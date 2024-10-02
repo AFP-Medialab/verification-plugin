@@ -1,15 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { CardHeader, Grid2 } from "@mui/material";
-import Divider from "@mui/material/Divider";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
@@ -59,13 +54,13 @@ const AssistantMediaResult = () => {
   const resultIsImage = resultProcessType === CONTENT_TYPE.IMAGE;
 
   // local control state
-  const [expandMedia, setExpandMedia] = useState(
-    !singleMediaPresent || processUrl == null,
-  );
+  // const [expandMedia, setExpandMedia] = useState(
+  //   !singleMediaPresent || processUrl == null,
+  // );
 
   // select the correct media to process, then load actions possible
   const submitMediaToProcess = (url) => {
-    setExpandMedia(false);
+    //setExpandMedia(false);
     let cType = null;
     if (imageList.includes(url)) {
       cType = CONTENT_TYPE.IMAGE;
@@ -76,8 +71,8 @@ const AssistantMediaResult = () => {
   };
   return (
     <Grid2 container spacing={2}>
-      <Grid2 size={{ xs: 6 }} hidden={!urlMode}>
-        <Card>
+      <Grid2 size={{ xs: 12 }} hidden={!urlMode}>
+        <Card data-testid="url-media-results">
           <CardHeader
             className={classes.assistantCardHeader}
             title={keyword("media_title")}
@@ -120,56 +115,76 @@ const AssistantMediaResult = () => {
               <LinearProgress variant={"indeterminate"} color={"secondary"} />
             )
           }
+
+          {/* selected image with recommended tools */}
           <CardContent>
             {processUrl !== null ? (
               resultIsImage ? (
-                <AssistantImageResult />
+                <Grid2 container spacing={2}>
+                  <Grid2 size={6}>
+                    <AssistantImageResult />
+                  </Grid2>
+                  <Grid2 size={6}>
+                    <AssistantProcessUrlActions />
+                  </Grid2>
+                  {/* <Grid2 size={12}>
+                    <Divider/>
+                  </Grid2> */}
+                </Grid2>
               ) : (
-                <AssistantVideoResult />
+                <Grid2 container spacing={2}>
+                  <Grid2 size={6}>
+                    <AssistantVideoResult />
+                  </Grid2>
+                  <Grid2 size={6}>
+                    <AssistantProcessUrlActions />
+                  </Grid2>
+                  {/* <Grid2 size={12}>
+                    <Divider/>
+                  </Grid2> */}
+                </Grid2>
               )
             ) : null}
           </CardContent>
-          <Divider m={1.5} />
+
+          {/* image grid and video grid of extracted media */}
           {!singleMediaPresent ? (
             <div>
-              <CardActions disableSpacing>
-                <IconButton
-                  onClick={() => {
-                    setExpandMedia(!expandMedia);
-                  }}
+              {/* select media */}
+              <CardContent>
+                <Typography
+                  component={"div"}
+                  sx={{ textAlign: "start" }}
+                  variant={"subtitle1"}
                 >
-                  <ExpandMoreIcon fontSize={"small"} />
-                  <Typography>{keyword("media_below")}</Typography>
-                </IconButton>
-              </CardActions>
-              <Collapse in={expandMedia}>
-                <CardContent>
-                  <ImageGridList
-                    list={imageList}
-                    height={60}
-                    cols={5}
-                    handleClick={(event) => {
-                      submitMediaToProcess(event);
-                    }}
-                  />
-                </CardContent>
-                <Divider m={1.5} />
-                <CardContent>
-                  <VideoGridList
-                    list={videoList}
-                    handleClick={(vidLink) => {
-                      submitMediaToProcess(vidLink);
-                    }}
-                  />
-                </CardContent>
-              </Collapse>
+                  {keyword("media_below")}
+                </Typography>
+              </CardContent>
+
+              {/* image list */}
+              <CardContent>
+                <ImageGridList
+                  list={imageList}
+                  height={60}
+                  cols={5}
+                  handleClick={(event) => {
+                    submitMediaToProcess(event);
+                  }}
+                />
+              </CardContent>
+
+              {/* video list */}
+              <CardContent>
+                <VideoGridList
+                  list={videoList}
+                  handleClick={(vidLink) => {
+                    submitMediaToProcess(vidLink);
+                  }}
+                />
+              </CardContent>
             </div>
           ) : null}
         </Card>
-      </Grid2>
-
-      <Grid2 size={{ xs: 6 }}>
-        <AssistantProcessUrlActions />
       </Grid2>
     </Grid2>
   );

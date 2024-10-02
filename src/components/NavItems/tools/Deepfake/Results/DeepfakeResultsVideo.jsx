@@ -199,7 +199,7 @@ const DeepfakeResultsVideo = (props) => {
           alignItems="flex-start"
         >
           <Grid2 size={{ xs: 6 }} container direction="column" spacing={3}>
-            <Grid2 size={{ xs: 6 }} container direction="column">
+            <Grid2 width="100%" size={{ xs: 6 }} container direction="column">
               <video
                 width="100%"
                 height="auto"
@@ -219,7 +219,7 @@ const DeepfakeResultsVideo = (props) => {
               </video>
             </Grid2>
             {!!results.deepfake_video_report.results && (
-              <Grid2 size={{ xs: 6 }} container direction="column">
+              <Grid2 size={{ xs: 6 }} container width="100%" direction="column">
                 <Typography
                   variant="body1"
                   style={{
@@ -319,28 +319,26 @@ const DeepfakeResultsVideo = (props) => {
             )}
           </Grid2>
           <Grid2 size={{ xs: 6 }} p={2}>
-            <Card>
-              <Stack direction="column" p={4} spacing={4}>
-                {deepfakeScores && deepfakeScores.length === 0 && (
-                  <Typography variant="h5" sx={{ color: "red" }}>
-                    {keyword("deepfake_no_face_detection")}
-                  </Typography>
-                )}
-                {deepfakeScores && deepfakeScores.length !== 0 && (
-                  <GaugeChartResult
-                    keyword={keyword}
-                    scores={deepfakeScores}
-                    methodNames={DeepfakeImageDetectionMethodNames}
-                    detectionThresholds={DETECTION_THRESHOLDS}
-                    resultsHaveErrors={false}
-                    sanitizeDetectionPercentage={(n) => Math.round(n)}
-                    gaugeExplanation={{ keywords: keywords, colors: colors }}
-                    toolName={"Deepfake"}
-                    detectionType={"video"}
-                  />
-                )}
-              </Stack>
-            </Card>
+            <Stack direction="column" p={4} spacing={4}>
+              {deepfakeScores && deepfakeScores.length === 0 && (
+                <Typography variant="h5" sx={{ color: "red" }}>
+                  {keyword("deepfake_no_face_detection")}
+                </Typography>
+              )}
+              {deepfakeScores && deepfakeScores.length !== 0 && (
+                <GaugeChartResult
+                  keyword={keyword}
+                  scores={deepfakeScores}
+                  methodNames={DeepfakeImageDetectionMethodNames}
+                  detectionThresholds={DETECTION_THRESHOLDS}
+                  resultsHaveErrors={false}
+                  sanitizeDetectionPercentage={(n) => Math.round(n)}
+                  gaugeExplanation={{ keywords: keywords, colors: colors }}
+                  toolName={"Deepfake"}
+                  detectionType={"video"}
+                />
+              )}
+            </Stack>
           </Grid2>
         </Grid2>
 

@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { IconButton } from "@mui/material";
 import Typography from "@mui/material/Typography";
@@ -12,6 +11,7 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
+import { Alert } from "@mui/material";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 const AssistantCheckStatus = () => {
@@ -34,19 +34,34 @@ const AssistantCheckStatus = () => {
   const neTitle = keyword("ne_title");
   const neFailState = useSelector((state) => state.assistant.neFail);
 
-  const newsFramingTitle = "news topic";
+  const newsFramingTitle = keyword("news_framing_title");
   const newsFramingFailState = useSelector(
     (state) => state.assistant.newsFramingFail,
   );
 
-  const newsGenreTitle = "news genre";
+  const newsGenreTitle = keyword("news_genre_title");
   const newsGenreFailState = useSelector(
     (state) => state.assistant.newsGenreFail,
   );
 
-  const persuasionTitle = "persuasion";
+  const persuasionTitle = keyword("persuasion_techniques");
   const persuasionFailState = useSelector(
     (state) => state.assistant.persuasionFail,
+  );
+
+  const subjectivityTitle = keyword("subjectivity");
+  const subjectivityFailState = useSelector(
+    (state) => state.assistant.subjectivityFail,
+  );
+
+  const prevFactChecksTitle = keyword("previous_fact_checks");
+  const prevFactChecksFailState = useSelector(
+    (state) => state.assistant.prevFactChecksFail,
+  );
+
+  const machineGeneratedTextTitle = keyword("machine_generated_text");
+  const machineGeneratedTextFailState = useSelector(
+    (state) => state.assistant.machineGeneratedTextFail,
   );
 
   const failStates = [
@@ -57,10 +72,13 @@ const AssistantCheckStatus = () => {
     { title: newsFramingTitle, failed: newsFramingFailState },
     { title: newsGenreTitle, failed: newsGenreFailState },
     { title: persuasionTitle, failed: persuasionFailState },
+    { title: subjectivityTitle, failed: subjectivityFailState },
+    { title: prevFactChecksTitle, failed: prevFactChecksFailState },
+    { title: machineGeneratedTextTitle, failed: machineGeneratedTextFailState },
   ];
 
   return (
-    <Box pl={1}>
+    <Alert severity="warning">
       <Typography component={"span"}>
         <Box color={"orange"} fontStyle="italic">
           {keyword("status_subtitle")}
@@ -78,16 +96,13 @@ const AssistantCheckStatus = () => {
           {failStates.map((value, key) =>
             value.failed ? (
               <ListItem key={key}>
-                <IconButton>
-                  <ErrorOutlineIcon color={"error"} />
-                </IconButton>
                 <ListItemText primary={value.title} />
               </ListItem>
             ) : null,
           )}
         </List>
       </Collapse>
-    </Box>
+    </Alert>
   );
 };
 export default AssistantCheckStatus;

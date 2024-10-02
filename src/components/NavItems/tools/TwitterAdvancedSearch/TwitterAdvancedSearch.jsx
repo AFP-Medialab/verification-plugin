@@ -9,7 +9,6 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import FormControl from "@mui/material/FormControl";
-import DateTime from "../../../Shared/DateTimePicker/DateTime";
 import useMyStyles, {
   myCardStyles,
 } from "../../../Shared/MaterialUiStyles/useMyStyles";
@@ -24,6 +23,8 @@ import CardHeader from "@mui/material/CardHeader";
 import TwitterAdvancedSearchIcon from "../../../NavBar/images/SVG/Search/Twitter_search.svg";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
+import dayjs from "dayjs";
 
 const TwitterAdvancedSearch = () => {
   const classes = useMyStyles();
@@ -84,13 +85,13 @@ const TwitterAdvancedSearch = () => {
   const handleFromDateChange = (date) => {
     setSelectedFromDateError(date === null);
     if (toDate && date > toDate) setSelectedFromDateError(true);
-    setSelectedFromDate(date);
+    setSelectedFromDate(dayjs(date));
   };
 
   const handleToDateChange = (date) => {
     setSelectedToDateError(date === null);
     if (fromDate && date < fromDate) setSelectedToDateError(true);
-    setSelectedToDate(date);
+    setSelectedToDate(dayjs(date));
   };
 
   const pastDate = (currentDate) => {
@@ -175,26 +176,15 @@ const TwitterAdvancedSearch = () => {
             );
           })}
           <div>
-            <DateTime
-              input={true}
-              label={keyword("twitter_from_date")}
-              dateFormat={"YYYY-MM-DD"}
-              timeFormat={"HH:mm:ss"}
-              handleChange={handleFromDateChange}
-              error={fromDateError}
-              value={fromDate}
-            />
-          </div>
-          <div>
-            <DateTime
-              input={true}
-              label={keyword("twitter_to_date")}
-              dateFormat={"YYYY-MM-DD"}
-              timeFormat={"HH:mm:ss"}
-              handleChange={handleToDateChange}
-              error={toDateError}
-              value={toDate}
-              shouldDisableDate={pastDate}
+            <DateAndTimePicker
+              time={true}
+              disabled={false}
+              keywordFromDate={keyword("twitter_from_date")}
+              keywordUntilDate={keyword("twitter_to_date")}
+              fromValue={fromDate}
+              untilValue={toDate}
+              handleSinceChange={handleFromDateChange}
+              handleUntilChange={handleToDateChange}
             />
           </div>
 

@@ -1,27 +1,32 @@
 import React, { useState } from "react";
-import { Paper } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Button,
+  Fab,
+  Grid2,
+  Link,
+  Paper,
+  Typography,
+} from "@mui/material";
 import { useSelector } from "react-redux";
-import Box from "@mui/material/Box";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
-import Typography from "@mui/material/Typography";
 import Iframe from "react-iframe";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import LockOutlinedIcon from "@mui/icons-material//LockOutlined";
-import LockOpenIcon from "@mui/icons-material//LockOpen";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import NavigateBeforeIcon from "@mui/icons-material//NavigateBefore";
-import NavigateNextIcon from "@mui/icons-material//NavigateNext";
-import Fab from "@mui/material/Fab";
-import { Grid2 } from "@mui/material";
-import Button from "@mui/material/Button";
-import ExpandMoreIcon from "@mui/icons-material//ExpandMore";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import Link from "@mui/material/Link";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { useNavigate } from "react-router-dom";
-import { SEARCH_ENGINE_SETTINGS } from "../../Shared/ReverseSearch/reverseSearchUtils";
-import { reverseImageSearch } from "../../Shared/ReverseSearch/reverseSearchUtils";
+import {
+  reverseImageSearch,
+  SEARCH_ENGINE_SETTINGS,
+} from "../../Shared/ReverseSearch/reverseSearchUtils";
 
 const Interactive = () => {
   const classes = useMyStyles();

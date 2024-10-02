@@ -1,20 +1,14 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
-import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import {
-  CardHeader,
-  CircularProgress,
-  Grid2,
-  Link,
-  styled,
-} from "@mui/material";
+import { CardHeader, CircularProgress, Grid2, styled } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Remove from "@mui/icons-material/Remove";
 import Typography from "@mui/material/Typography";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
@@ -28,14 +22,11 @@ import LocaleData from "dayjs/plugin/localeData";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 
 import Collapse from "@mui/material/Collapse";
-import Divider from "@mui/material/Divider";
-import { UnfoldMore, Remove } from "@mui/icons-material";
-import TranslateIcon from "@mui/icons-material/Translate";
-import IconButton from "@mui/material/IconButton";
-import FileCopyOutlined from "@mui/icons-material/FileCopy";
 
 import { useNavigate } from "react-router-dom";
 import { getLanguageName } from "../../../Shared/Utils/languageUtils";
+import TextFooter from "./TextFooter.jsx";
+import { TextFooterPrevFactChecks } from "./TextFooter.jsx";
 
 const renderEntityKeys = (entities, keyword) => {
   // translate array into readable string
@@ -65,136 +56,31 @@ const calculateSubjectivity = (sentences) => {
     .replaceAll(",", "");
 };
 
-const getExpandIcon = (loading, fail, done = null, role = null) => {
-  if (loading || fail || done || (role && !role.includes("BETA_TESTER"))) {
-    // "done" is for when subjectivityDone = true and Object.keys(result.entities).length < 1
+const getExpandIcon = (
+  loading,
+  fail,
+  doneWithEmptyResult = null,
+  role = null,
+) => {
+  if (
+    loading ||
+    fail ||
+    doneWithEmptyResult ||
+    (role && !role.includes("BETA_TESTER"))
+  ) {
+    // "doneWithEmptyResult" is for when subjectivityDone = true and Object.keys(result.entities).length < 1
+    // "doneWithEmptyResult" is for when prevFactChecksDone = true and result.length < 1
     return <Remove />;
   } else {
     return <ExpandMoreIcon />;
   }
 };
 
-const renderCollapse = (
-  classes,
-  setDisplayOrigLang,
-  displayOrigLang,
-  textLang,
-  sharedKeyword,
-  keyword,
-  text,
-  displayExpander,
-  expanded,
-  setExpanded,
-) => {
-  return (
-    <Box mb={1.5}>
-      <Divider />
-      <Grid2 container>
-        <Grid2 size={{ xs: 11 }} style={{ display: "flex" }}>
-          <Typography
-            className={classes.toolTipIcon}
-            onClick={() => setDisplayOrigLang(!displayOrigLang)}
-          >
-            {textLang}
-          </Typography>
-          <Tooltip title={sharedKeyword("copy_to_clipboard")}>
-            <IconButton
-              className={classes.toolTipIcon}
-              onClick={() => {
-                navigator.clipboard.writeText(text);
-              }}
-            >
-              <FileCopyOutlined />
-            </IconButton>
-          </Tooltip>
-          {textLang && textLang !== "en" && textLang !== "" ? (
-            <Tooltip title={keyword("translate")}>
-              <IconButton
-                className={classes.toolTipIcon}
-                onClick={() =>
-                  window.open(
-                    "https://translate.google.com/?sl=auto&text=" +
-                      encodeURIComponent(text) +
-                      "&op=translate",
-                    "_blank",
-                  )
-                }
-              >
-                <TranslateIcon />
-              </IconButton>
-            </Tooltip>
-          ) : null}
-        </Grid2>
-        <Grid2 size={1} align={"right"}>
-          {displayExpander ? (
-            // expanded ?  required here if using different icons for expanded and closed
-            <UnfoldMore
-              className={classes.toolTipIcon}
-              onClick={() => {
-                setExpanded(!expanded);
-              }}
-            />
-          ) : null}
-        </Grid2>
-      </Grid2>
-    </Box>
-  );
-};
-
-const renderCollapsePrevFactChecks = (
-  classes,
-  displayExpander,
-  expanded,
-  setExpanded,
-  navigate,
-  keyword,
-) => {
-  const handleClick = (path) => {
-    // instead need to set parameter then load text in SemanticSearch/index.jsx
-    navigate("/app/" + path + "/assistantText");
-  };
-
-  return (
-    <Box mb={1.5}>
-      <Divider />
-      <Grid2 container>
-        <Grid2 size={{ xs: 1 }} align={"start"}>
-          <></>
-        </Grid2>
-        <Grid2 size={{ xs: 10 }} align={"center"}>
-          <Typography
-            component={"div"}
-            sx={{ color: "text.secondary", align: "start" }}
-          >
-            <p></p>
-            {keyword("more_details")}{" "}
-            <Link
-              sx={{ cursor: "pointer" }}
-              onClick={() => handleClick("tools/semanticSearch")}
-            >
-              {keyword("semantic_search_title")}
-            </Link>
-          </Typography>
-        </Grid2>
-        <Grid2 size={1} align={"right"}>
-          {displayExpander ? (
-            <UnfoldMore
-              className={classes.toolTipIcon}
-              onClick={() => {
-                setExpanded(!expanded);
-              }}
-            />
-          ) : null}
-        </Grid2>
-      </Grid2>
-    </Box>
-  );
-};
-
 const AssistantCredSignals = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const sharedKeyword = i18nLoadNamespace("components/Shared/utils");
   const classes = useMyStyles();
+  const expandMinimiseText = keyword("expand_minimise_text");
 
   // displaying expanded text in AccordionDetails
   const [displayOrigLang, setDisplayOrigLang] = useState(true);
@@ -423,18 +309,17 @@ const AssistantCredSignals = () => {
                     textHtmlMap={textHtmlMap}
                   />
                 </Collapse>
-                {renderCollapse(
-                  classes,
-                  setDisplayOrigLang,
-                  displayOrigLang,
-                  textLang,
-                  sharedKeyword,
-                  keyword,
-                  text,
-                  displayExpander,
-                  expanded,
-                  setExpanded,
-                )}
+                {/* footer */}
+                <TextFooter
+                  classes={classes}
+                  setDisplayOrigLang={setDisplayOrigLang}
+                  displayOrigLang={displayOrigLang}
+                  textLang={textLang}
+                  expandMinimiseText={expandMinimiseText}
+                  text={text}
+                  setExpanded={setExpanded}
+                  expanded={expanded}
+                />
               </div>
             )}
           </AccordionDetails>
@@ -493,18 +378,17 @@ const AssistantCredSignals = () => {
                     displayBox="true"
                   />
                 </Collapse>
-                {renderCollapse(
-                  classes,
-                  setDisplayOrigLang,
-                  displayOrigLang,
-                  textLang,
-                  sharedKeyword,
-                  keyword,
-                  text,
-                  displayExpander,
-                  expanded,
-                  setExpanded,
-                )}
+                {/* footer */}
+                <TextFooter
+                  classes={classes}
+                  setDisplayOrigLang={setDisplayOrigLang}
+                  displayOrigLang={displayOrigLang}
+                  textLang={textLang}
+                  expandMinimiseText={expandMinimiseText}
+                  text={text}
+                  setExpanded={setExpanded}
+                  expanded={expanded}
+                />
               </div>
             )}
           </AccordionDetails>
@@ -580,18 +464,17 @@ const AssistantCredSignals = () => {
                     textHtmlMap={textHtmlMap}
                   />
                 </Collapse>
-                {renderCollapse(
-                  classes,
-                  setDisplayOrigLang,
-                  displayOrigLang,
-                  textLang,
-                  sharedKeyword,
-                  keyword,
-                  text,
-                  displayExpander,
-                  expanded,
-                  setExpanded,
-                )}
+                {/* footer */}
+                <TextFooter
+                  classes={classes}
+                  setDisplayOrigLang={setDisplayOrigLang}
+                  displayOrigLang={displayOrigLang}
+                  textLang={textLang}
+                  expandMinimiseText={expandMinimiseText}
+                  text={text}
+                  setExpanded={setExpanded}
+                  expanded={expanded}
+                />
               </div>
             )}
           </AccordionDetails>
@@ -671,18 +554,17 @@ const AssistantCredSignals = () => {
                     subjectivity="true"
                   />
                 </Collapse>
-                {renderCollapse(
-                  classes,
-                  setDisplayOrigLang,
-                  displayOrigLang,
-                  textLang,
-                  sharedKeyword,
-                  keyword,
-                  text,
-                  displayExpander,
-                  expanded,
-                  setExpanded,
-                )}
+                {/* footer */}
+                <TextFooter
+                  classes={classes}
+                  setDisplayOrigLang={setDisplayOrigLang}
+                  displayOrigLang={displayOrigLang}
+                  textLang={textLang}
+                  expandMinimiseText={expandMinimiseText}
+                  text={text}
+                  setExpanded={setExpanded}
+                  expanded={expanded}
+                />
               </div>
             )}
           </AccordionDetails>
@@ -698,7 +580,8 @@ const AssistantCredSignals = () => {
             (!prevFactChecksLoading &&
               !prevFactChecksFail &&
               !prevFactChecksDone) ||
-            !role.includes("BETA_TESTER")
+            !role.includes("BETA_TESTER") ||
+            (prevFactChecksDone && prevFactChecksResult.length < 1)
           }
           disableGutters
         >
@@ -706,7 +589,7 @@ const AssistantCredSignals = () => {
             expandIcon={getExpandIcon(
               prevFactChecksLoading,
               prevFactChecksFail,
-              null,
+              prevFactChecksDone && prevFactChecksResult.length < 1,
               role,
             )}
           >
@@ -731,7 +614,7 @@ const AssistantCredSignals = () => {
                 )}
                 {role.includes("BETA_TESTER") &&
                   prevFactChecksDone &&
-                  prevFactChecksResult && (
+                  prevFactChecksResult.length > 0 && (
                     <Typography
                       sx={{ color: "text.secondary", align: "start" }}
                     >
@@ -755,69 +638,67 @@ const AssistantCredSignals = () => {
                     {keyword("login_required")}
                   </Typography>
                 )}
-                {prevFactChecksDone &&
-                  prevFactChecksResult &&
-                  Object.keys(prevFactChecksResult).length < 1 && (
-                    <Typography
-                      sx={{ color: "text.secondary", align: "start" }}
-                    >
-                      {keyword("none_detected")}
-                    </Typography>
-                  )}
+                {prevFactChecksDone && prevFactChecksResult.length < 1 && (
+                  <Typography sx={{ color: "text.secondary", align: "start" }}>
+                    {keyword("none_detected")}
+                  </Typography>
+                )}
               </Grid2>
             </Grid2>
           </AccordionSummary>
 
           <AccordionDetails>
-            {prevFactChecksDone && role.includes("BETA_TESTER") && (
-              <div>
-                <Collapse
-                  in={expanded}
-                  collapsedSize={150}
-                  id={"element-to-check4"}
-                >
-                  {prevFactChecksResult
-                    ? prevFactChecksResult.map((resultItem) => {
-                        // date in correct format
-                        const date = resultItem.published_at.slice(0, 10);
+            {prevFactChecksDone &&
+              prevFactChecksResult.length > 0 &&
+              role.includes("BETA_TESTER") && (
+                <div>
+                  <Collapse
+                    in={expanded}
+                    collapsedSize={150}
+                    id={"element-to-check4"}
+                  >
+                    {prevFactChecksResult
+                      ? prevFactChecksResult.map((resultItem) => {
+                          // date in correct format
+                          const date = resultItem.published_at.slice(0, 10);
 
-                        return (
-                          <ResultDisplayItem
-                            key={resultItem.id}
-                            id={resultItem.id}
-                            claim={resultItem.claim_en}
-                            title={resultItem.title_en}
-                            claimOriginalLanguage={resultItem.claim}
-                            titleOriginalLanguage={resultItem.title}
-                            rating={resultItem.rating}
-                            date={
-                              dayjs(date).format(
-                                globalLocaleData.longDateFormat("LL"),
-                              ) ?? null
-                            }
-                            website={resultItem.website}
-                            language={getLanguageName(
-                              resultItem.source_language,
-                            )}
-                            similarityScore={resultItem.score}
-                            articleUrl={resultItem.url}
-                            domainUrl={resultItem.source_name}
-                            imageUrl={resultItem.image_url}
-                          />
-                        );
-                      })
-                    : null}
-                </Collapse>
-                {renderCollapsePrevFactChecks(
-                  classes,
-                  displayExpander,
-                  expanded,
-                  setExpanded,
-                  navigate,
-                  keyword,
-                )}
-              </div>
-            )}
+                          return (
+                            <ResultDisplayItem
+                              key={resultItem.id}
+                              id={resultItem.id}
+                              claim={resultItem.claim_en}
+                              title={resultItem.title_en}
+                              claimOriginalLanguage={resultItem.claim}
+                              titleOriginalLanguage={resultItem.title}
+                              rating={resultItem.rating}
+                              date={
+                                dayjs(date).format(
+                                  globalLocaleData.longDateFormat("LL"),
+                                ) ?? null
+                              }
+                              website={resultItem.website}
+                              language={getLanguageName(
+                                resultItem.source_language,
+                              )}
+                              similarityScore={resultItem.score}
+                              articleUrl={resultItem.url}
+                              domainUrl={resultItem.source_name}
+                              imageUrl={resultItem.image_url}
+                            />
+                          );
+                        })
+                      : null}
+                  </Collapse>
+                  <TextFooterPrevFactChecks
+                    classes={classes}
+                    expandMinimiseText={expandMinimiseText}
+                    setExpanded={setExpanded}
+                    expanded={expanded}
+                    navigate={navigate}
+                    keyword={keyword}
+                  />
+                </div>
+              )}
           </AccordionDetails>
         </StyledAccordion>
 

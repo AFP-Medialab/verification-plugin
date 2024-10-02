@@ -4,33 +4,33 @@
 
 import axios from "axios";
 import _ from "lodash";
-import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 import {
-  ERR_AUTH_INVALID_PARAMS,
-  ERR_AUTH_BAD_REQUEST,
-  ERR_AUTH_SERVER_ERROR,
-  ERR_AUTH_UNKNOWN_ERROR,
-  ERR_AUTH_INVALID_TOKEN,
-  ERR_AUTH_INVALID_CREDENTIALS,
-  ERR_AUTH_INVALID_USER_STATE,
-  ERR_AUTH_USER_EXPIRED,
-  ERR_AUTH_SESSION_EXPIRED,
   ERR_AUTH_ABORT_ERROR,
+  ERR_AUTH_BAD_REQUEST,
+  ERR_AUTH_INVALID_CREDENTIALS,
+  ERR_AUTH_INVALID_PARAMS,
+  ERR_AUTH_INVALID_TOKEN,
+  ERR_AUTH_INVALID_USER_STATE,
+  ERR_AUTH_SERVER_ERROR,
+  ERR_AUTH_SESSION_EXPIRED,
+  ERR_AUTH_UNKNOWN_ERROR,
+  ERR_AUTH_USER_EXPIRED,
 } from "./authenticationErrors";
 
 import { useDispatch, useSelector } from "react-redux";
 
 import {
-  userRegistrationSentAction,
+  userAccessCodeRequestLoadingAction,
   userAccessCodeRequestSentAction,
   userLoginAction,
-  userTokenRefreshedAction,
-  userSessionExpiredAction,
-  userRegistrationLoadingAction,
-  userAccessCodeRequestLoadingAction,
   userLoginLoadingAction,
   userLogoutAction,
+  userRegistrationLoadingAction,
+  userRegistrationSentAction,
+  userSessionExpiredAction,
+  userTokenRefreshedAction,
 } from "../../../redux/actions/authenticationActions";
 
 /**

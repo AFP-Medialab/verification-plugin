@@ -104,21 +104,20 @@ const AssistantFileSelected = () => {
       />
       <CardContent>
         <Grid2 container spacing={3}>
-          {generateList(
-            keyword("upload_image"),
-            CONTENT_TYPE.IMAGE,
-            imageActions,
-          )}
-          <Divider
-            orientation="vertical"
-            flexItem
-            style={{ marginRight: "-1px", marginTop: "20px" }}
-          />
-          {generateList(
-            keyword("upload_video"),
-            CONTENT_TYPE.VIDEO,
-            videoActions,
-          )}
+          <Grid2 size={{ xs: 6 }}>
+            {generateList(
+              keyword("upload_image"),
+              CONTENT_TYPE.IMAGE,
+              imageActions,
+            )}
+          </Grid2>
+          <Grid2 size={{ xs: 6 }}>
+            {generateList(
+              keyword("upload_video"),
+              CONTENT_TYPE.VIDEO,
+              videoActions,
+            )}
+          </Grid2>
         </Grid2>
       </CardContent>
     </Card>
