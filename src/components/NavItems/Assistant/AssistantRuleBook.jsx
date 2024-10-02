@@ -14,6 +14,10 @@ import Gradient from "@mui/icons-material/Gradient";
 import DeepfakeIcon from "../../NavBar/images/SVG/Image/Deepfake.svg";
 import DownloadIcon from "@mui/icons-material/Download";
 
+import { ROLES } from "../../../constants/roles.jsx";
+
+const BETA_TESTER = ROLES.BETA_TESTER;
+
 export const NE_SUPPORTED_LANGS = ["en", "pt", "fr", "de", "el", "es", "it"];
 
 export const CONTENT_TYPE = {
@@ -237,10 +241,11 @@ export const ASSISTANT_ACTIONS = [
     processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     cTypes: [CONTENT_TYPE.IMAGE],
     exceptions: [],
-    useInputUrl: false,
+    useInputUrl: true,
     text: "synthetic_image_detection_text",
     tsvPrefix: "synthetic_image_detection",
     path: "tools/syntheticImageDetection",
+    betaTester: true,
   },
   {
     title: "navbar_deepfake_image",
@@ -255,10 +260,11 @@ export const ASSISTANT_ACTIONS = [
     processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     cTypes: [CONTENT_TYPE.IMAGE],
     exceptions: [],
-    useInputUrl: false,
+    useInputUrl: true,
     text: "deepfake_image_text",
     tsvPrefix: "deepfakeImage",
     path: "tools/deepfakeImage",
+    betaTester: true,
   },
   {
     title: "assistant_video_download_action",
@@ -313,6 +319,7 @@ export const selectCorrectActions = (
   inputUrlType,
   processUrlType,
   processUrl,
+  role,
 ) => {
   let possibleActions = ASSISTANT_ACTIONS.filter(
     (action) =>
@@ -320,7 +327,9 @@ export const selectCorrectActions = (
       (!action.processLinksAccepted ||
         action.processLinksAccepted.includes(processUrlType)) &&
       action.cTypes.includes(contentType) &&
-      (action.exceptions.length === 0 || !processUrl.match(action.exceptions)),
+      (action.exceptions.length === 0 ||
+        !processUrl.match(action.exceptions)) &&
+      (!action.betaTester || (action.betaTester && role.includes(BETA_TESTER))),
   );
   return possibleActions;
 };
