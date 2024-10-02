@@ -28,7 +28,9 @@ const ExtractedUrl = (
   let Icon;
   let iconColor;
 
-  {/* select correct icon and link colour */}
+  {
+    /* select correct icon and link colour */
+  }
   if (extractedSourceCred) {
     if (extractedSourceCred[link].caution) {
       sourceType = keyword("warning");
@@ -37,7 +39,7 @@ const ExtractedUrl = (
     } else if (extractedSourceCred[link].mixed) {
       sourceType = keyword("mentions");
       Icon = SentimentSatisfied;
-      iconColor = "warning";
+      iconColor = "action";
     } else if (extractedSourceCred[link].positive) {
       sourceType = keyword("fact_checker");
       Icon = TaskAltOutlined;
@@ -46,11 +48,10 @@ const ExtractedUrl = (
   }
 
   return (
-    <Grid2 container wrap="wrap" key={index} >
-
+    <Grid2 container wrap="wrap" key={index}>
       {/* icon */}
       <Grid2 size={{ xs: 1 }} align="center">
-        {loading && <Skeleton variant="circular" width={25} height={25} />}
+        {loading && <Skeleton variant="circular" width={20} height={20} />}
         {sourceType && done && <Icon color={iconColor} fontSize="large" />}
         {!sourceType && done && <LinkIcon />}
       </Grid2>
@@ -81,10 +82,7 @@ const ExtractedUrl = (
 
       {/* source cred details */}
       {sourceType && done ? (
-        <Grid2
-          size={{ xs: 1 }}
-          align="center"
-        >
+        <Grid2 size={{ xs: 1 }} align="center">
           <ExtractedSourceCredibilityResult
             extractedSourceCredibilityResults={extractedSourceCred[link]}
             sourceType={sourceType}
@@ -93,10 +91,7 @@ const ExtractedUrl = (
           />
         </Grid2>
       ) : loading ? (
-        <Grid2 
-          size={{ xs: 1 }} 
-          align="center"
-        >
+        <Grid2 size={{ xs: 1 }} align="center">
           <Skeleton variant="rounded" width={20} height={20} />
         </Grid2>
       ) : null}

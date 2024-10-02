@@ -73,84 +73,82 @@ const AssistantUrlSelected = (props) => {
 
   return (
     <div>
+      <Card>
+        <CardHeader
+          className={classes.assistantCardHeader}
+          title={
+            <Typography style={{ fontWeight: "bold", fontSize: 20 }}>
+              {keyword("assistant_give_url")}
+            </Typography>
+          }
+        />
 
-    <Card>
-      <CardHeader
-        className={classes.assistantCardHeader}
-        title={
-          <Typography style={{ fontWeight: "bold", fontSize: 20 }}>
-            {keyword("assistant_give_url")}
-          </Typography>
-        }
-      />
-
-      <CardContent>
-        <Box sx={{ mr: 2 }}>
-          <form>
-            <Stack>
-              <Stack
-                direction="row"
-                spacing={2}
-                justifyContent="flex-start"
-                alignItems="center"
-              >
-                {/* text box */}
-                <TextField
-                  variant="outlined"
-                  label={keyword("assistant_paste_url")}
-                  style={{ margin: 8 }}
-                  placeholder={""}
-                  fullWidth
-                  value={formInput || ""}
-                  onChange={(e) => setFormInput(e.target.value)}
-                  data-testid="assistant-url-selected-input"
-                />
-
-                {/* submit button */}
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  data-testid="assistant-url-selected-analyse-btn"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleSubmissionURL();
-                  }}
-                >
-                  {keyword("button_submit")}
-                </Button>
-              </Stack>
-
-              {/* archive */}
-              {inputUrl === null ? null : (
+        <CardContent>
+          <Box sx={{ mr: 2 }}>
+            <form>
+              <Stack>
                 <Stack
                   direction="row"
+                  spacing={2}
                   justifyContent="flex-start"
-                  alignItems="left"
+                  alignItems="center"
                 >
+                  {/* text box */}
+                  <TextField
+                    variant="outlined"
+                    label={keyword("assistant_paste_url")}
+                    style={{ margin: 8 }}
+                    placeholder={""}
+                    fullWidth
+                    value={formInput || ""}
+                    onChange={(e) => setFormInput(e.target.value)}
+                    data-testid="assistant-url-selected-input"
+                  />
+
+                  {/* submit button */}
                   <Button
-                    onClick={() => handleArchive()}
-                    startIcon={<ArchiveOutlinedIcon />}
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    data-testid="assistant-url-selected-analyse-btn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleSubmissionURL();
+                    }}
                   >
-                    <label>{keyword("archive_link")}</label>
+                    {keyword("button_submit")}
                   </Button>
                 </Stack>
-              )}
-            </Stack>
-          </form>
-        </Box>
-      </CardContent>
-    </Card>
 
-    {loading && (
-      <Card sx={{ mt: 4 }}>
-        <Stack direction="column" spacing={4} p={4}>
-          <Skeleton variant="rounded" height={40} />
-          <Skeleton variant="rounded" width={400} height={40} />
-        </Stack>
+                {/* archive */}
+                {inputUrl === null ? null : (
+                  <Stack
+                    direction="row"
+                    justifyContent="flex-start"
+                    alignItems="left"
+                  >
+                    <Button
+                      onClick={() => handleArchive()}
+                      startIcon={<ArchiveOutlinedIcon />}
+                    >
+                      <label>{keyword("archive_link")}</label>
+                    </Button>
+                  </Stack>
+                )}
+              </Stack>
+            </form>
+          </Box>
+        </CardContent>
       </Card>
-    )}
 
+      {loading && (
+        <Card sx={{ mt: 4 }}>
+          <Stack direction="column" spacing={4} p={4}>
+            <Skeleton variant="rounded" height={40} />
+            <Skeleton variant="rounded" width="50%" height={40} />
+          </Stack>
+        </Card>
+      )}
     </div>
   );
 };

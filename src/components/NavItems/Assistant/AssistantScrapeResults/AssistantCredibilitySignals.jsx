@@ -277,7 +277,9 @@ const AssistantCredSignals = () => {
                 </Typography>
               </Grid2>
               <Grid2 size={{ xs: 8 }} align="start">
-                {newsFramingLoading && <Skeleton variant="rounded" width={400} height={40} />}
+                {newsFramingLoading && (
+                  <Skeleton variant="rounded" width="50%" height={40} />
+                )}
                 {newsFramingFail && (
                   <Typography sx={{ color: "text.secondary", align: "start" }}>
                     {keyword("failed_to_load")}
@@ -345,7 +347,9 @@ const AssistantCredSignals = () => {
                 </Typography>
               </Grid2>
               <Grid2 size={{ xs: 8 }} align="start">
-                {newsGenreLoading && <Skeleton variant="rounded" width={400} height={40} />}
+                {newsGenreLoading && (
+                  <Skeleton variant="rounded" width="50%" height={40} />
+                )}
                 {newsGenreFail && (
                   <Typography sx={{ color: "text.secondary", align: "start" }}>
                     {keyword("failed_to_load")}
@@ -424,7 +428,9 @@ const AssistantCredSignals = () => {
                 </Typography>
               </Grid2>
               <Grid2 size={{ xs: 8 }} align="start">
-                {persuasionLoading && <Skeleton variant="rounded" width={400} height={40} />}
+                {persuasionLoading && (
+                  <Skeleton variant="rounded" width="50%" height={40} />
+                )}
                 {persuasionFail && (
                   <Typography sx={{ color: "text.secondary", align: "start" }}>
                     {keyword("failed_to_load")}
@@ -508,7 +514,7 @@ const AssistantCredSignals = () => {
               </Grid2>
               <Grid2 size={{ xs: 8 }} align="start">
                 {subjectivityLoading && (
-                  <Skeleton variant="rounded" width={400} height={40} />
+                  <Skeleton variant="rounded" width="50%" height={40} />
                 )}
                 {subjectivityFail && (
                   <Typography sx={{ color: "text.secondary", align: "start" }}>
@@ -605,7 +611,7 @@ const AssistantCredSignals = () => {
 
               <Grid2 size={{ xs: 8 }} align="start">
                 {role.includes("BETA_TESTER") && prevFactChecksLoading && (
-                  <Skeleton variant="rounded" width={400} height={40} />
+                  <Skeleton variant="rounded" width="50%" height={40} />
                 )}
                 {role.includes("BETA_TESTER") && prevFactChecksFail && (
                   <Typography sx={{ color: "text.secondary", align: "start" }}>
@@ -735,7 +741,7 @@ const AssistantCredSignals = () => {
               <Grid2 size={{ xs: 8 }} align="start">
                 {role.includes("BETA_TESTER") &&
                   machineGeneratedTextLoading && (
-                    <Skeleton variant="rounded" width={400} height={40} />
+                    <Skeleton variant="rounded" width="50%" height={40} />
                   )}
                 {role.includes("BETA_TESTER") && machineGeneratedTextFail && (
                   <Typography sx={{ color: "text.secondary", align: "start" }}>
