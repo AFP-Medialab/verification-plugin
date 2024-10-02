@@ -7,7 +7,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Collapse from "@mui/material/Collapse";
 import FindInPageIcon from "@mui/icons-material/FindInPage";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Grid2, IconButton } from "@mui/material";
+import { Grid2, IconButton, Skeleton, Stack } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
@@ -39,9 +39,25 @@ const AssistantSCResults = () => {
   const mixedSourceCred = useSelector(
     (state) => state.assistant.mixedSourceCred,
   );
+  const inputSCLoading = useSelector(
+    (state) => state.assistant.inputSCLoading,
+  );
+
+  // currently not working
+  console.log("1 inputSCLoading=", inputSCLoading);
+  if (inputSCLoading) {
+    console.log("2 inputSCLoading=", inputSCLoading);
+    return (
+      <Card variant={"outlined"} sx={{ mt: 4 }}>
+        <Stack direction="column" spacing={4} p={4}>
+          <Skeleton variant="rounded" height={40} />
+        </Stack>
+      </Card>
+    );
+  }
 
   return (
-    <Box mb={2} pl={1}>
+    // <Box>
       <Card variant={"outlined"} className={classes.sourceCredibilityBorder}>
         <Grid2 container>
           <Grid2 size={{ xs: 12 }} className={classes.displayFlex}>
@@ -144,7 +160,7 @@ const AssistantSCResults = () => {
           </Grid2>
         </Grid2>
       </Card>
-    </Box>
+
   );
 };
 export default AssistantSCResults;

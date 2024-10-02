@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
-import { Box, CardHeader, TextField } from "@mui/material/";
+import { Box, CardHeader, Skeleton, TextField } from "@mui/material/";
 import Button from "@mui/material//Button";
 import Card from "@mui/material//Card";
 import CardContent from "@mui/material//CardContent";
-import LinearProgress from "@mui/material//LinearProgress";
 import Typography from "@mui/material//Typography";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -73,6 +72,8 @@ const AssistantUrlSelected = (props) => {
   };
 
   return (
+    <div>
+
     <Card>
       <CardHeader
         className={classes.assistantCardHeader}
@@ -82,9 +83,6 @@ const AssistantUrlSelected = (props) => {
           </Typography>
         }
       />
-
-      {/* loading */}
-      {loading && <LinearProgress color={"secondary"} />}
 
       <CardContent>
         <Box sx={{ mr: 2 }}>
@@ -143,6 +141,17 @@ const AssistantUrlSelected = (props) => {
         </Box>
       </CardContent>
     </Card>
+
+    {loading && (
+      <Card sx={{ mt: 4 }}>
+        <Stack direction="column" spacing={4} p={4}>
+          <Skeleton variant="rounded" height={40} />
+          <Skeleton variant="rounded" width={400} height={40} />
+        </Stack>
+      </Card>
+    )}
+
+    </div>
   );
 };
 

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import { CardHeader, Grid2 } from "@mui/material";
+import { CardHeader, Grid2, Skeleton } from "@mui/material";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
@@ -20,8 +20,7 @@ import {
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "../../../Shared/VideoGridList/VideoGridList";
-import { WarningOutlined } from "@mui/icons-material";
-import LinearProgress from "@mui/material/LinearProgress";
+import { ErrorOutlineOutlined } from "@mui/icons-material";
 
 const AssistantMediaResult = () => {
   const classes = useMyStyles();
@@ -70,26 +69,36 @@ const AssistantMediaResult = () => {
     dispatch(setProcessUrl(url, cType));
   };
   return (
-    <Grid2 container spacing={2}>
-      <Grid2 size={{ xs: 12 }} hidden={!urlMode}>
-        <Card data-testid="url-media-results">
+    // <Grid2 container >
+    //   <Grid2 size={{ xs: 12 }} hidden={!urlMode}>
+        <Card 
+          data-testid="url-media-results"
+          hidden={!urlMode || (!imageList.length && !videoList.length)}
+        >
           <CardHeader
             className={classes.assistantCardHeader}
             title={keyword("media_title")}
             action={
               <div style={{ display: "flex" }}>
                 <div
-                  hidden={dbkfImageMatch === null && dbkfVideoMatch === null}
+                  //hidden={dbkfImageMatch === null && dbkfVideoMatch === null}
                 >
-                  <Tooltip title={keyword("image_warning")}>
-                    <WarningOutlined
-                      className={classes.toolTipWarning}
-                      onClick={() => {
-                        dispatch(setWarningExpanded(!warningExpanded));
-                        window.scroll(0, 0);
-                      }}
-                    />
-                  </Tooltip>
+                  {console.log("dbkfMediaMatchLoading=", dbkfMediaMatchLoading)}
+                  {dbkfMediaMatchLoading && (
+                    <Skeleton variant="circular" />
+                  )}
+                  {(dbkfImageMatch || dbkfVideoMatch) && (
+                    <Tooltip title={keyword("image_warning")}>
+                      <ErrorOutlineOutlined
+                        color={"error"}
+                        className={classes.toolTipWarning}
+                        onClick={() => {
+                          dispatch(setWarningExpanded(!warningExpanded));
+                          window.scroll(0, 0);
+                        }}
+                      />
+                    </Tooltip>
+                  )}
                 </div>
                 <div>
                   <Tooltip
@@ -110,11 +119,11 @@ const AssistantMediaResult = () => {
               </div>
             }
           />
-          {
-            /*!ocrLoading && */ dbkfMediaMatchLoading && (
+          {/* {
+            /*!ocrLoading && *\/ dbkfMediaMatchLoading && (
               <LinearProgress variant={"indeterminate"} color={"secondary"} />
             )
-          }
+          } */}
 
           {/* selected image with recommended tools */}
           <CardContent>
@@ -127,9 +136,6 @@ const AssistantMediaResult = () => {
                   <Grid2 size={6}>
                     <AssistantProcessUrlActions />
                   </Grid2>
-                  {/* <Grid2 size={12}>
-                    <Divider/>
-                  </Grid2> */}
                 </Grid2>
               ) : (
                 <Grid2 container spacing={2}>
@@ -139,9 +145,6 @@ const AssistantMediaResult = () => {
                   <Grid2 size={6}>
                     <AssistantProcessUrlActions />
                   </Grid2>
-                  {/* <Grid2 size={12}>
-                    <Divider/>
-                  </Grid2> */}
                 </Grid2>
               )
             ) : null}
@@ -185,8 +188,6 @@ const AssistantMediaResult = () => {
             </div>
           ) : null}
         </Card>
-      </Grid2>
-    </Grid2>
   );
 };
 export default AssistantMediaResult;

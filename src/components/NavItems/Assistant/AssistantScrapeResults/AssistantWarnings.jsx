@@ -46,7 +46,7 @@ const AssistantWarnings = () => {
               className={classes.assistantIconRight}
               onClick={() => dispatch(setWarningExpanded(!warningExpanded))}
             >
-              <ExpandMoreIcon style={{ color: "red" }} />
+              <ExpandMoreIcon color={"error"} />
             </IconButton>
           </Grid2>
           <Grid2 size={{ xs: 12 }}>

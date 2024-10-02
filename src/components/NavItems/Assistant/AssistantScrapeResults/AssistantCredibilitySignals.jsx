@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
 import Card from "@mui/material/Card";
-import { CardHeader, CircularProgress, Grid2, styled } from "@mui/material";
+import { CardHeader, Grid2, styled, Skeleton } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -277,7 +277,7 @@ const AssistantCredSignals = () => {
                 </Typography>
               </Grid2>
               <Grid2 size={{ xs: 8 }} align="start">
-                {newsFramingLoading && <CircularProgress color={"secondary"} />}
+                {newsFramingLoading && <Skeleton variant="rounded" width={400} height={40} />}
                 {newsFramingFail && (
                   <Typography sx={{ color: "text.secondary", align: "start" }}>
                     {keyword("failed_to_load")}
@@ -345,7 +345,7 @@ const AssistantCredSignals = () => {
                 </Typography>
               </Grid2>
               <Grid2 size={{ xs: 8 }} align="start">
-                {newsGenreLoading && <CircularProgress color={"secondary"} />}
+                {newsGenreLoading && <Skeleton variant="rounded" width={400} height={40} />}
                 {newsGenreFail && (
                   <Typography sx={{ color: "text.secondary", align: "start" }}>
                     {keyword("failed_to_load")}
@@ -424,7 +424,7 @@ const AssistantCredSignals = () => {
                 </Typography>
               </Grid2>
               <Grid2 size={{ xs: 8 }} align="start">
-                {persuasionLoading && <CircularProgress color={"secondary"} />}
+                {persuasionLoading && <Skeleton variant="rounded" width={400} height={40} />}
                 {persuasionFail && (
                   <Typography sx={{ color: "text.secondary", align: "start" }}>
                     {keyword("failed_to_load")}
@@ -508,7 +508,7 @@ const AssistantCredSignals = () => {
               </Grid2>
               <Grid2 size={{ xs: 8 }} align="start">
                 {subjectivityLoading && (
-                  <CircularProgress color={"secondary"} />
+                  <Skeleton variant="rounded" width={400} height={40} />
                 )}
                 {subjectivityFail && (
                   <Typography sx={{ color: "text.secondary", align: "start" }}>
@@ -605,7 +605,7 @@ const AssistantCredSignals = () => {
 
               <Grid2 size={{ xs: 8 }} align="start">
                 {role.includes("BETA_TESTER") && prevFactChecksLoading && (
-                  <CircularProgress color={"secondary"} />
+                  <Skeleton variant="rounded" width={400} height={40} />
                 )}
                 {role.includes("BETA_TESTER") && prevFactChecksFail && (
                   <Typography sx={{ color: "text.secondary", align: "start" }}>
@@ -735,7 +735,7 @@ const AssistantCredSignals = () => {
               <Grid2 size={{ xs: 8 }} align="start">
                 {role.includes("BETA_TESTER") &&
                   machineGeneratedTextLoading && (
-                    <CircularProgress color={"secondary"} />
+                    <Skeleton variant="rounded" width={400} height={40} />
                   )}
                 {role.includes("BETA_TESTER") && machineGeneratedTextFail && (
                   <Typography sx={{ color: "text.secondary", align: "start" }}>
