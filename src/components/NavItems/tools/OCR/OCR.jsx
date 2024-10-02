@@ -69,7 +69,7 @@ const OCR = () => {
       imageFile && imageFile instanceof File
         ? URL.createObjectURL(imageFile)
         : src;
-    console.log("ocrInput", ocrInput);
+    // console.log("ocrInput", ocrInput);
 
     dispatch(setOcrInput(ocrInput, selectedScript));
   };

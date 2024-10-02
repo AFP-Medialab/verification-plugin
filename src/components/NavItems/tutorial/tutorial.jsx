@@ -1,8 +1,13 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Paper } from "@mui/material/";
-import Box from "@mui/material//Box";
-import Typography from "@mui/material//Typography";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Paper,
+  Typography,
+} from "@mui/material";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
@@ -11,10 +16,7 @@ import popUpEn from "./images/popUpImage/popUp_EN.png";
 import popUpFr from "./images/popUpImage/popUp_FR.png";
 import popUpEs from "./images/popUpImage/popUp_ES.png";
 import popUpEl from "./images/popUpImage/popUp_EL.png";
-import AccordionSummary from "@mui/material//AccordionSummary";
-import ExpandMoreIcon from "@mui/icons-material//ExpandMore";
-import AccordionDetails from "@mui/material//AccordionDetails";
-import Accordion from "@mui/material//Accordion";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 // from https://material-ui.com/customization/default-theme/
 // used typography body 2 style
