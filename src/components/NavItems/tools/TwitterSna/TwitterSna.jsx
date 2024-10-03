@@ -29,7 +29,6 @@ import {
 
 import OnWarningInfo from "../../../Shared/OnClickInfo/OnWarningInfo";
 import SearchIcon from "@mui/icons-material/Search";
-import DateTime from "../../../Shared/DateTimePicker/DateTime";
 import { convertMomentToGMT } from "../../../Shared/DateTimePicker/convertToGMT";
 import useTwitterSnaRequest from "./Hooks/useTwitterSnaRequest";
 import { replaceAll } from "../TwitterAdvancedSearch/createUrl";
@@ -51,6 +50,8 @@ import LaptopIcon from "@mui/icons-material/Laptop";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
+import dayjs from "dayjs";
 
 const TwitterSna = () => {
   const theme = createTheme({
@@ -316,13 +317,13 @@ const TwitterSna = () => {
   const handleSinceDateChange = (date) => {
     setSinceError(date === null);
     if (until && date >= until) setSinceError(true);
-    setSince(date);
+    setSince(dayjs(date));
   };
 
   const handleUntilDateChange = (date) => {
     setUntilError(date === null);
     if (since && date < since) setUntilError(true);
-    setUntil(date);
+    setUntil(dayjs(date));
   };
   const pastDate = (currentDate) => {
     const itemDate = currentDate.toDate();
@@ -659,35 +660,16 @@ const TwitterSna = () => {
               <Box m={1} />
 
               <Grid2 container spacing={4} alignItems="center">
-                <Grid2 size={{ xs: 4 }}>
-                  <DateTime
-                    id="standard-full-width-since"
+                <Grid2 size={{ xs: 8 }}>
+                  <DateAndTimePicker
+                    time={true}
                     disabled={searchFormDisabled}
-                    input={true}
-                    label={"*  " + keyword("twitter_sna_from_date")}
-                    className={classes.neededField}
-                    dateFormat={"YYYY-MM-DD"}
-                    timeFormat={"HH:mm:ss"}
-                    value={since}
-                    handleChange={handleSinceDateChange}
-                    error={sinceError}
-                    placeholder={keyword("twitter_sna_selectdate")}
-                  />
-                </Grid2>
-                <Grid2 size={{ xs: 4 }}>
-                  <DateTime
-                    id="standard-full-width-until"
-                    disabled={searchFormDisabled}
-                    input={true}
-                    label={"*  " + keyword("twitter_sna_until_date")}
-                    className={classes.neededField}
-                    dateFormat={"YYYY-MM-DD"}
-                    timeFormat={"HH:mm:ss"}
-                    value={until}
-                    handleChange={handleUntilDateChange}
-                    error={untilError}
-                    placeholder={keyword("twitter_sna_selectdate")}
-                    shouldDisableDate={pastDate}
+                    keywordFromDate={keyword("twitter_sna_from_date")}
+                    keywordUntilDate={keyword("twitter_sna_until_date")}
+                    fromValue={since}
+                    untilValue={until}
+                    handleSinceChange={handleSinceDateChange}
+                    handleUntilChange={handleUntilDateChange}
                   />
                 </Grid2>
 
@@ -796,7 +778,7 @@ const TwitterSna = () => {
 
               <Accordion>
                 <AccordionSummary
-                  expandIcon={<ExpandMoreIcon style={{ color: "#17717e" }} />}
+                  expandIcon={<ExpandMoreIcon style={{ color: "#00926c" }} />}
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
@@ -804,7 +786,7 @@ const TwitterSna = () => {
                     <Typography
                       variant="h6"
                       align="left"
-                      style={{ color: "#17717e" }}
+                      style={{ color: "#00926c" }}
                     >
                       {keyword("twittersna_title_optional")}
                     </Typography>

@@ -46,8 +46,8 @@ const Deepfake = () => {
 
   const dispatch = useDispatch();
 
-  const submitUrl = () => {
-    UseGetDeepfake(
+  const submitUrl = async () => {
+    await UseGetDeepfake(
       keyword,
       input,
       true,
@@ -78,9 +78,9 @@ const Deepfake = () => {
       preprocessingError,
     );
   };
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     dispatch(resetDeepfake());
-    submitUrl();
+    await submitUrl();
   };
 
   const handleClose = () => {
@@ -139,6 +139,7 @@ const Deepfake = () => {
                     fileInputTypesAccepted={"video/*"}
                     handleCloseSelectedFile={handleClose}
                     preprocessLocalFile={preprocessVideo}
+                    isParentLoading={isLoading}
                   />
                 </form>
                 <Box m={2} />

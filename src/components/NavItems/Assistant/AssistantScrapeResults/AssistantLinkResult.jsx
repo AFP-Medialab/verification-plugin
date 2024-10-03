@@ -16,7 +16,14 @@ import ExtractedSourceCredibilityResult from "../AssistantCheckResults/Extracted
 import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-const ExtractedUrl = (index, keyword, extractedSourceCred, link) => {
+const ExtractedUrl = (
+  index,
+  keyword,
+  extractedSourceCred,
+  link,
+  done,
+  loading,
+) => {
   let sourceType;
   let Icon;
   let iconColor;
@@ -45,6 +52,8 @@ const ExtractedUrl = (index, keyword, extractedSourceCred, link) => {
       <Grid2 size={{ xs: 10 }} align="left">
         <Typography>
           <Link
+            rel="noopener noreferrer"
+            target="_blank"
             color={
               extractedSourceCred
                 ? extractedSourceCred[link].urlColor
@@ -63,7 +72,7 @@ const ExtractedUrl = (index, keyword, extractedSourceCred, link) => {
         </Typography>
       </Grid2>
 
-      {sourceType ? (
+      {sourceType && done ? (
         <Grid2
           size={{ xs: 1 }}
           style={{ display: "flex", alignItems: "center" }}
@@ -77,6 +86,10 @@ const ExtractedUrl = (index, keyword, extractedSourceCred, link) => {
             urlColor={extractedSourceCred[link].urlColor}
           />
         </Grid2>
+      ) : loading ? (
+        <Grid2 size={{ xs: 1 }} style={{ alignItems: "right" }}>
+          <CircularProgress color={"secondary"} />
+        </Grid2>
       ) : null}
     </Grid2>
   );
@@ -87,13 +100,34 @@ const ExtractedUrlList = (
   linkList,
   extractedLinks,
   extractedSourceCred,
+  done,
+  loading,
+  fail,
 ) => {
   const links = extractedLinks ? extractedLinks : linkList ? linkList : null;
+  if (fail) {
+    return (
+      <Typography
+        component={"div"}
+        sx={{ textAlign: "start" }}
+        variant={"subtitle1"}
+      >
+        {keyword("extracted_urls_url_domain_analysis_failed")}
+      </Typography>
+    );
+  }
   return (
     <div>
       {links
         ? links.map((link, index) =>
-            ExtractedUrl(index, keyword, extractedSourceCred, link),
+            ExtractedUrl(
+              index,
+              keyword,
+              extractedSourceCred,
+              link,
+              done,
+              loading,
+            ),
           )
         : keyword("extracted_urls_url_domain_analysis_failed")}
     </div>
@@ -122,7 +156,6 @@ const AssistantLinkResult = () => {
             <Typography variant={"h5"}>
               {" "}
               {keyword("extracted_urls_url_domain_analysis")}{" "}
-              {inputSCLoading && <CircularProgress color={"secondary"} />}
             </Typography>
           }
           action={
@@ -150,27 +183,15 @@ const AssistantLinkResult = () => {
             overflowX: "hidden",
           }}
         >
-          {inputSCLoading &&
-            ExtractedUrlList(
-              keyword,
-              linkList,
-              extractedLinks,
-              extractedSourceCred,
-            )}
-          {inputSCFail &&
-            ExtractedUrlList(
-              keyword,
-              linkList,
-              extractedLinks,
-              extractedSourceCred,
-            )}
-          {inputSCDone &&
-            ExtractedUrlList(
-              keyword,
-              linkList,
-              extractedLinks,
-              extractedSourceCred,
-            )}
+          {ExtractedUrlList(
+            keyword,
+            linkList,
+            extractedLinks,
+            extractedSourceCred,
+            inputSCDone,
+            inputSCLoading,
+            inputSCFail,
+          )}
         </CardContent>
       </Card>
     </Grid2>
