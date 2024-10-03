@@ -30,8 +30,11 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { Audiotrack } from "@mui/icons-material";
-import { tools, TOOLS_CATEGORIES } from "../../../../constants/tools";
-import { ROLES } from "../../../../constants/roles";
+import {
+  canUserSeeTool,
+  tools,
+  TOOLS_CATEGORIES,
+} from "../../../../constants/tools";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -205,39 +208,46 @@ const ToolsMenu = () => {
     },
   ];
 
-  const canUserSeeTool = (tool) => {
-    return (
-      !tool.rolesNeeded ||
-      (role && tool.rolesNeeded && role.includes(...tool.rolesNeeded)) ||
-      tool.rolesNeeded.includes(ROLES.LOCK)
-    );
-  };
-
   tools.forEach((tool) => {
-    if (tool.category === TOOLS_CATEGORIES.VIDEO && canUserSeeTool(tool)) {
+    if (
+      tool.category === TOOLS_CATEGORIES.VIDEO &&
+      canUserSeeTool(tool, role)
+    ) {
       toolsVideo.push(tool);
     }
 
-    if (tool.category === TOOLS_CATEGORIES.IMAGE && canUserSeeTool(tool)) {
+    if (
+      tool.category === TOOLS_CATEGORIES.IMAGE &&
+      canUserSeeTool(tool, role)
+    ) {
       toolsImages.push(tool);
     }
 
-    if (tool.category === TOOLS_CATEGORIES.AUDIO && canUserSeeTool(tool)) {
+    if (
+      tool.category === TOOLS_CATEGORIES.AUDIO &&
+      canUserSeeTool(tool, role)
+    ) {
       toolsAudio.push(tool);
     }
 
-    if (tool.category === TOOLS_CATEGORIES.SEARCH && canUserSeeTool(tool)) {
+    if (
+      tool.category === TOOLS_CATEGORIES.SEARCH &&
+      canUserSeeTool(tool, role)
+    ) {
       toolsSearch.push(tool);
     }
 
     if (
       tool.category === TOOLS_CATEGORIES.DATA_ANALYSIS &&
-      canUserSeeTool(tool)
+      canUserSeeTool(tool, role)
     ) {
       toolsData.push(tool);
     }
 
-    if (tool.category === TOOLS_CATEGORIES.OTHER && canUserSeeTool(tool)) {
+    if (
+      tool.category === TOOLS_CATEGORIES.OTHER &&
+      canUserSeeTool(tool, role)
+    ) {
       otherTools.push(tool);
     }
   });
