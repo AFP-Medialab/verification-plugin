@@ -25,44 +25,42 @@ const AssistantWarnings = () => {
   );
 
   return (
-    <Box mb={2} pl={1}>
-      <Card variant={"outlined"} className={classes.assistantWarningBorder}>
-        <Grid2 container>
-          <Grid2 size={{ xs: 12 }} style={{ display: "flex" }}>
-            <CardMedia>
-              <Box m={1}>
-                <ErrorOutlineOutlinedIcon color={"error"} fontSize={"large"} />
+    <Card variant={"outlined"} className={classes.assistantWarningBorder}>
+      <Grid2 container>
+        <Grid2 size={{ xs: 12 }} style={{ display: "flex" }}>
+          <CardMedia>
+            <Box m={1}>
+              <ErrorOutlineOutlinedIcon color={"error"} fontSize={"large"} />
+            </Box>
+          </CardMedia>
+          <Box m={1} />
+          <div>
+            <Typography component={"span"} variant={"h6"} color={"error"}>
+              <Box mt={1.5} fontWeight="fontWeightBold">
+                {keyword("warning_title")}
               </Box>
-            </CardMedia>
-            <Box m={1} />
-            <div>
-              <Typography component={"span"} variant={"h6"} color={"error"}>
-                <Box mt={1.5} fontWeight="fontWeightBold">
-                  {keyword("warning_title")}
-                </Box>
-              </Typography>
-            </div>
-            <IconButton
-              className={classes.assistantIconRight}
-              onClick={() => dispatch(setWarningExpanded(!warningExpanded))}
-            >
-              <ExpandMoreIcon style={{ color: "red" }} />
-            </IconButton>
-          </Grid2>
-          <Grid2 size={{ xs: 12 }}>
-            <Collapse
-              in={warningExpanded}
-              className={classes.assistantBackground}
-            >
-              <Box m={1} />
-              <DbkfTextResults />
-
-              <DbkfMediaResults />
-            </Collapse>
-          </Grid2>
+            </Typography>
+          </div>
+          <IconButton
+            className={classes.assistantIconRight}
+            onClick={() => dispatch(setWarningExpanded(!warningExpanded))}
+          >
+            <ExpandMoreIcon style={{ color: "red" }} />
+          </IconButton>
         </Grid2>
-      </Card>
-    </Box>
+        <Grid2 size={{ xs: 12 }}>
+          <Collapse
+            in={warningExpanded}
+            className={classes.assistantBackground}
+          >
+            <Box m={1} />
+            <DbkfTextResults />
+
+            <DbkfMediaResults />
+          </Collapse>
+        </Grid2>
+      </Grid2>
+    </Card>
   );
 };
 export default AssistantWarnings;
