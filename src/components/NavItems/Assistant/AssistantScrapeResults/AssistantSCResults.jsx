@@ -41,110 +41,108 @@ const AssistantSCResults = () => {
   );
 
   return (
-    <Box mb={2} pl={1}>
-      <Card variant={"outlined"} className={classes.sourceCredibilityBorder}>
-        <Grid2 container>
-          <Grid2 size={{ xs: 12 }} className={classes.displayFlex}>
-            <CardMedia>
-              <Box m={1}>
-                <FindInPageIcon fontSize={"large"} color={"primary"} />
-              </Box>
-            </CardMedia>
-
-            <Box m={1} />
-
-            <Box mt={1.5}>
-              <Typography component={"span"} variant={"h6"}>
-                {keyword("url_domain_analysis")}
-              </Typography>
+    <Card variant={"outlined"} className={classes.sourceCredibilityBorder}>
+      <Grid2 container>
+        <Grid2 size={{ xs: 12 }} className={classes.displayFlex}>
+          <CardMedia>
+            <Box m={1}>
+              <FindInPageIcon fontSize={"large"} color={"primary"} />
             </Box>
+          </CardMedia>
 
-            <IconButton
-              className={classes.assistantIconRight}
-              onClick={() => dispatch(setAssuranceExpanded(!assuranceExpanded))}
-            >
-              <ExpandMoreIcon color={"primary"} />
-            </IconButton>
-          </Grid2>
+          <Box m={1} />
 
-          <Grid2 size={{ xs: 12 }}>
-            <Collapse
-              in={assuranceExpanded}
-              className={classes.assistantBackground}
-            >
-              <Box mt={3} ml={2}>
-                {positiveSourCred ? (
-                  <div>
-                    <Typography
-                      variant={"subtitle1"}
-                      className={classes.fontBold}
-                    >
-                      {keyword("fact_checker")}
-                    </Typography>
-                    <SourceCredibilityResult
-                      scResultFiltered={positiveSourCred}
-                      icon={CheckCircleOutlineIcon}
-                      iconColor="primary"
-                    />
-                  </div>
-                ) : null}
+          <Box mt={1.5}>
+            <Typography component={"span"} variant={"h6"}>
+              {keyword("url_domain_analysis")}
+            </Typography>
+          </Box>
 
-                {cautionSourceCred ? (
-                  <div>
-                    <Typography
-                      variant={"subtitle1"}
-                      className={classes.fontBold}
-                    >
-                      {keyword("warning_title")}
-                    </Typography>
-                    <SourceCredibilityResult
-                      scResultFiltered={cautionSourceCred}
-                      icon={ErrorOutlineOutlinedIcon}
-                      iconColor="error"
-                    />
-                  </div>
-                ) : null}
-
-                {mixedSourceCred ? (
-                  <div>
-                    <Typography
-                      variant={"subtitle1"}
-                      className={classes.fontBold}
-                    >
-                      {keyword("mentions")}
-                    </Typography>
-                    <SourceCredibilityResult
-                      scResultFiltered={mixedSourceCred}
-                      icon={SentimentSatisfied}
-                      iconColor="action"
-                    />
-                  </div>
-                ) : null}
-
-                <Box mr={2} mb={1}>
-                  <Tooltip
-                    interactive={"true"}
-                    leaveDelay={50}
-                    style={{ display: "flex", marginLeft: "auto" }}
-                    title={
-                      <div
-                        className={"content"}
-                        dangerouslySetInnerHTML={{
-                          __html: keyword("sc_tooltip"),
-                        }}
-                      />
-                    }
-                    classes={{ tooltip: classes.assistantTooltip }}
-                  >
-                    <HelpOutlineOutlinedIcon color={"action"} />
-                  </Tooltip>
-                </Box>
-              </Box>
-            </Collapse>
-          </Grid2>
+          <IconButton
+            className={classes.assistantIconRight}
+            onClick={() => dispatch(setAssuranceExpanded(!assuranceExpanded))}
+          >
+            <ExpandMoreIcon color={"primary"} />
+          </IconButton>
         </Grid2>
-      </Card>
-    </Box>
+
+        <Grid2 size={{ xs: 12 }}>
+          <Collapse
+            in={assuranceExpanded}
+            className={classes.assistantBackground}
+          >
+            <Box mt={3} ml={2}>
+              {positiveSourCred ? (
+                <div>
+                  <Typography
+                    variant={"subtitle1"}
+                    className={classes.fontBold}
+                  >
+                    {keyword("fact_checker")}
+                  </Typography>
+                  <SourceCredibilityResult
+                    scResultFiltered={positiveSourCred}
+                    icon={CheckCircleOutlineIcon}
+                    iconColor="primary"
+                  />
+                </div>
+              ) : null}
+
+              {cautionSourceCred ? (
+                <div>
+                  <Typography
+                    variant={"subtitle1"}
+                    className={classes.fontBold}
+                  >
+                    {keyword("warning_title")}
+                  </Typography>
+                  <SourceCredibilityResult
+                    scResultFiltered={cautionSourceCred}
+                    icon={ErrorOutlineOutlinedIcon}
+                    iconColor="error"
+                  />
+                </div>
+              ) : null}
+
+              {mixedSourceCred ? (
+                <div>
+                  <Typography
+                    variant={"subtitle1"}
+                    className={classes.fontBold}
+                  >
+                    {keyword("mentions")}
+                  </Typography>
+                  <SourceCredibilityResult
+                    scResultFiltered={mixedSourceCred}
+                    icon={SentimentSatisfied}
+                    iconColor="action"
+                  />
+                </div>
+              ) : null}
+
+              <Box mr={2} mb={1}>
+                <Tooltip
+                  interactive={"true"}
+                  leaveDelay={50}
+                  style={{ display: "flex", marginLeft: "auto" }}
+                  title={
+                    <div
+                      className={"content"}
+                      dangerouslySetInnerHTML={{
+                        __html: keyword("sc_tooltip"),
+                      }}
+                    />
+                  }
+                  classes={{ tooltip: classes.assistantTooltip }}
+                >
+                  <HelpOutlineOutlinedIcon color={"action"} />
+                </Tooltip>
+              </Box>
+            </Box>
+          </Collapse>
+        </Grid2>
+      </Grid2>
+    </Card>
   );
 };
 export default AssistantSCResults;
