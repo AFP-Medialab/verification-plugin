@@ -93,7 +93,6 @@ const SideMenu = ({ tools, setOpenAlert }) => {
     (state) => state.userSession && state.userSession.userAuthenticated,
   );
   const role = useSelector((state) => state.userSession.user.roles);
-  const betaTester = role.includes("BETA_TESTER");
 
   // Set UI direction based on language reading direction
   const direction = currentLang !== "ar" ? "ltr" : "rtl";
