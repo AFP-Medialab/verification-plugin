@@ -755,7 +755,7 @@ const AssistantCredSignals = () => {
                       sx={{ color: "text.secondary", align: "start" }}
                     >
                       {keyword(machineGeneratedTextResult.pred)}
-                      {round(machineGeneratedTextResult.score, 4)}
+                      {/* {round(machineGeneratedTextResult.score, 4)} */}
                     </Typography>
                   )}
                 {role.includes("BETA_TESTER") &&

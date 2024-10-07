@@ -153,6 +153,36 @@ const assistantReducer = (state = defaultState, action) => {
         neDone: false,
         neFail: false,
 
+        newsFramingResult: null,
+        newsFramingLoading: false,
+        newsFramingDone: false,
+        newsFramingFail: false,
+
+        newsGenreResult: null,
+        newsGenreLoading: false,
+        newsGenreDone: false,
+        newsGenreFail: false,
+
+        persuasionResult: null,
+        persuasionLoading: false,
+        persuasionDone: false,
+        persuasionFail: false,
+
+        subjectivityResult: null,
+        subjectivityLoading: false,
+        subjectivityTextDone: false,
+        subjectivityTextFail: false,
+
+        prevFactChecksResult: null,
+        prevFactChecksLoading: false,
+        prevFactChecksDone: false,
+        prevFactChecksFail: false,
+
+        machineGeneratedTextResult: null,
+        machineGeneratedTextLoading: false,
+        machineGeneratedTextDone: false,
+        machineGeneratedTextFail: false,
+
         loading: false,
         warningExpanded: false,
         assuranceExpanded: false,

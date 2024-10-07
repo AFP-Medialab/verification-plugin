@@ -603,7 +603,7 @@ const c2paData = new Tool(
   c2paSvgIcon,
   TOOLS_CATEGORIES.IMAGE,
   [TOOL_STATUS_ICON.NEW, TOOL_STATUS_ICON.LOCK],
-  [ROLES.BETA_TESTER],
+  [ROLES.EVALUATION],
   "c2pa",
   TOOL_GROUPS.VERIFICATION,
   <C2paData />,
@@ -638,3 +638,17 @@ export const tools = Object.freeze([
   about,
   c2paData,
 ]);
+
+/**
+ * Helper function to verify if a user has the permissions to see a tool
+ * @param tool {Tool}
+ * @param role {ROLES[]}
+ * @returns {boolean|*|?Array<Roles>|?Roles[]|boolean}
+ */
+export const canUserSeeTool = (tool, role) => {
+  return (
+    !tool.rolesNeeded ||
+    (role && tool.rolesNeeded && role.includes(...tool.rolesNeeded)) ||
+    tool.rolesNeeded.includes(ROLES.LOCK)
+  );
+};

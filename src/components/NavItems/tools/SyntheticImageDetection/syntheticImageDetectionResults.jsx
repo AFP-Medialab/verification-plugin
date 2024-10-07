@@ -280,6 +280,8 @@ const SyntheticImageDetectionResults = ({
   ];
   const colors = ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"];
 
+  const [filteredNddRows, setFilteredNddRows] = useState([]);
+
   /**
    *
    * @param nddResults
@@ -301,25 +303,10 @@ const SyntheticImageDetectionResults = ({
         // Display iff the user has the permissions to see the content
         if (!canUserDisplayAlgorithmResults(role, d)) continue;
 
-        if (
-          imageType &&
-          imageType === "image/webp" &&
-          (d.apiServiceName === ldmWebpR50Grip.apiServiceName ||
-            d.apiServiceName === proGanWebpR50Grip.apiServiceName ||
-            d.apiServiceName === gigaGanWebpR50Grip.apiServiceName)
-        ) {
-          detectionResults.push(d);
-        } else if (
-          imageType &&
-          imageType !== "image/webp" &&
-          (d.apiServiceName === ldmWebpR50Grip.apiServiceName ||
-            d.apiServiceName === proGanWebpR50Grip.apiServiceName ||
-            d.apiServiceName === gigaGanWebpR50Grip.apiServiceName)
-        ) {
-          continue;
-        } else {
-          detectionResults.push(d);
-        }
+        //TODO: Iff the nd result is a webp image and has detection for a webp algorithm, display the webp algorithm,
+        // else, filter out the webp algorithm
+
+        detectionResults.push(d);
       }
 
       if (detectionResults.length === 0) {
@@ -340,6 +327,17 @@ const SyntheticImageDetectionResults = ({
     }
     return rows;
   };
+
+  const updateNddRows = (nddResults) => {
+    const rows = getNddRows(nddResults);
+
+    setFilteredNddRows(rows);
+  };
+
+  useEffect(() => {
+    if (nd && nd.similar_media && nd.similar_media.length > 0)
+      updateNddRows(nd.similar_media);
+  }, [nd]);
 
   return (
     <Card sx={{ width: "100%" }}>
@@ -453,7 +451,7 @@ const SyntheticImageDetectionResults = ({
                           )}
                     </Typography>
 
-                    {nd && nd.similar_media && nd.similar_media.length > 0 && (
+                    {filteredNddRows && filteredNddRows.length > 0 && (
                       <Typography
                         variant="h5"
                         align="center"
@@ -582,7 +580,7 @@ const SyntheticImageDetectionResults = ({
             )}
           </Grid2>
           <Grid2 container size={{ xs: 12 }} spacing={4}>
-            {nd && nd.similar_media && nd.similar_media.length > 0 && (
+            {filteredNddRows && filteredNddRows.length > 0 && (
               <Grid2
                 sx={{
                   width: "100%",
@@ -595,7 +593,7 @@ const SyntheticImageDetectionResults = ({
                     </AccordionSummary>
                     <AccordionDetails>
                       <Stack direction={"column"} spacing={4}>
-                        <NddDatagrid rows={getNddRows(nd.similar_media)} />
+                        <NddDatagrid rows={filteredNddRows} />
                       </Stack>
                     </AccordionDetails>
                   </Accordion>
