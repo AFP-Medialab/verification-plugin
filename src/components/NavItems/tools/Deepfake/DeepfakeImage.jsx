@@ -30,8 +30,7 @@ const Deepfake = () => {
   //const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.deepfakeImage.loading);
   const result = useSelector((state) => state.deepfakeImage.result);
-  //const url = useSelector((state) => state.deepfakeImage.url);
-  const { url } = useParams();
+  const url = useSelector((state) => state.deepfakeImage.url);
   const role = useSelector((state) => state.userSession.user.roles);
   const [input, setInput] = useState(url ? url : "");
   const [type, setType] = useState("");

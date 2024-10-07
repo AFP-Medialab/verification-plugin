@@ -57,8 +57,7 @@ const SyntheticImageDetection = () => {
     (state) => state.syntheticImageDetection.loading,
   );
   const result = useSelector((state) => state.syntheticImageDetection.result);
-  //const url = useSelector((state) => state.syntheticImageDetection.url);
-  const { url } = useParams();
+  const url = useSelector((state) => state.syntheticImageDetection.url);
   const nd = useSelector((state) => state.syntheticImageDetection.duplicates);
   const [input, setInput] = useState(url ? url : "");
   const [imageFile, setImageFile] = useState(undefined);
