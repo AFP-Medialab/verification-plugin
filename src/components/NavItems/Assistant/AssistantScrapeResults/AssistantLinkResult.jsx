@@ -15,6 +15,7 @@ import ExtractedSourceCredibilityResult from "../AssistantCheckResults/Extracted
 import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { TaskAltOutlined } from "@mui/icons-material";
+import { DataGrid } from "@mui/x-data-grid";
 
 const ExtractedUrl = (
   index,
@@ -138,6 +139,103 @@ const ExtractedUrlList = (
   );
 };
 
+const columns = [
+  {
+    field: "id",
+    headerName: "ID",
+    //width: "10%",
+  },
+  {
+    field: "scIcon",
+    headerName: "SC",
+    //width: "10%",
+    renderCell: (params) => {
+      return <LinkIcon />;
+    },
+  },
+  {
+    field: "url",
+    headerName: "URL",
+    //width: "70%",
+  },
+  {
+    field: "details",
+    headerName: "Details",
+    //width: "10%",
+    renderCell: (params) => {
+      return (
+        <ExtractedSourceCredibilityResult
+          extractedSourceCredibilityResults={params.results}
+          sourceType={params.sourceType}
+          url={params.resolvedLink}
+          urlColor={params.urlColor}
+        />
+      );
+    },
+  },
+];
+
+const createRows = (urls, extractedSourceCred, loading, done, keyword) => {
+  let rows = [];
+
+  // create a row for each url
+  for (let i = 0; i < urls.length; i++) {
+    let url = urls[i];
+
+    // extracted source credibility
+    if (extractedSourceCred) {
+      if (extractedSourceCred[url].caution) {
+        sourceType = keyword("warning");
+        Icon = ErrorOutlineOutlinedIcon;
+        iconColor = "error";
+      } else if (extractedSourceCred[url].mixed) {
+        sourceType = keyword("mentions");
+        Icon = SentimentSatisfied;
+        iconColor = "action";
+      } else if (extractedSourceCred[url].positive) {
+        sourceType = keyword("fact_checker");
+        Icon = TaskAltOutlined;
+        iconColor = "primary";
+      }
+    }
+
+    // define cource cred icon
+    let scIcon = "na";
+    if (loading) {
+      scIcon = <Skeleton variant="circular" width={20} height={20} />;
+    } else if (done && extractedSourceCred[url]) {
+      scIcon = Icon;
+    }
+
+    // define details
+    let details = "na";
+    if (loading) {
+      details = <Skeleton variant="rounded" width={20} height={20} />;
+    } else if (done && extractedSourceCred[url]) {
+      details = {
+        results: extractedSourceCred[url],
+        sourceType: sourceType,
+        resolvedLink: extractedSourceCred[url].resolvedLink,
+        urlColor: extractedSourceCred[url].urlColor,
+      };
+    }
+
+    console.log(i);
+    console.log(scIcon);
+    console.log(url);
+    console.log(details);
+
+    rows.push({
+      id: i,
+      scIcon: scIcon,
+      url: extractedSourceCred ? extractedSourceCred[url].resolvedLink : url,
+      details: details,
+    });
+  }
+
+  return rows;
+};
+
 const AssistantLinkResult = () => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -151,54 +249,75 @@ const AssistantLinkResult = () => {
   const inputSCLoading = useSelector((state) => state.assistant.inputSCLoading);
   const inputSCFail = useSelector((state) => state.assistant.inputSCFail);
 
+  const urls = inputSCDone && extractedLinks ? extractedLinks : linkList;
+  const rows = createRows(
+    urls,
+    extractedSourceCred,
+    inputSCLoading,
+    inputSCDone,
+    keyword,
+  );
+
   return (
-    <Grid2 size={{ xs: 12 }}>
-      <Card>
-        <CardHeader
-          className={classes.assistantCardHeader}
-          title={
-            <Typography variant={"h5"}>
-              {" "}
-              {keyword("extracted_urls_url_domain_analysis")}{" "}
-            </Typography>
-          }
-          action={
-            <Tooltip
-              interactive={"true"}
-              title={
-                <div
-                  className={"content"}
-                  dangerouslySetInnerHTML={{
-                    __html: keyword("extracted_urls_tooltip"),
-                  }}
-                />
-              }
-              classes={{ tooltip: classes.assistantTooltip }}
-            >
-              <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
-            </Tooltip>
-          }
-        />
-        <CardContent
-          style={{
-            maxHeight: 300,
-            wordBreak: "break-word",
-            overflowY: "auto",
-            overflowX: "hidden",
+    <Card>
+      <CardHeader
+        className={classes.assistantCardHeader}
+        title={
+          <Typography variant={"h5"}>
+            {" "}
+            {keyword("extracted_urls_url_domain_analysis")}{" "}
+          </Typography>
+        }
+        action={
+          <Tooltip
+            interactive={"true"}
+            title={
+              <div
+                className={"content"}
+                dangerouslySetInnerHTML={{
+                  __html: keyword("extracted_urls_tooltip"),
+                }}
+              />
+            }
+            classes={{ tooltip: classes.assistantTooltip }}
+          >
+            <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+          </Tooltip>
+        }
+      />
+      <CardContent
+        style={{
+          maxHeight: 300,
+          wordBreak: "break-word",
+          overflowY: "auto",
+          overflowX: "hidden",
+        }}
+      >
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
+            },
           }}
-        >
-          {ExtractedUrlList(
-            keyword,
-            linkList,
-            extractedLinks,
-            extractedSourceCred,
-            inputSCDone,
-            inputSCLoading,
-            inputSCFail,
-          )}
-        </CardContent>
-      </Card>
-    </Grid2>
+          pageSizeOptions={[5]}
+          //checkboxSelection
+          disableRowSelectionOnClick
+        />
+        {/* {ExtractedUrlList(
+          keyword,
+          linkList,
+          extractedLinks,
+          extractedSourceCred,
+          inputSCDone,
+          inputSCLoading,
+          inputSCFail,
+        )} */}
+      </CardContent>
+    </Card>
   );
 };
 export default AssistantLinkResult;
