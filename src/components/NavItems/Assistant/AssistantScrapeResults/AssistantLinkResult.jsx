@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 import Card from "@mui/material/Card";
-import { CardHeader, Grid2, Skeleton } from "@mui/material";
+import { Box, CardHeader, Grid2, Skeleton } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Link from "@mui/material/Link";
 import LinkIcon from "@mui/icons-material/Link";
@@ -16,220 +16,236 @@ import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { TaskAltOutlined } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
+import { ArraySchema } from "yup";
 
-const ExtractedUrl = (
-  index,
-  keyword,
-  extractedSourceCred,
-  link,
-  done,
-  loading,
-) => {
-  let sourceType;
-  let Icon;
-  let iconColor;
-
-  {
-    /* select correct icon and link colour */
-  }
-  if (extractedSourceCred) {
-    if (extractedSourceCred[link].caution) {
-      sourceType = keyword("warning");
-      Icon = ErrorOutlineOutlinedIcon;
-      iconColor = "error";
-    } else if (extractedSourceCred[link].mixed) {
-      sourceType = keyword("mentions");
-      Icon = SentimentSatisfied;
-      iconColor = "action";
-    } else if (extractedSourceCred[link].positive) {
-      sourceType = keyword("fact_checker");
-      Icon = TaskAltOutlined;
-      iconColor = "primary";
-    }
-  }
-
-  return (
-    <Grid2 container wrap="wrap" key={index}>
-      {/* icon */}
-      <Grid2 size={{ xs: 1 }} align="center">
-        {loading && <Skeleton variant="circular" width={20} height={20} />}
-        {sourceType && done && <Icon color={iconColor} fontSize="large" />}
-        {!sourceType && done && <LinkIcon />}
-      </Grid2>
-
-      {/* extracted links */}
-      <Grid2 size={{ xs: 10 }} align="left">
-        <Typography>
-          <Link
-            rel="noopener noreferrer"
-            target="_blank"
-            color={
-              extractedSourceCred
-                ? extractedSourceCred[link].urlColor
-                : "inherit"
-            }
-            href={
-              extractedSourceCred
-                ? extractedSourceCred[link].resolvedLink
-                : link
-            }
-          >
-            {extractedSourceCred
-              ? extractedSourceCred[link].resolvedLink
-              : link}
-          </Link>
-        </Typography>
-      </Grid2>
-
-      {/* source cred details */}
-      {sourceType && done ? (
-        <Grid2 size={{ xs: 1 }} align="center">
-          <ExtractedSourceCredibilityResult
-            extractedSourceCredibilityResults={extractedSourceCred[link]}
-            sourceType={sourceType}
-            url={extractedSourceCred[link].resolvedLink}
-            urlColor={extractedSourceCred[link].urlColor}
-          />
-        </Grid2>
-      ) : loading ? (
-        <Grid2 size={{ xs: 1 }} align="center">
-          <Skeleton variant="rounded" width={20} height={20} />
-        </Grid2>
-      ) : null}
-    </Grid2>
-  );
-};
-
-const ExtractedUrlList = (
-  keyword,
-  linkList,
-  extractedLinks,
-  extractedSourceCred,
-  done,
-  loading,
-  fail,
-) => {
-  const links = extractedLinks ? extractedLinks : linkList ? linkList : null;
-  if (fail) {
-    return (
-      <Typography
-        component={"div"}
-        sx={{ textAlign: "start" }}
-        variant={"subtitle1"}
-      >
-        {keyword("extracted_urls_url_domain_analysis_failed")}
-      </Typography>
-    );
-  }
+// render status icon for extracted urls
+const StatusIcon = (params) => {
+  //console.log("StatusIcon params=", params);
   return (
     <div>
-      {links
-        ? links.map((link, index) =>
-            ExtractedUrl(
-              index,
-              keyword,
-              extractedSourceCred,
-              link,
-              done,
-              loading,
-            ),
-          )
-        : keyword("extracted_urls_url_domain_analysis_failed")}
+      {params.done && params.sourceType && (
+        <params.urlIcon color={params.urlColor} />
+      )}
+      {params.loading && (
+        <div align="center">
+          <Skeleton variant="circular" width={20} height={20} />
+        </div>
+      )}
+      {params.done && !params.sourceType && <LinkIcon />}
     </div>
   );
 };
 
+// render domain or account of extracted URL in correct colour
+const DomainAccount = (params) => {
+  //console.log("DomainAccount params=", params);
+  return (
+    <div>
+      {params.done && params.urlResults.resolvedDomain != "" && (
+        <Tooltip title={"https://" + params.urlResults.resolvedDomain}>
+          <Link
+            target="_blank"
+            href={"https://" + params.urlResults.resolvedDomain}
+            color={params.urlColor}
+          >
+            {"https://" + params.urlResults.resolvedDomain}
+          </Link>
+        </Tooltip>
+      )}
+      {params.done && params.urlResults.resolvedDomain === "" && ""}
+      {params.loading && <Skeleton variant="rounded" />}
+      {(params.fail || (params.done && !params.urlResults)) && ""}
+    </div>
+  );
+};
+
+// render URL in correct colour
+const Url = (params) => {
+  //console.log("Url params=", params);
+  return (
+    <Tooltip title={params.url}>
+      <Link
+        style={{ cursor: "pointer" }}
+        target="_blank"
+        href={params.url}
+        color={params.urlColor}
+      >
+        {params.url}
+      </Link>
+    </Tooltip>
+  );
+};
+
+// render details
+const Details = (params) => {
+  //console.log("Details params=", params);
+  return (
+    <div>
+      {params.done && params.urlResults && (
+        <ExtractedSourceCredibilityResult
+          extractedSourceCredibilityResults={params.urlResults}
+          sourceType={params.sourceType}
+          url={params.urlResults.resolvedLink}
+          urlColor={params.urlResults.urlColor}
+        />
+      )}
+      {params.loading && (
+        <div align="center">
+          <Skeleton variant="rounded" height={20} width={20} />
+        </div>
+      )}
+      {(params.fail || (params.done && !params.urlResults)) && "-"}
+    </div>
+  );
+};
+
+// columns
 const columns = [
   {
     field: "id",
     headerName: "ID",
-    //width: "10%",
+    resizable: false,
+    align: "center",
+    headerAlign: "center",
+    //width: '10%',
   },
   {
-    field: "scIcon",
-    headerName: "SC",
-    //width: "10%",
+    field: "urlIcon",
+    headerName: "Status",
+    resizable: false,
+    align: "center",
+    headerAlign: "center",
+    //width: '10%',
     renderCell: (params) => {
-      return <LinkIcon />;
+      return (
+        <StatusIcon
+          loading={params.row.urlIcon.loading}
+          done={params.row.urlIcon.done}
+          fail={params.row.urlIcon.fail}
+          urlIcon={params.row.urlIcon.urlIcon}
+          urlColor={params.row.urlIcon.urlColor}
+          sourceType={params.row.urlIcon.sourceType}
+        />
+      );
+    },
+  },
+  {
+    field: "domainAccount",
+    headerName: "Domain/Account",
+    resizable: false,
+    flex: 1,
+    //width: '40%',
+    renderCell: (params) => {
+      return (
+        <DomainAccount
+          loading={params.row.domainAccount.loading}
+          done={params.row.domainAccount.done}
+          fail={params.row.domainAccount.fail}
+          urlResults={params.row.domainAccount.urlResults}
+          urlColor={params.row.domainAccount.urlColor}
+        />
+      );
     },
   },
   {
     field: "url",
     headerName: "URL",
-    //width: "70%",
+    resizable: false,
+    flex: 1,
+    //width: '30%',
+    renderCell: (params) => {
+      return (
+        <Url url={params.row.url.url} urlColor={params.row.url.urlColor} />
+      );
+    },
   },
   {
     field: "details",
     headerName: "Details",
-    //width: "10%",
+    resizable: false,
+    align: "center",
+    headerAlign: "center",
+    //width: '10%',
     renderCell: (params) => {
       return (
-        <ExtractedSourceCredibilityResult
-          extractedSourceCredibilityResults={params.results}
-          sourceType={params.sourceType}
-          url={params.resolvedLink}
-          urlColor={params.urlColor}
+        <Details
+          loading={params.row.details.loading}
+          done={params.row.details.done}
+          fail={params.row.details.fail}
+          urlResults={params.row.details.urlResults}
+          sourceType={params.row.details.sourceType}
         />
       );
     },
   },
 ];
 
-const createRows = (urls, extractedSourceCred, loading, done, keyword) => {
+// rows
+const createRows = (
+  urls,
+  extractedSourceCred,
+  loading,
+  done,
+  fail,
+  keyword,
+) => {
   let rows = [];
 
   // create a row for each url
-  for (let i = 0; i < urls.length; i++) {
+  for (let i = 1; i < urls.length; i++) {
     let url = urls[i];
 
-    // extracted source credibility
+    // define extracted source credibility
+    let sourceType = null;
+    let urlIcon = <LinkIcon />;
+    let urlColor = "inherit";
+    let urlResults = null;
     if (extractedSourceCred) {
-      if (extractedSourceCred[url].caution) {
+      urlResults = extractedSourceCred[url];
+      if (urlResults.caution) {
         sourceType = keyword("warning");
-        Icon = ErrorOutlineOutlinedIcon;
-        iconColor = "error";
-      } else if (extractedSourceCred[url].mixed) {
+        urlIcon = ErrorOutlineOutlinedIcon;
+        urlColor = "error";
+      } else if (urlResults.mixed) {
         sourceType = keyword("mentions");
-        Icon = SentimentSatisfied;
-        iconColor = "action";
-      } else if (extractedSourceCred[url].positive) {
+        urlIcon = SentimentSatisfied;
+        urlColor = "action";
+      } else if (urlResults.positive) {
         sourceType = keyword("fact_checker");
-        Icon = TaskAltOutlined;
-        iconColor = "primary";
+        urlIcon = TaskAltOutlined;
+        urlColor = "primary";
       }
     }
 
-    // define cource cred icon
-    let scIcon = "na";
-    if (loading) {
-      scIcon = <Skeleton variant="circular" width={20} height={20} />;
-    } else if (done && extractedSourceCred[url]) {
-      scIcon = Icon;
-    }
-
-    // define details
-    let details = "na";
-    if (loading) {
-      details = <Skeleton variant="rounded" width={20} height={20} />;
-    } else if (done && extractedSourceCred[url]) {
-      details = {
-        results: extractedSourceCred[url],
-        sourceType: sourceType,
-        resolvedLink: extractedSourceCred[url].resolvedLink,
-        urlColor: extractedSourceCred[url].urlColor,
-      };
-    }
-
-    console.log(i);
-    console.log(scIcon);
-    console.log(url);
-    console.log(details);
-
+    // add row
     rows.push({
       id: i,
-      scIcon: scIcon,
-      url: extractedSourceCred ? extractedSourceCred[url].resolvedLink : url,
-      details: details,
+      urlIcon: {
+        loading: loading,
+        done: done,
+        fail: fail,
+        urlIcon: urlIcon,
+        urlColor: urlColor,
+        sourceType: sourceType,
+      },
+      domainAccount: {
+        loading: loading,
+        done: done,
+        fail: fail,
+        urlResults: urlResults,
+        urlColor: urlColor,
+      },
+      url: {
+        url: url,
+        urlColor: urlColor,
+      },
+      details: {
+        loading: loading,
+        done: done,
+        fail: fail,
+        urlResults: urlResults,
+        sourceType: sourceType,
+      },
     });
   }
 
@@ -249,14 +265,29 @@ const AssistantLinkResult = () => {
   const inputSCLoading = useSelector((state) => state.assistant.inputSCLoading);
   const inputSCFail = useSelector((state) => state.assistant.inputSCFail);
 
-  const urls = inputSCDone && extractedLinks ? extractedLinks : linkList;
+  const urls =
+    inputSCDone && extractedLinks ? extractedLinks : linkList ? linkList : null;
   const rows = createRows(
     urls,
     extractedSourceCred,
     inputSCLoading,
     inputSCDone,
+    inputSCFail,
     keyword,
   );
+
+  // if no urls extracted
+  if (!urls) {
+    return (
+      <Typography
+        component={"div"}
+        sx={{ textAlign: "start" }}
+        variant={"subtitle1"}
+      >
+        {keyword("extracted_urls_url_domain_analysis_failed")}
+      </Typography>
+    );
+  }
 
   return (
     <Card>
@@ -287,7 +318,6 @@ const AssistantLinkResult = () => {
       />
       <CardContent
         style={{
-          maxHeight: 300,
           wordBreak: "break-word",
           overflowY: "auto",
           overflowX: "hidden",
@@ -304,18 +334,8 @@ const AssistantLinkResult = () => {
             },
           }}
           pageSizeOptions={[5]}
-          //checkboxSelection
           disableRowSelectionOnClick
         />
-        {/* {ExtractedUrlList(
-          keyword,
-          linkList,
-          extractedLinks,
-          extractedSourceCred,
-          inputSCDone,
-          inputSCLoading,
-          inputSCFail,
-        )} */}
       </CardContent>
     </Card>
   );

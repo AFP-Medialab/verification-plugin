@@ -872,6 +872,7 @@ const filterSourceCredibilityResults = (
       sourceCredibilityDict[link] = {
         link: link,
         resolvedLink: result["resolved-url"],
+        resolvedDomain: result["resolved-domain"],
         urlColor: trafficLightColors.unlabelled,
         positive: [],
         mixed: [],
@@ -897,6 +898,7 @@ const filterSourceCredibilityResults = (
       sourceCredibilityDict[link] = {
         link: link,
         resolvedLink: link,
+        resolvedDomain: "",
         urlColor: trafficLightColors.unlabelled,
         positive: [],
         mixed: [],

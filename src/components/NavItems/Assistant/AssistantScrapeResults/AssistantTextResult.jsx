@@ -65,67 +65,67 @@ const AssistantTextResult = () => {
   }, [textBox]);
 
   return (
-    <Grid2 size={{ xs: 12 }}>
-      <Card data-testid="assistant-text-scraped-text">
-        <CardHeader
-          className={classes.assistantCardHeader}
-          title={keyword("text_title")}
-          action={
-            // top left warning and tooltip
-            <div style={{ display: "flex" }}>
-              <div hidden={dbkfMatch === null}>
-                <Tooltip title={keyword("text_warning")}>
-                  <WarningOutlined
-                    className={classes.toolTipWarning}
-                    onClick={() => {
-                      dispatch(setWarningExpanded(!warningExpanded));
-                      window.scrollTo(0, 0);
-                    }}
-                  />
-                </Tooltip>
-              </div>
-              <Tooltip
-                interactive={"true"}
-                title={
-                  <div
-                    className={"content"}
-                    dangerouslySetInnerHTML={{
-                      __html: keyword("text_tooltip"),
-                    }}
-                  />
-                }
-                classes={{ tooltip: classes.assistantTooltip }}
-              >
-                <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+    //<Grid2 size={{ xs: 12 }}>
+    <Card data-testid="assistant-text-scraped-text">
+      <CardHeader
+        className={classes.assistantCardHeader}
+        title={keyword("text_title")}
+        action={
+          // top left warning and tooltip
+          <div style={{ display: "flex" }}>
+            <div hidden={dbkfMatch === null}>
+              <Tooltip title={keyword("text_warning")}>
+                <WarningOutlined
+                  className={classes.toolTipWarning}
+                  onClick={() => {
+                    dispatch(setWarningExpanded(!warningExpanded));
+                    window.scrollTo(0, 0);
+                  }}
+                />
               </Tooltip>
             </div>
-          }
-        />
-        {dbkfMatchLoading && mtLoading && (
-          <LinearProgress variant={"indeterminate"} color={"secondary"} />
-        )}
-        <CardContent>
-          <Collapse in={expanded} collapsedSize={100} id={"element-to-check"}>
-            <Typography component={"div"} sx={{ textAlign: "start" }}>
-              {/*{!displayOrigLang && translatedText ? translatedText : text}*/}
-              {textHtmlOutput ?? text}
-            </Typography>
-          </Collapse>
+            <Tooltip
+              interactive={"true"}
+              title={
+                <div
+                  className={"content"}
+                  dangerouslySetInnerHTML={{
+                    __html: keyword("text_tooltip"),
+                  }}
+                />
+              }
+              classes={{ tooltip: classes.assistantTooltip }}
+            >
+              <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+            </Tooltip>
+          </div>
+        }
+      />
+      {dbkfMatchLoading && mtLoading && (
+        <LinearProgress variant={"indeterminate"} color={"secondary"} />
+      )}
+      <CardContent>
+        <Collapse in={expanded} collapsedSize={300} id={"element-to-check"}>
+          <Typography component={"div"} sx={{ textAlign: "start" }}>
+            {/*{!displayOrigLang && translatedText ? translatedText : text}*/}
+            {textHtmlOutput ?? text}
+          </Typography>
+        </Collapse>
 
-          {/* footer */}
-          <TextFooter
-            classes={classes}
-            setDisplayOrigLang={setDisplayOrigLang}
-            displayOrigLang={displayOrigLang}
-            textLang={textLang}
-            expandMinimiseText={expandMinimiseText}
-            text={text}
-            setExpanded={setExpanded}
-            expanded={expanded}
-          />
-        </CardContent>
-      </Card>
-    </Grid2>
+        {/* footer */}
+        <TextFooter
+          classes={classes}
+          setDisplayOrigLang={setDisplayOrigLang}
+          displayOrigLang={displayOrigLang}
+          textLang={textLang}
+          expandMinimiseText={expandMinimiseText}
+          text={text}
+          setExpanded={setExpanded}
+          expanded={expanded}
+        />
+      </CardContent>
+    </Card>
+    //</Grid2>
   );
 };
 export default AssistantTextResult;
