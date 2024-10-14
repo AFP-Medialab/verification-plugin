@@ -158,12 +158,12 @@ export default function AssistantTextClassification({
           <CardContent>
             <CategoriesList
               categories={filteredCategories}
-              noCategoriesText={keyword("no_detected_categories")}
               thresholdLow={configs.confidenceThresholdLow}
               thresholdHigh={configs.confidenceThresholdHigh}
               rgbLow={configs.confidenceRgbLow}
               rgbHigh={configs.confidenceRgbHigh}
               keyword={keyword}
+              subjectvity={subjectivity}
             />
             {filteredSentences.length > 0 ? (
               <FormControlLabel
@@ -186,14 +186,21 @@ export default function AssistantTextClassification({
 
 export function CategoriesList({
   categories,
-  noCategoriesText,
   thresholdLow,
   thresholdHigh,
   rgbLow,
   rgbHigh,
   keyword,
+  subjectvity,
 }) {
-  if (categories.length < 1) return <p>{noCategoriesText}</p>;
+  if (_.isEmpty(categories)) {
+    return (
+      <p>
+        {subjectvity && keyword("no_detected_sentences")}
+        {!subjectvity && keyword("no_detected_categories")}
+      </p>
+    );
+  }
 
   let output = [];
   let index = 0;

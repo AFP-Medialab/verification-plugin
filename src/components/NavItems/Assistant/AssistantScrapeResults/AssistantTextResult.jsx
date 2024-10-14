@@ -255,6 +255,7 @@ const AssistantTextResult = () => {
                   titleText={newsFramingTitle}
                   helpDescription={"news_framing_tooltip"}
                   textHtmlMap={textHtmlMap}
+                  subjectivity={false}
                 />
               )}
             </CustomTabPanel>
@@ -275,7 +276,7 @@ const AssistantTextResult = () => {
                   titleText={newsGenreTitle}
                   helpDescription={"news_genre_tooltip"}
                   textHtmlMap={textHtmlMap}
-                  displayBox="true"
+                  subjectivity={false}
                 />
               )}
             </CustomTabPanel>
@@ -300,7 +301,7 @@ const AssistantTextResult = () => {
               )}
             </CustomTabPanel>
 
-            {/* sujectivity */}
+            {/* subjectivity */}
             <CustomTabPanel value={textTabIndex} index={4}>
               {subjectivityLoading && (
                 <Stack direction="column" spacing={4} p={4}>
@@ -316,7 +317,7 @@ const AssistantTextResult = () => {
                   titleText={subjectivityTitle}
                   helpDescription={"subjectivity_tooltip"}
                   textHtmlMap={textHtmlMap}
-                  subjectivity="true"
+                  subjectivity={true}
                 />
               )}
             </CustomTabPanel>

@@ -174,6 +174,7 @@ export default function AssistantTextSpanClassification({
             marginTop: "0.5em",
             marginBottom: "0.5em",
             padding: "0.5em",
+            cursor: "pointer",
           }}
         >
           {persuasionTechnique.replaceAll("_", " ")}
@@ -384,6 +385,7 @@ export function CategoriesListToggle({
           ":hover": {
             background: rgbToString(rgbHigh),
           },
+          cursor: "pointer",
         }}
         secondaryAction={itemChip}
         onMouseOver={() => handleCategoryHover(category)}
