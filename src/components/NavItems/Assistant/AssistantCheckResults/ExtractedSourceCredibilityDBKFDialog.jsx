@@ -22,6 +22,7 @@ import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { getUrlTypeFromCredScope } from "./assistantUtils";
+import { Chip, Stack } from "@mui/material";
 
 const renderScope = (keyword, scope) => {
   return (
@@ -66,13 +67,13 @@ const renderDescription = (keyword, description) => {
 const renderEvidence = (evidence) => {
   return (
     <ListItem>
-      <List>
+      <List sx={{ listStyle: "decimal", ml: 4 }}>
         {evidence
           ? evidence.map((result, index) => (
-              <ListItem key={index}>
-                <ListItemIcon>
+              <ListItem key={index} sx={{ display: "list-item" }}>
+                {/* <ListItemIcon>
                   <ArrowRightIcon />
-                </ListItemIcon>
+                </ListItemIcon> */}
                 <Typography>
                   <Link target="_blank" href={result}>
                     {result}
@@ -91,6 +92,7 @@ const ExtractedSourceCredibilityDBKFDialog = ({
   sourceType,
   url,
   urlColor,
+  urlIcon,
 }) => {
   //central
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -104,6 +106,9 @@ const ExtractedSourceCredibilityDBKFDialog = ({
   const handleClose = () => {
     setOpen(false);
   };
+
+  console.log("DurlColor=", urlColor);
+  console.log("DurlIcon=", urlIcon);
 
   return (
     <div>
@@ -122,8 +127,7 @@ const ExtractedSourceCredibilityDBKFDialog = ({
             <IconButton onClick={handleClose}>
               <CloseIcon />
             </IconButton>
-            {sourceType}
-            {": "}
+            {"URL: "}
             <Link color={urlColor} href={url}>
               {url}
             </Link>
@@ -141,21 +145,37 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                               {value.credibilityScope &&
                               value.credibilityScope.includes("/") ? (
-                                <Typography color={trafficLightColor}>
-                                  {` ${keyword("this")}`}
-                                  {getUrlTypeFromCredScope(
-                                    value.credibilityScope,
-                                  )}
-                                  {` ${keyword(
-                                    "source_credibility_warning_account",
-                                  )} ${" "}${value.credibilitySource}`}
-                                </Typography>
+                                <Stack direction="row">
+                                  <Chip
+                                    label={sourceType}
+                                    color={urlColor}
+                                    size="small"
+                                  />
+                                  {/* <urlIcon color={urlColor} /> */}
+                                  <Typography sx={{ ml: 1 }}>
+                                    {` ${keyword("this")}`}
+                                    {getUrlTypeFromCredScope(
+                                      value.credibilityScope,
+                                    )}
+                                    {` ${keyword(
+                                      "source_credibility_warning_account",
+                                    )} ${" "}${value.credibilitySource}`}
+                                  </Typography>
+                                </Stack>
                               ) : value.credibilityScope ? (
-                                <Typography color={trafficLightColor}>
-                                  {` ${keyword(
-                                    "source_cred_popup_header_domain",
-                                  )} ${value.credibilitySource} `}
-                                </Typography>
+                                <Stack direction="row">
+                                  <Chip
+                                    label={sourceType}
+                                    color={urlColor}
+                                    size="small"
+                                  />
+                                  {/* <urlIcon color={urlColor} /> */}
+                                  <Typography sx={{ ml: 1 }}>
+                                    {` ${keyword(
+                                      "source_cred_popup_header_domain",
+                                    )} ${value.credibilitySource} `}
+                                  </Typography>
+                                </Stack>
                               ) : null}
                             </AccordionSummary>
 

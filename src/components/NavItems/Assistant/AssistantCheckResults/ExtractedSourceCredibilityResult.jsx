@@ -13,18 +13,23 @@ import Typography from "@mui/material/Typography";
 const ExtractedSourceCredibilityResult = ({
   extractedSourceCredibilityResults,
   sourceType,
-  urlColor,
   url,
+  urlColor,
+  urlIcon,
 }) => {
   const trafficLightColors = useSelector(
     (state) => state.assistant.trafficLightColors,
   );
 
+  // currently passing through urlColor from parent, don't need trafficLightColors anymore?
   const sourceCredibilityResults = [
     [extractedSourceCredibilityResults.caution, trafficLightColors.caution],
     [extractedSourceCredibilityResults.mixed, trafficLightColors.mixed],
     [extractedSourceCredibilityResults.positive, trafficLightColors.positive],
   ];
+
+  console.log("RurlColor=", urlColor);
+  console.log("RurlIcon=", urlIcon);
 
   return (
     <List component={Stack} direction="row" disablePadding={true}>
@@ -54,6 +59,7 @@ const ExtractedSourceCredibilityResult = ({
                     sourceType={sourceType}
                     url={url}
                     urlColor={urlColor}
+                    urlIcon={urlIcon}
                   />
                 </ListItemSecondaryAction>
               </Typography>

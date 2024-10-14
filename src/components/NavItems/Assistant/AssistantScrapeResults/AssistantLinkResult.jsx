@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 import Card from "@mui/material/Card";
-import { Box, CardHeader, Grid2, Skeleton } from "@mui/material";
+import {
+  Box,
+  Button,
+  CardHeader,
+  Chip,
+  Grid2,
+  Skeleton,
+  Stack,
+} from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Link from "@mui/material/Link";
 import LinkIcon from "@mui/icons-material/Link";
@@ -14,47 +22,48 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import ExtractedSourceCredibilityResult from "../AssistantCheckResults/ExtractedSourceCredibilityResult";
 import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import { TaskAltOutlined } from "@mui/icons-material";
+import { CheckCircleOutline, TaskAltOutlined } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
-import { ArraySchema } from "yup";
 
 // render status icon for extracted urls
-const StatusIcon = (params) => {
-  //console.log("StatusIcon params=", params);
+const Status = (params) => {
+  console.log("Status params=", params);
   return (
-    <div>
+    <Stack>
       {params.done && params.sourceType && (
-        <params.urlIcon color={params.urlColor} />
+        //  <params.urlIcon color={params.urlColor} />
+        <Chip label={params.sourceType} color={params.urlColor} size="small" />
       )}
       {params.loading && (
-        <div align="center">
-          <Skeleton variant="circular" width={20} height={20} />
-        </div>
+        //<div style={{ display: "flex", justifyContent: "center", alignItems: "center" }} >
+        <Skeleton variant="circular" width={20} height={20} />
+        //</div>
       )}
-      {params.done && !params.sourceType && <LinkIcon />}
-    </div>
+    </Stack>
   );
 };
 
 // render domain or account of extracted URL in correct colour
 const DomainAccount = (params) => {
   //console.log("DomainAccount params=", params);
+  let domainOrAccount = "";
+  if (params.urlResults && params.urlResults.resolvedDomain) {
+    domainOrAccount = "https://" + params.urlResults.resolvedDomain;
+  }
   return (
     <div>
-      {params.done && params.urlResults.resolvedDomain != "" && (
-        <Tooltip title={"https://" + params.urlResults.resolvedDomain}>
-          <Link
-            target="_blank"
-            href={"https://" + params.urlResults.resolvedDomain}
-            color={params.urlColor}
-          >
-            {"https://" + params.urlResults.resolvedDomain}
+      {params.done && domainOrAccount != "" && (
+        <Tooltip title={domainOrAccount}>
+          <Link target="_blank" href={domainOrAccount} color={params.urlColor}>
+            {domainOrAccount}
           </Link>
         </Tooltip>
       )}
-      {params.done && params.urlResults.resolvedDomain === "" && ""}
-      {params.loading && <Skeleton variant="rounded" />}
-      {(params.fail || (params.done && !params.urlResults)) && ""}
+      {params.loading && (
+        // <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }} >
+        <Skeleton variant="rounded" />
+        // </div>
+      )}
     </div>
   );
 };
@@ -81,20 +90,23 @@ const Details = (params) => {
   //console.log("Details params=", params);
   return (
     <div>
-      {params.done && params.urlResults && (
+      {console.log("LsourceType=", params.sourceType)}
+      {console.log("LurlColor=", params.urlColor)}
+      {console.log("LurlIcon=", params.urlIcon)}
+      {params.done && params.sourceType && (
         <ExtractedSourceCredibilityResult
           extractedSourceCredibilityResults={params.urlResults}
           sourceType={params.sourceType}
           url={params.urlResults.resolvedLink}
-          urlColor={params.urlResults.urlColor}
+          urlColor={params.urlColor}
+          urlIcon={params.urlIcon}
         />
       )}
       {params.loading && (
-        <div align="center">
-          <Skeleton variant="rounded" height={20} width={20} />
-        </div>
+        //<div style={{ display: "flex", justifyContent: "center", alignItems: "center" }} >
+        <Skeleton variant="rounded" height={20} width={20} />
+        //</div>
       )}
-      {(params.fail || (params.done && !params.urlResults)) && "-"}
     </div>
   );
 };
@@ -104,27 +116,23 @@ const columns = [
   {
     field: "id",
     headerName: "ID",
-    resizable: false,
     align: "center",
     headerAlign: "center",
-    //width: '10%',
   },
   {
-    field: "urlIcon",
+    field: "status",
     headerName: "Status",
-    resizable: false,
     align: "center",
     headerAlign: "center",
-    //width: '10%',
     renderCell: (params) => {
       return (
-        <StatusIcon
-          loading={params.row.urlIcon.loading}
-          done={params.row.urlIcon.done}
-          fail={params.row.urlIcon.fail}
-          urlIcon={params.row.urlIcon.urlIcon}
-          urlColor={params.row.urlIcon.urlColor}
-          sourceType={params.row.urlIcon.sourceType}
+        <Status
+          loading={params.row.status.loading}
+          done={params.row.status.done}
+          fail={params.row.status.fail}
+          urlIcon={params.row.status.urlIcon}
+          urlColor={params.row.status.urlColor}
+          sourceType={params.row.status.sourceType}
         />
       );
     },
@@ -132,9 +140,7 @@ const columns = [
   {
     field: "domainAccount",
     headerName: "Domain/Account",
-    resizable: false,
-    flex: 1,
-    //width: '40%',
+    //width: "*",
     renderCell: (params) => {
       return (
         <DomainAccount
@@ -150,9 +156,7 @@ const columns = [
   {
     field: "url",
     headerName: "URL",
-    resizable: false,
-    flex: 1,
-    //width: '30%',
+    //width: "2*",
     renderCell: (params) => {
       return (
         <Url url={params.row.url.url} urlColor={params.row.url.urlColor} />
@@ -162,10 +166,8 @@ const columns = [
   {
     field: "details",
     headerName: "Details",
-    resizable: false,
     align: "center",
     headerAlign: "center",
-    //width: '10%',
     renderCell: (params) => {
       return (
         <Details
@@ -174,6 +176,8 @@ const columns = [
           fail={params.row.details.fail}
           urlResults={params.row.details.urlResults}
           sourceType={params.row.details.sourceType}
+          urlColor={params.row.details.urlColor}
+          urlIcon={params.row.details.urlIcon}
         />
       );
     },
@@ -197,7 +201,7 @@ const createRows = (
 
     // define extracted source credibility
     let sourceType = null;
-    let urlIcon = <LinkIcon />;
+    let urlIcon = null;
     let urlColor = "inherit";
     let urlResults = null;
     if (extractedSourceCred) {
@@ -209,18 +213,18 @@ const createRows = (
       } else if (urlResults.mixed) {
         sourceType = keyword("mentions");
         urlIcon = SentimentSatisfied;
-        urlColor = "action";
+        urlColor = "warning";
       } else if (urlResults.positive) {
         sourceType = keyword("fact_checker");
-        urlIcon = TaskAltOutlined;
-        urlColor = "primary";
+        urlIcon = CheckCircleOutline; //TaskAltOutlined;
+        urlColor = "success";
       }
     }
 
     // add row
     rows.push({
       id: i,
-      urlIcon: {
+      status: {
         loading: loading,
         done: done,
         fail: fail,
@@ -245,6 +249,8 @@ const createRows = (
         fail: fail,
         urlResults: urlResults,
         sourceType: sourceType,
+        urlColor: urlColor,
+        urlIcon: urlIcon,
       },
     });
   }
@@ -289,6 +295,15 @@ const AssistantLinkResult = () => {
     );
   }
 
+  // // https://www.dhiwise.com/post/react-get-screen-width-everything-you-need-to-know
+  //   const [width, setWidth] = useState(window.innerWidth);
+
+  //   useEffect(() => {
+  //     const handleResize = () => setWidth(window.innerWidth);
+  //     window.addEventListener("resize", handleResize);
+  //     return () => window.removeEventListener("resize", handleResize);
+  //   }, []);
+
   return (
     <Card>
       <CardHeader
@@ -317,25 +332,22 @@ const AssistantLinkResult = () => {
         }
       />
       <CardContent
-        style={{
-          wordBreak: "break-word",
-          overflowY: "auto",
-          overflowX: "hidden",
-        }}
+      // style={{
+      //   wordBreak: "break-word",
+      //   overflowY: "auto",
+      //   overflowX: "hidden",
+      // }}
       >
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 5,
-              },
-            },
-          }}
-          pageSizeOptions={[5]}
-          disableRowSelectionOnClick
-        />
+        // issue with resize related to parent not having a fixed/determined
+        size?
+        <div style={{ height: 400, width: "100%", minWidth: 0 }}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            disableRowSelectionOnClick
+            //disableColumnResize
+          />
+        </div>
       </CardContent>
     </Card>
   );

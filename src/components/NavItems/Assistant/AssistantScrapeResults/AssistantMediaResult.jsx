@@ -72,6 +72,7 @@ const AssistantMediaResult = () => {
     <Card
       data-testid="url-media-results"
       hidden={!urlMode || (!imageList.length && !videoList.length)}
+      //width={window.innerWidth}
     >
       <CardHeader
         className={classes.assistantCardHeader}
