@@ -117,14 +117,14 @@ export default function AssistantTextClassification({
 
   // disabled category box for Subjectivity classifier
   // subjectivty or not
-  let width = 12;
-  if (!subjectivity) {
-    width = 9;
-  }
+  // let width = 12;
+  // if (!subjectivity) {
+  //   width = 9;
+  // }
 
   return (
     <Grid2 container>
-      <Grid2 sx={{ paddingRight: "1em" }} size={width}>
+      <Grid2 sx={{ paddingRight: "1em" }} size={9}>
         <ClassifiedText
           text={text}
           spanIndices={filteredSentences}
@@ -137,49 +137,49 @@ export default function AssistantTextClassification({
           textHtmlMap={textHtmlMap}
         />
       </Grid2>
-      {!subjectivity ? (
-        <Grid2 size={{ xs: 3 }}>
-          <Card>
-            <CardHeader
-              className={classes.assistantCardHeader}
-              title={titleText}
-              action={
-                <div style={{ display: "flex" }}>
-                  <Tooltip
-                    interactive={"true"}
-                    title={confidenceTooltipContent}
-                    classes={{ tooltip: classes.assistantTooltip }}
-                  >
-                    <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
-                  </Tooltip>
-                </div>
-              }
+      {/* {!subjectivity ? ( */}
+      <Grid2 size={{ xs: 3 }}>
+        <Card>
+          <CardHeader
+            className={classes.assistantCardHeader}
+            title={titleText}
+            action={
+              <div style={{ display: "flex" }}>
+                <Tooltip
+                  interactive={"true"}
+                  title={confidenceTooltipContent}
+                  classes={{ tooltip: classes.assistantTooltip }}
+                >
+                  <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+                </Tooltip>
+              </div>
+            }
+          />
+          <CardContent>
+            <CategoriesList
+              categories={filteredCategories}
+              noCategoriesText={keyword("no_detected_categories")}
+              thresholdLow={configs.confidenceThresholdLow}
+              thresholdHigh={configs.confidenceThresholdHigh}
+              rgbLow={configs.confidenceRgbLow}
+              rgbHigh={configs.confidenceRgbHigh}
+              keyword={keyword}
             />
-            <CardContent>
-              <CategoriesList
-                categories={filteredCategories}
-                noCategoriesText={keyword("no_detected_categories")}
-                thresholdLow={configs.confidenceThresholdLow}
-                thresholdHigh={configs.confidenceThresholdHigh}
-                rgbLow={configs.confidenceRgbLow}
-                rgbHigh={configs.confidenceRgbHigh}
-                keyword={keyword}
+            {filteredSentences.length > 0 ? (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={doHighlightSentence}
+                    onChange={handleHighlightSentences}
+                  />
+                }
+                label={keyword("highlight_important_sentence")}
               />
-              {filteredSentences.length > 0 ? (
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={doHighlightSentence}
-                      onChange={handleHighlightSentences}
-                    />
-                  }
-                  label={keyword("highlight_important_sentence")}
-                />
-              ) : null}
-            </CardContent>
-          </Card>
-        </Grid2>
-      ) : null}
+            ) : null}
+          </CardContent>
+        </Card>
+      </Grid2>
+      {/* ) : null} */}
     </Grid2>
   );
 }
