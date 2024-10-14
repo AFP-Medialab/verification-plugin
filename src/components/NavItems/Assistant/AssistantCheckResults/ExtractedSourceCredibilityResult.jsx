@@ -28,9 +28,6 @@ const ExtractedSourceCredibilityResult = ({
     [extractedSourceCredibilityResults.positive, trafficLightColors.positive],
   ];
 
-  console.log("RurlColor=", urlColor);
-  console.log("RurlIcon=", urlIcon);
-
   return (
     <List component={Stack} direction="row" disablePadding={true}>
       {sourceCredibilityResults ? (

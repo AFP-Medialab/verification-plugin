@@ -107,9 +107,6 @@ const ExtractedSourceCredibilityDBKFDialog = ({
     setOpen(false);
   };
 
-  console.log("DurlColor=", urlColor);
-  console.log("DurlIcon=", urlIcon);
-
   return (
     <div>
       <ListAltOutlinedIcon

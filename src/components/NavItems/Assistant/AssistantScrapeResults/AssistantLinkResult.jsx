@@ -25,15 +25,22 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { CheckCircleOutline, TaskAltOutlined } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
 
-// render status icon for extracted urls
+const renderChips = (sourceType) => {
+  return (
+    <Chip lable={sourceType[0][0]} color={sourceType[0][1]} size="small" />
+    //   {sourceType.forEach(([label, color], index) => (
+    //       <Chip label={label} color={color} size="small" />
+    // ))}
+  );
+};
+
+// render status for extracted urls
 const Status = (params) => {
-  console.log("Status params=", params);
+  //console.log("Status params=", params);
   return (
     <Stack>
-      {params.done && params.sourceType && (
-        //  <params.urlIcon color={params.urlColor} />
-        <Chip label={params.sourceType} color={params.urlColor} size="small" />
-      )}
+      {params.done && params.sourceType && renderChips(params.sourceType)}
+      {/* <Chip label={params.sourceType} color={params.urlColor} size="small" /> */}
       {params.loading && (
         //<div style={{ display: "flex", justifyContent: "center", alignItems: "center" }} >
         <Skeleton variant="circular" width={20} height={20} />
@@ -90,9 +97,6 @@ const Details = (params) => {
   //console.log("Details params=", params);
   return (
     <div>
-      {console.log("LsourceType=", params.sourceType)}
-      {console.log("LurlColor=", params.urlColor)}
-      {console.log("LurlIcon=", params.urlIcon)}
       {params.done && params.sourceType && (
         <ExtractedSourceCredibilityResult
           extractedSourceCredibilityResults={params.urlResults}
@@ -200,26 +204,29 @@ const createRows = (
     let url = urls[i];
 
     // define extracted source credibility
-    let sourceType = null;
+    let sourceType = [];
     let urlIcon = null;
     let urlColor = "inherit";
     let urlResults = null;
     if (extractedSourceCred) {
       urlResults = extractedSourceCred[url];
       if (urlResults.caution) {
-        sourceType = keyword("warning");
-        urlIcon = ErrorOutlineOutlinedIcon;
         urlColor = "error";
-      } else if (urlResults.mixed) {
-        sourceType = keyword("mentions");
-        urlIcon = SentimentSatisfied;
+        sourceType.push([keyword("warning"), urlColor]);
+        urlIcon = ErrorOutlineOutlinedIcon;
+      }
+      if (urlResults.mixed) {
         urlColor = "warning";
+        sourceType.push([keyword("mentions"), urlColor]);
+        urlIcon = SentimentSatisfied;
       } else if (urlResults.positive) {
-        sourceType = keyword("fact_checker");
-        urlIcon = CheckCircleOutline; //TaskAltOutlined;
         urlColor = "success";
+        sourceType.push([keyword("fact_checker"), urlColor]);
+        urlIcon = CheckCircleOutline; //TaskAltOutlined;
       }
     }
+
+    //console.log("sourceType=", sourceType);
 
     // add row
     rows.push({
@@ -332,14 +339,13 @@ const AssistantLinkResult = () => {
         }
       />
       <CardContent
-      // style={{
-      //   wordBreak: "break-word",
-      //   overflowY: "auto",
-      //   overflowX: "hidden",
-      // }}
+        style={{
+          wordBreak: "break-word",
+          overflowY: "auto",
+          overflowX: "hidden",
+        }}
       >
-        // issue with resize related to parent not having a fixed/determined
-        size?
+        {/* issue with resize related to parent not having a fixed/determined size? */}
         <div style={{ height: 400, width: "100%", minWidth: 0 }}>
           <DataGrid
             rows={rows}
