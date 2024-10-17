@@ -16,7 +16,6 @@ import {
   KNOWN_LINKS,
   selectCorrectActions,
 } from "./AssistantRuleBook";
-import Divider from "@mui/material/Divider";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { useNavigate } from "react-router-dom";
