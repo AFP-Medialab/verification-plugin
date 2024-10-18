@@ -261,7 +261,7 @@ export const toolsHome = new Tool(
  * Video tools
  **/
 
-const videoAnalysis = new Tool(
+export const videoAnalysis = new Tool(
   "navbar_analysis_video",
   "navbar_analysis_description",
   AnalysisSvgIcon,
@@ -274,7 +274,7 @@ const videoAnalysis = new Tool(
   <Footer type={FOOTER_TYPES.ITI} />,
 );
 
-const keyframes = new Tool(
+export const keyframes = new Tool(
   "navbar_keyframes",
   "navbar_keyframes_description",
   KeyframesSvgIcon,
@@ -287,7 +287,7 @@ const keyframes = new Tool(
   <Footer type={FOOTER_TYPES.ITI} />,
 );
 
-const thumbnails = new Tool(
+export const thumbnails = new Tool(
   "navbar_thumbnails",
   "navbar_thumbnails_description",
   thumbnailsSvgIcon,
@@ -300,7 +300,7 @@ const thumbnails = new Tool(
   <Footer type={FOOTER_TYPES.AFP} />,
 );
 
-const videoRights = new Tool(
+export const videoRights = new Tool(
   "navbar_rights",
   "navbar_rights_description",
   videoRightsSvgIcon,
@@ -326,7 +326,7 @@ const videoMetadata = new Tool(
   <Footer type={FOOTER_TYPES.AFP} />,
 );
 
-const videoDeepfake = new Tool(
+export const videoDeepfake = new Tool(
   "navbar_deepfake_video",
   "navbar_deepfake_video_description",
   deepfakeSvgIcon,
@@ -343,7 +343,7 @@ const videoDeepfake = new Tool(
  * Image tools
  **/
 
-const imageAnalysis = new Tool(
+export const imageAnalysis = new Tool(
   "navbar_analysis_image",
   "navbar_analysis_image_description",
   imageAnalysisSvgIcon,
@@ -356,7 +356,7 @@ const imageAnalysis = new Tool(
   <Footer type={FOOTER_TYPES.ITI} />,
 );
 
-const imageMagnifier = new Tool(
+export const imageMagnifier = new Tool(
   "navbar_magnifier",
   "navbar_magnifier_description",
   magnifierSvgIcon,
@@ -369,7 +369,7 @@ const imageMagnifier = new Tool(
   <Footer type={FOOTER_TYPES.AFP} />,
 );
 
-const imageMetadata = new Tool(
+export const imageMetadata = new Tool(
   "navbar_metadata_image",
   "navbar_metadata_description",
   metadataSvgIcon,
@@ -382,7 +382,7 @@ const imageMetadata = new Tool(
   <Footer type={FOOTER_TYPES.AFP} />,
 );
 
-const imageForensic = new Tool(
+export const imageForensic = new Tool(
   "navbar_forensic",
   "navbar_forensic_description",
   forensicSvgIcon,
@@ -395,7 +395,7 @@ const imageForensic = new Tool(
   <Footer type={FOOTER_TYPES.ITI_BORELLI_AFP} />,
 );
 
-const imageOcr = new Tool(
+export const imageOcr = new Tool(
   "navbar_ocr",
   "navbar_ocr_description",
   ocrSvgIcon,
@@ -434,7 +434,7 @@ export const imageSyntheticDetection = new Tool(
   <Footer type={FOOTER_TYPES.ITI_UNINA} />,
 );
 
-const imageDeepfake = new Tool(
+export const imageDeepfake = new Tool(
   "navbar_deepfake_image",
   "navbar_deepfake_image_description",
   deepfakeSvgIcon,

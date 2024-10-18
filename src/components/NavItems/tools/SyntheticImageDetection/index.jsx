@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import {
   resetSyntheticImageDetectionImage,
   setSyntheticImageDetectionLoading,
@@ -282,6 +283,15 @@ const SyntheticImageDetection = () => {
       preprocessingError,
     );
   };
+
+  // automatically run if url param in current page url
+  useEffect(() => {
+    if (url) {
+      const uri = url !== null ? decodeURIComponent(url) : undefined;
+      setInput(uri);
+      handleSubmit(uri);
+    }
+  }, [url]);
 
   /**
    *

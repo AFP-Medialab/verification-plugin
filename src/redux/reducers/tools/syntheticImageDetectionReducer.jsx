@@ -29,6 +29,11 @@ const syntheticImageDetectionReducer = (state = defaultState, action) => {
         duplicates: action.payload,
         loading: false,
       };
+    case "SET_SYNTHETIC_IMAGE_DETECTION_URL":
+      return {
+        ...state,
+        url: action.payload.url,
+      };
     default:
       return state;
   }

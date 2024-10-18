@@ -143,6 +143,7 @@ function* handleMediaActionList() {
   const inputUrl = yield select((state) => state.assistant.inputUrl);
   const processUrl = yield select((state) => state.assistant.processUrl);
   const contentType = yield select((state) => state.assistant.processUrlType);
+  const role = yield select((state) => state.userSession.user.roles);
 
   if (processUrl !== null) {
     let knownInputLink = yield call(
@@ -161,6 +162,7 @@ function* handleMediaActionList() {
       knownInputLink,
       knownProcessLink,
       processUrl,
+      role,
     );
 
     yield put(setProcessUrlActions(contentType, actions));
@@ -170,7 +172,14 @@ function* handleMediaActionList() {
 function* handleSubmitUpload(action) {
   let contentType = action.payload.contentType;
   let known_link = KNOWN_LINKS.OWN;
-  let actions = selectCorrectActions(contentType, known_link, known_link, "");
+  const role = yield select((state) => state.userSession.user.roles);
+  let actions = selectCorrectActions(
+    contentType,
+    known_link,
+    known_link,
+    "",
+    role,
+  );
   yield put(setProcessUrlActions(contentType, actions));
   yield put(setImageVideoSelected(true));
 }

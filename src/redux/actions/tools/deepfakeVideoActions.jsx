@@ -35,3 +35,5 @@ export const setDeepfakeResultVideo = createAction("SET_DEEPFAKE_VIDEO_RESULT");
         }
     }
 };*/
+
+export const setDeepfakeUrlVideo = createAction("SET_DEEPFAKE_VIDEO_URL");
