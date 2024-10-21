@@ -13,6 +13,7 @@ import Link from "@mui/material/Link";
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import Typography from "@mui/material/Typography";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { Tooltip } from "@mui/material";
 
 const SourceCredibilityDBKFDialog = (props) => {
   //central
@@ -33,10 +34,12 @@ const SourceCredibilityDBKFDialog = (props) => {
 
   return (
     <div>
-      <ListAltOutlinedIcon
-        style={{ cursor: "pointer" }}
-        onClick={handleClickOpen}
-      />
+      <Tooltip title="Details">
+        <ListAltOutlinedIcon
+          style={{ cursor: "pointer" }}
+          onClick={handleClickOpen}
+        />
+      </Tooltip>
       <Dialog onClose={handleClose} maxWidth={"lg"} open={open}>
         <DialogTitle>
           <Typography>

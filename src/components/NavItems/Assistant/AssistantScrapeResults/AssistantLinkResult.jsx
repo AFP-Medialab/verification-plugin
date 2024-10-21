@@ -25,22 +25,29 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { CheckCircleOutline, TaskAltOutlined } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
 
-const renderChips = (sourceType) => {
-  return (
-    <Chip lable={sourceType[0][0]} color={sourceType[0][1]} size="small" />
-    //   {sourceType.forEach(([label, color], index) => (
-    //       <Chip label={label} color={color} size="small" />
-    // ))}
-  );
-};
-
 // render status for extracted urls
 const Status = (params) => {
   //console.log("Status params=", params);
+
+  // let chips = [];
+  // for (let ind in params.sourceType) {
+  //   chips.push( <Chip index={params.sourceType[ind].type} label={params.sourceType[ind].type} color={params.sourceType[ind].color} size="small" /> );
+  // }
+
   return (
     <Stack>
-      {params.done && params.sourceType && renderChips(params.sourceType)}
-      {/* <Chip label={params.sourceType} color={params.urlColor} size="small" /> */}
+      {params.done && params.sourceType !== null && (
+        <Stack>
+          {
+            <Chip
+              index={params.sourceType}
+              label={params.sourceType}
+              color={params.urlColor}
+              size="small"
+            />
+          }
+        </Stack>
+      )}
       {params.loading && (
         //<div style={{ display: "flex", justifyContent: "center", alignItems: "center" }} >
         <Skeleton variant="circular" width={20} height={20} />
@@ -204,7 +211,7 @@ const createRows = (
     let url = urls[i];
 
     // define extracted source credibility
-    let sourceType = [];
+    let sourceType = null;
     let urlIcon = null;
     let urlColor = "inherit";
     let urlResults = null;
@@ -212,21 +219,19 @@ const createRows = (
       urlResults = extractedSourceCred[url];
       if (urlResults.caution) {
         urlColor = "error";
-        sourceType.push([keyword("warning"), urlColor]);
+        sourceType = keyword("Warning");
         urlIcon = ErrorOutlineOutlinedIcon;
       }
       if (urlResults.mixed) {
         urlColor = "warning";
-        sourceType.push([keyword("mentions"), urlColor]);
+        sourceType = keyword("mentions");
         urlIcon = SentimentSatisfied;
       } else if (urlResults.positive) {
         urlColor = "success";
-        sourceType.push([keyword("fact_checker"), urlColor]);
+        sourceType = keyword("fact_checker");
         urlIcon = CheckCircleOutline; //TaskAltOutlined;
       }
     }
-
-    //console.log("sourceType=", sourceType);
 
     // add row
     rows.push({

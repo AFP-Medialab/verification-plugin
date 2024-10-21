@@ -109,10 +109,12 @@ const ExtractedSourceCredibilityDBKFDialog = ({
 
   return (
     <div>
-      <ListAltOutlinedIcon
-        style={{ cursor: "pointer" }}
-        onClick={handleClickOpen}
-      />
+      <Tooltip title="Details">
+        <ListAltOutlinedIcon
+          style={{ cursor: "pointer" }}
+          onClick={handleClickOpen}
+        />
+      </Tooltip>
       <Dialog
         onClose={handleClose}
         maxWidth={"lg"}
