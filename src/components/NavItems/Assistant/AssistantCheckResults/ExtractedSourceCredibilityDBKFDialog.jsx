@@ -89,7 +89,7 @@ const renderEvidence = (evidence) => {
 
 const ExtractedSourceCredibilityDBKFDialog = ({
   sourceCredibility,
-  sourceType,
+  //sourceType,
   url,
   urlColor,
   urlIcon,
@@ -131,12 +131,30 @@ const ExtractedSourceCredibilityDBKFDialog = ({
               {url}
             </Link>
           </Typography>
+          {/* <Typography>
+            {console.log(sourceCredibility)}
+            {sourceCredibility[0][0][0] ? sourceCredibility[0][0][0] ? sourceCredibility[0][0][0].credibilityScope ? (
+              <>
+            {"Domain/Account: "}
+            <Link color={urlColor} href={sourceCredibility[0][0][0].credibilityScope}>
+              {url}
+            </Link>
+            </>
+            ) : null : null : null}
+          </Typography> */}
         </DialogTitle>
 
         <DialogContent dividers>
           {sourceCredibility
             ? sourceCredibility.map(
-                ([sourceCredibilityResults, trafficLightColor], index) => (
+                (
+                  [
+                    sourceCredibilityResults,
+                    trafficLightColor,
+                    sourceTypeLabel,
+                  ],
+                  index,
+                ) => (
                   <div key={index}>
                     {sourceCredibilityResults
                       ? sourceCredibilityResults.map((value, key) => (
@@ -145,13 +163,17 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                               {value.credibilityScope &&
                               value.credibilityScope.includes("/") ? (
                                 <Stack direction="row">
+                                  {/* {console.log(sourceType, trafficLightColor)} */}
                                   <Chip
-                                    label={sourceType}
-                                    color={urlColor}
+                                    label={keyword(sourceTypeLabel)}
+                                    color={trafficLightColor}
                                     size="small"
                                   />
                                   {/* <urlIcon color={urlColor} /> */}
-                                  <Typography sx={{ ml: 1 }}>
+                                  <Typography
+                                    sx={{ ml: 1 }}
+                                    color={trafficLightColor}
+                                  >
                                     {` ${keyword("this")}`}
                                     {getUrlTypeFromCredScope(
                                       value.credibilityScope,
@@ -163,15 +185,19 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                                 </Stack>
                               ) : value.credibilityScope ? (
                                 <Stack direction="row">
+                                  {/* {console.log(sourceType, trafficLightColor)} */}
                                   <Chip
-                                    label={sourceType}
-                                    color={urlColor}
+                                    label={keyword(sourceTypeLabel)}
+                                    color={trafficLightColor}
                                     size="small"
                                   />
                                   {/* <urlIcon color={urlColor} /> */}
-                                  <Typography sx={{ ml: 1 }}>
+                                  <Typography
+                                    sx={{ ml: 1 }}
+                                    color={trafficLightColor}
+                                  >
                                     {` ${keyword(
-                                      "source_cred_popup_header_domain",
+                                      "source_credibility_warning_domain",
                                     )} ${value.credibilitySource} `}
                                   </Typography>
                                 </Stack>

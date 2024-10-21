@@ -27,26 +27,33 @@ import { DataGrid } from "@mui/x-data-grid";
 
 // render status for extracted urls
 const Status = (params) => {
-  //console.log("Status params=", params);
-
-  // let chips = [];
-  // for (let ind in params.sourceType) {
-  //   chips.push( <Chip index={params.sourceType[ind].type} label={params.sourceType[ind].type} color={params.sourceType[ind].color} size="small" /> );
-  // }
-
+  // console.log("Status params=", params);
   return (
     <Stack>
-      {params.done && params.sourceType !== null && (
-        <Stack>
-          {
-            <Chip
-              index={params.sourceType}
-              label={params.sourceType}
-              color={params.urlColor}
-              size="small"
-            />
-          }
-        </Stack>
+      {params.done && params.urlIcon !== null && (
+        <params.urlIcon color={params.urlColor} />
+        // <>
+        //   {
+        //    params.sourceType.forEach( (sourceType, index) => (
+        //     <>
+        //       <Chip
+        //         //index={sourceType.type}
+        //         label={sourceType.type}
+        //         color={sourceType.urlColor}
+        //         size="small"
+        //       />
+        //       {"here"}
+        //       {console.log(sourceType, sourceType.type, sourceType.urlColor)}
+        //     </>
+        //   ))
+        //     // <Chip
+        //     //   index={params.sourceType}
+        //     //   label={params.sourceType}
+        //     //   color={params.urlColor}
+        //     //   size="small"
+        //     // />
+        //   }
+        // </>
       )}
       {params.loading && (
         //<div style={{ display: "flex", justifyContent: "center", alignItems: "center" }} >
@@ -103,11 +110,11 @@ const Url = (params) => {
 const Details = (params) => {
   //console.log("Details params=", params);
   return (
-    <div>
-      {params.done && params.sourceType && (
+    <Stack>
+      {params.done && params.urlResults.resolvedDomain !== "" && (
         <ExtractedSourceCredibilityResult
           extractedSourceCredibilityResults={params.urlResults}
-          sourceType={params.sourceType}
+          //sourceType={params.sourceType}
           url={params.urlResults.resolvedLink}
           urlColor={params.urlColor}
           urlIcon={params.urlIcon}
@@ -118,7 +125,7 @@ const Details = (params) => {
         <Skeleton variant="rounded" height={20} width={20} />
         //</div>
       )}
-    </div>
+    </Stack>
   );
 };
 
@@ -143,7 +150,7 @@ const columns = [
           fail={params.row.status.fail}
           urlIcon={params.row.status.urlIcon}
           urlColor={params.row.status.urlColor}
-          sourceType={params.row.status.sourceType}
+          //sourceType={params.row.status.sourceType}
         />
       );
     },
@@ -186,7 +193,7 @@ const columns = [
           done={params.row.details.done}
           fail={params.row.details.fail}
           urlResults={params.row.details.urlResults}
-          sourceType={params.row.details.sourceType}
+          //sourceType={params.row.details.sourceType}
           urlColor={params.row.details.urlColor}
           urlIcon={params.row.details.urlIcon}
         />
@@ -203,46 +210,55 @@ const createRows = (
   done,
   fail,
   keyword,
+  trafficLightColors,
 ) => {
   let rows = [];
 
   // create a row for each url
-  for (let i = 1; i < urls.length; i++) {
+  for (let i = 0; i < urls.length; i++) {
     let url = urls[i];
 
     // define extracted source credibility
-    let sourceType = null;
+    let sourceType = new Array();
     let urlIcon = null;
     let urlColor = "inherit";
     let urlResults = null;
     if (extractedSourceCred) {
       urlResults = extractedSourceCred[url];
-      if (urlResults.caution) {
-        urlColor = "error";
-        sourceType = keyword("Warning");
-        urlIcon = ErrorOutlineOutlinedIcon;
+      // these are in order in case of multiple types of source credibility results
+      if (urlResults.positive) {
+        urlColor = trafficLightColors.positive;
+        // urlColor = "success";
+        // sourceType = keyword("fact_checker");
+        // sourceType.push({ type: keyword("fact_checker"), urlColor: urlColor });
+        urlIcon = CheckCircleOutline; //TaskAltOutlined;
       }
       if (urlResults.mixed) {
-        urlColor = "warning";
-        sourceType = keyword("mentions");
+        urlColor = trafficLightColors.mixed;
+        // urlColor = "warning";
+        // sourceType = keyword("mentions");
+        // sourceType.push({ type: keyword("mentions"), urlColor: urlColor });
         urlIcon = SentimentSatisfied;
-      } else if (urlResults.positive) {
-        urlColor = "success";
-        sourceType = keyword("fact_checker");
-        urlIcon = CheckCircleOutline; //TaskAltOutlined;
+      }
+      if (urlResults.caution) {
+        urlColor = trafficLightColors.caution;
+        // urlColor = "error";
+        // sourceType = keyword("warning");
+        // sourceType.push({ type: keyword("Warning"), urlColor: urlColor });
+        urlIcon = ErrorOutlineOutlinedIcon;
       }
     }
 
     // add row
     rows.push({
-      id: i,
+      id: i + 1,
       status: {
         loading: loading,
         done: done,
         fail: fail,
         urlIcon: urlIcon,
         urlColor: urlColor,
-        sourceType: sourceType,
+        //sourceType: sourceType,
       },
       domainAccount: {
         loading: loading,
@@ -260,7 +276,7 @@ const createRows = (
         done: done,
         fail: fail,
         urlResults: urlResults,
-        sourceType: sourceType,
+        //sourceType: sourceType,
         urlColor: urlColor,
         urlIcon: urlIcon,
       },
@@ -282,6 +298,9 @@ const AssistantLinkResult = () => {
   const inputSCDone = useSelector((state) => state.assistant.inputSCDone);
   const inputSCLoading = useSelector((state) => state.assistant.inputSCLoading);
   const inputSCFail = useSelector((state) => state.assistant.inputSCFail);
+  const trafficLightColors = useSelector(
+    (state) => state.assistant.trafficLightColors,
+  );
 
   const urls =
     inputSCDone && extractedLinks ? extractedLinks : linkList ? linkList : null;
@@ -292,6 +311,7 @@ const AssistantLinkResult = () => {
     inputSCDone,
     inputSCFail,
     keyword,
+    trafficLightColors,
   );
 
   // if no urls extracted

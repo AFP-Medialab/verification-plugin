@@ -21,11 +21,23 @@ const ExtractedSourceCredibilityResult = ({
     (state) => state.assistant.trafficLightColors,
   );
 
-  // currently passing through urlColor from parent, don't need trafficLightColors anymore?
+  // passing through correct colours for details here
   const sourceCredibilityResults = [
-    [extractedSourceCredibilityResults.caution, trafficLightColors.caution],
-    [extractedSourceCredibilityResults.mixed, trafficLightColors.mixed],
-    [extractedSourceCredibilityResults.positive, trafficLightColors.positive],
+    [
+      extractedSourceCredibilityResults.caution,
+      trafficLightColors.caution,
+      "warning",
+    ],
+    [
+      extractedSourceCredibilityResults.mixed,
+      trafficLightColors.mixed,
+      "mentions",
+    ],
+    [
+      extractedSourceCredibilityResults.positive,
+      trafficLightColors.positive,
+      "fact_checker",
+    ],
   ];
 
   return (

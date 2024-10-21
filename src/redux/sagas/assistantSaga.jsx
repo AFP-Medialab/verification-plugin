@@ -315,9 +315,9 @@ function* handleSourceCredibilityCall(action) {
     }
 
     const trafficLightColors = {
-      positive: "#008000", // green
-      mixed: "#FFA500", // orange
-      caution: "#FF0000", // red
+      positive: "success", //"#008000", // green
+      mixed: "warning", //"#FFA500", // orange
+      caution: "error", //"#FF0000", // red
       unlabelled: "inherit",
     };
 
