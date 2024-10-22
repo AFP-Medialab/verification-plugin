@@ -218,17 +218,25 @@ const AssistantTextResult = () => {
               variant="fullWidth"
             >
               <Tab label="Raw Text" {...a11yProps(0)} />
-              <Tab label="Topic" {...a11yProps(1)} disabled={newsFramingFail} />
-              <Tab label="Genre" {...a11yProps(2)} disabled={newsGenreFail} />
+              <Tab
+                label="Topic"
+                {...a11yProps(1)}
+                disabled={newsFramingFail || newsFramingLoading}
+              />
+              <Tab
+                label="Genre"
+                {...a11yProps(2)}
+                disabled={newsGenreFail || newsGenreLoading}
+              />
               <Tab
                 label="Persuasion Techniques"
                 {...a11yProps(3)}
-                disabled={persuasionFail}
+                disabled={persuasionFail || persuasionLoading}
               />
               <Tab
                 label="Subjectivity"
                 {...a11yProps(4)}
-                disabled={subjectivityFail}
+                disabled={subjectivityFail || subjectivityLoading}
               />
             </Tabs>
 
