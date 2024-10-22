@@ -150,79 +150,90 @@ const Details = (params) => {
 };
 
 // columns
-const columns = [
-  {
-    field: "id",
-    headerName: "ID",
-    align: "center",
-    headerAlign: "center",
-  },
-  {
-    field: "status",
-    headerName: "Status",
-    align: "center",
-    headerAlign: "center",
-    renderCell: (params) => {
-      return (
-        <Status
-          loading={params.row.status.loading}
-          done={params.row.status.done}
-          fail={params.row.status.fail}
-          urlResults={params.row.status.urlResults}
-          trafficLightColors={params.row.status.trafficLightColors}
-          sourceTypes={params.row.status.sourceTypes}
-        />
-      );
+const createColumns = (
+  headerId,
+  headerStatus,
+  headerDomainAccount,
+  headerUrl,
+  headerDetails,
+) => {
+  const columns = [
+    {
+      field: "id",
+      headerName: headerId,
+      align: "center",
+      headerAlign: "center",
+      type: "number",
     },
-  },
-  {
-    field: "domainAccount",
-    headerName: "Domain/Account",
-    //width: "*",
-    renderCell: (params) => {
-      return (
-        <DomainAccount
-          loading={params.row.domainAccount.loading}
-          done={params.row.domainAccount.done}
-          fail={params.row.domainAccount.fail}
-          urlResults={params.row.domainAccount.urlResults}
-          urlColor={params.row.domainAccount.urlColor}
-          domainOrAccount={params.row.domainAccount.domainOrAccount}
-        />
-      );
+    {
+      field: "status",
+      headerName: headerStatus,
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params) => {
+        return (
+          <Status
+            loading={params.row.status.loading}
+            done={params.row.status.done}
+            fail={params.row.status.fail}
+            urlResults={params.row.status.urlResults}
+            trafficLightColors={params.row.status.trafficLightColors}
+            sourceTypes={params.row.status.sourceTypes}
+          />
+        );
+      },
     },
-  },
-  {
-    field: "url",
-    headerName: "URL",
-    //width: "2*",
-    renderCell: (params) => {
-      return (
-        <Url url={params.row.url.url} urlColor={params.row.url.urlColor} />
-      );
+    {
+      field: "domainAccount",
+      headerName: headerDomainAccount,
+      //width: "*",
+      renderCell: (params) => {
+        return (
+          <DomainAccount
+            loading={params.row.domainAccount.loading}
+            done={params.row.domainAccount.done}
+            fail={params.row.domainAccount.fail}
+            urlResults={params.row.domainAccount.urlResults}
+            urlColor={params.row.domainAccount.urlColor}
+            domainOrAccount={params.row.domainAccount.domainOrAccount}
+          />
+        );
+      },
     },
-  },
-  {
-    field: "details",
-    headerName: "Details",
-    align: "center",
-    headerAlign: "center",
-    renderCell: (params) => {
-      return (
-        <Details
-          loading={params.row.details.loading}
-          done={params.row.details.done}
-          fail={params.row.details.fail}
-          urlResults={params.row.details.urlResults}
-          url={params.row.details.url}
-          domainOrAccount={params.row.details.domainOrAccount}
-          urlColor={params.row.details.urlColor}
-          sourceTypes={params.row.details.sourceTypes}
-        />
-      );
+    {
+      field: "url",
+      headerName: headerUrl,
+      //width: "2*",
+      renderCell: (params) => {
+        return (
+          <Url url={params.row.url.url} urlColor={params.row.url.urlColor} />
+        );
+      },
     },
-  },
-];
+    {
+      field: "details",
+      headerName: headerDetails,
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params) => {
+        return (
+          <Details
+            loading={params.row.details.loading}
+            done={params.row.details.done}
+            fail={params.row.details.fail}
+            urlResults={params.row.details.urlResults}
+            url={params.row.details.url}
+            domainOrAccount={params.row.details.domainOrAccount}
+            urlColor={params.row.details.urlColor}
+            sourceTypes={params.row.details.sourceTypes}
+          />
+        );
+      },
+    },
+  ];
+
+  return columns;
+};
 
 // rows
 const createRows = (
@@ -265,7 +276,6 @@ const createRows = (
       domainOrAccount = urlResults.resolvedDomain
         ? "https://" + urlResults.resolvedDomain
         : null;
-      console.log(domainOrAccount);
     }
 
     // add row
@@ -332,6 +342,13 @@ const AssistantLinkResult = () => {
     inputSCDone,
     inputSCFail,
     trafficLightColors,
+  );
+  const columns = createColumns(
+    keyword("id"),
+    keyword("status"),
+    keyword("domain_or_account"),
+    keyword("assistant_urlbox"),
+    keyword("details"),
   );
 
   // if no urls extracted

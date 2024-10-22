@@ -127,7 +127,8 @@ const ExtractedSourceCredibilityDBKFDialog = ({
             <IconButton onClick={handleClose}>
               <CloseIcon />
             </IconButton>
-            {"URL: "}
+            {keyword("assistant_urlbox")}
+            {": "}
             <Link color={urlColor} href={url}>
               {url}
             </Link>
