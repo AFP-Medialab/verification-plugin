@@ -12,10 +12,10 @@ import Typography from "@mui/material/Typography";
 
 const ExtractedSourceCredibilityResult = ({
   extractedSourceCredibilityResults,
-  sourceType,
   url,
+  domainOrAccount,
   urlColor,
-  urlIcon,
+  sourceTypes,
 }) => {
   const trafficLightColors = useSelector(
     (state) => state.assistant.trafficLightColors,
@@ -26,17 +26,17 @@ const ExtractedSourceCredibilityResult = ({
     [
       extractedSourceCredibilityResults.caution,
       trafficLightColors.caution,
-      "warning",
+      sourceTypes.caution,
     ],
     [
       extractedSourceCredibilityResults.mixed,
       trafficLightColors.mixed,
-      "mentions",
+      sourceTypes.mixed,
     ],
     [
       extractedSourceCredibilityResults.positive,
       trafficLightColors.positive,
-      "fact_checker",
+      sourceTypes.positive,
     ],
   ];
 
@@ -65,10 +65,9 @@ const ExtractedSourceCredibilityResult = ({
                 <ListItemSecondaryAction>
                   <ExtractedSourceCredibilityDBKFDialog
                     sourceCredibility={sourceCredibilityResults}
-                    sourceType={sourceType}
                     url={url}
+                    domainOrAccount={domainOrAccount}
                     urlColor={urlColor}
-                    urlIcon={urlIcon}
                   />
                 </ListItemSecondaryAction>
               </Typography>

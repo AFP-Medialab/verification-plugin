@@ -89,10 +89,9 @@ const renderEvidence = (evidence) => {
 
 const ExtractedSourceCredibilityDBKFDialog = ({
   sourceCredibility,
-  //sourceType,
   url,
+  domainOrAccount,
   urlColor,
-  urlIcon,
 }) => {
   //central
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -115,6 +114,7 @@ const ExtractedSourceCredibilityDBKFDialog = ({
           onClick={handleClickOpen}
         />
       </Tooltip>
+
       <Dialog
         onClose={handleClose}
         maxWidth={"lg"}
@@ -122,6 +122,7 @@ const ExtractedSourceCredibilityDBKFDialog = ({
         scroll={"paper"}
       >
         <DialogTitle>
+          {/* display the url */}
           <Typography>
             <IconButton onClick={handleClose}>
               <CloseIcon />
@@ -131,28 +132,31 @@ const ExtractedSourceCredibilityDBKFDialog = ({
               {url}
             </Link>
           </Typography>
-          {/* <Typography>
-            {console.log(sourceCredibility)}
-            {sourceCredibility[0][0][0] ? sourceCredibility[0][0][0] ? sourceCredibility[0][0][0].credibilityScope ? (
-              <>
-            {"Domain/Account: "}
-            <Link color={urlColor} href={sourceCredibility[0][0][0].credibilityScope}>
-              {url}
-            </Link>
-            </>
-            ) : null : null : null}
-          </Typography> */}
+
+          {/* display the domain */}
+          {domainOrAccount &&
+          domainOrAccount.split("https://")[1].includes("/") ? (
+            <Typography>
+              {keyword("account_scope")}
+              <Link color={urlColor} href={domainOrAccount}>
+                {domainOrAccount}
+              </Link>
+            </Typography>
+          ) : domainOrAccount ? (
+            <Typography>
+              {keyword("domain_scope")}
+              <Link color={urlColor} href={domainOrAccount}>
+                {domainOrAccount}
+              </Link>
+            </Typography>
+          ) : null}
         </DialogTitle>
 
         <DialogContent dividers>
           {sourceCredibility
             ? sourceCredibility.map(
                 (
-                  [
-                    sourceCredibilityResults,
-                    trafficLightColor,
-                    sourceTypeLabel,
-                  ],
+                  [sourceCredibilityResults, trafficLightColor, sourceType],
                   index,
                 ) => (
                   <div key={index}>
@@ -163,9 +167,8 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                               {value.credibilityScope &&
                               value.credibilityScope.includes("/") ? (
                                 <Stack direction="row">
-                                  {/* {console.log(sourceType, trafficLightColor)} */}
                                   <Chip
-                                    label={keyword(sourceTypeLabel)}
+                                    label={keyword(sourceType)}
                                     color={trafficLightColor}
                                     size="small"
                                   />
@@ -185,9 +188,8 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                                 </Stack>
                               ) : value.credibilityScope ? (
                                 <Stack direction="row">
-                                  {/* {console.log(sourceType, trafficLightColor)} */}
                                   <Chip
-                                    label={keyword(sourceTypeLabel)}
+                                    label={keyword(sourceType)}
                                     color={trafficLightColor}
                                     size="small"
                                   />

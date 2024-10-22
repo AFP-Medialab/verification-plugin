@@ -20,6 +20,7 @@ import SentimentSatisfied from "@mui/icons-material/SentimentSatisfied";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import ExtractedSourceCredibilityResult from "../AssistantCheckResults/ExtractedSourceCredibilityResult";
+import { TextCopy } from "../../../Shared/Utils/TextCopy";
 import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { CheckCircleOutline, TaskAltOutlined } from "@mui/icons-material";
@@ -27,33 +28,54 @@ import { DataGrid } from "@mui/x-data-grid";
 
 // render status for extracted urls
 const Status = (params) => {
-  // console.log("Status params=", params);
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   return (
     <Stack>
-      {params.done && params.urlIcon !== null && (
-        <params.urlIcon color={params.urlColor} />
-        // <>
-        //   {
-        //    params.sourceType.forEach( (sourceType, index) => (
-        //     <>
-        //       <Chip
-        //         //index={sourceType.type}
-        //         label={sourceType.type}
-        //         color={sourceType.urlColor}
-        //         size="small"
-        //       />
-        //       {"here"}
-        //       {console.log(sourceType, sourceType.type, sourceType.urlColor)}
-        //     </>
-        //   ))
-        //     // <Chip
-        //     //   index={params.sourceType}
-        //     //   label={params.sourceType}
-        //     //   color={params.urlColor}
-        //     //   size="small"
-        //     // />
-        //   }
-        // </>
+      {/* {params.done && params.urlResults !== null && (
+        // <params.urlIcon color={params.urlColor} />
+        <Stack direction="row">
+        {params.urlResults ? params.urlResults.caution !== null ? 
+          <ErrorOutlineOutlinedIcon color={params.trafficLightColors.caution} />
+          : null : null}
+        {params.urlResults ? params.urlResults.mixed !== null ? 
+          <SentimentSatisfied color={params.trafficLightColors.mixed} />
+          : null : null}
+        {params.urlResults ? params.urlResults.positive != null ? 
+          <CheckCircleOutline color={params.trafficLightColors.success} />
+          : null : null}
+          </Stack>
+      )} */}
+      {params.done && params.urlResults !== null && (
+        // <params.urlIcon color={params.urlColor} />
+        <Stack>
+          {params.urlResults ? (
+            params.urlResults.caution !== null ? (
+              <Chip
+                label={keyword(params.sourceTypes.caution)}
+                color={params.trafficLightColors.caution}
+                size="small"
+              />
+            ) : null
+          ) : null}
+          {params.urlResults ? (
+            params.urlResults.mixed !== null ? (
+              <Chip
+                label={keyword(params.sourceTypes.mixed)}
+                color={params.trafficLightColors.mixed}
+                size="small"
+              />
+            ) : null
+          ) : null}
+          {params.urlResults ? (
+            params.urlResults.positive != null ? (
+              <Chip
+                label={keyword(params.sourceTypes.positive)}
+                color={params.trafficLightColors.success}
+                size="small"
+              />
+            ) : null
+          ) : null}
+        </Stack>
       )}
       {params.loading && (
         //<div style={{ display: "flex", justifyContent: "center", alignItems: "center" }} >
@@ -66,17 +88,16 @@ const Status = (params) => {
 
 // render domain or account of extracted URL in correct colour
 const DomainAccount = (params) => {
-  //console.log("DomainAccount params=", params);
-  let domainOrAccount = "";
-  if (params.urlResults && params.urlResults.resolvedDomain) {
-    domainOrAccount = "https://" + params.urlResults.resolvedDomain;
-  }
   return (
-    <div>
-      {params.done && domainOrAccount != "" && (
-        <Tooltip title={domainOrAccount}>
-          <Link target="_blank" href={domainOrAccount} color={params.urlColor}>
-            {domainOrAccount}
+    <Stack>
+      {params.done && params.domainOrAccount != "" && (
+        <Tooltip title={params.domainOrAccount}>
+          <Link
+            target="_blank"
+            href={params.domainOrAccount}
+            color={params.urlColor}
+          >
+            {params.domainOrAccount}
           </Link>
         </Tooltip>
       )}
@@ -85,13 +106,12 @@ const DomainAccount = (params) => {
         <Skeleton variant="rounded" />
         // </div>
       )}
-    </div>
+    </Stack>
   );
 };
 
 // render URL in correct colour
 const Url = (params) => {
-  //console.log("Url params=", params);
   return (
     <Tooltip title={params.url}>
       <Link
@@ -108,16 +128,16 @@ const Url = (params) => {
 
 // render details
 const Details = (params) => {
-  //console.log("Details params=", params);
   return (
-    <Stack>
-      {params.done && params.urlResults.resolvedDomain !== "" && (
+    <Stack direction="row">
+      {<TextCopy text={params.url} index={params.url} />}
+      {params.done && params.domainOrAccount !== "" && (
         <ExtractedSourceCredibilityResult
           extractedSourceCredibilityResults={params.urlResults}
-          //sourceType={params.sourceType}
           url={params.urlResults.resolvedLink}
+          domainOrAccount={params.domainOrAccount}
           urlColor={params.urlColor}
-          urlIcon={params.urlIcon}
+          sourceTypes={params.sourceTypes}
         />
       )}
       {params.loading && (
@@ -148,9 +168,9 @@ const columns = [
           loading={params.row.status.loading}
           done={params.row.status.done}
           fail={params.row.status.fail}
-          urlIcon={params.row.status.urlIcon}
-          urlColor={params.row.status.urlColor}
-          //sourceType={params.row.status.sourceType}
+          urlResults={params.row.status.urlResults}
+          trafficLightColors={params.row.status.trafficLightColors}
+          sourceTypes={params.row.status.sourceTypes}
         />
       );
     },
@@ -167,6 +187,7 @@ const columns = [
           fail={params.row.domainAccount.fail}
           urlResults={params.row.domainAccount.urlResults}
           urlColor={params.row.domainAccount.urlColor}
+          domainOrAccount={params.row.domainAccount.domainOrAccount}
         />
       );
     },
@@ -193,9 +214,10 @@ const columns = [
           done={params.row.details.done}
           fail={params.row.details.fail}
           urlResults={params.row.details.urlResults}
-          //sourceType={params.row.details.sourceType}
+          url={params.row.details.url}
+          domainOrAccount={params.row.details.domainOrAccount}
           urlColor={params.row.details.urlColor}
-          urlIcon={params.row.details.urlIcon}
+          sourceTypes={params.row.details.sourceTypes}
         />
       );
     },
@@ -209,44 +231,41 @@ const createRows = (
   loading,
   done,
   fail,
-  keyword,
   trafficLightColors,
 ) => {
-  let rows = [];
+  // define types of source credibility
+  const sourceTypes = {
+    caution: "warning",
+    mixed: "mentions",
+    positive: "fact_checker",
+  };
 
   // create a row for each url
+  let rows = [];
   for (let i = 0; i < urls.length; i++) {
     let url = urls[i];
 
     // define extracted source credibility
-    let sourceType = new Array();
-    let urlIcon = null;
     let urlColor = "inherit";
     let urlResults = null;
+    let domainOrAccount = null;
     if (extractedSourceCred) {
       urlResults = extractedSourceCred[url];
       // these are in order in case of multiple types of source credibility results
       if (urlResults.positive) {
         urlColor = trafficLightColors.positive;
-        // urlColor = "success";
-        // sourceType = keyword("fact_checker");
-        // sourceType.push({ type: keyword("fact_checker"), urlColor: urlColor });
-        urlIcon = CheckCircleOutline; //TaskAltOutlined;
       }
       if (urlResults.mixed) {
         urlColor = trafficLightColors.mixed;
-        // urlColor = "warning";
-        // sourceType = keyword("mentions");
-        // sourceType.push({ type: keyword("mentions"), urlColor: urlColor });
-        urlIcon = SentimentSatisfied;
       }
       if (urlResults.caution) {
         urlColor = trafficLightColors.caution;
-        // urlColor = "error";
-        // sourceType = keyword("warning");
-        // sourceType.push({ type: keyword("Warning"), urlColor: urlColor });
-        urlIcon = ErrorOutlineOutlinedIcon;
       }
+      // detect domain or account address
+      domainOrAccount = urlResults.resolvedDomain
+        ? "https://" + urlResults.resolvedDomain
+        : null;
+      console.log(domainOrAccount);
     }
 
     // add row
@@ -256,9 +275,10 @@ const createRows = (
         loading: loading,
         done: done,
         fail: fail,
-        urlIcon: urlIcon,
-        urlColor: urlColor,
-        //sourceType: sourceType,
+        urlResults: urlResults,
+        url: url,
+        trafficLightColors: trafficLightColors,
+        sourceTypes: sourceTypes,
       },
       domainAccount: {
         loading: loading,
@@ -266,6 +286,7 @@ const createRows = (
         fail: fail,
         urlResults: urlResults,
         urlColor: urlColor,
+        domainOrAccount: domainOrAccount,
       },
       url: {
         url: url,
@@ -276,9 +297,9 @@ const createRows = (
         done: done,
         fail: fail,
         urlResults: urlResults,
-        //sourceType: sourceType,
         urlColor: urlColor,
-        urlIcon: urlIcon,
+        sourceTypes: sourceTypes,
+        domainOrAccount: domainOrAccount,
       },
     });
   }
@@ -310,7 +331,6 @@ const AssistantLinkResult = () => {
     inputSCLoading,
     inputSCDone,
     inputSCFail,
-    keyword,
     trafficLightColors,
   );
 
