@@ -19,6 +19,7 @@ const SourceCredibilityResult = (props) => {
   const sourceCredibilityResults = props.scResultFiltered;
   const Icon = props.icon;
   const iconColor = props.iconColor;
+  const sourceType = props.sourceType;
 
   return (
     <List disablePadding={true}>
@@ -34,7 +35,7 @@ const SourceCredibilityResult = (props) => {
                     <Typography
                       variant={"body1"}
                       component={"div"}
-                      align={"left"}
+                      //align={"start"}
                       color={"textPrimary"}
                     >
                       {value.credibilityScope &&
@@ -95,6 +96,8 @@ const SourceCredibilityResult = (props) => {
                         <SourceCredibilityDBKFDialog
                           evidence={value.credibilityEvidence}
                           source={value.credibilitySource}
+                          color={iconColor}
+                          sourceType={sourceType}
                         />
                       </ListItemSecondaryAction>
                     ) : null}

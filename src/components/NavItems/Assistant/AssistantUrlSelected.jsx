@@ -11,7 +11,10 @@ import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import { KNOWN_LINKS } from "./AssistantRuleBook";
-import { submitInputUrl } from "../../../redux/actions/tools/assistantActions";
+import {
+  cleanAssistantState,
+  submitInputUrl,
+} from "../../../redux/actions/tools/assistantActions";
 
 import { useTrackEvent } from "../../../Hooks/useAnalytics";
 import Stack from "@mui/material/Stack";
@@ -30,7 +33,6 @@ const AssistantUrlSelected = (props) => {
   //local state
   const formInput = props.formInput;
   const setFormInput = (value) => props.setFormInput(value);
-  const cleanAssistant = () => props.cleanAssistant();
   const [url, setUrl] = useState(undefined);
 
   useTrackEvent(
@@ -43,7 +45,7 @@ const AssistantUrlSelected = (props) => {
   );
 
   const handleSubmissionURL = () => {
-    //cleanAssistant();
+    dispatch(cleanAssistantState());
     setUrl(formInput);
     dispatch(submitInputUrl(formInput));
     //trackEvent("submission", "assistant", "page assistant", formInput);

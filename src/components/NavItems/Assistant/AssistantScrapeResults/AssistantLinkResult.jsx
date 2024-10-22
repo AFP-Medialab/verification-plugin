@@ -30,22 +30,29 @@ import { DataGrid } from "@mui/x-data-grid";
 const Status = (params) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   return (
-    <Stack>
-      {/* {params.done && params.urlResults !== null && (
-        // <params.urlIcon color={params.urlColor} />
-        <Stack direction="row">
-        {params.urlResults ? params.urlResults.caution !== null ? 
-          <ErrorOutlineOutlinedIcon color={params.trafficLightColors.caution} />
-          : null : null}
-        {params.urlResults ? params.urlResults.mixed !== null ? 
-          <SentimentSatisfied color={params.trafficLightColors.mixed} />
-          : null : null}
-        {params.urlResults ? params.urlResults.positive != null ? 
-          <CheckCircleOutline color={params.trafficLightColors.success} />
-          : null : null}
-          </Stack>
-      )} */}
+    <Stack justifyContent="center" alignItems="center">
       {params.done && params.urlResults !== null && (
+        <Stack direction="row">
+          {params.urlResults ? (
+            params.urlResults.caution !== null ? (
+              <ErrorOutlineOutlinedIcon
+                color={params.trafficLightColors.caution}
+              />
+            ) : null
+          ) : null}
+          {params.urlResults ? (
+            params.urlResults.mixed !== null ? (
+              <SentimentSatisfied color={params.trafficLightColors.mixed} />
+            ) : null
+          ) : null}
+          {params.urlResults ? (
+            params.urlResults.positive != null ? (
+              <CheckCircleOutline color={params.trafficLightColors.positive} />
+            ) : null
+          ) : null}
+        </Stack>
+      )}
+      {/* {params.done && params.urlResults !== null && (
         // <params.urlIcon color={params.urlColor} />
         <Stack>
           {params.urlResults ? (
@@ -76,7 +83,7 @@ const Status = (params) => {
             ) : null
           ) : null}
         </Stack>
-      )}
+      )} */}
       {params.loading && (
         //<div style={{ display: "flex", justifyContent: "center", alignItems: "center" }} >
         <Skeleton variant="circular" width={20} height={20} />
@@ -86,29 +93,29 @@ const Status = (params) => {
   );
 };
 
-// render domain or account of extracted URL in correct colour
-const DomainAccount = (params) => {
-  return (
-    <Stack>
-      {params.done && params.domainOrAccount != "" && (
-        <Tooltip title={params.domainOrAccount}>
-          <Link
-            target="_blank"
-            href={params.domainOrAccount}
-            color={params.urlColor}
-          >
-            {params.domainOrAccount}
-          </Link>
-        </Tooltip>
-      )}
-      {params.loading && (
-        // <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }} >
-        <Skeleton variant="rounded" />
-        // </div>
-      )}
-    </Stack>
-  );
-};
+// // render domain or account of extracted URL in correct colour
+// const DomainAccount = (params) => {
+//   return (
+//     <Stack>
+//       {params.done && params.domainOrAccount != "" && (
+//         <Tooltip title={params.domainOrAccount}>
+//           <Link
+//             target="_blank"
+//             href={params.domainOrAccount}
+//             color={params.urlColor}
+//           >
+//             {params.domainOrAccount}
+//           </Link>
+//         </Tooltip>
+//       )}
+//       {params.loading && (
+//         // <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }} >
+//         <Skeleton variant="rounded" />
+//         // </div>
+//       )}
+//     </Stack>
+//   );
+// };
 
 // render URL in correct colour
 const Url = (params) => {
@@ -129,7 +136,7 @@ const Url = (params) => {
 // render details
 const Details = (params) => {
   return (
-    <Stack direction="row">
+    <Stack justifyContent="center" alignItems="center" direction="row">
       {<TextCopy text={params.url} index={params.url} />}
       {params.done && params.domainOrAccount !== "" && (
         <ExtractedSourceCredibilityResult
@@ -153,7 +160,7 @@ const Details = (params) => {
 const createColumns = (
   headerId,
   headerStatus,
-  headerDomainAccount,
+  //headerDomainAccount,
   headerUrl,
   headerDetails,
 ) => {
@@ -164,71 +171,79 @@ const createColumns = (
       align: "center",
       headerAlign: "center",
       type: "number",
+      width: 50,
     },
     {
       field: "status",
       headerName: headerStatus,
       align: "center",
       headerAlign: "center",
+      width: 100,
       renderCell: (params) => {
         return (
           <Status
-            loading={params.row.status.loading}
-            done={params.row.status.done}
-            fail={params.row.status.fail}
-            urlResults={params.row.status.urlResults}
-            trafficLightColors={params.row.status.trafficLightColors}
-            sourceTypes={params.row.status.sourceTypes}
+            loading={params.value.loading}
+            done={params.value.done}
+            fail={params.value.fail}
+            urlResults={params.value.urlResults}
+            trafficLightColors={params.value.trafficLightColors}
+            sourceTypes={params.value.sourceTypes}
+            sortBySourceType={params.value.sortBySourceType}
           />
         );
       },
+      sortComparator: (v1, v2) =>
+        v1.sortBySourceType.localeCompare(v2.sortBySourceType),
     },
-    {
-      field: "domainAccount",
-      headerName: headerDomainAccount,
-      //width: "*",
-      renderCell: (params) => {
-        return (
-          <DomainAccount
-            loading={params.row.domainAccount.loading}
-            done={params.row.domainAccount.done}
-            fail={params.row.domainAccount.fail}
-            urlResults={params.row.domainAccount.urlResults}
-            urlColor={params.row.domainAccount.urlColor}
-            domainOrAccount={params.row.domainAccount.domainOrAccount}
-          />
-        );
-      },
-    },
+    // {
+    //   field: "domainAccount",
+    //   headerName: headerDomainAccount,
+    //   width: 200,
+    //   renderCell: (params) => {
+    //     return (
+    //       <DomainAccount
+    //         loading={params.value.loading}
+    //         done={params.value.done}
+    //         fail={params.value.fail}
+    //         urlResults={params.value.urlResults}
+    //         urlColor={params.value.urlColor}
+    //         domainOrAccount={params.value.domainOrAccount}
+    //       />
+    //     );
+    //   },
+    //   sortComparator: (v1, v2) => v1.domainOrAccount.localeCompare(v2.domainOrAccount),
+    // },
     {
       field: "url",
       headerName: headerUrl,
-      //width: "2*",
+      width: 700,
       renderCell: (params) => {
-        return (
-          <Url url={params.row.url.url} urlColor={params.row.url.urlColor} />
-        );
+        return <Url url={params.value.url} urlColor={params.value.urlColor} />;
       },
+      sortComparator: (v1, v2) => v1.url.localeCompare(v2.url),
     },
     {
       field: "details",
       headerName: headerDetails,
       align: "center",
       headerAlign: "center",
+      width: 100,
       renderCell: (params) => {
         return (
           <Details
-            loading={params.row.details.loading}
-            done={params.row.details.done}
-            fail={params.row.details.fail}
-            urlResults={params.row.details.urlResults}
-            url={params.row.details.url}
-            domainOrAccount={params.row.details.domainOrAccount}
-            urlColor={params.row.details.urlColor}
-            sourceTypes={params.row.details.sourceTypes}
+            loading={params.value.loading}
+            done={params.value.done}
+            fail={params.value.fail}
+            urlResults={params.value.urlResults}
+            url={params.value.url}
+            domainOrAccount={params.value.domainOrAccount}
+            urlColor={params.value.urlColor}
+            sourceTypes={params.value.sourceTypes}
           />
         );
       },
+      sortComparator: (v1, v2) =>
+        v1.sortByDetails.localeCompare(v2.sortByDetails),
     },
   ];
 
@@ -259,23 +274,29 @@ const createRows = (
     // define extracted source credibility
     let urlColor = "inherit";
     let urlResults = null;
-    let domainOrAccount = null;
+    let sortBySourceType = "";
+    let sortByDetails = false;
+    let domainOrAccount;
     if (extractedSourceCred) {
       urlResults = extractedSourceCred[url];
+      sortByDetails = true;
       // these are in order in case of multiple types of source credibility results
       if (urlResults.positive) {
         urlColor = trafficLightColors.positive;
+        sortBySourceType = sourceTypes.positive + sortBySourceType;
       }
       if (urlResults.mixed) {
         urlColor = trafficLightColors.mixed;
+        sortBySourceType = sourceTypes.mixed + sortBySourceType;
       }
       if (urlResults.caution) {
         urlColor = trafficLightColors.caution;
+        sortBySourceType = sourceTypes.caution + sortBySourceType;
       }
       // detect domain or account address
       domainOrAccount = urlResults.resolvedDomain
         ? "https://" + urlResults.resolvedDomain
-        : null;
+        : "";
     }
 
     // add row
@@ -289,15 +310,16 @@ const createRows = (
         url: url,
         trafficLightColors: trafficLightColors,
         sourceTypes: sourceTypes,
+        sortBySourceType: sortBySourceType,
       },
-      domainAccount: {
-        loading: loading,
-        done: done,
-        fail: fail,
-        urlResults: urlResults,
-        urlColor: urlColor,
-        domainOrAccount: domainOrAccount,
-      },
+      // domainAccount: {
+      //   loading: loading,
+      //   done: done,
+      //   fail: fail,
+      //   urlResults: urlResults,
+      //   urlColor: urlColor,
+      //   domainOrAccount: domainOrAccount,
+      // },
       url: {
         url: url,
         urlColor: urlColor,
@@ -310,6 +332,7 @@ const createRows = (
         urlColor: urlColor,
         sourceTypes: sourceTypes,
         domainOrAccount: domainOrAccount,
+        sortByDetails: sortByDetails,
       },
     });
   }
@@ -346,9 +369,9 @@ const AssistantLinkResult = () => {
   const columns = createColumns(
     keyword("id"),
     keyword("status"),
-    keyword("domain_or_account"),
+    //keyword("domain_or_account"),
     keyword("assistant_urlbox"),
-    keyword("details"),
+    keyword("options"),
   );
 
   // if no urls extracted
@@ -363,15 +386,6 @@ const AssistantLinkResult = () => {
       </Typography>
     );
   }
-
-  // // https://www.dhiwise.com/post/react-get-screen-width-everything-you-need-to-know
-  //   const [width, setWidth] = useState(window.innerWidth);
-
-  //   useEffect(() => {
-  //     const handleResize = () => setWidth(window.innerWidth);
-  //     window.addEventListener("resize", handleResize);
-  //     return () => window.removeEventListener("resize", handleResize);
-  //   }, []);
 
   return (
     <Card>
@@ -408,12 +422,18 @@ const AssistantLinkResult = () => {
         }}
       >
         {/* issue with resize related to parent not having a fixed/determined size? */}
-        <div style={{ height: 400, width: "100%", minWidth: 0 }}>
+        <div style={{ height: 400, width: 1000, minWidth: 0 }}>
+          {/* <div style={{ height: 400, width: "100%", minWidth: 0 }}> */}
           <DataGrid
+            //autoHeigh={true}
             rows={rows}
             columns={columns}
             disableRowSelectionOnClick
-            //disableColumnResize
+            initialState={{
+              sorting: {
+                sortModel: [{ field: "status", sort: "desc" }],
+              },
+            }}
           />
         </div>
       </CardContent>

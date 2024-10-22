@@ -13,7 +13,7 @@ import Link from "@mui/material/Link";
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import Typography from "@mui/material/Typography";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { Tooltip } from "@mui/material";
+import { Chip, Grid2, Tooltip } from "@mui/material";
 
 const SourceCredibilityDBKFDialog = (props) => {
   //central
@@ -23,6 +23,8 @@ const SourceCredibilityDBKFDialog = (props) => {
   // props
   const source = props.source;
   const evidence = props.evidence;
+  const color = props.color;
+  const sourceType = props.sourceType;
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -42,22 +44,30 @@ const SourceCredibilityDBKFDialog = (props) => {
       </Tooltip>
       <Dialog onClose={handleClose} maxWidth={"lg"} open={open}>
         <DialogTitle>
-          <Typography>
-            <IconButton onClick={handleClose}>
-              <CloseIcon />
-            </IconButton>
-            {keyword("source_cred_popup_header_domain")} {source}
-          </Typography>
+          <Grid2 container>
+            <Grid2 size={{ xs: 11 }} direction="row">
+              <Typography variant="body1" component="div">
+                <Chip label={keyword(sourceType)} color={color} />{" "}
+                {keyword("source_cred_popup_header_domain")} {source}
+              </Typography>
+            </Grid2>
+            <Grid2 size={{ xs: 1 }} alignItems="right">
+              <IconButton onClick={handleClose}>
+                <CloseIcon />
+              </IconButton>
+            </Grid2>
+          </Grid2>
         </DialogTitle>
+
         <DialogContent dividers>
-          <List>
+          <List sx={{ listStyle: "decimal", ml: 4 }}>
             {evidence.map((result, index) => (
-              <ListItem key={index}>
-                <ListItemIcon>
+              <ListItem key={index} sx={{ display: "list-item" }}>
+                {/* <ListItemIcon>
                   <ArrowRightIcon />
-                </ListItemIcon>
+                </ListItemIcon> */}
                 <Typography>
-                  <Link target="_blank" href={result}>
+                  <Link target="_blank" href={result} color="inherit">
                     {result}
                   </Link>
                 </Typography>

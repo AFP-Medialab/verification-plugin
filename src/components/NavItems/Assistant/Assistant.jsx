@@ -212,34 +212,32 @@ const Assistant = () => {
       </Grid2>
 
       {/* text results */}
-      <Grid2
-        container
-        hidden={linkList.length === 0 && text === null && neResult === null}
-      >
-        {text ? (
-          <Grid2 size={{ xs: 12 }}>
-            <AssistantTextResult />
-          </Grid2>
-        ) : null}
+      {text ? (
+        <Grid2 size={{ xs: 12 }}>
+          <AssistantTextResult />
+        </Grid2>
+      ) : null}
 
-        {neResult ? (
-          <Grid2 size={{ xs: 12 }}>
-            <AssistantNEResult />
-          </Grid2>
-        ) : null}
+      {/* named entity results */}
+      {text && neResult ? (
+        <Grid2 size={{ xs: 12 }}>
+          <AssistantNEResult />
+        </Grid2>
+      ) : null}
 
-        {linkList.length !== 0 ? (
-          <Grid2 size={{ xs: 12 }}>
-            <AssistantLinkResult />
-          </Grid2>
-        ) : null}
+      {/* extracted urls with url domain analysis */}
+      {text && linkList.length !== 0 ? (
+        <Grid2 size={{ xs: 12 }}>
+          <AssistantLinkResult />
+        </Grid2>
+      ) : null}
 
-        {text ? (
-          <Grid2 size={{ xs: 12 }}>
-            <AssistantCredSignals />
-          </Grid2>
-        ) : null}
-      </Grid2>
+      {/* credibility signals */}
+      {text ? (
+        <Grid2 size={{ xs: 12 }}>
+          <AssistantCredSignals />
+        </Grid2>
+      ) : null}
     </Grid2>
   );
 };

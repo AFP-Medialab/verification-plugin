@@ -22,7 +22,7 @@ import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { getUrlTypeFromCredScope } from "./assistantUtils";
-import { Chip, Stack } from "@mui/material";
+import { Chip, Grid2, Stack } from "@mui/material";
 
 const renderScope = (keyword, scope) => {
   return (
@@ -75,7 +75,7 @@ const renderEvidence = (evidence) => {
                   <ArrowRightIcon />
                 </ListItemIcon> */}
                 <Typography>
-                  <Link target="_blank" href={result}>
+                  <Link target="_blank" href={result} color="inherit">
                     {result}
                   </Link>
                 </Typography>
@@ -123,34 +123,47 @@ const ExtractedSourceCredibilityDBKFDialog = ({
       >
         <DialogTitle>
           {/* display the url */}
-          <Typography>
-            <IconButton onClick={handleClose}>
-              <CloseIcon />
-            </IconButton>
-            {keyword("assistant_urlbox")}
-            {": "}
-            <Link color={urlColor} href={url}>
-              {url}
-            </Link>
-          </Typography>
+          <Grid2 container>
+            {/* url */}
+            <Grid2 size={{ xs: 11 }}>
+              <Typography>
+                {keyword("assistant_urlbox")}
+                {": "}
+                <Link color={urlColor} href={url}>
+                  {url}
+                </Link>
+              </Typography>
+            </Grid2>
 
-          {/* display the domain */}
-          {domainOrAccount &&
-          domainOrAccount.split("https://")[1].includes("/") ? (
-            <Typography>
-              {keyword("account_scope")}
-              <Link color={urlColor} href={domainOrAccount}>
-                {domainOrAccount}
-              </Link>
-            </Typography>
-          ) : domainOrAccount ? (
-            <Typography>
-              {keyword("domain_scope")}
-              <Link color={urlColor} href={domainOrAccount}>
-                {domainOrAccount}
-              </Link>
-            </Typography>
-          ) : null}
+            {/* close button */}
+            <Grid2 size={{ xs: 1 }} alignItems="right">
+              <IconButton onClick={handleClose}>
+                <CloseIcon />
+              </IconButton>
+            </Grid2>
+
+            {/* domain */}
+            {/* {domainOrAccount &&
+            domainOrAccount.split("https://")[1].includes("/") ? (
+              <Grid2 size={{ xs: 12 }}>
+                <Typography>
+                  {keyword("account_scope")}
+                  <Link color={urlColor} href={domainOrAccount}>
+                    {domainOrAccount}
+                  </Link>
+                </Typography>
+              </Grid2>
+            ) : domainOrAccount ? (
+              <Grid2 size={{ xs: 12 }}>
+                <Typography>
+                  {keyword("domain_scope")}
+                  <Link color={urlColor} href={domainOrAccount}>
+                    {domainOrAccount}
+                  </Link>
+                </Typography>
+              </Grid2>
+            ) : null} */}
+          </Grid2>
         </DialogTitle>
 
         <DialogContent dividers>
@@ -173,10 +186,9 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                                     color={trafficLightColor}
                                     size="small"
                                   />
-                                  {/* <urlIcon color={urlColor} /> */}
                                   <Typography
                                     sx={{ ml: 1 }}
-                                    color={trafficLightColor}
+                                    //color={trafficLightColor}
                                   >
                                     {` ${keyword("this")}`}
                                     {getUrlTypeFromCredScope(
@@ -194,10 +206,9 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                                     color={trafficLightColor}
                                     size="small"
                                   />
-                                  {/* <urlIcon color={urlColor} /> */}
                                   <Typography
                                     sx={{ ml: 1 }}
-                                    color={trafficLightColor}
+                                    //color={trafficLightColor}
                                   >
                                     {` ${keyword(
                                       "source_credibility_warning_domain",

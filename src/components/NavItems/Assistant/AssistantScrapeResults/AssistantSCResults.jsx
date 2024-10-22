@@ -7,7 +7,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Collapse from "@mui/material/Collapse";
 import FindInPageIcon from "@mui/icons-material/FindInPage";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Grid2, IconButton } from "@mui/material";
+import { Chip, Grid2, IconButton } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
@@ -39,6 +39,17 @@ const AssistantSCResults = () => {
   const mixedSourceCred = useSelector(
     (state) => state.assistant.mixedSourceCred,
   );
+  const trafficLightColors = useSelector(
+    (state) => state.assistant.trafficLightColors,
+  );
+
+  // define types of source credibility
+  // also defined in AssistantLinkResult - move to redux?
+  const sourceTypes = {
+    caution: "warning",
+    mixed: "mentions",
+    positive: "fact_checker",
+  };
 
   return (
     <Card variant={"outlined"} className={classes.sourceCredibilityBorder}>
@@ -74,48 +85,45 @@ const AssistantSCResults = () => {
             <Box mt={3} ml={2}>
               {positiveSourCred ? (
                 <div>
-                  <Typography
-                    variant={"subtitle1"}
-                    className={classes.fontBold}
-                  >
-                    {keyword("fact_checker")}
-                  </Typography>
+                  <Chip
+                    label={keyword("fact_checker")}
+                    color={trafficLightColors.positive}
+                  />
                   <SourceCredibilityResult
                     scResultFiltered={positiveSourCred}
                     icon={CheckCircleOutlineIcon}
-                    iconColor="primary"
+                    iconColor={trafficLightColors.positive}
+                    sourceType={sourceTypes.positive}
                   />
                 </div>
               ) : null}
 
               {cautionSourceCred ? (
                 <div>
-                  <Typography
-                    variant={"subtitle1"}
-                    className={classes.fontBold}
-                  >
-                    {keyword("warning_title")}
-                  </Typography>
+                  <Chip
+                    label={keyword("warning_title")}
+                    color={trafficLightColors.caution}
+                  />
                   <SourceCredibilityResult
                     scResultFiltered={cautionSourceCred}
                     icon={ErrorOutlineOutlinedIcon}
-                    iconColor="error"
+                    iconColor={trafficLightColors.caution}
+                    sourceType={sourceTypes.caution}
                   />
                 </div>
               ) : null}
 
               {mixedSourceCred ? (
                 <div>
-                  <Typography
-                    variant={"subtitle1"}
-                    className={classes.fontBold}
-                  >
-                    {keyword("mentions")}
-                  </Typography>
+                  <Chip
+                    label={keyword("mentions")}
+                    color={trafficLightColors.mixed}
+                  />
                   <SourceCredibilityResult
                     scResultFiltered={mixedSourceCred}
                     icon={SentimentSatisfied}
-                    iconColor="action"
+                    iconColor={trafficLightColors.mixed}
+                    sourceType={sourceTypes.mixed}
                   />
                 </div>
               ) : null}
