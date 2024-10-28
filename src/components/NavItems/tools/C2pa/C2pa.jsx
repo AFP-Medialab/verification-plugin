@@ -4,7 +4,6 @@ import {
   AccordionSummary,
   Alert,
   Box,
-  Button,
   Card,
   CardHeader,
   FormControlLabel,
@@ -32,8 +31,8 @@ import exifr from "exifr";
 import { ArrowDownward } from "@mui/icons-material";
 import Typography from "@mui/material/Typography";
 import { v4 as uuidv4 } from "uuid";
-import C2paCard from "./components/c2paCard";
 import { ROLES } from "../../../../constants/roles";
+import AfpReverseSearchResults from "./components/AfpReverseSearchResults";
 
 const C2paData = () => {
   const role = useSelector((state) => state.userSession.user.roles);
@@ -65,7 +64,7 @@ const C2paData = () => {
 
   const [loadingProgress, setLoadingProgress] = useState(null);
 
-  const [performReverseSearch, setPerformReverseSearch] = useState(true);
+  const [performReverseSearch, setPerformReverseSearch] = useState(false);
 
   const authenticatedRequest = useAuthenticatedRequest();
 
@@ -330,20 +329,26 @@ const C2paData = () => {
               isParentLoading={isLoading}
             />
             <Box m={4} />
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={performReverseSearch}
-                    onChange={togglePerformReverseSearch}
-                    size="small"
-                    disabled={isLoading}
-                    inputProps={{ "aria-label": "toggle using reverse search" }}
+
+            {role.includes(ROLES.AFP_C2PA_GOLD) ||
+              (role.includes(ROLES.EXTRA_FEATURE) && (
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={performReverseSearch}
+                        onChange={togglePerformReverseSearch}
+                        size="small"
+                        disabled={isLoading}
+                        inputProps={{
+                          "aria-label": "toggle using reverse search",
+                        }}
+                      />
+                    }
+                    label={keyword("reverse_search_switch_label")}
                   />
-                }
-                label={keyword("reverse_search_switch_label")}
-              />
-            </FormGroup>
+                </FormGroup>
+              ))}
           </form>
         </Box>
 
@@ -402,83 +407,13 @@ const C2paData = () => {
             </AccordionSummary>
 
             <AccordionDetails>
-              <Stack direction="row" spacing={4}>
-                <Box width="100%">
-                  <Grid2
-                    container
-                    direction="row"
-                    spacing={2}
-                    p={4}
-                    width="100%"
-                  >
-                    <Grid2
-                      container
-                      direction="column"
-                      size={{ xs: 6 }}
-                      spacing={2}
-                    >
-                      <Grid2>
-                        <img
-                          src={thumbnailImage}
-                          style={{
-                            maxWidth: "100%",
-                            maxHeight: "60vh",
-                            borderRadius: "10px",
-                          }}
-                        />
-                      </Grid2>
-
-                      {hdImage &&
-                        (role.includes(ROLES.AFP_C2PA_GOLD) ||
-                          role.includes(ROLES.EXTRA_FEATURE)) && (
-                          <Grid2>
-                            <Button
-                              variant="contained"
-                              onClick={downloadHdImage}
-                              sx={{ textTransform: "none" }}
-                            >
-                              {keyword(
-                                "reverse_search_original_image_download_button",
-                              )}
-                            </Button>
-                          </Grid2>
-                        )}
-
-                      {thumbnailImageCaption &&
-                      typeof thumbnailImageCaption === "string" ? (
-                        <Grid2 mt={2}>
-                          <Stack direction="column" spacing={1}>
-                            <Typography>
-                              {keyword("image_caption_title")}
-                            </Typography>
-
-                            <Typography variant={"caption"}>
-                              {thumbnailImageCaption}
-                            </Typography>
-                          </Stack>
-                        </Grid2>
-                      ) : (
-                        <Alert severity="info" sx={{ width: "fit-content" }}>
-                          {keyword("no_caption_available_alert")}
-                        </Alert>
-                      )}
-                    </Grid2>
-                    <Grid2
-                      container
-                      direction="column"
-                      size={{ xs: 6 }}
-                      spacing={2}
-                    >
-                      <Alert severity="info" sx={{ width: "fit-content" }}>
-                        {keyword("afp_produced_image_info")}
-                      </Alert>
-                      {hdImageC2paData && (
-                        <C2paCard c2paData={hdImageC2paData} />
-                      )}
-                    </Grid2>
-                  </Grid2>
-                </Box>
-              </Stack>
+              <AfpReverseSearchResults
+                thumbnailImage={thumbnailImage}
+                downloadHdImage={downloadHdImage}
+                hdImage={hdImage}
+                thumbnailImageCaption={thumbnailImageCaption}
+                hdImageC2paData={hdImageC2paData}
+              />
             </AccordionDetails>
           </Accordion>
         )}

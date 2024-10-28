@@ -109,7 +109,7 @@ const C2paResults = ({ result, handleClose, hasSimilarAfpResult }) => {
 
   return (
     <Grid2 container direction="row" spacing={3} p={4}>
-      <Grid2 item container justifyContent="center" size={{ xs: 6 }}>
+      <Grid2 item container justifyContent="start" size={{ xs: 6 }}>
         <Grid2 item>
           {isImage ? (
             <img

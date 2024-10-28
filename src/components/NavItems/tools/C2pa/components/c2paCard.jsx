@@ -80,7 +80,7 @@ const C2PaCard = (c2paData) => {
 
   /**
    *
-   * @param {String} title the keywoed for the title
+   * @param {String} title the keyword for the title
    * @param {String} information the keyword for the title description
    * @returns {React.JSX.Element}
    */
