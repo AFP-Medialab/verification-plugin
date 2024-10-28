@@ -8,7 +8,7 @@ import {
   Card,
   CardContent,
   Divider,
-  Grid,
+  Grid2,
   Stack,
   Tooltip,
   Typography,
@@ -87,15 +87,15 @@ const C2paResults = ({ result, handleClose, hasSimilarAfpResult }) => {
    */
   const title = (title, information) => {
     return (
-      <Grid container direction="row" alignItems="center">
-        <Grid item>
+      <Grid2 container direction="row" alignItems="center">
+        <Grid2 item>
           <Typography variant="h6">{keyword(title)}</Typography>
-        </Grid>
-        <Grid item m={2} />
+        </Grid2>
+        <Grid2 item m={2} />
         <Tooltip title={<h3>{keyword(information)}</h3>}>
           <HelpIcon />
         </Tooltip>
-      </Grid>
+      </Grid2>
     );
   };
 
@@ -108,9 +108,9 @@ const C2paResults = ({ result, handleClose, hasSimilarAfpResult }) => {
   };
 
   return (
-    <Grid container direction="row" spacing={3} p={4}>
-      <Grid item container justifyContent="center" xs>
-        <Grid item>
+    <Grid2 container direction="row" spacing={3} p={4}>
+      <Grid2 item container justifyContent="center" size={{ xs: 6 }}>
+        <Grid2 item>
           {isImage ? (
             <img
               src={url}
@@ -133,9 +133,9 @@ const C2paResults = ({ result, handleClose, hasSimilarAfpResult }) => {
               <source src={url} />
             </video>
           )}
-        </Grid>
-      </Grid>
-      <Grid item xs>
+        </Grid2>
+      </Grid2>
+      <Grid2 item size={{ xs: 6 }}>
         <Card p={1}>
           <CardContent>
             {!manifestData ? (
@@ -490,8 +490,8 @@ const C2paResults = ({ result, handleClose, hasSimilarAfpResult }) => {
             ) : null}
           </CardContent>
         </Card>
-      </Grid>
-    </Grid>
+      </Grid2>
+    </Grid2>
     // </Card>
   );
 };
