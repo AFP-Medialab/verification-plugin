@@ -7,6 +7,7 @@ const initialState = {
   currentImageId: null,
   mainImageId: null,
   validationIssues: false,
+  thumbnail: null,
 };
 
 const c2paSlice = createSlice({
@@ -34,12 +35,16 @@ const c2paSlice = createSlice({
       state.url = null;
       state.currentManifest = null;
       state.validationIssues = false;
+      state.thumbnail = null;
     },
     c2paIngredientResultCleaned(state, action) {
       state.ingredientResult = null;
     },
     c2paValidationIssuesSet(state, action) {
       state.validationIssues = action.payload;
+    },
+    setC2paThumbnail(state, action) {
+      state.thumbnail = action.payload;
     },
   },
 });
@@ -53,6 +58,7 @@ export const {
   c2paStateCleaned,
   c2paIngredientResultCleaned,
   c2paValidationIssuesSet,
+  setC2paThumbnail,
 } = c2paSlice.actions;
 
 const c2paReducer = c2paSlice.reducer;

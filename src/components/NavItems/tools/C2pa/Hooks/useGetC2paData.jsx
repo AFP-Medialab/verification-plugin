@@ -6,7 +6,6 @@ import {
 } from "c2pa";
 import {
   c2paCurrentImageIdSet,
-  c2paLoadingSet,
   c2paMainImageIdSet,
   c2paResultSet,
 } from "redux/reducers/tools/c2paReducer";
@@ -225,7 +224,7 @@ async function getC2paData(url, dispatch) {
     workerSrc: "./c2paAssets/c2pa.worker.min.js",
   });
 
-  dispatch(c2paLoadingSet(true));
+  //dispatch(c2paLoadingSet(true));
   // const url = URL.createObjectURL(image);
 
   try {
@@ -263,11 +262,82 @@ async function getC2paData(url, dispatch) {
       dispatch(c2paCurrentImageIdSet("id"));
       dispatch(c2paMainImageIdSet("id"));
     }
-    dispatch(c2paLoadingSet(false));
+    //dispatch(c2paLoadingSet(false));
   } catch (err) {
     console.error("Error reading image:", err);
-    dispatch(c2paLoadingSet(false));
+    //dispatch(c2paLoadingSet(false));
   }
+}
+
+/**
+ *
+ * @param {Object} url the url of the image containing c2pa data
+ */
+
+export async function getC2paDataHd(url) {
+  const settings = await getToolkitSettings();
+
+  const c2pa = await createC2pa({
+    wasmSrc: "./c2paAssets/toolkit_bg.wasm",
+    workerSrc: "./c2paAssets/c2pa.worker.min.js",
+  });
+
+  let c2paData = {
+    result: null,
+    loading: false,
+    url: null,
+    currentImageId: null,
+    mainImageId: null,
+    validationIssues: false,
+    thumbnail: null,
+  };
+
+  //dispatch(c2paLoadingSet(true));
+  // const url = URL.createObjectURL(image);
+
+  try {
+    const { manifestStore } = await c2pa.read(url, {
+      settings: settings,
+    });
+
+    if (manifestStore) {
+      const activeManifest = manifestStore.activeManifest
+        ? manifestStore.activeManifest
+        : null;
+
+      let validationIssues = null;
+      if (manifestStore.validationStatus.length > 0) {
+        validationIssues = getValidationIssues(manifestStore.validationStatus);
+      }
+      if (activeManifest) {
+        let { id, data } = await readManifest(activeManifest, null, {}, url, 0);
+        data[id].validationIssues = validationIssues;
+        c2paData.result = data;
+
+        // each manifest has an id. The current image id determines which image's data is displayed
+        // and the main image id is used to return to the first image if a child image is being displayed
+        c2paData.currentImageId = id;
+        c2paData.mainImageId = id;
+      } else {
+        console.log("no active manifest");
+      }
+    } else {
+      // if there is no manifest store, the only data saved for an image is its url
+      const data = {};
+      data["id"] = { url: url };
+      // dispatch(c2paResultSet(data));
+      c2paData.result = data;
+      c2paData.currentImageId = "id";
+      c2paData.mainImageId = "id";
+      // dispatch(c2paCurrentImageIdSet("id"));
+      // dispatch(c2paMainImageIdSet("id"));
+    }
+    //dispatch(c2paLoadingSet(false));
+  } catch (err) {
+    console.error("Error reading image:", err);
+    //dispatch(c2paLoadingSet(false));
+  }
+  return c2paData;
 }
 
 export default getC2paData;

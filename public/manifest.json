@@ -13,8 +13,7 @@
   },
   "permissions": [
     "contextMenus",
-    "activeTab",
-    "scripting"
+    "activeTab"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -29,8 +28,12 @@
   },
   "web_accessible_resources": [
     {
-      "resources": [ "toolkit_bg.wasm" ],
-      "matches": [ "<all_urls>" ]
+      "resources": [
+        "toolkit_bg.wasm"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
     }
   ]
 }
