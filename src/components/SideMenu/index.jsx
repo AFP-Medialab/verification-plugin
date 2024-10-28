@@ -31,6 +31,7 @@ import ImageIcon from "../NavBar/images/SVG/Image/Images.svg";
 import SearchIcon from "../NavBar/images/SVG/Search/Search.svg";
 import DataIcon from "../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
 import {
+  canUserSeeTool,
   TOOL_GROUPS,
   TOOL_STATUS_ICON,
   TOOLS_CATEGORIES,
@@ -92,7 +93,6 @@ const SideMenu = ({ tools, setOpenAlert }) => {
     (state) => state.userSession && state.userSession.userAuthenticated,
   );
   const role = useSelector((state) => state.userSession.user.roles);
-  const betaTester = role.includes("BETA_TESTER");
 
   // Set UI direction based on language reading direction
   const direction = currentLang !== "ar" ? "ltr" : "rtl";
@@ -598,13 +598,9 @@ const SideMenu = ({ tools, setOpenAlert }) => {
 
                     if (
                       itemList.rolesNeeded &&
-                      itemList.rolesNeeded.includes("BETA_TESTER")
+                      !canUserSeeTool(itemList, role)
                     ) {
-                      if (betaTester) {
-                        return element;
-                      } else {
-                        return null;
-                      }
+                      return null;
                     } else {
                       return element;
                     }
