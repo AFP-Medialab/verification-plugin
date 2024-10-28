@@ -50,8 +50,6 @@ const C2paData = () => {
 
   const keyword = i18nLoadNamespace("components/NavItems/tools/C2pa");
 
-  const [thumbnail, setThumbnail] = useState(null);
-
   const [thumbnailImage, setThumbnailImage] = useState(null);
 
   const [hdImage, setHdImage] = useState(null);
@@ -59,8 +57,6 @@ const C2paData = () => {
   const [hdImageC2paData, setHdImageC2paData] = useState(null);
 
   const [thumbnailImageCaption, setThumbnailImageCaption] = useState(null);
-
-  const [thumbnailFromHdImage, setThumbnailFromHdImage] = useState(null);
 
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -235,8 +231,6 @@ const C2paData = () => {
       const imageUrl = URL.createObjectURL(blob);
 
       // console.log(await exifr.thumbnailUrl(blob));
-
-      setThumbnailFromHdImage((await exifr.thumbnailUrl(blob)) ?? null);
 
       setHdImage(imageUrl);
       setHdImageC2paData(await getC2paDataHd(imageUrl));
