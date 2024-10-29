@@ -436,6 +436,8 @@ function* handlePersuasionCall(action) {
   }
 }
 
+const SERVER_TIMEOUT_LIMIT = 6000;
+
 function* handleSubjectivityCall(action) {
   if (action.type === "CLEAN_STATE") return;
 
@@ -445,7 +447,10 @@ function* handleSubjectivityCall(action) {
     if (text) {
       yield put(setSubjectivityDetails(null, true, false, false));
 
-      const result = yield call(assistantApi.callSubjectivityService, text.substring(0, 5000));
+      const result = yield call(
+        assistantApi.callSubjectivityService,
+        text.substring(0, SERVER_TIMEOUT_LIMIT),
+      );
 
       yield put(setSubjectivityDetails(result, false, true, false));
     }
@@ -453,6 +458,8 @@ function* handleSubjectivityCall(action) {
     yield put(setSubjectivityDetails(null, false, false, true));
   }
 }
+
+const URL_BUFFER_LIMIT = 6000;
 
 function* handlePrevFactChecksCall(action) {
   if (action.type === "CLEAN_STATE") return;
@@ -466,7 +473,10 @@ function* handlePrevFactChecksCall(action) {
     if (text && role.includes("BETA_TESTER")) {
       yield put(setPrevFactChecksDetails(null, true, false, false));
 
-      const result = yield call(assistantApi.callPrevFactChecksService, text.substring(0, 7000));
+      const result = yield call(
+        assistantApi.callPrevFactChecksService,
+        text.substring(0, URL_BUFFER_LIMIT),
+      );
 
       yield put(
         setPrevFactChecksDetails(result.fact_checks, false, true, false),
@@ -493,7 +503,7 @@ function* handleMachineGeneratedTextCall(action) {
 
       const result = yield call(
         assistantApi.callMachineGeneratedTextService,
-        text.substring(0, 7000),
+        text.substring(0, URL_BUFFER_LIMIT),
       );
 
       yield put(setMachineGeneratedTextDetails(result, false, true, false));
