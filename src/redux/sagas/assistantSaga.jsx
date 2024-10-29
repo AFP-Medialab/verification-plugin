@@ -445,7 +445,7 @@ function* handleSubjectivityCall(action) {
     if (text) {
       yield put(setSubjectivityDetails(null, true, false, false));
 
-      const result = yield call(assistantApi.callSubjectivityService, text);
+      const result = yield call(assistantApi.callSubjectivityService, text.substring(0, 5000));
 
       yield put(setSubjectivityDetails(result, false, true, false));
     }
@@ -466,7 +466,7 @@ function* handlePrevFactChecksCall(action) {
     if (text && role.includes("BETA_TESTER")) {
       yield put(setPrevFactChecksDetails(null, true, false, false));
 
-      const result = yield call(assistantApi.callPrevFactChecksService, text);
+      const result = yield call(assistantApi.callPrevFactChecksService, text.substring(0, 7000));
 
       yield put(
         setPrevFactChecksDetails(result.fact_checks, false, true, false),
@@ -493,7 +493,7 @@ function* handleMachineGeneratedTextCall(action) {
 
       const result = yield call(
         assistantApi.callMachineGeneratedTextService,
-        text,
+        text.substring(0, 7000),
       );
 
       yield put(setMachineGeneratedTextDetails(result, false, true, false));
