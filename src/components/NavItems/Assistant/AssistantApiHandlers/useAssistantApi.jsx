@@ -53,19 +53,6 @@ export default function assistantApiCalls() {
     return namedEntityResult.data;
   };
 
-  const callSourceCredibilityService = async (urlList) => {
-    if (urlList.length === 0) return null;
-
-    let urls = urlList.join(" ");
-
-    const result = await axios.post(
-      assistantEndpoint + "gcloud/source-credibility",
-      { text: urls },
-    );
-
-    return result.data;
-  };
-
   const callOcrService = async (data, script, mode) => {
     const result = await axios.post(assistantEndpoint + "gcloud/ocr", {
       text: data,
@@ -102,7 +89,32 @@ export default function assistantApiCalls() {
       }
     }
   }
+  
+  const callSourceCredibilityService = async (urlList) => {
+    return await callAsyncWithNumRetries(
+      MAX_NUM_RETRIES,
+      async () => {
+        if (urlList.length === 0) return null;
+    
+        let urls = urlList.join(" ");
 
+        const result = await axios.post(
+          assistantEndpoint + "gcloud/source-credibility",
+          { text: urls },
+        );
+        return result.data;
+      },
+      (numTries) => {
+        console.log(
+          "Could not connect to source credibility service, tries " +
+            (numTries + 1) +
+            "/" +
+            MAX_NUM_RETRIES,
+        );
+      },
+    );
+  };
+  
   const callNewsFramingService = async (text) => {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
