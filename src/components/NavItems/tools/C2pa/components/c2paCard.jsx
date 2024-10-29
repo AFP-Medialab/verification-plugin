@@ -87,10 +87,10 @@ const C2PaCard = (c2paData) => {
   const title = (title, information) => {
     return (
       <Grid2 container direction="row" alignItems="center">
-        <Grid2 item>
+        <Grid2>
           <Typography variant="h6">{keyword(title)}</Typography>
         </Grid2>
-        <Grid2 item m={2} />
+        <Grid2 m={2} />
         <Tooltip title={<h3>{keyword(information)}</h3>}>
           <HelpIcon />
         </Tooltip>

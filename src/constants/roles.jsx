@@ -6,7 +6,7 @@
 export const ROLES = {
   ARCHIVE: "ARCHIVE",
   BETA_TESTER: "BETA_TESTER",
-  LOCK: "lock",
+  LOCK: "user",
   EVALUATION: "EVALUATION",
   EXTRA_FEATURE: "EXTRA_FEATURE",
   AFP_C2PA_GOLD: "AFP_C2PA_GOLD", //Highest level for AFP Reverse search

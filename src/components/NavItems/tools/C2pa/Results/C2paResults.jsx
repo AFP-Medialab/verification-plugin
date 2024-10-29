@@ -88,10 +88,10 @@ const C2paResults = ({ result, handleClose, hasSimilarAfpResult }) => {
   const title = (title, information) => {
     return (
       <Grid2 container direction="row" alignItems="center">
-        <Grid2 item>
+        <Grid2>
           <Typography variant="h6">{keyword(title)}</Typography>
         </Grid2>
-        <Grid2 item m={2} />
+        <Grid2 m={2} />
         <Tooltip title={<h3>{keyword(information)}</h3>}>
           <HelpIcon />
         </Tooltip>
@@ -109,8 +109,8 @@ const C2paResults = ({ result, handleClose, hasSimilarAfpResult }) => {
 
   return (
     <Grid2 container direction="row" spacing={3} p={4}>
-      <Grid2 item container justifyContent="start" size={{ xs: 6 }}>
-        <Grid2 item>
+      <Grid2 container justifyContent="start" size={{ xs: 6 }}>
+        <Grid2>
           {isImage ? (
             <img
               src={url}
@@ -135,7 +135,7 @@ const C2paResults = ({ result, handleClose, hasSimilarAfpResult }) => {
           )}
         </Grid2>
       </Grid2>
-      <Grid2 item size={{ xs: 6 }}>
+      <Grid2 size={{ xs: 6 }}>
         <Card p={1}>
           <CardContent>
             {!manifestData ? (

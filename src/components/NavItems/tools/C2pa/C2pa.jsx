@@ -314,50 +314,52 @@ const C2paData = () => {
 
         <Box p={3}>
           <form>
-            <StringFileUploadField
-              labelKeyword={keyword("image_link")}
-              placeholderKeyword={keyword("placeholder")}
-              submitButtonKeyword={keyword("submit_button")}
-              localFileKeyword={keyword("button_localfile")}
-              urlInput={input}
-              setUrlInput={setInput}
-              fileInput={imageFile}
-              setFileInput={setImageFile}
-              handleSubmit={handleSubmit}
-              fileInputTypesAccepted={"image/*, video/*"}
-              handleCloseSelectedFile={handleClose}
-              isParentLoading={isLoading}
-            />
-            <Box m={4} />
+            <Stack direction="column" spacing={4}>
+              <StringFileUploadField
+                labelKeyword={keyword("image_link")}
+                placeholderKeyword={keyword("placeholder")}
+                submitButtonKeyword={keyword("submit_button")}
+                localFileKeyword={keyword("button_localfile")}
+                urlInput={input}
+                setUrlInput={setInput}
+                fileInput={imageFile}
+                setFileInput={setImageFile}
+                handleSubmit={handleSubmit}
+                fileInputTypesAccepted={"image/*, video/*"}
+                handleCloseSelectedFile={handleClose}
+                isParentLoading={isLoading}
+              />
 
-            {role.includes(ROLES.AFP_C2PA_GOLD) ||
-              (role.includes(ROLES.EXTRA_FEATURE) && (
-                <FormGroup>
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        checked={performReverseSearch}
-                        onChange={togglePerformReverseSearch}
-                        size="small"
-                        disabled={isLoading}
-                        inputProps={{
-                          "aria-label": "toggle using reverse search",
-                        }}
-                      />
-                    }
-                    label={keyword("reverse_search_switch_label")}
-                  />
-                </FormGroup>
-              ))}
+              {role.includes(ROLES.AFP_C2PA_GOLD) ||
+                (role.includes(ROLES.EXTRA_FEATURE) && (
+                  <FormGroup>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={performReverseSearch}
+                          onChange={togglePerformReverseSearch}
+                          size="small"
+                          disabled={isLoading}
+                          inputProps={{
+                            "aria-label": "toggle using reverse search",
+                          }}
+                        />
+                      }
+                      label={keyword("reverse_search_switch_label")}
+                    />
+                  </FormGroup>
+                ))}
+
+              {isLoading && (
+                <Box mt={3}>
+                  <LinearProgress />
+                </Box>
+              )}
+            </Stack>
           </form>
         </Box>
 
-        <Box m={2} />
-        {isLoading && (
-          <Box mt={3}>
-            <LinearProgress />
-          </Box>
-        )}
+        {/*<Box m={2} />*/}
       </Card>
 
       <Box m={3} />
