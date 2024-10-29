@@ -330,25 +330,25 @@ const C2paData = () => {
                 isParentLoading={isLoading}
               />
 
-              {role.includes(ROLES.AFP_C2PA_GOLD) ||
-                (role.includes(ROLES.EXTRA_FEATURE) && (
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={performReverseSearch}
-                          onChange={togglePerformReverseSearch}
-                          size="small"
-                          disabled={isLoading}
-                          inputProps={{
-                            "aria-label": "toggle using reverse search",
-                          }}
-                        />
-                      }
-                      label={keyword("reverse_search_switch_label")}
-                    />
-                  </FormGroup>
-                ))}
+              {(role.includes(ROLES.AFP_C2PA_GOLD) ||
+                role.includes(ROLES.EXTRA_FEATURE)) && (
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={performReverseSearch}
+                        onChange={togglePerformReverseSearch}
+                        size="small"
+                        disabled={isLoading}
+                        inputProps={{
+                          "aria-label": "toggle using reverse search",
+                        }}
+                      />
+                    }
+                    label={keyword("reverse_search_switch_label")}
+                  />
+                </FormGroup>
+              )}
 
               {isLoading && (
                 <Box mt={3}>
