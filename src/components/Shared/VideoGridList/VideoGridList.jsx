@@ -3,6 +3,8 @@ import ImageList from "@mui/material//ImageList";
 import ImageListItem from "@mui/material//ImageListItem";
 import Link from "@mui/material/Link";
 import LinkIcon from "@mui/icons-material/Link";
+import Typography from "@mui/material/Typography";
+
 import useClasses from "../MaterialUiStyles/useClasses";
 
 const styles = (theme) => ({
@@ -30,23 +32,30 @@ const styles = (theme) => ({
 const VideoImageList = (props) => {
   const classes = useClasses(styles);
 
+  console.log("PROPS", props);
+
   return (
     <div className={classes.root}>
-      <ImageList rowHeight={"auto"} className={classes.imageList} cols={1}>
+      <ImageList
+        rowHeight={"auto"}
+        className={classes.imageList}
+        cols={1}
+        style={props.style}
+      >
         {props.list.map((tile, index) => (
           <ImageListItem key={index} cols={1}>
-            <Link
-              variant="body2"
-              onClick={() => {
-                props.handleClick(tile);
-              }}
-              data-testid={"assistant-media-grid-video-" + index}
-            >
-              <p>
-                <LinkIcon className={classes.icon} />
+            <Typography noWrap={true}>
+              <LinkIcon className={classes.icon} />
+              <Link
+                variant="body2"
+                onClick={() => {
+                  props.handleClick(tile);
+                }}
+                data-testid={"assistant-media-grid-video-" + index}
+              >
                 {tile}
-              </p>
-            </Link>
+              </Link>
+            </Typography>
           </ImageListItem>
         ))}
       </ImageList>
