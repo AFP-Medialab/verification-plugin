@@ -35,7 +35,6 @@ const VideoImageList = (props) => {
       <ImageList rowHeight={"auto"} className={classes.imageList} cols={1}>
         {props.list.map((tile, index) => (
           <ImageListItem key={index} cols={1}>
-            <LinkIcon className={classes.icon} />
             <Link
               variant="body2"
               onClick={() => {
@@ -43,7 +42,10 @@ const VideoImageList = (props) => {
               }}
               data-testid={"assistant-media-grid-video-" + index}
             >
-              {tile}
+              <p>
+                <LinkIcon className={classes.icon} />
+                {tile}
+              </p>
             </Link>
           </ImageListItem>
         ))}

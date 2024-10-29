@@ -162,6 +162,7 @@ const AssistantMediaResult = () => {
               </CardContent>
 
               {/* image list */}
+              <h1>Images</h1>
               <CardContent>
                 <ImageGridList
                   list={imageList}
@@ -174,9 +175,11 @@ const AssistantMediaResult = () => {
               </CardContent>
 
               {/* video list */}
+              <h1>Videos</h1>
               <CardContent>
                 <VideoGridList
                   list={videoList}
+                  style={{ margin: 8 }}
                   handleClick={(vidLink) => {
                     submitMediaToProcess(vidLink);
                   }}
