@@ -787,6 +787,11 @@ const styles = (theme) => ({
     border: "4px solid white",
   },
 
+  checkeredBG: {
+    background:
+      "repeating-conic-gradient(#808080 0% 25%, #eee 0% 50%) 50% / 20px 20px",
+  },
+
   hidden: {
     display: "none",
   },

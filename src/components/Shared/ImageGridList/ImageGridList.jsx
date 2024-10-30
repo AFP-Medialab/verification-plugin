@@ -15,8 +15,11 @@ const styles = (theme) => ({
   },
   imageList: {
     width: "100%",
-
     paddingBottom: "10px",
+  },
+  checkeredBG: {
+    background:
+      "repeating-conic-gradient(#808080 0% 25%, #eee 0% 50%) 50% / 20px 20px",
   },
 });
 
@@ -33,6 +36,7 @@ const ImageImageList = (props) => {
                 <img
                   src={tile}
                   alt={tile}
+                  className={classes.checkeredBG}
                   onClick={() => props.handleClick(props.list[index])}
                   onLoad={props.setLoading}
                   style={{ width: "100%", height: "auto" }}
