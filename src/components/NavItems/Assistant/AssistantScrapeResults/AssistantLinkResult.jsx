@@ -121,14 +121,17 @@ const createColumns = (headerId, headerStatus, headerUrl, headerDetails) => {
       align: "center",
       headerAlign: "center",
       type: "number",
-      width: 50,
+      minWidth: 50,
+      flex: 1,
     },
     {
       field: "status",
       headerName: headerStatus,
       align: "center",
       headerAlign: "center",
-      width: 100,
+      display: "flex",
+      minWidth: 120,
+      flex: 1,
       renderCell: (params) => {
         return (
           <Status
@@ -148,7 +151,8 @@ const createColumns = (headerId, headerStatus, headerUrl, headerDetails) => {
     {
       field: "url",
       headerName: headerUrl,
-      width: 700,
+      minWidth: 400,
+      flex: 1,
       renderCell: (params) => {
         return <Url url={params.value.url} urlColor={params.value.urlColor} />;
       },
@@ -159,7 +163,12 @@ const createColumns = (headerId, headerStatus, headerUrl, headerDetails) => {
       headerName: headerDetails,
       align: "center",
       headerAlign: "center",
-      width: 100,
+      display: "flex",
+      minWidth: 100,
+      flex: 1,
+      // change to type: actions,
+      // getActions: (params) => [/.../],
+      //   an array of <GridActionsCellItem> elements, one for each action button
       renderCell: (params) => {
         return (
           <Details
@@ -174,8 +183,7 @@ const createColumns = (headerId, headerStatus, headerUrl, headerDetails) => {
           />
         );
       },
-      sortComparator: (v1, v2) =>
-        v1.sortByDetails.localeCompare(v2.sortByDetails),
+      sortComparator: (v1, v2) => v1.sortByDetails === v2.sortByDetails,
     },
   ];
 
@@ -227,7 +235,9 @@ const createRows = (
       }
       // detect domain or account address
       domainOrAccount = urlResults.resolvedDomain
-        ? "https://" + urlResults.resolvedDomain
+        ? urlResults.resolvedDomain.startsWidth("https://")
+          ? urlResults.resolvedDomain
+          : "https://" + urlResults.resolvedDomain
         : "";
     }
 
@@ -345,8 +355,7 @@ const AssistantLinkResult = () => {
         }}
       >
         {/* issue with resize related to parent not having a fixed/determined size? */}
-        <div style={{ height: 400, width: 1000, minWidth: 0 }}>
-          {/* <div style={{ height: 400, width: "100%", minWidth: 0 }}> */}
+        <div style={{ height: 400, width: "100%", minWidth: 0 }}>
           <DataGrid
             rows={rows}
             columns={columns}
