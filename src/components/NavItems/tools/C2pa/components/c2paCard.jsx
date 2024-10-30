@@ -26,15 +26,10 @@ import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespac
 import HelpIcon from "@mui/icons-material/Help";
 
 const C2PaCard = (c2paData) => {
-  console.log(c2paData);
-
   const [mainImageId, setMainImageId] = useState(c2paData.c2paData.mainImageId);
   const [currentImageId, setCurrentImageId] = useState(
     c2paData.c2paData.currentImageId,
   );
-
-  console.log(mainImageId);
-  console.log(currentImageId);
 
   const url = c2paData.c2paData.result[currentImageId].url;
   const parentId = c2paData.c2paData.result[currentImageId].parent;
@@ -306,7 +301,6 @@ const C2PaCard = (c2paData) => {
                                 <AccordionDetails>
                                   {manifestData.captureInfo.allCaptureInfo.map(
                                     (obj, key) => {
-                                      console.log(obj);
                                       return (
                                         <Stack key={key}>
                                           {Object.keys(obj.data).map(
@@ -387,8 +381,6 @@ const C2PaCard = (c2paData) => {
                             <Box m={1} />
                             <Stack direction="row" spacing={1} p={1}>
                               {manifestData.children.map((obj, key) => {
-                                console.log(manifestData);
-                                console.log(obj);
                                 return (
                                   <Box key={key}>
                                     <img
