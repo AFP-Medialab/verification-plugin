@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 //import ImageList from '@mui/material//ImageList';
 //import ImageListItem from '@mui/material//ImageListItem';
 import { Grid2 } from "@mui/material/";
@@ -26,18 +26,41 @@ const styles = (theme) => ({
 const ImageImageList = (props) => {
   const classes = useClasses(styles);
 
+  const [filteredList, setFilteredList] = useState([]);
+
+  useEffect(() => {
+    const filteredImages = [];
+    const promises = props.list.map((imageUrl) => {
+      return new Promise((resolve) => {
+        const image = new Image();
+        image.src = imageUrl;
+        image.onload = () => {
+          if (image.width > 2 && image.height > 2) {
+            filteredImages.push(imageUrl);
+          }
+          resolve();
+        };
+      });
+    });
+
+    Promise.all(promises).then(() => {
+      setFilteredList(filteredImages);
+    });
+  }, [props.list]);
+
   return (
     <div className={classes.root}>
       <Grid2 container spacing={1}>
-        {props.list.map((tile, index) => {
+        {filteredList.map((tile, index) => {
           return (
             <Grid2 key={index} size={{ xs: 12 / props.cols }}>
-              {index === props.list.length - 1 && props.setLoading !== null ? (
+              {index === filteredList.length - 1 &&
+              props.setLoading !== null ? (
                 <img
                   src={tile}
                   alt={tile}
                   className={classes.checkeredBG}
-                  onClick={() => props.handleClick(props.list[index])}
+                  onClick={() => props.handleClick(filteredList[index])}
                   onLoad={props.setLoading}
                   style={{ width: "100%", height: "auto" }}
                   data-testid={"assistant-media-grid-image-" + index}
@@ -46,7 +69,7 @@ const ImageImageList = (props) => {
                 <img
                   src={tile}
                   alt={tile}
-                  onClick={() => props.handleClick(props.list[index])}
+                  onClick={() => props.handleClick(filteredList[index])}
                   style={{ width: "100%", height: "auto" }}
                   data-testid={"assistant-media-grid-image-" + index}
                 />

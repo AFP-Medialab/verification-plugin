@@ -32,8 +32,6 @@ const styles = (theme) => ({
 const VideoImageList = (props) => {
   const classes = useClasses(styles);
 
-  console.log("PROPS", props);
-
   return (
     <div className={classes.root}>
       <ImageList
