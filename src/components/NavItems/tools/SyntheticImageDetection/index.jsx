@@ -414,23 +414,21 @@ const SyntheticImageDetection = () => {
               />
             </form>
 
-            {(role.includes(ROLES.EXTRA_FEATURE) ||
-              role.includes(ROLES.EVALUATION)) &&
-              imageFile && (
-                <FormGroup>
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        checked={autoResizeLocalFile}
-                        onChange={toggleAutoResizeLocalFile}
-                        size="small"
-                        disabled={isLoading}
-                      />
-                    }
-                    label="Auto-Resize"
-                  />
-                </FormGroup>
-              )}
+            {role.includes(ROLES.BETA_TESTER) && imageFile && (
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={autoResizeLocalFile}
+                      onChange={toggleAutoResizeLocalFile}
+                      size="small"
+                      disabled={isLoading}
+                    />
+                  }
+                  label="Auto-Resize"
+                />
+              </FormGroup>
+            )}
 
             {isLoading && (
               <Box mt={3}>
