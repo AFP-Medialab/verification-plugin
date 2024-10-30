@@ -436,7 +436,7 @@ function* handlePersuasionCall(action) {
   }
 }
 
-const SERVER_TIMEOUT_LIMIT = 6000;
+//const SERVER_TIMEOUT_LIMIT = 6000;
 
 function* handleSubjectivityCall(action) {
   if (action.type === "CLEAN_STATE") return;
@@ -449,7 +449,8 @@ function* handleSubjectivityCall(action) {
 
       const result = yield call(
         assistantApi.callSubjectivityService,
-        text.substring(0, SERVER_TIMEOUT_LIMIT),
+        text,
+        //text.substring(0, SERVER_TIMEOUT_LIMIT),
       );
 
       yield put(setSubjectivityDetails(result, false, true, false));
