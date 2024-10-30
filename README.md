@@ -73,18 +73,13 @@ The Verification plugin is a browser based plugin built with React and Redux.
 
 - Run the `dev` script to build the React app in development mode
   ```
-
-npm run dev
-
+  npm run dev
   ```
 
 - Run the `build` to build the React app for production
   ```
-
-npm run build
-
+  npm run build 
   ```
-
 
 ## Load the extension on the browser
 
@@ -92,7 +87,7 @@ npm run build
 
 [Chrome for Developers documentation](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked)
 
-- Go to the Extensions page by entering [chrome://extensions/](chrome://extensions/) in a new tab.  
+- Go to the Extensions page by entering [chrome://extensions/](chrome://extensions/) in a new tab.
 - Enable **Developer Mode** by clicking the toggle switch next to Developer mode.
 - Click the **Load unpacked** button and select the extension directory (go inside the `build` folder).
 
