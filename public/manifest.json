@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Fake news debunker by InVID & WeVerify",
-  "version": "0.82",
+  "version": "0.83",
   "description": "InVID WeVerify extension",
   "short_name": "Verification Plugin",
   "action": {
@@ -28,12 +28,8 @@
   },
   "web_accessible_resources": [
     {
-      "resources": [
-        "toolkit_bg.wasm"
-      ],
-      "matches": [
-        "<all_urls>"
-      ]
+      "resources": [ "toolkit_bg.wasm" ],
+      "matches": [ "<all_urls>" ]
     }
   ]
 }
