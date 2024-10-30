@@ -51,8 +51,6 @@ const C2PaCard = (c2paData) => {
       ? manifestData.captureInfo.longitude
       : null;
 
-  const [image, setImage] = useState(null);
-
   const [isImage, setIsImage] = useState(true);
 
   const depthExceeded = c2paData.c2paData.result[currentImageId].depthExceeded;
@@ -402,7 +400,7 @@ const C2PaCard = (c2paData) => {
                                         cursor: "pointer",
                                       }}
                                       onClick={() => {
-                                        setImage(obj);
+                                        setCurrentImageId(obj);
                                       }}
                                     />
                                   </Box>
@@ -427,7 +425,7 @@ const C2PaCard = (c2paData) => {
           {parentId ? (
             <Box maxWidth="fit-content" marginInline="auto">
               <Button
-                onClick={() => setImage(parentId)}
+                onClick={() => setCurrentImageId(parentId)}
                 startIcon={<KeyboardArrowLeft />}
                 variant="contained"
               >
@@ -436,7 +434,7 @@ const C2PaCard = (c2paData) => {
               <Box m={0.5} />
               {parentId !== mainImageId ? (
                 <Button
-                  onClick={() => setImage(mainImageId)}
+                  onClick={() => setCurrentImageId(mainImageId)}
                   startIcon={<KeyboardDoubleArrowLeft />}
                   variant="contained"
                 >

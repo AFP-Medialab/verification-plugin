@@ -36,7 +36,7 @@ import HelpIcon from "@mui/icons-material/Help";
  * @returns {React.JSX.Element}
  */
 
-const C2paResults = ({ result, handleClose, hasSimilarAfpResult }) => {
+const C2paResults = ({ result, hasSimilarAfpResult }) => {
   const currentImageId = useSelector((state) => state.c2pa.currentImageId);
   const mainImageId = useSelector((state) => state.c2pa.mainImageId);
 

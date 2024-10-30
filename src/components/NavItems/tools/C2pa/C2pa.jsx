@@ -21,7 +21,11 @@ import { useDispatch, useSelector } from "react-redux";
 import C2paResults from "./Results/C2paResults";
 import {
   c2paLoadingSet,
-  c2paStateCleaned,
+  resetC2paState,
+  setAfpHdImage,
+  setC2paThumbnail,
+  setC2paThumbnailCaption,
+  setHdImageC2paData,
 } from "redux/reducers/tools/c2paReducer";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
@@ -40,6 +44,16 @@ const C2paData = () => {
   const isLoading = useSelector((state) => state.c2pa.loading);
   const result = useSelector((state) => state.c2pa.result);
 
+  const thumbnailImage = useSelector((state) => state.c2pa.thumbnail);
+
+  const thumbnailImageCaption = useSelector(
+    (state) => state.c2pa.thumbnailCaption,
+  );
+
+  const hdImage = useSelector((state) => state.c2pa.afpHdImage);
+
+  const hdImageC2paData = useSelector((state) => state.c2pa.hdImageC2paData);
+
   const [input, setInput] = useState("");
   const [imageFile, setImageFile] = useState(undefined);
 
@@ -49,18 +63,7 @@ const C2paData = () => {
 
   const keyword = i18nLoadNamespace("components/NavItems/tools/C2pa");
 
-  const [thumbnailImage, setThumbnailImage] = useState(null);
-
-  const [hdImage, setHdImage] = useState(null);
-
-  const [hdImageC2paData, setHdImageC2paData] = useState(null);
-
-  const [thumbnailImageCaption, setThumbnailImageCaption] = useState(null);
-
   const [errorMessage, setErrorMessage] = useState(null);
-
-  const [reverseSearchImageNotFound, setReverseSearchImageNotFound] =
-    useState(false);
 
   const [loadingProgress, setLoadingProgress] = useState(null);
 
@@ -77,8 +80,6 @@ const C2paData = () => {
     formData.append("imageData", imageFile);
 
     const data = input ? { imageUrl: input } : formData;
-
-    // console.log(data);
 
     const afpRenditionTypeHD = "HD";
     const afpRenditionTypeThumbnail = "THUMBNAIL";
@@ -113,8 +114,6 @@ const C2paData = () => {
       setErrorMessage(keyword("error_message_reverse_search_generic"));
       return;
     }
-
-    //console.log(res.data);
 
     if (res.data.progress) setLoadingProgress(res.data.progress);
 
@@ -185,7 +184,6 @@ const C2paData = () => {
         (error.status === 200 &&
           error.message.includes("No watermarked result"))
       ) {
-        setReverseSearchImageNotFound(true);
         setErrorMessage(keyword("error_message_no_result_found"));
       }
 
@@ -193,8 +191,6 @@ const C2paData = () => {
       dispatch(c2paLoadingSet(false));
       return;
     }
-
-    console.log(urls);
 
     if (urls.thumbnailUrl) {
       const thumbnailImageConfig = {
@@ -210,11 +206,10 @@ const C2paData = () => {
 
       const metadata = await exifr.parse(blob, true);
 
-      if (metadata["Caption"]) setThumbnailImageCaption(metadata["Caption"]);
+      if (metadata["Caption"])
+        dispatch(setC2paThumbnailCaption(metadata["Caption"]));
 
-      //console.log(await exifr.parse(blob, true));
-
-      setThumbnailImage(imageUrl);
+      dispatch(setC2paThumbnail(imageUrl));
     }
 
     if (urls.hdUrl && !role.includes(ROLES.AFP_C2PA_2)) {
@@ -229,20 +224,17 @@ const C2paData = () => {
 
       const imageUrl = URL.createObjectURL(blob);
 
-      // console.log(await exifr.thumbnailUrl(blob));
+      dispatch(setAfpHdImage(imageUrl));
 
-      setHdImage(imageUrl);
-      setHdImageC2paData(await getC2paDataHd(imageUrl));
+      dispatch(setHdImageC2paData(await getC2paDataHd(imageUrl), dispatch));
     }
   };
 
   const handleSubmit = async () => {
-    dispatch(c2paStateCleaned());
+    dispatch(resetC2paState());
     setLoadingProgress(null);
 
-    setReverseSearchImageNotFound(false);
     setErrorMessage(null);
-    setThumbnailImage(null);
 
     dispatch(c2paLoadingSet(true));
 
@@ -264,10 +256,8 @@ const C2paData = () => {
     setImageFile(undefined);
     setInput("");
     setErrorMessage(null);
-    setHdImage(undefined);
-    setThumbnailImage(undefined);
-    setReverseSearchImageNotFound(false);
-    dispatch(c2paStateCleaned());
+
+    dispatch(resetC2paState());
   };
 
   const togglePerformReverseSearch = () => {
@@ -390,8 +380,7 @@ const C2paData = () => {
               {result && (
                 <C2paResults
                   result={result}
-                  handleClose={handleClose}
-                  hasSimilarAfpResult={thumbnailImage ? true : false}
+                  hasSimilarAfpResult={!!thumbnailImage}
                 />
               )}
             </AccordionDetails>

@@ -271,7 +271,7 @@ async function getC2paData(url, dispatch) {
 
 /**
  *
- * @param {Object} url the url of the image containing c2pa data
+ * @param {string} url the url of the image containing c2pa data
  */
 
 export async function getC2paDataHd(url) {
@@ -329,10 +329,12 @@ export async function getC2paDataHd(url) {
       c2paData.result = data;
       c2paData.currentImageId = "id";
       c2paData.mainImageId = "id";
-      // dispatch(c2paCurrentImageIdSet("id"));
-      // dispatch(c2paMainImageIdSet("id"));
+      // dispatch(setCurrentHdImageId("id"));
+      // dispatch(setMainHdImageId("id"));
     }
     //dispatch(c2paLoadingSet(false));
+
+    return c2paData;
   } catch (err) {
     console.error("Error reading image:", err);
     //dispatch(c2paLoadingSet(false));
