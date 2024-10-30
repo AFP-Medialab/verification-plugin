@@ -401,7 +401,14 @@ export function CategoriesListToggle({
     index++;
   }
 
-  return <List>{output}</List>;
+  return (
+    <List>
+      <ListItem>
+        <Typography>{keyword("select_persausion_technique")}</Typography>
+      </ListItem>
+      {output}
+    </List>
+  );
 }
 
 export function MultiCategoryClassifiedText({
