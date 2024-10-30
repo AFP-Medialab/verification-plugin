@@ -31,9 +31,11 @@ import ImageIcon from "../NavBar/images/SVG/Image/Images.svg";
 import SearchIcon from "../NavBar/images/SVG/Search/Search.svg";
 import DataIcon from "../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
 import {
+  canUserSeeTool,
   TOOL_GROUPS,
   TOOL_STATUS_ICON,
   TOOLS_CATEGORIES,
+  toolsHome,
 } from "../../constants/tools";
 import { ROLES } from "../../constants/roles";
 import { selectTopMenuItem } from "../../redux/reducers/navReducer";
@@ -51,6 +53,8 @@ const SideMenu = ({ tools, setOpenAlert }) => {
 
   const navigate = useNavigate();
 
+  const role = useSelector((state) => state.userSession.user.roles);
+
   useEffect(() => {
     //Set the redux state if the tool was opened from URL
     const pathArr = window.location.href.split("/");
@@ -61,9 +65,20 @@ const SideMenu = ({ tools, setOpenAlert }) => {
 
     const path = lastNonEmptyPath.split("?")[0];
 
-    const toolWithPath = tools.find((tool) => tool.path === path);
+    let toolWithPath = tools.find((tool) => tool.path === path);
 
     if (toolWithPath) {
+      if (!canUserSeeTool(toolWithPath, role)) {
+        toolWithPath = toolsHome;
+
+        const url = new URL(
+          `/popup.html#/app/${toolsHome.path}`,
+          window.location.href,
+        ).href;
+
+        window.location.replace(url);
+      }
+
       dispatch(selectTool(toolWithPath.titleKeyword));
 
       //Now we open the drawer for the tool selected
@@ -91,8 +106,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
   const userAuthenticated = useSelector(
     (state) => state.userSession && state.userSession.userAuthenticated,
   );
-  const role = useSelector((state) => state.userSession.user.roles);
-  const betaTester = role.includes("BETA_TESTER");
+  // const role = useSelector((state) => state.userSession.user.roles);
 
   // Set UI direction based on language reading direction
   const direction = currentLang !== "ar" ? "ltr" : "rtl";
@@ -598,13 +612,9 @@ const SideMenu = ({ tools, setOpenAlert }) => {
 
                     if (
                       itemList.rolesNeeded &&
-                      itemList.rolesNeeded.includes("BETA_TESTER")
+                      !canUserSeeTool(itemList, role)
                     ) {
-                      if (betaTester) {
-                        return element;
-                      } else {
-                        return null;
-                      }
+                      return null;
                     } else {
                       return element;
                     }
