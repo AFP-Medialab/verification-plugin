@@ -3,7 +3,11 @@ import React from "react";
 import Box from "@mui/material/Box";
 import { Grid2, Link } from "@mui/material";
 import Divider from "@mui/material/Divider";
-import { UnfoldMore } from "@mui/icons-material";
+import {
+  ExpandLessOutlined,
+  ExpandMoreOutlined,
+  UnfoldMore,
+} from "@mui/icons-material";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
@@ -18,6 +22,7 @@ export default function TextFooter({
   textLang,
   expandMinimiseText,
   text,
+  displayExpander,
   setExpanded,
   expanded,
 }) {
@@ -42,15 +47,16 @@ export default function TextFooter({
         </Grid2>
 
         {/* translate */}
-        <Grid2 size={{ xs: 1 }} align={"center"} display="flex" pt={2}>
+        <Grid2 size={{ xs: 1 }} align={"right"} display="flex" pt={2}>
           <Translate text={text} />
         </Grid2>
 
         {/* expand/minimise text */}
-        <Grid2 size={{ xs: 1 }} align={"left"} display="flex" pt={1}>
+        <Grid2 size={{ xs: 1 }} align={"right"} display="flex" pt={1}>
           <ExpandMinimise
             classes={classes}
             expandMinimiseText={expandMinimiseText}
+            displayExpander={displayExpander}
             setExpanded={setExpanded}
             expanded={expanded}
           />
@@ -63,6 +69,7 @@ export default function TextFooter({
 export function TextFooterPrevFactChecks({
   classes,
   expandMinimiseText,
+  displayExpander,
   setExpanded,
   expanded,
   navigate,
@@ -104,6 +111,7 @@ export function TextFooterPrevFactChecks({
           <ExpandMinimise
             classes={classes}
             expandMinimiseText={expandMinimiseText}
+            displayExpander={displayExpander}
             setExpanded={setExpanded}
             expanded={expanded}
           />
@@ -116,19 +124,39 @@ export function TextFooterPrevFactChecks({
 export function ExpandMinimise({
   classes,
   expandMinimiseText,
+  displayExpander,
   setExpanded,
   expanded,
 }) {
   return (
     <Tooltip title={expandMinimiseText}>
-      <UnfoldMore
+      {/* <UnfoldMore
         className={classes.toolTipIcon}
         onClick={() => {
           setExpanded(!expanded);
         }}
         sx={{ cursor: "pointer" }}
         color={"primary"}
-      />
+      /> */}
+      {displayExpander ? (
+        expanded ? (
+          <ExpandLessOutlined
+            className={classes.toolTipIcon}
+            onClick={() => {
+              setExpanded(!expanded);
+            }}
+            color="primary"
+          />
+        ) : (
+          <ExpandMoreOutlined
+            className={classes.toolTipIcon}
+            onClick={() => {
+              setExpanded(!expanded);
+            }}
+            color="primary"
+          />
+        )
+      ) : null}
     </Tooltip>
   );
 }
