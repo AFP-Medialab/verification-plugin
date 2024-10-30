@@ -494,8 +494,6 @@ function* handleMachineGeneratedTextCall(action) {
     const text = yield select((state) => state.assistant.urlText);
 
     // this prevents the call from happening if not correct user status
-
-    //yield take("SET_SCRAPED_DATA"); // wait until linkList has been created
     const role = yield select((state) => state.userSession.user.roles);
 
     if (text && role.includes("BETA_TESTER")) {
