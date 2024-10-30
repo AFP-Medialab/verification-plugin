@@ -235,7 +235,7 @@ const createRows = (
       }
       // detect domain or account address
       domainOrAccount = urlResults.resolvedDomain
-        ? urlResults.resolvedDomain.startsWidth("https://")
+        ? urlResults.resolvedDomain.startsWith("https://")
           ? urlResults.resolvedDomain
           : "https://" + urlResults.resolvedDomain
         : "";

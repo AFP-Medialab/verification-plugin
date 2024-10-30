@@ -51,7 +51,7 @@ const SourceCredibilityDBKFDialog = (props) => {
                 {keyword("source_cred_popup_header_domain")} {source}
               </Typography>
             </Grid2>
-            <Grid2 size={{ xs: 1 }} alignItems="right">
+            <Grid2 size={{ xs: 1 }} display="flex" justifyContent="flex-end">
               <IconButton onClick={handleClose}>
                 <CloseIcon />
               </IconButton>

@@ -146,7 +146,7 @@ const ExtractedSourceCredibilityDBKFDialog = ({
           <Grid2 container>
             {/* url */}
             <Grid2 size={{ xs: 11 }}>
-              <Typography>
+              <Typography sx={{ wordWrap: "break-word" }}>
                 {keyword("assistant_urlbox")}
                 {": "}
                 <Link color={urlColor} href={url}>
@@ -156,7 +156,7 @@ const ExtractedSourceCredibilityDBKFDialog = ({
             </Grid2>
 
             {/* close button */}
-            <Grid2 size={{ xs: 1 }} alignItems="right">
+            <Grid2 size={{ xs: 1 }} display="flex" justifyContent="flex-end">
               <IconButton onClick={handleClose}>
                 <CloseIcon />
               </IconButton>
