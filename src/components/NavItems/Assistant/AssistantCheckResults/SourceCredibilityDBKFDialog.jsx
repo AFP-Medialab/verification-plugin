@@ -47,7 +47,7 @@ const SourceCredibilityDBKFDialog = (props) => {
           <Grid2 container>
             <Grid2 size={{ xs: 11 }} direction="row">
               <Typography variant="body1" component="div">
-                <Chip label={keyword(sourceType)} color={color} />{" "}
+                <Chip label={keyword(sourceType)} color={color} size="small" />{" "}
                 {keyword("source_cred_popup_header_domain")} {source}
               </Typography>
             </Grid2>

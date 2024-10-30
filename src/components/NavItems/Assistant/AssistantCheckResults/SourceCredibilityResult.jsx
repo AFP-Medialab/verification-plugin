@@ -10,6 +10,7 @@ import SourceCredibilityDBKFDialog from "./SourceCredibilityDBKFDialog";
 import Typography from "@mui/material/Typography";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { getUrlTypeFromCredScope } from "./assistantUtils";
+import { Chip, Grid2 } from "@mui/material";
 
 const SourceCredibilityResult = (props) => {
   // central
@@ -26,16 +27,29 @@ const SourceCredibilityResult = (props) => {
       {sourceCredibilityResults
         ? sourceCredibilityResults.map((value, key) => (
             <ListItem key={key}>
-              <ListItemAvatar>
-                <Icon fontSize={"large"} color={iconColor} />
-              </ListItemAvatar>
+              {/* <Grid2 container> */}
+
+              {/* source type */}
+              {/* <Grid2 size={ 2 }> */}
+              {/* <ListItemAvatar>
+                    <Box
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <Chip label={keyword(props.sourceType)} color={iconColor} size="small" />
+                    </Box>
+                  </ListItemAvatar> */}
+              {/* </Grid2> */}
+
+              {/* details from url domain analysis with details icon */}
+              {/* <Grid2 size={  9 }> */}
               <ListItemText
                 primary={
-                  <div>
+                  <div sx={{ ml: 2 }}>
                     <Typography
                       variant={"body1"}
                       component={"div"}
-                      //align={"start"}
                       color={"textPrimary"}
                     >
                       {value.credibilityScope &&
@@ -102,8 +116,11 @@ const SourceCredibilityResult = (props) => {
                       </ListItemSecondaryAction>
                     ) : null}
                   </Typography>
+                  // </Grid2>
                 }
               />
+              {/* //   </Grid2> */}
+              {/* // </Grid2> */}
             </ListItem>
           ))
         : null}

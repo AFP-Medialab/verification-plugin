@@ -13,7 +13,7 @@ import Link from "@mui/material/Link";
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import Typography from "@mui/material/Typography";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import Accordion from "@mui/material/Accordion";
+import MuiAccordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -23,6 +23,19 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { getUrlTypeFromCredScope } from "./assistantUtils";
 import { Chip, Grid2, Stack } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+const Accordion = styled((props) => (
+  <MuiAccordion disableGutters elevation={0} square {...props} />
+))(({ theme }) => ({
+  border: `1px solid ${theme.palette.divider}`,
+  "&:not(:last-child)": {
+    borderBottom: 0,
+  },
+  "&::before": {
+    display: "none",
+  },
+}));
 
 const renderScope = (keyword, scope) => {
   return (
@@ -64,26 +77,33 @@ const renderDescription = (keyword, description) => {
   );
 };
 
-const renderEvidence = (evidence) => {
+const renderEvidence = (keyword, evidence, source, scope) => {
   return (
-    <ListItem>
-      <List sx={{ listStyle: "decimal", ml: 4 }}>
-        {evidence
-          ? evidence.map((result, index) => (
-              <ListItem key={index} sx={{ display: "list-item" }}>
-                {/* <ListItemIcon>
-                  <ArrowRightIcon />
-                </ListItemIcon> */}
-                <Typography>
-                  <Link target="_blank" href={result} color="inherit">
-                    {result}
-                  </Link>
-                </Typography>
-              </ListItem>
-            ))
-          : null}
-      </List>
-    </ListItem>
+    <>
+      <ListItem>
+        <Typography variant={"subtitle2"}>
+          {scope && scope.includes("/")
+            ? keyword("source_cred_popup_header_account")
+            : keyword("source_cred_popup_header_domain")}{" "}
+          {source}
+        </Typography>
+      </ListItem>
+      <ListItem>
+        <List sx={{ listStyle: "decimal", ml: 4 }}>
+          {evidence
+            ? evidence.map((result, index) => (
+                <ListItem key={index} sx={{ display: "list-item" }}>
+                  <Typography>
+                    <Link target="_blank" href={result} color="inherit">
+                      {result}
+                    </Link>
+                  </Typography>
+                </ListItem>
+              ))
+            : null}
+        </List>
+      </ListItem>
+    </>
   );
 };
 
@@ -141,28 +161,6 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                 <CloseIcon />
               </IconButton>
             </Grid2>
-
-            {/* domain */}
-            {/* {domainOrAccount &&
-            domainOrAccount.split("https://")[1].includes("/") ? (
-              <Grid2 size={{ xs: 12 }}>
-                <Typography>
-                  {keyword("account_scope")}
-                  <Link color={urlColor} href={domainOrAccount}>
-                    {domainOrAccount}
-                  </Link>
-                </Typography>
-              </Grid2>
-            ) : domainOrAccount ? (
-              <Grid2 size={{ xs: 12 }}>
-                <Typography>
-                  {keyword("domain_scope")}
-                  <Link color={urlColor} href={domainOrAccount}>
-                    {domainOrAccount}
-                  </Link>
-                </Typography>
-              </Grid2>
-            ) : null} */}
           </Grid2>
         </DialogTitle>
 
@@ -237,11 +235,16 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                                   sourceCredibilityResults[key]
                                     .credibilityDescription,
                                 )}
-
-                                {renderEvidence(
-                                  sourceCredibilityResults[key]
-                                    .credibilityEvidence,
-                                )}
+                                {sourceCredibilityResults[key]
+                                  .credibilityEvidence.length > 0
+                                  ? renderEvidence(
+                                      keyword,
+                                      sourceCredibilityResults[key]
+                                        .credibilityEvidence,
+                                      value.credibilitySource,
+                                      value.credibilityScope,
+                                    )
+                                  : null}
                               </List>
                             </AccordionDetails>
                           </Accordion>

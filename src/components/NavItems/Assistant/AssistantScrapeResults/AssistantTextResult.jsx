@@ -65,7 +65,6 @@ const AssistantTextResult = () => {
   }, [textBox]);
 
   return (
-    //<Grid2 size={{ xs: 12 }}>
     <Card data-testid="assistant-text-scraped-text">
       <CardHeader
         className={classes.assistantCardHeader}
@@ -125,7 +124,6 @@ const AssistantTextResult = () => {
         />
       </CardContent>
     </Card>
-    //</Grid2>
   );
 };
 export default AssistantTextResult;

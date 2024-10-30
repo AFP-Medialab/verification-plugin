@@ -30,31 +30,14 @@ import { DataGrid } from "@mui/x-data-grid";
 const Status = (params) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   return (
-    <Stack justifyContent="center" alignItems="center">
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      flexDirection="column"
+    >
       {params.done && params.urlResults !== null && (
-        <Stack direction="row">
-          {params.urlResults ? (
-            params.urlResults.caution !== null ? (
-              <ErrorOutlineOutlinedIcon
-                color={params.trafficLightColors.caution}
-              />
-            ) : null
-          ) : null}
-          {params.urlResults ? (
-            params.urlResults.mixed !== null ? (
-              <SentimentSatisfied color={params.trafficLightColors.mixed} />
-            ) : null
-          ) : null}
-          {params.urlResults ? (
-            params.urlResults.positive != null ? (
-              <CheckCircleOutline color={params.trafficLightColors.positive} />
-            ) : null
-          ) : null}
-        </Stack>
-      )}
-      {/* {params.done && params.urlResults !== null && (
-        // <params.urlIcon color={params.urlColor} />
-        <Stack>
+        <>
           {params.urlResults ? (
             params.urlResults.caution !== null ? (
               <Chip
@@ -77,45 +60,17 @@ const Status = (params) => {
             params.urlResults.positive != null ? (
               <Chip
                 label={keyword(params.sourceTypes.positive)}
-                color={params.trafficLightColors.success}
+                color={params.trafficLightColors.positive}
                 size="small"
               />
             ) : null
           ) : null}
-        </Stack>
-      )} */}
-      {params.loading && (
-        //<div style={{ display: "flex", justifyContent: "center", alignItems: "center" }} >
-        <Skeleton variant="circular" width={20} height={20} />
-        //</div>
+        </>
       )}
-    </Stack>
+      {params.loading && <Skeleton variant="rounded" width={60} height={20} />}
+    </Box>
   );
 };
-
-// // render domain or account of extracted URL in correct colour
-// const DomainAccount = (params) => {
-//   return (
-//     <Stack>
-//       {params.done && params.domainOrAccount != "" && (
-//         <Tooltip title={params.domainOrAccount}>
-//           <Link
-//             target="_blank"
-//             href={params.domainOrAccount}
-//             color={params.urlColor}
-//           >
-//             {params.domainOrAccount}
-//           </Link>
-//         </Tooltip>
-//       )}
-//       {params.loading && (
-//         // <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }} >
-//         <Skeleton variant="rounded" />
-//         // </div>
-//       )}
-//     </Stack>
-//   );
-// };
 
 // render URL in correct colour
 const Url = (params) => {
@@ -136,7 +91,12 @@ const Url = (params) => {
 // render details
 const Details = (params) => {
   return (
-    <Stack justifyContent="center" alignItems="center" direction="row">
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      flexDirection="row"
+    >
       {<TextCopy text={params.url} index={params.url} />}
       {params.done && params.domainOrAccount !== "" && (
         <ExtractedSourceCredibilityResult
@@ -147,23 +107,13 @@ const Details = (params) => {
           sourceTypes={params.sourceTypes}
         />
       )}
-      {params.loading && (
-        //<div style={{ display: "flex", justifyContent: "center", alignItems: "center" }} >
-        <Skeleton variant="rounded" height={20} width={20} />
-        //</div>
-      )}
-    </Stack>
+      {params.loading && <Skeleton variant="rounded" height={20} width={20} />}
+    </Box>
   );
 };
 
 // columns
-const createColumns = (
-  headerId,
-  headerStatus,
-  //headerDomainAccount,
-  headerUrl,
-  headerDetails,
-) => {
+const createColumns = (headerId, headerStatus, headerUrl, headerDetails) => {
   const columns = [
     {
       field: "id",
@@ -195,24 +145,6 @@ const createColumns = (
       sortComparator: (v1, v2) =>
         v1.sortBySourceType.localeCompare(v2.sortBySourceType),
     },
-    // {
-    //   field: "domainAccount",
-    //   headerName: headerDomainAccount,
-    //   width: 200,
-    //   renderCell: (params) => {
-    //     return (
-    //       <DomainAccount
-    //         loading={params.value.loading}
-    //         done={params.value.done}
-    //         fail={params.value.fail}
-    //         urlResults={params.value.urlResults}
-    //         urlColor={params.value.urlColor}
-    //         domainOrAccount={params.value.domainOrAccount}
-    //       />
-    //     );
-    //   },
-    //   sortComparator: (v1, v2) => v1.domainOrAccount.localeCompare(v2.domainOrAccount),
-    // },
     {
       field: "url",
       headerName: headerUrl,
@@ -312,14 +244,6 @@ const createRows = (
         sourceTypes: sourceTypes,
         sortBySourceType: sortBySourceType,
       },
-      // domainAccount: {
-      //   loading: loading,
-      //   done: done,
-      //   fail: fail,
-      //   urlResults: urlResults,
-      //   urlColor: urlColor,
-      //   domainOrAccount: domainOrAccount,
-      // },
       url: {
         url: url,
         urlColor: urlColor,
@@ -369,7 +293,6 @@ const AssistantLinkResult = () => {
   const columns = createColumns(
     keyword("id"),
     keyword("status"),
-    //keyword("domain_or_account"),
     keyword("assistant_urlbox"),
     keyword("options"),
   );
@@ -425,7 +348,6 @@ const AssistantLinkResult = () => {
         <div style={{ height: 400, width: 1000, minWidth: 0 }}>
           {/* <div style={{ height: 400, width: "100%", minWidth: 0 }}> */}
           <DataGrid
-            //autoHeigh={true}
             rows={rows}
             columns={columns}
             disableRowSelectionOnClick
