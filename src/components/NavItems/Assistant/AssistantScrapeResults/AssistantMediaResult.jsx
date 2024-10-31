@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Card from "@mui/material/Card";
@@ -69,6 +69,32 @@ const AssistantMediaResult = () => {
     }
     dispatch(setProcessUrl(url, cType));
   };
+
+  const [filteredImageList, setFilteredImageList] = useState([]);
+
+  useEffect(() => {
+    const imagePromises = imageList.map((imageUrl) => {
+      return new Promise((resolve) => {
+        const image = new Image();
+        image.src = imageUrl;
+        image.onload = () => {
+          resolve({ url: imageUrl, width: image.width, height: image.height });
+        };
+      });
+    });
+
+    Promise.all(imagePromises)
+      .then((imageDimensions) => {
+        const filteredImages = imageDimensions
+          .filter((image) => image.width > 2 && image.height > 2)
+          .map((image) => image.url);
+        setFilteredImageList(filteredImages);
+      })
+      .catch((error) => {
+        console.error("Assistant error loading images:", error);
+      });
+  }, [imageList]);
+
   return (
     <Grid2 container spacing={2}>
       <Grid2 size={{ xs: 12 }} hidden={!urlMode}>
@@ -162,10 +188,12 @@ const AssistantMediaResult = () => {
               </CardContent>
 
               {/* image list */}
-              <Typography variant={"h4"}>Images</Typography>
+              {filteredImageList.length > 0 ? (
+                <Typography variant={"h4"}>Images</Typography>
+              ) : null}
               <CardContent>
                 <ImageGridList
-                  list={imageList}
+                  list={filteredImageList}
                   height={60}
                   cols={5}
                   handleClick={(event) => {
@@ -175,7 +203,9 @@ const AssistantMediaResult = () => {
               </CardContent>
 
               {/* video list */}
-              <Typography variant={"h4"}>Videos</Typography>
+              {videoList.length > 0 ? (
+                <Typography variant={"h4"}>Videos</Typography>
+              ) : null}
               <CardContent>
                 <VideoGridList
                   list={videoList}

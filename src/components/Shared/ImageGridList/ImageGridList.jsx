@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 //import ImageList from '@mui/material//ImageList';
 //import ImageListItem from '@mui/material//ImageListItem';
 import { Grid2 } from "@mui/material/";
@@ -19,48 +19,25 @@ const styles = (theme) => ({
   },
   checkeredBG: {
     background:
-      "repeating-conic-gradient(#808080 0% 25%, #eee 0% 50%) 50% / 20px 20px",
+      "repeating-conic-gradient(#eee 0% 25%, #fafafa 0% 50%) 50% / 20px 20px",
   },
 });
 
 const ImageImageList = (props) => {
   const classes = useClasses(styles);
 
-  const [filteredList, setFilteredList] = useState([]);
-
-  useEffect(() => {
-    const filteredImages = [];
-    const promises = props.list.map((imageUrl) => {
-      return new Promise((resolve) => {
-        const image = new Image();
-        image.src = imageUrl;
-        image.onload = () => {
-          if (image.width > 2 && image.height > 2) {
-            filteredImages.push(imageUrl);
-          }
-          resolve();
-        };
-      });
-    });
-
-    Promise.all(promises).then(() => {
-      setFilteredList(filteredImages);
-    });
-  }, [props.list]);
-
   return (
     <div className={classes.root}>
       <Grid2 container spacing={1}>
-        {filteredList.map((tile, index) => {
+        {props.list.map((tile, index) => {
           return (
             <Grid2 key={index} size={{ xs: 12 / props.cols }}>
-              {index === filteredList.length - 1 &&
-              props.setLoading !== null ? (
+              {index === props.list.length - 1 && props.setLoading !== null ? (
                 <img
                   src={tile}
                   alt={tile}
                   className={classes.checkeredBG}
-                  onClick={() => props.handleClick(filteredList[index])}
+                  onClick={() => props.handleClick(props.list[index])}
                   onLoad={props.setLoading}
                   style={{ width: "100%", height: "auto" }}
                   data-testid={"assistant-media-grid-image-" + index}
@@ -69,7 +46,8 @@ const ImageImageList = (props) => {
                 <img
                   src={tile}
                   alt={tile}
-                  onClick={() => props.handleClick(filteredList[index])}
+                  className={classes.checkeredBG}
+                  onClick={() => props.handleClick(props.list[index])}
                   style={{ width: "100%", height: "auto" }}
                   data-testid={"assistant-media-grid-image-" + index}
                 />
