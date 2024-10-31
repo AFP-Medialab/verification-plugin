@@ -145,7 +145,7 @@ const AssistantMediaResult = () => {
           }
 
           {/* selected image with recommended tools */}
-          <CardContent>
+          <CardContent sx={{ padding: processUrl == null ? 0 : undefined }}>
             {processUrl !== null ? (
               resultIsImage ? (
                 <Grid2 container spacing={2}>
