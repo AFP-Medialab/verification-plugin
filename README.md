@@ -45,15 +45,28 @@ The Verification plugin is a browser based plugin built with React and Redux.
 
 3. Add an `.env` file at the root containing
    ```
-   REACT_APP_ELK_URL=<ELK-URL>/twinttweets/_search
-   REACT_APP_TWINT_WRAPPER_URL=<TWINT-WRAPPER-URL>
-   REACT_APP_FACEBOOK_APP_ID=<REACT_ID>
-   REACT_APP_TRANSLATION_GITHUB=https://raw.githubusercontent.com/AFP-Medialab/InVID-Translations/react/
-   REACT_APP_KEYFRAME_TOKEN=<yourKeyframeToken>
-   REACT_APP_MY_WEB_HOOK_URL=<yourSlackAppUrlHook>
-   REACT_APP_GOOGLE_ANALYTICS_KEY=<yourGoogleAnaliticsToken>
-   REACT_APP_MAP_TOKEN=<MAP_TOKEN>
-   REACT_APP_BASEURL=<TWINT-WRAPPER-URL>
+   REACT_APP_KEYFRAME_API=<keyframe_url>
+   REACT_APP_MY_WEB_HOOK_URL=<slack_webhook_url>
+   REACT_APP_TRANSLATION_URL=<translation_server_url>
+   REACT_APP_TRANSLATION_TAG=<The current translation tag, e.g. v0.83>
+   REACT_APP_TSNA_SERVER=<tsna_url>
+   REACT_APP_ASSISTANT_URL=<assistant_url>
+   REACT_APP_DBKF_SEARCH_API=<dbkf_url>
+   REACT_APP_DBKF_SIMILARITY_API=<dbkf_similarity_url>
+   REACT_APP_BASEURL=<baseurl>
+   REACT_APP_CAA_FORENSICS_URL=<forensics_url>
+   REACT_APP_CAA_ANALYSIS_URL=<analysis_url>
+   REACT_APP_CAA_ENVISU4_UTILS_URL=<envisu4_url>
+   REACT_APP_CAA_DEEPFAKE_URL=<deepfake_url>
+   REACT_APP_CAA_LOCATION_URL=<location_url>
+   REACT_APP_MATOMO_URL=<matomo_url>
+   REACT_APP_MATOMO_DOMAIN=<matomo_domain>
+   MATOMO_SITE=<matomo_site>
+   REACT_APP_VIDEORIGHT_API=<videoright_url>
+   REACT_APP_LOCCUS_URL=<loccus_url>
+   REACT_APP_AFP_REVERSE_SEARCH_URL=<reversesearch_url>
+   REACT_APP_SEMANTIC_SEARCH_URL=<semanticsearch_url>
+   ARCHIVE_BACKEND=<archive_url>
    ```
 
 ## Build the project
@@ -65,9 +78,8 @@ The Verification plugin is a browser based plugin built with React and Redux.
 
 - Run the `build` to build the React app for production
   ```
-  npm run build
+  npm run build 
   ```
-
 
 ## Load the extension on the browser
 
@@ -75,46 +87,9 @@ The Verification plugin is a browser based plugin built with React and Redux.
 
 [Chrome for Developers documentation](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked)
 
-- Go to the Extensions page by entering [chrome://extensions/](chrome://extensions/) in a new tab.  
+- Go to the Extensions page by entering [chrome://extensions/](chrome://extensions/) in a new tab.
 - Enable **Developer Mode** by clicking the toggle switch next to Developer mode.
 - Click the **Load unpacked** button and select the extension directory (go inside the `build` folder).
-
-#### Firefox ( ⚠️ deprecated)
-
-- In firefox menu click on `Add-ons`
-- Then click on the gear button `⚙⌄`
-- Then click on `Debug Add-ons`
-- Then click on `Load TEmporary Add-on...`
-- Select the `manifest.json` in the `dev` or `build` file you generated earlier.
-
-## Project folders structure
-
-`public` the configuration files for an extension `manifest.json` and the root html file `popup.html`
-
-`src/background` scripts executed in the web browser background by the extension. The contextual menu for example.
-
-`src/Hooks` Custom hooks used in this project.
-
-`src/LocalDictionary` The offline translation files fallback used when the server cannot provide the translation
-
-`src/redux` react-redux actions and
-reducers. [Documentation](https://react-redux.js.org/)
-
-`src/components` The main custom React components used in this project.
-
-`src/components/Shared` Small React components reused in other components.
-
-`src/components/FeedBack`The FeedBack tool
-
-`src/components/PopUp` The extension's PopUp
-
-`src/components/MySnackBar` The arrow to get back to the top of the page.
-
-`src/components/Navbar` The NavBar and its Drawer (for tools)
-
-`src/components/NavItems` All the components displayed by the navBar.
-
-`src/components/NavItems/tools` All components that the `tools drawer` can display.
 
 ## Testing
 
@@ -122,10 +97,12 @@ The [playwright](https://playwright.dev/) framework is used for e2e, component a
 in the `tests` folder with the following structure:
 
 ```
+
 tests
 !- component_unit - Component and unit testing
 |- e2e - End to end testing
--- examples - Examples to serve as a reference only 
+-- examples - Examples to serve as a reference only
+
 ```
 
 **Note: Before running all (or just e2e) tests, the extension must first be built. See End-to-end (e2e) testing section
@@ -134,7 +111,9 @@ for more details**
 All tests (e2e, component & unit) can be run using the command:
 
 ```
+
 npm run test
+
 ```
 
 ### Component and Unit testing
@@ -142,7 +121,9 @@ npm run test
 Component and unit testing are run together using the following command:
 
 ```
+
 npm run test-cu
+
 ```
 
 Playwright configurations of the component and unit tests can be found in `/playwright-ct.config.js`
@@ -167,7 +148,9 @@ tests.
 E2E testing can be run using the following command:
 
 ```
+
 npm run test-e2e
+
 ```
 
 Playwright configurations of the e2e tests can be found in `/playwright.config.ts`.

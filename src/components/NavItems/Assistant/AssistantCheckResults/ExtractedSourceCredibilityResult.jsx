@@ -6,7 +6,6 @@ import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import ExtractedSourceCredibilityDBKFDialog from "./ExtractedSourceCredibilityDBKFDialog";
 import Typography from "@mui/material/Typography";
@@ -14,8 +13,6 @@ import Typography from "@mui/material/Typography";
 const ExtractedSourceCredibilityResult = ({
   extractedSourceCredibilityResults,
   sourceType,
-  Icon,
-  iconColor,
   urlColor,
   url,
 }) => {
@@ -33,10 +30,6 @@ const ExtractedSourceCredibilityResult = ({
     <List component={Stack} direction="row" disablePadding={true}>
       {sourceCredibilityResults ? (
         <ListItem>
-          <ListItemAvatar>
-            <Icon fontSize={"large"} color={iconColor} />
-          </ListItemAvatar>
-
           <ListItemText
             primary={
               <div>

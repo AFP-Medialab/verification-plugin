@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import { CardHeader, Grid2 } from "@mui/material";
+import { CardHeader, Grid2, LinearProgress } from "@mui/material";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
@@ -20,8 +20,7 @@ import {
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "../../../Shared/VideoGridList/VideoGridList";
-import { WarningOutlined } from "@mui/icons-material";
-import LinearProgress from "@mui/material/LinearProgress";
+import { WarningAmber } from "@mui/icons-material";
 
 const AssistantMediaResult = () => {
   const classes = useMyStyles();
@@ -96,132 +95,126 @@ const AssistantMediaResult = () => {
   }, [imageList]);
 
   return (
-    <Grid2 container spacing={2}>
-      <Grid2 size={{ xs: 12 }} hidden={!urlMode}>
-        <Card data-testid="url-media-results">
-          <CardHeader
-            className={classes.assistantCardHeader}
-            title={keyword("media_title")}
-            subheader={keyword("media_below")}
-            subheaderTypographyProps={{ sx: { color: "white" } }}
-            action={
-              <div style={{ display: "flex" }}>
-                <div
-                  hidden={dbkfImageMatch === null && dbkfVideoMatch === null}
-                >
-                  <Tooltip title={keyword("image_warning")}>
-                    <WarningOutlined
-                      className={classes.toolTipWarning}
-                      onClick={() => {
-                        dispatch(setWarningExpanded(!warningExpanded));
-                        window.scroll(0, 0);
-                      }}
-                    />
-                  </Tooltip>
-                </div>
-                <div>
-                  <Tooltip
-                    interactive={"true"}
-                    title={
-                      <div
-                        className={"content"}
-                        dangerouslySetInnerHTML={{
-                          __html: keyword("media_tooltip"),
-                        }}
-                      />
-                    }
-                    classes={{ tooltip: classes.assistantTooltip }}
-                  >
-                    <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
-                  </Tooltip>
-                </div>
-              </div>
-            }
-          />
-          {
-            /*!ocrLoading && */ dbkfMediaMatchLoading && (
-              <LinearProgress variant={"indeterminate"} color={"secondary"} />
-            )
-          }
+    <Card
+      data-testid="url-media-results"
+      hidden={!urlMode || (!imageList.length && !videoList.length)}
+    >
+      <CardHeader
+        className={classes.assistantCardHeader}
+        title={keyword("media_title")}
+        subheader={keyword("media_below")}
+        subheaderTypographyProps={{ sx: { color: "white" } }}
+        action={
+          <div style={{ display: "flex" }}>
+            <div>
+              {(dbkfImageMatch || dbkfVideoMatch) && (
+                <Tooltip title={keyword("image_warning")}>
+                  <WarningAmber
+                    color={"warning"}
+                    className={classes.toolTipWarning}
+                    onClick={() => {
+                      dispatch(setWarningExpanded(!warningExpanded));
+                      window.scroll(0, 0);
+                    }}
+                  />
+                </Tooltip>
+              )}
+            </div>
+            <div>
+              <Tooltip
+                interactive={"true"}
+                title={
+                  <div
+                    className={"content"}
+                    dangerouslySetInnerHTML={{
+                      __html: keyword("media_tooltip"),
+                    }}
+                  />
+                }
+                classes={{ tooltip: classes.assistantTooltip }}
+              >
+                <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+              </Tooltip>
+            </div>
+          </div>
+        }
+      />
 
-          {/* selected image with recommended tools */}
-          <CardContent sx={{ padding: processUrl == null ? 0 : undefined }}>
-            {processUrl !== null ? (
-              resultIsImage ? (
-                <Grid2 container spacing={2}>
-                  <Grid2 size={6}>
-                    <AssistantImageResult />
-                  </Grid2>
-                  <Grid2 size={6}>
-                    <AssistantProcessUrlActions />
-                  </Grid2>
-                  {/* <Grid2 size={12}>
-                    <Divider/>
-                  </Grid2> */}
-                </Grid2>
-              ) : (
-                <Grid2 container spacing={2}>
-                  <Grid2 size={6}>
-                    <AssistantVideoResult />
-                  </Grid2>
-                  <Grid2 size={6}>
-                    <AssistantProcessUrlActions />
-                  </Grid2>
-                  {/* <Grid2 size={12}>
-                    <Divider/>
-                  </Grid2> */}
-                </Grid2>
-              )
-            ) : null}
+      {dbkfMediaMatchLoading ? (
+        <div>
+          <LinearProgress />
+        </div>
+      ) : null}
+
+      {/* selected image with recommended tools */}
+      <CardContent sx={{ padding: processUrl == null ? 0 : undefined }}>
+        {processUrl !== null ? (
+          resultIsImage ? (
+            <Grid2 container spacing={2}>
+              <Grid2 size={6}>
+                <AssistantImageResult />
+              </Grid2>
+              <Grid2 size={6}>
+                <AssistantProcessUrlActions />
+              </Grid2>
+            </Grid2>
+          ) : (
+            <Grid2 container spacing={2}>
+              <Grid2 size={6}>
+                <AssistantVideoResult />
+              </Grid2>
+              <Grid2 size={6}>
+                <AssistantProcessUrlActions />
+              </Grid2>
+            </Grid2>
+          )
+        ) : null}
+      </CardContent>
+
+      {/* image grid and video grid of extracted media */}
+      {!singleMediaPresent ? (
+        <div>
+          {/* select media */}
+          {/*<CardContent>
+            <Typography
+              component={"div"}
+              sx={{ textAlign: "start" }}
+              variant={"subtitle1"}
+            >
+              {keyword("media_below")}
+            </Typography>
+          </CardContent>*/}
+
+          {/* image list */}
+          {filteredImageList.length > 0 ? (
+            <Typography variant={"h4"}>Images</Typography>
+          ) : null}
+          <CardContent>
+            <ImageGridList
+              list={filteredImageList}
+              height={60}
+              cols={5}
+              handleClick={(event) => {
+                submitMediaToProcess(event);
+              }}
+            />
           </CardContent>
 
-          {/* image grid and video grid of extracted media */}
-          {!singleMediaPresent ? (
-            <div>
-              {/* select media */}
-              {/* <CardContent>
-                <Typography
-                  component={"div"}
-                  sx={{ textAlign: "start" }}
-                  variant={"subtitle1"}
-                >
-                  {keyword("media_below")}
-                </Typography>
-              </CardContent> */}
-
-              {/* image list */}
-              {filteredImageList.length > 0 ? (
-                <Typography variant={"h4"}>Images</Typography>
-              ) : null}
-              <CardContent>
-                <ImageGridList
-                  list={filteredImageList}
-                  height={60}
-                  cols={5}
-                  handleClick={(event) => {
-                    submitMediaToProcess(event);
-                  }}
-                />
-              </CardContent>
-
-              {/* video list */}
-              {videoList.length > 0 ? (
-                <Typography variant={"h4"}>Videos</Typography>
-              ) : null}
-              <CardContent>
-                <VideoGridList
-                  list={videoList}
-                  style={{ margin: 0 }}
-                  handleClick={(vidLink) => {
-                    submitMediaToProcess(vidLink);
-                  }}
-                />
-              </CardContent>
-            </div>
+          {/* video list */}
+          {videoList.length > 0 ? (
+            <Typography variant={"h4"}>Videos</Typography>
           ) : null}
-        </Card>
-      </Grid2>
-    </Grid2>
+          <CardContent>
+            <VideoGridList
+              list={videoList}
+              handleClick={(vidLink) => {
+                submitMediaToProcess(vidLink);
+              }}
+            />
+          </CardContent>
+        </div>
+      ) : null}
+    </Card>
   );
 };
 export default AssistantMediaResult;
