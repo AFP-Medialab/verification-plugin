@@ -102,6 +102,8 @@ const AssistantMediaResult = () => {
           <CardHeader
             className={classes.assistantCardHeader}
             title={keyword("media_title")}
+            subheader={keyword("media_below")}
+            subheaderTypographyProps={{ sx: { color: "white" } }}
             action={
               <div style={{ display: "flex" }}>
                 <div
@@ -177,7 +179,7 @@ const AssistantMediaResult = () => {
           {!singleMediaPresent ? (
             <div>
               {/* select media */}
-              <CardContent>
+              {/* <CardContent>
                 <Typography
                   component={"div"}
                   sx={{ textAlign: "start" }}
@@ -185,7 +187,7 @@ const AssistantMediaResult = () => {
                 >
                   {keyword("media_below")}
                 </Typography>
-              </CardContent>
+              </CardContent> */}
 
               {/* image list */}
               {filteredImageList.length > 0 ? (
