@@ -48,7 +48,7 @@ const AssistantUrlSelected = (props) => {
   const handleSubmissionURL = () => {
     setUrl(formInput);
     dispatch(submitInputUrl(formInput));
-    navigate(encodeURIComponent(formInput));
+    navigate("/app/assistant/" + encodeURIComponent(formInput));
     //trackEvent("submission", "assistant", "page assistant", formInput);
   };
 
