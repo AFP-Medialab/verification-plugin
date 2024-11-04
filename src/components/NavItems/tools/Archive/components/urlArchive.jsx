@@ -12,10 +12,12 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import { useEffect, useState } from "react";
 import IconPermaCC from "../../../../NavBar/images/SVG/Others/perma-cc-icon.svg";
 import IconInternetArchive from "../../../../NavBar/images/SVG/Others/archive-icon.svg";
+import axios from "axios";
 
 const UrlArchive = ({ url, openLinks }) => {
   const [platform, setPlatform] = useState(null);
   const [urls, setUrls] = useState([]);
+  const [link, setLink] = useState(null);
 
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
 
@@ -57,6 +59,31 @@ const UrlArchive = ({ url, openLinks }) => {
     window.open("https://web.archive.org/save/" + link, "_blank");
   };
 
+  const internetArchiveLink = (link) => {
+    const bodyFormData = new FormData();
+    bodyFormData.append("url", link);
+    bodyFormData.append("capture_all", "on");
+
+    const axiosConfig = {
+      method: "post",
+      url: "https://web.archive.org/save/",
+      data: bodyFormData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    axios(axiosConfig);
+    //let redirect = "https://web.archive.org/save/" + link
+  };
+  const handleIASubmit = (event) => {
+    event.preventDefault();
+    console.log("link ", link);
+    internetArchiveLink(link);
+    console.log("test .... ");
+
+    console.log(event);
+  };
+
   const ArchiveLink = ({ link, link_type_keyword }) => {
     return (
       <>
@@ -69,12 +96,14 @@ const UrlArchive = ({ url, openLinks }) => {
             </Button>
           </Tooltip>
           <Tooltip title={keyword("internet_archive_button")}>
-            <Button onClick={() => saveToInternetArchive(link)}>
-              <IconInternetArchive />
-            </Button>
+            <form onSubmit={handleIASubmit}>
+              <Button onClick={() => setLink(link)} type="submit">
+                <IconInternetArchive />
+              </Button>
+            </form>
           </Tooltip>
         </Grid2>
-        <Link href={link} pl={2}>
+        <Link href={link} pl={2} rel="noopener noreferrer" target="_blank">
           {link}
         </Link>
       </>
