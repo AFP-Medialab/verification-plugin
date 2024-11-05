@@ -1,6 +1,5 @@
 import { test, expect } from './fixtures';
 
-
 const MediaType = {
   video: "video",
   image: "image",
@@ -41,7 +40,7 @@ const MediaServices = {
   {
     url: "https://twitter.com/NatGeo/status/1334635273888514048/video/1",
     mediaType: MediaType.video,
-    mediaStatus: MediaVideoStatus.noEmbed,
+    mediaStatus: MediaVideoStatus.video,
     services: [MediaServices.metadata, MediaServices.videoDownload]
   },
   // Youtube video
@@ -49,9 +48,11 @@ const MediaServices = {
     url: "https://www.youtube.com/watch?v=UXrkN0iQmZQ",
     mediaType: MediaType.video,
     mediaStatus: MediaVideoStatus.iframe,
-    services: [MediaServices.analysisVideo, MediaServices.keyframes, MediaServices.thumbnails, MediaServices.videoRights]
+    services: [MediaServices.analysisVideo, MediaServices.keyframes, MediaServices.thumbnails, MediaServices.videoRights],
+    hasScrapedText: false
   },
   // Youtube shorts
+  // Fails: The Assistant could not display this video content.
   {
     url: "https://www.youtube.com/shorts/RMGOds6SxF0",
     mediaType: MediaType.video,
@@ -94,18 +95,20 @@ const MediaServices = {
     services: [MediaServices.videoDownloadGeneric]
   },
   // TikTok video post
-  {
-    url: "https://www.tiktok.com/@deeptomcruise/video/7223086851236646149",
-    mediaType: MediaType.video,
-    mediaStatus: MediaVideoStatus.noEmbed,
-    services: [MediaServices.videoDownloadTiktok]
-  },
+  // TO BE DELETED?: Stopped testing tiktok endpoint as we are no longer able to scrape them
+  // {
+  //   url: "https://www.tiktok.com/@deeptomcruise/video/7223086851236646149",
+  //   mediaType: MediaType.video,
+  //   mediaStatus: MediaVideoStatus.noEmbed,
+  //   services: [MediaServices.videoDownloadTiktok]
+  // },
   // VK link with images
+  // MF: If you look at the post, it's definitely a video. The only image is the avatar of OP, which isn't loaded
+  // because the backend loads the _post_ rather than the _page_, so the avatar isn't seen.
   {
     url: "https://vk.com/wall-57424472_432185",
-    mediaType: MediaType.image,
-    imageGridIndex: 0,
-    services: [MediaServices.magnifier, MediaServices.metadata, MediaServices.forensic, MediaServices.ocr]
+    mediaType: MediaType.noEmbed,
+    services: [MediaServices.videoDownloadGeneric]
   },
   // VK link with embedded video
   {
@@ -119,21 +122,24 @@ const MediaServices = {
     url: "https://vimeo.com/389685467",
     mediaType: MediaType.video,
     mediaStatus: MediaVideoStatus.iframe,
-    services: [MediaServices.videoDownloadGeneric]
+    services: [MediaServices.videoDownloadGeneric],
+    hasScrapedText: false
   },
   // Dailymotion video post
   {
     url: "https://www.dailymotion.com/video/x91gv4a",
     mediaType: MediaType.video,
     mediaStatus: MediaVideoStatus.iframe,
-    services: [MediaServices.videoDownloadGeneric]
+    services: [MediaServices.videoDownloadGeneric],
+    hasScrapedText: false
   },
   // Mastodon link with youtube video link
+  // Fails: Doesn't pick up the video link
   {
     url: "https://mstdn.social/@BBC/105203076554056414",
     mediaType: MediaType.video,
     mediaStatus: MediaVideoStatus.video,
-    services: []
+    services: [MediaServices.videoDownload],
   },
   // Mastodon link with embedded video
   {
@@ -221,5 +227,3 @@ async function checkMediaServices(page, availableServices){
   }
 
 }
-
-
