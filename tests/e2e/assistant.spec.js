@@ -57,7 +57,8 @@ const MediaServices = {
     url: "https://www.youtube.com/shorts/RMGOds6SxF0",
     mediaType: MediaType.video,
     mediaStatus: MediaVideoStatus.noEmbed,
-    services: [MediaServices.videoDownloadGeneric]
+    services: [MediaServices.videoDownloadGeneric, MediaServices.keyframes],
+    hasScrapedText: false
   },
   // Facebook post with video
   {
