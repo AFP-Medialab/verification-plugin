@@ -35,6 +35,7 @@ import {
   tools,
   TOOLS_CATEGORIES,
 } from "../../../../constants/tools";
+import { ROLES } from "../../../../constants/roles";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -80,7 +81,7 @@ const ToolsMenu = () => {
   const [openAlert, setOpenAlert] = React.useState(false);
 
   const handleClick = (path, rolesNeeded) => {
-    if (rolesNeeded && rolesNeeded.includes("lock")) {
+    if (rolesNeeded && rolesNeeded.includes(ROLES.REGISTERED_USER)) {
       if (userAuthenticated) {
         handlePush(path);
       } else {
@@ -211,42 +212,42 @@ const ToolsMenu = () => {
   tools.forEach((tool) => {
     if (
       tool.category === TOOLS_CATEGORIES.VIDEO &&
-      canUserSeeTool(tool, role)
+      canUserSeeTool(tool, role, userAuthenticated)
     ) {
       toolsVideo.push(tool);
     }
 
     if (
       tool.category === TOOLS_CATEGORIES.IMAGE &&
-      canUserSeeTool(tool, role)
+      canUserSeeTool(tool, role, userAuthenticated)
     ) {
       toolsImages.push(tool);
     }
 
     if (
       tool.category === TOOLS_CATEGORIES.AUDIO &&
-      canUserSeeTool(tool, role)
+      canUserSeeTool(tool, role, userAuthenticated)
     ) {
       toolsAudio.push(tool);
     }
 
     if (
       tool.category === TOOLS_CATEGORIES.SEARCH &&
-      canUserSeeTool(tool, role)
+      canUserSeeTool(tool, role, userAuthenticated)
     ) {
       toolsSearch.push(tool);
     }
 
     if (
       tool.category === TOOLS_CATEGORIES.DATA_ANALYSIS &&
-      canUserSeeTool(tool, role)
+      canUserSeeTool(tool, role, userAuthenticated)
     ) {
       toolsData.push(tool);
     }
 
     if (
       tool.category === TOOLS_CATEGORIES.OTHER &&
-      canUserSeeTool(tool, role)
+      canUserSeeTool(tool, role, userAuthenticated)
     ) {
       otherTools.push(tool);
     }

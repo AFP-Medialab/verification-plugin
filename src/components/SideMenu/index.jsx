@@ -68,7 +68,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
     let toolWithPath = tools.find((tool) => tool.path === path);
 
     if (toolWithPath) {
-      if (!canUserSeeTool(toolWithPath, role)) {
+      if (!canUserSeeTool(toolWithPath, role, userAuthenticated)) {
         toolWithPath = toolsHome;
 
         const url = new URL(
@@ -138,7 +138,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
     if (
       !userAuthenticated &&
       tool.rolesNeeded &&
-      tool.rolesNeeded.includes(ROLES.LOCK)
+      tool.rolesNeeded.includes(ROLES.REGISTERED_USER)
     ) {
       setOpenAlert(true);
       return;
@@ -612,7 +612,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
 
                     if (
                       itemList.rolesNeeded &&
-                      !canUserSeeTool(itemList, role)
+                      !canUserSeeTool(itemList, role, userAuthenticated)
                     ) {
                       return null;
                     } else {

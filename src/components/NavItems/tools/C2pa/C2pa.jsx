@@ -71,10 +71,11 @@ const C2paData = () => {
 
   const authenticatedRequest = useAuthenticatedRequest();
 
-  const getAfpReverseSearch = async () => {
-    // Creates a random request id
-    const requestId = uuidv4();
+  const getTransactionId = () => {
+    return `verificationplugin-${process.env.npm_package_version}-${uuidv4()}`;
+  };
 
+  const getAfpReverseSearch = async () => {
     const formData = new FormData();
 
     formData.append("imageData", imageFile);
@@ -98,7 +99,7 @@ const C2paData = () => {
       headers: {
         Accept: "*/*",
         "X-AFP-RENDITION-TYPE": afpRenditionType,
-        "X-AFP-TRANSACTION-ID": requestId,
+        "X-AFP-TRANSACTION-ID": getTransactionId(),
         "Content-Type": input
           ? "application/x-www-form-urlencoded"
           : imageFile.type,
@@ -115,7 +116,11 @@ const C2paData = () => {
       return;
     }
 
-    if (res.data.progress) setLoadingProgress(res.data.progress);
+    if (res.data.progress) {
+      setLoadingProgress(res.data.progress);
+    } else {
+      setLoadingProgress("0");
+    }
 
     const reverseSearchUrl = res.data.iMatagReverseSearchUrl
       .split("/")
@@ -139,6 +144,7 @@ const C2paData = () => {
           url: `${serverUrl}/search/${reverseSearchUrl}`,
           headers: {
             "Content-Type": "application/json",
+            "X-AFP-TRANSACTION-ID": getTransactionId(),
           },
           data: data,
         };
@@ -153,7 +159,7 @@ const C2paData = () => {
       }
 
       while (status.status === "pending" || status.status === "in progress") {
-        await sleep(2000);
+        await sleep(10000);
 
         status = await getNewStatus();
 
@@ -198,6 +204,9 @@ const C2paData = () => {
         responseType: "blob",
         maxBodyLength: Infinity,
         url: `https://plugin-archiving.afp.com/gateway/c2paafp/${urls.thumbnailUrl}`,
+        headers: {
+          "X-AFP-TRANSACTION-ID": getTransactionId(),
+        },
       };
 
       const blob = (await authenticatedRequest(thumbnailImageConfig)).data;
@@ -218,6 +227,9 @@ const C2paData = () => {
         responseType: "blob",
         maxBodyLength: Infinity,
         url: `${serverUrl}/${urls.hdUrl}`,
+        headers: {
+          "X-AFP-TRANSACTION-ID": getTransactionId(),
+        },
       };
 
       const blob = (await authenticatedRequest(hdImageConfig)).data;
