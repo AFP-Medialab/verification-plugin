@@ -43,6 +43,11 @@ const ExtractedUrl = (
       iconColor = "primary";
     }
   }
+
+  const href = extractedSourceCred
+    ? extractedSourceCred[link].resolvedLink
+    : link;
+
   return (
     <Grid2 container wrap="wrap" key={index}>
       <Grid2 size={{ xs: 1 }} align="center">
@@ -59,11 +64,7 @@ const ExtractedUrl = (
                 ? extractedSourceCred[link].urlColor
                 : "inherit"
             }
-            href={
-              extractedSourceCred
-                ? extractedSourceCred[link].resolvedLink
-                : link
-            }
+            href={href}
           >
             {extractedSourceCred
               ? extractedSourceCred[link].resolvedLink
@@ -117,7 +118,7 @@ const ExtractedUrlList = (
     );
   }
   return (
-    <div>
+    <div data-testid="url-domain-analysis">
       {links
         ? links.map((link, index) =>
             ExtractedUrl(

@@ -1,4 +1,7 @@
-import { test, expect } from './fixtures';
+import {
+  test,
+  expect
+} from './fixtures';
 
 const MediaType = {
   video: "video",
@@ -30,6 +33,58 @@ const MediaServices = {
 
 
 [
+  // Negative Source Credibility
+  {
+    url: "https://www.breitbart.com/europe/2024/02/12/german-government-expects-10-million-migrants-to-flee-ukraine-if-russia-wins-war-report",
+    mediaType: MediaType.image,
+    imageGridIndex: 0,
+    services: [MediaServices.metadata, MediaServices.magnifier, MediaServices.forensic, MediaServices.ocr],
+    namedEntities: {
+      Person: [
+        "Gerald Knaus",
+        "Roderich Kiesewetter",
+        "Heiko Teggatz",
+        "Olaf Scholz",
+        "Frank", // This should be Frank-Walter Steinmeir, but the named entity recognition does not handle hyphens well
+        "Walter Steinmeier"
+      ],
+      Location: [
+        "Ukraine",
+        "Russia",
+        "Germany",
+        "Berlin",
+        "Western Europe",
+        "Europe",
+        "Syria",
+        "Turkey",
+        "Poland",
+        "Middle East",
+        "Africa",
+        "Canada"
+      ],
+      Organization: [
+        "EU",
+        "Bundestag",
+        "Christian Democratic Union",
+        "CDU",
+        "NATO",
+        "The UN Refugee Agency",
+        "UNHCR",
+        "Chairman of the German Police Union",
+        "West",
+        "Germany’s Federal Office for Migration and Refugees and Federal Institute for Population Research"
+      ]
+    },
+    domainAnalyses: {
+        "https://www.unhcr.org/us/emergencies/ukraine-emergency": null,
+        "https://www.breitbart.com/europe/2024/01/06/illegal-migrant-arrivals-highest-since-2015-migrant-crisis-says-germany/": "ErrorOutlineOutlinedIcon",
+        "https://www.politico.eu/article/germany-migration-president-frank-walter-steinmeier-breaking-point/": null,
+        "https://www.breitbart.com/europe/2023/07/14/half-of-ukrainian-refugees-in-germany-want-to-stay-forever/": "ErrorOutlineOutlinedIcon",
+        "https://www.theglobeandmail.com/politics/article-displaced-ukrainians-want-to-settle-permanently-in-canada/": null,
+        "https://www.welt.de/politik/deutschland/article250007304/Ukraine-Bei-einem-Zerfall-der-Ukraine-droht-eine-Massenflucht.html?icid=search.product.onsitesearch" : "CheckCircleOutlineIcon",
+        "https://twitter.com/KurtZindulka": null,
+    }
+  },
   // Twitter image post
   {
     url: "https://twitter.com/vesinfiltro/status/1253122594976468993/photo/1",
@@ -135,7 +190,6 @@ const MediaServices = {
     hasScrapedText: false
   },
   // Mastodon link with youtube video link
-  // Fails: Doesn't pick up the video link
   {
     url: "https://mstdn.social/@BBC/105203076554056414",
     mediaType: MediaType.video,
@@ -149,81 +203,115 @@ const MediaServices = {
     mediaStatus: MediaVideoStatus.video,
     services: [MediaServices.videoDownload, MediaServices.metadata]
   },
-].forEach(({url, videoGridIndex, imageGridIndex, mediaType, mediaStatus, services, hasScrapedText = true}) => {
-    test(`Test assistant media services for url: ${url}`, async ({ page, extensionId }) => {
+].forEach(({
+  url,
+  videoGridIndex,
+  imageGridIndex,
+  mediaType,
+  mediaStatus,
+  services,
+  hasScrapedText = true,
+  namedEntities = {},
+  domainAnalyses = {}
+}) => {
+  test(`Test assistant media services for url: ${url}`, async ({
+    page,
+    extensionId
+  }) => {
 
-      // Navigate to the assistant page
-      await page.goto(`chrome-extension://${extensionId}/popup.html#/app/assistant/`);
-      // Accept local storage usage
-      await page.getByText("Accept").click();
+    // Navigate to the assistant page
+    await page.goto(`chrome-extension://${extensionId}/popup.html#/app/assistant/`);
+    // Accept local storage usage
+    await page.getByText("Accept").click();
 
-      // Component to display media should not be displayed at the start
-      await expect(page.getByTestId("url-media-results")).not.toBeVisible();
+    // Component to display media should not be displayed at the start
+    await expect(page.getByTestId("url-media-results")).not.toBeVisible();
 
-      // Choose to enter url instead of uploading a file
-      await page.getByTestId("assistant-webpage-link").click();
-      await page.locator("[data-testid='assistant-url-selected-input'] input").fill(url);
-      await page.getByTestId("assistant-url-selected-analyse-btn").click();
+    // Choose to enter url instead of uploading a file
+    await page.getByTestId("assistant-webpage-link").click();
+    await page.locator("[data-testid='assistant-url-selected-input'] input").fill(url);
+    await page.getByTestId("assistant-url-selected-analyse-btn").click();
 
-      // Expecting a media post with images or video
-      await expect(page.getByTestId("url-media-results")).toBeVisible();
+    // Expecting a media post with images or video
+    await expect(page.getByTestId("url-media-results")).toBeVisible();
 
-      // If multiple images/videos exist, click on the media grid first
-      if(Number.isInteger(videoGridIndex))
-        await page.getByTestId("assistant-media-grid-video-"+videoGridIndex).click();
+    // If multiple images/videos exist, click on the media grid first
+    if (Number.isInteger(videoGridIndex))
+      await page.getByTestId("assistant-media-grid-video-" + videoGridIndex).click();
 
-      if(Number.isInteger(imageGridIndex))
-        await page.getByTestId("assistant-media-grid-image-"+imageGridIndex).click();
+    if (Number.isInteger(imageGridIndex))
+      await page.getByTestId("assistant-media-grid-image-" + imageGridIndex).click();
 
 
-      // Check that media exists for image and video posts and that all expected services are shown
-      switch(mediaType){
-        case MediaType.image:
-          await expect(page.getByTestId("assistant-media-image")).toBeVisible();
-          await checkMediaServices(page, services)
-          break;
-        case MediaType.video:
-          await expect(page.getByTestId("assistant-media-video-container")).toBeVisible();
-          if(mediaStatus !== null && mediaStatus !== undefined){
-            switch (mediaStatus) {
-              case MediaVideoStatus.iframe:
-                await expect(page.getByTestId("assistant-media-video-iframe")).toBeVisible();
-                break;
-              case MediaVideoStatus.video:
-                await expect(page.getByTestId("assistant-media-video-tag")).toBeVisible();
-                break;
-              case MediaVideoStatus.noEmbed:
-                await expect(page.getByTestId("assistant-media-video-noembed")).toBeVisible();
-                break;
+    // Check that media exists for image and video posts and that all expected services are shown
+    switch (mediaType) {
+      case MediaType.image:
+        await expect(page.getByTestId("assistant-media-image")).toBeVisible();
+        await checkMediaServices(page, services)
+        break;
+      case MediaType.video:
+        await expect(page.getByTestId("assistant-media-video-container")).toBeVisible();
+        if (mediaStatus !== null && mediaStatus !== undefined) {
+          switch (mediaStatus) {
+            case MediaVideoStatus.iframe:
+              await expect(page.getByTestId("assistant-media-video-iframe")).toBeVisible();
+              break;
+            case MediaVideoStatus.video:
+              await expect(page.getByTestId("assistant-media-video-tag")).toBeVisible();
+              break;
+            case MediaVideoStatus.noEmbed:
+              await expect(page.getByTestId("assistant-media-video-noembed")).toBeVisible();
+              break;
 
-            }
           }
-          await checkMediaServices(page, services)
-          break;
-        case MediaType.none:
-          await expect(page.getByTestId("assistant-media-video-container")).not.toBeVisible();
-          break;
+        }
+        await checkMediaServices(page, services)
+        break;
+      case MediaType.none:
+        await expect(page.getByTestId("assistant-media-video-container")).not.toBeVisible();
+        break;
+    }
+
+    if (hasScrapedText) {
+      await expect(page.getByTestId("assistant-text-scraped-text")).toBeVisible();
+      // Named entities
+      for (const entityType in namedEntities) {
+        await page.getByTestId(entityType+"-dropdown").click();
+        for (const entity in namedEntities[entityType]) {
+          await expect(page.getByTestId(namedEntities[entityType][entity])).toBeVisible();
+        }
       }
+      // URL domain analysis
+      if (Object.keys(domainAnalyses).length > 0){
+        for (const url in domainAnalyses) {
+          await expect(page.getByTestId("url-domain-analysis").locator("[href*=\""+url+"\"]")).toBeVisible();
+          const resultRow = page.getByTestId("url-domain-analysis").locator("div.MuiGrid2-container").filter({ hasText: url });
 
-      if(hasScrapedText){
-        await expect(page.getByTestId("assistant-text-scraped-text")).toBeVisible();
+          if (domainAnalyses[url] != null) {
+            await expect(resultRow.locator(">div")).toHaveCount(3);
+            await expect(resultRow.getByTestId(domainAnalyses[url])).toBeVisible();
+          }
+          else {
+            await expect(resultRow.locator(">div")).toHaveCount(2);
+          }
+        }
       }
+    }
 
 
-    });
-  }
-);
+  });
+});
 
-async function checkMediaServices(page, availableServices){
+async function checkMediaServices(page, availableServices) {
   // Checks that expected services are shown
-  for( const serviceId of availableServices){
+  for (const serviceId of availableServices) {
     await expect(page.getByTestId(serviceId)).toBeVisible();
   }
 
   // Ensure disabled services are not showing
-  for( const serviceKey in MediaServices){
+  for (const serviceKey in MediaServices) {
     const serviceId = MediaServices[serviceKey];
-    if(!availableServices.includes(serviceId))
+    if (!availableServices.includes(serviceId))
       await expect(page.getByTestId(serviceId)).not.toBeVisible();
   }
 
