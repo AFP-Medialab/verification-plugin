@@ -263,6 +263,7 @@ const AssistantCredSignals = () => {
           onChange={handleChange(newsFramingTitle)}
           disabled={newsFramingLoading || newsFramingFail}
           disableGutters
+          data-testid="topic-accordion"
         >
           <AccordionSummary
             expandIcon={getExpandIcon(newsFramingLoading, newsFramingFail)}
@@ -284,7 +285,10 @@ const AssistantCredSignals = () => {
                   </Typography>
                 )}
                 {newsFramingDone && (
-                  <Typography sx={{ color: "text.secondary", align: "start" }}>
+                  <Typography
+                    sx={{ color: "text.secondary", align: "start" }}
+                    data-testid="topic-result"
+                  >
                     {renderEntityKeys(newsFramingResult.entities, keyword)}
                   </Typography>
                 )}
@@ -331,6 +335,7 @@ const AssistantCredSignals = () => {
           onChange={handleChange(newsGenreTitle)}
           disabled={newsGenreLoading || newsGenreFail}
           disableGutters
+          data-testid="genre-accordion"
         >
           <AccordionSummary
             expandIcon={getExpandIcon(newsGenreLoading, newsGenreFail)}
@@ -347,12 +352,18 @@ const AssistantCredSignals = () => {
               <Grid2 size={{ xs: 8 }} align="start">
                 {newsGenreLoading && <CircularProgress color={"secondary"} />}
                 {newsGenreFail && (
-                  <Typography sx={{ color: "text.secondary", align: "start" }}>
+                  <Typography
+                    sx={{ color: "text.secondary", align: "start" }}
+                    data-testid="genre-result"
+                  >
                     {keyword("failed_to_load")}
                   </Typography>
                 )}
                 {newsGenreDone && (
-                  <Typography sx={{ color: "text.secondary", align: "start" }}>
+                  <Typography
+                    sx={{ color: "text.secondary", align: "start" }}
+                    data-testid="genre-result"
+                  >
                     {renderEntityKeys(newsGenreResult.entities, keyword)}
                   </Typography>
                 )}
@@ -405,6 +416,7 @@ const AssistantCredSignals = () => {
               Object.keys(persuasionResult.entities).length < 1)
           }
           disableGutters
+          data-testid="persuasionTechniques-accordion"
         >
           <AccordionSummary
             expandIcon={getExpandIcon(
@@ -431,7 +443,10 @@ const AssistantCredSignals = () => {
                   </Typography>
                 )}
                 {persuasionDone && (
-                  <Typography sx={{ color: "text.secondary", align: "start" }}>
+                  <Typography
+                    sx={{ color: "text.secondary", align: "start" }}
+                    data-testid="persuasionTechniques-result"
+                  >
                     {renderEntityKeys(persuasionResult.entities, keyword)}
                   </Typography>
                 )}
@@ -439,6 +454,7 @@ const AssistantCredSignals = () => {
                   Object.keys(persuasionResult.entities).length < 1 && (
                     <Typography
                       sx={{ color: "text.secondary", align: "start" }}
+                      data-testid="persuasionTechniques-result"
                     >
                       {keyword("none_detected")}
                     </Typography>
@@ -491,6 +507,7 @@ const AssistantCredSignals = () => {
               Object.keys(subjectivityResult.entities).length < 1)
           }
           disableGutters
+          data-testid="subjectivity-accordion"
         >
           <AccordionSummary
             expandIcon={getExpandIcon(
@@ -511,7 +528,10 @@ const AssistantCredSignals = () => {
                   <CircularProgress color={"secondary"} />
                 )}
                 {subjectivityFail && (
-                  <Typography sx={{ color: "text.secondary", align: "start" }}>
+                  <Typography
+                    sx={{ color: "text.secondary", align: "start" }}
+                    data-testid="subjectivity-result"
+                  >
                     {keyword("failed_to_load")}
                   </Typography>
                 )}
@@ -519,6 +539,7 @@ const AssistantCredSignals = () => {
                   Object.keys(subjectivityResult.entities).length >= 1 && (
                     <Typography
                       sx={{ color: "text.secondary", align: "start" }}
+                      data-testid="subjectivity-result"
                     >
                       {keyword("subjective_sentences_detected")}{" "}
                       {calculateSubjectivity(subjectivityResult.sentences)}
@@ -528,6 +549,7 @@ const AssistantCredSignals = () => {
                   Object.keys(subjectivityResult.entities).length < 1 && (
                     <Typography
                       sx={{ color: "text.secondary", align: "start" }}
+                      data-testid="subjectivity-result"
                     >
                       {keyword("none_detected")}
                     </Typography>
@@ -584,6 +606,7 @@ const AssistantCredSignals = () => {
             (prevFactChecksDone && prevFactChecksResult.length < 1)
           }
           disableGutters
+          data-testid="previousFactChecks-accordion"
         >
           <AccordionSummary
             expandIcon={getExpandIcon(
@@ -628,18 +651,25 @@ const AssistantCredSignals = () => {
                   !prevFactChecksResult && (
                     <Typography
                       sx={{ color: "text.secondary", align: "start" }}
+                      data-testid="previousFactChecks-result"
                     >
                       {keyword("reanalyse_url")}
                       {/* should now be obselete as saga is re run */}
                     </Typography>
                   )}
                 {!role.includes("BETA_TESTER") && (
-                  <Typography sx={{ color: "text.secondary", align: "start" }}>
+                  <Typography
+                    sx={{ color: "text.secondary", align: "start" }}
+                    data-testid="previousFactChecks-result"
+                  >
                     {keyword("login_required")}
                   </Typography>
                 )}
                 {prevFactChecksDone && prevFactChecksResult.length < 1 && (
-                  <Typography sx={{ color: "text.secondary", align: "start" }}>
+                  <Typography
+                    sx={{ color: "text.secondary", align: "start" }}
+                    data-testid="previousFactChecks-result"
+                  >
                     {keyword("none_detected")}
                   </Typography>
                 )}
@@ -713,6 +743,7 @@ const AssistantCredSignals = () => {
             !role.includes("BETA_TESTER")
           }
           disableGutters
+          data-testid="machineGeneratedText-accordion"
         >
           <AccordionSummary
             expandIcon={getExpandIcon(
@@ -738,7 +769,10 @@ const AssistantCredSignals = () => {
                     <CircularProgress color={"secondary"} />
                   )}
                 {role.includes("BETA_TESTER") && machineGeneratedTextFail && (
-                  <Typography sx={{ color: "text.secondary", align: "start" }}>
+                  <Typography
+                    sx={{ color: "text.secondary", align: "start" }}
+                    data-testid="machineGeneratedText-result"
+                  >
                     {keyword("failed_to_load")}
                   </Typography>
                 )}
@@ -747,6 +781,7 @@ const AssistantCredSignals = () => {
                   machineGeneratedTextResult && (
                     <Typography
                       sx={{ color: "text.secondary", align: "start" }}
+                      data-testid="machineGeneratedText-result"
                     >
                       {keyword(machineGeneratedTextResult.pred)}
                       {/* {round(machineGeneratedTextResult.score, 4)} */}
@@ -759,13 +794,17 @@ const AssistantCredSignals = () => {
                   !machineGeneratedTextResult && (
                     <Typography
                       sx={{ color: "text.secondary", align: "start" }}
+                      data-testid="machineGeneratedText-result"
                     >
                       {keyword("reanalyse_url")}
                       {/* should now be obselete as saga is re run */}
                     </Typography>
                   )}
                 {!role.includes("BETA_TESTER") && (
-                  <Typography sx={{ color: "text.secondary", align: "start" }}>
+                  <Typography
+                    sx={{ color: "text.secondary", align: "start" }}
+                    data-testid="machineGeneratedText-result"
+                  >
                     {keyword("login_required")}
                   </Typography>
                 )}

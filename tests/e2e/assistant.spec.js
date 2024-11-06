@@ -83,6 +83,19 @@ const MediaServices = {
         "https://www.theglobeandmail.com/politics/article-displaced-ukrainians-want-to-settle-permanently-in-canada/": null,
         "https://www.welt.de/politik/deutschland/article250007304/Ukraine-Bei-einem-Zerfall-der-Ukraine-droht-eine-Massenflucht.html?icid=search.product.onsitesearch" : "CheckCircleOutlineIcon",
         "https://twitter.com/KurtZindulka": null,
+    },
+    credibilitySignals: {
+      topic: ["Security, Defense and Well-being", "Politics", "International Relations"],
+      genre: ["Objective reporting"],
+      persuasionTechniques: [
+        "Appeal to Authority",
+        "Appeal to fear/prejudice",
+        "Appeal to Popularity",
+        "Exaggeration or minimisation",
+        "Loaded language",
+        "Repetition"
+      ],
+      subjectivity: ["None detected"]
     }
   },
   // Twitter image post
@@ -212,7 +225,8 @@ const MediaServices = {
   services,
   hasScrapedText = true,
   namedEntities = {},
-  domainAnalyses = {}
+  domainAnalyses = {},
+  credibilitySignals = {}
 }) => {
   test(`Test assistant media services for url: ${url}`, async ({
     page,
@@ -293,6 +307,14 @@ const MediaServices = {
           }
           else {
             await expect(resultRow.locator(">div")).toHaveCount(2);
+          }
+        }
+      }
+      // Credibility signals
+      if (Object.keys(credibilitySignals).length > 0){
+        for (const signal in credibilitySignals) {
+          for (const foundIndex in credibilitySignals[signal]) {
+            await expect(page.getByTestId(signal+"-result")).toContainText(credibilitySignals[signal][foundIndex]);
           }
         }
       }
