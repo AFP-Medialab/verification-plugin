@@ -60,6 +60,7 @@ const AssistantSCResults = () => {
 
           <IconButton
             className={classes.assistantIconRight}
+            data-testid="url-domain-analysis-button"
             onClick={() => dispatch(setAssuranceExpanded(!assuranceExpanded))}
           >
             <ExpandMoreIcon color={"primary"} />
@@ -84,6 +85,7 @@ const AssistantSCResults = () => {
                     scResultFiltered={positiveSourCred}
                     icon={CheckCircleOutlineIcon}
                     iconColor="primary"
+                    data-testid="sourceCred-factChecker"
                   />
                 </div>
               ) : null}
@@ -100,6 +102,7 @@ const AssistantSCResults = () => {
                     scResultFiltered={cautionSourceCred}
                     icon={ErrorOutlineOutlinedIcon}
                     iconColor="error"
+                    data-testid="sourceCred-warning"
                   />
                 </div>
               ) : null}
@@ -116,6 +119,7 @@ const AssistantSCResults = () => {
                     scResultFiltered={mixedSourceCred}
                     icon={SentimentSatisfied}
                     iconColor="action"
+                    data-testid="sourceCred-mentions"
                   />
                 </div>
               ) : null}

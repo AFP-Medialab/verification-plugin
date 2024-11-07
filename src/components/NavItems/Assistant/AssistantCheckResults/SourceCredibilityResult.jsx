@@ -21,10 +21,13 @@ const SourceCredibilityResult = (props) => {
   const iconColor = props.iconColor;
 
   return (
-    <List disablePadding={true}>
+    <List disablePadding={true} data-testid={props["data-testid"]}>
       {sourceCredibilityResults
         ? sourceCredibilityResults.map((value, key) => (
-            <ListItem key={key}>
+            <ListItem
+              key={key}
+              data-testid={"source-" + value.credibilitySource}
+            >
               <ListItemAvatar>
                 <Icon fontSize={"large"} color={iconColor} />
               </ListItemAvatar>
