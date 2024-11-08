@@ -78,15 +78,11 @@ const Deepfake = () => {
     );
   };
 
-  // automatically run if url param in current page url
   useEffect(() => {
-    if (url) {
-      const uri = url !== null ? decodeURIComponent(url) : undefined;
-      setInput(uri);
-      setVideoFile(uri);
-      handleSubmit();
+    if (url && input && !result) {
+      handleSubmit(input);
     }
-  }, [url]);
+  }, [url, input, result]);
 
   const handleSubmit = async () => {
     dispatch(resetDeepfake());

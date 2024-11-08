@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
 import LinearProgress from "@mui/material/LinearProgress";
 import Box from "@mui/material/Box";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
@@ -83,15 +82,11 @@ const Deepfake = () => {
     );
   };
 
-  // automatically run if url param in current page url
   useEffect(() => {
-    if (url) {
-      const uri = url !== null ? decodeURIComponent(url) : undefined;
-      setInput(uri);
-      setImageFile(uri);
-      handleSubmit(uri);
+    if (url && input && !result) {
+      handleSubmit(input);
     }
-  }, [url]);
+  }, [url, input, result]);
 
   const handleSubmit = () => {
     dispatch(resetDeepfake());
