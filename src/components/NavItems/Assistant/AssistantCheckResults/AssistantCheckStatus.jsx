@@ -44,22 +44,22 @@ const AssistantCheckStatus = () => {
     (state) => state.assistant.newsGenreFail,
   );
 
-  const persuasionTitle = keyword("persuasion_techniques");
+  const persuasionTitle = keyword("persuasion_techniques_title");
   const persuasionFailState = useSelector(
     (state) => state.assistant.persuasionFail,
   );
 
-  const subjectivityTitle = keyword("subjectivity");
+  const subjectivityTitle = keyword("subjectivity_title");
   const subjectivityFailState = useSelector(
     (state) => state.assistant.subjectivityFail,
   );
 
-  const prevFactChecksTitle = keyword("previous_fact_checks");
+  const prevFactChecksTitle = keyword("previous_fact_checks_title");
   const prevFactChecksFailState = useSelector(
     (state) => state.assistant.prevFactChecksFail,
   );
 
-  const machineGeneratedTextTitle = keyword("machine_generated_text");
+  const machineGeneratedTextTitle = keyword("machine_generated_text_title");
   const machineGeneratedTextFailState = useSelector(
     (state) => state.assistant.machineGeneratedTextFail,
   );

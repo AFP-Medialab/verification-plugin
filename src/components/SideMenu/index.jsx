@@ -35,6 +35,7 @@ import {
   TOOL_GROUPS,
   TOOL_STATUS_ICON,
   TOOLS_CATEGORIES,
+  toolsHome,
 } from "../../constants/tools";
 import { ROLES } from "../../constants/roles";
 import { selectTopMenuItem } from "../../redux/reducers/navReducer";
@@ -52,6 +53,8 @@ const SideMenu = ({ tools, setOpenAlert }) => {
 
   const navigate = useNavigate();
 
+  const role = useSelector((state) => state.userSession.user.roles);
+
   useEffect(() => {
     //Set the redux state if the tool was opened from URL
     const pathArr = window.location.href.split("/");
@@ -62,9 +65,20 @@ const SideMenu = ({ tools, setOpenAlert }) => {
 
     const path = lastNonEmptyPath.split("?")[0];
 
-    const toolWithPath = tools.find((tool) => tool.path === path);
+    let toolWithPath = tools.find((tool) => tool.path === path);
 
     if (toolWithPath) {
+      if (!canUserSeeTool(toolWithPath, role, userAuthenticated)) {
+        toolWithPath = toolsHome;
+
+        const url = new URL(
+          `/popup.html#/app/${toolsHome.path}`,
+          window.location.href,
+        ).href;
+
+        window.location.replace(url);
+      }
+
       dispatch(selectTool(toolWithPath.titleKeyword));
 
       //Now we open the drawer for the tool selected
@@ -92,7 +106,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
   const userAuthenticated = useSelector(
     (state) => state.userSession && state.userSession.userAuthenticated,
   );
-  const role = useSelector((state) => state.userSession.user.roles);
+  // const role = useSelector((state) => state.userSession.user.roles);
 
   // Set UI direction based on language reading direction
   const direction = currentLang !== "ar" ? "ltr" : "rtl";
@@ -124,7 +138,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
     if (
       !userAuthenticated &&
       tool.rolesNeeded &&
-      tool.rolesNeeded.includes(ROLES.LOCK)
+      tool.rolesNeeded.includes(ROLES.REGISTERED_USER)
     ) {
       setOpenAlert(true);
       return;
@@ -598,7 +612,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
 
                     if (
                       itemList.rolesNeeded &&
-                      !canUserSeeTool(itemList, role)
+                      !canUserSeeTool(itemList, role, userAuthenticated)
                     ) {
                       return null;
                     } else {

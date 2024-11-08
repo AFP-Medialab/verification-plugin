@@ -107,7 +107,7 @@ const AssistantCredSignals = () => {
   const textHtmlMap = useSelector((state) => state.assistant.urlTextHtmlMap);
 
   // news framing (topic)
-  const newsFramingTitle = keyword("news_framing");
+  const newsFramingTitle = keyword("news_framing_title");
   const newsFramingResult = useSelector(
     (state) => state.assistant.newsFramingResult,
   );
@@ -122,7 +122,7 @@ const AssistantCredSignals = () => {
   );
 
   // news genre
-  const newsGenreTitle = keyword("news_genre");
+  const newsGenreTitle = keyword("news_genre_title");
   const newsGenreResult = useSelector(
     (state) => state.assistant.newsGenreResult,
   );
@@ -133,7 +133,7 @@ const AssistantCredSignals = () => {
   const newsGenreFail = useSelector((state) => state.assistant.newsGenreFail);
 
   // persuasion techniques
-  const persuasionTitle = keyword("persuasion_techniques");
+  const persuasionTitle = keyword("persuasion_techniques_title");
   const persuasionResult = useSelector(
     (state) => state.assistant.persuasionResult,
   );
@@ -144,7 +144,7 @@ const AssistantCredSignals = () => {
   const persuasionFail = useSelector((state) => state.assistant.persuasionFail);
 
   // subjectivity
-  const subjectivityTitle = keyword("subjectivity");
+  const subjectivityTitle = keyword("subjectivity_title");
   const subjectivityResult = useSelector(
     (state) => state.assistant.subjectivityResult,
   );
@@ -159,7 +159,7 @@ const AssistantCredSignals = () => {
   );
 
   // previous fact checks
-  const prevFactChecksTitle = keyword("previous_fact_checks");
+  const prevFactChecksTitle = keyword("previous_fact_checks_title");
   const prevFactChecksResult = useSelector(
     (state) => state.assistant.prevFactChecksResult,
   );
@@ -184,7 +184,7 @@ const AssistantCredSignals = () => {
   const navigate = useNavigate();
 
   // machine generated text
-  const machineGeneratedTextTitle = keyword("machine_generated_text");
+  const machineGeneratedTextTitle = keyword("machine_generated_text_title");
   const machineGeneratedTextResult = useSelector(
     (state) => state.assistant.machineGeneratedTextResult,
   );

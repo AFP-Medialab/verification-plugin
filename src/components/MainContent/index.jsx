@@ -12,7 +12,7 @@ import {
 import { setFalse, setTrue } from "../../redux/reducers/cookiesReducers";
 import Feedback from "../Feedback/Feedback";
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
-import { TOOL_STATUS_ICON } from "../../constants/tools";
+import { canUserSeeTool } from "../../constants/tools";
 import { useDispatch, useSelector } from "react-redux";
 import { i18nLoadNamespace } from "../Shared/Languages/i18nLoadNamespace";
 import { TOP_MENU_ITEMS } from "../../constants/topMenuItems";
@@ -40,15 +40,12 @@ const MainContent = ({ tools }) => {
 
   const role = useSelector((state) => state.userSession.user.roles);
 
+  const userAuthenticated = useSelector(
+    (state) => state.userSession.userAuthenticated,
+  );
+
   const toolsAllowedForRole = tools.filter((tool) => {
-    if (
-      !tool.rolesNeeded ||
-      tool.rolesNeeded.length === 0 ||
-      tool.rolesNeeded.includes(TOOL_STATUS_ICON.LOCK)
-    )
-      return true;
-    else
-      return tool.rolesNeeded.some((restriction) => role.includes(restriction));
+    return canUserSeeTool(tool, role, userAuthenticated);
   });
 
   const themeFab = createTheme({
