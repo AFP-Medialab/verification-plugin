@@ -15,7 +15,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@date-io/moment": "^3.0.0",
     "@emotion/css": "^11.13.0",
