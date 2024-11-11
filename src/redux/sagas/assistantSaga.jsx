@@ -865,6 +865,7 @@ const filterSourceCredibilityResults = (
 
   let sourceCredibilityDict = {};
 
+  // collecting results for each link in extracted linkList
   sourceCredibility.forEach((result) => {
     const link = result["string"];
 
@@ -907,13 +908,14 @@ const filterSourceCredibilityResults = (
     }
   }
 
-  const positiveResults = sourceCredibilityDict[inputUrl].positive.length
+  // collecting results for the inputUrl
+  const positiveResults = sourceCredibilityDict[inputUrl]
     ? sourceCredibilityDict[inputUrl].positive
     : null;
-  const mixedResults = sourceCredibilityDict[inputUrl].mixed.length
+  const mixedResults = sourceCredibilityDict[inputUrl]
     ? sourceCredibilityDict[inputUrl].mixed
     : null;
-  const cautionResults = sourceCredibilityDict[inputUrl].caution.length
+  const cautionResults = sourceCredibilityDict[inputUrl]
     ? sourceCredibilityDict[inputUrl].caution
     : null;
   delete sourceCredibilityDict[inputUrl];

@@ -30,7 +30,7 @@ const AssistantSCResults = () => {
   const assuranceExpanded = useSelector(
     (state) => state.assistant.assuranceExpanded,
   );
-  const positiveSourCred = useSelector(
+  const positiveSourceCred = useSelector(
     (state) => state.assistant.positiveSourceCred,
   );
   const cautionSourceCred = useSelector(
@@ -83,14 +83,14 @@ const AssistantSCResults = () => {
             className={classes.assistantBackground}
           >
             <Box mt={3} ml={2}>
-              {positiveSourCred ? (
+              {positiveSourceCred && positiveSourceCred.length > 0 ? (
                 <div>
                   <Chip
                     label={keyword("fact_checker")}
                     color={trafficLightColors.positive}
                   />
                   <SourceCredibilityResult
-                    scResultFiltered={positiveSourCred}
+                    scResultFiltered={positiveSourceCred}
                     icon={CheckCircleOutlineIcon}
                     iconColor={trafficLightColors.positive}
                     sourceType={sourceTypes.positive}
@@ -98,7 +98,7 @@ const AssistantSCResults = () => {
                 </div>
               ) : null}
 
-              {cautionSourceCred ? (
+              {cautionSourceCred && cautionSourceCred.length > 0 ? (
                 <div>
                   <Chip
                     label={keyword("warning_title")}
@@ -113,7 +113,7 @@ const AssistantSCResults = () => {
                 </div>
               ) : null}
 
-              {mixedSourceCred ? (
+              {mixedSourceCred && mixedSourceCred.length > 0 ? (
                 <div>
                   <Chip
                     label={keyword("mentions")}
