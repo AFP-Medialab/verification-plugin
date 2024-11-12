@@ -36,6 +36,7 @@ const DbkfMediaResults = () => {
                       align={"left"}
                     >
                       {keyword("dbkf_image_warning") +
+                        " " +
                         parseFloat(value.similarity).toFixed(2)}
                     </Typography>
                     <Box mb={0.5} />
