@@ -7,6 +7,10 @@ import { CardHeader, Grid2, LinearProgress } from "@mui/material";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { CONTENT_TYPE } from "../AssistantRuleBook";
 import AssistantImageResult from "./AssistantImageResult";
@@ -185,32 +189,46 @@ const AssistantMediaResult = () => {
             </Typography>
           </CardContent>*/}
 
-          {/* image list */}
-          {filteredImageList.length > 0 ? (
-            <Typography variant={"h4"}>Images</Typography>
-          ) : null}
           <CardContent>
-            <ImageGridList
-              list={filteredImageList}
-              height={60}
-              cols={5}
-              handleClick={(event) => {
-                submitMediaToProcess(event);
-              }}
-            />
-          </CardContent>
+            {/* image list */}
+            {filteredImageList.length > 0 ? (
+              <Accordion defaultExpanded>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography variant="h6">
+                    {keyword("images_label")}
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <ImageGridList
+                    list={filteredImageList}
+                    height={60}
+                    cols={5}
+                    handleClick={(event) => {
+                      submitMediaToProcess(event);
+                    }}
+                  />
+                </AccordionDetails>
+              </Accordion>
+            ) : null}
 
-          {/* video list */}
-          {videoList.length > 0 ? (
-            <Typography variant={"h4"}>Videos</Typography>
-          ) : null}
-          <CardContent>
-            <VideoGridList
-              list={videoList}
-              handleClick={(vidLink) => {
-                submitMediaToProcess(vidLink);
-              }}
-            />
+            {/* video list */}
+            {videoList.length > 0 ? (
+              <Accordion defaultExpanded>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography variant="h6">
+                    {keyword("videos_label")}
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <VideoGridList
+                    list={videoList}
+                    handleClick={(vidLink) => {
+                      submitMediaToProcess(vidLink);
+                    }}
+                  />
+                </AccordionDetails>
+              </Accordion>
+            ) : null}
           </CardContent>
         </div>
       ) : null}
