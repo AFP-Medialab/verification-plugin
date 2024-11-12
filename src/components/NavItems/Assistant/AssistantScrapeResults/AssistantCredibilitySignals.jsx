@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import Card from "@mui/material/Card";
-import { CardHeader, Grid2, styled, Skeleton } from "@mui/material";
+import { CardHeader, Grid2, Skeleton, styled } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -10,23 +11,22 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Remove from "@mui/icons-material/Remove";
 import Typography from "@mui/material/Typography";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import AssistantTextClassification from "./AssistantTextClassification";
-import AssistantTextSpanClassification from "./AssistantTextSpanClassification";
-import ResultDisplayItem from "components/NavItems/tools/SemanticSearch/components/ResultDisplayItem";
+import Collapse from "@mui/material/Collapse";
+
 import dayjs from "dayjs";
 import LocaleData from "dayjs/plugin/localeData";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 
-import Collapse from "@mui/material/Collapse";
-
-import { useNavigate } from "react-router-dom";
+import AssistantTextClassification from "./AssistantTextClassification.jsx";
+import AssistantTextSpanClassification from "./AssistantTextSpanClassification.jsx";
+import ResultDisplayItem from "./../../tools/SemanticSearch/components/ResultDisplayItem.jsx";
+import { ROLES } from "../../../../constants/roles.jsx";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { getLanguageName } from "../../../Shared/Utils/languageUtils";
-import TextFooter from "./TextFooter.jsx";
-import { TextFooterPrevFactChecks } from "./TextFooter.jsx";
+import TextFooter, { TextFooterPrevFactChecks } from "./TextFooter.jsx";
 
 const renderEntityKeys = (entities, keyword) => {
   // translate array into readable string
@@ -66,7 +66,7 @@ const getExpandIcon = (
     loading ||
     fail ||
     doneWithEmptyResult ||
-    (role && !role.includes("BETA_TESTER"))
+    (role && !role.includes(ROLES.BETA_TESTER))
   ) {
     // "doneWithEmptyResult" is for when subjectivityDone = true and Object.keys(result.entities).length < 1
     // "doneWithEmptyResult" is for when prevFactChecksDone = true and result.length < 1
@@ -172,8 +172,10 @@ const AssistantCredSignals = () => {
   const prevFactChecksFail = useSelector(
     (state) => state.assistant.prevFactChecksFail,
   );
+
   // checking if user logged in
   const role = useSelector((state) => state.userSession.user.roles);
+
   // date information
   dayjs.extend(LocaleData);
   dayjs.extend(localizedFormat);
@@ -586,7 +588,7 @@ const AssistantCredSignals = () => {
             (!prevFactChecksLoading &&
               !prevFactChecksFail &&
               !prevFactChecksDone) ||
-            !role.includes("BETA_TESTER") ||
+            !role.includes(ROLES.BETA_TESTER) ||
             (prevFactChecksDone && prevFactChecksResult.length < 1)
           }
           disableGutters
@@ -610,15 +612,15 @@ const AssistantCredSignals = () => {
               </Grid2>
 
               <Grid2 size={{ xs: 8 }} align="start">
-                {role.includes("BETA_TESTER") && prevFactChecksLoading && (
+                {role.includes(ROLES.BETA_TESTER) && prevFactChecksLoading && (
                   <Skeleton variant="rounded" width="50%" height={40} />
                 )}
-                {role.includes("BETA_TESTER") && prevFactChecksFail && (
+                {role.includes(ROLES.BETA_TESTER) && prevFactChecksFail && (
                   <Typography sx={{ color: "text.secondary", align: "start" }}>
                     {keyword("failed_to_load")}
                   </Typography>
                 )}
-                {role.includes("BETA_TESTER") &&
+                {role.includes(ROLES.BETA_TESTER) &&
                   prevFactChecksDone &&
                   prevFactChecksResult.length > 0 && (
                     <Typography
@@ -627,7 +629,7 @@ const AssistantCredSignals = () => {
                       {keyword("previous_fact_checks_found")}
                     </Typography>
                   )}
-                {role.includes("BETA_TESTER") &&
+                {role.includes(ROLES.BETA_TESTER) &&
                   !prevFactChecksDone &&
                   !prevFactChecksLoading &&
                   !prevFactChecksFail &&
@@ -639,7 +641,7 @@ const AssistantCredSignals = () => {
                       {/* should now be obselete as saga is re run */}
                     </Typography>
                   )}
-                {!role.includes("BETA_TESTER") && (
+                {!role.includes(ROLES.BETA_TESTER) && (
                   <Typography sx={{ color: "text.secondary", align: "start" }}>
                     {keyword("login_required")}
                   </Typography>
@@ -656,7 +658,7 @@ const AssistantCredSignals = () => {
           <AccordionDetails>
             {prevFactChecksDone &&
               prevFactChecksResult.length > 0 &&
-              role.includes("BETA_TESTER") && (
+              role.includes(ROLES.BETA_TESTER) && (
                 <div>
                   <Collapse
                     in={expanded}
@@ -716,7 +718,7 @@ const AssistantCredSignals = () => {
             machineGeneratedTextLoading ||
             machineGeneratedTextFail ||
             machineGeneratedTextDone ||
-            !role.includes("BETA_TESTER")
+            !role.includes(ROLES.BETA_TESTER)
           }
           disableGutters
         >
@@ -739,16 +741,19 @@ const AssistantCredSignals = () => {
               </Grid2>
 
               <Grid2 size={{ xs: 8 }} align="start">
-                {role.includes("BETA_TESTER") &&
+                {role.includes(ROLES.BETA_TESTER) &&
                   machineGeneratedTextLoading && (
                     <Skeleton variant="rounded" width="50%" height={40} />
                   )}
-                {role.includes("BETA_TESTER") && machineGeneratedTextFail && (
-                  <Typography sx={{ color: "text.secondary", align: "start" }}>
-                    {keyword("failed_to_load")}
-                  </Typography>
-                )}
-                {role.includes("BETA_TESTER") &&
+                {role.includes(ROLES.BETA_TESTER) &&
+                  machineGeneratedTextFail && (
+                    <Typography
+                      sx={{ color: "text.secondary", align: "start" }}
+                    >
+                      {keyword("failed_to_load")}
+                    </Typography>
+                  )}
+                {role.includes(ROLES.BETA_TESTER) &&
                   machineGeneratedTextDone &&
                   machineGeneratedTextResult && (
                     <Typography
@@ -758,7 +763,7 @@ const AssistantCredSignals = () => {
                       {/* {round(machineGeneratedTextResult.score, 4)} */}
                     </Typography>
                   )}
-                {role.includes("BETA_TESTER") &&
+                {role.includes(ROLES.BETA_TESTER) &&
                   !machineGeneratedTextDone &&
                   !machineGeneratedTextLoading &&
                   !machineGeneratedTextFail &&
@@ -770,7 +775,7 @@ const AssistantCredSignals = () => {
                       {/* should now be obselete as saga is re run */}
                     </Typography>
                   )}
-                {!role.includes("BETA_TESTER") && (
+                {!role.includes(ROLES.BETA_TESTER) && (
                   <Typography sx={{ color: "text.secondary", align: "start" }}>
                     {keyword("login_required")}
                   </Typography>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import LinearProgress from "@mui/material/LinearProgress";
 import Box from "@mui/material/Box";
@@ -81,6 +81,12 @@ const Deepfake = () => {
       preprocessingError,
     );
   };
+
+  useEffect(() => {
+    if (url && input && !result) {
+      handleSubmit(input);
+    }
+  }, [url, input, result]);
 
   const handleSubmit = () => {
     dispatch(resetDeepfake());
