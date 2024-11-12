@@ -18,6 +18,9 @@ const DbkfMediaResults = () => {
   const dbkfImageMatch = useSelector((state) => state.assistant.dbkfImageMatch);
   const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
 
+  console.log(dbkfImageMatch);
+  console.log(dbkfVideoMatch);
+
   return (
     <List disablePadding={true}>
       {dbkfImageMatch
@@ -34,6 +37,7 @@ const DbkfMediaResults = () => {
                       color={"textPrimary"}
                       component={"div"}
                       align={"left"}
+                      data-testid={"dbkf_image_warning_" + value.claimUrl}
                     >
                       {keyword("dbkf_image_warning") +
                         " " +
@@ -77,8 +81,10 @@ const DbkfMediaResults = () => {
                       color={"textPrimary"}
                       component={"div"}
                       align={"left"}
+                      data-testid={"dbkf_video_warning_" + value.claimUrl}
                     >
                       {keyword("dbkf_video_warning") +
+                        " " +
                         parseFloat(value.similarity).toFixed(2)}
                     </Typography>
                     <Box mb={0.5} />
