@@ -58,7 +58,7 @@ const SyntheticImageDetection = () => {
 
   const [imageType, setImageType] = useState(undefined);
 
-  const [autoResizeLocalFile, setAutoResizeLocalFile] = useState(false);
+  const [autoResizeLocalFile, setAutoResizeLocalFile] = useState(true);
 
   const dispatch = useDispatch();
 
@@ -292,7 +292,9 @@ const SyntheticImageDetection = () => {
   const handleSubmit = async (url) => {
     const processedFile =
       autoResizeLocalFile && imageFile
-        ? await resizeImageWithWorker(imageFile)
+        ? role.includes(ROLES.BETA_TESTER)
+          ? await resizeImageWithWorker(imageFile)
+          : imageFile
         : imageFile;
 
     if (autoResizeLocalFile && processedFile) {
