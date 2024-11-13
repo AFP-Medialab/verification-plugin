@@ -50,6 +50,7 @@ const VideoImageList = (props) => {
                   props.handleClick(tile);
                 }}
                 data-testid={"assistant-media-grid-video-" + index}
+                style={{ cursor: "pointer" }}
               >
                 {tile}
               </Link>

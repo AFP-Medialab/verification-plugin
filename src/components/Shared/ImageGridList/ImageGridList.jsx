@@ -39,7 +39,7 @@ const ImageImageList = (props) => {
                   className={classes.checkeredBG}
                   onClick={() => props.handleClick(props.list[index])}
                   onLoad={props.setLoading}
-                  style={{ width: "100%", height: "auto" }}
+                  style={{ width: "100%", height: "auto", cursor: "pointer" }}
                   data-testid={"assistant-media-grid-image-" + index}
                 />
               ) : (
@@ -48,7 +48,7 @@ const ImageImageList = (props) => {
                   alt={tile}
                   className={classes.checkeredBG}
                   onClick={() => props.handleClick(props.list[index])}
-                  style={{ width: "100%", height: "auto" }}
+                  style={{ width: "100%", height: "auto", cursor: "pointer" }}
                   data-testid={"assistant-media-grid-image-" + index}
                 />
               )}
