@@ -219,7 +219,7 @@ const AssistantMediaResult = () => {
                     {keyword("videos_label")}
                   </Typography>
                 </AccordionSummary>
-                <AccordionDetails>
+                <AccordionDetails style={{ paddingTop: 0 }}>
                   <VideoGridList
                     list={videoList}
                     handleClick={(vidLink) => {

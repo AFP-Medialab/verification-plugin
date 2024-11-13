@@ -18,6 +18,7 @@ const styles = (theme) => ({
   imageList: {
     width: "100%",
     maxHeight: "500px",
+    margin: 0,
   },
   icon: {
     color: theme.palette.secondary.main,
