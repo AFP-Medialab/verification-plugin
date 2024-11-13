@@ -63,9 +63,6 @@ const SourceCredibilityDBKFDialog = (props) => {
           <List sx={{ listStyle: "decimal", ml: 4 }}>
             {evidence.map((result, index) => (
               <ListItem key={index} sx={{ display: "list-item" }}>
-                {/* <ListItemIcon>
-                  <ArrowRightIcon />
-                </ListItemIcon> */}
                 <Typography>
                   <Link target="_blank" href={result} color="inherit">
                     {result}

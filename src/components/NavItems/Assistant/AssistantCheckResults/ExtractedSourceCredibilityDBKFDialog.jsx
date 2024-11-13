@@ -155,8 +155,26 @@ const ExtractedSourceCredibilityDBKFDialog = ({
               </Typography>
             </Grid2>
 
-            {/* close button */}
             <Grid2 size={{ xs: 1 }} display="flex" justifyContent="flex-end">
+              {/* tooltip help */}
+              <Tooltip
+                interactive={"true"}
+                leaveDelay={50}
+                style={{ display: "flex", marginLeft: "auto" }}
+                title={
+                  <div
+                    className={"content"}
+                    dangerouslySetInnerHTML={{
+                      __html: keyword("sc_tooltip"),
+                    }}
+                  />
+                }
+                classes={{ tooltip: classes.assistantTooltip }}
+              >
+                <HelpOutlineOutlinedIcon color={"action"} />
+              </Tooltip>
+
+              {/* close button */}
               <IconButton onClick={handleClose}>
                 <CloseIcon />
               </IconButton>
@@ -254,25 +272,6 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                 ),
               )
             : null}
-
-          <Box mr={2} mb={1}>
-            <Tooltip
-              interactive={"true"}
-              leaveDelay={50}
-              style={{ display: "flex", marginLeft: "auto" }}
-              title={
-                <div
-                  className={"content"}
-                  dangerouslySetInnerHTML={{
-                    __html: keyword("sc_tooltip"),
-                  }}
-                />
-              }
-              classes={{ tooltip: classes.assistantTooltip }}
-            >
-              <HelpOutlineOutlinedIcon color={"action"} />
-            </Tooltip>
-          </Box>
         </DialogContent>
       </Dialog>
     </div>

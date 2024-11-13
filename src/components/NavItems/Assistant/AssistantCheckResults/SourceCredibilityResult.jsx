@@ -27,23 +27,6 @@ const SourceCredibilityResult = (props) => {
       {sourceCredibilityResults
         ? sourceCredibilityResults.map((value, key) => (
             <ListItem key={key}>
-              {/* <Grid2 container> */}
-
-              {/* source type */}
-              {/* <Grid2 size={ 2 }> */}
-              {/* <ListItemAvatar>
-                    <Box
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                    >
-                      <Chip label={keyword(props.sourceType)} color={iconColor} size="small" />
-                    </Box>
-                  </ListItemAvatar> */}
-              {/* </Grid2> */}
-
-              {/* details from url domain analysis with details icon */}
-              {/* <Grid2 size={  9 }> */}
               <ListItemText
                 primary={
                   <div sx={{ ml: 2 }}>
@@ -116,11 +99,8 @@ const SourceCredibilityResult = (props) => {
                       </ListItemSecondaryAction>
                     ) : null}
                   </Typography>
-                  // </Grid2>
                 }
               />
-              {/* //   </Grid2> */}
-              {/* // </Grid2> */}
             </ListItem>
           ))
         : null}

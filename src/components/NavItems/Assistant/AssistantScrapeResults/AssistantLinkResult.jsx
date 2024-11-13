@@ -24,51 +24,43 @@ import { TextCopy } from "../../../Shared/Utils/TextCopy";
 import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { CheckCircleOutline, TaskAltOutlined } from "@mui/icons-material";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, getGridSingleSelectOperators } from "@mui/x-data-grid";
 
 // render status for extracted urls
 const Status = (params) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      flexDirection="column"
-    >
-      {params.done && params.urlResults !== null && (
-        <>
-          {params.urlResults ? (
-            params.urlResults.caution !== null ? (
-              <Chip
-                label={keyword(params.sourceTypes.caution)}
-                color={params.trafficLightColors.caution}
-                size="small"
-              />
-            ) : null
-          ) : null}
-          {params.urlResults ? (
-            params.urlResults.mixed !== null ? (
-              <Chip
-                label={keyword(params.sourceTypes.mixed)}
-                color={params.trafficLightColors.mixed}
-                size="small"
-              />
-            ) : null
-          ) : null}
-          {params.urlResults ? (
-            params.urlResults.positive != null ? (
-              <Chip
-                label={keyword(params.sourceTypes.positive)}
-                color={params.trafficLightColors.positive}
-                size="small"
-              />
-            ) : null
-          ) : null}
-        </>
-      )}
+    <Stack direction="column" spacing={0.5}>
+      {params.done && params.urlResults.caution !== null ? (
+        <Chip
+          label={keyword(params.sourceTypes.caution)}
+          color={params.trafficLightColors.caution}
+          size="small"
+        />
+      ) : null}
+      {params.done && params.urlResults.mixed !== null ? (
+        <Chip
+          label={keyword(params.sourceTypes.mixed)}
+          color={params.trafficLightColors.mixed}
+          size="small"
+        />
+      ) : null}
+      {params.done && params.urlResults.positive != null ? (
+        <Chip
+          label={keyword(params.sourceTypes.positive)}
+          color={params.trafficLightColors.positive}
+          size="small"
+        />
+      ) : null}
+      {params.done && params.urlResults.resolvedDomain == "" ? (
+        <Chip
+          label={keyword(params.sourceTypes.unlabelled)}
+          color={params.trafficLightColors.unlabelled}
+          size="small"
+        />
+      ) : null}
       {params.loading && <Skeleton variant="rounded" width={60} height={20} />}
-    </Box>
+    </Stack>
   );
 };
 
@@ -113,166 +105,211 @@ const Details = (params) => {
 };
 
 // columns
-const createColumns = (headerId, headerStatus, headerUrl, headerDetails) => {
-  const columns = [
-    {
-      field: "id",
-      headerName: headerId,
-      align: "center",
-      headerAlign: "center",
-      type: "number",
-      minWidth: 50,
-      flex: 1,
-    },
-    {
-      field: "status",
-      headerName: headerStatus,
-      align: "center",
-      headerAlign: "center",
-      display: "flex",
-      minWidth: 120,
-      flex: 1,
-      renderCell: (params) => {
-        return (
-          <Status
-            loading={params.value.loading}
-            done={params.value.done}
-            fail={params.value.fail}
-            urlResults={params.value.urlResults}
-            trafficLightColors={params.value.trafficLightColors}
-            sourceTypes={params.value.sourceTypes}
-            sortBySourceType={params.value.sortBySourceType}
-          />
-        );
-      },
-      sortComparator: (v1, v2) =>
-        v1.sortBySourceType.localeCompare(v2.sortBySourceType),
-    },
-    {
-      field: "url",
-      headerName: headerUrl,
-      minWidth: 400,
-      flex: 1,
-      renderCell: (params) => {
-        return <Url url={params.value.url} urlColor={params.value.urlColor} />;
-      },
-      sortComparator: (v1, v2) => v1.url.localeCompare(v2.url),
-    },
-    {
-      field: "details",
-      headerName: headerDetails,
-      align: "center",
-      headerAlign: "center",
-      display: "flex",
-      minWidth: 100,
-      flex: 1,
-      // change to type: actions,
-      // getActions: (params) => [/.../],
-      //   an array of <GridActionsCellItem> elements, one for each action button
-      renderCell: (params) => {
-        return (
-          <Details
-            loading={params.value.loading}
-            done={params.value.done}
-            fail={params.value.fail}
-            urlResults={params.value.urlResults}
-            url={params.value.url}
-            domainOrAccount={params.value.domainOrAccount}
-            urlColor={params.value.urlColor}
-            sourceTypes={params.value.sourceTypes}
-          />
-        );
-      },
-      sortComparator: (v1, v2) => v1.sortByDetails === v2.sortByDetails,
-    },
-  ];
-
-  return columns;
+const sourceTypeListSortComparator = (v1, v2) => {
+  return v1.sourceTypeList.length - v2.sourceTypeList.length;
 };
 
-// rows
-const createRows = (
-  urls,
-  extractedSourceCred,
-  loading,
-  done,
-  fail,
-  trafficLightColors,
-) => {
-  // define types of source credibility
-  const sourceTypes = {
-    caution: "warning",
-    mixed: "mentions",
-    positive: "fact_checker",
-  };
+const sourceTypeListFilterOperators = getGridSingleSelectOperators()
+  .filter((operator) => operator.value === "isAnyOf")
+  .map((operator) => {
+    const newOperator = { ...operator };
+    const newGetApplyFilterFn = (filterItem, column) => {
+      return (params) => {
+        let isOk = true;
+        filterItem?.value?.forEach((fv) => {
+          isOk = isOk && params.value.includes(fv);
+          console.log(params.value);
+        });
+        return isOk;
+      };
+    };
+    newOperator.getApplyFilterFn = newGetApplyFilterFn;
+    return newOperator;
+  });
 
-  // create a row for each url
-  let rows = [];
-  for (let i = 0; i < urls.length; i++) {
-    let url = urls[i];
+// const createColumns = (headerId, headerStatus, headerUrl, headerDetails) => {
+//   const columns = [
+//     {
+//       field: "id",
+//       headerName: headerId,
+//       align: "center",
+//       headerAlign: "center",
+//       type: "number",
+//       minWidth: 30,
+//       flex: 1,
+//     },
+//     {
+//       field: "status",
+//       headerName: headerStatus,
+//       align: "center",
+//       headerAlign: "center",
+//       display: "flex",
+//       minWidth: 120,
+//       flex: 1,
+//       renderCell: (params) => {
+//         return (
+//           <Status
+//             loading={params.value.loading}
+//             done={params.value.done}
+//             fail={params.value.fail}
+//             urlResults={params.value.urlResults}
+//             trafficLightColors={params.value.trafficLightColors}
+//             sourceTypes={params.value.sourceTypes}
+//             sortBySourceType={params.value.sortBySourceType}
+//           />
+//         );
+//       },
+//       // sortComparator: (v1, v2) =>
+//       //   v1.sortBySourceType.localeCompare(v2.sortBySourceType),
+//       //valueGetter: (params) => params?.row?.sortBySourceType,
+//       //valueOptions: (params) => params?.value?.sourceTypeList,
+//       valueoptions: [...new Set(rows.map((o) => o.sourceTypeList).flat())],
+//       sortComparator: sourceTypeListSortComparator,
+//       filterOperators: sourceTypeListFilterOperators,
+//     },
+//     {
+//       field: "url",
+//       headerName: headerUrl,
+//       minWidth: 400,
+//       flex: 1,
+//       renderCell: (params) => {
+//         return <Url url={params.value.url} urlColor={params.value.urlColor} />;
+//       },
+//       sortComparator: (v1, v2) => v1.url.localeCompare(v2.url),
+//     },
+//     {
+//       field: "details",
+//       headerName: headerDetails,
+//       align: "center",
+//       headerAlign: "center",
+//       display: "flex",
+//       minWidth: 100,
+//       flex: 1,
+//       // change to type: actions,
+//       //   an array of <GridActionsCellItem> elements, one for each action button
+//       // getActions: (params) => [/.../],
+//       renderCell: (params) => {
+//         return (
+//           <Details
+//             loading={params.value.loading}
+//             done={params.value.done}
+//             fail={params.value.fail}
+//             urlResults={params.value.urlResults}
+//             url={params.value.url}
+//             domainOrAccount={params.value.domainOrAccount}
+//             urlColor={params.value.urlColor}
+//             sourceTypes={params.value.sourceTypes}
+//           />
+//         );
+//       },
+//       sortComparator: (v1, v2) => v1.sortByDetails === v2.sortByDetails,
+//     },
+//   ];
 
-    // define extracted source credibility
-    let urlColor = "inherit";
-    let urlResults = null;
-    let sortBySourceType = "";
-    let sortByDetails = false;
-    let domainOrAccount;
-    if (extractedSourceCred) {
-      urlResults = extractedSourceCred[url];
-      sortByDetails = true;
-      // these are in order in case of multiple types of source credibility results
-      if (urlResults.positive) {
-        urlColor = trafficLightColors.positive;
-        sortBySourceType = sourceTypes.positive + sortBySourceType;
-      }
-      if (urlResults.mixed) {
-        urlColor = trafficLightColors.mixed;
-        sortBySourceType = sourceTypes.mixed + sortBySourceType;
-      }
-      if (urlResults.caution) {
-        urlColor = trafficLightColors.caution;
-        sortBySourceType = sourceTypes.caution + sortBySourceType;
-      }
-      // detect domain or account address
-      domainOrAccount = urlResults.resolvedDomain
-        ? urlResults.resolvedDomain.startsWith("https://")
-          ? urlResults.resolvedDomain
-          : "https://" + urlResults.resolvedDomain
-        : "";
-    }
+//   return columns;
+// };
 
-    // add row
-    rows.push({
-      id: i + 1,
-      status: {
-        loading: loading,
-        done: done,
-        fail: fail,
-        urlResults: urlResults,
-        url: url,
-        trafficLightColors: trafficLightColors,
-        sourceTypes: sourceTypes,
-        sortBySourceType: sortBySourceType,
-      },
-      url: {
-        url: url,
-        urlColor: urlColor,
-      },
-      details: {
-        loading: loading,
-        done: done,
-        fail: fail,
-        urlResults: urlResults,
-        urlColor: urlColor,
-        sourceTypes: sourceTypes,
-        domainOrAccount: domainOrAccount,
-        sortByDetails: sortByDetails,
-      },
-    });
-  }
+// // rows
+// const createRows = (
+//   urls,
+//   extractedSourceCred,
+//   loading,
+//   done,
+//   fail,
+//   trafficLightColors,
+//   keyword,
+// ) => {
+//   // define types of source credibility
+//   const sourceTypes = {
+//     positive: "fact_checker",
+//     mixed: "mentions",
+//     caution: "warning",
+//     unlabelled: "unlabelled",
+//   };
+//   // const sourceTypeList = [
+//   //   keyword("fact_checker"),
+//   //   keyword("mentions"),
+//   //   keyword("warning"),
+//   //   keyword("unlabelled"),
+//   // ]
 
-  return rows;
-};
+//   // create a row for each url
+//   let rows = [];
+//   for (let i = 0; i < urls.length; i++) {
+//     let url = urls[i];
+
+//     // define extracted source credibility
+//     let urlColor = "inherit"; //trafficLightColors.unlabelled;
+//     let urlResults = sourceTypes.unlabelled;
+//     let sortBySourceType = "";
+//     let sortByDetails = false;
+//     let domainOrAccount;
+
+//     let sourceTypeList = [];
+
+//     if (extractedSourceCred) {
+//       urlResults = extractedSourceCred[url];
+//       sortByDetails = true;
+//       // these are in order in case of multiple types of source credibility results
+//       if (urlResults.positive) {
+//         urlColor = trafficLightColors.positive;
+//         sortBySourceType = sourceTypes.positive + sortBySourceType;
+//         sourceTypeList.push(keyword(sourceTypes.positive));
+//       }
+//       if (urlResults.mixed) {
+//         urlColor = trafficLightColors.mixed;
+//         sortBySourceType = sourceTypes.mixed + sortBySourceType;
+//         sourceTypeList.push(keyword(sourceTypes.mixed));
+//       }
+//       if (urlResults.caution) {
+//         urlColor = trafficLightColors.caution;
+//         sortBySourceType = sourceTypes.caution + sortBySourceType;
+//         sourceTypeList.push(keyword(sourceTypes.caution));
+//       }
+//       // detect domain or account address
+//       domainOrAccount = urlResults.resolvedDomain
+//         ? urlResults.resolvedDomain.startsWith("https://")
+//           ? urlResults.resolvedDomain
+//           : "https://" + urlResults.resolvedDomain
+//         : "";
+//     } else {
+//       sortBySourceType = sourceTypes.unlabelled;
+//       sourceTypeList.push(keyword(sourceTypes.unlabelled));
+//     }
+
+//     // add row
+//     rows.push({
+//       id: i + 1,
+//       status: {
+//         loading: loading,
+//         done: done,
+//         fail: fail,
+//         urlResults: urlResults,
+//         url: url,
+//         trafficLightColors: trafficLightColors,
+//         sourceTypes: sourceTypes,
+//         sortBySourceType: sortBySourceType,
+//         sourceTypeList: sourceTypeList,
+//       },
+//       url: {
+//         url: url,
+//         urlColor: urlColor,
+//       },
+//       details: {
+//         loading: loading,
+//         done: done,
+//         fail: fail,
+//         urlResults: urlResults,
+//         urlColor: urlColor,
+//         sourceTypes: sourceTypes,
+//         domainOrAccount: domainOrAccount,
+//         sortByDetails: sortByDetails,
+//       },
+//     });
+//   }
+
+//   return rows;
+// };
 
 const AssistantLinkResult = () => {
   const classes = useMyStyles();
@@ -292,20 +329,175 @@ const AssistantLinkResult = () => {
 
   const urls =
     inputSCDone && extractedLinks ? extractedLinks : linkList ? linkList : null;
-  const rows = createRows(
-    urls,
-    extractedSourceCred,
-    inputSCLoading,
-    inputSCDone,
-    inputSCFail,
-    trafficLightColors,
-  );
-  const columns = createColumns(
-    keyword("id"),
-    keyword("status"),
-    keyword("assistant_urlbox"),
-    keyword("options"),
-  );
+  // const rows = createRows(
+  //   urls,
+  //   extractedSourceCred,
+  //   inputSCLoading,
+  //   inputSCDone,
+  //   inputSCFail,
+  //   trafficLightColors,
+  //   keyword,
+  // );
+  // const columns = createColumns(
+  //   keyword("id"),
+  //   keyword("status"),
+  //   keyword("assistant_urlbox"),
+  //   keyword("options"),
+  // );
+
+  const sourceTypes = {
+    positive: "fact_checker",
+    mixed: "mentions",
+    caution: "warning",
+    unlabelled: "unlabelled",
+  };
+
+  // create a row for each url
+  let rows = [];
+  for (let i = 0; i < urls.length; i++) {
+    let url = urls[i];
+
+    // define extracted source credibility
+    let urlColor = "inherit"; //trafficLightColors.unlabelled;
+    let urlResults = sourceTypes.unlabelled;
+    let sortByDetails = false;
+    let domainOrAccount;
+
+    let sourceTypeList = [sourceTypes.unlabelled];
+
+    if (extractedSourceCred) {
+      urlResults = extractedSourceCred[url];
+      sortByDetails = true;
+      // these are in order in case of multiple types of source credibility results
+      if (urlResults.positive) {
+        urlColor = trafficLightColors.positive;
+        sourceTypeList.push(keyword(sourceTypes.positive));
+      }
+      if (urlResults.mixed) {
+        urlColor = trafficLightColors.mixed;
+        sourceTypeList.push(keyword(sourceTypes.mixed));
+      }
+      if (urlResults.caution) {
+        urlColor = trafficLightColors.caution;
+        sourceTypeList.push(keyword(sourceTypes.caution));
+      }
+      // detect domain or account address
+      domainOrAccount = urlResults.resolvedDomain
+        ? urlResults.resolvedDomain.startsWith("https://")
+          ? urlResults.resolvedDomain
+          : "https://" + urlResults.resolvedDomain
+        : "";
+    } else {
+      sourceTypeList.push(keyword(sourceTypes.unlabelled));
+    }
+
+    // add row
+    rows.push({
+      id: i + 1,
+      status: {
+        loading: inputSCLoading,
+        done: inputSCDone,
+        fail: inputSCFail,
+        urlResults: urlResults,
+        url: url,
+        trafficLightColors: trafficLightColors,
+        sourceTypes: sourceTypes,
+        sourceTypeList: sourceTypeList,
+      },
+      url: {
+        url: url,
+        urlColor: urlColor,
+      },
+      details: {
+        loading: inputSCLoading,
+        done: inputSCDone,
+        fail: inputSCFail,
+        urlResults: urlResults,
+        urlColor: urlColor,
+        sourceTypes: sourceTypes,
+        domainOrAccount: domainOrAccount,
+        sortByDetails: sortByDetails,
+      },
+    });
+  }
+
+  console.log([...new Set(rows.map((o) => o.status.sourceTypeList).flat())]);
+
+  // columns
+  const columns = [
+    {
+      field: "id",
+      headerName: keyword("id"),
+      align: "center",
+      headerAlign: "center",
+      type: "number",
+      minWidth: 30,
+      flex: 1,
+    },
+    {
+      field: "status",
+      headerName: keyword("status"),
+      align: "center",
+      headerAlign: "center",
+      display: "flex",
+      minWidth: 120,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <Status
+            loading={params.value.loading}
+            done={params.value.done}
+            fail={params.value.fail}
+            urlResults={params.value.urlResults}
+            trafficLightColors={params.value.trafficLightColors}
+            sourceTypes={params.value.sourceTypes}
+          />
+        );
+      },
+      valueOptions: [
+        ...new Set(rows.map((o) => o.status.sourceTypeList).flat()),
+      ],
+      sortComparator: sourceTypeListSortComparator,
+      filterOperators: sourceTypeListFilterOperators,
+    },
+    {
+      field: "url",
+      headerName: keyword("url"),
+      minWidth: 400,
+      flex: 1,
+      renderCell: (params) => {
+        return <Url url={params.value.url} urlColor={params.value.urlColor} />;
+      },
+      sortComparator: (v1, v2) => v1.url.localeCompare(v2.url),
+    },
+    {
+      field: "details",
+      headerName: keyword("options"),
+      align: "center",
+      headerAlign: "center",
+      display: "flex",
+      minWidth: 100,
+      flex: 1,
+      // change to type: actions,
+      //   an array of <GridActionsCellItem> elements, one for each action button
+      // getActions: (params) => [/.../],
+      renderCell: (params) => {
+        return (
+          <Details
+            loading={params.value.loading}
+            done={params.value.done}
+            fail={params.value.fail}
+            urlResults={params.value.urlResults}
+            url={params.value.url}
+            domainOrAccount={params.value.domainOrAccount}
+            urlColor={params.value.urlColor}
+            sourceTypes={params.value.sourceTypes}
+          />
+        );
+      },
+      sortComparator: (v1, v2) => v1.sortByDetails === v2.sortByDetails,
+    },
+  ];
 
   // if no urls extracted
   if (!urls) {
@@ -359,6 +551,7 @@ const AssistantLinkResult = () => {
           <DataGrid
             rows={rows}
             columns={columns}
+            rowHeight={60}
             disableRowSelectionOnClick
             initialState={{
               sorting: {
