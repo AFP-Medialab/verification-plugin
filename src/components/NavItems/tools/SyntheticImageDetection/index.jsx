@@ -33,14 +33,9 @@ import { setError } from "redux/reducers/errorReducer";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 import { syntheticImageDetectionAlgorithms } from "./SyntheticImageDetectionAlgorithms";
-import { useLocation } from "react-router-dom";
 import { ROLES } from "../../../../constants/roles";
 
 const SyntheticImageDetection = () => {
-  const location = useLocation();
-  const urlParams = new URLSearchParams(location.search);
-  const urlParam = urlParams.get("url");
-
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace(
     "components/NavItems/tools/SyntheticImageDetection",
@@ -63,7 +58,7 @@ const SyntheticImageDetection = () => {
 
   const [imageType, setImageType] = useState(undefined);
 
-  const [autoResizeLocalFile, setAutoResizeLocalFile] = useState(false);
+  const [autoResizeLocalFile, setAutoResizeLocalFile] = useState(true);
 
   const dispatch = useDispatch();
 
@@ -73,6 +68,12 @@ const SyntheticImageDetection = () => {
   };
 
   const workerRef = useRef(null);
+
+  useEffect(() => {
+    if (url && input && !result) {
+      handleSubmit(input);
+    }
+  }, [url, input, result]);
 
   useEffect(() => {
     workerRef.current = new Worker(
@@ -291,7 +292,9 @@ const SyntheticImageDetection = () => {
   const handleSubmit = async (url) => {
     const processedFile =
       autoResizeLocalFile && imageFile
-        ? await resizeImageWithWorker(imageFile)
+        ? role.includes(ROLES.BETA_TESTER)
+          ? await resizeImageWithWorker(imageFile)
+          : imageFile
         : imageFile;
 
     if (autoResizeLocalFile && processedFile) {
@@ -313,13 +316,6 @@ const SyntheticImageDetection = () => {
       processedFile,
     );
   };
-
-  useEffect(() => {
-    if (urlParam) {
-      setInput(urlParam);
-      handleSubmit(urlParam);
-    }
-  }, []);
 
   useEffect(() => {
     if (!result) return;
@@ -414,23 +410,21 @@ const SyntheticImageDetection = () => {
               />
             </form>
 
-            {(role.includes(ROLES.EXTRA_FEATURE) ||
-              role.includes(ROLES.EVALUATION)) &&
-              imageFile && (
-                <FormGroup>
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        checked={autoResizeLocalFile}
-                        onChange={toggleAutoResizeLocalFile}
-                        size="small"
-                        disabled={isLoading}
-                      />
-                    }
-                    label="Auto-Resize"
-                  />
-                </FormGroup>
-              )}
+            {role.includes(ROLES.BETA_TESTER) && imageFile && (
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={autoResizeLocalFile}
+                      onChange={toggleAutoResizeLocalFile}
+                      size="small"
+                      disabled={isLoading}
+                    />
+                  }
+                  label="Auto-Resize"
+                />
+              </FormGroup>
+            )}
 
             {isLoading && (
               <Box mt={3}>

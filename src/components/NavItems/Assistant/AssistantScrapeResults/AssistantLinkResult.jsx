@@ -2,12 +2,11 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 import Card from "@mui/material/Card";
-import { CardHeader, CircularProgress, Grid2 } from "@mui/material";
+import { CardHeader, Grid2, Skeleton } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Link from "@mui/material/Link";
 import LinkIcon from "@mui/icons-material/Link";
 import Typography from "@mui/material/Typography";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 import SentimentSatisfied from "@mui/icons-material/SentimentSatisfied";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -15,6 +14,7 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import ExtractedSourceCredibilityResult from "../AssistantCheckResults/ExtractedSourceCredibilityResult";
 import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import { TaskAltOutlined } from "@mui/icons-material";
 
 const ExtractedUrl = (
   index,
@@ -28,6 +28,9 @@ const ExtractedUrl = (
   let Icon;
   let iconColor;
 
+  {
+    /* select correct icon and link colour */
+  }
   if (extractedSourceCred) {
     if (extractedSourceCred[link].caution) {
       sourceType = keyword("warning");
@@ -39,21 +42,21 @@ const ExtractedUrl = (
       iconColor = "action";
     } else if (extractedSourceCred[link].positive) {
       sourceType = keyword("fact_checker");
-      Icon = CheckCircleOutlineIcon;
+      Icon = TaskAltOutlined;
       iconColor = "primary";
     }
   }
 
-  const href = extractedSourceCred
-    ? extractedSourceCred[link].resolvedLink
-    : link;
-
   return (
     <Grid2 container wrap="wrap" key={index}>
+      {/* icon */}
       <Grid2 size={{ xs: 1 }} align="center">
-        <LinkIcon />
+        {loading && <Skeleton variant="circular" width={20} height={20} />}
+        {sourceType && done && <Icon color={iconColor} fontSize="large" />}
+        {!sourceType && done && <LinkIcon />}
       </Grid2>
 
+      {/* extracted links */}
       <Grid2 size={{ xs: 10 }} align="left">
         <Typography>
           <Link
@@ -73,23 +76,19 @@ const ExtractedUrl = (
         </Typography>
       </Grid2>
 
+      {/* source cred details */}
       {sourceType && done ? (
-        <Grid2
-          size={{ xs: 1 }}
-          style={{ display: "flex", alignItems: "center" }}
-        >
+        <Grid2 size={{ xs: 1 }} align="center">
           <ExtractedSourceCredibilityResult
             extractedSourceCredibilityResults={extractedSourceCred[link]}
             sourceType={sourceType}
-            Icon={Icon}
-            iconColor={iconColor}
             url={extractedSourceCred[link].resolvedLink}
             urlColor={extractedSourceCred[link].urlColor}
           />
         </Grid2>
       ) : loading ? (
-        <Grid2 size={{ xs: 1 }} style={{ alignItems: "right" }}>
-          <CircularProgress color={"secondary"} />
+        <Grid2 size={{ xs: 1 }} align="center">
+          <Skeleton variant="rounded" width={20} height={20} />
         </Grid2>
       ) : null}
     </Grid2>

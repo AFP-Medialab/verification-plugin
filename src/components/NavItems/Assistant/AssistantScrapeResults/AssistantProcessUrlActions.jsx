@@ -1,5 +1,6 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -14,12 +15,25 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Divider from "@mui/material/Divider";
 import { KNOWN_LINKS } from "../AssistantRuleBook";
-import { useNavigate } from "react-router-dom";
+
+import {
+  resetDeepfake as resetDeepfakeImage,
+  setDeepfakeUrlImage,
+} from "../../../../redux/actions/tools/deepfakeImageActions";
+import {
+  resetDeepfake as resetDeepfakeVideo,
+  setDeepfakeUrlVideo,
+} from "../../../../redux/actions/tools/deepfakeVideoActions";
+import {
+  resetSyntheticImageDetectionImage,
+  setSyntheticImageDetectionUrl,
+} from "../../../../redux/actions/tools/syntheticImageDetectionActions";
 
 const AssistantProcessUrlActions = () => {
   const classes = useMyStyles();
   const navigate = useNavigate();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
+  const dispatch = useDispatch();
 
   const inputUrl = useSelector((state) => state.assistant.inputUrl);
   const processUrl = useSelector((state) => state.assistant.processUrl);
@@ -30,6 +44,21 @@ const AssistantProcessUrlActions = () => {
 
   const handleClick = (action) => {
     const resultUrl = action.useInputUrl ? inputUrl : processUrl;
+
+    // deepfake and synthetic image detection set URL actions
+    if (action.path === "tools/deepfakeImage") {
+      dispatch(resetDeepfakeImage());
+      dispatch(setDeepfakeUrlImage({ url: resultUrl }));
+    }
+    if (action.path === "tools/deepfakeVideo") {
+      dispatch(resetDeepfakeVideo());
+      dispatch(setDeepfakeUrlVideo({ url: resultUrl }));
+    }
+    if (action.path === "tools/syntheticImageDetection") {
+      dispatch(resetSyntheticImageDetectionImage());
+      dispatch(setSyntheticImageDetectionUrl({ url: resultUrl }));
+    }
+
     if (action.download) {
       // Creates an A tag for downloading the video
       let dl = document.createElement("a");
@@ -39,14 +68,7 @@ const AssistantProcessUrlActions = () => {
     } else if (action.path === null) {
       return; // Do nothing if path is null
     } else if (resultUrl !== null) {
-      navigate(
-        "/app/" +
-          action.path +
-          "/" +
-          encodeURIComponent(resultUrl) +
-          "/" +
-          contentType,
-      );
+      navigate("/app/" + action.path + "/");
       //history.push("/app/" + action.path + "/" + encodeURIComponent(resultUrl) + "/" + contentType)
     } else {
       navigate(
@@ -61,9 +83,6 @@ const AssistantProcessUrlActions = () => {
       <Typography align={"left"} variant={"h5"}>
         {keyword("recommended_tools")}
       </Typography>
-      {/* <Typography align={"left"} variant={"subtitle2"}>
-        {keyword("things_you_can_do")}
-      </Typography> */}
       <Divider />
       <List>
         {processUrlActions.map((action, index) => {

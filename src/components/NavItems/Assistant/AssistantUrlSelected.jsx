@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom"; // version 5.2.0
 
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
-import { Box, CardHeader, TextField } from "@mui/material/";
+import { Box, CardHeader, Skeleton, TextField } from "@mui/material/";
 import Button from "@mui/material//Button";
 import Card from "@mui/material//Card";
 import CardContent from "@mui/material//CardContent";
-import LinearProgress from "@mui/material//LinearProgress";
 import Typography from "@mui/material//Typography";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -19,6 +19,7 @@ import Stack from "@mui/material/Stack";
 
 const AssistantUrlSelected = (props) => {
   // styles, language, dispatch, params
+  const navigate = useNavigate();
   const classes = useMyStyles();
   const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -29,7 +30,7 @@ const AssistantUrlSelected = (props) => {
   const loading = useSelector((state) => state.assistant.loading);
 
   //local state
-  const formInput = props.formInput;
+  const formInput = props.formInput || "";
   const setFormInput = (value) => props.setFormInput(value);
   const cleanAssistant = () => props.cleanAssistant();
   const [url, setUrl] = useState(undefined);
@@ -44,8 +45,10 @@ const AssistantUrlSelected = (props) => {
   );
 
   const handleSubmissionURL = () => {
+    cleanAssistant();
     setUrl(formInput);
     dispatch(submitInputUrl(formInput));
+    navigate("/app/assistant/" + encodeURIComponent(formInput));
     //trackEvent("submission", "assistant", "page assistant", formInput);
   };
 
@@ -73,76 +76,84 @@ const AssistantUrlSelected = (props) => {
   };
 
   return (
-    <Card>
-      <CardHeader
-        className={classes.assistantCardHeader}
-        title={
-          <Typography style={{ fontWeight: "bold", fontSize: 20 }}>
-            {keyword("assistant_give_url")}
-          </Typography>
-        }
-      />
+    <div>
+      <Card>
+        <CardHeader
+          className={classes.assistantCardHeader}
+          title={
+            <Typography style={{ fontWeight: "bold", fontSize: 20 }}>
+              {keyword("assistant_give_url")}
+            </Typography>
+          }
+        />
 
-      {/* loading */}
-      {loading && <LinearProgress color={"secondary"} />}
-
-      <CardContent>
-        <Box sx={{ mr: 2 }}>
-          <form>
-            <Stack>
-              <Stack
-                direction="row"
-                spacing={2}
-                justifyContent="flex-start"
-                alignItems="center"
-              >
-                {/* text box */}
-                <TextField
-                  variant="outlined"
-                  label={keyword("assistant_paste_url")}
-                  style={{ margin: 8 }}
-                  placeholder={""}
-                  fullWidth
-                  value={formInput || ""}
-                  onChange={(e) => setFormInput(e.target.value)}
-                  data-testid="assistant-url-selected-input"
-                />
-
-                {/* submit button */}
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  data-testid="assistant-url-selected-analyse-btn"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleSubmissionURL();
-                  }}
-                >
-                  {keyword("button_submit")}
-                </Button>
-              </Stack>
-
-              {/* archive */}
-              {inputUrl === null ? null : (
+        <CardContent>
+          <Box sx={{ mr: 2 }}>
+            <form>
+              <Stack>
                 <Stack
                   direction="row"
+                  spacing={2}
                   justifyContent="flex-start"
-                  alignItems="left"
+                  alignItems="center"
                 >
+                  {/* text box */}
+                  <TextField
+                    variant="outlined"
+                    label={keyword("assistant_paste_url")}
+                    style={{ margin: 8 }}
+                    placeholder={""}
+                    fullWidth
+                    value={formInput || ""}
+                    onChange={(e) => setFormInput(e.target.value)}
+                    data-testid="assistant-url-selected-input"
+                  />
+
+                  {/* submit button */}
                   <Button
-                    onClick={() => handleArchive()}
-                    startIcon={<ArchiveOutlinedIcon />}
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    data-testid="assistant-url-selected-analyse-btn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleSubmissionURL();
+                    }}
                   >
-                    <label>{keyword("archive_link")}</label>
+                    {keyword("button_submit")}
                   </Button>
                 </Stack>
-              )}
-            </Stack>
-          </form>
-        </Box>
-      </CardContent>
-    </Card>
+
+                {/* archive */}
+                {inputUrl === null ? null : (
+                  <Stack
+                    direction="row"
+                    justifyContent="flex-start"
+                    alignItems="left"
+                  >
+                    <Button
+                      onClick={() => handleArchive()}
+                      startIcon={<ArchiveOutlinedIcon />}
+                    >
+                      <label>{keyword("archive_link")}</label>
+                    </Button>
+                  </Stack>
+                )}
+              </Stack>
+            </form>
+          </Box>
+        </CardContent>
+      </Card>
+
+      {loading && (
+        <Card sx={{ mt: 4 }}>
+          <Stack direction="column" spacing={4} p={4}>
+            <Skeleton variant="rounded" height={40} />
+            <Skeleton variant="rounded" width="50%" height={40} />
+          </Stack>
+        </Card>
+      )}
+    </div>
   );
 };
 

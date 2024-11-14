@@ -7,6 +7,10 @@ const initialState = {
   currentImageId: null,
   mainImageId: null,
   validationIssues: false,
+  thumbnail: null,
+  thumbnailCaption: null,
+  afpHdImage: null,
+  hdImageC2paData: null,
 };
 
 const c2paSlice = createSlice({
@@ -29,17 +33,35 @@ const c2paSlice = createSlice({
     c2paLoadingSet(state, action) {
       state.loading = action.payload;
     },
-    c2paStateCleaned(state, action) {
+    resetC2paState(state, action) {
       state.result = null;
       state.url = null;
       state.currentManifest = null;
       state.validationIssues = false;
+      state.thumbnail = null;
+      state.thumbnailCaption = null;
+      state.afpHdImage = null;
+      state.hdImageC2paData = null;
+      state.currentHdImageId = null;
+      state.mainHdImageId = null;
     },
     c2paIngredientResultCleaned(state, action) {
       state.ingredientResult = null;
     },
     c2paValidationIssuesSet(state, action) {
       state.validationIssues = action.payload;
+    },
+    setC2paThumbnail(state, action) {
+      state.thumbnail = action.payload;
+    },
+    setC2paThumbnailCaption(state, action) {
+      state.thumbnailCaption = action.payload;
+    },
+    setAfpHdImage(state, action) {
+      state.afpHdImage = action.payload;
+    },
+    setHdImageC2paData(state, action) {
+      state.hdImageC2paData = action.payload;
     },
   },
 });
@@ -50,9 +72,13 @@ export const {
   c2paMainImageIdSet,
   c2paUrlSet,
   c2paLoadingSet,
-  c2paStateCleaned,
+  resetC2paState,
   c2paIngredientResultCleaned,
   c2paValidationIssuesSet,
+  setC2paThumbnail,
+  setC2paThumbnailCaption,
+  setAfpHdImage,
+  setHdImageC2paData,
 } = c2paSlice.actions;
 
 const c2paReducer = c2paSlice.reducer;

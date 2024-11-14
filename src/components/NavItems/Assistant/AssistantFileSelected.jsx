@@ -1,6 +1,6 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
-import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import { CardHeader, Grid2 } from "@mui/material";
@@ -16,7 +16,6 @@ import {
   KNOWN_LINKS,
   selectCorrectActions,
 } from "./AssistantRuleBook";
-import Divider from "@mui/material/Divider";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { useNavigate } from "react-router-dom";
@@ -28,7 +27,8 @@ const AssistantFileSelected = () => {
 
   const getActionList = (contentType) => {
     let known_link = KNOWN_LINKS.OWN;
-    return selectCorrectActions(contentType, known_link, known_link, "");
+    const role = useSelector((state) => state.userSession.user.roles);
+    return selectCorrectActions(contentType, known_link, known_link, "", role);
   };
 
   const imageActions = getActionList(CONTENT_TYPE.IMAGE);
@@ -61,9 +61,7 @@ const AssistantFileSelected = () => {
                       handleClick(action.path, cType);
                     }}
                   >
-                    <ListItemAvatar>
-                      <Avatar variant={"square"} src={action.icon} />
-                    </ListItemAvatar>
+                    <ListItemAvatar>{action.icon}</ListItemAvatar>
                     <ListItemText
                       primary={
                         <Typography textAlign={"start"} component={"span"}>
