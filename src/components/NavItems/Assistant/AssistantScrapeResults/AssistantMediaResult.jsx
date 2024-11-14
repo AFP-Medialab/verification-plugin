@@ -189,7 +189,7 @@ const AssistantMediaResult = () => {
             </Typography>
           </CardContent>*/}
 
-          <CardContent>
+          <CardContent style={{ wordBreak: "break-word" }}>
             {/* image list */}
             {filteredImageList.length > 0 ? (
               <Accordion defaultExpanded>

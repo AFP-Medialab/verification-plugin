@@ -43,7 +43,7 @@ const VideoImageList = (props) => {
       >
         {props.list.map((tile, index) => (
           <ImageListItem key={index} cols={1}>
-            <Typography noWrap={true}>
+            <Typography>
               <LinkIcon className={classes.icon} />
               <Link
                 variant="body2"
