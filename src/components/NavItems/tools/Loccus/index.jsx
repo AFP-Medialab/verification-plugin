@@ -31,6 +31,8 @@ import useAuthenticatedRequest from "components/Shared/Authentication/useAuthent
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 
+import { v4 as uuidv4 } from "uuid";
+
 const Loccus = () => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Loccus");
@@ -97,12 +99,11 @@ const Loccus = () => {
     let res;
 
     try {
-      // unique identifier for the file to process
       // TODO: provide a view on previous file uploads by the user
 
       let data = JSON.stringify({
         file: b64InputFile,
-        alias: "test",
+        alias: uuidv4(),
       });
 
       let config = {
