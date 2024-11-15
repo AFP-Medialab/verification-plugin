@@ -62,6 +62,7 @@ export const setScrapedData = (
   images,
   videos,
   textHtmlMap,
+  collectedComments,
 ) => {
   return {
     type: "SET_SCRAPED_DATA",
@@ -72,6 +73,7 @@ export const setScrapedData = (
       imageList: images,
       videoList: videos,
       urlTextHtmlMap: textHtmlMap,
+      collectedComments: collectedComments,
     },
   };
 };

@@ -619,6 +619,7 @@ function* handleAssistantScrapeCall(action) {
         filteredSR.imageList,
         filteredSR.videoList,
         filteredSR.urlTextHtmlMap,
+        filteredSR.collectedComments,
       ),
     );
     yield put(setAssistantLoading(false));
@@ -672,7 +673,17 @@ function* extractFromLocalStorage(instagram_result, inputUrl, urlType) {
   window.localStorage.removeItem("instagram_result");
 
   yield put(setInputUrl(inputUrl, urlType));
-  yield put(setScrapedData(text_result, null, [], image_result, video_result));
+  yield put(
+    setScrapedData(
+      text_result,
+      null,
+      [],
+      image_result,
+      video_result,
+      null,
+      null,
+    ),
+  );
   yield put(setAssistantLoading(false));
 }
 
@@ -702,12 +713,12 @@ function formatTelegramLink(url) {
  **/
 const decideWhetherToScrape = (urlType, contentType) => {
   switch (urlType) {
-    case KNOWN_LINKS.YOUTUBE:
     case KNOWN_LINKS.YOUTUBESHORTS:
     case KNOWN_LINKS.LIVELEAK:
     case KNOWN_LINKS.VIMEO:
     case KNOWN_LINKS.DAILYMOTION:
       return false;
+    case KNOWN_LINKS.YOUTUBE:
     case KNOWN_LINKS.TIKTOK:
     case KNOWN_LINKS.INSTAGRAM:
     case KNOWN_LINKS.FACEBOOK:
@@ -778,6 +789,7 @@ const filterAssistantResults = (
   let urlText = null;
   let urlTextHtmlMap = null;
   let textLang = null;
+  let collectedComments = null;
 
   switch (urlType) {
     case KNOWN_LINKS.YOUTUBE:
@@ -856,6 +868,10 @@ const filterAssistantResults = (
       .sort()
       .filter((value, index, array) => array.indexOf(value) === index);
     urlTextHtmlMap = scrapeResult.text_html_mapping;
+
+    if ("collected_comments" in scrapeResult) {
+      collectedComments = scrapeResult.collected_comments;
+    }
   }
 
   return {
@@ -865,6 +881,7 @@ const filterAssistantResults = (
     imageList: imageList,
     linkList: linkList,
     urlTextHtmlMap: urlTextHtmlMap,
+    collectedComments: collectedComments,
   };
 };
 

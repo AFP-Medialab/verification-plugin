@@ -11,6 +11,7 @@ const defaultState = {
   linkList: [],
   urlText: null,
   urlTextHtmlMap: null,
+  collectedComments: null,
   textLang: null,
   processUrlActions: [],
   processUrlType: null,

@@ -34,6 +34,7 @@ import {
 import { setError } from "redux/reducers/errorReducer";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { Close } from "@mui/icons-material";
+import AssistantCommentResult from "./AssistantScrapeResults/AssistantCommentResult";
 
 const Assistant = () => {
   // styles, language, dispatch, params
@@ -55,6 +56,9 @@ const Assistant = () => {
   const videoList = useSelector((state) => state.assistant.videoList);
   const text = useSelector((state) => state.assistant.urlText);
   const linkList = useSelector((state) => state.assistant.linkList);
+  const collectedComments = useSelector(
+    (state) => state.assistant.collectedComments,
+  );
   const errorKey = useSelector((state) => state.assistant.errorKey);
 
   // checking if user logged in
@@ -221,7 +225,7 @@ const Assistant = () => {
                   <AssistantWarnings />
                 </Grid2>
               ) : null}
-
+              
               {/* source crediblity//URL domain analysis results */}
               {positiveSourceCred || cautionSourceCred || mixedSourceCred ? (
                 <Grid2 size={{ xs: 12 }}>
@@ -254,6 +258,12 @@ const Assistant = () => {
               {text ? (
                 <Grid2 size={{ xs: 12 }}>
                   <AssistantTextResult />
+                </Grid2>
+              ) : null}
+
+              {collectedComments ? (
+                <Grid2 size={12}>
+                  <AssistantCommentResult collectdComments={collectedComments} />
                 </Grid2>
               ) : null}
 
