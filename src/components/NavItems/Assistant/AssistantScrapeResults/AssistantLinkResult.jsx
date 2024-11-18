@@ -117,8 +117,7 @@ const sourceTypeListFilterOperators = getGridSingleSelectOperators()
       return (params) => {
         let isOk = true;
         filterItem?.value?.forEach((fv) => {
-          isOk = isOk && params.value.includes(fv);
-          console.log(params.value);
+          isOk = isOk && params.sourceTypeList.includes(fv);
         });
         return isOk;
       };
@@ -363,11 +362,13 @@ const AssistantLinkResult = () => {
     let sortByDetails = false;
     let domainOrAccount;
 
-    let sourceTypeList = [sourceTypes.unlabelled];
+    // this needs checking
+    let sourceTypeList;
 
     if (extractedSourceCred) {
       urlResults = extractedSourceCred[url];
       sortByDetails = true;
+      sourceTypeList = [];
       // these are in order in case of multiple types of source credibility results
       if (urlResults.positive) {
         urlColor = trafficLightColors.positive;
@@ -388,7 +389,8 @@ const AssistantLinkResult = () => {
           : "https://" + urlResults.resolvedDomain
         : "";
     } else {
-      sourceTypeList.push(keyword(sourceTypes.unlabelled));
+      sourceTypeList = [sourceTypes.unlabelled];
+      // sourceTypeList.push(keyword(sourceTypes.unlabelled));
     }
 
     // add row
@@ -421,7 +423,9 @@ const AssistantLinkResult = () => {
     });
   }
 
-  console.log([...new Set(rows.map((o) => o.status.sourceTypeList).flat())]);
+  console.log("options=", [
+    ...new Set(rows.map((o) => o.status.sourceTypeList).flat()),
+  ]);
 
   // columns
   const columns = [
@@ -442,6 +446,10 @@ const AssistantLinkResult = () => {
       display: "flex",
       minWidth: 120,
       flex: 1,
+      type: "singleSelect",
+      valueOptions: [
+        ...new Set(rows.map((o) => o.status.sourceTypeList).flat()),
+      ],
       renderCell: (params) => {
         return (
           <Status
@@ -454,9 +462,7 @@ const AssistantLinkResult = () => {
           />
         );
       },
-      valueOptions: [
-        ...new Set(rows.map((o) => o.status.sourceTypeList).flat()),
-      ],
+
       sortComparator: sourceTypeListSortComparator,
       filterOperators: sourceTypeListFilterOperators,
     },
