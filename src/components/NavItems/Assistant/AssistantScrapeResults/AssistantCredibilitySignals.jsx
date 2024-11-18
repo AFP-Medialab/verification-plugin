@@ -235,11 +235,11 @@ const AssistantCredSignals = () => {
                     // "</b><br>" +
                     // keyword("subjectivity_tooltip") +
                     // "<br><br><b>" +
-                    keyword("previous_fact_checks") +
+                    keyword("previous_fact_checks_title") +
                     "</b><br>" +
                     keyword("previous_fact_checks_tooltip") +
                     "<br><br><b>" +
-                    keyword("machine_generated_text") +
+                    keyword("machine_generated_text_title") +
                     "</b><br>" +
                     keyword("machine_generated_text_tooltip"),
                 }}
