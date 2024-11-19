@@ -46,7 +46,6 @@ const Archive = () => {
   const mainUrl = useSelector((state) => state.archive.mainUrl);
   const [urlInput, setUrlInput] = useState("");
   const [urlResults, setUrlResults] = useState(false);
-  const [openLinks, setOpenLinks] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -223,7 +222,7 @@ const Archive = () => {
           </Stack>
           {urlResults && urlInput !== "" ? (
             <>
-              <UrlArchive url={urlInput} openLinks={openLinks}></UrlArchive>
+              <UrlArchive url={urlInput}></UrlArchive>
             </>
           ) : null}
         </Box>

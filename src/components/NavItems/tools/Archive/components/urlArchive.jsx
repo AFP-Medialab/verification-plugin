@@ -18,7 +18,7 @@ import {
 import { useSelector } from "react-redux";
 import { history } from "../../../../Shared/History/History";
 
-const UrlArchive = ({ url, openLinks }) => {
+const UrlArchive = ({ url }) => {
   const [platform, setPlatform] = useState(null);
   const [urls, setUrls] = useState([]);
 
