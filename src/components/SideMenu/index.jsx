@@ -41,6 +41,7 @@ import { ROLES } from "../../constants/roles";
 import { selectTopMenuItem } from "../../redux/reducers/navReducer";
 import { TOP_MENU_ITEMS } from "../../constants/topMenuItems";
 import { selectTool } from "../../redux/reducers/tools/toolReducer";
+import SideMenuElement from "./sideMenuElement";
 
 const SideMenu = ({ tools, setOpenAlert }) => {
   const classes = useMyStyles();
@@ -184,16 +185,10 @@ const SideMenu = ({ tools, setOpenAlert }) => {
     )[0];
     return tool.category === TOOLS_CATEGORIES.VIDEO;
   });
-  const [classBorderVideo, setClassBorderVideo] = useState(null);
 
   const handleClickListVideo = (setOpen) => {
     if (setOpen) setOpenListVideo(setOpen);
     else setOpenListVideo((prevState) => !prevState);
-    if (!classBorderVideo) {
-      setClassBorderVideo(classes.drawerCategoryBorder);
-    } else {
-      setClassBorderVideo(null);
-    }
   };
 
   //Image items
@@ -201,16 +196,10 @@ const SideMenu = ({ tools, setOpenAlert }) => {
     (tool) => tool.category === TOOLS_CATEGORIES.IMAGE,
   );
   const [openListImage, setOpenListImage] = useState(false);
-  const [classBorderImage, setClassBorderImage] = useState(null);
 
   const handleClickListImage = (setOpen) => {
     if (setOpen) setOpenListImage(setOpen);
     else setOpenListImage((prev) => !prev);
-    if (!openListImage) {
-      setClassBorderImage(classes.drawerCategoryBorder);
-    } else {
-      setClassBorderImage(null);
-    }
   };
 
   //Audio items
@@ -218,16 +207,10 @@ const SideMenu = ({ tools, setOpenAlert }) => {
     (tool) => tool.category === TOOLS_CATEGORIES.AUDIO,
   );
   const [openListAudio, setOpenListAudio] = useState(false);
-  const [classBorderAudio, setClassBorderAudio] = useState(null);
 
   const handleClickListAudio = (setOpen) => {
     if (setOpen) setOpenListAudio(setOpen);
     else setOpenListAudio((prevState) => !prevState);
-    if (!openListAudio) {
-      setClassBorderAudio(classes.drawerCategoryBorder);
-    } else {
-      setClassBorderAudio(null);
-    }
   };
 
   //Search items
@@ -235,16 +218,10 @@ const SideMenu = ({ tools, setOpenAlert }) => {
     (tool) => tool.category === TOOLS_CATEGORIES.SEARCH,
   );
   const [openListSearch, setOpenListSearch] = useState(false);
-  const [classBorderSearch, setClassBorderSearch] = useState(null);
 
   const handleClickListSearch = (setOpen) => {
     if (setOpen) setOpenListSearch(setOpen);
     else setOpenListSearch((prevState) => !prevState);
-    if (!openListSearch) {
-      setClassBorderSearch(classes.drawerCategoryBorder);
-    } else {
-      setClassBorderSearch(null);
-    }
   };
 
   //Data items
@@ -253,32 +230,20 @@ const SideMenu = ({ tools, setOpenAlert }) => {
   );
 
   const [openListData, setOpenListData] = useState(false);
-  const [classBorderData, setClassBorderData] = useState(null);
 
   const handleClickListData = (setOpen) => {
     if (setOpen) setOpenListData(setOpen);
     else setOpenListData((prevState) => !prevState);
-    if (!openListData) {
-      setClassBorderData(classes.drawerCategoryBorder);
-    } else {
-      setClassBorderData(null);
-    }
   };
 
   const drawerItemsOtherTools = tools.filter(
     (tool) => tool.category === TOOLS_CATEGORIES.OTHER,
   );
   const [openListOtherTools, setOpenListOtherTools] = useState(false);
-  const [classBorderOtherTools, setClassBorderOtherTools] = useState(null);
 
   const handleClickListOtherTools = (setOpen) => {
     if (setOpen) setOpenListOtherTools(setOpen);
     else setOpenListOtherTools((prevState) => !prevState);
-    if (!openListOtherTools) {
-      setClassBorderOtherTools(classes.drawerCategoryBorder);
-    } else {
-      setClassBorderOtherTools(null);
-    }
   };
 
   let listItems = [];
@@ -298,7 +263,6 @@ const SideMenu = ({ tools, setOpenAlert }) => {
       variableOpen: openListVideo,
       setVariableOpen: setOpenListVideo,
       handleOpenCategoryDrawer: handleClickListVideo,
-      classBorder: classBorderVideo,
     },
     {
       titleKeyword: TOOLS_CATEGORIES.IMAGE,
@@ -314,7 +278,6 @@ const SideMenu = ({ tools, setOpenAlert }) => {
       variableOpen: openListImage,
       setVariableOpen: setOpenListImage,
       handleOpenCategoryDrawer: handleClickListImage,
-      classBorder: classBorderImage,
     },
     {
       titleKeyword: TOOLS_CATEGORIES.AUDIO,
@@ -330,7 +293,6 @@ const SideMenu = ({ tools, setOpenAlert }) => {
       variableOpen: openListAudio,
       setVariableOpen: setOpenListAudio,
       handleOpenCategoryDrawer: handleClickListAudio,
-      classBorder: classBorderAudio,
     },
     {
       titleKeyword: TOOLS_CATEGORIES.SEARCH,
@@ -346,7 +308,6 @@ const SideMenu = ({ tools, setOpenAlert }) => {
       variableOpen: openListSearch,
       setVariableOpen: setOpenListSearch,
       handleOpenCategoryDrawer: handleClickListSearch,
-      classBorder: classBorderSearch,
     },
     {
       titleKeyword: TOOLS_CATEGORIES.DATA_ANALYSIS,
@@ -362,7 +323,6 @@ const SideMenu = ({ tools, setOpenAlert }) => {
       variableOpen: openListData,
       setVariableOpen: setOpenListData,
       handleOpenCategoryDrawer: handleClickListData,
-      classBorder: classBorderData,
     },
     {
       titleKeyword: TOOLS_CATEGORIES.OTHER,
@@ -371,7 +331,6 @@ const SideMenu = ({ tools, setOpenAlert }) => {
       variableOpen: openListOtherTools,
       setVariableOpen: setOpenListOtherTools,
       handleOpenCategoryDrawer: handleClickListOtherTools,
-      classBorder: classBorderOtherTools,
     },
   ];
 
@@ -555,68 +514,26 @@ const SideMenu = ({ tools, setOpenAlert }) => {
               <Collapse in={item.variableOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                   {item.list.map((itemList, keyList) => {
-                    let element = (
-                      <ListItemButton
-                        selected={
-                          topMenuItemSelected === toolsItem.titleKeyword &&
-                          selectedToolTitleKeyword === itemList.titleKeyword
-                        }
-                        key={keyList}
-                        onClick={() => handleSideMenuToolClick(itemList)}
-                      >
-                        {isSideMenuOpen ? (
-                          <>
-                            <ListItemIcon
-                              className={classes.drawerListNested}
-                              sx={{
-                                marginRight: "12px",
-                                minWidth: "unset",
-                              }}
-                            >
-                              <itemList.icon
-                                sx={iconConditionalStyling(itemList)}
-                              />
-                            </ListItemIcon>
-                            <ListItemText
-                              primary={
-                                <Typography
-                                  color={
-                                    topMenuItemSelected ===
-                                      toolsItem.titleKeyword &&
-                                    selectedToolTitleKeyword ===
-                                      itemList.titleKeyword
-                                      ? "primary"
-                                      : ""
-                                  }
-                                  className={classes.drawerListText}
-                                >
-                                  {keyword(itemList.titleKeyword)}
-                                </Typography>
-                              }
-                            />
-                          </>
-                        ) : (
-                          <Stack
-                            direction="row"
-                            alignItems="center"
-                            justifyContent="center"
-                            width="100%"
-                          >
-                            <itemList.icon
-                              sx={iconConditionalStyling(itemList)}
-                            />
-                          </Stack>
-                        )}
-                      </ListItemButton>
-                    );
-
                     if (
                       itemList.rolesNeeded &&
                       !canUserSeeTool(itemList, role, userAuthenticated)
                     ) {
                       return null;
                     } else {
-                      return element;
+                      return (
+                        <SideMenuElement
+                          tool={itemList}
+                          key={keyList}
+                          onClick={() => handleSideMenuToolClick(itemList)}
+                          isSideMenuOpen={isSideMenuOpen}
+                          isElementSelected={
+                            topMenuItemSelected === toolsItem.titleKeyword &&
+                            selectedToolTitleKeyword === itemList.titleKeyword
+                          }
+                          keyword={keyword}
+                          level={1}
+                        />
+                      );
                     }
                   })}
                 </List>
@@ -643,55 +560,18 @@ const SideMenu = ({ tools, setOpenAlert }) => {
         </ListSubheader>
         {drawerItemsMore.map((item, key) => {
           return (
-            <ListItemButton
-              selected={
+            <SideMenuElement
+              tool={item}
+              key={key}
+              onClick={() => handleSideMenuToolClick(item)}
+              isSideMenuOpen={isSideMenuOpen}
+              isElementSelected={
                 topMenuItemSelected === item.titleKeyword ||
                 selectedToolTitleKeyword === item.titleKeyword
               }
-              key={key}
-              onClick={() => handleSideMenuToolClick(item)}
-            >
-              {isSideMenuOpen ? (
-                <>
-                  <ListItemIcon
-                    sx={{
-                      marginRight: "12px",
-                      minWidth: "unset",
-                    }}
-                  >
-                    <item.icon sx={iconConditionalStyling(item)} />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <Typography
-                        color={
-                          topMenuItemSelected === item.titleKeyword ||
-                          selectedToolTitleKeyword === item.titleKeyword
-                            ? "primary"
-                            : ""
-                        }
-                        className={`${
-                          isSideMenuOpen
-                            ? classes.drawerListText
-                            : classes.hidden
-                        }`}
-                      >
-                        {keyword(item.titleKeyword)}
-                      </Typography>
-                    }
-                  />
-                </>
-              ) : (
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  justifyContent="center"
-                  width="100%"
-                >
-                  <item.icon sx={iconConditionalStyling(item)} />
-                </Stack>
-              )}
-            </ListItemButton>
+              keyword={keyword}
+              level={0}
+            />
           );
         })}
       </List>
