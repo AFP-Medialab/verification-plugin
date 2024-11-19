@@ -361,14 +361,11 @@ const AssistantLinkResult = () => {
     let urlResults = sourceTypes.unlabelled;
     let sortByDetails = false;
     let domainOrAccount;
-
-    // this needs checking
-    let sourceTypeList;
+    let sourceTypeList = [sourceTypes.unlabelled];
 
     if (extractedSourceCred) {
       urlResults = extractedSourceCred[url];
       sortByDetails = true;
-      sourceTypeList = [];
       // these are in order in case of multiple types of source credibility results
       if (urlResults.positive) {
         urlColor = trafficLightColors.positive;
@@ -382,15 +379,17 @@ const AssistantLinkResult = () => {
         urlColor = trafficLightColors.caution;
         sourceTypeList.push(keyword(sourceTypes.caution));
       }
+      // if positive, mixed or caution then remove unlabelled
+      sourceTypeList =
+        sourceTypeList.length > 1
+          ? sourceTypeList.splice(1, sourceTypeList.length)
+          : sourceTypeList;
       // detect domain or account address
       domainOrAccount = urlResults.resolvedDomain
         ? urlResults.resolvedDomain.startsWith("https://")
           ? urlResults.resolvedDomain
           : "https://" + urlResults.resolvedDomain
         : "";
-    } else {
-      sourceTypeList = [sourceTypes.unlabelled];
-      // sourceTypeList.push(keyword(sourceTypes.unlabelled));
     }
 
     // add row
@@ -422,10 +421,6 @@ const AssistantLinkResult = () => {
       },
     });
   }
-
-  console.log("options=", [
-    ...new Set(rows.map((o) => o.status.sourceTypeList).flat()),
-  ]);
 
   // columns
   const columns = [

@@ -54,27 +54,53 @@ const AssistantSCResults = () => {
   return (
     <Card variant={"outlined"} className={classes.sourceCredibilityBorder}>
       <Grid2 container>
-        <Grid2 size={{ xs: 12 }} className={classes.displayFlex}>
+        <Grid2 size={{ xs: 11 }} className={classes.displayFlex}>
+          {/* icon */}
           <CardMedia>
             <Box m={1}>
               <FindInPageIcon fontSize={"large"} color={"primary"} />
             </Box>
           </CardMedia>
 
+          {/* spacing */}
           <Box m={1} />
 
+          {/* title */}
           <Box mt={1.5}>
             <Typography component={"span"} variant={"h6"}>
               {keyword("url_domain_analysis")}
             </Typography>
           </Box>
 
+          {/* expand button */}
           <IconButton
             className={classes.assistantIconRight}
             onClick={() => dispatch(setAssuranceExpanded(!assuranceExpanded))}
           >
             <ExpandMoreIcon color={"primary"} />
           </IconButton>
+        </Grid2>
+
+        <Grid2 size={{ xs: 1 }}>
+          {/* help tooltip */}
+          <Box mt={1.5} align="right">
+            <Tooltip
+              interactive={"true"}
+              leaveDelay={50}
+              style={{ display: "flex", marginLeft: "auto" }}
+              title={
+                <div
+                  className={"content"}
+                  dangerouslySetInnerHTML={{
+                    __html: keyword("sc_tooltip"),
+                  }}
+                />
+              }
+              classes={{ tooltip: classes.assistantTooltip }}
+            >
+              <HelpOutlineOutlinedIcon color={"action"} />
+            </Tooltip>
+          </Box>
         </Grid2>
 
         <Grid2 size={{ xs: 12 }}>
@@ -127,25 +153,6 @@ const AssistantSCResults = () => {
                   />
                 </div>
               ) : null}
-
-              <Box mr={2} mb={1}>
-                <Tooltip
-                  interactive={"true"}
-                  leaveDelay={50}
-                  style={{ display: "flex", marginLeft: "auto" }}
-                  title={
-                    <div
-                      className={"content"}
-                      dangerouslySetInnerHTML={{
-                        __html: keyword("sc_tooltip"),
-                      }}
-                    />
-                  }
-                  classes={{ tooltip: classes.assistantTooltip }}
-                >
-                  <HelpOutlineOutlinedIcon color={"action"} />
-                </Tooltip>
-              </Box>
             </Box>
           </Collapse>
         </Grid2>

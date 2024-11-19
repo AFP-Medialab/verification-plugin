@@ -13,11 +13,14 @@ import Link from "@mui/material/Link";
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import Typography from "@mui/material/Typography";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { Chip, Grid2, Tooltip } from "@mui/material";
 
 const SourceCredibilityDBKFDialog = (props) => {
   //central
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
+  const classes = useMyStyles();
   const [open, setOpen] = useState(false);
 
   // props
@@ -52,6 +55,25 @@ const SourceCredibilityDBKFDialog = (props) => {
               </Typography>
             </Grid2>
             <Grid2 size={{ xs: 1 }} display="flex" justifyContent="flex-end">
+              {/* tooltip help */}
+              <Tooltip
+                interactive={"true"}
+                leaveDelay={50}
+                style={{ display: "flex", marginLeft: "auto" }}
+                title={
+                  <div
+                    className={"content"}
+                    dangerouslySetInnerHTML={{
+                      __html: keyword("sc_tooltip"),
+                    }}
+                  />
+                }
+                classes={{ tooltip: classes.assistantTooltip }}
+              >
+                <HelpOutlineOutlinedIcon color={"action"} />
+              </Tooltip>
+
+              {/* close button */}
               <IconButton onClick={handleClose}>
                 <CloseIcon />
               </IconButton>
