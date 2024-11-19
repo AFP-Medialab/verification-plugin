@@ -29,6 +29,7 @@ const AssistantImageResult = () => {
         <img
           crossOrigin={"anonymous"}
           src={processUrl}
+          className={classes.checkeredBG}
           height={"100%"}
           alt={processUrl}
           width={"100%"}
