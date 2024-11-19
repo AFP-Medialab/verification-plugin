@@ -25,6 +25,7 @@ import {
 } from "../../../redux/actions/tools/assistantActions";
 import { setError } from "redux/reducers/errorReducer";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import AssistantCommentResult from "./AssistantScrapeResults/AssistantCommentResult";
 
 const Assistant = () => {
   // styles, language, dispatch, params
@@ -46,6 +47,9 @@ const Assistant = () => {
   const videoList = useSelector((state) => state.assistant.videoList);
   const text = useSelector((state) => state.assistant.urlText);
   const linkList = useSelector((state) => state.assistant.linkList);
+  const collectedComments = useSelector(
+    (state) => state.assistant.collectedComments,
+  );
   const errorKey = useSelector((state) => state.assistant.errorKey);
 
   //third party check states
@@ -213,11 +217,23 @@ const Assistant = () => {
       {/* text results */}
       <Grid2
         container
-        hidden={linkList.length === 0 && text === null && neResult === null}
+        hidden={
+          linkList.length === 0 &&
+          text === null &&
+          neResult === null &&
+          collectedComments === null
+        }
+        size={12}
       >
         {text ? (
           <Grid2 size={{ xs: 12 }}>
             <AssistantTextResult />
+          </Grid2>
+        ) : null}
+
+        {collectedComments ? (
+          <Grid2 size={12}>
+            <AssistantCommentResult collectdComments={collectedComments} />
           </Grid2>
         ) : null}
 
