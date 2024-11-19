@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Grid2,
-  Icon,
   Link,
   Stack,
   Tooltip,
@@ -12,24 +11,45 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import { useEffect, useState } from "react";
 import IconPermaCC from "../../../../NavBar/images/SVG/Others/perma-cc-icon.svg";
 import IconInternetArchive from "../../../../NavBar/images/SVG/Others/archive-icon.svg";
+import {
+  getclientId,
+  trackEvent,
+} from "../../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { useSelector } from "react-redux";
 
 const UrlArchive = ({ url, openLinks }) => {
   const [platform, setPlatform] = useState(null);
   const [urls, setUrls] = useState([]);
 
+  const client_id = getclientId();
+
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.id : null;
+
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
 
   useEffect(() => {
-    if (url && url.includes("facebook")) {
+    if (!url && typeof url !== "string") return;
+
+    if (url.includes("facebook")) {
       setPlatform("facebook");
-    } else if (url && url.includes("youtube")) {
+    } else if (url.includes("youtube")) {
       setPlatform("youtube");
-    } else if (url && url.includes("instagram")) {
+    } else if (url.includes("instagram")) {
       setPlatform("instagram");
     }
   }, [url]);
 
   useEffect(() => {
+    if (platform)
+      trackEvent(
+        "submission",
+        "archive",
+        "easy archiving link",
+        url,
+        client_id,
+      );
+
     if (platform === "facebook") {
       const facebookUrls = [
         `https://www.facebook.com/plugins/post.php?href=${encodeURIComponent(
@@ -54,6 +74,14 @@ const UrlArchive = ({ url, openLinks }) => {
   }, [platform]);
 
   const saveToInternetArchive = (link) => {
+    trackEvent(
+      "archive",
+      "archive_wbm_spn",
+      "Archive with WBM SPN",
+      link,
+      client_id,
+    );
+
     window.open("https://web.archive.org/save/" + link, "_blank");
   };
 

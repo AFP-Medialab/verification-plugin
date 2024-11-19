@@ -8,9 +8,7 @@ import {
   Box,
   Button,
   Card,
-  Checkbox,
   Fade,
-  FormControlLabel,
   Grid2,
   Skeleton,
   Stack,
@@ -38,7 +36,6 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 
 // import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 // import { useSelector } from "react-redux";
-// import { useTrackEvent } from "Hooks/useAnalytics";
 
 //TODO:UI for long strings
 
