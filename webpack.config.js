@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const Dotenv = require("dotenv-webpack");
+const webpack = require("webpack");
 
 module.exports = {
   entry: {
@@ -83,13 +84,19 @@ module.exports = {
       filename: "[name].css",
       chunkFilename: "[id].css",
     }),
+    new webpack.ProvidePlugin({
+      Buffer: ["buffer", "Buffer"],
+    }),
     new Dotenv(),
   ],
   resolve: {
     extensions: [".js", ".jsx"],
     modules: ["node_modules", "src"],
+    fallback: {
+      buffer: require.resolve("buffer"),
+    },
   },
   experiments: {
     asyncWebAssembly: true,
-  }
+  },
 };

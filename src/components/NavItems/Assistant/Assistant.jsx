@@ -121,8 +121,7 @@ const Assistant = () => {
       dispatch(setUrlMode(true));
       setFormInput(uri);
       dispatch(submitInputUrl(uri));
-      navigate("/app/assistant/");
-      //history.push("/app/assistant/");
+      navigate("/app/assistant/" + encodeURIComponent(url));
     }
   }, [url]);
 

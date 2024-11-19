@@ -16,9 +16,18 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Divider from "@mui/material/Divider";
 import { KNOWN_LINKS } from "../AssistantRuleBook";
 
-import { setDeepfakeUrlImage } from "../../../../redux/actions/tools/deepfakeImageActions";
-import { setDeepfakeUrlVideo } from "../../../../redux/actions/tools/deepfakeVideoActions";
-import { setSyntheticImageDetectionUrl } from "../../../../redux/actions/tools/syntheticImageDetectionActions";
+import {
+  resetDeepfake as resetDeepfakeImage,
+  setDeepfakeUrlImage,
+} from "../../../../redux/actions/tools/deepfakeImageActions";
+import {
+  resetDeepfake as resetDeepfakeVideo,
+  setDeepfakeUrlVideo,
+} from "../../../../redux/actions/tools/deepfakeVideoActions";
+import {
+  resetSyntheticImageDetectionImage,
+  setSyntheticImageDetectionUrl,
+} from "../../../../redux/actions/tools/syntheticImageDetectionActions";
 
 const AssistantProcessUrlActions = () => {
   const classes = useMyStyles();
@@ -38,12 +47,15 @@ const AssistantProcessUrlActions = () => {
 
     // deepfake and synthetic image detection set URL actions
     if (action.path === "tools/deepfakeImage") {
+      dispatch(resetDeepfakeImage());
       dispatch(setDeepfakeUrlImage({ url: resultUrl }));
     }
     if (action.path === "tools/deepfakeVideo") {
+      dispatch(resetDeepfakeVideo());
       dispatch(setDeepfakeUrlVideo({ url: resultUrl }));
     }
     if (action.path === "tools/syntheticImageDetection") {
+      dispatch(resetSyntheticImageDetectionImage());
       dispatch(setSyntheticImageDetectionUrl({ url: resultUrl }));
     }
 
@@ -56,14 +68,7 @@ const AssistantProcessUrlActions = () => {
     } else if (action.path === null) {
       return; // Do nothing if path is null
     } else if (resultUrl !== null) {
-      navigate(
-        "/app/" +
-          action.path +
-          "/" +
-          encodeURIComponent(resultUrl) +
-          "/" +
-          contentType,
-      );
+      navigate("/app/" + action.path + "/");
       //history.push("/app/" + action.path + "/" + encodeURIComponent(resultUrl) + "/" + contentType)
     } else {
       navigate(

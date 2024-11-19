@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import Card from "@mui/material/Card";
-import { CardHeader, Grid2, styled, Skeleton } from "@mui/material";
+import { CardHeader, Grid2, Skeleton, styled } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -26,10 +26,7 @@ import { ROLES } from "../../../../constants/roles.jsx";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { getLanguageName } from "../../../Shared/Utils/languageUtils";
-import TextFooter from "./TextFooter.jsx";
-import { TextFooterPrevFactChecks } from "./TextFooter.jsx";
-
-const BETA_TESTER = ROLES.BETA_TESTER;
+import TextFooter, { TextFooterPrevFactChecks } from "./TextFooter.jsx";
 
 const renderEntityKeys = (entities, keyword) => {
   // translate array into readable string
@@ -69,7 +66,7 @@ const getExpandIcon = (
     loading ||
     fail ||
     doneWithEmptyResult ||
-    (role && !role.includes(BETA_TESTER))
+    (role && !role.includes(ROLES.BETA_TESTER))
   ) {
     // "doneWithEmptyResult" is for when subjectivityDone = true and Object.keys(result.entities).length < 1
     // "doneWithEmptyResult" is for when prevFactChecksDone = true and result.length < 1
@@ -110,7 +107,7 @@ const AssistantCredSignals = () => {
   const textHtmlMap = useSelector((state) => state.assistant.urlTextHtmlMap);
 
   // news framing (topic)
-  const newsFramingTitle = keyword("news_framing");
+  const newsFramingTitle = keyword("news_framing_title");
   const newsFramingResult = useSelector(
     (state) => state.assistant.newsFramingResult,
   );
@@ -125,7 +122,7 @@ const AssistantCredSignals = () => {
   );
 
   // news genre
-  const newsGenreTitle = keyword("news_genre");
+  const newsGenreTitle = keyword("news_genre_title");
   const newsGenreResult = useSelector(
     (state) => state.assistant.newsGenreResult,
   );
@@ -136,7 +133,7 @@ const AssistantCredSignals = () => {
   const newsGenreFail = useSelector((state) => state.assistant.newsGenreFail);
 
   // persuasion techniques
-  const persuasionTitle = keyword("persuasion_techniques");
+  const persuasionTitle = keyword("persuasion_techniques_title");
   const persuasionResult = useSelector(
     (state) => state.assistant.persuasionResult,
   );
@@ -147,7 +144,7 @@ const AssistantCredSignals = () => {
   const persuasionFail = useSelector((state) => state.assistant.persuasionFail);
 
   // subjectivity
-  const subjectivityTitle = keyword("subjectivity");
+  const subjectivityTitle = keyword("subjectivity_title");
   const subjectivityResult = useSelector(
     (state) => state.assistant.subjectivityResult,
   );
@@ -162,7 +159,7 @@ const AssistantCredSignals = () => {
   );
 
   // previous fact checks
-  const prevFactChecksTitle = keyword("previous_fact_checks");
+  const prevFactChecksTitle = keyword("previous_fact_checks_title");
   const prevFactChecksResult = useSelector(
     (state) => state.assistant.prevFactChecksResult,
   );
@@ -187,7 +184,7 @@ const AssistantCredSignals = () => {
   const navigate = useNavigate();
 
   // machine generated text
-  const machineGeneratedTextTitle = keyword("machine_generated_text");
+  const machineGeneratedTextTitle = keyword("machine_generated_text_title");
   const machineGeneratedTextResult = useSelector(
     (state) => state.assistant.machineGeneratedTextResult,
   );
@@ -222,27 +219,27 @@ const AssistantCredSignals = () => {
                   __html:
                     keyword("credibility_signals_tooltip") +
                     "<br><br><b>" +
-                    keyword("news_framing") +
-                    "</b><br>" +
-                    keyword("news_framing_tooltip") +
-                    "<br><br><b>" +
-                    keyword("news_genre") +
-                    "</b><br>" +
-                    keyword("news_genre_tooltip") +
-                    "<br><br><b>" +
-                    keyword("persuasion_techniques") +
-                    "</b><br>" +
-                    keyword("persuasion_techniques_tooltip") +
-                    "<br><br><b>" +
-                    keyword("subjectivity") +
-                    "</b><br>" +
-                    keyword("subjectivity_tooltip") +
-                    "<br><br><b>" +
-                    keyword("previous_fact_checks") +
+                    // keyword("news_framing") +
+                    // "</b><br>" +
+                    // keyword("news_framing_tooltip") +
+                    // "<br><br><b>" +
+                    // keyword("news_genre") +
+                    // "</b><br>" +
+                    // keyword("news_genre_tooltip") +
+                    // "<br><br><b>" +
+                    // keyword("persuasion_techniques") +
+                    // "</b><br>" +
+                    // keyword("persuasion_techniques_tooltip") +
+                    // "<br><br><b>" +
+                    // keyword("subjectivity") +
+                    // "</b><br>" +
+                    // keyword("subjectivity_tooltip") +
+                    // "<br><br><b>" +
+                    keyword("previous_fact_checks_title") +
                     "</b><br>" +
                     keyword("previous_fact_checks_tooltip") +
                     "<br><br><b>" +
-                    keyword("machine_generated_text") +
+                    keyword("machine_generated_text_title") +
                     "</b><br>" +
                     keyword("machine_generated_text_tooltip"),
                 }}
@@ -262,325 +259,6 @@ const AssistantCredSignals = () => {
           overflowX: "hidden",
         }}
       >
-        {/* News Framing/Topic */}
-        <StyledAccordion
-          expanded={expandedAccordion === newsFramingTitle}
-          onChange={handleChange(newsFramingTitle)}
-          disabled={newsFramingLoading || newsFramingFail}
-          disableGutters
-        >
-          <AccordionSummary
-            expandIcon={getExpandIcon(newsFramingLoading, newsFramingFail)}
-          >
-            <Grid2 container spacing={1} wrap="wrap" width="100%">
-              <Grid2 size={{ xs: 4 }} align="start">
-                <Typography
-                  display="inline"
-                  sx={{ flexShrink: 0, align: "start" }}
-                >
-                  {newsFramingTitle}
-                </Typography>
-              </Grid2>
-              <Grid2 size={{ xs: 8 }} align="start">
-                {newsFramingLoading && (
-                  <Skeleton variant="rounded" width="50%" height={40} />
-                )}
-                {newsFramingFail && (
-                  <Typography sx={{ color: "text.secondary", align: "start" }}>
-                    {keyword("failed_to_load")}
-                  </Typography>
-                )}
-                {newsFramingDone && (
-                  <Typography sx={{ color: "text.secondary", align: "start" }}>
-                    {renderEntityKeys(newsFramingResult.entities, keyword)}
-                  </Typography>
-                )}
-              </Grid2>
-            </Grid2>
-          </AccordionSummary>
-
-          <AccordionDetails>
-            {newsFramingDone && (
-              <div>
-                <Collapse
-                  in={expanded}
-                  collapsedSize={150}
-                  id={"element-to-check0"}
-                >
-                  <AssistantTextClassification
-                    text={text}
-                    classification={newsFramingResult.entities}
-                    configs={newsFramingResult.configs}
-                    titleText={newsFramingTitle}
-                    helpDescription={"news_framing_tooltip"}
-                    textHtmlMap={textHtmlMap}
-                  />
-                </Collapse>
-                {/* footer */}
-                <TextFooter
-                  classes={classes}
-                  setDisplayOrigLang={setDisplayOrigLang}
-                  displayOrigLang={displayOrigLang}
-                  textLang={textLang}
-                  expandMinimiseText={expandMinimiseText}
-                  text={text}
-                  setExpanded={setExpanded}
-                  expanded={expanded}
-                />
-              </div>
-            )}
-          </AccordionDetails>
-        </StyledAccordion>
-
-        {/* News Genre */}
-        <StyledAccordion
-          expanded={expandedAccordion === newsGenreTitle}
-          onChange={handleChange(newsGenreTitle)}
-          disabled={newsGenreLoading || newsGenreFail}
-          disableGutters
-        >
-          <AccordionSummary
-            expandIcon={getExpandIcon(newsGenreLoading, newsGenreFail)}
-          >
-            <Grid2 container spacing={1} wrap="wrap" width="100%">
-              <Grid2 size={{ xs: 4 }} align="start">
-                <Typography
-                  display="inline"
-                  sx={{ flexShrink: 0, align: "start" }}
-                >
-                  {newsGenreTitle}
-                </Typography>
-              </Grid2>
-              <Grid2 size={{ xs: 8 }} align="start">
-                {newsGenreLoading && (
-                  <Skeleton variant="rounded" width="50%" height={40} />
-                )}
-                {newsGenreFail && (
-                  <Typography sx={{ color: "text.secondary", align: "start" }}>
-                    {keyword("failed_to_load")}
-                  </Typography>
-                )}
-                {newsGenreDone && (
-                  <Typography sx={{ color: "text.secondary", align: "start" }}>
-                    {renderEntityKeys(newsGenreResult.entities, keyword)}
-                  </Typography>
-                )}
-              </Grid2>
-            </Grid2>
-          </AccordionSummary>
-
-          <AccordionDetails>
-            {newsGenreDone && (
-              <div>
-                <Collapse
-                  in={expanded}
-                  collapsedSize={150}
-                  id={"element-to-check1"}
-                >
-                  <AssistantTextClassification
-                    text={text}
-                    classification={newsGenreResult.entities}
-                    configs={newsGenreResult.configs}
-                    titleText={newsGenreTitle}
-                    helpDescription={"news_genre_tooltip"}
-                    textHtmlMap={textHtmlMap}
-                    displayBox="true"
-                  />
-                </Collapse>
-                {/* footer */}
-                <TextFooter
-                  classes={classes}
-                  setDisplayOrigLang={setDisplayOrigLang}
-                  displayOrigLang={displayOrigLang}
-                  textLang={textLang}
-                  expandMinimiseText={expandMinimiseText}
-                  text={text}
-                  setExpanded={setExpanded}
-                  expanded={expanded}
-                />
-              </div>
-            )}
-          </AccordionDetails>
-        </StyledAccordion>
-
-        {/* Persuasion Techniques */}
-        <StyledAccordion
-          expanded={expandedAccordion === persuasionTitle}
-          onChange={handleChange(persuasionTitle)}
-          disabled={
-            persuasionLoading ||
-            persuasionFail ||
-            (persuasionDone &&
-              Object.keys(persuasionResult.entities).length < 1)
-          }
-          disableGutters
-        >
-          <AccordionSummary
-            expandIcon={getExpandIcon(
-              persuasionLoading,
-              persuasionFail,
-              persuasionDone &&
-                Object.keys(persuasionResult.entities).length < 1,
-            )}
-          >
-            <Grid2 container spacing={1} wrap="wrap" width="100%">
-              <Grid2 size={{ xs: 4 }} align="start">
-                <Typography
-                  display="inline"
-                  sx={{ flexShrink: 0, align: "start" }}
-                >
-                  {persuasionTitle}
-                </Typography>
-              </Grid2>
-              <Grid2 size={{ xs: 8 }} align="start">
-                {persuasionLoading && (
-                  <Skeleton variant="rounded" width="50%" height={40} />
-                )}
-                {persuasionFail && (
-                  <Typography sx={{ color: "text.secondary", align: "start" }}>
-                    {keyword("failed_to_load")}
-                  </Typography>
-                )}
-                {persuasionDone && (
-                  <Typography sx={{ color: "text.secondary", align: "start" }}>
-                    {renderEntityKeys(persuasionResult.entities, keyword)}
-                  </Typography>
-                )}
-                {persuasionDone &&
-                  Object.keys(persuasionResult.entities).length < 1 && (
-                    <Typography
-                      sx={{ color: "text.secondary", align: "start" }}
-                    >
-                      {keyword("none_detected")}
-                    </Typography>
-                  )}
-              </Grid2>
-            </Grid2>
-          </AccordionSummary>
-
-          <AccordionDetails>
-            {persuasionDone && (
-              <div>
-                <Collapse
-                  in={expanded}
-                  collapsedSize={150}
-                  id={"element-to-check2"}
-                >
-                  <AssistantTextSpanClassification
-                    text={text}
-                    classification={persuasionResult.entities}
-                    configs={persuasionResult.configs}
-                    titleText={persuasionTitle}
-                    helpDescription={"persuasion_techniques_tooltip"}
-                    textHtmlMap={textHtmlMap}
-                  />
-                </Collapse>
-                {/* footer */}
-                <TextFooter
-                  classes={classes}
-                  setDisplayOrigLang={setDisplayOrigLang}
-                  displayOrigLang={displayOrigLang}
-                  textLang={textLang}
-                  expandMinimiseText={expandMinimiseText}
-                  text={text}
-                  setExpanded={setExpanded}
-                  expanded={expanded}
-                />
-              </div>
-            )}
-          </AccordionDetails>
-        </StyledAccordion>
-
-        {/* Subjectivity */}
-        <StyledAccordion
-          expanded={expandedAccordion === subjectivityTitle}
-          onChange={handleChange(subjectivityTitle)}
-          disabled={
-            subjectivityLoading ||
-            subjectivityFail ||
-            (subjectivityDone &&
-              Object.keys(subjectivityResult.entities).length < 1)
-          }
-          disableGutters
-        >
-          <AccordionSummary
-            expandIcon={getExpandIcon(
-              subjectivityLoading,
-              subjectivityFail,
-              subjectivityDone &&
-                Object.keys(subjectivityResult.entities).length < 1,
-            )}
-          >
-            <Grid2 container spacing={1} wrap="wrap" width="100%">
-              <Grid2 size={{ xs: 4 }} align="start">
-                <Typography sx={{ flexShrink: 0, align: "start" }}>
-                  {subjectivityTitle}
-                </Typography>
-              </Grid2>
-              <Grid2 size={{ xs: 8 }} align="start">
-                {subjectivityLoading && (
-                  <Skeleton variant="rounded" width="50%" height={40} />
-                )}
-                {subjectivityFail && (
-                  <Typography sx={{ color: "text.secondary", align: "start" }}>
-                    {keyword("failed_to_load")}
-                  </Typography>
-                )}
-                {subjectivityDone &&
-                  Object.keys(subjectivityResult.entities).length >= 1 && (
-                    <Typography
-                      sx={{ color: "text.secondary", align: "start" }}
-                    >
-                      {keyword("subjective_sentences_detected")}{" "}
-                      {calculateSubjectivity(subjectivityResult.sentences)}
-                    </Typography>
-                  )}
-                {subjectivityDone &&
-                  Object.keys(subjectivityResult.entities).length < 1 && (
-                    <Typography
-                      sx={{ color: "text.secondary", align: "start" }}
-                    >
-                      {keyword("none_detected")}
-                    </Typography>
-                  )}
-              </Grid2>
-            </Grid2>
-          </AccordionSummary>
-
-          <AccordionDetails>
-            {subjectivityDone && (
-              <div>
-                <Collapse
-                  in={expanded}
-                  collapsedSize={150}
-                  id={"element-to-check3"}
-                >
-                  <AssistantTextClassification
-                    text={text}
-                    classification={subjectivityResult.entities}
-                    configs={subjectivityResult.configs}
-                    titleText={subjectivityTitle}
-                    helpDescription={"subjectivity_tooltip"}
-                    textHtmlMap={textHtmlMap}
-                    subjectivity="true"
-                  />
-                </Collapse>
-                {/* footer */}
-                <TextFooter
-                  classes={classes}
-                  setDisplayOrigLang={setDisplayOrigLang}
-                  displayOrigLang={displayOrigLang}
-                  textLang={textLang}
-                  expandMinimiseText={expandMinimiseText}
-                  text={text}
-                  setExpanded={setExpanded}
-                  expanded={expanded}
-                />
-              </div>
-            )}
-          </AccordionDetails>
-        </StyledAccordion>
-
         {/* Previous fact-checks */}
         <StyledAccordion
           expanded={expandedAccordion === prevFactChecksTitle}
@@ -591,10 +269,10 @@ const AssistantCredSignals = () => {
             (!prevFactChecksLoading &&
               !prevFactChecksFail &&
               !prevFactChecksDone) ||
-            !role.includes(BETA_TESTER) ||
+            !role.includes(ROLES.BETA_TESTER) ||
             (prevFactChecksDone && prevFactChecksResult.length < 1)
           }
-          disableGutters
+          //disableGutters
         >
           <AccordionSummary
             expandIcon={getExpandIcon(
@@ -615,15 +293,15 @@ const AssistantCredSignals = () => {
               </Grid2>
 
               <Grid2 size={{ xs: 8 }} align="start">
-                {role.includes(BETA_TESTER) && prevFactChecksLoading && (
+                {role.includes(ROLES.BETA_TESTER) && prevFactChecksLoading && (
                   <Skeleton variant="rounded" width="50%" height={40} />
                 )}
-                {role.includes(BETA_TESTER) && prevFactChecksFail && (
+                {role.includes(ROLES.BETA_TESTER) && prevFactChecksFail && (
                   <Typography sx={{ color: "text.secondary", align: "start" }}>
                     {keyword("failed_to_load")}
                   </Typography>
                 )}
-                {role.includes(BETA_TESTER) &&
+                {role.includes(ROLES.BETA_TESTER) &&
                   prevFactChecksDone &&
                   prevFactChecksResult.length > 0 && (
                     <Typography
@@ -632,7 +310,7 @@ const AssistantCredSignals = () => {
                       {keyword("previous_fact_checks_found")}
                     </Typography>
                   )}
-                {role.includes(BETA_TESTER) &&
+                {role.includes(ROLES.BETA_TESTER) &&
                   !prevFactChecksDone &&
                   !prevFactChecksLoading &&
                   !prevFactChecksFail &&
@@ -644,7 +322,7 @@ const AssistantCredSignals = () => {
                       {/* should now be obselete as saga is re run */}
                     </Typography>
                   )}
-                {!role.includes(BETA_TESTER) && (
+                {!role.includes(ROLES.BETA_TESTER) && (
                   <Typography sx={{ color: "text.secondary", align: "start" }}>
                     {keyword("login_required")}
                   </Typography>
@@ -661,7 +339,7 @@ const AssistantCredSignals = () => {
           <AccordionDetails>
             {prevFactChecksDone &&
               prevFactChecksResult.length > 0 &&
-              role.includes(BETA_TESTER) && (
+              role.includes(ROLES.BETA_TESTER) && (
                 <div>
                   <Collapse
                     in={expanded}
@@ -703,6 +381,7 @@ const AssistantCredSignals = () => {
                   <TextFooterPrevFactChecks
                     classes={classes}
                     expandMinimiseText={expandMinimiseText}
+                    displayExpander={displayExpander}
                     setExpanded={setExpanded}
                     expanded={expanded}
                     navigate={navigate}
@@ -721,9 +400,9 @@ const AssistantCredSignals = () => {
             machineGeneratedTextLoading ||
             machineGeneratedTextFail ||
             machineGeneratedTextDone ||
-            !role.includes(BETA_TESTER)
+            !role.includes(ROLES.BETA_TESTER)
           }
-          disableGutters
+          //disableGutters
         >
           <AccordionSummary
             expandIcon={getExpandIcon(
@@ -744,16 +423,19 @@ const AssistantCredSignals = () => {
               </Grid2>
 
               <Grid2 size={{ xs: 8 }} align="start">
-                {role.includes(BETA_TESTER) &&
+                {role.includes(ROLES.BETA_TESTER) &&
                   machineGeneratedTextLoading && (
                     <Skeleton variant="rounded" width="50%" height={40} />
                   )}
-                {role.includes(BETA_TESTER) && machineGeneratedTextFail && (
-                  <Typography sx={{ color: "text.secondary", align: "start" }}>
-                    {keyword("failed_to_load")}
-                  </Typography>
-                )}
-                {role.includes(BETA_TESTER) &&
+                {role.includes(ROLES.BETA_TESTER) &&
+                  machineGeneratedTextFail && (
+                    <Typography
+                      sx={{ color: "text.secondary", align: "start" }}
+                    >
+                      {keyword("failed_to_load")}
+                    </Typography>
+                  )}
+                {role.includes(ROLES.BETA_TESTER) &&
                   machineGeneratedTextDone &&
                   machineGeneratedTextResult && (
                     <Typography
@@ -763,7 +445,7 @@ const AssistantCredSignals = () => {
                       {/* {round(machineGeneratedTextResult.score, 4)} */}
                     </Typography>
                   )}
-                {role.includes(BETA_TESTER) &&
+                {role.includes(ROLES.BETA_TESTER) &&
                   !machineGeneratedTextDone &&
                   !machineGeneratedTextLoading &&
                   !machineGeneratedTextFail &&
@@ -775,7 +457,7 @@ const AssistantCredSignals = () => {
                       {/* should now be obselete as saga is re run */}
                     </Typography>
                   )}
-                {!role.includes(BETA_TESTER) && (
+                {!role.includes(ROLES.BETA_TESTER) && (
                   <Typography sx={{ color: "text.secondary", align: "start" }}>
                     {keyword("login_required")}
                   </Typography>

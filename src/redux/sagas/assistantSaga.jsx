@@ -445,6 +445,8 @@ function* handlePersuasionCall(action) {
   }
 }
 
+//const SERVER_TIMEOUT_LIMIT = 6000;
+
 function* handleSubjectivityCall(action) {
   if (action.type === "CLEAN_STATE") return;
 
@@ -454,7 +456,11 @@ function* handleSubjectivityCall(action) {
     if (text) {
       yield put(setSubjectivityDetails(null, true, false, false));
 
-      const result = yield call(assistantApi.callSubjectivityService, text);
+      const result = yield call(
+        assistantApi.callSubjectivityService,
+        text,
+        //text.substring(0, SERVER_TIMEOUT_LIMIT),
+      );
 
       yield put(setSubjectivityDetails(result, false, true, false));
     }
@@ -462,6 +468,8 @@ function* handleSubjectivityCall(action) {
     yield put(setSubjectivityDetails(null, false, false, true));
   }
 }
+
+const URL_BUFFER_LIMIT = 6000;
 
 function* handlePrevFactChecksCall(action) {
   if (action.type === "CLEAN_STATE") return;
@@ -475,7 +483,10 @@ function* handlePrevFactChecksCall(action) {
     if (text && role.includes("BETA_TESTER")) {
       yield put(setPrevFactChecksDetails(null, true, false, false));
 
-      const result = yield call(assistantApi.callPrevFactChecksService, text);
+      const result = yield call(
+        assistantApi.callPrevFactChecksService,
+        text.substring(0, URL_BUFFER_LIMIT),
+      );
 
       yield put(
         setPrevFactChecksDetails(result.fact_checks, false, true, false),
@@ -493,8 +504,6 @@ function* handleMachineGeneratedTextCall(action) {
     const text = yield select((state) => state.assistant.urlText);
 
     // this prevents the call from happening if not correct user status
-
-    //yield take("SET_SCRAPED_DATA"); // wait until linkList has been created
     const role = yield select((state) => state.userSession.user.roles);
 
     if (text && role.includes("BETA_TESTER")) {
@@ -502,7 +511,7 @@ function* handleMachineGeneratedTextCall(action) {
 
       const result = yield call(
         assistantApi.callMachineGeneratedTextService,
-        text,
+        text.substring(0, URL_BUFFER_LIMIT),
       );
 
       yield put(setMachineGeneratedTextDetails(result, false, true, false));

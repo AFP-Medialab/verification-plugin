@@ -17,8 +17,6 @@ import {
   videoRights,
 } from "../../../constants/tools";
 
-const BETA_TESTER = ROLES.BETA_TESTER;
-
 export const NE_SUPPORTED_LANGS = ["en", "pt", "fr", "de", "el", "es", "it"];
 
 export const CONTENT_TYPE = {
@@ -329,7 +327,8 @@ export const selectCorrectActions = (
       action.cTypes.includes(contentType) &&
       (action.exceptions.length === 0 ||
         !processUrl.match(action.exceptions)) &&
-      (!action.betaTester || (action.betaTester && role.includes(BETA_TESTER))),
+      (!action.betaTester ||
+        (action.betaTester && role.includes(ROLES.BETA_TESTER))),
   );
   return possibleActions;
 };

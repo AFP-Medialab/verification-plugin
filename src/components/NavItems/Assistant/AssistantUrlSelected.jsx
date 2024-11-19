@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom"; // version 5.2.0
 
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
 import { Box, CardHeader, Skeleton, TextField } from "@mui/material/";
@@ -21,6 +22,7 @@ import Stack from "@mui/material/Stack";
 
 const AssistantUrlSelected = (props) => {
   // styles, language, dispatch, params
+  const navigate = useNavigate();
   const classes = useMyStyles();
   const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -31,7 +33,7 @@ const AssistantUrlSelected = (props) => {
   const loading = useSelector((state) => state.assistant.loading);
 
   //local state
-  const formInput = props.formInput;
+  const formInput = props.formInput || "";
   const setFormInput = (value) => props.setFormInput(value);
   const [url, setUrl] = useState(undefined);
 
@@ -48,6 +50,7 @@ const AssistantUrlSelected = (props) => {
     dispatch(cleanAssistantState());
     setUrl(formInput);
     dispatch(submitInputUrl(formInput));
+    navigate("/app/assistant/" + encodeURIComponent(formInput));
     //trackEvent("submission", "assistant", "page assistant", formInput);
   };
 

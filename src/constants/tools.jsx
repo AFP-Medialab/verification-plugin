@@ -105,7 +105,7 @@ export const TOOL_GROUPS = {
 /**
  * Represents a topMenuItem that can be used by users
  */
-class Tool {
+export class Tool {
   /**
    *
    * @param titleKeyword {string} The keyword for the name of the topMenuItem
@@ -414,7 +414,7 @@ const imageGif = new Tool(
   gifSvgIcon,
   TOOLS_CATEGORIES.IMAGE,
   [TOOL_STATUS_ICON.LOCK],
-  [ROLES.LOCK],
+  [ROLES.REGISTERED_USER],
   "gif",
   TOOL_GROUPS.VERIFICATION,
   <CheckGif />,
@@ -500,7 +500,7 @@ const searchSemantic = new Tool(
   manageSearchSvgIcon,
   TOOLS_CATEGORIES.SEARCH,
   [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.NEW, TOOL_STATUS_ICON.LOCK],
-  [ROLES.LOCK],
+  [ROLES.REGISTERED_USER],
   "semanticSearch",
   TOOL_GROUPS.VERIFICATION,
   <SemanticSearch />,
@@ -543,7 +543,7 @@ const dataAnalysisSna = new Tool(
   twitterSnaSvgIcon,
   TOOLS_CATEGORIES.DATA_ANALYSIS,
   [TOOL_STATUS_ICON.LOCK],
-  [ROLES.LOCK],
+  [ROLES.REGISTERED_USER],
   "twitterSna",
   TOOL_GROUPS.VERIFICATION,
   <TwitterSna />,
@@ -603,11 +603,11 @@ const c2paData = new Tool(
   c2paSvgIcon,
   TOOLS_CATEGORIES.IMAGE,
   [TOOL_STATUS_ICON.NEW, TOOL_STATUS_ICON.LOCK],
-  [ROLES.EVALUATION],
+  [ROLES.REGISTERED_USER],
   "c2pa",
   TOOL_GROUPS.VERIFICATION,
   <C2paData />,
-  null,
+  <Footer type={FOOTER_TYPES.AFP} />,
 );
 
 export const tools = Object.freeze([
@@ -643,12 +643,19 @@ export const tools = Object.freeze([
  * Helper function to verify if a user has the permissions to see a tool
  * @param tool {Tool}
  * @param role {ROLES[]}
+ * @param isUserAuthenticated {boolean}
  * @returns {boolean|*|?Array<Roles>|?Roles[]|boolean}
  */
-export const canUserSeeTool = (tool, role) => {
+export const canUserSeeTool = (tool, role, isUserAuthenticated) => {
+  if (!tool) throw new Error("[Error] Tool was not provided");
+
+  if (!isUserAuthenticated && tool.rolesNeeded) {
+    return false;
+  }
+
   return (
     !tool.rolesNeeded ||
     (role && tool.rolesNeeded && role.includes(...tool.rolesNeeded)) ||
-    tool.rolesNeeded.includes(ROLES.LOCK)
+    (isUserAuthenticated && tool.rolesNeeded.includes(ROLES.REGISTERED_USER))
   );
 };
