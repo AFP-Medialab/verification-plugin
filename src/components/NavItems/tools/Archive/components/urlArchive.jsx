@@ -16,6 +16,7 @@ import {
   trackEvent,
 } from "../../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useSelector } from "react-redux";
+import { history } from "../../../../Shared/History/History";
 
 const UrlArchive = ({ url, openLinks }) => {
   const [platform, setPlatform] = useState(null);
@@ -48,6 +49,8 @@ const UrlArchive = ({ url, openLinks }) => {
         "easy archiving link",
         url,
         client_id,
+        history,
+        uid,
       );
 
     if (platform === "facebook") {
@@ -80,6 +83,8 @@ const UrlArchive = ({ url, openLinks }) => {
       "Archive with WBM SPN",
       link,
       client_id,
+      history,
+      uid,
     );
 
     window.open("https://web.archive.org/save/" + link, "_blank");

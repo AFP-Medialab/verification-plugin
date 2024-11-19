@@ -112,11 +112,7 @@ const Archive = () => {
         },
       };
 
-      const response = await authenticatedRequest(axiosConfig);
-
-      //console.log(response);
-
-      return response;
+      return await authenticatedRequest(axiosConfig);
     } catch (error) {
       console.error(error);
       throw new Error(error);
@@ -183,7 +179,6 @@ const Archive = () => {
     setIsLoading(false);
     setHasArchiveBeenCreated(true);
     setInput("");
-    return;
   };
 
   return (
@@ -307,7 +302,7 @@ const Archive = () => {
                   <Box>
                     {errorMessage && (
                       <Box mb={4}>
-                        <Fade in={errorMessage ? true : false} timeout={750}>
+                        <Fade in={!!errorMessage} timeout={750}>
                           <Alert severity="error">{errorMessage}</Alert>
                         </Fade>
                       </Box>
