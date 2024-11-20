@@ -81,6 +81,7 @@ function treeMapToElementsRecursive(
   wrapFunc = null,
 ) {
   let childElems = [];
+  const textLength = text.length;
   if ("span" in treeElem) {
     // If there's text in the node
 
@@ -94,7 +95,8 @@ function treeMapToElementsRecursive(
       for (let i = 0; i < spanHighlightIndices.length; i++) {
         const hSpan = spanHighlightIndices[i];
         const hSpanStart = hSpan.indices[0];
-        const hSpanEnd = hSpan.indices[1];
+        // Sometimes the end index is negative so we have to check this
+        const hSpanEnd = hSpan.indices[1] > -1 ? hSpan.indices[1] : textLength;
         if (
           (span.start <= hSpanStart && hSpanStart <= span.end) ||
           (span.start <= hSpanEnd && hSpanEnd <= span.end)
