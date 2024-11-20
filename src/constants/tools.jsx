@@ -105,7 +105,7 @@ export const TOOL_GROUPS = {
 /**
  * Represents a topMenuItem that can be used by users
  */
-class Tool {
+export class Tool {
   /**
    *
    * @param titleKeyword {string} The keyword for the name of the topMenuItem

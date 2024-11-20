@@ -315,9 +315,9 @@ function* handleSourceCredibilityCall(action) {
     }
 
     const trafficLightColors = {
-      positive: "#008000", // green
-      mixed: "#FFA500", // orange
-      caution: "#FF0000", // red
+      positive: "success", //"#008000", // green
+      mixed: "warning", //"#FFA500", // orange
+      caution: "error", //"#FF0000", // red
       unlabelled: "inherit",
     };
 
@@ -793,10 +793,6 @@ const filterAssistantResults = (
     case KNOWN_LINKS.FACEBOOK:
       if (scrapeResult.videos.length === 0) {
         imageList = scrapeResult.images;
-        imageList = imageList.filter(
-          (imageUrl) =>
-            imageUrl.includes("//scontent") && !imageUrl.includes("/cp0/"),
-        );
       } else {
         videoList = scrapeResult.videos;
       }
@@ -874,6 +870,7 @@ const filterSourceCredibilityResults = (
 
   let sourceCredibilityDict = {};
 
+  // collecting results for each link in extracted linkList
   sourceCredibility.forEach((result) => {
     const link = result["string"];
 
@@ -881,6 +878,7 @@ const filterSourceCredibilityResults = (
       sourceCredibilityDict[link] = {
         link: link,
         resolvedLink: result["resolved-url"],
+        resolvedDomain: result["resolved-domain"],
         urlColor: trafficLightColors.unlabelled,
         positive: [],
         mixed: [],
@@ -906,6 +904,7 @@ const filterSourceCredibilityResults = (
       sourceCredibilityDict[link] = {
         link: link,
         resolvedLink: link,
+        resolvedDomain: "",
         urlColor: trafficLightColors.unlabelled,
         positive: [],
         mixed: [],
@@ -914,13 +913,14 @@ const filterSourceCredibilityResults = (
     }
   }
 
-  const positiveResults = sourceCredibilityDict[inputUrl].positive.length
+  // collecting results for the inputUrl
+  const positiveResults = sourceCredibilityDict[inputUrl]
     ? sourceCredibilityDict[inputUrl].positive
     : null;
-  const mixedResults = sourceCredibilityDict[inputUrl].mixed.length
+  const mixedResults = sourceCredibilityDict[inputUrl]
     ? sourceCredibilityDict[inputUrl].mixed
     : null;
-  const cautionResults = sourceCredibilityDict[inputUrl].caution.length
+  const cautionResults = sourceCredibilityDict[inputUrl]
     ? sourceCredibilityDict[inputUrl].caution
     : null;
   delete sourceCredibilityDict[inputUrl];

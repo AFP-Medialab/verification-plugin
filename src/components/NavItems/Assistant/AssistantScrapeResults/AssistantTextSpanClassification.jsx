@@ -174,6 +174,7 @@ export default function AssistantTextSpanClassification({
             marginTop: "0.5em",
             marginBottom: "0.5em",
             padding: "0.5em",
+            cursor: "pointer",
           }}
         >
           {persuasionTechnique.replaceAll("_", " ")}
@@ -246,9 +247,6 @@ export default function AssistantTextSpanClassification({
     categoriesText[collection] = output;
   }
 
-  // console.log("categories=", categories);
-  // console.log("categoriesText=", categoriesText);
-
   // remove duplicate spans from array of categories
   // duplicates occur as categories are counted then repeated for category allCategoriesLabel
   let uniqueCategories = {};
@@ -263,8 +261,6 @@ export default function AssistantTextSpanClassification({
       );
     });
   }
-
-  // console.log("uniqueCategories=", uniqueCategories);
 
   return (
     <Grid2 container>
@@ -356,8 +352,16 @@ export function CategoriesListToggle({
       output.push(<Divider key={index} />);
     }
 
+    // find colour of background givens sum(scores)/num_scores
+    let scores = categories[category].map((categoryItem) =>
+      Number(categoryItem.score),
+    );
+    let scoresSum = scores.reduce(
+      (accumulator, currentScore) => accumulator + currentScore,
+      0,
+    );
     let backgroundRgb = interpRgb(
-      categories[category][0].score,
+      scoresSum / scores.length,
       thresholdLow,
       thresholdHigh,
       rgbLow,
@@ -378,12 +382,13 @@ export function CategoriesListToggle({
         sx={{
           background:
             category === currentCategory || currentCategory === null
-              ? rgbToString(rgbHigh)
+              ? rgbToString(backgroundRgb)
               : rgbToString([140, 140, 140]),
           color: textColour,
           ":hover": {
-            background: rgbToString(rgbHigh),
+            background: rgbToString(backgroundRgb),
           },
+          cursor: "pointer",
         }}
         secondaryAction={itemChip}
         onMouseOver={() => handleCategoryHover(category)}
@@ -396,7 +401,14 @@ export function CategoriesListToggle({
     index++;
   }
 
-  return <List>{output}</List>;
+  return (
+    <List>
+      <ListItem>
+        <Typography>{keyword("select_persausion_technique")}</Typography>
+      </ListItem>
+      {output}
+    </List>
+  );
 }
 
 export function MultiCategoryClassifiedText({
