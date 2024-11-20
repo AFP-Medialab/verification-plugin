@@ -90,7 +90,7 @@ const Details = (params) => {
       flexDirection="row"
     >
       {<TextCopy text={params.url} index={params.url} />}
-      {params.done && params.domainOrAccount !== "" && (
+      {params.done && params.domainOrAccount !== null && (
         <ExtractedSourceCredibilityResult
           extractedSourceCredibilityResults={params.urlResults}
           url={params.urlResults.resolvedLink}
@@ -159,9 +159,13 @@ const AssistantLinkResult = () => {
 
     // define extracted source credibility
     let urlColor = "inherit"; //trafficLightColors.unlabelled;
-    let urlResults = sourceTypes.unlabelled;
+    let urlResults = {
+      caution: null,
+      mixed: null,
+      positive: null,
+    };
     let sortByDetails = false;
-    let domainOrAccount;
+    let domainOrAccount = null;
     let sourceTypeList = [sourceTypes.unlabelled];
 
     if (extractedSourceCred) {
@@ -190,7 +194,7 @@ const AssistantLinkResult = () => {
         ? urlResults.resolvedDomain.startsWith("https://")
           ? urlResults.resolvedDomain
           : "https://" + urlResults.resolvedDomain
-        : "";
+        : null;
     }
 
     // add row
