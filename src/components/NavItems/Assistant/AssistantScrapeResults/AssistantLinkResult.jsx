@@ -73,7 +73,6 @@ const Url = (params) => {
         target="_blank"
         href={params.url}
         color={params.urlColor}
-        data-testid="url-domain-analysis"
       >
         {params.url}
       </Link>
@@ -555,6 +554,8 @@ const AssistantLinkResult = () => {
             columns={columns}
             rowHeight={60}
             disableRowSelectionOnClick
+            disableVirtualization // Otherwise the test script can't see anything
+            data-testid="url-domain-analysis"
             initialState={{
               sorting: {
                 sortModel: [{ field: "status", sort: "desc" }],

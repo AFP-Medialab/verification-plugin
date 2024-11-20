@@ -42,8 +42,12 @@ const DbkfMediaResults = () => {
                         color={"textPrimary"}
                         component={"div"}
                         align={"left"}
+                        data-testid={
+                          "dbkf_image_warning" + "_" + value.claimUrl
+                        }
                       >
                         {keyword("dbkf_image_warning") +
+                          " " +
                           parseFloat(value.similarity).toFixed(2)}
                       </Typography>
                       <Box mb={0.5} />
@@ -89,6 +93,9 @@ const DbkfMediaResults = () => {
                         color={"textPrimary"}
                         component={"div"}
                         align={"left"}
+                        data-testid={
+                          "dbkf_video_warning" + "_" + value.claimUrl
+                        }
                       >
                         {keyword("dbkf_video_warning") +
                           " " +

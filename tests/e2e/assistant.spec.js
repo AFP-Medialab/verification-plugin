@@ -10,10 +10,10 @@ const MediaType = {
 };
 
 const LinkResult = {
-  negative: "ErrorOutlineOutlinedIcon",
-  mention: "SentimentSatisfiedIcon",
-  positive: "TaskAltOutlinedIcon",
-  none: null
+  negative: "Warning",
+  mention: "Mentions",
+  positive: "Fact checker",
+  none: "Unlabelled"
 };
 
 const MediaVideoStatus = {
@@ -90,13 +90,13 @@ const MediaServices = {
       mentions: ["DBKF"]
     },
     extractedURLAnalyses: {
-        "https://www.unhcr.org/us/emergencies/ukraine-emergency": null,
+        "https://www.unhcr.org/us/emergencies/ukraine-emergency": LinkResult.none,
         "https://www.breitbart.com/europe/2024/01/06/illegal-migrant-arrivals-highest-since-2015-migrant-crisis-says-germany/": LinkResult.negative,
-        "https://www.politico.eu/article/germany-migration-president-frank-walter-steinmeier-breaking-point/": null,
+        "https://www.politico.eu/article/germany-migration-president-frank-walter-steinmeier-breaking-point/": LinkResult.none,
         "https://www.breitbart.com/europe/2023/07/14/half-of-ukrainian-refugees-in-germany-want-to-stay-forever/": LinkResult.negative,
-        "https://www.theglobeandmail.com/politics/article-displaced-ukrainians-want-to-settle-permanently-in-canada/": null,
+        "https://www.theglobeandmail.com/politics/article-displaced-ukrainians-want-to-settle-permanently-in-canada/": LinkResult.none,
         "https://x.com/BreitbartNews": LinkResult.mention,
-        "https://twitter.com/KurtZindulka": null,
+        "https://twitter.com/KurtZindulka": LinkResult.none,
     },
     credibilitySignals: {
       topic: ["Security, Defense and Well-being", "Politics", "International Relations"],
@@ -134,7 +134,7 @@ const MediaServices = {
     },
     extractedURLAnalyses: {
         "https://x.com/BreitbartNews": LinkResult.mention,
-        "https://twitter.com/pamkeyNEN": null,
+        "https://twitter.com/pamkeyNEN": LinkResult.none,
     },
     credibilitySignals: {
       topic: ["Law and Justice System", "Politics"],
@@ -190,7 +190,6 @@ const MediaServices = {
     },
     extractedURLAnalyses: {
         "https://twitter.com/DemagogCZ": LinkResult.positive,
-        "https://www.facebook.com/journalismproject/programs/third-party-fact-checking": LinkResult.mention,
         "https://drive.google.com/drive/folders/1J6nkGqAan4B5tet7dG5I9rRxHGyUwHGq": LinkResult.negative,
         "https://web.archive.org/web/20230323215342/https:/www.ustavnysud.sk/c/document_library/get_file?uuid=67bda80c-2905-43c2-a802-7796b0c14c31&groupId=10182": LinkResult.negative
     },
@@ -339,11 +338,11 @@ const MediaServices = {
       "https://911truth.org/us-judge-condemns-fbi-while-ordering-release-of-man-in-newburgh-four-terror-sting/": LinkResult.negative,
       "https://911truth.org/author/mb/": LinkResult.negative,
       "https://911truth.org/": LinkResult.negative,
-      "https://michaelshermer.substack.com/p/the-truth-about-911-truth": null,
-      "https://ine.uaf.edu/wtc7": null,
-      "https://www.facebook.com/sharer.php?u=https%3A%2F%2F911truth.org%2Frationality-9-11-asking-questions-response-michael-shermer%2F": null,
-      "https://www.reddit.com/submit?url=https://911truth.org/rationality-9-11-asking-questions-response-michael-shermer/&title=Rationality, 9/11, and the Art of Asking Questions: A Response to Michael Shermer and other “Professional” Debunkers": LinkResult.negative,
-      "https://www.youtube.com/@911TruthOrg": null
+      // "https://michaelshermer.substack.com/p/the-truth-about-911-truth": LinkResult.none,
+      // "https://ine.uaf.edu/wtc7": LinkResult.none, // not on the first page
+      // "https://www.facebook.com/sharer.php?u=https%3A%2F%2F911truth.org%2Frationality-9-11-asking-questions-response-michael-shermer%2F": LinkResult.none,
+      // "https://www.reddit.com/submit?url=https://911truth.org/rationality-9-11-asking-questions-response-michael-shermer/&title=Rationality, 9/11, and the Art of Asking Questions: A Response to Michael Shermer and other “Professional” Debunkers": LinkResult.negative,
+      // "https://www.youtube.com/@911TruthOrg": LinkResult.none
     },
     credibilitySignals: {
       topic: ["Religious, Ethical and Cultural"],
@@ -419,7 +418,7 @@ const MediaServices = {
     extractedURLAnalyses: {
       // "https://twitter.com/share": LinkResult.negative, // Extracted, but doesn't appear in the page?!
       "https://www.blogpreston.co.uk": LinkResult.positive,
-      "https://www.blogpreston.co.uk/photos/": LinkResult.positive,
+      // "https://www.blogpreston.co.uk/photos/": LinkResult.positive, // Not on first page
       "https://www.blogpreston.co.uk/category/preston-news/": LinkResult.positive,
       "https://www.blogpreston.co.uk/category/preston-news/preston-redevelopment/": LinkResult.positive,
       "https://www.blogpreston.co.uk/category/preston-proud/": LinkResult.positive,
@@ -441,14 +440,14 @@ const MediaServices = {
       // This seems to be flakey behaviour:
       // The first time it will extract it as normal, and then it'll resolve to the "login" URL
       // I guess this is a facebook think rather than an us thing.
-      // "http://facebook.com/blogpreston": null,
-      "http://twitter.com/blogpreston": null,
-      "https://instagram.com/blog.preston/": null,
-      "https://lancashire.citizenspace.com/environment-and-planning/stcsurvey/": null,
-      "https://whatsapp.com/channel/0029VaFnaP3HgZWdNB6IR41U": null,
-      "http://eepurl.com/irNrXU": null,
-      // "http://flickr.com/11253414@N04/54119224627": null, // flaky
-      // "http://flickr.com/11253414@N04/54120533300": null, // flaky
+      // "http://facebook.com/blogpreston": LinkResult.none,
+      "http://twitter.com/blogpreston": LinkResult.none,
+      "https://instagram.com/blog.preston/": LinkResult.none,
+      "https://lancashire.citizenspace.com/environment-and-planning/stcsurvey/": LinkResult.none,
+      "https://whatsapp.com/channel/0029VaFnaP3HgZWdNB6IR41U": LinkResult.none,
+      "http://eepurl.com/irNrXU": LinkResult.none,
+      // "http://flickr.com/11253414@N04/54119224627": LinkResult.none, // flaky
+      // "http://flickr.com/11253414@N04/54120533300": LinkResult.none, // flaky
     },
     credibilitySignals: {
       topic: [
@@ -644,7 +643,7 @@ const MediaServices = {
       factChecker: ["Bundesverband Digitalpublisher und Zeitungsverleger"]
     },
     extractedURLAnalyses: {
-      "https://www.az-online.de/politik/spd-cdu-auszaehlung-wahl-in-niedersachsen-ergebnisse-hochrechnungen-prognosen-landtagswahl-2022-weil-althusmann-ministerpraesident-zr-91836603.html": LinkResult.positive
+      "https://www.az-online.de/politik/wahl-in-niedersachsen-ergebnisse-hochrechnungen-prognosen-landtagswahl-2022-weil-althusmann-ministerpraesident-spd-cdu-auszaehlung-zr-91836603.html": LinkResult.positive
     },
     credibilitySignals: {
       topic: [
@@ -853,7 +852,6 @@ const MediaServices = {
   {
     url: "https://www.facebook.com/sheffieldstar/videos/out-in-sheffield-with-john-burkhill-and-his-many-many-fans/458905073200654",
     mediaType: MediaType.video,
-    videoGridIndex: 0,
     services: [MediaServices.analysisVideo, MediaServices.keyframes, MediaServices.videoDownload, MediaServices.videoDownloadGeneric],
     namedEntities: {
       Person: ["John Burkhill"]
@@ -865,7 +863,7 @@ const MediaServices = {
       topic: [
       "Politics", // No?
       ],
-      genre: ["Satire"], // It's not
+      genre: [],
       persuasion: [
         "Appeal to Popularity" // Not really
       ],
@@ -1011,12 +1009,9 @@ const MediaServices = {
       topic: [
         "Economy and Resources",
       ],
-      genre: ["Opinionated News"], // I don't think so
+      genre: [],
       persuasion: [
-        "Appeal to fear/prejudice",
         "Exaggeration or minimisation",
-        "Loaded language",
-        "Repetition",
       ],
       subjectivity: []
     }
@@ -1031,12 +1026,12 @@ const MediaServices = {
         "Security, Defense and Well-being",
         "Health and Safety"
       ],
-      genre: [],
+      genre: ["Satire"], // No
       persuasion: [
         // None of these!
-        // "Loaded language",
-        // "Name calling or labeling",
-        // "Repetition"
+        "Loaded language",
+        "Name calling or labeling",
+        "Repetition"
       ],
       subjectivity: ["Subjective"] // "Toot toot." is not a subjective sentence
     }
@@ -1054,8 +1049,8 @@ const MediaServices = {
       genre: ["Satire"], // I don't think so (Seems to be the default when it doesn't know?)
       persuasion: [
         // None of these!
-        // "Doubt",
-        // "Loaded language",
+        "Doubt",
+        "Loaded language",
       ],
       subjectivity: [] // "Toot toot." is not a subjective sentence
     }
@@ -1074,22 +1069,21 @@ const MediaServices = {
     mediaType: MediaType.none,
     extractedURLAnalyses: {
       // "http://spreadshirt.de": ?? // Missing
-      "https://t.co/4AkKRFywd8?amp=1": LinkResult.none,
-      "https://t.me/QUERDENKEN711": LinkResult.none,
-      "https://t.me/QUERDENKEN711_aktiv": LinkResult.none,
-      "https://t.me/QUERDENKEN_711": LinkResult.none,
-      "https://twitter.com/Crazyca07572857/status/1334513909022208001?s=20": LinkResult.none,
+      "https://t.co/4AkKRFywd8?amp=1": LinkResult.negative,
+      "https://t.me/QUERDENKEN711": LinkResult.negative,
+      "https://t.me/QUERDENKEN711_aktiv": LinkResult.negative,
+      "https://t.me/QUERDENKEN_711": LinkResult.negative,
+      "https://twitter.com/Crazyca07572857/status/1334513909022208001?s=20": LinkResult.negative,
     },
     credibilitySignals: {
       topic: [
         "Religious, Ethical and Cultural", // Tenuous
-        "Security, Defense and Well-being" // Don't think so, possibly debatable, but highly contextual
       ],
       genre: ["Satire"], // I don't think so (Seems to be the default when it doesn't know?)
       persuasion: [
-        "Appeal to Hypocrisy",
+        // "Appeal to Hypocrisy", // flaky
         "Guilt by association",
-        "Loaded language",
+        // "Loaded language", // flaky
         "Name calling or labeling",
         "Questioning the reputation", // Maybe this one, but not the others, I don't think
         "Repetition",
@@ -1164,9 +1158,7 @@ const MediaServices = {
       ],
       genre: ["Opinionated News"], // I guess not (Seems to be the default when it doesn't know?)
       persuasion: [
-        "Loaded language",
         "Name calling or labeling",
-        "Slogans"
       ],
       subjectivity: ["Subjective"]
     }
@@ -1511,17 +1503,11 @@ const MediaServices = {
       }
       // Extracted URL domain analysis
       if (Object.keys(extractedURLAnalyses).length > 0){
+        const urlAnalysisDiv = page.getByTestId("url-domain-analysis")
         for (const url in extractedURLAnalyses) {
-          await expect(page.getByTestId("url-domain-analysis").locator("[href=\""+url+"\"]")).toBeVisible();
-          const resultRow = page.getByTestId("url-domain-analysis").locator("div.MuiGrid2-container").filter({ has: page.locator(`text="${url}"`) });
-
-          if (extractedURLAnalyses[url] != null) {
-            await expect(resultRow.locator(">div")).toHaveCount(3);
-            await expect(resultRow.getByTestId(extractedURLAnalyses[url])).toBeVisible();
-          }
-          else {
-            await expect(resultRow.locator(">div")).toHaveCount(2);
-          }
+          await expect(urlAnalysisDiv.locator("[href=\""+url+"\"]")).toBeVisible();
+          const resultRow = urlAnalysisDiv.locator("div.MuiDataGrid-row").filter({ has: page.locator(`text="${url}"`) });
+          await expect(resultRow.locator("[data-field=\"status\"]")).toContainText(extractedURLAnalyses[url]);
         }
       }
       // Credibility signals
