@@ -404,7 +404,7 @@ export function CategoriesListToggle({
   return (
     <List>
       <ListItem>
-        <Typography>{keyword("select_persausion_technique")}</Typography>
+        <Typography>{keyword("select_persuasion_technique")}</Typography>
       </ListItem>
       {output}
     </List>
