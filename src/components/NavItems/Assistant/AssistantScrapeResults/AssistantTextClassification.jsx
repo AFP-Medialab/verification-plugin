@@ -164,6 +164,7 @@ export default function AssistantTextClassification({
               rgbHigh={configs.confidenceRgbHigh}
               keyword={keyword}
               subjectvity={subjectivity}
+              titleText={titleText}
             />
             {filteredSentences.length > 0 ? (
               <FormControlLabel
@@ -192,6 +193,7 @@ export function CategoriesList({
   rgbHigh,
   keyword,
   subjectvity,
+  titleText,
 }) {
   if (_.isEmpty(categories)) {
     return (
@@ -232,7 +234,9 @@ export function CategoriesList({
     );
     index++;
   }
-  return <List>{output}</List>;
+  return (
+    <List data-testid={titleText.toLowerCase() + "-result"}>{output}</List>
+  );
 }
 
 /*

@@ -222,21 +222,25 @@ const AssistantTextResult = () => {
                 label="Topic"
                 {...a11yProps(1)}
                 disabled={newsFramingFail || newsFramingLoading}
+                data-testid="topic-tab"
               />
               <Tab
                 label="Genre"
                 {...a11yProps(2)}
                 disabled={newsGenreFail || newsGenreLoading}
+                data-testid="genre-tab"
               />
               <Tab
                 label="Persuasion Techniques"
                 {...a11yProps(3)}
                 disabled={persuasionFail || persuasionLoading}
+                data-testid="persuasion-tab"
               />
               <Tab
                 label="Subjectivity"
                 {...a11yProps(4)}
                 disabled={subjectivityFail || subjectivityLoading}
+                data-testid="subjectivity-tab"
               />
             </Tabs>
 

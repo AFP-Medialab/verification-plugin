@@ -67,7 +67,11 @@ const ExtractedUrl = (
                 ? extractedSourceCred[link].urlColor
                 : "inherit"
             }
-            href={href}
+            href={
+              extractedSourceCred
+                ? extractedSourceCred[link].resolvedLink
+                : link
+            }
           >
             {extractedSourceCred
               ? extractedSourceCred[link].resolvedLink
