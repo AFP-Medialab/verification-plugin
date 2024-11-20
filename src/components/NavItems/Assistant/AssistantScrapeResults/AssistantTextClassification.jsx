@@ -115,6 +115,10 @@ export default function AssistantTextClassification({
     }
   }
 
+  if (Object.keys(filteredCategories).length == 0) {
+    filteredSentences = [];
+  }
+
   // disabled category box for Subjectivity classifier
   // subjectivty or not
   // let width = 12;
