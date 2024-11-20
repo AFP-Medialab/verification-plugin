@@ -445,7 +445,21 @@ function* handlePersuasionCall(action) {
   }
 }
 
-//const SERVER_TIMEOUT_LIMIT = 6000;
+const SERVER_TIMEOUT_LIMIT = 6000;
+
+const getTextChunks = (text) => {
+  // todo - split around a full stop after SERVER_TIMEOUT_LIMIT
+  let textChunks = [];
+  if (text.length > SERVER_TIMEOUT_LIMIT) {
+    for (let i = 0; i < text.length; i += SERVER_TIMEOUT_LIMIT) {
+      textChunks.push(text.substring(i, i + SERVER_TIMEOUT_LIMIT));
+    }
+  } else {
+    // single chunk as text less than limit
+    textChunks.push(text);
+  }
+  return textChunks;
+};
 
 function* handleSubjectivityCall(action) {
   if (action.type === "CLEAN_STATE") return;
@@ -456,11 +470,74 @@ function* handleSubjectivityCall(action) {
     if (text) {
       yield put(setSubjectivityDetails(null, true, false, false));
 
-      const result = yield call(
-        assistantApi.callSubjectivityService,
-        text,
-        //text.substring(0, SERVER_TIMEOUT_LIMIT),
-      );
+      // collect chunks of text
+      const textChunks = getTextChunks(text);
+
+      // collect results for each chunk
+      let result = {};
+      let step = 0;
+      for (let i = 0; i < textChunks.length; i += 1) {
+        console.log(
+          "Subjectivity service: sending text chunk",
+          i,
+          "/",
+          textChunks.length,
+        );
+        const textChunkResult = yield call(
+          assistantApi.callSubjectivityService,
+          textChunks[i],
+        );
+
+        // merge results
+        if (i == 0) {
+          result = textChunkResult;
+        } else {
+          // add step to sentences indices and Important_Sentence indices
+          step = i * SERVER_TIMEOUT_LIMIT;
+
+          let stepImportantSentences = [];
+          for (
+            let j = 0;
+            j < textChunkResult.entities.Important_Sentence.length;
+            j += 1
+          ) {
+            let importantSentence =
+              textChunkResult.entities.Important_Sentence[j];
+
+            stepImportantSentences.push({
+              indices: [
+                importantSentence.indices[0] + step,
+                importantSentence.indices[1] + step,
+              ],
+              score: importantSentence.score,
+            });
+          }
+          let stepSentences = [];
+          for (let k = 0; k < textChunkResult.sentences.length; k += 1) {
+            let sentence = textChunkResult.sentences[k];
+
+            stepSentences.push({
+              indices: [sentence.indices[0] + step, sentence.indices[1] + step],
+              score: sentence.score,
+              label: sentence.label,
+              sentence: sentence.sentence,
+            });
+          }
+
+          // update results
+          result = {
+            text: result.text + textChunkResult.text,
+            configs: result.configs,
+            entities: {
+              Important_Sentence: result.entities.Important_Sentence.concat(
+                stepImportantSentences,
+              ),
+              Subjective: result.entities.Subjective,
+            },
+            sentences: result.sentences.concat(stepSentences),
+          };
+        }
+      }
 
       yield put(setSubjectivityDetails(result, false, true, false));
     }
@@ -483,10 +560,37 @@ function* handlePrevFactChecksCall(action) {
     if (text && role.includes("BETA_TESTER")) {
       yield put(setPrevFactChecksDetails(null, true, false, false));
 
-      const result = yield call(
-        assistantApi.callPrevFactChecksService,
-        text.substring(0, URL_BUFFER_LIMIT),
-      );
+      // collect chunks of text
+      const textChunks = getTextChunks(text);
+
+      // chunk text
+      console.log("pfc text.length =", text.length);
+
+      // collect results for each chunk
+      let result = {};
+      let step = 0;
+      for (let i = 0; i < textChunks.length; i += 1) {
+        console.log(
+          "Previous fact-checks service: sending text chunk",
+          i,
+          "/",
+          textChunks.length,
+        );
+        const textChunkResult = yield call(
+          assistantApi.callPrevFactChecksService,
+          textChunks[i],
+        );
+
+        console.log(textChunkResult);
+        // need to find a link which has a previous fact check detected to test this
+
+        // merge results
+        if (i == 0) {
+          result = textChunkResult;
+        } else {
+          result.fact_checks.push(textChunkResult.textChunkResult);
+        }
+      }
 
       yield put(
         setPrevFactChecksDetails(result.fact_checks, false, true, false),
@@ -506,15 +610,46 @@ function* handleMachineGeneratedTextCall(action) {
     // this prevents the call from happening if not correct user status
     const role = yield select((state) => state.userSession.user.roles);
 
+    // chunk text
+    console.log("mgt text.length =", text.length);
+
     if (text && role.includes("BETA_TESTER")) {
       yield put(setMachineGeneratedTextDetails(null, true, false, false));
 
-      const result = yield call(
-        assistantApi.callMachineGeneratedTextService,
-        text.substring(0, URL_BUFFER_LIMIT),
-      );
+      // collect chunks of text
+      const textChunks = getTextChunks(text);
 
-      yield put(setMachineGeneratedTextDetails(result, false, true, false));
+      // collect results for each chunk
+      let result = {};
+      let step = 0;
+      let score = 0;
+      for (let i = 0; i < textChunks.length; i += 1) {
+        console.log(
+          "Machine Generated Text service: sending text chunk",
+          i,
+          "/",
+          textChunks.length,
+        );
+        const textChunkResult = yield call(
+          assistantApi.callMachineGeneratedTextService,
+          textChunks[i],
+        );
+
+        console.log(textChunkResult);
+
+        // merge results
+        if (i == 0) {
+          result = [textChunkResult];
+        } else {
+          result.push(textChunkResult);
+        }
+      }
+
+      console.log("MGT result=", result);
+      // sum scores and divide each by length of textChunk
+
+      // should be done on backend?
+      yield put(setMachineGeneratedTextDetails(result[0], false, true, false));
     }
   } catch (error) {
     yield put(setMachineGeneratedTextDetails(null, false, false, true));
