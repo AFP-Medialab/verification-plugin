@@ -328,21 +328,6 @@ const AssistantLinkResult = () => {
 
   const urls =
     inputSCDone && extractedLinks ? extractedLinks : linkList ? linkList : null;
-  // const rows = createRows(
-  //   urls,
-  //   extractedSourceCred,
-  //   inputSCLoading,
-  //   inputSCDone,
-  //   inputSCFail,
-  //   trafficLightColors,
-  //   keyword,
-  // );
-  // const columns = createColumns(
-  //   keyword("id"),
-  //   keyword("status"),
-  //   keyword("assistant_urlbox"),
-  //   keyword("options"),
-  // );
 
   const sourceTypes = {
     positive: "fact_checker",
@@ -463,7 +448,7 @@ const AssistantLinkResult = () => {
     },
     {
       field: "url",
-      headerName: keyword("url"),
+      headerName: keyword("assistant_urlbox"),
       minWidth: 400,
       flex: 1,
       renderCell: (params) => {
