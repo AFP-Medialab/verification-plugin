@@ -163,189 +163,188 @@ const AssistantTextResult = () => {
   }
 
   return (
-    <Grid2 size={{ xs: 12 }}>
-      <Card data-testid="assistant-text-scraped-text">
-        <CardHeader
-          className={classes.assistantCardHeader}
-          title={keyword("text_title")}
-          action={
-            // top left warning and tooltip
-            <div style={{ display: "flex" }}>
-              <div hidden={dbkfMatch === null}>
-                <Tooltip title={keyword("text_warning")}>
-                  <WarningOutlined
-                    className={classes.toolTipWarning}
-                    onClick={() => {
-                      dispatch(setWarningExpanded(!warningExpanded));
-                      window.scrollTo(0, 0);
-                    }}
-                  />
-                </Tooltip>
-              </div>
-              <Tooltip
-                interactive={"true"}
-                title={
-                  <div
-                    className={"content"}
-                    dangerouslySetInnerHTML={{
-                      __html: keyword("text_tooltip"),
-                    }}
-                  />
-                }
-                classes={{ tooltip: classes.assistantTooltip }}
-              >
-                <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+    <Card data-testid="assistant-text-scraped-text">
+      <CardHeader
+        className={classes.assistantCardHeader}
+        title={keyword("text_title")}
+        action={
+          // top left warning and tooltip
+          <div style={{ display: "flex" }}>
+            <div hidden={dbkfMatch === null}>
+              <Tooltip title={keyword("text_warning")}>
+                <WarningOutlined
+                  className={classes.toolTipWarning}
+                  onClick={() => {
+                    dispatch(setWarningExpanded(!warningExpanded));
+                    window.scrollTo(0, 0);
+                  }}
+                />
               </Tooltip>
             </div>
-          }
-        />
-        {dbkfMatchLoading && mtLoading && <LinearProgress />}
-
-        <CardContent
-          style={{
-            wordBreak: "break-word",
-            overflowY: "auto",
-            overflowX: "hidden",
-          }}
-        >
-          <Collapse in={expanded} collapsedSize={500} id={"element-to-check"}>
-            {/* tabs setup */}
-            <Tabs
-              value={textTabIndex}
-              onChange={handleTabChange}
-              onClick={handleTabClick}
-              aria-label="extracted text tabs"
-              variant="fullWidth"
+            <Tooltip
+              interactive={"true"}
+              title={
+                <div
+                  className={"content"}
+                  dangerouslySetInnerHTML={{
+                    __html: keyword("text_tooltip"),
+                  }}
+                />
+              }
+              classes={{ tooltip: classes.assistantTooltip }}
             >
-              <Tab label="Raw Text" {...a11yProps(0)} />
-              <Tab
-                label="Topic"
-                {...a11yProps(1)}
-                disabled={newsFramingFail || newsFramingLoading}
+              <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+            </Tooltip>
+          </div>
+        }
+      />
+      {dbkfMatchLoading && mtLoading && (
+        <LinearProgress variant={"indeterminate"} color={"secondary"} />
+      )}
+      <CardContent
+        style={{
+          wordBreak: "break-word",
+          overflowY: "auto",
+          overflowX: "hidden",
+        }}
+      >
+        <Collapse in={expanded} collapsedSize={500} id={"element-to-check"}>
+          {/* tabs setup */}
+          <Tabs
+            value={textTabIndex}
+            onChange={handleTabChange}
+            onClick={handleTabClick}
+            aria-label="extracted text tabs"
+            variant="fullWidth"
+          >
+            <Tab label="Raw Text" {...a11yProps(0)} />
+            <Tab
+              label="Topic"
+              {...a11yProps(1)}
+              disabled={newsFramingFail || newsFramingLoading}
+            />
+            <Tab
+              label="Genre"
+              {...a11yProps(2)}
+              disabled={newsGenreFail || newsGenreLoading}
+            />
+            <Tab
+              label="Persuasion Techniques"
+              {...a11yProps(3)}
+              disabled={persuasionFail || persuasionLoading}
+            />
+            <Tab
+              label="Subjectivity"
+              {...a11yProps(4)}
+              disabled={subjectivityFail || subjectivityLoading}
+            />
+          </Tabs>
+
+          {/* extracted raw text */}
+          <CustomTabPanel value={textTabIndex} index={0}>
+            <Typography component={"div"} sx={{ textAlign: "start" }}>
+              {textHtmlOutput ?? text}
+            </Typography>
+          </CustomTabPanel>
+
+          {/* news framing (topic) */}
+          <CustomTabPanel value={textTabIndex} index={1}>
+            {newsFramingLoading && (
+              <Stack direction="column" spacing={4} p={4}>
+                <Skeleton variant="rounded" height={40} />
+                <Skeleton variant="rounded" width="50%" height={40} />
+              </Stack>
+            )}
+            {newsFramingDone && (
+              <AssistantTextClassification
+                text={text}
+                classification={newsFramingResult.entities}
+                configs={newsFramingResult.configs}
+                titleText={newsFramingTitle}
+                helpDescription={"news_framing_tooltip"}
+                textHtmlMap={textHtmlMap}
+                subjectivity={false}
               />
-              <Tab
-                label="Genre"
-                {...a11yProps(2)}
-                disabled={newsGenreFail || newsGenreLoading}
+            )}
+          </CustomTabPanel>
+
+          {/* news genre */}
+          <CustomTabPanel value={textTabIndex} index={2}>
+            {newsGenreLoading && (
+              <Stack direction="column" spacing={4} p={4}>
+                <Skeleton variant="rounded" height={40} />
+                <Skeleton variant="rounded" width="50%" height={40} />
+              </Stack>
+            )}
+            {newsGenreDone && (
+              <AssistantTextClassification
+                text={text}
+                classification={newsGenreResult.entities}
+                configs={newsGenreResult.configs}
+                titleText={newsGenreTitle}
+                helpDescription={"news_genre_tooltip"}
+                textHtmlMap={textHtmlMap}
+                subjectivity={false}
               />
-              <Tab
-                label="Persuasion Techniques"
-                {...a11yProps(3)}
-                disabled={persuasionFail || persuasionLoading}
+            )}
+          </CustomTabPanel>
+
+          {/* persuasion */}
+          <CustomTabPanel value={textTabIndex} index={3}>
+            {persuasionLoading && (
+              <Stack direction="column" spacing={4} p={4}>
+                <Skeleton variant="rounded" height={40} />
+                <Skeleton variant="rounded" width="50%" height={40} />
+              </Stack>
+            )}
+            {persuasionDone && (
+              <AssistantTextSpanClassification
+                text={text}
+                classification={persuasionResult.entities}
+                configs={persuasionResult.configs}
+                titleText={persuasionTitle}
+                helpDescription={"persuasion_techniques_tooltip"}
+                textHtmlMap={textHtmlMap}
               />
-              <Tab
-                label="Subjectivity"
-                {...a11yProps(4)}
-                disabled={subjectivityFail || subjectivityLoading}
+            )}
+          </CustomTabPanel>
+
+          {/* subjectivity */}
+          <CustomTabPanel value={textTabIndex} index={4}>
+            {subjectivityLoading && (
+              <Stack direction="column" spacing={4} p={4}>
+                <Skeleton variant="rounded" height={40} />
+                <Skeleton variant="rounded" width="50%" height={40} />
+              </Stack>
+            )}
+            {subjectivityDone && (
+              <AssistantTextClassification
+                text={text}
+                classification={subjectivityResult.entities}
+                configs={subjectivityResult.configs}
+                titleText={subjectivityTitle}
+                helpDescription={"subjectivity_tooltip"}
+                textHtmlMap={textHtmlMap}
+                subjectivity={true}
               />
-            </Tabs>
+            )}
+          </CustomTabPanel>
+        </Collapse>
 
-            {/* extracted raw text */}
-            <CustomTabPanel value={textTabIndex} index={0}>
-              <Typography component={"div"} sx={{ textAlign: "start" }}>
-                {textHtmlOutput ?? text}
-              </Typography>
-            </CustomTabPanel>
-
-            {/* news framing (topic) */}
-            <CustomTabPanel value={textTabIndex} index={1}>
-              {newsFramingLoading && (
-                <Stack direction="column" spacing={4} p={4}>
-                  <Skeleton variant="rounded" height={40} />
-                  <Skeleton variant="rounded" width="50%" height={40} />
-                </Stack>
-              )}
-              {newsFramingDone && (
-                <AssistantTextClassification
-                  text={text}
-                  classification={newsFramingResult.entities}
-                  configs={newsFramingResult.configs}
-                  titleText={newsFramingTitle}
-                  helpDescription={"news_framing_tooltip"}
-                  textHtmlMap={textHtmlMap}
-                  subjectivity={false}
-                />
-              )}
-            </CustomTabPanel>
-
-            {/* news genre */}
-            <CustomTabPanel value={textTabIndex} index={2}>
-              {newsGenreLoading && (
-                <Stack direction="column" spacing={4} p={4}>
-                  <Skeleton variant="rounded" height={40} />
-                  <Skeleton variant="rounded" width="50%" height={40} />
-                </Stack>
-              )}
-              {newsGenreDone && (
-                <AssistantTextClassification
-                  text={text}
-                  classification={newsGenreResult.entities}
-                  configs={newsGenreResult.configs}
-                  titleText={newsGenreTitle}
-                  helpDescription={"news_genre_tooltip"}
-                  textHtmlMap={textHtmlMap}
-                  subjectivity={false}
-                />
-              )}
-            </CustomTabPanel>
-
-            {/* persuasion */}
-            <CustomTabPanel value={textTabIndex} index={3}>
-              {persuasionLoading && (
-                <Stack direction="column" spacing={4} p={4}>
-                  <Skeleton variant="rounded" height={40} />
-                  <Skeleton variant="rounded" width="50%" height={40} />
-                </Stack>
-              )}
-              {persuasionDone && (
-                <AssistantTextSpanClassification
-                  text={text}
-                  classification={persuasionResult.entities}
-                  configs={persuasionResult.configs}
-                  titleText={persuasionTitle}
-                  helpDescription={"persuasion_techniques_tooltip"}
-                  textHtmlMap={textHtmlMap}
-                />
-              )}
-            </CustomTabPanel>
-
-            {/* subjectivity */}
-            <CustomTabPanel value={textTabIndex} index={4}>
-              {subjectivityLoading && (
-                <Stack direction="column" spacing={4} p={4}>
-                  <Skeleton variant="rounded" height={40} />
-                  <Skeleton variant="rounded" width="50%" height={40} />
-                </Stack>
-              )}
-              {subjectivityDone && (
-                <AssistantTextClassification
-                  text={text}
-                  classification={subjectivityResult.entities}
-                  configs={subjectivityResult.configs}
-                  titleText={subjectivityTitle}
-                  helpDescription={"subjectivity_tooltip"}
-                  textHtmlMap={textHtmlMap}
-                  subjectivity={true}
-                />
-              )}
-            </CustomTabPanel>
-          </Collapse>
-
-          {/* footer */}
-          <TextFooter
-            classes={classes}
-            setDisplayOrigLang={setDisplayOrigLang}
-            displayOrigLang={displayOrigLang}
-            textLang={textLang}
-            expandMinimiseText={expandMinimiseText}
-            text={text}
-            displayExpander={displayExpander}
-            setExpanded={setExpanded}
-            expanded={expanded}
-          />
-        </CardContent>
-      </Card>
-    </Grid2>
+        {/* footer */}
+        <TextFooter
+          classes={classes}
+          setDisplayOrigLang={setDisplayOrigLang}
+          displayOrigLang={displayOrigLang}
+          textLang={textLang}
+          expandMinimiseText={expandMinimiseText}
+          text={text}
+          displayExpander={displayExpander}
+          setExpanded={setExpanded}
+          expanded={expanded}
+        />
+      </CardContent>
+    </Card>
   );
 };
 export default AssistantTextResult;
