@@ -793,10 +793,6 @@ const filterAssistantResults = (
     case KNOWN_LINKS.FACEBOOK:
       if (scrapeResult.videos.length === 0) {
         imageList = scrapeResult.images;
-        imageList = imageList.filter(
-          (imageUrl) =>
-            imageUrl.includes("//scontent") && !imageUrl.includes("/cp0/"),
-        );
       } else {
         videoList = scrapeResult.videos;
       }
