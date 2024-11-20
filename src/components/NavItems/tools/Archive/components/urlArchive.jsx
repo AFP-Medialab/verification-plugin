@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { useEffect, useState } from "react";
-import IconPermaCC from "../../../../NavBar/images/SVG/Others/perma-cc-icon.svg";
 import IconInternetArchive from "../../../../NavBar/images/SVG/Others/archive-icon.svg";
 import {
   getclientId,
@@ -92,15 +91,15 @@ const UrlArchive = ({ url }) => {
 
   const ArchiveLink = ({ link, link_type_keyword }) => {
     return (
-      <>
+      <Box>
         <Grid2 container>
           <Typography>{keyword(link_type_keyword)}</Typography>
           <Box p={1} />
-          <Tooltip title={keyword("permacc_button")}>
-            <Button>
-              <IconPermaCC />
-            </Button>
-          </Tooltip>
+          {/*<Tooltip title={keyword("permacc_button")}>*/}
+          {/*  <Button>*/}
+          {/*    <IconPermaCC />*/}
+          {/*  </Button>*/}
+          {/*</Tooltip>*/}
           <Tooltip title={keyword("internet_archive_button")}>
             <Button onClick={() => saveToInternetArchive(link)}>
               <IconInternetArchive />
@@ -110,7 +109,7 @@ const UrlArchive = ({ url }) => {
         <Link href={link} pl={2}>
           {link}
         </Link>
-      </>
+      </Box>
     );
   };
 
