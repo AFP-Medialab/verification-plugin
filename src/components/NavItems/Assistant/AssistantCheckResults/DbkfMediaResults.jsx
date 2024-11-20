@@ -24,91 +24,98 @@ const DbkfMediaResults = () => {
   return (
     <List disablePadding={true}>
       {dbkfImageMatch
-        ? dbkfImageMatch.map((value, key) => (
-            <ListItem key={key}>
-              <ListItemAvatar>
-                <ImageIconOutlined fontSize={"large"} />
-              </ListItemAvatar>
-              <ListItemText
-                primary={
-                  <div>
+        ? dbkfImageMatch
+            .filter(
+              (obj1, i, arr) =>
+                arr.findIndex((obj2) => obj2.id === obj1.id) === i,
+            )
+            .map((value, key) => (
+              <ListItem key={key}>
+                <ListItemAvatar>
+                  <ImageIconOutlined fontSize={"large"} />
+                </ListItemAvatar>
+                <ListItemText
+                  primary={
+                    <div>
+                      <Typography
+                        variant={"body1"}
+                        color={"textPrimary"}
+                        component={"div"}
+                        align={"left"}
+                      >
+                        {keyword("dbkf_image_warning") +
+                          parseFloat(value.similarity).toFixed(2)}
+                      </Typography>
+                      <Box mb={0.5} />
+                    </div>
+                  }
+                  secondary={
                     <Typography
-                      variant={"body1"}
-                      color={"textPrimary"}
+                      variant={"caption"}
                       component={"div"}
-                      align={"left"}
-                      data-testid={"dbkf_image_warning_" + value.claimUrl}
+                      color={"textSecondary"}
                     >
-                      {keyword("dbkf_image_warning") +
-                        " " +
-                        parseFloat(value.similarity).toFixed(2)}
+                      <a
+                        href={value.claimUrl}
+                        key={key}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {value.claimUrl}
+                      </a>
                     </Typography>
-                    <Box mb={0.5} />
-                  </div>
-                }
-                secondary={
-                  <Typography
-                    variant={"caption"}
-                    component={"div"}
-                    color={"textSecondary"}
-                  >
-                    <a
-                      href={value.claimUrl}
-                      key={key}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {value.claimUrl}
-                    </a>
-                  </Typography>
-                }
-              />
-            </ListItem>
-          ))
+                  }
+                />
+              </ListItem>
+            ))
         : null}
 
       {dbkfVideoMatch
-        ? dbkfVideoMatch.map((value, key) => (
-            <ListItem key={key}>
-              <ListItemAvatar>
-                <DuoOutlined fontSize={"large"} />
-              </ListItemAvatar>
-              <ListItemText
-                primary={
-                  <div>
+        ? dbkfVideoMatch
+            .filter(
+              (obj1, i, arr) =>
+                arr.findIndex((obj2) => obj2.id === obj1.id) === i,
+            )
+            .map((value, key) => (
+              <ListItem key={key}>
+                <ListItemAvatar>
+                  <DuoOutlined fontSize={"large"} />
+                </ListItemAvatar>
+                <ListItemText
+                  primary={
+                    <div>
+                      <Typography
+                        variant={"body1"}
+                        color={"textPrimary"}
+                        component={"div"}
+                        align={"left"}
+                      >
+                        {keyword("dbkf_video_warning") +
+                          " " +
+                          parseFloat(value.similarity).toFixed(2)}
+                      </Typography>
+                      <Box mb={0.5} />
+                    </div>
+                  }
+                  secondary={
                     <Typography
-                      variant={"body1"}
-                      color={"textPrimary"}
+                      variant={"caption"}
                       component={"div"}
-                      align={"left"}
-                      data-testid={"dbkf_video_warning_" + value.claimUrl}
+                      color={"textSecondary"}
                     >
-                      {keyword("dbkf_video_warning") +
-                        " " +
-                        parseFloat(value.similarity).toFixed(2)}
+                      <a
+                        href={value.claimUrl}
+                        key={key}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {value.claimUrl}
+                      </a>
                     </Typography>
-                    <Box mb={0.5} />
-                  </div>
-                }
-                secondary={
-                  <Typography
-                    variant={"caption"}
-                    component={"div"}
-                    color={"textSecondary"}
-                  >
-                    <a
-                      href={value.claimUrl}
-                      key={key}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {value.claimUrl}
-                    </a>
-                  </Typography>
-                }
-              />
-            </ListItem>
-          ))
+                  }
+                />
+              </ListItem>
+            ))
         : null}
     </List>
   );
