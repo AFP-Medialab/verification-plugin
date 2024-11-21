@@ -56,7 +56,7 @@ export const TYPE_PATTERNS = [
 export const KNOWN_LINK_PATTERNS = [
   {
     key: KNOWN_LINKS.BLUESKY,
-    patterns: ["((https?:/{2})?(www.)?(bsky).app/profile/[\\w.]+/post/\\w*)"],
+    patterns: ["((https?:/{2})?(www.)?(bsky).app/profile/[\\w-.]+/post/\\w*)"],
   },
   {
     key: KNOWN_LINKS.TWITTER,
