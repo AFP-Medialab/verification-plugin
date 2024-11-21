@@ -707,6 +707,7 @@ const decideWhetherToScrape = (urlType, contentType) => {
     case KNOWN_LINKS.INSTAGRAM:
     case KNOWN_LINKS.FACEBOOK:
     case KNOWN_LINKS.TWITTER:
+    case KNOWN_LINKS.BLUESKY:
     case KNOWN_LINKS.TELEGRAM:
     case KNOWN_LINKS.MASTODON:
     case KNOWN_LINKS.VK:
@@ -802,6 +803,14 @@ const filterAssistantResults = (
       }
       break;
     case KNOWN_LINKS.TWITTER:
+      if (scrapeResult.images.length > 0) {
+        imageList = scrapeResult.images;
+      }
+      if (scrapeResult.videos.length > 0) {
+        videoList = scrapeResult.videos;
+      }
+      break;
+    case KNOWN_LINKS.BLUESKY:
       if (scrapeResult.images.length > 0) {
         imageList = scrapeResult.images;
       }
