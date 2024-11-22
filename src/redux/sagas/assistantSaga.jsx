@@ -587,9 +587,10 @@ function* handlePrevFactChecksCall(action) {
         // merge results
         if (i == 0) {
           result = textChunkResult;
-        } else {
-          result.fact_checks.push(textChunkResult.textChunkResult);
         }
+        // else {
+        //   result.fact_checks.push(textChunkResult.textChunkResult);
+        // }
       }
 
       yield put(
@@ -647,9 +648,30 @@ function* handleMachineGeneratedTextCall(action) {
 
       console.log("MGT result=", result);
       // sum scores and divide each by length of textChunk
+      let overallResult = {
+        pred: null,
+        score: 0,
+      };
+      for (let i = 0; i < textChunks.length; i += 1) {
+        // loop through results and textChunks for length
+        overallResult.score += result[i].score * textChunks[i].length;
+        console.log(
+          i,
+          result[i].score,
+          textChunks[i].length,
+          result[i].score * textChunks[i].length,
+        );
+      }
+      console.log(
+        overallResult.score,
+        text.length,
+        overallResult.score / text.length,
+      );
+      overallResult.score = overallResult.score / text.length;
 
-      // should be done on backend?
-      yield put(setMachineGeneratedTextDetails(result[0], false, true, false));
+      yield put(
+        setMachineGeneratedTextDetails(overallResult, false, true, false),
+      );
     }
   } catch (error) {
     yield put(setMachineGeneratedTextDetails(null, false, false, true));
