@@ -567,7 +567,7 @@ function* handlePrevFactChecksCall(action) {
       console.log("pfc text.length =", text.length);
 
       // collect results for each chunk
-      let result = {};
+      let factChecksResult = [];
       let step = 0;
       for (let i = 0; i < textChunks.length; i += 1) {
         console.log(
@@ -581,21 +581,22 @@ function* handlePrevFactChecksCall(action) {
           textChunks[i],
         );
 
-        console.log(textChunkResult);
         // need to find a link which has a previous fact check detected to test this
+        // https://www.breitbart.com/europe/2024/10/21/moldova-votes-in-favour-of-eu-membership-by-razor-thin-majority/
 
         // merge results
         if (i == 0) {
-          result = textChunkResult;
+          factChecksResult = textChunkResult.fact_checks;
+        } else {
+          for (let j = 0; j < textChunkResult.fact_checks.length; j += 1) {
+            factChecksResult.push(textChunkResult.fact_checks[j]);
+          }
         }
-        // else {
-        //   result.fact_checks.push(textChunkResult.textChunkResult);
-        // }
       }
 
-      yield put(
-        setPrevFactChecksDetails(result.fact_checks, false, true, false),
-      );
+      console.log("PFC results=", factChecksResult);
+
+      yield put(setPrevFactChecksDetails(factChecksResult, false, true, false));
     }
   } catch (error) {
     yield put(setPrevFactChecksDetails(null, false, false, true));
@@ -610,9 +611,6 @@ function* handleMachineGeneratedTextCall(action) {
 
     // this prevents the call from happening if not correct user status
     const role = yield select((state) => state.userSession.user.roles);
-
-    // chunk text
-    console.log("mgt text.length =", text.length);
 
     if (text && role.includes("BETA_TESTER")) {
       yield put(setMachineGeneratedTextDetails(null, true, false, false));
@@ -636,8 +634,6 @@ function* handleMachineGeneratedTextCall(action) {
           textChunks[i],
         );
 
-        console.log(textChunkResult);
-
         // merge results
         if (i == 0) {
           result = [textChunkResult];
@@ -646,8 +642,7 @@ function* handleMachineGeneratedTextCall(action) {
         }
       }
 
-      console.log("MGT result=", result);
-      // sum scores and divide each by length of textChunk
+      // find overall result by summing scores and dividing each by length of textChunk
       let overallResult = {
         pred: null,
         score: 0,
@@ -655,19 +650,24 @@ function* handleMachineGeneratedTextCall(action) {
       for (let i = 0; i < textChunks.length; i += 1) {
         // loop through results and textChunks for length
         overallResult.score += result[i].score * textChunks[i].length;
-        console.log(
-          i,
-          result[i].score,
-          textChunks[i].length,
-          result[i].score * textChunks[i].length,
-        );
       }
-      console.log(
-        overallResult.score,
-        text.length,
-        overallResult.score / text.length,
-      );
+
+      // overall score
       overallResult.score = overallResult.score / text.length;
+      // overall prediction
+      if (0 <= score < 0.05) {
+        overallResult.pred = "highly_likely_human";
+      } else if (0.05 <= score < 0.5) {
+        overallResult.pred = "likely_human";
+      } else if (0.5 <= score < 0.95) {
+        overallResult.pred = "likely_machine";
+      } else if (0.95 <= score <= 1) {
+        overallResult.pred = "highly_likely_machine";
+      } else {
+        overallResult.pred = "failed_to_load";
+      }
+
+      console.log("MGT results=", result, overallResult);
 
       yield put(
         setMachineGeneratedTextDetails(overallResult, false, true, false),
