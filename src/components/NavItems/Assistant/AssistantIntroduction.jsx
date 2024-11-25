@@ -97,10 +97,15 @@ const AssistantIntroduction = (props) => {
                   dangerouslySetInnerHTML={{
                     __html:
                       keyword("assistant_help_title") +
+                      "<br><br>" +
                       keyword("assistant_help_1") +
                       keyword("assistant_help_2") +
                       keyword("assistant_help_3") +
-                      keyword("assistant_help_4"),
+                      keyword("assistant_help_4") +
+                      "<br>" +
+                      keyword("supported_tools_link") +
+                      "<br>" +
+                      keyword("supported_urls_link"),
                   }}
                 />
               }

@@ -80,7 +80,7 @@ export default function AssistantTextClassification({
   );
   const confidenceTooltipContent = (
     <ColourGradientTooltipContent
-      description={keyword(helpDescription)}
+      description={helpDescription}
       colourScaleText={keyword("colour_scale")}
       textLow={keyword("low_importance")}
       textHigh={keyword("high_importance")}
@@ -119,13 +119,6 @@ export default function AssistantTextClassification({
     filteredSentences = [];
   }
 
-  // disabled category box for Subjectivity classifier
-  // subjectivty or not
-  // let width = 12;
-  // if (!subjectivity) {
-  //   width = 9;
-  // }
-
   return (
     <Grid2 container>
       <Grid2 sx={{ paddingRight: "1em" }} size={9}>
@@ -141,7 +134,7 @@ export default function AssistantTextClassification({
           textHtmlMap={textHtmlMap}
         />
       </Grid2>
-      {/* {!subjectivity ? ( */}
+
       <Grid2 size={{ xs: 3 }}>
         <Card>
           <CardHeader
@@ -183,7 +176,6 @@ export default function AssistantTextClassification({
           </CardContent>
         </Card>
       </Grid2>
-      {/* ) : null} */}
     </Grid2>
   );
 }

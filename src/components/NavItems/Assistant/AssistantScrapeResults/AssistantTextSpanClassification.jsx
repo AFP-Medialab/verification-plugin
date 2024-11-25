@@ -57,13 +57,6 @@ export default function AssistantTextSpanClassification({
   const tooltipTextLowThreshold = keyword("low_confidence");
   const tooltipTextHighThreshold = keyword("high_confidence");
 
-  // console.log("keyword(helpDescription)=", keyword(helpDescription));
-  // console.log("keyword(\"colour_scale\")=", keyword("colour_scale"));
-  // console.log("tooltipTextLowThreshold=", tooltipTextLowThreshold);
-  // console.log("tooltipTextHighThreshold=", tooltipTextHighThreshold);
-  // console.log("configs.confidenceRgbLow=", configs.confidenceRgbLow);
-  // console.log("configs.confidenceRgbHigh=", configs.confidenceRgbHigh);
-
   const confidenceTooltipContent = (
     <ColourGradientTooltipContent
       description={keyword(helpDescription)}
@@ -177,7 +170,8 @@ export default function AssistantTextSpanClassification({
             cursor: "pointer",
           }}
         >
-          {persuasionTechnique.replaceAll("_", " ")}
+          {/* {persuasionTechnique.replaceAll("_", " ")} */}
+          {keyword(persuasionTechnique)}
         </div>,
       );
     }
