@@ -229,7 +229,7 @@ const csvSnaSvgIcon = (props) => {
 };
 
 const archiveSvgIcon = (props) => {
-  return <ArchiveIcon inheritViewBox {...props} />;
+  return <ArchiveIcon {...props} />;
 };
 
 const aboutSvgIcon = (props) => {
@@ -567,7 +567,7 @@ const dataAnalysisCrowdtangle = new Tool(
  * Other tools
  **/
 
-const archiving = new Tool(
+export const archiving = new Tool(
   "navbar_archiving",
   "navbar_archiving_description",
   archiveSvgIcon,

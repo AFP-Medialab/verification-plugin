@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Grid2,
-  Link,
-  Stack,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Link, Stack, Typography } from "@mui/material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { useEffect, useState } from "react";
 import IconInternetArchive from "../../../../NavBar/images/SVG/Others/archive-icon.svg";
@@ -16,6 +8,8 @@ import {
 } from "../../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useSelector } from "react-redux";
 import { history } from "../../../../Shared/History/History";
+import { prettifyLargeString } from "../utils";
+import CopyButton from "../../../../Shared/CopyButton";
 
 const UrlArchive = ({ url }) => {
   const [platform, setPlatform] = useState(null);
@@ -37,10 +31,16 @@ const UrlArchive = ({ url }) => {
       setPlatform("youtube");
     } else if (url.includes("instagram")) {
       setPlatform("instagram");
+    } else {
+      setPlatform(null);
     }
   }, [url]);
 
   useEffect(() => {
+    if (!platform) {
+      setUrls(url);
+    }
+
     if (platform)
       trackEvent(
         "submission",
@@ -90,36 +90,61 @@ const UrlArchive = ({ url }) => {
   };
 
   const ArchiveLink = ({ link, link_type_keyword }) => {
+    if (!link) return <></>;
+
     return (
       <Box>
-        <Grid2 container>
-          <Typography>{keyword(link_type_keyword)}</Typography>
-          <Box p={1} />
-          {/*<Tooltip title={keyword("permacc_button")}>*/}
-          {/*  <Button>*/}
-          {/*    <IconPermaCC />*/}
-          {/*  </Button>*/}
-          {/*</Tooltip>*/}
-          <Tooltip title={keyword("internet_archive_button")}>
-            <Button onClick={() => saveToInternetArchive(link)}>
-              <IconInternetArchive />
+        <Stack direction="column" spacing={1}>
+          <Stack
+            direction="row"
+            justifyContent={"start"}
+            alignItems={"center"}
+            spacing={1}
+          >
+            <Typography>{keyword(link_type_keyword)}</Typography>
+            <Link href={link} target="_blank">
+              {prettifyLargeString(link)}
+            </Link>
+            <CopyButton
+              strToCopy={link}
+              labelBeforeCopy={"Copy Url"}
+              labelAfterCopy={"Copied!"}
+            />
+          </Stack>
+
+          <Box>
+            <Button
+              variant="outlined"
+              onClick={() => saveToInternetArchive(link)}
+              startIcon={<IconInternetArchive />}
+              sx={{ textTransform: "none" }}
+            >
+              {keyword("internet_archive_button")}
             </Button>
-          </Tooltip>
-        </Grid2>
-        <Link href={link} pl={2}>
-          {link}
-        </Link>
+          </Box>
+        </Stack>
+
+        {/*<Box />*/}
+        {/*<Tooltip title={keyword("permacc_button")}>*/}
+        {/*  <Button>*/}
+        {/*    <IconPermaCC />*/}
+        {/*  </Button>*/}
+        {/*</Tooltip>*/}
       </Box>
     );
   };
 
   return (
     <>
-      <Stack p={2} spacing={1}>
+      <Stack spacing={4}>
         {platform === "facebook" ? (
           <>
-            <Box p={1} />
-            <Grid2>
+            <Stack spacing={4}>
+              <ArchiveLink link={urls[0]} link_type_keyword={"embed_link"} />
+              <ArchiveLink link={urls[1]} link_type_keyword={"android_link"} />
+              <ArchiveLink link={urls[2]} link_type_keyword={"mobile_link"} />
+            </Stack>
+            <Box>
               <Button
                 variant="contained"
                 color="primary"
@@ -131,12 +156,7 @@ const UrlArchive = ({ url }) => {
               >
                 {keyword("open_links_button")}
               </Button>
-            </Grid2>
-            <Stack spacing={2}>
-              <ArchiveLink link={urls[0]} link_type_keyword={"embed_link"} />
-              <ArchiveLink link={urls[1]} link_type_keyword={"android_link"} />
-              <ArchiveLink link={urls[2]} link_type_keyword={"mobile_link"} />
-            </Stack>
+            </Box>
           </>
         ) : (
           <>
@@ -154,7 +174,7 @@ const UrlArchive = ({ url }) => {
                     />
                   </>
                 ) : (
-                  <Typography>{keyword("unsupported_platform")}</Typography>
+                  <ArchiveLink link={url} link_type_keyword={"link"} />
                 )}
               </>
             )}

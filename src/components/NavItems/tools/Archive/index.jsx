@@ -4,12 +4,12 @@ import {
   Alert,
   Box,
   Card,
+  CardContent,
   Fade,
   Skeleton,
   Stack,
   Typography,
 } from "@mui/material";
-import ArchiveIcon from "@mui/icons-material/Archive";
 
 import ArchiveTable from "./components/archiveTable";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
@@ -18,11 +18,12 @@ import { useParams } from "react-router-dom";
 import UrlArchive from "./components/urlArchive";
 import {
   archiveStateCleaned,
-  archiveUrlSet,
+  setArchiveUrl,
 } from "redux/reducers/tools/archiveReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import StringFileUploadField from "../../../Shared/StringFileUploadField"; //TODO:UI for long strings
+import StringFileUploadField from "../../../Shared/StringFileUploadField";
+import { archiving } from "../../../../constants/tools"; //TODO:UI for long strings
 
 //TODO:UI for long strings
 
@@ -57,11 +58,12 @@ const Archive = () => {
     } else if (url && url !== "") {
       setUrlResults(true);
       setUrlInput(url);
-      archiveUrlSet(url);
+      setArchiveUrl(url);
     }
   }, []);
 
   const handleCloseUrl = () => {
+    setFileToUpload(null);
     setUrlResults(false);
     setErrorMessage("");
     dispatch(archiveStateCleaned());
@@ -69,9 +71,9 @@ const Archive = () => {
   };
 
   const handleSubmitUrl = () => {
+    setArchiveUrl(urlInput);
     setUrlResults(true);
-    dispatch(archiveUrlSet(urlInput));
-    setIsLoading(false);
+    dispatch(setArchiveUrl(urlInput));
   };
 
   const isFileAWaczFile = (fileName) => {
@@ -107,9 +109,63 @@ const Archive = () => {
     }
   };
 
+  const handleSubmitFile = async () => {
+    if (!fileToUpload || !isFileAWaczFile(fileToUpload.name)) {
+      setErrorMessage("File error — The file is not a .wacz file");
+      setIsLoading(false);
+      setHasArchiveBeenCreated(false);
+      return;
+    }
+
+    let result;
+
+    try {
+      result = await fetchArchivedUrls(fileToUpload);
+    } catch (error) {
+      setErrorMessage(
+        "Upload error — An error happened with the file upload. Try with another file.",
+      );
+      setIsLoading(false);
+      setHasArchiveBeenCreated(false);
+      setInput("");
+      setArchiveLinks([]);
+      return;
+    }
+
+    if (!result) {
+      setErrorMessage(
+        "Upload error — An error happened wit the upload of the file. Try again or with another file.",
+      );
+      setIsLoading(false);
+      setHasArchiveBeenCreated(false);
+      return;
+    }
+
+    let results = [];
+
+    for (const page of Object.keys(result.data.pages)) {
+      let archivedUrl = result.data.pages[page].capture_url;
+      let originalUrl = result.data.pages[page].url;
+
+      results.push({ archivedUrl, originalUrl });
+    }
+
+    if (results.length === 0) {
+      setErrorMessage(
+        "Upload error — An error happened wit the upload of the file. Try again or with another file.",
+      );
+      setIsLoading(false);
+      setHasArchiveBeenCreated(false);
+      return;
+    }
+
+    setArchiveLinks(results);
+  };
+
   const handleSubmit = async () => {
     // Reset states
     setErrorMessage("");
+    setArchiveLinks([]);
     setHasArchiveBeenCreated(false);
 
     setIsLoading(true);
@@ -117,70 +173,30 @@ const Archive = () => {
     if (urlInput) {
       handleSubmitUrl();
     } else {
-      if (!fileToUpload || !isFileAWaczFile(fileToUpload.name)) {
-        setErrorMessage("File error — The file is not a .wacz file");
-        setIsLoading(false);
-        setHasArchiveBeenCreated(false);
-        return;
-      }
-
-      let result;
-
-      try {
-        result = await fetchArchivedUrls(fileToUpload);
-      } catch (error) {
-        setErrorMessage(
-          "Upload error — An error happened with the file upload. Try with another file.",
-        );
-        setIsLoading(false);
-        setHasArchiveBeenCreated(false);
-        setInput("");
-        setArchiveLinks([]);
-        return;
-      }
-
-      if (!result) {
-        setErrorMessage(
-          "Upload error — An error happened wit the upload of the file. Try again or with another file.",
-        );
-        setIsLoading(false);
-        setHasArchiveBeenCreated(false);
-        return;
-      }
-
-      let results = [];
-
-      for (const page of Object.keys(result.data.pages)) {
-        let archivedUrl = result.data.pages[page].capture_url;
-        let originalUrl = result.data.pages[page].url;
-
-        results.push({ archivedUrl, originalUrl });
-      }
-
-      if (results.length === 0) {
-        setErrorMessage(
-          "Upload error — An error happened wit the upload of the file. Try again or with another file.",
-        );
-        setIsLoading(false);
-        setHasArchiveBeenCreated(false);
-        return;
-      }
-
-      setArchiveLinks(results);
-      setIsLoading(false);
+      await handleSubmitFile();
       setHasArchiveBeenCreated(true);
       setInput("");
     }
+
+    setIsLoading(false);
   };
 
   return (
-    <div>
+    <Box>
       <HeaderTool
         name={keyword("archive_name")}
         description={"Archive a .wacz file with Web Archive (Wayback Machine)"}
-        icon={<ArchiveIcon sx={{ fill: "#00926c", width: 40, height: 40 }} />}
+        icon={
+          // <
+          <archiving.icon
+            style={{
+              fontSize: "40px",
+              fill: "#00926c",
+            }}
+          />
+        }
       />
-      <Card>
+      <Card variant="outlined">
         <Box p={3}>
           <form>
             <StringFileUploadField
@@ -199,11 +215,6 @@ const Archive = () => {
               isParentLoading={isLoading}
             />
           </form>
-          {urlResults && urlInput !== "" ? (
-            <>
-              <UrlArchive url={urlInput}></UrlArchive>
-            </>
-          ) : null}
         </Box>
       </Card>
       <Box p={2} />
@@ -226,8 +237,19 @@ const Archive = () => {
         </Fade>
       )}
 
+      {urlResults && urlInput !== "" ? (
+        <Card variant="outlined" m={2}>
+          <CardContent>
+            <Typography variant="h6" component="div" pb={2}>
+              Archivable links
+            </Typography>
+            <UrlArchive url={urlInput}></UrlArchive>
+          </CardContent>
+        </Card>
+      ) : null}
+
       {hasArchiveBeenCreated && archiveLinks.length > 0 && (
-        <Card>
+        <Card variant="outlined">
           <Typography>{keyword("archive_wacz_accordion")}</Typography>
           <Box p={3}>
             <form>
@@ -274,7 +296,7 @@ const Archive = () => {
           </Box>
         </Card>
       )}
-    </div>
+    </Box>
   );
 };
 

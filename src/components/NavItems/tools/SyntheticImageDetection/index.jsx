@@ -362,7 +362,7 @@ const SyntheticImageDetection = () => {
         )}
         icon={
           <Gradient
-            style={{ fill: "#00926c", height: "75px", width: "auto" }}
+            style={{ fill: "#00926c", height: "40px", width: "auto" }}
           />
         }
       />

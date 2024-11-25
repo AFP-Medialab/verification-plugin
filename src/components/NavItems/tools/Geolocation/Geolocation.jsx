@@ -49,7 +49,7 @@ const Geolocation = () => {
         description={keywordAllTools("navbar_geolocation_description")}
         icon={
           <GeolocationIcon
-            style={{ fill: "#00926c", width: "75px", height: "75px" }}
+            style={{ fill: "#00926c", width: "40px", height: "40px" }}
           />
         }
       />
