@@ -70,7 +70,11 @@ const UrlArchive = ({ url }) => {
       const youtubeUrls = [url.replace("/watch?v=", "/embed/")];
       setUrls(youtubeUrls);
     } else if (platform === "instagram") {
-      const instagramUrls = [url + "embed/captioned"];
+      const instagramUrls = [
+        url.substring(url.length - 1) === "/"
+          ? url + "embed/captioned"
+          : url + "/embed/captioned",
+      ];
       setUrls(instagramUrls);
     }
   }, [platform]);
