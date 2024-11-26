@@ -267,7 +267,6 @@ const AssistantTextResult = () => {
                 titleText={newsFramingTitle}
                 helpDescription={
                   keyword("news_framing_tooltip") +
-                  "<br><br>" +
                   keyword("credibility_signals_link")
                 }
                 textHtmlMap={textHtmlMap}
@@ -292,7 +291,6 @@ const AssistantTextResult = () => {
                 titleText={newsGenreTitle}
                 helpDescription={
                   keyword("news_genre_tooltip") +
-                  "<br><br>" +
                   keyword("credibility_signals_link")
                 }
                 textHtmlMap={textHtmlMap}
@@ -317,7 +315,6 @@ const AssistantTextResult = () => {
                 titleText={persuasionTitle}
                 helpDescription={
                   keyword("persuasion_techniques_tooltip") +
-                  "<br><br>" +
                   keyword("credibility_signals_link")
                 }
                 textHtmlMap={textHtmlMap}

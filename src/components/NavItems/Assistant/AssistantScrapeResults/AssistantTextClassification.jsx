@@ -51,26 +51,29 @@ export default function AssistantTextClassification({
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   // subjectivity or not
-  let toolipText;
+  let tooltipText;
   let textLow, textHigh;
   let rgbLow, rgbHigh;
   if (subjectivity) {
-    toolipText = <p>{keyword("confidence_tooltip_sentence")}</p>;
+    // subjectivity requires confidence tooltip
+    tooltipText = keyword("confidence_tooltip_sentence");
     textLow = keyword("low_confidence");
     textHigh = keyword("high_confidence");
     rgbLow = configs.confidenceRgbLow;
     rgbHigh = configs.confidenceRgbHigh;
   } else {
-    toolipText = <p>{keyword("importance_tooltip")}</p>;
+    // news framing and news genre requires importance tooltip
+    tooltipText = keyword("importance_tooltip");
     textLow = keyword("low_importance");
     textHigh = keyword("high_importance");
     rgbLow = configs.importanceRgbLow;
     rgbHigh = configs.importanceRgbHigh;
   }
 
+  // tooltip for hovering over highlighted sentences
   const importanceTooltipContent = (
     <ColourGradientTooltipContent
-      description={toolipText}
+      description={tooltipText}
       colourScaleText={keyword("colour_scale")}
       textLow={textLow}
       textHigh={textHigh}
@@ -78,15 +81,19 @@ export default function AssistantTextClassification({
       rgbHigh={rgbHigh}
     />
   );
+  // sub card header tooltip
   const confidenceTooltipContent = (
-    <ColourGradientTooltipContent
-      description={helpDescription}
-      colourScaleText={keyword("colour_scale")}
-      textLow={keyword("low_importance")}
-      textHigh={keyword("high_importance")}
-      rgbLow={configs.confidenceRgbLow}
-      rgbHigh={configs.confidenceRgbHigh}
-    />
+    <div>
+      <p dangerouslySetInnerHTML={{ __html: keyword(helpDescription) }}></p>
+      <ColourGradientTooltipContent
+        description={tooltipText}
+        colourScaleText={keyword("colour_scale")}
+        textLow={keyword("low_importance")}
+        textHigh={keyword("high_importance")}
+        rgbLow={configs.confidenceRgbLow}
+        rgbHigh={configs.confidenceRgbHigh}
+      />
+    </div>
   );
 
   let filteredCategories = {};
@@ -121,6 +128,7 @@ export default function AssistantTextClassification({
 
   return (
     <Grid2 container>
+      {/* text being displayed */}
       <Grid2 sx={{ paddingRight: "1em" }} size={9}>
         <ClassifiedText
           text={text}
@@ -135,6 +143,7 @@ export default function AssistantTextClassification({
         />
       </Grid2>
 
+      {/* credibility signal box with categories */}
       <Grid2 size={{ xs: 3 }}>
         <Card>
           <CardHeader

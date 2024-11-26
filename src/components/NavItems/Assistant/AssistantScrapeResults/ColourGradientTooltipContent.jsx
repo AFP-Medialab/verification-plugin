@@ -39,14 +39,8 @@ export default function ColourGradientTooltipContent({
   rgbHigh = [255, 255, 255],
 }) {
   return (
-    <div
-      className={"content"}
-      //      dangerouslySetInnerHTML={description}
-    >
-      {/*
-      __html: description,
-    }}>*/}
-      {description}
+    <div className={"content"}>
+      <p>{description}</p>
       <p>{colourScaleText}</p>
       <ColourGradientScale
         textLow={textLow}

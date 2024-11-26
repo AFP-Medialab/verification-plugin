@@ -54,18 +54,23 @@ export default function AssistantTextSpanClassification({
 }) {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
+  const tooltipText = keyword("confidence_tooltip_sentence");
   const tooltipTextLowThreshold = keyword("low_confidence");
   const tooltipTextHighThreshold = keyword("high_confidence");
 
+  // sub card header tooltip
   const confidenceTooltipContent = (
-    <ColourGradientTooltipContent
-      description={keyword(helpDescription)}
-      colourScaleText={keyword("colour_scale")}
-      textLow={tooltipTextLowThreshold}
-      textHigh={tooltipTextHighThreshold}
-      rgbLow={configs.confidenceRgbLow}
-      rgbHigh={configs.confidenceRgbHigh}
-    />
+    <div>
+      <p dangerouslySetInnerHTML={{ __html: helpDescription }}></p>
+      <ColourGradientTooltipContent
+        description={tooltipText}
+        colourScaleText={keyword("colour_scale")}
+        textLow={tooltipTextLowThreshold}
+        textHigh={tooltipTextHighThreshold}
+        rgbLow={configs.confidenceRgbLow}
+        rgbHigh={configs.confidenceRgbHigh}
+      />
+    </div>
   );
 
   const [doHighlightSentence, setDoHighlightSentence] = useState(true);
