@@ -54,22 +54,17 @@ export default function AssistantTextSpanClassification({
 }) {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
-  const tooltipText = keyword("confidence_tooltip_sentence");
-  const tooltipTextLowThreshold = keyword("low_confidence");
-  const tooltipTextHighThreshold = keyword("high_confidence");
 
-  // sub card header tooltip
+  // sub card header tooltip for categories
+  const colourScaleText = keyword("colour_scale");
+  const categoryTooltipText = keyword("confidence_tooltip_technique");
+  const categoryTextLow = keyword("low_confidence");
+  const categoryTextHigh = keyword("high_confidence");
+  const categoryRgbLow = configs.confidenceRgbLow;
+  const categoryRgbHigh = configs.confidenceRgbHigh;
   const confidenceTooltipContent = (
     <div>
       <p dangerouslySetInnerHTML={{ __html: helpDescription }}></p>
-      <ColourGradientTooltipContent
-        description={tooltipText}
-        colourScaleText={keyword("colour_scale")}
-        textLow={tooltipTextLowThreshold}
-        textHigh={tooltipTextHighThreshold}
-        rgbLow={configs.confidenceRgbLow}
-        rgbHigh={configs.confidenceRgbHigh}
-      />
     </div>
   );
 
@@ -180,16 +175,16 @@ export default function AssistantTextSpanClassification({
         </div>,
       );
     }
-    techniqueContent.push(keyword("confidence_tooltip_technique"));
+    techniqueContent.push(categoryTooltipText);
 
     let techniquesTooltip = (
       <ColourGradientTooltipContent
         description={techniqueContent}
-        colourScaleText={keyword("colour_scale")}
-        textLow={tooltipTextLowThreshold}
-        textHigh={tooltipTextHighThreshold}
-        rgbLow={configs.confidenceRgbLow}
-        rgbHigh={configs.confidenceRgbHigh}
+        colourScaleText={colourScaleText}
+        textLow={categoryTextLow}
+        textHigh={categoryTextHigh}
+        rgbLow={categoryRgbLow}
+        rgbHigh={categoryRgbHigh}
       />
     );
 
@@ -294,7 +289,7 @@ export default function AssistantTextSpanClassification({
               thresholdHigh={configs.confidenceThresholdHigh}
               rgbLow={configs.confidenceRgbLow}
               rgbHigh={configs.confidenceRgbHigh}
-              noCategoriesText={keyword("no_detected_categories")}
+              noCategoriesText={keyword("no_detected_techniques")}
               allCategoriesLabel={allCategoriesLabel}
               onCategoryChange={handleCategorySelect}
               keyword={keyword}

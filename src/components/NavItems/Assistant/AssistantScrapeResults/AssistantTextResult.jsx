@@ -270,7 +270,7 @@ const AssistantTextResult = () => {
                   keyword("credibility_signals_link")
                 }
                 textHtmlMap={textHtmlMap}
-                subjectivity={false}
+                credibilitySignal={keyword("news_framing_title")}
               />
             )}
           </CustomTabPanel>
@@ -294,7 +294,7 @@ const AssistantTextResult = () => {
                   keyword("credibility_signals_link")
                 }
                 textHtmlMap={textHtmlMap}
-                subjectivity={false}
+                credibilitySignal={keyword("news_genre_title")}
               />
             )}
           </CustomTabPanel>
@@ -342,7 +342,7 @@ const AssistantTextResult = () => {
                   keyword("credibility_signals_link")
                 }
                 textHtmlMap={textHtmlMap}
-                subjectivity={true}
+                credibilitySignal={keyword("subjectivity_title")}
               />
             )}
           </CustomTabPanel>

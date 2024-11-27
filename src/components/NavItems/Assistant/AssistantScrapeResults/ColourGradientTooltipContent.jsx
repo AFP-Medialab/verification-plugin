@@ -40,7 +40,7 @@ export default function ColourGradientTooltipContent({
 }) {
   return (
     <div className={"content"}>
-      <p>{description}</p>
+      {description}
       <p>{colourScaleText}</p>
       <ColourGradientScale
         textLow={textLow}
