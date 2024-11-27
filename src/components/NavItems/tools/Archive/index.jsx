@@ -24,12 +24,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { archiving } from "../../../../constants/tools";
-import assistantApiCalls from "../../Assistant/AssistantApiHandlers/useAssistantApi";
 import {
   KNOWN_LINK_PATTERNS,
   matchPattern,
   TYPE_PATTERNS,
-} from "../../Assistant/AssistantRuleBook"; //TODO:UI for long strings
+} from "../../Assistant/AssistantRuleBook";
 
 //TODO:UI for long strings
 
@@ -96,8 +95,6 @@ const Archive = () => {
     try {
       let data = new FormData();
       data.append("file", waczFileUrl);
-
-      //console.log(data);
 
       const axiosConfig = {
         method: "post",
@@ -179,14 +176,14 @@ const Archive = () => {
     if (urlInput) {
       handleSubmitUrl();
       const urlType = matchPattern(urlInput, KNOWN_LINK_PATTERNS);
-      console.log(urlType);
+      // console.log(urlType);
 
       const contentType = matchPattern(urlInput, TYPE_PATTERNS);
-      console.log(contentType);
-
-      console.log(
-        await assistantApiCalls().callAssistantScraper(urlType, urlInput),
-      );
+      // console.log(contentType);
+      //
+      // console.log(
+      //   await assistantApiCalls().callAssistantScraper(urlType, urlInput),
+      // );
     } else {
       await handleSubmitFile();
       setHasArchiveBeenCreated(true);
@@ -288,7 +285,6 @@ const Archive = () => {
                             </Alert>
                             <Box>
                               <Skeleton variant="text" height={100} />
-                              {/*<Skeleton variant="text" height={40} />*/}
                             </Box>
                           </Box>
                         </Fade>

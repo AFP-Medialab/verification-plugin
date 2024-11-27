@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { history } from "../../../../Shared/History/History";
 import { prettifyLargeString } from "../utils";
 import CopyButton from "../../../../Shared/CopyButton";
+import { KNOWN_LINKS } from "../../../Assistant/AssistantRuleBook";
 
 const UrlArchive = ({ url }) => {
   const [platform, setPlatform] = useState(null);
@@ -25,12 +26,12 @@ const UrlArchive = ({ url }) => {
   useEffect(() => {
     if (!url && typeof url !== "string") return;
 
-    if (url.includes("facebook")) {
-      setPlatform("facebook");
-    } else if (url.includes("youtube")) {
-      setPlatform("youtube");
-    } else if (url.includes("instagram")) {
-      setPlatform("instagram");
+    if (url.includes(KNOWN_LINKS.FACEBOOK)) {
+      setPlatform(KNOWN_LINKS.FACEBOOK);
+    } else if (url.includes(KNOWN_LINKS.YOUTUBE)) {
+      setPlatform(KNOWN_LINKS.YOUTUBE);
+    } else if (url.includes(KNOWN_LINKS.INSTAGRAM)) {
+      setPlatform(KNOWN_LINKS.INSTAGRAM);
     } else {
       setPlatform(null);
     }
@@ -39,6 +40,7 @@ const UrlArchive = ({ url }) => {
   useEffect(() => {
     if (!platform) {
       setUrls(url);
+      return;
     }
 
     if (platform)
@@ -52,7 +54,7 @@ const UrlArchive = ({ url }) => {
         uid,
       );
 
-    if (platform === "facebook") {
+    if (platform === KNOWN_LINKS.FACEBOOK) {
       const facebookUrls = [
         `https://www.facebook.com/plugins/post.php?href=${encodeURIComponent(
           url,
@@ -66,10 +68,10 @@ const UrlArchive = ({ url }) => {
         )}`,
       ];
       setUrls(facebookUrls);
-    } else if (platform === "youtube") {
+    } else if (platform === KNOWN_LINKS.YOUTUBE) {
       const youtubeUrls = [url.replace("/watch?v=", "/embed/")];
       setUrls(youtubeUrls);
-    } else if (platform === "instagram") {
+    } else if (platform === KNOWN_LINKS.INSTAGRAM) {
       const instagramUrls = [
         url.substring(url.length - 1) === "/"
           ? url + "embed/captioned"
@@ -77,6 +79,8 @@ const UrlArchive = ({ url }) => {
       ];
       setUrls(instagramUrls);
     }
+
+    setUrls((prev) => [...prev, url]);
   }, [platform]);
 
   const saveToInternetArchive = (link) => {
@@ -138,53 +142,53 @@ const UrlArchive = ({ url }) => {
     );
   };
 
+  const getArchiveLinksForPlatform = (platform) => {
+    let archiveListForPlatform;
+
+    if (platform === KNOWN_LINKS.FACEBOOK) {
+      archiveListForPlatform = (
+        <>
+          <Stack spacing={4}>
+            <ArchiveLink link={urls[0]} link_type_keyword={"embed_link"} />
+            <ArchiveLink link={urls[1]} link_type_keyword={"android_link"} />
+            <ArchiveLink link={urls[2]} link_type_keyword={"mobile_link"} />
+          </Stack>
+        </>
+      );
+    } else if (platform === KNOWN_LINKS.YOUTUBE) {
+      archiveListForPlatform = (
+        <ArchiveLink link={urls[0]} link_type_keyword={"embed_link"} />
+      );
+    } else if (platform === KNOWN_LINKS.INSTAGRAM) {
+      archiveListForPlatform = (
+        <ArchiveLink link={urls[0]} link_type_keyword={"embed_link"} />
+      );
+    }
+
+    return (
+      <>
+        {archiveListForPlatform}
+        <ArchiveLink link={url} link_type_keyword={"link_submitted"} />
+        <Box>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              urls.map((urlElement) => {
+                window.open(urlElement, "_blank");
+              });
+            }}
+          >
+            {keyword("open_links_button")}
+          </Button>
+        </Box>
+      </>
+    );
+  };
+
   return (
     <>
-      <Stack spacing={4}>
-        {platform === "facebook" ? (
-          <>
-            <Stack spacing={4}>
-              <ArchiveLink link={urls[0]} link_type_keyword={"embed_link"} />
-              <ArchiveLink link={urls[1]} link_type_keyword={"android_link"} />
-              <ArchiveLink link={urls[2]} link_type_keyword={"mobile_link"} />
-            </Stack>
-            <Box>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => {
-                  urls.map((urlElement) => {
-                    window.open(urlElement, "_blank");
-                  });
-                }}
-              >
-                {keyword("open_links_button")}
-              </Button>
-            </Box>
-          </>
-        ) : (
-          <>
-            {platform === "youtube" ? (
-              <>
-                <ArchiveLink link={urls[0]} link_type_keyword={"embed_link"} />
-              </>
-            ) : (
-              <>
-                {platform === "instagram" ? (
-                  <>
-                    <ArchiveLink
-                      link={urls[0]}
-                      link_type_keyword={"embed_link"}
-                    />
-                  </>
-                ) : (
-                  <ArchiveLink link={url} link_type_keyword={"link"} />
-                )}
-              </>
-            )}
-          </>
-        )}
-      </Stack>
+      <Stack spacing={4}>{getArchiveLinksForPlatform(platform)}</Stack>
     </>
   );
 };
