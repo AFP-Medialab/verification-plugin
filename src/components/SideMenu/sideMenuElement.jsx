@@ -51,7 +51,7 @@ const SideMenuElement = ({
     <ListItemButton
       selected={isElementSelected}
       onClick={onClick}
-      sx={{ pl: level > 0 ? 2 * level + 4 : 2 }}
+      sx={{ pl: level > 0 && isSideMenuOpen ? 2 * level + 4 : 2 }}
     >
       {isSideMenuOpen ? (
         <>
