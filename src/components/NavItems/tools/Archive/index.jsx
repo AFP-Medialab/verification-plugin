@@ -23,7 +23,13 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
-import { archiving } from "../../../../constants/tools"; //TODO:UI for long strings
+import { archiving } from "../../../../constants/tools";
+import assistantApiCalls from "../../Assistant/AssistantApiHandlers/useAssistantApi";
+import {
+  KNOWN_LINK_PATTERNS,
+  matchPattern,
+  TYPE_PATTERNS,
+} from "../../Assistant/AssistantRuleBook"; //TODO:UI for long strings
 
 //TODO:UI for long strings
 
@@ -172,6 +178,15 @@ const Archive = () => {
 
     if (urlInput) {
       handleSubmitUrl();
+      const urlType = matchPattern(urlInput, KNOWN_LINK_PATTERNS);
+      console.log(urlType);
+
+      const contentType = matchPattern(urlInput, TYPE_PATTERNS);
+      console.log(contentType);
+
+      console.log(
+        await assistantApiCalls().callAssistantScraper(urlType, urlInput),
+      );
     } else {
       await handleSubmitFile();
       setHasArchiveBeenCreated(true);
@@ -250,7 +265,6 @@ const Archive = () => {
 
       {hasArchiveBeenCreated && archiveLinks.length > 0 && (
         <Card variant="outlined">
-          <Typography>{keyword("archive_wacz_accordion")}</Typography>
           <Box p={3}>
             <form>
               <Stack spacing={4}>
