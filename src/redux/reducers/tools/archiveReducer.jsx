@@ -6,7 +6,7 @@ const archiveSlice = createSlice({
   name: "archive",
   initialState,
   reducers: {
-    archiveUrlSet(state, action) {
+    setArchiveUrl(state, action) {
       state.mainUrl = action.payload;
     },
     archiveStateCleaned(state, action) {
@@ -14,7 +14,7 @@ const archiveSlice = createSlice({
     },
   },
 });
-export const { archiveUrlSet, archiveStateCleaned } = archiveSlice.actions;
+export const { setArchiveUrl, archiveStateCleaned } = archiveSlice.actions;
 
 const archiveReducer = archiveSlice.reducer;
 export default archiveReducer;
