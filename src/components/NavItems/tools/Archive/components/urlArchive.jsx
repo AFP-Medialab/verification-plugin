@@ -138,13 +138,6 @@ const UrlArchive = ({ url, mediaUrl }) => {
             </Button>
           </Box>
         </Stack>
-
-        {/*<Box />*/}
-        {/*<Tooltip title={keyword("permacc_button")}>*/}
-        {/*  <Button>*/}
-        {/*    <IconPermaCC />*/}
-        {/*  </Button>*/}
-        {/*</Tooltip>*/}
       </Box>
     );
   };
@@ -188,6 +181,7 @@ const UrlArchive = ({ url, mediaUrl }) => {
                 window.open(urlElement, "_blank");
               });
             }}
+            sx={{ textTransform: "none" }}
           >
             {keyword("open_links_button")}
           </Button>
