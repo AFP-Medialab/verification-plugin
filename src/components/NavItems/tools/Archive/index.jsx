@@ -132,9 +132,7 @@ const Archive = () => {
     try {
       result = await fetchArchivedUrls(fileToUpload);
     } catch (error) {
-      setErrorMessage(
-        "Upload error — An error happened with the file upload. Try with another file.",
-      );
+      setErrorMessage(keyword("upload_error"));
       setIsLoading(false);
       setHasArchiveBeenCreated(false);
       setInput("");
@@ -143,9 +141,7 @@ const Archive = () => {
     }
 
     if (!result) {
-      setErrorMessage(
-        "Upload error — An error happened wit the upload of the file. Try again or with another file.",
-      );
+      setErrorMessage(keyword("upload_error"));
       setIsLoading(false);
       setHasArchiveBeenCreated(false);
       return;
@@ -161,9 +157,7 @@ const Archive = () => {
     }
 
     if (results.length === 0) {
-      setErrorMessage(
-        "Upload error — An error happened wit the upload of the file. Try again or with another file.",
-      );
+      setErrorMessage(keyword("upload_error"));
       setIsLoading(false);
       setHasArchiveBeenCreated(false);
       return;
@@ -213,7 +207,7 @@ const Archive = () => {
     <Box>
       <HeaderTool
         name={keyword("archive_name")}
-        description={"Archive a .wacz file with Web Archive (Wayback Machine)"}
+        description={keyword("archive_description")}
         icon={
           // <
           <archiving.icon
@@ -269,7 +263,7 @@ const Archive = () => {
         <Card variant="outlined" m={2}>
           <CardContent>
             <Typography variant="h6" component="div" pb={2}>
-              Archivable links
+              {keyword("links_card_title")}
             </Typography>
             <UrlArchive url={urlInput} mediaUrl={mediaUrl}></UrlArchive>
           </CardContent>
@@ -286,7 +280,7 @@ const Archive = () => {
                     <Box mb={4}>
                       <Fade in={hasArchiveBeenCreated} timeout={750}>
                         <Alert severity="success">
-                          The archive was created successfully!
+                          {keyword("upload_success")}
                         </Alert>
                       </Fade>
                     </Box>
@@ -297,7 +291,7 @@ const Archive = () => {
                         <Fade in={isLoading} timeout={750}>
                           <Box>
                             <Alert severity="info">
-                              Loading... This can take up to a few minutes
+                              {keyword("upload_loading")}
                             </Alert>
                             <Box>
                               <Skeleton variant="text" height={100} />
