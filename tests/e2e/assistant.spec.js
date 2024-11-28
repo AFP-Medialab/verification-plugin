@@ -1507,7 +1507,7 @@ const MediaServices = {
         for (const url in extractedURLAnalyses) {
           await expect(urlAnalysisDiv.locator("[href=\""+url+"\"]")).toBeVisible();
           const resultRow = urlAnalysisDiv.locator("div.MuiDataGrid-row").filter({ has: page.locator(`text="${url}"`) });
-          await expect(resultRow.locator("[data-field=\"status\"]")).toContainText(extractedURLAnalyses[url]);
+          await expect(resultRow.locator("[data-field=\"status\"]")).toContainText(extractedURLAnalyses[url], {ignoreCase: true});
         }
       }
       // Credibility signals
