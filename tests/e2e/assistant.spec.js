@@ -1402,7 +1402,7 @@ const MediaServices = {
     mediaStatus: MediaVideoStatus.video,
     services: [MediaServices.videoDownload, MediaServices.metadata]
   },
-].slice(1).forEach(({
+].slice(0, 1).forEach(({
   url,
   videoGridIndex,
   imageGridIndex,
