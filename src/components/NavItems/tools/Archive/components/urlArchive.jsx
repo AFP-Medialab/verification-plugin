@@ -12,7 +12,14 @@ import { prettifyLargeString } from "../utils";
 import CopyButton from "../../../../Shared/CopyButton";
 import { KNOWN_LINKS } from "../../../Assistant/AssistantRuleBook";
 
-const UrlArchive = ({ url }) => {
+/**
+ *
+ * @param url {string}
+ * @param mediaUrl {?string} Optional - The URL of the media in the social media post to archive
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const UrlArchive = ({ url, mediaUrl }) => {
   const [platform, setPlatform] = useState(null);
   const [urls, setUrls] = useState([]);
 
@@ -169,6 +176,9 @@ const UrlArchive = ({ url }) => {
       <>
         {archiveListForPlatform}
         <ArchiveLink link={url} link_type_keyword={"link_submitted"} />
+        {mediaUrl && (
+          <ArchiveLink link={mediaUrl} link_type_keyword={"media_url"} />
+        )}
         <Box>
           <Button
             variant="contained"

@@ -26,9 +26,10 @@ import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { archiving } from "../../../../constants/tools";
 import {
   KNOWN_LINK_PATTERNS,
+  KNOWN_LINKS,
   matchPattern,
-  TYPE_PATTERNS,
 } from "../../Assistant/AssistantRuleBook";
+import assistantApiCalls from "../../Assistant/AssistantApiHandlers/useAssistantApi";
 
 //TODO:UI for long strings
 
@@ -37,7 +38,11 @@ const Archive = () => {
 
   const dispatch = useDispatch();
   const mainUrl = useSelector((state) => state.archive.mainUrl);
+
   const [urlInput, setUrlInput] = useState("");
+
+  const [mediaUrl, setMediaUrl] = useState("");
+
   const [urlResults, setUrlResults] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -170,20 +175,29 @@ const Archive = () => {
     setErrorMessage("");
     setArchiveLinks([]);
     setHasArchiveBeenCreated(false);
-
+    setMediaUrl("");
     setIsLoading(true);
 
     if (urlInput) {
       handleSubmitUrl();
       const urlType = matchPattern(urlInput, KNOWN_LINK_PATTERNS);
-      // console.log(urlType);
 
-      const contentType = matchPattern(urlInput, TYPE_PATTERNS);
-      // console.log(contentType);
-      //
-      // console.log(
-      //   await assistantApiCalls().callAssistantScraper(urlType, urlInput),
-      // );
+      if (urlType === KNOWN_LINKS.TWITTER) {
+        const res = await assistantApiCalls().callAssistantScraper(
+          urlType,
+          urlInput,
+        );
+
+        let mediaUrl;
+
+        if (res.images && res.images.length > 0) {
+          mediaUrl = res.images[0];
+        } else if (res.videos && res.videos.length > 0) {
+          mediaUrl = res.videos[0];
+        }
+
+        if (mediaUrl && typeof mediaUrl === "string") setMediaUrl(mediaUrl);
+      }
     } else {
       await handleSubmitFile();
       setHasArchiveBeenCreated(true);
@@ -255,7 +269,7 @@ const Archive = () => {
             <Typography variant="h6" component="div" pb={2}>
               Archivable links
             </Typography>
-            <UrlArchive url={urlInput}></UrlArchive>
+            <UrlArchive url={urlInput} mediaUrl={mediaUrl}></UrlArchive>
           </CardContent>
         </Card>
       ) : null}
