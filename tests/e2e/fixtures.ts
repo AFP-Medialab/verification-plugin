@@ -8,7 +8,7 @@ export const test = base.extend<{
   context: async ({ }, use) => {
     const pathToExtension = path.join(__dirname, '../../build');
     const context = await chromium.launchPersistentContext('', {
-      headless: false,
+      // headless: false,
       args: [
         `--disable-extensions-except=${pathToExtension}`,
         `--load-extension=${pathToExtension}`,

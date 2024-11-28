@@ -18,7 +18,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright Component and unit tests
-      run: npx playwright test -c playwright-e2e.config.js
+      run: xvfb-run npx playwright test -c playwright-e2e.config.js --headed
     - uses: actions/upload-artifact@v4
       if: always()
       with:
