@@ -29,7 +29,7 @@ import {
   KNOWN_LINKS,
   matchPattern,
 } from "../../Assistant/AssistantRuleBook";
-import assistantApiCalls from "../../Assistant/AssistantApiHandlers/useAssistantApi";
+import assistantApiCalls from "../../Assistant/AssistantApiHandlers/useAssistantApi"; //TODO:UI for long strings
 
 //TODO:UI for long strings
 
@@ -78,6 +78,8 @@ const Archive = () => {
     setErrorMessage("");
     dispatch(archiveStateCleaned());
     setUrlInput("");
+    setHasArchiveBeenCreated(false);
+    setArchiveLinks(null);
   };
 
   const handleSubmitUrl = () => {
@@ -305,14 +307,18 @@ const Archive = () => {
                       )}
                     </>
                   ) : (
-                    <Fade in={!isLoading} timeout={1000}>
-                      <Box>
-                        <ArchiveTable
-                          rows={archiveLinks}
-                          fileName={fileToUpload.name}
-                        />
-                      </Box>
-                    </Fade>
+                    <>
+                      {fileToUpload && fileToUpload.name && (
+                        <Fade in={!isLoading} timeout={1000}>
+                          <Box>
+                            <ArchiveTable
+                              rows={archiveLinks}
+                              fileName={fileToUpload.name}
+                            />
+                          </Box>
+                        </Fade>
+                      )}
+                    </>
                   )}
                 </Box>
               </Stack>
