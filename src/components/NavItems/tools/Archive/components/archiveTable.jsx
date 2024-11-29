@@ -32,7 +32,7 @@ export const ArchiveTable = (props) => {
 
   const handleIconClick = (id) => {
     let result = clicks.includes(id)
-      ? clicks.filter((click) => click != id)
+      ? clicks.filter((click) => click !== id)
       : [...clicks, id];
     setClicks(result);
   };
