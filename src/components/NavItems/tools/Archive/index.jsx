@@ -134,7 +134,7 @@ const Archive = () => {
         setIsLoading(true);
 
         const res = await queryClient.ensureQueryData({
-          queryKey: ["extracted_media_link"],
+          queryKey: ["extracted_media_link", url],
           queryFn: () => fetchMediaUrl(urlType, url),
           staleTime: 1000 * 60 * 5,
         });
