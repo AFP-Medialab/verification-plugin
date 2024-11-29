@@ -82,7 +82,7 @@ const Archive = () => {
     const fetchUrl = process.env.ARCHIVE_BACKEND;
 
     if (!waczFileUrl) {
-      throw new Error("[fetchArchivedUrls] Error: waczFileUrl is not defined");
+      throw new Error("upload_error");
     }
 
     try {
@@ -101,7 +101,7 @@ const Archive = () => {
       return await authenticatedRequest(axiosConfig);
     } catch (error) {
       console.error(error);
-      throw new Error(error);
+      throw new Error("upload_error");
     }
   };
 
@@ -158,7 +158,7 @@ const Archive = () => {
 
   const sendWaczFileToWbm = async () => {
     if (!fileToUpload || !isFileAWaczFile(fileToUpload.name)) {
-      throw new Error(keyword("file_error"));
+      throw new Error("file_error");
     }
 
     let result;
@@ -167,10 +167,10 @@ const Archive = () => {
       result = await fetchArchivedUrls(fileToUpload);
     } catch (error) {
       // User friendly Errors
-      throw new Error(keyword("upload_error"));
+      throw new Error("upload_error");
     }
 
-    if (!result) throw new Error(keyword("upload_error"));
+    if (!result) throw new Error("upload_error");
 
     let results = [];
 
@@ -181,7 +181,7 @@ const Archive = () => {
     }
 
     if (results.length === 0) {
-      throw new Error(keyword("upload_error"));
+      throw new Error("upload_error");
     }
 
     return results;
@@ -208,12 +208,12 @@ const Archive = () => {
     setMediaUrl("");
     setIsLoading(true);
 
-    if (urlInput || url) {
+    if (fileToUpload) {
+      await archiveFileToWbm.mutate();
+    } else {
       const urlToFetch = url && urlInput && urlInput !== url ? urlInput : url;
 
       await fetchMediaLinkForSocialMediaPost(urlToFetch);
-    } else {
-      await archiveFileToWbm.mutate();
     }
 
     setIsLoading(false);
@@ -259,7 +259,9 @@ const Archive = () => {
       {archiveFileToWbm.isError && (
         <Box mb={4}>
           <Fade in={true} timeout={750}>
-            <Alert severity="error">{archiveFileToWbm.error.message}</Alert>
+            <Alert severity="error">
+              {keyword(archiveFileToWbm.error.message)}
+            </Alert>
           </Fade>
         </Box>
       )}
