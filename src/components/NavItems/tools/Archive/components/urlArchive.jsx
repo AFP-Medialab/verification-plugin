@@ -19,6 +19,7 @@ import { history } from "../../../../Shared/History/History";
 import { prettifyLargeString } from "../utils";
 import CopyButton from "../../../../Shared/CopyButton";
 import { KNOWN_LINKS } from "../../../Assistant/AssistantRuleBook";
+import DownloadWaczFile from "./downloadWaczFile";
 
 /**
  *
@@ -145,6 +146,7 @@ const UrlArchive = ({ url, mediaUrl }) => {
               {keyword("internet_archive_button")}
             </Button>
           </Box>
+          <DownloadWaczFile url={link} />
         </Stack>
       </Box>
     );
