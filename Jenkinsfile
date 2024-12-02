@@ -8,7 +8,7 @@ pipeline {
          stage ('Build Plugin') {
             agent {
                 docker {
-                    image 'node:18-buster-slim'
+                    image 'node:22-alpine'
                     reuseNode true
                 }
             }

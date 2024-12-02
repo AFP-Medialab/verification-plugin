@@ -107,7 +107,7 @@ const Deepfake = () => {
         description={keywordAllTools("navbar_deepfake_image_description")}
         icon={
           <DeepfakeIcon
-            style={{ fill: "#00926c", height: "75px", width: "auto" }}
+            style={{ fill: "#00926c", height: "40px", width: "auto" }}
           />
         }
       />

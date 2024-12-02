@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 
 import {
-  Link,
   IconButton,
+  Link,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
   Tooltip,
 } from "@mui/material";
 
@@ -49,8 +49,12 @@ export const ArchiveTable = (props) => {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell sx={{ fontWeight: 700 }}>Archived url</TableCell>
-            <TableCell sx={{ fontWeight: 700 }}>Original url</TableCell>
+            <TableCell sx={{ fontWeight: 700 }}>
+              {keyword("archived_url_table_header")}
+            </TableCell>
+            <TableCell sx={{ fontWeight: 700 }}>
+              {keyword("original_url_table_header")}
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

@@ -1,8 +1,8 @@
 import { trackEvent } from "../components/Shared/GoogleAnalytics/MatomoAnalytics";
 import {
-  SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
   reverseImageSearchAll,
+  SEARCH_ENGINE_SETTINGS,
 } from "../components/Shared/ReverseSearch/reverseSearchUtils";
 import { openTabs } from "components/Shared/ReverseSearch/utils/openTabUtils";
 import { getImgUrl } from "components/Shared/ReverseSearch/utils/searchUtils";
@@ -15,7 +15,7 @@ const mediaAssistant = (info) => {
     openTabs({
       url: page_name + "#/app/assistant/" + encodeURIComponent(url),
     });
-    // Google analytics
+    // Analytics
     trackEvent("contextMenu", "contextMenuClick", "Assistant", url, "");
   }
 };
@@ -26,7 +26,7 @@ const ocr = (info) => {
     openTabs({
       url: page_name + "#/app/tools/ocr/" + encodeURIComponent(url),
     });
-    // Google analytics
+    // Analytics
     trackEvent("contextMenu", "contextMenuClick", "OCR", url, "");
   }
 };
@@ -37,7 +37,7 @@ const thumbnailsSearch = (info) => {
     openTabs({
       url: page_name + "#/app/tools/thumbnails/" + encodeURIComponent(url),
     });
-    // Google analytics
+    // Analytics
     trackEvent("contextMenu", "contextMenuClick", "YouTubeThumbnails", url, "");
   }
 };
@@ -52,7 +52,7 @@ const videoReversesearchDBKF = (info) => {
       url: url,
       selected: false,
     });
-    // Google analytics
+    // Analytics
     trackEvent(
       "contextMenu",
       "contextMenuClick",
@@ -68,7 +68,7 @@ const analysisVideo = (info) => {
     openTabs({
       url: page_name + "#/app/tools/Analysis/" + encodeURIComponent(url),
     });
-    // Google analytics
+    // Analytics
     trackEvent("contextMenu", "contextMenuClick", "Analysis", url, "");
   }
 };
@@ -79,7 +79,7 @@ const imageMagnifier = (info) => {
     openTabs({
       url: page_name + "#/app/tools/magnifier/" + encodeURIComponent(url),
     });
-    // Google analytics
+    // Analytics
     trackEvent("contextMenu", "contextMenuClick", "Magnifier", url, "");
   }
 };
@@ -90,7 +90,7 @@ const imageForensic = (info) => {
     openTabs({
       url: page_name + "#/app/tools/forensic/" + encodeURIComponent(url),
     });
-    // Google analytics
+    // Analytics
     trackEvent("contextMenu", "contextMenuClick", "Forensic", url, "");
   }
 };
