@@ -1,17 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import {
-  Alert,
-  Box,
-  Card,
-  CardContent,
-  Fade,
-  Skeleton,
-  Stack,
-  Typography,
-} from "@mui/material";
-
-import ArchiveTable from "./components/archiveTable";
+import { Alert, Box, Card, Fade, Skeleton, Stack } from "@mui/material";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
 import { useParams } from "react-router-dom";
@@ -29,9 +18,14 @@ import {
   KNOWN_LINKS,
   matchPattern,
 } from "../../Assistant/AssistantRuleBook";
-import assistantApiCalls from "../../Assistant/AssistantApiHandlers/useAssistantApi"; //TODO:UI for long strings
+import assistantApiCalls from "../../Assistant/AssistantApiHandlers/useAssistantApi";
+import { QueryClient, useMutation } from "@tanstack/react-query";
+import ArchivedFileCard from "./components/archivedFileCard";
+import CircularProgress from "@mui/material/CircularProgress"; //TODO:UI for long strings
 
 //TODO:UI for long strings
+
+const queryClient = new QueryClient();
 
 const Archive = () => {
   const { url } = useParams();
@@ -47,13 +41,9 @@ const Archive = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [input, setInput] = useState("");
-
   const [fileToUpload, setFileToUpload] = useState(/** @type {File?} */ null);
 
   const [archiveLinks, setArchiveLinks] = useState([]);
-
-  const [hasArchiveBeenCreated, setHasArchiveBeenCreated] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -65,10 +55,12 @@ const Archive = () => {
     if (mainUrl) {
       setUrlResults(true);
       setUrlInput(mainUrl);
+      handleSubmit(mainUrl);
     } else if (url && url !== "") {
       setUrlResults(true);
       setUrlInput(url);
       setArchiveUrl(url);
+      handleSubmit(url);
     }
   }, []);
 
@@ -78,14 +70,8 @@ const Archive = () => {
     setErrorMessage("");
     dispatch(archiveStateCleaned());
     setUrlInput("");
-    setHasArchiveBeenCreated(false);
+    archiveFileToWbm.reset();
     setArchiveLinks(null);
-  };
-
-  const handleSubmitUrl = () => {
-    setArchiveUrl(urlInput);
-    setUrlResults(true);
-    dispatch(setArchiveUrl(urlInput));
   };
 
   const isFileAWaczFile = (fileName) => {
@@ -96,7 +82,7 @@ const Archive = () => {
     const fetchUrl = process.env.ARCHIVE_BACKEND;
 
     if (!waczFileUrl) {
-      throw new Error("[fetchArchivedUrls] Error: waczFileUrl is not defined");
+      throw new Error("upload_error");
     }
 
     try {
@@ -115,74 +101,43 @@ const Archive = () => {
       return await authenticatedRequest(axiosConfig);
     } catch (error) {
       console.error(error);
-      throw new Error(error);
+      throw new Error("upload_error");
     }
   };
 
-  const handleSubmitFile = async () => {
-    if (!fileToUpload || !isFileAWaczFile(fileToUpload.name)) {
-      setErrorMessage("File error — The file is not a .wacz file");
-      setIsLoading(false);
-      setHasArchiveBeenCreated(false);
+  const fetchMediaUrl = async (urlType, urlInput) => {
+    const res = await assistantApiCalls().callAssistantScraper(
+      urlType,
+      urlInput,
+    );
+
+    if (!res.status || res.status !== "success") throw new Error("fetch_error");
+
+    return res;
+  };
+
+  const fetchMediaLinkForSocialMediaPost = async (url) => {
+    if (!url || typeof url !== "string") {
       return;
     }
 
-    let result;
+    setErrorMessage("");
+
+    setArchiveUrl(url);
+    setUrlResults(true);
+    dispatch(setArchiveUrl(url));
+
+    const urlType = matchPattern(url, KNOWN_LINK_PATTERNS);
 
     try {
-      result = await fetchArchivedUrls(fileToUpload);
-    } catch (error) {
-      setErrorMessage(keyword("upload_error"));
-      setIsLoading(false);
-      setHasArchiveBeenCreated(false);
-      setInput("");
-      setArchiveLinks([]);
-      return;
-    }
-
-    if (!result) {
-      setErrorMessage(keyword("upload_error"));
-      setIsLoading(false);
-      setHasArchiveBeenCreated(false);
-      return;
-    }
-
-    let results = [];
-
-    for (const page of Object.keys(result.data.pages)) {
-      let archivedUrl = result.data.pages[page].capture_url;
-      let originalUrl = result.data.pages[page].url;
-
-      results.push({ archivedUrl, originalUrl });
-    }
-
-    if (results.length === 0) {
-      setErrorMessage(keyword("upload_error"));
-      setIsLoading(false);
-      setHasArchiveBeenCreated(false);
-      return;
-    }
-
-    setArchiveLinks(results);
-  };
-
-  const handleSubmit = async () => {
-    // Reset states
-    setErrorMessage("");
-    setArchiveLinks([]);
-    setHasArchiveBeenCreated(false);
-    setMediaUrl("");
-    setIsLoading(true);
-
-    if (urlInput) {
-      handleSubmitUrl();
-      const urlType = matchPattern(urlInput, KNOWN_LINK_PATTERNS);
-
       if (urlType === KNOWN_LINKS.TWITTER) {
-        const res = await assistantApiCalls().callAssistantScraper(
-          urlType,
-          urlInput,
-        );
+        setIsLoading(true);
+
+        const res = await queryClient.ensureQueryData({
+          queryKey: ["extracted_media_link", url],
+          queryFn: () => fetchMediaUrl(urlType, url),
+          staleTime: 1000 * 60 * 5,
+        });
 
         let mediaUrl;
 
@@ -194,10 +149,71 @@ const Archive = () => {
 
         if (mediaUrl && typeof mediaUrl === "string") setMediaUrl(mediaUrl);
       }
+    } catch (error) {
+      setErrorMessage(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const sendWaczFileToWbm = async () => {
+    if (!fileToUpload || !isFileAWaczFile(fileToUpload.name)) {
+      throw new Error("file_error");
+    }
+
+    let result;
+
+    try {
+      result = await fetchArchivedUrls(fileToUpload);
+    } catch (error) {
+      // User friendly Errors
+      throw new Error("upload_error");
+    }
+
+    if (!result) throw new Error("upload_error");
+
+    let results = [];
+
+    for (const page of Object.keys(result.data.pages)) {
+      let archivedUrl = result.data.pages[page].capture_url;
+      let originalUrl = result.data.pages[page].url;
+      results.push({ archivedUrl, originalUrl });
+    }
+
+    if (results.length === 0) {
+      throw new Error("upload_error");
+    }
+
+    return results;
+  };
+
+  const archiveFileToWbm = useMutation({
+    mutationFn: () => {
+      return sendWaczFileToWbm();
+    },
+    onSuccess: (data) => {
+      setArchiveLinks(data);
+    },
+  });
+
+  /**
+   *
+   * @param url {?string}
+   * @returns {Promise<void>}
+   */
+  const handleSubmit = async (url) => {
+    // Reset states
+    setErrorMessage("");
+    setArchiveLinks([]);
+    setMediaUrl("");
+    setIsLoading(true);
+
+    if (fileToUpload) {
+      await archiveFileToWbm.mutate();
     } else {
-      await handleSubmitFile();
-      setHasArchiveBeenCreated(true);
-      setInput("");
+      const urlToFetch = url && urlInput && urlInput !== url ? urlInput : url;
+
+      await fetchMediaLinkForSocialMediaPost(urlToFetch);
     }
 
     setIsLoading(false);
@@ -209,7 +225,6 @@ const Archive = () => {
         name={keyword("archive_name")}
         description={keyword("archive_description")}
         icon={
-          // <
           <archiving.icon
             style={{
               fontSize: "40px",
@@ -234,92 +249,49 @@ const Archive = () => {
               fileInputTypesAccepted={".wacz"}
               handleCloseSelectedFile={handleCloseUrl}
               preprocessLocalFile={null}
-              isParentLoading={isLoading}
+              isParentLoading={isLoading || archiveFileToWbm.isPending}
             />
           </form>
         </Box>
       </Card>
       <Box p={2} />
-      {errorMessage && (
+
+      {archiveFileToWbm.isError && (
         <Box mb={4}>
-          <Fade in={!!errorMessage} timeout={750}>
-            <Alert severity="error">{errorMessage}</Alert>
+          <Fade in={true} timeout={750}>
+            <Alert severity="error">
+              {keyword(archiveFileToWbm.error.message)}
+            </Alert>
           </Fade>
         </Box>
       )}
 
-      {isLoading && fileToUpload && (
-        <Fade in={isLoading} timeout={750}>
-          <Stack direction="column" spacing={4}>
-            <Alert severity="info">
-              Loading... This can take up to a few minutes
+      {errorMessage && (
+        <Box mb={4}>
+          <Fade in={true} timeout={750}>
+            <Alert severity="error">{keyword(errorMessage)}</Alert>
+          </Fade>
+        </Box>
+      )}
+
+      {archiveFileToWbm.isPending && (
+        <Fade in={true} timeout={750}>
+          <Stack direction="column" spacing={2}>
+            <Alert icon={<CircularProgress size={20} />} severity="info">
+              {keyword("upload_loading")}
             </Alert>
             <Skeleton variant="text" height={200} />
           </Stack>
         </Fade>
       )}
 
-      {urlResults && urlInput !== "" ? (
-        <Card variant="outlined" m={2}>
-          <CardContent>
-            <Typography variant="h6" component="div" pb={2}>
-              {keyword("links_card_title")}
-            </Typography>
-            <UrlArchive url={urlInput} mediaUrl={mediaUrl}></UrlArchive>
-          </CardContent>
-        </Card>
-      ) : null}
-
-      {hasArchiveBeenCreated && archiveLinks.length > 0 && (
-        <Card variant="outlined">
-          <Box p={3}>
-            <form>
-              <Stack spacing={4}>
-                <Box>
-                  {hasArchiveBeenCreated && (
-                    <Box mb={4}>
-                      <Fade in={hasArchiveBeenCreated} timeout={750}>
-                        <Alert severity="success">
-                          {keyword("upload_success")}
-                        </Alert>
-                      </Fade>
-                    </Box>
-                  )}
-                  {isLoading || archiveLinks.length === 0 ? (
-                    <>
-                      {isLoading && (
-                        <Fade in={isLoading} timeout={750}>
-                          <Box>
-                            <Alert severity="info">
-                              {keyword("upload_loading")}
-                            </Alert>
-                            <Box>
-                              <Skeleton variant="text" height={100} />
-                            </Box>
-                          </Box>
-                        </Fade>
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      {fileToUpload && fileToUpload.name && (
-                        <Fade in={!isLoading} timeout={1000}>
-                          <Box>
-                            <ArchiveTable
-                              rows={archiveLinks}
-                              fileName={fileToUpload.name}
-                            />
-                          </Box>
-                        </Fade>
-                      )}
-                    </>
-                  )}
-                </Box>
-              </Stack>
-            </form>
-          </Box>
-        </Card>
+      {archiveFileToWbm.isSuccess && (
+        <ArchivedFileCard file={fileToUpload} archiveLinks={archiveLinks} />
       )}
+
+      {urlResults && urlInput !== "" ? (
+        <UrlArchive url={urlInput} mediaUrl={mediaUrl}></UrlArchive>
+      ) : null}
     </Box>
   );
 };

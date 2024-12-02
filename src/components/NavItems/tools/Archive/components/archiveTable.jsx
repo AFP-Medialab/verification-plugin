@@ -19,8 +19,11 @@ import { prettifyLargeString } from "../utils";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import { useSelector } from "react-redux";
+import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
 
 export const ArchiveTable = (props) => {
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
+
   const [clicks, setClicks] = useState([]);
 
   const client_id = getclientId();
@@ -29,7 +32,7 @@ export const ArchiveTable = (props) => {
 
   const handleIconClick = (id) => {
     let result = clicks.includes(id)
-      ? clicks.filter((click) => click != id)
+      ? clicks.filter((click) => click !== id)
       : [...clicks, id];
     setClicks(result);
   };

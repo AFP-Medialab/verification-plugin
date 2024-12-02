@@ -1,6 +1,14 @@
-import { Box, Button, Link, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Link,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import IconInternetArchive from "../../../../NavBar/images/SVG/Others/archive-icon.svg";
 import {
   getclientId,
@@ -11,6 +19,7 @@ import { history } from "../../../../Shared/History/History";
 import { prettifyLargeString } from "../utils";
 import CopyButton from "../../../../Shared/CopyButton";
 import { KNOWN_LINKS } from "../../../Assistant/AssistantRuleBook";
+import DownloadWaczFile from "./downloadWaczFile";
 
 /**
  *
@@ -137,6 +146,7 @@ const UrlArchive = ({ url, mediaUrl }) => {
               {keyword("internet_archive_button")}
             </Button>
           </Box>
+          <DownloadWaczFile url={link} />
         </Stack>
       </Box>
     );
@@ -191,9 +201,14 @@ const UrlArchive = ({ url, mediaUrl }) => {
   };
 
   return (
-    <>
-      <Stack spacing={4}>{getArchiveLinksForPlatform(platform)}</Stack>
-    </>
+    <Card variant="outlined" m={2}>
+      <CardContent>
+        <Typography variant="h6" component="div" pb={2}>
+          {keyword("links_card_title")}
+        </Typography>
+        <Stack spacing={4}>{getArchiveLinksForPlatform(platform)}</Stack>
+      </CardContent>
+    </Card>
   );
 };
 
