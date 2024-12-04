@@ -296,6 +296,7 @@ export const ASSISTANT_ACTIONS = [
       KNOWN_LINKS.VIMEO,
       KNOWN_LINKS.LIVELEAK,
       KNOWN_LINKS.DAILYMOTION,
+      KNOWN_LINKS.BLUESKY,
     ],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
