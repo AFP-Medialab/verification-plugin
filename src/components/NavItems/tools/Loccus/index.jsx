@@ -48,6 +48,11 @@ const Loccus = () => {
     (state) => state.syntheticAudioDetection.loading,
   );
   const result = useSelector((state) => state.syntheticAudioDetection.result);
+
+  const isInconclusive = useSelector(
+    (state) => state.syntheticAudioDetection.isInconclusive,
+  );
+
   const url = useSelector((state) => state.syntheticAudioDetection.url);
   const chunks = useSelector((state) => state.syntheticAudioDetection.chunks);
   const authenticatedRequest = useAuthenticatedRequest();
@@ -55,6 +60,26 @@ const Loccus = () => {
   const [audioFile, setAudioFile] = useState(AUDIO_FILE_DEFAULT_STATE);
 
   const dispatch = useDispatch();
+
+  /**
+   * Returns true iff more than 50% of the chunks' results are null in the array, else returns false
+   */
+  const isResultInconclusive = (result) => {
+    if (!result || result.length === 0)
+      return new Error(
+        `[isResultInconclusive] Error: the result object is not defined.`,
+      );
+
+    let nullChunks = 0;
+
+    const chunks = result.length;
+
+    for (const resultChunk of result) {
+      if (resultChunk.score === null) nullChunks++;
+    }
+
+    return nullChunks / chunks >= 0.5;
+  };
 
   const useGetVoiceCloningScore = async (url, processURL, dispatch) => {
     if (!processURL && !url && !audioFile) {
@@ -179,11 +204,14 @@ const Loccus = () => {
 
       const res3 = await authenticatedRequest(config3);
 
+      const isInconclusive = isResultInconclusive(res3.data);
+
       dispatch(
         setLoccusResult({
           url: audioFile ? URL.createObjectURL(audioFile) : url,
           result: res2.data,
           chunks: res3.data,
+          isInconclusive: isInconclusive,
         }),
       );
     } catch (error) {
@@ -365,6 +393,7 @@ const Loccus = () => {
       {result && (
         <LoccusResults
           result={result}
+          isInconclusive={isInconclusive}
           url={url}
           handleClose={handleClose}
           chunks={chunks}
