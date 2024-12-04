@@ -42,7 +42,13 @@ import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
 import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
 import { ROLES } from "../../../../constants/roles";
 
-const LoccusResults = (props) => {
+const LoccusResults = ({
+  result,
+  isInconclusive,
+  url,
+  handleClose,
+  chunks,
+}) => {
   dayjs.extend(duration);
 
   const keyword = i18nLoadNamespace("components/NavItems/tools/Loccus");
@@ -51,9 +57,6 @@ const LoccusResults = (props) => {
   const isCurrentLanguageLeftToRight = currentLang !== "ar";
 
   const role = useSelector((state) => state.userSession.user.roles);
-
-  const result = props.result;
-  const url = props.url;
 
   const [voiceCloningScore, setVoiceCloningScore] = useState(null);
   const [voiceRecordingScore, setVoiceRecordingScore] = useState(null);
@@ -240,6 +243,7 @@ const LoccusResults = (props) => {
     }
 
     const newVoiceCloningScore = (1 - result.subscores.synthesis) * 100;
+
     if (voiceCloningScore !== newVoiceCloningScore)
       setVoiceCloningScore(newVoiceCloningScore);
 
@@ -296,7 +300,7 @@ const LoccusResults = (props) => {
           style={{ borderRadius: "4px 4p x 0px 0px" }}
           title={keyword("loccus_title")}
           action={
-            <IconButton aria-label="close" onClick={props.handleClose}>
+            <IconButton aria-label="close" onClick={handleClose}>
               <Close sx={{ color: "white" }} />
             </IconButton>
           }
@@ -328,7 +332,7 @@ const LoccusResults = (props) => {
                 <Grid2 ref={chunksChartRef} width="100%" height="300px">
                   <Chart
                     type={"line"}
-                    data={getChartDataFromChunks(props.chunks)}
+                    data={getChartDataFromChunks(chunks)}
                     options={chartConfig}
                   />
                 </Grid2>
@@ -364,77 +368,87 @@ const LoccusResults = (props) => {
                 <Typography variant="h5">
                   {keyword("loccus_voice_cloning_detection_title")}
                 </Typography>
-                <Stack
-                  direction={{ sm: "column", md: "row" }}
-                  alignItems={{ sm: "start", md: "center" }}
-                  justifyContent="center"
-                  width="100%"
-                >
+
+                {!isInconclusive && (
                   <Stack
-                    direction="column"
+                    direction={{ sm: "column", md: "row" }}
+                    alignItems={{ sm: "start", md: "center" }}
                     justifyContent="center"
-                    alignItems="center"
-                    spacing={0}
-                    ref={gaugeChartRef}
+                    width="100%"
                   >
-                    <GaugeChart
-                      id={"gauge-chart"}
-                      animate={false}
-                      nrOfLevels={4}
-                      textColor={"black"}
-                      arcsLength={[0.1, 0.2, 0.3, 0.4]}
-                      percent={voiceCloningScore / 100}
-                      style={{ width: 250 }}
-                    />
                     <Stack
-                      direction="row"
+                      direction="column"
                       justifyContent="center"
                       alignItems="center"
-                      spacing={10}
+                      spacing={0}
+                      ref={gaugeChartRef}
                     >
-                      <Typography variant="subtitle2">
-                        {keyword("loccus_gauge_no_detection")}
-                      </Typography>
-                      <Typography variant="subtitle2">
-                        {keyword("loccus_gauge_detection")}
-                      </Typography>
-                    </Stack>
-                  </Stack>
-                  <Box alignSelf={{ sm: "flex-start", md: "flex-end" }}>
-                    <Tooltip title={keyword("loccus_download_gauge_button")}>
-                      <IconButton
-                        color="primary"
-                        aria-label="download chart"
-                        onClick={async () =>
-                          await exportReactElementAsJpg(
-                            gaugeChartRef,
-                            "gauge_chart",
-                          )
-                        }
-                      >
-                        <Download />
-                      </IconButton>
-                    </Tooltip>
-                  </Box>
-                </Stack>
+                      <GaugeChart
+                        id={"gauge-chart"}
+                        animate={false}
+                        nrOfLevels={4}
+                        textColor={"black"}
+                        arcsLength={[0.1, 0.2, 0.3, 0.4]}
+                        percent={voiceCloningScore / 100}
+                        style={{ width: 250 }}
+                      />
 
-                <GaugeChartModalExplanation
-                  keyword={keyword}
-                  keywordsArr={keywords}
-                  keywordLink={"loccus_scale_explanation_link"}
-                  keywordModalTitle={"loccus_scale_modal_explanation_title"}
-                  colors={colors}
-                />
+                      <Stack
+                        direction="row"
+                        justifyContent="center"
+                        alignItems="center"
+                        spacing={10}
+                      >
+                        <Typography variant="subtitle2">
+                          {keyword("loccus_gauge_no_detection")}
+                        </Typography>
+                        <Typography variant="subtitle2">
+                          {keyword("loccus_gauge_detection")}
+                        </Typography>
+                      </Stack>
+                    </Stack>
+                    <Box alignSelf={{ sm: "flex-start", md: "flex-end" }}>
+                      <Tooltip title={keyword("loccus_download_gauge_button")}>
+                        <IconButton
+                          color="primary"
+                          aria-label="download chart"
+                          onClick={async () =>
+                            await exportReactElementAsJpg(
+                              gaugeChartRef,
+                              "gauge_chart",
+                            )
+                          }
+                        >
+                          <Download />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
+                  </Stack>
+                )}
+
+                {!isInconclusive && (
+                  <GaugeChartModalExplanation
+                    keyword={keyword}
+                    keywordsArr={keywords}
+                    keywordLink={"loccus_scale_explanation_link"}
+                    keywordModalTitle={"loccus_scale_modal_explanation_title"}
+                    colors={colors}
+                  />
+                )}
 
                 <CustomAlertScore
                   score={voiceCloningScore}
                   detectionType={DETECTION_TYPES.VOICE_CLONING}
                   toolName={"Loccus"}
                   thresholds={DETECTION_THRESHOLDS}
+                  isInconclusive={isInconclusive}
                 />
-                <Typography>
-                  {keyword("loccus_cloning_additional_explanation_text")}
-                </Typography>
+
+                {!isInconclusive && (
+                  <Typography>
+                    {keyword("loccus_cloning_additional_explanation_text")}
+                  </Typography>
+                )}
               </Stack>
 
               {role.includes(ROLES.EXTRA_FEATURE) && (
