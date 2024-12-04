@@ -225,13 +225,13 @@ export default function assistantApiCalls() {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
       async () => {
-        const resultGet = await axios.get(
-          assistantEndpoint +
-            "kinit/machine-generated-text" +
-            "?text=" +
-            encodeURIComponent(text), // max URL length is 2048 characters
-        );
-        const resultPost = await axios.post(
+        // const result = await axios.get(
+        //   assistantEndpoint +
+        //     "kinit/machine-generated-text" +
+        //     "?text=" +
+        //     encodeURIComponent(text), // max URL length is 2048 characters
+        // );
+        const result = await axios.post(
           assistantEndpoint + "kinit/machine-generated-text",
           {
             content: text,
