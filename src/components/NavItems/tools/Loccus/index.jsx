@@ -32,6 +32,7 @@ import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 
 import { v4 as uuidv4 } from "uuid";
+import { useMutation } from "@tanstack/react-query";
 
 const Loccus = () => {
   const classes = useMyStyles();
@@ -44,9 +45,7 @@ const Loccus = () => {
   const AUDIO_FILE_DEFAULT_STATE = undefined;
 
   const role = useSelector((state) => state.userSession.user.roles);
-  const isLoading = useSelector(
-    (state) => state.syntheticAudioDetection.loading,
-  );
+
   const result = useSelector((state) => state.syntheticAudioDetection.result);
 
   const isInconclusive = useSelector(
@@ -83,7 +82,7 @@ const Loccus = () => {
 
   const useGetVoiceCloningScore = async (url, processURL, dispatch) => {
     if (!processURL && !url && !audioFile) {
-      return;
+      throw new Error("No URL or audio file");
     }
 
     const blobToDataUrl = (blob) =>
@@ -105,16 +104,14 @@ const Loccus = () => {
       try {
         blob = (await axios.get(url, { responseType: "blob" })).data ?? null;
       } catch (e) {
-        //TODO: Handle Error
-        console.log(e);
+        console.error(e);
+        throw new Error(e);
       }
     }
 
     const b64InputFile = blob
       ? decodeURIComponent(await blobToBase64(blob))
       : await blobToBase64(audioFile);
-
-    dispatch(setLoccusLoading(true));
 
     const handleError = (e) => {
       dispatch(setError(e));
@@ -149,12 +146,11 @@ const Loccus = () => {
       res = await authenticatedRequest(config);
 
       if (!res || !res.data || res.data.message) {
-        //   TODO: handle error
-        return;
+        throw new Error("No data");
       }
 
       if (!res.data.state || res.data.state !== "available") {
-        //   TODO: Handle Error
+        throw new Error("The file is not available.");
         return;
       }
 
@@ -218,13 +214,16 @@ const Loccus = () => {
       console.log(error);
       if (error.message.includes("canceled")) {
         handleError(keyword("loccus_error_timeout"));
+        throw new Error(keyword("loccus_error_timeout"));
       } else {
         handleError(error.response?.data?.message ?? error.message);
+        throw new Error(error.response?.data?.message ?? error.message);
       }
     }
   };
 
   const handleClose = () => {
+    getAnalysisResultsForAudio.reset();
     setInput("");
     setAudioFile(AUDIO_FILE_DEFAULT_STATE);
     dispatch(resetLoccusAudio());
@@ -322,9 +321,17 @@ const Loccus = () => {
     );
   }
 
+  const getAnalysisResultsForAudio = useMutation({
+    mutationFn: () => {
+      return useGetVoiceCloningScore(input, true, dispatch);
+    },
+    onSuccess: (data) => {},
+  });
+
   const handleSubmit = async () => {
     dispatch(resetLoccusAudio());
-    await useGetVoiceCloningScore(input, true, dispatch);
+
+    await getAnalysisResultsForAudio.mutate();
   };
 
   return (
@@ -377,10 +384,11 @@ const Loccus = () => {
               fileInputTypesAccepted={"audio/*"}
               handleCloseSelectedFile={handleClose}
               preprocessLocalFile={preprocessLocalFile}
+              isParentLoading={getAnalysisResultsForAudio.isPending}
             />
           </form>
           <Box m={2} />
-          {isLoading && (
+          {getAnalysisResultsForAudio.isPending && (
             <Box mt={3}>
               <LinearProgress />
             </Box>
@@ -389,6 +397,10 @@ const Loccus = () => {
       </Card>
 
       <Box m={3} />
+
+      {getAnalysisResultsForAudio.isError && (
+        <Alert severity="error">{keyword("loccus_generic_error")}</Alert>
+      )}
 
       {result && (
         <LoccusResults
