@@ -34,8 +34,13 @@ import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 import { syntheticImageDetectionAlgorithms } from "./SyntheticImageDetectionAlgorithms";
 import { ROLES } from "../../../../constants/roles";
+import { useLocation } from "react-router-dom";
 
 const SyntheticImageDetection = () => {
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+  const urlParam = urlParams.get("url");
+
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace(
     "components/NavItems/tools/SyntheticImageDetection",
@@ -68,6 +73,13 @@ const SyntheticImageDetection = () => {
   };
 
   const workerRef = useRef(null);
+
+  useEffect(() => {
+    if (urlParam && !input) {
+      setInput(urlParam);
+      handleSubmit(urlParam);
+    }
+  }, []);
 
   useEffect(() => {
     if (url && input && !result) {

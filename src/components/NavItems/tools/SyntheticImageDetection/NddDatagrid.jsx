@@ -10,7 +10,7 @@ import {
   getPercentageColorCode,
 } from "./syntheticImageDetectionResults";
 import { OpenInNew } from "@mui/icons-material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import {
@@ -22,6 +22,7 @@ import {
   frFR,
   itIT,
 } from "@mui/x-data-grid/locales";
+import { useNavigate } from "react-router-dom";
 
 const languages = {
   en: enUS,
@@ -34,6 +35,8 @@ const languages = {
 };
 
 const NddDataGrid = ({ rows }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const keyword = i18nLoadNamespace(
     "components/NavItems/tools/SyntheticImageDetection",
   );
@@ -194,7 +197,9 @@ const NddDataGrid = ({ rows }) => {
           // eslint-disable-next-line react/jsx-key
           <GridActionsCellItem
             icon={<OpenInNew />}
-            onClick={() => window.open(url, "_blank", "noopener noreferrer")}
+            onClick={() => {
+              window.open(url, "_blank", "noopener noreferrer");
+            }}
             label="Open Analysis"
           />,
         ];
