@@ -684,14 +684,14 @@ function formatTelegramLink(url) {
     );
   }
 
-  // this pattern only matches telegram links of the format t.me/{channel}/{id} and NOT t.me/s/{channel}/{id}
-  const nonSPattern = "^(?:https:/{2})?(?:www.)?t.me/(?!s/)\\w*/\\d*";
+  // Check if the embed parameter already exists
+  const hasEmbed = url.includes("?embed=");
 
-  return url.match(nonSPattern) !== null
-    ? url.replace("t.me/", "t.me/s/")
-    : url;
+  const newUrl = url.replace("t.me/s/", "t.me/");
+
+  // Add ?embed=1 if not already present
+  return hasEmbed ? newUrl : `${newUrl}?embed=1`;
 }
-
 /**
  * PREPROCESS FUNCTIONS
  **/
