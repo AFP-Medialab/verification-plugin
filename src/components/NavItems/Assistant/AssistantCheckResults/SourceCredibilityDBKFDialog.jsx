@@ -64,7 +64,10 @@ const SourceCredibilityDBKFDialog = (props) => {
                   <div
                     className={"content"}
                     dangerouslySetInnerHTML={{
-                      __html: keyword("sc_tooltip"),
+                      __html:
+                        keyword("sc_tooltip") +
+                        "<br><br>" +
+                        keyword("url_domain_analysis_link"),
                     }}
                   />
                 }
