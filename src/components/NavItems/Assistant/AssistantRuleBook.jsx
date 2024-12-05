@@ -38,6 +38,7 @@ export const KNOWN_LINKS = {
   MASTODON: "mastodon",
   OWN: "own",
   VK: "vk",
+  BLUESKY: "bsky",
   MISC: "general",
 };
 
@@ -53,6 +54,10 @@ export const TYPE_PATTERNS = [
 ];
 
 export const KNOWN_LINK_PATTERNS = [
+  {
+    key: KNOWN_LINKS.BLUESKY,
+    patterns: ["((https?:/{2})?(www.)?(bsky).app/profile/[\\w-.]+/post/\\w*)"],
+  },
   {
     key: KNOWN_LINKS.TWITTER,
     patterns: ["((https?:/{2})?(www.)?(twitter|x).com/\\w{1,15}/status/\\d*)"],
@@ -291,6 +296,7 @@ export const ASSISTANT_ACTIONS = [
       KNOWN_LINKS.VIMEO,
       KNOWN_LINKS.LIVELEAK,
       KNOWN_LINKS.DAILYMOTION,
+      KNOWN_LINKS.BLUESKY,
     ],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
