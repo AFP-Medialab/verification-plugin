@@ -148,6 +148,7 @@ const AssistantNEResult = () => {
                   <Box key={index}>
                     <ListItemButton
                       key={index}
+                      data-testid={value["category"] + "-dropdown"}
                       onClick={() => handleCollapse(index)}
                     >
                       <ListItemText
@@ -176,6 +177,7 @@ const AssistantNEResult = () => {
                                 }
                                 rel="noopener noreferrer"
                                 target={"_blank"}
+                                data-testid={v.value}
                               >
                                 {v.value} &nbsp;
                               </Link>

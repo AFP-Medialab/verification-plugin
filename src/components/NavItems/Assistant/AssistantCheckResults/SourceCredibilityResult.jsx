@@ -23,10 +23,13 @@ const SourceCredibilityResult = (props) => {
   const sourceType = props.sourceType;
 
   return (
-    <List disablePadding={true}>
+    <List disablePadding={true} data-testid={props["data-testid"]}>
       {sourceCredibilityResults
         ? sourceCredibilityResults.map((value, key) => (
-            <ListItem key={key}>
+            <ListItem
+              key={key}
+              data-testid={"source-" + value.credibilitySource}
+            >
               <ListItemText
                 primary={
                   <div sx={{ ml: 2 }}>
