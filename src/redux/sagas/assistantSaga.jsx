@@ -538,10 +538,12 @@ function* handleNamedEntityCall(action) {
 
       Object.entries(result.response.annotations).forEach((entity) => {
         entity[1].forEach((instance) => {
-          entities.push({
-            word: instance.features.string,
-            category: entity[0],
-          });
+          if (instance.features.string) {
+            entities.push({
+              word: instance.features.string,
+              category: entity[0],
+            });
+          }
         });
       });
 
