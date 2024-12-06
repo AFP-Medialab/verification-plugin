@@ -21,8 +21,10 @@ export default function DBKFApi() {
       "/documents?&limit=5&orderBy=score&q=" +
       encodeURIComponent(cleanQuery(query));
     let searchResult = await axios.get(finalUri);
-    let searchData = Object.values(searchResult.data);
-    return searchData;
+    if (searchResult && searchResult.data) {
+      return searchResult.data.documents;
+    }
+    return [];
   };
 
   const callVideoSimilarityEndpoint = async (url) => {
