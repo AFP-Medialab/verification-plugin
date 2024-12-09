@@ -172,6 +172,22 @@ const Assistant = () => {
         </Grid2>
       ) : null}
 
+      {/* assistant status */}
+      {scFailState ||
+      dbkfTextFailState ||
+      dbkfMediaFailState ||
+      neFailState ||
+      newsFramingFailState ||
+      newsGenreFailState ||
+      persuasionFailState ||
+      subjectivityFailState ||
+      previousFactChecksFailState ||
+      machineGeneratedTextFailState ? (
+        <Grid2 size={{ xs: 12 }}>
+          <AssistantCheckStatus />
+        </Grid2>
+      ) : null}
+
       {/* assistant results section */}
       {urlMode && inputUrl ? (
         <Card sx={{ width: "100%", mb: 2 }}>
@@ -191,22 +207,6 @@ const Assistant = () => {
 
           <CardContent>
             <Grid2 container spacing={4}>
-              {/* assistant status */}
-              {scFailState ||
-              dbkfTextFailState ||
-              dbkfMediaFailState ||
-              neFailState ||
-              newsFramingFailState ||
-              newsGenreFailState ||
-              persuasionFailState ||
-              subjectivityFailState ||
-              previousFactChecksFailState ||
-              machineGeneratedTextFailState ? (
-                <Grid2 size={{ xs: 12 }}>
-                  <AssistantCheckStatus />
-                </Grid2>
-              ) : null}
-
               {/* warnings and api status checks */}
               {dbkfTextMatch || dbkfImageResult || dbkfVideoMatch ? (
                 <Grid2
