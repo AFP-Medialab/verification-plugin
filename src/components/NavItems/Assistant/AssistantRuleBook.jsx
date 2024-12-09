@@ -27,6 +27,7 @@ export const CONTENT_TYPE = {
 export const KNOWN_LINKS = {
   TWITTER: "twitter",
   INSTAGRAM: "instagram",
+  SNAPCHAT: "snapchat",
   FACEBOOK: "facebook",
   TIKTOK: "tiktok",
   TELEGRAM: "telegram",
@@ -60,6 +61,13 @@ export const KNOWN_LINK_PATTERNS = [
   {
     key: KNOWN_LINKS.TIKTOK,
     patterns: ["((https?:\\/{2})?(www.)?tiktok.com\\/.*\\/video/\\d*)"],
+  },
+  {
+    key: KNOWN_LINKS.SNAPCHAT,
+    patterns: [
+      "((https?:\\/{2})?(www.)?snapchat.com\\/(spotlight|lens)/\\w*)",
+      "((https?:\\/{2})?(www.)?snapchat.com\\/p\\/[\\w\\-]+\\/\\w*)",
+    ],
   },
   {
     key: KNOWN_LINKS.INSTAGRAM,
@@ -123,7 +131,11 @@ export const ASSISTANT_ACTIONS = [
   {
     title: "navbar_analysis_video",
     icon: <videoAnalysis.icon sx={{ fontSize: "24px" }} />,
-    linksAccepted: [KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.FACEBOOK],
+    linksAccepted: [
+      KNOWN_LINKS.YOUTUBE,
+      KNOWN_LINKS.FACEBOOK,
+      KNOWN_LINKS.SNAPCHAT,
+    ],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
     useInputUrl: true,
@@ -134,7 +146,11 @@ export const ASSISTANT_ACTIONS = [
   {
     title: "navbar_analysis_image",
     icon: <imageAnalysis.icon sx={{ fontSize: "24px" }} />,
-    linksAccepted: [KNOWN_LINKS.FACEBOOK, KNOWN_LINKS.TWITTER],
+    linksAccepted: [
+      KNOWN_LINKS.FACEBOOK,
+      KNOWN_LINKS.TWITTER,
+      KNOWN_LINKS.SNAPCHAT,
+    ],
     cTypes: [CONTENT_TYPE.IMAGE],
     exceptions: [],
     useInputUrl: true,
@@ -151,6 +167,7 @@ export const ASSISTANT_ACTIONS = [
       KNOWN_LINKS.YOUTUBE,
       KNOWN_LINKS.YOUTUBESHORTS,
       KNOWN_LINKS.LIVELEAK,
+      KNOWN_LINKS.SNAPCHAT,
       KNOWN_LINKS.OWN,
     ],
     cTypes: [CONTENT_TYPE.VIDEO],
@@ -188,7 +205,7 @@ export const ASSISTANT_ACTIONS = [
     processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     cTypes: [CONTENT_TYPE.IMAGE, CONTENT_TYPE.VIDEO],
     exceptions: [
-      /(pbs.twimg.com)|(youtu.be|youtube)|(instagram)|(fbcdn.net)|(vimeo)|(tiktok.com)/,
+      /(pbs.twimg.com)|(youtu.be|youtube)|(instagram)|(fbcdn.net)|(vimeo)|(snapchat)|(tiktok.com)/,
     ],
     useInputUrl: false,
     text: "metadata_text",
@@ -272,6 +289,7 @@ export const ASSISTANT_ACTIONS = [
       KNOWN_LINKS.FACEBOOK,
       KNOWN_LINKS.TWITTER,
       KNOWN_LINKS.MASTODON,
+      KNOWN_LINKS.SNAPCHAT,
     ],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
