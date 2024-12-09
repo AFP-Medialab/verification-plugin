@@ -38,6 +38,7 @@ const GaugeChartResult = ({
   scores,
   methodNames,
   detectionThresholds,
+  arcLengths,
   resultsHaveErrors,
   sanitizeDetectionPercentage,
   gaugeExplanation,
@@ -144,16 +145,20 @@ const GaugeChartResult = ({
                 animate={false}
                 nrOfLevels={4}
                 textColor={"black"}
-                arcsLength={[
-                  (100 - detectionThresholds.THRESHOLD_1) / 100,
-                  (detectionThresholds.THRESHOLD_2 -
-                    detectionThresholds.THRESHOLD_1) /
-                    100,
-                  (detectionThresholds.THRESHOLD_3 -
-                    detectionThresholds.THRESHOLD_2) /
-                    100,
-                  (100 - detectionThresholds.THRESHOLD_3) / 100,
-                ]}
+                arcsLength={
+                  arcLengths
+                    ? arcLengths
+                    : [
+                        (100 - detectionThresholds.THRESHOLD_1) / 100,
+                        (detectionThresholds.THRESHOLD_2 -
+                          detectionThresholds.THRESHOLD_1) /
+                          100,
+                        (detectionThresholds.THRESHOLD_3 -
+                          detectionThresholds.THRESHOLD_2) /
+                          100,
+                        (100 - detectionThresholds.THRESHOLD_3) / 100,
+                      ]
+                }
                 percent={scores ? maxScore / 100 : 0}
                 style={{
                   minWidth: "250px",

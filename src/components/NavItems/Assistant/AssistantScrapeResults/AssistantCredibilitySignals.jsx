@@ -205,6 +205,8 @@ const AssistantCredSignals = () => {
     THRESHOLD_3: 95.0,
   };
 
+  const arcLengths = [0.05, 0.45, 0.45, 0.05];
+
   const keywords = [
     "gauge_scale_modal_explanation_rating_1",
     "gauge_scale_modal_explanation_rating_2",
@@ -224,7 +226,7 @@ const AssistantCredSignals = () => {
   const MachineGeneratedTextMethodNamesResults = {
     methodName: "machinegeneratedtext",
     predictionScore: machineGeneratedTextResult
-      ? machineGeneratedTextResult.score
+      ? machineGeneratedTextResult.score * 100.0
       : null,
   };
 
@@ -438,7 +440,7 @@ const AssistantCredSignals = () => {
             expandIcon={getExpandIcon(
               machineGeneratedTextLoading,
               machineGeneratedTextFail,
-              machineGeneratedTextDone,
+              null,
               role,
             )}
           >
@@ -503,8 +505,9 @@ const AssistantCredSignals = () => {
                 scores={[MachineGeneratedTextMethodNamesResults]}
                 methodNames={MachineGeneratedTextMethodNames}
                 detectionThresholds={DETECTION_THRESHOLDS}
+                arcLengths={arcLengths}
                 resultsHaveErrors={false}
-                sanitizeDetectionPercentage={(n) => Math.round(n * 100.0)}
+                sanitizeDetectionPercentage={(n) => Math.round(n)}
                 gaugeExplanation={{ colors: colors, keywords: keywords }}
                 toolName={keyword("machine_generated_text_title")}
                 detectionType={"text"}
