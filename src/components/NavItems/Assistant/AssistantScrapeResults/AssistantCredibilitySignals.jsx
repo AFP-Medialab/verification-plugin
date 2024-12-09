@@ -327,11 +327,15 @@ const AssistantCredSignals = () => {
                     {keyword("login_required")}
                   </Typography>
                 )}
-                {prevFactChecksDone && prevFactChecksResult.length < 1 && (
-                  <Typography sx={{ color: "text.secondary", align: "start" }}>
-                    {keyword("none_detected")}
-                  </Typography>
-                )}
+                {role.includes(ROLES.BETA_TESTER) &&
+                  prevFactChecksDone &&
+                  prevFactChecksResult.length < 1 && (
+                    <Typography
+                      sx={{ color: "text.secondary", align: "start" }}
+                    >
+                      {keyword("none_detected")}
+                    </Typography>
+                  )}
               </Grid2>
             </Grid2>
           </AccordionSummary>
