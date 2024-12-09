@@ -27,6 +27,7 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { getLanguageName } from "../../../Shared/Utils/languageUtils";
 import TextFooter, { TextFooterPrevFactChecks } from "./TextFooter.jsx";
+import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult.jsx";
 
 const renderEntityKeys = (entities, keyword) => {
   // translate array into readable string
@@ -197,6 +198,35 @@ const AssistantCredSignals = () => {
   const machineGeneratedTextFail = useSelector(
     (state) => state.assistant.machineGeneratedTextFail,
   );
+
+  const DETECTION_THRESHOLDS = {
+    THRESHOLD_1: 5.0,
+    THRESHOLD_2: 50.0,
+    THRESHOLD_3: 95.0,
+  };
+
+  const keywords = [
+    "gauge_scale_modal_explanation_rating_1",
+    "gauge_scale_modal_explanation_rating_2",
+    "gauge_scale_modal_explanation_rating_3",
+    "gauge_scale_modal_explanation_rating_4",
+  ];
+  const colors = ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"];
+
+  //const methodName = "machinegeneratedtext";
+  const MachineGeneratedTextMethodNames = {
+    machinegeneratedtext: {
+      name: keyword("machine_generated_text_title"),
+      description: keyword("machine_generated_text_tooltip"),
+    },
+  };
+
+  const MachineGeneratedTextMethodNamesResults = {
+    methodName: "machinegeneratedtext",
+    predictionScore: machineGeneratedTextResult
+      ? machineGeneratedTextResult.score
+      : null,
+  };
 
   return (
     <Card>
@@ -399,7 +429,7 @@ const AssistantCredSignals = () => {
           disabled={
             machineGeneratedTextLoading ||
             machineGeneratedTextFail ||
-            machineGeneratedTextDone ||
+            //machineGeneratedTextDone ||
             !role.includes(ROLES.BETA_TESTER)
           }
           //disableGutters
@@ -465,6 +495,22 @@ const AssistantCredSignals = () => {
               </Grid2>
             </Grid2>
           </AccordionSummary>
+
+          <AccordionDetails>
+            {machineGeneratedTextResult ? (
+              <GaugeChartResult
+                keyword={keyword}
+                scores={[MachineGeneratedTextMethodNamesResults]}
+                methodNames={MachineGeneratedTextMethodNames}
+                detectionThresholds={DETECTION_THRESHOLDS}
+                resultsHaveErrors={false}
+                sanitizeDetectionPercentage={(n) => Math.round(n * 100.0)}
+                gaugeExplanation={{ colors: colors, keywords: keywords }}
+                toolName={keyword("machine_generated_text_title")}
+                detectionType={"text"}
+              />
+            ) : null}
+          </AccordionDetails>
         </StyledAccordion>
       </CardContent>
     </Card>

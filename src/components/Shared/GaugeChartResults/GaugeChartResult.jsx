@@ -217,6 +217,9 @@ const GaugeChartResult = ({
             <AccordionDetails>
               <Stack direction={"column"} spacing={4}>
                 {scores.map((item, key) => {
+                  {
+                    console.log(scores);
+                  }
                   let predictionScore;
 
                   if (item.predictionScore) {
@@ -238,6 +241,9 @@ const GaugeChartResult = ({
                               variant={"h6"}
                               sx={{ fontWeight: "bold" }}
                             >
+                              {console.log(methodNames)}
+                              {console.log(item)}
+                              {console.log(item.methodName)}
                               {methodNames[item.methodName].name}
                             </Typography>
                             <Stack
