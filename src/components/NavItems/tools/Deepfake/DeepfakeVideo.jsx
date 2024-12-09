@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import LinearProgress from "@mui/material/LinearProgress";
 import Box from "@mui/material/Box";
@@ -18,7 +18,6 @@ import { setError } from "redux/reducers/errorReducer";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
 
 const Deepfake = () => {
-  //const { url } = useParams();
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
   const keywordAllTools = i18nLoadNamespace(
@@ -78,6 +77,13 @@ const Deepfake = () => {
       preprocessingError,
     );
   };
+
+  useEffect(() => {
+    if (url && input && !result) {
+      handleSubmit(input);
+    }
+  }, [url, input, result]);
+
   const handleSubmit = async () => {
     dispatch(resetDeepfake());
     await submitUrl();
@@ -97,7 +103,7 @@ const Deepfake = () => {
         description={keywordAllTools("navbar_deepfake_video_description")}
         icon={
           <DeepfakeIcon
-            style={{ fill: "#00926c", height: "75px", width: "auto" }}
+            style={{ fill: "#00926c", height: "40px", width: "auto" }}
           />
         }
       />

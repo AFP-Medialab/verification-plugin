@@ -1,9 +1,10 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import { Button, ButtonGroup, Grid2, TextField } from "@mui/material";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import CloseIcon from "@mui/icons-material/Close";
 import LoadingButton from "@mui/lab/LoadingButton";
+import accept from "attr-accept";
 
 /**
  * A reusable form component with a textfield and a local file with optional processing
@@ -40,6 +41,46 @@ const StringFileUploadField = ({
   isParentLoading,
 }) => {
   const fileRef = useRef(null);
+
+  const [isOver, setIsOver] = useState(false);
+  const [validDrop, setValidDrop] = useState(false);
+
+  /**
+   *
+   * @param e {DragEvent}
+   */
+  const onDragEnter = (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer?.files?.[0];
+    setIsOver(true);
+    if (file && accept(file, fileInputTypesAccepted)) {
+      setValidDrop(true);
+    } else {
+      setValidDrop(false);
+    }
+  };
+
+  const onDragLeave = (e) => {
+    e.preventDefault();
+    setIsOver(false);
+  };
+
+  const handleFile = async (file) => {
+    if (preprocessLocalFile) {
+      file = await preprocessLocalFile(file);
+    }
+    setFileInput(file);
+  };
+
+  const onDrop = (e) => {
+    e.preventDefault();
+    setIsOver(false);
+    setValidDrop(false);
+    const file = e.dataTransfer?.files?.[0];
+    if (file && accept(file, fileInputTypesAccepted)) {
+      handleFile(file);
+    }
+  };
 
   return (
     <Box>
@@ -78,7 +119,17 @@ const StringFileUploadField = ({
           variant="outlined"
           disabled={isParentLoading || urlInput !== ""}
         >
-          <Button startIcon={<FolderOpenIcon />} sx={{ textTransform: "none" }}>
+          <Button
+            startIcon={<FolderOpenIcon />}
+            sx={{ textTransform: "none" }}
+            style={
+              isOver ? { cursor: validDrop ? "copy" : "no-drop" } : undefined
+            }
+            onDragEnter={onDragEnter}
+            onDragLeave={onDragLeave}
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={onDrop}
+          >
             <label htmlFor="file">
               {fileInput ? fileInput.name : localFileKeyword}
             </label>
@@ -89,12 +140,9 @@ const StringFileUploadField = ({
               accept={fileInputTypesAccepted}
               hidden={true}
               ref={fileRef}
-              onChange={async (e) => {
+              onChange={(e) => {
                 e.preventDefault();
-                const newFile = preprocessLocalFile
-                  ? await preprocessLocalFile(e.target.files[0])
-                  : e.target.files[0];
-                setFileInput(newFile);
+                handleFile(e.target.files[0]);
                 e.target.value = null;
               }}
             />

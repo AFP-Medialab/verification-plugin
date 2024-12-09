@@ -1,27 +1,27 @@
 import React from "react";
-import { Grid2, Typography } from "@mui/material";
+import { Box, Grid2, Typography } from "@mui/material";
 
-const HeaderTool = (props) => {
-  const name = props.name;
-  const description = props.description;
-  const icon = props.icon;
-
+/**
+ *
+ */
+const HeaderTool = ({ name, description, icon }) => {
   return (
-    <Grid2 container direction="column" alignItems="start" mb={3}>
-      <Grid2 size="grow">
+    <Grid2 container direction="column" alignItems="start" spacing={1} mb={4}>
+      <Box>
         <Grid2
           container
           direction="row"
           justifyContent="flex-start"
           alignItems="center"
+          spacing={1}
         >
           {icon}
-          <Typography variant="h4" color={"primary"}>
+          <Typography variant="h5" color={"primary"}>
             {name}
           </Typography>
         </Grid2>
-      </Grid2>
-      <Grid2 size="grow" textAlign="start">
+      </Box>
+      <Grid2 textAlign="start">
         <Typography>{description}</Typography>
       </Grid2>
     </Grid2>

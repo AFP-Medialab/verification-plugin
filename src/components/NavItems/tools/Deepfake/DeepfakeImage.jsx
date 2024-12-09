@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import LinearProgress from "@mui/material/LinearProgress";
 import Box from "@mui/material/Box";
@@ -82,6 +82,12 @@ const Deepfake = () => {
     );
   };
 
+  useEffect(() => {
+    if (url && input && !result) {
+      handleSubmit(input);
+    }
+  }, [url, input, result]);
+
   const handleSubmit = () => {
     dispatch(resetDeepfake());
     submitUrl();
@@ -101,7 +107,7 @@ const Deepfake = () => {
         description={keywordAllTools("navbar_deepfake_image_description")}
         icon={
           <DeepfakeIcon
-            style={{ fill: "#00926c", height: "75px", width: "auto" }}
+            style={{ fill: "#00926c", height: "40px", width: "auto" }}
           />
         }
       />

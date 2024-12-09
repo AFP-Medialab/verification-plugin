@@ -1,13 +1,21 @@
 import React from "react";
-import analysisIconOff from "../../NavBar/images/tools/video_logoOff.png";
-import keyframesIconOff from "../../NavBar/images/tools/keyframesOff.png";
-import thumbnailsIconOff from "../../NavBar/images/tools/youtubeOff.png";
-import magnifierIconOff from "../../NavBar/images/tools/magnifierOff.png";
-import metadataIconOff from "../../NavBar/images/tools/metadataOff.png";
-import videoRightsIconOff from "../../NavBar/images/tools/copyrightOff.png";
-import forensicIconOff from "../../NavBar/images/tools/forensic_logoOff.png";
-import videoIconOff from "../../NavBar/images/tools/video_logoOff.png";
 import DownloadIcon from "@mui/icons-material/Download";
+
+import { ROLES } from "../../../constants/roles.jsx";
+import {
+  imageAnalysis,
+  imageDeepfake,
+  imageForensic,
+  imageMagnifier,
+  imageMetadata,
+  imageOcr,
+  imageSyntheticDetection,
+  keyframes,
+  thumbnails,
+  videoAnalysis,
+  videoDeepfake,
+  videoRights,
+} from "../../../constants/tools";
 
 export const NE_SUPPORTED_LANGS = ["en", "pt", "fr", "de", "el", "es", "it"];
 
@@ -19,6 +27,7 @@ export const CONTENT_TYPE = {
 export const KNOWN_LINKS = {
   TWITTER: "twitter",
   INSTAGRAM: "instagram",
+  SNAPCHAT: "snapchat",
   FACEBOOK: "facebook",
   TIKTOK: "tiktok",
   TELEGRAM: "telegram",
@@ -52,6 +61,13 @@ export const KNOWN_LINK_PATTERNS = [
   {
     key: KNOWN_LINKS.TIKTOK,
     patterns: ["((https?:\\/{2})?(www.)?tiktok.com\\/.*\\/video/\\d*)"],
+  },
+  {
+    key: KNOWN_LINKS.SNAPCHAT,
+    patterns: [
+      "((https?:\\/{2})?(www.)?snapchat.com\\/(spotlight|lens)/\\w*)",
+      "((https?:\\/{2})?(www.)?snapchat.com\\/p\\/[\\w\\-]+\\/\\w*)",
+    ],
   },
   {
     key: KNOWN_LINKS.INSTAGRAM,
@@ -114,8 +130,12 @@ export const KNOWN_LINK_PATTERNS = [
 export const ASSISTANT_ACTIONS = [
   {
     title: "navbar_analysis_video",
-    icon: analysisIconOff,
-    linksAccepted: [KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.FACEBOOK],
+    icon: <videoAnalysis.icon sx={{ fontSize: "24px" }} />,
+    linksAccepted: [
+      KNOWN_LINKS.YOUTUBE,
+      KNOWN_LINKS.FACEBOOK,
+      KNOWN_LINKS.SNAPCHAT,
+    ],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
     useInputUrl: true,
@@ -125,8 +145,12 @@ export const ASSISTANT_ACTIONS = [
   },
   {
     title: "navbar_analysis_image",
-    icon: analysisIconOff,
-    linksAccepted: [KNOWN_LINKS.FACEBOOK, KNOWN_LINKS.TWITTER],
+    icon: <imageAnalysis.icon sx={{ fontSize: "24px" }} />,
+    linksAccepted: [
+      KNOWN_LINKS.FACEBOOK,
+      KNOWN_LINKS.TWITTER,
+      KNOWN_LINKS.SNAPCHAT,
+    ],
     cTypes: [CONTENT_TYPE.IMAGE],
     exceptions: [],
     useInputUrl: true,
@@ -136,13 +160,14 @@ export const ASSISTANT_ACTIONS = [
   },
   {
     title: "navbar_keyframes",
-    icon: keyframesIconOff,
+    icon: <keyframes.icon sx={{ fontSize: "24px" }} />,
     linksAccepted: [
       KNOWN_LINKS.YOUTUBE,
       KNOWN_LINKS.FACEBOOK,
       KNOWN_LINKS.YOUTUBE,
       KNOWN_LINKS.YOUTUBESHORTS,
       KNOWN_LINKS.LIVELEAK,
+      KNOWN_LINKS.SNAPCHAT,
       KNOWN_LINKS.OWN,
     ],
     cTypes: [CONTENT_TYPE.VIDEO],
@@ -154,7 +179,7 @@ export const ASSISTANT_ACTIONS = [
   },
   {
     title: "navbar_thumbnails",
-    icon: thumbnailsIconOff,
+    icon: <thumbnails.icon sx={{ fontSize: "24px" }} />,
     linksAccepted: [KNOWN_LINKS.YOUTUBE],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
@@ -165,7 +190,7 @@ export const ASSISTANT_ACTIONS = [
   },
   {
     title: "navbar_magnifier",
-    icon: magnifierIconOff,
+    icon: <imageMagnifier.icon sx={{ fontSize: "24px" }} />,
     processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     cTypes: [CONTENT_TYPE.IMAGE],
     exceptions: [],
@@ -176,11 +201,11 @@ export const ASSISTANT_ACTIONS = [
   },
   {
     title: "navbar_metadata",
-    icon: metadataIconOff,
+    icon: <imageMetadata.icon sx={{ fontSize: "24px" }} />,
     processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     cTypes: [CONTENT_TYPE.IMAGE, CONTENT_TYPE.VIDEO],
     exceptions: [
-      /(pbs.twimg.com)|(youtu.be|youtube)|(instagram)|(fbcdn.net)|(vimeo)|(tiktok.com)/,
+      /(pbs.twimg.com)|(youtu.be|youtube)|(instagram)|(fbcdn.net)|(vimeo)|(snapchat)|(tiktok.com)/,
     ],
     useInputUrl: false,
     text: "metadata_text",
@@ -189,7 +214,7 @@ export const ASSISTANT_ACTIONS = [
   },
   {
     title: "navbar_rights",
-    icon: videoRightsIconOff,
+    icon: <videoRights.icon sx={{ fontSize: "24px" }} />,
     linksAccepted: [KNOWN_LINKS.YOUTUBE],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
@@ -200,7 +225,7 @@ export const ASSISTANT_ACTIONS = [
   },
   {
     title: "navbar_forensic",
-    icon: forensicIconOff,
+    icon: <imageForensic.icon sx={{ fontSize: "24px" }} />,
     processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     cTypes: [CONTENT_TYPE.IMAGE],
     exceptions: [],
@@ -211,7 +236,7 @@ export const ASSISTANT_ACTIONS = [
   },
   {
     title: "navbar_ocr",
-    icon: forensicIconOff,
+    icon: <imageOcr.icon sx={{ fontSize: "24px" }} />,
     processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     cTypes: [CONTENT_TYPE.IMAGE],
     exceptions: [],
@@ -221,13 +246,50 @@ export const ASSISTANT_ACTIONS = [
     path: "tools/ocr",
   },
   {
+    title: "navbar_synthetic_image_detection",
+    icon: <imageSyntheticDetection.icon sx={{ fontSize: "24px" }} />,
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    cTypes: [CONTENT_TYPE.IMAGE],
+    exceptions: [],
+    useInputUrl: false,
+    text: "synthetic_image_detection_text",
+    tsvPrefix: "synthetic_image_detection",
+    path: "tools/syntheticImageDetection",
+    betaTester: true,
+  },
+  {
+    title: "navbar_deepfake_image",
+    icon: <imageDeepfake.icon sx={{ fontSize: "24px" }} />,
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    cTypes: [CONTENT_TYPE.IMAGE],
+    exceptions: [],
+    useInputUrl: false,
+    text: "deepfake_image_text",
+    tsvPrefix: "deepfakeImage",
+    path: "tools/deepfakeImage",
+    betaTester: true,
+  },
+  {
+    title: "navbar_deepfake_video",
+    icon: <videoDeepfake.icon sx={{ fontSize: "24px" }} />,
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    cTypes: [CONTENT_TYPE.VIDEO],
+    exceptions: [],
+    useInputUrl: false,
+    text: "deepfake_video_text",
+    tsvPrefix: "deepfakeVideo",
+    path: "tools/deepfakeVideo",
+    betaTester: true,
+  },
+  {
     title: "assistant_video_download_action",
-    icon: videoIconOff,
+    icon: <DownloadIcon color="disabled" fontSize="large" />,
     linksAccepted: [
       KNOWN_LINKS.TELEGRAM,
       KNOWN_LINKS.FACEBOOK,
       KNOWN_LINKS.TWITTER,
       KNOWN_LINKS.MASTODON,
+      KNOWN_LINKS.SNAPCHAT,
     ],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
@@ -273,6 +335,7 @@ export const selectCorrectActions = (
   inputUrlType,
   processUrlType,
   processUrl,
+  role,
 ) => {
   let possibleActions = ASSISTANT_ACTIONS.filter(
     (action) =>
@@ -280,7 +343,10 @@ export const selectCorrectActions = (
       (!action.processLinksAccepted ||
         action.processLinksAccepted.includes(processUrlType)) &&
       action.cTypes.includes(contentType) &&
-      (action.exceptions.length === 0 || !processUrl.match(action.exceptions)),
+      (action.exceptions.length === 0 ||
+        !processUrl.match(action.exceptions)) &&
+      (!action.betaTester ||
+        (action.betaTester && role.includes(ROLES.BETA_TESTER))),
   );
   return possibleActions;
 };

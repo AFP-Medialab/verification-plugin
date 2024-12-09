@@ -10,6 +10,7 @@ import SourceCredibilityDBKFDialog from "./SourceCredibilityDBKFDialog";
 import Typography from "@mui/material/Typography";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { getUrlTypeFromCredScope } from "./assistantUtils";
+import { Chip, Grid2 } from "@mui/material";
 
 const SourceCredibilityResult = (props) => {
   // central
@@ -19,22 +20,19 @@ const SourceCredibilityResult = (props) => {
   const sourceCredibilityResults = props.scResultFiltered;
   const Icon = props.icon;
   const iconColor = props.iconColor;
+  const sourceType = props.sourceType;
 
   return (
     <List disablePadding={true}>
       {sourceCredibilityResults
         ? sourceCredibilityResults.map((value, key) => (
             <ListItem key={key}>
-              <ListItemAvatar>
-                <Icon fontSize={"large"} color={iconColor} />
-              </ListItemAvatar>
               <ListItemText
                 primary={
-                  <div>
+                  <div sx={{ ml: 2 }}>
                     <Typography
                       variant={"body1"}
                       component={"div"}
-                      align={"left"}
                       color={"textPrimary"}
                     >
                       {value.credibilityScope &&
@@ -95,6 +93,8 @@ const SourceCredibilityResult = (props) => {
                         <SourceCredibilityDBKFDialog
                           evidence={value.credibilityEvidence}
                           source={value.credibilitySource}
+                          color={iconColor}
+                          sourceType={sourceType}
                         />
                       </ListItemSecondaryAction>
                     ) : null}

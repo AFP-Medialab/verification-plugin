@@ -32,6 +32,11 @@ const deepfakeImageReducer = (state = defaultState, action) => {
         result: action.payload.result,
         loading: false,
       };
+    case "SET_DEEPFAKE_IMAGE_URL":
+      return {
+        ...state,
+        url: action.payload.url,
+      };
     default:
       return state;
   }

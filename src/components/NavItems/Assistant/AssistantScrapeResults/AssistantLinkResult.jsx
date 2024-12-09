@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 import Card from "@mui/material/Card";
-import { CardHeader, Grid2, Skeleton } from "@mui/material";
+import {
+  Box,
+  Button,
+  CardHeader,
+  Chip,
+  Grid2,
+  Skeleton,
+  Stack,
+} from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Link from "@mui/material/Link";
 import LinkIcon from "@mui/icons-material/Link";
@@ -12,131 +20,111 @@ import SentimentSatisfied from "@mui/icons-material/SentimentSatisfied";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import ExtractedSourceCredibilityResult from "../AssistantCheckResults/ExtractedSourceCredibilityResult";
+import { TextCopy } from "../../../Shared/Utils/TextCopy";
 import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import { TaskAltOutlined } from "@mui/icons-material";
+import { CheckCircleOutline, TaskAltOutlined } from "@mui/icons-material";
+import { DataGrid, getGridSingleSelectOperators } from "@mui/x-data-grid";
 
-const ExtractedUrl = (
-  index,
-  keyword,
-  extractedSourceCred,
-  link,
-  done,
-  loading,
-) => {
-  let sourceType;
-  let Icon;
-  let iconColor;
-
-  {
-    /* select correct icon and link colour */
-  }
-  if (extractedSourceCred) {
-    if (extractedSourceCred[link].caution) {
-      sourceType = keyword("warning");
-      Icon = ErrorOutlineOutlinedIcon;
-      iconColor = "error";
-    } else if (extractedSourceCred[link].mixed) {
-      sourceType = keyword("mentions");
-      Icon = SentimentSatisfied;
-      iconColor = "action";
-    } else if (extractedSourceCred[link].positive) {
-      sourceType = keyword("fact_checker");
-      Icon = TaskAltOutlined;
-      iconColor = "primary";
-    }
-  }
-
+// render status for extracted urls
+const Status = (params) => {
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   return (
-    <Grid2 container wrap="wrap" key={index}>
-      {/* icon */}
-      <Grid2 size={{ xs: 1 }} align="center">
-        {loading && <Skeleton variant="circular" width={20} height={20} />}
-        {sourceType && done && <Icon color={iconColor} fontSize="large" />}
-        {!sourceType && done && <LinkIcon />}
-      </Grid2>
-
-      {/* extracted links */}
-      <Grid2 size={{ xs: 10 }} align="left">
-        <Typography>
-          <Link
-            rel="noopener noreferrer"
-            target="_blank"
-            color={
-              extractedSourceCred
-                ? extractedSourceCred[link].urlColor
-                : "inherit"
-            }
-            href={
-              extractedSourceCred
-                ? extractedSourceCred[link].resolvedLink
-                : link
-            }
-          >
-            {extractedSourceCred
-              ? extractedSourceCred[link].resolvedLink
-              : link}
-          </Link>
-        </Typography>
-      </Grid2>
-
-      {/* source cred details */}
-      {sourceType && done ? (
-        <Grid2 size={{ xs: 1 }} align="center">
-          <ExtractedSourceCredibilityResult
-            extractedSourceCredibilityResults={extractedSourceCred[link]}
-            sourceType={sourceType}
-            url={extractedSourceCred[link].resolvedLink}
-            urlColor={extractedSourceCred[link].urlColor}
-          />
-        </Grid2>
-      ) : loading ? (
-        <Grid2 size={{ xs: 1 }} align="center">
-          <Skeleton variant="rounded" width={20} height={20} />
-        </Grid2>
+    <Stack direction="column" spacing={0.5}>
+      {params.done && params.urlResults.caution !== null ? (
+        <Chip
+          label={keyword(params.sourceTypes.caution)}
+          color={params.trafficLightColors.caution}
+          size="small"
+        />
       ) : null}
-    </Grid2>
+      {params.done && params.urlResults.mixed !== null ? (
+        <Chip
+          label={keyword(params.sourceTypes.mixed)}
+          color={params.trafficLightColors.mixed}
+          size="small"
+        />
+      ) : null}
+      {params.done && params.urlResults.positive != null ? (
+        <Chip
+          label={keyword(params.sourceTypes.positive)}
+          color={params.trafficLightColors.positive}
+          size="small"
+        />
+      ) : null}
+      {params.done && params.urlResults.resolvedDomain == "" ? (
+        <Chip
+          label={keyword(params.sourceTypes.unlabelled)}
+          color={params.trafficLightColors.unlabelled}
+          size="small"
+        />
+      ) : null}
+      {params.loading && <Skeleton variant="rounded" width={60} height={20} />}
+    </Stack>
   );
 };
 
-const ExtractedUrlList = (
-  keyword,
-  linkList,
-  extractedLinks,
-  extractedSourceCred,
-  done,
-  loading,
-  fail,
-) => {
-  const links = extractedLinks ? extractedLinks : linkList ? linkList : null;
-  if (fail) {
-    return (
-      <Typography
-        component={"div"}
-        sx={{ textAlign: "start" }}
-        variant={"subtitle1"}
-      >
-        {keyword("extracted_urls_url_domain_analysis_failed")}
-      </Typography>
-    );
-  }
+// render URL in correct colour
+const Url = (params) => {
   return (
-    <div>
-      {links
-        ? links.map((link, index) =>
-            ExtractedUrl(
-              index,
-              keyword,
-              extractedSourceCred,
-              link,
-              done,
-              loading,
-            ),
-          )
-        : keyword("extracted_urls_url_domain_analysis_failed")}
-    </div>
+    <Tooltip title={params.url}>
+      <Link
+        style={{ cursor: "pointer" }}
+        target="_blank"
+        href={params.url}
+        color={params.urlColor}
+      >
+        {params.url}
+      </Link>
+    </Tooltip>
   );
 };
+
+// render details
+const Details = (params) => {
+  return (
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      flexDirection="row"
+    >
+      {<TextCopy text={params.url} index={params.url} />}
+      {params.done && params.domainOrAccount !== null && (
+        <ExtractedSourceCredibilityResult
+          extractedSourceCredibilityResults={params.urlResults}
+          url={params.urlResults.resolvedLink}
+          domainOrAccount={params.domainOrAccount}
+          urlColor={params.urlColor}
+          sourceTypes={params.sourceTypes}
+        />
+      )}
+      {params.loading && <Skeleton variant="rounded" height={20} width={20} />}
+    </Box>
+  );
+};
+
+// columns
+const sourceTypeListSortComparator = (v1, v2) => {
+  return v1.sourceTypeList.length - v2.sourceTypeList.length;
+};
+
+const sourceTypeListFilterOperators = getGridSingleSelectOperators()
+  .filter((operator) => operator.value === "isAnyOf")
+  .map((operator) => {
+    const newOperator = { ...operator };
+    const newGetApplyFilterFn = (filterItem, column) => {
+      return (params) => {
+        let isOk = true;
+        filterItem?.value?.forEach((fv) => {
+          isOk = isOk && params.sourceTypeList.includes(fv);
+        });
+        return isOk;
+      };
+    };
+    newOperator.getApplyFilterFn = newGetApplyFilterFn;
+    return newOperator;
+  });
 
 const AssistantLinkResult = () => {
   const classes = useMyStyles();
@@ -150,55 +138,236 @@ const AssistantLinkResult = () => {
   const inputSCDone = useSelector((state) => state.assistant.inputSCDone);
   const inputSCLoading = useSelector((state) => state.assistant.inputSCLoading);
   const inputSCFail = useSelector((state) => state.assistant.inputSCFail);
+  const trafficLightColors = useSelector(
+    (state) => state.assistant.trafficLightColors,
+  );
+
+  const urls =
+    inputSCDone && extractedLinks ? extractedLinks : linkList ? linkList : null;
+
+  const sourceTypes = {
+    positive: "fact_checker",
+    mixed: "mentions",
+    caution: "warning",
+    unlabelled: "unlabelled",
+  };
+
+  // create a row for each url
+  let rows = [];
+  for (let i = 0; i < urls.length; i++) {
+    let url = urls[i];
+
+    // define extracted source credibility
+    let urlColor = "inherit"; //trafficLightColors.unlabelled;
+    let urlResults = {
+      caution: null,
+      mixed: null,
+      positive: null,
+    };
+    let sortByDetails = false;
+    let domainOrAccount = null;
+    let sourceTypeList = [sourceTypes.unlabelled];
+
+    if (extractedSourceCred) {
+      urlResults = extractedSourceCred[url];
+      sortByDetails = true;
+      // these are in order in case of multiple types of source credibility results
+      if (urlResults.positive) {
+        urlColor = trafficLightColors.positive;
+        sourceTypeList.push(keyword(sourceTypes.positive));
+      }
+      if (urlResults.mixed) {
+        urlColor = trafficLightColors.mixed;
+        sourceTypeList.push(keyword(sourceTypes.mixed));
+      }
+      if (urlResults.caution) {
+        urlColor = trafficLightColors.caution;
+        sourceTypeList.push(keyword(sourceTypes.caution));
+      }
+      // if positive, mixed or caution then remove unlabelled
+      sourceTypeList =
+        sourceTypeList.length > 1
+          ? sourceTypeList.splice(1, sourceTypeList.length)
+          : sourceTypeList;
+      // detect domain or account address
+      domainOrAccount = urlResults.resolvedDomain
+        ? urlResults.resolvedDomain.startsWith("https://")
+          ? urlResults.resolvedDomain
+          : "https://" + urlResults.resolvedDomain
+        : null;
+    }
+
+    // add row
+    rows.push({
+      id: i + 1,
+      status: {
+        loading: inputSCLoading,
+        done: inputSCDone,
+        fail: inputSCFail,
+        urlResults: urlResults,
+        url: url,
+        trafficLightColors: trafficLightColors,
+        sourceTypes: sourceTypes,
+        sourceTypeList: sourceTypeList,
+      },
+      url: {
+        url: url,
+        urlColor: urlColor,
+      },
+      details: {
+        loading: inputSCLoading,
+        done: inputSCDone,
+        fail: inputSCFail,
+        urlResults: urlResults,
+        urlColor: urlColor,
+        sourceTypes: sourceTypes,
+        domainOrAccount: domainOrAccount,
+        sortByDetails: sortByDetails,
+      },
+    });
+  }
+
+  // columns
+  const columns = [
+    {
+      field: "id",
+      headerName: keyword("id"),
+      align: "center",
+      headerAlign: "center",
+      type: "number",
+      minWidth: 30,
+      flex: 1,
+    },
+    {
+      field: "status",
+      headerName: keyword("status"),
+      align: "center",
+      headerAlign: "center",
+      display: "flex",
+      minWidth: 120,
+      flex: 1,
+      type: "singleSelect",
+      valueOptions: [
+        ...new Set(rows.map((o) => o.status.sourceTypeList).flat()),
+      ],
+      renderCell: (params) => {
+        return (
+          <Status
+            loading={params.value.loading}
+            done={params.value.done}
+            fail={params.value.fail}
+            urlResults={params.value.urlResults}
+            trafficLightColors={params.value.trafficLightColors}
+            sourceTypes={params.value.sourceTypes}
+          />
+        );
+      },
+
+      sortComparator: sourceTypeListSortComparator,
+      filterOperators: sourceTypeListFilterOperators,
+    },
+    {
+      field: "url",
+      headerName: keyword("assistant_urlbox"),
+      minWidth: 400,
+      flex: 1,
+      renderCell: (params) => {
+        return <Url url={params.value.url} urlColor={params.value.urlColor} />;
+      },
+      sortComparator: (v1, v2) => v1.url.localeCompare(v2.url),
+    },
+    {
+      field: "details",
+      headerName: keyword("options"),
+      align: "center",
+      headerAlign: "center",
+      display: "flex",
+      minWidth: 100,
+      flex: 1,
+      // change to type: actions,
+      //   an array of <GridActionsCellItem> elements, one for each action button
+      // getActions: (params) => [/.../],
+      renderCell: (params) => {
+        return (
+          <Details
+            loading={params.value.loading}
+            done={params.value.done}
+            fail={params.value.fail}
+            urlResults={params.value.urlResults}
+            url={params.value.url}
+            domainOrAccount={params.value.domainOrAccount}
+            urlColor={params.value.urlColor}
+            sourceTypes={params.value.sourceTypes}
+          />
+        );
+      },
+      sortComparator: (v1, v2) => v1.sortByDetails === v2.sortByDetails,
+    },
+  ];
+
+  // if no urls extracted
+  if (!urls) {
+    return (
+      <Typography
+        component={"div"}
+        sx={{ textAlign: "start" }}
+        variant={"subtitle1"}
+      >
+        {keyword("extracted_urls_url_domain_analysis_failed")}
+      </Typography>
+    );
+  }
 
   return (
-    <Grid2 size={{ xs: 12 }}>
-      <Card>
-        <CardHeader
-          className={classes.assistantCardHeader}
-          title={
-            <Typography variant={"h5"}>
-              {" "}
-              {keyword("extracted_urls_url_domain_analysis")}{" "}
-            </Typography>
-          }
-          action={
-            <Tooltip
-              interactive={"true"}
-              title={
-                <div
-                  className={"content"}
-                  dangerouslySetInnerHTML={{
-                    __html: keyword("extracted_urls_tooltip"),
-                  }}
-                />
-              }
-              classes={{ tooltip: classes.assistantTooltip }}
-            >
-              <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
-            </Tooltip>
-          }
-        />
-        <CardContent
-          style={{
-            maxHeight: 300,
-            wordBreak: "break-word",
-            overflowY: "auto",
-            overflowX: "hidden",
-          }}
-        >
-          {ExtractedUrlList(
-            keyword,
-            linkList,
-            extractedLinks,
-            extractedSourceCred,
-            inputSCDone,
-            inputSCLoading,
-            inputSCFail,
-          )}
-        </CardContent>
-      </Card>
-    </Grid2>
+    <Card>
+      <CardHeader
+        className={classes.assistantCardHeader}
+        title={
+          <Typography variant={"h5"}>
+            {" "}
+            {keyword("extracted_urls_url_domain_analysis")}{" "}
+          </Typography>
+        }
+        action={
+          <Tooltip
+            interactive={"true"}
+            title={
+              <div
+                className={"content"}
+                dangerouslySetInnerHTML={{
+                  __html: keyword("extracted_urls_tooltip"),
+                }}
+              />
+            }
+            classes={{ tooltip: classes.assistantTooltip }}
+          >
+            <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+          </Tooltip>
+        }
+      />
+      <CardContent
+        style={{
+          wordBreak: "break-word",
+          overflowY: "auto",
+          overflowX: "hidden",
+        }}
+      >
+        {/* issue with resize related to parent not having a fixed/determined size? */}
+        <div style={{ height: 400, width: "100%", minWidth: 0 }}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            rowHeight={60}
+            disableRowSelectionOnClick
+            initialState={{
+              sorting: {
+                sortModel: [{ field: "status", sort: "desc" }],
+              },
+            }}
+          />
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 export default AssistantLinkResult;

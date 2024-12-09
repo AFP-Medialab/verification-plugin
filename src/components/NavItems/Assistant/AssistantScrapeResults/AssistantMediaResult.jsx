@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Card from "@mui/material/Card";
@@ -7,6 +7,10 @@ import { CardHeader, Grid2, LinearProgress } from "@mui/material";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { CONTENT_TYPE } from "../AssistantRuleBook";
 import AssistantImageResult from "./AssistantImageResult";
@@ -68,14 +72,43 @@ const AssistantMediaResult = () => {
     }
     dispatch(setProcessUrl(url, cType));
   };
+
+  const [filteredImageList, setFilteredImageList] = useState([]);
+
+  useEffect(() => {
+    const imagePromises = imageList.map((imageUrl) => {
+      return new Promise((resolve) => {
+        const image = new Image();
+        image.src = imageUrl;
+        image.onload = () => {
+          resolve({ url: imageUrl, width: image.width, height: image.height });
+        };
+      });
+    });
+
+    Promise.all(imagePromises)
+      .then((imageDimensions) => {
+        const filteredImages = imageDimensions
+          .filter((image) => image.width > 2 && image.height > 2)
+          .map((image) => image.url);
+        setFilteredImageList(filteredImages);
+      })
+      .catch((error) => {
+        console.error("Assistant error loading images:", error);
+      });
+  }, [imageList]);
+
   return (
     <Card
       data-testid="url-media-results"
       hidden={!urlMode || (!imageList.length && !videoList.length)}
+      //width={window.innerWidth}
     >
       <CardHeader
         className={classes.assistantCardHeader}
         title={keyword("media_title")}
+        subheader={keyword("media_below")}
+        subheaderTypographyProps={{ sx: { color: "white" } }}
         action={
           <div style={{ display: "flex" }}>
             <div>
@@ -119,7 +152,7 @@ const AssistantMediaResult = () => {
       ) : null}
 
       {/* selected image with recommended tools */}
-      <CardContent>
+      <CardContent sx={{ padding: processUrl == null ? 0 : undefined }}>
         {processUrl !== null ? (
           resultIsImage ? (
             <Grid2 container spacing={2}>
@@ -147,7 +180,7 @@ const AssistantMediaResult = () => {
       {!singleMediaPresent ? (
         <div>
           {/* select media */}
-          <CardContent>
+          {/*<CardContent>
             <Typography
               component={"div"}
               sx={{ textAlign: "start" }}
@@ -155,28 +188,48 @@ const AssistantMediaResult = () => {
             >
               {keyword("media_below")}
             </Typography>
-          </CardContent>
+          </CardContent>*/}
 
-          {/* image list */}
-          <CardContent>
-            <ImageGridList
-              list={imageList}
-              height={60}
-              cols={5}
-              handleClick={(event) => {
-                submitMediaToProcess(event);
-              }}
-            />
-          </CardContent>
+          <CardContent style={{ wordBreak: "break-word" }}>
+            {/* image list */}
+            {filteredImageList.length > 0 ? (
+              <Accordion defaultExpanded>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography variant="h6">
+                    {keyword("images_label")}
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <ImageGridList
+                    list={filteredImageList}
+                    height={60}
+                    cols={5}
+                    handleClick={(event) => {
+                      submitMediaToProcess(event);
+                    }}
+                  />
+                </AccordionDetails>
+              </Accordion>
+            ) : null}
 
-          {/* video list */}
-          <CardContent>
-            <VideoGridList
-              list={videoList}
-              handleClick={(vidLink) => {
-                submitMediaToProcess(vidLink);
-              }}
-            />
+            {/* video list */}
+            {videoList.length > 0 ? (
+              <Accordion defaultExpanded>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography variant="h6">
+                    {keyword("videos_label")}
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails style={{ paddingTop: 0 }}>
+                  <VideoGridList
+                    list={videoList}
+                    handleClick={(vidLink) => {
+                      submitMediaToProcess(vidLink);
+                    }}
+                  />
+                </AccordionDetails>
+              </Accordion>
+            ) : null}
           </CardContent>
         </div>
       ) : null}

@@ -2,6 +2,7 @@ const defaultState = {
   url: "",
   result: null,
   chunks: [],
+  isInconclusive: false,
   loading: false,
 };
 
@@ -13,6 +14,7 @@ const loccusReducer = (state = defaultState, action) => {
         url: "",
         result: null,
         chunks: [],
+        isInconclusive: false,
         loading: false,
       };
     case "SET_LOCCUS_LOADING":
@@ -26,6 +28,7 @@ const loccusReducer = (state = defaultState, action) => {
         url: action.payload.url,
         result: action.payload.result,
         chunks: action.payload.chunks,
+        isInconclusive: action.payload.isInconclusive,
         loading: false,
       };
     default:

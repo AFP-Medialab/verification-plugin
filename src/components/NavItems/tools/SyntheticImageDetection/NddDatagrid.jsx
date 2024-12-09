@@ -194,7 +194,9 @@ const NddDataGrid = ({ rows }) => {
           // eslint-disable-next-line react/jsx-key
           <GridActionsCellItem
             icon={<OpenInNew />}
-            onClick={() => window.open(url, "_blank", "noopener noreferrer")}
+            onClick={() => {
+              window.open(url, "_blank", "noopener noreferrer");
+            }}
             label="Open Analysis"
           />,
         ];

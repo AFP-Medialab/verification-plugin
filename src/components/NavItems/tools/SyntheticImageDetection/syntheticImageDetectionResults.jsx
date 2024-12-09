@@ -201,7 +201,18 @@ const SyntheticImageDetectionResults = ({
 
     res = res
       .filter((i) => i !== undefined)
-      .sort((a, b) => b.predictionScore - a.predictionScore);
+      .sort((a, b) => {
+        const scoreA = a.isError
+          ? -Infinity
+          : sanitizeDetectionPercentage(a.predictionScore);
+        const scoreB = b.isError
+          ? -Infinity
+          : sanitizeDetectionPercentage(b.predictionScore);
+
+        return scoreB - scoreA;
+      });
+
+    console.log(res);
 
     const hasResultError = () => {
       for (const algorithm of res) {
@@ -239,13 +250,23 @@ const SyntheticImageDetectionResults = ({
   );
 
   /**
-   * Returns a percentage between 0 and 99 for display purposes. We exclude 0 and 100 values.
+   * Returns a percentage between 1 and 99 for display purposes. We exclude 0 and 100 values.
    * @param percentage {number}
-   * @returns {number}
+   * @returns {number | Error}
    */
   const sanitizeDetectionPercentage = (percentage) => {
+    if (typeof percentage !== "number") {
+      return new Error(
+        `[sanitizeDetectionPercentage] Error: The percentage is not a number.`,
+      );
+    }
+
     const floor = Math.floor(percentage);
-    return floor === 0 ? 1 : floor;
+
+    if (floor >= 100) return 99;
+    if (floor <= 0) return 1;
+
+    return floor;
   };
   const [detailsPanelMessage, setDetailsPanelMessage] = useState(
     "synthetic_image_detection_additional_results",
@@ -615,7 +636,7 @@ const SyntheticImageDetectionResults = ({
                       {syntheticImageScores.map((item, key) => {
                         let predictionScore;
 
-                        if (item.predictionScore) {
+                        if (typeof item.predictionScore === "number") {
                           predictionScore = sanitizeDetectionPercentage(
                             item.predictionScore,
                           );

@@ -16,6 +16,8 @@ import "dayjs/locale/de";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs from "dayjs";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const AppWrapper = ({ children }) => {
   //   const { children } = props;
@@ -45,13 +47,20 @@ const AppWrapper = ({ children }) => {
     dayjs.locale(currentLang);
   }
 
+  const queryClient = new QueryClient();
+
   return (
     <LocalizationProvider
       dateAdapter={AdapterDayjs}
       adapterLocale={currentLang}
     >
       <CacheProvider value={direction === "rtl" ? cacheRtl : emptyCache}>
-        <ThemeProvider theme={theme}>{children}</ThemeProvider>
+        <ThemeProvider theme={theme}>
+          <QueryClientProvider client={queryClient}>
+            {children}
+            <ReactQueryDevtools initialIsOpen={false}></ReactQueryDevtools>
+          </QueryClientProvider>
+        </ThemeProvider>
       </CacheProvider>
     </LocalizationProvider>
   );
