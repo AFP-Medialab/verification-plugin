@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Box, CardHeader, Grid2 } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import Tooltip from "@mui/material/Tooltip";
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import LinkIcon from "@mui/icons-material/Link";
@@ -18,6 +18,24 @@ import {
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import HeaderTool from "../../Shared/HeaderTool/HeaderTool";
+
+//import { HtmlTooltip } from "../../Shared/Utils/HtmlTooltip";
+
+import { Trans } from "react-i18next";
+
+import { styled } from "@mui/material/styles";
+
+const HtmlTooltipStyled = styled(({ className, ...props }) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    //backgroundColor: '#f5f5f9',
+    //color: 'rgba(0, 0, 0, 0.87)',
+    //maxWidth: 220,
+    //fontSize: theme.typography.pxToRem(12),
+    //border: '1px solid #dadde9',
+  },
+}));
 
 const AssistantIntroduction = (props) => {
   // styles, language, dispatch, params
@@ -92,22 +110,78 @@ const AssistantIntroduction = (props) => {
             <Tooltip
               interactive={"true"}
               title={
-                <div
-                  className={"content"}
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      keyword("assistant_help_title") +
-                      keyword("assistant_help_1") +
-                      keyword("assistant_help_2") +
-                      keyword("assistant_help_3") +
-                      keyword("assistant_help_4"),
-                  }}
-                />
+                <div>
+                  <Trans t={keyword} i18nKey="assistant_help_title" />
+                  <Trans
+                    t={keyword}
+                    i18nKey="assistant_help_1"
+                    components={{ b: <b /> }}
+                  />
+                  <Trans t={keyword} i18nKey="assistant_help_2" />
+                  <Trans t={keyword} i18nKey="supported_tools_link" />
+                  <Trans t={keyword} i18nKey="assistant_help_3" />
+                  <Trans t={keyword} i18nKey="supported_urls_link" />
+                </div>
               }
               classes={{ tooltip: classes.assistantTooltip }}
             >
               <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
             </Tooltip>
+
+            // <HtmlTooltipStyled
+            //   title={
+            //     <React.Fragment>
+            //       "<b>"
+            //       {keyword("assistant_help_title")}
+            //       "</b>"
+            //       {keyword("supported_urls_link")}
+            //     </React.Fragment>
+            //   }
+            //   classes={{ tooltip: classes.assistantTooltip }}
+            // >
+            //   <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+            // </HtmlTooltipStyled>
+
+            // <HtmlTooltip text={
+            //   // "<b>" +
+            //   // keyword("assistant_help_title") +
+            //   // "</b>" + "<br>" +
+            //   // keyword("assistant_help_1") +
+            //   // keyword("assistant_help_2") +
+            //   // "<br>" +
+            //   // keyword("supported_tools_link") +
+            //   // "<br><br>" +
+            //   // keyword("assistant_help_3") +
+            //   // "<br>" +
+            //   keyword("supported_urls_link")}
+            // />
+
+            // <Tooltip
+            //   interactive={"true"}
+            //   title={
+            //     <div
+            //       className={"content"}
+            //       dangerouslySetInnerHTML={{
+            //         __html:
+            //           "<b>" +
+            //           keyword("assistant_help_title") +
+            //           "</b>" +
+            //           "<br>" +
+            //           keyword("assistant_help_1") +
+            //           keyword("assistant_help_2") +
+            //           "<br>" +
+            //           keyword("supported_tools_link") +
+            //           "<br><br>" +
+            //           keyword("assistant_help_3") +
+            //           "<br>" +
+            //           keyword("supported_urls_link"),
+            //       }}
+            //     />
+            //   }
+            //   classes={{ tooltip: classes.assistantTooltip }}
+            // >
+            //   <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+            // </Tooltip>
           }
         />
 
