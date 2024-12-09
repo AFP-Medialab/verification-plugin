@@ -25,6 +25,7 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "../../../Shared/VideoGridList/VideoGridList";
 import { WarningAmber } from "@mui/icons-material";
+import { ROLES } from "constants/roles";
 
 const AssistantMediaResult = () => {
   const classes = useMyStyles();
@@ -55,6 +56,9 @@ const AssistantMediaResult = () => {
     (state) => state.assistant.warningExpanded,
   );
   const resultIsImage = resultProcessType === CONTENT_TYPE.IMAGE;
+
+  // checking if user logged in
+  const role = useSelector((state) => state.userSession.user.roles);
 
   // local control state
   // const [expandMedia, setExpandMedia] = useState(
@@ -152,29 +156,31 @@ const AssistantMediaResult = () => {
       ) : null}
 
       {/* selected image with recommended tools */}
-      <CardContent sx={{ padding: processUrl == null ? 0 : undefined }}>
-        {processUrl !== null ? (
-          resultIsImage ? (
-            <Grid2 container spacing={2}>
-              <Grid2 size={6}>
-                <AssistantImageResult />
+      {role.includes(ROLES.BETA_TESTER) ? (
+        <CardContent sx={{ padding: processUrl == null ? 0 : undefined }}>
+          {processUrl !== null ? (
+            resultIsImage ? (
+              <Grid2 container spacing={2}>
+                <Grid2 size={6}>
+                  <AssistantImageResult />
+                </Grid2>
+                <Grid2 size={6}>
+                  <AssistantProcessUrlActions />
+                </Grid2>
               </Grid2>
-              <Grid2 size={6}>
-                <AssistantProcessUrlActions />
+            ) : (
+              <Grid2 container spacing={2}>
+                <Grid2 size={6}>
+                  <AssistantVideoResult />
+                </Grid2>
+                <Grid2 size={6}>
+                  <AssistantProcessUrlActions />
+                </Grid2>
               </Grid2>
-            </Grid2>
-          ) : (
-            <Grid2 container spacing={2}>
-              <Grid2 size={6}>
-                <AssistantVideoResult />
-              </Grid2>
-              <Grid2 size={6}>
-                <AssistantProcessUrlActions />
-              </Grid2>
-            </Grid2>
-          )
-        ) : null}
-      </CardContent>
+            )
+          ) : null}
+        </CardContent>
+      ) : null}
 
       {/* image grid and video grid of extracted media */}
       {!singleMediaPresent ? (
