@@ -3,7 +3,14 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { Grid2 } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Grid2,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 
 import AssistantCheckStatus from "./AssistantCheckResults/AssistantCheckStatus";
@@ -25,6 +32,7 @@ import {
 } from "../../../redux/actions/tools/assistantActions";
 import { setError } from "redux/reducers/errorReducer";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { Close } from "@mui/icons-material";
 
 const Assistant = () => {
   // styles, language, dispatch, params
@@ -125,6 +133,13 @@ const Assistant = () => {
     }
   }, [url]);
 
+  // for having a single results section with a close button
+  const handleClose = () => {
+    //setFormInput("");
+    cleanAssistant();
+    dispatch(setUrlMode(true));
+  };
+
   return (
     <Grid2
       container
@@ -157,24 +172,6 @@ const Assistant = () => {
         </Grid2>
       ) : null}
 
-      {/* warnings and api status checks */}
-      {dbkfTextMatch || dbkfImageResult || dbkfVideoMatch ? (
-        <Grid2
-          size="grow"
-          className={classes.assistantGrid}
-          hidden={urlMode === null || urlMode === false}
-        >
-          <AssistantWarnings />
-        </Grid2>
-      ) : null}
-
-      {/* source crediblity//URL domain analysis results */}
-      {positiveSourceCred || cautionSourceCred || mixedSourceCred ? (
-        <Grid2 size="grow">
-          <AssistantSCResults />
-        </Grid2>
-      ) : null}
-
       {/* assistant status */}
       {scFailState ||
       dbkfTextFailState ||
@@ -186,56 +183,99 @@ const Assistant = () => {
       subjectivityFailState ||
       previousFactChecksFailState ||
       machineGeneratedTextFailState ? (
-        <Grid2 size="grow">
+        <Grid2 size={{ xs: 12 }}>
           <AssistantCheckStatus />
         </Grid2>
       ) : null}
 
-      {/* media results */}
-      <Grid2
-        container
-        hidden={
-          !urlMode ||
-          (urlMode && inputUrl === null) ||
-          (urlMode &&
-            inputUrl !== null &&
-            !imageList.length &&
-            !videoList.length)
-        }
-      >
-        {imageList.length > 0 || videoList.length > 0 || imageVideoSelected ? (
-          <Grid2 size={{ xs: 12 }}>
-            <AssistantMediaResult />
-          </Grid2>
-        ) : null}
-      </Grid2>
+      {/* assistant results section */}
+      {urlMode && inputUrl ? (
+        <Card sx={{ width: "100%", mb: 2 }}>
+          <CardHeader
+            className={classes.assistantCardHeader}
+            title={
+              <Typography style={{ fontWeight: "bold", fontSize: 20 }}>
+                {keyword("Assistant results")}
+              </Typography>
+            }
+            action={
+              <IconButton aria-label="close" onClick={handleClose}>
+                <Close sx={{ color: "white" }} />
+              </IconButton>
+            }
+          />
 
-      {/* text results */}
-      {text ? (
-        <Grid2 size={{ xs: 12 }}>
-          <AssistantTextResult />
-        </Grid2>
-      ) : null}
+          <CardContent>
+            <Grid2 container spacing={4}>
+              {/* warnings and api status checks */}
+              {dbkfTextMatch || dbkfImageResult || dbkfVideoMatch ? (
+                <Grid2
+                  size={{ xs: 12 }}
+                  className={classes.assistantGrid}
+                  hidden={urlMode === null || urlMode === false}
+                >
+                  <AssistantWarnings />
+                </Grid2>
+              ) : null}
 
-      {/* named entity results */}
-      {text && neResult ? (
-        <Grid2 size={{ xs: 12 }}>
-          <AssistantNEResult />
-        </Grid2>
-      ) : null}
+              {/* source crediblity//URL domain analysis results */}
+              {positiveSourceCred || cautionSourceCred || mixedSourceCred ? (
+                <Grid2 size={{ xs: 12 }}>
+                  <AssistantSCResults />
+                </Grid2>
+              ) : null}
 
-      {/* extracted urls with url domain analysis */}
-      {text && linkList.length !== 0 ? (
-        <Grid2 size={{ xs: 12 }}>
-          <AssistantLinkResult />
-        </Grid2>
-      ) : null}
+              {/* media results */}
+              <Grid2
+                container
+                hidden={
+                  !urlMode ||
+                  (urlMode && inputUrl === null) ||
+                  (urlMode &&
+                    inputUrl !== null &&
+                    !imageList.length &&
+                    !videoList.length)
+                }
+              >
+                {imageList.length > 0 ||
+                videoList.length > 0 ||
+                imageVideoSelected ? (
+                  <Grid2 size={{ xs: 12 }}>
+                    <AssistantMediaResult />
+                  </Grid2>
+                ) : null}
+              </Grid2>
 
-      {/* credibility signals */}
-      {text ? (
-        <Grid2 size={{ xs: 12 }}>
-          <AssistantCredSignals />
-        </Grid2>
+              {/* text results */}
+              {text ? (
+                <Grid2 size={{ xs: 12 }}>
+                  <AssistantTextResult />
+                </Grid2>
+              ) : null}
+
+              {/* named entity results */}
+              {text && neResult ? (
+                <Grid2 size={{ xs: 12 }}>
+                  <AssistantNEResult />
+                </Grid2>
+              ) : null}
+
+              {/* extracted urls with url domain analysis */}
+              {text && linkList.length !== 0 ? (
+                <Grid2 size={{ xs: 12 }}>
+                  <AssistantLinkResult />
+                </Grid2>
+              ) : null}
+
+              {/* credibility signals */}
+              {text ? (
+                <Grid2 size={{ xs: 12 }}>
+                  <AssistantCredSignals />
+                </Grid2>
+              ) : null}
+            </Grid2>
+          </CardContent>
+        </Card>
       ) : null}
     </Grid2>
   );
