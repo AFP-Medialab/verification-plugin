@@ -150,6 +150,17 @@ const Metadata = ({ mediaType }) => {
     }
   }, [url, type]);
 
+  const processUrl = useSelector((state) => state.assistant.processUrl);
+  const processUrlType = useSelector((state) => state.assistant.processUrlType);
+  useEffect(() => {
+    if (processUrl) {
+      setInput(processUrl);
+      dispatch(setMetadataMediaType(processUrlType));
+      setRadioImage(processUrlType === "image");
+      setUrlDetected(true);
+    }
+  }, [processUrl]);
+
   const handleCloseResult = () => {
     setInput("");
   };
@@ -157,6 +168,8 @@ const Metadata = ({ mediaType }) => {
   const handleCloseFile = () => {
     setFileInput(null);
   };
+
+  console.log("TYPE", processUrlType);
 
   return (
     <div>

@@ -152,6 +152,14 @@ const OCR = () => {
     }
   }, [url]);
 
+  const processUrl = useSelector((state) => state.assistant.processUrl);
+  useEffect(() => {
+    if (processUrl) {
+      setInput(processUrl);
+      submitUrl(processUrl);
+    }
+  }, [processUrl]);
+
   const handleCloseSelectedFile = () => {
     dispatch(resetOcrState());
   };

@@ -143,6 +143,14 @@ const Forensic = () => {
     setImageFile(undefined);
   }, [imageFile]);
 
+  const processUrl = useSelector((state) => state.assistant.processUrl);
+  useEffect(() => {
+    if (processUrl) {
+      setInput(processUrl);
+      setUrlDetected(true);
+    }
+  }, [processUrl]);
+
   const preprocessingSuccess = (file) => {
     setImageFile(file);
     setType("local");
