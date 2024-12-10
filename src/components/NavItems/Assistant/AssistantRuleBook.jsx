@@ -269,7 +269,7 @@ export const ASSISTANT_ACTIONS = [
       KNOWN_LINKS.TELEGRAM,
       KNOWN_LINKS.YOUTUBESHORTS,
       KNOWN_LINKS.DAILYMOTION,
-      // KNOWN_LINKS.LIVELEAK, // doesn't exist anymore
+      // KNOWN_LINKS.LIVELEAK, // doesn't exist anymore; assistant works; deepfakevideo has no face detected, video doesn't load properly
       // KNOWN_LINKS.VIMEO, // assistant works; deepfakevideo has no face detected, video doesn't load properly
       // KNOWN_LINKS.MASTODON, // assistant fails to load video; deepfakevideo has no face detected, video doesn't load properly
       // KNOWN_LINKS.VK, // assistant fails to load; deepfakevideo works
