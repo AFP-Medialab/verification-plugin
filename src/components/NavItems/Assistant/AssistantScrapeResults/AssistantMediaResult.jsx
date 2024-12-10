@@ -25,7 +25,6 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "../../../Shared/VideoGridList/VideoGridList";
 import { WarningAmber } from "@mui/icons-material";
-import { ROLES } from "constants/roles";
 
 const AssistantMediaResult = () => {
   const classes = useMyStyles();
@@ -56,9 +55,6 @@ const AssistantMediaResult = () => {
     (state) => state.assistant.warningExpanded,
   );
   const resultIsImage = resultProcessType === CONTENT_TYPE.IMAGE;
-
-  // checking if user logged in
-  const role = useSelector((state) => state.userSession.user.roles);
 
   // local control state
   // const [expandMedia, setExpandMedia] = useState(
