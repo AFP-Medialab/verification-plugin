@@ -317,6 +317,7 @@ const AssistantCredSignals = () => {
                   !prevFactChecksResult && (
                     <Typography
                       sx={{ color: "text.secondary", align: "start" }}
+                      data-testid="previousFactChecks-result"
                     >
                       {keyword("reanalyse_url")}
                       {/* should now be obselete as saga is re run */}
@@ -328,7 +329,10 @@ const AssistantCredSignals = () => {
                   </Typography>
                 )}
                 {prevFactChecksDone && prevFactChecksResult.length < 1 && (
-                  <Typography sx={{ color: "text.secondary", align: "start" }}>
+                  <Typography
+                    sx={{ color: "text.secondary", align: "start" }}
+                    data-testid="previousFactChecks-result"
+                  >
                     {keyword("none_detected")}
                   </Typography>
                 )}
@@ -440,6 +444,7 @@ const AssistantCredSignals = () => {
                   machineGeneratedTextResult && (
                     <Typography
                       sx={{ color: "text.secondary", align: "start" }}
+                      data-testid="machineGeneratedText-result"
                     >
                       {keyword(machineGeneratedTextResult.pred)}
                       {/* {round(machineGeneratedTextResult.score, 4)} */}
@@ -452,6 +457,7 @@ const AssistantCredSignals = () => {
                   !machineGeneratedTextResult && (
                     <Typography
                       sx={{ color: "text.secondary", align: "start" }}
+                      data-testid="machineGeneratedText-result"
                     >
                       {keyword("reanalyse_url")}
                       {/* should now be obselete as saga is re run */}

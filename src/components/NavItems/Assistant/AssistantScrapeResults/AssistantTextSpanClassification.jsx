@@ -299,6 +299,7 @@ export default function AssistantTextSpanClassification({
               allCategoriesLabel={allCategoriesLabel}
               onCategoryChange={handleCategorySelect}
               keyword={keyword}
+              titleText={titleText}
             />
           </CardContent>
         </Card>
@@ -317,6 +318,7 @@ export function CategoriesListToggle({
   allCategoriesLabel,
   onCategoryChange = () => {},
   keyword,
+  titleText,
 }) {
   if (categories.length < 1) return <p>{noCategoriesText}</p>;
 
@@ -402,7 +404,7 @@ export function CategoriesListToggle({
   }
 
   return (
-    <List>
+    <List data-testid={titleText.split(" ")[0].toLowerCase() + "-result"}>
       <ListItem>
         <Typography>{keyword("select_persuasion_technique")}</Typography>
       </ListItem>

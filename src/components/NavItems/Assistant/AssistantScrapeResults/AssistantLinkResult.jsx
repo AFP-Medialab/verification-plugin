@@ -359,6 +359,8 @@ const AssistantLinkResult = () => {
             columns={columns}
             rowHeight={60}
             disableRowSelectionOnClick
+            disableVirtualization // Otherwise the test script can't see anything
+            data-testid="url-domain-analysis"
             initialState={{
               sorting: {
                 sortModel: [{ field: "status", sort: "desc" }],
