@@ -102,63 +102,6 @@ const AssistantCredSignals = () => {
     },
   }));
 
-  // assistant media states
-  const text = useSelector((state) => state.assistant.urlText);
-  const textLang = useSelector((state) => state.assistant.textLang);
-  const textHtmlMap = useSelector((state) => state.assistant.urlTextHtmlMap);
-
-  // news framing (topic)
-  const newsFramingTitle = keyword("news_framing_title");
-  const newsFramingResult = useSelector(
-    (state) => state.assistant.newsFramingResult,
-  );
-  const newsFramingLoading = useSelector(
-    (state) => state.assistant.newsFramingLoading,
-  );
-  const newsFramingDone = useSelector(
-    (state) => state.assistant.newsFramingDone,
-  );
-  const newsFramingFail = useSelector(
-    (state) => state.assistant.newsFramingFail,
-  );
-
-  // news genre
-  const newsGenreTitle = keyword("news_genre_title");
-  const newsGenreResult = useSelector(
-    (state) => state.assistant.newsGenreResult,
-  );
-  const newsGenreLoading = useSelector(
-    (state) => state.assistant.newsGenreLoading,
-  );
-  const newsGenreDone = useSelector((state) => state.assistant.newsGenreDone);
-  const newsGenreFail = useSelector((state) => state.assistant.newsGenreFail);
-
-  // persuasion techniques
-  const persuasionTitle = keyword("persuasion_techniques_title");
-  const persuasionResult = useSelector(
-    (state) => state.assistant.persuasionResult,
-  );
-  const persuasionLoading = useSelector(
-    (state) => state.assistant.persuasionLoading,
-  );
-  const persuasionDone = useSelector((state) => state.assistant.persuasionDone);
-  const persuasionFail = useSelector((state) => state.assistant.persuasionFail);
-
-  // subjectivity
-  const subjectivityTitle = keyword("subjectivity_title");
-  const subjectivityResult = useSelector(
-    (state) => state.assistant.subjectivityResult,
-  );
-  const subjectivityLoading = useSelector(
-    (state) => state.assistant.subjectivityLoading,
-  );
-  const subjectivityDone = useSelector(
-    (state) => state.assistant.subjectivityDone,
-  );
-  const subjectivityFail = useSelector(
-    (state) => state.assistant.subjectivityFail,
-  );
-
   // previous fact checks
   const prevFactChecksTitle = keyword("previous_fact_checks_title");
   const prevFactChecksResult = useSelector(
@@ -215,7 +158,7 @@ const AssistantCredSignals = () => {
   ];
   const colors = ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"];
 
-  //const methodName = "machinegeneratedtext";
+  // methodName = "machinegeneratedtext"
   const MachineGeneratedTextMethodNames = {
     machinegeneratedtext: {
       name: keyword("machine_generated_text_title"),
@@ -251,22 +194,6 @@ const AssistantCredSignals = () => {
                   __html:
                     keyword("credibility_signals_tooltip") +
                     "<br><br><b>" +
-                    // keyword("news_framing") +
-                    // "</b><br>" +
-                    // keyword("news_framing_tooltip") +
-                    // "<br><br><b>" +
-                    // keyword("news_genre") +
-                    // "</b><br>" +
-                    // keyword("news_genre_tooltip") +
-                    // "<br><br><b>" +
-                    // keyword("persuasion_techniques") +
-                    // "</b><br>" +
-                    // keyword("persuasion_techniques_tooltip") +
-                    // "<br><br><b>" +
-                    // keyword("subjectivity") +
-                    // "</b><br>" +
-                    // keyword("subjectivity_tooltip") +
-                    // "<br><br><b>" +
                     keyword("previous_fact_checks_title") +
                     "</b><br>" +
                     keyword("previous_fact_checks_tooltip") +
@@ -509,8 +436,8 @@ const AssistantCredSignals = () => {
                 resultsHaveErrors={false}
                 sanitizeDetectionPercentage={(n) => Math.round(n)}
                 gaugeExplanation={{ colors: colors, keywords: keywords }}
-                toolName={keyword("machine_generated_text_title")}
-                detectionType={"text"}
+                toolName="Assistant" // this points to the correct translatons .tsv file
+                detectionType={"machine_generated_text"}
               />
             ) : null}
           </AccordionDetails>

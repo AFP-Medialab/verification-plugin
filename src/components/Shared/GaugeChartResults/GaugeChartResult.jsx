@@ -242,7 +242,9 @@ const GaugeChartResult = ({
                             <Typography
                               variant={"h6"}
                               sx={{ fontWeight: "bold" }}
-                            ></Typography>
+                            >
+                              {methodNames[item.methodName].name}
+                            </Typography>
                             <Stack
                               direction={{ lg: "row", md: "column" }}
                               spacing={2}
