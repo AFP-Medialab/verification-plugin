@@ -4,7 +4,13 @@ import CopyButton from "../CopyButton";
 import { i18nLoadNamespace } from "../Languages/i18nLoadNamespace";
 import Typography from "@mui/material/Typography";
 
-const CustomAlertScore = ({ score, detectionType, toolName, thresholds }) => {
+const CustomAlertScore = ({
+  score,
+  detectionType,
+  toolName,
+  thresholds,
+  isInconclusive,
+}) => {
   const keyword = i18nLoadNamespace(`components/NavItems/tools/${toolName}`);
 
   // TODO: handle error
@@ -37,6 +43,7 @@ const CustomAlertScore = ({ score, detectionType, toolName, thresholds }) => {
   const DETECTION_THRESHOLD_2 = thresholds.THRESHOLD_2;
   const DETECTION_THRESHOLD_3 = thresholds.THRESHOLD_3;
 
+  const SEVERITY_ERROR = "error";
   const SEVERITY_INFO = "info";
 
   function getDisplayTextForDetectionScore(score, detectionType) {
@@ -66,7 +73,11 @@ const CustomAlertScore = ({ score, detectionType, toolName, thresholds }) => {
 
     displayText = keyword(`${toolNameSnakeCase}${detectionTranslation}_rating`);
 
-    if (score >= DETECTION_THRESHOLD_3) {
+    if (isInconclusive) {
+      displayText += keyword(
+        `${toolNameSnakeCase}${detectionTranslation}_rating_0`,
+      );
+    } else if (score >= DETECTION_THRESHOLD_3) {
       displayText +=
         !detectionType ||
         detectionType === DETECTION_TYPES.VOICE_CLONING ||
@@ -108,7 +119,7 @@ const CustomAlertScore = ({ score, detectionType, toolName, thresholds }) => {
     detectionType,
   );
 
-  alertSettings.severity = SEVERITY_INFO;
+  alertSettings.severity = isInconclusive ? SEVERITY_ERROR : SEVERITY_INFO;
 
   return (
     <Alert
