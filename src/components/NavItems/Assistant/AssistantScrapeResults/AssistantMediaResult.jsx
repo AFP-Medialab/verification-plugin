@@ -156,31 +156,29 @@ const AssistantMediaResult = () => {
       ) : null}
 
       {/* selected image with recommended tools */}
-      {role.includes(ROLES.BETA_TESTER) ? (
-        <CardContent sx={{ padding: processUrl == null ? 0 : undefined }}>
-          {processUrl !== null ? (
-            resultIsImage ? (
-              <Grid2 container spacing={2}>
-                <Grid2 size={6}>
-                  <AssistantImageResult />
-                </Grid2>
-                <Grid2 size={6}>
-                  <AssistantProcessUrlActions />
-                </Grid2>
+      <CardContent sx={{ padding: processUrl == null ? 0 : undefined }}>
+        {processUrl !== null ? (
+          resultIsImage ? (
+            <Grid2 container spacing={2}>
+              <Grid2 size={6}>
+                <AssistantImageResult />
               </Grid2>
-            ) : (
-              <Grid2 container spacing={2}>
-                <Grid2 size={6}>
-                  <AssistantVideoResult />
-                </Grid2>
-                <Grid2 size={6}>
-                  <AssistantProcessUrlActions />
-                </Grid2>
+              <Grid2 size={6}>
+                <AssistantProcessUrlActions />
               </Grid2>
-            )
-          ) : null}
-        </CardContent>
-      ) : null}
+            </Grid2>
+          ) : (
+            <Grid2 container spacing={2}>
+              <Grid2 size={6}>
+                <AssistantVideoResult />
+              </Grid2>
+              <Grid2 size={6}>
+                <AssistantProcessUrlActions />
+              </Grid2>
+            </Grid2>
+          )
+        ) : null}
+      </CardContent>
 
       {/* image grid and video grid of extracted media */}
       {!singleMediaPresent ? (

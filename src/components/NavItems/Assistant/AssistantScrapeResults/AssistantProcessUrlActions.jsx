@@ -15,7 +15,6 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Divider from "@mui/material/Divider";
 import { KNOWN_LINKS } from "../AssistantRuleBook";
-import { ROLES } from "../../../../constants/roles.jsx";
 
 import {
   resetDeepfake as resetDeepfakeImage,
@@ -43,27 +42,6 @@ const AssistantProcessUrlActions = () => {
   const processUrlActions = useSelector(
     (state) => state.assistant.processUrlActions,
   );
-
-  // checking if user logged in
-  const role = useSelector((state) => state.userSession.user.roles);
-
-  // let processUrlActions;
-  if (role.includes(ROLES.BETA_TESTER)) {
-    // processUrlActions = useSelector(
-    //   (state) => state.assistant.processUrlActions,
-    // );
-    console.log(role, processUrlActions);
-  } else if (role.includes(ROLES.REGISTERED_USER)) {
-    // processUrlActions = useSelector(
-    //   (state) => state.assistant.processUrlActions,
-    // );
-    console.log(role, processUrlActions);
-  } else {
-    // processUrlActions = useSelector(
-    //   (state) => state.assistant.processUrlActions,
-    // );
-    console.log(role, processUrlActions);
-  }
 
   const handleClick = (action) => {
     const resultUrl = action.useInputUrl ? inputUrl : processUrl;
