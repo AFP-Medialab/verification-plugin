@@ -95,6 +95,9 @@ module.exports = {
     fallback: {
       buffer: require.resolve("buffer"),
     },
+    alias: {
+      "@workers": path.resolve(__dirname, "src/workers"),
+    },
   },
   experiments: {
     asyncWebAssembly: true,

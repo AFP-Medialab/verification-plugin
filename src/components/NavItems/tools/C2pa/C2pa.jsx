@@ -5,10 +5,8 @@ import {
   Alert,
   Box,
   Card,
-  CardHeader,
   FormControlLabel,
   FormGroup,
-  Grid2,
   LinearProgress,
   Stack,
   Switch,
@@ -227,8 +225,6 @@ const C2paData = () => {
 
       const metadata = await exifr.parse(blob, options);
 
-      console.log(metadata);
-
       setImageMetadata(metadata);
 
       if (metadata.iptc && metadata.iptc["Caption"])
@@ -309,34 +305,14 @@ const C2paData = () => {
     }
   };
 
-  // const [tabValue, setTabValue] = React.useState("exif");
-  //
-  // const handleTabChange = (event, newValue) => {
-  //   setTabValue(newValue);
-  // };
-
   return (
     <Box>
       <HeaderTool
         name={keyword("c2pa_title")}
         description={keyword("c2pa_description")}
       />
-      <Card>
-        <CardHeader
-          title={
-            <Grid2
-              container
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <span>{keyword("image_link")}</span>
-            </Grid2>
-          }
-          className={classes.headerUploadedImage}
-        />
-
-        <Box p={3}>
+      <Card variant="outlined" sx={{ minWidth: 500 }}>
+        <Box p={4}>
           <form>
             <Stack direction="column" spacing={4}>
               <StringFileUploadField
@@ -382,11 +358,10 @@ const C2paData = () => {
             </Stack>
           </form>
         </Box>
-
-        {/*<Box m={2} />*/}
       </Card>
 
-      <Box m={3} />
+      <Box m={4} />
+
       <Stack direction="column" spacing={4}>
         {loadingProgress && (
           <Alert icon={<CircularProgress size={20} />} severity="info">
@@ -466,7 +441,7 @@ const C2paData = () => {
           </Accordion>
         )}
 
-        <Box m={3} />
+        <Box m={4} />
       </Stack>
     </Box>
   );

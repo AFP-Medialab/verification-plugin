@@ -82,8 +82,6 @@ async function readManifest(manifest, parent, result, url, depth) {
 
     const manifestData = {};
 
-    console.log(manifest);
-
     manifestData.title = manifest.title;
     manifestData.signatureInfo = {
       issuer: manifest.signatureInfo.issuer,

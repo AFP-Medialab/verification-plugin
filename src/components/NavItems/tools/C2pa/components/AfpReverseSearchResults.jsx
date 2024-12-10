@@ -26,13 +26,17 @@ const AfpReverseSearchResults = ({
     <Stack direction="row" spacing={4}>
       <Box width="100%">
         <Grid2 container direction="row" spacing={2} p={4} width="100%">
-          <Grid2 container direction="column" size={{ xs: 6 }} spacing={2}>
+          <Grid2
+            container
+            direction="column"
+            size={{ md: 12, lg: 6 }}
+            spacing={2}
+          >
             <Grid2>
               <img
                 src={thumbnailImage}
                 style={{
-                  maxWidth: "100%",
-                  maxHeight: "60vh",
+                  width: 345,
                   borderRadius: "10px",
                 }}
               />
@@ -55,7 +59,12 @@ const AfpReverseSearchResults = ({
               </Alert>
             )}
           </Grid2>
-          <Grid2 container direction="column" size={{ xs: 6 }} spacing={2}>
+          <Grid2
+            container
+            direction="column"
+            size={{ md: 12, lg: 6 }}
+            spacing={2}
+          >
             <Alert severity="info" sx={{ width: "fit-content" }}>
               {keyword("afp_produced_image_info")}
             </Alert>

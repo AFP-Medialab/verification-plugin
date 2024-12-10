@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Alert,
   Box,
@@ -16,6 +16,8 @@ import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespac
 import { ROLES } from "../../../../../constants/roles";
 import C2paCard from "./c2paCard";
 import CardMedia from "@mui/material/CardMedia";
+import { getBlob } from "../../../../Shared/ReverseSearch/utils/searchUtils";
+import { deepClone } from "@mui/x-data-grid/internals";
 
 const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
   const role = useSelector((state) => state.userSession.user.roles);
@@ -23,7 +25,34 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
 
   const [thumbnailImage, setThumbnailImage] = useState(null);
 
-  const [selectedImage, setSelectedImage] = useState(hdImage);
+  const [resizedHdImageUrl, setResizedHdImageUrl] = useState(null);
+
+  const [selectedImage, setSelectedImage] = useState(resizedHdImageUrl);
+
+  const workerRef = useRef(null);
+
+  const [processedC2paData, setProcessedC2paData] = useState(null);
+
+  useEffect(() => {
+    if (!hdImageC2paData) return;
+
+    if (!resizedHdImageUrl) return;
+
+    if (
+      !hdImageC2paData ||
+      !hdImageC2paData.result ||
+      Object.keys(hdImageC2paData.result).length !== 2
+    )
+      return;
+
+    let c2paDataWithResizedHdUrl = deepClone(hdImageC2paData);
+
+    c2paDataWithResizedHdUrl.result[c2paDataWithResizedHdUrl.mainImageId].url =
+      resizedHdImageUrl;
+
+    setProcessedC2paData(c2paDataWithResizedHdUrl);
+    setSelectedImage(resizedHdImageUrl);
+  }, [hdImageC2paData, resizedHdImageUrl]);
 
   useEffect(() => {
     if (
@@ -40,8 +69,50 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
     }
   }, [hdImageC2paData]);
 
+  useEffect(() => {
+    workerRef.current = new Worker(
+      new URL("@workers/resizeImageWorker", import.meta.url),
+    );
+
+    return () => {
+      workerRef.current.terminate();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!hdImage) return;
+
+    getBlob(hdImage).then((blob) => {
+      resizeImageWithWorker(blob.obj).then((resizedImage) => {
+        setResizedHdImageUrl(URL.createObjectURL(resizedImage));
+      });
+    });
+  }, [hdImage]);
+
+  /**
+   *
+   * @param image
+   */
+  const resizeImageWithWorker = (image) => {
+    return new Promise((resolve, reject) => {
+      const workerInstance = new Worker(
+        new URL("@workers/resizeImageWorker", import.meta.url),
+      );
+      workerInstance.postMessage(image);
+
+      workerInstance.onerror = function (e) {
+        reject(e.error);
+      };
+
+      workerInstance.onmessage = function (e) {
+        resolve(e.data);
+      };
+    });
+  };
+
   const handleImageCardClick = (image) => {
-    setSelectedImage(image);
+    if (image === hdImage) setSelectedImage(resizedHdImageUrl);
+    else setSelectedImage(image);
   };
 
   const ImageCard = (src, alt, legend, isSelected) => {
@@ -49,7 +120,7 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
       <Card
         variant="outlined"
         sx={{
-          maxWidth: 345,
+          width: 345,
           border: isSelected
             ? "3px solid #00926c"
             : "1px solid rgba(0, 0, 0, 0.12)",
@@ -78,15 +149,16 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
           <Grid2
             container
             direction="column"
-            size={{ xs: 6 }}
+            size={{ md: 12, lg: 6 }}
             spacing={4}
-            alignItems="center"
+            alignItems="start"
           >
             {ImageCard(
-              hdImage,
+              // hdImage,
+              resizedHdImageUrl,
               "AFP HD Image",
               "AFP C2PA Image",
-              selectedImage === hdImage,
+              selectedImage === resizedHdImageUrl,
             )}
 
             <Divider orientation="vertical" flexItem sx={{ width: "100%" }} />
@@ -100,7 +172,12 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
                 selectedImage === thumbnailImage.url,
               )}
           </Grid2>
-          <Grid2 container direction="column" size={{ xs: 6 }} spacing={2}>
+          <Grid2
+            container
+            direction="column"
+            size={{ md: 12, lg: 6 }}
+            spacing={2}
+          >
             <Alert severity="info" sx={{ width: "fit-content" }}>
               {keyword("afp_produced_image_info")}
             </Alert>
@@ -119,11 +196,12 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
                 </Grid2>
               )}
 
-            {hdImageC2paData && (
+            {processedC2paData && resizedHdImageUrl && (
               <C2paCard
-                c2paData={hdImageC2paData}
+                c2paData={processedC2paData}
                 currentImageSrc={selectedImage}
                 setCurrentImageSrc={setSelectedImage}
+                resizedImageUrl={resizedHdImageUrl}
               />
             )}
           </Grid2>

@@ -160,12 +160,11 @@ const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
                   <Box m={1} />
                   <Divider m={1} />
                 </Box>
-
-                <Box p={1}>
-                  <Stack>
-                    {title("credit_title", "credit_explanation")}
-                    <Box p={1}>
-                      {manifestData.producer ? (
+                {manifestData.producer && (
+                  <Box p={1}>
+                    <Stack>
+                      {title("credit_title", "credit_explanation")}
+                      <Box p={1}>
                         <>
                           <Typography>
                             {manifestData.producer.name
@@ -192,24 +191,19 @@ const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
                             </>
                           ) : null}
                         </>
-                      ) : (
-                        <Alert severity="info">
-                          {isImage
-                            ? keyword("credit_no_info_image")
-                            : keyword("credit_no_info_video")}
-                        </Alert>
-                      )}
-                    </Box>
-                  </Stack>
-                  <Box m={1} />
-                  <Divider m={1} />
-                </Box>
+                      </Box>
+                    </Stack>
 
-                <Box p={1}>
-                  <Stack>
-                    {title("capture_info_title", "capture_info_explanation")}
-                    <Box p={1}>
-                      {manifestData.captureInfo ? (
+                    <Box m={1} />
+                    <Divider m={1} />
+                  </Box>
+                )}
+
+                {manifestData.captureInfo && (
+                  <Box p={1}>
+                    <Stack>
+                      {title("capture_info_title", "capture_info_explanation")}
+                      <Box p={1}>
                         <>
                           {manifestData.captureInfo.make ? (
                             <Typography>
@@ -338,16 +332,13 @@ const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
                             </Box>
                           ) : null}
                         </>
-                      ) : (
-                        <Alert severity="warning">
-                          {keyword("capture_no_info")}
-                        </Alert>
-                      )}
-                    </Box>
-                  </Stack>
-                  <Box m={1} />
-                  <Divider />
-                </Box>
+                      </Box>
+                    </Stack>
+
+                    <Box m={1} />
+                    <Divider />
+                  </Box>
+                )}
 
                 <Box p={1}>
                   {title("process_title", "process_explanation")}
