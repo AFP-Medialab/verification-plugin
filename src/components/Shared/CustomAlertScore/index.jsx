@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert } from "@mui/material";
+import { Alert, Grid2 } from "@mui/material";
 import CopyButton from "../CopyButton";
 import { i18nLoadNamespace } from "../Languages/i18nLoadNamespace";
 import Typography from "@mui/material/Typography";
@@ -140,9 +140,11 @@ const CustomAlertScore = ({
         />
       }
     >
-      <Typography variant="body1" align="start">
-        {alertSettings.displayText}
-      </Typography>
+      <Grid2 container>
+        <Grid2 size={{ xs: 12 }} align="start">
+          <Typography variant="body1">{alertSettings.displayText}</Typography>
+        </Grid2>
+      </Grid2>
     </Alert>
   );
 };
