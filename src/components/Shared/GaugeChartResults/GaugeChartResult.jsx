@@ -38,7 +38,7 @@ const GaugeChartResult = ({
   scores,
   methodNames,
   detectionThresholds,
-  arcLengths,
+  arcsLength,
   resultsHaveErrors,
   sanitizeDetectionPercentage,
   gaugeExplanation,
@@ -146,8 +146,8 @@ const GaugeChartResult = ({
                 nrOfLevels={4}
                 textColor={"black"}
                 arcsLength={
-                  arcLengths
-                    ? arcLengths
+                  arcsLength
+                    ? arcsLength
                     : [
                         (100 - detectionThresholds.THRESHOLD_1) / 100,
                         (detectionThresholds.THRESHOLD_2 -

@@ -205,7 +205,7 @@ const AssistantCredSignals = () => {
     THRESHOLD_3: 95.0,
   };
 
-  const arcLengths = [0.05, 0.45, 0.45, 0.05];
+  const arcsLength = [0.05, 0.45, 0.45, 0.05];
 
   const keywords = [
     "gauge_scale_modal_explanation_rating_1",
@@ -505,7 +505,7 @@ const AssistantCredSignals = () => {
                 scores={[MachineGeneratedTextMethodNamesResults]}
                 methodNames={MachineGeneratedTextMethodNames}
                 detectionThresholds={DETECTION_THRESHOLDS}
-                arcLengths={arcLengths}
+                arcsLength={arcsLength}
                 resultsHaveErrors={false}
                 sanitizeDetectionPercentage={(n) => Math.round(n)}
                 gaugeExplanation={{ colors: colors, keywords: keywords }}
