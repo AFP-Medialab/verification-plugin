@@ -263,7 +263,7 @@ export const ASSISTANT_ACTIONS = [
     processLinksAccepted: [
       KNOWN_LINKS.YOUTUBE,
       KNOWN_LINKS.TWITTER,
-      // KNOwn_LINKS.INSTAGRAM, // assistant fails to load video (even if logged in); deepfakevideo tool directly works
+      // KNOWN_LINKS.INSTAGRAM, // assistant fails to load video (even if logged in); deepfakevideo tool directly works
       // KNOWN_LINKS.FACEBOOK, // assistant fails to load video; deepfakevideo has no face detected, video doesn't load properly
       // KNOWN_LINKS.TIKTOK, // assistant fails to load video; deepfakevideo has no face detected, video doesn't load properly
       KNOWN_LINKS.TELEGRAM,
