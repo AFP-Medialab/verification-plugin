@@ -1,20 +1,26 @@
-import React from "react";
-import { Alert, Box, Button, Grid2, Stack } from "@mui/material";
-import { ROLES } from "../../../../../constants/roles";
+import React, { useState } from "react";
+import { Alert, Box, Grid2, List, ListItemText, Stack } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import C2paCard from "./c2paCard";
 import { useSelector } from "react-redux";
 import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import Tab from "@mui/material/Tab";
+import ListItem from "@mui/material/ListItem";
+import { prettyCase } from "../../../../Shared/Utils/stringUtils";
 
 const AfpReverseSearchResults = ({
   thumbnailImage,
-  downloadHdImage,
-  hdImage,
   thumbnailImageCaption,
-  hdImageC2paData,
+  imageMetadata,
 }) => {
   const role = useSelector((state) => state.userSession.user.roles);
   const keyword = i18nLoadNamespace("components/NavItems/tools/C2pa");
+
+  const [tabValue, setTabValue] = useState("exif");
+
+  const handleTabChange = (event, newValue) => {
+    setTabValue(newValue);
+  };
 
   return (
     <Stack direction="row" spacing={4}>
@@ -31,20 +37,6 @@ const AfpReverseSearchResults = ({
                 }}
               />
             </Grid2>
-
-            {hdImage &&
-              (role.includes(ROLES.AFP_C2PA_GOLD) ||
-                role.includes(ROLES.EXTRA_FEATURE)) && (
-                <Grid2>
-                  <Button
-                    variant="contained"
-                    onClick={downloadHdImage}
-                    sx={{ textTransform: "none" }}
-                  >
-                    {keyword("reverse_search_original_image_download_button")}
-                  </Button>
-                </Grid2>
-              )}
 
             {thumbnailImageCaption &&
             typeof thumbnailImageCaption === "string" ? (
@@ -67,7 +59,51 @@ const AfpReverseSearchResults = ({
             <Alert severity="info" sx={{ width: "fit-content" }}>
               {keyword("afp_produced_image_info")}
             </Alert>
-            {hdImageC2paData && <C2paCard c2paData={hdImageC2paData} />}
+
+            {imageMetadata && (
+              <>
+                <Box sx={{ width: "100%", typography: "body1" }}>
+                  <TabContext value={tabValue}>
+                    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                      <TabList
+                        variant="scrollable"
+                        scrollButtons="auto"
+                        onChange={handleTabChange}
+                        aria-label="Image metadata tabs"
+                      >
+                        {Object.keys(imageMetadata)
+                          .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
+                          .map((item, index) => {
+                            return <Tab label={item} value={item} key={item} />;
+                          })}
+                      </TabList>
+                    </Box>
+
+                    {Object.keys(imageMetadata).map((metadataGroup, index) => {
+                      return (
+                        <TabPanel value={metadataGroup} key={index}>
+                          <List>
+                            {Object.entries(imageMetadata[metadataGroup]).map(
+                              ([key, value]) => {
+                                // we may need to improve the value processing later on for a prettier print
+                                return (
+                                  <ListItem key={key} disablePadding>
+                                    <ListItemText
+                                      primary={prettyCase(key)}
+                                      secondary={<>{value.toString()}</>}
+                                    />
+                                  </ListItem>
+                                );
+                              },
+                            )}
+                          </List>
+                        </TabPanel>
+                      );
+                    })}
+                  </TabContext>
+                </Box>
+              </>
+            )}
           </Grid2>
         </Grid2>
       </Box>

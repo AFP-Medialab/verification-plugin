@@ -37,6 +37,7 @@ import Typography from "@mui/material/Typography";
 import { v4 as uuidv4 } from "uuid";
 import { ROLES } from "../../../../constants/roles";
 import AfpReverseSearchResults from "./components/AfpReverseSearchResults";
+import HdImageResults from "./components/HdImageResults";
 
 const C2paData = () => {
   const role = useSelector((state) => state.userSession.user.roles);
@@ -57,6 +58,8 @@ const C2paData = () => {
   const [input, setInput] = useState("");
   const [imageFile, setImageFile] = useState(undefined);
 
+  const [imageMetadata, setImageMetadata] = useState(null);
+
   const dispatch = useDispatch();
 
   const classes = useMyStyles();
@@ -67,7 +70,7 @@ const C2paData = () => {
 
   const [loadingProgress, setLoadingProgress] = useState(null);
 
-  const [performReverseSearch, setPerformReverseSearch] = useState(false);
+  const [performReverseSearch, setPerformReverseSearch] = useState(true);
 
   const authenticatedRequest = useAuthenticatedRequest();
 
@@ -213,10 +216,23 @@ const C2paData = () => {
 
       const imageUrl = URL.createObjectURL(blob);
 
-      const metadata = await exifr.parse(blob, true);
+      const options = {
+        exif: true,
+        gps: true,
+        iptc: true,
+        jfif: true,
+        tiff: true,
+        mergeOutput: false,
+      };
 
-      if (metadata["Caption"])
-        dispatch(setC2paThumbnailCaption(metadata["Caption"]));
+      const metadata = await exifr.parse(blob, options);
+
+      console.log(metadata);
+
+      setImageMetadata(metadata);
+
+      if (metadata.iptc && metadata.iptc["Caption"])
+        dispatch(setC2paThumbnailCaption(metadata.iptc["Caption"]));
 
       dispatch(setC2paThumbnail(imageUrl));
     }
@@ -292,6 +308,12 @@ const C2paData = () => {
       a.click();
     }
   };
+
+  // const [tabValue, setTabValue] = React.useState("exif");
+  //
+  // const handleTabChange = (event, newValue) => {
+  //   setTabValue(newValue);
+  // };
 
   return (
     <Box>
@@ -416,10 +438,34 @@ const C2paData = () => {
                 hdImage={hdImage}
                 thumbnailImageCaption={thumbnailImageCaption}
                 hdImageC2paData={hdImageC2paData}
+                imageMetadata={imageMetadata}
               />
             </AccordionDetails>
           </Accordion>
         )}
+
+        {hdImage && (
+          <Accordion defaultExpanded>
+            <AccordionSummary
+              expandIcon={<ArrowDownward />}
+              aria-controls="panel2-content"
+              id="panel2-header"
+            >
+              <Typography>
+                {keyword("reverse_search_results_title_hd")}
+              </Typography>
+            </AccordionSummary>
+
+            <AccordionDetails>
+              <HdImageResults
+                downloadHdImage={downloadHdImage}
+                hdImage={hdImage}
+                hdImageC2paData={hdImageC2paData}
+              />
+            </AccordionDetails>
+          </Accordion>
+        )}
+
         <Box m={3} />
       </Stack>
     </Box>

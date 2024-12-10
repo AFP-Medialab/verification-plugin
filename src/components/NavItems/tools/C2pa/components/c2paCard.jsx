@@ -25,17 +25,14 @@ import {
 import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
 import HelpIcon from "@mui/icons-material/Help";
 
-const C2PaCard = (c2paData) => {
-  const [mainImageId, setMainImageId] = useState(c2paData.c2paData.mainImageId);
-  const [currentImageId, setCurrentImageId] = useState(
-    c2paData.c2paData.currentImageId,
-  );
+const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
+  const [mainImageId, setMainImageId] = useState(c2paData.mainImageId);
+  const [currentImageId, setCurrentImageId] = useState(c2paData.currentImageId);
 
-  const url = c2paData.c2paData.result[currentImageId].url;
-  const parentId = c2paData.c2paData.result[currentImageId].parent;
-  const manifestData = c2paData.c2paData.result[currentImageId].manifestData;
-  const validationIssues =
-    c2paData.c2paData.result[currentImageId].validationIssues;
+  const url = c2paData.result[currentImageId].url;
+  const parentId = c2paData.result[currentImageId].parent;
+  const manifestData = c2paData.result[currentImageId].manifestData;
+  const validationIssues = c2paData.result[currentImageId].validationIssues;
 
   const latitude =
     manifestData && manifestData.captureInfo
@@ -48,7 +45,7 @@ const C2PaCard = (c2paData) => {
 
   const [isImage, setIsImage] = useState(true);
 
-  const depthExceeded = c2paData.c2paData.result[currentImageId].depthExceeded;
+  const depthExceeded = c2paData.result[currentImageId].depthExceeded;
 
   const keyword = i18nLoadNamespace("components/NavItems/tools/C2pa");
 
@@ -62,6 +59,17 @@ const C2PaCard = (c2paData) => {
       setIsImage(false);
     };
   }, []);
+
+  useEffect(() => {
+    if (currentImageSrc !== url) {
+      for (const [imageId, imageObject] of Object.entries(c2paData.result)) {
+        if (imageObject.url === currentImageSrc) {
+          setCurrentImageId(imageId);
+          break;
+        }
+      }
+    }
+  }, [currentImageSrc]);
 
   const validationMessage = (issues) => {
     if (issues.trustedSourceIssue && issues.errorMessages.length <= 2) {
@@ -384,7 +392,7 @@ const C2PaCard = (c2paData) => {
                                 return (
                                   <Box key={key}>
                                     <img
-                                      src={c2paData.c2paData.result[obj].url}
+                                      src={c2paData.result[obj].url}
                                       style={{
                                         maxWidth: "150px",
                                         maxHeight: "60vh",
@@ -393,6 +401,9 @@ const C2PaCard = (c2paData) => {
                                       }}
                                       onClick={() => {
                                         setCurrentImageId(obj);
+                                        setCurrentImageSrc(
+                                          c2paData.result[obj].url,
+                                        );
                                       }}
                                     />
                                   </Box>
@@ -417,7 +428,10 @@ const C2PaCard = (c2paData) => {
           {parentId ? (
             <Box maxWidth="fit-content" marginInline="auto">
               <Button
-                onClick={() => setCurrentImageId(parentId)}
+                onClick={() => {
+                  setCurrentImageId(parentId);
+                  setCurrentImageSrc(c2paData.result[parentId].url);
+                }}
                 startIcon={<KeyboardArrowLeft />}
                 variant="contained"
               >
@@ -426,7 +440,10 @@ const C2PaCard = (c2paData) => {
               <Box m={0.5} />
               {parentId !== mainImageId ? (
                 <Button
-                  onClick={() => setCurrentImageId(mainImageId)}
+                  onClick={() => {
+                    setCurrentImageId(mainImageId);
+                    setCurrentImageSrc(c2paData.result[mainImageId].url);
+                  }}
                   startIcon={<KeyboardDoubleArrowLeft />}
                   variant="contained"
                 >

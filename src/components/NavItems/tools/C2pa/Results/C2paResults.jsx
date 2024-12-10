@@ -154,7 +154,7 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                         : keyword("no_c2pa_info_video")}
                     </Alert>
                     {hasSimilarAfpResult && (
-                      <Alert severity="error" m={1}>
+                      <Alert severity="success" m={1}>
                         {keyword("reverse_search_result_found_warning")}
                       </Alert>
                     )}

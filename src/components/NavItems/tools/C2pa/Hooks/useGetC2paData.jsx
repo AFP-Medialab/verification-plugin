@@ -82,6 +82,8 @@ async function readManifest(manifest, parent, result, url, depth) {
 
     const manifestData = {};
 
+    console.log(manifest);
+
     manifestData.title = manifest.title;
     manifestData.signatureInfo = {
       issuer: manifest.signatureInfo.issuer,
@@ -99,7 +101,14 @@ async function readManifest(manifest, parent, result, url, depth) {
 
       for (let i = 0; i < manifest.ingredients.length; i++) {
         let thumbnail = manifest.ingredients[i].thumbnail;
-        let ingredientUrl = thumbnail.getUrl();
+        let ingredientUrl;
+
+        try {
+          ingredientUrl = thumbnail.getUrl();
+        } catch (error) {
+          ingredientUrl = null;
+        }
+
         let validationIssues = getValidationIssues(
           manifest.ingredients[i].validationStatus,
         );
@@ -112,7 +121,7 @@ async function readManifest(manifest, parent, result, url, depth) {
               manifest.ingredients[i].manifest,
               manifestId,
               result,
-              ingredientUrl.url,
+              ingredientUrl?.url ?? null,
               depth + 1,
             );
             ingredientId = id;
@@ -121,14 +130,14 @@ async function readManifest(manifest, parent, result, url, depth) {
           } else {
             ingredientId = manifest.ingredients[i].instanceId;
             result[ingredientId] = {
-              url: ingredientUrl.url,
+              url: ingredientUrl?.url ?? null,
               parent: manifestId,
             };
           }
         } else {
           ingredientId = manifest.ingredients[i].instanceId;
           result[ingredientId] = {
-            url: ingredientUrl.url,
+            url: ingredientUrl?.url ?? null,
             parent: manifestId,
             depthExceeded: true,
           };
