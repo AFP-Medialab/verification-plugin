@@ -158,7 +158,7 @@ const Thumbnails = () => {
         }),
       );
       if (selectedValue.openTabs) images.forEach((img) => imageClickUrl(img));
-    } else dispatch(setError("Please use a valid Youtube URL (add to tsv)"));
+    } else dispatch(setError("Please use a valid YouTube URL (add to tsv)"));
   };
 
   const imageClickUrl = (url) => {
