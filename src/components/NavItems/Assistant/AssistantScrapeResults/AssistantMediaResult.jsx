@@ -26,6 +26,10 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "../../../Shared/VideoGridList/VideoGridList";
 import { WarningAmber } from "@mui/icons-material";
 
+import { TransHtmlBlankSpace, TransSupportedToolsLink } from "../reusableTrans";
+import { Trans } from "react-i18next";
+import { Link } from "react-router-dom";
+
 const AssistantMediaResult = () => {
   const classes = useMyStyles();
   const dispatch = useDispatch();
@@ -129,15 +133,17 @@ const AssistantMediaResult = () => {
               <Tooltip
                 interactive={"true"}
                 title={
-                  <div
-                    className={"content"}
-                    dangerouslySetInnerHTML={{
-                      __html:
-                        keyword("media_tooltip") +
-                        "<br><br>" +
-                        keyword("supported_tools_link"),
-                    }}
-                  />
+                  <>
+                    <Trans
+                      t={keyword}
+                      i18nKey="media_tooltip"
+                      components={{
+                        b: <b />,
+                      }}
+                    />
+                    <TransHtmlBlankSpace keyword={keyword} />
+                    <TransSupportedToolsLink keyword={keyword} />
+                  </>
                 }
                 classes={{ tooltip: classes.assistantTooltip }}
               >

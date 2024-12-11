@@ -19,24 +19,27 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import HeaderTool from "../../Shared/HeaderTool/HeaderTool";
 
-//import { HtmlTooltip } from "../../Shared/Utils/HtmlTooltip";
-
+import {
+  TransHtmlBlankSpace,
+  TransSupportedUrlsLink,
+  TransSupportedToolsLink,
+} from "./reusableTrans";
 import { Trans } from "react-i18next";
-
-import { styled } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 
-const HtmlTooltipStyled = styled(({ className, ...props }) => (
-  <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
-  [`& .${tooltipClasses.tooltip}`]: {
-    //backgroundColor: '#f5f5f9',
-    //color: 'rgba(0, 0, 0, 0.87)',
-    //maxWidth: 220,
-    //fontSize: theme.typography.pxToRem(12),
-    //border: '1px solid #dadde9',
-  },
-}));
+import { styled } from "@mui/material/styles";
+
+// const HtmlTooltipStyled = styled(({ className, ...props }) => (
+//   <Tooltip {...props} classes={{ popper: className }} />
+// ))(({ theme }) => ({
+//   [`& .${tooltipClasses.tooltip}`]: {
+//     //backgroundColor: '#f5f5f9',
+//     //color: 'rgba(0, 0, 0, 0.87)',
+//     //maxWidth: 220,
+//     //fontSize: theme.typography.pxToRem(12),
+//     //border: '1px solid #dadde9',
+//   },
+// }));
 
 const AssistantIntroduction = (props) => {
   // styles, language, dispatch, params
@@ -111,43 +114,72 @@ const AssistantIntroduction = (props) => {
             <Tooltip
               interactive={"true"}
               title={
-                <div>
-                  <Trans t={keyword} i18nKey="assistant_help_title" />
+                <>
                   <Trans
                     t={keyword}
-                    i18nKey="assistant_help_1"
-                    components={{ b: <b /> }}
+                    i18nKey="assistant_help_title"
+                    components={{
+                      b: <b />, // bold not working here
+                    }}
                   />
-                  <Trans t={keyword} i18nKey="assistant_help_2" />
+                  {/* <Trans 
+                    t={keyword} 
+                    i18nKey="html_blank_space" // not working
+                  /> */}
+                  <TransHtmlBlankSpace keyword={keyword} />
+                  <Trans t={keyword} i18nKey="assistant_help_1" />
                   <Trans
+                    t={keyword}
+                    i18nKey="assistant_help_2"
+                    components={{
+                      b: <b />,
+                      ul: <ul />,
+                      li: <li />,
+                    }}
+                  />
+                  {/* <Trans
                     t={keyword}
                     i18nKey="supported_tools_link"
                     components={{
                       supportedToolsLink: (
                         <Link
-                          href="linklinklink"
-                          target="_-blank"
+                          href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools"
+                          target="_blank"
                           rel="noopener noreferrer"
                         />
                       ),
                     }}
                   />
-                  />
-                  <Trans t={keyword} i18nKey="assistant_help_3" />
+                  <Trans 
+                    t={keyword} 
+                    i18nKey="html_blank_space"  // not working
+                  /> */}
+                  <TransSupportedToolsLink keyword={keyword} />
+                  <TransHtmlBlankSpace keyword={keyword} />
                   <Trans
+                    t={keyword}
+                    i18nKey="assistant_help_3" // update this for bluesky and vk and others?
+                    components={{
+                      b: <b />,
+                      ul: <ul />,
+                      li: <li />,
+                    }}
+                  />
+                  {/* <Trans
                     t={keyword}
                     i18nKey="supported_urls_link"
                     components={{
                       supportedUrlsLink: (
                         <Link
-                          href="linklinklink"
-                          target="_-blank"
+                          href="https://gatenlp.github.io/we-verify-app-assistant/supported-urls"
+                          target="_blank"
                           rel="noopener noreferrer"
                         />
                       ),
                     }}
-                  />
-                </div>
+                  /> */}
+                  <TransSupportedUrlsLink keyword={keyword} />
+                </>
               }
               classes={{ tooltip: classes.assistantTooltip }}
             >
