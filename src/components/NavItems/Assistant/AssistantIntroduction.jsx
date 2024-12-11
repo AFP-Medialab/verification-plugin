@@ -24,6 +24,7 @@ import HeaderTool from "../../Shared/HeaderTool/HeaderTool";
 import { Trans } from "react-i18next";
 
 import { styled } from "@mui/material/styles";
+import { Link } from "react-router-dom";
 
 const HtmlTooltipStyled = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -118,9 +119,34 @@ const AssistantIntroduction = (props) => {
                     components={{ b: <b /> }}
                   />
                   <Trans t={keyword} i18nKey="assistant_help_2" />
-                  <Trans t={keyword} i18nKey="supported_tools_link" />
+                  <Trans
+                    t={keyword}
+                    i18nKey="supported_tools_link"
+                    components={{
+                      supportedToolsLink: (
+                        <Link
+                          href="linklinklink"
+                          target="_-blank"
+                          rel="noopener noreferrer"
+                        />
+                      ),
+                    }}
+                  />
+                  />
                   <Trans t={keyword} i18nKey="assistant_help_3" />
-                  <Trans t={keyword} i18nKey="supported_urls_link" />
+                  <Trans
+                    t={keyword}
+                    i18nKey="supported_urls_link"
+                    components={{
+                      supportedUrlsLink: (
+                        <Link
+                          href="linklinklink"
+                          target="_-blank"
+                          rel="noopener noreferrer"
+                        />
+                      ),
+                    }}
+                  />
                 </div>
               }
               classes={{ tooltip: classes.assistantTooltip }}
