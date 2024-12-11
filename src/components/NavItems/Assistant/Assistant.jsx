@@ -24,6 +24,7 @@ import AssistantTextResult from "./AssistantScrapeResults/AssistantTextResult";
 import AssistantUrlSelected from "./AssistantUrlSelected";
 import AssistantWarnings from "./AssistantScrapeResults/AssistantWarnings";
 import AssistantCredSignals from "./AssistantScrapeResults/AssistantCredibilitySignals";
+import { ROLES } from "../../../constants/roles.jsx";
 
 import {
   cleanAssistantState,
@@ -55,6 +56,9 @@ const Assistant = () => {
   const text = useSelector((state) => state.assistant.urlText);
   const linkList = useSelector((state) => state.assistant.linkList);
   const errorKey = useSelector((state) => state.assistant.errorKey);
+
+  // checking if user logged in
+  const role = useSelector((state) => state.userSession.user.roles);
 
   //third party check states
   const neResult = useSelector((state) => state.assistant.neResultCategory);
@@ -268,7 +272,7 @@ const Assistant = () => {
               ) : null}
 
               {/* credibility signals */}
-              {text ? (
+              {role.includes(ROLES.BETA_TESTER) && text ? (
                 <Grid2 size={{ xs: 12 }}>
                   <AssistantCredSignals />
                 </Grid2>

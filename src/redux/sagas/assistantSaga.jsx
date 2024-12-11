@@ -64,7 +64,10 @@ function* getMediaListSaga() {
 }
 
 function* getMediaActionSaga() {
-  yield takeLatest("SET_PROCESS_URL", handleMediaActionList);
+  yield takeLatest(
+    ["SET_PROCESS_URL", "AUTH_USER_LOGIN", "AUTH_USER_LOGOUT"],
+    handleMediaActionList,
+  );
 }
 
 function* getAssistantScrapeSaga() {
