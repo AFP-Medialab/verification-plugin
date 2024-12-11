@@ -218,23 +218,9 @@ const AssistantCredSignals = () => {
                 dangerouslySetInnerHTML={{
                   __html:
                     keyword("credibility_signals_tooltip") +
+                    "<br><br>" +
+                    keyword("credibility_signals_link") +
                     "<br><br><b>" +
-                    // keyword("news_framing") +
-                    // "</b><br>" +
-                    // keyword("news_framing_tooltip") +
-                    // "<br><br><b>" +
-                    // keyword("news_genre") +
-                    // "</b><br>" +
-                    // keyword("news_genre_tooltip") +
-                    // "<br><br><b>" +
-                    // keyword("persuasion_techniques") +
-                    // "</b><br>" +
-                    // keyword("persuasion_techniques_tooltip") +
-                    // "<br><br><b>" +
-                    // keyword("subjectivity") +
-                    // "</b><br>" +
-                    // keyword("subjectivity_tooltip") +
-                    // "<br><br><b>" +
                     keyword("previous_fact_checks_title") +
                     "</b><br>" +
                     keyword("previous_fact_checks_tooltip") +
