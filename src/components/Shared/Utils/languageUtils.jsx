@@ -12,7 +12,7 @@ export const getLanguageName = (language, locale) => {
     // console.error(
     //   `Error: the language code ${language} is not ISO-639-1 compatible`,
     // );
-    return LanguageDictionary[language]["en"];
+    return LanguageDictionary["en"]["en"];
   }
   return LanguageDictionary[language][locale];
 };
