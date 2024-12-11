@@ -169,8 +169,6 @@ const Metadata = ({ mediaType }) => {
     setFileInput(null);
   };
 
-  console.log("TYPE", processUrlType);
-
   return (
     <div>
       <HeaderTool
