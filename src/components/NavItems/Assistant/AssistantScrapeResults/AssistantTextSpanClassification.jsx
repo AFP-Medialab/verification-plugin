@@ -54,25 +54,18 @@ export default function AssistantTextSpanClassification({
 }) {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
-  const tooltipTextLowThreshold = keyword("low_confidence");
-  const tooltipTextHighThreshold = keyword("high_confidence");
 
-  // console.log("keyword(helpDescription)=", keyword(helpDescription));
-  // console.log("keyword(\"colour_scale\")=", keyword("colour_scale"));
-  // console.log("tooltipTextLowThreshold=", tooltipTextLowThreshold);
-  // console.log("tooltipTextHighThreshold=", tooltipTextHighThreshold);
-  // console.log("configs.confidenceRgbLow=", configs.confidenceRgbLow);
-  // console.log("configs.confidenceRgbHigh=", configs.confidenceRgbHigh);
-
+  // sub card header tooltip for categories
+  const colourScaleText = keyword("colour_scale");
+  const categoryTooltipText = keyword("confidence_tooltip_technique");
+  const categoryTextLow = keyword("low_confidence");
+  const categoryTextHigh = keyword("high_confidence");
+  const categoryRgbLow = configs.confidenceRgbLow;
+  const categoryRgbHigh = configs.confidenceRgbHigh;
   const confidenceTooltipContent = (
-    <ColourGradientTooltipContent
-      description={keyword(helpDescription)}
-      colourScaleText={keyword("colour_scale")}
-      textLow={tooltipTextLowThreshold}
-      textHigh={tooltipTextHighThreshold}
-      rgbLow={configs.confidenceRgbLow}
-      rgbHigh={configs.confidenceRgbHigh}
-    />
+    <div>
+      <p dangerouslySetInnerHTML={{ __html: helpDescription }}></p>
+    </div>
   );
 
   const [doHighlightSentence, setDoHighlightSentence] = useState(true);
@@ -177,20 +170,21 @@ export default function AssistantTextSpanClassification({
             cursor: "pointer",
           }}
         >
-          {persuasionTechnique.replaceAll("_", " ")}
+          {/* {persuasionTechnique.replaceAll("_", " ")} */}
+          {keyword(persuasionTechnique)}
         </div>,
       );
     }
-    techniqueContent.push(keyword("confidence_tooltip_technique"));
+    techniqueContent.push(categoryTooltipText);
 
     let techniquesTooltip = (
       <ColourGradientTooltipContent
         description={techniqueContent}
-        colourScaleText={keyword("colour_scale")}
-        textLow={tooltipTextLowThreshold}
-        textHigh={tooltipTextHighThreshold}
-        rgbLow={configs.confidenceRgbLow}
-        rgbHigh={configs.confidenceRgbHigh}
+        colourScaleText={colourScaleText}
+        textLow={categoryTextLow}
+        textHigh={categoryTextHigh}
+        rgbLow={categoryRgbLow}
+        rgbHigh={categoryRgbHigh}
       />
     );
 
@@ -295,7 +289,7 @@ export default function AssistantTextSpanClassification({
               thresholdHigh={configs.confidenceThresholdHigh}
               rgbLow={configs.confidenceRgbLow}
               rgbHigh={configs.confidenceRgbHigh}
-              noCategoriesText={keyword("no_detected_categories")}
+              noCategoriesText={keyword("no_detected_techniques")}
               allCategoriesLabel={allCategoriesLabel}
               onCategoryChange={handleCategorySelect}
               keyword={keyword}

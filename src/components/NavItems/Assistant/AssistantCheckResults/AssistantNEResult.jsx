@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import { CardHeader, Grid2, ListItemButton } from "@mui/material";
+import { CardHeader, Grid2, ListItemButton, Tooltip } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Collapse from "@mui/material/Collapse";
 import Divider from "@mui/material/Divider";
@@ -14,6 +14,7 @@ import Link from "@mui/material/Link";
 import ListItem from "@mui/material/ListItem";
 import List from "@mui/material/List";
 import ListItemText from "@mui/material/ListItemText";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 //import ReactWordcloud from "react-wordcloud";
 import { TagCloud } from "react-tagcloud";
 import { select } from "d3-selection";
@@ -135,6 +136,25 @@ const AssistantNEResult = () => {
         <CardHeader
           className={classes.assistantCardHeader}
           title={keyword("named_entity_title")}
+          action={
+            <Tooltip
+              interactive={"true"}
+              title={
+                <div
+                  className={"content"}
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      keyword("named_entity_tooltip") +
+                      "<br><br>" +
+                      keyword("named_entity_link"),
+                  }}
+                />
+              }
+              classes={{ tooltip: classes.assistantTooltip }}
+            >
+              <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+            </Tooltip>
+          }
         />
         {neLoading && <LinearProgress />}
         <CardContent>

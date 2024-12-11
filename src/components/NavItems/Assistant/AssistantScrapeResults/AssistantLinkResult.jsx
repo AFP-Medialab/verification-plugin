@@ -335,7 +335,12 @@ const AssistantLinkResult = () => {
               <div
                 className={"content"}
                 dangerouslySetInnerHTML={{
-                  __html: keyword("extracted_urls_tooltip"),
+                  __html:
+                    keyword("extracted_urls_tooltip") +
+                    "<br><br>" +
+                    keyword("sc_tooltip") +
+                    "<br><br>" +
+                    keyword("url_domain_analysis_link"),
                 }}
               />
             }

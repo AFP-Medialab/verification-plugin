@@ -132,7 +132,10 @@ const AssistantMediaResult = () => {
                   <div
                     className={"content"}
                     dangerouslySetInnerHTML={{
-                      __html: keyword("media_tooltip"),
+                      __html:
+                        keyword("media_tooltip") +
+                        "<br><br>" +
+                        keyword("supported_tools_link"),
                     }}
                   />
                 }

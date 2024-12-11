@@ -30,7 +30,6 @@ import AssistantTextSpanClassification from "./AssistantTextSpanClassification";
 
 const AssistantTextResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
-  //const sharedKeyword = i18nLoadNamespace("components/Shared/utils");
   const expandMinimiseText = keyword("expand_minimise_text");
 
   const classes = useMyStyles();
@@ -187,7 +186,12 @@ const AssistantTextResult = () => {
                 <div
                   className={"content"}
                   dangerouslySetInnerHTML={{
-                    __html: keyword("text_tooltip"),
+                    __html:
+                      keyword("text_tooltip") +
+                      "<br>" +
+                      keyword("supported_tools_link") +
+                      "<br>" +
+                      keyword("credibility_signals_link"),
                   }}
                 />
               }
@@ -217,24 +221,24 @@ const AssistantTextResult = () => {
             aria-label="extracted text tabs"
             variant="fullWidth"
           >
-            <Tab label="Raw Text" {...a11yProps(0)} />
+            <Tab label={keyword("raw_text")} {...a11yProps(0)} />
             <Tab
-              label="Topic"
+              label={newsFramingTitle}
               {...a11yProps(1)}
               disabled={newsFramingFail || newsFramingLoading}
             />
             <Tab
-              label="Genre"
+              label={newsGenreTitle}
               {...a11yProps(2)}
               disabled={newsGenreFail || newsGenreLoading}
             />
             <Tab
-              label="Persuasion Techniques"
+              label={persuasionTitle}
               {...a11yProps(3)}
               disabled={persuasionFail || persuasionLoading}
             />
             <Tab
-              label="Subjectivity"
+              label={subjectivityTitle}
               {...a11yProps(4)}
               disabled={subjectivityFail || subjectivityLoading}
             />
@@ -261,9 +265,12 @@ const AssistantTextResult = () => {
                 classification={newsFramingResult.entities}
                 configs={newsFramingResult.configs}
                 titleText={newsFramingTitle}
-                helpDescription={"news_framing_tooltip"}
+                helpDescription={
+                  keyword("news_framing_tooltip") +
+                  keyword("credibility_signals_link")
+                }
                 textHtmlMap={textHtmlMap}
-                subjectivity={false}
+                credibilitySignal={keyword("news_framing_title")}
               />
             )}
           </CustomTabPanel>
@@ -282,9 +289,12 @@ const AssistantTextResult = () => {
                 classification={newsGenreResult.entities}
                 configs={newsGenreResult.configs}
                 titleText={newsGenreTitle}
-                helpDescription={"news_genre_tooltip"}
+                helpDescription={
+                  keyword("news_genre_tooltip") +
+                  keyword("credibility_signals_link")
+                }
                 textHtmlMap={textHtmlMap}
-                subjectivity={false}
+                credibilitySignal={keyword("news_genre_title")}
               />
             )}
           </CustomTabPanel>
@@ -303,7 +313,10 @@ const AssistantTextResult = () => {
                 classification={persuasionResult.entities}
                 configs={persuasionResult.configs}
                 titleText={persuasionTitle}
-                helpDescription={"persuasion_techniques_tooltip"}
+                helpDescription={
+                  keyword("persuasion_techniques_tooltip") +
+                  keyword("credibility_signals_link")
+                }
                 textHtmlMap={textHtmlMap}
               />
             )}
@@ -323,9 +336,13 @@ const AssistantTextResult = () => {
                 classification={subjectivityResult.entities}
                 configs={subjectivityResult.configs}
                 titleText={subjectivityTitle}
-                helpDescription={"subjectivity_tooltip"}
+                helpDescription={
+                  keyword("subjectivity_tooltip") +
+                  "<br><br>" +
+                  keyword("credibility_signals_link")
+                }
                 textHtmlMap={textHtmlMap}
-                subjectivity={true}
+                credibilitySignal={keyword("subjectivity_title")}
               />
             )}
           </CustomTabPanel>
