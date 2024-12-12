@@ -137,17 +137,6 @@ export const ASSISTANT_ACTIONS = [
     path: "tools/analysis",
   },
   {
-    title: "navbar_analysis_image",
-    icon: <imageAnalysis.icon sx={{ fontSize: "24px" }} />,
-    linksAccepted: [KNOWN_LINKS.FACEBOOK, KNOWN_LINKS.TWITTER],
-    cTypes: [CONTENT_TYPE.IMAGE],
-    exceptions: [],
-    useInputUrl: true,
-    text: "image_analysis_text",
-    tsvPrefix: "api",
-    path: "tools/analysisImage",
-  },
-  {
     title: "navbar_keyframes",
     icon: <keyframes.icon sx={{ fontSize: "24px" }} />,
     linksAccepted: [
@@ -199,17 +188,6 @@ export const ASSISTANT_ACTIONS = [
     text: "metadata_text",
     tsvPrefix: "metadata",
     path: "tools/metadata",
-  },
-  {
-    title: "navbar_rights",
-    icon: <videoRights.icon sx={{ fontSize: "24px" }} />,
-    linksAccepted: [KNOWN_LINKS.YOUTUBE],
-    cTypes: [CONTENT_TYPE.VIDEO],
-    exceptions: [],
-    useInputUrl: true,
-    text: "rights_text",
-    tsvPrefix: "copyright",
-    path: "tools/copyright",
   },
   {
     title: "navbar_forensic",

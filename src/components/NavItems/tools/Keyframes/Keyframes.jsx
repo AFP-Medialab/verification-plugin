@@ -118,6 +118,14 @@ const Keyframes = () => {
     setSubmittedUrl(undefined);
   }, [submittedUrl]);
 
+  const processUrl = useSelector((state) => state.assistant.processUrl);
+  useEffect(() => {
+    if (processUrl) {
+      setInput(processUrl);
+      setSubmittedUrl(processUrl);
+    }
+  }, [processUrl]);
+
   const [classButtonURL, setClassButtonURL] = useState(null);
   const [classButtonLocal, setClassButtonLocal] = useState(null);
 

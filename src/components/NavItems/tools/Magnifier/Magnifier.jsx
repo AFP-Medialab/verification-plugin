@@ -100,6 +100,14 @@ const Magnifier = () => {
     }
   }, [url]);
 
+  const processUrl = useSelector((state) => state.assistant.processUrl);
+  useEffect(() => {
+    if (processUrl) {
+      setInput(processUrl);
+      submitUrl(processUrl);
+    }
+  }, [processUrl]);
+
   const preprocessImage = (file) => {
     setImageFile(file);
     return file;

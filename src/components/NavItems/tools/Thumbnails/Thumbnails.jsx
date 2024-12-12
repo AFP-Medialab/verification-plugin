@@ -158,7 +158,7 @@ const Thumbnails = () => {
         }),
       );
       if (selectedValue.openTabs) images.forEach((img) => imageClickUrl(img));
-    } else dispatch(setError("Please use a valid Youtube Url (add to tsv)"));
+    } else dispatch(setError(keyword(enter_valid_youtube_url)));
   };
 
   const imageClickUrl = (url) => {
@@ -224,6 +224,14 @@ const Thumbnails = () => {
       dispatch(setThumbnailsLoading(false));
     }
   }, [showResult]);
+
+  const processUrl = useSelector((state) => state.assistant.processUrl);
+  useEffect(() => {
+    if (processUrl) {
+      setInput(processUrl);
+      setUrlDetected(true);
+    }
+  }, [processUrl]);
 
   return (
     <div>

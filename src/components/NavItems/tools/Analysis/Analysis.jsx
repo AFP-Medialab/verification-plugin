@@ -121,6 +121,14 @@ const Analysis = () => {
     }
   }, [url]);
 
+  const processUrl = useSelector((state) => state.assistant.processUrl);
+  useEffect(() => {
+    if (processUrl) {
+      setInput(processUrl);
+      setSubmittedUrl(processUrl);
+    }
+  }, [processUrl]);
+
   return (
     <div>
       <HeaderTool

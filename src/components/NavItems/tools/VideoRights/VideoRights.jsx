@@ -88,6 +88,14 @@ const VideoRights = () => {
     }
   }, [submitted]);
 
+  const processUrl = useSelector((state) => state.assistant.processUrl);
+  useEffect(() => {
+    if (processUrl) {
+      setInput(processUrl);
+      setUrlDetected(true);
+    }
+  }, [processUrl]);
+
   return (
     <div>
       <HeaderTool
