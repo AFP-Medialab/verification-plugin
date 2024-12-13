@@ -13,6 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import LoadingButton from "@mui/lab/LoadingButton";
 import accept from "attr-accept";
 import { green } from "@mui/material/colors";
+import { i18nLoadNamespace } from "../Languages/i18nLoadNamespace";
 
 /**
  * A reusable form component with a textfield and a local file with optional processing
@@ -54,6 +55,8 @@ const StringFileUploadField = ({
   const [validDrop, setValidDrop] = useState(false);
 
   const dropColor = green[50];
+
+  const keyword = i18nLoadNamespace("components/Shared/StringFileUploadField");
 
   /**
    *
@@ -116,7 +119,7 @@ const StringFileUploadField = ({
     >
       {isDragging && (
         <Stack justifyContent="center" alignItems="center" height="100%">
-          <Typography>{"Drop the file to upload here..."}</Typography>
+          <Typography>{keyword("droppable_zone")}</Typography>
         </Stack>
       )}
 
