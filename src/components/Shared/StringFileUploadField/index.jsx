@@ -1,10 +1,18 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
-import { Button, ButtonGroup, Grid2, TextField } from "@mui/material";
+import {
+  Button,
+  ButtonGroup,
+  Grid2,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import CloseIcon from "@mui/icons-material/Close";
 import LoadingButton from "@mui/lab/LoadingButton";
 import accept from "attr-accept";
+import { green } from "@mui/material/colors";
 
 /**
  * A reusable form component with a textfield and a local file with optional processing
@@ -42,17 +50,20 @@ const StringFileUploadField = ({
 }) => {
   const fileRef = useRef(null);
 
-  const [isOver, setIsOver] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const [validDrop, setValidDrop] = useState(false);
+
+  const dropColor = green[50];
 
   /**
    *
    * @param e {DragEvent}
    */
-  const onDragEnter = (e) => {
+  const onDragOver = (e) => {
     e.preventDefault();
     const file = e.dataTransfer?.files?.[0];
-    setIsOver(true);
+    setIsDragging(true);
+
     if (file && accept(file, fileInputTypesAccepted)) {
       setValidDrop(true);
     } else {
@@ -62,7 +73,7 @@ const StringFileUploadField = ({
 
   const onDragLeave = (e) => {
     e.preventDefault();
-    setIsOver(false);
+    setIsDragging(false);
   };
 
   const handleFile = async (file) => {
@@ -74,7 +85,7 @@ const StringFileUploadField = ({
 
   const onDrop = (e) => {
     e.preventDefault();
-    setIsOver(false);
+    setIsDragging(false);
     setValidDrop(false);
     const file = e.dataTransfer?.files?.[0];
     if (file && accept(file, fileInputTypesAccepted)) {
@@ -82,87 +93,115 @@ const StringFileUploadField = ({
     }
   };
 
+  const fieldsRef = useRef(null);
+  const [fieldsDivHeight, setFieldsDivHeight] = useState(0);
+
+  // Keep track of the computed height
+  useEffect(() => {
+    if (fieldsRef.current) {
+      setFieldsDivHeight(fieldsRef.current.offsetHeight);
+    }
+  }, []);
+
   return (
-    <Box>
-      <Grid2 container direction="row" spacing={3} alignItems="center">
-        <Grid2 size="grow">
-          <TextField
-            type="url"
-            id="standard-full-width"
-            label={labelKeyword}
-            placeholder={placeholderKeyword}
-            fullWidth
-            value={urlInput}
-            variant="outlined"
-            disabled={isParentLoading || fileInput instanceof Blob}
-            onChange={(e) => setUrlInput(e.target.value)}
-          />
-        </Grid2>
-        <Grid2>
-          <LoadingButton
-            type="submit"
-            variant="contained"
-            color="primary"
-            onClick={async (e) => {
-              e.preventDefault();
-              urlInput ? await handleSubmit(urlInput) : await handleSubmit(e);
-            }}
-            loading={isParentLoading}
-            disabled={(urlInput === "" && !fileInput) || isParentLoading}
-          >
-            {submitButtonKeyword}
-          </LoadingButton>
-        </Grid2>
-      </Grid2>
-      <Grid2 mt={2}>
-        <ButtonGroup
-          variant="outlined"
-          disabled={isParentLoading || urlInput !== ""}
-        >
-          <Button
-            startIcon={<FolderOpenIcon />}
-            sx={{ textTransform: "none" }}
-            style={
-              isOver ? { cursor: validDrop ? "copy" : "no-drop" } : undefined
-            }
-            onDragEnter={onDragEnter}
-            onDragLeave={onDragLeave}
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={onDrop}
-          >
-            <label htmlFor="file">
-              {fileInput ? fileInput.name : localFileKeyword}
-            </label>
-            <input
-              id="file"
-              name="file"
-              type="file"
-              accept={fileInputTypesAccepted}
-              hidden={true}
-              ref={fileRef}
-              onChange={(e) => {
-                e.preventDefault();
-                handleFile(e.target.files[0]);
-                e.target.value = null;
-              }}
+    <Box
+      onDragOver={onDragOver}
+      onDragLeave={onDragLeave}
+      onDrop={onDrop}
+      sx={{
+        border: isDragging ? "4px dashed #00926c" : "0",
+        height: isDragging ? fieldsDivHeight : "auto",
+        backgroundColor: isDragging ? dropColor : "initial",
+      }}
+    >
+      {isDragging && (
+        <Stack justifyContent="center" alignItems="center" height="100%">
+          <Typography>{"Drop the file to upload here..."}</Typography>
+        </Stack>
+      )}
+
+      <Box visibility={isDragging ? "hidden" : "visible"} ref={fieldsRef}>
+        <Grid2 container direction="row" spacing={3} alignItems="center">
+          <Grid2 size="grow">
+            <TextField
+              type="url"
+              id="standard-full-width"
+              label={labelKeyword}
+              placeholder={placeholderKeyword}
+              fullWidth
+              value={urlInput}
+              variant="outlined"
+              disabled={isParentLoading || fileInput instanceof Blob}
+              onChange={(e) => setUrlInput(e.target.value)}
             />
-          </Button>
-          {fileInput instanceof Blob && (
-            <Button
-              size="small"
-              aria-label="remove selected file"
-              onClick={(e) => {
+          </Grid2>
+          <Grid2>
+            <LoadingButton
+              type="submit"
+              variant="contained"
+              color="primary"
+              onClick={async (e) => {
                 e.preventDefault();
-                handleCloseSelectedFile();
-                fileRef.current.value = null;
-                setFileInput(null);
+                urlInput ? await handleSubmit(urlInput) : await handleSubmit(e);
               }}
+              loading={isParentLoading}
+              disabled={(urlInput === "" && !fileInput) || isParentLoading}
             >
-              <CloseIcon fontSize="small" />
+              {submitButtonKeyword}
+            </LoadingButton>
+          </Grid2>
+        </Grid2>
+        <Grid2 mt={2}>
+          <ButtonGroup
+            variant="outlined"
+            disabled={isParentLoading || urlInput !== ""}
+          >
+            <Button
+              startIcon={<FolderOpenIcon />}
+              sx={{ textTransform: "none" }}
+              style={
+                isDragging
+                  ? { cursor: validDrop ? "copy" : "no-drop" }
+                  : undefined
+              }
+              onDragOver={onDragOver}
+              onDragLeave={onDragLeave}
+              onDrop={onDrop}
+            >
+              <label htmlFor="file">
+                {fileInput ? fileInput.name : localFileKeyword}
+              </label>
+              <input
+                id="file"
+                name="file"
+                type="file"
+                accept={fileInputTypesAccepted}
+                hidden={true}
+                ref={fileRef}
+                onChange={(e) => {
+                  e.preventDefault();
+                  handleFile(e.target.files[0]);
+                  e.target.value = null;
+                }}
+              />
             </Button>
-          )}
-        </ButtonGroup>
-      </Grid2>
+            {fileInput instanceof Blob && (
+              <Button
+                size="small"
+                aria-label="remove selected file"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleCloseSelectedFile();
+                  fileRef.current.value = null;
+                  setFileInput(null);
+                }}
+              >
+                <CloseIcon fontSize="small" />
+              </Button>
+            )}
+          </ButtonGroup>
+        </Grid2>
+      </Box>
     </Box>
   );
 };
