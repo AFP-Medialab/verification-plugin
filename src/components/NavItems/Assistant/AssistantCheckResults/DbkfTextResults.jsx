@@ -1,6 +1,7 @@
 import React from "react";
 
 import Box from "@mui/material/Box";
+import Link from "@mui/material/Link";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
@@ -43,14 +44,14 @@ const DbkfTextResults = () => {
                     component={"div"}
                     color={"textSecondary"}
                   >
-                    <a
-                      href={value.claimUrl}
+                    <Link
+                      href={value.externalLink}
                       key={key}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       {value.text}
-                    </a>
+                    </Link>
                   </Typography>
                 }
               />
