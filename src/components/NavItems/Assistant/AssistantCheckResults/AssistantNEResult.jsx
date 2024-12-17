@@ -1,25 +1,30 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
-import Card from "@mui/material/Card";
-import { CardHeader, Grid2, ListItemButton } from "@mui/material";
-import CardContent from "@mui/material/CardContent";
-import Collapse from "@mui/material/Collapse";
-import Divider from "@mui/material/Divider";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import LinearProgress from "@mui/material/LinearProgress";
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
-//import ReactWordcloud from "react-wordcloud";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Card,
+  CardHeader,
+  CardContent,
+  Chip,
+  Collapse,
+  Divider,
+  Grid2,
+  ListItemButton,
+  LinearProgress,
+  Typography,
+  Link,
+} from "@mui/material";
 import { TagCloud } from "react-tagcloud";
 import { select } from "d3-selection";
 import "tippy.js/dist/tippy.css";
 import "tippy.js/animations/scale.css";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import { DataGrid, getGridSingleSelectOperators } from "@mui/x-data-grid";
 
 const AssistantNEResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -40,61 +45,10 @@ const AssistantNEResult = () => {
     }, {}),
   );
 
-  const toggleCategory = (category) => {
-    setVisibleCategories({
-      ...visibleCategories,
-      [category]: !visibleCategories[category],
-    });
-  };
-
-  function getCallback(callback) {
-    return function (word, event) {
-      const isActive = callback !== "onWordMouseOut";
-      const element = event.target;
-      const text = select(element);
-      text
-        .on("click", () => {
-          if (isActive) {
-            window.open(`https://google.com/search?q=${word.text}`, "_blank");
-          }
-        })
-        .transition()
-        .attr("text-decoration", isActive ? "underline" : "none");
-    };
-  }
-
-  const options = {
-    rotations: 1,
-    rotationAngles: [0],
-    fontSizes: [15, 60],
-  };
-
-  const callbacks = {
-    getWordColor: (word) => {
-      switch (word.category.toLowerCase()) {
-        case "person":
-          return "blue";
-        case "location":
-          return "red";
-        case "organization":
-          return "green";
-        case "hashtag":
-          return "orange";
-        case "userid":
-          return "purple";
-        default:
-          return "black";
-      }
-    },
-    getWordTooltip: (word) => {
-      return word.text + " (" + word.category + "): " + word.value;
-    },
-    onWordClick: getCallback("onWordClick"),
-    onWordMouseOut: getCallback("onWordMouseOut"),
-    onWordMouseOver: getCallback("onWordMouseOver"),
-  };
-
   function getWordColor(tag, active = true) {
+    if (!tag || !tag.category) {
+      return "black";
+    }
     if (active) {
       switch (tag.category.toLowerCase()) {
         case "person":
@@ -127,45 +81,48 @@ const AssistantNEResult = () => {
     }
   }
 
-  const styles = {
-    margin: "0px 3px",
-    verticalAlign: "middle",
-    display: "inline-block",
-  };
+  const namedEntityTypeList = [
+    ...new Set(neResultCount.map((res) => keyword(res.category))),
+  ].sort();
 
-  const customRenderer = (tag, size, color) => {
-    const { className, style, ...props } = tag.props || {};
-    const fontSize = size + "px";
-    const key = tag.key || tag.value;
-    const tagStyle = {
-      ...styles,
-      color: getWordColor(tag),
-      textDecorationColor: getWordColor(tag),
-      visibility: visibleCategories[tag.category.toLowerCase()]
-        ? "hidden"
-        : "visible",
-      fontSize,
-      ...style,
-    };
-
-    let tagClassName = "tag-cloud-tag";
-    if (className) {
-      tagClassName += " " + className;
-    }
-
-    return (
-      <Link
-        key={key}
-        style={tagStyle}
-        className={tagClassName}
-        href={"https://www.google.com/search?q=" + tag.value}
-        rel="noopener noreferrer"
-        target={"_blank"}
-      >
-        {tag.value}
-      </Link>
-    );
-  };
+  const columns = [
+    {
+      field: "value",
+      headerName: keyword("name"),
+      type: "string",
+      align: "left",
+      headerAlign: "center",
+      minWidth: 100,
+      flex: 1,
+    },
+    {
+      field: "category",
+      headerName: keyword("category"),
+      type: "singleSelect",
+      valueOptions: namedEntityTypeList,
+      align: "center",
+      headerAlign: "center",
+      minWidth: 5,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <Chip
+            label={keyword(params.row.category)}
+            sx={{ color: "white", backgroundColor: getWordColor(params.row) }}
+            size="small"
+          />
+        );
+      },
+    },
+    {
+      field: "count",
+      type: "number",
+      headerName: keyword("count"),
+      headerAlign: "center",
+      minWidth: 4,
+      flex: 1,
+    },
+  ];
 
   return (
     <Grid2 size={{ xs: 12 }}>
@@ -176,36 +133,22 @@ const AssistantNEResult = () => {
         />
         {neLoading && <LinearProgress />}
         <CardContent>
-          <ButtonGroup>
-            {neResult.map((tag, index) => (
-              <Button
-                style={{
-                  color: "white",
-                  border: "none",
-                  backgroundColor: getWordColor(
-                    tag,
-                    !visibleCategories[tag.category.toLowerCase()],
-                  ),
-                }}
-                key={tag.category}
-                onClick={() => toggleCategory(tag.category.toLowerCase())}
-              >
-                {tag.category}
-              </Button>
-            ))}
-          </ButtonGroup>
-          <Grid2 container>
-            <Grid2 align={"center"}>
-              <TagCloud
-                tags={neResultCount}
-                shuffle={false}
-                key={JSON.stringify(visibleCategories)} // This key will change when filteredData changes
-                minSize={20}
-                maxSize={45}
-                renderer={customRenderer}
-              />
-            </Grid2>
-          </Grid2>
+          <div style={{ height: 400, width: "100%", minWidth: 0 }}>
+            <DataGrid
+              rows={neResultCount.map((obj, index) => ({
+                ...obj,
+                id: index + 1,
+              }))}
+              columns={columns}
+              rowHeight={60}
+              disableRowSelectionOnClick
+              initialState={{
+                sorting: {
+                  sortModel: [{ field: "category", sort: "desc" }],
+                },
+              }}
+            />
+          </div>
         </CardContent>
       </Card>
     </Grid2>
