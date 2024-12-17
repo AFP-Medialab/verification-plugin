@@ -38,6 +38,7 @@ const GaugeChartResult = ({
   scores,
   methodNames,
   detectionThresholds,
+  arcsLength,
   resultsHaveErrors,
   sanitizeDetectionPercentage,
   gaugeExplanation,
@@ -144,16 +145,20 @@ const GaugeChartResult = ({
                 animate={false}
                 nrOfLevels={4}
                 textColor={"black"}
-                arcsLength={[
-                  (100 - detectionThresholds.THRESHOLD_1) / 100,
-                  (detectionThresholds.THRESHOLD_2 -
-                    detectionThresholds.THRESHOLD_1) /
-                    100,
-                  (detectionThresholds.THRESHOLD_3 -
-                    detectionThresholds.THRESHOLD_2) /
-                    100,
-                  (100 - detectionThresholds.THRESHOLD_3) / 100,
-                ]}
+                arcsLength={
+                  arcsLength
+                    ? arcsLength
+                    : [
+                        (100 - detectionThresholds.THRESHOLD_1) / 100,
+                        (detectionThresholds.THRESHOLD_2 -
+                          detectionThresholds.THRESHOLD_1) /
+                          100,
+                        (detectionThresholds.THRESHOLD_3 -
+                          detectionThresholds.THRESHOLD_2) /
+                          100,
+                        (100 - detectionThresholds.THRESHOLD_3) / 100,
+                      ]
+                }
                 percent={scores ? maxScore / 100 : 0}
                 style={{
                   minWidth: "250px",
@@ -209,89 +214,91 @@ const GaugeChartResult = ({
         {resultsHaveErrors && (
           <Alert severity="error">{keyword("gauge_algorithms_errors")}</Alert>
         )}
-        <Box sx={{ width: "100%" }}>
-          <Accordion defaultExpanded onChange={handleDetailsChange}>
-            <AccordionSummary expandIcon={<ExpandMore />}>
-              <Typography>{keyword(detailsPanelMessage)}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Stack direction={"column"} spacing={4}>
-                {scores.map((item, key) => {
-                  let predictionScore;
+        {detectionType != "machine_generated_text" ? (
+          <Box sx={{ width: "100%" }}>
+            <Accordion defaultExpanded onChange={handleDetailsChange}>
+              <AccordionSummary expandIcon={<ExpandMore />}>
+                <Typography>{keyword(detailsPanelMessage)}</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Stack direction={"column"} spacing={4}>
+                  {scores.map((item, key) => {
+                    let predictionScore;
 
-                  if (item.predictionScore) {
-                    predictionScore = sanitizeDetectionPercentage(
-                      item.predictionScore,
-                    );
-                  }
+                    if (item.predictionScore) {
+                      predictionScore = sanitizeDetectionPercentage(
+                        item.predictionScore,
+                      );
+                    }
 
-                  return (
-                    <Stack direction="column" spacing={4} key={key}>
-                      <Stack direction="column" spacing={2}>
-                        <Stack
-                          direction="row"
-                          alignItems="flex-start"
-                          justifyContent="space-between"
-                        >
-                          <Box>
-                            <Typography
-                              variant={"h6"}
-                              sx={{ fontWeight: "bold" }}
-                            >
-                              {methodNames[item.methodName].name}
-                            </Typography>
-                            <Stack
-                              direction={{ lg: "row", md: "column" }}
-                              spacing={2}
-                              alignItems="center"
-                            >
-                              <Stack direction="row" spacing={1}>
-                                {item.isError ? (
-                                  <Alert severity="error">
-                                    {keyword("gauge_error_generic")}
-                                  </Alert>
-                                ) : (
-                                  <>
-                                    <Typography>
-                                      {keyword("gauge_probability_text")}{" "}
-                                    </Typography>
-                                    <Typography
-                                      sx={{
-                                        color:
-                                          getPercentageColorCode(
-                                            predictionScore,
-                                          ),
-                                      }}
-                                    >
-                                      {predictionScore}%
-                                    </Typography>
-                                  </>
+                    return (
+                      <Stack direction="column" spacing={4} key={key}>
+                        <Stack direction="column" spacing={2}>
+                          <Stack
+                            direction="row"
+                            alignItems="flex-start"
+                            justifyContent="space-between"
+                          >
+                            <Box>
+                              <Typography
+                                variant={"h6"}
+                                sx={{ fontWeight: "bold" }}
+                              >
+                                {methodNames[item.methodName].name}
+                              </Typography>
+                              <Stack
+                                direction={{ lg: "row", md: "column" }}
+                                spacing={2}
+                                alignItems="center"
+                              >
+                                <Stack direction="row" spacing={1}>
+                                  {item.isError ? (
+                                    <Alert severity="error">
+                                      {keyword("gauge_error_generic")}
+                                    </Alert>
+                                  ) : (
+                                    <>
+                                      <Typography>
+                                        {keyword("gauge_probability_text")}{" "}
+                                      </Typography>
+                                      <Typography
+                                        sx={{
+                                          color:
+                                            getPercentageColorCode(
+                                              predictionScore,
+                                            ),
+                                        }}
+                                      >
+                                        {predictionScore}%
+                                      </Typography>
+                                    </>
+                                  )}
+                                </Stack>
+                                {!item.isError && (
+                                  <Chip
+                                    label={getAlertLabel(predictionScore)}
+                                    color={getAlertColor(predictionScore)}
+                                  />
                                 )}
                               </Stack>
-                              {!item.isError && (
-                                <Chip
-                                  label={getAlertLabel(predictionScore)}
-                                  color={getAlertColor(predictionScore)}
-                                />
-                              )}
-                            </Stack>
+                            </Box>
+                          </Stack>
+
+                          <Box p={2} sx={{ backgroundColor: "#FAFAFA" }} mb={2}>
+                            <Typography>
+                              {methodNames[item.methodName].description}
+                            </Typography>
                           </Box>
                         </Stack>
-
-                        <Box p={2} sx={{ backgroundColor: "#FAFAFA" }} mb={2}>
-                          <Typography>
-                            {methodNames[item.methodName].description}
-                          </Typography>
-                        </Box>
+                        {scores.length > key + 1 && <Divider />}
                       </Stack>
-                      {scores.length > key + 1 && <Divider />}
-                    </Stack>
-                  );
-                })}
-              </Stack>
-            </AccordionDetails>
-          </Accordion>
-        </Box>
+                    );
+                  })}
+                </Stack>
+              </AccordionDetails>
+            </Accordion>
+          </Box>
+        ) : null}
       </Stack>
     </>
   );
