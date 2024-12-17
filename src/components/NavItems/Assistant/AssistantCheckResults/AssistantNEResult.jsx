@@ -13,9 +13,6 @@ import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import LinearProgress from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
-import ListItem from "@mui/material/ListItem";
-import List from "@mui/material/List";
-import ListItemText from "@mui/material/ListItemText";
 //import ReactWordcloud from "react-wordcloud";
 import { TagCloud } from "react-tagcloud";
 import { select } from "d3-selection";
@@ -151,7 +148,6 @@ const AssistantNEResult = () => {
       ...style,
     };
 
-    console.log(tag.value, tag.category, tagStyle);
     let tagClassName = "tag-cloud-tag";
     if (className) {
       tagClassName += " " + className;
@@ -191,6 +187,7 @@ const AssistantNEResult = () => {
                     !visibleCategories[tag.category.toLowerCase()],
                   ),
                 }}
+                key={tag.category}
                 onClick={() => toggleCategory(tag.category.toLowerCase())}
               >
                 {tag.category}
