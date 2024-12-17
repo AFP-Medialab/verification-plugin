@@ -20,7 +20,7 @@ import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import HeaderTool from "../../Shared/HeaderTool/HeaderTool";
 
 import {
-  TransHtmlBlankSpace,
+  TransHtmlDoubleLinkBreak,
   TransSupportedUrlsLink,
   TransSupportedToolsLink,
 } from "./reusableTrans";
@@ -28,18 +28,6 @@ import { Trans } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import { styled } from "@mui/material/styles";
-
-// const HtmlTooltipStyled = styled(({ className, ...props }) => (
-//   <Tooltip {...props} classes={{ popper: className }} />
-// ))(({ theme }) => ({
-//   [`& .${tooltipClasses.tooltip}`]: {
-//     //backgroundColor: '#f5f5f9',
-//     //color: 'rgba(0, 0, 0, 0.87)',
-//     //maxWidth: 220,
-//     //fontSize: theme.typography.pxToRem(12),
-//     //border: '1px solid #dadde9',
-//   },
-// }));
 
 const AssistantIntroduction = (props) => {
   // styles, language, dispatch, params
@@ -119,14 +107,10 @@ const AssistantIntroduction = (props) => {
                     t={keyword}
                     i18nKey="assistant_help_title"
                     components={{
-                      b: <b />, // bold not working here
+                      b: <b />,
                     }}
                   />
-                  {/* <Trans 
-                    t={keyword} 
-                    i18nKey="html_blank_space" // not working
-                  /> */}
-                  <TransHtmlBlankSpace keyword={keyword} />
+                  <TransHtmlDoubleLinkBreak keyword={keyword} />
                   <Trans t={keyword} i18nKey="assistant_help_1" />
                   <Trans
                     t={keyword}
@@ -137,25 +121,8 @@ const AssistantIntroduction = (props) => {
                       li: <li />,
                     }}
                   />
-                  {/* <Trans
-                    t={keyword}
-                    i18nKey="supported_tools_link"
-                    components={{
-                      supportedToolsLink: (
-                        <Link
-                          href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        />
-                      ),
-                    }}
-                  />
-                  <Trans 
-                    t={keyword} 
-                    i18nKey="html_blank_space"  // not working
-                  /> */}
                   <TransSupportedToolsLink keyword={keyword} />
-                  <TransHtmlBlankSpace keyword={keyword} />
+                  <TransHtmlDoubleLinkBreak keyword={keyword} />
                   <Trans
                     t={keyword}
                     i18nKey="assistant_help_3" // update this for bluesky and vk and others?
@@ -165,19 +132,6 @@ const AssistantIntroduction = (props) => {
                       li: <li />,
                     }}
                   />
-                  {/* <Trans
-                    t={keyword}
-                    i18nKey="supported_urls_link"
-                    components={{
-                      supportedUrlsLink: (
-                        <Link
-                          href="https://gatenlp.github.io/we-verify-app-assistant/supported-urls"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        />
-                      ),
-                    }}
-                  /> */}
                   <TransSupportedUrlsLink keyword={keyword} />
                 </>
               }
@@ -185,61 +139,6 @@ const AssistantIntroduction = (props) => {
             >
               <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
             </Tooltip>
-
-            // <HtmlTooltipStyled
-            //   title={
-            //     <React.Fragment>
-            //       "<b>"
-            //       {keyword("assistant_help_title")}
-            //       "</b>"
-            //       {keyword("supported_urls_link")}
-            //     </React.Fragment>
-            //   }
-            //   classes={{ tooltip: classes.assistantTooltip }}
-            // >
-            //   <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
-            // </HtmlTooltipStyled>
-
-            // <HtmlTooltip text={
-            //   // "<b>" +
-            //   // keyword("assistant_help_title") +
-            //   // "</b>" + "<br>" +
-            //   // keyword("assistant_help_1") +
-            //   // keyword("assistant_help_2") +
-            //   // "<br>" +
-            //   // keyword("supported_tools_link") +
-            //   // "<br><br>" +
-            //   // keyword("assistant_help_3") +
-            //   // "<br>" +
-            //   keyword("supported_urls_link")}
-            // />
-
-            // <Tooltip
-            //   interactive={"true"}
-            //   title={
-            //     <div
-            //       className={"content"}
-            //       dangerouslySetInnerHTML={{
-            //         __html:
-            //           "<b>" +
-            //           keyword("assistant_help_title") +
-            //           "</b>" +
-            //           "<br>" +
-            //           keyword("assistant_help_1") +
-            //           keyword("assistant_help_2") +
-            //           "<br>" +
-            //           keyword("supported_tools_link") +
-            //           "<br><br>" +
-            //           keyword("assistant_help_3") +
-            //           "<br>" +
-            //           keyword("supported_urls_link"),
-            //       }}
-            //     />
-            //   }
-            //   classes={{ tooltip: classes.assistantTooltip }}
-            // >
-            //   <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
-            // </Tooltip>
           }
         />
 

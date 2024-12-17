@@ -27,13 +27,14 @@ import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
 import { v4 as uuidv4 } from "uuid";
 
 import "./assistantTextResultStyle.css";
+import { Trans } from "react-i18next";
 
 export default function AssistantTextClassification({
   text,
   classification,
   titleText = "Detected Class",
   importantSentenceKey = "Important_Sentence",
-  helpDescription = "",
+  categoriesTooltipContent = "",
   configs = {
     confidenceThresholdLow: 0.8,
     confidenceThresholdHigh: 1.0,
@@ -94,20 +95,6 @@ export default function AssistantTextClassification({
       rgbLow={sentenceRgbLow}
       rgbHigh={sentenceRgbHigh}
     />
-  );
-  // sub card header tooltip for categories
-  const categoriesTooltipContent = (
-    <div>
-      <p dangerouslySetInnerHTML={{ __html: helpDescription }}></p>
-      {/* <ColourGradientTooltipContent
-        description={categoryTooltipText}
-        colourScaleText={colourScaleText}
-        textLow={categoryTextLow}
-        textHigh={categoryTextHigh}
-        rgbLow={categoryRgbLow}
-        rgbHigh={categoryRgbHigh}
-      /> */}
-    </div>
   );
 
   let filteredCategories = {};

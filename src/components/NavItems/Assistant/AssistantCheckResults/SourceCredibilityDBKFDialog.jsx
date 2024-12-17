@@ -16,6 +16,11 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { Chip, Grid2, Tooltip } from "@mui/material";
+import {
+  TransSourceCredibilityTooltip,
+  TransHtmlDoubleLineBreak,
+  TransUrlDomainAnalysisLink,
+} from "../reusableTrans";
 
 const SourceCredibilityDBKFDialog = (props) => {
   //central
@@ -61,15 +66,11 @@ const SourceCredibilityDBKFDialog = (props) => {
                 leaveDelay={50}
                 style={{ display: "flex", marginLeft: "auto" }}
                 title={
-                  <div
-                    className={"content"}
-                    dangerouslySetInnerHTML={{
-                      __html:
-                        keyword("sc_tooltip") +
-                        "<br><br>" +
-                        keyword("url_domain_analysis_link"),
-                    }}
-                  />
+                  <>
+                    <TransSourceCredibilityTooltip keyword={keyword} />
+                    <TransHtmlDoubleLinkBreak keyword={keyword} />
+                    <TransUrlDomainAnalysisLink keyword={keyword} />
+                  </>
                 }
                 classes={{ tooltip: classes.assistantTooltip }}
               >

@@ -21,7 +21,8 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { Trans } from "react-i18next";
 import {
-  TransHtmlBlankSpace,
+  TransHtmlDoubleLinkBreak,
+  TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
 } from "../reusableTrans";
 
@@ -95,24 +96,8 @@ const AssistantSCResults = () => {
               style={{ display: "flex", marginLeft: "auto" }}
               title={
                 <>
-                  <Trans
-                    t={keyword}
-                    i18nKey="sc_tooltip"
-                    components={{
-                      ul: <ul />,
-                      li: <li />,
-                      strongWarning: (
-                        <strong style="background-color:#d32f2f;" />
-                      ), // colours not working :(
-                      strongMentions: (
-                        <strong style="background-color:#ed6c02;" />
-                      ),
-                      strongFactChecker: (
-                        <strong style="background-color:#2e7d32;" />
-                      ),
-                    }}
-                  />
-                  <TransHtmlBlankSpace keyword={keyword} />
+                  <TransSourceCredibilityTooltip keyword={keyword} />
+                  <TransHtmlDoubleLinkBreak keyword={keyword} />
                   <TransUrlDomainAnalysisLink keyword={keyword} />
                 </>
               }

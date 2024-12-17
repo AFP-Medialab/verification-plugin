@@ -39,7 +39,7 @@ export default function AssistantTextSpanClassification({
   text,
   classification,
   titleText = "Detected Class",
-  helpDescription = "",
+  categoriesTooltipContent = "",
   configs = {
     confidenceThresholdLow: 0.8,
     confidenceThresholdHigh: 1.0,
@@ -62,11 +62,6 @@ export default function AssistantTextSpanClassification({
   const categoryTextHigh = keyword("high_confidence");
   const categoryRgbLow = configs.confidenceRgbLow;
   const categoryRgbHigh = configs.confidenceRgbHigh;
-  const confidenceTooltipContent = (
-    <div>
-      <p dangerouslySetInnerHTML={{ __html: helpDescription }}></p>
-    </div>
-  );
 
   const [doHighlightSentence, setDoHighlightSentence] = useState(true);
   const handleHighlightSentences = (event) => {
@@ -274,7 +269,7 @@ export default function AssistantTextSpanClassification({
               <div style={{ display: "flex" }}>
                 <Tooltip
                   interactive={"true"}
-                  title={confidenceTooltipContent}
+                  title={categoriesTooltipContent}
                   classes={{ tooltip: classes.assistantTooltip }}
                 >
                   <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />

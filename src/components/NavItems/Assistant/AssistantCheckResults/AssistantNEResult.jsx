@@ -22,6 +22,11 @@ import "tippy.js/dist/tippy.css";
 import "tippy.js/animations/scale.css";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import { Trans } from "react-i18next";
+import {
+  TransHtmlDoubleLinkBreak,
+  TransNamedEntityRecogniserLink,
+} from "../reusableTrans";
 
 const AssistantNEResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -140,15 +145,11 @@ const AssistantNEResult = () => {
             <Tooltip
               interactive={"true"}
               title={
-                <div
-                  className={"content"}
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      keyword("named_entity_tooltip") +
-                      "<br><br>" +
-                      keyword("named_entity_link"),
-                  }}
-                />
+                <>
+                  <Trans t={keyword} i18nKey="named_entity_tooltip" />
+                  <TransHtmlDoubleLinkBreak keyword={keyword} />
+                  <TransNamedEntityRecogniserLink keyword={keyword} />
+                </>
               }
               classes={{ tooltip: classes.assistantTooltip }}
             >

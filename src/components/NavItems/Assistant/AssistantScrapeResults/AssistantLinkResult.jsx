@@ -25,6 +25,12 @@ import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { CheckCircleOutline, TaskAltOutlined } from "@mui/icons-material";
 import { DataGrid, getGridSingleSelectOperators } from "@mui/x-data-grid";
+import { Trans } from "react-i18next";
+import {
+  TransHtmlDoubleLinkBreak,
+  TransSourceCredibilityTooltip,
+  TransUrlDomainAnalysisLink,
+} from "../reusableTrans";
 
 // render status for extracted urls
 const Status = (params) => {
@@ -332,17 +338,13 @@ const AssistantLinkResult = () => {
           <Tooltip
             interactive={"true"}
             title={
-              <div
-                className={"content"}
-                dangerouslySetInnerHTML={{
-                  __html:
-                    keyword("extracted_urls_tooltip") +
-                    "<br><br>" +
-                    keyword("sc_tooltip") +
-                    "<br><br>" +
-                    keyword("url_domain_analysis_link"),
-                }}
-              />
+              <>
+                <Trans t={keyword} i18nKey="extracted_urls_tooltip" />
+                <TransHtmlDoubleLinkBreak keyword={keyword} />
+                <TransSourceCredibilityTooltip keyword={keyword} />
+                <TransHtmlDoubleLinkBreak keyword={keyword} />
+                <TransUrlDomainAnalysisLink keyword={keyword} />
+              </>
             }
             classes={{ tooltip: classes.assistantTooltip }}
           >

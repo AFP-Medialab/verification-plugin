@@ -26,7 +26,10 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "../../../Shared/VideoGridList/VideoGridList";
 import { WarningAmber } from "@mui/icons-material";
 
-import { TransHtmlBlankSpace, TransSupportedToolsLink } from "../reusableTrans";
+import {
+  TransHtmlDoubleLinkBreak,
+  TransSupportedToolsLink,
+} from "../reusableTrans";
 import { Trans } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -141,7 +144,7 @@ const AssistantMediaResult = () => {
                         b: <b />,
                       }}
                     />
-                    <TransHtmlBlankSpace keyword={keyword} />
+                    <TransHtmlDoubleLinkBreak keyword={keyword} />
                     <TransSupportedToolsLink keyword={keyword} />
                   </>
                 }

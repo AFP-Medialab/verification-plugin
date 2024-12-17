@@ -5,7 +5,7 @@ export function TransSupportedToolsLink({ keyword }) {
   return (
     <Trans
       t={keyword}
-      i18nKey="supported_tools_link"
+      i18nKey="supported_tools_link" // link not working, pointing to plugin itself
       components={{
         supportedToolsLink: (
           <Link
@@ -23,7 +23,7 @@ export function TransSupportedUrlsLink({ keyword }) {
   return (
     <Trans
       t={keyword}
-      i18nKey="supported_urls_link"
+      i18nKey="supported_urls_link" // link not working, pointing to plugin itself
       components={{
         supportedUrlsLink: (
           <Link
@@ -41,7 +41,7 @@ export function TransUrlDomainAnalysisLink({ keyword }) {
   return (
     <Trans
       t={keyword}
-      i18nKey="url_domain_analysis_link" // link not working
+      i18nKey="url_domain_analysis_link" // link not working, pointing to plugin itself
       components={{
         urlDomainAnalysisLink: (
           <Link
@@ -55,11 +55,62 @@ export function TransUrlDomainAnalysisLink({ keyword }) {
   );
 }
 
-export function TransHtmlBlankSpace({ keyword }) {
+export function TransNamedEntityRecogniserLink({ keyword }) {
   return (
     <Trans
       t={keyword}
-      i18nKey="html_blank_space" // not working
+      i18nKey="named_entity_link" // link not working, pointing to plugin itself
+      components={{
+        namedEntityRecogniserLink: (
+          <Link
+            href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#named-entity-recogniser"
+            target="_blank"
+            rel="noopener noreferrer"
+          />
+        ),
+      }}
     />
   );
+}
+
+export function TransCredibilitySignalsLink({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="credibility_signals_link" // link not working, pointing to plugin itself
+      components={{
+        credibilitySignalsLink: (
+          <Link
+            href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#credibility-signals"
+            target="_blank"
+            rel="noopener noreferrer"
+          />
+        ),
+      }}
+    />
+  );
+}
+
+export function TransSourceCredibilityTooltip({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="sc_tooltip"
+      components={{
+        ul: <ul />,
+        li: <li />,
+        strongWarning: <strong style={{ background: "#d32f2f" }} />,
+        strongMentions: <strong style={{ background: "#ed6c02" }} />,
+        strongFactChecker: <strong style={{ background: "#2e7d32" }} />,
+      }}
+    />
+  );
+}
+
+export function TransHtmlDoubleLinkBreak({ keyword }) {
+  return <Trans t={keyword} i18nKey="html_double_line_break" />;
+}
+
+export function TransHtmlSingleLinkBreak({ keyword }) {
+  return <Trans t={keyword} i18nKey="html_single_line_break" />;
 }

@@ -27,6 +27,13 @@ import { treeMapToElements } from "./assistantUtils";
 import TextFooter from "./TextFooter.jsx";
 import AssistantTextClassification from "./AssistantTextClassification";
 import AssistantTextSpanClassification from "./AssistantTextSpanClassification";
+import {
+  TransCredibilitySignalsLink,
+  TransHtmlDoubleLinkBreak,
+  TransHtmlSingleLinkBreak,
+  TransSupportedToolsLink,
+} from "../reusableTrans";
+import { Trans } from "react-i18next";
 
 const AssistantTextResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -183,17 +190,20 @@ const AssistantTextResult = () => {
             <Tooltip
               interactive={"true"}
               title={
-                <div
-                  className={"content"}
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      keyword("text_tooltip") +
-                      "<br>" +
-                      keyword("supported_tools_link") +
-                      "<br>" +
-                      keyword("credibility_signals_link"),
-                  }}
-                />
+                <>
+                  <Trans
+                    t={keyword}
+                    i18nKey="text_tooltip"
+                    components={{
+                      b: <b />,
+                      ul: <ul />,
+                      li: <li />,
+                    }}
+                  />
+                  <TransSupportedToolsLink keyword={keyword} />
+                  <TransHtmlDoubleLinkBreak keyword={keyword} />
+                  <TransCredibilitySignalsLink keyword={keyword} />
+                </>
               }
               classes={{ tooltip: classes.assistantTooltip }}
             >
@@ -265,9 +275,18 @@ const AssistantTextResult = () => {
                 classification={newsFramingResult.entities}
                 configs={newsFramingResult.configs}
                 titleText={newsFramingTitle}
-                helpDescription={
-                  keyword("news_framing_tooltip") +
-                  keyword("credibility_signals_link")
+                categoriesTooltipContent={
+                  <>
+                    <Trans
+                      t={keyword}
+                      i18nKey="news_framing_tooltip"
+                      components={{
+                        ul: <ul />,
+                        li: <li />,
+                      }}
+                    />
+                    <TransCredibilitySignalsLink keyword={keyword} />
+                  </>
                 }
                 textHtmlMap={textHtmlMap}
                 credibilitySignal={keyword("news_framing_title")}
@@ -289,9 +308,18 @@ const AssistantTextResult = () => {
                 classification={newsGenreResult.entities}
                 configs={newsGenreResult.configs}
                 titleText={newsGenreTitle}
-                helpDescription={
-                  keyword("news_genre_tooltip") +
-                  keyword("credibility_signals_link")
+                categoriesTooltipContent={
+                  <>
+                    <Trans
+                      t={keyword}
+                      i18nKey="news_genre_tooltip"
+                      components={{
+                        ul: <ul />,
+                        li: <li />,
+                      }}
+                    />
+                    <TransCredibilitySignalsLink keyword={keyword} />
+                  </>
                 }
                 textHtmlMap={textHtmlMap}
                 credibilitySignal={keyword("news_genre_title")}
@@ -313,9 +341,18 @@ const AssistantTextResult = () => {
                 classification={persuasionResult.entities}
                 configs={persuasionResult.configs}
                 titleText={persuasionTitle}
-                helpDescription={
-                  keyword("persuasion_techniques_tooltip") +
-                  keyword("credibility_signals_link")
+                categoriesTooltipContent={
+                  <>
+                    <Trans
+                      t={keyword}
+                      i18nKey="persuasion_techniques_tooltip"
+                      components={{
+                        ul: <ul />,
+                        li: <li />,
+                      }}
+                    />
+                    <TransCredibilitySignalsLink keyword={keyword} />
+                  </>
                 }
                 textHtmlMap={textHtmlMap}
               />
@@ -336,10 +373,12 @@ const AssistantTextResult = () => {
                 classification={subjectivityResult.entities}
                 configs={subjectivityResult.configs}
                 titleText={subjectivityTitle}
-                helpDescription={
-                  keyword("subjectivity_tooltip") +
-                  "<br><br>" +
-                  keyword("credibility_signals_link")
+                categoriesTooltipContent={
+                  <>
+                    <Trans t={keyword} i18nKey="subjectivity_tooltip" />
+                    <TransHtmlDoubleLinkBreak keyword={keyword} />
+                    <TransCredibilitySignalsLink keyword={keyword} />
+                  </>
                 }
                 textHtmlMap={textHtmlMap}
                 credibilitySignal={keyword("subjectivity_title")}
