@@ -94,6 +94,17 @@ const AssistantNEResult = () => {
       headerAlign: "center",
       minWidth: 100,
       flex: 1,
+      renderCell: (params) => {
+        return (
+          <Link
+            href={"https://www.google.com/search?q=" + params.row.value}
+            rel="noopener noreferrer"
+            target={"_blank"}
+          >
+            {params.row.value}
+          </Link>
+        );
+      },
     },
     {
       field: "category",
