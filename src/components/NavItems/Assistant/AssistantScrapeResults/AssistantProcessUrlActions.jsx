@@ -28,6 +28,7 @@ import {
   resetSyntheticImageDetectionImage,
   setSyntheticImageDetectionUrl,
 } from "../../../../redux/actions/tools/syntheticImageDetectionActions";
+import { Trans } from "react-i18next";
 
 const AssistantProcessUrlActions = () => {
   const classes = useMyStyles();
@@ -110,11 +111,7 @@ const AssistantProcessUrlActions = () => {
                     secondary={
                       <Typography color={"textSecondary"} component={"span"}>
                         <Box fontStyle="italic">
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html: keyword(action.text),
-                            }}
-                          ></div>
+                          <Trans t={keyword} i18nKey={action.text} />
                         </Box>
                       </Typography>
                     }
