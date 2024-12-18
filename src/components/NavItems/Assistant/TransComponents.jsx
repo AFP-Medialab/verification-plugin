@@ -1,14 +1,13 @@
 import { Trans } from "react-i18next";
-import { Link } from "react-router-dom";
 
 export function TransSupportedToolsLink({ keyword }) {
   return (
     <Trans
       t={keyword}
-      i18nKey="supported_tools_link" // link not working, pointing to plugin itself
+      i18nKey="supported_tools_link"
       components={{
         supportedToolsLink: (
-          <Link
+          <a
             href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools"
             target="_blank"
             rel="noopener noreferrer"
@@ -23,10 +22,10 @@ export function TransSupportedUrlsLink({ keyword }) {
   return (
     <Trans
       t={keyword}
-      i18nKey="supported_urls_link" // link not working, pointing to plugin itself
+      i18nKey="supported_urls_link"
       components={{
         supportedUrlsLink: (
-          <Link
+          <a
             href="https://gatenlp.github.io/we-verify-app-assistant/supported-urls"
             target="_blank"
             rel="noopener noreferrer"
@@ -41,10 +40,10 @@ export function TransUrlDomainAnalysisLink({ keyword }) {
   return (
     <Trans
       t={keyword}
-      i18nKey="url_domain_analysis_link" // link not working, pointing to plugin itself
+      i18nKey="url_domain_analysis_link"
       components={{
         urlDomainAnalysisLink: (
-          <Link
+          <a
             href="https://gatenlp.github.io/domain-analysis-lists/"
             target="_blank"
             rel="noopener noreferrer"
@@ -59,10 +58,10 @@ export function TransNamedEntityRecogniserLink({ keyword }) {
   return (
     <Trans
       t={keyword}
-      i18nKey="named_entity_link" // link not working, pointing to plugin itself
+      i18nKey="named_entity_link"
       components={{
         namedEntityRecogniserLink: (
-          <Link
+          <a
             href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#named-entity-recogniser"
             target="_blank"
             rel="noopener noreferrer"
@@ -77,10 +76,10 @@ export function TransCredibilitySignalsLink({ keyword }) {
   return (
     <Trans
       t={keyword}
-      i18nKey="credibility_signals_link" // link not working, pointing to plugin itself
+      i18nKey="credibility_signals_link"
       components={{
         credibilitySignalsLink: (
-          <Link
+          <a
             href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#credibility-signals"
             target="_blank"
             rel="noopener noreferrer"
