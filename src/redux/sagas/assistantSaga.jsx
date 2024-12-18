@@ -479,7 +479,7 @@ function* handleSubjectivityCall(action) {
       for (let i = 0; i < textChunks.length; i += 1) {
         console.log(
           "Subjectivity service: sending text chunk",
-          i,
+          i + 1,
           "/",
           textChunks.length,
         );
@@ -488,6 +488,8 @@ function* handleSubjectivityCall(action) {
           textChunks[i],
         );
 
+        console.log(i, textChunkResult);
+
         // merge results
         if (i == 0) {
           result = textChunkResult;
@@ -495,10 +497,13 @@ function* handleSubjectivityCall(action) {
           // add step to sentences indices and Important_Sentence indices
           step = i * SERVER_TIMEOUT_LIMIT;
 
+          // merge Important_Sentence if any exist
           let stepImportantSentences = [];
           for (
             let j = 0;
-            j < textChunkResult.entities.Important_Sentence.length;
+            j < textChunkResult.entities
+              ? textChunkResult.entities.Important_Sentence.length
+              : null;
             j += 1
           ) {
             let importantSentence =
@@ -512,6 +517,8 @@ function* handleSubjectivityCall(action) {
               score: importantSentence.score,
             });
           }
+
+          // merge sentences
           let stepSentences = [];
           for (let k = 0; k < textChunkResult.sentences.length; k += 1) {
             let sentence = textChunkResult.sentences[k];
@@ -560,43 +567,14 @@ function* handlePrevFactChecksCall(action) {
     if (text && role.includes("BETA_TESTER")) {
       yield put(setPrevFactChecksDetails(null, true, false, false));
 
-      // collect chunks of text
-      const textChunks = getTextChunks(text);
+      const result = yield call(
+        assistantApi.callPrevFactChecksService,
+        text.substring(0, URL_BUFFER_LIMIT),
+      );
 
-      // chunk text
-      console.log("pfc text.length =", text.length);
-
-      // collect results for each chunk
-      let factChecksResult = [];
-      let step = 0;
-      for (let i = 0; i < textChunks.length; i += 1) {
-        console.log(
-          "Previous fact-checks service: sending text chunk",
-          i,
-          "/",
-          textChunks.length,
-        );
-        const textChunkResult = yield call(
-          assistantApi.callPrevFactChecksService,
-          textChunks[i],
-        );
-
-        // need to find a link which has a previous fact check detected to test this
-        // https://www.breitbart.com/europe/2024/10/21/moldova-votes-in-favour-of-eu-membership-by-razor-thin-majority/
-
-        // merge results
-        if (i == 0) {
-          factChecksResult = textChunkResult.fact_checks;
-        } else {
-          for (let j = 0; j < textChunkResult.fact_checks.length; j += 1) {
-            factChecksResult.push(textChunkResult.fact_checks[j]);
-          }
-        }
-      }
-
-      console.log("PFC results=", factChecksResult);
-
-      yield put(setPrevFactChecksDetails(factChecksResult, false, true, false));
+      yield put(
+        setPrevFactChecksDetails(result.fact_checks, false, true, false),
+      );
     }
   } catch (error) {
     yield put(setPrevFactChecksDetails(null, false, false, true));
@@ -615,63 +593,12 @@ function* handleMachineGeneratedTextCall(action) {
     if (text && role.includes("BETA_TESTER")) {
       yield put(setMachineGeneratedTextDetails(null, true, false, false));
 
-      // collect chunks of text
-      const textChunks = getTextChunks(text);
-
-      // collect results for each chunk
-      let result = {};
-      let step = 0;
-      let score = 0;
-      for (let i = 0; i < textChunks.length; i += 1) {
-        console.log(
-          "Machine Generated Text service: sending text chunk",
-          i,
-          "/",
-          textChunks.length,
-        );
-        const textChunkResult = yield call(
-          assistantApi.callMachineGeneratedTextService,
-          textChunks[i],
-        );
-
-        // merge results
-        if (i == 0) {
-          result = [textChunkResult];
-        } else {
-          result.push(textChunkResult);
-        }
-      }
-
-      // find overall result by summing scores and dividing each by length of textChunk
-      let overallResult = {
-        pred: null,
-        score: 0,
-      };
-      for (let i = 0; i < textChunks.length; i += 1) {
-        // loop through results and textChunks for length
-        overallResult.score += result[i].score * textChunks[i].length;
-      }
-
-      // overall score
-      overallResult.score = overallResult.score / text.length;
-      // overall prediction
-      if (0 <= score < 0.05) {
-        overallResult.pred = "highly_likely_human";
-      } else if (0.05 <= score < 0.5) {
-        overallResult.pred = "likely_human";
-      } else if (0.5 <= score < 0.95) {
-        overallResult.pred = "likely_machine";
-      } else if (0.95 <= score <= 1) {
-        overallResult.pred = "highly_likely_machine";
-      } else {
-        overallResult.pred = "failed_to_load";
-      }
-
-      console.log("MGT results=", result, overallResult);
-
-      yield put(
-        setMachineGeneratedTextDetails(overallResult, false, true, false),
+      const result = yield call(
+        assistantApi.callMachineGeneratedTextService,
+        text.substring(0, URL_BUFFER_LIMIT),
       );
+
+      yield put(setMachineGeneratedTextDetails(result, false, true, false));
     }
   } catch (error) {
     yield put(setMachineGeneratedTextDetails(null, false, false, true));
