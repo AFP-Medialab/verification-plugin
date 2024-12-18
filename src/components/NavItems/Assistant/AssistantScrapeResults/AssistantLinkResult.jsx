@@ -30,7 +30,7 @@ import {
   TransHtmlDoubleLinkBreak,
   TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
-} from "../reusableTrans";
+} from "../TransComponents";
 
 // render status for extracted urls
 const Status = (params) => {

@@ -31,7 +31,7 @@ import {
   TransCredibilitySignalsLink,
   TransHtmlDoubleLinkBreak,
   TransHtmlSingleLinkBreak,
-} from "../reusableTrans.jsx";
+} from "../TransComponents";
 import { Trans } from "react-i18next";
 
 const renderEntityKeys = (entities, keyword) => {

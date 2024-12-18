@@ -29,7 +29,7 @@ import {
   TransHtmlDoubleLinkBreak,
   TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
-} from "../reusableTrans";
+} from "../TransComponents";
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />

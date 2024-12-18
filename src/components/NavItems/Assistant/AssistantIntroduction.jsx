@@ -23,7 +23,7 @@ import {
   TransHtmlDoubleLinkBreak,
   TransSupportedUrlsLink,
   TransSupportedToolsLink,
-} from "./reusableTrans";
+} from "./TransComponents";
 import { Trans } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -112,6 +112,7 @@ const AssistantIntroduction = (props) => {
                   />
                   <TransHtmlDoubleLinkBreak keyword={keyword} />
                   <Trans t={keyword} i18nKey="assistant_help_1" />
+                  <TransHtmlDoubleLinkBreak keyword={keyword} />
                   <Trans
                     t={keyword}
                     i18nKey="assistant_help_2"
@@ -122,17 +123,6 @@ const AssistantIntroduction = (props) => {
                     }}
                   />
                   <TransSupportedToolsLink keyword={keyword} />
-                  <TransHtmlDoubleLinkBreak keyword={keyword} />
-                  <Trans
-                    t={keyword}
-                    i18nKey="assistant_help_3" // update this for bluesky and vk and others?
-                    components={{
-                      b: <b />,
-                      ul: <ul />,
-                      li: <li />,
-                    }}
-                  />
-                  <TransSupportedUrlsLink keyword={keyword} />
                 </>
               }
               classes={{ tooltip: classes.assistantTooltip }}

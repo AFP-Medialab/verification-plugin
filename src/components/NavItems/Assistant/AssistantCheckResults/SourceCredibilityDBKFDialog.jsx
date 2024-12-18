@@ -17,10 +17,10 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { Chip, Grid2, Tooltip } from "@mui/material";
 import {
+  TransHtmlDoubleLinkBreak,
   TransSourceCredibilityTooltip,
-  TransHtmlDoubleLineBreak,
   TransUrlDomainAnalysisLink,
-} from "../reusableTrans";
+} from "../TransComponents";
 
 const SourceCredibilityDBKFDialog = (props) => {
   //central

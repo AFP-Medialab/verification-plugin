@@ -24,7 +24,7 @@ import {
   TransHtmlDoubleLinkBreak,
   TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
-} from "../reusableTrans";
+} from "../TransComponents";
 
 const AssistantSCResults = () => {
   // central

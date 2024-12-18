@@ -32,7 +32,7 @@ import {
   TransHtmlDoubleLinkBreak,
   TransHtmlSingleLinkBreak,
   TransSupportedToolsLink,
-} from "../reusableTrans";
+} from "../TransComponents";
 import { Trans } from "react-i18next";
 
 const AssistantTextResult = () => {

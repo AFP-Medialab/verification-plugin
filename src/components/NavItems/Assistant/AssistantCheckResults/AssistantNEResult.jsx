@@ -26,7 +26,7 @@ import { Trans } from "react-i18next";
 import {
   TransHtmlDoubleLinkBreak,
   TransNamedEntityRecogniserLink,
-} from "../reusableTrans";
+} from "../TransComponents";
 
 const AssistantNEResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");

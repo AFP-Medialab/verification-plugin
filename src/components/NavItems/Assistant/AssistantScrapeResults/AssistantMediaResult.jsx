@@ -29,7 +29,7 @@ import { WarningAmber } from "@mui/icons-material";
 import {
   TransHtmlDoubleLinkBreak,
   TransSupportedToolsLink,
-} from "../reusableTrans";
+} from "../TransComponents";
 import { Trans } from "react-i18next";
 import { Link } from "react-router-dom";
 
