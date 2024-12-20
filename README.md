@@ -81,6 +81,35 @@ The Verification plugin is a browser based plugin built with React and Redux.
   npm run build 
   ```
 
+## Translations
+
+The plugin is translated into 8 languages: English, French, Spanish, Greek, Italian, Arabic, German and Japanese.
+
+InVID-Translations repository: https://github.com/AFP-Medialab/InVID-Translations
+- Update the relevant translations file using tabs to separate the translations
+- For quotation marks, use single quotation `'` as `"` is not allowed
+- Set `REACT_APP_TRANSLATION_URL` to either the staging URL
+    - Register as a staging user to be granted access
+    - Prevents test and page visits being added to production analytics server
+    - Use when working on translations as this is a non-cached translation and a page refresh will show the changes
+- Set `REACT_APP_TRANSLATION_URL` to either the production URL
+    - There is a caching mechanism meaning changes are shown once the cache is reset (~once a day) 
+    - you will only need to refresh the page to see your new translation changes. On the other hand, if you use the prod URl we - Set `REACT_APP_TRANSLATION_TAG` to the branch in the InVID translations currently being worked on
+
+
+### Offline Translations
+
+Scripts for creating the offline translations are in this repository: https://github.com/AFP-Medialab/vera-python-scripts
+
+For offline translations, edit and run [https://github.com/AFP-Medialab/vera-python-scripts/weverify-plugin/local-languages.ipynb](https://github.com/AFP-Medialab/vera-python-scripts/weverify-plugin/local-languages.ipynb) to generate the JSON files
+- Edit `invid_translation_project_path=<TRANSLATIONS-PATH>` to local folder for the InVID-Translations
+- Edit `TARGET_PROJECT_HOME=<FRONTEND-PATH>` to local Verification Plugin folder
+- If `write_to_file = True` then the `tsv` to `JSON` conversion will be done, otherwise it will just do a dry run
+- Generates English: `public/locales/en/components/NavItems/tools/Assistant.json`
+- Generates Arabic: `public/locales/ar/components/NavItems/tools/Assistant.json`
+- This script is run before deployment so it's not necessary to run manually
+
+
 ## Load the extension on the browser
 
 #### Google Chrome / Chromium-based browsers
