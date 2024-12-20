@@ -87,7 +87,7 @@ The plugin is translated into 8 languages: English, French, Spanish, Greek, Ital
 
 InVID-Translations repository: https://github.com/AFP-Medialab/InVID-Translations
 - Update the relevant translations file using tabs to separate the translations
-- For quotation marks, use single quotation `'` as `"` is not allowed
+- For quotation marks, use single quotation mark `'` as double quotation marks `"` are not allowed
 - Set `REACT_APP_TRANSLATION_URL` to the staging URL
     - Register as a staging user to be granted access
     - Prevents test and page visits being added to production analytics server
