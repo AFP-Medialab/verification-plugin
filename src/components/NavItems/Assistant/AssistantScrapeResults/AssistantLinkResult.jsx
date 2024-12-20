@@ -20,7 +20,12 @@ import { DataGrid, getGridSingleSelectOperators } from "@mui/x-data-grid";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import ExtractedSourceCredibilityResult from "../AssistantCheckResults/ExtractedSourceCredibilityResult";
+import { TextCopy } from "../../../Shared/Utils/TextCopy";
+import Tooltip from "@mui/material/Tooltip";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import { CheckCircleOutline, TaskAltOutlined } from "@mui/icons-material";
+import { DataGrid, getGridSingleSelectOperators } from "@mui/x-data-grid";
+import ExtractedUrlDomainAnalysisResults from "../AssistantCheckResults/ExtractedUrlDomainAnalysisResults";
 import {
   TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,
@@ -94,12 +99,13 @@ const Details = (params) => {
     >
       {<TextCopy text={params.url} index={params.url} />}
       {params.done && params.domainOrAccount !== null && (
-        <ExtractedSourceCredibilityResult
+        <UrlDomainAnalysisResults
           extractedSourceCredibilityResults={params.urlResults}
           url={params.urlResults.resolvedLink}
           domainOrAccount={params.domainOrAccount}
           urlColor={params.urlColor}
           sourceTypes={params.sourceTypes}
+          trafficLightColors={params.trafficLightColors}
         />
       )}
       {params.loading && <Skeleton variant="rounded" height={20} width={20} />}
@@ -143,16 +149,10 @@ const AssistantLinkResult = () => {
   const trafficLightColors = useSelector(
     (state) => state.assistant.trafficLightColors,
   );
+  const sourceTypes = useSelector((state) => state.assistant.sourceTypes);
 
   const urls =
     inputSCDone && extractedLinks ? extractedLinks : linkList ? linkList : null;
-
-  const sourceTypes = {
-    positive: "fact_checker",
-    mixed: "mentions",
-    caution: "warning",
-    unlabelled: "unlabelled",
-  };
 
   // create a row for each url
   let rows = [];
@@ -168,7 +168,14 @@ const AssistantLinkResult = () => {
     };
     let sortByDetails = false;
     let domainOrAccount = null;
-    let sourceTypeList = [sourceTypes.unlabelled];
+    const unlabelled = "unlabelled";
+    let sourceTypeList = [
+      sourceTypes
+        ? sourceTypes.unlabelled
+          ? unlabelled
+          : unlabelled
+        : unlabelled,
+    ];
 
     if (extractedSourceCred) {
       urlResults = extractedSourceCred[url];
@@ -221,9 +228,11 @@ const AssistantLinkResult = () => {
         done: inputSCDone,
         fail: inputSCFail,
         urlResults: urlResults,
+        url: url,
         urlColor: urlColor,
-        sourceTypes: sourceTypes,
         domainOrAccount: domainOrAccount,
+        sourceTypes: sourceTypes,
+        trafficLightColors: trafficLightColors,
         sortByDetails: sortByDetails,
       },
     });
@@ -297,9 +306,10 @@ const AssistantLinkResult = () => {
             fail={params.value.fail}
             urlResults={params.value.urlResults}
             url={params.value.url}
-            domainOrAccount={params.value.domainOrAccount}
             urlColor={params.value.urlColor}
+            domainOrAccount={params.value.domainOrAccount}
             sourceTypes={params.value.sourceTypes}
+            trafficLightColors={params.value.trafficLightColors}
           />
         );
       },
