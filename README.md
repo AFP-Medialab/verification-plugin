@@ -88,13 +88,13 @@ The plugin is translated into 8 languages: English, French, Spanish, Greek, Ital
 InVID-Translations repository: https://github.com/AFP-Medialab/InVID-Translations
 - Update the relevant translations file using tabs to separate the translations
 - For quotation marks, use single quotation `'` as `"` is not allowed
-- Set `REACT_APP_TRANSLATION_URL` to either the staging URL
+- Set `REACT_APP_TRANSLATION_URL` to the staging URL
     - Register as a staging user to be granted access
     - Prevents test and page visits being added to production analytics server
     - Use when working on translations as this is a non-cached translation and a page refresh will show the changes
-- Set `REACT_APP_TRANSLATION_URL` to either the production URL
+- Set `REACT_APP_TRANSLATION_URL` to the production URL
     - There is a caching mechanism meaning changes are shown once the cache is reset (~once a day) 
-    - you will only need to refresh the page to see your new translation changes. On the other hand, if you use the prod URl we - Set `REACT_APP_TRANSLATION_TAG` to the branch in the InVID translations currently being worked on
+    - Set `REACT_APP_TRANSLATION_TAG` to the branch in the InVID translations currently being worked on
 
 
 ### Offline Translations
@@ -107,7 +107,7 @@ For offline translations, edit and run [https://github.com/AFP-Medialab/vera-pyt
 - If `write_to_file = True` then the `tsv` to `JSON` conversion will be done, otherwise it will just do a dry run
 - Generates English: `public/locales/en/components/NavItems/tools/Assistant.json`
 - Generates Arabic: `public/locales/ar/components/NavItems/tools/Assistant.json`
-- This script is run before deployment so it's not necessary to run manually
+- This script is run before deployment so it's not necessary to run everytime there is an update
 
 
 ## Load the extension on the browser
