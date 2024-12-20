@@ -14,11 +14,11 @@ import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 import SentimentSatisfied from "@mui/icons-material/SentimentSatisfied";
 
 import { setAssuranceExpanded } from "../../../../redux/actions/tools/assistantActions";
-import SourceCredibilityResult from "../AssistantCheckResults/SourceCredibilityResult";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { renderAccordion } from "../AssistantCheckResults/assistantUtils";
 
 const AssistantSCResults = () => {
   // central
@@ -39,20 +39,35 @@ const AssistantSCResults = () => {
   const mixedSourceCred = useSelector(
     (state) => state.assistant.mixedSourceCred,
   );
+  const inputUrl = useSelector((state) => state.assistant.inputUrl);
   const trafficLightColors = useSelector(
     (state) => state.assistant.trafficLightColors,
   );
+  const sourceTypes = useSelector((state) => state.assistant.sourceTypes);
 
-  // define types of source credibility
-  // also defined in AssistantLinkResult - move to redux?
-  const sourceTypes = {
-    caution: "warning",
-    mixed: "mentions",
-    positive: "fact_checker",
-  };
+  // passing through correct colours for details here
+  const sourceCredibility = [
+    [cautionSourceCred, trafficLightColors.caution, sourceTypes.caution],
+    [mixedSourceCred, trafficLightColors.mixed, sourceTypes.mixed],
+    [positiveSourceCred, trafficLightColors.positive, sourceTypes.positive],
+  ];
+
+  // find colour for URL
+  const urlColor =
+    cautionSourceCred.length > 0
+      ? trafficLightColors.caution
+      : mixedSourceCred.length > 0
+        ? trafficLightColors.mixed
+        : positiveSourceCred.length > 0
+          ? trafficLightColors.positive
+          : trafficLightColors.unlabelled;
 
   return (
-    <Card variant={"outlined"} className={classes.sourceCredibilityBorder}>
+    <Card
+      variant={"outlined"}
+      className={classes.sourceCredibilityBorder}
+      height="400"
+    >
       <Grid2 container>
         <Grid2 size={{ xs: 11 }} className={classes.displayFlex}>
           {/* icon */}
@@ -109,50 +124,9 @@ const AssistantSCResults = () => {
             className={classes.assistantBackground}
           >
             <Box mt={3} ml={2}>
-              {positiveSourceCred && positiveSourceCred.length > 0 ? (
-                <div>
-                  <Chip
-                    label={keyword("fact_checker")}
-                    color={trafficLightColors.positive}
-                  />
-                  <SourceCredibilityResult
-                    scResultFiltered={positiveSourceCred}
-                    icon={CheckCircleOutlineIcon}
-                    iconColor={trafficLightColors.positive}
-                    sourceType={sourceTypes.positive}
-                  />
-                </div>
-              ) : null}
-
-              {cautionSourceCred && cautionSourceCred.length > 0 ? (
-                <div>
-                  <Chip
-                    label={keyword("warning_title")}
-                    color={trafficLightColors.caution}
-                  />
-                  <SourceCredibilityResult
-                    scResultFiltered={cautionSourceCred}
-                    icon={ErrorOutlineOutlinedIcon}
-                    iconColor={trafficLightColors.caution}
-                    sourceType={sourceTypes.caution}
-                  />
-                </div>
-              ) : null}
-
-              {mixedSourceCred && mixedSourceCred.length > 0 ? (
-                <div>
-                  <Chip
-                    label={keyword("mentions")}
-                    color={trafficLightColors.mixed}
-                  />
-                  <SourceCredibilityResult
-                    scResultFiltered={mixedSourceCred}
-                    icon={SentimentSatisfied}
-                    iconColor={trafficLightColors.mixed}
-                    sourceType={sourceTypes.mixed}
-                  />
-                </div>
-              ) : null}
+              {sourceCredibility
+                ? renderAccordion(keyword, sourceCredibility, (scroll = true))
+                : null}
             </Box>
           </Collapse>
         </Grid2>
