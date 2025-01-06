@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
-import { useSelector } from "react-redux";
-//import 'tui-image-editor/dist/tui-image-editor.css'
+import { useDispatch, useSelector } from "react-redux"; //import 'tui-image-editor/dist/tui-image-editor.css'
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -13,20 +12,18 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { useParams, useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 import { CONTENT_TYPE, KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
 import MetadataIcon from "../../../NavBar/images/SVG/Image/Metadata.svg";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-
-import { useDispatch } from "react-redux";
 import { setMetadataMediaType } from "../../../../redux/reducers/tools/metadataReducer";
 
 import { Alert, Stack } from "@mui/material";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
+import exifr from "exifr";
 
 const Metadata = ({ mediaType }) => {
   const { url, type } = useParams();
@@ -34,6 +31,9 @@ const Metadata = ({ mediaType }) => {
 
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Metadata");
+
+  const keywordTip = i18nLoadNamespace("components/Shared/OnClickInfo");
+
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
   );
@@ -52,6 +52,16 @@ const Metadata = ({ mediaType }) => {
   const [imageUrl, setImageurl] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
   const [urlDetected, setUrlDetected] = useState(false);
+
+  const [imageMetadata, setImageMetadata] = useState(null);
+  const exifrOptions = {
+    exif: true,
+    gps: true,
+    iptc: true,
+    jfif: true,
+    tiff: true,
+    mergeOutput: false,
+  };
 
   useVideoTreatment(videoUrl, keyword);
   useImageTreatment(imageUrl, keyword);
@@ -75,24 +85,28 @@ const Metadata = ({ mediaType }) => {
     videoUrl,
     uid,
   );
-  const submitUrl = () => {
+  const submitUrl = async () => {
     if (input) {
       /* trackEvent(
-        "submission",
-        "metadata",
-        "extract metadata",
-        input,
-        client_id,
-        uid
-      );*/
+                                                                                      "submission",
+                                                                                      "metadata",
+                                                                                      "extract metadata",
+                                                                                      input,
+                                                                                      client_id,
+                                                                                      uid
+                                                                                    );*/
       if (radioImage) {
         setImageurl(input);
+        // const metadata = await exifr.parse(input, exifrOptions);
+        // setImageMetadata(metadata);
       } else {
         setVideoUrl(input);
       }
     } else if (fileInput) {
       if (radioImage) {
         setImageurl(URL.createObjectURL(fileInput));
+        const metadata = await exifr.parse(fileInput, exifrOptions);
+        setImageMetadata(metadata);
       } else {
         setVideoUrl(URL.createObjectURL(fileInput));
       }
@@ -159,7 +173,7 @@ const Metadata = ({ mediaType }) => {
   };
 
   return (
-    <div>
+    <Box>
       <HeaderTool
         name={keywordAllTools("navbar_metadata")}
         description={keywordAllTools("navbar_metadata_description")}
@@ -173,17 +187,13 @@ const Metadata = ({ mediaType }) => {
       />
       <Stack direction={"column"} spacing={2}>
         <Alert severity="info">{keyword("description_limitations")}</Alert>
+        <Alert severity="info">{keywordTip("metadata_tip")}</Alert>
       </Stack>
 
-      <Box m={3} />
+      <Box m={4} />
 
-      <Card>
-        <CardHeader
-          title={keyword("cardheader_source")}
-          className={classes.headerUploadedImage}
-        />
-
-        <Box p={3}>
+      <Card variant="outlined">
+        <Box p={4}>
           <RadioGroup
             aria-label="position"
             name="position"
@@ -222,13 +232,14 @@ const Metadata = ({ mediaType }) => {
           />
         </Box>
       </Card>
-      <Box m={3} />
+      <Box m={4} />
       {resultData ? (
         resultIsImage ? (
           <MetadataImageResult
             result={resultData}
-            image={resultUrl}
+            metadata={imageMetadata}
             closeResult={handleCloseResult}
+            imageSrc={resultUrl}
           />
         ) : (
           <MetadataVideoResult
@@ -237,7 +248,7 @@ const Metadata = ({ mediaType }) => {
           />
         )
       ) : null}
-    </div>
+    </Box>
   );
 };
 export default Metadata;

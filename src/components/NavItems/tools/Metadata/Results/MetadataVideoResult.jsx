@@ -12,7 +12,6 @@ import { cleanMetadataState } from "../../../../../redux/reducers/tools/metadata
 import Button from "@mui/material/Button";
 import MapIcon from "@mui/icons-material/Map";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import { IconButton } from "@mui/material";
@@ -361,8 +360,6 @@ const MetadataVideoResult = (props) => {
         }
       />
       <div className={classes.root2}>
-        <Box m={1} />
-        <OnClickInfo keyword={"metadata_tip"} />
         <Box m={3} />
         <Typography variant={"h5"}>{keyword("metadata_title")}</Typography>
         <div>
