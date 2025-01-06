@@ -90,6 +90,9 @@ const AssistantMediaResult = () => {
         image.onload = () => {
           resolve({ url: imageUrl, width: image.width, height: image.height });
         };
+        image.onerror = () => {
+          resolve({ url: imageUrl, width: null, height: null });
+        };
       });
     });
 
@@ -108,7 +111,7 @@ const AssistantMediaResult = () => {
   return (
     <Card
       data-testid="url-media-results"
-      hidden={!urlMode || (!imageList.length && !videoList.length)}
+      hidden={!urlMode || (!filteredImageList.length && !videoList.length)}
       //width={window.innerWidth}
     >
       <CardHeader
