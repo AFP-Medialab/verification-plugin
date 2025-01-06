@@ -26,6 +26,13 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "../../../Shared/VideoGridList/VideoGridList";
 import { WarningAmber } from "@mui/icons-material";
 
+import {
+  TransHtmlDoubleLinkBreak,
+  TransSupportedToolsLink,
+} from "../TransComponents";
+import { Trans } from "react-i18next";
+import { Link } from "react-router-dom";
+
 const AssistantMediaResult = () => {
   const classes = useMyStyles();
   const dispatch = useDispatch();
@@ -83,6 +90,9 @@ const AssistantMediaResult = () => {
         image.onload = () => {
           resolve({ url: imageUrl, width: image.width, height: image.height });
         };
+        image.onerror = () => {
+          resolve({ url: imageUrl, width: null, height: null });
+        };
       });
     });
 
@@ -101,7 +111,7 @@ const AssistantMediaResult = () => {
   return (
     <Card
       data-testid="url-media-results"
-      hidden={!urlMode || (!imageList.length && !videoList.length)}
+      hidden={!urlMode || (!filteredImageList.length && !videoList.length)}
       //width={window.innerWidth}
     >
       <CardHeader
@@ -129,12 +139,17 @@ const AssistantMediaResult = () => {
               <Tooltip
                 interactive={"true"}
                 title={
-                  <div
-                    className={"content"}
-                    dangerouslySetInnerHTML={{
-                      __html: keyword("media_tooltip"),
-                    }}
-                  />
+                  <>
+                    <Trans
+                      t={keyword}
+                      i18nKey="media_tooltip"
+                      components={{
+                        b: <b />,
+                      }}
+                    />
+                    <TransHtmlDoubleLinkBreak keyword={keyword} />
+                    <TransSupportedToolsLink keyword={keyword} />
+                  </>
                 }
                 classes={{ tooltip: classes.assistantTooltip }}
               >

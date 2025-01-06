@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Card from "@mui/material/Card";
-import { CardHeader, Grid2, ListItemButton } from "@mui/material";
+import { CardHeader, Grid2, ListItemButton, Tooltip } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Collapse from "@mui/material/Collapse";
 import Divider from "@mui/material/Divider";
@@ -13,6 +13,10 @@ import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import LinearProgress from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
+import ListItem from "@mui/material/ListItem";
+import List from "@mui/material/List";
+import ListItemText from "@mui/material/ListItemText";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 //import ReactWordcloud from "react-wordcloud";
 import { TagCloud } from "react-tagcloud";
 import { select } from "d3-selection";
@@ -20,6 +24,11 @@ import "tippy.js/dist/tippy.css";
 import "tippy.js/animations/scale.css";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import { Trans } from "react-i18next";
+import {
+  TransHtmlDoubleLinkBreak,
+  TransNamedEntityRecogniserLink,
+} from "../TransComponents";
 
 const AssistantNEResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -173,6 +182,21 @@ const AssistantNEResult = () => {
         <CardHeader
           className={classes.assistantCardHeader}
           title={keyword("named_entity_title")}
+          action={
+            <Tooltip
+              interactive={"true"}
+              title={
+                <>
+                  <Trans t={keyword} i18nKey="named_entity_tooltip" />
+                  <TransHtmlDoubleLinkBreak keyword={keyword} />
+                  <TransNamedEntityRecogniserLink keyword={keyword} />
+                </>
+              }
+              classes={{ tooltip: classes.assistantTooltip }}
+            >
+              <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+            </Tooltip>
+          }
         />
         {neLoading && <LinearProgress />}
         <CardContent>
