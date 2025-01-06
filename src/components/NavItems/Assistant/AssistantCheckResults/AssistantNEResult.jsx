@@ -88,9 +88,11 @@ const AssistantNEResult = () => {
   const customRenderer = (tag, size, color) => {
     const { className, style, ...props } = tag.props || {};
     const fontSize = size + "px";
-    const key = tag.key || tag.value;
     const tagStyle = {
       ...styles,
+      "&:hover": {
+        color: "red !important",
+      },
       color: getWordColor(tag),
       textDecorationColor: getWordColor(tag),
       visibility: visibleCategories[tag.category.toLowerCase()]
@@ -100,22 +102,23 @@ const AssistantNEResult = () => {
       ...style,
     };
 
-    let tagClassName = "tag-cloud-tag";
+    let tagClassName = classes.tagCloudTag;
     if (className) {
       tagClassName += " " + className;
     }
 
     return (
-      <Link
-        key={key}
-        style={tagStyle}
-        className={tagClassName}
-        href={"https://www.google.com/search?q=" + tag.value}
-        rel="noopener noreferrer"
-        target={"_blank"}
-      >
-        {tag.value}
-      </Link>
+      <Tooltip key={tag.key || tag.value} title={tag.count} arrow>
+        <Link
+          style={tagStyle}
+          className={tagClassName}
+          href={"https://www.google.com/search?q=" + tag.value}
+          rel="noopener noreferrer"
+          target={"_blank"}
+        >
+          {tag.value}
+        </Link>
+      </Tooltip>
     );
   };
 
@@ -168,7 +171,6 @@ const AssistantNEResult = () => {
               <TagCloud
                 tags={neResultCount}
                 shuffle={false}
-                key={JSON.stringify(visibleCategories)} // This key will change when filteredData changes
                 minSize={20}
                 maxSize={45}
                 renderer={customRenderer}

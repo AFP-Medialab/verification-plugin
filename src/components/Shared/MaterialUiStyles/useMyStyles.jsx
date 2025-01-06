@@ -12,27 +12,13 @@ const styles = (theme) => ({
   },
 
   namedEntityButtonHidden: {
-    "text-decoration": "line-through !important",
-    "&:after": {
-      background: "rgba(0, 0, 0, 0.3)",
-      content: '" "',
-      position: "absolute",
-      top: 0,
-      bottom: 0,
-      left: 0,
-      right: 0,
-    },
-    "&.MuiButtonGroup-firstButton": {
-      "&:after": {
-        "border-top-left-radius": "4px",
-        "border-bottom-left-radius": "4px",
-      },
-    },
-    "&.MuiButtonGroup-lastButton": {
-      "&:after": {
-        "border-top-right-radius": "4px",
-        "border-bottom-right-radius": "4px",
-      },
+    textDecoration: "line-through !important",
+    filter: "brightness(80%)",
+  },
+
+  tagCloudTag: {
+    "&:hover": {
+      filter: "brightness(80%)",
     },
   },
 
