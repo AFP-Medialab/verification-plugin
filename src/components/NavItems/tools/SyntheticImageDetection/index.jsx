@@ -89,7 +89,7 @@ const SyntheticImageDetection = () => {
 
   useEffect(() => {
     workerRef.current = new Worker(
-      new URL("../../../../workers/resizeImageWorker", import.meta.url),
+      new URL("@workers/resizeImageWorker", import.meta.url),
     );
 
     return () => {
@@ -104,7 +104,7 @@ const SyntheticImageDetection = () => {
   const resizeImageWithWorker = (image) => {
     return new Promise((resolve, reject) => {
       const workerInstance = new Worker(
-        new URL("../../../../workers/resizeImageWorker", import.meta.url),
+        new URL("@workers/resizeImageWorker", import.meta.url),
       );
       workerInstance.postMessage(image);
 
