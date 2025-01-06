@@ -24,6 +24,12 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { getUrlTypeFromCredScope } from "./assistantUtils";
 import { Chip, Grid2, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { Trans } from "react-i18next";
+import {
+  TransHtmlDoubleLinkBreak,
+  TransSourceCredibilityTooltip,
+  TransUrlDomainAnalysisLink,
+} from "../TransComponents";
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -162,12 +168,11 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                 leaveDelay={50}
                 style={{ display: "flex", marginLeft: "auto" }}
                 title={
-                  <div
-                    className={"content"}
-                    dangerouslySetInnerHTML={{
-                      __html: keyword("sc_tooltip"),
-                    }}
-                  />
+                  <>
+                    <TransSourceCredibilityTooltip keyword={keyword} />
+                    <TransHtmlDoubleLinkBreak keyword={keyword} />
+                    <TransUrlDomainAnalysisLink keyword={keyword} />
+                  </>
                 }
                 classes={{ tooltip: classes.assistantTooltip }}
               >
