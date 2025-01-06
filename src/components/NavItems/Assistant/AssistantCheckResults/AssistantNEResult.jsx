@@ -56,83 +56,26 @@ const AssistantNEResult = () => {
     });
   };
 
-  function getCallback(callback) {
-    return function (word, event) {
-      const isActive = callback !== "onWordMouseOut";
-      const element = event.target;
-      const text = select(element);
-      text
-        .on("click", () => {
-          if (isActive) {
-            window.open(`https://google.com/search?q=${word.text}`, "_blank");
-          }
-        })
-        .transition()
-        .attr("text-decoration", isActive ? "underline" : "none");
-    };
-  }
-
-  const options = {
-    rotations: 1,
-    rotationAngles: [0],
-    fontSizes: [15, 60],
-  };
-
-  const callbacks = {
-    getWordColor: (word) => {
-      switch (word.category.toLowerCase()) {
-        case "person":
-          return "blue";
-        case "location":
-          return "red";
-        case "organization":
-          return "green";
-        case "hashtag":
-          return "orange";
-        case "userid":
-          return "purple";
-        default:
-          return "black";
-      }
-    },
-    getWordTooltip: (word) => {
-      return word.text + " (" + word.category + "): " + word.value;
-    },
-    onWordClick: getCallback("onWordClick"),
-    onWordMouseOut: getCallback("onWordMouseOut"),
-    onWordMouseOver: getCallback("onWordMouseOver"),
-  };
-
-  function getWordColor(tag, active = true) {
-    if (active) {
-      switch (tag.category.toLowerCase()) {
-        case "person":
-          return "blue";
-        case "location":
-          return "red";
-        case "organization":
-          return "green";
-        case "hashtag":
-          return "orange";
-        case "userid":
-          return "purple";
-        default:
-          return "black";
-      }
-    }
+  function getWordColor(tag) {
     switch (tag.category.toLowerCase()) {
       case "person":
-        return "darkblue";
+        return "#648FFF";
+      // return "blue";
       case "location":
-        return "darkred";
+        return "#DC267F";
+      // return "red";
       case "organization":
-        return "darkgreen";
+        return "#FFB000";
+      // return "green";
       case "hashtag":
-        return "darkorange";
+        return "#FE6100";
+      // return "orange";
       case "userid":
-        return "darkpurple";
+        return "#785EF0";
+      // return "purple";
       default:
-        return "gray";
+        return "black";
+      // return "black";
     }
   }
 
@@ -203,13 +146,15 @@ const AssistantNEResult = () => {
           <ButtonGroup>
             {neResult.map((tag, index) => (
               <Button
+                className={
+                  visibleCategories[tag.category.toLowerCase()]
+                    ? classes.namedEntityButtonHidden
+                    : ""
+                }
                 style={{
                   color: "white",
                   border: "none",
-                  backgroundColor: getWordColor(
-                    tag,
-                    !visibleCategories[tag.category.toLowerCase()],
-                  ),
+                  backgroundColor: getWordColor(tag),
                 }}
                 key={tag.category}
                 onClick={() => toggleCategory(tag.category.toLowerCase())}
