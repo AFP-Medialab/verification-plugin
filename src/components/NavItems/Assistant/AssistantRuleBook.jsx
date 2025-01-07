@@ -218,17 +218,6 @@ export const ASSISTANT_ACTIONS = [
     path: "tools/metadata",
   },
   {
-    title: "navbar_rights",
-    icon: <videoRights.icon sx={{ fontSize: "24px" }} />,
-    linksAccepted: [KNOWN_LINKS.YOUTUBE],
-    cTypes: [CONTENT_TYPE.VIDEO],
-    exceptions: [],
-    useInputUrl: true,
-    text: "rights_text",
-    tsvPrefix: "copyright",
-    path: "tools/copyright",
-  },
-  {
     title: "navbar_forensic",
     icon: <imageForensic.icon sx={{ fontSize: "24px" }} />,
     processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
