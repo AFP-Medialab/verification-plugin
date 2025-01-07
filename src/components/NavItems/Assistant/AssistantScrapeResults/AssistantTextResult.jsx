@@ -168,6 +168,15 @@ const AssistantTextResult = () => {
     };
   }
 
+  function scrollToElement(id, padding = 0) {
+    const element = document.getElementById(id);
+    if (element) {
+      const targetPosition =
+        element.getBoundingClientRect().top + window.scrollY - padding;
+      window.scrollTo({ top: targetPosition, behavior: "smooth" });
+    }
+  }
+
   return (
     <Card data-testid="assistant-text-scraped-text">
       <CardHeader
@@ -180,9 +189,10 @@ const AssistantTextResult = () => {
               <Tooltip title={keyword("text_warning")}>
                 <WarningOutlined
                   className={classes.toolTipWarning}
+                  sx={{ cursor: "pointer" }}
                   onClick={() => {
-                    dispatch(setWarningExpanded(!warningExpanded));
-                    window.scrollTo(0, 0);
+                    dispatch(setWarningExpanded(true));
+                    scrollToElement("warnings", 100);
                   }}
                 />
               </Tooltip>
