@@ -225,7 +225,7 @@ const Assistant = () => {
                   <AssistantWarnings />
                 </Grid2>
               ) : null}
-              
+
               {/* source crediblity//URL domain analysis results */}
               {positiveSourceCred || cautionSourceCred || mixedSourceCred ? (
                 <Grid2 size={{ xs: 12 }}>
@@ -254,16 +254,20 @@ const Assistant = () => {
                 ) : null}
               </Grid2>
 
+              {/* YouTube comments if video */}
+              {console.log("collectedComments=", collectedComments)}
+              {collectedComments ? (
+                <Grid2 size={12}>
+                  <AssistantCommentResult
+                    collectdComments={collectedComments}
+                  />
+                </Grid2>
+              ) : null}
+
               {/* text results */}
               {text ? (
                 <Grid2 size={{ xs: 12 }}>
                   <AssistantTextResult />
-                </Grid2>
-              ) : null}
-
-              {collectedComments ? (
-                <Grid2 size={12}>
-                  <AssistantCommentResult collectdComments={collectedComments} />
                 </Grid2>
               ) : null}
 

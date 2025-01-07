@@ -15,6 +15,15 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { CONTENT_TYPE } from "../AssistantRuleBook";
 import AssistantImageResult from "./AssistantImageResult";
 import AssistantVideoResult from "./AssistantVideoResult";
+
+// from Video Analysis - change these to AssistantSaga ?
+import {
+  setAnalysisComments,
+  setAnalysisLinkComments,
+  setAnalysisVerifiedComments,
+} from "../../../../redux/actions/tools/analysisActions";
+import AnalysisComments from "../../tools/Analysis/Results/AnalysisComments";
+
 import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
 import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
 import {
@@ -62,6 +71,9 @@ const AssistantMediaResult = () => {
     (state) => state.assistant.warningExpanded,
   );
   const resultIsImage = resultProcessType === CONTENT_TYPE.IMAGE;
+
+  // Video Analysis for YouTube comments
+  const resultData = useSelector((state) => state.analysis.result);
 
   // local control state
   // const [expandMedia, setExpandMedia] = useState(
@@ -166,7 +178,7 @@ const AssistantMediaResult = () => {
         </div>
       ) : null}
 
-      {/* selected image with recommended tools */}
+      {/* selected image or video with recommended tools */}
       <CardContent sx={{ padding: processUrl == null ? 0 : undefined }}>
         {processUrl !== null ? (
           resultIsImage ? (
@@ -185,6 +197,20 @@ const AssistantMediaResult = () => {
               </Grid2>
               <Grid2 size={6}>
                 <AssistantProcessUrlActions />
+              </Grid2>
+
+              {/* YouTube comments */}
+              <Grid2 size={12}>
+                <AnalysisComments
+                  type="YOUTUBE"
+                  classes={classes}
+                  title={"youtube_comment_title"}
+                  keyword={keyword}
+                  report={resultData} // not filled correctly, need to generate through assistant not analysis
+                  setAnalysisComments={setAnalysisComments}
+                  setAnalysisLinkComments={setAnalysisLinkComments}
+                  setAnalysisVerifiedComments={setAnalysisVerifiedComments}
+                />
               </Grid2>
             </Grid2>
           )
