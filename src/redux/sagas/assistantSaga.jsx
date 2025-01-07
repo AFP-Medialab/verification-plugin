@@ -64,7 +64,10 @@ function* getMediaListSaga() {
 }
 
 function* getMediaActionSaga() {
-  yield takeLatest("SET_PROCESS_URL", handleMediaActionList);
+  yield takeLatest(
+    ["SET_PROCESS_URL", "AUTH_USER_LOGIN", "AUTH_USER_LOGOUT"],
+    handleMediaActionList,
+  );
 }
 
 function* getAssistantScrapeSaga() {
@@ -384,7 +387,7 @@ function* handleDbkfTextCall(action) {
                 textToUse = text.slice(0, -1)
             }*/
       let result = yield call(dbkfAPI.callTextSimilarityEndpoint, textToUse);
-      let filteredResult = filterDbkfTextResult(result);
+      let filteredResult = result.length ? result : null;
 
       yield put(setDbkfTextMatchDetails(filteredResult, false, true, false));
     }
@@ -709,6 +712,7 @@ const decideWhetherToScrape = (urlType, contentType) => {
     case KNOWN_LINKS.INSTAGRAM:
     case KNOWN_LINKS.FACEBOOK:
     case KNOWN_LINKS.TWITTER:
+    case KNOWN_LINKS.SNAPCHAT:
     case KNOWN_LINKS.BLUESKY:
     case KNOWN_LINKS.TELEGRAM:
     case KNOWN_LINKS.MASTODON:
@@ -808,6 +812,7 @@ const filterAssistantResults = (
         videoList = scrapeResult.videos;
       }
       break;
+    case KNOWN_LINKS.SNAPCHAT:
     case KNOWN_LINKS.BLUESKY:
       if (scrapeResult.images.length > 0) {
         imageList = scrapeResult.images;
@@ -1000,29 +1005,6 @@ const addToRelevantSourceCred = (sourceCredList, result) => {
     credibilityEvidence: resultEvidence,
     credibilityScope: result["credibility-scope"],
   });
-};
-
-const filterDbkfTextResult = (result) => {
-  let resultList = [];
-  let scores = [];
-
-  result.forEach((res) => {
-    scores.push(res.score);
-  });
-
-  let scaled = scaleNumbers(scores, 0, 100);
-
-  // to be reviewed. only really fixes some minor cases.
-  result.forEach((value, index) => {
-    if (value.score > 1000 && scaled[index] > 70) {
-      resultList.push({
-        text: value.text,
-        claimUrl: value.externalLink,
-        score: value.score,
-      });
-    }
-  });
-  return resultList.length ? resultList : null;
 };
 
 const scaleNumbers = (unscaledNums) => {

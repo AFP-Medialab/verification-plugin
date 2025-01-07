@@ -27,6 +27,7 @@ export const CONTENT_TYPE = {
 export const KNOWN_LINKS = {
   TWITTER: "twitter",
   INSTAGRAM: "instagram",
+  SNAPCHAT: "snapchat",
   FACEBOOK: "facebook",
   TIKTOK: "tiktok",
   TELEGRAM: "telegram",
@@ -65,6 +66,13 @@ export const KNOWN_LINK_PATTERNS = [
   {
     key: KNOWN_LINKS.TIKTOK,
     patterns: ["((https?:\\/{2})?(www.)?tiktok.com\\/.*\\/video/\\d*)"],
+  },
+  {
+    key: KNOWN_LINKS.SNAPCHAT,
+    patterns: [
+      "((https?:\\/{2})?(www.)?snapchat.com\\/(spotlight|lens)/\\w*)",
+      "((https?:\\/{2})?(www.)?snapchat.com\\/p\\/[\\w\\-]+\\/\\w*)",
+    ],
   },
   {
     key: KNOWN_LINKS.INSTAGRAM,
@@ -128,13 +136,32 @@ export const ASSISTANT_ACTIONS = [
   {
     title: "navbar_analysis_video",
     icon: <videoAnalysis.icon sx={{ fontSize: "24px" }} />,
-    linksAccepted: [KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.FACEBOOK],
+    linksAccepted: [
+      KNOWN_LINKS.YOUTUBE,
+      KNOWN_LINKS.FACEBOOK,
+      KNOWN_LINKS.SNAPCHAT,
+    ],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
     useInputUrl: true,
     text: "video_analysis_text",
     tsvPrefix: "api",
     path: "tools/analysis",
+  },
+  {
+    title: "navbar_analysis_image",
+    icon: <imageAnalysis.icon sx={{ fontSize: "24px" }} />,
+    linksAccepted: [
+      KNOWN_LINKS.FACEBOOK,
+      KNOWN_LINKS.TWITTER,
+      KNOWN_LINKS.SNAPCHAT,
+    ],
+    cTypes: [CONTENT_TYPE.IMAGE],
+    exceptions: [],
+    useInputUrl: true,
+    text: "image_analysis_text",
+    tsvPrefix: "api",
+    path: "tools/analysisImage",
   },
   {
     title: "navbar_keyframes",
@@ -145,6 +172,7 @@ export const ASSISTANT_ACTIONS = [
       KNOWN_LINKS.YOUTUBE,
       KNOWN_LINKS.YOUTUBESHORTS,
       KNOWN_LINKS.LIVELEAK,
+      KNOWN_LINKS.SNAPCHAT,
       KNOWN_LINKS.OWN,
     ],
     cTypes: [CONTENT_TYPE.VIDEO],
@@ -182,7 +210,7 @@ export const ASSISTANT_ACTIONS = [
     processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     cTypes: [CONTENT_TYPE.IMAGE, CONTENT_TYPE.VIDEO],
     exceptions: [
-      /(pbs.twimg.com)|(youtu.be|youtube)|(instagram)|(fbcdn.net)|(vimeo)|(tiktok.com)/,
+      /(pbs.twimg.com)|(youtu.be|youtube)|(instagram)|(fbcdn.net)|(vimeo)|(snapchat)|(tiktok.com)/,
     ],
     useInputUrl: false,
     text: "metadata_text",
@@ -238,7 +266,22 @@ export const ASSISTANT_ACTIONS = [
   {
     title: "navbar_deepfake_video",
     icon: <videoDeepfake.icon sx={{ fontSize: "24px" }} />,
-    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    processLinksAccepted: [
+      KNOWN_LINKS.YOUTUBE,
+      KNOWN_LINKS.TWITTER,
+      // KNOWN_LINKS.INSTAGRAM, // assistant fails to load video (even if logged in); deepfakevideo tool directly works
+      // KNOWN_LINKS.FACEBOOK, // assistant fails to load video; deepfakevideo has no face detected, video doesn't load properly
+      // KNOWN_LINKS.TIKTOK, // assistant fails to load video; deepfakevideo has no face detected, video doesn't load properly
+      KNOWN_LINKS.TELEGRAM,
+      KNOWN_LINKS.YOUTUBESHORTS,
+      KNOWN_LINKS.DAILYMOTION,
+      // KNOWN_LINKS.LIVELEAK, // doesn't exist anymore; assistant works; deepfakevideo has no face detected, video doesn't load properly
+      // KNOWN_LINKS.VIMEO, // assistant works; deepfakevideo has no face detected, video doesn't load properly
+      // KNOWN_LINKS.MASTODON, // assistant fails to load video; deepfakevideo has no face detected, video doesn't load properly
+      // KNOWN_LINKS.VK, // assistant fails to load; deepfakevideo works
+      KNOWN_LINKS.MISC,
+      KNOWN_LINKS.OWN,
+    ],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
     useInputUrl: false,
@@ -249,12 +292,13 @@ export const ASSISTANT_ACTIONS = [
   },
   {
     title: "assistant_video_download_action",
-    icon: <DownloadIcon color="disabled" fontSize="large" />,
+    icon: <DownloadIcon color="disabled" />,
     linksAccepted: [
       KNOWN_LINKS.TELEGRAM,
       KNOWN_LINKS.FACEBOOK,
       KNOWN_LINKS.TWITTER,
       KNOWN_LINKS.MASTODON,
+      KNOWN_LINKS.SNAPCHAT,
     ],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
@@ -265,7 +309,7 @@ export const ASSISTANT_ACTIONS = [
   },
   {
     title: "assistant_video_download_generic",
-    icon: <DownloadIcon color="disabled" fontSize="large" />,
+    icon: <DownloadIcon color="disabled" />,
     linksAccepted: [
       KNOWN_LINKS.YOUTUBESHORTS,
       KNOWN_LINKS.INSTAGRAM,
@@ -285,7 +329,7 @@ export const ASSISTANT_ACTIONS = [
   },
   {
     title: "assistant_video_download_tiktok",
-    icon: <DownloadIcon color="disabled" fontSize="large" />,
+    icon: <DownloadIcon color="disabled" />,
     linksAccepted: [KNOWN_LINKS.TIKTOK],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],

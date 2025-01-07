@@ -89,13 +89,13 @@ export default function assistantApiCalls() {
       }
     }
   }
-  
+
   const callSourceCredibilityService = async (urlList) => {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
       async () => {
         if (urlList.length === 0) return null;
-    
+
         let urls = urlList.join(" ");
 
         const result = await axios.post(
@@ -114,7 +114,7 @@ export default function assistantApiCalls() {
       },
     );
   };
-  
+
   const callNewsFramingService = async (text) => {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
@@ -225,11 +225,11 @@ export default function assistantApiCalls() {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
       async () => {
-        const result = await axios.get(
-          assistantEndpoint +
-            "kinit/machine-generated-text" +
-            "?text=" +
-            encodeURIComponent(text), // max URL length is 2048 characters
+        const result = await axios.post(
+          assistantEndpoint + "kinit/machine-generated-text",
+          {
+            content: text,
+          },
         );
         return result.data;
       },
