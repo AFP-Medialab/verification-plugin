@@ -3,11 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom"; // version 5.2.0
 
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
-import { Box, CardHeader, Skeleton, TextField } from "@mui/material/";
+import { Box, CardHeader, Skeleton, TextField, Tooltip } from "@mui/material/";
 import Button from "@mui/material//Button";
 import Card from "@mui/material//Card";
 import CardContent from "@mui/material//CardContent";
 import Typography from "@mui/material//Typography";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
@@ -19,6 +20,11 @@ import {
 
 import { useTrackEvent } from "../../../Hooks/useAnalytics";
 import Stack from "@mui/material/Stack";
+import { Trans } from "react-i18next";
+import {
+  TransHtmlDoubleLinkBreak,
+  TransSupportedUrlsLink,
+} from "./TransComponents";
 
 const AssistantUrlSelected = (props) => {
   // styles, language, dispatch, params
@@ -86,6 +92,29 @@ const AssistantUrlSelected = (props) => {
             <Typography style={{ fontWeight: "bold", fontSize: 20 }}>
               {keyword("assistant_give_url")}
             </Typography>
+          }
+          action={
+            <Tooltip
+              interactive={"true"}
+              title={
+                <>
+                  <Trans
+                    t={keyword}
+                    i18nKey="assistant_help_3" // update this for bluesky and vk and others?
+                    components={{
+                      b: <b />,
+                      ul: <ul />,
+                      li: <li />,
+                    }}
+                  />
+                  <TransHtmlDoubleLinkBreak keyword={keyword} />
+                  <TransSupportedUrlsLink keyword={keyword} />
+                </>
+              }
+              classes={{ tooltip: classes.assistantTooltip }}
+            >
+              <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+            </Tooltip>
           }
         />
 

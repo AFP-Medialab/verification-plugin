@@ -28,6 +28,12 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { getLanguageName } from "../../../Shared/Utils/languageUtils";
 import TextFooter, { TextFooterPrevFactChecks } from "./TextFooter.jsx";
 import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult.jsx";
+import {
+  TransCredibilitySignalsLink,
+  TransHtmlDoubleLinkBreak,
+  TransHtmlSingleLinkBreak,
+} from "../TransComponents";
+import { Trans } from "react-i18next";
 
 const renderEntityKeys = (entities, keyword) => {
   // translate array into readable string
@@ -188,21 +194,37 @@ const AssistantCredSignals = () => {
           <Tooltip
             interactive={"true"}
             title={
-              <div
-                className={"content"}
-                dangerouslySetInnerHTML={{
-                  __html:
-                    keyword("credibility_signals_tooltip") +
-                    "<br><br><b>" +
-                    keyword("previous_fact_checks_title") +
-                    "</b><br>" +
-                    keyword("previous_fact_checks_tooltip") +
-                    "<br><br><b>" +
-                    keyword("machine_generated_text_title") +
-                    "</b><br>" +
-                    keyword("machine_generated_text_tooltip"),
-                }}
-              />
+              <>
+                <Trans
+                  t={keyword}
+                  i18nKey="credibility_signals_tooltip"
+                  components={{
+                    b: <b />,
+                  }}
+                />
+                <TransHtmlDoubleLinkBreak keyword={keyword} />
+                <TransCredibilitySignalsLink keyword={keyword} />
+                <TransHtmlDoubleLinkBreak keyword={keyword} />
+                <Trans
+                  t={keyword}
+                  i18nKey="previous_fact_checks_title_bold"
+                  components={{
+                    b: <b />,
+                  }}
+                />
+                <TransHtmlSingleLinkBreak keyword={keyword} />
+                <Trans t={keyword} i18nKey="previous_fact_checks_tooltip" />
+                <TransHtmlDoubleLinkBreak keyword={keyword} />
+                <Trans
+                  t={keyword}
+                  i18nKey="machine_generated_text_title_bold"
+                  components={{
+                    b: <b />,
+                  }}
+                />
+                <TransHtmlSingleLinkBreak keyword={keyword} />
+                <Trans t={keyword} i18nKey="machine_generated_text_tooltip" />
+              </>
             }
             classes={{ tooltip: classes.assistantTooltip }}
           >
@@ -286,11 +308,15 @@ const AssistantCredSignals = () => {
                     {keyword("login_required")}
                   </Typography>
                 )}
-                {prevFactChecksDone && prevFactChecksResult.length < 1 && (
-                  <Typography sx={{ color: "text.secondary", align: "start" }}>
-                    {keyword("none_detected")}
-                  </Typography>
-                )}
+                {role.includes(ROLES.BETA_TESTER) &&
+                  prevFactChecksDone &&
+                  prevFactChecksResult.length < 1 && (
+                    <Typography
+                      sx={{ color: "text.secondary", align: "start" }}
+                    >
+                      {keyword("none_detected")}
+                    </Typography>
+                  )}
               </Grid2>
             </Grid2>
           </AccordionSummary>
