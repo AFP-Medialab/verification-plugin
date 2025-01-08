@@ -199,44 +199,19 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                       ? sourceCredibilityResults.map((value, key) => (
                           <Accordion key={key}>
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                              {value.credibilityScope &&
-                              value.credibilityScope.includes("/") ? (
-                                <Stack direction="row">
-                                  <Chip
-                                    label={keyword(sourceType)}
-                                    color={trafficLightColor}
-                                    size="small"
-                                  />
-                                  <Typography
-                                    sx={{ ml: 1 }}
-                                    //color={trafficLightColor}
-                                  >
-                                    {` ${keyword("this")}`}
-                                    {getUrlTypeFromCredScope(
-                                      value.credibilityScope,
-                                    )}
-                                    {` ${keyword(
-                                      "source_credibility_warning_account",
-                                    )} ${" "}${value.credibilitySource}`}
-                                  </Typography>
-                                </Stack>
-                              ) : value.credibilityScope ? (
-                                <Stack direction="row">
-                                  <Chip
-                                    label={keyword(sourceType)}
-                                    color={trafficLightColor}
-                                    size="small"
-                                  />
-                                  <Typography
-                                    sx={{ ml: 1 }}
-                                    //color={trafficLightColor}
-                                  >
-                                    {` ${keyword(
-                                      "source_credibility_warning_domain",
-                                    )} ${value.credibilitySource} `}
-                                  </Typography>
-                                </Stack>
-                              ) : null}
+                              <Stack direction="row">
+                                <Chip
+                                  label={keyword(sourceType)}
+                                  color={trafficLightColor}
+                                  size="small"
+                                />
+                                <Typography sx={{ ml: 1 }}>
+                                  {value.credibilityScope &&
+                                  value.credibilityScope.includes("/")
+                                    ? ` ${keyword("this")} ${getUrlTypeFromCredScope(value.credibilityScope)} ${keyword("source_credibility_warning_account")} ${" "}${value.credibilitySource}`
+                                    : ` ${keyword("source_credibility_warning_domain")} ${value.credibilitySource} `}
+                                </Typography>
+                              </Stack>
                             </AccordionSummary>
 
                             <AccordionDetails>
