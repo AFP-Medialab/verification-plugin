@@ -20,6 +20,7 @@ import { prettifyLargeString } from "../utils";
 import CopyButton from "../../../../Shared/CopyButton";
 import { KNOWN_LINKS } from "../../../Assistant/AssistantRuleBook";
 import DownloadWaczFile from "./downloadWaczFile";
+import { ROLES } from "../../../../../constants/roles";
 
 /**
  *
@@ -36,6 +37,8 @@ const UrlArchive = ({ url, mediaUrl }) => {
 
   const session = useSelector((state) => state.userSession);
   const uid = session && session.user ? session.user.id : null;
+
+  const role = useSelector((state) => state.userSession.user.roles);
 
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
 
@@ -146,7 +149,9 @@ const UrlArchive = ({ url, mediaUrl }) => {
               {keyword("internet_archive_button")}
             </Button>
           </Box>
-          <DownloadWaczFile url={link} />
+          {role.includes(ROLES.EXTRA_FEATURE) && (
+            <DownloadWaczFile url={link} />
+          )}
         </Stack>
       </Box>
     );
