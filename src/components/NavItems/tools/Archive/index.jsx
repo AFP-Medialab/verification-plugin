@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
 
-import { Alert, Box, Card, Fade, Skeleton, Stack } from "@mui/material";
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import { Box, Button, Card, Grid2, Stack, Typography } from "@mui/material";
 import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
 import { useParams } from "react-router-dom";
-import UrlArchive from "./components/urlArchive";
 import {
   archiveStateCleaned,
   setArchiveUrl,
 } from "redux/reducers/tools/archiveReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { archiving } from "../../../../constants/tools";
 import {
   KNOWN_LINK_PATTERNS,
@@ -20,8 +17,14 @@ import {
 } from "../../Assistant/AssistantRuleBook";
 import assistantApiCalls from "../../Assistant/AssistantApiHandlers/useAssistantApi";
 import { QueryClient, useMutation } from "@tanstack/react-query";
-import ArchivedFileCard from "./components/archivedFileCard";
-import CircularProgress from "@mui/material/CircularProgress"; //TODO:UI for long strings
+import CustomizedMenus, { StyledMenu } from "./components/StyledMenu";
+import FirstStep from "./components/FirstStep";
+import SecondStep from "./components/SecondStep";
+import { ArrowBack } from "@mui/icons-material";
+import ThirdStep from "./components/ThirdStep";
+import FourthStep from "./components/FourthStep";
+import FifthStep from "./components/FifthStep";
+import SixthStep from "./components/SixthStep"; //TODO:UI for long strings
 
 //TODO:UI for long strings
 
@@ -46,6 +49,8 @@ const Archive = () => {
   const [archiveLinks, setArchiveLinks] = useState([]);
 
   const [errorMessage, setErrorMessage] = useState("");
+
+  const [step, setStep] = useState(1);
 
   const authenticatedRequest = useAuthenticatedRequest();
 
@@ -219,79 +224,122 @@ const Archive = () => {
     setIsLoading(false);
   };
 
+  const handleContinueToNextStep = async () => {
+    if (step <= 3) {
+      setStep((prev) => prev + 1);
+    } else if (step === 4) {
+      await handleSubmit();
+      setStep(5);
+    } else if (step === 5 || step === 6) {
+      // reset to 1st step
+      handleCloseUrl();
+      setStep(1);
+    }
+  };
+
   return (
-    <Box>
-      <HeaderTool
-        name={keyword("archive_name")}
-        description={keyword("archive_description")}
-        icon={
-          <archiving.icon
-            style={{
-              fontSize: "40px",
-              fill: "#00926c",
+    <Box sx={{ minHeight: "65vh" }}>
+      <Card variant="outlined" sx={{ height: "100%" }}>
+        <Box p={3} sx={{ height: "fill-available" }}>
+          <Stack
+            direction="column"
+            sx={{
+              justifyContent: "space-between",
+              height: "100%",
             }}
-          />
-        }
-      />
-      <Card variant="outlined">
-        <Box p={3}>
-          <form>
-            <StringFileUploadField
-              labelKeyword={"Archive an url"}
-              placeholderKeyword={"Url to archive"}
-              submitButtonKeyword={keyword("submit_button")}
-              localFileKeyword={keyword("archive_wacz_accordion")}
-              urlInput={urlInput}
-              setUrlInput={setUrlInput}
-              fileInput={fileToUpload}
-              setFileInput={setFileToUpload}
-              handleSubmit={handleSubmit}
-              fileInputTypesAccepted={".wacz"}
-              handleCloseSelectedFile={handleCloseUrl}
-              preprocessLocalFile={null}
-              isParentLoading={isLoading || archiveFileToWbm.isPending}
-            />
-          </form>
+            spacing={2}
+          >
+            <Stack direction="column" spacing={4}>
+              <Stack direction="row" justifyContent={"space-between"}>
+                <Box>
+                  <Grid2
+                    container
+                    direction="row"
+                    justifyContent="flex-start"
+                    alignItems="center"
+                    spacing={1}
+                  >
+                    <archiving.icon
+                      style={{
+                        fontSize: "40px",
+                        fill: "#00926c",
+                      }}
+                    />
+
+                    <Typography variant="h5" color={"primary"}>
+                      {keyword("archive_name")}
+                    </Typography>
+                  </Grid2>
+                </Box>
+                <Box>
+                  <CustomizedMenus
+                    handleGoToFirstStep={() => setStep(1)}
+                    handleGoToWaczUpload={() => setStep(4)}
+                    handleGoToWbmStep={() => setStep(6)}
+                  />
+                </Box>
+              </Stack>
+
+              {step === 1 && (
+                <FirstStep
+                  handleClick={setStep}
+                  url={urlInput}
+                  handleUrlChange={setUrlInput}
+                />
+              )}
+              {step === 2 && <SecondStep url={urlInput} />}
+              {step === 3 && <ThirdStep />}
+              {step === 4 && (
+                <FourthStep
+                  fileInput={fileToUpload}
+                  setFileInput={setFileToUpload}
+                />
+              )}
+              {step === 5 && (
+                <FifthStep
+                  archiveFileToWbm={archiveFileToWbm}
+                  fileToUpload={fileToUpload}
+                  errorMessage={errorMessage}
+                  archiveLinks={archiveLinks}
+                />
+              )}
+              {step === 6 && (
+                <SixthStep urlInput={urlInput} mediaUrl={mediaUrl} />
+              )}
+            </Stack>
+
+            {step >= 2 && (
+              <Stack
+                direction="row"
+                spacing={4}
+                sx={{
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                }}
+              >
+                {step < 5 && (
+                  <Button
+                    variant="outlined"
+                    startIcon={<ArrowBack />}
+                    onClick={() => setStep((prev) => prev - 1)}
+                  >
+                    {"Back"}
+                  </Button>
+                )}
+
+                <Button
+                  variant="contained"
+                  onClick={() => handleContinueToNextStep()}
+                  disabled={step === 4 && !fileToUpload}
+                >
+                  {step <= 4 ? "Continue" : "New archive"}
+                </Button>
+              </Stack>
+            )}
+          </Stack>
         </Box>
       </Card>
       <Box p={2} />
-
-      {archiveFileToWbm.isError && (
-        <Box mb={4}>
-          <Fade in={true} timeout={750}>
-            <Alert severity="error">
-              {keyword(archiveFileToWbm.error.message)}
-            </Alert>
-          </Fade>
-        </Box>
-      )}
-
-      {errorMessage && (
-        <Box mb={4}>
-          <Fade in={true} timeout={750}>
-            <Alert severity="error">{keyword(errorMessage)}</Alert>
-          </Fade>
-        </Box>
-      )}
-
-      {archiveFileToWbm.isPending && (
-        <Fade in={true} timeout={750}>
-          <Stack direction="column" spacing={2}>
-            <Alert icon={<CircularProgress size={20} />} severity="info">
-              {keyword("upload_loading")}
-            </Alert>
-            <Skeleton variant="text" height={200} />
-          </Stack>
-        </Fade>
-      )}
-
-      {archiveFileToWbm.isSuccess && (
-        <ArchivedFileCard file={fileToUpload} archiveLinks={archiveLinks} />
-      )}
-
-      {urlResults && urlInput !== "" ? (
-        <UrlArchive url={urlInput} mediaUrl={mediaUrl}></UrlArchive>
-      ) : null}
     </Box>
   );
 };
