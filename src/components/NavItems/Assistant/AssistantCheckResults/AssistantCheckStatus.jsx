@@ -64,6 +64,11 @@ const AssistantCheckStatus = () => {
     (state) => state.assistant.machineGeneratedTextFail,
   );
 
+  const targetObliviousStanceTitle = keyword("target_oblivious_stance_title");
+  const targetObliviousStanceFailState = useSelector(
+    (state) => state.assistant.targetObliviousStanceFail,
+  );
+
   const failStates = [
     { title: scTitle, failed: scFailState },
     { title: dbkfMediaTitle, failed: dbkfMediaFailState },
@@ -75,6 +80,10 @@ const AssistantCheckStatus = () => {
     { title: subjectivityTitle, failed: subjectivityFailState },
     { title: prevFactChecksTitle, failed: prevFactChecksFailState },
     { title: machineGeneratedTextTitle, failed: machineGeneratedTextFailState },
+    {
+      title: targetObliviousStanceTitle,
+      fialed: targetObliviousStanceFailState,
+    },
   ];
 
   return (

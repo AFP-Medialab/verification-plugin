@@ -203,7 +203,7 @@ const Assistant = () => {
             className={classes.assistantCardHeader}
             title={
               <Typography style={{ fontWeight: "bold", fontSize: 20 }}>
-                {keyword("Assistant results")}
+                {keyword("assistant_results")}
               </Typography>
             }
             action={
@@ -255,11 +255,10 @@ const Assistant = () => {
               </Grid2>
 
               {/* YouTube comments if video */}
-              {console.log("collectedComments=", collectedComments)}
               {collectedComments ? (
                 <Grid2 size={12}>
                   <AssistantCommentResult
-                    collectdComments={collectedComments}
+                    collectedComments={collectedComments}
                   />
                 </Grid2>
               ) : null}

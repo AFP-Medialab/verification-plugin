@@ -200,18 +200,20 @@ const AssistantMediaResult = () => {
               </Grid2>
 
               {/* YouTube comments */}
-              <Grid2 size={12}>
-                <AnalysisComments
-                  type="YOUTUBE"
-                  classes={classes}
-                  title={"youtube_comment_title"}
-                  keyword={keyword}
-                  report={resultData} // not filled correctly, need to generate through assistant not analysis
-                  setAnalysisComments={setAnalysisComments}
-                  setAnalysisLinkComments={setAnalysisLinkComments}
-                  setAnalysisVerifiedComments={setAnalysisVerifiedComments}
-                />
-              </Grid2>
+              {resultData ? (
+                <Grid2 size={12}>
+                  <AnalysisComments
+                    type="YOUTUBE"
+                    classes={classes}
+                    title={"youtube_comment_title"}
+                    keyword={keyword}
+                    report={resultData} // not filled correctly, need to generate through assistant not analysis
+                    setAnalysisComments={setAnalysisComments}
+                    setAnalysisLinkComments={setAnalysisLinkComments}
+                    setAnalysisVerifiedComments={setAnalysisVerifiedComments}
+                  />
+                </Grid2>
+              ) : null}
             </Grid2>
           )
         ) : null}

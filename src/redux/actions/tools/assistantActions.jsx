@@ -257,6 +257,23 @@ export const setMachineGeneratedTextDetails = (
   };
 };
 
+export const setTargetObliviousStanceDetails = (
+  tosResult,
+  tosLoading,
+  tosDone,
+  tosFail,
+) => {
+  return {
+    type: "SET_TARGET_OBLIVIOUS_STANCE_DETAILS",
+    payload: {
+      targetObliviousStanceResult: tosResult,
+      targetObliviousStanceLoading: tosLoading,
+      targetObliviousStanceDone: tosDone,
+      targetObliviousStanceFail: tosFail,
+    },
+  };
+};
+
 export const setNeDetails = (
   neResultCategory,
   neResultCount,
