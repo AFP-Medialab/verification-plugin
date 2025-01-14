@@ -72,8 +72,8 @@ const FirstStep = ({ handleClick, url, handleUrlChange }) => {
               </Typography>
 
               <ListItemText
-                primary={"Wacz upload"}
-                secondary={"Continue with building a wacz file"}
+                primary={"WACZ upload"}
+                secondary={"Continue with building a WACZ file"}
               />
             </Stack>
 
@@ -85,7 +85,7 @@ const FirstStep = ({ handleClick, url, handleUrlChange }) => {
           <ListItemButton onClick={() => handleNavigation(6)}>
             <Stack direction="column" spacing={1} width={"100%"}>
               <Typography variant="caption" color={"error"}>
-                {"Not recommended, archive may fail to play"}
+                {"Less recommended, archive may fail to play"}
               </Typography>
               <ListItemText
                 primary={"Save on the Wayback Machine"}

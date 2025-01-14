@@ -156,7 +156,7 @@ const DownloadWaczFile = ({ url }) => {
         >
           {getWaczFileFromScoop.isPending
             ? "Processing..."
-            : "Download .wacz file"}
+            : "Download .WACZ file"}
         </LoadingButton>
         {getWaczFileFromScoop.isError && (
           <Typography variant="body2" color="error">

@@ -50,6 +50,8 @@ const StyledMenu = styled((props) => (
 }));
 
 export default function CustomizedMenus({
+  isRestartEnabled,
+  isGoToWbmStepEnabled,
   handleGoToFirstStep,
   handleGoToWaczUpload,
   handleGoToWbmStep,
@@ -61,7 +63,8 @@ export default function CustomizedMenus({
   };
   const handleClose = (fn) => {
     setAnchorEl(null);
-    fn();
+
+    if (typeof fn === "function") fn();
   };
 
   return (
@@ -89,12 +92,17 @@ export default function CustomizedMenus({
         <MenuItem
           onClick={() => handleClose(handleGoToFirstStep)}
           disableRipple
+          disabled={!isRestartEnabled}
         >
           <Replay />
           {"Restart from the beginning"}
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
-        <MenuItem onClick={() => handleClose(handleGoToWbmStep)} disableRipple>
+        <MenuItem
+          onClick={() => handleClose(handleGoToWbmStep)}
+          disableRipple
+          disabled={!isGoToWbmStepEnabled}
+        >
           <Archive />
           {"Go to Archiving with the Wayback Machine"}
         </MenuItem>
@@ -104,7 +112,7 @@ export default function CustomizedMenus({
           disableRipple
         >
           <FileUpload />
-          {"Go to wacz upload step"}
+          {"Go to WACZ upload step"}
         </MenuItem>
       </StyledMenu>
     </div>

@@ -10,7 +10,7 @@ const FourthStep = ({ fileInput, setFileInput }) => {
   return (
     <Stack direction="column" spacing={4}>
       <Stack direction="column" spacing={2}>
-        <Typography variant="h6">{"Upload the wacz file"}</Typography>
+        <Typography variant="h6">{"Upload the WACZ file"}</Typography>
       </Stack>
       <Box>
         <ButtonGroup variant="outlined">
