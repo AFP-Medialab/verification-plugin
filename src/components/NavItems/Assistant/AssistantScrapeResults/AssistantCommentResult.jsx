@@ -27,6 +27,10 @@ import { useDispatch } from "react-redux";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import { Trans } from "react-i18next";
+import {
+  TransCollectedCommentsTooltip,
+  TransTargetObliviousStanceLink,
+} from "../TransComponents";
 
 const AssistantCommentResult = ({ collectedComments }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -96,13 +100,22 @@ const AssistantCommentResult = ({ collectedComments }) => {
                   ) : null}
                   {targetObliviousStanceDone &&
                   targetObliviousStanceResult[commentId] ? (
-                    <Chip
-                      label={keyword(targetObliviousStance)}
-                      color={
-                        targetObliviousStanceColours[targetObliviousStance]
-                      }
-                      size="small"
-                    />
+                    <Tooltip title={keyword("target_oblivious_stance_tooltip")}>
+                      <Chip
+                        label={
+                          keyword("stance_label") +
+                          keyword(
+                            targetObliviousStance == "comment"
+                              ? "unlabelled"
+                              : targetObliviousStance,
+                          )
+                        }
+                        color={
+                          targetObliviousStanceColours[targetObliviousStance]
+                        }
+                        size="small"
+                      />
+                    </Tooltip>
                   ) : null}
                 </span>
               </div>
@@ -137,7 +150,8 @@ const AssistantCommentResult = ({ collectedComments }) => {
             interactive={"true"}
             title={
               <>
-                <Trans t={keyword} i18nKey="collected_comments_title_tooltip" />
+                <TransCollectedCommentsTooltip />
+                <TransTargetObliviousStanceLink />
               </>
             }
             classes={{ tooltip: classes.assistantTooltip }}

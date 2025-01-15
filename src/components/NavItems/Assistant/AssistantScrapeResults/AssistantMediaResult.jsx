@@ -73,7 +73,11 @@ const AssistantMediaResult = () => {
   const resultIsImage = resultProcessType === CONTENT_TYPE.IMAGE;
 
   // Video Analysis for YouTube comments
-  const resultData = useSelector((state) => state.analysis.result);
+  const report = useSelector((state) => state.analysis.result);
+  const targetObliviousStanceResult = useSelector(
+    (state) => state.assistant.targetObliviousStanceResult,
+  );
+  //const collectedComments = useSelector((state) => state.assistant.collectedComments);
 
   // local control state
   // const [expandMedia, setExpandMedia] = useState(
@@ -200,14 +204,16 @@ const AssistantMediaResult = () => {
               </Grid2>
 
               {/* YouTube comments */}
-              {resultData ? (
+              {report != null ? (
                 <Grid2 size={12}>
                   <AnalysisComments
                     type="YOUTUBE"
                     classes={classes}
-                    title={"youtube_comment_title"}
+                    //title={"youtube_comment_title"}
+                    title={"collected_comments_title"}
                     keyword={keyword}
-                    report={resultData} // not filled correctly, need to generate through assistant not analysis
+                    report={report} // difference in assistant and video analysis API results
+                    targetObliviousStance={targetObliviousStanceResult}
                     setAnalysisComments={setAnalysisComments}
                     setAnalysisLinkComments={setAnalysisLinkComments}
                     setAnalysisVerifiedComments={setAnalysisVerifiedComments}

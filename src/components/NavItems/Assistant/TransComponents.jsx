@@ -90,6 +90,24 @@ export function TransCredibilitySignalsLink({ keyword }) {
   );
 }
 
+export function TransTargetObliviousStanceLink({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="target_oblivious_stance_classifier"
+      components={{
+        credibilitySignalsLink: (
+          <a
+            href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#stance-classifier"
+            target="_blank"
+            rel="noopener noreferrer"
+          />
+        ),
+      }}
+    />
+  );
+}
+
 export function TransSourceCredibilityTooltip({ keyword }) {
   return (
     <Trans
@@ -101,6 +119,23 @@ export function TransSourceCredibilityTooltip({ keyword }) {
         strongWarning: <strong style={{ background: "#d32f2f" }} />,
         strongMentions: <strong style={{ background: "#ed6c02" }} />,
         strongFactChecker: <strong style={{ background: "#2e7d32" }} />,
+      }}
+    />
+  );
+}
+
+export function TransCollectedCommentsTooltip({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="collected_comments_tooltip"
+      components={{
+        ul: <ul />,
+        li: <li />,
+        strongSupport: <strong style={{ background: "#2e7d32" }} />,
+        strongDeny: <strong style={{ background: "#d32f2f" }} />,
+        strongQuery: <strong style={{ background: "#ed6c02" }} />,
+        strongComment: <strong style={{ background: "#0288d1" }} />,
       }}
     />
   );
