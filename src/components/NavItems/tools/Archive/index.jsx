@@ -26,8 +26,6 @@ import FourthStep from "./components/FourthStep";
 import FifthStep from "./components/FifthStep";
 import SixthStep from "./components/SixthStep";
 
-//TODO:UI for long strings
-
 const queryClient = new QueryClient();
 
 const Archive = () => {
@@ -41,8 +39,6 @@ const Archive = () => {
   const [mediaUrl, setMediaUrl] = useState("");
 
   const [urlResults, setUrlResults] = useState(false);
-
-  const [isLoading, setIsLoading] = useState(false);
 
   const [fileToUpload, setFileToUpload] = useState(/** @type {File?} */ null);
 
@@ -143,8 +139,6 @@ const Archive = () => {
 
     try {
       if (urlType === KNOWN_LINKS.TWITTER) {
-        setIsLoading(true);
-
         const res = await queryClient.ensureQueryData({
           queryKey: ["extracted_media_link", url],
           queryFn: () => fetchMediaUrl(urlType, url),
@@ -163,8 +157,6 @@ const Archive = () => {
       }
     } catch (error) {
       setErrorMessage(error.message);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -218,7 +210,6 @@ const Archive = () => {
     setErrorMessage("");
     setArchiveLinks([]);
     setMediaUrl("");
-    setIsLoading(true);
 
     if (fileToUpload) {
       await archiveFileToWbm.mutate();
@@ -227,8 +218,6 @@ const Archive = () => {
 
       await fetchMediaLinkForSocialMediaPost(urlToFetch);
     }
-
-    setIsLoading(false);
   };
 
   // It may be easier to read these form validations in the components themselves instead of having everything

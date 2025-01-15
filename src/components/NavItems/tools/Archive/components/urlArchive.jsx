@@ -10,10 +10,7 @@ import {
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import React, { useEffect, useState } from "react";
 import IconInternetArchive from "../../../../NavBar/images/SVG/Others/archive-icon.svg";
-import {
-  getclientId,
-  trackEvent,
-} from "../../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { getclientId } from "../../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useSelector } from "react-redux";
 import { history } from "../../../../Shared/History/History";
 import { prettifyLargeString } from "../utils";
@@ -21,6 +18,7 @@ import CopyButton from "../../../../Shared/CopyButton";
 import { KNOWN_LINKS } from "../../../Assistant/AssistantRuleBook";
 import DownloadWaczFile from "./downloadWaczFile";
 import { ROLES } from "../../../../../constants/roles";
+import { useTrackEvent } from "../../../../../Hooks/useAnalytics";
 
 /**
  *
@@ -56,22 +54,22 @@ const UrlArchive = ({ url, mediaUrl }) => {
     }
   }, [url]);
 
+  if (url)
+    useTrackEvent(
+      "submission",
+      "archive",
+      "easy archiving link",
+      url,
+      client_id,
+      history,
+      uid,
+    );
+
   useEffect(() => {
     if (!platform) {
       setUrls(url);
       return;
     }
-
-    if (platform)
-      trackEvent(
-        "submission",
-        "archive",
-        "easy archiving link",
-        url,
-        client_id,
-        history,
-        uid,
-      );
 
     if (platform === KNOWN_LINKS.FACEBOOK) {
       const facebookUrls = [
@@ -104,7 +102,7 @@ const UrlArchive = ({ url, mediaUrl }) => {
   }, [platform]);
 
   const saveToInternetArchive = (link) => {
-    trackEvent(
+    useTrackEvent(
       "archive",
       "archive_wbm_spn",
       "Archive with WBM SPN",
