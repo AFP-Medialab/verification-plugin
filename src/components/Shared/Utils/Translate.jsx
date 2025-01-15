@@ -29,7 +29,14 @@ export const Translate = ({ text, type }) => {
       {keyword("translate")}
     </Button>
   ) : (
-    <IconButton onClick={() => googleTranslate(text)}>
+    <IconButton
+      onClick={() => googleTranslate(text)}
+      sx={{
+        "&:hover": {
+          backgroundColor: "inherit",
+        },
+      }}
+    >
       <TranslateIcon color={"primary"} />
     </IconButton>
   );
