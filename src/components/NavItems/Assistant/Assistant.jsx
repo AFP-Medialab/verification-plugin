@@ -230,25 +230,13 @@ const Assistant = () => {
               ) : null}
 
               {/* media results */}
-              <Grid2
-                container
-                hidden={
-                  !urlMode ||
-                  (urlMode && inputUrl === null) ||
-                  (urlMode &&
-                    inputUrl !== null &&
-                    !imageList.length &&
-                    !videoList.length)
-                }
-              >
-                {imageList.length > 0 ||
-                videoList.length > 0 ||
-                imageVideoSelected ? (
-                  <Grid2 size={{ xs: 12 }}>
-                    <AssistantMediaResult />
-                  </Grid2>
-                ) : null}
-              </Grid2>
+              {imageList.length > 0 ||
+              videoList.length > 0 ||
+              imageVideoSelected ? (
+                <Grid2 size={{ xs: 12 }}>
+                  <AssistantMediaResult />
+                </Grid2>
+              ) : null}
 
               {/* text results */}
               {text ? (

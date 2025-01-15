@@ -24,7 +24,7 @@ import {
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "../../../Shared/VideoGridList/VideoGridList";
-import { WarningAmber } from "@mui/icons-material";
+import { WarningOutlined } from "@mui/icons-material";
 
 import {
   TransHtmlDoubleLinkBreak,
@@ -87,6 +87,7 @@ const AssistantMediaResult = () => {
       return new Promise((resolve) => {
         const image = new Image();
         image.src = imageUrl;
+        console.log("imageUrl=", imageUrl);
         image.onload = () => {
           resolve({ url: imageUrl, width: image.width, height: image.height });
         };
@@ -102,6 +103,7 @@ const AssistantMediaResult = () => {
           .filter((image) => image.width > 2 && image.height > 2)
           .map((image) => image.url);
         setFilteredImageList(filteredImages);
+        console.log(imageDimensions, filteredImages);
       })
       .catch((error) => {
         console.error("Assistant error loading images:", error);
@@ -111,8 +113,7 @@ const AssistantMediaResult = () => {
   return (
     <Card
       data-testid="url-media-results"
-      hidden={!urlMode || (!filteredImageList.length && !videoList.length)}
-      //width={window.innerWidth}
+      hidden={!filteredImageList.length && !videoList.length}
     >
       <CardHeader
         className={classes.assistantCardHeader}
