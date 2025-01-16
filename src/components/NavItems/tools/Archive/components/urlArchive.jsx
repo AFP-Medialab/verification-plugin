@@ -10,10 +10,7 @@ import {
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import React, { useEffect, useState } from "react";
 import IconInternetArchive from "../../../../NavBar/images/SVG/Others/archive-icon.svg";
-import {
-  getclientId,
-  trackEvent,
-} from "../../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { getclientId } from "../../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useSelector } from "react-redux";
 import { history } from "../../../../Shared/History/History";
 import { prettifyLargeString } from "../utils";
@@ -21,6 +18,7 @@ import CopyButton from "../../../../Shared/CopyButton";
 import { KNOWN_LINKS } from "../../../Assistant/AssistantRuleBook";
 import DownloadWaczFile from "./downloadWaczFile";
 import { ROLES } from "../../../../../constants/roles";
+import { useTrackEvent } from "../../../../../Hooks/useAnalytics";
 
 /**
  *
@@ -56,31 +54,31 @@ const UrlArchive = ({ url, mediaUrl }) => {
     }
   }, [url]);
 
+  if (url)
+    useTrackEvent(
+      "submission",
+      "archive",
+      "easy archiving link",
+      url,
+      client_id,
+      history,
+      uid,
+    );
+
   useEffect(() => {
     if (!platform) {
       setUrls(url);
       return;
     }
 
-    if (platform)
-      trackEvent(
-        "submission",
-        "archive",
-        "easy archiving link",
-        url,
-        client_id,
-        history,
-        uid,
-      );
-
     if (platform === KNOWN_LINKS.FACEBOOK) {
       const facebookUrls = [
-        `https://www.facebook.com/plugins/post.php?href=${encodeURIComponent(
+        `https://www.facebook.com/plugins/post.php?height=476&href=${encodeURIComponent(
           url,
-        )}&show_text=true&width=500`,
+        )}&show_text=true&width=1100`,
         `https://www.facebook.com/v16.0/plugins/post.php?app_id=&channel=https%3A%2F%2Fstaticxx.facebook.com%2Fx%2Fconnect%2Fxd_arbiter%2F%3Fversion%3D46%23cb%3Dfe3fbda33dec3%26domain%3Ddevelopers.facebook.com%26is_canvas%3Dfalse%26origin%3Dhttps%253A%252F%252Fdevelopers.facebook.com%252Ff8686a44c9f19%26relation%3Dparent.parent&container_width=734&href=${encodeURIComponent(
           url,
-        )}&set=a.462670379217792&locale=en_US&sdk=joey&show_text=true&width=500`,
+        )}&set=a.462670379217792&locale=en_US&sdk=joey&show_text=true&width=1100`,
         `https://mbasic.facebook.com/${url.replace(
           "https://www.facebook.com/",
           "",
@@ -91,11 +89,12 @@ const UrlArchive = ({ url, mediaUrl }) => {
       const youtubeUrls = [url.replace("/watch?v=", "/embed/")];
       setUrls(youtubeUrls);
     } else if (platform === KNOWN_LINKS.INSTAGRAM) {
-      const instagramUrls = [
-        url.substring(url.length - 1) === "/"
-          ? url + "embed/captioned"
-          : url + "/embed/captioned",
-      ];
+      const embedUrl = (() => {
+        const u = new URL(url);
+        return u.origin + u.pathname + "embed/captioned";
+      })();
+
+      const instagramUrls = [embedUrl];
       setUrls(instagramUrls);
     }
 
@@ -103,7 +102,7 @@ const UrlArchive = ({ url, mediaUrl }) => {
   }, [platform]);
 
   const saveToInternetArchive = (link) => {
-    trackEvent(
+    useTrackEvent(
       "archive",
       "archive_wbm_spn",
       "Archive with WBM SPN",

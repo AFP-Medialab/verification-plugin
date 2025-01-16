@@ -24,9 +24,7 @@ import { ArrowBack } from "@mui/icons-material";
 import ThirdStep from "./components/ThirdStep";
 import FourthStep from "./components/FourthStep";
 import FifthStep from "./components/FifthStep";
-import SixthStep from "./components/SixthStep"; //TODO:UI for long strings
-
-//TODO:UI for long strings
+import SixthStep from "./components/SixthStep";
 
 const queryClient = new QueryClient();
 
@@ -42,8 +40,6 @@ const Archive = () => {
 
   const [urlResults, setUrlResults] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(false);
-
   const [fileToUpload, setFileToUpload] = useState(/** @type {File?} */ null);
 
   const [archiveLinks, setArchiveLinks] = useState([]);
@@ -51,6 +47,10 @@ const Archive = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const [step, setStep] = useState(1);
+
+  const [isWaczFileReplayable, setIsWaczFileReplayable] = useState(" ");
+  const [step3HelperText, setStep3HelperText] = useState("");
+  const [step3Error, setStep3Error] = useState(false);
 
   const authenticatedRequest = useAuthenticatedRequest();
 
@@ -77,6 +77,9 @@ const Archive = () => {
     setUrlInput("");
     archiveFileToWbm.reset();
     setArchiveLinks(null);
+    setIsWaczFileReplayable(" ");
+    setStep3HelperText("");
+    setStep3Error(false);
   };
 
   const isFileAWaczFile = (fileName) => {
@@ -136,8 +139,6 @@ const Archive = () => {
 
     try {
       if (urlType === KNOWN_LINKS.TWITTER) {
-        setIsLoading(true);
-
         const res = await queryClient.ensureQueryData({
           queryKey: ["extracted_media_link", url],
           queryFn: () => fetchMediaUrl(urlType, url),
@@ -156,8 +157,6 @@ const Archive = () => {
       }
     } catch (error) {
       setErrorMessage(error.message);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -211,7 +210,6 @@ const Archive = () => {
     setErrorMessage("");
     setArchiveLinks([]);
     setMediaUrl("");
-    setIsLoading(true);
 
     if (fileToUpload) {
       await archiveFileToWbm.mutate();
@@ -220,12 +218,22 @@ const Archive = () => {
 
       await fetchMediaLinkForSocialMediaPost(urlToFetch);
     }
-
-    setIsLoading(false);
   };
 
+  // It may be easier to read these form validations in the components themselves instead of having everything
+  // in the parent component
   const handleContinueToNextStep = async () => {
-    if (step <= 3) {
+    if (step === 3 && isWaczFileReplayable === " ") {
+      setStep3HelperText("step3_radio_helper_text");
+      setStep3Error(true);
+      return;
+    }
+
+    if (step === 3 && isWaczFileReplayable === "false") {
+      // jump to the archiving tips
+      setStep(6);
+    } else if (step <= 3) {
+      // Increment to the next step
       setStep((prev) => prev + 1);
     } else if (step === 4) {
       await handleSubmit();
@@ -273,7 +281,12 @@ const Archive = () => {
                 </Box>
                 <Box>
                   <CustomizedMenus
-                    handleGoToFirstStep={() => setStep(1)}
+                    isRestartEnabled={step !== 1}
+                    isGoToWbmStepEnabled={urlInput}
+                    handleGoToFirstStep={() => {
+                      handleCloseUrl();
+                      setStep(1);
+                    }}
                     handleGoToWaczUpload={() => setStep(4)}
                     handleGoToWbmStep={() => setStep(6)}
                   />
@@ -288,7 +301,16 @@ const Archive = () => {
                 />
               )}
               {step === 2 && <SecondStep url={urlInput} />}
-              {step === 3 && <ThirdStep />}
+              {step === 3 && (
+                <ThirdStep
+                  isWaczFileReplayable={isWaczFileReplayable}
+                  setIsWaczFileReplayable={setIsWaczFileReplayable}
+                  helperText={step3HelperText}
+                  setHelperText={setStep3HelperText}
+                  error={step3Error}
+                  setError={setStep3Error}
+                />
+              )}
               {step === 4 && (
                 <FourthStep
                   fileInput={fileToUpload}
@@ -322,8 +344,9 @@ const Archive = () => {
                     variant="outlined"
                     startIcon={<ArrowBack />}
                     onClick={() => setStep((prev) => prev - 1)}
+                    sx={{ textTransform: "none" }}
                   >
-                    {"Back"}
+                    {keyword("back_button")}
                   </Button>
                 )}
 
@@ -331,8 +354,20 @@ const Archive = () => {
                   variant="contained"
                   onClick={() => handleContinueToNextStep()}
                   disabled={step === 4 && !fileToUpload}
+                  sx={{ textTransform: "none" }}
+                  startIcon={
+                    step > 4 ? (
+                      <archiving.icon
+                        style={{
+                          fontSize: "20px",
+                        }}
+                      />
+                    ) : undefined
+                  }
                 >
-                  {step <= 4 ? "Continue" : "New archive"}
+                  {step <= 4
+                    ? keyword("continue_button")
+                    : keyword("new_archive_button")}
                 </Button>
               </Stack>
             )}

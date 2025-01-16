@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Button, ButtonGroup, Stack, Typography } from "@mui/material";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import CloseIcon from "@mui/icons-material/Close";
-import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 const FourthStep = ({ fileInput, setFileInput }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
@@ -10,7 +10,7 @@ const FourthStep = ({ fileInput, setFileInput }) => {
   return (
     <Stack direction="column" spacing={4}>
       <Stack direction="column" spacing={2}>
-        <Typography variant="h6">{"Upload the wacz file"}</Typography>
+        <Typography variant="h6">{keyword("step4_title")}</Typography>
       </Stack>
       <Box>
         <ButtonGroup variant="outlined">

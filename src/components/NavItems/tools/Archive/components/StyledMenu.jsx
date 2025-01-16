@@ -5,6 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
 import { IconButton } from "@mui/material";
 import { Archive, FileUpload, MoreVert, Replay } from "@mui/icons-material";
+import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -50,10 +51,13 @@ const StyledMenu = styled((props) => (
 }));
 
 export default function CustomizedMenus({
+  isRestartEnabled,
+  isGoToWbmStepEnabled,
   handleGoToFirstStep,
   handleGoToWaczUpload,
   handleGoToWbmStep,
 }) {
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -61,7 +65,8 @@ export default function CustomizedMenus({
   };
   const handleClose = (fn) => {
     setAnchorEl(null);
-    fn();
+
+    if (typeof fn === "function") fn();
   };
 
   return (
@@ -89,22 +94,26 @@ export default function CustomizedMenus({
         <MenuItem
           onClick={() => handleClose(handleGoToFirstStep)}
           disableRipple
+          disabled={!isRestartEnabled}
         >
           <Replay />
-          {"Restart from the beginning"}
+          {keyword("menu_restart")}
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
-        <MenuItem onClick={() => handleClose(handleGoToWbmStep)} disableRipple>
+        <MenuItem
+          onClick={() => handleClose(handleGoToWbmStep)}
+          disableRipple
+          disabled={!isGoToWbmStepEnabled}
+        >
           <Archive />
-          {"Go to Archiving with the Wayback Machine"}
+          {keyword("menu_wbm_step")}
         </MenuItem>
-
         <MenuItem
           onClick={() => handleClose(handleGoToWaczUpload)}
           disableRipple
         >
           <FileUpload />
-          {"Go to wacz upload step"}
+          {keyword("menu_wacz_step")}
         </MenuItem>
       </StyledMenu>
     </div>

@@ -2,7 +2,11 @@ import React from "react";
 import { Alert, Box, Fade, Skeleton, Stack } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import ArchivedFileCard from "./archivedFileCard";
-import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import List from "@mui/material/List";
+import { prettifyLargeString } from "../utils";
 
 const FifthStep = ({
   archiveFileToWbm,
@@ -13,9 +17,22 @@ const FifthStep = ({
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
 
   return (
-    <>
+    <Stack direction="column" spacing={4}>
+      {fileToUpload &&
+        typeof fileToUpload.name === "string" &&
+        fileToUpload.name.length > 0 && (
+          <List dense={true}>
+            <ListItem>
+              <ListItemText
+                primary={keyword("step5_file_name")}
+                secondary={prettifyLargeString(fileToUpload.name)}
+              />
+            </ListItem>
+          </List>
+        )}
+
       {archiveFileToWbm.isError && (
-        <Box mb={4}>
+        <Box>
           <Fade in={true} timeout={750}>
             <Alert severity="error">
               {keyword(archiveFileToWbm.error.message)}
@@ -25,7 +42,7 @@ const FifthStep = ({
       )}
 
       {errorMessage && (
-        <Box mb={4}>
+        <Box>
           <Fade in={true} timeout={750}>
             <Alert severity="error">{keyword(errorMessage)}</Alert>
           </Fade>
@@ -46,7 +63,7 @@ const FifthStep = ({
       {archiveFileToWbm.isSuccess && (
         <ArchivedFileCard file={fileToUpload} archiveLinks={archiveLinks} />
       )}
-    </>
+    </Stack>
   );
 };
 

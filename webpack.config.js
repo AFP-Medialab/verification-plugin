@@ -97,6 +97,7 @@ module.exports = {
     },
     alias: {
       "@workers": path.resolve(__dirname, "src/workers"),
+      "@Shared": path.resolve(__dirname, "src/components/Shared"),
     },
   },
   experiments: {

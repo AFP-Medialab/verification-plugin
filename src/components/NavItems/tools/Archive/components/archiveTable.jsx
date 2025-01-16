@@ -39,8 +39,8 @@ export const ArchiveTable = (props) => {
 
   useTrackEvent(
     "submission",
-    "archiving",
-    "archiving",
+    "wacz_archiving",
+    "WACZ archiving",
     props.fileName,
     client_id,
     props.fileName,
