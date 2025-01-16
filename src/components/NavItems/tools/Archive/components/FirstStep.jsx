@@ -11,9 +11,12 @@ import {
 } from "@mui/material";
 import ListItem from "@mui/material/ListItem";
 import { ArrowForward } from "@mui/icons-material";
-import { isValidUrl } from "../../../../Shared/Utils/URLUtils";
+import { isValidUrl } from "@Shared/Utils/URLUtils";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 const FirstStep = ({ handleClick, url, handleUrlChange }) => {
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
+
   const [isUrlValid, setIsUrlValid] = React.useState(false);
 
   const [isError, setIsError] = React.useState(false);
@@ -46,7 +49,7 @@ const FirstStep = ({ handleClick, url, handleUrlChange }) => {
   return (
     <Stack direction="column" spacing={4}>
       <Stack direction="column" spacing={2}>
-        <Typography>{"Enter the URL to archive"}</Typography>
+        <Typography>{keyword("step1_title")}</Typography>
 
         <Box>
           <TextField
@@ -54,11 +57,11 @@ const FirstStep = ({ handleClick, url, handleUrlChange }) => {
             error={isError}
             color={isUrlValid && url ? "success" : "primary"}
             variant="filled"
-            label={"URL"}
+            label={keyword("step1_textfield_label")}
             sx={{ width: "50%" }}
             value={url}
             onChange={(e) => handleUrlValidation(e.target.value)}
-            helperText={isError ? "Incorrect URL." : ""}
+            helperText={isError ? keyword("step1_invalid_url_error") : ""}
           ></TextField>
         </Box>
       </Stack>
@@ -68,12 +71,12 @@ const FirstStep = ({ handleClick, url, handleUrlChange }) => {
           <ListItemButton onClick={() => handleNavigation(2)}>
             <Stack direction="column" spacing={1} width={"100%"}>
               <Typography variant="caption" color={"success"}>
-                {"Recommended, higher quality archive"}
+                {keyword("step1_recommended_caption")}
               </Typography>
 
               <ListItemText
-                primary={"WACZ upload"}
-                secondary={"Continue with building a WACZ file"}
+                primary={keyword("step1_wacz_upload_title")}
+                secondary={keyword("step1_wacz_upload_subtitle")}
               />
             </Stack>
 
@@ -85,11 +88,11 @@ const FirstStep = ({ handleClick, url, handleUrlChange }) => {
           <ListItemButton onClick={() => handleNavigation(6)}>
             <Stack direction="column" spacing={1} width={"100%"}>
               <Typography variant="caption" color={"error"}>
-                {"Less recommended, archive may fail to play"}
+                {keyword("step1_not_recommended_caption")}
               </Typography>
               <ListItemText
-                primary={"Save on the Wayback Machine"}
-                secondary={"Save the URL directly to the Wayback Machine"}
+                primary={keyword("step1_wbm_upload_title")}
+                secondary={keyword("step1_wbm_upload_subtitle")}
               />
             </Stack>
             <ArrowForward />

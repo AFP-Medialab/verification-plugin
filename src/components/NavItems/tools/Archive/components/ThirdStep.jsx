@@ -11,6 +11,7 @@ import Radio from "@mui/material/Radio";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 const ThirdStep = ({
   isWaczFileReplayable,
@@ -28,15 +29,13 @@ const ThirdStep = ({
     setIsWaczFileReplayable(e.target.value);
   };
 
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
+
   return (
     <Stack direction="column" spacing={6}>
       <Stack direction="column" spacing={2}>
-        <Typography variant="h6">{"Replay the WACZ file"}</Typography>
-        <Typography>
-          {
-            "Make sure the archive captured in the WACZ file worked. Use webrecorder to replay the archive, and make sure the media is captured and readable."
-          }
-        </Typography>
+        <Typography variant="h6">{keyword("step3_title")}</Typography>
+        <Typography>{keyword("step3_subtitle")}</Typography>
       </Stack>
 
       <Box>
@@ -48,21 +47,21 @@ const ThirdStep = ({
             target={"_blank"}
             variant={"body1"}
           >
-            {"Download the Webrecorder's archiveweb.page Chrome extension"}
+            {keyword("step3_wbm_dl_extension")}
           </Link>
           <Link
             href={"https://replayweb.page/docs/"}
             target={"_blank"}
             variant={"body1"}
           >
-            {"Webrecorder's ReplayWeb.page user guide"}
+            {keyword("step3_wbm_user_guide")}
           </Link>
         </Stack>
       </Box>
 
       <Box>
         <Stack direction="column" spacing={2}>
-          <Typography>{"Video tutorial"}</Typography>
+          <Typography>{keyword("step3_video_tutorial_title")}</Typography>
           <iframe
             width="560"
             height="315"
@@ -87,19 +86,15 @@ const ThirdStep = ({
           <FormControlLabel
             value={"true"}
             control={<Radio />}
-            label={
-              "The WACZ file was correctly replayed by Webrecorder's ReplayWeb.page"
-            }
+            label={keyword("step3_radio_wacz")}
           />
           <FormControlLabel
             value={"false"}
             control={<Radio />}
-            label={
-              "There was an issue with replaying the archive (try another method)"
-            }
+            label={keyword("step3_radio_wbm")}
           />
         </RadioGroup>
-        <FormHelperText>{helperText}</FormHelperText>
+        <FormHelperText>{keyword(helperText)}</FormHelperText>
       </FormControl>
     </Stack>
   );

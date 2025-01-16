@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Download } from "@mui/icons-material";
-import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 /**
  *
@@ -155,8 +155,8 @@ const DownloadWaczFile = ({ url }) => {
           startIcon={<Download />}
         >
           {getWaczFileFromScoop.isPending
-            ? "Processing..."
-            : "Download .WACZ file"}
+            ? keyword("scoop_button_loading")
+            : keyword("scoop_button_download")}
         </LoadingButton>
         {getWaczFileFromScoop.isError && (
           <Typography variant="body2" color="error">

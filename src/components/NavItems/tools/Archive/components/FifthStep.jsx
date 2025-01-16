@@ -2,7 +2,7 @@ import React from "react";
 import { Alert, Box, Fade, Skeleton, Stack } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import ArchivedFileCard from "./archivedFileCard";
-import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import List from "@mui/material/List";
@@ -24,7 +24,7 @@ const FifthStep = ({
           <List dense={true}>
             <ListItem>
               <ListItemText
-                primary={"File name"}
+                primary={keyword("step5_file_name")}
                 secondary={prettifyLargeString(fileToUpload.name)}
               />
             </ListItem>

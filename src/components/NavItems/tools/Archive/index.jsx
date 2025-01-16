@@ -224,7 +224,7 @@ const Archive = () => {
   // in the parent component
   const handleContinueToNextStep = async () => {
     if (step === 3 && isWaczFileReplayable === " ") {
-      setStep3HelperText("Please select an option");
+      setStep3HelperText("step3_radio_helper_text");
       setStep3Error(true);
       return;
     }
@@ -346,7 +346,7 @@ const Archive = () => {
                     onClick={() => setStep((prev) => prev - 1)}
                     sx={{ textTransform: "none" }}
                   >
-                    {"Back"}
+                    {keyword("back_button")}
                   </Button>
                 )}
 
@@ -365,7 +365,9 @@ const Archive = () => {
                     ) : undefined
                   }
                 >
-                  {step <= 4 ? "Continue" : "New archive"}
+                  {step <= 4
+                    ? keyword("continue_button")
+                    : keyword("new_archive_button")}
                 </Button>
               </Stack>
             )}
