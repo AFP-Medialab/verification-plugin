@@ -11,6 +11,17 @@ const styles = (theme) => ({
     textAlign: "center",
   },
 
+  namedEntityButtonHidden: {
+    textDecoration: "line-through !important",
+    filter: "brightness(80%)",
+  },
+
+  tagCloudTag: {
+    "&:hover": {
+      filter: "brightness(80%)",
+    },
+  },
+
   rootNoCenter: {
     padding: theme.spacing(2),
   },

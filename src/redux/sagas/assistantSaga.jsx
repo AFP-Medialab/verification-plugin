@@ -560,6 +560,7 @@ function* handleNamedEntityCall(action) {
             return b.value - a.value;
           });
         });
+        categoryList.sort();
         yield put(
           setNeDetails(categoryList, wordCloudList, false, true, false),
         );

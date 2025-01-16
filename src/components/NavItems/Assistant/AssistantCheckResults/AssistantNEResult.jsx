@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
 import Card from "@mui/material/Card";
 import { CardHeader, Grid2, ListItemButton, Tooltip } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
@@ -37,73 +39,43 @@ const AssistantNEResult = () => {
   const neLoading = useSelector((state) => state.assistant.neLoading);
 
   const [selectedIndex, setSelectedIndex] = useState(null);
-  //console.log("neResult ", neResult);
-  //console.log("neResultCount ", neResultCount);
   const handleCollapse = (index) => {
     index === selectedIndex ? setSelectedIndex(null) : setSelectedIndex(index);
   };
+  const [visibleCategories, setVisibleCategories] = useState(
+    neResult.reduce((acc, key) => {
+      acc[key.category.toLowerCase()] = false;
+      return acc;
+    }, {}),
+  );
 
-  function getCallback(callback) {
-    return function (word, event) {
-      const isActive = callback !== "onWordMouseOut";
-      const element = event.target;
-      const text = select(element);
-      text
-        .on("click", () => {
-          if (isActive) {
-            window.open(`https://google.com/search?q=${word.text}`, "_blank");
-          }
-        })
-        .transition()
-        .attr("text-decoration", isActive ? "underline" : "none");
-    };
-  }
-
-  const options = {
-    rotations: 1,
-    rotationAngles: [0],
-    fontSizes: [15, 60],
-  };
-
-  const callbacks = {
-    getWordColor: (word) => {
-      switch (word.category) {
-        case "Person":
-          return "blue";
-        case "Location":
-          return "red";
-        case "Organization":
-          return "green";
-        case "Hashtag":
-          return "orange";
-        case "UserId":
-          return "purple";
-        default:
-          return "black";
-      }
-    },
-    getWordTooltip: (word) => {
-      return word.text + " (" + word.category + "): " + word.value;
-    },
-    onWordClick: getCallback("onWordClick"),
-    onWordMouseOut: getCallback("onWordMouseOut"),
-    onWordMouseOver: getCallback("onWordMouseOver"),
+  const toggleCategory = (category) => {
+    setVisibleCategories({
+      ...visibleCategories,
+      [category]: !visibleCategories[category],
+    });
   };
 
   function getWordColor(tag) {
-    switch (tag.category) {
-      case "Person":
-        return "blue";
-      case "Location":
-        return "red";
-      case "Organization":
-        return "green";
-      case "Hashtag":
-        return "orange";
-      case "UserId":
-        return "purple";
+    switch (tag.category.toLowerCase()) {
+      case "person":
+        return "#648FFF";
+      // return "blue";
+      case "location":
+        return "#DC267F";
+      // return "red";
+      case "organization":
+        return "#FFB000";
+      // return "green";
+      case "hashtag":
+        return "#FE6100";
+      // return "orange";
+      case "userid":
+        return "#785EF0";
+      // return "purple";
       default:
         return "black";
+      // return "black";
     }
   }
 
@@ -112,26 +84,41 @@ const AssistantNEResult = () => {
     verticalAlign: "middle",
     display: "inline-block",
   };
+
   const customRenderer = (tag, size, color) => {
     const { className, style, ...props } = tag.props || {};
     const fontSize = size + "px";
-    const key = tag.key || tag.value;
     const tagStyle = {
       ...styles,
+      "&:hover": {
+        color: "red !important",
+      },
       color: getWordColor(tag),
+      textDecorationColor: getWordColor(tag),
+      visibility: visibleCategories[tag.category.toLowerCase()]
+        ? "hidden"
+        : "visible",
       fontSize,
       ...style,
     };
 
-    let tagClassName = "tag-cloud-tag";
+    let tagClassName = classes.tagCloudTag;
     if (className) {
       tagClassName += " " + className;
     }
 
     return (
-      <span key={key} style={tagStyle} className={tagClassName}>
-        {tag.value}
-      </span>
+      <Tooltip key={tag.key || tag.value} title={tag.count} arrow>
+        <Link
+          style={tagStyle}
+          className={tagClassName}
+          href={"https://www.google.com/search?q=" + tag.value}
+          rel="noopener noreferrer"
+          target={"_blank"}
+        >
+          {tag.value}
+        </Link>
+      </Tooltip>
     );
   };
 
@@ -159,64 +146,31 @@ const AssistantNEResult = () => {
         />
         {neLoading && <LinearProgress />}
         <CardContent>
+          <ButtonGroup sx={{ paddingBottom: "15px" }}>
+            {neResult.map((tag, index) => (
+              <Button
+                className={
+                  visibleCategories[tag.category.toLowerCase()]
+                    ? classes.namedEntityButtonHidden
+                    : ""
+                }
+                style={{
+                  color: "white",
+                  border: "none",
+                  backgroundColor: getWordColor(tag),
+                }}
+                key={tag.category}
+                onClick={() => toggleCategory(tag.category.toLowerCase())}
+              >
+                {tag.category}
+              </Button>
+            ))}
+          </ButtonGroup>
           <Grid2 container>
-            <Grid2
-              size={{ xs: 4 }}
-              style={{ maxHeight: 300, overflowY: "auto" }}
-            >
-              <List>
-                {neResult.map((value, index) => (
-                  <Box key={index}>
-                    <ListItemButton
-                      key={index}
-                      onClick={() => handleCollapse(index)}
-                    >
-                      <ListItemText
-                        primary={
-                          <Typography component={"div"} align={"left"}>
-                            <Box fontWeight="fontWeightBold">
-                              {value["category"]}
-                            </Box>
-                          </Typography>
-                        }
-                      />
-                      {index === selectedIndex ? (
-                        <ExpandLess />
-                      ) : (
-                        <ExpandMore />
-                      )}
-                    </ListItemButton>
-                    <Collapse in={index === selectedIndex}>
-                      <List component="div" disablePadding>
-                        {value["words"].map((v, k) => (
-                          <ListItem key={k}>
-                            <ListItemText>
-                              <Link
-                                href={
-                                  "https://www.google.com/search?q=" + v.value
-                                }
-                                rel="noopener noreferrer"
-                                target={"_blank"}
-                              >
-                                {v.value} &nbsp;
-                              </Link>
-                              ({v.count})
-                            </ListItemText>
-                          </ListItem>
-                        ))}
-                      </List>
-                    </Collapse>
-                  </Box>
-                ))}
-              </List>
-            </Grid2>
-            <Grid2 size={{ xs: 1 }} align={"center"}>
-              <Divider orientation="vertical" />
-            </Grid2>
-            <Grid2 size={{ xs: 7 }} align={"center"}>
-              {/*<ReactWordcloud words={neResultCount} callbacks={callbacks} options={options}/>*/}
+            <Grid2 align={"center"}>
               <TagCloud
                 tags={neResultCount}
+                shuffle={false}
                 minSize={20}
                 maxSize={45}
                 renderer={customRenderer}
