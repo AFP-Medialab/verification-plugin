@@ -146,7 +146,7 @@ const AssistantNEResult = () => {
         />
         {neLoading && <LinearProgress />}
         <CardContent>
-          <ButtonGroup>
+          <ButtonGroup sx={{ paddingBottom: "15px" }}>
             {neResult.map((tag, index) => (
               <Button
                 className={
