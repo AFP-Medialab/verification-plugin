@@ -87,12 +87,16 @@ const AssistantMediaResult = () => {
       return new Promise((resolve) => {
         const image = new Image();
         image.src = imageUrl;
-        console.log("imageUrl=", imageUrl);
         image.onload = () => {
-          resolve({ url: imageUrl, width: image.width, height: image.height });
+          resolve({
+            url: imageUrl,
+            include: image.width > 2 && image.height > 2,
+          });
         };
         image.onerror = () => {
-          resolve({ url: imageUrl, width: null, height: null });
+          // We have to include it if there's an error loading as we don't have enough info to filter it out
+          // Instagram seem to have some pretty aggressive security policies, so we get this there
+          resolve({ url: imageUrl, include: true });
         };
       });
     });
@@ -100,10 +104,9 @@ const AssistantMediaResult = () => {
     Promise.all(imagePromises)
       .then((imageDimensions) => {
         const filteredImages = imageDimensions
-          .filter((image) => image.width > 2 && image.height > 2)
+          .filter((image) => image.include)
           .map((image) => image.url);
         setFilteredImageList(filteredImages);
-        console.log(imageDimensions, filteredImages);
       })
       .catch((error) => {
         console.error("Assistant error loading images:", error);
