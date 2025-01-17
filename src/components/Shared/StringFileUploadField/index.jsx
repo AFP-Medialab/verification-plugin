@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import {
   Button,
@@ -96,34 +96,37 @@ const StringFileUploadField = ({
     }
   };
 
-  const fieldsRef = useRef(null);
-  const [fieldsDivHeight, setFieldsDivHeight] = useState(0);
-
-  // Keep track of the computed height
-  useEffect(() => {
-    if (fieldsRef.current) {
-      setFieldsDivHeight(fieldsRef.current.offsetHeight);
-    }
-  }, []);
-
   return (
     <Box
       onDragOver={onDragOver}
       onDragLeave={onDragLeave}
       onDrop={onDrop}
       sx={{
-        border: isDragging ? "4px dashed #00926c" : "0",
-        height: isDragging ? fieldsDivHeight : "auto",
-        backgroundColor: isDragging ? dropColor : "initial",
+        position: "relative",
       }}
     >
       {isDragging && (
-        <Stack justifyContent="center" alignItems="center" height="100%">
+        <Stack
+          justifyContent="center"
+          alignItems="center"
+          height="100%"
+          sx={{
+            border: "4px dashed #00926c",
+            backgroundColor: dropColor,
+            justifyContent: "center",
+            alignItems: "center",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: 0,
+          }}
+        >
           <Typography>{keyword("droppable_zone")}</Typography>
         </Stack>
       )}
 
-      <Box visibility={isDragging ? "hidden" : "visible"} ref={fieldsRef}>
+      <Box visibility={isDragging ? "hidden" : "visible"}>
         <Grid2 container direction="row" spacing={3} alignItems="center">
           <Grid2 size="grow">
             <TextField
