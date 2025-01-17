@@ -70,9 +70,8 @@ const Thumbnails = () => {
     let selectedList = {};
 
     for (const searchEngine of Object.values(SEARCH_ENGINE_SETTINGS)) {
-      if (searchEngine.NAME === SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME)
-        selectedList[searchEngine.NAME] = true;
-      else selectedList[searchEngine.NAME] = false;
+      selectedList[searchEngine.NAME] =
+        searchEngine.NAME === SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME;
     }
 
     selectedList["openTabs"] = true;
@@ -141,13 +140,13 @@ const Thumbnails = () => {
     if (url !== null && url !== "" && isYtUrl(url)) {
       setEventUrl(url);
       /*trackEvent(
-                                      "submission",
-                                      "thumbnails",
-                                      "youtube thumbnail",
-                                      url,
-                                      client_id,
-                                      uid
-                                    );*/
+                                            "submission",
+                                            "thumbnails",
+                                            "youtube thumbnail",
+                                            url,
+                                            client_id,
+                                            uid
+                                          );*/
       let images = get_images(url);
       dispatch(
         setThumbnailsResult({

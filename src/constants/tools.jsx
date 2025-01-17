@@ -34,7 +34,7 @@ import CsvSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/CSV_SNA.svg
 import AboutIcon from "../components/NavBar/images/SVG/Navbar/About.svg";
 import ToolsMenu from "../components/NavItems/tools/Alltools/ToolsMenu";
 import Analysis from "../components/NavItems/tools/Analysis/Analysis";
-import { Footer, FOOTER_TYPES } from "../components/Shared/Footer/Footer";
+import { Footer, FOOTER_TYPES } from "@Shared/Footer/Footer";
 import Keyframes from "../components/NavItems/tools/Keyframes/Keyframes";
 import Thumbnails from "../components/NavItems/tools/Thumbnails/Thumbnails";
 import VideoRights from "../components/NavItems/tools/VideoRights/VideoRights";
