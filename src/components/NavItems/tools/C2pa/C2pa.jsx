@@ -204,7 +204,7 @@ const C2paData = () => {
         method: "get",
         responseType: "blob",
         maxBodyLength: Infinity,
-        url: `https://plugin-archiving.afp.com/gateway/c2paafp/${urls.thumbnailUrl}`,
+        url: `https://plugin-archiving.afp.com/gateway/c2paafp${urls.thumbnailUrl}`,
         headers: {
           "X-AFP-TRANSACTION-ID": getTransactionId(),
         },
@@ -238,7 +238,7 @@ const C2paData = () => {
         method: "get",
         responseType: "blob",
         maxBodyLength: Infinity,
-        url: `${serverUrl}/${urls.hdUrl}`,
+        url: `${serverUrl}${urls.hdUrl}`,
         headers: {
           "X-AFP-TRANSACTION-ID": getTransactionId(),
         },
