@@ -10,9 +10,9 @@ import {
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import React, { useEffect, useState } from "react";
 import IconInternetArchive from "../../../../NavBar/images/SVG/Others/archive-icon.svg";
-import { getclientId } from "../../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { useSelector } from "react-redux";
-import { history } from "../../../../Shared/History/History";
+import { history } from "@Shared/History/History";
 import { prettifyLargeString } from "../utils";
 import CopyButton from "../../../../Shared/CopyButton";
 import { KNOWN_LINKS } from "../../../Assistant/AssistantRuleBook";

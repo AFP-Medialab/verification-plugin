@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
+import ImageGridList from "@Shared/ImageGridList/ImageGridList";
 import { useDispatch, useSelector } from "react-redux";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { Grid2, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 import { loadImageSize, useLoading } from "../../../../Hooks/useInput";
 import {
   cleanThumbnailsState,
@@ -18,22 +18,22 @@ import {
 import { setError } from "redux/reducers/errorReducer";
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
-import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
+import OnClickInfo from "@Shared/OnClickInfo/OnClickInfo";
 import { useParams } from "react-router-dom";
 
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import ThumbnailsIcon from "../../../NavBar/images/SVG/Video/Thumbnails.svg";
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import HeaderTool from "@Shared/HeaderTool/HeaderTool";
 import LinearProgress from "@mui/material/LinearProgress";
 import {
   reverseImageSearch,
   reverseImageSearchAll,
   SEARCH_ENGINE_SETTINGS,
-} from "../../../Shared/ReverseSearch/reverseSearchUtils";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+} from "@Shared/ReverseSearch/reverseSearchUtils";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import { thumbnails } from "../../../../constants/tools";
 
 const Thumbnails = () => {
   const { url } = useParams();
@@ -70,9 +70,8 @@ const Thumbnails = () => {
     let selectedList = {};
 
     for (const searchEngine of Object.values(SEARCH_ENGINE_SETTINGS)) {
-      if (searchEngine.NAME === SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME)
-        selectedList[searchEngine.NAME] = true;
-      else selectedList[searchEngine.NAME] = false;
+      selectedList[searchEngine.NAME] =
+        searchEngine.NAME === SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME;
     }
 
     selectedList["openTabs"] = true;
@@ -141,13 +140,13 @@ const Thumbnails = () => {
     if (url !== null && url !== "" && isYtUrl(url)) {
       setEventUrl(url);
       /*trackEvent(
-                          "submission",
-                          "thumbnails",
-                          "youtube thumbnail",
-                          url,
-                          client_id,
-                          uid
-                        );*/
+                                            "submission",
+                                            "thumbnails",
+                                            "youtube thumbnail",
+                                            url,
+                                            client_id,
+                                            uid
+                                          );*/
       let images = get_images(url);
       dispatch(
         setThumbnailsResult({
@@ -238,13 +237,7 @@ const Thumbnails = () => {
       <HeaderTool
         name={keywordAllTools("navbar_thumbnails")}
         description={keywordAllTools("navbar_thumbnails_description")}
-        icon={
-          <ThumbnailsIcon
-            style={{ fill: "#00926c" }}
-            width="40px"
-            height="40px"
-          />
-        }
+        icon={<thumbnails.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
       />
 
       <Card>

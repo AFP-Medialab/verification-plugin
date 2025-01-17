@@ -7,9 +7,8 @@ import ForensicResults from "./Results/ForensicResult";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { useParams } from "react-router-dom";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import ForensicIcon from "../../../NavBar/images/SVG/Image/Forensic.svg";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -18,9 +17,10 @@ import Alert from "@mui/material/Alert";
 import { resetForensicState } from "../../../../redux/actions/tools/forensicActions";
 import { setError } from "redux/reducers/errorReducer";
 import axios from "axios";
-import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
+import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { Stack } from "@mui/material";
+import { imageForensic } from "../../../../constants/tools";
 
 const Forensic = () => {
   const { url } = useParams();
@@ -191,11 +191,7 @@ const Forensic = () => {
             name={keywordAllTools("navbar_forensic")}
             description={keywordAllTools("navbar_forensic_description")}
             icon={
-              <ForensicIcon
-                style={{ fill: "#00926c" }}
-                width="40px"
-                height="40px"
-              />
+              <imageForensic.icon sx={{ fill: "#00926c", fontSize: "40px" }} />
             }
           />
 

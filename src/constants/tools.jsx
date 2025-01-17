@@ -34,7 +34,7 @@ import CsvSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/CSV_SNA.svg
 import AboutIcon from "../components/NavBar/images/SVG/Navbar/About.svg";
 import ToolsMenu from "../components/NavItems/tools/Alltools/ToolsMenu";
 import Analysis from "../components/NavItems/tools/Analysis/Analysis";
-import { Footer, FOOTER_TYPES } from "../components/Shared/Footer/Footer";
+import { Footer, FOOTER_TYPES } from "@Shared/Footer/Footer";
 import Keyframes from "../components/NavItems/tools/Keyframes/Keyframes";
 import Thumbnails from "../components/NavItems/tools/Thumbnails/Thumbnails";
 import VideoRights from "../components/NavItems/tools/VideoRights/VideoRights";
@@ -408,7 +408,7 @@ export const imageOcr = new Tool(
   <Footer type={FOOTER_TYPES.USFD} />,
 );
 
-const imageGif = new Tool(
+export const imageGif = new Tool(
   "navbar_gif",
   "navbar_gif_description",
   gifSvgIcon,
@@ -447,7 +447,7 @@ export const imageDeepfake = new Tool(
   <Footer type={FOOTER_TYPES.ITI} />,
 );
 
-const imageGeolocation = new Tool(
+export const imageGeolocation = new Tool(
   "navbar_geolocation",
   "navbar_geolocation_description",
   geolocationSvgIcon,
@@ -481,7 +481,7 @@ const audioLoccus = new Tool(
  * Search tools
  **/
 
-const searchTwitter = new Tool(
+export const searchTwitter = new Tool(
   "navbar_twitter",
   "navbar_twitter_description",
   twitterSearchSvgIcon,
@@ -537,7 +537,7 @@ const searchXnetwork = new Tool(
  * Data Analysis tools
  **/
 
-const dataAnalysisSna = new Tool(
+export const dataAnalysisSna = new Tool(
   "navbar_twitter_sna",
   "navbar_twitter_sna_description",
   twitterSnaSvgIcon,

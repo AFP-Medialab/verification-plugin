@@ -10,20 +10,20 @@ import Divider from "@mui/material/Divider";
 import KeyFramesResults from "./Results/KeyFramesResults";
 import { useKeyframeWrapper } from "./Hooks/useKeyframeWrapper";
 import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 import { useParams } from "react-router-dom";
-import "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import KeyframesIcon from "../../../NavBar/images/SVG/Video/Keyframes.svg";
 import { Grid2 } from "@mui/material";
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import HeaderTool from "@Shared/HeaderTool/HeaderTool";
 import LinkIcon from "@mui/icons-material/Link";
 import FileIcon from "@mui/icons-material/InsertDriveFile";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import { keyframes } from "../../../../constants/tools";
 
 const Keyframes = () => {
   const { url } = useParams();
@@ -38,10 +38,10 @@ const Keyframes = () => {
   const [localFile, setLocalFile] = useState(false);
 
   /*
-          const toggleLocal = () => {
-              setLocalFile(!localFile);
-          };
-          */
+                  const toggleLocal = () => {
+                      setLocalFile(!localFile);
+                  };
+                  */
 
   const resultUrl = useSelector((state) => state.keyframes.url);
   const resultData = useSelector((state) => state.keyframes.result);
@@ -85,21 +85,21 @@ const Keyframes = () => {
   //const client_id = getclientId();
   const submitUrl = () => {
     /*trackEvent(
-                  "submission",
-                  "keyframe",
-                  "video key frame analysis",
-                  input.trim()
-                );*/
+                                  "submission",
+                                  "keyframe",
+                                  "video key frame analysis",
+                                  input.trim()
+                                );*/
     setSubmittedUrl(input);
   };
 
   /*useEffect(()=>{
-              console.log("detected");
-              if (urlDetected) {
-                  submitUrl()
-              }
-              // eslint-disable-next-line react-hooks/exhaustive-deps
-          }, [urlDetected])*/
+                      console.log("detected");
+                      if (urlDetected) {
+                          submitUrl()
+                      }
+                      // eslint-disable-next-line react-hooks/exhaustive-deps
+                  }, [urlDetected])*/
 
   useEffect(() => {
     if (url) {
@@ -185,13 +185,7 @@ const Keyframes = () => {
       <HeaderTool
         name={keywordAllTools("navbar_keyframes")}
         description={keywordAllTools("navbar_keyframes_description")}
-        icon={
-          <KeyframesIcon
-            style={{ fill: "#00926c" }}
-            width="40px"
-            height="40px"
-          />
-        }
+        icon={<keyframes.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
       />
 
       <Card>

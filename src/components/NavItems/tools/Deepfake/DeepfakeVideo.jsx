@@ -5,7 +5,6 @@ import Box from "@mui/material/Box";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import DeepfakeIcon from "../../../NavBar/images/SVG/Image/Deepfake.svg";
 import { Grid2 } from "@mui/material";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import UseGetDeepfake from "./Hooks/useGetDeepfake";
@@ -16,6 +15,7 @@ import { resetDeepfake } from "../../../../redux/actions/tools/deepfakeVideoActi
 import { preprocessFileUpload } from "components/Shared/Utils/fileUtils";
 import { setError } from "redux/reducers/errorReducer";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
+import { videoDeepfake } from "../../../../constants/tools";
 
 const Deepfake = () => {
   const classes = useMyStyles();
@@ -101,11 +101,7 @@ const Deepfake = () => {
       <HeaderTool
         name={keywordAllTools("navbar_deepfake_video")}
         description={keywordAllTools("navbar_deepfake_video_description")}
-        icon={
-          <DeepfakeIcon
-            style={{ fill: "#00926c", height: "40px", width: "auto" }}
-          />
-        }
+        icon={<videoDeepfake.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
       />
 
       <Alert severity="warning">{keywordWarning("warning_beta")}</Alert>
