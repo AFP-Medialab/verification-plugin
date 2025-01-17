@@ -408,7 +408,7 @@ export const imageOcr = new Tool(
   <Footer type={FOOTER_TYPES.USFD} />,
 );
 
-const imageGif = new Tool(
+export const imageGif = new Tool(
   "navbar_gif",
   "navbar_gif_description",
   gifSvgIcon,
@@ -447,7 +447,7 @@ export const imageDeepfake = new Tool(
   <Footer type={FOOTER_TYPES.ITI} />,
 );
 
-const imageGeolocation = new Tool(
+export const imageGeolocation = new Tool(
   "navbar_geolocation",
   "navbar_geolocation_description",
   geolocationSvgIcon,
@@ -481,7 +481,7 @@ const audioLoccus = new Tool(
  * Search tools
  **/
 
-const searchTwitter = new Tool(
+export const searchTwitter = new Tool(
   "navbar_twitter",
   "navbar_twitter_description",
   twitterSearchSvgIcon,
@@ -537,7 +537,7 @@ const searchXnetwork = new Tool(
  * Data Analysis tools
  **/
 
-const dataAnalysisSna = new Tool(
+export const dataAnalysisSna = new Tool(
   "navbar_twitter_sna",
   "navbar_twitter_sna_description",
   twitterSnaSvgIcon,

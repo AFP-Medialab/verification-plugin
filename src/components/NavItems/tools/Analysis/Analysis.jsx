@@ -26,15 +26,15 @@ import { useParams } from "react-router-dom";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import AnalysisIcon from "../../../NavBar/images/SVG/Video/Video_analysis.svg";
 import { Grid2 } from "@mui/material";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import styles from "./Results/layout.module.css";
 import Alert from "@mui/material/Alert";
 import _ from "lodash";
-import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { videoAnalysis } from "../../../../constants/tools";
 
 const Analysis = () => {
   const caa_analysis_url = process.env.REACT_APP_CAA_ANALYSIS_URL;
@@ -86,12 +86,12 @@ const Analysis = () => {
   );
   const submitForm = () => {
     /*trackEvent(
-                      "submission",
-                      "analysis",
-                      "video caa analysis",
-                      input.trim(),
-                      client_id
-                    );*/
+                                  "submission",
+                                  "analysis",
+                                  "video caa analysis",
+                                  input.trim(),
+                                  client_id
+                                );*/
     setSubmittedUrl(input.trim());
     dispatch(cleanAnalysisState());
   };
@@ -134,13 +134,7 @@ const Analysis = () => {
       <HeaderTool
         name={keywordAllTools("navbar_analysis_video")}
         description={keywordAllTools("navbar_analysis_description")}
-        icon={
-          <AnalysisIcon
-            style={{ fill: "#00926c" }}
-            width="40px"
-            height="40px"
-          />
-        }
+        icon={<videoAnalysis.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
       />
       <Card>
         <CardHeader

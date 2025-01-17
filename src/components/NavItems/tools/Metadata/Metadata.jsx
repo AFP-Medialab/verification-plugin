@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
-import { useSelector } from "react-redux";
-//import 'tui-image-editor/dist/tui-image-editor.css'
+import { useDispatch, useSelector } from "react-redux";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -11,22 +10,20 @@ import useImageTreatment from "./Hooks/useImageTreatment";
 import useVideoTreatment from "./Hooks/useVideoTreatment";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { useParams, useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 import { CONTENT_TYPE, KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import MetadataIcon from "../../../NavBar/images/SVG/Image/Metadata.svg";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-
-import { useDispatch } from "react-redux";
 import { setMetadataMediaType } from "../../../../redux/reducers/tools/metadataReducer";
 
 import { Alert, Stack } from "@mui/material";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
+import { imageMetadata } from "../../../../constants/tools";
 
 const Metadata = ({ mediaType }) => {
   const { url, type } = useParams();
@@ -44,9 +41,7 @@ const Metadata = ({ mediaType }) => {
   const session = useSelector((state) => state.userSession);
   const uid = session && session.user ? session.user.id : null;
 
-  const [radioImage, setRadioImage] = useState(
-    mediaType === "video" ? false : true,
-  );
+  const [radioImage, setRadioImage] = useState(mediaType !== "video");
   const [input, setInput] = useState(resultUrl ? resultUrl : "");
   const [fileInput, setFileInput] = useState(null);
   const [imageUrl, setImageurl] = useState(null);
@@ -77,14 +72,6 @@ const Metadata = ({ mediaType }) => {
   );
   const submitUrl = () => {
     if (input) {
-      /* trackEvent(
-        "submission",
-        "metadata",
-        "extract metadata",
-        input,
-        client_id,
-        uid
-      );*/
       if (radioImage) {
         setImageurl(input);
       } else {
@@ -175,10 +162,11 @@ const Metadata = ({ mediaType }) => {
         name={keywordAllTools("navbar_metadata")}
         description={keywordAllTools("navbar_metadata_description")}
         icon={
-          <MetadataIcon
-            style={{ fill: "#00926c" }}
-            width="40px"
-            height="40px"
+          <imageMetadata.icon
+            sx={{
+              fill: "#00926c",
+              fontSize: "40px",
+            }}
           />
         }
       />

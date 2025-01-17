@@ -6,7 +6,6 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import DeepfakeIcon from "../../../NavBar/images/SVG/Image/Deepfake.svg";
 import { Grid2 } from "@mui/material";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import UseGetDeepfake from "./Hooks/useGetDeepfake";
@@ -16,7 +15,8 @@ import Alert from "@mui/material/Alert";
 import { setError } from "redux/reducers/errorReducer";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { resetDeepfake } from "../../../../redux/actions/tools/deepfakeImageActions";
-import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
+import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
+import { imageDeepfake } from "../../../../constants/tools";
 
 const Deepfake = () => {
   //const { url } = useParams();
@@ -105,11 +105,7 @@ const Deepfake = () => {
       <HeaderTool
         name={keywordAllTools("navbar_deepfake_image")}
         description={keywordAllTools("navbar_deepfake_image_description")}
-        icon={
-          <DeepfakeIcon
-            style={{ fill: "#00926c", height: "40px", width: "auto" }}
-          />
-        }
+        icon={<imageDeepfake.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
       />
 
       <Alert severity="warning">{keywordWarning("warning_beta")}</Alert>
