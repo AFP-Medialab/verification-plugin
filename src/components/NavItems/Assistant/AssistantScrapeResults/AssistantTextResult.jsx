@@ -188,6 +188,7 @@ const AssistantTextResult = () => {
             <div hidden={dbkfMatch === null}>
               <Tooltip title={keyword("text_warning")}>
                 <WarningOutlined
+                  color={"warning"}
                   className={classes.toolTipWarning}
                   sx={{ cursor: "pointer" }}
                   onClick={() => {

@@ -24,7 +24,7 @@ import {
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "../../../Shared/VideoGridList/VideoGridList";
-import { WarningAmber } from "@mui/icons-material";
+import { WarningOutlined } from "@mui/icons-material";
 
 import {
   TransHtmlDoubleLinkBreak,
@@ -88,10 +88,15 @@ const AssistantMediaResult = () => {
         const image = new Image();
         image.src = imageUrl;
         image.onload = () => {
-          resolve({ url: imageUrl, width: image.width, height: image.height });
+          resolve({
+            url: imageUrl,
+            include: image.width > 2 || image.height > 2,
+          });
         };
         image.onerror = () => {
-          resolve({ url: imageUrl, width: null, height: null });
+          // We have to include it if there's an error loading as we don't have enough info to filter it out
+          // Instagram seem to have some pretty aggressive security policies, so we get this there
+          resolve({ url: imageUrl, include: true });
         };
       });
     });
@@ -99,7 +104,7 @@ const AssistantMediaResult = () => {
     Promise.all(imagePromises)
       .then((imageDimensions) => {
         const filteredImages = imageDimensions
-          .filter((image) => image.width > 2 && image.height > 2)
+          .filter((image) => image.include)
           .map((image) => image.url);
         setFilteredImageList(filteredImages);
       })
@@ -111,8 +116,7 @@ const AssistantMediaResult = () => {
   return (
     <Card
       data-testid="url-media-results"
-      hidden={!urlMode || (!filteredImageList.length && !videoList.length)}
-      //width={window.innerWidth}
+      hidden={!filteredImageList.length && !videoList.length}
     >
       <CardHeader
         className={classes.assistantCardHeader}
