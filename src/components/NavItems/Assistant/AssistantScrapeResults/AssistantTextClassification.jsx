@@ -27,13 +27,14 @@ import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
 import { v4 as uuidv4 } from "uuid";
 
 import "./assistantTextResultStyle.css";
+import { Trans } from "react-i18next";
 
 export default function AssistantTextClassification({
   text,
   classification,
   titleText = "Detected Class",
   importantSentenceKey = "Important_Sentence",
-  helpDescription = "",
+  categoriesTooltipContent = "",
   configs = {
     confidenceThresholdLow: 0.8,
     confidenceThresholdHigh: 1.0,
@@ -45,47 +46,54 @@ export default function AssistantTextClassification({
     importanceRgbHigh: [228, 25, 25],
   },
   textHtmlMap = null,
-  subjectivity = false,
+  credibilitySignal = keyword("news_framing_title"),
 }) {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
-  // subjectivity or not
-  let toolipText;
-  let textLow, textHigh;
-  let rgbLow, rgbHigh;
-  if (subjectivity) {
-    toolipText = <p>{keyword("confidence_tooltip_sentence")}</p>;
-    textLow = keyword("low_confidence");
-    textHigh = keyword("high_confidence");
-    rgbLow = configs.confidenceRgbLow;
-    rgbHigh = configs.confidenceRgbHigh;
+  // define sentence and category details
+  let sentenceTooltipText;
+  let sentenceTextLow, sentenceTextHigh;
+  let sentenceRgbLow, sentenceRgbHigh;
+  let sentenceThresholdLow, sentenceThresholdHigh;
+  const colourScaleText = keyword("colour_scale");
+  if (credibilitySignal == keyword("subjectivity_title")) {
+    // subjectivity requires confidence for sentence
+    sentenceTooltipText = keyword("confidence_tooltip_sentence");
+    sentenceTextLow = keyword("low_confidence");
+    sentenceTextHigh = keyword("high_confidence");
+    sentenceRgbLow = configs.confidenceRgbLow;
+    sentenceRgbHigh = configs.confidenceRgbHigh;
+    sentenceThresholdLow = configs.confidenceThresholdLow;
+    sentenceThresholdHigh = configs.confidenceThresholdHigh;
   } else {
-    toolipText = <p>{keyword("importance_tooltip")}</p>;
-    textLow = keyword("low_importance");
-    textHigh = keyword("high_importance");
-    rgbLow = configs.importanceRgbLow;
-    rgbHigh = configs.importanceRgbHigh;
+    // news framing and news genre requires importance for sentence
+    sentenceTooltipText = keyword("importance_tooltip_sentence");
+    sentenceTextLow = keyword("low_importance");
+    sentenceTextHigh = keyword("high_importance");
+    sentenceRgbLow = configs.importanceRgbLow;
+    sentenceRgbHigh = configs.importanceRgbHigh;
+    sentenceThresholdLow = configs.importanceThresholdLow;
+    sentenceThresholdHigh = configs.importanceThresholdHigh;
   }
+  // category is confidence for news framing, news genre and subjectivity
+  const categoryTooltipText = keyword("confidence_tooltip_category");
+  const categoryTextLow = keyword("low_confidence");
+  const categoryTextHigh = keyword("high_confidence");
+  const categoryRgbLow = configs.confidenceRgbLow;
+  const categoryRgbHigh = configs.confidenceRgbHigh;
+  const categoryThresholdLow = configs.confidenceThresholdLow;
+  const categoryThresholdHigh = configs.confidenceThresholdHigh;
 
-  const importanceTooltipContent = (
+  // tooltip for hovering over highlighted sentences
+  const sentenceTooltipContent = (
     <ColourGradientTooltipContent
-      description={toolipText}
-      colourScaleText={keyword("colour_scale")}
-      textLow={textLow}
-      textHigh={textHigh}
-      rgbLow={rgbLow}
-      rgbHigh={rgbHigh}
-    />
-  );
-  const confidenceTooltipContent = (
-    <ColourGradientTooltipContent
-      description={keyword(helpDescription)}
-      colourScaleText={keyword("colour_scale")}
-      textLow={keyword("low_importance")}
-      textHigh={keyword("high_importance")}
-      rgbLow={configs.confidenceRgbLow}
-      rgbHigh={configs.confidenceRgbHigh}
+      description={sentenceTooltipText}
+      colourScaleText={colourScaleText}
+      textLow={sentenceTextLow}
+      textHigh={sentenceTextHigh}
+      rgbLow={sentenceRgbLow}
+      rgbHigh={sentenceRgbHigh}
     />
   );
 
@@ -115,85 +123,92 @@ export default function AssistantTextClassification({
     }
   }
 
-  // disabled category box for Subjectivity classifier
-  // subjectivty or not
-  let width = 12;
-  if (!subjectivity) {
-    width = 9;
+  if (Object.keys(filteredCategories).length == 0) {
+    filteredSentences = [];
   }
 
   return (
     <Grid2 container>
-      <Grid2 sx={{ paddingRight: "1em" }} size={width}>
+      {/* text being displayed */}
+      <Grid2 sx={{ paddingRight: "1em" }} size={9}>
         <ClassifiedText
           text={text}
           spanIndices={filteredSentences}
           highlightSpan={doHighlightSentence}
-          tooltipText={importanceTooltipContent}
-          thresholdLow={configs.importanceThresholdLow}
-          thresholdHigh={configs.importanceThresholdHigh}
-          rgbLow={rgbLow}
-          rgbHigh={rgbHigh}
+          tooltipText={sentenceTooltipContent}
+          thresholdLow={sentenceThresholdLow}
+          thresholdHigh={sentenceThresholdHigh}
+          rgbLow={sentenceRgbLow}
+          rgbHigh={sentenceRgbHigh}
           textHtmlMap={textHtmlMap}
         />
       </Grid2>
-      {!subjectivity ? (
-        <Grid2 size={{ xs: 3 }}>
-          <Card>
-            <CardHeader
-              className={classes.assistantCardHeader}
-              title={titleText}
-              action={
-                <div style={{ display: "flex" }}>
-                  <Tooltip
-                    interactive={"true"}
-                    title={confidenceTooltipContent}
-                    classes={{ tooltip: classes.assistantTooltip }}
-                  >
-                    <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
-                  </Tooltip>
-                </div>
-              }
+
+      {/* credibility signal box with categories */}
+      <Grid2 size={{ xs: 3 }}>
+        <Card>
+          <CardHeader
+            className={classes.assistantCardHeader}
+            title={titleText}
+            action={
+              <div style={{ display: "flex" }}>
+                <Tooltip
+                  interactive={"true"}
+                  title={categoriesTooltipContent}
+                  classes={{ tooltip: classes.assistantTooltip }}
+                >
+                  <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+                </Tooltip>
+              </div>
+            }
+          />
+          <CardContent>
+            <CategoriesList
+              categories={filteredCategories}
+              thresholdLow={categoryThresholdLow}
+              thresholdHigh={categoryThresholdHigh}
+              rgbLow={categoryRgbLow}
+              rgbHigh={categoryRgbHigh}
+              keyword={keyword}
+              credibilitySignal={credibilitySignal}
             />
-            <CardContent>
-              <CategoriesList
-                categories={filteredCategories}
-                noCategoriesText={keyword("no_detected_categories")}
-                thresholdLow={configs.confidenceThresholdLow}
-                thresholdHigh={configs.confidenceThresholdHigh}
-                rgbLow={configs.confidenceRgbLow}
-                rgbHigh={configs.confidenceRgbHigh}
-                keyword={keyword}
+            {filteredSentences.length > 0 ? (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={doHighlightSentence}
+                    onChange={handleHighlightSentences}
+                  />
+                }
+                label={keyword("highlight_important_sentence")}
               />
-              {filteredSentences.length > 0 ? (
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={doHighlightSentence}
-                      onChange={handleHighlightSentences}
-                    />
-                  }
-                  label={keyword("highlight_important_sentence")}
-                />
-              ) : null}
-            </CardContent>
-          </Card>
-        </Grid2>
-      ) : null}
+            ) : null}
+          </CardContent>
+        </Card>
+      </Grid2>
     </Grid2>
   );
 }
 
 export function CategoriesList({
   categories,
-  noCategoriesText,
   thresholdLow,
   thresholdHigh,
   rgbLow,
   rgbHigh,
   keyword,
+  credibilitySignal,
 }) {
-  if (categories.length < 1) return <p>{noCategoriesText}</p>;
+  if (_.isEmpty(categories)) {
+    return (
+      <p>
+        {credibilitySignal == keyword("news_framing_title") &&
+          keyword("no_detected_topics")}
+        {credibilitySignal == keyword("subjectivity_title") &&
+          keyword("no_detected_sentences")}
+      </p>
+    );
+  }
 
   let output = [];
   let index = 0;

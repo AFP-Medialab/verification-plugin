@@ -8,18 +8,17 @@ import useVideoRightsTreatment from "./Hooks/useVideoRightsTreatment";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoRightsResults from "./Results/VideoRightsResults";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
-//import { useTrackEvent } from "../../../../Hooks/useAnalytics";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics"; //import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { useParams } from "react-router-dom";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import VideoRightsIcon from "../../../NavBar/images/SVG/Video/Video_rights.svg";
 import { setVideoRightsLoading } from "../../../../redux/actions/tools/videoRightsActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import { Grid2 } from "@mui/material";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
+import { videoRights } from "../../../../constants/tools";
 
 const VideoRights = () => {
   const { url } = useParams();
@@ -56,13 +55,13 @@ const VideoRights = () => {
   const submitForm = () => {
     if (!isLoading) {
       /*trackEvent(
-              "submission",
-              "videorights",
-              "video rights",
-              input,
-              client_id,
-              uid
-            );*/
+                    "submission",
+                    "videorights",
+                    "video rights",
+                    input,
+                    client_id,
+                    uid
+                  );*/
       setSubmitted(input);
       dispatch(setVideoRightsLoading(true));
     }
@@ -88,18 +87,20 @@ const VideoRights = () => {
     }
   }, [submitted]);
 
+  const processUrl = useSelector((state) => state.assistant.processUrl);
+  useEffect(() => {
+    if (processUrl) {
+      setInput(processUrl);
+      setUrlDetected(true);
+    }
+  }, [processUrl]);
+
   return (
     <div>
       <HeaderTool
         name={keywordAllTools("navbar_rights")}
         description={keywordAllTools("navbar_rights_description")}
-        icon={
-          <VideoRightsIcon
-            style={{ fill: "#00926c" }}
-            width="40px"
-            height="40px"
-          />
-        }
+        icon={<videoRights.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
       />
       <Card>
         <CardHeader

@@ -14,13 +14,12 @@ import {
 } from "../../../../redux/actions/tools/magnifierActions";
 import { setError } from "redux/reducers/errorReducer";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
-
-import MagnifierIcon from "../../../NavBar/images/SVG/Image/Magnifier.svg";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
+import { imageMagnifier } from "../../../../constants/tools";
 
 const Magnifier = () => {
   const { url } = useParams();
@@ -100,6 +99,14 @@ const Magnifier = () => {
     }
   }, [url]);
 
+  const processUrl = useSelector((state) => state.assistant.processUrl);
+  useEffect(() => {
+    if (processUrl) {
+      setInput(processUrl);
+      submitUrl(processUrl);
+    }
+  }, [processUrl]);
+
   const preprocessImage = (file) => {
     setImageFile(file);
     return file;
@@ -117,10 +124,11 @@ const Magnifier = () => {
         name={keywordAllTools("navbar_magnifier")}
         description={keywordAllTools("navbar_magnifier_description")}
         icon={
-          <MagnifierIcon
-            style={{ fill: "#00926c" }}
-            width="40px"
-            height="40px"
+          <imageMagnifier.icon
+            sx={{
+              fill: "#00926c",
+              fontSize: "40px",
+            }}
           />
         }
       />

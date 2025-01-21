@@ -97,6 +97,12 @@ export const ldmR50Mever = new SyntheticImageDetectionAlgorithm(
   "synthetic_image_detection_ldm_r50_mever_description",
   [ROLES.EVALUATION, ROLES.EXTRA_FEATURE],
 );
+export const itwRineMever = new SyntheticImageDetectionAlgorithm(
+  "itw_rine_mever",
+  "synthetic_image_detection_itw_rine_mever_name",
+  "synthetic_image_detection_itw_rine_mever_description",
+  [ROLES.EVALUATION, ROLES.EXTRA_FEATURE],
+);
 
 /**
  * The list of the synthetic image detection algorithms
@@ -114,6 +120,7 @@ export const syntheticImageDetectionAlgorithms = [
   ldmR50Mever,
   proGanRineMever,
   ldmRineMever,
+  itwRineMever,
 ];
 
 /**

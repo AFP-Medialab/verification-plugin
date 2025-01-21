@@ -4,7 +4,7 @@ import FiberNewIcon from "@mui/icons-material/FiberNew";
 import AuthenticationIcon from "./AdvancedTools/AuthenticationIcon";
 import ImprovedIcon from "../../../NavBar/images/SVG/Improved.svg";
 import ScienceIcon from "@mui/icons-material/Science";
-import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { useSelector } from "react-redux";
 
 /**

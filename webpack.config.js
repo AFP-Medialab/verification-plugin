@@ -95,6 +95,10 @@ module.exports = {
     fallback: {
       buffer: require.resolve("buffer"),
     },
+    alias: {
+      "@workers": path.resolve(__dirname, "src/workers"),
+      "@Shared": path.resolve(__dirname, "src/components/Shared"),
+    },
   },
   experiments: {
     asyncWebAssembly: true,

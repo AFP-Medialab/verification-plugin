@@ -64,7 +64,10 @@ function* getMediaListSaga() {
 }
 
 function* getMediaActionSaga() {
-  yield takeLatest("SET_PROCESS_URL", handleMediaActionList);
+  yield takeLatest(
+    ["SET_PROCESS_URL", "AUTH_USER_LOGIN", "AUTH_USER_LOGOUT"],
+    handleMediaActionList,
+  );
 }
 
 function* getAssistantScrapeSaga() {
@@ -143,6 +146,7 @@ function* handleMediaActionList() {
   const inputUrl = yield select((state) => state.assistant.inputUrl);
   const processUrl = yield select((state) => state.assistant.processUrl);
   const contentType = yield select((state) => state.assistant.processUrlType);
+  const role = yield select((state) => state.userSession.user.roles);
 
   if (processUrl !== null) {
     let knownInputLink = yield call(
@@ -161,6 +165,7 @@ function* handleMediaActionList() {
       knownInputLink,
       knownProcessLink,
       processUrl,
+      role,
     );
 
     yield put(setProcessUrlActions(contentType, actions));
@@ -170,7 +175,14 @@ function* handleMediaActionList() {
 function* handleSubmitUpload(action) {
   let contentType = action.payload.contentType;
   let known_link = KNOWN_LINKS.OWN;
-  let actions = selectCorrectActions(contentType, known_link, known_link, "");
+  const role = yield select((state) => state.userSession.user.roles);
+  let actions = selectCorrectActions(
+    contentType,
+    known_link,
+    known_link,
+    "",
+    role,
+  );
   yield put(setProcessUrlActions(contentType, actions));
   yield put(setImageVideoSelected(true));
 }
@@ -306,9 +318,9 @@ function* handleSourceCredibilityCall(action) {
     }
 
     const trafficLightColors = {
-      positive: "#008000", // green
-      mixed: "#FFA500", // orange
-      caution: "#FF0000", // red
+      positive: "success", //"#008000", // green
+      mixed: "warning", //"#FFA500", // orange
+      caution: "error", //"#FF0000", // red
       unlabelled: "inherit",
     };
 
@@ -375,7 +387,7 @@ function* handleDbkfTextCall(action) {
                 textToUse = text.slice(0, -1)
             }*/
       let result = yield call(dbkfAPI.callTextSimilarityEndpoint, textToUse);
-      let filteredResult = filterDbkfTextResult(result);
+      let filteredResult = result.length ? result : null;
 
       yield put(setDbkfTextMatchDetails(filteredResult, false, true, false));
     }
@@ -529,10 +541,12 @@ function* handleNamedEntityCall(action) {
 
       Object.entries(result.response.annotations).forEach((entity) => {
         entity[1].forEach((instance) => {
-          entities.push({
-            word: instance.features.string,
-            category: entity[0],
-          });
+          if (instance.features.string) {
+            entities.push({
+              word: instance.features.string,
+              category: entity[0],
+            });
+          }
         });
       });
 
@@ -546,6 +560,7 @@ function* handleNamedEntityCall(action) {
             return b.value - a.value;
           });
         });
+        categoryList.sort();
         yield put(
           setNeDetails(categoryList, wordCloudList, false, true, false),
         );
@@ -675,14 +690,14 @@ function formatTelegramLink(url) {
     );
   }
 
-  // this pattern only matches telegram links of the format t.me/{channel}/{id} and NOT t.me/s/{channel}/{id}
-  const nonSPattern = "^(?:https:/{2})?(?:www.)?t.me/(?!s/)\\w*/\\d*";
+  // Check if the embed parameter already exists
+  const hasEmbed = url.includes("?embed=");
 
-  return url.match(nonSPattern) !== null
-    ? url.replace("t.me/", "t.me/s/")
-    : url;
+  const newUrl = url.replace("t.me/s/", "t.me/");
+
+  // Add ?embed=1 if not already present
+  return hasEmbed ? newUrl : `${newUrl}?embed=1`;
 }
-
 /**
  * PREPROCESS FUNCTIONS
  **/
@@ -698,6 +713,8 @@ const decideWhetherToScrape = (urlType, contentType) => {
     case KNOWN_LINKS.INSTAGRAM:
     case KNOWN_LINKS.FACEBOOK:
     case KNOWN_LINKS.TWITTER:
+    case KNOWN_LINKS.SNAPCHAT:
+    case KNOWN_LINKS.BLUESKY:
     case KNOWN_LINKS.TELEGRAM:
     case KNOWN_LINKS.MASTODON:
     case KNOWN_LINKS.VK:
@@ -784,15 +801,20 @@ const filterAssistantResults = (
     case KNOWN_LINKS.FACEBOOK:
       if (scrapeResult.videos.length === 0) {
         imageList = scrapeResult.images;
-        imageList = imageList.filter(
-          (imageUrl) =>
-            imageUrl.includes("//scontent") && !imageUrl.includes("/cp0/"),
-        );
       } else {
         videoList = scrapeResult.videos;
       }
       break;
     case KNOWN_LINKS.TWITTER:
+      if (scrapeResult.images.length > 0) {
+        imageList = scrapeResult.images;
+      }
+      if (scrapeResult.videos.length > 0) {
+        videoList = scrapeResult.videos;
+      }
+      break;
+    case KNOWN_LINKS.SNAPCHAT:
+    case KNOWN_LINKS.BLUESKY:
       if (scrapeResult.images.length > 0) {
         imageList = scrapeResult.images;
       }
@@ -865,6 +887,7 @@ const filterSourceCredibilityResults = (
 
   let sourceCredibilityDict = {};
 
+  // collecting results for each link in extracted linkList
   sourceCredibility.forEach((result) => {
     const link = result["string"];
 
@@ -872,6 +895,7 @@ const filterSourceCredibilityResults = (
       sourceCredibilityDict[link] = {
         link: link,
         resolvedLink: result["resolved-url"],
+        resolvedDomain: result["resolved-domain"],
         urlColor: trafficLightColors.unlabelled,
         positive: [],
         mixed: [],
@@ -897,6 +921,7 @@ const filterSourceCredibilityResults = (
       sourceCredibilityDict[link] = {
         link: link,
         resolvedLink: link,
+        resolvedDomain: "",
         urlColor: trafficLightColors.unlabelled,
         positive: [],
         mixed: [],
@@ -905,13 +930,14 @@ const filterSourceCredibilityResults = (
     }
   }
 
-  const positiveResults = sourceCredibilityDict[inputUrl].positive.length
+  // collecting results for the inputUrl
+  const positiveResults = sourceCredibilityDict[inputUrl]
     ? sourceCredibilityDict[inputUrl].positive
     : null;
-  const mixedResults = sourceCredibilityDict[inputUrl].mixed.length
+  const mixedResults = sourceCredibilityDict[inputUrl]
     ? sourceCredibilityDict[inputUrl].mixed
     : null;
-  const cautionResults = sourceCredibilityDict[inputUrl].caution.length
+  const cautionResults = sourceCredibilityDict[inputUrl]
     ? sourceCredibilityDict[inputUrl].caution
     : null;
   delete sourceCredibilityDict[inputUrl];
@@ -980,29 +1006,6 @@ const addToRelevantSourceCred = (sourceCredList, result) => {
     credibilityEvidence: resultEvidence,
     credibilityScope: result["credibility-scope"],
   });
-};
-
-const filterDbkfTextResult = (result) => {
-  let resultList = [];
-  let scores = [];
-
-  result.forEach((res) => {
-    scores.push(res.score);
-  });
-
-  let scaled = scaleNumbers(scores, 0, 100);
-
-  // to be reviewed. only really fixes some minor cases.
-  result.forEach((value, index) => {
-    if (value.score > 1000 && scaled[index] > 70) {
-      resultList.push({
-        text: value.text,
-        claimUrl: value.externalLink,
-        score: value.score,
-      });
-    }
-  });
-  return resultList.length ? resultList : null;
 };
 
 const scaleNumbers = (unscaledNums) => {

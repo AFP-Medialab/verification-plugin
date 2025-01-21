@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import LinearProgress from "@mui/material/LinearProgress";
 import Box from "@mui/material/Box";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import DeepfakeIcon from "../../../NavBar/images/SVG/Image/Deepfake.svg";
 import { Grid2 } from "@mui/material";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import UseGetDeepfake from "./Hooks/useGetDeepfake";
@@ -16,9 +15,9 @@ import { resetDeepfake } from "../../../../redux/actions/tools/deepfakeVideoActi
 import { preprocessFileUpload } from "components/Shared/Utils/fileUtils";
 import { setError } from "redux/reducers/errorReducer";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
+import { videoDeepfake } from "../../../../constants/tools";
 
 const Deepfake = () => {
-  //const { url } = useParams();
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
   const keywordAllTools = i18nLoadNamespace(
@@ -78,6 +77,13 @@ const Deepfake = () => {
       preprocessingError,
     );
   };
+
+  useEffect(() => {
+    if (url && input && !result) {
+      handleSubmit(input);
+    }
+  }, [url, input, result]);
+
   const handleSubmit = async () => {
     dispatch(resetDeepfake());
     await submitUrl();
@@ -95,11 +101,7 @@ const Deepfake = () => {
       <HeaderTool
         name={keywordAllTools("navbar_deepfake_video")}
         description={keywordAllTools("navbar_deepfake_video_description")}
-        icon={
-          <DeepfakeIcon
-            style={{ fill: "#00926c", height: "75px", width: "auto" }}
-          />
-        }
+        icon={<videoDeepfake.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
       />
 
       <Alert severity="warning">{keywordWarning("warning_beta")}</Alert>

@@ -11,20 +11,17 @@ import Radio from "@mui/material/Radio";
 import FormControl from "@mui/material/FormControl";
 import useMyStyles, {
   myCardStyles,
-} from "../../../Shared/MaterialUiStyles/useMyStyles";
-import {
-  //trackEvent,
-  getclientId,
-} from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+} from "@Shared/MaterialUiStyles/useMyStyles";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import Alert from "@mui/material/Alert";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import TwitterAdvancedSearchIcon from "../../../NavBar/images/SVG/Search/Twitter_search.svg";
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
+import HeaderTool from "@Shared/HeaderTool/HeaderTool";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import DateAndTimePicker from "@Shared/DateTimePicker/DateAndTimePicker";
 import dayjs from "dayjs";
+import { searchTwitter } from "../../../../constants/tools";
 
 const TwitterAdvancedSearch = () => {
   const classes = useMyStyles();
@@ -131,13 +128,13 @@ const TwitterAdvancedSearch = () => {
       setEventUrl(url);
       window.open(url);
       /*trackEvent(
-      "submission",
-      "twitter_advance_search",
-      "search twitter request",
-      url,
-      client_id,
-      uid
-    );*/
+                        "submission",
+                        "twitter_advance_search",
+                        "search twitter request",
+                        url,
+                        client_id,
+                        uid
+                      );*/
     }
   };
 
@@ -146,13 +143,7 @@ const TwitterAdvancedSearch = () => {
       <HeaderTool
         name={keywordAllTools("navbar_twitter")}
         description={keywordAllTools("navbar_twitter_description")}
-        icon={
-          <TwitterAdvancedSearchIcon
-            style={{ fill: "#00926c" }}
-            width="40px"
-            height="40px"
-          />
-        }
+        icon={<searchTwitter.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
       />
       <Alert severity="warning">{keyword("warning_x_search")}</Alert>
       <Box mt={3} />
