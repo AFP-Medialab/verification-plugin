@@ -1,23 +1,34 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom"; // version 5.2.0
 
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
-import { Box, CardHeader, Skeleton, TextField } from "@mui/material/";
+import { Box, CardHeader, Skeleton, TextField, Tooltip } from "@mui/material/";
 import Button from "@mui/material//Button";
 import Card from "@mui/material//Card";
 import CardContent from "@mui/material//CardContent";
 import Typography from "@mui/material//Typography";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import { KNOWN_LINKS } from "./AssistantRuleBook";
-import { submitInputUrl } from "../../../redux/actions/tools/assistantActions";
+import {
+  cleanAssistantState,
+  submitInputUrl,
+} from "../../../redux/actions/tools/assistantActions";
 
 import { useTrackEvent } from "../../../Hooks/useAnalytics";
 import Stack from "@mui/material/Stack";
+import { Trans } from "react-i18next";
+import {
+  TransHtmlDoubleLinkBreak,
+  TransSupportedUrlsLink,
+} from "./TransComponents";
 
 const AssistantUrlSelected = (props) => {
   // styles, language, dispatch, params
+  const navigate = useNavigate();
   const classes = useMyStyles();
   const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -28,9 +39,8 @@ const AssistantUrlSelected = (props) => {
   const loading = useSelector((state) => state.assistant.loading);
 
   //local state
-  const formInput = props.formInput;
+  const formInput = props.formInput || "";
   const setFormInput = (value) => props.setFormInput(value);
-  const cleanAssistant = () => props.cleanAssistant();
   const [url, setUrl] = useState(undefined);
 
   useTrackEvent(
@@ -43,9 +53,10 @@ const AssistantUrlSelected = (props) => {
   );
 
   const handleSubmissionURL = () => {
-    cleanAssistant();
+    dispatch(cleanAssistantState());
     setUrl(formInput);
     dispatch(submitInputUrl(formInput));
+    navigate("/app/assistant/" + encodeURIComponent(formInput));
     //trackEvent("submission", "assistant", "page assistant", formInput);
   };
 
@@ -81,6 +92,29 @@ const AssistantUrlSelected = (props) => {
             <Typography style={{ fontWeight: "bold", fontSize: 20 }}>
               {keyword("assistant_give_url")}
             </Typography>
+          }
+          action={
+            <Tooltip
+              interactive={"true"}
+              title={
+                <>
+                  <Trans
+                    t={keyword}
+                    i18nKey="assistant_help_3" // update this for bluesky and vk and others?
+                    components={{
+                      b: <b />,
+                      ul: <ul />,
+                      li: <li />,
+                    }}
+                  />
+                  <TransHtmlDoubleLinkBreak keyword={keyword} />
+                  <TransSupportedUrlsLink keyword={keyword} />
+                </>
+              }
+              classes={{ tooltip: classes.assistantTooltip }}
+            >
+              <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+            </Tooltip>
           }
         />
 

@@ -34,7 +34,7 @@ import CsvSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/CSV_SNA.svg
 import AboutIcon from "../components/NavBar/images/SVG/Navbar/About.svg";
 import ToolsMenu from "../components/NavItems/tools/Alltools/ToolsMenu";
 import Analysis from "../components/NavItems/tools/Analysis/Analysis";
-import { Footer, FOOTER_TYPES } from "../components/Shared/Footer/Footer";
+import { Footer, FOOTER_TYPES } from "@Shared/Footer/Footer";
 import Keyframes from "../components/NavItems/tools/Keyframes/Keyframes";
 import Thumbnails from "../components/NavItems/tools/Thumbnails/Thumbnails";
 import VideoRights from "../components/NavItems/tools/VideoRights/VideoRights";
@@ -105,7 +105,7 @@ export const TOOL_GROUPS = {
 /**
  * Represents a topMenuItem that can be used by users
  */
-class Tool {
+export class Tool {
   /**
    *
    * @param titleKeyword {string} The keyword for the name of the topMenuItem
@@ -229,7 +229,7 @@ const csvSnaSvgIcon = (props) => {
 };
 
 const archiveSvgIcon = (props) => {
-  return <ArchiveIcon inheritViewBox {...props} />;
+  return <ArchiveIcon {...props} />;
 };
 
 const aboutSvgIcon = (props) => {
@@ -261,7 +261,7 @@ export const toolsHome = new Tool(
  * Video tools
  **/
 
-const videoAnalysis = new Tool(
+export const videoAnalysis = new Tool(
   "navbar_analysis_video",
   "navbar_analysis_description",
   AnalysisSvgIcon,
@@ -274,7 +274,7 @@ const videoAnalysis = new Tool(
   <Footer type={FOOTER_TYPES.ITI} />,
 );
 
-const keyframes = new Tool(
+export const keyframes = new Tool(
   "navbar_keyframes",
   "navbar_keyframes_description",
   KeyframesSvgIcon,
@@ -287,7 +287,7 @@ const keyframes = new Tool(
   <Footer type={FOOTER_TYPES.ITI} />,
 );
 
-const thumbnails = new Tool(
+export const thumbnails = new Tool(
   "navbar_thumbnails",
   "navbar_thumbnails_description",
   thumbnailsSvgIcon,
@@ -300,7 +300,7 @@ const thumbnails = new Tool(
   <Footer type={FOOTER_TYPES.AFP} />,
 );
 
-const videoRights = new Tool(
+export const videoRights = new Tool(
   "navbar_rights",
   "navbar_rights_description",
   videoRightsSvgIcon,
@@ -326,7 +326,7 @@ const videoMetadata = new Tool(
   <Footer type={FOOTER_TYPES.AFP} />,
 );
 
-const videoDeepfake = new Tool(
+export const videoDeepfake = new Tool(
   "navbar_deepfake_video",
   "navbar_deepfake_video_description",
   deepfakeSvgIcon,
@@ -343,7 +343,7 @@ const videoDeepfake = new Tool(
  * Image tools
  **/
 
-const imageAnalysis = new Tool(
+export const imageAnalysis = new Tool(
   "navbar_analysis_image",
   "navbar_analysis_image_description",
   imageAnalysisSvgIcon,
@@ -356,7 +356,7 @@ const imageAnalysis = new Tool(
   <Footer type={FOOTER_TYPES.ITI} />,
 );
 
-const imageMagnifier = new Tool(
+export const imageMagnifier = new Tool(
   "navbar_magnifier",
   "navbar_magnifier_description",
   magnifierSvgIcon,
@@ -369,7 +369,7 @@ const imageMagnifier = new Tool(
   <Footer type={FOOTER_TYPES.AFP} />,
 );
 
-const imageMetadata = new Tool(
+export const imageMetadata = new Tool(
   "navbar_metadata_image",
   "navbar_metadata_description",
   metadataSvgIcon,
@@ -382,7 +382,7 @@ const imageMetadata = new Tool(
   <Footer type={FOOTER_TYPES.AFP} />,
 );
 
-const imageForensic = new Tool(
+export const imageForensic = new Tool(
   "navbar_forensic",
   "navbar_forensic_description",
   forensicSvgIcon,
@@ -395,7 +395,7 @@ const imageForensic = new Tool(
   <Footer type={FOOTER_TYPES.ITI_BORELLI_AFP} />,
 );
 
-const imageOcr = new Tool(
+export const imageOcr = new Tool(
   "navbar_ocr",
   "navbar_ocr_description",
   ocrSvgIcon,
@@ -408,7 +408,7 @@ const imageOcr = new Tool(
   <Footer type={FOOTER_TYPES.USFD} />,
 );
 
-const imageGif = new Tool(
+export const imageGif = new Tool(
   "navbar_gif",
   "navbar_gif_description",
   gifSvgIcon,
@@ -434,7 +434,7 @@ export const imageSyntheticDetection = new Tool(
   <Footer type={FOOTER_TYPES.ITI_UNINA} />,
 );
 
-const imageDeepfake = new Tool(
+export const imageDeepfake = new Tool(
   "navbar_deepfake_image",
   "navbar_deepfake_image_description",
   deepfakeSvgIcon,
@@ -447,7 +447,7 @@ const imageDeepfake = new Tool(
   <Footer type={FOOTER_TYPES.ITI} />,
 );
 
-const imageGeolocation = new Tool(
+export const imageGeolocation = new Tool(
   "navbar_geolocation",
   "navbar_geolocation_description",
   geolocationSvgIcon,
@@ -481,7 +481,7 @@ const audioLoccus = new Tool(
  * Search tools
  **/
 
-const searchTwitter = new Tool(
+export const searchTwitter = new Tool(
   "navbar_twitter",
   "navbar_twitter_description",
   twitterSearchSvgIcon,
@@ -537,7 +537,7 @@ const searchXnetwork = new Tool(
  * Data Analysis tools
  **/
 
-const dataAnalysisSna = new Tool(
+export const dataAnalysisSna = new Tool(
   "navbar_twitter_sna",
   "navbar_twitter_sna_description",
   twitterSnaSvgIcon,
@@ -567,7 +567,7 @@ const dataAnalysisCrowdtangle = new Tool(
  * Other tools
  **/
 
-const archiving = new Tool(
+export const archiving = new Tool(
   "navbar_archiving",
   "navbar_archiving_description",
   archiveSvgIcon,

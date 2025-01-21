@@ -25,7 +25,11 @@ const AssistantWarnings = () => {
   );
 
   return (
-    <Card variant={"outlined"} className={classes.assistantWarningBorder}>
+    <Card
+      variant={"outlined"}
+      className={classes.assistantWarningBorder}
+      id="warnings"
+    >
       <Grid2 container>
         <Grid2 size={{ xs: 12 }} style={{ display: "flex" }}>
           <CardMedia>

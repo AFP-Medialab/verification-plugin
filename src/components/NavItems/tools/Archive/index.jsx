@@ -1,67 +1,56 @@
 import React, { useEffect, useState } from "react";
 
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Alert,
-  Box,
-  Button,
-  Card,
-  Checkbox,
-  Fade,
-  FormControlLabel,
-  Grid2,
-  Skeleton,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-
-import LoadingButton from "@mui/lab/LoadingButton";
-import ArchiveIcon from "@mui/icons-material/Archive";
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-
-import ArchiveTable from "./components/archiveTable";
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import { Box, Button, Card, Grid2, Stack, Typography } from "@mui/material";
 import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
-import { prettifyLargeString } from "./utils";
 import { useParams } from "react-router-dom";
-import UrlArchive from "./components/urlArchive";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   archiveStateCleaned,
-  archiveUrlSet,
+  setArchiveUrl,
 } from "redux/reducers/tools/archiveReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { archiving } from "../../../../constants/tools";
+import {
+  KNOWN_LINK_PATTERNS,
+  KNOWN_LINKS,
+  matchPattern,
+} from "../../Assistant/AssistantRuleBook";
+import assistantApiCalls from "../../Assistant/AssistantApiHandlers/useAssistantApi";
+import { QueryClient, useMutation } from "@tanstack/react-query";
+import CustomizedMenus, { StyledMenu } from "./components/StyledMenu";
+import FirstStep from "./components/FirstStep";
+import SecondStep from "./components/SecondStep";
+import { ArrowBack } from "@mui/icons-material";
+import ThirdStep from "./components/ThirdStep";
+import FourthStep from "./components/FourthStep";
+import FifthStep from "./components/FifthStep";
+import SixthStep from "./components/SixthStep";
 
-// import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
-// import { useSelector } from "react-redux";
-// import { useTrackEvent } from "Hooks/useAnalytics";
-
-//TODO:UI for long strings
+const queryClient = new QueryClient();
 
 const Archive = () => {
   const { url } = useParams();
 
   const dispatch = useDispatch();
   const mainUrl = useSelector((state) => state.archive.mainUrl);
+
   const [urlInput, setUrlInput] = useState("");
+
+  const [mediaUrl, setMediaUrl] = useState("");
+
   const [urlResults, setUrlResults] = useState(false);
-  const [openLinks, setOpenLinks] = useState(false);
-
-  const [isLoading, setIsLoading] = useState(false);
-
-  const [input, setInput] = useState("");
 
   const [fileToUpload, setFileToUpload] = useState(/** @type {File?} */ null);
 
   const [archiveLinks, setArchiveLinks] = useState([]);
 
-  const [hasArchiveBeenCreated, setHasArchiveBeenCreated] = useState(false);
-
   const [errorMessage, setErrorMessage] = useState("");
+
+  const [step, setStep] = useState(1);
+
+  const [isWaczFileReplayable, setIsWaczFileReplayable] = useState(" ");
+  const [step3HelperText, setStep3HelperText] = useState("");
+  const [step3Error, setStep3Error] = useState(false);
 
   const authenticatedRequest = useAuthenticatedRequest();
 
@@ -71,22 +60,26 @@ const Archive = () => {
     if (mainUrl) {
       setUrlResults(true);
       setUrlInput(mainUrl);
+      handleSubmit(mainUrl);
     } else if (url && url !== "") {
       setUrlResults(true);
       setUrlInput(url);
-      archiveUrlSet(url);
+      setArchiveUrl(url);
+      handleSubmit(url);
     }
   }, []);
 
   const handleCloseUrl = () => {
+    setFileToUpload(null);
     setUrlResults(false);
+    setErrorMessage("");
     dispatch(archiveStateCleaned());
     setUrlInput("");
-  };
-
-  const handleSubmitUrl = () => {
-    setUrlResults(true);
-    dispatch(archiveUrlSet(urlInput));
+    archiveFileToWbm.reset();
+    setArchiveLinks(null);
+    setIsWaczFileReplayable(" ");
+    setStep3HelperText("");
+    setStep3Error(false);
   };
 
   const isFileAWaczFile = (fileName) => {
@@ -97,14 +90,12 @@ const Archive = () => {
     const fetchUrl = process.env.ARCHIVE_BACKEND;
 
     if (!waczFileUrl) {
-      throw new Error("[fetchArchivedUrls] Error: waczFileUrl is not defined");
+      throw new Error("upload_error");
     }
 
     try {
       let data = new FormData();
       data.append("file", waczFileUrl);
-
-      //console.log(data);
 
       const axiosConfig = {
         method: "post",
@@ -115,29 +106,63 @@ const Archive = () => {
         },
       };
 
-      const response = await authenticatedRequest(axiosConfig);
-
-      //console.log(response);
-
-      return response;
+      return await authenticatedRequest(axiosConfig);
     } catch (error) {
       console.error(error);
-      throw new Error(error);
+      throw new Error("upload_error");
     }
   };
 
-  const handleSubmit = async () => {
-    // Reset states
-    setErrorMessage("");
-    setHasArchiveBeenCreated(false);
+  const fetchMediaUrl = async (urlType, urlInput) => {
+    const res = await assistantApiCalls().callAssistantScraper(
+      urlType,
+      urlInput,
+    );
 
-    setIsLoading(true);
+    if (!res.status || res.status !== "success") throw new Error("fetch_error");
 
-    if (!fileToUpload || !isFileAWaczFile(fileToUpload.name)) {
-      setErrorMessage("File error — The file is not a .wacz file");
-      setIsLoading(false);
-      setHasArchiveBeenCreated(false);
+    return res;
+  };
+
+  const fetchMediaLinkForSocialMediaPost = async (url) => {
+    if (!url || typeof url !== "string") {
       return;
+    }
+
+    setErrorMessage("");
+
+    setArchiveUrl(url);
+    setUrlResults(true);
+    dispatch(setArchiveUrl(url));
+
+    const urlType = matchPattern(url, KNOWN_LINK_PATTERNS);
+
+    try {
+      if (urlType === KNOWN_LINKS.TWITTER) {
+        const res = await queryClient.ensureQueryData({
+          queryKey: ["extracted_media_link", url],
+          queryFn: () => fetchMediaUrl(urlType, url),
+          staleTime: 1000 * 60 * 5,
+        });
+
+        let mediaUrl;
+
+        if (res.images && res.images.length > 0) {
+          mediaUrl = res.images[0];
+        } else if (res.videos && res.videos.length > 0) {
+          mediaUrl = res.videos[0];
+        }
+
+        if (mediaUrl && typeof mediaUrl === "string") setMediaUrl(mediaUrl);
+      }
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
+  };
+
+  const sendWaczFileToWbm = async () => {
+    if (!fileToUpload || !isFileAWaczFile(fileToUpload.name)) {
+      throw new Error("file_error");
     }
 
     let result;
@@ -145,220 +170,212 @@ const Archive = () => {
     try {
       result = await fetchArchivedUrls(fileToUpload);
     } catch (error) {
-      setErrorMessage(
-        "Upload error — An error happened with the file upload. Try with another file.",
-      );
-      setIsLoading(false);
-      setHasArchiveBeenCreated(false);
-      setInput("");
-      setArchiveLinks([]);
-      return;
+      // User friendly Errors
+      throw new Error("upload_error");
     }
 
-    if (!result) {
-      setErrorMessage(
-        "Upload error — An error happened wit the upload of the file. Try again or with another file.",
-      );
-      setIsLoading(false);
-      setHasArchiveBeenCreated(false);
-      return;
-    }
+    if (!result) throw new Error("upload_error");
 
     let results = [];
 
     for (const page of Object.keys(result.data.pages)) {
       let archivedUrl = result.data.pages[page].capture_url;
       let originalUrl = result.data.pages[page].url;
-
       results.push({ archivedUrl, originalUrl });
     }
 
     if (results.length === 0) {
-      setErrorMessage(
-        "Upload error — An error happened wit the upload of the file. Try again or with another file.",
-      );
-      setIsLoading(false);
-      setHasArchiveBeenCreated(false);
+      throw new Error("upload_error");
+    }
+
+    return results;
+  };
+
+  const archiveFileToWbm = useMutation({
+    mutationFn: () => {
+      return sendWaczFileToWbm();
+    },
+    onSuccess: (data) => {
+      setArchiveLinks(data);
+    },
+  });
+
+  /**
+   *
+   * @param url {?string}
+   * @returns {Promise<void>}
+   */
+  const handleSubmit = async (url) => {
+    // Reset states
+    setErrorMessage("");
+    setArchiveLinks([]);
+    setMediaUrl("");
+
+    if (fileToUpload) {
+      await archiveFileToWbm.mutate();
+    } else {
+      const urlToFetch = url && urlInput && urlInput !== url ? urlInput : url;
+
+      await fetchMediaLinkForSocialMediaPost(urlToFetch);
+    }
+  };
+
+  // It may be easier to read these form validations in the components themselves instead of having everything
+  // in the parent component
+  const handleContinueToNextStep = async () => {
+    if (step === 3 && isWaczFileReplayable === " ") {
+      setStep3HelperText("step3_radio_helper_text");
+      setStep3Error(true);
       return;
     }
 
-    setArchiveLinks(results);
-    setIsLoading(false);
-    setHasArchiveBeenCreated(true);
-    setInput("");
-    return;
+    if (step === 3 && isWaczFileReplayable === "false") {
+      // jump to the archiving tips
+      setStep(6);
+    } else if (step <= 3) {
+      // Increment to the next step
+      setStep((prev) => prev + 1);
+    } else if (step === 4) {
+      await handleSubmit();
+      setStep(5);
+    } else if (step === 5 || step === 6) {
+      // reset to 1st step
+      handleCloseUrl();
+      setStep(1);
+    }
   };
 
   return (
-    <div>
-      <HeaderTool
-        name={keyword("archive_name")}
-        description={"Archive a .wacz file with Web Archive (Wayback Machine)"}
-        icon={<ArchiveIcon sx={{ fill: "#00926c", width: 40, height: 40 }} />}
-      />
-      <Card>
-        <Box p={3}>
-          <Stack direction="row" spacing={2}>
-            <TextField
-              type="url"
-              id="standard-full-width"
-              label={""}
-              placeholder={""}
-              value={urlInput}
-              variant="outlined"
-              disabled={urlResults}
-              onChange={(e) => {
-                setUrlInput(e.target.value);
-              }}
-              fullWidth
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              disabled={urlResults || urlInput === ""}
-              onClick={handleSubmitUrl}
-            >
-              {keyword("submit_button")}
-            </Button>
-            <Button
-              variant="outlined"
-              color="error"
-              disabled={!urlResults}
-              onClick={handleCloseUrl}
-            >
-              {keyword("clear_button")}
-            </Button>
-          </Stack>
-          {urlResults && urlInput !== "" ? (
-            <>
-              <UrlArchive url={urlInput} openLinks={openLinks}></UrlArchive>
-            </>
-          ) : null}
-        </Box>
-      </Card>
-      <Box p={2} />
-      <Card>
-        <Accordion>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>{keyword("archive_wacz_accordion")}</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Box p={3}>
-              <form>
-                <Stack spacing={4}>
+    <Box sx={{ minHeight: "65vh" }}>
+      <Card variant="outlined" sx={{ height: "100%" }}>
+        <Box p={3} sx={{ height: "fill-available" }}>
+          <Stack
+            direction="column"
+            sx={{
+              justifyContent: "space-between",
+              height: "100%",
+            }}
+            spacing={2}
+          >
+            <Stack direction="column" spacing={4}>
+              <Stack direction="row" justifyContent={"space-between"}>
+                <Box>
                   <Grid2
                     container
                     direction="row"
-                    spacing={3}
-                    alignItems="start"
+                    justifyContent="flex-start"
+                    alignItems="center"
+                    spacing={1}
                   >
-                    {/* <Grid2  >
-                  <TextField
-                    disabled={isLoading}
-                    id="standard-full-width"
-                    label={".wacz file to archive"}
-                    placeholder={"my-example-file.wacz"}
-                    fullWidth
-                    value={input}
-                    variant="outlined"
-                    onChange={(e) => setInput(e.target.value)}
-                  />
-                </Grid2> */}
+                    <archiving.icon
+                      style={{
+                        fontSize: "40px",
+                        fill: "#00926c",
+                      }}
+                    />
 
-                    <Grid2>
-                      <Stack
-                        direction="column"
-                        spacing={2}
-                        justifyContent="flex-start"
-                        alignItems="flex-start"
-                      >
-                        <Button
-                          variant="outlined"
-                          startIcon={<FolderOpenIcon />}
-                        >
-                          <label htmlFor="fileInputMagnifier">
-                            {input !== "" ? input : "Select a .wacz file"}
-                          </label>
-                          <input
-                            id="fileInputMagnifier"
-                            type="file"
-                            hidden={true}
-                            onChange={(e) => {
-                              setInput(
-                                prettifyLargeString(e.target.files[0].name),
-                              );
-                              setFileToUpload(e.target.files[0]);
-                            }}
-                          />
-                        </Button>
-                        <LoadingButton
-                          loading={isLoading}
-                          disabled={!input}
-                          type="submit"
-                          variant="contained"
-                          color="primary"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleSubmit();
-                          }}
-                        >
-                          {keyword("archive_file")}
-                        </LoadingButton>
-                      </Stack>
-                    </Grid2>
+                    <Typography variant="h5" color={"primary"}>
+                      {keyword("archive_name")}
+                    </Typography>
                   </Grid2>
-                  <Box>
-                    {errorMessage && (
-                      <Box mb={4}>
-                        <Fade in={errorMessage ? true : false} timeout={750}>
-                          <Alert severity="error">{errorMessage}</Alert>
-                        </Fade>
-                      </Box>
-                    )}
+                </Box>
+                <Box>
+                  <CustomizedMenus
+                    isRestartEnabled={step !== 1}
+                    isGoToWbmStepEnabled={urlInput}
+                    handleGoToFirstStep={() => {
+                      handleCloseUrl();
+                      setStep(1);
+                    }}
+                    handleGoToWaczUpload={() => setStep(4)}
+                    handleGoToWbmStep={() => setStep(6)}
+                  />
+                </Box>
+              </Stack>
 
-                    {hasArchiveBeenCreated && (
-                      <Box mb={4}>
-                        <Fade in={hasArchiveBeenCreated} timeout={750}>
-                          <Alert severity="success">
-                            The archive was created successfully!
-                          </Alert>
-                        </Fade>
-                      </Box>
-                    )}
-                    {isLoading || archiveLinks.length === 0 ? (
-                      <>
-                        {isLoading && (
-                          <Fade in={isLoading} timeout={750}>
-                            <Box>
-                              <Alert severity="info">
-                                Loading... This can take up to a few minutes
-                              </Alert>
-                              <Box>
-                                <Skeleton variant="text" height={40} />
-                                <Skeleton variant="text" height={40} />
-                              </Box>
-                            </Box>
-                          </Fade>
-                        )}
-                      </>
-                    ) : (
-                      <Fade in={!isLoading} timeout={1000}>
-                        <Box>
-                          <ArchiveTable
-                            rows={archiveLinks}
-                            fileName={fileToUpload.name}
-                          />
-                        </Box>
-                      </Fade>
-                    )}
-                  </Box>
-                </Stack>
-              </form>
-            </Box>
-          </AccordionDetails>
-        </Accordion>
+              {step === 1 && (
+                <FirstStep
+                  handleClick={setStep}
+                  url={urlInput}
+                  handleUrlChange={setUrlInput}
+                />
+              )}
+              {step === 2 && <SecondStep url={urlInput} />}
+              {step === 3 && (
+                <ThirdStep
+                  isWaczFileReplayable={isWaczFileReplayable}
+                  setIsWaczFileReplayable={setIsWaczFileReplayable}
+                  helperText={step3HelperText}
+                  setHelperText={setStep3HelperText}
+                  error={step3Error}
+                  setError={setStep3Error}
+                />
+              )}
+              {step === 4 && (
+                <FourthStep
+                  fileInput={fileToUpload}
+                  setFileInput={setFileToUpload}
+                />
+              )}
+              {step === 5 && (
+                <FifthStep
+                  archiveFileToWbm={archiveFileToWbm}
+                  fileToUpload={fileToUpload}
+                  errorMessage={errorMessage}
+                  archiveLinks={archiveLinks}
+                />
+              )}
+              {step === 6 && (
+                <SixthStep urlInput={urlInput} mediaUrl={mediaUrl} />
+              )}
+            </Stack>
+
+            {step >= 2 && (
+              <Stack
+                direction="row"
+                spacing={4}
+                sx={{
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                }}
+              >
+                {step < 5 && (
+                  <Button
+                    variant="outlined"
+                    startIcon={<ArrowBack />}
+                    onClick={() => setStep((prev) => prev - 1)}
+                    sx={{ textTransform: "none" }}
+                  >
+                    {keyword("back_button")}
+                  </Button>
+                )}
+
+                <Button
+                  variant="contained"
+                  onClick={() => handleContinueToNextStep()}
+                  disabled={step === 4 && !fileToUpload}
+                  sx={{ textTransform: "none" }}
+                  startIcon={
+                    step > 4 ? (
+                      <archiving.icon
+                        style={{
+                          fontSize: "20px",
+                        }}
+                      />
+                    ) : undefined
+                  }
+                >
+                  {step <= 4
+                    ? keyword("continue_button")
+                    : keyword("new_archive_button")}
+                </Button>
+              </Stack>
+            )}
+          </Stack>
+        </Box>
       </Card>
-    </div>
+      <Box p={2} />
+    </Box>
   );
 };
 

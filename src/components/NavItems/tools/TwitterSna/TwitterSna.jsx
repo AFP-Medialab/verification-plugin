@@ -29,21 +29,19 @@ import {
 
 import OnWarningInfo from "../../../Shared/OnClickInfo/OnWarningInfo";
 import SearchIcon from "@mui/icons-material/Search";
-import { convertMomentToGMT } from "../../../Shared/DateTimePicker/convertToGMT";
+import { convertMomentToGMT } from "@Shared/DateTimePicker/convertToGMT";
 import useTwitterSnaRequest from "./Hooks/useTwitterSnaRequest";
 import { replaceAll } from "../TwitterAdvancedSearch/createUrl";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import TwitterSNAIcon from "../../../NavBar/images/SVG/DataAnalysis/Twitter_sna.svg";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import GlobeIcon from "@mui/icons-material/Public";
 import ExcludeIcon from "@mui/icons-material/HighlightOff";
 import TranslateIcon from "@mui/icons-material/Translate";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-//import DoneIcon from '@mui/icons-material/Done';
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline"; //import DoneIcon from '@mui/icons-material/Done';
 import PermMediaIcon from "@mui/icons-material/PermMedia";
 import LaptopIcon from "@mui/icons-material/Laptop";
 
@@ -52,6 +50,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
 import dayjs from "dayjs";
+import { dataAnalysisSna } from "../../../../constants/tools";
 
 const TwitterSna = () => {
   const theme = createTheme({
@@ -374,13 +373,13 @@ const TwitterSna = () => {
         delete prevResult.socioSemantic4ModeGraph;
       }
       /*trackEvent(
-                                                  "submission",
-                                                  "tsna",
-                                                  "redirect to tsna",
-                                                  JSON.stringify(newRequest),
-                                                  client_id,
-                                                  uid
-                                                );*/
+                                                                    "submission",
+                                                                    "tsna",
+                                                                    "redirect to tsna",
+                                                                    JSON.stringify(newRequest),
+                                                                    client_id,
+                                                                    uid
+                                                                  );*/
       setSubmittedRequest(newRequest);
     }
   };
@@ -523,10 +522,10 @@ const TwitterSna = () => {
   }
 
   /*
-                const verifiedChange = () => {
-                  setVerifiedUsers(!verifiedUsers);
-                };
-                */
+                      const verifiedChange = () => {
+                        setVerifiedUsers(!verifiedUsers);
+                      };
+                      */
 
   return (
     <div>
@@ -535,11 +534,7 @@ const TwitterSna = () => {
           name={keywordAllTools("navbar_twitter_sna")}
           description={keywordAllTools("navbar_twitter_sna_description")}
           icon={
-            <TwitterSNAIcon
-              style={{ fill: "#00926c" }}
-              width="40px"
-              height="40px"
-            />
+            <dataAnalysisSna.icon sx={{ fill: "#00926c", fontSize: "40px" }} />
           }
         />
         <Card className={cardClasses.root}>

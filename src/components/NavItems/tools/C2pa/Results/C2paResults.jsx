@@ -109,22 +109,20 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
 
   return (
     <Grid2 container direction="row" spacing={3} p={4}>
-      <Grid2 container justifyContent="start" size={{ xs: 6 }}>
+      <Grid2 container justifyContent="start" size={{ md: 12, lg: 6 }}>
         <Grid2>
           {isImage ? (
             <img
               src={url}
               style={{
-                maxWidth: "100%",
-                maxHeight: "60vh",
+                width: 345,
                 borderRadius: "10px",
               }}
             />
           ) : (
             <video
               style={{
-                maxWidth: "100%",
-                maxHeight: "60vh",
+                width: 345,
                 borderRadius: "10px",
               }}
               controls
@@ -135,7 +133,7 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
           )}
         </Grid2>
       </Grid2>
-      <Grid2 size={{ xs: 6 }}>
+      <Grid2 size={{ md: 12, lg: 6 }}>
         <Card p={1}>
           <CardContent>
             {!manifestData ? (
@@ -154,7 +152,7 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                         : keyword("no_c2pa_info_video")}
                     </Alert>
                     {hasSimilarAfpResult && (
-                      <Alert severity="error" m={1}>
+                      <Alert severity="success" m={1}>
                         {keyword("reverse_search_result_found_warning")}
                       </Alert>
                     )}
@@ -207,7 +205,7 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                     <Stack>
                       {title("credit_title", "credit_explanation")}
                       <Box p={1}>
-                        {manifestData.producer ? (
+                        {manifestData.producer && (
                           <>
                             <Typography>
                               {manifestData.producer.name
@@ -234,12 +232,6 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                               </>
                             ) : null}
                           </>
-                        ) : (
-                          <Alert severity="info">
-                            {isImage
-                              ? keyword("credit_no_info_image")
-                              : keyword("credit_no_info_video")}
-                          </Alert>
                         )}
                       </Box>
                     </Stack>
@@ -251,7 +243,7 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                     <Stack>
                       {title("capture_info_title", "capture_info_explanation")}
                       <Box p={1}>
-                        {manifestData.captureInfo ? (
+                        {manifestData.captureInfo && (
                           <>
                             {manifestData.captureInfo.make ? (
                               <Typography>
@@ -380,10 +372,6 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                               </Box>
                             ) : null}
                           </>
-                        ) : (
-                          <Alert severity="warning">
-                            {keyword("capture_no_info")}
-                          </Alert>
                         )}
                       </Box>
                     </Stack>

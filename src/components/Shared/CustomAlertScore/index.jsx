@@ -1,10 +1,16 @@
 import React from "react";
-import { Alert } from "@mui/material";
+import { Alert, Grid2 } from "@mui/material";
 import CopyButton from "../CopyButton";
 import { i18nLoadNamespace } from "../Languages/i18nLoadNamespace";
 import Typography from "@mui/material/Typography";
 
-const CustomAlertScore = ({ score, detectionType, toolName, thresholds }) => {
+const CustomAlertScore = ({
+  score,
+  detectionType,
+  toolName,
+  thresholds,
+  isInconclusive,
+}) => {
   const keyword = i18nLoadNamespace(`components/NavItems/tools/${toolName}`);
 
   // TODO: handle error
@@ -27,6 +33,7 @@ const CustomAlertScore = ({ score, detectionType, toolName, thresholds }) => {
     VOICE_RECORDING: "replay",
     IMAGE: "image",
     VIDEO: "video",
+    MACHINE_GENERATED_TEXT: "machine_generated_text",
   };
 
   const toolNameSnakeCase = toolName
@@ -37,6 +44,7 @@ const CustomAlertScore = ({ score, detectionType, toolName, thresholds }) => {
   const DETECTION_THRESHOLD_2 = thresholds.THRESHOLD_2;
   const DETECTION_THRESHOLD_3 = thresholds.THRESHOLD_3;
 
+  const SEVERITY_ERROR = "error";
   const SEVERITY_INFO = "info";
 
   function getDisplayTextForDetectionScore(score, detectionType) {
@@ -58,6 +66,8 @@ const CustomAlertScore = ({ score, detectionType, toolName, thresholds }) => {
           return "_image";
         } else if (detectionType === DETECTION_TYPES.VIDEO) {
           return "_video";
+        } else if (detectionType === DETECTION_TYPES.MACHINE_GENERATED_TEXT) {
+          return "_machine_generated_text";
         } else return "";
       }
     };
@@ -66,12 +76,17 @@ const CustomAlertScore = ({ score, detectionType, toolName, thresholds }) => {
 
     displayText = keyword(`${toolNameSnakeCase}${detectionTranslation}_rating`);
 
-    if (score >= DETECTION_THRESHOLD_3) {
+    if (isInconclusive) {
+      displayText += keyword(
+        `${toolNameSnakeCase}${detectionTranslation}_rating_0`,
+      );
+    } else if (score >= DETECTION_THRESHOLD_3) {
       displayText +=
         !detectionType ||
         detectionType === DETECTION_TYPES.VOICE_CLONING ||
         detectionType === DETECTION_TYPES.VIDEO ||
-        detectionType === DETECTION_TYPES.IMAGE
+        detectionType === DETECTION_TYPES.IMAGE ||
+        detectionType === DETECTION_TYPES.MACHINE_GENERATED_TEXT
           ? keyword(`${toolNameSnakeCase}${detectionTranslation}_rating_4`)
           : keyword(`loccus_voice_recording_detection_rating_4`);
     } else if (score >= DETECTION_THRESHOLD_2) {
@@ -79,7 +94,8 @@ const CustomAlertScore = ({ score, detectionType, toolName, thresholds }) => {
         !detectionType ||
         detectionType === DETECTION_TYPES.VOICE_CLONING ||
         detectionType === DETECTION_TYPES.VIDEO ||
-        detectionType === DETECTION_TYPES.IMAGE
+        detectionType === DETECTION_TYPES.IMAGE ||
+        detectionType === DETECTION_TYPES.MACHINE_GENERATED_TEXT
           ? keyword(`${toolNameSnakeCase}${detectionTranslation}_rating_3`)
           : keyword(`loccus_voice_recording_detection_rating_3`);
     } else if (score >= DETECTION_THRESHOLD_1) {
@@ -87,7 +103,8 @@ const CustomAlertScore = ({ score, detectionType, toolName, thresholds }) => {
         !detectionType ||
         detectionType === DETECTION_TYPES.VOICE_CLONING ||
         detectionType === DETECTION_TYPES.VIDEO ||
-        detectionType === DETECTION_TYPES.IMAGE
+        detectionType === DETECTION_TYPES.IMAGE ||
+        detectionType === DETECTION_TYPES.MACHINE_GENERATED_TEXT
           ? keyword(`${toolNameSnakeCase}${detectionTranslation}_rating_2`)
           : keyword(`loccus_voice_recording_detection_rating_2`);
     } else {
@@ -95,7 +112,8 @@ const CustomAlertScore = ({ score, detectionType, toolName, thresholds }) => {
         !detectionType ||
         detectionType === DETECTION_TYPES.VOICE_CLONING ||
         detectionType === DETECTION_TYPES.VIDEO ||
-        detectionType === DETECTION_TYPES.IMAGE
+        detectionType === DETECTION_TYPES.IMAGE ||
+        detectionType === DETECTION_TYPES.MACHINE_GENERATED_TEXT
           ? keyword(`${toolNameSnakeCase}${detectionTranslation}_rating_1`)
           : keyword(`loccus_voice_recording_detection_rating_1`);
     }
@@ -108,7 +126,7 @@ const CustomAlertScore = ({ score, detectionType, toolName, thresholds }) => {
     detectionType,
   );
 
-  alertSettings.severity = SEVERITY_INFO;
+  alertSettings.severity = isInconclusive ? SEVERITY_ERROR : SEVERITY_INFO;
 
   return (
     <Alert
@@ -122,7 +140,11 @@ const CustomAlertScore = ({ score, detectionType, toolName, thresholds }) => {
         />
       }
     >
-      <Typography variant="body1">{alertSettings.displayText}</Typography>
+      <Grid2 container>
+        <Grid2 size={{ xs: 12 }} align="start">
+          <Typography variant="body1">{alertSettings.displayText}</Typography>
+        </Grid2>
+      </Grid2>
     </Alert>
   );
 };

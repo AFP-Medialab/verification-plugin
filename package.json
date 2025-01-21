@@ -1,6 +1,6 @@
 {
   "name": "weverify-plugin",
-  "version": "0.83",
+  "version": "0.84",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@date-io/moment": "^3.0.0",
     "@emotion/css": "^11.13.0",
@@ -27,8 +27,11 @@
     "@mui/x-data-grid": "^7.18.0",
     "@mui/x-date-pickers": "^7.18.0",
     "@reduxjs/toolkit": "^1.9.7",
+    "@tanstack/react-query": "^5.61.5",
+    "@tanstack/react-query-devtools": "^5.61.5",
     "@types/chrome": "^0.0.272",
     "@wavesurfer/react": "^1.0.7",
+    "attr-accept": "^2.2.5",
     "axios": "^1.7.7",
     "buffer": "^6.0.3",
     "c2pa": "^0.17.5",
@@ -87,6 +90,7 @@
     "@playwright/experimental-ct-react": "^1.47.2",
     "@playwright/test": "^1.47.2",
     "@svgr/webpack": "^8.1.0",
+    "@tanstack/eslint-plugin-query": "^5.61.6",
     "@types/node": "^22.7.2",
     "babel-loader": "^9.2.1",
     "concurrently": "^9.0.1",

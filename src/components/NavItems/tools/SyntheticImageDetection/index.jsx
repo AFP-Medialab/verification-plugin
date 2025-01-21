@@ -33,8 +33,8 @@ import { setError } from "redux/reducers/errorReducer";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 import { syntheticImageDetectionAlgorithms } from "./SyntheticImageDetectionAlgorithms";
-import { useLocation } from "react-router-dom";
 import { ROLES } from "../../../../constants/roles";
+import { useLocation } from "react-router-dom";
 
 const SyntheticImageDetection = () => {
   const location = useLocation();
@@ -63,7 +63,7 @@ const SyntheticImageDetection = () => {
 
   const [imageType, setImageType] = useState(undefined);
 
-  const [autoResizeLocalFile, setAutoResizeLocalFile] = useState(false);
+  const [autoResizeLocalFile, setAutoResizeLocalFile] = useState(true);
 
   const dispatch = useDispatch();
 
@@ -75,8 +75,21 @@ const SyntheticImageDetection = () => {
   const workerRef = useRef(null);
 
   useEffect(() => {
+    if (urlParam && !input) {
+      setInput(urlParam);
+      handleSubmit(urlParam);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (url && input && !result) {
+      handleSubmit(input);
+    }
+  }, [url, input, result]);
+
+  useEffect(() => {
     workerRef.current = new Worker(
-      new URL("../../../../workers/resizeImageWorker", import.meta.url),
+      new URL("@workers/resizeImageWorker", import.meta.url),
     );
 
     return () => {
@@ -91,7 +104,7 @@ const SyntheticImageDetection = () => {
   const resizeImageWithWorker = (image) => {
     return new Promise((resolve, reject) => {
       const workerInstance = new Worker(
-        new URL("../../../../workers/resizeImageWorker", import.meta.url),
+        new URL("@workers/resizeImageWorker", import.meta.url),
       );
       workerInstance.postMessage(image);
 
@@ -291,7 +304,9 @@ const SyntheticImageDetection = () => {
   const handleSubmit = async (url) => {
     const processedFile =
       autoResizeLocalFile && imageFile
-        ? await resizeImageWithWorker(imageFile)
+        ? role.includes(ROLES.BETA_TESTER)
+          ? await resizeImageWithWorker(imageFile)
+          : imageFile
         : imageFile;
 
     if (autoResizeLocalFile && processedFile) {
@@ -313,13 +328,6 @@ const SyntheticImageDetection = () => {
       processedFile,
     );
   };
-
-  useEffect(() => {
-    if (urlParam) {
-      setInput(urlParam);
-      handleSubmit(urlParam);
-    }
-  }, []);
 
   useEffect(() => {
     if (!result) return;
@@ -366,7 +374,7 @@ const SyntheticImageDetection = () => {
         )}
         icon={
           <Gradient
-            style={{ fill: "#00926c", height: "75px", width: "auto" }}
+            style={{ fill: "#00926c", height: "40px", width: "auto" }}
           />
         }
       />

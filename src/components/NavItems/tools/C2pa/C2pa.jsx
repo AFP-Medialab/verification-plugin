@@ -5,10 +5,8 @@ import {
   Alert,
   Box,
   Card,
-  CardHeader,
   FormControlLabel,
   FormGroup,
-  Grid2,
   LinearProgress,
   Stack,
   Switch,
@@ -37,6 +35,7 @@ import Typography from "@mui/material/Typography";
 import { v4 as uuidv4 } from "uuid";
 import { ROLES } from "../../../../constants/roles";
 import AfpReverseSearchResults from "./components/AfpReverseSearchResults";
+import HdImageResults from "./components/HdImageResults";
 
 const C2paData = () => {
   const role = useSelector((state) => state.userSession.user.roles);
@@ -57,6 +56,8 @@ const C2paData = () => {
   const [input, setInput] = useState("");
   const [imageFile, setImageFile] = useState(undefined);
 
+  const [imageMetadata, setImageMetadata] = useState(null);
+
   const dispatch = useDispatch();
 
   const classes = useMyStyles();
@@ -67,7 +68,7 @@ const C2paData = () => {
 
   const [loadingProgress, setLoadingProgress] = useState(null);
 
-  const [performReverseSearch, setPerformReverseSearch] = useState(false);
+  const [performReverseSearch, setPerformReverseSearch] = useState(true);
 
   const authenticatedRequest = useAuthenticatedRequest();
 
@@ -203,7 +204,7 @@ const C2paData = () => {
         method: "get",
         responseType: "blob",
         maxBodyLength: Infinity,
-        url: `https://plugin-archiving.afp.com/gateway/c2paafp/${urls.thumbnailUrl}`,
+        url: `https://plugin-archiving.afp.com/gateway/c2paafp${urls.thumbnailUrl}`,
         headers: {
           "X-AFP-TRANSACTION-ID": getTransactionId(),
         },
@@ -213,10 +214,21 @@ const C2paData = () => {
 
       const imageUrl = URL.createObjectURL(blob);
 
-      const metadata = await exifr.parse(blob, true);
+      const options = {
+        exif: true,
+        gps: true,
+        iptc: true,
+        jfif: true,
+        tiff: true,
+        mergeOutput: false,
+      };
 
-      if (metadata["Caption"])
-        dispatch(setC2paThumbnailCaption(metadata["Caption"]));
+      const metadata = await exifr.parse(blob, options);
+
+      setImageMetadata(metadata);
+
+      if (metadata.iptc && metadata.iptc["Caption"])
+        dispatch(setC2paThumbnailCaption(metadata.iptc["Caption"]));
 
       dispatch(setC2paThumbnail(imageUrl));
     }
@@ -226,7 +238,7 @@ const C2paData = () => {
         method: "get",
         responseType: "blob",
         maxBodyLength: Infinity,
-        url: `${serverUrl}/${urls.hdUrl}`,
+        url: `${serverUrl}${urls.hdUrl}`,
         headers: {
           "X-AFP-TRANSACTION-ID": getTransactionId(),
         },
@@ -299,22 +311,8 @@ const C2paData = () => {
         name={keyword("c2pa_title")}
         description={keyword("c2pa_description")}
       />
-      <Card>
-        <CardHeader
-          title={
-            <Grid2
-              container
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <span>{keyword("image_link")}</span>
-            </Grid2>
-          }
-          className={classes.headerUploadedImage}
-        />
-
-        <Box p={3}>
+      <Card variant="outlined" sx={{ minWidth: 500 }}>
+        <Box p={4}>
           <form>
             <Stack direction="column" spacing={4}>
               <StringFileUploadField
@@ -360,11 +358,10 @@ const C2paData = () => {
             </Stack>
           </form>
         </Box>
-
-        {/*<Box m={2} />*/}
       </Card>
 
-      <Box m={3} />
+      <Box m={4} />
+
       <Stack direction="column" spacing={4}>
         {loadingProgress && (
           <Alert icon={<CircularProgress size={20} />} severity="info">
@@ -416,11 +413,35 @@ const C2paData = () => {
                 hdImage={hdImage}
                 thumbnailImageCaption={thumbnailImageCaption}
                 hdImageC2paData={hdImageC2paData}
+                imageMetadata={imageMetadata}
               />
             </AccordionDetails>
           </Accordion>
         )}
-        <Box m={3} />
+
+        {hdImage && (
+          <Accordion defaultExpanded>
+            <AccordionSummary
+              expandIcon={<ArrowDownward />}
+              aria-controls="panel2-content"
+              id="panel2-header"
+            >
+              <Typography>
+                {keyword("reverse_search_results_title_hd")}
+              </Typography>
+            </AccordionSummary>
+
+            <AccordionDetails>
+              <HdImageResults
+                downloadHdImage={downloadHdImage}
+                hdImage={hdImage}
+                hdImageC2paData={hdImageC2paData}
+              />
+            </AccordionDetails>
+          </Accordion>
+        )}
+
+        <Box m={4} />
       </Stack>
     </Box>
   );

@@ -15,8 +15,11 @@ const styles = (theme) => ({
   },
   imageList: {
     width: "100%",
-
     paddingBottom: "10px",
+  },
+  checkeredBG: {
+    background:
+      "repeating-conic-gradient(#eee 0% 25%, #fafafa 0% 50%) 50% / 20px 20px",
   },
 });
 
@@ -33,17 +36,19 @@ const ImageImageList = (props) => {
                 <img
                   src={tile}
                   alt={tile}
+                  className={classes.checkeredBG}
                   onClick={() => props.handleClick(props.list[index])}
                   onLoad={props.setLoading}
-                  style={{ width: "100%", height: "auto" }}
+                  style={{ width: "100%", height: "auto", cursor: "pointer" }}
                   data-testid={"assistant-media-grid-image-" + index}
                 />
               ) : (
                 <img
                   src={tile}
                   alt={tile}
+                  className={classes.checkeredBG}
                   onClick={() => props.handleClick(props.list[index])}
-                  style={{ width: "100%", height: "auto" }}
+                  style={{ width: "100%", height: "auto", cursor: "pointer" }}
                   data-testid={"assistant-media-grid-image-" + index}
                 />
               )}

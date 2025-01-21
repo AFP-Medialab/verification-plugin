@@ -11,6 +11,17 @@ const styles = (theme) => ({
     textAlign: "center",
   },
 
+  namedEntityButtonHidden: {
+    textDecoration: "line-through !important",
+    filter: "brightness(80%)",
+  },
+
+  tagCloudTag: {
+    "&:hover": {
+      filter: "brightness(80%)",
+    },
+  },
+
   rootNoCenter: {
     padding: theme.spacing(2),
   },
@@ -785,6 +796,11 @@ const styles = (theme) => ({
 
   deepfakeSquareBorderWhite: {
     border: "4px solid white",
+  },
+
+  checkeredBG: {
+    background:
+      "repeating-conic-gradient(#eee 0% 25%, #fafafa 0% 50%) 50% / 20px 20px",
   },
 
   hidden: {

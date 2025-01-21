@@ -7,7 +7,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Collapse from "@mui/material/Collapse";
 import FindInPageIcon from "@mui/icons-material/FindInPage";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Grid2, IconButton } from "@mui/material";
+import { Chip, Grid2, IconButton } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
@@ -19,6 +19,12 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { Trans } from "react-i18next";
+import {
+  TransHtmlDoubleLinkBreak,
+  TransSourceCredibilityTooltip,
+  TransUrlDomainAnalysisLink,
+} from "../TransComponents";
 
 const AssistantSCResults = () => {
   // central
@@ -30,7 +36,7 @@ const AssistantSCResults = () => {
   const assuranceExpanded = useSelector(
     (state) => state.assistant.assuranceExpanded,
   );
-  const positiveSourCred = useSelector(
+  const positiveSourceCred = useSelector(
     (state) => state.assistant.positiveSourceCred,
   );
   const cautionSourceCred = useSelector(
@@ -39,25 +45,40 @@ const AssistantSCResults = () => {
   const mixedSourceCred = useSelector(
     (state) => state.assistant.mixedSourceCred,
   );
+  const trafficLightColors = useSelector(
+    (state) => state.assistant.trafficLightColors,
+  );
+
+  // define types of source credibility
+  // also defined in AssistantLinkResult - move to redux?
+  const sourceTypes = {
+    caution: "warning",
+    mixed: "mentions",
+    positive: "fact_checker",
+  };
 
   return (
     <Card variant={"outlined"} className={classes.sourceCredibilityBorder}>
       <Grid2 container>
-        <Grid2 size={{ xs: 12 }} className={classes.displayFlex}>
+        <Grid2 size={{ xs: 11 }} className={classes.displayFlex}>
+          {/* icon */}
           <CardMedia>
             <Box m={1}>
               <FindInPageIcon fontSize={"large"} color={"primary"} />
             </Box>
           </CardMedia>
 
+          {/* spacing */}
           <Box m={1} />
 
+          {/* title */}
           <Box mt={1.5}>
             <Typography component={"span"} variant={"h6"}>
               {keyword("url_domain_analysis")}
             </Typography>
           </Box>
 
+          {/* expand button */}
           <IconButton
             className={classes.assistantIconRight}
             onClick={() => dispatch(setAssuranceExpanded(!assuranceExpanded))}
@@ -66,78 +87,77 @@ const AssistantSCResults = () => {
           </IconButton>
         </Grid2>
 
+        <Grid2 size={{ xs: 1 }}>
+          {/* help tooltip */}
+          <Box mt={1.5} align="right">
+            <Tooltip
+              interactive={"true"}
+              leaveDelay={50}
+              style={{ display: "flex", marginLeft: "auto" }}
+              title={
+                <>
+                  <TransSourceCredibilityTooltip keyword={keyword} />
+                  <TransHtmlDoubleLinkBreak keyword={keyword} />
+                  <TransUrlDomainAnalysisLink keyword={keyword} />
+                </>
+              }
+              classes={{ tooltip: classes.assistantTooltip }}
+            >
+              <HelpOutlineOutlinedIcon color={"action"} />
+            </Tooltip>
+          </Box>
+        </Grid2>
+
         <Grid2 size={{ xs: 12 }}>
           <Collapse
             in={assuranceExpanded}
             className={classes.assistantBackground}
           >
             <Box mt={3} ml={2}>
-              {positiveSourCred ? (
+              {positiveSourceCred && positiveSourceCred.length > 0 ? (
                 <div>
-                  <Typography
-                    variant={"subtitle1"}
-                    className={classes.fontBold}
-                  >
-                    {keyword("fact_checker")}
-                  </Typography>
+                  <Chip
+                    label={keyword("fact_checker")}
+                    color={trafficLightColors.positive}
+                  />
                   <SourceCredibilityResult
-                    scResultFiltered={positiveSourCred}
+                    scResultFiltered={positiveSourceCred}
                     icon={CheckCircleOutlineIcon}
-                    iconColor="primary"
+                    iconColor={trafficLightColors.positive}
+                    sourceType={sourceTypes.positive}
                   />
                 </div>
               ) : null}
 
-              {cautionSourceCred ? (
+              {cautionSourceCred && cautionSourceCred.length > 0 ? (
                 <div>
-                  <Typography
-                    variant={"subtitle1"}
-                    className={classes.fontBold}
-                  >
-                    {keyword("warning_title")}
-                  </Typography>
+                  <Chip
+                    label={keyword("warning_title")}
+                    color={trafficLightColors.caution}
+                  />
                   <SourceCredibilityResult
                     scResultFiltered={cautionSourceCred}
                     icon={ErrorOutlineOutlinedIcon}
-                    iconColor="error"
+                    iconColor={trafficLightColors.caution}
+                    sourceType={sourceTypes.caution}
                   />
                 </div>
               ) : null}
 
-              {mixedSourceCred ? (
+              {mixedSourceCred && mixedSourceCred.length > 0 ? (
                 <div>
-                  <Typography
-                    variant={"subtitle1"}
-                    className={classes.fontBold}
-                  >
-                    {keyword("mentions")}
-                  </Typography>
+                  <Chip
+                    label={keyword("mentions")}
+                    color={trafficLightColors.mixed}
+                  />
                   <SourceCredibilityResult
                     scResultFiltered={mixedSourceCred}
                     icon={SentimentSatisfied}
-                    iconColor="action"
+                    iconColor={trafficLightColors.mixed}
+                    sourceType={sourceTypes.mixed}
                   />
                 </div>
               ) : null}
-
-              <Box mr={2} mb={1}>
-                <Tooltip
-                  interactive={"true"}
-                  leaveDelay={50}
-                  style={{ display: "flex", marginLeft: "auto" }}
-                  title={
-                    <div
-                      className={"content"}
-                      dangerouslySetInnerHTML={{
-                        __html: keyword("sc_tooltip"),
-                      }}
-                    />
-                  }
-                  classes={{ tooltip: classes.assistantTooltip }}
-                >
-                  <HelpOutlineOutlinedIcon color={"action"} />
-                </Tooltip>
-              </Box>
             </Box>
           </Collapse>
         </Grid2>

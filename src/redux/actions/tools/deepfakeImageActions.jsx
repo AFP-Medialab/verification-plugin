@@ -9,3 +9,5 @@ export const setDeepfakeLoadingImage = createAction(
 );
 
 export const setDeepfakeResultImage = createAction("SET_DEEPFAKE_IMAGE_RESULT");
+
+export const setDeepfakeUrlImage = createAction("SET_DEEPFAKE_IMAGE_URL");
