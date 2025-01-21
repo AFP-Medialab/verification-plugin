@@ -74,6 +74,11 @@ const defaultState = {
   machineGeneratedTextDone: false,
   machineGeneratedTextFail: false,
 
+  youtubeCommentsResult: null,
+  youtubeCommentsLoading: false,
+  youtubeCommentsDone: false,
+  youtubeCommentsFail: false,
+
   targetObliviousStanceResult: null,
   targetObliviousStanceLoading: false,
   targetObliviousStanceDone: false,
@@ -106,6 +111,7 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_SUBJECTIVITY_DETAILS":
     case "SET_PREV_FACT_CHECKS_DETAILS":
     case "SET_MACHINE_GENERATED_TEXT_DETAILS":
+    case "SET_YOUTUBE_COMMENTS_DETAILS":
     case "SET_TARGET_OBLIVIOUS_STANCE_DETAILS":
     case "SET_LOADING":
     case "SET_WARNING_EXPANDED":
@@ -190,6 +196,11 @@ const assistantReducer = (state = defaultState, action) => {
         machineGeneratedTextLoading: false,
         machineGeneratedTextDone: false,
         machineGeneratedTextFail: false,
+
+        youtubeCommentsResult: null,
+        youtubeCommentsLoading: false,
+        youtubeCommentsDone: false,
+        youtubeCommentsFail: false,
 
         targetObliviousStanceResult: null,
         targetObliviousStanceLoading: false,

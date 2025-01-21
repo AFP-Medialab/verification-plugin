@@ -18,6 +18,7 @@ import {
   setSubjectivityDetails,
   setPrevFactChecksDetails,
   setMachineGeneratedTextDetails,
+  setYoutubeCommentsDetails,
   setTargetObliviousStanceDetails,
   setProcessUrl,
   setProcessUrlActions,
@@ -124,6 +125,13 @@ function* getMachineGeneratedTextSaga() {
   yield takeLatest(
     ["SET_SCRAPED_DATA", "AUTH_USER_LOGIN", "CLEAN_STATE"],
     handleMachineGeneratedTextCall,
+  );
+}
+
+function* getYoutubeCommentsSaga() {
+  yield takeLatest(
+    ["SET_SCRAPED_DATA", "CLEAN_STATE"],
+    handleYoutubeCommentsCall,
   );
 }
 
@@ -529,6 +537,33 @@ function* handleMachineGeneratedTextCall(action) {
     }
   } catch (error) {
     yield put(setMachineGeneratedTextDetails(null, false, false, true));
+  }
+}
+
+function* handleYoutubeCommentsCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const inputUrl = yield select((state) => state.assistant.inputUrl); // TODO set this properly
+
+    const videoId = inputUrl; // split at "?v="
+
+    console.log(inputUrl, videoId);
+
+    if (urlType === KNOWN_LINKS.YOUTUBE) {
+      yield put(setYoutubeCommentsDetails(null, true, false, false));
+
+      const result = yield call(
+        assistantApi.callYoutubeCommentsService,
+        videoId,
+      );
+
+      console.log("youtube_comments=", result);
+
+      yield put(setYoutubeCommentsDetails(result, false, true, false));
+    }
+  } catch (error) {
+    yield put(setYoutubeCommentsDetails(null, false, false, true));
   }
 }
 
@@ -1105,6 +1140,7 @@ export default function* assistantSaga() {
     fork(getSubjectivitySaga),
     fork(getPrevFactChecksSaga),
     fork(getMachineGeneratedTextSaga),
+    fork(getYoutubeCommentsSaga),
     fork(getTargetObliviousStanceSaga),
   ]);
 }

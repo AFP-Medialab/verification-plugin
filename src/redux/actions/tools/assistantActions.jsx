@@ -257,6 +257,23 @@ export const setMachineGeneratedTextDetails = (
   };
 };
 
+export const setYoutubeCommentsDetails = (
+  ytcResult,
+  ytcLoading,
+  ytcDone,
+  ytcFail,
+) => {
+  return {
+    type: "SET_YOUTUBE_COMMENTS_DETAILS",
+    payload: {
+      youtubeCommentsResult: ytcResult,
+      youtubeCommentsLoading: ytcLoading,
+      youtubeCommentsDone: ytcDone,
+      youtubeCommentsFail: ytcFail,
+    },
+  };
+};
+
 export const setTargetObliviousStanceDetails = (
   tosResult,
   tosLoading,
