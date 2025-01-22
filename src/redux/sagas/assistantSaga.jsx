@@ -544,18 +544,17 @@ function* handleYoutubeCommentsCall(action) {
   if (action.type === "CLEAN_STATE") return;
 
   try {
-    const inputUrl = yield select((state) => state.assistant.inputUrl); // TODO set this properly
-
-    const videoId = inputUrl; // split at "?v="
-
-    console.log(inputUrl, videoId);
+    const inputUrl = yield select((state) => state.assistant.inputUrl);
+    const urlType = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
 
     if (urlType === KNOWN_LINKS.YOUTUBE) {
       yield put(setYoutubeCommentsDetails(null, true, false, false));
 
+      console.log(inputUrl, urlType);
+
       const result = yield call(
         assistantApi.callYoutubeCommentsService,
-        videoId,
+        inputUrl,
       );
 
       console.log("youtube_comments=", result);

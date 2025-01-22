@@ -40,6 +40,7 @@ import ListItem from "@mui/material/ListItem";
 import { Trans } from "react-i18next";
 import {
   TransCollectedCommentsTooltip,
+  TransTargetObliviousStanceTooltip,
   TransTargetObliviousStanceLink,
 } from "../TransComponents";
 import { TextCopy } from "components/Shared/Utils/TextCopy";
@@ -147,7 +148,14 @@ const AssistantCommentResult = ({ collectedComments }) => {
                 </TableCell>
 
                 <TableCell align="center">
-                  <Tooltip title={keyword("target_oblivious_stance_tooltip")}>
+                  <Tooltip
+                    title={
+                      <>
+                        <TransTargetObliviousStanceTooltip />
+                        <TransTargetObliviousStanceLink />
+                      </>
+                    }
+                  >
                     {targetObliviousStanceLoading && (
                       <Skeleton variant="rounded" />
                     )}
@@ -227,7 +235,14 @@ const AssistantCommentResult = ({ collectedComments }) => {
                   ) : null}
                   {targetObliviousStanceDone &&
                   targetObliviousStanceResult[commentId] ? (
-                    <Tooltip title={keyword("target_oblivious_stance_tooltip")}>
+                    <Tooltip
+                      title={
+                        <>
+                          <TransTargetObliviousStanceTooltip />
+                          <TransTargetObliviousStanceLink />
+                        </>
+                      }
+                    >
                       <Chip
                         label={
                           keyword("stance_label") +
@@ -277,6 +292,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
             title={
               <>
                 <TransCollectedCommentsTooltip />
+                <TransTargetObliviousStanceTooltip />
                 <TransTargetObliviousStanceLink />
               </>
             }
@@ -286,6 +302,13 @@ const AssistantCommentResult = ({ collectedComments }) => {
           </Tooltip>
         }
       />
+
+      {targetObliviousStanceLoading ? (
+        <div>
+          <LinearProgress />
+        </div>
+      ) : null}
+
       <CardContent width="100%">
         {/* all comments */}
         <Accordion>
@@ -315,11 +338,8 @@ const AssistantCommentResult = ({ collectedComments }) => {
         </Accordion>
 
         {/* link comments */}
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            disabled={linkComments.length < 1}
-          >
+        <Accordion hidden={linkComments.length < 1}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>
               {keyword("link_comments") + " (" + linkComments.length + ")"}
             </Typography>
@@ -328,11 +348,8 @@ const AssistantCommentResult = ({ collectedComments }) => {
         </Accordion>
 
         {/* verification comments */}
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            disabled={verificationComments.length < 1}
-          >
+        <Accordion hidden={verificationComments.length < 1}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>
               {keyword("api_comments_verified") +
                 " (" +
@@ -346,11 +363,8 @@ const AssistantCommentResult = ({ collectedComments }) => {
         </Accordion>
 
         {/* stance: deny comments */}
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            disabled={denyComments.length < 1}
-          >
+        <Accordion hidden={denyComments.length < 1}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>
               {keyword("stance_deny_comments") +
                 " (" +
@@ -362,11 +376,8 @@ const AssistantCommentResult = ({ collectedComments }) => {
         </Accordion>
 
         {/* stance: support comments */}
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            disabled={supportComments.length < 1}
-          >
+        <Accordion hidden={supportComments.length < 1}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>
               {keyword("stance_support_comments") +
                 " (" +
@@ -378,11 +389,8 @@ const AssistantCommentResult = ({ collectedComments }) => {
         </Accordion>
 
         {/* stance: query comments */}
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            disabled={queryComments.length < 1}
-          >
+        <Accordion hidden={queryComments.length < 1}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>
               {keyword("stance_query_comments") +
                 " (" +

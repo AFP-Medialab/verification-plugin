@@ -125,10 +125,14 @@ export function TransSourceCredibilityTooltip({ keyword }) {
 }
 
 export function TransCollectedCommentsTooltip({ keyword }) {
+  return <Trans t={keyword} i18nKey="collected_comments_tooltip" />;
+}
+
+export function TransTargetObliviousStanceTooltip({ keyword }) {
   return (
     <Trans
       t={keyword}
-      i18nKey="collected_comments_tooltip"
+      i18nKey="target_oblivious_stance_tooltip"
       components={{
         ul: <ul />,
         li: <li />,

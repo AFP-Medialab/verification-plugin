@@ -244,14 +244,14 @@ export default function assistantApiCalls() {
     );
   };
 
-  const callYoutubeCommentsService = async (videoId) => {
+  const callYoutubeCommentsService = async (inputUrl) => {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
       async () => {
         const result = await axios.post(
           assistantEndpoint + "mever/youtube-comments",
           {
-            videoId: videoId,
+            url: inputUrl,
           },
         );
         return result.data;
