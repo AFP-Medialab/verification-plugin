@@ -87,7 +87,7 @@ const Archive = () => {
   };
 
   const fetchArchivedUrls = async (waczFileUrl) => {
-    const fetchUrl = process.env.ARCHIVE_BACKEND;
+    const fetchUrl = process.env.REACT_APP_ARCHIVE_BACKEND;
 
     if (!waczFileUrl) {
       throw new Error("upload_error");
