@@ -11,6 +11,7 @@ const defaultState = {
   linkList: [],
   urlText: null,
   urlTextHtmlMap: null,
+  collectedComments: null,
   textLang: null,
   processUrlActions: [],
   processUrlType: null,
@@ -73,6 +74,16 @@ const defaultState = {
   machineGeneratedTextDone: false,
   machineGeneratedTextFail: false,
 
+  youtubeCommentsResult: null,
+  youtubeCommentsLoading: false,
+  youtubeCommentsDone: false,
+  youtubeCommentsFail: false,
+
+  targetObliviousStanceResult: null,
+  targetObliviousStanceLoading: false,
+  targetObliviousStanceDone: false,
+  targetObliviousStanceFail: false,
+
   loading: false,
   warningExpanded: false,
   assuranceExpanded: false,
@@ -100,6 +111,8 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_SUBJECTIVITY_DETAILS":
     case "SET_PREV_FACT_CHECKS_DETAILS":
     case "SET_MACHINE_GENERATED_TEXT_DETAILS":
+    case "SET_YOUTUBE_COMMENTS_DETAILS":
+    case "SET_TARGET_OBLIVIOUS_STANCE_DETAILS":
     case "SET_LOADING":
     case "SET_WARNING_EXPANDED":
     case "SET_ASSURANCE_EXPANDED":
@@ -121,6 +134,7 @@ const assistantReducer = (state = defaultState, action) => {
         linkList: [],
         urlText: null,
         urlTextHtmlMap: null,
+        collectedComments: null,
         textLang: null,
         processUrlActions: [],
         processUrlType: null,
@@ -182,6 +196,16 @@ const assistantReducer = (state = defaultState, action) => {
         machineGeneratedTextLoading: false,
         machineGeneratedTextDone: false,
         machineGeneratedTextFail: false,
+
+        youtubeCommentsResult: null,
+        youtubeCommentsLoading: false,
+        youtubeCommentsDone: false,
+        youtubeCommentsFail: false,
+
+        targetObliviousStanceResult: null,
+        targetObliviousStanceLoading: false,
+        targetObliviousStanceDone: false,
+        targetObliviousStanceFail: false,
 
         loading: false,
         warningExpanded: false,

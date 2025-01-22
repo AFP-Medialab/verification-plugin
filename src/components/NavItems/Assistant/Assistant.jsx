@@ -34,6 +34,7 @@ import {
 import { setError } from "redux/reducers/errorReducer";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { Close } from "@mui/icons-material";
+import AssistantCommentResult from "./AssistantScrapeResults/AssistantCommentResult";
 
 const Assistant = () => {
   // styles, language, dispatch, params
@@ -55,6 +56,9 @@ const Assistant = () => {
   const videoList = useSelector((state) => state.assistant.videoList);
   const text = useSelector((state) => state.assistant.urlText);
   const linkList = useSelector((state) => state.assistant.linkList);
+  const collectedComments = useSelector(
+    (state) => state.assistant.collectedComments,
+  );
   const errorKey = useSelector((state) => state.assistant.errorKey);
 
   // checking if user logged in
@@ -199,7 +203,7 @@ const Assistant = () => {
             className={classes.assistantCardHeader}
             title={
               <Typography style={{ fontWeight: "bold", fontSize: 20 }}>
-                {keyword("Assistant results")}
+                {keyword("assistant_results")}
               </Typography>
             }
             action={
@@ -235,6 +239,15 @@ const Assistant = () => {
               imageVideoSelected ? (
                 <Grid2 size={{ xs: 12 }}>
                   <AssistantMediaResult />
+                </Grid2>
+              ) : null}
+
+              {/* YouTube comments if video */}
+              {collectedComments ? (
+                <Grid2 size={12}>
+                  <AssistantCommentResult
+                    collectedComments={collectedComments}
+                  />
                 </Grid2>
               ) : null}
 

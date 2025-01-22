@@ -62,6 +62,7 @@ export const setScrapedData = (
   images,
   videos,
   textHtmlMap,
+  collectedComments,
 ) => {
   return {
     type: "SET_SCRAPED_DATA",
@@ -72,6 +73,7 @@ export const setScrapedData = (
       imageList: images,
       videoList: videos,
       urlTextHtmlMap: textHtmlMap,
+      collectedComments: collectedComments,
     },
   };
 };
@@ -251,6 +253,40 @@ export const setMachineGeneratedTextDetails = (
       machineGeneratedTextLoading: mgtLoading,
       machineGeneratedTextDone: mgtDone,
       machineGeneratedTextFail: mgtFail,
+    },
+  };
+};
+
+export const setYoutubeCommentsDetails = (
+  ytcResult,
+  ytcLoading,
+  ytcDone,
+  ytcFail,
+) => {
+  return {
+    type: "SET_YOUTUBE_COMMENTS_DETAILS",
+    payload: {
+      youtubeCommentsResult: ytcResult,
+      youtubeCommentsLoading: ytcLoading,
+      youtubeCommentsDone: ytcDone,
+      youtubeCommentsFail: ytcFail,
+    },
+  };
+};
+
+export const setTargetObliviousStanceDetails = (
+  tosResult,
+  tosLoading,
+  tosDone,
+  tosFail,
+) => {
+  return {
+    type: "SET_TARGET_OBLIVIOUS_STANCE_DETAILS",
+    payload: {
+      targetObliviousStanceResult: tosResult,
+      targetObliviousStanceLoading: tosLoading,
+      targetObliviousStanceDone: tosDone,
+      targetObliviousStanceFail: tosFail,
     },
   };
 };

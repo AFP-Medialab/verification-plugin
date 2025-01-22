@@ -21,6 +21,7 @@ import Typography from "@mui/material/Typography";
 import styles from "./layout.module.css";
 import { TextCopy } from "../../../../Shared/Utils/TextCopy";
 import { Translate } from "../../../../Shared/Utils/Translate";
+import { Chip, Tooltip } from "@mui/material";
 
 const CommentsPanel = (props) => {
   const [count_comments, setCount_comments] = useState(1);
@@ -130,6 +131,15 @@ const CommentsPanel = (props) => {
   };
   const dispatch = useDispatch();
 
+  // targetObliviousStance
+  const targetObliviousStance = props.targetObliviousStance;
+  const targetObliviousStanceColours = {
+    support: "success",
+    deny: "error",
+    query: "warning",
+    comment: "inherit",
+  };
+
   return (
     <Accordion
       expanded={expanded === "panel1"}
@@ -160,6 +170,9 @@ const CommentsPanel = (props) => {
               <TableCell align="center">
                 {keyword("twitter_user_name_5")}
               </TableCell>
+              {targetObliviousStance != null ? (
+                <TableCell align="center">{keyword("stance_title")}</TableCell>
+              ) : null}
               <TableCell />
             </TableRow>
           </TableHead>
@@ -196,6 +209,30 @@ const CommentsPanel = (props) => {
                       {comment.textDisplay}
                     </Linkify>
                   </TableCell>
+                  {targetObliviousStance != null ? (
+                    <TableCell align="center">
+                      <Tooltip
+                        title={keyword("target_oblivious_stance_tooltip")}
+                      >
+                        <Chip
+                          label={
+                            keyword("stance_label") +
+                            keyword(
+                              targetObliviousStance == "comment"
+                                ? "unlabelled"
+                                : targetObliviousStance,
+                            )
+                          }
+                          color={
+                            targetObliviousStanceColours[
+                              targetObliviousStance[comment.comid]
+                            ]
+                          }
+                          size="small"
+                        />
+                      </Tooltip>
+                    </TableCell>
+                  ) : null}
                   <TableCell>
                     <TextCopy text={comment.textDisplay} index={key} />
                     <Translate text={comment.textDisplay} />
@@ -286,6 +323,7 @@ const AnalysisComments = (props) => {
             classes={props.classes}
             keyword={keyword}
             report={props.report}
+            targetObliviousStance={props.targetObliviousStance}
             nb_comments={props.report.pagination.total_comments}
             setCommentsAction={props.setAnalysisComments}
             commentsData={verificationComments}
@@ -303,6 +341,7 @@ const AnalysisComments = (props) => {
             classes={props.classes}
             keyword={keyword}
             report={props.report}
+            targetObliviousStance={props.targetObliviousStance}
             nb_comments={
               props.report.verification_cues.num_verification_comments
             }
@@ -320,6 +359,7 @@ const AnalysisComments = (props) => {
             classes={props.classes}
             keyword={keyword}
             report={props.report}
+            targetObliviousStance={props.targetObliviousStance}
             nb_comments={props.report.verification_cues.num_link_comments}
             setCommentsAction={props.setAnalysisLinkComments}
             commentsData={linkComments}

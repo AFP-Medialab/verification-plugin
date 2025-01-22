@@ -18,6 +18,8 @@ import {
   setSubjectivityDetails,
   setPrevFactChecksDetails,
   setMachineGeneratedTextDetails,
+  setYoutubeCommentsDetails,
+  setTargetObliviousStanceDetails,
   setProcessUrl,
   setProcessUrlActions,
   setScrapedData,
@@ -123,6 +125,20 @@ function* getMachineGeneratedTextSaga() {
   yield takeLatest(
     ["SET_SCRAPED_DATA", "AUTH_USER_LOGIN", "CLEAN_STATE"],
     handleMachineGeneratedTextCall,
+  );
+}
+
+function* getYoutubeCommentsSaga() {
+  yield takeLatest(
+    ["SET_SCRAPED_DATA", "CLEAN_STATE"],
+    handleYoutubeCommentsCall,
+  );
+}
+
+function* getTargetObliviousStanceSaga() {
+  yield takeLatest(
+    ["SET_SCRAPED_DATA", "CLEAN_STATE"],
+    handleTargetObliviousStanceCall,
   );
 }
 
@@ -524,6 +540,32 @@ function* handleMachineGeneratedTextCall(action) {
   }
 }
 
+function* handleYoutubeCommentsCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const inputUrl = yield select((state) => state.assistant.inputUrl);
+    const urlType = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
+
+    if (urlType === KNOWN_LINKS.YOUTUBE) {
+      yield put(setYoutubeCommentsDetails(null, true, false, false));
+
+      console.log(inputUrl, urlType);
+
+      const result = yield call(
+        assistantApi.callYoutubeCommentsService,
+        inputUrl,
+      );
+
+      console.log("youtube_comments=", result);
+
+      yield put(setYoutubeCommentsDetails(result, false, true, false));
+    }
+  } catch (error) {
+    yield put(setYoutubeCommentsDetails(null, false, false, true));
+  }
+}
+
 function* handleNamedEntityCall(action) {
   if (action.type === "CLEAN_STATE") return;
 
@@ -620,6 +662,7 @@ function* handleAssistantScrapeCall(action) {
         filteredSR.imageList,
         filteredSR.videoList,
         filteredSR.urlTextHtmlMap,
+        filteredSR.collectedComments,
       ),
     );
     yield put(setAssistantLoading(false));
@@ -631,6 +674,46 @@ function* handleAssistantScrapeCall(action) {
     } else {
       yield put(setErrorKey(error.message));
     }
+  }
+}
+
+// Target Oblivious Stance Classification for YouTube Comments
+function* handleTargetObliviousStanceCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const collectedComments = yield select(
+      (state) => state.assistant.collectedComments,
+    );
+
+    function createCommentArray(comments, convertedComments) {
+      comments.forEach((comment) => {
+        convertedComments.push({
+          text: comment.textOriginal,
+          id_str: comment.id,
+          in_reply_to_status_id_str: "1",
+        });
+        if ("replies" in comment) {
+          createCommentArray(comment.replies, convertedComments);
+        }
+      });
+    }
+
+    let convertedComments = [];
+    createCommentArray(collectedComments, convertedComments);
+
+    if (convertedComments) {
+      yield put(setTargetObliviousStanceDetails(null, true, false, false));
+
+      const result = yield call(
+        assistantApi.callTargetObliviousStanceService,
+        convertedComments,
+      );
+
+      yield put(setTargetObliviousStanceDetails(result, false, true, false));
+    }
+  } catch (error) {
+    yield put(setTargetObliviousStanceDetails(null, false, false, true));
   }
 }
 
@@ -673,7 +756,17 @@ function* extractFromLocalStorage(instagram_result, inputUrl, urlType) {
   window.localStorage.removeItem("instagram_result");
 
   yield put(setInputUrl(inputUrl, urlType));
-  yield put(setScrapedData(text_result, null, [], image_result, video_result));
+  yield put(
+    setScrapedData(
+      text_result,
+      null,
+      [],
+      image_result,
+      video_result,
+      null,
+      null,
+    ),
+  );
   yield put(setAssistantLoading(false));
 }
 
@@ -703,12 +796,12 @@ function formatTelegramLink(url) {
  **/
 const decideWhetherToScrape = (urlType, contentType) => {
   switch (urlType) {
-    case KNOWN_LINKS.YOUTUBE:
     case KNOWN_LINKS.YOUTUBESHORTS:
     case KNOWN_LINKS.LIVELEAK:
     case KNOWN_LINKS.VIMEO:
     case KNOWN_LINKS.DAILYMOTION:
       return false;
+    case KNOWN_LINKS.YOUTUBE:
     case KNOWN_LINKS.TIKTOK:
     case KNOWN_LINKS.INSTAGRAM:
     case KNOWN_LINKS.FACEBOOK:
@@ -779,6 +872,7 @@ const filterAssistantResults = (
   let urlText = null;
   let urlTextHtmlMap = null;
   let textLang = null;
+  let collectedComments = null;
 
   switch (urlType) {
     case KNOWN_LINKS.YOUTUBE:
@@ -857,6 +951,10 @@ const filterAssistantResults = (
       .sort()
       .filter((value, index, array) => array.indexOf(value) === index);
     urlTextHtmlMap = scrapeResult.text_html_mapping;
+
+    if ("collected_comments" in scrapeResult) {
+      collectedComments = scrapeResult.collected_comments;
+    }
   }
 
   return {
@@ -866,6 +964,7 @@ const filterAssistantResults = (
     imageList: imageList,
     linkList: linkList,
     urlTextHtmlMap: urlTextHtmlMap,
+    collectedComments: collectedComments,
   };
 };
 
@@ -1041,5 +1140,7 @@ export default function* assistantSaga() {
     fork(getSubjectivitySaga),
     fork(getPrevFactChecksSaga),
     fork(getMachineGeneratedTextSaga),
+    fork(getYoutubeCommentsSaga),
+    fork(getTargetObliviousStanceSaga),
   ]);
 }
