@@ -1,4 +1,18 @@
 {
   "tabWidth": 2,
-  "useTabs": false
+  "useTabs": false,
+  "plugins": ["@trivago/prettier-plugin-sort-imports"],
+  "importOrder": [
+    "react",
+    "@mui",
+    "@mui-icons",
+    "<THIRD_PARTY_MODULES>",
+    "^[./]",
+    "^[.]/[^./]",
+    "^[.]/[^./]/(.*)$",
+    "^[.]/",
+    "<INTERNAL_MODULES>"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
 }

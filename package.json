@@ -91,6 +91,7 @@
     "@playwright/test": "^1.47.2",
     "@svgr/webpack": "^8.1.0",
     "@tanstack/eslint-plugin-query": "^5.61.6",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.1",
     "@types/node": "^22.7.2",
     "babel-loader": "^9.2.1",
     "concurrently": "^9.0.1",
