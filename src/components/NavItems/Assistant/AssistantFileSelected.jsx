@@ -1,9 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
+import { CardHeader, Grid2 } from "@mui/material";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import { CardHeader, Grid2 } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -11,14 +12,14 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import {
   CONTENT_TYPE,
   KNOWN_LINKS,
   selectCorrectActions,
 } from "./AssistantRuleBook";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
-import { useNavigate } from "react-router-dom";
 
 const AssistantFileSelected = () => {
   const classes = useMyStyles();

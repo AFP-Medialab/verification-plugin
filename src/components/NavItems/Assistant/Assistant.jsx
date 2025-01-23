@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { Close } from "@mui/icons-material";
 import {
   Card,
   CardContent,
@@ -11,29 +11,28 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 
-import AssistantCheckStatus from "./AssistantCheckResults/AssistantCheckStatus";
-import AssistantFileSelected from "./AssistantFileSelected";
-import AssistantIntroduction from "./AssistantIntroduction";
-import AssistantLinkResult from "./AssistantScrapeResults/AssistantLinkResult";
-import AssistantMediaResult from "./AssistantScrapeResults/AssistantMediaResult";
-import AssistantNEResult from "./AssistantCheckResults/AssistantNEResult";
-import AssistantSCResults from "./AssistantScrapeResults/AssistantSCResults";
-import AssistantTextResult from "./AssistantScrapeResults/AssistantTextResult";
-import AssistantUrlSelected from "./AssistantUrlSelected";
-import AssistantWarnings from "./AssistantScrapeResults/AssistantWarnings";
-import AssistantCredSignals from "./AssistantScrapeResults/AssistantCredibilitySignals";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { setError } from "redux/reducers/errorReducer";
+
 import { ROLES } from "../../../constants/roles.jsx";
-
 import {
   cleanAssistantState,
   setUrlMode,
   submitInputUrl,
 } from "../../../redux/actions/tools/assistantActions";
-import { setError } from "redux/reducers/errorReducer";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { Close } from "@mui/icons-material";
+import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
+import AssistantCheckStatus from "./AssistantCheckResults/AssistantCheckStatus";
+import AssistantNEResult from "./AssistantCheckResults/AssistantNEResult";
+import AssistantFileSelected from "./AssistantFileSelected";
+import AssistantIntroduction from "./AssistantIntroduction";
+import AssistantCredSignals from "./AssistantScrapeResults/AssistantCredibilitySignals";
+import AssistantLinkResult from "./AssistantScrapeResults/AssistantLinkResult";
+import AssistantMediaResult from "./AssistantScrapeResults/AssistantMediaResult";
+import AssistantSCResults from "./AssistantScrapeResults/AssistantSCResults";
+import AssistantTextResult from "./AssistantScrapeResults/AssistantTextResult";
+import AssistantWarnings from "./AssistantScrapeResults/AssistantWarnings";
+import AssistantUrlSelected from "./AssistantUrlSelected";
 
 const Assistant = () => {
   // styles, language, dispatch, params

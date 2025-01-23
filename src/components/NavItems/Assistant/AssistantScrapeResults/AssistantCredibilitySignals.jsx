@@ -1,37 +1,37 @@
 import React, { useState } from "react";
+import { Trans } from "react-i18next";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import Card from "@mui/material/Card";
-import { CardHeader, Grid2, Skeleton, styled } from "@mui/material";
-import CardContent from "@mui/material/CardContent";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Remove from "@mui/icons-material/Remove";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import Remove from "@mui/icons-material/Remove";
+import { CardHeader, Grid2, Skeleton, styled } from "@mui/material";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 import Collapse from "@mui/material/Collapse";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
+import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult.jsx";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import dayjs from "dayjs";
 import LocaleData from "dayjs/plugin/localeData";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 
-import ResultDisplayItem from "./../../tools/SemanticSearch/components/ResultDisplayItem.jsx";
 import { ROLES } from "../../../../constants/roles.jsx";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { getLanguageName } from "../../../Shared/Utils/languageUtils";
-import TextFooterPrevFactChecks from "./TextFooter.jsx";
-import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult.jsx";
 import {
   TransCredibilitySignalsLink,
   TransHtmlDoubleLinkBreak,
   TransHtmlSingleLinkBreak,
 } from "../TransComponents";
-import { Trans } from "react-i18next";
+import ResultDisplayItem from "./../../tools/SemanticSearch/components/ResultDisplayItem.jsx";
+import TextFooterPrevFactChecks from "./TextFooter.jsx";
 
 const getExpandIcon = (
   loading,

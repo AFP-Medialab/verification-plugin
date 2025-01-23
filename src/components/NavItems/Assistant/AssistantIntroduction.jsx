@@ -1,29 +1,29 @@
 import React, { useState } from "react";
+import { Trans } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import LinkIcon from "@mui/icons-material/Link";
 import { Box, CardHeader, Grid2 } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Tooltip from "@mui/material/Tooltip";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-import LinkIcon from "@mui/icons-material/Link";
 import Typography from "@mui/material/Typography";
 
-import AssistantIcon from "../../NavBar/images/navbar/assistant-icon-primary.svg";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import {
   setImageVideoSelected,
   setUrlMode,
 } from "../../../redux/actions/tools/assistantActions";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
+import AssistantIcon from "../../NavBar/images/navbar/assistant-icon-primary.svg";
 import HeaderTool from "../../Shared/HeaderTool/HeaderTool";
-
+import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import {
   TransHtmlDoubleLinkBreak,
   TransSupportedToolsLink,
 } from "./TransComponents";
-import { Trans } from "react-i18next";
 
 const AssistantIntroduction = (props) => {
   // styles, language, dispatch, params

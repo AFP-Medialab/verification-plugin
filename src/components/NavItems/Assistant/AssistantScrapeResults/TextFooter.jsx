@@ -1,15 +1,15 @@
 import React from "react";
 
-import Box from "@mui/material/Box";
-import { Grid2, Link } from "@mui/material";
-import Divider from "@mui/material/Divider";
 import { ExpandLessOutlined, ExpandMoreOutlined } from "@mui/icons-material";
+import { Grid2, Link } from "@mui/material";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { getLanguageName } from "../../../Shared/Utils/languageUtils";
 import { TextCopy } from "../../../Shared/Utils/TextCopy";
 import { Translate } from "../../../Shared/Utils/Translate";
+import { getLanguageName } from "../../../Shared/Utils/languageUtils";
 
 export default function TextFooter({
   classes,

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import Card from "@mui/material/Card";
+
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import {
   CardHeader,
   Checkbox,
@@ -9,13 +10,18 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
+import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Divider from "@mui/material/Divider";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { v4 as uuidv4 } from "uuid";
+
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
+import "./assistantTextResultStyle.css";
 import {
   interpRgb,
   rgbToLuminance,
@@ -23,10 +29,6 @@ import {
   treeMapToElements,
   wrapPlainTextSpan,
 } from "./assistantUtils";
-import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
-import { v4 as uuidv4 } from "uuid";
-
-import "./assistantTextResultStyle.css";
 
 export default function AssistantTextClassification({
   text,

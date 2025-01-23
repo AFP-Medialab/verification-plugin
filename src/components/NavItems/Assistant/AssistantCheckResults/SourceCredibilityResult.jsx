@@ -3,11 +3,13 @@ import React from "react";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
-import SourceCredibilityDBKFDialog from "./SourceCredibilityDBKFDialog";
+import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
+
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import SourceCredibilityDBKFDialog from "./SourceCredibilityDBKFDialog";
 import { getUrlTypeFromCredScope } from "./assistantUtils";
 
 const SourceCredibilityResult = (props) => {

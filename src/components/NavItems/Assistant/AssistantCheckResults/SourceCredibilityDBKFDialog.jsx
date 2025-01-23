@@ -1,19 +1,21 @@
 import React, { useState } from "react";
 
 import CloseIcon from "@mui/icons-material/Close";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
+import { Chip, Grid2, Tooltip } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import Link from "@mui/material/Link";
-import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import Typography from "@mui/material/Typography";
+
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import { Chip, Grid2, Tooltip } from "@mui/material";
 import {
   TransHtmlDoubleLinkBreak,
   TransSourceCredibilityTooltip,

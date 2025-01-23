@@ -1,36 +1,36 @@
 import React, { useEffect, useState } from "react";
+import { Trans } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import { CardHeader, Grid2, LinearProgress } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
+import { CardHeader, Grid2, LinearProgress } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
-import { CONTENT_TYPE } from "../AssistantRuleBook";
-import AssistantImageResult from "./AssistantImageResult";
-import AssistantVideoResult from "./AssistantVideoResult";
-import WarningAmber from "./AssistantWarnings";
-import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
-import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import {
   setProcessUrl,
   setWarningExpanded,
 } from "../../../../redux/actions/tools/assistantActions";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "../../../Shared/VideoGridList/VideoGridList";
-
+import { CONTENT_TYPE } from "../AssistantRuleBook";
 import {
   TransHtmlDoubleLinkBreak,
   TransSupportedToolsLink,
 } from "../TransComponents";
-import { Trans } from "react-i18next";
+import AssistantImageResult from "./AssistantImageResult";
+import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
+import AssistantVideoResult from "./AssistantVideoResult";
+import WarningAmber from "./AssistantWarnings";
 
 const AssistantMediaResult = () => {
   const classes = useMyStyles();

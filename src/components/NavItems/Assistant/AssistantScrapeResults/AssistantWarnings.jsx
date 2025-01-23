@@ -1,19 +1,21 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import { WarningAmber } from "@mui/icons-material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Grid2, IconButton } from "@mui/material";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import Collapse from "@mui/material/Collapse";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Grid2, IconButton } from "@mui/material";
 import Typography from "@mui/material/Typography";
+
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import { setWarningExpanded } from "../../../../redux/actions/tools/assistantActions";
-import DbkfTextResults from "../AssistantCheckResults/DbkfTextResults";
-import DbkfMediaResults from "../AssistantCheckResults/DbkfMediaResults";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import { WarningAmber } from "@mui/icons-material";
+import DbkfMediaResults from "../AssistantCheckResults/DbkfMediaResults";
+import DbkfTextResults from "../AssistantCheckResults/DbkfTextResults";
 
 const AssistantWarnings = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");

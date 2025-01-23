@@ -1,30 +1,30 @@
 import React, { useEffect, useState } from "react";
+import { Trans } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-
-import Card from "@mui/material/Card";
-import { Box, CardHeader, Tabs, Tab, Skeleton, Stack } from "@mui/material";
-import CardContent from "@mui/material/CardContent";
-import Collapse from "@mui/material/Collapse";
 
 import { WarningOutlined } from "@mui/icons-material";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import { Box, CardHeader, Skeleton, Stack, Tab, Tabs } from "@mui/material";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Collapse from "@mui/material/Collapse";
 import LinearProgress from "@mui/material/LinearProgress";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import { setWarningExpanded } from "../../../../redux/actions/tools/assistantActions";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import { treeMapToElements } from "./assistantUtils";
 
-import TextFooter from "./TextFooter.jsx";
-import AssistantTextClassification from "./AssistantTextClassification";
-import AssistantTextSpanClassification from "./AssistantTextSpanClassification";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import { setWarningExpanded } from "../../../../redux/actions/tools/assistantActions";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
   TransCredibilitySignalsLink,
   TransHtmlDoubleLinkBreak,
   TransSupportedToolsLink,
 } from "../TransComponents";
-import { Trans } from "react-i18next";
+import AssistantTextClassification from "./AssistantTextClassification";
+import AssistantTextSpanClassification from "./AssistantTextSpanClassification";
+import TextFooter from "./TextFooter.jsx";
+import { treeMapToElements } from "./assistantUtils";
 
 const AssistantTextResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");

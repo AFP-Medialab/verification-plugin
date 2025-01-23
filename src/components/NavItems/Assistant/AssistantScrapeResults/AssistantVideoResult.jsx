@@ -1,21 +1,22 @@
 import React from "react";
+import Iframe from "react-iframe";
 import { useSelector } from "react-redux";
 
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
-import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
-import CardActions from "@mui/material/CardActions";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
-import { IconButton } from "@mui/material";
 import ImageIcon from "@mui/icons-material/Image";
-import Iframe from "react-iframe";
+import { IconButton } from "@mui/material";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardMedia from "@mui/material/CardMedia";
 import Link from "@mui/material/Link";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { KNOWN_LINKS } from "../AssistantRuleBook";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import { KNOWN_LINKS } from "../AssistantRuleBook";
 
 const AssistantVideoResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
