@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import CloseIcon from "@mui/icons-material/Close";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
@@ -8,7 +7,6 @@ import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import Link from "@mui/material/Link";
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import Typography from "@mui/material/Typography";
@@ -17,14 +15,12 @@ import MuiAccordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Box from "@mui/material/Box";
 import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { getUrlTypeFromCredScope } from "./assistantUtils";
 import { Chip, Grid2, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { Trans } from "react-i18next";
 import {
   TransHtmlDoubleLinkBreak,
   TransSourceCredibilityTooltip,

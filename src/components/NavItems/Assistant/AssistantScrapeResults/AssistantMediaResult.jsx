@@ -15,6 +15,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { CONTENT_TYPE } from "../AssistantRuleBook";
 import AssistantImageResult from "./AssistantImageResult";
 import AssistantVideoResult from "./AssistantVideoResult";
+import WarningAmber from "./AssistantWarnings";
 import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
 import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
 import {
@@ -24,14 +25,12 @@ import {
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "../../../Shared/VideoGridList/VideoGridList";
-import { WarningOutlined } from "@mui/icons-material";
 
 import {
   TransHtmlDoubleLinkBreak,
   TransSupportedToolsLink,
 } from "../TransComponents";
 import { Trans } from "react-i18next";
-import { Link } from "react-router-dom";
 
 const AssistantMediaResult = () => {
   const classes = useMyStyles();
@@ -40,7 +39,6 @@ const AssistantMediaResult = () => {
 
   // assistant media states
   const processUrl = useSelector((state) => state.assistant.processUrl);
-  const urlMode = useSelector((state) => state.assistant.urlMode);
   const resultProcessType = useSelector(
     (state) => state.assistant.processUrlType,
   );

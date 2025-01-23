@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import CloseIcon from "@mui/icons-material/Close";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
@@ -8,7 +7,6 @@ import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import Link from "@mui/material/Link";
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import Typography from "@mui/material/Typography";

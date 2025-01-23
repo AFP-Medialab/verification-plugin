@@ -3,11 +3,7 @@ import React from "react";
 import Box from "@mui/material/Box";
 import { Grid2, Link } from "@mui/material";
 import Divider from "@mui/material/Divider";
-import {
-  ExpandLessOutlined,
-  ExpandMoreOutlined,
-  UnfoldMore,
-} from "@mui/icons-material";
+import { ExpandLessOutlined, ExpandMoreOutlined } from "@mui/icons-material";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
@@ -130,14 +126,6 @@ export function ExpandMinimise({
 }) {
   return (
     <Tooltip title={expandMinimiseText}>
-      {/* <UnfoldMore
-        className={classes.toolTipIcon}
-        onClick={() => {
-          setExpanded(!expanded);
-        }}
-        sx={{ cursor: "pointer" }}
-        color={"primary"}
-      /> */}
       {displayExpander ? (
         expanded ? (
           <ExpandLessOutlined

@@ -22,9 +22,6 @@ const AssistantVideoResult = () => {
   const classes = useMyStyles();
 
   const processUrl = useSelector((state) => state.assistant.processUrl);
-  const process_url_type = useSelector(
-    (state) => state.assistant.processUrlType,
-  );
   const input_url_type = useSelector((state) => state.assistant.inputUrlType);
 
   const useIframe = () => {

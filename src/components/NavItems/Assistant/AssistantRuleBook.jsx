@@ -14,7 +14,6 @@ import {
   thumbnails,
   videoAnalysis,
   videoDeepfake,
-  videoRights,
 } from "../../../constants/tools";
 
 export const NE_SUPPORTED_LANGS = ["en", "pt", "fr", "de", "el", "es", "it"];

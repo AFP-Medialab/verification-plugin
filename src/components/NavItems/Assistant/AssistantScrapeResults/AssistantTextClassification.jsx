@@ -27,7 +27,6 @@ import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
 import { v4 as uuidv4 } from "uuid";
 
 import "./assistantTextResultStyle.css";
-import { Trans } from "react-i18next";
 
 export default function AssistantTextClassification({
   text,
@@ -77,9 +76,6 @@ export default function AssistantTextClassification({
     sentenceThresholdHigh = configs.importanceThresholdHigh;
   }
   // category is confidence for news framing, news genre and subjectivity
-  const categoryTooltipText = keyword("confidence_tooltip_category");
-  const categoryTextLow = keyword("low_confidence");
-  const categoryTextHigh = keyword("high_confidence");
   const categoryRgbLow = configs.confidenceRgbLow;
   const categoryRgbHigh = configs.confidenceRgbHigh;
   const categoryThresholdLow = configs.confidenceThresholdLow;

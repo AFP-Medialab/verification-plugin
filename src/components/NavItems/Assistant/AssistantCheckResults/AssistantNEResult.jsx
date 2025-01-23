@@ -1,25 +1,16 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Card from "@mui/material/Card";
-import { CardHeader, Grid2, ListItemButton, Tooltip } from "@mui/material";
+import { CardHeader, Grid2, Tooltip } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
-import Collapse from "@mui/material/Collapse";
-import Divider from "@mui/material/Divider";
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import LinearProgress from "@mui/material/LinearProgress";
-import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
-import ListItem from "@mui/material/ListItem";
-import List from "@mui/material/List";
-import ListItemText from "@mui/material/ListItemText";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 //import ReactWordcloud from "react-wordcloud";
 import { TagCloud } from "react-tagcloud";
-import { select } from "d3-selection";
 import "tippy.js/dist/tippy.css";
 import "tippy.js/animations/scale.css";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -38,10 +29,6 @@ const AssistantNEResult = () => {
   const neResultCount = useSelector((state) => state.assistant.neResultCount);
   const neLoading = useSelector((state) => state.assistant.neLoading);
 
-  const [selectedIndex, setSelectedIndex] = useState(null);
-  const handleCollapse = (index) => {
-    index === selectedIndex ? setSelectedIndex(null) : setSelectedIndex(index);
-  };
   const [visibleCategories, setVisibleCategories] = useState(
     neResult.reduce((acc, key) => {
       acc[key.category.toLowerCase()] = false;

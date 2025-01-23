@@ -4,13 +4,11 @@ import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import SourceCredibilityDBKFDialog from "./SourceCredibilityDBKFDialog";
 import Typography from "@mui/material/Typography";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { getUrlTypeFromCredScope } from "./assistantUtils";
-import { Chip, Grid2 } from "@mui/material";
 
 const SourceCredibilityResult = (props) => {
   // central
@@ -18,7 +16,6 @@ const SourceCredibilityResult = (props) => {
 
   // props
   const sourceCredibilityResults = props.scResultFiltered;
-  const Icon = props.icon;
   const iconColor = props.iconColor;
   const sourceType = props.sourceType;
 

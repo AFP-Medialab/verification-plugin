@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Box, CardHeader, Grid2 } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import LinkIcon from "@mui/icons-material/Link";
@@ -21,13 +21,9 @@ import HeaderTool from "../../Shared/HeaderTool/HeaderTool";
 
 import {
   TransHtmlDoubleLinkBreak,
-  TransSupportedUrlsLink,
   TransSupportedToolsLink,
 } from "./TransComponents";
 import { Trans } from "react-i18next";
-import { Link } from "react-router-dom";
-
-import { styled } from "@mui/material/styles";
 
 const AssistantIntroduction = (props) => {
   // styles, language, dispatch, params

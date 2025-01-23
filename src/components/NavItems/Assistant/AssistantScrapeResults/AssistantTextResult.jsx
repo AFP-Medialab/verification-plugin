@@ -2,15 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Card from "@mui/material/Card";
-import {
-  Box,
-  CardHeader,
-  Grid2,
-  Tabs,
-  Tab,
-  Skeleton,
-  Stack,
-} from "@mui/material";
+import { Box, CardHeader, Tabs, Tab, Skeleton, Stack } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Collapse from "@mui/material/Collapse";
 
@@ -30,7 +22,6 @@ import AssistantTextSpanClassification from "./AssistantTextSpanClassification";
 import {
   TransCredibilitySignalsLink,
   TransHtmlDoubleLinkBreak,
-  TransHtmlSingleLinkBreak,
   TransSupportedToolsLink,
 } from "../TransComponents";
 import { Trans } from "react-i18next";
@@ -53,9 +44,6 @@ const AssistantTextResult = () => {
   const mtLoading = useSelector((state) => state.assistant.mtLoading);
   const dbkfMatchLoading = useSelector(
     (state) => state.assistant.dbkfTextMatchLoading,
-  );
-  const warningExpanded = useSelector(
-    (state) => state.assistant.warningExpanded,
   );
 
   // news framing (topic)
@@ -110,9 +98,6 @@ const AssistantTextResult = () => {
     (state) => state.assistant.subjectivityFail,
   );
 
-  // checking if user logged in
-  const role = useSelector((state) => state.userSession.user.roles);
-
   // display states
   const textBox = document.getElementById("element-to-check");
   const [expanded, setExpanded] = useState(false);
@@ -121,10 +106,6 @@ const AssistantTextResult = () => {
   const [textTabIndex, setTextTabIndex] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTextTabIndex(newValue);
-  };
-  const handleTabClick = (event) => {
-    // leave unset?
-    //setExpanded(true);
   };
 
   useEffect(() => {
@@ -238,7 +219,6 @@ const AssistantTextResult = () => {
           <Tabs
             value={textTabIndex}
             onChange={handleTabChange}
-            onClick={handleTabClick}
             aria-label="extracted text tabs"
             variant="fullWidth"
           >

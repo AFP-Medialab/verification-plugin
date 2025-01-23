@@ -1,29 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 
 import Card from "@mui/material/Card";
-import {
-  Box,
-  Button,
-  CardHeader,
-  Chip,
-  Grid2,
-  Skeleton,
-  Stack,
-} from "@mui/material";
+import { Box, CardHeader, Chip, Skeleton, Stack } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Link from "@mui/material/Link";
-import LinkIcon from "@mui/icons-material/Link";
 import Typography from "@mui/material/Typography";
-import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
-import SentimentSatisfied from "@mui/icons-material/SentimentSatisfied";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import ExtractedSourceCredibilityResult from "../AssistantCheckResults/ExtractedSourceCredibilityResult";
 import { TextCopy } from "../../../Shared/Utils/TextCopy";
 import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import { CheckCircleOutline, TaskAltOutlined } from "@mui/icons-material";
 import { DataGrid, getGridSingleSelectOperators } from "@mui/x-data-grid";
 import { Trans } from "react-i18next";
 import {

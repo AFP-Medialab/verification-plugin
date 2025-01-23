@@ -64,9 +64,6 @@ export default function AssistantTextSpanClassification({
   const categoryRgbHigh = configs.confidenceRgbHigh;
 
   const [doHighlightSentence, setDoHighlightSentence] = useState(true);
-  const handleHighlightSentences = (event) => {
-    setDoHighlightSentence(event.target.checked);
-  };
 
   function filterLabelsWithMinThreshold(classification, minThreshold) {
     let filteredLabels = {};

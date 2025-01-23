@@ -19,14 +19,12 @@ import dayjs from "dayjs";
 import LocaleData from "dayjs/plugin/localeData";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 
-import AssistantTextClassification from "./AssistantTextClassification.jsx";
-import AssistantTextSpanClassification from "./AssistantTextSpanClassification.jsx";
 import ResultDisplayItem from "./../../tools/SemanticSearch/components/ResultDisplayItem.jsx";
 import { ROLES } from "../../../../constants/roles.jsx";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { getLanguageName } from "../../../Shared/Utils/languageUtils";
-import TextFooter, { TextFooterPrevFactChecks } from "./TextFooter.jsx";
+import TextFooterPrevFactChecks from "./TextFooter.jsx";
 import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult.jsx";
 import {
   TransCredibilitySignalsLink,
@@ -34,34 +32,6 @@ import {
   TransHtmlSingleLinkBreak,
 } from "../TransComponents";
 import { Trans } from "react-i18next";
-
-const renderEntityKeys = (entities, keyword) => {
-  // translate array into readable string
-  let translatedEntities = [];
-  Object.keys(entities).map((entity, index) =>
-    entity != "Important_Sentence"
-      ? translatedEntities.push(keyword(entity))
-      : null,
-  );
-  return translatedEntities.join("; ");
-};
-
-const round = (number, decimalPlaces) => {
-  return (Math.round(number * 100) / 100).toFixed(decimalPlaces);
-};
-
-const calculateSubjectivity = (sentences) => {
-  let scoresSUBJ = [];
-  for (let i = 0; i < sentences.length; i++) {
-    if (sentences[i].label == "SUBJ") {
-      scoresSUBJ.push(Number(sentences[i].score));
-    }
-  }
-
-  return [" (", scoresSUBJ.length, "/", sentences.length, ")"]
-    .toString()
-    .replaceAll(",", "");
-};
 
 const getExpandIcon = (
   loading,
@@ -85,12 +55,10 @@ const getExpandIcon = (
 
 const AssistantCredSignals = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
-  const sharedKeyword = i18nLoadNamespace("components/Shared/utils");
   const classes = useMyStyles();
   const expandMinimiseText = keyword("expand_minimise_text");
 
   // displaying expanded text in AccordionDetails
-  const [displayOrigLang, setDisplayOrigLang] = useState(true);
   const [displayExpander, setDisplayExpander] = useState(true);
   const [expanded, setExpanded] = useState(true);
 
