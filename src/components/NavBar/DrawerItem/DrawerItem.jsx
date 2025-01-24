@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useLocation } from "react-router-dom";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { getclientId } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackPageView } from "../../../Hooks/useAnalytics";
 import { selectTopMenuItem } from "../../../redux/reducers/navReducer";
 import { TOP_MENU_ITEMS } from "../../../constants/topMenuItems";
@@ -73,9 +73,6 @@ const DrawerItemContent = ({ tool }) => {
         styleOverrides: {
           wrapper: {
             fontSize: 12,
-          },
-          root: {
-            minWidth: "15%!important",
           },
         },
       },

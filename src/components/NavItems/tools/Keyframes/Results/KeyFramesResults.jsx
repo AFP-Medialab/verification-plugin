@@ -1,85 +1,55 @@
 import React, { memo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import ImageGridList from "../../../../Shared/ImageGridList/ImageGridList";
-import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
-import Button from "@mui/material/Button";
+import { useSelector } from "react-redux";
+import ImageGridList from "@Shared/ImageGridList/ImageGridList";
 import { useKeyframes } from "../Hooks/usekeyframes";
-//import { useLoading, loadImageSize } from "../../../../../Hooks/useInput"
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
+  Button,
+  Card,
+  CardContent,
   CircularProgress,
+  Divider,
   Grid2,
   IconButton,
+  Link,
+  Popover,
+  Stack,
   Typography,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { cleanKeyframesState } from "../../../../../redux/actions/tools/keyframesActions";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Link from "@mui/material/Link";
+import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import Popover from "@mui/material/Popover";
-import ZoomInIcon from "@mui/icons-material/ZoomIn";
-import ZoomOutIcon from "@mui/icons-material/ZoomOut";
-import DetailedIcon from "@mui/icons-material/ViewComfyRounded";
-import SimpleIcon from "@mui/icons-material/ViewStreamRounded";
 import {
   reverseImageSearch,
   SEARCH_ENGINE_SETTINGS,
-} from "../../../../Shared/ReverseSearch/reverseSearchUtils";
+} from "@Shared/ReverseSearch/reverseSearchUtils";
+import {
+  Close,
+  Download,
+  ExpandMore,
+  HelpOutline,
+  ReportProblemOutlined,
+  ZoomIn,
+  ZoomOut,
+} from "@mui/icons-material";
 
 const KeyFramesResults = (props) => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Keyframes");
   const keywordHelp = i18nLoadNamespace("components/Shared/OnClickInfo");
-  const dispatch = useDispatch();
 
   const [detailed, setDetailed] = useState(false);
+
   const [simpleList, detailedList] = useKeyframes(props.result);
-  //const [findHeight, setFindHeight] = useState(false);
-  const [cols, setCols] = useState(3);
-  //const [height, setHeight] = useState(0);
+  const [cols, setCols] = useState(4);
+
   const similarityResults = useSelector((state) => state.keyframes.similarity);
-  //const isLoading = useSelector(state => state.keyframes.loading);
   const isLoadingSimilarity = useSelector(
     (state) => state.keyframes.similarityLoading,
   );
-
-  const theme = createTheme({
-    palette: {
-      primary: {
-        light: "#00926c",
-        main: "#00926c",
-        dark: "#00926c",
-        contrastText: "#fff",
-      },
-      secondary: {
-        main: "#ffaf33",
-      },
-      error: {
-        main: "rgb(198,57,59)",
-      },
-    },
-    components: {
-      MuiImageList: {
-        styleOverrides: {
-          root: {
-            maxHeight: "none!important",
-            height: "auto!important",
-          },
-        },
-      },
-    },
-  });
 
   const toggleDetail = () => {
     setDetailed(!detailed);
@@ -147,16 +117,31 @@ const KeyFramesResults = (props) => {
     setAnchorHelp(null);
   }
 
+  const keyframe_url = process.env.REACT_APP_KEYFRAME_API;
+  const video_id = useSelector((state) => state.keyframes.video_id);
+
+  const downloadAction = () => {
+    const downloadUrl = keyframe_url + "/keyframes/" + video_id + "/Subshots";
+    fetch(downloadUrl).then((response) => {
+      response.blob().then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        let a = document.createElement("a");
+        a.href = url;
+        a.click();
+      });
+    });
+  };
+
   return (
     <>
-      <Card>
-        {similarityResults &&
-          !isLoadingSimilarity &&
-          similarityResults.length > 0 && (
+      {similarityResults &&
+        !isLoadingSimilarity &&
+        similarityResults.length > 0 && (
+          <Card variant="outlined">
             <Box>
               <Accordion style={{ border: "2px solid #00926c" }}>
                 <AccordionSummary
-                  expandIcon={<ExpandMoreIcon style={{ color: "#17717e" }} />}
+                  expandIcon={<ExpandMore sx={{ color: "primary" }} />}
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
@@ -168,20 +153,20 @@ const KeyFramesResults = (props) => {
                       alignItems: "center",
                     }}
                   >
-                    <ReportProblemOutlinedIcon
-                      style={{ color: "#17717e", marginRight: "8px" }}
+                    <ReportProblemOutlined
+                      sx={{ color: "primary", marginRight: "8px" }}
                     />
                     <Typography
                       variant="h6"
                       align="left"
-                      style={{ color: "#17717e" }}
+                      sx={{ color: "primary" }}
                     >
                       {keyword("found_dbkf")}
                     </Typography>
                   </Box>
                 </AccordionSummary>
                 <AccordionDetails style={{ flexDirection: "column" }}>
-                  <Box p={2}>
+                  <Box p={1}>
                     <Typography variant="body1" align="left">
                       {keyword("dbkf_articles")}
                     </Typography>
@@ -193,13 +178,13 @@ const KeyFramesResults = (props) => {
                         <Typography
                           variant="body1"
                           align="left"
-                          style={{ color: "#17717e" }}
+                          sx={{ color: "primary" }}
                           key={key}
                         >
                           <Link
                             target="_blank"
                             href={value.externalLink}
-                            style={{ color: "#17717e" }}
+                            sx={{ color: "primary" }}
                           >
                             {value.externalLink}
                           </Link>
@@ -210,24 +195,18 @@ const KeyFramesResults = (props) => {
                 </AccordionDetails>
               </Accordion>
             </Box>
-          )}
-      </Card>
-      <Box m={3} />
-      <Card>
-        <CardHeader
-          title={
-            <Grid2
-              container
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <span>{keyword("cardheader_results")}</span>
-              <HelpOutlineIcon
-                style={{ color: "#FFFFFF" }}
-                onClick={clickHelp}
-              />
-
+          </Card>
+        )}
+      <Card variant="outlined">
+        <CardContent>
+          <Stack direction="column" spacing={4}>
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="h6">
+                {keyword("cardheader_results")}
+              </Typography>
+              <IconButton onClick={clickHelp}>
+                <HelpOutline />
+              </IconButton>
               <Popover
                 id={help}
                 open={openHelp}
@@ -236,7 +215,6 @@ const KeyFramesResults = (props) => {
                 PaperProps={{
                   style: {
                     width: "300px",
-                    fontSize: 14,
                   },
                 }}
                 anchorOrigin={{
@@ -248,92 +226,75 @@ const KeyFramesResults = (props) => {
                   horizontal: "center",
                 }}
               >
-                <Box p={3}>
-                  <Grid2
-                    container
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="stretch"
-                  >
-                    <Typography variant="h6" gutterBottom>
-                      {keywordHelp("title_tip")}
+                <Box p={2}>
+                  <Stack direction="column" spacing={2}>
+                    <Stack
+                      direction="row"
+                      sx={{
+                        justifyContent: "space-between",
+                        alignItems: "baseline",
+                      }}
+                    >
+                      <Typography variant="h6" gutterBottom>
+                        {keywordHelp("title_tip")}
+                      </Typography>{" "}
+                      <IconButton onClick={closeHelp}>
+                        <Close />
+                      </IconButton>
+                    </Stack>
+                    <Typography variant="body2">
+                      {keywordHelp("keyframes_tip")}
                     </Typography>
-
-                    <CloseIcon onClick={closeHelp} />
-                  </Grid2>
-
-                  <Box m={1} />
-                  <Typography variant="body2">
-                    {keywordHelp("keyframes_tip")}
-                  </Typography>
+                  </Stack>
                 </Box>
               </Popover>
-            </Grid2>
-          }
-          className={classes.headerUploadedImage}
-          action={
-            <IconButton
-              aria-label="close"
-              onClick={() => {
-                props.closeResult();
-                dispatch(cleanKeyframesState());
-              }}
-            >
-              <CloseIcon sx={{ color: "white" }} />
-            </IconButton>
-          }
-        />
+            </Stack>
 
-        <div className={classes.root2}>
-          <Grid2
-            container
-            justifyContent="space-between"
-            spacing={2}
-            alignContent={"center"}
-          >
-            <Grid2>
-              {!detailed ? (
-                <Button
-                  color={"primary"}
-                  onClick={() => toggleDetail()}
-                  endIcon={<DetailedIcon />}
-                >
-                  {keyword("keyframe_title_get_detail")}
-                </Button>
-              ) : (
-                <Button
-                  color={"primary"}
-                  onClick={() => toggleDetail()}
-                  endIcon={<SimpleIcon />}
-                >
-                  {keyword("keyframe_title_get_simple")}
-                </Button>
-              )}
-            </Grid2>
-            <Grid2 size="grow" style={{ textAlign: "end" }}>
-              <Button onClick={() => zoom(-1)} endIcon={<ZoomOutIcon />}>
-                {keyword("zoom_out")}
-              </Button>
-            </Grid2>
-            <Grid2>
-              <Button onClick={() => zoom(1)} endIcon={<ZoomInIcon />}>
-                {keyword("zoom_in")}
-              </Button>
-            </Grid2>
-          </Grid2>
-          <Box m={2} />
-          <Divider />
+            <Stack direction="column">
+              <Grid2
+                container
+                justifyContent="space-between"
+                spacing={2}
+                alignContent={"center"}
+              >
+                <Grid2>
+                  <Button onClick={() => toggleDetail()}>
+                    {!detailed
+                      ? keyword("keyframe_title_get_detail")
+                      : keyword("keyframe_title_get_simple")}
+                  </Button>
+                </Grid2>
 
-          <Box m={4} />
-          <ThemeProvider theme={theme}>
+                <Grid2>
+                  <Button
+                    color="primary"
+                    onClick={downloadAction}
+                    startIcon={<Download />}
+                  >
+                    {keyword("keyframes_download_subshots")}
+                  </Button>
+                </Grid2>
+
+                <Grid2 size="grow" style={{ textAlign: "end" }}>
+                  <Button onClick={() => zoom(-1)} startIcon={<ZoomOut />}>
+                    {keyword("zoom_out")}
+                  </Button>
+                </Grid2>
+                <Grid2>
+                  <Button onClick={() => zoom(1)} startIcon={<ZoomIn />}>
+                    {keyword("zoom_in")}
+                  </Button>
+                </Grid2>
+              </Grid2>
+              <Divider />
+            </Stack>
+
             {detailed && loadingDetailed && (
               <Box m={4}>
                 <CircularProgress />
               </Box>
             )}
             {detailed && (
-              //<ImageGridList list={detailedList} height={160} onClick={(url) => ImageReverseSearch("google", url)}/>
-
               <div className={classDetailed}>
                 <ImageGridList
                   list={detailedList}
@@ -351,7 +312,6 @@ const KeyFramesResults = (props) => {
               </Box>
             )}
             {!detailed && (
-              //<ImageGridList list={simpleList}  height={160} onClick={(url) => ImageReverseSearch("google", url)}/>
               <div className={classSimple}>
                 <ImageGridList
                   list={simpleList}
@@ -362,8 +322,8 @@ const KeyFramesResults = (props) => {
                 />
               </div>
             )}
-          </ThemeProvider>
-        </div>
+          </Stack>
+        </CardContent>
       </Card>
     </>
   );
