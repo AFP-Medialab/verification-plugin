@@ -1,12 +1,19 @@
 import React, { useState } from "react";
-import { Box, Card, Pagination, Stack, Typography } from "@mui/material";
-import SelectSmall from "./components/SelectSmall";
-import ResultDisplayItem from "./components/ResultDisplayItem";
-import { getLanguageName } from "../../../Shared/Utils/languageUtils";
-import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
+
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
 import dayjs from "dayjs";
 import LocaleData from "dayjs/plugin/localeData";
 import localizedFormat from "dayjs/plugin/localizedFormat";
+
+import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
+import { getLanguageName } from "../../../Shared/Utils/languageUtils";
+import ResultDisplayItem from "./components/ResultDisplayItem";
+import SelectSmall from "./components/SelectSmall";
 
 const SemanticSearchResults = (searchResults) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/SemanticSearch");

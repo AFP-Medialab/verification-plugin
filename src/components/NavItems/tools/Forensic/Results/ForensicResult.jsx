@@ -1,43 +1,48 @@
-import Box from "@mui/material/Box";
-import { Button, Grid2 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import Typography from "@mui/material/Typography";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
+import CardMedia from "@mui/material/CardMedia";
 import Divider from "@mui/material/Divider";
-import InfoIcon from "@mui/icons-material/Info";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CancelIcon from "@mui/icons-material/Cancel";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import Popover from "@mui/material/Popover";
-import CloseIcon from "@mui/icons-material/Close";
-import GifIcon from "@mui/icons-material/Gif";
 import Fab from "@mui/material/Fab";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import Fade from "@mui/material/Fade";
+import Grid2 from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
+import Popover from "@mui/material/Popover";
+import Snackbar from "@mui/material/Snackbar";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import Typography from "@mui/material/Typography";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
+import CancelIcon from "@mui/icons-material/Cancel";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CloseIcon from "@mui/icons-material/Close";
+import EmojiObjectsIcon from "@mui/icons-material/EmojiObjects";
+import GifIcon from "@mui/icons-material/Gif";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import InfoIcon from "@mui/icons-material/Info";
+import LinkIcon from "@mui/icons-material/Link";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import WarningIcon from "@mui/icons-material/Warning";
+
+import { DetectionProgressBar } from "components/Shared/DetectionProgressBar/DetectionProgressBar";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import { ROLES } from "../../../../../constants/roles";
 import { setForensicImageRatio } from "../../../../../redux/actions/tools/forensicActions";
 import {
   setStateBackResults,
   setStateInit,
 } from "../../../../../redux/reducers/tools/gifReducer";
-import LinkIcon from "@mui/icons-material/Link";
-import IconButton from "@mui/material/IconButton";
-import Snackbar from "@mui/material/Snackbar";
-import WarningIcon from "@mui/icons-material/Warning";
-import Alert from "@mui/material/Alert";
-import EmojiObjectsIcon from "@mui/icons-material/EmojiObjects";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import AnimatedGif from "../../Gif/AnimatedGif";
-import { DetectionProgressBar } from "components/Shared/DetectionProgressBar/DetectionProgressBar";
 import ImageCanvas from "../components/imageCanvas/imageCanvas";
-import Fade from "@mui/material/Fade";
-import CardMedia from "@mui/material/CardMedia";
-import { ROLES } from "../../../../../constants/roles";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

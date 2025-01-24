@@ -1,21 +1,26 @@
 import React from "react";
-import MainContentMenuTopMenuItems from "../NavBar/MainContentMenuTabItems/MainContentMenuTopMenuItems";
-import ScrollTop from "../Shared/ScrollTop/ScrollTop";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Button, Fab, Snackbar } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+
+import Button from "@mui/material/Button";
+import Fab from "@mui/material/Fab";
+import Snackbar from "@mui/material/Snackbar";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
 import { KeyboardArrowUp } from "@mui/icons-material";
-import MySnackbar from "../MySnackbar/MySnackbar";
+
+import { canUserSeeTool } from "../../constants/tools";
+import { TOP_MENU_ITEMS } from "../../constants/topMenuItems";
+import { setFalse, setTrue } from "../../redux/reducers/cookiesReducers";
 import {
   cleanError,
   cleanErrorNetwork,
 } from "../../redux/reducers/errorReducer";
-import { setFalse, setTrue } from "../../redux/reducers/cookiesReducers";
 import Feedback from "../Feedback/Feedback";
-import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
-import { canUserSeeTool } from "../../constants/tools";
-import { useDispatch, useSelector } from "react-redux";
+import MySnackbar from "../MySnackbar/MySnackbar";
+import MainContentMenuTopMenuItems from "../NavBar/MainContentMenuTabItems/MainContentMenuTopMenuItems";
 import { i18nLoadNamespace } from "../Shared/Languages/i18nLoadNamespace";
-import { TOP_MENU_ITEMS } from "../../constants/topMenuItems";
+import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
+import ScrollTop from "../Shared/ScrollTop/ScrollTop";
 
 /**
  *

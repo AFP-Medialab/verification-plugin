@@ -1,8 +1,12 @@
 import React from "react";
-import { Button, Grid2 } from "@mui/material";
+
+import Button from "@mui/material/Button";
+import Grid2 from "@mui/material/Grid2";
+
 import { SEARCH_ENGINE_SETTINGS } from "components/Shared/ReverseSearch/reverseSearchUtils";
-import useMyStyles from "../MaterialUiStyles/useMyStyles";
+
 import { i18nLoadNamespace } from "../Languages/i18nLoadNamespace";
+import useMyStyles from "../MaterialUiStyles/useMyStyles";
 import { IMAGE_FORMATS } from "./utils/searchUtils";
 
 export const ReverseSearchButtons = ({

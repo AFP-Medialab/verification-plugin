@@ -1,18 +1,17 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
-import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
-import Link from "@mui/material/Link";
-import { Chip, Grid2, Stack, Typography } from "@mui/material";
-import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
-import {
-  getAlertColor,
-  getAlertLabel,
-  getPercentageColorCode,
-} from "./syntheticImageDetectionResults";
-import { OpenInNew } from "@mui/icons-material";
 import { useSelector } from "react-redux";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 
+import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
+import Grid2 from "@mui/material/Grid2";
+import Link from "@mui/material/Link";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
+import { OpenInNew } from "@mui/icons-material";
+
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import {
   arSD,
   deDE,
@@ -22,6 +21,13 @@ import {
   frFR,
   itIT,
 } from "@mui/x-data-grid/locales";
+
+import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
+import {
+  getAlertColor,
+  getAlertLabel,
+  getPercentageColorCode,
+} from "./syntheticImageDetectionResults";
 
 const languages = {
   en: enUS,

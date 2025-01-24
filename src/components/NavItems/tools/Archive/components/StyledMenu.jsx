@@ -1,10 +1,13 @@
 import * as React from "react";
-import { alpha, styled } from "@mui/material/styles";
+
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import Divider from "@mui/material/Divider";
-import { IconButton } from "@mui/material";
+import { alpha, styled } from "@mui/material/styles";
+
 import { Archive, FileUpload, MoreVert, Replay } from "@mui/icons-material";
+
 import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
 
 const StyledMenu = styled((props) => (

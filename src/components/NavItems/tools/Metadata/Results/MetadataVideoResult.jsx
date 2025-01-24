@@ -1,22 +1,26 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import Typography from "@mui/material/Typography";
-import TableBody from "@mui/material/TableBody";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Table from "@mui/material/Table";
+
 import Box from "@mui/material/Box";
-import Tooltip from "@mui/material/Tooltip";
-import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import { cleanMetadataState } from "../../../../../redux/reducers/tools/metadataReducer";
 import Button from "@mui/material/Button";
-import MapIcon from "@mui/icons-material/Map";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import { IconButton } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
 import CloseIcon from "@mui/icons-material/Close";
+import MapIcon from "@mui/icons-material/Map";
+
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import { cleanMetadataState } from "../../../../../redux/reducers/tools/metadataReducer";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
+import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 
 const MetadataVideoResult = (props) => {
   const classes = useMyStyles();

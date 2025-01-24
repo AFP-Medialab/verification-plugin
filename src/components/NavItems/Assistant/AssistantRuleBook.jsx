@@ -1,4 +1,5 @@
 import React from "react";
+
 import DownloadIcon from "@mui/icons-material/Download";
 
 import { ROLES } from "../../../constants/roles.jsx";
@@ -14,7 +15,6 @@ import {
   thumbnails,
   videoAnalysis,
   videoDeepfake,
-  videoRights,
 } from "../../../constants/tools";
 
 export const NE_SUPPORTED_LANGS = ["en", "pt", "fr", "de", "el", "es", "it"];

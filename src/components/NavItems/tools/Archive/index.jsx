@@ -1,30 +1,38 @@
+import { QueryClient, useMutation } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
-
-import { Box, Button, Card, Grid2, Stack, Typography } from "@mui/material";
-import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import Grid2 from "@mui/material/Grid2";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
+import { ArrowBack } from "@mui/icons-material";
+
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import {
   archiveStateCleaned,
   setArchiveUrl,
 } from "redux/reducers/tools/archiveReducer";
-import { useDispatch, useSelector } from "react-redux";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import { archiving } from "../../../../constants/tools";
+import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
+import assistantApiCalls from "../../Assistant/AssistantApiHandlers/useAssistantApi";
 import {
-  KNOWN_LINK_PATTERNS,
   KNOWN_LINKS,
+  KNOWN_LINK_PATTERNS,
   matchPattern,
 } from "../../Assistant/AssistantRuleBook";
-import assistantApiCalls from "../../Assistant/AssistantApiHandlers/useAssistantApi";
-import { QueryClient, useMutation } from "@tanstack/react-query";
-import CustomizedMenus, { StyledMenu } from "./components/StyledMenu";
-import FirstStep from "./components/FirstStep";
-import SecondStep from "./components/SecondStep";
-import { ArrowBack } from "@mui/icons-material";
-import ThirdStep from "./components/ThirdStep";
-import FourthStep from "./components/FourthStep";
 import FifthStep from "./components/FifthStep";
+import FirstStep from "./components/FirstStep";
+import FourthStep from "./components/FourthStep";
+import SecondStep from "./components/SecondStep";
 import SixthStep from "./components/SixthStep";
+import CustomizedMenus, { StyledMenu } from "./components/StyledMenu";
+import ThirdStep from "./components/ThirdStep";
 
 const queryClient = new QueryClient();
 

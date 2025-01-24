@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
-import {
-  CardContent,
-  Grid2,
-  IconButton,
-  Popover,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import CloseIcon from "@mui/icons-material/Close";
-import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
-import { useSelector } from "react-redux";
-import { useTrackEvent } from "Hooks/useAnalytics";
+import Grid2 from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
+import Popover from "@mui/material/Popover";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
 import { Close } from "@mui/icons-material";
+import CloseIcon from "@mui/icons-material/Close";
+
+import { useTrackEvent } from "Hooks/useAnalytics";
 import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult";
+import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const DeepfakeResultsVideo = (props) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
