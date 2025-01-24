@@ -118,6 +118,6 @@
   },
   "lint-staged": {
     "src/**/*.{js,css,md}": ["prettier --write"],
-    "src/**/*.jsx": ["prettier --write", "jscodeshift"]
+    "src/**/*.jsx": ["jscodeshift", "prettier --write"]
   }
 }

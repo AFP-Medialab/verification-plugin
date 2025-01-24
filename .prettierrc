@@ -5,6 +5,7 @@
   "importOrder": [
     "react",
     "@mui/material",
+    "@mui/material/(.*)",
     "@mui/icons-material",
     "@mui",
     "@mui-icons",
