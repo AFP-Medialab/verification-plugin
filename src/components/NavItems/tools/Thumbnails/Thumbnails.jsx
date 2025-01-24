@@ -1,39 +1,43 @@
 import React, { useEffect, useState } from "react";
-import TextField from "@mui/material/TextField";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import ImageGridList from "@Shared/ImageGridList/ImageGridList";
-import { useDispatch, useSelector } from "react-redux";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { Grid2, IconButton } from "@mui/material";
+import FormGroup from "@mui/material/FormGroup";
+import Grid2 from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
+import LinearProgress from "@mui/material/LinearProgress";
+import TextField from "@mui/material/TextField";
+
 import CloseIcon from "@mui/icons-material/Close";
+
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import HeaderTool from "@Shared/HeaderTool/HeaderTool";
+import ImageGridList from "@Shared/ImageGridList/ImageGridList";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
+import OnClickInfo from "@Shared/OnClickInfo/OnClickInfo";
+import {
+  SEARCH_ENGINE_SETTINGS,
+  reverseImageSearch,
+  reverseImageSearchAll,
+} from "@Shared/ReverseSearch/reverseSearchUtils";
+import { setError } from "redux/reducers/errorReducer";
+
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { loadImageSize, useLoading } from "../../../../Hooks/useInput";
+import { thumbnails } from "../../../../constants/tools";
 import {
   cleanThumbnailsState,
   setThumbnailsLoading,
   setThumbnailsResult,
 } from "../../../../redux/reducers/tools/thumbnailsReducer";
-import { setError } from "redux/reducers/errorReducer";
-import Checkbox from "@mui/material/Checkbox";
-import FormGroup from "@mui/material/FormGroup";
-import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import OnClickInfo from "@Shared/OnClickInfo/OnClickInfo";
-import { useParams } from "react-router-dom";
-
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import HeaderTool from "@Shared/HeaderTool/HeaderTool";
-import LinearProgress from "@mui/material/LinearProgress";
-import {
-  reverseImageSearch,
-  reverseImageSearchAll,
-  SEARCH_ENGINE_SETTINGS,
-} from "@Shared/ReverseSearch/reverseSearchUtils";
-import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-import { thumbnails } from "../../../../constants/tools";
 
 const Thumbnails = () => {
   const { url } = useParams();

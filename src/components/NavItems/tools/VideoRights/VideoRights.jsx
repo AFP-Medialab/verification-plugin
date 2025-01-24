@@ -1,24 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import TextField from "@mui/material/TextField";
+//import { useTrackEvent } from "../../../../Hooks/useAnalytics";
+import { useParams } from "react-router-dom";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import LinearProgress from "@mui/material/LinearProgress";
-import useVideoRightsTreatment from "./Hooks/useVideoRightsTreatment";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import VideoRightsResults from "./Results/VideoRightsResults";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics"; //import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { useParams } from "react-router-dom";
-import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
-
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import { setVideoRightsLoading } from "../../../../redux/actions/tools/videoRightsActions";
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import { Grid2 } from "@mui/material";
+import Grid2 from "@mui/material/Grid2";
+import LinearProgress from "@mui/material/LinearProgress";
+import TextField from "@mui/material/TextField";
+
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { videoRights } from "../../../../constants/tools";
+import { setVideoRightsLoading } from "../../../../redux/actions/tools/videoRightsActions";
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
+import useVideoRightsTreatment from "./Hooks/useVideoRightsTreatment";
+import VideoRightsResults from "./Results/VideoRightsResults";
 
 const VideoRights = () => {
   const { url } = useParams();

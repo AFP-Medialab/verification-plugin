@@ -1,29 +1,32 @@
 import React, { memo, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import LocalFile from "./LocalFile/LocalFile";
-import LinearProgress from "@mui/material/LinearProgress";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import KeyFramesResults from "./Results/KeyFramesResults";
-import { useKeyframeWrapper } from "./Hooks/useKeyframeWrapper";
-import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
-import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 import { useParams } from "react-router-dom";
-import "@Shared/GoogleAnalytics/MatomoAnalytics";
-import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import { Grid2 } from "@mui/material";
-import HeaderTool from "@Shared/HeaderTool/HeaderTool";
-import LinkIcon from "@mui/icons-material/Link";
+import Divider from "@mui/material/Divider";
+import Grid2 from "@mui/material/Grid2";
+import LinearProgress from "@mui/material/LinearProgress";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+
 import FileIcon from "@mui/icons-material/InsertDriveFile";
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
+import LinkIcon from "@mui/icons-material/Link";
+
+import "@Shared/GoogleAnalytics/MatomoAnalytics";
+import HeaderTool from "@Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
+
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { keyframes } from "../../../../constants/tools";
+import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
+import { useKeyframeWrapper } from "./Hooks/useKeyframeWrapper";
+import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
+import LocalFile from "./LocalFile/LocalFile";
+import KeyFramesResults from "./Results/KeyFramesResults";
 
 const Keyframes = () => {
   const { url } = useParams();

@@ -1,26 +1,30 @@
 import React, { createRef, useState } from "react";
-import Loop from "./Loop";
-import Box from "@mui/material/Box";
 import { useDispatch, useSelector } from "react-redux";
-import Button from "@mui/material/Button";
-import "tui-image-editor/dist/tui-image-editor.css";
-import ImageEditor from "../Utils/ImageEditor";
-import Fade from "@mui/material/Fade";
-import Modal from "@mui/material/Modal";
+
 import Backdrop from "@mui/material/Backdrop";
-import { Grid2 } from "@mui/material";
-import { setMagnifierResult } from "../../../../../redux/actions/tools/magnifierActions";
-import { IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import {
-  reverseImageSearch,
-  SEARCH_ENGINE_SETTINGS,
-} from "../../../../Shared/ReverseSearch/reverseSearchUtils";
+import Fade from "@mui/material/Fade";
+import Grid2 from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
+import Modal from "@mui/material/Modal";
+
+import CloseIcon from "@mui/icons-material/Close";
+
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { ReverseSearchButtons } from "components/Shared/ReverseSearch/ReverseSearchButtons";
+import "tui-image-editor/dist/tui-image-editor.css";
+
+import { setMagnifierResult } from "../../../../../redux/actions/tools/magnifierActions";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
+import {
+  SEARCH_ENGINE_SETTINGS,
+  reverseImageSearch,
+} from "../../../../Shared/ReverseSearch/reverseSearchUtils";
+import ImageEditor from "../Utils/ImageEditor";
+import Loop from "./Loop";
 
 const myTheme = {
   "loadButton.backgroundColor": "#151515",

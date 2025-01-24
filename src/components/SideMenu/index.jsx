@@ -1,20 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Box,
-  Button,
-  Collapse,
-  Divider,
-  Drawer,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  ListSubheader,
-  Stack,
-  Typography,
-} from "@mui/material";
-import clsx from "clsx";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Collapse from "@mui/material/Collapse";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import ListSubheader from "@mui/material/ListSubheader";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
 import {
   Audiotrack,
   ChevronLeft,
@@ -23,24 +23,26 @@ import {
   ExpandMore,
   MoreHoriz,
 } from "@mui/icons-material";
-import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
-import { i18nLoadNamespace } from "../Shared/Languages/i18nLoadNamespace";
-import { useDispatch, useSelector } from "react-redux";
-import VideoIcon from "../NavBar/images/SVG/Video/Video.svg";
-import ImageIcon from "../NavBar/images/SVG/Image/Images.svg";
-import SearchIcon from "../NavBar/images/SVG/Search/Search.svg";
-import DataIcon from "../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
+
+import clsx from "clsx";
+
+import { ROLES } from "../../constants/roles";
 import {
-  canUserSeeTool,
+  TOOLS_CATEGORIES,
   TOOL_GROUPS,
   TOOL_STATUS_ICON,
-  TOOLS_CATEGORIES,
+  canUserSeeTool,
   toolsHome,
 } from "../../constants/tools";
-import { ROLES } from "../../constants/roles";
-import { selectTopMenuItem } from "../../redux/reducers/navReducer";
 import { TOP_MENU_ITEMS } from "../../constants/topMenuItems";
+import { selectTopMenuItem } from "../../redux/reducers/navReducer";
 import { selectTool } from "../../redux/reducers/tools/toolReducer";
+import DataIcon from "../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
+import ImageIcon from "../NavBar/images/SVG/Image/Images.svg";
+import SearchIcon from "../NavBar/images/SVG/Search/Search.svg";
+import VideoIcon from "../NavBar/images/SVG/Video/Video.svg";
+import { i18nLoadNamespace } from "../Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import SideMenuElement from "./sideMenuElement";
 
 const SideMenu = ({ tools, setOpenAlert }) => {

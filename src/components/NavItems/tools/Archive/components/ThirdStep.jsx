@@ -1,16 +1,16 @@
 import React from "react";
-import {
-  Box,
-  Divider,
-  FormHelperText,
-  Link,
-  Stack,
-  Typography,
-} from "@mui/material";
-import Radio from "@mui/material/Radio";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import RadioGroup from "@mui/material/RadioGroup";
+
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
 import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormHelperText from "@mui/material/FormHelperText";
+import Link from "@mui/material/Link";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 const ThirdStep = ({

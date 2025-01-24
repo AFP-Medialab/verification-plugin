@@ -1,29 +1,31 @@
 import React, { useEffect, useState } from "react";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Alert,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Divider,
-  Grid2,
-  Stack,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import moment from "moment/moment";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
-import MapIcon from "@mui/icons-material/Map";
+
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Divider from "@mui/material/Divider";
+import Grid2 from "@mui/material/Grid2";
+import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
 import {
   ExpandMore,
   KeyboardArrowLeft,
   KeyboardDoubleArrowLeft,
 } from "@mui/icons-material";
-import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
 import HelpIcon from "@mui/icons-material/Help";
+import MapIcon from "@mui/icons-material/Map";
+
+import moment from "moment/moment";
+
+import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
 
 const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
   const [mainImageId, setMainImageId] = useState(c2paData.mainImageId);
