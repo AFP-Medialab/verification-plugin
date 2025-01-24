@@ -1,11 +1,19 @@
 import React, { useState } from "react";
-import { Alert, Box, Grid2, List, ListItemText, Stack } from "@mui/material";
-import Typography from "@mui/material/Typography";
 import { useSelector } from "react-redux";
-import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
-import { TabContext, TabList, TabPanel } from "@mui/lab";
-import Tab from "@mui/material/Tab";
+
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Grid2 from "@mui/material/Grid2";
+import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Stack from "@mui/material/Stack";
+import Tab from "@mui/material/Tab";
+import Typography from "@mui/material/Typography";
+
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+
+import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
 import { prettyCase } from "../../../../Shared/Utils/stringUtils";
 
 const AfpReverseSearchResults = ({

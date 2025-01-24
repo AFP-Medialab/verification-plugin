@@ -1,40 +1,44 @@
 import React, { memo, useState } from "react";
-import { useSelector } from "react-redux";
-import ImageGridList from "@Shared/ImageGridList/ImageGridList";
-import { useKeyframes } from "../Hooks/usekeyframes";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CircularProgress,
-  Divider,
-  Grid2,
-  IconButton,
-  Link,
-  Popover,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
+import { useDispatch, useSelector } from "react-redux";
 
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import CircularProgress from "@mui/material/CircularProgress";
+import Divider from "@mui/material/Divider";
+import Grid2 from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
+import Popover from "@mui/material/Popover";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
+import CloseIcon from "@mui/icons-material/Close";
+import DownloadIcon from "@mui/icons-material/Download";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined";
+import DetailedIcon from "@mui/icons-material/ViewComfyRounded";
+import SimpleIcon from "@mui/icons-material/ViewStreamRounded";
+import ZoomInIcon from "@mui/icons-material/ZoomIn";
+import ZoomOutIcon from "@mui/icons-material/ZoomOut";
+
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import { cleanKeyframesState } from "../../../../../redux/actions/tools/keyframesActions";
+import ImageGridList from "../../../../Shared/ImageGridList/ImageGridList";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import {
-  reverseImageSearch,
   SEARCH_ENGINE_SETTINGS,
-} from "@Shared/ReverseSearch/reverseSearchUtils";
-import {
-  Close,
-  Download,
-  ExpandMore,
-  HelpOutline,
-  ReportProblemOutlined,
-  ZoomIn,
-  ZoomOut,
-} from "@mui/icons-material";
+  reverseImageSearch,
+} from "../../../../Shared/ReverseSearch/reverseSearchUtils";
+import { useKeyframes } from "../Hooks/usekeyframes";
 
 const KeyFramesResults = (props) => {
   const classes = useMyStyles();
@@ -141,7 +145,7 @@ const KeyFramesResults = (props) => {
             <Box>
               <Accordion style={{ border: "2px solid #00926c" }}>
                 <AccordionSummary
-                  expandIcon={<ExpandMore sx={{ color: "primary" }} />}
+                  expandIcon={<ExpandMoreIcon sx={{ color: "primary" }} />}
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
@@ -153,7 +157,7 @@ const KeyFramesResults = (props) => {
                       alignItems: "center",
                     }}
                   >
-                    <ReportProblemOutlined
+                    <ReportProblemOutlinedIcon
                       sx={{ color: "primary", marginRight: "8px" }}
                     />
                     <Typography
@@ -205,7 +209,7 @@ const KeyFramesResults = (props) => {
                 {keyword("cardheader_results")}
               </Typography>
               <IconButton onClick={clickHelp}>
-                <HelpOutline />
+                <HelpOutlineIcon />
               </IconButton>
               <Popover
                 id={help}
@@ -239,7 +243,7 @@ const KeyFramesResults = (props) => {
                         {keywordHelp("title_tip")}
                       </Typography>{" "}
                       <IconButton onClick={closeHelp}>
-                        <Close />
+                        <CloseIcon />
                       </IconButton>
                     </Stack>
                     <Typography variant="body2">
@@ -269,19 +273,19 @@ const KeyFramesResults = (props) => {
                   <Button
                     color="primary"
                     onClick={downloadAction}
-                    startIcon={<Download />}
+                    startIcon={<DownloadIcon />}
                   >
                     {keyword("keyframes_download_subshots")}
                   </Button>
                 </Grid2>
 
                 <Grid2 size="grow" style={{ textAlign: "end" }}>
-                  <Button onClick={() => zoom(-1)} startIcon={<ZoomOut />}>
+                  <Button onClick={() => zoom(-1)} startIcon={<ZoomOutIcon />}>
                     {keyword("zoom_out")}
                   </Button>
                 </Grid2>
                 <Grid2>
-                  <Button onClick={() => zoom(1)} startIcon={<ZoomIn />}>
+                  <Button onClick={() => zoom(1)} startIcon={<ZoomInIcon />}>
                     {keyword("zoom_in")}
                   </Button>
                 </Grid2>

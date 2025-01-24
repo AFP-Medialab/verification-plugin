@@ -1,25 +1,29 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
+
 import Box from "@mui/material/Box";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import { IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { cleanAnalysisState } from "../../../../../redux/actions/tools/image_analysisActions";
-import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
+import CardMedia from "@mui/material/CardMedia";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import Typography from "@mui/material/Typography";
+
+import CloseIcon from "@mui/icons-material/Close";
+
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import { cleanAnalysisState } from "../../../../../redux/actions/tools/image_analysisActions";
 import {
   setAnalysisComments,
   setAnalysisLinkComments,
   setAnalysisVerifiedComments,
 } from "../../../../../redux/actions/tools/image_analysisActions";
-import CardMedia from "@mui/material/CardMedia";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import AnalysisComments from "../../Analysis/Results/AnalysisComments";
 
 const TwitterResults = (props) => {

@@ -1,7 +1,10 @@
-import { IconButton, Tooltip } from "@mui/material";
+import React, { useState } from "react";
+
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+
 import DoneIcon from "@mui/icons-material/Done";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
-import React, { useState } from "react";
 
 const CopyButton = ({ strToCopy, labelBeforeCopy, labelAfterCopy }) => {
   if (typeof strToCopy !== "string") {

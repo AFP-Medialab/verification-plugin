@@ -1,29 +1,30 @@
 import React, { useEffect, useState } from "react";
-import Box from "@mui/material/Box";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useParams } from "react-router-dom";
+
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
-import MetadataImageResult from "./Results/MetadataImageResult";
-import MetadataVideoResult from "./Results/MetadataVideoResult";
+import Stack from "@mui/material/Stack";
+
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import StringFileUploadField from "components/Shared/StringFileUploadField";
+
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
+import { imageMetadata } from "../../../../constants/tools";
+import { setMetadataMediaType } from "../../../../redux/reducers/tools/metadataReducer";
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import { CONTENT_TYPE, KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import useImageTreatment from "./Hooks/useImageTreatment";
 import useVideoTreatment from "./Hooks/useVideoTreatment";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { useLocation, useParams } from "react-router-dom";
-
-import { CONTENT_TYPE, KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
-
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import { setMetadataMediaType } from "../../../../redux/reducers/tools/metadataReducer";
-
-import { Alert, Stack } from "@mui/material";
-import StringFileUploadField from "components/Shared/StringFileUploadField";
-import { imageMetadata } from "../../../../constants/tools";
+import MetadataImageResult from "./Results/MetadataImageResult";
+import MetadataVideoResult from "./Results/MetadataVideoResult";
 
 const Metadata = ({ mediaType }) => {
   const { url, type } = useParams();

@@ -1,31 +1,32 @@
 import React, { useState } from "react";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Button,
-  Fab,
-  Grid2,
-  Link,
-  Paper,
-  Typography,
-} from "@mui/material";
-import { useSelector } from "react-redux";
-import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import Iframe from "react-iframe";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Fab from "@mui/material/Fab";
+import Grid2 from "@mui/material/Grid2";
+import Link from "@mui/material/Link";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
-import { useNavigate } from "react-router-dom";
 import {
-  reverseImageSearch,
   SEARCH_ENGINE_SETTINGS,
+  reverseImageSearch,
 } from "../../Shared/ReverseSearch/reverseSearchUtils";
 
 const Interactive = () => {

@@ -1,22 +1,23 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Paper,
-  Typography,
-} from "@mui/material";
-import CustomTile from "../../Shared/CustomTitle/CustomTitle";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 
-import popUpEn from "./images/popUpImage/popUp_EN.png";
-import popUpFr from "./images/popUpImage/popUp_FR.png";
-import popUpEs from "./images/popUpImage/popUp_ES.png";
-import popUpEl from "./images/popUpImage/popUp_EL.png";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import CustomTile from "../../Shared/CustomTitle/CustomTitle";
+import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
+import popUpEl from "./images/popUpImage/popUp_EL.png";
+import popUpEn from "./images/popUpImage/popUp_EN.png";
+import popUpEs from "./images/popUpImage/popUp_ES.png";
+import popUpFr from "./images/popUpImage/popUp_FR.png";
 
 // from https://material-ui.com/customization/default-theme/
 // used typography body 2 style

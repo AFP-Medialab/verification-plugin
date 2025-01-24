@@ -1,28 +1,37 @@
 import React, { memo, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+
 import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import LocalFile from "./LocalFile/LocalFile";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import Divider from "@mui/material/Divider";
+import Grid2 from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
 import LinearProgress from "@mui/material/LinearProgress";
-import KeyFramesResults from "./Results/KeyFramesResults";
+import Stack from "@mui/material/Stack";
+import Tab from "@mui/material/Tab";
+import TextField from "@mui/material/TextField";
+
+import LinkIcon from "@mui/icons-material/Link";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+
+import "@Shared/GoogleAnalytics/MatomoAnalytics";
+import HeaderTool from "@Shared/HeaderTool/HeaderTool";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { ClearIcon } from "@mui/x-date-pickers";
+
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
+import { keyframes } from "../../../../constants/tools";
+import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import { useKeyframeWrapper } from "./Hooks/useKeyframeWrapper";
 import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
-import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
-import { useParams } from "react-router-dom";
-import "@Shared/GoogleAnalytics/MatomoAnalytics";
-import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
-
-import Card from "@mui/material/Card";
-import { Divider, Grid2, IconButton, Stack } from "@mui/material";
-import HeaderTool from "@Shared/HeaderTool/HeaderTool";
-import LinkIcon from "@mui/icons-material/Link";
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-import { keyframes } from "../../../../constants/tools";
-import { TabContext, TabList, TabPanel } from "@mui/lab";
-import Tab from "@mui/material/Tab";
-import { Clear, UploadFile } from "@mui/icons-material";
-import LoadingButton from "@mui/lab/LoadingButton";
+import LocalFile from "./LocalFile/LocalFile";
+import KeyFramesResults from "./Results/KeyFramesResults";
 
 const Keyframes = () => {
   const { url } = useParams();
@@ -196,7 +205,7 @@ const Keyframes = () => {
                 sx={{ minWidth: "inherit !important", textTransform: "none" }}
               />
               <Tab
-                icon={<UploadFile />}
+                icon={<UploadFileIcon />}
                 iconPosition="start"
                 label={keyword("filemode_title")}
                 value="file"
@@ -234,7 +243,7 @@ const Keyframes = () => {
                                 onClick={() => setInput("")}
                                 disabled={isLoading || isLoadingSimilarity}
                               >
-                                <Clear />
+                                <ClearIcon />
                               </IconButton>
                             ) : undefined,
                           }}

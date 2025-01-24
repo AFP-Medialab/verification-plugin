@@ -1,39 +1,36 @@
 import React, { useEffect, useState } from "react";
+import { Trans } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import {
-  Box,
-  CardHeader,
-  Grid2,
-  Tabs,
-  Tab,
-  Skeleton,
-  Stack,
-} from "@mui/material";
 import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
 import Collapse from "@mui/material/Collapse";
+import LinearProgress from "@mui/material/LinearProgress";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
 import { WarningOutlined } from "@mui/icons-material";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import LinearProgress from "@mui/material/LinearProgress";
-import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
-import { setWarningExpanded } from "../../../../redux/actions/tools/assistantActions";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import { treeMapToElements } from "./assistantUtils";
 
-import TextFooter from "./TextFooter.jsx";
-import AssistantTextClassification from "./AssistantTextClassification";
-import AssistantTextSpanClassification from "./AssistantTextSpanClassification";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import { setWarningExpanded } from "../../../../redux/actions/tools/assistantActions";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
   TransCredibilitySignalsLink,
   TransHtmlDoubleLinkBreak,
-  TransHtmlSingleLinkBreak,
   TransSupportedToolsLink,
 } from "../TransComponents";
-import { Trans } from "react-i18next";
+import AssistantTextClassification from "./AssistantTextClassification";
+import AssistantTextSpanClassification from "./AssistantTextSpanClassification";
+import TextFooter from "./TextFooter.jsx";
+import { treeMapToElements } from "./assistantUtils";
 
 const AssistantTextResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -53,9 +50,6 @@ const AssistantTextResult = () => {
   const mtLoading = useSelector((state) => state.assistant.mtLoading);
   const dbkfMatchLoading = useSelector(
     (state) => state.assistant.dbkfTextMatchLoading,
-  );
-  const warningExpanded = useSelector(
-    (state) => state.assistant.warningExpanded,
   );
 
   // news framing (topic)
@@ -110,9 +104,6 @@ const AssistantTextResult = () => {
     (state) => state.assistant.subjectivityFail,
   );
 
-  // checking if user logged in
-  const role = useSelector((state) => state.userSession.user.roles);
-
   // display states
   const textBox = document.getElementById("element-to-check");
   const [expanded, setExpanded] = useState(false);
@@ -121,10 +112,6 @@ const AssistantTextResult = () => {
   const [textTabIndex, setTextTabIndex] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTextTabIndex(newValue);
-  };
-  const handleTabClick = (event) => {
-    // leave unset?
-    //setExpanded(true);
   };
 
   useEffect(() => {
@@ -238,7 +225,6 @@ const AssistantTextResult = () => {
           <Tabs
             value={textTabIndex}
             onChange={handleTabChange}
-            onClick={handleTabClick}
             aria-label="extracted text tabs"
             variant="fullWidth"
           >

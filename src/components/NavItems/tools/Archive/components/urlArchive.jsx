@@ -1,24 +1,25 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Link,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import React, { useEffect, useState } from "react";
-import IconInternetArchive from "../../../../NavBar/images/SVG/Others/archive-icon.svg";
-import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { useSelector } from "react-redux";
+
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Link from "@mui/material/Link";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { history } from "@Shared/History/History";
-import { prettifyLargeString } from "../utils";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import { useTrackEvent } from "../../../../../Hooks/useAnalytics";
+import { ROLES } from "../../../../../constants/roles";
+import IconInternetArchive from "../../../../NavBar/images/SVG/Others/archive-icon.svg";
 import CopyButton from "../../../../Shared/CopyButton";
 import { KNOWN_LINKS } from "../../../Assistant/AssistantRuleBook";
+import { prettifyLargeString } from "../utils";
 import DownloadWaczFile from "./downloadWaczFile";
-import { ROLES } from "../../../../../constants/roles";
-import { useTrackEvent } from "../../../../../Hooks/useAnalytics";
 
 /**
  *

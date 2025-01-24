@@ -1,46 +1,47 @@
-import React, { useEffect, useRef, useState } from "react";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Card,
-  CardHeader,
-  Divider,
-  Grid2,
-  IconButton,
-  Stack,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import { Close, Download, ExpandMore } from "@mui/icons-material";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { useSelector } from "react-redux";
-import { useTrackEvent } from "Hooks/useAnalytics";
-import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
-import GaugeChart from "react-gauge-chart";
 import { useWavesurfer } from "@wavesurfer/react";
-import CustomAlertScore from "../../../Shared/CustomAlertScore";
+import React, { useEffect, useRef, useState } from "react";
+import { Chart } from "react-chartjs-2";
+import GaugeChart from "react-gauge-chart";
+import { useSelector } from "react-redux";
 
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import Divider from "@mui/material/Divider";
+import Grid2 from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
+import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
+import { Close, Download, ExpandMore } from "@mui/icons-material";
+
+import { useTrackEvent } from "Hooks/useAnalytics";
 import {
   CategoryScale,
   Chart as ChartJS,
+  Tooltip as ChartTooltip,
   Legend,
-  LinearScale,
   LineController,
   LineElement,
+  LinearScale,
   PointElement,
   TimeSeriesScale,
   Title,
-  Tooltip as ChartTooltip,
 } from "chart.js";
-import { Chart } from "react-chartjs-2";
 import "chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm";
+import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
-import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
-import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
+
 import { ROLES } from "../../../../constants/roles";
+import CustomAlertScore from "../../../Shared/CustomAlertScore";
+import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
+import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
 
 const LoccusResults = ({
   result,

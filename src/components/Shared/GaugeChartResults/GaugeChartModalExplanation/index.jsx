@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import {
-  Backdrop,
-  Box,
-  Fade,
-  IconButton,
-  Link,
-  Modal,
-  Stack,
-  Typography,
-} from "@mui/material";
+
+import Backdrop from "@mui/material/Backdrop";
+import Box from "@mui/material/Box";
+import Fade from "@mui/material/Fade";
+import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
+import Modal from "@mui/material/Modal";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
 import { Close, Square } from "@mui/icons-material";
 
 /**

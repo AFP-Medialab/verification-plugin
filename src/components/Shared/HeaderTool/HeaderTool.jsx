@@ -1,5 +1,8 @@
 import React from "react";
-import { Box, Grid2, Typography } from "@mui/material";
+
+import Box from "@mui/material/Box";
+import Grid2 from "@mui/material/Grid2";
+import Typography from "@mui/material/Typography";
 
 /**
  *

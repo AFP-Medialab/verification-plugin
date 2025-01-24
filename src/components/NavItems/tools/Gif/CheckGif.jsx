@@ -1,19 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+
 import Box from "@mui/material/Box";
-import useGetHomographics from "./Hooks/useGetHomographics";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import Typography from "@mui/material/Typography";
-import { Grid2 } from "@mui/material";
-import Button from "@mui/material/Button";
-import DragAndDrop from "./DragAndDrop";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import LinkIcon from "@mui/icons-material/Link";
-import FileIcon from "@mui/icons-material/InsertDriveFile";
-import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
+import Grid2 from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import FileIcon from "@mui/icons-material/InsertDriveFile";
+import LinkIcon from "@mui/icons-material/Link";
+
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
+import { imageGif } from "../../../../constants/tools";
 import {
   setStateInit,
   setStateReady,
@@ -21,12 +27,10 @@ import {
   setStateSelectingUrl,
 } from "../../../../redux/reducers/tools/gifReducer";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import IconButton from "@mui/material/IconButton";
-import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import AnimatedGif from "./AnimatedGif";
-import { imageGif } from "../../../../constants/tools";
+import DragAndDrop from "./DragAndDrop";
+import useGetHomographics from "./Hooks/useGetHomographics";
 
 const CheckGif = () => {
   //Init variables
