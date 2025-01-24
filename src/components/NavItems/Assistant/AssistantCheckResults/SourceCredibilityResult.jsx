@@ -39,15 +39,11 @@ const SourceCredibilityResult = (props) => {
                         <Typography>
                           {` ${keyword("this")}`}
                           {getUrlTypeFromCredScope(value.credibilityScope)}
-                          {` ${keyword(
-                            "source_credibility_warning_account",
-                          )} ${" "}${value.credibilitySource}`}
+                          {` ${keyword("source_credibility_warning_account")} ${" "}${value.credibilitySource}`}
                         </Typography>
                       ) : value.credibilityScope ? (
                         <Typography>
-                          {` ${keyword(
-                            "source_credibility_warning_domain",
-                          )} ${" "}${value.credibilitySource}`}
+                          {` ${keyword("source_credibility_warning_domain")} ${" "}${value.credibilitySource}`}
                         </Typography>
                       ) : null}
                     </Typography>
@@ -62,29 +58,21 @@ const SourceCredibilityResult = (props) => {
                   >
                     {value.credibilityScope.includes("/") ? (
                       <Typography variant={"subtitle2"}>
-                        {` ${" "} ${keyword("account_scope")} ${
-                          value.credibilityScope
-                        } `}
+                        {` ${" "} ${keyword("account_scope")} ${value.credibilityScope} `}
                       </Typography>
                     ) : value.credibilityScope ? (
                       <Typography variant={"subtitle2"}>
-                        {` ${keyword("domain_scope")} ${
-                          value.credibilityScope
-                        } `}
+                        {` ${keyword("domain_scope")} ${value.credibilityScope} `}
                       </Typography>
                     ) : null}
                     {value.credibilityLabels ? (
                       <Typography variant={"subtitle2"}>
-                        {` ${keyword("labelled_as")} ${
-                          value.credibilityLabels
-                        } `}
+                        {` ${keyword("labelled_as")} ${value.credibilityLabels} `}
                       </Typography>
                     ) : null}
                     {value.credibilityDescription ? (
                       <Typography variant={"subtitle2"}>
-                        {` ${keyword("commented_as")} ${
-                          value.credibilityDescription
-                        } `}
+                        {` ${keyword("commented_as")} ${value.credibilityDescription} `}
                       </Typography>
                     ) : null}
                     {value.credibilityEvidence.length > 0 ? (

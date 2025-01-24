@@ -45,13 +45,13 @@ const renderScope = (keyword, scope) => {
   return (
     <ListItem>
       {scope && scope.includes("/") ? (
-        <Typography variant={"subtitle2"}>
-          {` ${keyword("account_scope")} ${scope} `}
-        </Typography>
+        <Typography
+          variant={"subtitle2"}
+        >{` ${keyword("account_scope")} ${scope} `}</Typography>
       ) : scope ? (
-        <Typography variant={"subtitle2"}>
-          {` ${keyword("domain_scope")} ${scope} `}
-        </Typography>
+        <Typography
+          variant={"subtitle2"}
+        >{` ${keyword("domain_scope")} ${scope} `}</Typography>
       ) : null}
     </ListItem>
   );
@@ -61,9 +61,9 @@ const renderLabels = (keyword, labels) => {
   return (
     <ListItem>
       {labels ? (
-        <Typography variant={"subtitle2"}>
-          {` ${keyword("labelled_as")} ${labels} `}
-        </Typography>
+        <Typography
+          variant={"subtitle2"}
+        >{` ${keyword("labelled_as")} ${labels} `}</Typography>
       ) : null}
     </ListItem>
   );
@@ -73,9 +73,9 @@ const renderDescription = (keyword, description) => {
   return (
     <ListItem>
       {description ? (
-        <Typography variant={"subtitle2"}>
-          {` ${keyword("commented_as")} ${description} `}
-        </Typography>
+        <Typography
+          variant={"subtitle2"}
+        >{` ${keyword("commented_as")} ${description} `}</Typography>
       ) : null}
     </ListItem>
   );
@@ -213,9 +213,7 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                                     {getUrlTypeFromCredScope(
                                       value.credibilityScope,
                                     )}
-                                    {` ${keyword(
-                                      "source_credibility_warning_account",
-                                    )} ${" "}${value.credibilitySource}`}
+                                    {` ${keyword("source_credibility_warning_account")} ${" "}${value.credibilitySource}`}
                                   </Typography>
                                 </Stack>
                               ) : value.credibilityScope ? (
@@ -229,9 +227,7 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                                     sx={{ ml: 1 }}
                                     //color={trafficLightColor}
                                   >
-                                    {` ${keyword(
-                                      "source_credibility_warning_domain",
-                                    )} ${value.credibilitySource} `}
+                                    {` ${keyword("source_credibility_warning_domain")} ${value.credibilitySource} `}
                                   </Typography>
                                 </Stack>
                               ) : null}
