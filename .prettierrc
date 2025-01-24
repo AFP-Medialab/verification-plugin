@@ -4,6 +4,8 @@
   "plugins": ["@trivago/prettier-plugin-sort-imports"],
   "importOrder": [
     "react",
+    "@mui/material",
+    "@mui/icons-material",
     "@mui",
     "@mui-icons",
     "<THIRD_PARTY_MODULES>",

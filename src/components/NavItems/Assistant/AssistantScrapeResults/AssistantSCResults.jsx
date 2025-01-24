@@ -1,12 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import FindInPageIcon from "@mui/icons-material/FindInPage";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import SentimentSatisfied from "@mui/icons-material/SentimentSatisfied";
 import { Chip, Grid2, IconButton } from "@mui/material";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -14,6 +8,13 @@ import CardMedia from "@mui/material/CardMedia";
 import Collapse from "@mui/material/Collapse";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import FindInPageIcon from "@mui/icons-material/FindInPage";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import SentimentSatisfied from "@mui/icons-material/SentimentSatisfied";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 

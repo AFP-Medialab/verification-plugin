@@ -1,7 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { IconButton } from "@mui/material";
 import { Alert } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -10,6 +9,8 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
+
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { Close } from "@mui/icons-material";
 import {
   Card,
   CardContent,
@@ -11,6 +10,8 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
+
+import { Close } from "@mui/icons-material";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { setError } from "redux/reducers/errorReducer";

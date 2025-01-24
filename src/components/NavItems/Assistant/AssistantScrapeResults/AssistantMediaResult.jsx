@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Trans } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { CardHeader, Grid2, LinearProgress } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -12,6 +10,9 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 

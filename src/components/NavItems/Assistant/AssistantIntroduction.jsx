@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import { Trans } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-import LinkIcon from "@mui/icons-material/Link";
 import { Box, CardHeader, Grid2 } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import LinkIcon from "@mui/icons-material/Link";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 

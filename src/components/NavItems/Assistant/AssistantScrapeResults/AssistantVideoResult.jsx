@@ -2,9 +2,6 @@ import React from "react";
 import Iframe from "react-iframe";
 import { useSelector } from "react-redux";
 
-import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
-import ImageIcon from "@mui/icons-material/Image";
 import { IconButton } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -12,6 +9,10 @@ import CardMedia from "@mui/material/CardMedia";
 import Link from "@mui/material/Link";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+
+import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
+import FileCopyIcon from "@mui/icons-material/FileCopy";
+import ImageIcon from "@mui/icons-material/Image";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 

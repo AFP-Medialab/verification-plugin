@@ -1,11 +1,12 @@
 import React from "react";
 
-import { ExpandLessOutlined, ExpandMoreOutlined } from "@mui/icons-material";
 import { Grid2, Link } from "@mui/material";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+
+import { ExpandLessOutlined, ExpandMoreOutlined } from "@mui/icons-material";
 
 import { TextCopy } from "../../../Shared/Utils/TextCopy";
 import { Translate } from "../../../Shared/Utils/Translate";

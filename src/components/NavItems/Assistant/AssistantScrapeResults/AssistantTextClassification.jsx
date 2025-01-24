@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import {
   CardHeader,
   Checkbox,
@@ -15,6 +14,8 @@ import CardContent from "@mui/material/CardContent";
 import Divider from "@mui/material/Divider";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { v4 as uuidv4 } from "uuid";

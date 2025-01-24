@@ -3,9 +3,6 @@ import { Trans } from "react-i18next";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import Remove from "@mui/icons-material/Remove";
 import { CardHeader, Grid2, Skeleton, styled } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -15,6 +12,10 @@ import CardContent from "@mui/material/CardContent";
 import Collapse from "@mui/material/Collapse";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import Remove from "@mui/icons-material/Remove";
 
 import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult.jsx";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";

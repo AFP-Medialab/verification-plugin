@@ -3,16 +3,17 @@ import { Trans } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-// version 5.2.0
-
-import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { Box, CardHeader, Skeleton, TextField, Tooltip } from "@mui/material/";
 import Button from "@mui/material//Button";
 import Card from "@mui/material//Card";
 import CardContent from "@mui/material//CardContent";
 import Typography from "@mui/material//Typography";
 import Stack from "@mui/material/Stack";
+
+// version 5.2.0
+
+import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 

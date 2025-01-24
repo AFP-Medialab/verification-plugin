@@ -2,13 +2,15 @@ import React from "react";
 import { Trans } from "react-i18next";
 import { useSelector } from "react-redux";
 
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { Box, CardHeader, Chip, Skeleton, Stack } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Link from "@mui/material/Link";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+
 import { DataGrid, getGridSingleSelectOperators } from "@mui/x-data-grid";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";

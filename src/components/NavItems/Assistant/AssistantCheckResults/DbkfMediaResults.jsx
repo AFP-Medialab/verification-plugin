@@ -1,14 +1,15 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-import { DuoOutlined } from "@mui/icons-material";
-import ImageIconOutlined from "@mui/icons-material/Image";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
+
+import { DuoOutlined } from "@mui/icons-material";
+import ImageIconOutlined from "@mui/icons-material/Image";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
