@@ -7,7 +7,6 @@
     "@mui/material",
     "@mui/material/(.*)",
     "@mui/icons-material",
-    "@mui",
     "@mui-icons",
     "<THIRD_PARTY_MODULES>",
     "^[./]",
