@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Trans } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Box, CardHeader, Grid2 } from "@mui/material";
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Grid2 from "@mui/material/Grid2";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 

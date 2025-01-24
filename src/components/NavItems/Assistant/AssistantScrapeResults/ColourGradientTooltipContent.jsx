@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Grid2 } from "@mui/material";
+import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
 
 import { rgbListToGradient } from "./assistantUtils";

@@ -1,8 +1,9 @@
 import React from "react";
 
-import { Grid2, Link } from "@mui/material";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
+import Grid2 from "@mui/material/Grid2";
+import Link from "@mui/material/Link";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 

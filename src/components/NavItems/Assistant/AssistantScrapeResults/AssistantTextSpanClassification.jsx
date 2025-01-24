@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 
-import {
-  CardHeader,
-  Chip,
-  Grid2,
-  List,
-  ListItem,
-  ListItemText,
-} from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
+import Grid2 from "@mui/material/Grid2";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
