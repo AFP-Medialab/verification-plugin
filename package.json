@@ -50,6 +50,7 @@
     "i18next-browser-languagedetector": "^8.0.0",
     "i18next-chained-backend": "^4.6.2",
     "i18next-http-backend": "^2.6.1",
+    "jscodeshift": "^17.1.2",
     "jwt-decode": "^4.0.0",
     "konva": "^9.3.15",
     "lodash": "^4.17.21",
