@@ -1,5 +1,5 @@
 import React, { memo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -8,7 +8,6 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import CardHeader from "@mui/material/CardHeader";
 import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
 import Grid2 from "@mui/material/Grid2";
@@ -17,21 +16,17 @@ import Link from "@mui/material/Link";
 import Popover from "@mui/material/Popover";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 import CloseIcon from "@mui/icons-material/Close";
 import DownloadIcon from "@mui/icons-material/Download";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined";
-import DetailedIcon from "@mui/icons-material/ViewComfyRounded";
-import SimpleIcon from "@mui/icons-material/ViewStreamRounded";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import { cleanKeyframesState } from "../../../../../redux/actions/tools/keyframesActions";
 import ImageGridList from "../../../../Shared/ImageGridList/ImageGridList";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import {

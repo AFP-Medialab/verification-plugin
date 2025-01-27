@@ -3,9 +3,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
 import Divider from "@mui/material/Divider";
 import Grid2 from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
@@ -20,14 +18,12 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import "@Shared/GoogleAnalytics/MatomoAnalytics";
 import HeaderTool from "@Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { ClearIcon } from "@mui/x-date-pickers";
 
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { keyframes } from "../../../../constants/tools";
-import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import { useKeyframeWrapper } from "./Hooks/useKeyframeWrapper";
 import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
 import LocalFile from "./LocalFile/LocalFile";
@@ -36,20 +32,10 @@ import KeyFramesResults from "./Results/KeyFramesResults";
 const Keyframes = () => {
   const { url } = useParams();
 
-  const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Keyframes");
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
   );
-
-  // state used to toggle localFile view
-  const [localFile, setLocalFile] = useState(false);
-
-  /*
-                                                                                                const toggleLocal = () => {
-                                                                                                    setLocalFile(!localFile);
-                                                                                                };
-                                                                                                */
 
   const resultUrl = useSelector((state) => state.keyframes.url);
   const resultData = useSelector((state) => state.keyframes.result);
@@ -64,6 +50,7 @@ const Keyframes = () => {
   //const [urlDetected, setUrlDetected] = useState(false)
   useVideoSimilarity(submittedUrl, keyword);
   useKeyframeWrapper(submittedUrl, keyword);
+
   useTrackEvent(
     "submission",
     "keyframe",
@@ -73,41 +60,16 @@ const Keyframes = () => {
     submittedUrl,
   );
 
-  //human right
-  const downloadShubshots = useSelector((state) => state.humanRightsCheckBox);
-
-  //download subshots results
-
-  //const client_id = getclientId();
   const submitUrl = () => {
-    /*trackEvent(
-                                                                                                                                                                                              "submission",
-                                                                                                                                                                                              "keyframe",
-                                                                                                                                                                                              "video key frame analysis",
-                                                                                                                                                                                              input.trim()
-                                                                                                                                                                                            );*/
     setSubmittedUrl(input);
   };
 
-  /*useEffect(()=>{
-                                                                                                    console.log("detected");
-                                                                                                    if (urlDetected) {
-                                                                                                        submitUrl()
-                                                                                                    }
-                                                                                                    // eslint-disable-next-line react-hooks/exhaustive-deps
-                                                                                                }, [urlDetected])*/
-
   useEffect(() => {
-    if (url) {
-      if (url === KNOWN_LINKS.OWN) {
-        setLocalFile(true);
-      } else {
-        const uri = decodeURIComponent(url);
-        setInput(uri);
-      }
-      submitUrl();
-      //setUrlDetected(true)
-    }
+    if (!url) return;
+
+    const uri = decodeURIComponent(url);
+    setInput(uri);
+    submitUrl();
   }, [url]);
 
   useEffect(() => {
@@ -121,53 +83,6 @@ const Keyframes = () => {
       setSubmittedUrl(processUrl);
     }
   }, [processUrl]);
-
-  const [classButtonURL, setClassButtonURL] = useState(null);
-  const [classButtonLocal, setClassButtonLocal] = useState(null);
-
-  const [classIconURL, setClassIconURL] = useState(
-    classes.bigButtonIconSelectted,
-  );
-  const [classIconLocal, setClassIconLocal] = useState(classes.bigButtonIcon);
-
-  const [showURL, setShowURL] = useState(true);
-  const [showLocal, setShowLocal] = useState(false);
-
-  if (
-    showURL &&
-    !showLocal &&
-    classButtonURL !== classes.bigButtonDivSelectted &&
-    classButtonLocal !== classes.bigButtonDiv
-  ) {
-    setClassButtonURL(classes.bigButtonDivSelectted);
-    setClassButtonLocal(classes.bigButtonDiv);
-  }
-
-  const clickURL = () => {
-    setClassButtonURL(classes.bigButtonDivSelectted);
-    setClassIconURL(classes.bigButtonIconSelectted);
-
-    setClassButtonLocal(classes.bigButtonDiv);
-    setClassIconLocal(classes.bigButtonIcon);
-
-    setShowURL(true);
-    setShowLocal(false);
-
-    setLocalFile(false);
-  };
-
-  const clickLocal = () => {
-    setClassButtonURL(classes.bigButtonDiv);
-    setClassIconURL(classes.bigButtonIcon);
-
-    setClassButtonLocal(classes.bigButtonDivSelectted);
-    setClassIconLocal(classes.bigButtonIconSelectted);
-
-    setShowURL(false);
-    setShowLocal(true);
-
-    setLocalFile(true);
-  };
 
   /**
    * Resets input
