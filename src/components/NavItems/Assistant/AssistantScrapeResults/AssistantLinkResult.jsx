@@ -27,7 +27,7 @@ import { CheckCircleOutline, TaskAltOutlined } from "@mui/icons-material";
 import { DataGrid, getGridSingleSelectOperators } from "@mui/x-data-grid";
 import { Trans } from "react-i18next";
 import {
-  TransHtmlDoubleLinkBreak,
+  TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
 } from "../TransComponents";
@@ -340,9 +340,9 @@ const AssistantLinkResult = () => {
             title={
               <>
                 <Trans t={keyword} i18nKey="extracted_urls_tooltip" />
-                <TransHtmlDoubleLinkBreak keyword={keyword} />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
                 <TransSourceCredibilityTooltip keyword={keyword} />
-                <TransHtmlDoubleLinkBreak keyword={keyword} />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
                 <TransUrlDomainAnalysisLink keyword={keyword} />
               </>
             }

@@ -29,8 +29,8 @@ import AssistantTextClassification from "./AssistantTextClassification";
 import AssistantTextSpanClassification from "./AssistantTextSpanClassification";
 import {
   TransCredibilitySignalsLink,
-  TransHtmlDoubleLinkBreak,
-  TransHtmlSingleLinkBreak,
+  TransHtmlDoubleLineBreak,
+  TransHtmlSingleLineBreak,
   TransSupportedToolsLink,
 } from "../TransComponents";
 import { Trans } from "react-i18next";
@@ -201,7 +201,7 @@ const AssistantTextResult = () => {
                     }}
                   />
                   <TransSupportedToolsLink keyword={keyword} />
-                  <TransHtmlDoubleLinkBreak keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
                   <TransCredibilitySignalsLink keyword={keyword} />
                 </>
               }
@@ -376,7 +376,7 @@ const AssistantTextResult = () => {
                 categoriesTooltipContent={
                   <>
                     <Trans t={keyword} i18nKey="subjectivity_tooltip" />
-                    <TransHtmlDoubleLinkBreak keyword={keyword} />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
                     <TransCredibilitySignalsLink keyword={keyword} />
                   </>
                 }

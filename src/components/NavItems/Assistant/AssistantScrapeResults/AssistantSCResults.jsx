@@ -21,7 +21,7 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { Trans } from "react-i18next";
 import {
-  TransHtmlDoubleLinkBreak,
+  TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
 } from "../TransComponents";
@@ -97,7 +97,7 @@ const AssistantSCResults = () => {
               title={
                 <>
                   <TransSourceCredibilityTooltip keyword={keyword} />
-                  <TransHtmlDoubleLinkBreak keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
                   <TransUrlDomainAnalysisLink keyword={keyword} />
                 </>
               }

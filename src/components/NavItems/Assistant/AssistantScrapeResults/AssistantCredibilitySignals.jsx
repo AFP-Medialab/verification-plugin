@@ -29,8 +29,8 @@ import { getLanguageName } from "../../../Shared/Utils/languageUtils";
 import TextFooter, { TextFooterPrevFactChecks } from "./TextFooter.jsx";
 import {
   TransCredibilitySignalsLink,
-  TransHtmlDoubleLinkBreak,
-  TransHtmlSingleLinkBreak,
+  TransHtmlDoubleLineBreak,
+  TransHtmlSingleLineBreak,
 } from "../TransComponents";
 import { Trans } from "react-i18next";
 
@@ -227,9 +227,9 @@ const AssistantCredSignals = () => {
                     b: <b />,
                   }}
                 />
-                <TransHtmlDoubleLinkBreak keyword={keyword} />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
                 <TransCredibilitySignalsLink keyword={keyword} />
-                <TransHtmlDoubleLinkBreak keyword={keyword} />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
                 <Trans
                   t={keyword}
                   i18nKey="previous_fact_checks_title_bold"
@@ -237,9 +237,9 @@ const AssistantCredSignals = () => {
                     b: <b />,
                   }}
                 />
-                <TransHtmlSingleLinkBreak keyword={keyword} />
+                <TransHtmlSingleLineBreak keyword={keyword} />
                 <Trans t={keyword} i18nKey="previous_fact_checks_tooltip" />
-                <TransHtmlDoubleLinkBreak keyword={keyword} />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
                 <Trans
                   t={keyword}
                   i18nKey="machine_generated_text_title_bold"
@@ -247,7 +247,7 @@ const AssistantCredSignals = () => {
                     b: <b />,
                   }}
                 />
-                <TransHtmlSingleLinkBreak keyword={keyword} />
+                <TransHtmlSingleLineBreak keyword={keyword} />
                 <Trans t={keyword} i18nKey="machine_generated_text_tooltip" />
               </>
             }

@@ -20,7 +20,7 @@ import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import HeaderTool from "../../Shared/HeaderTool/HeaderTool";
 
 import {
-  TransHtmlDoubleLinkBreak,
+  TransHtmlDoubleLineBreak,
   TransSupportedUrlsLink,
   TransSupportedToolsLink,
 } from "./TransComponents";
@@ -110,9 +110,9 @@ const AssistantIntroduction = (props) => {
                       b: <b />,
                     }}
                   />
-                  <TransHtmlDoubleLinkBreak keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
                   <Trans t={keyword} i18nKey="assistant_help_1" />
-                  <TransHtmlDoubleLinkBreak keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
                   <Trans
                     t={keyword}
                     i18nKey="assistant_help_2"

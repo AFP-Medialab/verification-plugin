@@ -22,7 +22,7 @@ import { useTrackEvent } from "../../../Hooks/useAnalytics";
 import Stack from "@mui/material/Stack";
 import { Trans } from "react-i18next";
 import {
-  TransHtmlDoubleLinkBreak,
+  TransHtmlDoubleLineBreak,
   TransSupportedUrlsLink,
 } from "./TransComponents";
 
@@ -107,7 +107,7 @@ const AssistantUrlSelected = (props) => {
                       li: <li />,
                     }}
                   />
-                  <TransHtmlDoubleLinkBreak keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
                   <TransSupportedUrlsLink keyword={keyword} />
                 </>
               }

@@ -94,7 +94,7 @@ export function TransTargetObliviousStanceLink({ keyword }) {
   return (
     <Trans
       t={keyword}
-      i18nKey="target_oblivious_stance_classifier"
+      i18nKey="target_oblivious_stance_link"
       components={{
         credibilitySignalsLink: (
           <a
@@ -145,10 +145,10 @@ export function TransTargetObliviousStanceTooltip({ keyword }) {
   );
 }
 
-export function TransHtmlDoubleLinkBreak({ keyword }) {
+export function TransHtmlDoubleLineBreak({ keyword }) {
   return <Trans t={keyword} i18nKey="html_double_line_break" />;
 }
 
-export function TransHtmlSingleLinkBreak({ keyword }) {
+export function TransHtmlSingleLineBreak({ keyword }) {
   return <Trans t={keyword} i18nKey="html_single_line_break" />;
 }

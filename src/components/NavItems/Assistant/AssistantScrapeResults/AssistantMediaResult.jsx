@@ -36,7 +36,7 @@ import VideoGridList from "../../../Shared/VideoGridList/VideoGridList";
 import { WarningAmber } from "@mui/icons-material";
 
 import {
-  TransHtmlDoubleLinkBreak,
+  TransHtmlDoubleLineBreak,
   TransSupportedToolsLink,
 } from "../TransComponents";
 import { Trans } from "react-i18next";
@@ -163,7 +163,7 @@ const AssistantMediaResult = () => {
                         b: <b />,
                       }}
                     />
-                    <TransHtmlDoubleLinkBreak keyword={keyword} />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
                     <TransSupportedToolsLink keyword={keyword} />
                   </>
                 }

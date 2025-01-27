@@ -17,7 +17,7 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { Chip, Grid2, Tooltip } from "@mui/material";
 import {
-  TransHtmlDoubleLinkBreak,
+  TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
 } from "../TransComponents";
@@ -68,7 +68,7 @@ const SourceCredibilityDBKFDialog = (props) => {
                 title={
                   <>
                     <TransSourceCredibilityTooltip keyword={keyword} />
-                    <TransHtmlDoubleLinkBreak keyword={keyword} />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
                     <TransUrlDomainAnalysisLink keyword={keyword} />
                   </>
                 }

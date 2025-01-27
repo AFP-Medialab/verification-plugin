@@ -26,7 +26,7 @@ import { Chip, Grid2, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Trans } from "react-i18next";
 import {
-  TransHtmlDoubleLinkBreak,
+  TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
 } from "../TransComponents";
@@ -170,7 +170,7 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                 title={
                   <>
                     <TransSourceCredibilityTooltip keyword={keyword} />
-                    <TransHtmlDoubleLinkBreak keyword={keyword} />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
                     <TransUrlDomainAnalysisLink keyword={keyword} />
                   </>
                 }

@@ -42,6 +42,7 @@ import {
   TransCollectedCommentsTooltip,
   TransTargetObliviousStanceTooltip,
   TransTargetObliviousStanceLink,
+  TransHtmlDoubleLineBreak,
 } from "../TransComponents";
 import { TextCopy } from "components/Shared/Utils/TextCopy";
 import { Translate } from "components/Shared/Utils/Translate";
@@ -148,19 +149,21 @@ const AssistantCommentResult = ({ collectedComments }) => {
                 </TableCell>
 
                 <TableCell align="center">
-                  <Tooltip
-                    title={
-                      <>
-                        <TransTargetObliviousStanceTooltip />
-                        <TransTargetObliviousStanceLink />
-                      </>
-                    }
-                  >
-                    {targetObliviousStanceLoading && (
-                      <Skeleton variant="rounded" />
-                    )}
-                    {targetObliviousStanceDone &&
-                      targetObliviousStanceResult != null && (
+                  {targetObliviousStanceLoading && (
+                    <Skeleton variant="rounded" />
+                  )}
+                  {targetObliviousStanceDone &&
+                    targetObliviousStanceResult != null && (
+                      <Tooltip
+                        interactive={"true"}
+                        title={
+                          <>
+                            <TransTargetObliviousStanceTooltip />
+                            <TransTargetObliviousStanceLink />
+                          </>
+                        }
+                        classes={{ tooltip: classes.assistantTooltip }}
+                      >
                         <Chip
                           label={keyword(
                             targetObliviousStanceResult[comment.id],
@@ -172,8 +175,8 @@ const AssistantCommentResult = ({ collectedComments }) => {
                           }
                           size="small"
                         />
-                      )}
-                  </Tooltip>
+                      </Tooltip>
+                    )}
                 </TableCell>
 
                 <TableCell>
@@ -236,12 +239,14 @@ const AssistantCommentResult = ({ collectedComments }) => {
                   {targetObliviousStanceDone &&
                   targetObliviousStanceResult[commentId] ? (
                     <Tooltip
+                      interactive={"true"}
                       title={
                         <>
                           <TransTargetObliviousStanceTooltip />
                           <TransTargetObliviousStanceLink />
                         </>
                       }
+                      classes={{ tooltip: classes.assistantTooltip }}
                     >
                       <Chip
                         label={
@@ -292,6 +297,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
             title={
               <>
                 <TransCollectedCommentsTooltip />
+                <TransHtmlDoubleLineBreak />
                 <TransTargetObliviousStanceTooltip />
                 <TransTargetObliviousStanceLink />
               </>

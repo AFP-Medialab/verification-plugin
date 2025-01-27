@@ -24,7 +24,7 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { Trans } from "react-i18next";
 import {
-  TransHtmlDoubleLinkBreak,
+  TransHtmlDoubleLineBreak,
   TransNamedEntityRecogniserLink,
 } from "../TransComponents";
 
@@ -147,7 +147,7 @@ const AssistantNEResult = () => {
               title={
                 <>
                   <Trans t={keyword} i18nKey="named_entity_tooltip" />
-                  <TransHtmlDoubleLinkBreak keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
                   <TransNamedEntityRecogniserLink keyword={keyword} />
                 </>
               }
