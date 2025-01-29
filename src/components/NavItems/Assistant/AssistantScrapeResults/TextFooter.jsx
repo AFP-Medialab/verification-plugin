@@ -9,6 +9,8 @@ import Typography from "@mui/material/Typography";
 
 import { ExpandLessOutlined, ExpandMoreOutlined } from "@mui/icons-material";
 
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import { TextCopy } from "../../../Shared/Utils/TextCopy";
 import { Translate } from "../../../Shared/Utils/Translate";
 import { getLanguageName } from "../../../Shared/Utils/languageUtils";
@@ -24,6 +26,7 @@ export default function TextFooter({
   setExpanded,
   expanded,
 }) {
+  const keyword = i18nLoadNamespace("components/Shared/utils");
   return (
     <Box>
       <Divider />
@@ -41,12 +44,20 @@ export default function TextFooter({
 
         {/* copy to clipboard */}
         <Grid2 size={{ xs: 1 }} align={"right"} display="flex" pt={1.5}>
-          <TextCopy text={text} index={text} />
+          <Tooltip title={keyword("copy_to_clipboard")}>
+            <div>
+              <TextCopy text={text} index={text} />
+            </div>
+          </Tooltip>
         </Grid2>
 
         {/* translate */}
         <Grid2 size={{ xs: 1 }} align={"right"} display="flex" pt={2}>
-          <Translate text={text} />
+          <Tooltip title={keyword("translate")}>
+            <div>
+              <Translate text={text} />
+            </div>
+          </Tooltip>
         </Grid2>
 
         {/* expand/minimise text */}
@@ -127,7 +138,7 @@ export function ExpandMinimise({
   expanded,
 }) {
   return (
-    <Tooltip title={expandMinimiseText}>
+    <Tooltip title={expandMinimiseText} sx={{ cursor: "pointer" }}>
       {displayExpander ? (
         expanded ? (
           <ExpandLessOutlined

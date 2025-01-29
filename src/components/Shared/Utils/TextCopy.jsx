@@ -42,6 +42,11 @@ export const TextCopy = ({ text, index, type }) => {
         </Button>
       ) : (
         <IconButton
+          sx={{
+            "&:hover": {
+              backgroundColor: "inherit",
+            },
+          }}
           onClick={() => {
             copyText(text);
             setTooltipIndex(index);

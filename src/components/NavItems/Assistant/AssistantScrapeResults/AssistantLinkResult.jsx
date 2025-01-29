@@ -16,7 +16,6 @@ import Typography from "@mui/material/Typography";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import { DataGrid, getGridSingleSelectOperators } from "@mui/x-data-grid";
-
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
