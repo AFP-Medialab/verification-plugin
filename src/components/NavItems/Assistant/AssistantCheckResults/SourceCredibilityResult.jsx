@@ -3,14 +3,14 @@ import React from "react";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
-import SourceCredibilityDBKFDialog from "./SourceCredibilityDBKFDialog";
+import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
+
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import SourceCredibilityDBKFDialog from "./SourceCredibilityDBKFDialog";
 import { getUrlTypeFromCredScope } from "./assistantUtils";
-import { Chip, Grid2 } from "@mui/material";
 
 const SourceCredibilityResult = (props) => {
   // central
@@ -18,7 +18,6 @@ const SourceCredibilityResult = (props) => {
 
   // props
   const sourceCredibilityResults = props.scResultFiltered;
-  const Icon = props.icon;
   const iconColor = props.iconColor;
   const sourceType = props.sourceType;
 
@@ -40,15 +39,11 @@ const SourceCredibilityResult = (props) => {
                         <Typography>
                           {` ${keyword("this")}`}
                           {getUrlTypeFromCredScope(value.credibilityScope)}
-                          {` ${keyword(
-                            "source_credibility_warning_account",
-                          )} ${" "}${value.credibilitySource}`}
+                          {` ${keyword("source_credibility_warning_account")} ${" "}${value.credibilitySource}`}
                         </Typography>
                       ) : value.credibilityScope ? (
                         <Typography>
-                          {` ${keyword(
-                            "source_credibility_warning_domain",
-                          )} ${" "}${value.credibilitySource}`}
+                          {` ${keyword("source_credibility_warning_domain")} ${" "}${value.credibilitySource}`}
                         </Typography>
                       ) : null}
                     </Typography>
@@ -63,29 +58,21 @@ const SourceCredibilityResult = (props) => {
                   >
                     {value.credibilityScope.includes("/") ? (
                       <Typography variant={"subtitle2"}>
-                        {` ${" "} ${keyword("account_scope")} ${
-                          value.credibilityScope
-                        } `}
+                        {` ${" "} ${keyword("account_scope")} ${value.credibilityScope} `}
                       </Typography>
                     ) : value.credibilityScope ? (
                       <Typography variant={"subtitle2"}>
-                        {` ${keyword("domain_scope")} ${
-                          value.credibilityScope
-                        } `}
+                        {` ${keyword("domain_scope")} ${value.credibilityScope} `}
                       </Typography>
                     ) : null}
                     {value.credibilityLabels ? (
                       <Typography variant={"subtitle2"}>
-                        {` ${keyword("labelled_as")} ${
-                          value.credibilityLabels
-                        } `}
+                        {` ${keyword("labelled_as")} ${value.credibilityLabels} `}
                       </Typography>
                     ) : null}
                     {value.credibilityDescription ? (
                       <Typography variant={"subtitle2"}>
-                        {` ${keyword("commented_as")} ${
-                          value.credibilityDescription
-                        } `}
+                        {` ${keyword("commented_as")} ${value.credibilityDescription} `}
                       </Typography>
                     ) : null}
                     {value.credibilityEvidence.length > 0 ? (

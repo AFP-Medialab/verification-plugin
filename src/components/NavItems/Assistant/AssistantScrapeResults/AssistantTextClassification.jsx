@@ -1,21 +1,26 @@
 import React, { useState } from "react";
+
 import Card from "@mui/material/Card";
-import {
-  CardHeader,
-  Checkbox,
-  FormControlLabel,
-  Grid2,
-  List,
-  ListItem,
-  ListItemText,
-} from "@mui/material";
 import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Checkbox from "@mui/material/Checkbox";
 import Divider from "@mui/material/Divider";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Grid2 from "@mui/material/Grid2";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { v4 as uuidv4 } from "uuid";
+
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
+import "./assistantTextResultStyle.css";
 import {
   interpRgb,
   rgbToLuminance,
@@ -23,11 +28,6 @@ import {
   treeMapToElements,
   wrapPlainTextSpan,
 } from "./assistantUtils";
-import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
-import { v4 as uuidv4 } from "uuid";
-
-import "./assistantTextResultStyle.css";
-import { Trans } from "react-i18next";
 
 export default function AssistantTextClassification({
   text,
@@ -77,9 +77,6 @@ export default function AssistantTextClassification({
     sentenceThresholdHigh = configs.importanceThresholdHigh;
   }
   // category is confidence for news framing, news genre and subjectivity
-  const categoryTooltipText = keyword("confidence_tooltip_category");
-  const categoryTextLow = keyword("low_confidence");
-  const categoryTextHigh = keyword("high_confidence");
   const categoryRgbLow = configs.confidenceRgbLow;
   const categoryRgbHigh = configs.confidenceRgbHigh;
   const categoryThresholdLow = configs.confidenceThresholdLow;

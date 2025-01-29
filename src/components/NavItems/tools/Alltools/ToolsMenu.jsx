@@ -1,41 +1,39 @@
 import React, { useState } from "react";
+import Iframe from "react-iframe";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-import {
-  Alert,
-  Box,
-  Button,
-  Card,
-  Dialog,
-  DialogContent,
-  Grid2,
-  Snackbar,
-  SvgIcon,
-  Tab,
-  Tabs,
-  Typography,
-} from "@mui/material";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import Grid2 from "@mui/material/Grid2";
+import Snackbar from "@mui/material/Snackbar";
+import SvgIcon from "@mui/material/SvgIcon";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import Typography from "@mui/material/Typography";
 
+import { Audiotrack } from "@mui/icons-material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
-import Iframe from "react-iframe";
-import DialogActions from "@mui/material/DialogActions";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import ToolsMenuItem from "./ToolsMenuItem";
-import ImageIcon from "../../../NavBar/images/SVG/Image/Images.svg";
-import VideoIcon from "../../../NavBar/images/SVG/Video/Video.svg";
-import SearchIcon from "../../../NavBar/images/SVG/Search/Search.svg";
-import DataIcon from "../../../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
-import { useSelector } from "react-redux";
-
-import { useNavigate } from "react-router-dom";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { Audiotrack } from "@mui/icons-material";
+
+import { ROLES } from "../../../../constants/roles";
 import {
+  TOOLS_CATEGORIES,
   canUserSeeTool,
   tools,
-  TOOLS_CATEGORIES,
 } from "../../../../constants/tools";
-import { ROLES } from "../../../../constants/roles";
+import DataIcon from "../../../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
+import ImageIcon from "../../../NavBar/images/SVG/Image/Images.svg";
+import SearchIcon from "../../../NavBar/images/SVG/Search/Search.svg";
+import VideoIcon from "../../../NavBar/images/SVG/Video/Video.svg";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import ToolsMenuItem from "./ToolsMenuItem";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+
 import Box from "@mui/material/Box";
-import useGetHomographics from "./Hooks/useGetHomographics";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import Typography from "@mui/material/Typography";
-import { Grid2 } from "@mui/material";
-import Button from "@mui/material/Button";
-import IconGif from "../../../NavBar/images/SVG/Image/Gif.svg";
-import DragAndDrop from "./DragAndDrop";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import LinkIcon from "@mui/icons-material/Link";
-import FileIcon from "@mui/icons-material/InsertDriveFile";
-import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
+import Grid2 from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import FileIcon from "@mui/icons-material/InsertDriveFile";
+import LinkIcon from "@mui/icons-material/Link";
+
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
+import { imageGif } from "../../../../constants/tools";
 import {
   setStateInit,
   setStateReady,
@@ -22,11 +27,10 @@ import {
   setStateSelectingUrl,
 } from "../../../../redux/reducers/tools/gifReducer";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import IconButton from "@mui/material/IconButton";
-import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import AnimatedGif from "./AnimatedGif";
+import DragAndDrop from "./DragAndDrop";
+import useGetHomographics from "./Hooks/useGetHomographics";
 
 const CheckGif = () => {
   //Init variables
@@ -182,15 +186,15 @@ const CheckGif = () => {
 
   //Code to enable the button to upload the images
   /* if (toolState === 22 && imageURL1 !== "" && imageURL2 !== "") {
-                        //console.log("Ready to send"); //DEBUG
-                        dispatch(setStateReady());
-                    }*/
+                            //console.log("Ready to send"); //DEBUG
+                            dispatch(setStateReady());
+                        }*/
 
   //Code to enable the button to upload the images
   /* if (toolState === 21 && imageDropped1 !== null && imageDropped2 !== null) {
-                        //console.log("Ready to send"); //DEBUG
-                        dispatch(setStateReady());
-                    }*/
+                            //console.log("Ready to send"); //DEBUG
+                            dispatch(setStateReady());
+                        }*/
 
   useEffect(() => {
     if (toolState === 22 && imageURL1 !== "" && imageURL2 !== "") {
@@ -242,23 +246,23 @@ const CheckGif = () => {
     setEventUrl2(imageURL2);
     setEventUrlType2("url original image");
     /*trackEvent(
-                                      "submission",
-                                      "checkgif",
-                                      "url fake image",
-                                      imageURL1,
-                                      client_id,
-                                      uid
-                                    );
-                                    trackEvent(
-                                      "submission",
-                                      "checkgif",
-                                      "url original image",
-                                      imageURL2,
-                                      client_id,
-                                      uid
-                                    );*/
+                                              "submission",
+                                              "checkgif",
+                                              "url fake image",
+                                              imageURL1,
+                                              client_id,
+                                              uid
+                                            );
+                                            trackEvent(
+                                              "submission",
+                                              "checkgif",
+                                              "url original image",
+                                              imageURL2,
+                                              client_id,
+                                              uid
+                                            );*/
     /*submissionEvent(imageURL1);
-                                        submissionEvent(imageURL2);*/
+                                                submissionEvent(imageURL2);*/
     const files = {
       url_0: imageURL1,
       url_1: imageURL2,
@@ -273,23 +277,23 @@ const CheckGif = () => {
     setEventUrl2(selectedFile2);
     setEventUrlType2("file original image");
     /* trackEvent(
-                                      "submission",
-                                      "checkgif",
-                                      "file fake image",
-                                      selectedFile1,
-                                      client_id,
-                                      uid
-                                    );
-                                    trackEvent(
-                                      "submission",
-                                      "checkgif",
-                                      "file original image",
-                                      selectedFile2,
-                                      client_id,
-                                      uid
-                                    );*/
+                                              "submission",
+                                              "checkgif",
+                                              "file fake image",
+                                              selectedFile1,
+                                              client_id,
+                                              uid
+                                            );
+                                            trackEvent(
+                                              "submission",
+                                              "checkgif",
+                                              "file original image",
+                                              selectedFile2,
+                                              client_id,
+                                              uid
+                                            );*/
     /*submissionEvent(selectedFile1);
-                                        submissionEvent(selectedFile2);*/
+                                                submissionEvent(selectedFile2);*/
     const files = {
       file1: selectedFile1,
       file2: selectedFile2,
@@ -363,9 +367,7 @@ const CheckGif = () => {
       <HeaderTool
         name={keywordAllTools("navbar_gif")}
         description={keywordAllTools("navbar_gif_description")}
-        icon={
-          <IconGif style={{ fill: "#00926c" }} width="40px" height="40px" />
-        }
+        icon={<imageGif.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
       />
 
       {

@@ -1,19 +1,19 @@
 import React from "react";
 
 import Box from "@mui/material/Box";
-import { Grid2, Link, Tooltip } from "@mui/material";
 import Divider from "@mui/material/Divider";
-import {
-  ExpandLessOutlined,
-  ExpandMoreOutlined,
-  UnfoldMore,
-} from "@mui/icons-material";
+import Grid2 from "@mui/material/Grid2";
+import Link from "@mui/material/Link";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { getLanguageName } from "../../../Shared/Utils/languageUtils";
+import { ExpandLessOutlined, ExpandMoreOutlined } from "@mui/icons-material";
+
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import { TextCopy } from "../../../Shared/Utils/TextCopy";
 import { Translate } from "../../../Shared/Utils/Translate";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { getLanguageName } from "../../../Shared/Utils/languageUtils";
 
 export default function TextFooter({
   classes,
@@ -139,14 +139,6 @@ export function ExpandMinimise({
 }) {
   return (
     <Tooltip title={expandMinimiseText} sx={{ cursor: "pointer" }}>
-      {/* <UnfoldMore
-        className={classes.toolTipIcon}
-        onClick={() => {
-          setExpanded(!expanded);
-        }}
-        sx={{ cursor: "pointer" }}
-        color={"primary"}
-      /> */}
       {displayExpander ? (
         expanded ? (
           <ExpandLessOutlined

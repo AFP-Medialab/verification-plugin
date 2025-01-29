@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
@@ -6,10 +7,10 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
-import TextFieldsIcon from "@mui/icons-material/TextFields";
 import Typography from "@mui/material/Typography";
 
-import { useSelector } from "react-redux";
+import TextFieldsIcon from "@mui/icons-material/TextFields";
+
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const DbkfTextResults = () => {

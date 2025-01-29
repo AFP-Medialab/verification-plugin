@@ -1,6 +1,6 @@
 {
   "name": "weverify-plugin",
-  "version": "0.83",
+  "version": "0.84",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -50,6 +50,7 @@
     "i18next-browser-languagedetector": "^8.0.0",
     "i18next-chained-backend": "^4.6.2",
     "i18next-http-backend": "^2.6.1",
+    "jscodeshift": "^17.1.2",
     "jwt-decode": "^4.0.0",
     "konva": "^9.3.15",
     "lodash": "^4.17.21",
@@ -91,6 +92,7 @@
     "@playwright/test": "^1.47.2",
     "@svgr/webpack": "^8.1.0",
     "@tanstack/eslint-plugin-query": "^5.61.6",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.1",
     "@types/node": "^22.7.2",
     "babel-loader": "^9.2.1",
     "concurrently": "^9.0.1",
@@ -115,6 +117,7 @@
     "webpack-merge": "^5.9.0"
   },
   "lint-staged": {
-    "src/**/*.{js,css,md,jsx}": "prettier --write"
+    "src/**/*.{js,css,md}": ["prettier --write"],
+    "src/**/*.jsx": ["jscodeshift", "prettier --write"]
   }
 }

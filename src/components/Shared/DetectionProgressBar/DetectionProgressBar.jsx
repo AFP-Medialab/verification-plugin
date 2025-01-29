@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+
 import Box from "@mui/material/Box";
 import CardMedia from "@mui/material/CardMedia";
-import { Grid2 } from "@mui/material";
+import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
-import MakoScale from "../../NavBar/images/SVG/MakoScale.png";
+
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import MakoScale from "../../NavBar/images/SVG/MakoScale.png";
 
 export const DetectionProgressBar = (props) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Forensic");
