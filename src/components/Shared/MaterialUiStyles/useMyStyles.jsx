@@ -1,4 +1,5 @@
 import { green } from "@mui/material/colors";
+
 import useClasses from "./useClasses";
 
 const drawerWidthOpen = 300;
@@ -9,6 +10,17 @@ const styles = (theme) => ({
     padding: theme.spacing(3, 2),
     marginTop: 5,
     textAlign: "center",
+  },
+
+  namedEntityButtonHidden: {
+    textDecoration: "line-through !important",
+    filter: "brightness(80%)",
+  },
+
+  tagCloudTag: {
+    "&:hover": {
+      filter: "brightness(80%)",
+    },
   },
 
   rootNoCenter: {

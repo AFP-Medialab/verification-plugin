@@ -5,15 +5,19 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import Collapse from "@mui/material/Collapse";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Grid2, IconButton } from "@mui/material";
+import Grid2 from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { setWarningExpanded } from "../../../../redux/actions/tools/assistantActions";
-import DbkfTextResults from "../AssistantCheckResults/DbkfTextResults";
-import DbkfMediaResults from "../AssistantCheckResults/DbkfMediaResults";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+
 import { WarningAmber } from "@mui/icons-material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import { setWarningExpanded } from "../../../../redux/actions/tools/assistantActions";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import DbkfMediaResults from "../AssistantCheckResults/DbkfMediaResults";
+import DbkfTextResults from "../AssistantCheckResults/DbkfTextResults";
 
 const AssistantWarnings = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -25,7 +29,11 @@ const AssistantWarnings = () => {
   );
 
   return (
-    <Card variant={"outlined"} className={classes.assistantWarningBorder}>
+    <Card
+      variant={"outlined"}
+      className={classes.assistantWarningBorder}
+      id="warnings"
+    >
       <Grid2 container>
         <Grid2 size={{ xs: 12 }} style={{ display: "flex" }}>
           <CardMedia>

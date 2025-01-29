@@ -1,7 +1,13 @@
 import React from "react";
-import { Alert, Box, Card, Fade, Stack } from "@mui/material";
-import ArchiveTable from "./archiveTable";
+
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import Fade from "@mui/material/Fade";
+import Stack from "@mui/material/Stack";
+
 import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
+import ArchiveTable from "./archiveTable";
 
 const ArchivedFileCard = ({ file, archiveLinks }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");

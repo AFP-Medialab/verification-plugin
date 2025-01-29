@@ -1,33 +1,33 @@
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Alert,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Divider,
-  Grid2,
-  Stack,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { useEffect, useState } from "react";
+import { MapContainer, Marker, TileLayer } from "react-leaflet";
+import { useDispatch, useSelector } from "react-redux";
+
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Divider from "@mui/material/Divider";
+import Grid2 from "@mui/material/Grid2";
+import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
 import {
   ExpandMore,
   KeyboardArrowLeft,
   KeyboardDoubleArrowLeft,
 } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import { c2paCurrentImageIdSet } from "redux/reducers/tools/c2paReducer";
-import moment from "moment";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { MapContainer, Marker, TileLayer } from "react-leaflet";
-import { Icon as GeoIcon } from "leaflet";
-import { useEffect, useState } from "react";
-import MapIcon from "@mui/icons-material/Map";
 import HelpIcon from "@mui/icons-material/Help";
+import MapIcon from "@mui/icons-material/Map";
+
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { Icon as GeoIcon } from "leaflet";
+import moment from "moment";
+import { c2paCurrentImageIdSet } from "redux/reducers/tools/c2paReducer";
 
 /**
  *
@@ -108,6 +108,7 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
   };
 
   return (
+    // </Card>
     <Grid2 container direction="row" spacing={3} p={4}>
       <Grid2 container justifyContent="start" size={{ md: 12, lg: 6 }}>
         <Grid2>
@@ -480,7 +481,6 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
         </Card>
       </Grid2>
     </Grid2>
-    // </Card>
   );
 };
 
