@@ -25,14 +25,14 @@ import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 
+import {
+  SEARCH_ENGINE_SETTINGS,
+  reverseImageSearch,
+} from "@Shared/ReverseSearch/reverseSearchUtils";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import ImageGridList from "../../../../Shared/ImageGridList/ImageGridList";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import {
-  SEARCH_ENGINE_SETTINGS,
-  reverseImageSearch,
-} from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 import { useKeyframes } from "../Hooks/usekeyframes";
 
 const KeyFramesResults = (props) => {
