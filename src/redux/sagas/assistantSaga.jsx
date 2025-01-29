@@ -793,9 +793,9 @@ const filterAssistantResults = (
       break;
     case KNOWN_LINKS.INSTAGRAM:
       if (scrapeResult.videos.length === 1) {
-        videoList = [scrapeResult.videos[0]];
+        videoList = scrapeResult.videos;
       } else {
-        imageList = [scrapeResult.images[0]];
+        imageList = scrapeResult.images;
       }
       break;
     case KNOWN_LINKS.FACEBOOK:
