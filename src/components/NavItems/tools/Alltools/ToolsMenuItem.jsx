@@ -1,11 +1,15 @@
 import React, { useState } from "react";
-import { Box, Grid2, Typography } from "@mui/material/";
-import FiberNewIcon from "@mui/icons-material/FiberNew";
-import AuthenticationIcon from "./AdvancedTools/AuthenticationIcon";
-import ImprovedIcon from "../../../NavBar/images/SVG/Improved.svg";
-import ScienceIcon from "@mui/icons-material/Science";
-import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { useSelector } from "react-redux";
+
+import { Box, Grid2, Typography } from "@mui/material/";
+
+import FiberNewIcon from "@mui/icons-material/FiberNew";
+import ScienceIcon from "@mui/icons-material/Science";
+
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+
+import ImprovedIcon from "../../../NavBar/images/SVG/Improved.svg";
+import AuthenticationIcon from "./AdvancedTools/AuthenticationIcon";
 
 /**
  *
