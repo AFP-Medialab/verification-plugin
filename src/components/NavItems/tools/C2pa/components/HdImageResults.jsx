@@ -146,7 +146,28 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
   return (
     <Stack direction="row" spacing={4}>
       <Box width="100%">
-        <Grid2 container direction="row" spacing={2} p={4} width="100%">
+        <Grid2 container direction="row" spacing={4} p={4} width="100%">
+          <Alert severity="info">
+            <Typography variant="body2">
+              {
+                "To protect the image, an invisible watermark is embedded. This change is automatically recorded in the C2PA history below."
+              }
+            </Typography>
+            <Typography variant="body2">
+              {"Two thumbnails are displayed:"}
+            </Typography>
+            <Typography variant="body2">
+              <ul>
+                <li>
+                  {
+                    "The first thumbnail is the original thumbnail which comes from the camera."
+                  }
+                </li>
+                <li>{"The second thumbnail is the watermarked image."}</li>
+              </ul>
+            </Typography>
+          </Alert>
+
           <Grid2
             container
             direction="column"
@@ -158,7 +179,7 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
               // hdImage,
               resizedHdImageUrl,
               "AFP HD Image",
-              "AFP C2PA Image",
+              "Original C2PA AFP Image",
               selectedImage === resizedHdImageUrl,
             )}
 
@@ -169,7 +190,7 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
               ImageCard(
                 thumbnailImage.url,
                 "Original image from Camera",
-                "Original image from Camera",
+                "Original C2PA Nikon Image",
                 selectedImage === thumbnailImage.url,
               )}
           </Grid2>
