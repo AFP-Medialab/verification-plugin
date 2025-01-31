@@ -22,6 +22,7 @@ import {
   selectCorrectActions,
 } from "../../components/NavItems/Assistant/AssistantRuleBook";
 import {
+  addChatbotMessage,
   cleanAssistantState,
   setAssistantLoading,
   setDbkfImageMatchDetails,
@@ -70,7 +71,7 @@ function* getMediaActionSaga() {
 }
 
 function* getAssistantChatbotSaga() {
-  yield takeLatest(["SUBMIT_USER_CHATBOT_MESSAGE"], handleAssistantChatbotCall);
+  yield takeLatest("SUBMIT_USER_CHATBOT_MESSAGE", handleAssistantChatbotCall);
 }
 
 function* getAssistantScrapeSaga() {
@@ -578,28 +579,18 @@ function* handleAssistantChatbotCall(action) {
   const message = action.payload.message;
 
   yield put(cleanAssistantState());
-  // yield put(setAssistantLoading(true));
+  yield put(setAssistantLoading(true));
+  yield put(addChatbotMessage(message));
 
   try {
     const chatbotResponse = yield call(assistantApi.callChatbot, message);
-    console.log(chatbotResponse);
 
-    // yield put(setInputUrl(inputUrl, urlType));
-    // yield put(
-    //   setScrapedData(
-    //     filteredSR.urlText,
-    //     filteredSR.textLang,
-    //     filteredSR.linkList,
-    //     filteredSR.imageList,
-    //     filteredSR.videoList,
-    //     filteredSR.urlTextHtmlMap,
-    //   ),
-    // );
-    // yield put(setAssistantLoading(false));
+    yield put(addChatbotMessage(chatbotResponse.message));
+    yield put(setAssistantLoading(false));
   } catch (error) {
-    // yield put(setAssistantLoading(false));
+    yield put(setAssistantLoading(false));
     console.log(error);
-    // yield put(setErrorKey(error.message));
+    yield put(setErrorKey(error.message));
   }
 }
 

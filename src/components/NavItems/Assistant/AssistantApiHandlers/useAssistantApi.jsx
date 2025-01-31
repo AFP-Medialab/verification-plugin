@@ -40,6 +40,7 @@ export default function assistantApiCalls() {
     if (chatbotResponse.data.status === "success") {
       return chatbotResponse.data;
     } else {
+      console.log("Chatbot error:", scrapeResult);
       throw new Error("assistant_error_server_error");
     }
   };

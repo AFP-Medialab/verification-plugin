@@ -54,23 +54,16 @@ const ChatbotInterface = (props) => {
   );
   const [formInput, setFormInput] = useState("");
 
-  const [chatbotMessages, setChatbotMessages] = useState([]);
+  const chatbotMessages = useSelector(
+    (state) => state.assistant.chatbotMessages,
+  ); // Access the entire state
+
+  const entireState = useSelector((state) => state); // Access the entire state
+  console.log(entireState);
 
   const sendMessage = () => {
-    chatbotMessages.push({
-      id: chatbotMessages.length + 1,
-      sent: 1,
-      text: formInput,
-      class: "greeting",
-    });
     dispatch(submitUserChatbotMessage(formInput));
-    chatbotMessages.push({
-      id: chatbotMessages.length + 1,
-      sent: 0,
-      text: "Hi! I am a chatbot assistant. How can I help you today?",
-    });
     setFormInput("");
-    setChatbotMessages(chatbotMessages);
   };
 
   return (
@@ -86,7 +79,7 @@ const ChatbotInterface = (props) => {
               spacing={1}
             >
               <MessageBubble sent={msg.sent}>
-                <Typography variant="body1">{msg.text}</Typography>
+                <Typography variant="body1">{msg.message}</Typography>
                 <Typography
                   variant="caption"
                   sx={{ display: "block", mt: 0.5, opacity: 0.8 }}
