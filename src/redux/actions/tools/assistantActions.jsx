@@ -55,11 +55,12 @@ export const setProcessUrl = (processUrl, processUrlType) => {
   };
 };
 
-export const addChatbotMessage = (message, userMessageClasses) => {
+export const addChatbotMessage = (message, sent) => {
   return {
     type: "ADD_CHATBOT_MESSAGE",
     payload: {
       message: message,
+      sent: sent,
     },
   };
 };

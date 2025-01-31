@@ -580,12 +580,12 @@ function* handleAssistantChatbotCall(action) {
 
   yield put(cleanAssistantState());
   yield put(setAssistantLoading(true));
-  yield put(addChatbotMessage(message));
+  yield put(addChatbotMessage(message, 1));
 
   try {
     const chatbotResponse = yield call(assistantApi.callChatbot, message);
 
-    yield put(addChatbotMessage(chatbotResponse.message));
+    yield put(addChatbotMessage(chatbotResponse.message, 0));
     yield put(setAssistantLoading(false));
   } catch (error) {
     yield put(setAssistantLoading(false));
