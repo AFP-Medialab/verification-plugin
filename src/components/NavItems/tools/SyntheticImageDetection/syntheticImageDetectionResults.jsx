@@ -30,6 +30,7 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import CustomAlertScore from "../../../Shared/CustomAlertScore";
 import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
 import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
+import ChatbotInterface from "./ChatbotInterface";
 import NddDatagrid from "./NddDatagrid";
 import {
   DETECTION_THRESHOLDS,
@@ -293,6 +294,16 @@ const SyntheticImageDetectionResults = ({
       : setNddDetailsPanelMessage(
           "synthetic_image_detection_ndd_additional_results_hide",
         );
+  };
+
+  const [chatbotPanelMessage, setChatbotPanelMessage] = useState(
+    "synthetic_image_detection_chatbot_hide",
+  );
+
+  const handleChatbotChange = () => {
+    chatbotPanelMessage === "synthetic_image_detection_chatbot_hide"
+      ? setChatbotPanelMessage("synthetic_image_detection_chatbot")
+      : setChatbotPanelMessage("synthetic_image_detection_chatbot_hide");
   };
 
   const keywords = [
@@ -601,6 +612,24 @@ const SyntheticImageDetectionResults = ({
                 </Alert>
               </Stack>
             )}
+          </Grid2>
+          <Grid2
+            sx={{
+              width: "100%",
+            }}
+          >
+            <Box pl={4} pr={4}>
+              <Accordion defaultExpanded onChange={handleChatbotChange}>
+                <AccordionSummary expandIcon={<ExpandMore />}>
+                  <Typography>{keyword(chatbotPanelMessage)}</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Box sx={{ mr: 2 }}>
+                    <ChatbotInterface />
+                  </Box>
+                </AccordionDetails>
+              </Accordion>
+            </Box>
           </Grid2>
           <Grid2 container size={{ xs: 12 }} spacing={4}>
             {filteredNddRows && filteredNddRows.length > 0 && (
