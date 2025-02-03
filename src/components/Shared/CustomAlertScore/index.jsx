@@ -1,8 +1,11 @@
 import React from "react";
-import { Alert, Grid2 } from "@mui/material";
+
+import Alert from "@mui/material/Alert";
+import Grid2 from "@mui/material/Grid2";
+import Typography from "@mui/material/Typography";
+
 import CopyButton from "../CopyButton";
 import { i18nLoadNamespace } from "../Languages/i18nLoadNamespace";
-import Typography from "@mui/material/Typography";
 
 const CustomAlertScore = ({
   score,

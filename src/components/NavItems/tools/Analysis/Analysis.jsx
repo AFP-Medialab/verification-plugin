@@ -1,19 +1,25 @@
 import React, { memo, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Button from "@mui/material/Button";
-import LinearProgress from "@mui/material/LinearProgress";
-import Box from "@mui/material/Box";
-import YoutubeResults from "./Results/YoutubeResults";
-import TwitterResults from "./Results/TwitterResults";
-import { useAnalysisWrapper } from "./Hooks/useAnalysisWrapper";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Iframe from "react-iframe";
-import useGenerateApiUrl from "./Hooks/useGenerateApiUrl";
-import AFacebookResults from "./Results/AFacebookResults";
-import FacebookVideoDescription from "./Results/FacebookVideoDescription";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Grid2 from "@mui/material/Grid2";
+import LinearProgress from "@mui/material/LinearProgress";
+import TextField from "@mui/material/TextField";
+
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import _ from "lodash";
+
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
+import { videoAnalysis } from "../../../../constants/tools";
 import {
   cleanAnalysisState,
   setAnalysisComments,
@@ -22,19 +28,16 @@ import {
   setAnalysisResult,
   setAnalysisVerifiedComments,
 } from "../../../../redux/actions/tools/analysisActions";
-import { useParams } from "react-router-dom";
-import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import { Grid2 } from "@mui/material";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
+import { useAnalysisWrapper } from "./Hooks/useAnalysisWrapper";
+import useGenerateApiUrl from "./Hooks/useGenerateApiUrl";
+import AFacebookResults from "./Results/AFacebookResults";
+import FacebookVideoDescription from "./Results/FacebookVideoDescription";
+import TwitterResults from "./Results/TwitterResults";
+import YoutubeResults from "./Results/YoutubeResults";
 import styles from "./Results/layout.module.css";
-import Alert from "@mui/material/Alert";
-import _ from "lodash";
-import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { videoAnalysis } from "../../../../constants/tools";
 
 const Analysis = () => {
   const caa_analysis_url = process.env.REACT_APP_CAA_ANALYSIS_URL;

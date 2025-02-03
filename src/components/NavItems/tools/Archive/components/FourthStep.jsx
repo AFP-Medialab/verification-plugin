@@ -1,7 +1,14 @@
 import React from "react";
-import { Box, Button, ButtonGroup, Stack, Typography } from "@mui/material";
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
 import CloseIcon from "@mui/icons-material/Close";
+import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 const FourthStep = ({ fileInput, setFileInput }) => {

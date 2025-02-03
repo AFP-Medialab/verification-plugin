@@ -1,15 +1,16 @@
 import React from "react";
-import {
-  Box,
-  Divider,
-  Link,
-  ListItemText,
-  Stack,
-  Typography,
-} from "@mui/material";
+
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import Link from "@mui/material/Link";
 import ListItem from "@mui/material/ListItem";
-import DownloadWaczFile from "./downloadWaczFile";
+import ListItemText from "@mui/material/ListItemText";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+
+import DownloadWaczFile from "./downloadWaczFile";
 
 const SecondStep = ({ url }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");

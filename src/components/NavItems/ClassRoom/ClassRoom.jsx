@@ -1,35 +1,33 @@
 import React, { useState } from "react";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Button,
-  Card,
-  createTheme,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  Divider,
-  Grid2,
-  Tab,
-  Tabs,
-  TextField,
-  ThemeProvider,
-  Typography,
-} from "@mui/material";
+import Iframe from "react-iframe";
+
+import { ThemeProvider, createTheme } from "@mui/material";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import Divider from "@mui/material/Divider";
+import Grid2 from "@mui/material/Grid2";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 
 import { CastForEducation, ExpandMore } from "@mui/icons-material";
 
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import PropTypes from "prop-types";
 
-import Iframe from "react-iframe";
-import youverifyImage from "./Images/YouVerify_Logo.png";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
+import IconClassRoom from "../../NavBar/images/SVG/Navbar/Classroom.svg";
 import { changeTabEvent } from "../../Shared/GoogleAnalytics/GoogleAnalytics";
 import HeaderTool from "../../Shared/HeaderTool/HeaderTool";
-import IconClassRoom from "../../NavBar/images/SVG/Navbar/Classroom.svg";
+import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
+import youverifyImage from "./Images/YouVerify_Logo.png";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

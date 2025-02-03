@@ -1,26 +1,29 @@
 import React, { useEffect, useState } from "react";
-import Box from "@mui/material/Box";
 import { useDispatch, useSelector } from "react-redux";
-import useGetImages from "./Hooks/useGetImages";
-import LinearProgress from "@mui/material/LinearProgress";
-import ForensicResults from "./Results/ForensicResult";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { useParams } from "react-router-dom";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
+
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import Alert from "@mui/material/Alert";
-import { resetForensicState } from "../../../../redux/actions/tools/forensicActions";
-import { setError } from "redux/reducers/errorReducer";
-import axios from "axios";
+import LinearProgress from "@mui/material/LinearProgress";
+import Stack from "@mui/material/Stack";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
-import StringFileUploadField from "../../../Shared/StringFileUploadField";
-import { Stack } from "@mui/material";
+import axios from "axios";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { setError } from "redux/reducers/errorReducer";
+
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { imageForensic } from "../../../../constants/tools";
+import { resetForensicState } from "../../../../redux/actions/tools/forensicActions";
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import StringFileUploadField from "../../../Shared/StringFileUploadField";
+import useGetImages from "./Hooks/useGetImages";
+import ForensicResults from "./Results/ForensicResult";
 
 const Forensic = () => {
   const { url } = useParams();

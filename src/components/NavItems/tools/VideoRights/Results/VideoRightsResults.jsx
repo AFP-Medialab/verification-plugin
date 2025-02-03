@@ -1,25 +1,30 @@
 import React from "react";
-import { IconButton, Paper } from "@mui/material";
-import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import Typography from "@mui/material/Typography";
-import BlockIcon from "@mui/icons-material/Block";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import YouTubeIcon from "@mui/icons-material/YouTube";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import Divider from "@mui/material/Divider";
-import invidLogo from "../images/InVID-logo.svg?url";
-import Icon from "@mui/material/Icon";
-import { Grid2 } from "@mui/material";
-import { cleanVideoRightsState } from "../../../../../redux/actions/tools/videoRightsActions";
 import { useDispatch } from "react-redux";
+
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import Divider from "@mui/material/Divider";
+import Grid2 from "@mui/material/Grid2";
+import Icon from "@mui/material/Icon";
+import IconButton from "@mui/material/IconButton";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+
+import BlockIcon from "@mui/icons-material/Block";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CloseIcon from "@mui/icons-material/Close";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import YouTubeIcon from "@mui/icons-material/YouTube";
+
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import { cleanVideoRightsState } from "../../../../../redux/actions/tools/videoRightsActions";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
+import invidLogo from "../images/InVID-logo.svg?url";
 
 const VideoRightsResults = (props) => {
   const classes = useMyStyles();

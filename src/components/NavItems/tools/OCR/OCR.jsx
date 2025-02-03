@@ -1,30 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import HeaderTool from "@Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
+import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
+import { setError } from "redux/reducers/errorReducer";
 
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
+import { imageOcr } from "../../../../constants/tools";
 import {
   resetOcrState,
-  setb64InputFile,
   setOcrBinaryImage,
   setOcrErrorKey,
   setOcrInput,
   setOcrResult,
+  setb64InputFile,
 } from "../../../../redux/actions/tools/ocrActions";
-import OcrResult from "./Results/OcrResult";
-
-import { Box } from "@mui/material";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import HeaderTool from "@Shared/HeaderTool/HeaderTool";
-import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { setError } from "redux/reducers/errorReducer";
-import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
-import { imageOcr } from "../../../../constants/tools";
+import OcrResult from "./Results/OcrResult";
 
 const OCR = () => {
   const { url } = useParams();

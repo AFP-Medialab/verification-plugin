@@ -1,40 +1,38 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormGroup from "@mui/material/FormGroup";
+import Grid2 from "@mui/material/Grid2";
+import LinearProgress from "@mui/material/LinearProgress";
+import Stack from "@mui/material/Stack";
+import Switch from "@mui/material/Switch";
+
+import { Gradient } from "@mui/icons-material";
+
+import axios from "axios";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { setError } from "redux/reducers/errorReducer";
+
+import { ROLES } from "../../../../constants/roles";
 import {
   resetSyntheticImageDetectionImage,
   setSyntheticImageDetectionLoading,
   setSyntheticImageDetectionNearDuplicates,
   setSyntheticImageDetectionResult,
 } from "../../../../redux/actions/tools/syntheticImageDetectionActions";
-
-import axios from "axios";
-import {
-  Alert,
-  Box,
-  Card,
-  CardHeader,
-  FormControlLabel,
-  FormGroup,
-  Grid2,
-  LinearProgress,
-  Stack,
-  Switch,
-} from "@mui/material";
-
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import { Gradient } from "@mui/icons-material";
-
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { isValidUrl } from "../../../Shared/Utils/URLUtils";
-import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
-
-import { setError } from "redux/reducers/errorReducer";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
+import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 import { syntheticImageDetectionAlgorithms } from "./SyntheticImageDetectionAlgorithms";
-import { ROLES } from "../../../../constants/roles";
-import { useLocation } from "react-router-dom";
+import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
 
 const SyntheticImageDetection = () => {
   const location = useLocation();

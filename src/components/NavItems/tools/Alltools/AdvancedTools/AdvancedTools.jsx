@@ -1,26 +1,31 @@
 import React, { useEffect } from "react";
-import { Grid2, Stack } from "@mui/material";
+import { Controller, useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import LockIcon from "@mui/icons-material/Lock";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import TextField from "@mui/material/TextField";
-import LockOpenIcon from "@mui/icons-material/LockOpen";
-import useAuthenticationAPI from "../../../../Shared/Authentication/useAuthenticationAPI";
-import { useDispatch, useSelector } from "react-redux";
-import { ERR_AUTH_UNKNOWN_ERROR } from "../../../../Shared/Authentication/authenticationErrors";
-import { setError } from "redux/reducers/errorReducer";
+import Grid2 from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import { Controller, useForm } from "react-hook-form";
-import * as yup from "yup";
-import _ from "lodash";
 import MenuItem from "@mui/material/MenuItem";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import LockIcon from "@mui/icons-material/Lock";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
+
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import _ from "lodash";
+import { setError } from "redux/reducers/errorReducer";
+import * as yup from "yup";
+
+import { ERR_AUTH_UNKNOWN_ERROR } from "../../../../Shared/Authentication/authenticationErrors";
+import useAuthenticationAPI from "../../../../Shared/Authentication/useAuthenticationAPI";
 
 const registrationValidationSchema = yup.object().shape({
   email: yup
