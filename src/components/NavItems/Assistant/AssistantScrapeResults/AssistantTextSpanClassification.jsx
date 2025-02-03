@@ -15,7 +15,6 @@ import Typography from "@mui/material/Typography";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import { styled } from "@mui/system";
-
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { v4 as uuidv4 } from "uuid";
 
