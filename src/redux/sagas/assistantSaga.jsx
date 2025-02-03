@@ -578,12 +578,24 @@ function* handleNamedEntityCall(action) {
 function* handleAssistantChatbotCall(action) {
   const message = action.payload.message;
 
-  yield put(cleanAssistantState());
   yield put(setAssistantLoading(true));
   yield put(addChatbotMessage(message, 1));
 
   try {
     const chatbotResponse = yield call(assistantApi.callChatbot, message);
+
+    console.log(chatbotResponse);
+
+    if (
+      ["BUG", "FEATURE", "OUTPUT"].some((keyword) =>
+        chatbotResponse.userMessageClasses.includes(keyword),
+      )
+    ) {
+      console.log("TODO: Hook up to slack");
+    }
+    if (chatbotResponse.userMessageClasses.includes("EXPLAIN")) {
+      console.log("TODO: Hook up to slack");
+    }
 
     yield put(addChatbotMessage(chatbotResponse.message, 0));
     yield put(setAssistantLoading(false));

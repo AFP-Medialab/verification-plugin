@@ -42,9 +42,6 @@ const MessageBubble = styled(Box)(({ sent }) => ({
   alignSelf: sent ? "flex-end" : "flex-start",
   boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
   transition: "transform 0.2s ease",
-  "&:hover": {
-    transform: "scale(1.02)",
-  },
 }));
 
 const ChatbotInterface = (props) => {
@@ -56,10 +53,9 @@ const ChatbotInterface = (props) => {
 
   const chatbotMessages = useSelector(
     (state) => state.assistant.chatbotMessages,
-  ); // Access the entire state
+  ).filter((msg) => msg.message); // Access the entire state
 
   const entireState = useSelector((state) => state); // Access the entire state
-  console.log(entireState);
 
   const sendMessage = () => {
     dispatch(submitUserChatbotMessage(formInput));

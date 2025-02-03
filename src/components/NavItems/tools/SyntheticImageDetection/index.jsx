@@ -31,8 +31,11 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
+import ChatbotInterface from "./ChatbotInterface";
 import { syntheticImageDetectionAlgorithms } from "./SyntheticImageDetectionAlgorithms";
 import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
+
+// Delete me!
 
 const SyntheticImageDetection = () => {
   const location = useLocation();
@@ -382,6 +385,17 @@ const SyntheticImageDetection = () => {
           {keywordWarning("warning_beta_synthetic_image_detection")}
         </Alert>
       </Stack>
+
+      <Card>
+        <CardHeader
+          title="Chatbot testing: Delete me before integration"
+          className={classes.headerUploadedImage}
+        />
+
+        <Box sx={{ mr: 2 }}>
+          <ChatbotInterface />
+        </Box>
+      </Card>
 
       <Card>
         <CardHeader
