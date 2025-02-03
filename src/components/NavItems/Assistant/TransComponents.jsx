@@ -1,5 +1,7 @@
 import { Trans } from "react-i18next";
 
+// Links
+
 export function TransSupportedToolsLink({ keyword }) {
   return (
     <Trans
@@ -96,7 +98,7 @@ export function TransTargetObliviousStanceLink({ keyword }) {
       t={keyword}
       i18nKey="target_oblivious_stance_link"
       components={{
-        credibilitySignalsLink: (
+        targetObliviousStanceLink: (
           <a
             href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#stance-classifier"
             target="_blank"
@@ -107,6 +109,8 @@ export function TransTargetObliviousStanceLink({ keyword }) {
     />
   );
 }
+
+// Tooltips
 
 export function TransSourceCredibilityTooltip({ keyword }) {
   return (
@@ -122,10 +126,6 @@ export function TransSourceCredibilityTooltip({ keyword }) {
       }}
     />
   );
-}
-
-export function TransCollectedCommentsTooltip({ keyword }) {
-  return <Trans t={keyword} i18nKey="collected_comments_tooltip" />;
 }
 
 export function TransTargetObliviousStanceTooltip({ keyword }) {
@@ -144,6 +144,8 @@ export function TransTargetObliviousStanceTooltip({ keyword }) {
     />
   );
 }
+
+// Whitespace
 
 export function TransHtmlDoubleLineBreak({ keyword }) {
   return <Trans t={keyword} i18nKey="html_double_line_break" />;

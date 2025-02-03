@@ -557,7 +557,7 @@ function* handleYoutubeCommentsCall(action) {
         inputUrl,
       );
 
-      console.log("youtube_comments=", result);
+      console.log("youtubeComments=", result);
 
       yield put(setYoutubeCommentsDetails(result, false, true, false));
     }

@@ -6,6 +6,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
   CardHeader,
   Chip,
   Divider,
@@ -47,7 +48,18 @@ import {
 import { TextCopy } from "components/Shared/Utils/TextCopy";
 import { Translate } from "components/Shared/Utils/Translate";
 
-const AssistantCommentResult = ({ collectedComments }) => {
+import AnalysisComments, {
+  CommentsPanel,
+} from "components/NavItems/tools/Analysis/Results/AnalysisComments";
+import {
+  cleanAnalysisState,
+  setAnalysisComments,
+  setAnalysisLinkComments,
+  setAnalysisVerifiedComments,
+} from "redux/actions/tools/analysisActions";
+import YoutubeResults from "components/NavItems/tools/Analysis/Results/YoutubeResults";
+
+const AssistantCommentResult = ({ collectedComments, youtubeComments }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   //const sharedKeyword = i18nLoadNamespace("components/Shared/utils");
   const expandMinimiseText = keyword("expand_minimise_text");
@@ -74,9 +86,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
     comment: "inherit",
   };
 
-  // organise comments into groups
-  let linkComments = [];
-  let verificationComments = [];
+  // organise collectedComments into groups
   let denyComments = [];
   let supportComments = [];
   let queryComments = [];
@@ -90,12 +100,12 @@ const AssistantCommentResult = ({ collectedComments }) => {
     stance == "deny" ? denyComments.push(collectedComments[i]) : null;
     // add link
     // TODO get this working correctly
-    const commentText = collectedComments
-      ? collectedComments[i].textOriginal
-      : null;
-    commentText.search(/www./i)
-      ? linkComments.push(collectedComments[i])
-      : null;
+    // const commentText = collectedComments
+    //   ? collectedComments[i].textOriginal
+    //   : null;
+    // commentText.search(/www./i)
+    //   ? linkComments.push(collectedComments[i])
+    //   : null;
     // add verification
     // TODO code for pattern recognition
   }
@@ -158,8 +168,10 @@ const AssistantCommentResult = ({ collectedComments }) => {
                         interactive={"true"}
                         title={
                           <>
-                            <TransTargetObliviousStanceTooltip />
-                            <TransTargetObliviousStanceLink />
+                            <TransTargetObliviousStanceTooltip
+                              keyword={keyword}
+                            />
+                            <TransTargetObliviousStanceLink keyword={keyword} />
                           </>
                         }
                         classes={{ tooltip: classes.assistantTooltip }}
@@ -242,8 +254,10 @@ const AssistantCommentResult = ({ collectedComments }) => {
                       interactive={"true"}
                       title={
                         <>
-                          <TransTargetObliviousStanceTooltip />
-                          <TransTargetObliviousStanceLink />
+                          <TransTargetObliviousStanceTooltip
+                            keyword={keyword}
+                          />
+                          <TransTargetObliviousStanceLink keyword={keyword} />
                         </>
                       }
                       classes={{ tooltip: classes.assistantTooltip }}
@@ -296,10 +310,10 @@ const AssistantCommentResult = ({ collectedComments }) => {
             interactive={"true"}
             title={
               <>
-                <TransCollectedCommentsTooltip />
-                <TransHtmlDoubleLineBreak />
-                <TransTargetObliviousStanceTooltip />
-                <TransTargetObliviousStanceLink />
+                <Trans t={keyword} i18nKey="collected_comments_tooltip" />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
+                <TransTargetObliviousStanceTooltip keyword={keyword} />
+                <TransTargetObliviousStanceLink keyword={keyword} />
               </>
             }
             classes={{ tooltip: classes.assistantTooltip }}
@@ -316,6 +330,64 @@ const AssistantCommentResult = ({ collectedComments }) => {
       ) : null}
 
       <CardContent width="100%">
+        <Box m={2} />
+        {console.log(youtubeComments)}
+        {youtubeComments && (
+          <AnalysisComments
+            type="YOUTUBE"
+            classes={classes}
+            title={"youtube_comment_title"}
+            keyword={keyword}
+            report={youtubeComments}
+            setAnalysisComments={setAnalysisComments}
+            setAnalysisLinkComments={setAnalysisLinkComments}
+            setAnalysisVerifiedComments={setAnalysisVerifiedComments}
+          />
+        )}
+        {/* {youtubeComments && youtubeComments.coms.comments.length >= 1 && (
+          <CommentsPanel
+            title={"api_comments"}
+            classes={classes}
+            keyword={keyword}
+            report={youtubeComments.coms} //
+            targetObliviousStance={targetObliviousStanceResult} //
+            nb_comments={youtubeComments.coms.pagination.total_comments}
+            setCommentsAction={setAnalysisComments} //
+            commentsData={youtubeComments.coms.comments}
+            com_type={"coms"}
+          />
+        )}
+        <Box m={2} />
+        {youtubeComments && youtubeComments.vercoms.comments.length >= 1 && (
+          <CommentsPanel
+            title={"api_comments_verified"}
+            classes={classes}
+            keyword={keyword}
+            report={youtubeComments.vercoms} //
+            targetObliviousStance={targetObliviousStanceResult} //
+            nb_comments={youtubeComments.vercoms.pagination.total_comments}
+            setCommentsAction={setAnalysisVerifiedComments} //
+            commentsData={youtubeComments.vercoms.comments}
+            com_type={"vercoms"}
+          />
+        )}
+        <Box m={2} />
+        {youtubeComments && youtubeComments.linkcoms.comments.length >= 1 && (
+          <CommentsPanel
+            title={"link_comments"}
+            classes={classes}
+            keyword={keyword}
+            report={youtubeComments.linkcoms} //
+            targetObliviousStance={targetObliviousStanceResult} //
+            nb_comments={youtubeComments.linkcoms.pagination.total_comments}
+            setCommentsAction={setAnalysisLinkComments} //
+            commentsData={youtubeComments.linkcoms.comments}
+            com_type={"linkcoms"}
+          />
+        )} */}
+
+        <Box m={2} />
+
         {/* all comments */}
         <Accordion>
           <AccordionSummary
@@ -340,31 +412,6 @@ const AssistantCommentResult = ({ collectedComments }) => {
               onChange={pageChangeHandler}
               page={currentPage}
             />
-          </AccordionDetails>
-        </Accordion>
-
-        {/* link comments */}
-        <Accordion hidden={linkComments.length < 1}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>
-              {keyword("link_comments") + " (" + linkComments.length + ")"}
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>{renderComments(linkComments)}</AccordionDetails>
-        </Accordion>
-
-        {/* verification comments */}
-        <Accordion hidden={verificationComments.length < 1}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>
-              {keyword("api_comments_verified") +
-                " (" +
-                verificationComments.length +
-                ")"}
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            {renderComments(verificationComments)}
           </AccordionDetails>
         </Accordion>
 

@@ -23,13 +23,15 @@ import { TextCopy } from "../../../../Shared/Utils/TextCopy";
 import { Translate } from "../../../../Shared/Utils/Translate";
 import { Chip, Tooltip } from "@mui/material";
 
-const CommentsPanel = (props) => {
+export const CommentsPanel = (props) => {
   const [count_comments, setCount_comments] = useState(1);
   const [expanded, setExpanded] = React.useState(false);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+
+  console.log("props.commentsData", props.commentsData);
 
   const classes = props.classes;
   const keyword = props.keyword;
@@ -331,6 +333,7 @@ const AnalysisComments = (props) => {
           />
         )}
         <Box m={2} />
+
         {verifiedComments.length >= 1 && (
           <CommentsPanel
             title={

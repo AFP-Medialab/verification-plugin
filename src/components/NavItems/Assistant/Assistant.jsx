@@ -59,6 +59,9 @@ const Assistant = () => {
   const collectedComments = useSelector(
     (state) => state.assistant.collectedComments,
   );
+  const youtubeComments = useSelector(
+    (state) => state.assistant.youtubeCommentsResult,
+  );
   const errorKey = useSelector((state) => state.assistant.errorKey);
 
   // checking if user logged in
@@ -255,10 +258,11 @@ const Assistant = () => {
               </Grid2>
 
               {/* YouTube comments if video */}
-              {collectedComments ? (
+              {collectedComments || youtubeComments ? (
                 <Grid2 size={12}>
                   <AssistantCommentResult
                     collectedComments={collectedComments}
+                    youtubeComments={youtubeComments}
                   />
                 </Grid2>
               ) : null}
