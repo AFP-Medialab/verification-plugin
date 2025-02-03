@@ -1,19 +1,19 @@
 import React from "react";
 
 import Box from "@mui/material/Box";
-import { Grid2, Link } from "@mui/material";
 import Divider from "@mui/material/Divider";
-import {
-  ExpandLessOutlined,
-  ExpandMoreOutlined,
-  UnfoldMore,
-} from "@mui/icons-material";
+import Grid2 from "@mui/material/Grid2";
+import Link from "@mui/material/Link";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { getLanguageName } from "../../../Shared/Utils/languageUtils";
+import { ExpandLessOutlined, ExpandMoreOutlined } from "@mui/icons-material";
+
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import { TextCopy } from "../../../Shared/Utils/TextCopy";
 import { Translate } from "../../../Shared/Utils/Translate";
+import { getLanguageName } from "../../../Shared/Utils/languageUtils";
 
 export default function TextFooter({
   classes,
@@ -26,6 +26,7 @@ export default function TextFooter({
   setExpanded,
   expanded,
 }) {
+  const keyword = i18nLoadNamespace("components/Shared/utils");
   return (
     <Box>
       <Divider />
@@ -43,12 +44,20 @@ export default function TextFooter({
 
         {/* copy to clipboard */}
         <Grid2 size={{ xs: 1 }} align={"right"} display="flex" pt={1.5}>
-          <TextCopy text={text} index={text} />
+          <Tooltip title={keyword("copy_to_clipboard")}>
+            <div>
+              <TextCopy text={text} index={text} />
+            </div>
+          </Tooltip>
         </Grid2>
 
         {/* translate */}
         <Grid2 size={{ xs: 1 }} align={"right"} display="flex" pt={2}>
-          <Translate text={text} />
+          <Tooltip title={keyword("translate")}>
+            <div>
+              <Translate text={text} />
+            </div>
+          </Tooltip>
         </Grid2>
 
         {/* expand/minimise text */}
@@ -129,15 +138,7 @@ export function ExpandMinimise({
   expanded,
 }) {
   return (
-    <Tooltip title={expandMinimiseText}>
-      {/* <UnfoldMore
-        className={classes.toolTipIcon}
-        onClick={() => {
-          setExpanded(!expanded);
-        }}
-        sx={{ cursor: "pointer" }}
-        color={"primary"}
-      /> */}
+    <Tooltip title={expandMinimiseText} sx={{ cursor: "pointer" }}>
       {displayExpander ? (
         expanded ? (
           <ExpandLessOutlined

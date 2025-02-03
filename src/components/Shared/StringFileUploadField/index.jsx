@@ -1,18 +1,20 @@
 import React, { useRef, useState } from "react";
+
 import Box from "@mui/material/Box";
-import {
-  Button,
-  ButtonGroup,
-  Grid2,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Grid2 from "@mui/material/Grid2";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import { green } from "@mui/material/colors";
+
 import CloseIcon from "@mui/icons-material/Close";
+import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+
 import LoadingButton from "@mui/lab/LoadingButton";
 import accept from "attr-accept";
-import { green } from "@mui/material/colors";
+
 import { i18nLoadNamespace } from "../Languages/i18nLoadNamespace";
 
 /**

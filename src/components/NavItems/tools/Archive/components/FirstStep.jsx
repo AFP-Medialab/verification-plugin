@@ -1,18 +1,19 @@
 import React, { useEffect } from "react";
-import {
-  Box,
-  Divider,
-  List,
-  ListItemButton,
-  ListItemText,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+
 import { ArrowForward } from "@mui/icons-material";
-import { isValidUrl } from "@Shared/Utils/URLUtils";
+
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import { isValidUrl } from "@Shared/Utils/URLUtils";
 
 const FirstStep = ({ handleClick, url, handleUrlChange }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");

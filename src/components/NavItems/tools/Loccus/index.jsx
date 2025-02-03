@@ -1,38 +1,34 @@
+import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import Grid2 from "@mui/material/Grid2";
+import LinearProgress from "@mui/material/LinearProgress";
+import Stack from "@mui/material/Stack";
+
+import { AudioFile } from "@mui/icons-material";
+
+import axios from "axios";
+import useAuthenticatedRequest from "components/Shared/Authentication/useAuthenticatedRequest";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { setError } from "redux/reducers/errorReducer";
+import { v4 as uuidv4 } from "uuid";
+
 import {
   resetLoccusAudio,
   setLoccusLoading,
   setLoccusResult,
 } from "../../../../redux/actions/tools/loccusActions";
-
-import axios from "axios";
-import {
-  Alert,
-  Box,
-  Card,
-  CardHeader,
-  Grid2,
-  LinearProgress,
-  Stack,
-} from "@mui/material";
-
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import { AudioFile } from "@mui/icons-material";
-
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import LoccusResults from "./loccusResults";
-
-import { setError } from "redux/reducers/errorReducer";
-import { isValidUrl } from "../../../Shared/Utils/URLUtils";
-
-import useAuthenticatedRequest from "components/Shared/Authentication/useAuthenticatedRequest";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
+import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
-
-import { v4 as uuidv4 } from "uuid";
-import { useMutation } from "@tanstack/react-query";
+import LoccusResults from "./loccusResults";
 
 const Loccus = () => {
   const classes = useMyStyles();

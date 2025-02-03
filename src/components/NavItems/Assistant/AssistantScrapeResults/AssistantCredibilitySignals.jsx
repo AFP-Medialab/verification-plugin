@@ -1,67 +1,41 @@
 import React, { useState } from "react";
+import { Trans } from "react-i18next";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import Card from "@mui/material/Card";
-import { CardHeader, Grid2, Skeleton, styled } from "@mui/material";
-import CardContent from "@mui/material/CardContent";
+import { styled } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Remove from "@mui/icons-material/Remove";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
 import Collapse from "@mui/material/Collapse";
+import Grid2 from "@mui/material/Grid2";
+import Skeleton from "@mui/material/Skeleton";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import Remove from "@mui/icons-material/Remove";
+
+import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult.jsx";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import dayjs from "dayjs";
 import LocaleData from "dayjs/plugin/localeData";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 
-import AssistantTextClassification from "./AssistantTextClassification.jsx";
-import AssistantTextSpanClassification from "./AssistantTextSpanClassification.jsx";
-import ResultDisplayItem from "./../../tools/SemanticSearch/components/ResultDisplayItem.jsx";
 import { ROLES } from "../../../../constants/roles.jsx";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { getLanguageName } from "../../../Shared/Utils/languageUtils";
-import TextFooter, { TextFooterPrevFactChecks } from "./TextFooter.jsx";
-import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult.jsx";
 import {
   TransCredibilitySignalsLink,
   TransHtmlDoubleLinkBreak,
   TransHtmlSingleLinkBreak,
 } from "../TransComponents";
-import { Trans } from "react-i18next";
-
-const renderEntityKeys = (entities, keyword) => {
-  // translate array into readable string
-  let translatedEntities = [];
-  Object.keys(entities).map((entity, index) =>
-    entity != "Important_Sentence"
-      ? translatedEntities.push(keyword(entity))
-      : null,
-  );
-  return translatedEntities.join("; ");
-};
-
-const round = (number, decimalPlaces) => {
-  return (Math.round(number * 100) / 100).toFixed(decimalPlaces);
-};
-
-const calculateSubjectivity = (sentences) => {
-  let scoresSUBJ = [];
-  for (let i = 0; i < sentences.length; i++) {
-    if (sentences[i].label == "SUBJ") {
-      scoresSUBJ.push(Number(sentences[i].score));
-    }
-  }
-
-  return [" (", scoresSUBJ.length, "/", sentences.length, ")"]
-    .toString()
-    .replaceAll(",", "");
-};
+import ResultDisplayItem from "./../../tools/SemanticSearch/components/ResultDisplayItem.jsx";
+import TextFooterPrevFactChecks from "./TextFooter.jsx";
 
 const getExpandIcon = (
   loading,
@@ -85,12 +59,10 @@ const getExpandIcon = (
 
 const AssistantCredSignals = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
-  const sharedKeyword = i18nLoadNamespace("components/Shared/utils");
   const classes = useMyStyles();
   const expandMinimiseText = keyword("expand_minimise_text");
 
   // displaying expanded text in AccordionDetails
-  const [displayOrigLang, setDisplayOrigLang] = useState(true);
   const [displayExpander, setDisplayExpander] = useState(true);
   const [expanded, setExpanded] = useState(true);
 

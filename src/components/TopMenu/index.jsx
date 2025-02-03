@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { AppBar, Grid2, Stack, Tab, Tabs, Toolbar } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+
+import AppBar from "@mui/material/AppBar";
+import Grid2 from "@mui/material/Grid2";
+import Stack from "@mui/material/Stack";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import Toolbar from "@mui/material/Toolbar";
+
+import { toolsHome } from "../../constants/tools";
+import { selectTopMenuItem } from "../../redux/reducers/navReducer";
+import { resetToolSelected } from "../../redux/reducers/tools/toolReducer";
 import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg";
 import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg";
 import LogoVera from "../NavBar/images/SVG/Navbar/vera-logo_black.svg";
-import { Link, useNavigate } from "react-router-dom";
-import AdvancedTools from "../NavItems/tools/Alltools/AdvancedTools/AdvancedTools";
 import Languages from "../NavItems/languages/languages";
-import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
-import { useDispatch, useSelector } from "react-redux";
+import AdvancedTools from "../NavItems/tools/Alltools/AdvancedTools/AdvancedTools";
 import { i18nLoadNamespace } from "../Shared/Languages/i18nLoadNamespace";
-import { selectTopMenuItem } from "../../redux/reducers/navReducer";
-import { toolsHome } from "../../constants/tools";
-import { resetToolSelected } from "../../redux/reducers/tools/toolReducer";
+import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 
 const TopMenu = ({ topMenuItems }) => {
   const classes = useMyStyles();

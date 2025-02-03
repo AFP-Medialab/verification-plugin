@@ -1,16 +1,19 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardMedia from "@mui/material/CardMedia";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
-import ImageIcon from "@mui/icons-material/Image";
-import { IconButton } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import Tooltip from "@mui/material/Tooltip";
+
+import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
+import FileCopyIcon from "@mui/icons-material/FileCopy";
+import ImageIcon from "@mui/icons-material/Image";
+
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 const AssistantImageResult = () => {

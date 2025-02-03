@@ -1,15 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+
 import Box from "@mui/material/Box";
-import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import { Grid2, IconButton, Stack, Typography } from "@mui/material";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import Grid2 from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
 import { Close } from "@mui/icons-material";
-import { useSelector } from "react-redux";
-import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
+
 import { useTrackEvent } from "Hooks/useAnalytics";
 import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult";
+import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 
 const DeepfakeResultsImage = (props) => {
   const classes = useMyStyles();

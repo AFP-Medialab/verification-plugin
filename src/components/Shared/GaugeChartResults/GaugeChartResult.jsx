@@ -1,22 +1,23 @@
-import { Download, ExpandMore } from "@mui/icons-material";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Alert,
-  Box,
-  Chip,
-  Divider,
-  IconButton,
-  Stack,
-  Tooltip,
-  Typography,
-} from "@mui/material";
 import React, { useRef, useState } from "react";
 import GaugeChart from "react-gauge-chart";
-import GaugeChartModalExplanation from "./GaugeChartModalExplanation";
+
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
+import { Download, ExpandMore } from "@mui/icons-material";
+
 import CustomAlertScore from "../CustomAlertScore";
 import { exportReactElementAsJpg } from "../Utils/htmlUtils";
+import GaugeChartModalExplanation from "./GaugeChartModalExplanation";
 
 /**
  *

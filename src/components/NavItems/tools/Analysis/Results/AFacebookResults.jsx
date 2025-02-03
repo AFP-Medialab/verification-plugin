@@ -1,23 +1,28 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import Typography from "@mui/material/Typography";
+
 import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
-import { Grid2, IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
+import Divider from "@mui/material/Divider";
+import Grid2 from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+
+import CloseIcon from "@mui/icons-material/Close";
+
 import axios from "axios";
-import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList";
-import { submissionEvent } from "../../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import _ from "lodash";
-import AnalysisComments from "./AnalysisComments";
-import { reverseImageSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
+
+import { submissionEvent } from "../../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
+import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import { ReverseSearchButtons } from "../../../../Shared/ReverseSearch/ReverseSearchButtons";
+import { reverseImageSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
+import AnalysisComments from "./AnalysisComments";
 
 const AFacebookResults = (props) => {
   const cleanAnalysisState = props.cleanAnalysisState;
