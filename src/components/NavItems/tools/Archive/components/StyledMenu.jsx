@@ -4,11 +4,12 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import Tooltip from "@mui/material/Tooltip";
 import { alpha, styled } from "@mui/material/styles";
 
 import { Archive, FileUpload, MoreVert, Replay } from "@mui/icons-material";
 
-import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -74,16 +75,18 @@ export default function CustomizedMenus({
 
   return (
     <div>
-      <IconButton
-        id="customized-button"
-        aria-controls={open ? "customized-menu" : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? "true" : undefined}
-        variant="contained"
-        onClick={handleClick}
-      >
-        <MoreVert />
-      </IconButton>
+      <Tooltip title={keyword("menu_tooltip")}>
+        <IconButton
+          id="customized-button"
+          aria-controls={open ? "customized-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+          variant="contained"
+          onClick={handleClick}
+        >
+          <MoreVert />
+        </IconButton>
+      </Tooltip>
 
       <StyledMenu
         id="customized-menu"
