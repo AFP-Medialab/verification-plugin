@@ -757,12 +757,6 @@ const styles = (theme) => ({
     alignItems: "center",
   },
 
-  imageAnalysis: {
-    height: "50vh",
-    backgroundPosition: "center",
-    backgroundSize: "contain",
-  },
-
   feedbackButtonTitleHide: {
     display: "none",
   },
