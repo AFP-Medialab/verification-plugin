@@ -1,4 +1,5 @@
 import { green } from "@mui/material/colors";
+
 import useClasses from "./useClasses";
 
 const drawerWidthOpen = 300;
@@ -754,12 +755,6 @@ const styles = (theme) => ({
     display: "flex",
     justifyContent: "space - between",
     alignItems: "center",
-  },
-
-  imageAnalysis: {
-    height: "50vh",
-    backgroundPosition: "center",
-    backgroundSize: "contain",
   },
 
   feedbackButtonTitleHide: {

@@ -4,7 +4,6 @@ import DownloadIcon from "@mui/icons-material/Download";
 
 import { ROLES } from "../../../constants/roles.jsx";
 import {
-  imageAnalysis,
   imageDeepfake,
   imageForensic,
   imageMagnifier,
@@ -150,21 +149,6 @@ export const ASSISTANT_ACTIONS = [
     text: "video_analysis_text",
     tsvPrefix: "api",
     path: "tools/analysis",
-  },
-  {
-    title: "navbar_analysis_image",
-    icon: <imageAnalysis.icon sx={{ fontSize: "24px" }} />,
-    linksAccepted: [
-      KNOWN_LINKS.FACEBOOK,
-      KNOWN_LINKS.TWITTER,
-      KNOWN_LINKS.SNAPCHAT,
-    ],
-    cTypes: [CONTENT_TYPE.IMAGE],
-    exceptions: [],
-    useInputUrl: true,
-    text: "image_analysis_text",
-    tsvPrefix: "api",
-    path: "tools/analysisImage",
   },
   {
     title: "navbar_keyframes",
