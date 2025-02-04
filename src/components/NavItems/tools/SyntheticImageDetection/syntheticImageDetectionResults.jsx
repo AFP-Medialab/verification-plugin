@@ -214,8 +214,6 @@ const SyntheticImageDetectionResults = ({
         return scoreB - scoreA;
       });
 
-    console.log(res);
-
     const hasResultError = () => {
       for (const algorithm of res) {
         if (algorithm.isError) return true;
