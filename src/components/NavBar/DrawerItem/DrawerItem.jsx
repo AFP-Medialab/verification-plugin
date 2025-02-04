@@ -6,13 +6,14 @@ import Container from "@mui/material/Container";
 import Fade from "@mui/material/Fade";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
+
 import { useTrackPageView } from "../../../Hooks/useAnalytics";
 import { TOOL_GROUPS, toolsHome } from "../../../constants/tools";
 import { TOP_MENU_ITEMS } from "../../../constants/topMenuItems";
 import { selectTopMenuItem } from "../../../redux/reducers/navReducer";
 import { selectTool } from "../../../redux/reducers/tools/toolReducer";
-import { getclientId } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
-import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 
 /**
  *
@@ -75,9 +76,6 @@ const DrawerItemContent = ({ tool }) => {
         styleOverrides: {
           wrapper: {
             fontSize: 12,
-          },
-          root: {
-            minWidth: "15%!important",
           },
         },
       },
