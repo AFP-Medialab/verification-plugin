@@ -179,7 +179,7 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
               // hdImage,
               resizedHdImageUrl,
               "AFP HD Image",
-              "Original C2PA AFP Image",
+              keyword("reverse_search_results_hd_afp_label"),
               selectedImage === resizedHdImageUrl,
             )}
 
@@ -190,7 +190,7 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
               ImageCard(
                 thumbnailImage.url,
                 "Original image from Camera",
-                "Original C2PA Nikon Image",
+                keyword("reverse_search_results_hd_camera_label"),
                 selectedImage === thumbnailImage.url,
               )}
           </Grid2>

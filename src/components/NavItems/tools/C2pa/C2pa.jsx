@@ -429,8 +429,7 @@ const C2paData = () => {
               id="panel2-header"
             >
               <Typography>
-                {/*{keyword("reverse_search_results_title_hd")}*/}
-                {"Original image, as captured by the camera"}
+                {keyword("reverse_search_results_title_hd")}
               </Typography>
             </AccordionSummary>
 
