@@ -69,6 +69,11 @@ const AssistantCheckStatus = () => {
     (state) => state.assistant.targetObliviousStanceFail,
   );
 
+  const multilingualStanceTitle = keyword("multilingual_stance_title");
+  const multilingualStanceFailState = useSelector(
+    (state) => state.assistant.multilingualStanceFail,
+  );
+
   const failStates = [
     { title: scTitle, failed: scFailState },
     { title: dbkfMediaTitle, failed: dbkfMediaFailState },
@@ -83,6 +88,10 @@ const AssistantCheckStatus = () => {
     {
       title: targetObliviousStanceTitle,
       failed: targetObliviousStanceFailState,
+    },
+    {
+      title: multilingualStanceTitle,
+      failed: multilingualStanceFailState,
     },
   ];
 

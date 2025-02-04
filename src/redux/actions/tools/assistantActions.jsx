@@ -274,6 +274,23 @@ export const setTargetObliviousStanceDetails = (
   };
 };
 
+export const setMultilingualStanceDetails = (
+  msResult,
+  msLoading,
+  msDone,
+  msFail,
+) => {
+  return {
+    type: "SET_MULTILINGUAL_STANCE_DETAILS",
+    payload: {
+      multilingualStanceResult: msResult,
+      multilingualStanceLoading: msLoading,
+      multilingualStanceDone: msDone,
+      multilingualStanceFail: msFail,
+    },
+  };
+};
+
 export const setNeDetails = (
   neResultCategory,
   neResultCount,

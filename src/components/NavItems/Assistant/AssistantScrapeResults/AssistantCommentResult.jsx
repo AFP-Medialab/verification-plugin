@@ -68,6 +68,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
   const numPages = Math.ceil(collectedComments.length / pageSize);
   const [currentPage, setCurrentPage] = useState(1);
 
+  // target oblivious stance classifier
   const targetObliviousStanceResult = useSelector(
     (state) => state.assistant.targetObliviousStanceResult,
   );
@@ -80,12 +81,28 @@ const AssistantCommentResult = ({ collectedComments }) => {
   const targetObliviousStanceFail = useSelector(
     (state) => state.assistant.targetObliviousStanceFail,
   );
-  const targetObliviousStanceColours = {
+  const stanceColours = {
     support: "success",
     deny: "error",
     query: "warning",
     comment: "inherit",
   };
+  // multilingual stance classifier
+  const multilingualStanceResult = useSelector(
+    (state) => state.assistant.multilingualStanceResult,
+  );
+  const multilingualStanceLoading = useSelector(
+    (state) => state.assistant.multilingualStanceLoading,
+  );
+  const multilingualStanceDone = useSelector(
+    (state) => state.assistant.multilingualStanceDone,
+  );
+  const multilingualStanceFail = useSelector(
+    (state) => state.assistant.multilingualStanceFail,
+  );
+
+  console.log("targetObliviousStanceResult=", targetObliviousStanceResult);
+  console.log("multilingualStanceResult=", multilingualStanceResult);
 
   // group comments by stance
   function sortCommentsByStance(comments) {
@@ -141,7 +158,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
   // for collectedComments
   function renderCommentList(
     commentList,
-    replies = true,
+    commentReplies = true,
     offset = null,
     pageSize = null,
   ) {
@@ -160,13 +177,21 @@ const AssistantCommentResult = ({ collectedComments }) => {
       const commentId = comment.id;
       const key = commentId;
       const text = comment.textOriginal;
+      const replies = comment.replies;
       const authorName = comment.authorDisplayName;
-      const publishedDate = moment(comment.publishedAt);
-      const updatedDate = moment(comment.updatedAt);
+      const authorChannelUrl = comment.authorChannelUrl;
+      const publishedDate =
+        moment(comment.publishedAt).format("l") +
+        " " +
+        moment(comment.publishedAt).format("LT");
       const targetObliviousStance = targetObliviousStanceResult
         ? targetObliviousStanceResult[commentId]
         : null;
-      const targetObliviousStanceColours = {
+      const multilingualStance = multilingualStanceResult
+        ? multilingualStanceResult[commentId]
+        : null;
+      // TODO this is repeated above
+      const stanceColours = {
         support: "success",
         deny: "error",
         query: "warning",
@@ -175,45 +200,58 @@ const AssistantCommentResult = ({ collectedComments }) => {
 
       let renderedReplies = [];
       if ("replies" in comment) {
-        renderedReplies = renderCommentList(comment.replies, true);
+        renderedReplies = renderCommentList(replies, true);
       }
       renderedComments.push(
-        <TableRow key={key}>
+        <TableRow
+          key={key}
+          sx={commentReplies ? null : { backgroundColor: "#e0f2f1" }}
+        >
           {/* hash */}
           <TableCell align="center">
-            {replies ? <SubdirectoryArrowRight color="grey" /> : i + 1}
+            <Typography variant="p">
+              {commentReplies ? (
+                <SubdirectoryArrowRight sx={{ color: "grey" }} />
+              ) : (
+                i + 1
+              )}
+            </Typography>
           </TableCell>
 
           {/* user */}
           <TableCell component="th" scope="row">
-            <Linkify>
-              <a
-                href={comment.authorChannelUrl}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                {authorName}
-              </a>
-            </Linkify>
+            <Typography variant="p">
+              <Linkify>
+                <a
+                  href={authorChannelUrl}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {authorName}
+                </a>
+              </Linkify>
+            </Typography>
           </TableCell>
 
           {/* created date */}
           <TableCell align="center">
             {/* 2024-11-15, 20:51:54 UTC */}
-            {comment["publishedAt"]}
+            <Typography variant="p">{publishedDate}</Typography>
           </TableCell>
 
           {/* description/comment */}
           <TableCell align="left">
-            <Linkify
-              componentDecorator={(decoratedHref, decoratedText, key) => (
-                <a target="blank" href={decoratedHref} key={key}>
-                  {decoratedText}
-                </a>
-              )}
-            >
-              {comment.textOriginal}
-            </Linkify>
+            <Typography variant="p">
+              <Linkify
+                componentDecorator={(decoratedHref, decoratedText, key) => (
+                  <a target="blank" href={decoratedHref} key={key}>
+                    {decoratedText}
+                  </a>
+                )}
+              >
+                {text}
+              </Linkify>
+            </Typography>
           </TableCell>
 
           {/* stance */}
@@ -245,6 +283,31 @@ const AssistantCommentResult = ({ collectedComments }) => {
             {targetObliviousStanceFail && <Chip label="Service failed" />}
           </TableCell>
 
+          {/* multilingual stance */}
+          <TableCell align="center">
+            {multilingualStanceLoading && <Skeleton variant="rounded" />}
+            {multilingualStanceDone && multilingualStanceResult != null && (
+              <Tooltip
+                interactive={"true"}
+                title={
+                  <>
+                    <TransTargetObliviousStanceTooltip keyword={keyword} />
+                    <TransTargetObliviousStanceLink keyword={keyword} />
+                  </>
+                }
+                classes={{ tooltip: classes.assistantTooltip }}
+              >
+                <Chip
+                  label={keyword(multilingualStanceResult[commentId])}
+                  color={tanceColours[multilingualStanceResult[commentId]]}
+                  size="small"
+                />
+              </Tooltip>
+            )}
+            {multilingualStanceFail && <Chip label="Service failed" />}
+            {/* TODO improve this */}
+          </TableCell>
+
           {/* options */}
           <TableCell>
             <TextCopy text={text} index={key} />
@@ -253,7 +316,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
         </TableRow>,
       );
 
-      comment.replies ? renderedComments.push(renderedReplies) : null;
+      replies ? renderedComments.push(renderedReplies) : null;
     }
 
     return renderedComments;
@@ -380,7 +443,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
               {keyword("stance_label")}
               <Chip
                 label={keyword("support")}
-                color={targetObliviousStanceColours.support}
+                color={stanceColours.support}
                 size="small"
               />{" "}
               {keyword("comments_label")}
@@ -397,7 +460,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
               {keyword("stance_label")}
               <Chip
                 label={keyword("query")}
-                color={targetObliviousStanceColours.query}
+                color={stanceColours.query}
                 size="small"
               />{" "}
               {keyword("comments_label")}
@@ -414,7 +477,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
               {keyword("stance_label")}
               <Chip
                 label={keyword("deny")}
-                color={targetObliviousStanceColours.deny}
+                color={stanceColours.deny}
                 size="small"
               />{" "}
               {keyword("comments_label")}

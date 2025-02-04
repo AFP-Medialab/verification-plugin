@@ -19,6 +19,7 @@ import {
   setPrevFactChecksDetails,
   setMachineGeneratedTextDetails,
   setTargetObliviousStanceDetails,
+  setMultilingualStanceDetails,
   setProcessUrl,
   setProcessUrlActions,
   setScrapedData,
@@ -131,6 +132,13 @@ function* getTargetObliviousStanceSaga() {
   yield takeLatest(
     ["SET_SCRAPED_DATA", "CLEAN_STATE"],
     handleTargetObliviousStanceCall,
+  );
+}
+
+function* getMultilingualStanceSaga() {
+  yield takeLatest(
+    ["SET_SCRAPED_DATA", "CLEAN_STATE"],
+    handleMultilingualStanceCall,
   );
 }
 
@@ -682,6 +690,70 @@ function* handleTargetObliviousStanceCall(action) {
   }
 }
 
+// Multilingual Stance Classification for YouTube Comments
+function* handleMultilingualStanceCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const collectedComments = yield select(
+      (state) => state.assistant.collectedComments,
+    );
+
+    function createCommentArray(
+      comments,
+      convertedComments,
+      comparisonText,
+      comparisonTextId,
+    ) {
+      comments.forEach((comment) => {
+        convertedComments.push({
+          text: comment.textOriginal,
+          id_str: comment.id,
+          in_reply_to_status_id_str: comparisonTextId,
+        });
+        // add replies comparing to their top level comment and its id
+        if ("replies" in comment) {
+          createCommentArray(
+            comment.replies,
+            convertedComments,
+            comment.textOriginal,
+            comment.id,
+          );
+        }
+      });
+    }
+
+    // add video title with id as main comparison for top level comments
+    let convertedComments = [
+      {
+        text: comments[0].videoTitle,
+        id_str: comments[0].videoId,
+      },
+    ];
+    createCommentArray(
+      collectedComments,
+      convertedComments,
+      comments[0].videoTitle,
+      comments[0].videoId,
+    );
+
+    if (convertedComments) {
+      yield put(setMultilingualStanceDetails(null, true, false, false));
+
+      console.log("convertedComments=", convertedComments);
+
+      const result = yield call(
+        assistantApi.callMultilingualStanceService,
+        convertedComments,
+      );
+
+      yield put(setMultilingualStanceDetails(result, false, true, false));
+    }
+  } catch (error) {
+    yield put(setMultilingualStanceDetails(null, false, false, true));
+  }
+}
+
 /**
  * Ensure input url is trimmed of whitespaces, returns ONLY the first link
  * if there's multiple links separated by whitespaces
@@ -1106,5 +1178,6 @@ export default function* assistantSaga() {
     fork(getPrevFactChecksSaga),
     fork(getMachineGeneratedTextSaga),
     fork(getTargetObliviousStanceSaga),
+    fork(getMultilingualStanceSaga),
   ]);
 }
