@@ -128,6 +128,11 @@ export function TransSourceCredibilityTooltip({ keyword }) {
   );
 }
 
+const stanceSupportColour = "#2e7d32";
+const stanceQueryColour = "#ed6c02";
+const stanceDenyColour = "#d32f2f";
+const stanceCommentColour = "#757575";
+
 export function TransTargetObliviousStanceTooltip({ keyword }) {
   return (
     <Trans
@@ -136,10 +141,10 @@ export function TransTargetObliviousStanceTooltip({ keyword }) {
       components={{
         ul: <ul />,
         li: <li />,
-        strongSupport: <strong style={{ background: "#2e7d32" }} />,
-        strongDeny: <strong style={{ background: "#d32f2f" }} />,
-        strongQuery: <strong style={{ background: "#ed6c02" }} />,
-        strongComment: <strong style={{ background: "#0288d1" }} />,
+        strongSupport: <strong style={{ background: stanceSupportColour }} />,
+        strongQuery: <strong style={{ background: stanceQueryColour }} />,
+        strongDeny: <strong style={{ background: stanceDenyColour }} />,
+        strongComment: <strong style={{ background: stanceCommentColour }} />,
       }}
     />
   );

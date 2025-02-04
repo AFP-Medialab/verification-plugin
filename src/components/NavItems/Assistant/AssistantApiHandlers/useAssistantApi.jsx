@@ -244,29 +244,6 @@ export default function assistantApiCalls() {
     );
   };
 
-  const callYoutubeCommentsService = async (inputUrl) => {
-    return await callAsyncWithNumRetries(
-      MAX_NUM_RETRIES,
-      async () => {
-        const result = await axios.post(
-          assistantEndpoint + "mever/youtube-comments",
-          {
-            url: inputUrl,
-          },
-        );
-        return result.data;
-      },
-      (numTries) => {
-        console.log(
-          "Could not connect to YouTube comments service, tries " +
-            (numTries + 1) +
-            "/" +
-            MAX_NUM_RETRIES,
-        );
-      },
-    );
-  };
-
   const callTargetObliviousStanceService = async (comments) => {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
@@ -301,7 +278,6 @@ export default function assistantApiCalls() {
     callSubjectivityService,
     callPrevFactChecksService,
     callMachineGeneratedTextService,
-    callYoutubeCommentsService,
     callTargetObliviousStanceService,
   };
 }

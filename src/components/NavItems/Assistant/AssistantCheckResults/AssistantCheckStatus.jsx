@@ -82,7 +82,7 @@ const AssistantCheckStatus = () => {
     { title: machineGeneratedTextTitle, failed: machineGeneratedTextFailState },
     {
       title: targetObliviousStanceTitle,
-      fialed: targetObliviousStanceFailState,
+      failed: targetObliviousStanceFailState,
     },
   ];
 

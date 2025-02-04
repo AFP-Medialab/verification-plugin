@@ -25,7 +25,11 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Linkify from "react-linkify";
 
-import { WarningOutlined } from "@mui/icons-material";
+import {
+  ArrowForward,
+  WarningOutlined,
+  SubdirectoryArrowRight,
+} from "@mui/icons-material";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -44,29 +48,23 @@ import {
   TransTargetObliviousStanceTooltip,
   TransTargetObliviousStanceLink,
   TransHtmlDoubleLineBreak,
+  TransStanceDenyComments,
+  TransStanceQueryComments,
+  TransStanceSupportComments,
 } from "../TransComponents";
 import { TextCopy } from "components/Shared/Utils/TextCopy";
 import { Translate } from "components/Shared/Utils/Translate";
 
-import AnalysisComments, {
-  CommentsPanel,
-} from "components/NavItems/tools/Analysis/Results/AnalysisComments";
-import {
-  cleanAnalysisState,
-  setAnalysisComments,
-  setAnalysisLinkComments,
-  setAnalysisVerifiedComments,
-} from "redux/actions/tools/analysisActions";
-import YoutubeResults from "components/NavItems/tools/Analysis/Results/YoutubeResults";
+import { caaVerificationKeywords } from "./caaVerificationKeywords";
 
-const AssistantCommentResult = ({ collectedComments, youtubeComments }) => {
+const AssistantCommentResult = ({ collectedComments }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   //const sharedKeyword = i18nLoadNamespace("components/Shared/utils");
   const expandMinimiseText = keyword("expand_minimise_text");
 
   const classes = useMyStyles();
   const dispatch = useDispatch();
-  const pageSize = 20;
+  const pageSize = 10;
   const numPages = Math.ceil(collectedComments.length / pageSize);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -79,6 +77,9 @@ const AssistantCommentResult = ({ collectedComments, youtubeComments }) => {
   const targetObliviousStanceDone = useSelector(
     (state) => state.assistant.targetObliviousStanceDone,
   );
+  const targetObliviousStanceFail = useSelector(
+    (state) => state.assistant.targetObliviousStanceFail,
+  );
   const targetObliviousStanceColours = {
     support: "success",
     deny: "error",
@@ -86,124 +87,64 @@ const AssistantCommentResult = ({ collectedComments, youtubeComments }) => {
     comment: "inherit",
   };
 
-  // organise collectedComments into groups
-  let denyComments = [];
-  let supportComments = [];
-  let queryComments = [];
-  for (let i = 0; i < collectedComments.length; i++) {
-    // add stance
-    const stance = targetObliviousStanceResult
-      ? targetObliviousStanceResult[collectedComments[i].id]
-      : null;
-    stance == "query" ? queryComments.push(collectedComments[i]) : null;
-    stance == "support" ? supportComments.push(collectedComments[i]) : null;
-    stance == "deny" ? denyComments.push(collectedComments[i]) : null;
-    // add link
-    // TODO get this working correctly
-    // const commentText = collectedComments
-    //   ? collectedComments[i].textOriginal
-    //   : null;
-    // commentText.search(/www./i)
-    //   ? linkComments.push(collectedComments[i])
-    //   : null;
-    // add verification
-    // TODO code for pattern recognition
-  }
-
-  function renderCommentTable(commentList) {
+  // group comments by stance
+  function sortCommentsByStance(comments) {
+    for (let i = 0; i < comments.length; i++) {
+      let text = comments[i].textOriginal;
+      // search for link
+      //text.search("/www./i") > 0 ? linkComments.push(comments[i]) : null;
+      //Linkify.find(text) ? linkComments.push(comments[i]) : null;
+      // search for verification text
+      caaVerificationKeywords.some((caaVerificationKeyword) =>
+        text.includes(caaVerificationKeyword),
+      )
+        ? verificationComments.push(comments[i])
+        : null;
+      // add stance
+      const stance = targetObliviousStanceResult
+        ? targetObliviousStanceResult[comments[i].id]
+        : null;
+      stance == "query" ? queryComments.push(comments[i]) : null;
+      stance == "support" ? supportComments.push(comments[i]) : null;
+      stance == "deny" ? denyComments.push(comments[i]) : null;
+      // number of comments and replies
+      totalCommentsWithReplies += 1;
+      comments[i].replies
+        ? (totalCommentsWithReplies += comments[i].replies.length)
+        : null;
+    }
     return (
-      <Table className={classes.table} size="small" aria-label="a dense table">
-        <TableHead>
-          <TableRow>
-            <TableCell align="center">{keyword("user")}</TableCell>
-            {/* <TableCell className={styles.size} align="center"> */}
-            <TableCell>{keyword("twitter_user_name_13")}</TableCell>
-            <TableCell align="center">
-              {keyword("twitter_user_name_5")}
-            </TableCell>
-            <TableCell align="center">{keyword("stance_title")}</TableCell>
-            <TableCell />
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {" "}
-          {/*className={styles.container}>*/}
-          {commentList.map((comment, key) => {
-            return (
-              <TableRow key={key}>
-                <TableCell component="th" scope="row">
-                  <a
-                    href={
-                      "https://www.youtube.com/" + comment["authorDisplayName"]
-                    }
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    {comment["authorDisplayName"]}
-                  </a>
-                </TableCell>
-                <TableCell align="center">
-                  {/* 2024-11-15, 20:51:54 UTC */}
-                  {comment["publishedAt"]}
-                </TableCell>
-                <TableCell align="left">
-                  <Linkify
-                    componentDecorator={(decoratedHref, decoratedText, key) => (
-                      <a target="blank" href={decoratedHref} key={key}>
-                        {decoratedText}
-                      </a>
-                    )}
-                  >
-                    {comment.textOriginal}
-                  </Linkify>
-                </TableCell>
-
-                <TableCell align="center">
-                  {targetObliviousStanceLoading && (
-                    <Skeleton variant="rounded" />
-                  )}
-                  {targetObliviousStanceDone &&
-                    targetObliviousStanceResult != null && (
-                      <Tooltip
-                        interactive={"true"}
-                        title={
-                          <>
-                            <TransTargetObliviousStanceTooltip
-                              keyword={keyword}
-                            />
-                            <TransTargetObliviousStanceLink keyword={keyword} />
-                          </>
-                        }
-                        classes={{ tooltip: classes.assistantTooltip }}
-                      >
-                        <Chip
-                          label={keyword(
-                            targetObliviousStanceResult[comment.id],
-                          )}
-                          color={
-                            targetObliviousStanceColours[
-                              targetObliviousStanceResult[comment.id]
-                            ]
-                          }
-                          size="small"
-                        />
-                      </Tooltip>
-                    )}
-                </TableCell>
-
-                <TableCell>
-                  <TextCopy text={comment.textOriginal} index={key} />
-                  <Translate text={comment.textOriginal} />
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+      linkComments,
+      verificationComments,
+      denyComments,
+      supportComments,
+      queryComments,
+      totalCommentsWithReplies
     );
   }
 
-  function renderCommentList(commentList, offset = null, pageSize = null) {
+  let totalCommentsWithReplies = 0;
+  let linkComments = [];
+  let verificationComments = [];
+  let denyComments = [];
+  let supportComments = [];
+  let queryComments = [];
+  linkComments,
+    verificationComments,
+    denyComments,
+    supportComments,
+    queryComments,
+    (totalCommentsWithReplies = sortCommentsByStance(collectedComments));
+
+  console.log("totalCommentsWithReplies=", totalCommentsWithReplies);
+
+  // for collectedComments
+  function renderCommentList(
+    commentList,
+    replies = true,
+    offset = null,
+    pageSize = null,
+  ) {
     let renderedComments = [];
     if (offset === null) {
       offset = 0;
@@ -217,6 +158,7 @@ const AssistantCommentResult = ({ collectedComments, youtubeComments }) => {
     for (let i = offset; i < lastIndex; i++) {
       const comment = commentList[i];
       const commentId = comment.id;
+      const key = commentId;
       const text = comment.textOriginal;
       const authorName = comment.authorDisplayName;
       const publishedDate = moment(comment.publishedAt);
@@ -233,69 +175,118 @@ const AssistantCommentResult = ({ collectedComments, youtubeComments }) => {
 
       let renderedReplies = [];
       if ("replies" in comment) {
-        renderedReplies = renderCommentList(comment.replies);
+        renderedReplies = renderCommentList(comment.replies, true);
       }
       renderedComments.push(
-        <ListItem key={comment.id}>
-          <Card sx={{ width: "100%" }}>
-            <CardContent>
-              <div>
-                <span style={{ fontWeight: "bold" }}>{authorName}</span>{" "}
-                <span style={{ fontStyle: "italic", fontSize: "small" }}>
-                  {updatedDate.format("Do MMM YYYY hh:mm")}
-                </span>
-                <span style={{ float: "right" }}>
-                  {targetObliviousStanceLoading ? (
-                    <Skeleton variant="rounded" width={60} height={20} />
-                  ) : null}
-                  {targetObliviousStanceDone &&
-                  targetObliviousStanceResult[commentId] ? (
-                    <Tooltip
-                      interactive={"true"}
-                      title={
-                        <>
-                          <TransTargetObliviousStanceTooltip
-                            keyword={keyword}
-                          />
-                          <TransTargetObliviousStanceLink keyword={keyword} />
-                        </>
-                      }
-                      classes={{ tooltip: classes.assistantTooltip }}
-                    >
-                      <Chip
-                        label={
-                          keyword("stance_label") +
-                          keyword(targetObliviousStance)
-                        }
-                        color={
-                          targetObliviousStanceColours[targetObliviousStance]
-                        }
-                        size="small"
-                      />
-                    </Tooltip>
-                  ) : null}
-                </span>
-              </div>
-              <Divider flexItem />
-              <p>{text}</p>
-              {renderedReplies}
-            </CardContent>
-          </Card>
-        </ListItem>,
+        <TableRow key={key}>
+          {/* hash */}
+          <TableCell align="center">
+            {replies ? <SubdirectoryArrowRight color="grey" /> : i + 1}
+          </TableCell>
+
+          {/* user */}
+          <TableCell component="th" scope="row">
+            <Linkify>
+              <a
+                href={comment.authorChannelUrl}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {authorName}
+              </a>
+            </Linkify>
+          </TableCell>
+
+          {/* created date */}
+          <TableCell align="center">
+            {/* 2024-11-15, 20:51:54 UTC */}
+            {comment["publishedAt"]}
+          </TableCell>
+
+          {/* description/comment */}
+          <TableCell align="left">
+            <Linkify
+              componentDecorator={(decoratedHref, decoratedText, key) => (
+                <a target="blank" href={decoratedHref} key={key}>
+                  {decoratedText}
+                </a>
+              )}
+            >
+              {comment.textOriginal}
+            </Linkify>
+          </TableCell>
+
+          {/* stance */}
+          <TableCell align="center">
+            {targetObliviousStanceLoading && <Skeleton variant="rounded" />}
+            {targetObliviousStanceDone &&
+              targetObliviousStanceResult != null && (
+                <Tooltip
+                  interactive={"true"}
+                  title={
+                    <>
+                      <TransTargetObliviousStanceTooltip keyword={keyword} />
+                      <TransTargetObliviousStanceLink keyword={keyword} />
+                    </>
+                  }
+                  classes={{ tooltip: classes.assistantTooltip }}
+                >
+                  <Chip
+                    label={keyword(targetObliviousStanceResult[commentId])}
+                    color={
+                      targetObliviousStanceColours[
+                        targetObliviousStanceResult[commentId]
+                      ]
+                    }
+                    size="small"
+                  />
+                </Tooltip>
+              )}
+            {targetObliviousStanceFail && <Chip label="Service failed" />}
+          </TableCell>
+
+          {/* options */}
+          <TableCell>
+            <TextCopy text={text} index={key} />
+            <Translate text={text} />
+          </TableCell>
+        </TableRow>,
       );
+
+      comment.replies ? renderedComments.push(renderedReplies) : null;
     }
 
-    return <List>{renderedComments}</List>;
+    return renderedComments;
   }
 
-  function renderComments(comments, allComments) {
-    if (allComments) {
-      const offset = (currentPage - 1) * pageSize;
-      return renderCommentTable(comments, offset, pageSize);
-    }
-    return renderCommentTable(comments, null, null);
+  // for collectedComments
+  function renderComments(comments) {
+    const offset = (currentPage - 1) * pageSize;
+    return (
+      <Table className={classes.table} size="small" aria-label="a dense table">
+        <TableHead>
+          <TableRow>
+            <TableCell align="center">
+              <Typography>#</Typography>
+            </TableCell>
+            <TableCell align="center">{keyword("user")}</TableCell>
+            <TableCell align="center">
+              {keyword("twitter_user_name_13")}
+            </TableCell>
+            <TableCell align="center">
+              {keyword("twitter_user_name_5")}
+            </TableCell>
+            <TableCell align="center">{keyword("stance_title")}</TableCell>
+            <TableCell align="center">{keyword("options")}</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {renderCommentList(comments, false, offset, pageSize)}
+        </TableBody>
+      </Table>
+    );
   }
-
+  // for collectedComments
   function pageChangeHandler(event, page) {
     setCurrentPage(page);
   }
@@ -330,64 +321,6 @@ const AssistantCommentResult = ({ collectedComments, youtubeComments }) => {
       ) : null}
 
       <CardContent width="100%">
-        <Box m={2} />
-        {console.log(youtubeComments)}
-        {youtubeComments && (
-          <AnalysisComments
-            type="YOUTUBE"
-            classes={classes}
-            title={"youtube_comment_title"}
-            keyword={keyword}
-            report={youtubeComments}
-            setAnalysisComments={setAnalysisComments}
-            setAnalysisLinkComments={setAnalysisLinkComments}
-            setAnalysisVerifiedComments={setAnalysisVerifiedComments}
-          />
-        )}
-        {/* {youtubeComments && youtubeComments.coms.comments.length >= 1 && (
-          <CommentsPanel
-            title={"api_comments"}
-            classes={classes}
-            keyword={keyword}
-            report={youtubeComments.coms} //
-            targetObliviousStance={targetObliviousStanceResult} //
-            nb_comments={youtubeComments.coms.pagination.total_comments}
-            setCommentsAction={setAnalysisComments} //
-            commentsData={youtubeComments.coms.comments}
-            com_type={"coms"}
-          />
-        )}
-        <Box m={2} />
-        {youtubeComments && youtubeComments.vercoms.comments.length >= 1 && (
-          <CommentsPanel
-            title={"api_comments_verified"}
-            classes={classes}
-            keyword={keyword}
-            report={youtubeComments.vercoms} //
-            targetObliviousStance={targetObliviousStanceResult} //
-            nb_comments={youtubeComments.vercoms.pagination.total_comments}
-            setCommentsAction={setAnalysisVerifiedComments} //
-            commentsData={youtubeComments.vercoms.comments}
-            com_type={"vercoms"}
-          />
-        )}
-        <Box m={2} />
-        {youtubeComments && youtubeComments.linkcoms.comments.length >= 1 && (
-          <CommentsPanel
-            title={"link_comments"}
-            classes={classes}
-            keyword={keyword}
-            report={youtubeComments.linkcoms} //
-            targetObliviousStance={targetObliviousStanceResult} //
-            nb_comments={youtubeComments.linkcoms.pagination.total_comments}
-            setCommentsAction={setAnalysisLinkComments} //
-            commentsData={youtubeComments.linkcoms.comments}
-            com_type={"linkcoms"}
-          />
-        )} */}
-
-        <Box m={2} />
-
         {/* all comments */}
         <Accordion>
           <AccordionSummary
@@ -415,27 +348,43 @@ const AssistantCommentResult = ({ collectedComments, youtubeComments }) => {
           </AccordionDetails>
         </Accordion>
 
-        {/* stance: deny comments */}
-        <Accordion hidden={denyComments.length < 1}>
+        {/* link comments */}
+        <Accordion hidden={linkComments.length < 1}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>
-              {keyword("stance_deny_comments") +
+              {keyword("link_comments") + " (" + linkComments.length + ")"}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>{renderComments(linkComments)}</AccordionDetails>
+        </Accordion>
+
+        {/* verification comments */}
+        <Accordion hidden={verificationComments.length < 1}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>
+              {keyword("api_comments_verified") +
                 " (" +
-                denyComments.length +
+                verificationComments.length +
                 ")"}
             </Typography>
           </AccordionSummary>
-          <AccordionDetails>{renderComments(denyComments)}</AccordionDetails>
+          <AccordionDetails>
+            {renderComments(verificationComments)}
+          </AccordionDetails>
         </Accordion>
 
         {/* stance: support comments */}
         <Accordion hidden={supportComments.length < 1}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>
-              {keyword("stance_support_comments") +
-                " (" +
-                supportComments.length +
-                ")"}
+              {keyword("stance_label")}
+              <Chip
+                label={keyword("support")}
+                color={targetObliviousStanceColours.support}
+                size="small"
+              />{" "}
+              {keyword("comments_label")}
+              {" (" + supportComments.length + ")"}
             </Typography>
           </AccordionSummary>
           <AccordionDetails>{renderComments(supportComments)}</AccordionDetails>
@@ -445,13 +394,34 @@ const AssistantCommentResult = ({ collectedComments, youtubeComments }) => {
         <Accordion hidden={queryComments.length < 1}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>
-              {keyword("stance_query_comments") +
-                " (" +
-                queryComments.length +
-                ")"}
+              {keyword("stance_label")}
+              <Chip
+                label={keyword("query")}
+                color={targetObliviousStanceColours.query}
+                size="small"
+              />{" "}
+              {keyword("comments_label")}
+              {" (" + queryComments.length + ")"}
             </Typography>
           </AccordionSummary>
           <AccordionDetails>{renderComments(queryComments)}</AccordionDetails>
+        </Accordion>
+
+        {/* stance: deny comments */}
+        <Accordion hidden={denyComments.length < 1}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>
+              {keyword("stance_label")}
+              <Chip
+                label={keyword("deny")}
+                color={targetObliviousStanceColours.deny}
+                size="small"
+              />{" "}
+              {keyword("comments_label")}
+              {" (" + denyComments.length + ")"}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>{renderComments(denyComments)}</AccordionDetails>
         </Accordion>
       </CardContent>
     </Card>

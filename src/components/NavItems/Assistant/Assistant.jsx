@@ -258,11 +258,10 @@ const Assistant = () => {
               </Grid2>
 
               {/* YouTube comments if video */}
-              {collectedComments || youtubeComments ? (
+              {collectedComments ? (
                 <Grid2 size={12}>
                   <AssistantCommentResult
                     collectedComments={collectedComments}
-                    youtubeComments={youtubeComments}
                   />
                 </Grid2>
               ) : null}
