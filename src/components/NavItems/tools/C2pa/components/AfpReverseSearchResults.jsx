@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
@@ -21,7 +20,6 @@ const AfpReverseSearchResults = ({
   thumbnailImageCaption,
   imageMetadata,
 }) => {
-  const role = useSelector((state) => state.userSession.user.roles);
   const keyword = i18nLoadNamespace("components/NavItems/tools/C2pa");
 
   const [tabValue, setTabValue] = useState("exif");
@@ -91,7 +89,9 @@ const AfpReverseSearchResults = ({
                         {Object.keys(imageMetadata)
                           .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
                           .map((item, index) => {
-                            return <Tab label={item} value={item} key={item} />;
+                            return (
+                              <Tab label={item} value={item} key={index} />
+                            );
                           })}
                       </TabList>
                     </Box>

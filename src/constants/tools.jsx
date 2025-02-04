@@ -19,7 +19,6 @@ import DeepfakeIcon from "../components/NavBar/images/SVG/Image/Deepfake.svg";
 import ForensicIcon from "../components/NavBar/images/SVG/Image/Forensic.svg";
 import GeolocationIcon from "../components/NavBar/images/SVG/Image/Geolocation.svg";
 import GifIcon from "../components/NavBar/images/SVG/Image/Gif.svg";
-import ImageAnalysisIcon from "../components/NavBar/images/SVG/Image/Image_analysis.svg";
 import MagnifierIcon from "../components/NavBar/images/SVG/Image/Magnifier.svg";
 import MetadataIcon from "../components/NavBar/images/SVG/Image/Metadata.svg";
 import OcrIcon from "../components/NavBar/images/SVG/Image/OCR.svg";
@@ -35,7 +34,6 @@ import VideoRightsIcon from "../components/NavBar/images/SVG/Video/Video_rights.
 import About from "../components/NavItems/About/About";
 import ToolsMenu from "../components/NavItems/tools/Alltools/ToolsMenu";
 import Analysis from "../components/NavItems/tools/Analysis/Analysis";
-import AnalysisImg from "../components/NavItems/tools/Analysis_images/Analysis";
 import Archive from "../components/NavItems/tools/Archive";
 import DeepfakeImage from "../components/NavItems/tools/Deepfake/DeepfakeImage";
 import DeepfakeVideo from "../components/NavItems/tools/Deepfake/DeepfakeVideo";
@@ -168,10 +166,6 @@ const metadataSvgIcon = (props) => {
 
 const deepfakeSvgIcon = (props) => {
   return <SvgIcon component={DeepfakeIcon} inheritViewBox {...props} />;
-};
-
-const imageAnalysisSvgIcon = (props) => {
-  return <SvgIcon component={ImageAnalysisIcon} inheritViewBox {...props} />;
 };
 
 const magnifierSvgIcon = (props) => {
@@ -340,19 +334,6 @@ export const videoDeepfake = new Tool(
 /**
  * Image tools
  **/
-
-export const imageAnalysis = new Tool(
-  "navbar_analysis_image",
-  "navbar_analysis_image_description",
-  imageAnalysisSvgIcon,
-  TOOLS_CATEGORIES.IMAGE,
-  null,
-  null,
-  "analysisImage",
-  TOOL_GROUPS.VERIFICATION,
-  <AnalysisImg />,
-  <Footer type={FOOTER_TYPES.ITI} />,
-);
 
 export const imageMagnifier = new Tool(
   "navbar_magnifier",
@@ -616,7 +597,6 @@ export const tools = Object.freeze([
   videoRights,
   videoMetadata,
   videoDeepfake,
-  imageAnalysis,
   imageMagnifier,
   imageMetadata,
   imageForensic,
