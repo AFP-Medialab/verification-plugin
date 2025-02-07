@@ -54,11 +54,12 @@ const ChatbotInterface = (props) => {
   const chatbotMessages = useSelector(
     (state) => state.assistant.chatbotMessages,
   ).filter((msg) => msg.message); // Access the entire state
+  const userEmail = useSelector((state) => state.userSession.user.email);
 
   const entireState = useSelector((state) => state); // Access the entire state
 
   const sendMessage = () => {
-    dispatch(submitUserChatbotMessage(formInput));
+    dispatch(submitUserChatbotMessage(formInput, userEmail));
     setFormInput("");
   };
 

@@ -19,9 +19,58 @@ import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlin
 import LoadingButton from "@mui/lab/LoadingButton";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
+const API_URL = process.env.REACT_APP_MY_WEB_HOOK_URL;
+
+const getFeedbackMessage = (email, message, messageType) => {
+  if (typeof message !== "string" || typeof messageType !== "string")
+    throw new Error("Invalid message type");
+
+  return {
+    blocks: [
+      {
+        type: "header",
+        text: {
+          type: "plain_text",
+          text: "" + messageType + "",
+        },
+      },
+      ...(email
+        ? [
+            {
+              type: "section",
+              text: {
+                type: "mrkdwn",
+                text: "<mailto:" + email + ">",
+              },
+            },
+          ]
+        : []),
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: "" + message + "",
+        },
+      },
+    ],
+  };
+};
+
+const sendToSlack = async (message, messageType) => {
+  const feedbackMessage = getFeedbackMessage(email, message, messageType);
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(feedbackMessage),
+  });
+
+  if (!response.ok) throw response;
+
+  return response;
+};
+
 const Feedback = () => {
   const keyword = i18nLoadNamespace("components/FeedBack");
-  const API_URL = process.env.REACT_APP_MY_WEB_HOOK_URL;
 
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   const [displayCard, setDisplayCard] = useState(false);
@@ -41,56 +90,6 @@ const Feedback = () => {
   const [isFeedbackSent, setIsFeedbackSent] = useState(false);
 
   const containerRef = React.useRef(null);
-
-  const getFeedbackMessage = (message, messageType) => {
-    if (typeof message !== "string" || typeof messageType !== "string")
-      throw new Error("Invalid message type");
-
-    return {
-      blocks: [
-        {
-          type: "header",
-          text: {
-            type: "plain_text",
-            text: "" + messageType + "",
-          },
-        },
-        ...(email
-          ? [
-              {
-                type: "section",
-                text: {
-                  type: "mrkdwn",
-                  text: "<mailto:" + email + ">",
-                },
-              },
-            ]
-          : []),
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: "" + message + "",
-          },
-        },
-      ],
-    };
-  };
-
-  const sendToSlack = async (message, messageType) => {
-    const feedbackMessage = getFeedbackMessage(message, messageType);
-    //console.log(feedbackMessage);
-    //console.log(JSON.stringify(feedbackMessage));
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(feedbackMessage),
-    });
-
-    if (!response.ok) throw response;
-
-    return response;
-  };
 
   const validateEmail = (email) => {
     if (!email) return true; //allow to proceed if the email is empty
@@ -294,3 +293,4 @@ const Feedback = () => {
 };
 
 export default Feedback;
+export { getFeedbackMessage, sendToSlack }; // Named exports

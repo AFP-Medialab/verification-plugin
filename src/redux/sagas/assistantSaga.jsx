@@ -10,6 +10,10 @@ import {
   takeLatest,
 } from "redux-saga/effects";
 
+import {
+  getFeedbackMessage,
+  sendToSlack,
+} from "../../components/Feedback/Feedback";
 import assistantApiCalls from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
 import DBKFApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
 import {
@@ -577,6 +581,7 @@ function* handleNamedEntityCall(action) {
 
 function* handleAssistantChatbotCall(action) {
   const message = action.payload.message;
+  const email = action.payload.email;
 
   yield put(setAssistantLoading(true));
   yield put(addChatbotMessage(message, 1));
@@ -586,15 +591,20 @@ function* handleAssistantChatbotCall(action) {
 
     console.log(chatbotResponse);
 
-    if (
-      ["BUG", "FEATURE", "OUTPUT"].some((keyword) =>
-        chatbotResponse.userMessageClasses.includes(keyword),
-      )
-    ) {
-      console.log("TODO: Hook up to slack");
+    if (chatbotResponse.userMessageClasses.includes("BUG")) {
+      const feedbackMessage = getFeedbackMessage(email, message, "BUG");
+      console.log("TODO: Hook BUG up to slack", feedbackMessage);
+    }
+    if (chatbotResponse.userMessageClasses.includes("FEATURE")) {
+      const feedbackMessage = getFeedbackMessage(email, message, "FEATURE");
+      console.log("TODO: Hook FEATURE up to slack", feedbackMessage);
+    }
+    if (chatbotResponse.userMessageClasses.includes("OUTPUT")) {
+      const feedbackMessage = getFeedbackMessage(email, message, "IMPROVEMENT");
+      console.log("TODO: Hook up OUTPUT to slack", feedbackMessage);
     }
     if (chatbotResponse.userMessageClasses.includes("EXPLAIN")) {
-      console.log("TODO: Hook up to slack");
+      console.log("TODO: Hook up to LLM");
     }
 
     yield put(addChatbotMessage(chatbotResponse.message, 0));
