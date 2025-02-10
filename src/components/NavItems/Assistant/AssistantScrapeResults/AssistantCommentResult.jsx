@@ -54,7 +54,6 @@ import {
 } from "../TransComponents";
 import { TextCopy } from "components/Shared/Utils/TextCopy";
 import { Translate } from "components/Shared/Utils/Translate";
-
 import { caaVerificationKeywords } from "./caaVerificationKeywords";
 
 const AssistantCommentResult = ({ collectedComments }) => {
@@ -65,8 +64,19 @@ const AssistantCommentResult = ({ collectedComments }) => {
   const classes = useMyStyles();
   const dispatch = useDispatch();
   const pageSize = 10;
-  const numPages = Math.ceil(collectedComments.length / pageSize);
-  const [currentPage, setCurrentPage] = useState(1);
+  //const numPages = Math.ceil(collectedComments.length / pageSize);
+  const [currentAllPage, setCurrentAllPage] = useState(1);
+  const [currentLinkPage, setCurrentLinkPage] = useState(1);
+  const [currentVerificationPage, setCurrentVerificationPage] = useState(1);
+  const [currentSupportPage, setCurrentSupportPage] = useState(1);
+  const [currentQueryPage, setCurrentQueryPage] = useState(1);
+  const [currentDenyPage, setCurrentDenyPage] = useState(1);
+  const [currentMultilingualSupportPage, setCurrentMultilingualSupportPage] =
+    useState(1);
+  const [currentMultilingualQueryPage, setCurrentMultilingualQueryPage] =
+    useState(1);
+  const [currentMultilingualDenyPage, setCurrentMultilingualDenyPage] =
+    useState(1);
 
   // target oblivious stance classifier
   const targetObliviousStanceResult = useSelector(
@@ -101,63 +111,61 @@ const AssistantCommentResult = ({ collectedComments }) => {
     (state) => state.assistant.multilingualStanceFail,
   );
 
-  console.log("targetObliviousStanceResult=", targetObliviousStanceResult);
-  console.log("multilingualStanceResult=", multilingualStanceResult);
-
-  // group comments by stance
-  function sortCommentsByStance(comments) {
-    for (let i = 0; i < comments.length; i++) {
-      let text = comments[i].textOriginal;
-      // search for link
-      //text.search("/www./i") > 0 ? linkComments.push(comments[i]) : null;
-      //Linkify.find(text) ? linkComments.push(comments[i]) : null;
-      // search for verification text
-      caaVerificationKeywords.some((caaVerificationKeyword) =>
-        text.includes(caaVerificationKeyword),
-      )
-        ? verificationComments.push(comments[i])
-        : null;
-      // add stance
-      const stance = targetObliviousStanceResult
-        ? targetObliviousStanceResult[comments[i].id]
-        : null;
-      stance == "query" ? queryComments.push(comments[i]) : null;
-      stance == "support" ? supportComments.push(comments[i]) : null;
-      stance == "deny" ? denyComments.push(comments[i]) : null;
-      // number of comments and replies
-      totalCommentsWithReplies += 1;
-      comments[i].replies
-        ? (totalCommentsWithReplies += comments[i].replies.length)
-        : null;
-    }
-    return (
-      linkComments,
-      verificationComments,
-      denyComments,
-      supportComments,
-      queryComments,
-      totalCommentsWithReplies
-    );
-  }
-
+  // group comments by links, verification and stance
   let totalCommentsWithReplies = 0;
   let linkComments = [];
   let verificationComments = [];
   let denyComments = [];
   let supportComments = [];
   let queryComments = [];
-  linkComments,
-    verificationComments,
-    denyComments,
-    supportComments,
-    queryComments,
-    (totalCommentsWithReplies = sortCommentsByStance(collectedComments));
-
-  console.log("totalCommentsWithReplies=", totalCommentsWithReplies);
+  let multilingualDenyComments = [];
+  let multilingualSupportComments = [];
+  let multilingualQueryComments = [];
+  for (let i = 0; i < collectedComments.length; i++) {
+    let text = collectedComments[i].textOriginal;
+    // search for link
+    text
+      .split(" ")
+      .find((word) => word.startsWith("http") || word.startsWith("www."))
+      ? linkComments.push(collectedComments[i])
+      : null;
+    // search for verification text
+    caaVerificationKeywords.some((caaVerificationKeyword) =>
+      text.split(" ").includes(caaVerificationKeyword),
+    )
+      ? verificationComments.push(collectedComments[i])
+      : null;
+    // add stance
+    const stance = targetObliviousStanceResult
+      ? targetObliviousStanceResult[collectedComments[i].id].stance
+      : null;
+    stance == "query" ? queryComments.push(collectedComments[i]) : null;
+    stance == "support" ? supportComments.push(collectedComments[i]) : null;
+    stance == "deny" ? denyComments.push(collectedComments[i]) : null;
+    // add multilingual stance
+    const multilingualStance = multilingualStanceResult
+      ? multilingualStanceResult[collectedComments[i].id].stance
+      : null;
+    multilingualStance == "query"
+      ? multilingualQueryComments.push(collectedComments[i])
+      : null;
+    multilingualStance == "support"
+      ? multilingualSupportComments.push(collectedComments[i])
+      : null;
+    multilingualStance == "deny"
+      ? multilingualDenyComments.push(collectedComments[i])
+      : null;
+    // number of comments and replies
+    totalCommentsWithReplies += 1;
+    collectedComments[i].replies
+      ? (totalCommentsWithReplies += collectedComments[i].replies.length)
+      : null;
+  }
 
   // for collectedComments
   function renderCommentList(
     commentList,
+    stanceColours,
     commentReplies = true,
     offset = null,
     pageSize = null,
@@ -190,17 +198,10 @@ const AssistantCommentResult = ({ collectedComments }) => {
       const multilingualStance = multilingualStanceResult
         ? multilingualStanceResult[commentId]
         : null;
-      // TODO this is repeated above
-      const stanceColours = {
-        support: "success",
-        deny: "error",
-        query: "warning",
-        comment: "inherit",
-      };
 
       let renderedReplies = [];
       if ("replies" in comment) {
-        renderedReplies = renderCommentList(replies, true);
+        renderedReplies = renderCommentList(replies, stanceColours, true);
       }
       renderedComments.push(
         <TableRow
@@ -270,10 +271,12 @@ const AssistantCommentResult = ({ collectedComments }) => {
                   classes={{ tooltip: classes.assistantTooltip }}
                 >
                   <Chip
-                    label={keyword(targetObliviousStanceResult[commentId])}
+                    label={keyword(
+                      targetObliviousStanceResult[commentId].stance,
+                    )}
                     color={
-                      targetObliviousStanceColours[
-                        targetObliviousStanceResult[commentId]
+                      stanceColours[
+                        targetObliviousStanceResult[commentId].stance
                       ]
                     }
                     size="small"
@@ -298,14 +301,15 @@ const AssistantCommentResult = ({ collectedComments }) => {
                 classes={{ tooltip: classes.assistantTooltip }}
               >
                 <Chip
-                  label={keyword(multilingualStanceResult[commentId])}
-                  color={tanceColours[multilingualStanceResult[commentId]]}
+                  label={keyword(multilingualStanceResult[commentId].stance)}
+                  color={
+                    stanceColours[multilingualStanceResult[commentId].stance]
+                  }
                   size="small"
                 />
               </Tooltip>
             )}
             {multilingualStanceFail && <Chip label="Service failed" />}
-            {/* TODO improve this */}
           </TableCell>
 
           {/* options */}
@@ -323,35 +327,90 @@ const AssistantCommentResult = ({ collectedComments }) => {
   }
 
   // for collectedComments
-  function renderComments(comments) {
+  function renderComments(comments, pageChangeHandler, currentPage, numPages) {
     const offset = (currentPage - 1) * pageSize;
     return (
-      <Table className={classes.table} size="small" aria-label="a dense table">
-        <TableHead>
-          <TableRow>
-            <TableCell align="center">
-              <Typography>#</Typography>
-            </TableCell>
-            <TableCell align="center">{keyword("user")}</TableCell>
-            <TableCell align="center">
-              {keyword("twitter_user_name_13")}
-            </TableCell>
-            <TableCell align="center">
-              {keyword("twitter_user_name_5")}
-            </TableCell>
-            <TableCell align="center">{keyword("stance_title")}</TableCell>
-            <TableCell align="center">{keyword("options")}</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {renderCommentList(comments, false, offset, pageSize)}
-        </TableBody>
-      </Table>
+      <>
+        <Pagination
+          count={numPages}
+          variant="outlined"
+          onChange={pageChangeHandler}
+          page={currentPage}
+        />
+
+        <Table
+          className={classes.table}
+          size="small"
+          aria-label="a dense table"
+        >
+          <TableHead>
+            <TableRow>
+              <TableCell align="center">
+                <Typography>#</Typography>
+              </TableCell>
+              <TableCell align="center">{keyword("user")}</TableCell>
+              <TableCell align="center">
+                {keyword("twitter_user_name_13")}
+              </TableCell>
+              <TableCell align="center">
+                {keyword("twitter_user_name_5")}
+              </TableCell>
+              <TableCell align="center">{keyword("stance_title")}</TableCell>
+              {/* TODO - remove heading later? */}
+              <TableCell align="center">
+                {keyword("multilingual_stance")}
+              </TableCell>
+              <TableCell align="center">{keyword("options")}</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {renderCommentList(
+              comments,
+              stanceColours,
+              false,
+              offset,
+              pageSize,
+            )}
+          </TableBody>
+        </Table>
+
+        <Pagination
+          count={numPages}
+          variant="outlined"
+          onChange={pageChangeHandler}
+          page={currentPage}
+        />
+      </>
     );
   }
+
   // for collectedComments
-  function pageChangeHandler(event, page) {
-    setCurrentPage(page);
+  function allPageChangeHandler(event, page) {
+    setCurrentAllPage(page);
+  }
+  function linkPageChangeHandler(event, page) {
+    setCurrentLinkPage(page);
+  }
+  function verificationPageChangeHandler(event, page) {
+    setCurrentVerificationPage(page);
+  }
+  function supportPageChangeHandler(event, page) {
+    setCurrentSupportPage(page);
+  }
+  function queryPageChangeHandler(event, page) {
+    setCurrentQueryPage(page);
+  }
+  function denyPageChangeHandler(event, page) {
+    setCurrentDenyPage(page);
+  }
+  function multilingualSupportPageChangeHandler(event, page) {
+    setCurrentMultilingualSupportPage(page);
+  }
+  function multilingualQueryPageChangeHandler(event, page) {
+    setCurrentMultilingualQueryPage(page);
+  }
+  function multilingualDenyPageChangeHandler(event, page) {
+    setCurrentMultilingualDenyPage(page);
   }
 
   return (
@@ -395,19 +454,25 @@ const AssistantCommentResult = ({ collectedComments }) => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Pagination
-              count={numPages}
-              variant="outlined"
-              onChange={pageChangeHandler}
-              page={currentPage}
-            />
-            {renderComments(collectedComments, true)}
-            <Pagination
-              count={numPages}
-              variant="outlined"
-              onChange={pageChangeHandler}
-              page={currentPage}
-            />
+            {/* <Pagination
+                count={numPages}
+                variant="outlined"
+                onChange={pageChangeHandler}
+                page={currentPage}
+              /> */}
+            {renderComments(
+              collectedComments,
+              allPageChangeHandler,
+              currentAllPage,
+              Math.ceil(collectedComments.length / pageSize),
+              true,
+            )}
+            {/* <Pagination
+                count={numPages}
+                variant="outlined"
+                onChange={pageChangeHandler}
+                page={currentPage}
+              /> */}
           </AccordionDetails>
         </Accordion>
 
@@ -418,7 +483,14 @@ const AssistantCommentResult = ({ collectedComments }) => {
               {keyword("link_comments") + " (" + linkComments.length + ")"}
             </Typography>
           </AccordionSummary>
-          <AccordionDetails>{renderComments(linkComments)}</AccordionDetails>
+          <AccordionDetails>
+            {renderComments(
+              linkComments,
+              linkPageChangeHandler,
+              currentLinkPage,
+              Math.ceil(linkComments.length / pageSize),
+            )}
+          </AccordionDetails>
         </Accordion>
 
         {/* verification comments */}
@@ -432,7 +504,12 @@ const AssistantCommentResult = ({ collectedComments }) => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            {renderComments(verificationComments)}
+            {renderComments(
+              verificationComments,
+              verificationPageChangeHandler,
+              currentVerificationPage,
+              Math.ceil(verificationComments.length / pageSize),
+            )}
           </AccordionDetails>
         </Accordion>
 
@@ -450,7 +527,14 @@ const AssistantCommentResult = ({ collectedComments }) => {
               {" (" + supportComments.length + ")"}
             </Typography>
           </AccordionSummary>
-          <AccordionDetails>{renderComments(supportComments)}</AccordionDetails>
+          <AccordionDetails>
+            {renderComments(
+              supportComments,
+              supportPageChangeHandler,
+              currentSupportPage,
+              Math.ceil(supportComments.length / pageSize),
+            )}
+          </AccordionDetails>
         </Accordion>
 
         {/* stance: query comments */}
@@ -467,7 +551,14 @@ const AssistantCommentResult = ({ collectedComments }) => {
               {" (" + queryComments.length + ")"}
             </Typography>
           </AccordionSummary>
-          <AccordionDetails>{renderComments(queryComments)}</AccordionDetails>
+          <AccordionDetails>
+            {renderComments(
+              queryComments,
+              queryPageChangeHandler,
+              currentQueryPage,
+              Math.ceil(queryComments.length / pageSize),
+            )}
+          </AccordionDetails>
         </Accordion>
 
         {/* stance: deny comments */}
@@ -484,7 +575,89 @@ const AssistantCommentResult = ({ collectedComments }) => {
               {" (" + denyComments.length + ")"}
             </Typography>
           </AccordionSummary>
-          <AccordionDetails>{renderComments(denyComments)}</AccordionDetails>
+          <AccordionDetails>
+            {renderComments(
+              denyComments,
+              denyPageChangeHandler,
+              currentDenyPage,
+              Math.ceil(denyComments.length / pageSize),
+            )}
+          </AccordionDetails>
+        </Accordion>
+
+        {/* multilingual stance: support comments */}
+        <Accordion hidden={supportComments.length < 1}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>
+              {keyword("stance_label")}
+              <Chip
+                label={keyword("support")}
+                color={stanceColours.support}
+                size="small"
+              />{" "}
+              {keyword("comments_label")}
+              {" (" + multilingualSupportComments.length + ")"}
+              {" multilingual"}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            {renderComments(
+              multilingualSupportComments,
+              multilingualSupportPageChangeHandler,
+              currentMultilingualSupportPage,
+              Math.ceil(multilingualSupportComments.length / pageSize),
+            )}
+          </AccordionDetails>
+        </Accordion>
+
+        {/* multilingual stance: query comments */}
+        <Accordion hidden={queryComments.length < 1}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>
+              {keyword("stance_label")}
+              <Chip
+                label={keyword("query")}
+                color={stanceColours.query}
+                size="small"
+              />{" "}
+              {keyword("comments_label")}
+              {" (" + multilingualQueryComments.length + ")"}
+              {" multilingual"}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            {renderComments(
+              multilingualQueryComments,
+              multilingualQueryPageChangeHandler,
+              currentMultilingualQueryPage,
+              Math.ceil(multilingualQueryComments.length / pageSize),
+            )}
+          </AccordionDetails>
+        </Accordion>
+
+        {/* multilingual stance: deny comments */}
+        <Accordion hidden={denyComments.length < 1}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>
+              {keyword("stance_label")}
+              <Chip
+                label={keyword("deny")}
+                color={stanceColours.deny}
+                size="small"
+              />{" "}
+              {keyword("comments_label")}
+              {" (" + multilingualDenyComments.length + ")"}
+              {" multilingual"}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            {renderComments(
+              multilingualDenyComments,
+              multilingualDenyPageChangeHandler,
+              currentMultilingualDenyPage,
+              Math.ceil(multilingualDenyComments.length / pageSize),
+            )}
+          </AccordionDetails>
         </Accordion>
       </CardContent>
     </Card>

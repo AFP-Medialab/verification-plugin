@@ -726,21 +726,19 @@ function* handleMultilingualStanceCall(action) {
     // add video title with id as main comparison for top level comments
     let convertedComments = [
       {
-        text: comments[0].videoTitle,
-        id_str: comments[0].videoId,
+        text: collectedComments[0].videoTitle,
+        id_str: collectedComments[0].videoId,
       },
     ];
     createCommentArray(
       collectedComments,
       convertedComments,
-      comments[0].videoTitle,
-      comments[0].videoId,
+      collectedComments[0].videoTitle,
+      collectedComments[0].videoId,
     );
 
     if (convertedComments) {
       yield put(setMultilingualStanceDetails(null, true, false, false));
-
-      console.log("convertedComments=", convertedComments);
 
       const result = yield call(
         assistantApi.callMultilingualStanceService,
