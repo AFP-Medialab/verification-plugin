@@ -13,6 +13,7 @@ import {
   Grid2,
   Pagination,
   Skeleton,
+  Switch,
 } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Collapse from "@mui/material/Collapse";
@@ -63,7 +64,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
 
   const classes = useMyStyles();
   const dispatch = useDispatch();
-  const pageSize = 10;
+  const pageSize = 5;
   //const numPages = Math.ceil(collectedComments.length / pageSize);
   const [currentAllPage, setCurrentAllPage] = useState(1);
   const [currentLinkPage, setCurrentLinkPage] = useState(1);
@@ -77,6 +78,10 @@ const AssistantCommentResult = ({ collectedComments }) => {
     useState(1);
   const [currentMultilingualDenyPage, setCurrentMultilingualDenyPage] =
     useState(1);
+
+  // multilingual stance classifier state
+  const [multilingualStanceClassifier, setMultilingualStanceClassifier] =
+    useState(false);
 
   // target oblivious stance classifier
   const targetObliviousStanceResult = useSelector(
@@ -183,6 +188,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
     for (let i = offset; i < lastIndex; i++) {
       const comment = commentList[i];
       const commentId = comment.id;
+      const commentNum = comment.commentNum;
       const key = commentId;
       const text = comment.textOriginal;
       const replies = comment.replies;
@@ -214,7 +220,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
               {commentReplies ? (
                 <SubdirectoryArrowRight sx={{ color: "grey" }} />
               ) : (
-                i + 1
+                <Typography>{commentNum}</Typography>
               )}
             </Typography>
           </TableCell>
@@ -255,11 +261,11 @@ const AssistantCommentResult = ({ collectedComments }) => {
             </Typography>
           </TableCell>
 
-          {/* stance */}
-          <TableCell align="center">
-            {targetObliviousStanceLoading && <Skeleton variant="rounded" />}
-            {targetObliviousStanceDone &&
-              targetObliviousStanceResult != null && (
+          {/* stance: switch between target oblivious and multilingual */}
+          {multilingualStanceClassifier ? (
+            <TableCell align="center">
+              {multilingualStanceLoading && <Skeleton variant="rounded" />}
+              {multilingualStanceDone && multilingualStanceResult != null && (
                 <Tooltip
                   interactive={"true"}
                   title={
@@ -271,46 +277,47 @@ const AssistantCommentResult = ({ collectedComments }) => {
                   classes={{ tooltip: classes.assistantTooltip }}
                 >
                   <Chip
-                    label={keyword(
-                      targetObliviousStanceResult[commentId].stance,
-                    )}
+                    label={keyword(multilingualStanceResult[commentId].stance)}
                     color={
-                      stanceColours[
-                        targetObliviousStanceResult[commentId].stance
-                      ]
+                      stanceColours[multilingualStanceResult[commentId].stance]
                     }
                     size="small"
                   />
                 </Tooltip>
               )}
-            {targetObliviousStanceFail && <Chip label="Service failed" />}
-          </TableCell>
-
-          {/* multilingual stance */}
-          <TableCell align="center">
-            {multilingualStanceLoading && <Skeleton variant="rounded" />}
-            {multilingualStanceDone && multilingualStanceResult != null && (
-              <Tooltip
-                interactive={"true"}
-                title={
-                  <>
-                    <TransTargetObliviousStanceTooltip keyword={keyword} />
-                    <TransTargetObliviousStanceLink keyword={keyword} />
-                  </>
-                }
-                classes={{ tooltip: classes.assistantTooltip }}
-              >
-                <Chip
-                  label={keyword(multilingualStanceResult[commentId].stance)}
-                  color={
-                    stanceColours[multilingualStanceResult[commentId].stance]
-                  }
-                  size="small"
-                />
-              </Tooltip>
-            )}
-            {multilingualStanceFail && <Chip label="Service failed" />}
-          </TableCell>
+              {multilingualStanceFail && <Chip label="Service failed" />}
+            </TableCell>
+          ) : (
+            <TableCell align="center">
+              {targetObliviousStanceLoading && <Skeleton variant="rounded" />}
+              {targetObliviousStanceDone &&
+                targetObliviousStanceResult != null && (
+                  <Tooltip
+                    interactive={"true"}
+                    title={
+                      <>
+                        <TransTargetObliviousStanceTooltip keyword={keyword} />
+                        <TransTargetObliviousStanceLink keyword={keyword} />
+                      </>
+                    }
+                    classes={{ tooltip: classes.assistantTooltip }}
+                  >
+                    <Chip
+                      label={keyword(
+                        targetObliviousStanceResult[commentId].stance,
+                      )}
+                      color={
+                        stanceColours[
+                          targetObliviousStanceResult[commentId].stance
+                        ]
+                      }
+                      size="small"
+                    />
+                  </Tooltip>
+                )}
+              {targetObliviousStanceFail && <Chip label="Service failed" />}
+            </TableCell>
+          )}
 
           {/* options */}
           <TableCell>
@@ -331,12 +338,14 @@ const AssistantCommentResult = ({ collectedComments }) => {
     const offset = (currentPage - 1) * pageSize;
     return (
       <>
-        <Pagination
-          count={numPages}
-          variant="outlined"
-          onChange={pageChangeHandler}
-          page={currentPage}
-        />
+        {comments.length > 5 ? (
+          <Pagination
+            count={numPages}
+            variant="outlined"
+            onChange={pageChangeHandler}
+            page={currentPage}
+          />
+        ) : null}
 
         <Table
           className={classes.table}
@@ -348,19 +357,29 @@ const AssistantCommentResult = ({ collectedComments }) => {
               <TableCell align="center">
                 <Typography>#</Typography>
               </TableCell>
-              <TableCell align="center">{keyword("user")}</TableCell>
               <TableCell align="center">
-                {keyword("twitter_user_name_13")}
+                <Typography>{keyword("user")}</Typography>
               </TableCell>
               <TableCell align="center">
-                {keyword("twitter_user_name_5")}
+                <Typography>{keyword("twitter_user_name_13")}</Typography>
               </TableCell>
-              <TableCell align="center">{keyword("stance_title")}</TableCell>
-              {/* TODO - remove heading later? */}
               <TableCell align="center">
-                {keyword("multilingual_stance")}
+                <Typography>{keyword("twitter_user_name_5")}</Typography>
               </TableCell>
-              <TableCell align="center">{keyword("options")}</TableCell>
+              <TableCell align="center">
+                <Typography>{keyword("stance_title")}</Typography>
+                <Typography display="inline">{keyword("TO")}</Typography>
+                <Switch
+                  size="small"
+                  checked={multilingualStanceClassifier}
+                  onChange={switchChangeHandler}
+                  //inputProps={{ 'aria-label': 'controlled' }}
+                />
+                <Typography display="inline">{keyword("ML")}</Typography>
+              </TableCell>
+              <TableCell align="center">
+                <Typography>{keyword("options")}</Typography>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -374,17 +393,25 @@ const AssistantCommentResult = ({ collectedComments }) => {
           </TableBody>
         </Table>
 
-        <Pagination
-          count={numPages}
-          variant="outlined"
-          onChange={pageChangeHandler}
-          page={currentPage}
-        />
+        {comments.length > 5 ? (
+          <Pagination
+            count={numPages}
+            variant="outlined"
+            onChange={pageChangeHandler}
+            page={currentPage}
+          />
+        ) : null}
       </>
     );
   }
 
-  // for collectedComments
+  // switch for different stance classifiers
+  function switchChangeHandler(event) {
+    multilingualStanceClassifier
+      ? setMultilingualStanceClassifier(false)
+      : setMultilingualStanceClassifier(true);
+  }
+  // pagination for collectedComments
   function allPageChangeHandler(event, page) {
     setCurrentAllPage(page);
   }
@@ -454,12 +481,6 @@ const AssistantCommentResult = ({ collectedComments }) => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            {/* <Pagination
-                count={numPages}
-                variant="outlined"
-                onChange={pageChangeHandler}
-                page={currentPage}
-              /> */}
             {renderComments(
               collectedComments,
               allPageChangeHandler,
@@ -467,12 +488,6 @@ const AssistantCommentResult = ({ collectedComments }) => {
               Math.ceil(collectedComments.length / pageSize),
               true,
             )}
-            {/* <Pagination
-                count={numPages}
-                variant="outlined"
-                onChange={pageChangeHandler}
-                page={currentPage}
-              /> */}
           </AccordionDetails>
         </Accordion>
 
@@ -518,6 +533,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>
               {keyword("stance_label")}
+              {keyword("target_oblivious_comments")}
               <Chip
                 label={keyword("support")}
                 color={stanceColours.support}
@@ -542,6 +558,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>
               {keyword("stance_label")}
+              {keyword("target_oblivious_comments")}
               <Chip
                 label={keyword("query")}
                 color={stanceColours.query}
@@ -566,6 +583,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>
               {keyword("stance_label")}
+              {keyword("target_oblivious_comments")}
               <Chip
                 label={keyword("deny")}
                 color={stanceColours.deny}
@@ -590,6 +608,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>
               {keyword("stance_label")}
+              {keyword("multilingual_comments")}
               <Chip
                 label={keyword("support")}
                 color={stanceColours.support}
@@ -615,6 +634,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>
               {keyword("stance_label")}
+              {keyword("multilingual_comments")}
               <Chip
                 label={keyword("query")}
                 color={stanceColours.query}
@@ -640,6 +660,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>
               {keyword("stance_label")}
+              {keyword("multilingual_comments")}
               <Chip
                 label={keyword("deny")}
                 color={stanceColours.deny}
