@@ -446,13 +446,14 @@ const AssistantCommentResult = ({ collectedComments }) => {
         {/* stance: support comments */}
         <Accordion hidden={supportComments.length < 1}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>{keyword("stance_label")}</Typography>
+            <Chip
+              label={keyword("support")}
+              color={stanceColours.support}
+              size="small"
+            />
             <Typography>
-              {keyword("stance_label")}
-              <Chip
-                label={keyword("support")}
-                color={stanceColours.support}
-                size="small"
-              />{" "}
+              {" "}
               {keyword("comments_label")}
               {" (" + supportComments.length + ")"}
             </Typography>
@@ -470,13 +471,14 @@ const AssistantCommentResult = ({ collectedComments }) => {
         {/* stance: query comments */}
         <Accordion hidden={queryComments.length < 1}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>{keyword("stance_label")}</Typography>
+            <Chip
+              label={keyword("query")}
+              color={stanceColours.query}
+              size="small"
+            />
             <Typography>
-              {keyword("stance_label")}
-              <Chip
-                label={keyword("query")}
-                color={stanceColours.query}
-                size="small"
-              />{" "}
+              {" "}
               {keyword("comments_label")}
               {" (" + queryComments.length + ")"}
             </Typography>
@@ -494,13 +496,14 @@ const AssistantCommentResult = ({ collectedComments }) => {
         {/* stance: deny comments */}
         <Accordion hidden={denyComments.length < 1}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>{keyword("stance_label")}</Typography>
+            <Chip
+              label={keyword("deny")}
+              color={stanceColours.deny}
+              size="small"
+            />
             <Typography>
-              {keyword("stance_label")}
-              <Chip
-                label={keyword("deny")}
-                color={stanceColours.deny}
-                size="small"
-              />{" "}
+              {" "}
               {keyword("comments_label")}
               {" (" + denyComments.length + ")"}
             </Typography>
