@@ -1,34 +1,34 @@
 import { combineReducers } from "redux";
+
+import assistantReducer from "./assistantReducer";
 import authenticationReducer from "./authenticationReducer";
+import cookiesReducer from "./cookiesReducers";
 import defaultLanguageReducer from "./defaultLanguageReducer";
 import dictionaryReducer from "./dictionaryReducer";
 import errorReducer from "./errorReducer";
-import languageReducer from "./languageReducer";
-import navReducer from "./navReducer";
-import toolReducer from "./tools/toolReducer";
-import assistantReducer from "./assistantReducer";
 import humanRightsCheckBoxReducer from "./humanRightsCheckBoxReducer";
 import interactiveExplanationReducer from "./interactiveExplanationReducer";
+import languageReducer from "./languageReducer";
+import languageSupportReducer from "./languageSupportReducer";
+import navReducer from "./navReducer";
 import analysisReducer from "./tools/analysisReducer";
-import keyframesReducer from "./tools/keyframesReducer";
-import thumbnailsReducer from "./tools/thumbnailsReducer";
-import videoRightsReducer from "./tools/videoRightsReducer";
-import metadataReducer from "./tools/metadataReducer";
+import archiveReducer from "./tools/archiveReducer";
+import c2paReducer from "./tools/c2paReducer";
 import deepfakeReducerImage from "./tools/deepfakeImageReducer";
 import deepfakeReducerVideo from "./tools/deepfakeVideoReducer";
-import syntheticImageDetectionReducer from "./tools/syntheticImageDetectionReducer";
-import ImageAnalysisReducer from "./tools/analysisReducerImage";
-import magnifierReducer from "./tools/magnifierReducer";
 import forensicReducer from "./tools/forensicReducer";
-import gifReducer from "./tools/gifReducer";
-import cookiesReducer from "./cookiesReducers";
-import ocrReducer from "./tools/ocrReducer";
 import geolocationReducer from "./tools/geolocationReducer";
-import twitterSnaReducer from "./tools/twitterSnaReducer";
-import languageSupportReducer from "./languageSupportReducer";
+import gifReducer from "./tools/gifReducer";
+import keyframesReducer from "./tools/keyframesReducer";
 import loccusReducer from "./tools/loccusReducer";
-import c2paReducer from "./tools/c2paReducer";
-import archiveReducer from "./tools/archiveReducer";
+import magnifierReducer from "./tools/magnifierReducer";
+import metadataReducer from "./tools/metadataReducer";
+import ocrReducer from "./tools/ocrReducer";
+import syntheticImageDetectionReducer from "./tools/syntheticImageDetectionReducer";
+import thumbnailsReducer from "./tools/thumbnailsReducer";
+import toolReducer from "./tools/toolReducer";
+import twitterSnaReducer from "./tools/twitterSnaReducer";
+import videoRightsReducer from "./tools/videoRightsReducer";
 
 const allReducers = combineReducers({
   language: languageReducer,
@@ -41,7 +41,6 @@ const allReducers = combineReducers({
   error: errorReducer,
   userSession: authenticationReducer,
   analysis: analysisReducer,
-  analysisImage: ImageAnalysisReducer,
   forensic: forensicReducer,
   keyframes: keyframesReducer,
   magnifier: magnifierReducer,

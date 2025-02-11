@@ -1,30 +1,29 @@
 import React from "react";
+import Iframe from "react-iframe";
 import { useSelector } from "react-redux";
 
-import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
 import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
 import CardActions from "@mui/material/CardActions";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
-import { IconButton } from "@mui/material";
-import ImageIcon from "@mui/icons-material/Image";
-import Iframe from "react-iframe";
+import CardMedia from "@mui/material/CardMedia";
+import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { KNOWN_LINKS } from "../AssistantRuleBook";
+import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
+import FileCopyIcon from "@mui/icons-material/FileCopy";
+import ImageIcon from "@mui/icons-material/Image";
+
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import { KNOWN_LINKS } from "../AssistantRuleBook";
 
 const AssistantVideoResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const classes = useMyStyles();
 
   const processUrl = useSelector((state) => state.assistant.processUrl);
-  const process_url_type = useSelector(
-    (state) => state.assistant.processUrlType,
-  );
   const input_url_type = useSelector((state) => state.assistant.inputUrlType);
 
   const useIframe = () => {

@@ -1,66 +1,41 @@
 import React, { useState } from "react";
+import { Trans } from "react-i18next";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import Card from "@mui/material/Card";
-import { CardHeader, Grid2, Skeleton, styled } from "@mui/material";
-import CardContent from "@mui/material/CardContent";
+import { styled } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Remove from "@mui/icons-material/Remove";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
 import Collapse from "@mui/material/Collapse";
+import Grid2 from "@mui/material/Grid2";
+import Skeleton from "@mui/material/Skeleton";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import Remove from "@mui/icons-material/Remove";
+
+import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult.jsx";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import dayjs from "dayjs";
 import LocaleData from "dayjs/plugin/localeData";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 
-import AssistantTextClassification from "./AssistantTextClassification.jsx";
-import AssistantTextSpanClassification from "./AssistantTextSpanClassification.jsx";
-import ResultDisplayItem from "./../../tools/SemanticSearch/components/ResultDisplayItem.jsx";
 import { ROLES } from "../../../../constants/roles.jsx";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { getLanguageName } from "../../../Shared/Utils/languageUtils";
-import TextFooter, { TextFooterPrevFactChecks } from "./TextFooter.jsx";
 import {
   TransCredibilitySignalsLink,
   TransHtmlDoubleLineBreak,
   TransHtmlSingleLineBreak,
 } from "../TransComponents";
-import { Trans } from "react-i18next";
-
-const renderEntityKeys = (entities, keyword) => {
-  // translate array into readable string
-  let translatedEntities = [];
-  Object.keys(entities).map((entity, index) =>
-    entity != "Important_Sentence"
-      ? translatedEntities.push(keyword(entity))
-      : null,
-  );
-  return translatedEntities.join("; ");
-};
-
-const round = (number, decimalPlaces) => {
-  return (Math.round(number * 100) / 100).toFixed(decimalPlaces);
-};
-
-const calculateSubjectivity = (sentences) => {
-  let scoresSUBJ = [];
-  for (let i = 0; i < sentences.length; i++) {
-    if (sentences[i].label == "SUBJ") {
-      scoresSUBJ.push(Number(sentences[i].score));
-    }
-  }
-
-  return [" (", scoresSUBJ.length, "/", sentences.length, ")"]
-    .toString()
-    .replaceAll(",", "");
-};
+import ResultDisplayItem from "./../../tools/SemanticSearch/components/ResultDisplayItem.jsx";
+import TextFooterPrevFactChecks from "./TextFooter.jsx";
 
 const getExpandIcon = (
   loading,
@@ -84,12 +59,10 @@ const getExpandIcon = (
 
 const AssistantCredSignals = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
-  const sharedKeyword = i18nLoadNamespace("components/Shared/utils");
   const classes = useMyStyles();
   const expandMinimiseText = keyword("expand_minimise_text");
 
   // displaying expanded text in AccordionDetails
-  const [displayOrigLang, setDisplayOrigLang] = useState(true);
   const [displayExpander, setDisplayExpander] = useState(true);
   const [expanded, setExpanded] = useState(true);
 
@@ -106,63 +79,6 @@ const AssistantCredSignals = () => {
       background: "white",
     },
   }));
-
-  // assistant media states
-  const text = useSelector((state) => state.assistant.urlText);
-  const textLang = useSelector((state) => state.assistant.textLang);
-  const textHtmlMap = useSelector((state) => state.assistant.urlTextHtmlMap);
-
-  // news framing (topic)
-  const newsFramingTitle = keyword("news_framing_title");
-  const newsFramingResult = useSelector(
-    (state) => state.assistant.newsFramingResult,
-  );
-  const newsFramingLoading = useSelector(
-    (state) => state.assistant.newsFramingLoading,
-  );
-  const newsFramingDone = useSelector(
-    (state) => state.assistant.newsFramingDone,
-  );
-  const newsFramingFail = useSelector(
-    (state) => state.assistant.newsFramingFail,
-  );
-
-  // news genre
-  const newsGenreTitle = keyword("news_genre_title");
-  const newsGenreResult = useSelector(
-    (state) => state.assistant.newsGenreResult,
-  );
-  const newsGenreLoading = useSelector(
-    (state) => state.assistant.newsGenreLoading,
-  );
-  const newsGenreDone = useSelector((state) => state.assistant.newsGenreDone);
-  const newsGenreFail = useSelector((state) => state.assistant.newsGenreFail);
-
-  // persuasion techniques
-  const persuasionTitle = keyword("persuasion_techniques_title");
-  const persuasionResult = useSelector(
-    (state) => state.assistant.persuasionResult,
-  );
-  const persuasionLoading = useSelector(
-    (state) => state.assistant.persuasionLoading,
-  );
-  const persuasionDone = useSelector((state) => state.assistant.persuasionDone);
-  const persuasionFail = useSelector((state) => state.assistant.persuasionFail);
-
-  // subjectivity
-  const subjectivityTitle = keyword("subjectivity_title");
-  const subjectivityResult = useSelector(
-    (state) => state.assistant.subjectivityResult,
-  );
-  const subjectivityLoading = useSelector(
-    (state) => state.assistant.subjectivityLoading,
-  );
-  const subjectivityDone = useSelector(
-    (state) => state.assistant.subjectivityDone,
-  );
-  const subjectivityFail = useSelector(
-    (state) => state.assistant.subjectivityFail,
-  );
 
   // previous fact checks
   const prevFactChecksTitle = keyword("previous_fact_checks_title");
@@ -203,6 +119,37 @@ const AssistantCredSignals = () => {
   const machineGeneratedTextFail = useSelector(
     (state) => state.assistant.machineGeneratedTextFail,
   );
+
+  const DETECTION_THRESHOLDS = {
+    THRESHOLD_1: 5.0,
+    THRESHOLD_2: 50.0,
+    THRESHOLD_3: 95.0,
+  };
+
+  const arcsLength = [0.05, 0.45, 0.45, 0.05];
+
+  const keywords = [
+    "gauge_scale_modal_explanation_rating_1",
+    "gauge_scale_modal_explanation_rating_2",
+    "gauge_scale_modal_explanation_rating_3",
+    "gauge_scale_modal_explanation_rating_4",
+  ];
+  const colors = ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"];
+
+  // methodName = "machinegeneratedtext"
+  const MachineGeneratedTextMethodNames = {
+    machinegeneratedtext: {
+      name: keyword("machine_generated_text_title"),
+      description: keyword("machine_generated_text_tooltip"),
+    },
+  };
+
+  const MachineGeneratedTextMethodNamesResults = {
+    methodName: "machinegeneratedtext",
+    predictionScore: machineGeneratedTextResult
+      ? machineGeneratedTextResult.score * 100.0
+      : null,
+  };
 
   return (
     <Card>
@@ -409,7 +356,7 @@ const AssistantCredSignals = () => {
           disabled={
             machineGeneratedTextLoading ||
             machineGeneratedTextFail ||
-            machineGeneratedTextDone ||
+            //machineGeneratedTextDone ||
             !role.includes(ROLES.BETA_TESTER)
           }
           //disableGutters
@@ -418,7 +365,7 @@ const AssistantCredSignals = () => {
             expandIcon={getExpandIcon(
               machineGeneratedTextLoading,
               machineGeneratedTextFail,
-              machineGeneratedTextDone,
+              null,
               role,
             )}
           >
@@ -475,6 +422,23 @@ const AssistantCredSignals = () => {
               </Grid2>
             </Grid2>
           </AccordionSummary>
+
+          <AccordionDetails>
+            {machineGeneratedTextResult ? (
+              <GaugeChartResult
+                keyword={keyword}
+                scores={[MachineGeneratedTextMethodNamesResults]}
+                methodNames={MachineGeneratedTextMethodNames}
+                detectionThresholds={DETECTION_THRESHOLDS}
+                arcsLength={arcsLength}
+                resultsHaveErrors={false}
+                sanitizeDetectionPercentage={(n) => Math.round(n)}
+                gaugeExplanation={{ colors: colors, keywords: keywords }}
+                toolName="Assistant" // this points to the correct translatons .tsv file
+                detectionType={"machine_generated_text"}
+              />
+            ) : null}
+          </AccordionDetails>
         </StyledAccordion>
       </CardContent>
     </Card>

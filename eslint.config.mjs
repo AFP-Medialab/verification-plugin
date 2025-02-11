@@ -18,6 +18,14 @@ export default [...compat.extends("eslint:recommended", "plugin:react/recommende
         react,
     },
 
+    settings: {
+      react: {
+        version: 'detect' // Or specify the exact version, e.g., '18.0'
+      }
+    },
+
+    files: ["**/*.jsx"],
+
     languageOptions: {
         globals: {
             ...globals.browser,

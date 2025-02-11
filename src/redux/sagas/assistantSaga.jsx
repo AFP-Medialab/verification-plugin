@@ -1,6 +1,26 @@
-import uniqWith from "lodash/uniqWith";
 import isEqual from "lodash/isEqual";
+import uniqWith from "lodash/uniqWith";
+import {
+  all,
+  call,
+  fork,
+  put,
+  select,
+  take,
+  takeLatest,
+} from "redux-saga/effects";
 
+import assistantApiCalls from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
+import DBKFApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
+import {
+  CONTENT_TYPE,
+  KNOWN_LINKS,
+  KNOWN_LINK_PATTERNS,
+  NE_SUPPORTED_LANGS,
+  TYPE_PATTERNS,
+  matchPattern,
+  selectCorrectActions,
+} from "../../components/NavItems/Assistant/AssistantRuleBook";
 import {
   cleanAssistantState,
   setAssistantLoading,
@@ -11,11 +31,11 @@ import {
   setImageVideoSelected,
   setInputSourceCredDetails,
   setInputUrl,
+  setMachineGeneratedTextDetails,
   setNeDetails,
   setNewsGenreDetails,
   setNewsTopicDetails,
   setPersuasionDetails,
-  setSubjectivityDetails,
   setPrevFactChecksDetails,
   setMachineGeneratedTextDetails,
   setMultilingualStanceDetails,
@@ -23,29 +43,9 @@ import {
   setProcessUrlActions,
   setScrapedData,
   setSingleMediaPresent,
+  setSubjectivityDetails,
   setUrlMode,
 } from "../actions/tools/assistantActions";
-
-import {
-  all,
-  call,
-  fork,
-  put,
-  select,
-  take,
-  takeLatest,
-} from "redux-saga/effects";
-import assistantApiCalls from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
-import DBKFApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
-import {
-  CONTENT_TYPE,
-  KNOWN_LINK_PATTERNS,
-  KNOWN_LINKS,
-  matchPattern,
-  NE_SUPPORTED_LANGS,
-  selectCorrectActions,
-  TYPE_PATTERNS,
-} from "../../components/NavItems/Assistant/AssistantRuleBook";
 
 /**
  * APIs
@@ -568,6 +568,7 @@ function* handleNamedEntityCall(action) {
             return b.value - a.value;
           });
         });
+        categoryList.sort();
         yield put(
           setNeDetails(categoryList, wordCloudList, false, true, false),
         );

@@ -1,42 +1,43 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import {
-  Alert,
-  Backdrop,
-  Box,
-  Button,
-  Card,
-  Collapse,
-  Fade,
-  IconButton,
-  Link,
-  Modal,
-  Skeleton,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+
+import Alert from "@mui/material/Alert";
+import Backdrop from "@mui/material/Backdrop";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import Collapse from "@mui/material/Collapse";
+import Fade from "@mui/material/Fade";
+import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
+import Modal from "@mui/material/Modal";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+
 import {
   Close,
   KeyboardArrowDown,
   KeyboardArrowUp,
   ManageSearch,
 } from "@mui/icons-material";
+
+import LoadingButton from "@mui/lab/LoadingButton";
+import { DatePicker } from "@mui/x-date-pickers";
+import axios from "axios";
+import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
+import dayjs from "dayjs";
+import isEqual from "lodash/isEqual";
+
+import languageDictionary from "../../../../LocalDictionary/iso-639-1-languages";
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
+import { getLanguageName } from "../../../Shared/Utils/languageUtils";
 import SemanticSearchResults from "./SemanticSearchResults";
 import CheckboxesTags from "./components/CheckboxesTags";
-import { DatePicker } from "@mui/x-date-pickers";
 import SelectSmall from "./components/SelectSmall";
-import LoadingButton from "@mui/lab/LoadingButton";
-
-import axios from "axios";
-import isEqual from "lodash/isEqual";
-import dayjs from "dayjs";
-import { getLanguageName } from "../../../Shared/Utils/languageUtils";
-import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
-import languageDictionary from "../../../../LocalDictionary/iso-639-1-languages";
-import { useSelector } from "react-redux";
-import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
 
 const SemanticSearch = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/SemanticSearch");

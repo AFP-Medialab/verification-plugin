@@ -1,27 +1,35 @@
 import React, { useEffect, useState } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  Grid2,
-  IconButton,
-  Typography,
-} from "@mui/material";
-import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Grid2 from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
 
+import { Close } from "@mui/icons-material";
+
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { setError } from "redux/reducers/errorReducer";
+
+import { ROLES } from "../../../constants/roles.jsx";
+import {
+  cleanAssistantState,
+  setUrlMode,
+  submitInputUrl,
+} from "../../../redux/actions/tools/assistantActions";
+import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import AssistantCheckStatus from "./AssistantCheckResults/AssistantCheckStatus";
+import AssistantNEResult from "./AssistantCheckResults/AssistantNEResult";
 import AssistantFileSelected from "./AssistantFileSelected";
 import AssistantIntroduction from "./AssistantIntroduction";
+import AssistantCredSignals from "./AssistantScrapeResults/AssistantCredibilitySignals";
 import AssistantLinkResult from "./AssistantScrapeResults/AssistantLinkResult";
 import AssistantMediaResult from "./AssistantScrapeResults/AssistantMediaResult";
-import AssistantNEResult from "./AssistantCheckResults/AssistantNEResult";
 import AssistantSCResults from "./AssistantScrapeResults/AssistantSCResults";
 import AssistantTextResult from "./AssistantScrapeResults/AssistantTextResult";
-import AssistantUrlSelected from "./AssistantUrlSelected";
 import AssistantWarnings from "./AssistantScrapeResults/AssistantWarnings";
 import AssistantCredSignals from "./AssistantScrapeResults/AssistantCredibilitySignals";
 import { ROLES } from "../../../constants/roles.jsx";
@@ -35,6 +43,7 @@ import { setError } from "redux/reducers/errorReducer";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { Close } from "@mui/icons-material";
 import AssistantCommentResult from "./AssistantScrapeResults/AssistantCommentResult";
+import AssistantUrlSelected from "./AssistantUrlSelected";
 
 const Assistant = () => {
   // styles, language, dispatch, params
@@ -237,25 +246,13 @@ const Assistant = () => {
               ) : null}
 
               {/* media results */}
-              <Grid2
-                container
-                hidden={
-                  !urlMode ||
-                  (urlMode && inputUrl === null) ||
-                  (urlMode &&
-                    inputUrl !== null &&
-                    !imageList.length &&
-                    !videoList.length)
-                }
-              >
-                {imageList.length > 0 ||
-                videoList.length > 0 ||
-                imageVideoSelected ? (
-                  <Grid2 size={{ xs: 12 }}>
-                    <AssistantMediaResult />
-                  </Grid2>
-                ) : null}
-              </Grid2>
+              {imageList.length > 0 ||
+              videoList.length > 0 ||
+              imageVideoSelected ? (
+                <Grid2 size={{ xs: 12 }}>
+                  <AssistantMediaResult />
+                </Grid2>
+              ) : null}
 
               {/* YouTube comments if video */}
               {collectedComments ? (

@@ -1,10 +1,16 @@
-import React from "react";
-import { Box, Stack, Typography } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
-import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
-import LoadingButton from "@mui/lab/LoadingButton";
+import React from "react";
+
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
 import { Download } from "@mui/icons-material";
-import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
+
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import LoadingButton from "@mui/lab/LoadingButton";
+
+import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
 
 /**
  *
@@ -155,8 +161,8 @@ const DownloadWaczFile = ({ url }) => {
           startIcon={<Download />}
         >
           {getWaczFileFromScoop.isPending
-            ? "Processing..."
-            : "Download .wacz file"}
+            ? keyword("scoop_button_loading")
+            : keyword("scoop_button_download")}
         </LoadingButton>
         {getWaczFileFromScoop.isError && (
           <Typography variant="body2" color="error">

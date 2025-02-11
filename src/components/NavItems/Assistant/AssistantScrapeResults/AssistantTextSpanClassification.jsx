@@ -1,22 +1,25 @@
 import React, { useState } from "react";
 
 import Card from "@mui/material/Card";
-import {
-  CardHeader,
-  Chip,
-  Grid2,
-  List,
-  ListItem,
-  ListItemText,
-} from "@mui/material";
 import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import Grid2 from "@mui/material/Grid2";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+
+import { styled } from "@mui/system";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { v4 as uuidv4 } from "uuid";
+
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
 import {
   interpRgb,
   mergeSpanIndices,
@@ -25,9 +28,6 @@ import {
   treeMapToElements,
   wrapPlainTextSpan,
 } from "./assistantUtils";
-import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
-import { styled } from "@mui/system";
-import { v4 as uuidv4 } from "uuid";
 
 // Had to create a custom styled span as the default style attribute does not support
 // :hover metaclass
@@ -64,9 +64,6 @@ export default function AssistantTextSpanClassification({
   const categoryRgbHigh = configs.confidenceRgbHigh;
 
   const [doHighlightSentence, setDoHighlightSentence] = useState(true);
-  const handleHighlightSentences = (event) => {
-    setDoHighlightSentence(event.target.checked);
-  };
 
   function filterLabelsWithMinThreshold(classification, minThreshold) {
     let filteredLabels = {};

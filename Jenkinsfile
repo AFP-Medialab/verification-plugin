@@ -3,6 +3,7 @@ pipeline {
     environment {
         version = "${env.BRANCH_NAME}-${env.BUILD_ID}"
         CONFIG_FILE_ID = "weverify-plugin-${env.BRANCH_NAME}-env"
+        //Test
     }
     stages {
          stage ('Build Plugin') {

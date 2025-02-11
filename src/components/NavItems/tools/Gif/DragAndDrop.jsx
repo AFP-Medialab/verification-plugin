@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Grid2 } from "@mui/material";
+
+import Grid2 from "@mui/material/Grid2";
 
 class DragAndDrop extends Component {
   state = {

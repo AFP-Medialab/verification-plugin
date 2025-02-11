@@ -1,11 +1,18 @@
 import React, { useState } from "react";
-import { Alert, Box, Grid2, List, ListItemText, Stack } from "@mui/material";
-import Typography from "@mui/material/Typography";
-import { useSelector } from "react-redux";
-import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
-import { TabContext, TabList, TabPanel } from "@mui/lab";
-import Tab from "@mui/material/Tab";
+
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Grid2 from "@mui/material/Grid2";
+import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Stack from "@mui/material/Stack";
+import Tab from "@mui/material/Tab";
+import Typography from "@mui/material/Typography";
+
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+
+import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
 import { prettyCase } from "../../../../Shared/Utils/stringUtils";
 
 const AfpReverseSearchResults = ({
@@ -13,7 +20,6 @@ const AfpReverseSearchResults = ({
   thumbnailImageCaption,
   imageMetadata,
 }) => {
-  const role = useSelector((state) => state.userSession.user.roles);
   const keyword = i18nLoadNamespace("components/NavItems/tools/C2pa");
 
   const [tabValue, setTabValue] = useState("exif");
@@ -83,7 +89,9 @@ const AfpReverseSearchResults = ({
                         {Object.keys(imageMetadata)
                           .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
                           .map((item, index) => {
-                            return <Tab label={item} value={item} key={item} />;
+                            return (
+                              <Tab label={item} value={item} key={index} />
+                            );
                           })}
                       </TabList>
                     </Box>

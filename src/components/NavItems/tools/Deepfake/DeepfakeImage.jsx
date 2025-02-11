@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import LinearProgress from "@mui/material/LinearProgress";
-import Box from "@mui/material/Box";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import DeepfakeIcon from "../../../NavBar/images/SVG/Image/Deepfake.svg";
-import { Grid2 } from "@mui/material";
+import Grid2 from "@mui/material/Grid2";
+import LinearProgress from "@mui/material/LinearProgress";
+
+import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { setError } from "redux/reducers/errorReducer";
+
+import { imageDeepfake } from "../../../../constants/tools";
+import { resetDeepfake } from "../../../../redux/actions/tools/deepfakeImageActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import UseGetDeepfake from "./Hooks/useGetDeepfake";
 import DeepfakeResultsImage from "./Results/DeepfakeResultsImage";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import Alert from "@mui/material/Alert";
-import { setError } from "redux/reducers/errorReducer";
-import StringFileUploadField from "../../../Shared/StringFileUploadField";
-import { resetDeepfake } from "../../../../redux/actions/tools/deepfakeImageActions";
-import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 
 const Deepfake = () => {
   //const { url } = useParams();
@@ -105,11 +107,7 @@ const Deepfake = () => {
       <HeaderTool
         name={keywordAllTools("navbar_deepfake_image")}
         description={keywordAllTools("navbar_deepfake_image_description")}
-        icon={
-          <DeepfakeIcon
-            style={{ fill: "#00926c", height: "40px", width: "auto" }}
-          />
-        }
+        icon={<imageDeepfake.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
       />
 
       <Alert severity="warning">{keywordWarning("warning_beta")}</Alert>

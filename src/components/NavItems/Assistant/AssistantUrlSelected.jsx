@@ -1,26 +1,29 @@
 import React, { useState } from "react";
+import { Trans } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom"; // version 5.2.0
+import { useNavigate } from "react-router-dom";
 
-import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
 import { Box, CardHeader, Skeleton, TextField, Tooltip } from "@mui/material/";
 import Button from "@mui/material//Button";
 import Card from "@mui/material//Card";
 import CardContent from "@mui/material//CardContent";
 import Typography from "@mui/material//Typography";
+import Stack from "@mui/material/Stack";
+
+// version 5.2.0
+
+import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
+
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import { KNOWN_LINKS } from "./AssistantRuleBook";
+import { useTrackEvent } from "../../../Hooks/useAnalytics";
 import {
   cleanAssistantState,
   submitInputUrl,
 } from "../../../redux/actions/tools/assistantActions";
-
-import { useTrackEvent } from "../../../Hooks/useAnalytics";
-import Stack from "@mui/material/Stack";
-import { Trans } from "react-i18next";
+import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
+import { KNOWN_LINKS } from "./AssistantRuleBook";
 import {
   TransHtmlDoubleLineBreak,
   TransSupportedUrlsLink,

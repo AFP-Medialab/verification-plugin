@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import {
-  Avatar,
-  Box,
-  Chip,
-  Divider,
-  Grid2,
-  Link,
-  Stack,
-  Typography,
-} from "@mui/material";
+
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
+import Divider from "@mui/material/Divider";
+import Grid2 from "@mui/material/Grid2";
+import Link from "@mui/material/Link";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
 import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
 
 const ResultDisplayItem = ({

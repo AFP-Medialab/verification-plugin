@@ -1,17 +1,21 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { useDispatch, useSelector } from "react-redux";
-import IconButton from "@mui/material/IconButton";
-import { changeLanguage } from "../../../redux/reducers/languageReducer";
-import { changeDefaultLanguage } from "../../../redux/reducers/defaultLanguageReducer";
-import DefaultLanguageDialog from "./defaultLanguageDialog";
-import { setStorageTrue } from "../../../redux/reducers/cookiesReducers";
+import Stack from "@mui/material/Stack";
+
 import TranslateIcon from "@mui/icons-material/Translate";
-import { useTranslation } from "react-i18next";
+
 import useLoadSupportedLanguage from "Hooks/useLoadSupportedLanguages";
-import Box from "@mui/material/Box";
-import { Stack } from "@mui/material";
+
+import { setStorageTrue } from "../../../redux/reducers/cookiesReducers";
+import { changeDefaultLanguage } from "../../../redux/reducers/defaultLanguageReducer";
+import { changeLanguage } from "../../../redux/reducers/languageReducer";
+import DefaultLanguageDialog from "./defaultLanguageDialog";
 
 const Languages = (props) => {
   const { t, i18n } = useTranslation("components/NavItems/languages");

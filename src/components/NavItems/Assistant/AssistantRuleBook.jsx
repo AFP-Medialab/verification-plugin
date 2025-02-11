@@ -1,9 +1,9 @@
 import React from "react";
+
 import DownloadIcon from "@mui/icons-material/Download";
 
 import { ROLES } from "../../../constants/roles.jsx";
 import {
-  imageAnalysis,
   imageDeepfake,
   imageForensic,
   imageMagnifier,
@@ -14,7 +14,6 @@ import {
   thumbnails,
   videoAnalysis,
   videoDeepfake,
-  videoRights,
 } from "../../../constants/tools";
 
 export const NE_SUPPORTED_LANGS = ["en", "pt", "fr", "de", "el", "es", "it"];
@@ -61,7 +60,10 @@ export const KNOWN_LINK_PATTERNS = [
   },
   {
     key: KNOWN_LINKS.TWITTER,
-    patterns: ["((https?:/{2})?(www.)?(twitter|x).com/\\w{1,15}/status/\\d*)"],
+    patterns: [
+      "((https?:/{2})?(www.)?(twitter|x).com/\\w{1,15}/status/\\d*)",
+      "((https?:/{2})?(www.)?(twitter|x).com/i/birdwatch/t/\\d*)",
+    ],
   },
   {
     key: KNOWN_LINKS.TIKTOK,
@@ -147,21 +149,6 @@ export const ASSISTANT_ACTIONS = [
     text: "video_analysis_text",
     tsvPrefix: "api",
     path: "tools/analysis",
-  },
-  {
-    title: "navbar_analysis_image",
-    icon: <imageAnalysis.icon sx={{ fontSize: "24px" }} />,
-    linksAccepted: [
-      KNOWN_LINKS.FACEBOOK,
-      KNOWN_LINKS.TWITTER,
-      KNOWN_LINKS.SNAPCHAT,
-    ],
-    cTypes: [CONTENT_TYPE.IMAGE],
-    exceptions: [],
-    useInputUrl: true,
-    text: "image_analysis_text",
-    tsvPrefix: "api",
-    path: "tools/analysisImage",
   },
   {
     title: "navbar_keyframes",

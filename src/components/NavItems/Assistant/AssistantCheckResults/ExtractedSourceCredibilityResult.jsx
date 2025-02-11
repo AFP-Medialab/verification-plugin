@@ -1,14 +1,15 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
-import ExtractedSourceCredibilityDBKFDialog from "./ExtractedSourceCredibilityDBKFDialog";
+import ListItemText from "@mui/material/ListItemText";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+
+import ExtractedSourceCredibilityDBKFDialog from "./ExtractedSourceCredibilityDBKFDialog";
 
 const ExtractedSourceCredibilityResult = ({
   extractedSourceCredibilityResults,

@@ -1,21 +1,24 @@
 import React, { useState } from "react";
 
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import CloseIcon from "@mui/icons-material/Close";
+import Chip from "@mui/material/Chip";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import Grid2 from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Link from "@mui/material/Link";
-import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+
+import CloseIcon from "@mui/icons-material/Close";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import { Chip, Grid2, Tooltip } from "@mui/material";
+import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
+
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
   TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,

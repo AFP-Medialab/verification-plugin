@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+
 import Box from "@mui/material/Box";
-import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import { CardMedia, Grid2, Typography } from "@mui/material";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import { Icon } from "leaflet";
+import CardMedia from "@mui/material/CardMedia";
+import Grid2 from "@mui/material/Grid2";
+import Typography from "@mui/material/Typography";
+
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { Icon } from "leaflet";
+import "leaflet/dist/leaflet.css";
+
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 
 const GeolocationResults = (props) => {
   const classes = useMyStyles();
