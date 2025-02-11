@@ -92,13 +92,13 @@ export function TransCredibilitySignalsLink({ keyword }) {
   );
 }
 
-export function TransTargetObliviousStanceLink({ keyword }) {
+export function TransMultilingualStanceLink({ keyword }) {
   return (
     <Trans
       t={keyword}
-      i18nKey="target_oblivious_stance_link"
+      i18nKey="multilingual_stance_link"
       components={{
-        targetObliviousStanceLink: (
+        multilingualStanceLink: (
           <a
             href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#stance-classifier"
             target="_blank"
@@ -133,11 +133,11 @@ const stanceQueryColour = "#ed6c02";
 const stanceDenyColour = "#d32f2f";
 const stanceCommentColour = "#757575";
 
-export function TransTargetObliviousStanceTooltip({ keyword }) {
+export function TransMultilingualStanceTooltip({ keyword }) {
   return (
     <Trans
       t={keyword}
-      i18nKey="target_oblivious_stance_tooltip"
+      i18nKey="multilingual_stance_tooltip"
       components={{
         ul: <ul />,
         li: <li />,

@@ -46,8 +46,8 @@ import ListItem from "@mui/material/ListItem";
 import { Trans } from "react-i18next";
 import {
   TransCollectedCommentsTooltip,
-  TransTargetObliviousStanceTooltip,
-  TransTargetObliviousStanceLink,
+  TransMultilingualStanceTooltip,
+  TransMultilingualStanceLink,
   TransHtmlDoubleLineBreak,
   TransStanceDenyComments,
   TransStanceQueryComments,
@@ -79,29 +79,6 @@ const AssistantCommentResult = ({ collectedComments }) => {
   const [currentMultilingualDenyPage, setCurrentMultilingualDenyPage] =
     useState(1);
 
-  // multilingual stance classifier state
-  const [multilingualStanceClassifier, setMultilingualStanceClassifier] =
-    useState(false);
-
-  // target oblivious stance classifier
-  const targetObliviousStanceResult = useSelector(
-    (state) => state.assistant.targetObliviousStanceResult,
-  );
-  const targetObliviousStanceLoading = useSelector(
-    (state) => state.assistant.targetObliviousStanceLoading,
-  );
-  const targetObliviousStanceDone = useSelector(
-    (state) => state.assistant.targetObliviousStanceDone,
-  );
-  const targetObliviousStanceFail = useSelector(
-    (state) => state.assistant.targetObliviousStanceFail,
-  );
-  const stanceColours = {
-    support: "success",
-    deny: "error",
-    query: "warning",
-    comment: "inherit",
-  };
   // multilingual stance classifier
   const multilingualStanceResult = useSelector(
     (state) => state.assistant.multilingualStanceResult,
@@ -115,6 +92,12 @@ const AssistantCommentResult = ({ collectedComments }) => {
   const multilingualStanceFail = useSelector(
     (state) => state.assistant.multilingualStanceFail,
   );
+  const stanceColours = {
+    support: "success",
+    deny: "error",
+    query: "warning",
+    comment: "inherit",
+  };
 
   // group comments by links, verification and stance
   let totalCommentsWithReplies = 0;
@@ -141,25 +124,12 @@ const AssistantCommentResult = ({ collectedComments }) => {
       ? verificationComments.push(collectedComments[i])
       : null;
     // add stance
-    const stance = targetObliviousStanceResult
-      ? targetObliviousStanceResult[collectedComments[i].id].stance
+    const stance = multilingualStanceResult
+      ? multilingualStanceResult[collectedComments[i].id].stance
       : null;
     stance == "query" ? queryComments.push(collectedComments[i]) : null;
     stance == "support" ? supportComments.push(collectedComments[i]) : null;
     stance == "deny" ? denyComments.push(collectedComments[i]) : null;
-    // add multilingual stance
-    const multilingualStance = multilingualStanceResult
-      ? multilingualStanceResult[collectedComments[i].id].stance
-      : null;
-    multilingualStance == "query"
-      ? multilingualQueryComments.push(collectedComments[i])
-      : null;
-    multilingualStance == "support"
-      ? multilingualSupportComments.push(collectedComments[i])
-      : null;
-    multilingualStance == "deny"
-      ? multilingualDenyComments.push(collectedComments[i])
-      : null;
     // number of comments and replies
     totalCommentsWithReplies += 1;
     collectedComments[i].replies
@@ -198,9 +168,6 @@ const AssistantCommentResult = ({ collectedComments }) => {
         moment(comment.publishedAt).format("l") +
         " " +
         moment(comment.publishedAt).format("LT");
-      const targetObliviousStance = targetObliviousStanceResult
-        ? targetObliviousStanceResult[commentId]
-        : null;
       const multilingualStance = multilingualStanceResult
         ? multilingualStanceResult[commentId]
         : null;
@@ -261,63 +228,31 @@ const AssistantCommentResult = ({ collectedComments }) => {
             </Typography>
           </TableCell>
 
-          {/* stance: switch between target oblivious and multilingual */}
-          {multilingualStanceClassifier ? (
-            <TableCell align="center">
-              {multilingualStanceLoading && <Skeleton variant="rounded" />}
-              {multilingualStanceDone && multilingualStanceResult != null && (
-                <Tooltip
-                  interactive={"true"}
-                  title={
-                    <>
-                      <TransTargetObliviousStanceTooltip keyword={keyword} />
-                      <TransTargetObliviousStanceLink keyword={keyword} />
-                    </>
+          {/* stance multilingual */}
+          <TableCell align="center">
+            {multilingualStanceLoading && <Skeleton variant="rounded" />}
+            {multilingualStanceDone && multilingualStanceResult != null && (
+              <Tooltip
+                interactive={"true"}
+                title={
+                  <>
+                    <TransMultilingualStanceTooltip keyword={keyword} />
+                    <TransMultilingualStanceLink keyword={keyword} />
+                  </>
+                }
+                classes={{ tooltip: classes.assistantTooltip }}
+              >
+                <Chip
+                  label={keyword(multilingualStanceResult[commentId].stance)}
+                  color={
+                    stanceColours[multilingualStanceResult[commentId].stance]
                   }
-                  classes={{ tooltip: classes.assistantTooltip }}
-                >
-                  <Chip
-                    label={keyword(multilingualStanceResult[commentId].stance)}
-                    color={
-                      stanceColours[multilingualStanceResult[commentId].stance]
-                    }
-                    size="small"
-                  />
-                </Tooltip>
-              )}
-              {multilingualStanceFail && <Chip label="Service failed" />}
-            </TableCell>
-          ) : (
-            <TableCell align="center">
-              {targetObliviousStanceLoading && <Skeleton variant="rounded" />}
-              {targetObliviousStanceDone &&
-                targetObliviousStanceResult != null && (
-                  <Tooltip
-                    interactive={"true"}
-                    title={
-                      <>
-                        <TransTargetObliviousStanceTooltip keyword={keyword} />
-                        <TransTargetObliviousStanceLink keyword={keyword} />
-                      </>
-                    }
-                    classes={{ tooltip: classes.assistantTooltip }}
-                  >
-                    <Chip
-                      label={keyword(
-                        targetObliviousStanceResult[commentId].stance,
-                      )}
-                      color={
-                        stanceColours[
-                          targetObliviousStanceResult[commentId].stance
-                        ]
-                      }
-                      size="small"
-                    />
-                  </Tooltip>
-                )}
-              {targetObliviousStanceFail && <Chip label="Service failed" />}
-            </TableCell>
-          )}
+                  size="small"
+                />
+              </Tooltip>
+            )}
+            {multilingualStanceFail && <Chip label="Service failed" />}
+          </TableCell>
 
           {/* options */}
           <TableCell>
@@ -368,14 +303,6 @@ const AssistantCommentResult = ({ collectedComments }) => {
               </TableCell>
               <TableCell align="center">
                 <Typography>{keyword("stance_title")}</Typography>
-                <Typography display="inline">{keyword("TO")}</Typography>
-                <Switch
-                  size="small"
-                  checked={multilingualStanceClassifier}
-                  onChange={switchChangeHandler}
-                  //inputProps={{ 'aria-label': 'controlled' }}
-                />
-                <Typography display="inline">{keyword("ML")}</Typography>
               </TableCell>
               <TableCell align="center">
                 <Typography>{keyword("options")}</Typography>
@@ -405,12 +332,6 @@ const AssistantCommentResult = ({ collectedComments }) => {
     );
   }
 
-  // switch for different stance classifiers
-  function switchChangeHandler(event) {
-    multilingualStanceClassifier
-      ? setMultilingualStanceClassifier(false)
-      : setMultilingualStanceClassifier(true);
-  }
   // pagination for collectedComments
   function allPageChangeHandler(event, page) {
     setCurrentAllPage(page);
@@ -452,8 +373,8 @@ const AssistantCommentResult = ({ collectedComments }) => {
               <>
                 <Trans t={keyword} i18nKey="collected_comments_tooltip" />
                 <TransHtmlDoubleLineBreak keyword={keyword} />
-                <TransTargetObliviousStanceTooltip keyword={keyword} />
-                <TransTargetObliviousStanceLink keyword={keyword} />
+                <TransMultilingualStanceTooltip keyword={keyword} />
+                <TransMultilingualStanceLink keyword={keyword} />
               </>
             }
             classes={{ tooltip: classes.assistantTooltip }}
@@ -462,12 +383,6 @@ const AssistantCommentResult = ({ collectedComments }) => {
           </Tooltip>
         }
       />
-
-      {targetObliviousStanceLoading ? (
-        <div>
-          <LinearProgress />
-        </div>
-      ) : null}
 
       <CardContent width="100%">
         {/* all comments */}
@@ -533,7 +448,6 @@ const AssistantCommentResult = ({ collectedComments }) => {
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>
               {keyword("stance_label")}
-              {keyword("target_oblivious_comments")}
               <Chip
                 label={keyword("support")}
                 color={stanceColours.support}
@@ -558,7 +472,6 @@ const AssistantCommentResult = ({ collectedComments }) => {
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>
               {keyword("stance_label")}
-              {keyword("target_oblivious_comments")}
               <Chip
                 label={keyword("query")}
                 color={stanceColours.query}
@@ -583,7 +496,6 @@ const AssistantCommentResult = ({ collectedComments }) => {
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>
               {keyword("stance_label")}
-              {keyword("target_oblivious_comments")}
               <Chip
                 label={keyword("deny")}
                 color={stanceColours.deny}
@@ -599,84 +511,6 @@ const AssistantCommentResult = ({ collectedComments }) => {
               denyPageChangeHandler,
               currentDenyPage,
               Math.ceil(denyComments.length / pageSize),
-            )}
-          </AccordionDetails>
-        </Accordion>
-
-        {/* multilingual stance: support comments */}
-        <Accordion hidden={supportComments.length < 1}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>
-              {keyword("stance_label")}
-              {keyword("multilingual_comments")}
-              <Chip
-                label={keyword("support")}
-                color={stanceColours.support}
-                size="small"
-              />{" "}
-              {keyword("comments_label")}
-              {" (" + multilingualSupportComments.length + ")"}
-              {" multilingual"}
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            {renderComments(
-              multilingualSupportComments,
-              multilingualSupportPageChangeHandler,
-              currentMultilingualSupportPage,
-              Math.ceil(multilingualSupportComments.length / pageSize),
-            )}
-          </AccordionDetails>
-        </Accordion>
-
-        {/* multilingual stance: query comments */}
-        <Accordion hidden={queryComments.length < 1}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>
-              {keyword("stance_label")}
-              {keyword("multilingual_comments")}
-              <Chip
-                label={keyword("query")}
-                color={stanceColours.query}
-                size="small"
-              />{" "}
-              {keyword("comments_label")}
-              {" (" + multilingualQueryComments.length + ")"}
-              {" multilingual"}
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            {renderComments(
-              multilingualQueryComments,
-              multilingualQueryPageChangeHandler,
-              currentMultilingualQueryPage,
-              Math.ceil(multilingualQueryComments.length / pageSize),
-            )}
-          </AccordionDetails>
-        </Accordion>
-
-        {/* multilingual stance: deny comments */}
-        <Accordion hidden={denyComments.length < 1}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>
-              {keyword("stance_label")}
-              {keyword("multilingual_comments")}
-              <Chip
-                label={keyword("deny")}
-                color={stanceColours.deny}
-                size="small"
-              />{" "}
-              {keyword("comments_label")}
-              {" (" + multilingualDenyComments.length + ")"}
-              {" multilingual"}
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            {renderComments(
-              multilingualDenyComments,
-              multilingualDenyPageChangeHandler,
-              currentMultilingualDenyPage,
-              Math.ceil(multilingualDenyComments.length / pageSize),
             )}
           </AccordionDetails>
         </Accordion>
