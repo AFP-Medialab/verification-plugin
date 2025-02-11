@@ -18,7 +18,6 @@ import {
   setSubjectivityDetails,
   setPrevFactChecksDetails,
   setMachineGeneratedTextDetails,
-  setTargetObliviousStanceDetails,
   setMultilingualStanceDetails,
   setProcessUrl,
   setProcessUrlActions,
@@ -125,13 +124,6 @@ function* getMachineGeneratedTextSaga() {
   yield takeLatest(
     ["SET_SCRAPED_DATA", "AUTH_USER_LOGIN", "CLEAN_STATE"],
     handleMachineGeneratedTextCall,
-  );
-}
-
-function* getTargetObliviousStanceSaga() {
-  yield takeLatest(
-    ["SET_SCRAPED_DATA", "CLEAN_STATE"],
-    handleTargetObliviousStanceCall,
   );
 }
 
@@ -650,46 +642,6 @@ function* handleAssistantScrapeCall(action) {
   }
 }
 
-// Target Oblivious Stance Classification for YouTube Comments
-function* handleTargetObliviousStanceCall(action) {
-  if (action.type === "CLEAN_STATE") return;
-
-  try {
-    const collectedComments = yield select(
-      (state) => state.assistant.collectedComments,
-    );
-
-    function createCommentArray(comments, convertedComments) {
-      comments.forEach((comment) => {
-        convertedComments.push({
-          text: comment.textOriginal,
-          id_str: comment.id,
-          in_reply_to_status_id_str: "1",
-        });
-        if ("replies" in comment) {
-          createCommentArray(comment.replies, convertedComments);
-        }
-      });
-    }
-
-    let convertedComments = [];
-    createCommentArray(collectedComments, convertedComments);
-
-    if (convertedComments) {
-      yield put(setTargetObliviousStanceDetails(null, true, false, false));
-
-      const result = yield call(
-        assistantApi.callTargetObliviousStanceService,
-        convertedComments,
-      );
-
-      yield put(setTargetObliviousStanceDetails(result, false, true, false));
-    }
-  } catch (error) {
-    yield put(setTargetObliviousStanceDetails(null, false, false, true));
-  }
-}
-
 // Multilingual Stance Classification for YouTube Comments
 function* handleMultilingualStanceCall(action) {
   if (action.type === "CLEAN_STATE") return;
@@ -1175,7 +1127,6 @@ export default function* assistantSaga() {
     fork(getSubjectivitySaga),
     fork(getPrevFactChecksSaga),
     fork(getMachineGeneratedTextSaga),
-    fork(getTargetObliviousStanceSaga),
     fork(getMultilingualStanceSaga),
   ]);
 }

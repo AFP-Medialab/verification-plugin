@@ -64,11 +64,6 @@ const AssistantCheckStatus = () => {
     (state) => state.assistant.machineGeneratedTextFail,
   );
 
-  const targetObliviousStanceTitle = keyword("target_oblivious_stance_title");
-  const targetObliviousStanceFailState = useSelector(
-    (state) => state.assistant.targetObliviousStanceFail,
-  );
-
   const multilingualStanceTitle = keyword("multilingual_stance_title");
   const multilingualStanceFailState = useSelector(
     (state) => state.assistant.multilingualStanceFail,
@@ -85,10 +80,6 @@ const AssistantCheckStatus = () => {
     { title: subjectivityTitle, failed: subjectivityFailState },
     { title: prevFactChecksTitle, failed: prevFactChecksFailState },
     { title: machineGeneratedTextTitle, failed: machineGeneratedTextFailState },
-    {
-      title: targetObliviousStanceTitle,
-      failed: targetObliviousStanceFailState,
-    },
     {
       title: multilingualStanceTitle,
       failed: multilingualStanceFailState,

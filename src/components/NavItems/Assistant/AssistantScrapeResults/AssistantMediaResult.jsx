@@ -72,13 +72,6 @@ const AssistantMediaResult = () => {
   );
   const resultIsImage = resultProcessType === CONTENT_TYPE.IMAGE;
 
-  // Video Analysis for YouTube comments
-  const report = useSelector((state) => state.analysis.result);
-  const targetObliviousStanceResult = useSelector(
-    (state) => state.assistant.targetObliviousStanceResult,
-  );
-  //const collectedComments = useSelector((state) => state.assistant.collectedComments);
-
   // local control state
   // const [expandMedia, setExpandMedia] = useState(
   //   !singleMediaPresent || processUrl == null,
@@ -202,24 +195,6 @@ const AssistantMediaResult = () => {
               <Grid2 size={6}>
                 <AssistantProcessUrlActions />
               </Grid2>
-
-              {/* YouTube comments */}
-              {report != null ? (
-                <Grid2 size={12}>
-                  <AnalysisComments
-                    type="YOUTUBE"
-                    classes={classes}
-                    //title={"youtube_comment_title"}
-                    title={"collected_comments_title"}
-                    keyword={keyword}
-                    report={report} // difference in assistant and video analysis API results
-                    targetObliviousStance={targetObliviousStanceResult}
-                    setAnalysisComments={setAnalysisComments}
-                    setAnalysisLinkComments={setAnalysisLinkComments}
-                    setAnalysisVerifiedComments={setAnalysisVerifiedComments}
-                  />
-                </Grid2>
-              ) : null}
             </Grid2>
           )
         ) : null}

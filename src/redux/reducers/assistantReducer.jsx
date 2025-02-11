@@ -74,11 +74,6 @@ const defaultState = {
   machineGeneratedTextDone: false,
   machineGeneratedTextFail: false,
 
-  targetObliviousStanceResult: null,
-  targetObliviousStanceLoading: false,
-  targetObliviousStanceDone: false,
-  targetObliviousStanceFail: false,
-
   multilingualStanceResult: null,
   multilingualStanceLoading: false,
   multilingualStanceDone: false,
@@ -111,7 +106,6 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_SUBJECTIVITY_DETAILS":
     case "SET_PREV_FACT_CHECKS_DETAILS":
     case "SET_MACHINE_GENERATED_TEXT_DETAILS":
-    case "SET_TARGET_OBLIVIOUS_STANCE_DETAILS":
     case "SET_MULTILINGUAL_STANCE_DETAILS":
     case "SET_LOADING":
     case "SET_WARNING_EXPANDED":
@@ -196,11 +190,6 @@ const assistantReducer = (state = defaultState, action) => {
         machineGeneratedTextLoading: false,
         machineGeneratedTextDone: false,
         machineGeneratedTextFail: false,
-
-        targetObliviousStanceResult: null,
-        targetObliviousStanceLoading: false,
-        targetObliviousStanceDone: false,
-        targetObliviousStanceFail: false,
 
         multilingualStanceResult: null,
         multilingualStanceLoading: false,

@@ -244,29 +244,6 @@ export default function assistantApiCalls() {
     );
   };
 
-  const callTargetObliviousStanceService = async (comments) => {
-    return await callAsyncWithNumRetries(
-      MAX_NUM_RETRIES,
-      async () => {
-        const result = await axios.post(
-          assistantEndpoint + "gcloud/target-oblivious-stance-classification",
-          {
-            comments: comments,
-          },
-        );
-        return result.data;
-      },
-      (numTries) => {
-        console.log(
-          "Could not connect to target oblivious stance service, tries " +
-            (numTries + 1) +
-            "/" +
-            MAX_NUM_RETRIES,
-        );
-      },
-    );
-  };
-
   const callMultilingualStanceService = async (comments) => {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
@@ -301,7 +278,6 @@ export default function assistantApiCalls() {
     callSubjectivityService,
     callPrevFactChecksService,
     callMachineGeneratedTextService,
-    callTargetObliviousStanceService,
     callMultilingualStanceService,
   };
 }
