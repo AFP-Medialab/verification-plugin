@@ -446,13 +446,12 @@ const AssistantCommentResult = ({ collectedComments }) => {
         {/* stance: support comments */}
         <Accordion hidden={supportComments.length < 1}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>{keyword("stance_label")}</Typography>
+            <Typography component="div">{keyword("stance_label")}
             <Chip
               label={keyword("support")}
               color={stanceColours.support}
               size="small"
             />
-            <Typography>
               {" "}
               {keyword("comments_label")}
               {" (" + supportComments.length + ")"}
@@ -471,13 +470,12 @@ const AssistantCommentResult = ({ collectedComments }) => {
         {/* stance: query comments */}
         <Accordion hidden={queryComments.length < 1}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>{keyword("stance_label")}</Typography>
+            <Typography component="div">{keyword("stance_label")}
             <Chip
               label={keyword("query")}
               color={stanceColours.query}
               size="small"
             />
-            <Typography>
               {" "}
               {keyword("comments_label")}
               {" (" + queryComments.length + ")"}
@@ -496,13 +494,12 @@ const AssistantCommentResult = ({ collectedComments }) => {
         {/* stance: deny comments */}
         <Accordion hidden={denyComments.length < 1}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>{keyword("stance_label")}</Typography>
+            <Typography component="div">{keyword("stance_label")}
             <Chip
               label={keyword("deny")}
               color={stanceColours.deny}
               size="small"
             />
-            <Typography>
               {" "}
               {keyword("comments_label")}
               {" (" + denyComments.length + ")"}
