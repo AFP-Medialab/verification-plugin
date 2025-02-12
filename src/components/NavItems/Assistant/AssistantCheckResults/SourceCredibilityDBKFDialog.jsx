@@ -20,7 +20,7 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
-  TransHtmlDoubleLinkBreak,
+  TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
 } from "../TransComponents";
@@ -71,7 +71,7 @@ const SourceCredibilityDBKFDialog = (props) => {
                 title={
                   <>
                     <TransSourceCredibilityTooltip keyword={keyword} />
-                    <TransHtmlDoubleLinkBreak keyword={keyword} />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
                     <TransUrlDomainAnalysisLink keyword={keyword} />
                   </>
                 }
