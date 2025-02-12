@@ -1,31 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import HeaderTool from "@Shared/HeaderTool/HeaderTool";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
+import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
+import { setError } from "redux/reducers/errorReducer";
+
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
+import { imageOcr } from "../../../../constants/tools";
 import {
   resetOcrState,
-  setb64InputFile,
   setOcrBinaryImage,
   setOcrErrorKey,
   setOcrInput,
   setOcrResult,
+  setb64InputFile,
 } from "../../../../redux/actions/tools/ocrActions";
-import OcrResult from "./Results/OcrResult";
-
-import { Box } from "@mui/material";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import OCRIcon from "../../../NavBar/images/SVG/Image/OCR.svg";
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-//import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
-import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { setError } from "redux/reducers/errorReducer";
-import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
+import OcrResult from "./Results/OcrResult";
 
 const OCR = () => {
   const { url } = useParams();
@@ -152,6 +152,14 @@ const OCR = () => {
     }
   }, [url]);
 
+  const processUrl = useSelector((state) => state.assistant.processUrl);
+  useEffect(() => {
+    if (processUrl) {
+      setInput(processUrl);
+      submitUrl(processUrl);
+    }
+  }, [processUrl]);
+
   const handleCloseSelectedFile = () => {
     dispatch(resetOcrState());
   };
@@ -171,9 +179,7 @@ const OCR = () => {
       <HeaderTool
         name={keywordAllTools("navbar_ocr")}
         description={keywordAllTools("navbar_ocr_description")}
-        icon={
-          <OCRIcon style={{ fill: "#00926c" }} width="40px" height="40px" />
-        }
+        icon={<imageOcr.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
       />
 
       <Card>

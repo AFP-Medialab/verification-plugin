@@ -1,27 +1,31 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Grid2, Paper } from "@mui/material";
+
 import Box from "@mui/material/Box";
-import CustomTile from "../../Shared/CustomTitle/CustomTitle";
-import europeImage from "./images/logo_EUh2020_horizontal.png";
-import itiImage from "./images/iti.jpg";
-import afpImage from "./images/Logo-AFP-384.png";
-import afcnLogo from "./images/afcn_logo.png";
-import arijLogo from "./images/arij_logo.png";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import Grid2 from "@mui/material/Grid2";
+import Link from "@mui/material/Link";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import {
   toggleHumanRightsCheckBox,
   toggleUnlockExplanationCheckBox,
 } from "../../../redux/actions";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
-import Link from "@mui/material/Link";
-import Typography from "@mui/material/Typography";
 import {
   toggleAnalyticsCheckBox,
   toggleState,
 } from "../../../redux/reducers/cookiesReducers";
+import CustomTile from "../../Shared/CustomTitle/CustomTitle";
+import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
+import afpImage from "./images/Logo-AFP-384.png";
+import afcnLogo from "./images/afcn_logo.png";
+import arijLogo from "./images/arij_logo.png";
+import itiImage from "./images/iti.jpg";
+import europeImage from "./images/logo_EUh2020_horizontal.png";
 
 const About = () => {
   const classes = useMyStyles();

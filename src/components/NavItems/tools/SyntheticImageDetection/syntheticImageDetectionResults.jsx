@@ -1,44 +1,46 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Alert,
-  Box,
-  Card,
-  CardContent,
-  CardHeader,
-  Chip,
-  Grid2,
-  IconButton,
-  Stack,
-} from "@mui/material";
-import { Close, Download, ExpandMore } from "@mui/icons-material";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import GaugeChart from "react-gauge-chart";
 import { useSelector } from "react-redux";
+
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Chip from "@mui/material/Chip";
+import Divider from "@mui/material/Divider";
+import Grid2 from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
+import { Close, Download, ExpandMore } from "@mui/icons-material";
+
 import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import CustomAlertScore from "../../../Shared/CustomAlertScore";
-import GaugeChart from "react-gauge-chart";
-import Tooltip from "@mui/material/Tooltip";
+import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
 import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
 import NddDatagrid from "./NddDatagrid";
 import {
-  canUserDisplayAlgorithmResults,
   DETECTION_THRESHOLDS,
+  SyntheticImageDetectionAlgorithm,
+  canUserDisplayAlgorithmResults,
   getSyntheticImageDetectionAlgorithmFromApiName,
   gigaGanWebpR50Grip,
   ldmWebpR50Grip,
   proGanWebpR50Grip,
-  SyntheticImageDetectionAlgorithm,
   syntheticImageDetectionAlgorithms,
 } from "./SyntheticImageDetectionAlgorithms";
-import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import List from "@mui/material/List";
 
 /**
  * Returns the alert color code for the given percentage n
@@ -211,8 +213,6 @@ const SyntheticImageDetectionResults = ({
 
         return scoreB - scoreA;
       });
-
-    console.log(res);
 
     const hasResultError = () => {
       for (const algorithm of res) {

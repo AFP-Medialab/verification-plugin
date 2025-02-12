@@ -1,6 +1,26 @@
-import uniqWith from "lodash/uniqWith";
 import isEqual from "lodash/isEqual";
+import uniqWith from "lodash/uniqWith";
+import {
+  all,
+  call,
+  fork,
+  put,
+  select,
+  take,
+  takeLatest,
+} from "redux-saga/effects";
 
+import assistantApiCalls from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
+import DBKFApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
+import {
+  CONTENT_TYPE,
+  KNOWN_LINKS,
+  KNOWN_LINK_PATTERNS,
+  NE_SUPPORTED_LANGS,
+  TYPE_PATTERNS,
+  matchPattern,
+  selectCorrectActions,
+} from "../../components/NavItems/Assistant/AssistantRuleBook";
 import {
   cleanAssistantState,
   setAssistantLoading,
@@ -11,40 +31,19 @@ import {
   setImageVideoSelected,
   setInputSourceCredDetails,
   setInputUrl,
+  setMachineGeneratedTextDetails,
   setNeDetails,
   setNewsGenreDetails,
   setNewsTopicDetails,
   setPersuasionDetails,
-  setSubjectivityDetails,
   setPrevFactChecksDetails,
-  setMachineGeneratedTextDetails,
   setProcessUrl,
   setProcessUrlActions,
   setScrapedData,
   setSingleMediaPresent,
+  setSubjectivityDetails,
   setUrlMode,
 } from "../actions/tools/assistantActions";
-
-import {
-  all,
-  call,
-  fork,
-  put,
-  select,
-  take,
-  takeLatest,
-} from "redux-saga/effects";
-import assistantApiCalls from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
-import DBKFApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
-import {
-  CONTENT_TYPE,
-  KNOWN_LINK_PATTERNS,
-  KNOWN_LINKS,
-  matchPattern,
-  NE_SUPPORTED_LANGS,
-  selectCorrectActions,
-  TYPE_PATTERNS,
-} from "../../components/NavItems/Assistant/AssistantRuleBook";
 
 /**
  * APIs
@@ -387,7 +386,7 @@ function* handleDbkfTextCall(action) {
                 textToUse = text.slice(0, -1)
             }*/
       let result = yield call(dbkfAPI.callTextSimilarityEndpoint, textToUse);
-      let filteredResult = filterDbkfTextResult(result);
+      let filteredResult = result.length ? result : null;
 
       yield put(setDbkfTextMatchDetails(filteredResult, false, true, false));
     }
@@ -560,6 +559,7 @@ function* handleNamedEntityCall(action) {
             return b.value - a.value;
           });
         });
+        categoryList.sort();
         yield put(
           setNeDetails(categoryList, wordCloudList, false, true, false),
         );
@@ -712,6 +712,7 @@ const decideWhetherToScrape = (urlType, contentType) => {
     case KNOWN_LINKS.INSTAGRAM:
     case KNOWN_LINKS.FACEBOOK:
     case KNOWN_LINKS.TWITTER:
+    case KNOWN_LINKS.SNAPCHAT:
     case KNOWN_LINKS.BLUESKY:
     case KNOWN_LINKS.TELEGRAM:
     case KNOWN_LINKS.MASTODON:
@@ -811,6 +812,7 @@ const filterAssistantResults = (
         videoList = scrapeResult.videos;
       }
       break;
+    case KNOWN_LINKS.SNAPCHAT:
     case KNOWN_LINKS.BLUESKY:
       if (scrapeResult.images.length > 0) {
         imageList = scrapeResult.images;
@@ -1003,29 +1005,6 @@ const addToRelevantSourceCred = (sourceCredList, result) => {
     credibilityEvidence: resultEvidence,
     credibilityScope: result["credibility-scope"],
   });
-};
-
-const filterDbkfTextResult = (result) => {
-  let resultList = [];
-  let scores = [];
-
-  result.forEach((res) => {
-    scores.push(res.score);
-  });
-
-  let scaled = scaleNumbers(scores, 0, 100);
-
-  // to be reviewed. only really fixes some minor cases.
-  result.forEach((value, index) => {
-    if (value.score > 1000 && scaled[index] > 70) {
-      resultList.push({
-        text: value.text,
-        claimUrl: value.externalLink,
-        score: value.score,
-      });
-    }
-  });
-  return resultList.length ? resultList : null;
 };
 
 const scaleNumbers = (unscaledNums) => {

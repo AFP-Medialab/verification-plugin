@@ -1,11 +1,20 @@
 import React, { useEffect, useState } from "react";
-import useGetGif from "./Hooks/useGetGif";
-import { Alert, Box, Button, Grid2, Slider, Typography } from "@mui/material";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Grid2 from "@mui/material/Grid2";
+import Slider from "@mui/material/Slider";
+import Typography from "@mui/material/Typography";
+
+import { Edit, PlayArrow } from "@mui/icons-material";
+
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import ImageCanvas from "../Forensic/components/imageCanvas/imageCanvas";
 import TextImageCanvas from "./Components/TextImageCanvas";
-import { Edit, PlayArrow } from "@mui/icons-material";
+import useGetGif from "./Hooks/useGetGif";
 
 const AnimatedGif = ({
   toolState,

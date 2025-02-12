@@ -1,23 +1,32 @@
 import React, { useState } from "react";
+import { Trans } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Box, CardHeader, Grid2 } from "@mui/material";
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Grid2 from "@mui/material/Grid2";
 import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import LinkIcon from "@mui/icons-material/Link";
-import Typography from "@mui/material/Typography";
 
-import AssistantIcon from "../../NavBar/images/navbar/assistant-icon-primary.svg";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import {
   setImageVideoSelected,
   setUrlMode,
 } from "../../../redux/actions/tools/assistantActions";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
+import AssistantIcon from "../../NavBar/images/navbar/assistant-icon-primary.svg";
 import HeaderTool from "../../Shared/HeaderTool/HeaderTool";
+import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
+import {
+  TransHtmlDoubleLinkBreak,
+  TransSupportedToolsLink,
+} from "./TransComponents";
 
 const AssistantIntroduction = (props) => {
   // styles, language, dispatch, params
@@ -92,17 +101,28 @@ const AssistantIntroduction = (props) => {
             <Tooltip
               interactive={"true"}
               title={
-                <div
-                  className={"content"}
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      keyword("assistant_help_title") +
-                      keyword("assistant_help_1") +
-                      keyword("assistant_help_2") +
-                      keyword("assistant_help_3") +
-                      keyword("assistant_help_4"),
-                  }}
-                />
+                <>
+                  <Trans
+                    t={keyword}
+                    i18nKey="assistant_help_title"
+                    components={{
+                      b: <b />,
+                    }}
+                  />
+                  <TransHtmlDoubleLinkBreak keyword={keyword} />
+                  <Trans t={keyword} i18nKey="assistant_help_1" />
+                  <TransHtmlDoubleLinkBreak keyword={keyword} />
+                  <Trans
+                    t={keyword}
+                    i18nKey="assistant_help_2"
+                    components={{
+                      b: <b />,
+                      ul: <ul />,
+                      li: <li />,
+                    }}
+                  />
+                  <TransSupportedToolsLink keyword={keyword} />
+                </>
               }
               classes={{ tooltip: classes.assistantTooltip }}
             >

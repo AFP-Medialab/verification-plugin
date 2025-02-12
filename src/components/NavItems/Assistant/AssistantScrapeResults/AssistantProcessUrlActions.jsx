@@ -1,10 +1,12 @@
 import React from "react";
+import { Trans } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
+import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
@@ -12,9 +14,6 @@ import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import Divider from "@mui/material/Divider";
-import { KNOWN_LINKS } from "../AssistantRuleBook";
 
 import {
   resetDeepfake as resetDeepfakeImage,
@@ -28,6 +27,8 @@ import {
   resetSyntheticImageDetectionImage,
   setSyntheticImageDetectionUrl,
 } from "../../../../redux/actions/tools/syntheticImageDetectionActions";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import { KNOWN_LINKS } from "../AssistantRuleBook";
 
 const AssistantProcessUrlActions = () => {
   const classes = useMyStyles();
@@ -110,11 +111,7 @@ const AssistantProcessUrlActions = () => {
                     secondary={
                       <Typography color={"textSecondary"} component={"span"}>
                         <Box fontStyle="italic">
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html: keyword(action.text),
-                            }}
-                          ></div>
+                          <Trans t={keyword} i18nKey={action.text} />
                         </Box>
                       </Typography>
                     }

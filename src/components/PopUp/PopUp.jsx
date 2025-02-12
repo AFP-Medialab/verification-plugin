@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Box, Button, Grid2 } from "@mui/material";
-import LogoVera from "../NavBar/images/SVG/Navbar/vera-logo_black.svg?url";
-import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg?url";
-import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg?url";
-import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Grid2 from "@mui/material/Grid2";
+
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { changeLanguage } from "../../redux/reducers/languageReducer";
-import { getSupportedBrowserLanguage } from "../Shared/Languages/getSupportedBrowserLanguage";
 import { ROLES } from "constants/roles";
+
+import { changeLanguage } from "../../redux/reducers/languageReducer";
+import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg?url";
+import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg?url";
+import LogoVera from "../NavBar/images/SVG/Navbar/vera-logo_black.svg?url";
+import { getSupportedBrowserLanguage } from "../Shared/Languages/getSupportedBrowserLanguage";
+import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 
 const navigator = window.browser ? window.browser : window.chrome;
 

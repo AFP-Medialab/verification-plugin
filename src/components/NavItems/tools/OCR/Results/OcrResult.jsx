@@ -4,29 +4,34 @@ import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import { CardContent, Grid2, TextField } from "@mui/material";
+import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Divider from "@mui/material/Divider";
+import Grid2 from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
 import LinearProgress from "@mui/material/LinearProgress";
 import MenuItem from "@mui/material/MenuItem";
+import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+
 import WarningOutlined from "@mui/icons-material/WarningOutlined";
-import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
+
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { setError } from "redux/reducers/errorReducer";
+
 import {
   resetOcrState,
   setOcrReprocess,
   setReprocessOpen,
   setSelectedScript,
 } from "../../../../../redux/actions/tools/ocrActions";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
+import {
+  SEARCH_ENGINE_SETTINGS,
+  reverseImageSearch,
+} from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 import { TextCopy } from "../../../../Shared/Utils/TextCopy";
 import { Translate } from "../../../../Shared/Utils/Translate";
-import {
-  reverseImageSearch,
-  SEARCH_ENGINE_SETTINGS,
-} from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 
 const OcrResult = () => {
   const classes = useMyStyles();

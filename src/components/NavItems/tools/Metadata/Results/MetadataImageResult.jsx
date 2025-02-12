@@ -1,8 +1,10 @@
 import React from "react";
-import { Stack } from "@mui/material";
-import Box from "@mui/material/Box";
+import { useDispatch } from "react-redux";
 
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
+import Stack from "@mui/material/Stack";
+
 import MetadataList from "../../../../Shared/MetadataList";
 
 const MetadataImageResult = ({ metadata, imageSrc }) => {

@@ -1,39 +1,43 @@
 import React, { useEffect, useState } from "react";
-import TextField from "@mui/material/TextField";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
-import { useDispatch, useSelector } from "react-redux";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { Grid2, IconButton } from "@mui/material";
+import FormGroup from "@mui/material/FormGroup";
+import Grid2 from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
+import LinearProgress from "@mui/material/LinearProgress";
+import TextField from "@mui/material/TextField";
+
 import CloseIcon from "@mui/icons-material/Close";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import HeaderTool from "@Shared/HeaderTool/HeaderTool";
+import ImageGridList from "@Shared/ImageGridList/ImageGridList";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
+import OnClickInfo from "@Shared/OnClickInfo/OnClickInfo";
+import {
+  SEARCH_ENGINE_SETTINGS,
+  reverseImageSearch,
+  reverseImageSearchAll,
+} from "@Shared/ReverseSearch/reverseSearchUtils";
+import { setError } from "redux/reducers/errorReducer";
+
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { loadImageSize, useLoading } from "../../../../Hooks/useInput";
+import { thumbnails } from "../../../../constants/tools";
 import {
   cleanThumbnailsState,
   setThumbnailsLoading,
   setThumbnailsResult,
 } from "../../../../redux/reducers/tools/thumbnailsReducer";
-import { setError } from "redux/reducers/errorReducer";
-import Checkbox from "@mui/material/Checkbox";
-import FormGroup from "@mui/material/FormGroup";
-import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
-import { useParams } from "react-router-dom";
-
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import ThumbnailsIcon from "../../../NavBar/images/SVG/Video/Thumbnails.svg";
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import LinearProgress from "@mui/material/LinearProgress";
-import {
-  reverseImageSearch,
-  reverseImageSearchAll,
-  SEARCH_ENGINE_SETTINGS,
-} from "../../../Shared/ReverseSearch/reverseSearchUtils";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const Thumbnails = () => {
   const { url } = useParams();
@@ -70,9 +74,8 @@ const Thumbnails = () => {
     let selectedList = {};
 
     for (const searchEngine of Object.values(SEARCH_ENGINE_SETTINGS)) {
-      if (searchEngine.NAME === SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME)
-        selectedList[searchEngine.NAME] = true;
-      else selectedList[searchEngine.NAME] = false;
+      selectedList[searchEngine.NAME] =
+        searchEngine.NAME === SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME;
     }
 
     selectedList["openTabs"] = true;
@@ -141,13 +144,13 @@ const Thumbnails = () => {
     if (url !== null && url !== "" && isYtUrl(url)) {
       setEventUrl(url);
       /*trackEvent(
-                          "submission",
-                          "thumbnails",
-                          "youtube thumbnail",
-                          url,
-                          client_id,
-                          uid
-                        );*/
+                                            "submission",
+                                            "thumbnails",
+                                            "youtube thumbnail",
+                                            url,
+                                            client_id,
+                                            uid
+                                          );*/
       let images = get_images(url);
       dispatch(
         setThumbnailsResult({
@@ -158,7 +161,7 @@ const Thumbnails = () => {
         }),
       );
       if (selectedValue.openTabs) images.forEach((img) => imageClickUrl(img));
-    } else dispatch(setError("Please use a valid Youtube Url (add to tsv)"));
+    } else dispatch(setError(keyword(enter_valid_youtube_url)));
   };
 
   const imageClickUrl = (url) => {
@@ -225,18 +228,20 @@ const Thumbnails = () => {
     }
   }, [showResult]);
 
+  const processUrl = useSelector((state) => state.assistant.processUrl);
+  useEffect(() => {
+    if (processUrl) {
+      setInput(processUrl);
+      setUrlDetected(true);
+    }
+  }, [processUrl]);
+
   return (
     <div>
       <HeaderTool
         name={keywordAllTools("navbar_thumbnails")}
         description={keywordAllTools("navbar_thumbnails_description")}
-        icon={
-          <ThumbnailsIcon
-            style={{ fill: "#00926c" }}
-            width="40px"
-            height="40px"
-          />
-        }
+        icon={<thumbnails.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
       />
 
       <Card>

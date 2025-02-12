@@ -1,23 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Alert,
-  Box,
-  Button,
-  Card,
-  CardActionArea,
-  CardContent,
-  Divider,
-  Grid2,
-  Stack,
-  Typography,
-} from "@mui/material";
 import { useSelector } from "react-redux";
-import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
-import { ROLES } from "../../../../../constants/roles";
-import C2paCard from "./c2paCard";
+
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardActionArea from "@mui/material/CardActionArea";
+import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import { getBlob } from "../../../../Shared/ReverseSearch/utils/searchUtils";
+import Divider from "@mui/material/Divider";
+import Grid2 from "@mui/material/Grid2";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
 import { deepClone } from "@mui/x-data-grid/internals";
+
+import { ROLES } from "../../../../../constants/roles";
+import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
+import { getBlob } from "../../../../Shared/ReverseSearch/utils/searchUtils";
+import C2paCard from "./c2paCard";
 
 const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
   const role = useSelector((state) => state.userSession.user.roles);
@@ -145,7 +146,28 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
   return (
     <Stack direction="row" spacing={4}>
       <Box width="100%">
-        <Grid2 container direction="row" spacing={2} p={4} width="100%">
+        <Grid2 container direction="row" spacing={4} p={4} width="100%">
+          <Alert severity="info">
+            <Typography variant="body2">
+              {
+                "To protect the image, an invisible watermark is embedded. This change is automatically recorded in the C2PA history below."
+              }
+            </Typography>
+            <Typography variant="body2">
+              {"Two thumbnails are displayed:"}
+            </Typography>
+            <Typography variant="body2">
+              <ul>
+                <li>
+                  {
+                    "The first thumbnail is the original thumbnail which comes from the camera."
+                  }
+                </li>
+                <li>{"The second thumbnail is the watermarked image."}</li>
+              </ul>
+            </Typography>
+          </Alert>
+
           <Grid2
             container
             direction="column"
@@ -157,7 +179,7 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
               // hdImage,
               resizedHdImageUrl,
               "AFP HD Image",
-              "AFP C2PA Image",
+              keyword("reverse_search_results_hd_afp_label"),
               selectedImage === resizedHdImageUrl,
             )}
 
@@ -168,7 +190,7 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
               ImageCard(
                 thumbnailImage.url,
                 "Original image from Camera",
-                "Original image from Camera",
+                keyword("reverse_search_results_hd_camera_label"),
                 selectedImage === thumbnailImage.url,
               )}
           </Grid2>

@@ -1,36 +1,39 @@
 import React, { useEffect, useState } from "react";
+import { Trans } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import {
-  Box,
-  CardHeader,
-  Grid2,
-  Tabs,
-  Tab,
-  Skeleton,
-  Stack,
-} from "@mui/material";
 import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
 import Collapse from "@mui/material/Collapse";
+import LinearProgress from "@mui/material/LinearProgress";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
 import { WarningOutlined } from "@mui/icons-material";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import LinearProgress from "@mui/material/LinearProgress";
-import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
-import { setWarningExpanded } from "../../../../redux/actions/tools/assistantActions";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import { treeMapToElements } from "./assistantUtils";
 
-import TextFooter from "./TextFooter.jsx";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import { setWarningExpanded } from "../../../../redux/actions/tools/assistantActions";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import {
+  TransCredibilitySignalsLink,
+  TransHtmlDoubleLinkBreak,
+  TransSupportedToolsLink,
+} from "../TransComponents";
 import AssistantTextClassification from "./AssistantTextClassification";
 import AssistantTextSpanClassification from "./AssistantTextSpanClassification";
+import TextFooter from "./TextFooter.jsx";
+import { treeMapToElements } from "./assistantUtils";
 
 const AssistantTextResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
-  //const sharedKeyword = i18nLoadNamespace("components/Shared/utils");
   const expandMinimiseText = keyword("expand_minimise_text");
 
   const classes = useMyStyles();
@@ -47,9 +50,6 @@ const AssistantTextResult = () => {
   const mtLoading = useSelector((state) => state.assistant.mtLoading);
   const dbkfMatchLoading = useSelector(
     (state) => state.assistant.dbkfTextMatchLoading,
-  );
-  const warningExpanded = useSelector(
-    (state) => state.assistant.warningExpanded,
   );
 
   // news framing (topic)
@@ -104,9 +104,6 @@ const AssistantTextResult = () => {
     (state) => state.assistant.subjectivityFail,
   );
 
-  // checking if user logged in
-  const role = useSelector((state) => state.userSession.user.roles);
-
   // display states
   const textBox = document.getElementById("element-to-check");
   const [expanded, setExpanded] = useState(false);
@@ -115,10 +112,6 @@ const AssistantTextResult = () => {
   const [textTabIndex, setTextTabIndex] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTextTabIndex(newValue);
-  };
-  const handleTabClick = (event) => {
-    // leave unset?
-    //setExpanded(true);
   };
 
   useEffect(() => {
@@ -162,6 +155,15 @@ const AssistantTextResult = () => {
     };
   }
 
+  function scrollToElement(id, padding = 0) {
+    const element = document.getElementById(id);
+    if (element) {
+      const targetPosition =
+        element.getBoundingClientRect().top + window.scrollY - padding;
+      window.scrollTo({ top: targetPosition, behavior: "smooth" });
+    }
+  }
+
   return (
     <Card data-testid="assistant-text-scraped-text">
       <CardHeader
@@ -173,10 +175,12 @@ const AssistantTextResult = () => {
             <div hidden={dbkfMatch === null}>
               <Tooltip title={keyword("text_warning")}>
                 <WarningOutlined
+                  color={"warning"}
                   className={classes.toolTipWarning}
+                  sx={{ cursor: "pointer" }}
                   onClick={() => {
-                    dispatch(setWarningExpanded(!warningExpanded));
-                    window.scrollTo(0, 0);
+                    dispatch(setWarningExpanded(true));
+                    scrollToElement("warnings", 100);
                   }}
                 />
               </Tooltip>
@@ -184,12 +188,20 @@ const AssistantTextResult = () => {
             <Tooltip
               interactive={"true"}
               title={
-                <div
-                  className={"content"}
-                  dangerouslySetInnerHTML={{
-                    __html: keyword("text_tooltip"),
-                  }}
-                />
+                <>
+                  <Trans
+                    t={keyword}
+                    i18nKey="text_tooltip"
+                    components={{
+                      b: <b />,
+                      ul: <ul />,
+                      li: <li />,
+                    }}
+                  />
+                  <TransSupportedToolsLink keyword={keyword} />
+                  <TransHtmlDoubleLinkBreak keyword={keyword} />
+                  <TransCredibilitySignalsLink keyword={keyword} />
+                </>
               }
               classes={{ tooltip: classes.assistantTooltip }}
             >
@@ -213,28 +225,27 @@ const AssistantTextResult = () => {
           <Tabs
             value={textTabIndex}
             onChange={handleTabChange}
-            onClick={handleTabClick}
             aria-label="extracted text tabs"
             variant="fullWidth"
           >
-            <Tab label="Raw Text" {...a11yProps(0)} />
+            <Tab label={keyword("raw_text")} {...a11yProps(0)} />
             <Tab
-              label="Topic"
+              label={newsFramingTitle}
               {...a11yProps(1)}
               disabled={newsFramingFail || newsFramingLoading}
             />
             <Tab
-              label="Genre"
+              label={newsGenreTitle}
               {...a11yProps(2)}
               disabled={newsGenreFail || newsGenreLoading}
             />
             <Tab
-              label="Persuasion Techniques"
+              label={persuasionTitle}
               {...a11yProps(3)}
               disabled={persuasionFail || persuasionLoading}
             />
             <Tab
-              label="Subjectivity"
+              label={subjectivityTitle}
               {...a11yProps(4)}
               disabled={subjectivityFail || subjectivityLoading}
             />
@@ -261,9 +272,21 @@ const AssistantTextResult = () => {
                 classification={newsFramingResult.entities}
                 configs={newsFramingResult.configs}
                 titleText={newsFramingTitle}
-                helpDescription={"news_framing_tooltip"}
+                categoriesTooltipContent={
+                  <>
+                    <Trans
+                      t={keyword}
+                      i18nKey="news_framing_tooltip"
+                      components={{
+                        ul: <ul />,
+                        li: <li />,
+                      }}
+                    />
+                    <TransCredibilitySignalsLink keyword={keyword} />
+                  </>
+                }
                 textHtmlMap={textHtmlMap}
-                subjectivity={false}
+                credibilitySignal={keyword("news_framing_title")}
               />
             )}
           </CustomTabPanel>
@@ -282,9 +305,21 @@ const AssistantTextResult = () => {
                 classification={newsGenreResult.entities}
                 configs={newsGenreResult.configs}
                 titleText={newsGenreTitle}
-                helpDescription={"news_genre_tooltip"}
+                categoriesTooltipContent={
+                  <>
+                    <Trans
+                      t={keyword}
+                      i18nKey="news_genre_tooltip"
+                      components={{
+                        ul: <ul />,
+                        li: <li />,
+                      }}
+                    />
+                    <TransCredibilitySignalsLink keyword={keyword} />
+                  </>
+                }
                 textHtmlMap={textHtmlMap}
-                subjectivity={false}
+                credibilitySignal={keyword("news_genre_title")}
               />
             )}
           </CustomTabPanel>
@@ -303,7 +338,19 @@ const AssistantTextResult = () => {
                 classification={persuasionResult.entities}
                 configs={persuasionResult.configs}
                 titleText={persuasionTitle}
-                helpDescription={"persuasion_techniques_tooltip"}
+                categoriesTooltipContent={
+                  <>
+                    <Trans
+                      t={keyword}
+                      i18nKey="persuasion_techniques_tooltip"
+                      components={{
+                        ul: <ul />,
+                        li: <li />,
+                      }}
+                    />
+                    <TransCredibilitySignalsLink keyword={keyword} />
+                  </>
+                }
                 textHtmlMap={textHtmlMap}
               />
             )}
@@ -323,9 +370,15 @@ const AssistantTextResult = () => {
                 classification={subjectivityResult.entities}
                 configs={subjectivityResult.configs}
                 titleText={subjectivityTitle}
-                helpDescription={"subjectivity_tooltip"}
+                categoriesTooltipContent={
+                  <>
+                    <Trans t={keyword} i18nKey="subjectivity_tooltip" />
+                    <TransHtmlDoubleLinkBreak keyword={keyword} />
+                    <TransCredibilitySignalsLink keyword={keyword} />
+                  </>
+                }
                 textHtmlMap={textHtmlMap}
-                subjectivity={true}
+                credibilitySignal={keyword("subjectivity_title")}
               />
             )}
           </CustomTabPanel>

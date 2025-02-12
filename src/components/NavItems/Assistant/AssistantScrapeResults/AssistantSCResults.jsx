@@ -4,21 +4,30 @@ import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
+import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
-import FindInPageIcon from "@mui/icons-material/FindInPage";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Chip, Grid2, IconButton } from "@mui/material";
+import Grid2 from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import FindInPageIcon from "@mui/icons-material/FindInPage";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import SentimentSatisfied from "@mui/icons-material/SentimentSatisfied";
 
-import { setAssuranceExpanded } from "../../../../redux/actions/tools/assistantActions";
-import SourceCredibilityResult from "../AssistantCheckResults/SourceCredibilityResult";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import Tooltip from "@mui/material/Tooltip";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import { setAssuranceExpanded } from "../../../../redux/actions/tools/assistantActions";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import SourceCredibilityResult from "../AssistantCheckResults/SourceCredibilityResult";
+import {
+  TransHtmlDoubleLinkBreak,
+  TransSourceCredibilityTooltip,
+  TransUrlDomainAnalysisLink,
+} from "../TransComponents";
 
 const AssistantSCResults = () => {
   // central
@@ -89,12 +98,11 @@ const AssistantSCResults = () => {
               leaveDelay={50}
               style={{ display: "flex", marginLeft: "auto" }}
               title={
-                <div
-                  className={"content"}
-                  dangerouslySetInnerHTML={{
-                    __html: keyword("sc_tooltip"),
-                  }}
-                />
+                <>
+                  <TransSourceCredibilityTooltip keyword={keyword} />
+                  <TransHtmlDoubleLinkBreak keyword={keyword} />
+                  <TransUrlDomainAnalysisLink keyword={keyword} />
+                </>
               }
               classes={{ tooltip: classes.assistantTooltip }}
             >

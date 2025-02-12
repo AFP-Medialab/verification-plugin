@@ -104,6 +104,13 @@ export const itwRineMever = new SyntheticImageDetectionAlgorithm(
   [ROLES.EVALUATION, ROLES.EXTRA_FEATURE],
 );
 
+export const itwSpaiMever = new SyntheticImageDetectionAlgorithm(
+  "itw_spai_mever",
+  "synthetic_image_detection_itw_spai_mever_name",
+  "synthetic_image_detection_itw_spai_mever_description",
+  [ROLES.EVALUATION, ROLES.EXTRA_FEATURE],
+);
+
 /**
  * The list of the synthetic image detection algorithms
  * TODO:Use SET
@@ -121,6 +128,7 @@ export const syntheticImageDetectionAlgorithms = [
   proGanRineMever,
   ldmRineMever,
   itwRineMever,
+  itwSpaiMever,
 ];
 
 /**

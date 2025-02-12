@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Image, Layer, Stage, Text } from "react-konva";
-import { preloadImage } from "../../Forensic/utils";
-import {
-  Alert,
-  Box,
-  FormControl,
-  Grid2,
-  InputLabel,
-  MenuItem,
-  Select,
-  Slider,
-  Typography,
-} from "@mui/material";
-import useMyStyles from "components/Shared/MaterialUiStyles/useMyStyles";
+
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import FormControl from "@mui/material/FormControl";
+import Grid2 from "@mui/material/Grid2";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import Slider from "@mui/material/Slider";
+import Typography from "@mui/material/Typography";
+
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "components/Shared/MaterialUiStyles/useMyStyles";
+
+import { preloadImage } from "../../Forensic/utils";
 
 const TextImageCanvas = ({
   imgSrc,

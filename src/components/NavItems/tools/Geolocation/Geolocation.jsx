@@ -1,21 +1,23 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import LinearProgress from "@mui/material/LinearProgress";
-import Box from "@mui/material/Box";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import GeolocationIcon from "../../../NavBar/images/SVG/Image/Geolocation.svg";
-import { Grid2 } from "@mui/material";
+import Grid2 from "@mui/material/Grid2";
+import LinearProgress from "@mui/material/LinearProgress";
+import TextField from "@mui/material/TextField";
+
+import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import { imageGeolocation } from "../../../../constants/tools";
+import { resetGeolocation } from "../../../../redux/reducers/tools/geolocationReducer";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useGeolocate from "./Hooks/useGeolocate";
 import GeolocationResults from "./Results/GeolocationResults";
-import Alert from "@mui/material/Alert";
-import { resetGeolocation } from "../../../../redux/reducers/tools/geolocationReducer";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const Geolocation = () => {
   const classes = useMyStyles();
@@ -48,9 +50,7 @@ const Geolocation = () => {
         name={keywordAllTools("navbar_geolocation")}
         description={keywordAllTools("navbar_geolocation_description")}
         icon={
-          <GeolocationIcon
-            style={{ fill: "#00926c", width: "40px", height: "40px" }}
-          />
+          <imageGeolocation.icon sx={{ fill: "#00926c", fontSize: "40px" }} />
         }
       />
 

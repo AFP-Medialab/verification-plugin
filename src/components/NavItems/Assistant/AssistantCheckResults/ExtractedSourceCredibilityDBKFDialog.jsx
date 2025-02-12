@@ -1,29 +1,36 @@
 import React, { useState } from "react";
 
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import CloseIcon from "@mui/icons-material/Close";
+import MuiAccordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Chip from "@mui/material/Chip";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import Grid2 from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Link from "@mui/material/Link";
-import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
-import Typography from "@mui/material/Typography";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import MuiAccordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import { getUrlTypeFromCredScope } from "./assistantUtils";
-import { Chip, Grid2, Stack } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
+
+import CloseIcon from "@mui/icons-material/Close";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
+
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import {
+  TransHtmlDoubleLinkBreak,
+  TransSourceCredibilityTooltip,
+  TransUrlDomainAnalysisLink,
+} from "../TransComponents";
+import { getUrlTypeFromCredScope } from "./assistantUtils";
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -41,13 +48,13 @@ const renderScope = (keyword, scope) => {
   return (
     <ListItem>
       {scope && scope.includes("/") ? (
-        <Typography variant={"subtitle2"}>
-          {` ${keyword("account_scope")} ${scope} `}
-        </Typography>
+        <Typography
+          variant={"subtitle2"}
+        >{` ${keyword("account_scope")} ${scope} `}</Typography>
       ) : scope ? (
-        <Typography variant={"subtitle2"}>
-          {` ${keyword("domain_scope")} ${scope} `}
-        </Typography>
+        <Typography
+          variant={"subtitle2"}
+        >{` ${keyword("domain_scope")} ${scope} `}</Typography>
       ) : null}
     </ListItem>
   );
@@ -57,9 +64,9 @@ const renderLabels = (keyword, labels) => {
   return (
     <ListItem>
       {labels ? (
-        <Typography variant={"subtitle2"}>
-          {` ${keyword("labelled_as")} ${labels} `}
-        </Typography>
+        <Typography
+          variant={"subtitle2"}
+        >{` ${keyword("labelled_as")} ${labels} `}</Typography>
       ) : null}
     </ListItem>
   );
@@ -69,9 +76,9 @@ const renderDescription = (keyword, description) => {
   return (
     <ListItem>
       {description ? (
-        <Typography variant={"subtitle2"}>
-          {` ${keyword("commented_as")} ${description} `}
-        </Typography>
+        <Typography
+          variant={"subtitle2"}
+        >{` ${keyword("commented_as")} ${description} `}</Typography>
       ) : null}
     </ListItem>
   );
@@ -162,12 +169,11 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                 leaveDelay={50}
                 style={{ display: "flex", marginLeft: "auto" }}
                 title={
-                  <div
-                    className={"content"}
-                    dangerouslySetInnerHTML={{
-                      __html: keyword("sc_tooltip"),
-                    }}
-                  />
+                  <>
+                    <TransSourceCredibilityTooltip keyword={keyword} />
+                    <TransHtmlDoubleLinkBreak keyword={keyword} />
+                    <TransUrlDomainAnalysisLink keyword={keyword} />
+                  </>
                 }
                 classes={{ tooltip: classes.assistantTooltip }}
               >
@@ -194,44 +200,19 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                       ? sourceCredibilityResults.map((value, key) => (
                           <Accordion key={key}>
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                              {value.credibilityScope &&
-                              value.credibilityScope.includes("/") ? (
-                                <Stack direction="row">
-                                  <Chip
-                                    label={keyword(sourceType)}
-                                    color={trafficLightColor}
-                                    size="small"
-                                  />
-                                  <Typography
-                                    sx={{ ml: 1 }}
-                                    //color={trafficLightColor}
-                                  >
-                                    {` ${keyword("this")}`}
-                                    {getUrlTypeFromCredScope(
-                                      value.credibilityScope,
-                                    )}
-                                    {` ${keyword(
-                                      "source_credibility_warning_account",
-                                    )} ${" "}${value.credibilitySource}`}
-                                  </Typography>
-                                </Stack>
-                              ) : value.credibilityScope ? (
-                                <Stack direction="row">
-                                  <Chip
-                                    label={keyword(sourceType)}
-                                    color={trafficLightColor}
-                                    size="small"
-                                  />
-                                  <Typography
-                                    sx={{ ml: 1 }}
-                                    //color={trafficLightColor}
-                                  >
-                                    {` ${keyword(
-                                      "source_credibility_warning_domain",
-                                    )} ${value.credibilitySource} `}
-                                  </Typography>
-                                </Stack>
-                              ) : null}
+                              <Stack direction="row">
+                                <Chip
+                                  label={keyword(sourceType)}
+                                  color={trafficLightColor}
+                                  size="small"
+                                />
+                                <Typography sx={{ ml: 1 }}>
+                                  {value.credibilityScope &&
+                                  value.credibilityScope.includes("/")
+                                    ? ` ${keyword("this")} ${getUrlTypeFromCredScope(value.credibilityScope)} ${keyword("source_credibility_warning_account")} ${" "}${value.credibilitySource}`
+                                    : ` ${keyword("source_credibility_warning_domain")} ${value.credibilitySource} `}
+                                </Typography>
+                              </Stack>
                             </AccordionSummary>
 
                             <AccordionDetails>

@@ -1,35 +1,34 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useParams } from "react-router-dom";
+
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
-import { useDispatch, useSelector } from "react-redux"; //import 'tui-image-editor/dist/tui-image-editor.css'
+import Card from "@mui/material/Card";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
-import MetadataImageResult from "./Results/MetadataImageResult";
-import MetadataVideoResult from "./Results/MetadataVideoResult";
-import useImageTreatment from "./Hooks/useImageTreatment";
-import useVideoTreatment from "./Hooks/useVideoTreatment";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import Stack from "@mui/material/Stack";
+
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { useLocation, useParams } from "react-router-dom";
-
-import { CONTENT_TYPE, KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
-
-import Card from "@mui/material/Card";
-import MetadataIcon from "../../../NavBar/images/SVG/Image/Metadata.svg";
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import { setMetadataMediaType } from "../../../../redux/reducers/tools/metadataReducer";
-
-import { Alert, Stack } from "@mui/material";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
 import exifr from "exifr";
+
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
+import { imageMetadata } from "../../../../constants/tools";
+import { setMetadataMediaType } from "../../../../redux/reducers/tools/metadataReducer";
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import { CONTENT_TYPE, KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
+import useImageTreatment from "./Hooks/useImageTreatment";
+import useVideoTreatment from "./Hooks/useVideoTreatment";
+import MetadataImageResult from "./Results/MetadataImageResult";
+import MetadataVideoResult from "./Results/MetadataVideoResult";
 
 const Metadata = ({ mediaType }) => {
   const { url, type } = useParams();
   const location = useLocation();
 
-  const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Metadata");
 
   const keywordTip = i18nLoadNamespace("components/Shared/OnClickInfo");
@@ -44,9 +43,7 @@ const Metadata = ({ mediaType }) => {
   const session = useSelector((state) => state.userSession);
   const uid = session && session.user ? session.user.id : null;
 
-  const [radioImage, setRadioImage] = useState(
-    mediaType === "video" ? false : true,
-  );
+  const [radioImage, setRadioImage] = useState(mediaType !== "video");
   const [input, setInput] = useState(resultUrl ? resultUrl : "");
   const [fileInput, setFileInput] = useState(null);
   const [imageUrl, setImageurl] = useState(null);
@@ -87,14 +84,6 @@ const Metadata = ({ mediaType }) => {
   );
   const submitUrl = async () => {
     if (input) {
-      /* trackEvent(
-                                                                                      "submission",
-                                                                                      "metadata",
-                                                                                      "extract metadata",
-                                                                                      input,
-                                                                                      client_id,
-                                                                                      uid
-                                                                                    );*/
       if (radioImage) {
         setImageurl(input);
         // const metadata = await exifr.parse(input, exifrOptions);
@@ -164,6 +153,17 @@ const Metadata = ({ mediaType }) => {
     }
   }, [url, type]);
 
+  const processUrl = useSelector((state) => state.assistant.processUrl);
+  const processUrlType = useSelector((state) => state.assistant.processUrlType);
+  useEffect(() => {
+    if (processUrl) {
+      setInput(processUrl);
+      dispatch(setMetadataMediaType(processUrlType));
+      setRadioImage(processUrlType === "image");
+      setUrlDetected(true);
+    }
+  }, [processUrl]);
+
   const handleCloseResult = () => {
     setInput("");
   };
@@ -178,10 +178,11 @@ const Metadata = ({ mediaType }) => {
         name={keywordAllTools("navbar_metadata")}
         description={keywordAllTools("navbar_metadata_description")}
         icon={
-          <MetadataIcon
-            style={{ fill: "#00926c" }}
-            width="40px"
-            height="40px"
+          <imageMetadata.icon
+            sx={{
+              fill: "#00926c",
+              fontSize: "40px",
+            }}
           />
         }
       />

@@ -1,22 +1,27 @@
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Alert,
-  Box,
-  Card,
-  FormControlLabel,
-  FormGroup,
-  LinearProgress,
-  Stack,
-  Switch,
-} from "@mui/material";
-import HeaderTool from "components/Shared/HeaderTool/HeaderTool";
-import useMyStyles from "components/Shared/MaterialUiStyles/useMyStyles";
-import StringFileUploadField from "components/Shared/StringFileUploadField";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import C2paResults from "./Results/C2paResults";
+
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CircularProgress from "@mui/material/CircularProgress";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormGroup from "@mui/material/FormGroup";
+import LinearProgress from "@mui/material/LinearProgress";
+import Stack from "@mui/material/Stack";
+import Switch from "@mui/material/Switch";
+import Typography from "@mui/material/Typography";
+
+import { ArrowDownward } from "@mui/icons-material";
+
+import HeaderTool from "components/Shared/HeaderTool/HeaderTool";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "components/Shared/MaterialUiStyles/useMyStyles";
+import StringFileUploadField from "components/Shared/StringFileUploadField";
+import exifr from "exifr";
 import {
   c2paLoadingSet,
   resetC2paState,
@@ -25,15 +30,12 @@ import {
   setC2paThumbnailCaption,
   setHdImageC2paData,
 } from "redux/reducers/tools/c2paReducer";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
-import CircularProgress from "@mui/material/CircularProgress";
-import getC2paData, { getC2paDataHd } from "./Hooks/useGetC2paData";
-import exifr from "exifr";
-import { ArrowDownward } from "@mui/icons-material";
-import Typography from "@mui/material/Typography";
 import { v4 as uuidv4 } from "uuid";
+
 import { ROLES } from "../../../../constants/roles";
+import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
+import getC2paData, { getC2paDataHd } from "./Hooks/useGetC2paData";
+import C2paResults from "./Results/C2paResults";
 import AfpReverseSearchResults from "./components/AfpReverseSearchResults";
 import HdImageResults from "./components/HdImageResults";
 
@@ -204,7 +206,7 @@ const C2paData = () => {
         method: "get",
         responseType: "blob",
         maxBodyLength: Infinity,
-        url: `https://plugin-archiving.afp.com/gateway/c2paafp/${urls.thumbnailUrl}`,
+        url: `https://plugin-archiving.afp.com/gateway/c2paafp${urls.thumbnailUrl}`,
         headers: {
           "X-AFP-TRANSACTION-ID": getTransactionId(),
         },
@@ -238,7 +240,7 @@ const C2paData = () => {
         method: "get",
         responseType: "blob",
         maxBodyLength: Infinity,
-        url: `${serverUrl}/${urls.hdUrl}`,
+        url: `${serverUrl}${urls.hdUrl}`,
         headers: {
           "X-AFP-TRANSACTION-ID": getTransactionId(),
         },

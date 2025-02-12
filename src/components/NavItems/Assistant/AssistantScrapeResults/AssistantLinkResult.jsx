@@ -1,30 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { Trans } from "react-i18next";
 import { useSelector } from "react-redux";
 
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import {
-  Box,
-  Button,
-  CardHeader,
-  Chip,
-  Grid2,
-  Skeleton,
-  Stack,
-} from "@mui/material";
 import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Chip from "@mui/material/Chip";
 import Link from "@mui/material/Link";
-import LinkIcon from "@mui/icons-material/Link";
-import Typography from "@mui/material/Typography";
-import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
-import SentimentSatisfied from "@mui/icons-material/SentimentSatisfied";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import ExtractedSourceCredibilityResult from "../AssistantCheckResults/ExtractedSourceCredibilityResult";
-import { TextCopy } from "../../../Shared/Utils/TextCopy";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import { CheckCircleOutline, TaskAltOutlined } from "@mui/icons-material";
+
 import { DataGrid, getGridSingleSelectOperators } from "@mui/x-data-grid";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import { TextCopy } from "../../../Shared/Utils/TextCopy";
+import ExtractedSourceCredibilityResult from "../AssistantCheckResults/ExtractedSourceCredibilityResult";
+import {
+  TransHtmlDoubleLinkBreak,
+  TransSourceCredibilityTooltip,
+  TransUrlDomainAnalysisLink,
+} from "../TransComponents";
 
 // render status for extracted urls
 const Status = (params) => {
@@ -332,12 +333,13 @@ const AssistantLinkResult = () => {
           <Tooltip
             interactive={"true"}
             title={
-              <div
-                className={"content"}
-                dangerouslySetInnerHTML={{
-                  __html: keyword("extracted_urls_tooltip"),
-                }}
-              />
+              <>
+                <Trans t={keyword} i18nKey="extracted_urls_tooltip" />
+                <TransHtmlDoubleLinkBreak keyword={keyword} />
+                <TransSourceCredibilityTooltip keyword={keyword} />
+                <TransHtmlDoubleLinkBreak keyword={keyword} />
+                <TransUrlDomainAnalysisLink keyword={keyword} />
+              </>
             }
             classes={{ tooltip: classes.assistantTooltip }}
           >

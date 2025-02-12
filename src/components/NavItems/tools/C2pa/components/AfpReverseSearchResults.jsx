@@ -1,16 +1,19 @@
 import React from "react";
-import { Alert, Box, Grid2, Stack } from "@mui/material";
+
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Grid2 from "@mui/material/Grid2";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { useSelector } from "react-redux";
-import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
-import MetadataList from "../../../../Shared/MetadataList";
+
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import MetadataList from "@Shared/MetadataList";
 
 const AfpReverseSearchResults = ({
   thumbnailImage,
   thumbnailImageCaption,
   imageMetadata,
 }) => {
-  const role = useSelector((state) => state.userSession.user.roles);
   const keyword = i18nLoadNamespace("components/NavItems/tools/C2pa");
 
   return (

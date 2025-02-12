@@ -1,6 +1,7 @@
 import React from "react";
 
-import { SvgIcon } from "@mui/material";
+import SvgIcon from "@mui/material/SvgIcon";
+
 import {
   Archive as ArchiveIcon,
   AudioFile,
@@ -8,54 +9,49 @@ import {
   ManageSearch,
 } from "@mui/icons-material";
 
-import ToolsIcon from "../components/NavBar/images/SVG/Navbar/Tools.svg";
+import { FOOTER_TYPES, Footer } from "@Shared/Footer/Footer";
+import C2paData from "components/NavItems/tools/C2pa/C2pa";
 
-import AnalysisIcon from "../components/NavBar/images/SVG/Video/Video_analysis.svg";
+import CsvSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/CSV_SNA.svg";
+import TwitterSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/Twitter_sna.svg";
+import C2paIcon from "../components/NavBar/images/SVG/Image/C2pa.svg";
+import DeepfakeIcon from "../components/NavBar/images/SVG/Image/Deepfake.svg";
+import ForensicIcon from "../components/NavBar/images/SVG/Image/Forensic.svg";
+import GeolocationIcon from "../components/NavBar/images/SVG/Image/Geolocation.svg";
+import GifIcon from "../components/NavBar/images/SVG/Image/Gif.svg";
+import MagnifierIcon from "../components/NavBar/images/SVG/Image/Magnifier.svg";
+import MetadataIcon from "../components/NavBar/images/SVG/Image/Metadata.svg";
+import OcrIcon from "../components/NavBar/images/SVG/Image/OCR.svg";
+import AboutIcon from "../components/NavBar/images/SVG/Navbar/About.svg";
+import ToolsIcon from "../components/NavBar/images/SVG/Navbar/Tools.svg";
+import CovidSearchIcon from "../components/NavBar/images/SVG/Search/Covid19.svg";
+import TwitterSearchIcon from "../components/NavBar/images/SVG/Search/Twitter_search.svg";
+import XnetworkIcon from "../components/NavBar/images/SVG/Search/Xnetwork.svg";
 import KeyframesIcon from "../components/NavBar/images/SVG/Video/Keyframes.svg";
 import ThumbnailsIcon from "../components/NavBar/images/SVG/Video/Thumbnails.svg";
+import AnalysisIcon from "../components/NavBar/images/SVG/Video/Video_analysis.svg";
 import VideoRightsIcon from "../components/NavBar/images/SVG/Video/Video_rights.svg";
-
-import MetadataIcon from "../components/NavBar/images/SVG/Image/Metadata.svg";
-import DeepfakeIcon from "../components/NavBar/images/SVG/Image/Deepfake.svg";
-import ImageAnalysisIcon from "../components/NavBar/images/SVG/Image/Image_analysis.svg";
-import MagnifierIcon from "../components/NavBar/images/SVG/Image/Magnifier.svg";
-import ForensicIcon from "../components/NavBar/images/SVG/Image/Forensic.svg";
-import OcrIcon from "../components/NavBar/images/SVG/Image/OCR.svg";
-import GifIcon from "../components/NavBar/images/SVG/Image/Gif.svg";
-import GeolocationIcon from "../components/NavBar/images/SVG/Image/Geolocation.svg";
-import C2paIcon from "../components/NavBar/images/SVG/Image/C2pa.svg";
-
-import TwitterSearchIcon from "../components/NavBar/images/SVG/Search/Twitter_search.svg";
-import CovidSearchIcon from "../components/NavBar/images/SVG/Search/Covid19.svg";
-import XnetworkIcon from "../components/NavBar/images/SVG/Search/Xnetwork.svg";
-
-import TwitterSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/Twitter_sna.svg";
-import CsvSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/CSV_SNA.svg";
-import AboutIcon from "../components/NavBar/images/SVG/Navbar/About.svg";
+import About from "../components/NavItems/About/About";
 import ToolsMenu from "../components/NavItems/tools/Alltools/ToolsMenu";
 import Analysis from "../components/NavItems/tools/Analysis/Analysis";
-import { Footer, FOOTER_TYPES } from "../components/Shared/Footer/Footer";
-import Keyframes from "../components/NavItems/tools/Keyframes/Keyframes";
-import Thumbnails from "../components/NavItems/tools/Thumbnails/Thumbnails";
-import VideoRights from "../components/NavItems/tools/VideoRights/VideoRights";
-import Metadata from "../components/NavItems/tools/Metadata/Metadata";
-import DeepfakeVideo from "../components/NavItems/tools/Deepfake/DeepfakeVideo";
-import AnalysisImg from "../components/NavItems/tools/Analysis_images/Analysis";
-import Magnifier from "../components/NavItems/tools/Magnifier/Magnifier";
-import Forensic from "../components/NavItems/tools/Forensic/Forensic";
-import OCR from "../components/NavItems/tools/OCR/OCR";
-import CheckGif from "../components/NavItems/tools/Gif/CheckGif";
-import SyntheticImageDetection from "../components/NavItems/tools/SyntheticImageDetection";
-import DeepfakeImage from "../components/NavItems/tools/Deepfake/DeepfakeImage";
-import Geolocation from "../components/NavItems/tools/Geolocation/Geolocation";
-import Loccus from "../components/NavItems/tools/Loccus";
-import TwitterAdvancedSearch from "../components/NavItems/tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
-import SemanticSearch from "../components/NavItems/tools/SemanticSearch";
-import TwitterSna from "../components/NavItems/tools/TwitterSna/TwitterSna";
 import Archive from "../components/NavItems/tools/Archive";
-import About from "../components/NavItems/About/About";
+import DeepfakeImage from "../components/NavItems/tools/Deepfake/DeepfakeImage";
+import DeepfakeVideo from "../components/NavItems/tools/Deepfake/DeepfakeVideo";
+import Forensic from "../components/NavItems/tools/Forensic/Forensic";
+import Geolocation from "../components/NavItems/tools/Geolocation/Geolocation";
+import CheckGif from "../components/NavItems/tools/Gif/CheckGif";
+import Keyframes from "../components/NavItems/tools/Keyframes/Keyframes";
+import Loccus from "../components/NavItems/tools/Loccus";
+import Magnifier from "../components/NavItems/tools/Magnifier/Magnifier";
+import Metadata from "../components/NavItems/tools/Metadata/Metadata";
+import OCR from "../components/NavItems/tools/OCR/OCR";
+import SemanticSearch from "../components/NavItems/tools/SemanticSearch";
+import SyntheticImageDetection from "../components/NavItems/tools/SyntheticImageDetection";
+import Thumbnails from "../components/NavItems/tools/Thumbnails/Thumbnails";
+import TwitterAdvancedSearch from "../components/NavItems/tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
+import TwitterSna from "../components/NavItems/tools/TwitterSna/TwitterSna";
+import VideoRights from "../components/NavItems/tools/VideoRights/VideoRights";
 import { ROLES } from "./roles";
-import C2paData from "components/NavItems/tools/C2pa/C2pa";
 
 /**
  * Represents the categories to which the tools belong
@@ -170,10 +166,6 @@ const metadataSvgIcon = (props) => {
 
 const deepfakeSvgIcon = (props) => {
   return <SvgIcon component={DeepfakeIcon} inheritViewBox {...props} />;
-};
-
-const imageAnalysisSvgIcon = (props) => {
-  return <SvgIcon component={ImageAnalysisIcon} inheritViewBox {...props} />;
 };
 
 const magnifierSvgIcon = (props) => {
@@ -343,19 +335,6 @@ export const videoDeepfake = new Tool(
  * Image tools
  **/
 
-export const imageAnalysis = new Tool(
-  "navbar_analysis_image",
-  "navbar_analysis_image_description",
-  imageAnalysisSvgIcon,
-  TOOLS_CATEGORIES.IMAGE,
-  null,
-  null,
-  "analysisImage",
-  TOOL_GROUPS.VERIFICATION,
-  <AnalysisImg />,
-  <Footer type={FOOTER_TYPES.ITI} />,
-);
-
 export const imageMagnifier = new Tool(
   "navbar_magnifier",
   "navbar_magnifier_description",
@@ -408,7 +387,7 @@ export const imageOcr = new Tool(
   <Footer type={FOOTER_TYPES.USFD} />,
 );
 
-const imageGif = new Tool(
+export const imageGif = new Tool(
   "navbar_gif",
   "navbar_gif_description",
   gifSvgIcon,
@@ -447,7 +426,7 @@ export const imageDeepfake = new Tool(
   <Footer type={FOOTER_TYPES.ITI} />,
 );
 
-const imageGeolocation = new Tool(
+export const imageGeolocation = new Tool(
   "navbar_geolocation",
   "navbar_geolocation_description",
   geolocationSvgIcon,
@@ -481,7 +460,7 @@ const audioLoccus = new Tool(
  * Search tools
  **/
 
-const searchTwitter = new Tool(
+export const searchTwitter = new Tool(
   "navbar_twitter",
   "navbar_twitter_description",
   twitterSearchSvgIcon,
@@ -537,7 +516,7 @@ const searchXnetwork = new Tool(
  * Data Analysis tools
  **/
 
-const dataAnalysisSna = new Tool(
+export const dataAnalysisSna = new Tool(
   "navbar_twitter_sna",
   "navbar_twitter_sna_description",
   twitterSnaSvgIcon,
@@ -618,7 +597,6 @@ export const tools = Object.freeze([
   videoRights,
   videoMetadata,
   videoDeepfake,
-  imageAnalysis,
   imageMagnifier,
   imageMetadata,
   imageForensic,

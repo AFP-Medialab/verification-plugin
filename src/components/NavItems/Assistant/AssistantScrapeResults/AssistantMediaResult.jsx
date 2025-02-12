@@ -1,30 +1,39 @@
 import React, { useEffect, useState } from "react";
+import { Trans } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import { CardHeader, Grid2, LinearProgress } from "@mui/material";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Grid2 from "@mui/material/Grid2";
+import LinearProgress from "@mui/material/LinearProgress";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
-import { CONTENT_TYPE } from "../AssistantRuleBook";
-import AssistantImageResult from "./AssistantImageResult";
-import AssistantVideoResult from "./AssistantVideoResult";
-import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
-import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import {
   setProcessUrl,
   setWarningExpanded,
 } from "../../../../redux/actions/tools/assistantActions";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "../../../Shared/VideoGridList/VideoGridList";
-import { WarningAmber } from "@mui/icons-material";
+import { CONTENT_TYPE } from "../AssistantRuleBook";
+import {
+  TransHtmlDoubleLinkBreak,
+  TransSupportedToolsLink,
+} from "../TransComponents";
+import AssistantImageResult from "./AssistantImageResult";
+import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
+import AssistantVideoResult from "./AssistantVideoResult";
+import WarningAmber from "./AssistantWarnings";
 
 const AssistantMediaResult = () => {
   const classes = useMyStyles();
@@ -33,7 +42,6 @@ const AssistantMediaResult = () => {
 
   // assistant media states
   const processUrl = useSelector((state) => state.assistant.processUrl);
-  const urlMode = useSelector((state) => state.assistant.urlMode);
   const resultProcessType = useSelector(
     (state) => state.assistant.processUrlType,
   );
@@ -81,7 +89,15 @@ const AssistantMediaResult = () => {
         const image = new Image();
         image.src = imageUrl;
         image.onload = () => {
-          resolve({ url: imageUrl, width: image.width, height: image.height });
+          resolve({
+            url: imageUrl,
+            include: image.width > 2 || image.height > 2,
+          });
+        };
+        image.onerror = () => {
+          // We have to include it if there's an error loading as we don't have enough info to filter it out
+          // Instagram seem to have some pretty aggressive security policies, so we get this there
+          resolve({ url: imageUrl, include: true });
         };
       });
     });
@@ -89,7 +105,7 @@ const AssistantMediaResult = () => {
     Promise.all(imagePromises)
       .then((imageDimensions) => {
         const filteredImages = imageDimensions
-          .filter((image) => image.width > 2 && image.height > 2)
+          .filter((image) => image.include)
           .map((image) => image.url);
         setFilteredImageList(filteredImages);
       })
@@ -101,8 +117,7 @@ const AssistantMediaResult = () => {
   return (
     <Card
       data-testid="url-media-results"
-      hidden={!urlMode || (!imageList.length && !videoList.length)}
-      //width={window.innerWidth}
+      hidden={!filteredImageList.length && !videoList.length}
     >
       <CardHeader
         className={classes.assistantCardHeader}
@@ -129,12 +144,17 @@ const AssistantMediaResult = () => {
               <Tooltip
                 interactive={"true"}
                 title={
-                  <div
-                    className={"content"}
-                    dangerouslySetInnerHTML={{
-                      __html: keyword("media_tooltip"),
-                    }}
-                  />
+                  <>
+                    <Trans
+                      t={keyword}
+                      i18nKey="media_tooltip"
+                      components={{
+                        b: <b />,
+                      }}
+                    />
+                    <TransHtmlDoubleLinkBreak keyword={keyword} />
+                    <TransSupportedToolsLink keyword={keyword} />
+                  </>
                 }
                 classes={{ tooltip: classes.assistantTooltip }}
               >
