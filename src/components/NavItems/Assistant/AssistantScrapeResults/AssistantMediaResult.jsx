@@ -18,12 +18,6 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import { CONTENT_TYPE } from "../AssistantRuleBook";
-import AssistantImageResult from "./AssistantImageResult";
-import AssistantVideoResult from "./AssistantVideoResult";
-import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
-import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
-
 import {
   setProcessUrl,
   setWarningExpanded,

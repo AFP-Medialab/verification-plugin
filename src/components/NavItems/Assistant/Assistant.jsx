@@ -25,24 +25,13 @@ import AssistantCheckStatus from "./AssistantCheckResults/AssistantCheckStatus";
 import AssistantNEResult from "./AssistantCheckResults/AssistantNEResult";
 import AssistantFileSelected from "./AssistantFileSelected";
 import AssistantIntroduction from "./AssistantIntroduction";
+import AssistantCommentResult from "./AssistantScrapeResults/AssistantCommentResult";
 import AssistantCredSignals from "./AssistantScrapeResults/AssistantCredibilitySignals";
 import AssistantLinkResult from "./AssistantScrapeResults/AssistantLinkResult";
 import AssistantMediaResult from "./AssistantScrapeResults/AssistantMediaResult";
 import AssistantSCResults from "./AssistantScrapeResults/AssistantSCResults";
 import AssistantTextResult from "./AssistantScrapeResults/AssistantTextResult";
 import AssistantWarnings from "./AssistantScrapeResults/AssistantWarnings";
-import AssistantCredSignals from "./AssistantScrapeResults/AssistantCredibilitySignals";
-import { ROLES } from "../../../constants/roles.jsx";
-
-import {
-  cleanAssistantState,
-  setUrlMode,
-  submitInputUrl,
-} from "../../../redux/actions/tools/assistantActions";
-import { setError } from "redux/reducers/errorReducer";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { Close } from "@mui/icons-material";
-import AssistantCommentResult from "./AssistantScrapeResults/AssistantCommentResult";
 import AssistantUrlSelected from "./AssistantUrlSelected";
 
 const Assistant = () => {
