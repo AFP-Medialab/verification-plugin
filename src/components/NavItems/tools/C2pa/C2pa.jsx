@@ -204,7 +204,7 @@ const C2paData = () => {
         method: "get",
         responseType: "blob",
         maxBodyLength: Infinity,
-        url: `${serverUrl}/gateway/c2paafp${urls.thumbnailUrl}`,
+        url: `${serverUrl}${urls.thumbnailUrl}`,
         headers: {
           "X-AFP-TRANSACTION-ID": getTransactionId(),
         },
