@@ -50,16 +50,17 @@ const ChatbotInterface = (props) => {
     "components/NavItems/tools/SyntheticImageDetection",
   );
   const [formInput, setFormInput] = useState("");
+  const archiveURL = useSelector(
+    (state) => state?.syntheticImageDetection?.duplicates?.archive_url ?? null,
+  );
 
   const chatbotMessages = useSelector(
     (state) => state.assistant.chatbotMessages,
   ).filter((msg) => msg.message); // Access the entire state
   const userEmail = useSelector((state) => state.userSession.user.email);
 
-  const entireState = useSelector((state) => state); // Access the entire state
-
   const sendMessage = () => {
-    dispatch(submitUserChatbotMessage(formInput, userEmail));
+    dispatch(submitUserChatbotMessage(formInput, userEmail, archiveURL));
     setFormInput("");
   };
 

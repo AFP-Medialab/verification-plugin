@@ -582,12 +582,18 @@ function* handleNamedEntityCall(action) {
 function* handleAssistantChatbotCall(action) {
   const message = action.payload.message;
   const email = action.payload.email;
+  const archiveURL = action.payload.archiveURL;
 
   yield put(setAssistantLoading(true));
   yield put(addChatbotMessage(message, 1));
 
   try {
-    const chatbotResponse = yield call(assistantApi.callChatbot, message);
+    const chatbotResponse = yield call(
+      assistantApi.callChatbot,
+      message,
+      email,
+      archiveURL,
+    );
 
     console.log(chatbotResponse);
 

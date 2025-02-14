@@ -23,16 +23,14 @@ export default function assistantApiCalls() {
     }
   }
 
-  const callChatbot = async (userInput) => {
+  const callChatbot = async (userInput, email, archiveURL) => {
     let chatbotResponse;
     try {
-      // chatbotResponse = await axios.post(
-      //   chatbotEndpoint + "chat/",
-      //   {user_input: userInput}
-      // );
-      chatbotResponse = await axios.get(
-        chatbotEndpoint + "chat/" + encodeURIComponent(userInput),
-      );
+      chatbotResponse = await axios.post(chatbotEndpoint + "chat/", {
+        message: userInput,
+        email: email,
+        archiveURL: archiveURL,
+      });
     } catch (error) {
       handleAssistantError(error);
     }
