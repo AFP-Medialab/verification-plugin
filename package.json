@@ -1,6 +1,6 @@
 {
   "name": "weverify-plugin",
-  "version": "0.85",
+  "version": "0.84.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -117,7 +117,12 @@
     "webpack-merge": "^5.9.0"
   },
   "lint-staged": {
-    "src/**/*.{js,css,md}": ["prettier --write"],
-    "src/**/*.jsx": ["jscodeshift", "prettier --write"]
+    "src/**/*.{js,css,md}": [
+      "prettier --write"
+    ],
+    "src/**/*.jsx": [
+      "jscodeshift",
+      "prettier --write"
+    ]
   }
 }
