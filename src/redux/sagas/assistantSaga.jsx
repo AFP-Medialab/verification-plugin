@@ -595,19 +595,14 @@ function* handleAssistantChatbotCall(action) {
       archiveURL,
     );
 
-    console.log(chatbotResponse);
-
     if (chatbotResponse.userMessageClasses.includes("BUG")) {
-      const feedbackMessage = getFeedbackMessage(email, message, "BUG");
-      console.log("TODO: Hook BUG up to slack", feedbackMessage);
+      sendToSlack(email, message, "BUG", archiveURL);
     }
     if (chatbotResponse.userMessageClasses.includes("FEATURE")) {
-      const feedbackMessage = getFeedbackMessage(email, message, "FEATURE");
-      console.log("TODO: Hook FEATURE up to slack", feedbackMessage);
+      sendToSlack(email, message, "FEATURE", archiveURL);
     }
-    if (chatbotResponse.userMessageClasses.includes("OUTPUT")) {
-      const feedbackMessage = getFeedbackMessage(email, message, "IMPROVEMENT");
-      console.log("TODO: Hook up OUTPUT to slack", feedbackMessage);
+    if (chatbotResponse.userMessageClasses.includes("IMPROVEMENT")) {
+      sendToSlack(email, message, "IMPROVEMENT", archiveURL);
     }
     if (chatbotResponse.userMessageClasses.includes("EXPLAIN")) {
       console.log("TODO: Hook up to LLM");

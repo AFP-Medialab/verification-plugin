@@ -21,7 +21,7 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 
 const API_URL = process.env.REACT_APP_MY_WEB_HOOK_URL;
 
-const getFeedbackMessage = (email, message, messageType) => {
+const getFeedbackMessage = (email, message, messageType, archiveURL = null) => {
   if (typeof message !== "string" || typeof messageType !== "string")
     throw new Error("Invalid message type");
 
@@ -51,12 +51,21 @@ const getFeedbackMessage = (email, message, messageType) => {
           type: "mrkdwn",
           text: "" + message + "",
         },
+        ...(archiveURL // Conditionally add the accessory
+          ? {
+              accessory: {
+                type: "image",
+                image_url: archiveURL,
+                alt_text: "Problematic image",
+              },
+            }
+          : {}), // Important: Return an empty object if archiveURL is not defined
       },
     ],
   };
 };
 
-const sendToSlack = async (message, messageType) => {
+const sendToSlack = async (email, message, messageType, archiveURL = null) => {
   const feedbackMessage = getFeedbackMessage(email, message, messageType);
   const response = await fetch(API_URL, {
     method: "POST",
@@ -112,7 +121,7 @@ const Feedback = () => {
 
     setIsFeedbackSending(true);
 
-    await sendToSlack(message, messageType);
+    await sendToSlack(email, message, messageType);
 
     //console.log("submitted");
 
