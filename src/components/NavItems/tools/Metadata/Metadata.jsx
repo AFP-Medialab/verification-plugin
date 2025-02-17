@@ -11,6 +11,10 @@ import RadioGroup from "@mui/material/RadioGroup";
 import Stack from "@mui/material/Stack";
 
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import {
+  getFileTypeFromFile,
+  getFileTypeFromUrl,
+} from "@Shared/Utils/fileUtils";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
 import exifr from "exifr";
@@ -84,6 +88,8 @@ const Metadata = ({ mediaType }) => {
   );
   const submitUrl = async () => {
     if (input) {
+      console.log(getFileTypeFromUrl(input));
+
       if (radioImage) {
         setImageurl(input);
         // const metadata = await exifr.parse(input, exifrOptions);
@@ -92,6 +98,8 @@ const Metadata = ({ mediaType }) => {
         setVideoUrl(input);
       }
     } else if (fileInput) {
+      console.log(getFileTypeFromFile(fileInput));
+
       if (radioImage) {
         setImageurl(URL.createObjectURL(fileInput));
         const metadata = await exifr.parse(fileInput, exifrOptions);
