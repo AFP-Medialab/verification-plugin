@@ -42,6 +42,8 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
 
   const data = result;
 
+  console.log(data);
+
   const url = data[currentImageId].url;
   const parentId = data[currentImageId].parent;
   const manifestData = data[currentImageId].manifestData;

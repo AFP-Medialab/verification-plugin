@@ -16,7 +16,7 @@ import StringFileUploadField from "components/Shared/StringFileUploadField";
 import exifr from "exifr";
 
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { imageMetadata } from "../../../../constants/tools";
+import { imageMetadata as imageMetadataTool } from "../../../../constants/tools";
 import { setMetadataMediaType } from "../../../../redux/reducers/tools/metadataReducer";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import { CONTENT_TYPE, KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
@@ -178,7 +178,7 @@ const Metadata = ({ mediaType }) => {
         name={keywordAllTools("navbar_metadata")}
         description={keywordAllTools("navbar_metadata_description")}
         icon={
-          <imageMetadata.icon
+          <imageMetadataTool.icon
             sx={{
               fill: "#00926c",
               fontSize: "40px",

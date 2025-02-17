@@ -1,9 +1,11 @@
 import { useEffect } from "react";
-import EXIF from "exif-js/exif";
 import { useDispatch } from "react-redux";
-import { setMetadadaResult } from "../../../../../redux/reducers/tools/metadataReducer";
-import { setError } from "redux/reducers/errorReducer";
+
+import EXIF from "exif-js/exif";
 import _ from "lodash";
+import { setError } from "redux/reducers/errorReducer";
+
+import { setMetadataResult } from "../../../../../redux/reducers/tools/metadataReducer";
 
 const useImageTreatment = (mediaUrl, keyword) => {
   const dispatch = useDispatch();
@@ -32,7 +34,7 @@ const useImageTreatment = (mediaUrl, keyword) => {
           let res = EXIF.getAllTags(img);
           if (!isEmpty(res)) {
             dispatch(
-              setMetadadaResult({
+              setMetadataResult({
                 url: mediaUrl,
                 result: res,
                 notification: false,
@@ -42,7 +44,7 @@ const useImageTreatment = (mediaUrl, keyword) => {
             );
           } else
             dispatch(
-              setMetadadaResult({
+              setMetadataResult({
                 url: mediaUrl,
                 result: { message: "metadata_img_error_exif" },
                 notification: false,
