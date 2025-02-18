@@ -1,8 +1,6 @@
-import axios from "axios";
 import {
   fileTypeFromBlob,
   fileTypeFromBuffer,
-  fileTypeFromFile,
   fileTypeFromStream,
 } from "file-type";
 
@@ -26,9 +24,9 @@ export const FILE_TYPES = {
  */
 export const getFileTypeFromUrl = async (url) => {
   try {
-    const response = await axios.get(url, { responseType: "stream" });
+    const response = await fetch(url);
 
-    return await fileTypeFromStream(response.data);
+    return await fileTypeFromStream(response.body);
   } catch (error) {
     console.error(error);
     return new Error(`Could not get file type for ${url}`);
@@ -36,18 +34,16 @@ export const getFileTypeFromUrl = async (url) => {
 };
 
 /**
- * Returns the file type for a Blob, Buffer, or file path
- * @param file {Blob | Buffer | string}
+ * Returns the file type for a Blob, Buffer
+ * @param file {Blob | Buffer}
  * @returns {Promise<{readonly ext: string, readonly mime: string}|FileTypeResult|undefined|Error>}
  */
-export const getFileTypeFromFile = async (file) => {
+export const getFileTypeFromFileObject = async (file) => {
   try {
     let fileType;
 
     if (file instanceof Blob) fileType = await fileTypeFromBlob(file);
     else if (file instanceof Buffer) fileType = fileTypeFromBuffer(file);
-    //file path
-    else if (typeof file === "string") fileType = await fileTypeFromFile(file);
     else
       throw new Error(
         `Error: the file type is not supported or file path is invalid ${file}`,

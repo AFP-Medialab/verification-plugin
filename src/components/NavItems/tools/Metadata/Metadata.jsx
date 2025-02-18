@@ -5,14 +5,11 @@ import { useLocation, useParams } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
 import Stack from "@mui/material/Stack";
 
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import {
-  getFileTypeFromFile,
+  getFileTypeFromFileObject,
   getFileTypeFromUrl,
 } from "@Shared/Utils/fileUtils";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -21,7 +18,10 @@ import exifr from "exifr";
 
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { imageMetadata as imageMetadataTool } from "../../../../constants/tools";
-import { setMetadataMediaType } from "../../../../redux/reducers/tools/metadataReducer";
+import {
+  cleanMetadataState,
+  setMetadataMediaType,
+} from "../../../../redux/reducers/tools/metadataReducer";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import { CONTENT_TYPE, KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import useImageTreatment from "./Hooks/useImageTreatment";
@@ -86,27 +86,89 @@ const Metadata = ({ mediaType }) => {
     videoUrl,
     uid,
   );
+
+  async function getImageMetadataFromUrl(url) {
+    try {
+      // Validate the URL format
+      if (!url || typeof url !== "string" || !/^https?:\/\//.test(url)) {
+        return new Error("Invalid URL provided");
+      }
+
+      // Fetch the image
+      const response = await fetch(url);
+
+      // Check for a successful response
+      if (!response.ok) {
+        return new Error(
+          `Failed to fetch image: ${response.status} ${response.statusText}`,
+        );
+      }
+
+      // Check if the content-type is an image
+      const contentType = response.headers.get("Content-Type");
+      if (!contentType || !contentType.startsWith("image/")) {
+        return new Error("The provided URL is not an image");
+      }
+
+      // Convert response to a Blob
+      const blob = await response.blob();
+
+      // Extract metadata using exifr
+      const metadata = await exifr.parse(blob, exifrOptions);
+
+      // Handle missing metadata
+      if (!metadata) {
+        return new Error("No EXIF metadata found in the image");
+      }
+
+      return metadata;
+    } catch (error) {
+      console.error("Error extracting metadata:", error.message);
+      return null; // Return null instead of throwing to prevent app crashes
+    }
+  }
+
   const submitUrl = async () => {
-    if (input) {
-      console.log(getFileTypeFromUrl(input));
+    // Reset state
+    cleanMetadataState();
+    setImageMetadata(null);
 
-      if (radioImage) {
-        setImageurl(input);
-        // const metadata = await exifr.parse(input, exifrOptions);
-        // setImageMetadata(metadata);
-      } else {
-        setVideoUrl(input);
+    try {
+      if (!input && !fileInput) {
+        throw new Error("No input provided"); // Handle missing input
       }
-    } else if (fileInput) {
-      console.log(getFileTypeFromFile(fileInput));
 
-      if (radioImage) {
-        setImageurl(URL.createObjectURL(fileInput));
-        const metadata = await exifr.parse(fileInput, exifrOptions);
-        setImageMetadata(metadata);
-      } else {
-        setVideoUrl(URL.createObjectURL(fileInput));
+      // Determine file type
+      const fileType = input
+        ? await getFileTypeFromUrl(input)
+        : await getFileTypeFromFileObject(fileInput);
+
+      if (!fileType) {
+        throw new Error("Unable to determine file type");
       }
+
+      if (fileType.mime.includes("image")) {
+        // Set the image URL
+        setImageurl(input || URL.createObjectURL(fileInput));
+
+        // Extract metadata
+        const metadata = input
+          ? await getImageMetadataFromUrl(input)
+          : await exifr.parse(fileInput, exifrOptions);
+
+        setImageMetadata(metadata instanceof Error ? null : metadata);
+        return;
+      }
+
+      if (fileType.mime.includes("video")) {
+        setVideoUrl(input || URL.createObjectURL(fileInput));
+        return;
+      }
+
+      throw new Error("Unsupported file type");
+    } catch (error) {
+      console.error("Error in submitUrl:", error.message);
+      //   TODO: error handling
     }
   };
 
@@ -202,44 +264,23 @@ const Metadata = ({ mediaType }) => {
       <Box m={4} />
 
       <Card variant="outlined">
-        <Box p={4}>
-          <RadioGroup
-            aria-label="position"
-            name="position"
-            value={radioImage}
-            onChange={() => setRadioImage(!radioImage)}
-            row
-          >
-            <FormControlLabel
-              value={true}
-              control={<Radio color="primary" />}
-              label={keyword("metadata_radio_image")}
-              labelPlacement="end"
+        <form>
+          <Box p={4}>
+            <StringFileUploadField
+              labelKeyword={keyword("metadata_content_input")}
+              placeholderKeyword={keyword("metadata_content_input_placeholder")}
+              submitButtonKeyword={keyword("button_submit")}
+              localFileKeyword={keyword("button_localfile")}
+              urlInput={input}
+              setUrlInput={setInput}
+              fileInput={fileInput}
+              setFileInput={setFileInput}
+              handleSubmit={submitUrl}
+              fileInputTypesAccepted={"image/*, video/*"}
+              handleCloseSelectedFile={handleCloseFile}
             />
-            <FormControlLabel
-              value={false}
-              control={<Radio color="primary" />}
-              label={keyword("metadata_radio_video")}
-              labelPlacement="end"
-            />
-          </RadioGroup>
-
-          <Box m={2} />
-
-          <StringFileUploadField
-            labelKeyword={keyword("metadata_content_input")}
-            placeholderKeyword={keyword("metadata_content_input_placeholder")}
-            submitButtonKeyword={keyword("button_submit")}
-            localFileKeyword={keyword("button_localfile")}
-            urlInput={input}
-            setUrlInput={setInput}
-            fileInput={fileInput}
-            setFileInput={setFileInput}
-            handleSubmit={submitUrl}
-            fileInputTypesAccepted={"image/*, video/*"}
-            handleCloseSelectedFile={handleCloseFile}
-          />
-        </Box>
+          </Box>
+        </form>
       </Card>
       <Box m={4} />
       {resultData ? (

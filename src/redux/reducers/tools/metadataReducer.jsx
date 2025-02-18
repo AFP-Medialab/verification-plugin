@@ -22,9 +22,8 @@ const metadataSlice = createSlice({
     setMetadataIsImage(state, action) {
       state.isImage = action.loading;
     },
-    cleanMetadataState(state, action) {
-      state.url = "";
-      state.result = null;
+    cleanMetadataState() {
+      return initialState;
     },
     setMetadataMediaType(state, action) {
       state.mediaType = action.payload;

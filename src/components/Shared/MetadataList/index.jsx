@@ -1,17 +1,40 @@
-import React, { useState } from "react";
-import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Box, Button, List, ListItemText } from "@mui/material";
-import Tab from "@mui/material/Tab";
+import React, { useEffect, useState } from "react";
+
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import { prettyCase } from "../Utils/stringUtils";
+import ListItemText from "@mui/material/ListItemText";
+import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
-import { i18nLoadNamespace } from "../Languages/i18nLoadNamespace";
+
 import { Map } from "@mui/icons-material";
+
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+
+import { i18nLoadNamespace } from "../Languages/i18nLoadNamespace";
+import { prettyCase } from "../Utils/stringUtils";
 
 const MetadataList = ({ metadata }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Metadata");
 
-  const [tabValue, setTabValue] = useState("exif");
+  const [tabValue, setTabValue] = useState(
+    Object.keys(metadata).length ? Object.keys(metadata).sort()[0] : false,
+  );
+
+  // setTabValue(
+  //   Object.keys(metadata).length ? Object.keys(metadata).sort()[0] : false,
+  // );
+
+  // Sync tabValue when metadata updates
+  useEffect(() => {
+    const sortedKeys = Object.keys(metadata).sort();
+    if (sortedKeys.length) {
+      setTabValue(sortedKeys[0]);
+    } else {
+      setTabValue(0);
+    }
+  }, [metadata]);
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
@@ -62,7 +85,7 @@ const MetadataList = ({ metadata }) => {
                 {Object.keys(metadata)
                   .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
                   .map((item, index) => {
-                    return <Tab label={item} value={item} key={item} />;
+                    return <Tab label={item} value={item} key={index} />;
                   })}
               </TabList>
             </Box>
