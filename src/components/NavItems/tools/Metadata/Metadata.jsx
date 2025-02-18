@@ -21,15 +21,15 @@ import { imageMetadata as imageMetadataTool } from "../../../../constants/tools"
 import {
   cleanMetadataState,
   setMetadataMediaType,
+  setMetadataResult,
 } from "../../../../redux/reducers/tools/metadataReducer";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import { CONTENT_TYPE, KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
-import useImageTreatment from "./Hooks/useImageTreatment";
 import useVideoTreatment from "./Hooks/useVideoTreatment";
 import MetadataImageResult from "./Results/MetadataImageResult";
 import MetadataVideoResult from "./Results/MetadataVideoResult";
 
-const Metadata = ({ mediaType }) => {
+const Metadata = () => {
   const { url, type } = useParams();
   const location = useLocation();
 
@@ -47,14 +47,16 @@ const Metadata = ({ mediaType }) => {
   const session = useSelector((state) => state.userSession);
   const uid = session && session.user ? session.user.id : null;
 
-  const [radioImage, setRadioImage] = useState(mediaType !== "video");
   const [input, setInput] = useState(resultUrl ? resultUrl : "");
   const [fileInput, setFileInput] = useState(null);
   const [imageUrl, setImageurl] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
   const [urlDetected, setUrlDetected] = useState(false);
 
-  const [imageMetadata, setImageMetadata] = useState(null);
+  const [imageMetadata, setImageMetadata] = useState(
+    resultData ? resultData : null,
+  );
+
   const exifrOptions = {
     exif: true,
     gps: true,
@@ -65,7 +67,6 @@ const Metadata = ({ mediaType }) => {
   };
 
   useVideoTreatment(videoUrl, keyword);
-  useImageTreatment(imageUrl, keyword);
 
   const client_id = getclientId();
   useTrackEvent(
@@ -149,7 +150,8 @@ const Metadata = ({ mediaType }) => {
 
       if (fileType.mime.includes("image")) {
         // Set the image URL
-        setImageurl(input || URL.createObjectURL(fileInput));
+        const imageUrl = input || URL.createObjectURL(fileInput);
+        setImageurl(imageUrl);
 
         // Extract metadata
         const metadata = input
@@ -157,6 +159,17 @@ const Metadata = ({ mediaType }) => {
           : await exifr.parse(fileInput, exifrOptions);
 
         setImageMetadata(metadata instanceof Error ? null : metadata);
+
+        dispatch(
+          setMetadataResult({
+            url: imageUrl,
+            result: metadata instanceof Error ? null : metadata,
+            notification: false,
+            loading: false,
+            isImage: true,
+          }),
+        );
+
         return;
       }
 
@@ -195,10 +208,8 @@ const Metadata = ({ mediaType }) => {
     if (location.state != null) {
       if (location.state.media === "image") {
         dispatch(setMetadataMediaType("image"));
-        setRadioImage(true);
       } else if (location.state.media === "video") {
         dispatch(setMetadataMediaType("video"));
-        setRadioImage(false);
       }
     } else {
       // console.log(mediaType);
@@ -210,9 +221,7 @@ const Metadata = ({ mediaType }) => {
     if (type) {
       let content_type = decodeURIComponent(type);
       if (content_type === CONTENT_TYPE.VIDEO) {
-        setRadioImage(false);
       } else if (content_type === CONTENT_TYPE.IMAGE) {
-        setRadioImage(true);
       }
     }
 
@@ -229,7 +238,6 @@ const Metadata = ({ mediaType }) => {
     if (processUrl) {
       setInput(processUrl);
       dispatch(setMetadataMediaType(processUrlType));
-      setRadioImage(processUrlType === "image");
       setUrlDetected(true);
     }
   }, [processUrl]);
