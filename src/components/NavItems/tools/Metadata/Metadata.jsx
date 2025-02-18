@@ -24,7 +24,7 @@ import {
   setMetadataResult,
 } from "../../../../redux/reducers/tools/metadataReducer";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import { CONTENT_TYPE, KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
+import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import useVideoTreatment from "./Hooks/useVideoTreatment";
 import MetadataImageResult from "./Results/MetadataImageResult";
 import MetadataVideoResult from "./Results/MetadataVideoResult";
@@ -218,13 +218,6 @@ const Metadata = () => {
   }
 
   useEffect(() => {
-    if (type) {
-      let content_type = decodeURIComponent(type);
-      if (content_type === CONTENT_TYPE.VIDEO) {
-      } else if (content_type === CONTENT_TYPE.IMAGE) {
-      }
-    }
-
     if (url && url !== KNOWN_LINKS.OWN) {
       let uri = decodeURIComponent(url);
       setInput(uri);
