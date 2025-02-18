@@ -1,69 +1,48 @@
 import React from "react";
 import { useState } from "react";
+import { Trans } from "react-i18next";
+import Linkify from "react-linkify";
 import { useSelector } from "react-redux";
-import Card from "@mui/material/Card";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  CardHeader,
-  Chip,
-  Divider,
-  Grid2,
-  Pagination,
-  Skeleton,
-  Switch,
-} from "@mui/material";
-import CardContent from "@mui/material/CardContent";
-import Collapse from "@mui/material/Collapse";
-import moment from "moment/moment";
 
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Chip from "@mui/material/Chip";
+import Pagination from "@mui/material/Pagination";
+import Skeleton from "@mui/material/Skeleton";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Linkify from "react-linkify";
-
-import {
-  ArrowForward,
-  WarningOutlined,
-  SubdirectoryArrowRight,
-} from "@mui/icons-material";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import LinearProgress from "@mui/material/LinearProgress";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import { setWarningExpanded } from "../../../../redux/actions/tools/assistantActions";
+
+import { SubdirectoryArrowRight } from "@mui/icons-material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import { treeMapToElements } from "./assistantUtils";
-import { useDispatch } from "react-redux";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import { Trans } from "react-i18next";
-import {
-  TransCollectedCommentsTooltip,
-  TransMultilingualStanceTooltip,
-  TransMultilingualStanceLink,
-  TransHtmlDoubleLineBreak,
-  TransStanceDenyComments,
-  TransStanceQueryComments,
-  TransStanceSupportComments,
-} from "../TransComponents";
 import { TextCopy } from "components/Shared/Utils/TextCopy";
 import { Translate } from "components/Shared/Utils/Translate";
+import moment from "moment/moment";
+
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import {
+  TransHtmlDoubleLineBreak,
+  TransMultilingualStanceLink,
+  TransMultilingualStanceTooltip,
+} from "../TransComponents";
 import { caaVerificationKeywords } from "./caaVerificationKeywords";
 
 const AssistantCommentResult = ({ collectedComments }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   //const sharedKeyword = i18nLoadNamespace("components/Shared/utils");
-  const expandMinimiseText = keyword("expand_minimise_text");
 
   const classes = useMyStyles();
-  const dispatch = useDispatch();
   const pageSize = 5;
   //const numPages = Math.ceil(collectedComments.length / pageSize);
   const [currentAllPage, setCurrentAllPage] = useState(1);
@@ -72,12 +51,6 @@ const AssistantCommentResult = ({ collectedComments }) => {
   const [currentSupportPage, setCurrentSupportPage] = useState(1);
   const [currentQueryPage, setCurrentQueryPage] = useState(1);
   const [currentDenyPage, setCurrentDenyPage] = useState(1);
-  const [currentMultilingualSupportPage, setCurrentMultilingualSupportPage] =
-    useState(1);
-  const [currentMultilingualQueryPage, setCurrentMultilingualQueryPage] =
-    useState(1);
-  const [currentMultilingualDenyPage, setCurrentMultilingualDenyPage] =
-    useState(1);
 
   // multilingual stance classifier
   const multilingualStanceResult = useSelector(
@@ -106,9 +79,6 @@ const AssistantCommentResult = ({ collectedComments }) => {
   let denyComments = [];
   let supportComments = [];
   let queryComments = [];
-  let multilingualDenyComments = [];
-  let multilingualSupportComments = [];
-  let multilingualQueryComments = [];
   for (let i = 0; i < collectedComments.length; i++) {
     let text = collectedComments[i].textOriginal;
     // search for link
@@ -136,6 +106,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
       ? (totalCommentsWithReplies += collectedComments[i].replies.length)
       : null;
   }
+  console.log("totalCommentsWithReplies=", totalCommentsWithReplies);
 
   // for collectedComments
   function renderCommentList(
@@ -168,9 +139,6 @@ const AssistantCommentResult = ({ collectedComments }) => {
         moment(comment.publishedAt).format("l") +
         " " +
         moment(comment.publishedAt).format("LT");
-      const multilingualStance = multilingualStanceResult
-        ? multilingualStanceResult[commentId]
-        : null;
 
       let renderedReplies = [];
       if ("replies" in comment) {
@@ -351,15 +319,6 @@ const AssistantCommentResult = ({ collectedComments }) => {
   function denyPageChangeHandler(event, page) {
     setCurrentDenyPage(page);
   }
-  function multilingualSupportPageChangeHandler(event, page) {
-    setCurrentMultilingualSupportPage(page);
-  }
-  function multilingualQueryPageChangeHandler(event, page) {
-    setCurrentMultilingualQueryPage(page);
-  }
-  function multilingualDenyPageChangeHandler(event, page) {
-    setCurrentMultilingualDenyPage(page);
-  }
 
   return (
     <Card data-testid="assistant-collected-comments">
@@ -446,13 +405,13 @@ const AssistantCommentResult = ({ collectedComments }) => {
         {/* stance: support comments */}
         <Accordion hidden={supportComments.length < 1}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography component="div">{keyword("stance_label")}
-            <Chip
-              label={keyword("support")}
-              color={stanceColours.support}
-              size="small"
-            />
-              {" "}
+            <Typography component="div">
+              {keyword("stance_label")}
+              <Chip
+                label={keyword("support")}
+                color={stanceColours.support}
+                size="small"
+              />{" "}
               {keyword("comments_label")}
               {" (" + supportComments.length + ")"}
             </Typography>
@@ -470,13 +429,13 @@ const AssistantCommentResult = ({ collectedComments }) => {
         {/* stance: query comments */}
         <Accordion hidden={queryComments.length < 1}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography component="div">{keyword("stance_label")}
-            <Chip
-              label={keyword("query")}
-              color={stanceColours.query}
-              size="small"
-            />
-              {" "}
+            <Typography component="div">
+              {keyword("stance_label")}
+              <Chip
+                label={keyword("query")}
+                color={stanceColours.query}
+                size="small"
+              />{" "}
               {keyword("comments_label")}
               {" (" + queryComments.length + ")"}
             </Typography>
@@ -494,13 +453,13 @@ const AssistantCommentResult = ({ collectedComments }) => {
         {/* stance: deny comments */}
         <Accordion hidden={denyComments.length < 1}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography component="div">{keyword("stance_label")}
-            <Chip
-              label={keyword("deny")}
-              color={stanceColours.deny}
-              size="small"
-            />
-              {" "}
+            <Typography component="div">
+              {keyword("stance_label")}
+              <Chip
+                label={keyword("deny")}
+                color={stanceColours.deny}
+                size="small"
+              />{" "}
               {keyword("comments_label")}
               {" (" + denyComments.length + ")"}
             </Typography>

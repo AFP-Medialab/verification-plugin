@@ -57,9 +57,6 @@ const Assistant = () => {
   const collectedComments = useSelector(
     (state) => state.assistant.collectedComments,
   );
-  const youtubeComments = useSelector(
-    (state) => state.assistant.youtubeCommentsResult,
-  );
   const errorKey = useSelector((state) => state.assistant.errorKey);
 
   // checking if user logged in
