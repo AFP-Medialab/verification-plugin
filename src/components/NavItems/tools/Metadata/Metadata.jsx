@@ -52,6 +52,7 @@ const Metadata = () => {
   const [imageUrl, setImageurl] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
   const [urlDetected, setUrlDetected] = useState(false);
+  const [error, setError] = useState(false);
 
   const [imageMetadata, setImageMetadata] = useState(
     resultData ? resultData : null,
@@ -133,6 +134,7 @@ const Metadata = () => {
     // Reset state
     cleanMetadataState();
     setImageMetadata(null);
+    setError(false);
 
     try {
       if (!input && !fileInput) {
@@ -181,7 +183,7 @@ const Metadata = () => {
       throw new Error("Unsupported file type");
     } catch (error) {
       console.error("Error in submitUrl:", error.message);
-      //   TODO: error handling
+      setError(error.message);
     }
   };
 
@@ -284,6 +286,9 @@ const Metadata = () => {
         </form>
       </Card>
       <Box m={4} />
+
+      {error && <Alert severity="error">{error}</Alert>}
+
       {resultData ? (
         resultIsImage ? (
           <MetadataImageResult

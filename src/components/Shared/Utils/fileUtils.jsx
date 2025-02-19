@@ -29,7 +29,7 @@ export const getFileTypeFromUrl = async (url) => {
     return await fileTypeFromStream(response.body);
   } catch (error) {
     console.error(error);
-    return new Error(`Could not get file type for ${url}`);
+    throw new Error(`Could not get file type for ${url}`);
   }
 };
 
