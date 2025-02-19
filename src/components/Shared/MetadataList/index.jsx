@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import Link from "@mui/material/Link";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -21,10 +21,6 @@ const MetadataList = ({ metadata }) => {
   const [tabValue, setTabValue] = useState(
     Object.keys(metadata).length ? Object.keys(metadata).sort()[0] : false,
   );
-
-  // setTabValue(
-  //   Object.keys(metadata).length ? Object.keys(metadata).sort()[0] : false,
-  // );
 
   // Sync tabValue when metadata updates
   useEffect(() => {
@@ -115,28 +111,31 @@ const MetadataList = ({ metadata }) => {
             })}
           </TabContext>
 
-          {metadata && tabValue === "gps" && (
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() =>
-                window.open(
-                  getGoogleMapsLink(
-                    metadata["gps"]["GPSLatitude"],
-                    metadata["gps"]["GPSLatitudeRef"],
-                    metadata["gps"]["GPSLongitude"],
-                    metadata["gps"]["GPSLongitudeRef"],
-                  ),
-                  "_blank",
-                )
-              }
-            >
-              <Map />
-              <Typography variant={"subtitle2"}>
-                {keyword("metadata_gps_button")}
-              </Typography>
-            </Button>
-          )}
+          {metadata &&
+            tabValue === "gps" &&
+            metadata["gps"] &&
+            metadata["gps"]["GPSLatitude"] &&
+            metadata["gps"]["GPSLatitudeRef"] &&
+            metadata["gps"]["GPSLongitude"] &&
+            metadata["gps"]["GPSLongitudeRef"] && (
+              <Link
+                component="button"
+                variant="contained"
+                color="primary"
+                href={getGoogleMapsLink(
+                  metadata["gps"]["GPSLatitude"],
+                  metadata["gps"]["GPSLatitudeRef"],
+                  metadata["gps"]["GPSLongitude"],
+                  metadata["gps"]["GPSLongitudeRef"],
+                )}
+                target="_blank"
+              >
+                <Map />
+                <Typography variant={"subtitle2"}>
+                  {keyword("metadata_gps_button")}
+                </Typography>
+              </Link>
+            )}
         </Box>
       ) : (
         <></>
