@@ -261,12 +261,13 @@ const SyntheticImageDetectionResults = ({
       );
     }
 
-    const floor = Math.floor(percentage);
+    const rounded =
+      percentage > 50 ? Math.round(percentage) : Math.floor(percentage);
 
-    if (floor >= 100) return 99;
-    if (floor <= 0) return 1;
+    if (rounded >= 100) return 99;
+    if (rounded <= 0) return 1;
 
-    return floor;
+    return rounded;
   };
   const [detailsPanelMessage, setDetailsPanelMessage] = useState(
     "synthetic_image_detection_additional_results",
