@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { React, useEffect, useState } from "react";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -41,8 +41,6 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
   const mainImageId = useSelector((state) => state.c2pa.mainImageId);
 
   const data = result;
-
-  console.log(data);
 
   const url = data[currentImageId].url;
   const parentId = data[currentImageId].parent;
