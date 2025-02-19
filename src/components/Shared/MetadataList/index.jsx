@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
-import Link from "@mui/material/Link";
+import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -24,6 +24,8 @@ const MetadataList = ({ metadata }) => {
 
   // Sync tabValue when metadata updates
   useEffect(() => {
+    console.log(metadata);
+
     const sortedKeys = Object.keys(metadata).sort();
     if (sortedKeys.length) {
       setTabValue(sortedKeys[0]);
@@ -118,23 +120,27 @@ const MetadataList = ({ metadata }) => {
             metadata["gps"]["GPSLatitudeRef"] &&
             metadata["gps"]["GPSLongitude"] &&
             metadata["gps"]["GPSLongitudeRef"] && (
-              <Link
-                component="button"
+              <Button
                 variant="contained"
                 color="primary"
-                href={getGoogleMapsLink(
-                  metadata["gps"]["GPSLatitude"],
-                  metadata["gps"]["GPSLatitudeRef"],
-                  metadata["gps"]["GPSLongitude"],
-                  metadata["gps"]["GPSLongitudeRef"],
-                )}
-                target="_blank"
+                onClick={() =>
+                  window.open(
+                    getGoogleMapsLink(
+                      metadata["gps"]["GPSLatitude"],
+                      metadata["gps"]["GPSLatitudeRef"],
+                      metadata["gps"]["GPSLongitude"],
+                      metadata["gps"]["GPSLongitudeRef"],
+                    ),
+                    "_blank",
+                    "noopener,noreferrer",
+                  )
+                }
               >
                 <Map />
                 <Typography variant={"subtitle2"}>
                   {keyword("metadata_gps_button")}
                 </Typography>
-              </Link>
+              </Button>
             )}
         </Box>
       ) : (
