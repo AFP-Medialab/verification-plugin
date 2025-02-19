@@ -55,7 +55,7 @@ const getFeedbackMessage = (email, message, messageType, archiveURL = null) => {
           ? {
               accessory: {
                 type: "image",
-                image_url: archiveURL,
+                image_url: archiveURL.trim(),
                 alt_text: "Problematic image",
               },
             }
@@ -66,7 +66,12 @@ const getFeedbackMessage = (email, message, messageType, archiveURL = null) => {
 };
 
 const sendToSlack = async (email, message, messageType, archiveURL = null) => {
-  const feedbackMessage = getFeedbackMessage(email, message, messageType);
+  const feedbackMessage = getFeedbackMessage(
+    email,
+    message,
+    messageType,
+    archiveURL,
+  );
   const response = await fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

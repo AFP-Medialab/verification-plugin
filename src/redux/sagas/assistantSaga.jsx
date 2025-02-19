@@ -594,15 +594,16 @@ function* handleAssistantChatbotCall(action) {
       email,
       archiveURL,
     );
+    const suffix = "\n[Sent via the chatbot assistant]";
 
     if (chatbotResponse.userMessageClasses.includes("BUG")) {
-      sendToSlack(email, message, "BUG", archiveURL);
+      sendToSlack(email, message + suffix, "BUG", archiveURL);
     }
     if (chatbotResponse.userMessageClasses.includes("FEATURE")) {
-      sendToSlack(email, message, "FEATURE", archiveURL);
+      sendToSlack(email, message + suffix, "FEATURE", archiveURL);
     }
     if (chatbotResponse.userMessageClasses.includes("IMPROVEMENT")) {
-      sendToSlack(email, message, "IMPROVEMENT", archiveURL);
+      sendToSlack(email, message + suffix, "IMPROVEMENT", archiveURL);
     }
     if (chatbotResponse.userMessageClasses.includes("EXPLAIN")) {
       console.log("TODO: Hook up to LLM");
