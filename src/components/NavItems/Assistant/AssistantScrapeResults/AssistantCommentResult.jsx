@@ -73,7 +73,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
   };
 
   // group comments by links, verification and stance
-  let totalCommentsWithReplies = 0;
+  // let totalCommentsWithReplies = 0;
   let linkComments = [];
   let verificationComments = [];
   let denyComments = [];
@@ -100,13 +100,13 @@ const AssistantCommentResult = ({ collectedComments }) => {
     stance == "query" ? queryComments.push(collectedComments[i]) : null;
     stance == "support" ? supportComments.push(collectedComments[i]) : null;
     stance == "deny" ? denyComments.push(collectedComments[i]) : null;
-    // number of comments and replies
-    totalCommentsWithReplies += 1;
-    collectedComments[i].replies
-      ? (totalCommentsWithReplies += collectedComments[i].replies.length)
-      : null;
+    // // number of comments and replies
+    // totalCommentsWithReplies += 1;
+    // collectedComments[i].replies
+    //   ? (totalCommentsWithReplies += collectedComments[i].replies.length)
+    //   : null;
   }
-  console.log("totalCommentsWithReplies=", totalCommentsWithReplies);
+  // console.log("totalCommentsWithReplies=", totalCommentsWithReplies);
 
   // for collectedComments
   function renderCommentList(
