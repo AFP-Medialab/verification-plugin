@@ -84,7 +84,7 @@ const VideoRightsResults = (props) => {
   ];
 
   return (
-    <Card>
+    <Card variant="outlined">
       <CardHeader
         title={keyword("cardheader_results")}
         className={classes.headerUploadedImage}

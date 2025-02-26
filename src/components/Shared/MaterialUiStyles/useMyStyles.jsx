@@ -154,7 +154,7 @@ const styles = (theme) => ({
 
   toolbar: {
     //...theme.mixins.toolbar,
-    height: "120px",
+    height: "114px",
     paddingBottom: "10px",
   },
   content: {

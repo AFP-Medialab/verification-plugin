@@ -4,12 +4,10 @@ import { useParams } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
 
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import HeaderTool from "@Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import { setError } from "redux/reducers/errorReducer";
 
@@ -29,7 +27,6 @@ import OcrResult from "./Results/OcrResult";
 
 const OCR = () => {
   const { url } = useParams();
-  const classes = useMyStyles();
   const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/OCR");
   const keywordAllTools = i18nLoadNamespace(
@@ -182,12 +179,8 @@ const OCR = () => {
         icon={<imageOcr.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
       />
 
-      <Card>
-        <CardHeader
-          title={keyword("cardheader_source")}
-          className={classes.headerUploadedImage}
-        />
-        <Box p={3}>
+      <Card variant="outlined">
+        <Box p={4}>
           <form>
             <StringFileUploadField
               labelKeyword={keyword("ocr_urlbox")}

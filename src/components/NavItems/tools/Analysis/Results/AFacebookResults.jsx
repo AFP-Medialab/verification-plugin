@@ -91,7 +91,7 @@ const AFacebookResults = (props) => {
   return (
     <div>
       {report !== null && (
-        <Card>
+        <Card variant="outlined">
           <CardHeader
             title={keyword("cardheader_results")}
             className={classes.headerUploadedImage}

@@ -296,7 +296,7 @@ const LoccusResults = ({
       alignItems="flex-start"
       spacing={2}
     >
-      <Card sx={{ width: "100%" }}>
+      <Card variant="outlined" sx={{ width: "100%" }}>
         <CardHeader
           style={{ borderRadius: "4px 4p x 0px 0px" }}
           title={keyword("loccus_title")}

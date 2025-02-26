@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
 import LinearProgress from "@mui/material/LinearProgress";
 
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
@@ -137,13 +136,8 @@ const Magnifier = () => {
         }
       />
 
-      <Card>
-        <CardHeader
-          title={keyword("cardheader_source")}
-          className={classes.headerUploadedImage}
-        />
-
-        <Box p={3}>
+      <Card variant="outlined">
+        <Box p={4}>
           <form>
             <StringFileUploadField
               labelKeyword={keyword("magnifier_urlbox")}

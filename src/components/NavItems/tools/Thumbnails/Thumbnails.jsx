@@ -144,13 +144,13 @@ const Thumbnails = () => {
     if (url !== null && url !== "" && isYtUrl(url)) {
       setEventUrl(url);
       /*trackEvent(
-                                            "submission",
-                                            "thumbnails",
-                                            "youtube thumbnail",
-                                            url,
-                                            client_id,
-                                            uid
-                                          );*/
+                                                        "submission",
+                                                        "thumbnails",
+                                                        "youtube thumbnail",
+                                                        url,
+                                                        client_id,
+                                                        uid
+                                                      );*/
       let images = get_images(url);
       dispatch(
         setThumbnailsResult({
@@ -244,12 +244,8 @@ const Thumbnails = () => {
         icon={<thumbnails.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
       />
 
-      <Card>
-        <CardHeader
-          title={keyword("cardheader_link")}
-          className={classes.headerUploadedImage}
-        />
-        <Box p={3}>
+      <Card variant="outlined">
+        <Box p={4}>
           <form>
             <Grid2 container direction="row" spacing={3} alignItems="center">
               <Grid2 size="grow">
@@ -331,7 +327,7 @@ const Thumbnails = () => {
       <Box m={3} />
 
       {resultData && resultData.length !== 0 && !isImgLoading && (
-        <Card>
+        <Card variant="outlined">
           <CardHeader
             title={keyword("cardheader_results")}
             className={classes.headerUploadedImage}

@@ -4,9 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import Grid2 from "@mui/material/Grid2";
 import LinearProgress from "@mui/material/LinearProgress";
+import Stack from "@mui/material/Stack";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
@@ -35,16 +34,6 @@ const Deepfake = () => {
   const [input, setInput] = useState(url ? url : "");
   const [type, setType] = useState("");
   const [videoFile, setVideoFile] = useState(undefined);
-  //Selecting mode
-  //============================================================================================
-  const [selectedMode, setSelectedMode] = useState("");
-
-  if (selectedMode !== "VIDEO") {
-    setSelectedMode("VIDEO");
-  }
-
-  //Submiting the URL
-  //============================================================================================
 
   const dispatch = useDispatch();
 
@@ -53,7 +42,7 @@ const Deepfake = () => {
       keyword,
       input,
       true,
-      selectedMode,
+      "VIDEO",
       dispatch,
       role,
       keywordWarning("error_invalid_url"),
@@ -100,75 +89,57 @@ const Deepfake = () => {
   };
 
   return (
-    <div>
-      <HeaderTool
-        name={keywordAllTools("navbar_deepfake_video")}
-        description={keywordAllTools("navbar_deepfake_video_description")}
-        icon={<videoDeepfake.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
-      />
-
-      <Alert severity="warning">{keywordWarning("warning_beta")}</Alert>
-
-      <Box m={3} />
-
-      <Card>
-        <CardHeader
-          title={
-            <Grid2
-              container
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <span>{keyword("deepfake_video_link")}</span>
-            </Grid2>
+    <Box>
+      <Stack direction="column" spacing={4}>
+        <HeaderTool
+          name={keywordAllTools("navbar_deepfake_video")}
+          description={keywordAllTools("navbar_deepfake_video_description")}
+          icon={
+            <videoDeepfake.icon sx={{ fill: "#00926c", fontSize: "40px" }} />
           }
-          className={classes.headerUploadedImage}
         />
 
-        <Box p={3}>
-          {selectedMode !== "" && (
-            <div>
-              <Box>
-                <form>
-                  <StringFileUploadField
-                    labelKeyword={keyword("deepfake_video_link")}
-                    placeholderKeyword={keyword("deepfake_placeholder")}
-                    submitButtonKeyword={keyword("submit_button")}
-                    localFileKeyword={keyword("button_localfile")}
-                    urlInput={input}
-                    setUrlInput={setInput}
-                    fileInput={videoFile}
-                    setFileInput={setVideoFile}
-                    handleSubmit={handleSubmit}
-                    fileInputTypesAccepted={"video/*"}
-                    handleCloseSelectedFile={handleClose}
-                    preprocessLocalFile={preprocessVideo}
-                    isParentLoading={isLoading}
-                  />
-                </form>
+        <Alert severity="warning">{keywordWarning("warning_beta")}</Alert>
+
+        <Card variant="outlined">
+          <Box p={4}>
+            <form>
+              <StringFileUploadField
+                labelKeyword={keyword("deepfake_video_link")}
+                placeholderKeyword={keyword("deepfake_placeholder")}
+                submitButtonKeyword={keyword("submit_button")}
+                localFileKeyword={keyword("button_localfile")}
+                urlInput={input}
+                setUrlInput={setInput}
+                fileInput={videoFile}
+                setFileInput={setVideoFile}
+                handleSubmit={handleSubmit}
+                fileInputTypesAccepted={"video/*"}
+                handleCloseSelectedFile={handleClose}
+                preprocessLocalFile={preprocessVideo}
+                isParentLoading={isLoading}
+              />
+            </form>
+            {isLoading && (
+              <>
                 <Box m={2} />
-                {isLoading && (
-                  <Box mt={3}>
-                    <LinearProgress />
-                  </Box>
-                )}
-              </Box>
-            </div>
-          )}
-        </Box>
-      </Card>
+                <Box mt={3}>
+                  <LinearProgress />
+                </Box>
+              </>
+            )}
+          </Box>
+        </Card>
 
-      <Box m={3} />
-
-      {result && (
-        <DeepfakeResultsVideo
-          result={result}
-          url={url}
-          handleClose={handleClose}
-        />
-      )}
-    </div>
+        {result && (
+          <DeepfakeResultsVideo
+            result={result}
+            url={url}
+            handleClose={handleClose}
+          />
+        )}
+      </Stack>
+    </Box>
   );
 };
 export default Deepfake;

@@ -114,7 +114,7 @@ const Deepfake = () => {
 
       <Box m={3} />
 
-      <Card>
+      <Card variant="outlined">
         <CardHeader
           title={
             <Grid2

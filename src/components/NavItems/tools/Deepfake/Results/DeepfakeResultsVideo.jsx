@@ -182,7 +182,7 @@ const DeepfakeResultsVideo = (props) => {
   };
 
   return (
-    <Card sx={{ width: "100%" }}>
+    <Card variant="outlined" sx={{ width: "100%" }}>
       <CardHeader
         style={{ borderRadius: "4px 4px 0px 0px" }}
         title={keyword("deepfake_video_title")}
@@ -210,6 +210,7 @@ const DeepfakeResultsVideo = (props) => {
                   borderRadius: "10px",
                   boxShadow:
                     "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
+                  maxHeight: "50vh",
                 }}
               >
                 <source
@@ -219,105 +220,6 @@ const DeepfakeResultsVideo = (props) => {
                 {keyword("deepfake_support")}
               </video>
             </Grid2>
-            {!!results.deepfake_video_report.results && (
-              <Grid2 size={{ xs: 6 }} container width="100%" direction="column">
-                <Typography
-                  variant="body1"
-                  style={{
-                    color: "#00926c",
-                    fontSize: "24px",
-                    fontWeight: "500",
-                  }}
-                >
-                  {keyword("deepfake_clips")}
-                </Typography>
-                <Box m={1} />
-
-                <Grid2 container spacing={3}>
-                  {results.deepfake_video_report.results.map(
-                    (valueShot, keyShot) => {
-                      const shotStart = valueShot.shot_start;
-                      const shotEnd = valueShot.shot_end;
-
-                      const startMin = ("0" + Math.floor(shotStart / 60)).slice(
-                        -2,
-                      );
-                      const startSec = ("0" + (shotStart % 60)).slice(-2);
-                      const endMin = ("0" + Math.floor(shotEnd / 60)).slice(-2);
-                      const endSec = ("0" + (shotEnd % 60)).slice(-2);
-
-                      return (
-                        <Grid2 size={{ sm: 4, xs: 12 }} key={keyShot}>
-                          {keyShot === shotSelectedKey ? (
-                            <Box
-                              onClick={() => clickShot(valueShot, keyShot)}
-                              style={{
-                                backgroundColor: "#00926c",
-                                borderRadius: "10px",
-                                overflow: "hidden",
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                boxShadow:
-                                  "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
-                              }}
-                            >
-                              <img
-                                alt="shot"
-                                key={keyShot}
-                                src={valueShot.shot_image}
-                                style={{ width: "100%", height: "auto" }}
-                              />
-                              <Box mt={1} />
-                              <Typography
-                                variant="body1"
-                                style={{ fontSize: "14px", color: "#ffffff" }}
-                              >
-                                {startMin}:{startSec}
-                                {" - "}
-                                {endMin}:{endSec}
-                              </Typography>
-                              <Box mt={1} />
-                            </Box>
-                          ) : (
-                            <Box
-                              onClick={() => clickShot(valueShot, keyShot)}
-                              style={{
-                                backgroundColor: "#ffffff",
-                                borderRadius: "10px",
-                                overflow: "hidden",
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                boxShadow:
-                                  "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
-                              }}
-                            >
-                              <img
-                                alt="shot"
-                                key={keyShot}
-                                src={valueShot.shot_image}
-                                style={{ width: "100%", height: "auto" }}
-                              />
-                              <Box mt={1} />
-                              <Typography
-                                variant="body1"
-                                style={{ fontSize: "14px" }}
-                              >
-                                {startMin}:{startSec}
-                                {" - "}
-                                {endMin}:{endSec}
-                              </Typography>
-                              <Box mt={1} />
-                            </Box>
-                          )}
-                        </Grid2>
-                      );
-                    },
-                  )}
-                </Grid2>
-              </Grid2>
-            )}
           </Grid2>
           <Grid2 size={{ xs: 6 }} p={2}>
             <Stack direction="column" p={4} spacing={4}>
@@ -345,10 +247,120 @@ const DeepfakeResultsVideo = (props) => {
 
         <Box m={3} />
 
+        <Card variant="outlined">
+          {!!results.deepfake_video_report.results && (
+            <Box width="100%" p={4}>
+              <Typography
+                variant="body1"
+                style={{
+                  color: "#00926c",
+                  fontSize: "24px",
+                  fontWeight: "500",
+                }}
+              >
+                {keyword("deepfake_clips")}
+              </Typography>
+              <Box m={1} />
+
+              <Grid2 container spacing={3}>
+                {results.deepfake_video_report.results.map(
+                  (valueShot, keyShot) => {
+                    const shotStart = valueShot.shot_start;
+                    const shotEnd = valueShot.shot_end;
+
+                    const startMin = ("0" + Math.floor(shotStart / 60)).slice(
+                      -2,
+                    );
+                    const startSec = ("0" + (shotStart % 60)).slice(-2);
+                    const endMin = ("0" + Math.floor(shotEnd / 60)).slice(-2);
+                    const endSec = ("0" + (shotEnd % 60)).slice(-2);
+
+                    return (
+                      <Grid2 size={{ sm: 4, xs: 12 }} key={keyShot}>
+                        {keyShot === shotSelectedKey ? (
+                          <Box
+                            onClick={() => clickShot(valueShot, keyShot)}
+                            style={{
+                              backgroundColor: "#00926c",
+                              borderRadius: "10px",
+                              overflow: "hidden",
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "center",
+                              boxShadow:
+                                "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
+                            }}
+                          >
+                            <img
+                              alt="shot"
+                              key={keyShot}
+                              src={valueShot.shot_image}
+                              style={{
+                                width: "100%",
+                                height: "auto",
+                                maxHeight: "15vh",
+                              }}
+                            />
+                            <Box mt={1} />
+                            <Typography
+                              variant="body1"
+                              style={{ fontSize: "14px", color: "#ffffff" }}
+                            >
+                              {startMin}:{startSec}
+                              {" - "}
+                              {endMin}:{endSec}
+                            </Typography>
+                            <Box mt={1} />
+                          </Box>
+                        ) : (
+                          <Box
+                            onClick={() => clickShot(valueShot, keyShot)}
+                            style={{
+                              backgroundColor: "#ffffff",
+                              borderRadius: "10px",
+                              overflow: "hidden",
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "center",
+                              boxShadow:
+                                "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
+                            }}
+                          >
+                            <img
+                              alt="shot"
+                              key={keyShot}
+                              src={valueShot.shot_image}
+                              style={{
+                                width: "100%",
+                                height: "auto",
+                                maxHeight: "15vh",
+                              }}
+                            />
+                            <Box mt={1} />
+                            <Typography
+                              variant="body1"
+                              style={{ fontSize: "14px" }}
+                            >
+                              {startMin}:{startSec}
+                              {" - "}
+                              {endMin}:{endSec}
+                            </Typography>
+                            <Box mt={1} />
+                          </Box>
+                        )}
+                      </Grid2>
+                    );
+                  },
+                )}
+              </Grid2>
+            </Box>
+          )}
+        </Card>
+
         {results &&
           results.deepfake_video_report &&
           results.deepfake_video_report.results && (
-            <Card style={{ overflow: "visible" }} mb={3}>
+            <Card variant="outlined" style={{ overflow: "visible" }} mb={3}>
               <CardHeader
                 style={{ borderRadius: "4px 4px 0px 0px" }}
                 title={
@@ -446,7 +458,7 @@ const DeepfakeResultsVideo = (props) => {
                             borderRadius: "10px",
                             boxShadow:
                               "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
-                            maxHeight: "60vh",
+                            maxHeight: "30vh",
                             maxWidth: "100%",
                           }}
                         >

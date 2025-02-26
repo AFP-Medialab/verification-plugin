@@ -196,7 +196,7 @@ const DeepfakeResultsImage = (props) => {
       alignItems="flex-start"
       spacing={2}
     >
-      <Card sx={{ width: "100%" }}>
+      <Card variant="outlined" sx={{ width: "100%" }}>
         <CardHeader
           style={{ borderRadius: "4px 4px 0px 0px" }}
           title={keyword("deepfake_image_title")}

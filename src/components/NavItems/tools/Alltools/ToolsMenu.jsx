@@ -283,7 +283,7 @@ const ToolsMenu = () => {
           {keywordWarning("warning_advanced_tools")}
         </Alert>
       </Snackbar>
-      <Card>
+      <Card variant="outlined">
         <Tabs
           value={value}
           onChange={handleChange}
