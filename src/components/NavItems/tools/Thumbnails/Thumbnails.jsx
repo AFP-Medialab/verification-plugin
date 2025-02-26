@@ -144,13 +144,13 @@ const Thumbnails = () => {
     if (url !== null && url !== "" && isYtUrl(url)) {
       setEventUrl(url);
       /*trackEvent(
-                                                        "submission",
-                                                        "thumbnails",
-                                                        "youtube thumbnail",
-                                                        url,
-                                                        client_id,
-                                                        uid
-                                                      );*/
+                                                              "submission",
+                                                              "thumbnails",
+                                                              "youtube thumbnail",
+                                                              url,
+                                                              client_id,
+                                                              uid
+                                                            );*/
       let images = get_images(url);
       dispatch(
         setThumbnailsResult({
@@ -161,7 +161,7 @@ const Thumbnails = () => {
         }),
       );
       if (selectedValue.openTabs) images.forEach((img) => imageClickUrl(img));
-    } else dispatch(setError(keyword(enter_valid_youtube_url)));
+    } else dispatch(setError(keyword("enter_valid_youtube_url")));
   };
 
   const imageClickUrl = (url) => {

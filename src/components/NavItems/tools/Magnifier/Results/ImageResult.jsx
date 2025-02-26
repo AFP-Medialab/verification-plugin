@@ -110,13 +110,6 @@ const ImageResult = ({ handleCloseResults }) => {
     return image_name.substring(0, image_name.lastIndexOf("."));
   };
 
-  const handleClick = (
-    /** @type {any} */ img,
-    /** @type {string} */ searchEngineName,
-  ) => {
-    reverseImageSearch(img, searchEngineName, false);
-  };
-
   const reverseSearch = (searchEngineName) => {
     reverseImageSearch(
       isImageUrl ? original : resultImage,

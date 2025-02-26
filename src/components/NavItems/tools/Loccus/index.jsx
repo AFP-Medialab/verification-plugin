@@ -22,14 +22,12 @@ import {
   setLoccusResult,
 } from "../../../../redux/actions/tools/loccusActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 import LoccusResults from "./loccusResults";
 
 const Loccus = () => {
-  const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Loccus");
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
@@ -145,7 +143,6 @@ const Loccus = () => {
 
       if (!res.data.state || res.data.state !== "available") {
         throw new Error("The file is not available.");
-        return;
       }
 
       // Second, we perform the Loccus authenticity verification
@@ -319,7 +316,6 @@ const Loccus = () => {
     mutationFn: () => {
       return useGetVoiceCloningScore(input, true, dispatch);
     },
-    onSuccess: (data) => {},
   });
 
   const handleSubmit = async () => {

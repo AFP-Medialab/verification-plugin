@@ -15,12 +15,10 @@ import { setError } from "redux/reducers/errorReducer";
 import { videoDeepfake } from "../../../../constants/tools";
 import { resetDeepfake } from "../../../../redux/actions/tools/deepfakeVideoActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import UseGetDeepfake from "./Hooks/useGetDeepfake";
 import DeepfakeResultsVideo from "./Results/DeepfakeResultsVideo";
 
 const Deepfake = () => {
-  const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
