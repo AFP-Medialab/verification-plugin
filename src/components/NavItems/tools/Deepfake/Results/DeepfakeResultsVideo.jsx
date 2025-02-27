@@ -308,7 +308,7 @@ const DeepfakeResultsVideo = (props) => {
                                         maxHeight: "15vh",
                                       }}
                                     />
-                                    <Typography>
+                                    <Typography variant="caption">
                                       {startMin}:{startSec}
                                       {" - "}
                                       {endMin}:{endSec}
