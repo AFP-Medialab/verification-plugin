@@ -314,7 +314,7 @@ const ToolsMenu = () => {
 
         <Box sx={{ m: 1 }} />
 
-        <div style={{ minHeight: "340px" }}>
+        <Box sx={{ minHeight: "55vh" }}>
           {categoriesAllowedForUser.map((category, index) => {
             const tools = category.value;
 
@@ -330,7 +330,7 @@ const ToolsMenu = () => {
                 >
                   {tools.map((tool, key) => {
                     const element = (
-                      <Grid2 size={4} minWidth="200px">
+                      <Grid2 size={{ xs: 4, lg: 3 }} minWidth="200px">
                         <ToolsMenuItem
                           tool={tool}
                           onClick={() =>
@@ -357,7 +357,7 @@ const ToolsMenu = () => {
               </TabPanel>
             );
           })}
-        </div>
+        </Box>
       </Card>
 
       <Box sx={{ m: 3 }} />
