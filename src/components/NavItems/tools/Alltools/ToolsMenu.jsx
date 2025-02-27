@@ -32,7 +32,6 @@ import DataIcon from "../../../NavBar/images/SVG/DataAnalysis/Data_analysis.svg"
 import ImageIcon from "../../../NavBar/images/SVG/Image/Images.svg";
 import SearchIcon from "../../../NavBar/images/SVG/Search/Search.svg";
 import VideoIcon from "../../../NavBar/images/SVG/Video/Video.svg";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import ToolsMenuItem from "./ToolsMenuItem";
 
 function TabPanel(props) {
@@ -62,7 +61,6 @@ function TabPanel(props) {
  */
 const ToolsMenu = () => {
   const navigate = useNavigate();
-  const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Alltools");
   const keywordNavbar = i18nLoadNamespace("components/NavBar");
   const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
