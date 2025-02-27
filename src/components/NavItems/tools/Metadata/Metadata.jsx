@@ -5,33 +5,38 @@ import { useLocation, useParams } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
 import Stack from "@mui/material/Stack";
 
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import {
+  getFileTypeFromFileObject,
+  getFileTypeFromUrl,
+} from "@Shared/Utils/fileUtils";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
+import exifr from "exifr";
 
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { imageMetadata } from "../../../../constants/tools";
-import { setMetadataMediaType } from "../../../../redux/reducers/tools/metadataReducer";
+import { imageMetadata as imageMetadataTool } from "../../../../constants/tools";
+import {
+  cleanMetadataState,
+  setMetadataMediaType,
+  setMetadataResult,
+} from "../../../../redux/reducers/tools/metadataReducer";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import { CONTENT_TYPE, KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
-import useImageTreatment from "./Hooks/useImageTreatment";
+import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import useVideoTreatment from "./Hooks/useVideoTreatment";
 import MetadataImageResult from "./Results/MetadataImageResult";
 import MetadataVideoResult from "./Results/MetadataVideoResult";
 
-const Metadata = ({ mediaType }) => {
+const Metadata = () => {
   const { url, type } = useParams();
   const location = useLocation();
 
-  const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Metadata");
+
+  const keywordTip = i18nLoadNamespace("components/Shared/OnClickInfo");
+
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
   );
@@ -42,15 +47,27 @@ const Metadata = ({ mediaType }) => {
   const session = useSelector((state) => state.userSession);
   const uid = session && session.user ? session.user.id : null;
 
-  const [radioImage, setRadioImage] = useState(mediaType !== "video");
   const [input, setInput] = useState(resultUrl ? resultUrl : "");
   const [fileInput, setFileInput] = useState(null);
   const [imageUrl, setImageurl] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
   const [urlDetected, setUrlDetected] = useState(false);
+  const [error, setError] = useState(false);
+
+  const [imageMetadata, setImageMetadata] = useState(
+    resultData ? resultData : null,
+  );
+
+  const exifrOptions = {
+    exif: true,
+    gps: true,
+    iptc: true,
+    jfif: true,
+    tiff: true,
+    mergeOutput: false,
+  };
 
   useVideoTreatment(videoUrl, keyword);
-  useImageTreatment(imageUrl, keyword);
 
   const client_id = getclientId();
   useTrackEvent(
@@ -71,19 +88,102 @@ const Metadata = ({ mediaType }) => {
     videoUrl,
     uid,
   );
-  const submitUrl = () => {
-    if (input) {
-      if (radioImage) {
-        setImageurl(input);
-      } else {
-        setVideoUrl(input);
+
+  async function getImageMetadataFromUrl(url) {
+    try {
+      // Validate the URL format
+      if (!url || typeof url !== "string" || !/^https?:\/\//.test(url)) {
+        return new Error("Invalid URL provided");
       }
-    } else if (fileInput) {
-      if (radioImage) {
-        setImageurl(URL.createObjectURL(fileInput));
-      } else {
-        setVideoUrl(URL.createObjectURL(fileInput));
+
+      // Fetch the image
+      const response = await fetch(url);
+
+      // Check for a successful response
+      if (!response.ok) {
+        return new Error(
+          `Failed to fetch image: ${response.status} ${response.statusText}`,
+        );
       }
+
+      // Check if the content-type is an image
+      const contentType = response.headers.get("Content-Type");
+      if (!contentType || !contentType.startsWith("image/")) {
+        return new Error("The provided URL is not an image");
+      }
+
+      // Convert response to a Blob
+      const blob = await response.blob();
+
+      // Extract metadata using exifr
+      const metadata = await exifr.parse(blob, exifrOptions);
+
+      // Handle missing metadata
+      if (!metadata) {
+        return new Error("No EXIF metadata found in the image");
+      }
+
+      return metadata;
+    } catch (error) {
+      console.error("Error extracting metadata:", error.message);
+      return null; // Return null instead of throwing to prevent app crashes
+    }
+  }
+
+  const submitUrl = async () => {
+    // Reset state
+    cleanMetadataState();
+    setImageMetadata(null);
+    setError(false);
+
+    try {
+      if (!input && !fileInput) {
+        throw new Error("No input provided"); // Handle missing input
+      }
+
+      // Determine file type
+      const fileType = input
+        ? await getFileTypeFromUrl(input)
+        : await getFileTypeFromFileObject(fileInput);
+
+      if (!fileType) {
+        throw new Error("Unable to determine file type");
+      }
+
+      if (fileType.mime.includes("image")) {
+        // Set the image URL
+        const imageUrl = input || URL.createObjectURL(fileInput);
+        setImageurl(imageUrl);
+
+        // Extract metadata
+        const metadata = input
+          ? await getImageMetadataFromUrl(input)
+          : await exifr.parse(fileInput, exifrOptions);
+
+        setImageMetadata(metadata instanceof Error ? null : metadata);
+
+        dispatch(
+          setMetadataResult({
+            url: imageUrl,
+            result: metadata instanceof Error ? null : metadata,
+            notification: false,
+            loading: false,
+            isImage: true,
+          }),
+        );
+
+        return;
+      }
+
+      if (fileType.mime.includes("video")) {
+        setVideoUrl(input || URL.createObjectURL(fileInput));
+        return;
+      }
+
+      throw new Error("Unsupported file type");
+    } catch (error) {
+      console.error("Error in submitUrl:", error.message);
+      setError(error.message);
     }
   };
 
@@ -110,10 +210,8 @@ const Metadata = ({ mediaType }) => {
     if (location.state != null) {
       if (location.state.media === "image") {
         dispatch(setMetadataMediaType("image"));
-        setRadioImage(true);
       } else if (location.state.media === "video") {
         dispatch(setMetadataMediaType("video"));
-        setRadioImage(false);
       }
     } else {
       // console.log(mediaType);
@@ -122,15 +220,6 @@ const Metadata = ({ mediaType }) => {
   }
 
   useEffect(() => {
-    if (type) {
-      let content_type = decodeURIComponent(type);
-      if (content_type === CONTENT_TYPE.VIDEO) {
-        setRadioImage(false);
-      } else if (content_type === CONTENT_TYPE.IMAGE) {
-        setRadioImage(true);
-      }
-    }
-
     if (url && url !== KNOWN_LINKS.OWN) {
       let uri = decodeURIComponent(url);
       setInput(uri);
@@ -144,7 +233,6 @@ const Metadata = ({ mediaType }) => {
     if (processUrl) {
       setInput(processUrl);
       dispatch(setMetadataMediaType(processUrlType));
-      setRadioImage(processUrlType === "image");
       setUrlDetected(true);
     }
   }, [processUrl]);
@@ -158,12 +246,12 @@ const Metadata = ({ mediaType }) => {
   };
 
   return (
-    <div>
+    <Box>
       <HeaderTool
         name={keywordAllTools("navbar_metadata")}
         description={keywordAllTools("navbar_metadata_description")}
         icon={
-          <imageMetadata.icon
+          <imageMetadataTool.icon
             sx={{
               fill: "#00926c",
               fontSize: "40px",
@@ -173,62 +261,41 @@ const Metadata = ({ mediaType }) => {
       />
       <Stack direction={"column"} spacing={2}>
         <Alert severity="info">{keyword("description_limitations")}</Alert>
+        <Alert severity="info">{keywordTip("metadata_tip")}</Alert>
       </Stack>
 
-      <Box m={3} />
+      <Box m={4} />
 
-      <Card>
-        <CardHeader
-          title={keyword("cardheader_source")}
-          className={classes.headerUploadedImage}
-        />
-
-        <Box p={3}>
-          <RadioGroup
-            aria-label="position"
-            name="position"
-            value={radioImage}
-            onChange={() => setRadioImage(!radioImage)}
-            row
-          >
-            <FormControlLabel
-              value={true}
-              control={<Radio color="primary" />}
-              label={keyword("metadata_radio_image")}
-              labelPlacement="end"
+      <Card variant="outlined">
+        <form>
+          <Box p={4}>
+            <StringFileUploadField
+              labelKeyword={keyword("metadata_content_input")}
+              placeholderKeyword={keyword("metadata_content_input_placeholder")}
+              submitButtonKeyword={keyword("button_submit")}
+              localFileKeyword={keyword("button_localfile")}
+              urlInput={input}
+              setUrlInput={setInput}
+              fileInput={fileInput}
+              setFileInput={setFileInput}
+              handleSubmit={submitUrl}
+              fileInputTypesAccepted={"image/*, video/*"}
+              handleCloseSelectedFile={handleCloseFile}
             />
-            <FormControlLabel
-              value={false}
-              control={<Radio color="primary" />}
-              label={keyword("metadata_radio_video")}
-              labelPlacement="end"
-            />
-          </RadioGroup>
-
-          <Box m={2} />
-
-          <StringFileUploadField
-            labelKeyword={keyword("metadata_content_input")}
-            placeholderKeyword={keyword("metadata_content_input_placeholder")}
-            submitButtonKeyword={keyword("button_submit")}
-            localFileKeyword={keyword("button_localfile")}
-            urlInput={input}
-            setUrlInput={setInput}
-            fileInput={fileInput}
-            setFileInput={setFileInput}
-            handleSubmit={submitUrl}
-            fileInputTypesAccepted={"image/*, video/*"}
-            handleCloseSelectedFile={handleCloseFile}
-          />
-        </Box>
+          </Box>
+        </form>
       </Card>
-      <Box m={3} />
+      <Box m={4} />
+
+      {error && <Alert severity="error">{error}</Alert>}
+
       {resultData ? (
         resultIsImage ? (
           <MetadataImageResult
             result={resultData}
-            image={resultUrl}
+            metadata={imageMetadata}
             closeResult={handleCloseResult}
+            imageSrc={resultUrl}
           />
         ) : (
           <MetadataVideoResult
@@ -237,7 +304,7 @@ const Metadata = ({ mediaType }) => {
           />
         )
       ) : null}
-    </div>
+    </Box>
   );
 };
 export default Metadata;

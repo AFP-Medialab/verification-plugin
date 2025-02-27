@@ -20,7 +20,6 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 
 import { cleanMetadataState } from "../../../../../redux/reducers/tools/metadataReducer";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 
 const MetadataVideoResult = (props) => {
   const classes = useMyStyles();
@@ -365,8 +364,6 @@ const MetadataVideoResult = (props) => {
         }
       />
       <div className={classes.root2}>
-        <Box m={1} />
-        <OnClickInfo keyword={"metadata_tip"} />
         <Box m={3} />
         <Typography variant={"h5"}>{keyword("metadata_title")}</Typography>
         <div>

@@ -19,10 +19,7 @@ import "tui-image-editor/dist/tui-image-editor.css";
 
 import { setMagnifierResult } from "../../../../../redux/actions/tools/magnifierActions";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import {
-  SEARCH_ENGINE_SETTINGS,
-  reverseImageSearch,
-} from "../../../../Shared/ReverseSearch/reverseSearchUtils";
+import { reverseImageSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 import ImageEditor from "../Utils/ImageEditor";
 import Loop from "./Loop";
 
@@ -139,7 +136,6 @@ const ImageResult = ({ handleCloseResults }) => {
           </IconButton>
         }
       />
-
       <div className={classes.root2}>
         <Modal
           aria-labelledby="transition-modal-title"
@@ -148,9 +144,13 @@ const ImageResult = ({ handleCloseResults }) => {
           open={open}
           onClose={handleClose}
           closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500,
+          slots={{
+            backdrop: Backdrop,
+          }}
+          slotProps={{
+            backdrop: {
+              timeout: 500,
+            },
           }}
         >
           <Fade in={open}>

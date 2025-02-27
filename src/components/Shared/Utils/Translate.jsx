@@ -1,8 +1,11 @@
 import React from "react";
-import TranslateIcon from "@mui/icons-material/Translate";
+
 import Button from "@mui/material/Button";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import IconButton from "@mui/material/IconButton";
+
+import TranslateIcon from "@mui/icons-material/Translate";
+
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 export const Translate = ({ text, type }) => {
   const keyword = i18nLoadNamespace("components/Shared/utils");
