@@ -596,15 +596,16 @@ function* handleAssistantChatbotCall(action) {
     );
     const suffix = "\n[Sent via the chatbot assistant]";
 
-    if (chatbotResponse.userMessageClasses.includes("BUG")) {
-      sendToSlack(email, message + suffix, "BUG", archiveURL);
-    }
-    if (chatbotResponse.userMessageClasses.includes("FEATURE")) {
-      sendToSlack(email, message + suffix, "FEATURE", archiveURL);
-    }
-    if (chatbotResponse.userMessageClasses.includes("IMPROVEMENT")) {
-      sendToSlack(email, message + suffix, "IMPROVEMENT", archiveURL);
-    }
+    // UNCOMMENT BEFORE MERGING
+    // if (chatbotResponse.userMessageClasses.includes("BUG")) {
+    //   sendToSlack(email, message + suffix, "BUG", archiveURL);
+    // }
+    // if (chatbotResponse.userMessageClasses.includes("FEATURE")) {
+    //   sendToSlack(email, message + suffix, "FEATURE", archiveURL);
+    // }
+    // if (chatbotResponse.userMessageClasses.includes("IMPROVEMENT")) {
+    //   sendToSlack(email, message + suffix, "IMPROVEMENT", archiveURL);
+    // }
     if (chatbotResponse.userMessageClasses.includes("EXPLAIN")) {
       console.log("TODO: Hook up to LLM");
     }
@@ -612,8 +613,8 @@ function* handleAssistantChatbotCall(action) {
     yield put(addChatbotMessage(chatbotResponse.message, 0));
     yield put(setAssistantLoading(false));
   } catch (error) {
-    yield put(setAssistantLoading(false));
     console.log(error);
+    yield put(setAssistantLoading(false));
     yield put(setErrorKey(error.message));
   }
 }
