@@ -1,15 +1,18 @@
 import React, { useState } from "react";
-import NotificationSnackbar from "../NotificationSnackbar";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import TopMenu from "../TopMenu";
-import { TOP_MENU_ITEMS } from "../../constants/topMenuItems";
-import SideMenu from "../SideMenu";
+
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
 import { tools } from "../../constants/tools";
+import { TOP_MENU_ITEMS } from "../../constants/topMenuItems";
 import MainContent from "../MainContent";
+import NotificationSnackbar from "../NotificationSnackbar";
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
+import SideMenu from "../SideMenu";
+import TopMenu from "../TopMenu";
 
 const ApplicationLayout = () => {
   const theme = createTheme({
+    cssVariables: true,
     palette: {
       primary: {
         light: "#00926c",
@@ -56,6 +59,13 @@ const ApplicationLayout = () => {
           },
         },
       },
+      MuiCardHeader: {
+        styleOverrides: {
+          title: {
+            fontSize: 18,
+          },
+        },
+      },
       MuiIconButton: {
         styleOverrides: {
           root: {
@@ -67,6 +77,9 @@ const ApplicationLayout = () => {
         styleOverrides: {
           root: {
             minWidth: "160px",
+          },
+          wrapper: {
+            fontSize: 12,
           },
         },
       },

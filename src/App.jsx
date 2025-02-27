@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { HashRouter, Route, Routes } from "react-router-dom";
 
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import {
   cleanErrorNetwork,
@@ -13,40 +11,6 @@ import {
 import ApplicationLayout from "./components/ApplicationLayout";
 import PopUp from "./components/PopUp/PopUp";
 import useAuthenticationAPI from "./components/Shared/Authentication/useAuthenticationAPI";
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      light: "#00926c",
-      main: "#00926c",
-      dark: "#00926c",
-      contrastText: "#fff",
-    },
-    secondary: {
-      main: "#ffaf33",
-    },
-    error: {
-      main: "rgb(198,57,59)",
-    },
-  },
-  typography: {
-    useNextVariants: "true",
-  },
-  components: {
-    MuiIcon: {
-      styleOverrides: {
-        root: {
-          overflow: "visible",
-        },
-      },
-    },
-    zIndex: {
-      styleOverrides: {
-        drawer: 1099,
-      },
-    },
-  },
-});
 
 const App = () => {
   const keyword = i18nLoadNamespace("components/Shared/utils");
@@ -96,12 +60,10 @@ const App = () => {
 
   return (
     <HashRouter>
-      <ThemeProvider theme={theme}>
-        <Routes>
-          <Route index path="/" element={<PopUp />} />
-          <Route path={"/app/*"} element={<ApplicationLayout />} />
-        </Routes>
-      </ThemeProvider>
+      <Routes>
+        <Route index path="/" element={<PopUp />} />
+        <Route path={"/app/*"} element={<ApplicationLayout />} />
+      </Routes>
     </HashRouter>
   );
 };

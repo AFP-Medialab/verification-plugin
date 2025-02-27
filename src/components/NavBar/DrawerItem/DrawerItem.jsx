@@ -2,12 +2,11 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useLocation } from "react-router-dom";
 
+import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Fade from "@mui/material/Fade";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
-import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 
 import { useTrackPageView } from "../../../Hooks/useAnalytics";
 import { TOOL_GROUPS, toolsHome } from "../../../constants/tools";
@@ -55,44 +54,6 @@ const DrawerItem = ({ tools }) => {
 const DrawerItemContent = ({ tool }) => {
   const dispatch = useDispatch();
 
-  //Style elements
-  //============================================================================================
-
-  const theme = createTheme({
-    cssVariables: true,
-    components: {
-      MuiCardHeader: {
-        styleOverrides: {
-          title: {
-            fontSize: 18,
-          },
-        },
-      },
-      MuiTab: {
-        styleOverrides: {
-          wrapper: {
-            fontSize: 12,
-          },
-        },
-      },
-      MuiCard: {
-        styleOverrides: {
-          root: {
-            borderRadius: "10px!important",
-          },
-        },
-      },
-    },
-    palette: {
-      primary: {
-        light: "#00926c",
-        main: "#00926c",
-        dark: "#00926c",
-        contrastText: "#fff",
-      },
-    },
-  });
-  const classes = useMyStyles();
   const path = useLocation();
   const client_id = getclientId();
 
@@ -116,18 +77,12 @@ const DrawerItemContent = ({ tool }) => {
   }, [tool]);
 
   return (
-    <Container
-      key={tool.titleKeyword}
-      className={classes.noMargin}
-      maxWidth={false}
-    >
+    <Container key={tool.titleKeyword} maxWidth={false}>
       <Fade in={true}>
-        <div>
-          <ThemeProvider theme={theme}>
-            {tool.content}
-            {tool.footer}
-          </ThemeProvider>
-        </div>
+        <Box>
+          {tool.content}
+          {tool.footer}
+        </Box>
       </Fade>
     </Container>
   );

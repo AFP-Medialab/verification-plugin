@@ -185,7 +185,6 @@ const DeepfakeResultsVideo = (props) => {
   return (
     <Card variant="outlined" sx={{ width: "100%" }}>
       <CardHeader
-        style={{ borderRadius: "4px 4px 0px 0px" }}
         title={keyword("deepfake_video_title")}
         action={
           <IconButton aria-label="close" onClick={handleClose}>
