@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
+import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Divider from "@mui/material/Divider";
@@ -209,8 +210,6 @@ const DeepfakeResultsVideo = (props) => {
                   key={results.deepfake_video_report.video_path}
                   style={{
                     borderRadius: "10px",
-                    boxShadow:
-                      "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
                     maxHeight: "50vh",
                   }}
                 >
@@ -261,11 +260,9 @@ const DeepfakeResultsVideo = (props) => {
               {!!results.deepfake_video_report.results && (
                 <Box>
                   <Typography
-                    variant="body1"
+                    variant="h6"
                     style={{
                       color: "#00926c",
-                      fontSize: "24px",
-                      fontWeight: "500",
                     }}
                   >
                     {keyword("deepfake_clips")}
@@ -289,75 +286,37 @@ const DeepfakeResultsVideo = (props) => {
 
                         return (
                           <Grid2 size={{ md: 3, sm: 12 }} key={keyShot}>
-                            {keyShot === shotSelectedKey ? (
-                              <Box
-                                onClick={() => clickShot(valueShot, keyShot)}
-                                style={{
-                                  backgroundColor: "#00926c",
-                                  borderRadius: "10px",
-                                  overflow: "hidden",
-                                  display: "flex",
-                                  flexDirection: "column",
-                                  alignItems: "center",
-                                  boxShadow:
-                                    "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
-                                }}
-                              >
-                                <img
-                                  alt="shot"
-                                  key={keyShot}
-                                  src={valueShot.shot_image}
-                                  style={{
-                                    maxWidth: "100px",
-                                    maxHeight: "15vh",
-                                  }}
-                                />
-                                <Box mt={1} />
-                                <Typography
-                                  variant="body1"
-                                  style={{ fontSize: "14px", color: "#ffffff" }}
-                                >
-                                  {startMin}:{startSec}
-                                  {" - "}
-                                  {endMin}:{endSec}
-                                </Typography>
-                                <Box mt={1} />
-                              </Box>
-                            ) : (
-                              <Box
-                                onClick={() => clickShot(valueShot, keyShot)}
-                                style={{
-                                  backgroundColor: "#ffffff",
-                                  borderRadius: "10px",
-                                  overflow: "hidden",
-                                  display: "flex",
-                                  flexDirection: "column",
-                                  alignItems: "center",
-                                  boxShadow:
-                                    "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
-                                }}
-                              >
-                                <img
-                                  alt="shot"
-                                  key={keyShot}
-                                  src={valueShot.shot_image}
-                                  style={{
-                                    maxWidth: "100px",
-                                    maxHeight: "15vh",
-                                  }}
-                                />
-                                <Box mt={1} />
-                                <Typography
-                                  variant="body1"
-                                  style={{ fontSize: "14px" }}
-                                >
-                                  {startMin}:{startSec}
-                                  {" - "}
-                                  {endMin}:{endSec}
-                                </Typography>
-                                <Box mt={1} />
-                              </Box>
-                            )}
+                            <Card
+                              variant="outlined"
+                              onClick={() => clickShot(valueShot, keyShot)}
+                              sx={{
+                                backgroundColor:
+                                  keyShot === shotSelectedKey
+                                    ? "#00926c"
+                                    : "#FFFFFF",
+                              }}
+                            >
+                              <CardActionArea>
+                                <CardContent>
+                                  <Stack direction="column" spacing={1}>
+                                    <img
+                                      alt="shot"
+                                      key={keyShot}
+                                      src={valueShot.shot_image}
+                                      style={{
+                                        maxWidth: "100px",
+                                        maxHeight: "15vh",
+                                      }}
+                                    />
+                                    <Typography>
+                                      {startMin}:{startSec}
+                                      {" - "}
+                                      {endMin}:{endSec}
+                                    </Typography>
+                                  </Stack>
+                                </CardContent>
+                              </CardActionArea>
+                            </Card>
                           </Grid2>
                         );
                       },
@@ -471,8 +430,6 @@ const DeepfakeResultsVideo = (props) => {
                                 }
                                 style={{
                                   borderRadius: "10px",
-                                  boxShadow:
-                                    "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
                                   maxHeight: "30vh",
                                   maxWidth: "100%",
                                 }}
@@ -527,13 +484,7 @@ const DeepfakeResultsVideo = (props) => {
                                               keyFace
                                             ] * 100,
                                           )}
-                                          %
-                                        </Typography>
-                                        <Typography
-                                          variant="h6"
-                                          style={{ color: "#989898" }}
-                                        >
-                                          {keyword("deepfake_name")}
+                                          % {keyword("deepfake_name")}
                                         </Typography>
                                       </Grid2>
                                     );
