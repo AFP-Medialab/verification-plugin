@@ -144,13 +144,13 @@ const Thumbnails = () => {
     if (url !== null && url !== "" && isYtUrl(url)) {
       setEventUrl(url);
       /*trackEvent(
-                                                              "submission",
-                                                              "thumbnails",
-                                                              "youtube thumbnail",
-                                                              url,
-                                                              client_id,
-                                                              uid
-                                                            );*/
+                                                                    "submission",
+                                                                    "thumbnails",
+                                                                    "youtube thumbnail",
+                                                                    url,
+                                                                    client_id,
+                                                                    uid
+                                                                  );*/
       let images = get_images(url);
       dispatch(
         setThumbnailsResult({
@@ -336,7 +336,7 @@ const Thumbnails = () => {
                 aria-label="close"
                 onClick={() => dispatch(cleanThumbnailsState())}
               >
-                <CloseIcon sx={{ color: "white" }} />
+                <CloseIcon />
               </IconButton>
             }
           />

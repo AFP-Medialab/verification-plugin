@@ -145,7 +145,7 @@ const ToolsMenu = () => {
         <SvgIcon
           component={VideoIcon}
           sx={{
-            fontSize: "40px",
+            fontSize: "24px",
           }}
           inheritViewBox
         />
@@ -159,7 +159,7 @@ const ToolsMenu = () => {
         <SvgIcon
           component={ImageIcon}
           sx={{
-            fontSize: "40px",
+            fontSize: "24px",
           }}
           inheritViewBox
         />
@@ -169,7 +169,7 @@ const ToolsMenu = () => {
       type: TOOLS_CATEGORIES.AUDIO,
       name: keywordNavbar(TOOLS_CATEGORIES.AUDIO),
       value: toolsAudio,
-      icon: <Audiotrack width="40px" height="40px" />,
+      icon: <Audiotrack width="24px" height="24px" />,
     },
     {
       type: TOOLS_CATEGORIES.SEARCH,
@@ -179,7 +179,7 @@ const ToolsMenu = () => {
         <SvgIcon
           component={SearchIcon}
           sx={{
-            fontSize: "40px",
+            fontSize: "24px",
           }}
           inheritViewBox
         />
@@ -193,7 +193,7 @@ const ToolsMenu = () => {
         <SvgIcon
           component={DataIcon}
           sx={{
-            fontSize: "40px",
+            fontSize: "24px",
           }}
           inheritViewBox
         />
@@ -203,7 +203,7 @@ const ToolsMenu = () => {
       type: TOOLS_CATEGORIES.OTHER,
       name: keywordNavbar(TOOLS_CATEGORIES.OTHER),
       value: otherTools,
-      icon: <MoreHorizIcon width="40px" height="40px" />,
+      icon: <MoreHorizIcon width="24px" height="24px" />,
     },
   ];
 
@@ -300,7 +300,6 @@ const ToolsMenu = () => {
                 iconPosition="start"
                 label={
                   <Typography
-                    variant="h6"
                     style={{
                       textTransform: "capitalize",
                     }}
@@ -310,7 +309,6 @@ const ToolsMenu = () => {
                 }
               />
             );
-            // }
           })}
         </Tabs>
 
@@ -319,25 +317,27 @@ const ToolsMenu = () => {
         <div style={{ minHeight: "340px" }}>
           {categoriesAllowedForUser.map((category, index) => {
             const tools = category.value;
-            //if(tools.length !==0){
 
             return (
               <TabPanel value={value} index={index} key={index}>
                 <Grid2
                   container
-                  justifyContent="flex-start"
+                  sx={{
+                    justifyContent: "flex-start",
+                    alignItems: "stretch",
+                  }}
                   spacing={2}
-                  className={classes.toolCardsContainer}
                 >
                   {tools.map((tool, key) => {
                     const element = (
-                      <Grid2
-                        className={classes.toolCardStyle}
-                        key={key}
-                        onClick={() => handleClick(tool.path, tool.rolesNeeded)}
-                        minWidth="250px"
-                      >
-                        <ToolsMenuItem tool={tool} />
+                      <Grid2 size={4} minWidth="200px">
+                        <ToolsMenuItem
+                          tool={tool}
+                          onClick={() =>
+                            handleClick(tool.path, tool.rolesNeeded)
+                          }
+                          key={key}
+                        />
                       </Grid2>
                     );
                     if (

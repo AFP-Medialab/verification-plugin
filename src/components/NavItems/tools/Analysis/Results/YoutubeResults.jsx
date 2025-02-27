@@ -116,7 +116,7 @@ const YoutubeResults = (props) => {
                     dispatch(cleanAnalysisState());
                   }}
                 >
-                  <CloseIcon sx={{ color: "white" }} />
+                  <CloseIcon />
                 </IconButton>
               }
             />

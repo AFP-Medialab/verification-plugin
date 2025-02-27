@@ -194,7 +194,7 @@ const StringFileUploadField = ({
             >
               <label htmlFor="file">
                 {fileInput
-                  ? prettifyLargeString(fileInput.name, 20)
+                  ? prettifyLargeString(fileInput.name, 24)
                   : localFileKeyword}
               </label>
               <input

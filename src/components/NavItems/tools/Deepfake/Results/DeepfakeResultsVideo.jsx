@@ -11,7 +11,6 @@ import Popover from "@mui/material/Popover";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { Close } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { useTrackEvent } from "Hooks/useAnalytics";
@@ -188,7 +187,7 @@ const DeepfakeResultsVideo = (props) => {
         title={keyword("deepfake_video_title")}
         action={
           <IconButton aria-label="close" onClick={handleClose}>
-            <Close sx={{ color: "white" }} />
+            <CloseIcon />
           </IconButton>
         }
       />

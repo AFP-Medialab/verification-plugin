@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { HashRouter, Route, Routes } from "react-router-dom";
-import PopUp from "./components/PopUp/PopUp";
-import useAuthenticationAPI from "./components/Shared/Authentication/useAuthenticationAPI";
 import { useDispatch } from "react-redux";
+import { HashRouter, Route, Routes } from "react-router-dom";
+
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import {
   cleanErrorNetwork,
   setErrorNetwork,
 } from "redux/reducers/errorReducer";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import ApplicationLayout from "./components/ApplicationLayout";
+import PopUp from "./components/PopUp/PopUp";
+import useAuthenticationAPI from "./components/Shared/Authentication/useAuthenticationAPI";
 
 const theme = createTheme({
   palette: {
@@ -30,13 +33,6 @@ const theme = createTheme({
     useNextVariants: "true",
   },
   components: {
-    MuiButton: {
-      styleOverrides: {
-        containedPrimary: {
-          color: "white",
-        },
-      },
-    },
     MuiIcon: {
       styleOverrides: {
         root: {

@@ -359,7 +359,7 @@ const MetadataVideoResult = (props) => {
               dispatch(cleanMetadataState());
             }}
           >
-            <CloseIcon sx={{ color: "white" }} />
+            <CloseIcon />
           </IconButton>
         }
       />

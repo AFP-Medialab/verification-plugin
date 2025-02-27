@@ -102,7 +102,7 @@ const AFacebookResults = (props) => {
                   dispatch(cleanAnalysisState());
                 }}
               >
-                <CloseIcon sx={{ color: "white" }} />
+                <CloseIcon />
               </IconButton>
             }
           />

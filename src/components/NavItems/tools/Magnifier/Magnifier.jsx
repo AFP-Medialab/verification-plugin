@@ -19,14 +19,12 @@ import {
   setMagnifierResult,
 } from "../../../../redux/actions/tools/magnifierActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import ImageResult from "./Results/ImageResult";
 
 const Magnifier = () => {
   const { url } = useParams();
-  const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Magnifier");
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",

@@ -745,12 +745,6 @@ const styles = (theme) => ({
     padding: theme.spacing(3),
   },
 
-  toolCardStyle: {
-    width: "32%",
-    maxWidth: "400px",
-    minWidth: "250px",
-  },
-
   dialogTitleWithButton: {
     display: "flex",
     justifyContent: "space - between",

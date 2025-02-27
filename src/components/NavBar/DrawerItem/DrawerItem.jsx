@@ -59,16 +59,12 @@ const DrawerItemContent = ({ tool }) => {
   //============================================================================================
 
   const theme = createTheme({
+    cssVariables: true,
     components: {
       MuiCardHeader: {
         styleOverrides: {
-          root: {
-            backgroundColor: "#00926c",
-          },
           title: {
-            color: "white",
-            fontSize: 20,
-            fontweight: 500,
+            fontSize: 18,
           },
         },
       },

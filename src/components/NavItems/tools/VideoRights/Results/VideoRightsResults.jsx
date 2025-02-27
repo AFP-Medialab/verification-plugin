@@ -93,7 +93,7 @@ const VideoRightsResults = (props) => {
             aria-label="close"
             onClick={() => dispatch(cleanVideoRightsState())}
           >
-            <CloseIcon sx={{ color: "white" }} />
+            <CloseIcon />
           </IconButton>
         }
       />
