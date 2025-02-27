@@ -12,11 +12,14 @@ import Typography from "@mui/material/Typography";
 
 import { ArrowBack } from "@mui/icons-material";
 
+import { downloadZip, makeZip } from "client-zip";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { sha256 } from "hash-wasm";
 import {
   archiveStateCleaned,
   setArchiveUrl,
 } from "redux/reducers/tools/archiveReducer";
+import { CDXIndexer, WARCRecord, WARCSerializer } from "warcio";
 
 import { archiving } from "../../../../constants/tools";
 import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
@@ -30,9 +33,11 @@ import FifthStep from "./components/FifthStep";
 import FirstStep from "./components/FirstStep";
 import FourthStep from "./components/FourthStep";
 import SecondStep from "./components/SecondStep";
+import SecondStep_Singlefile from "./components/SecondStep_Singlefile";
 import SixthStep from "./components/SixthStep";
 import CustomizedMenus, { StyledMenu } from "./components/StyledMenu";
 import ThirdStep from "./components/ThirdStep";
+import ThirdStep_Singlefile from "./components/ThirdStep_Singlefile";
 
 const queryClient = new QueryClient();
 
@@ -220,6 +225,7 @@ const Archive = () => {
     setMediaUrl("");
 
     if (fileToUpload) {
+      console.log("file to upload found");
       await archiveFileToWbm.mutate();
     } else {
       const urlToFetch = url && urlInput && urlInput !== url ? urlInput : url;

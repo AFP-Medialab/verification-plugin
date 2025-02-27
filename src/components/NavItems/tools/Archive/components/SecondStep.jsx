@@ -1,6 +1,8 @@
 import React from "react";
 
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
 import Divider from "@mui/material/Divider";
 import Link from "@mui/material/Link";
 import ListItem from "@mui/material/ListItem";
@@ -8,11 +10,15 @@ import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
+import CloseIcon from "@mui/icons-material/Close";
+import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 import DownloadWaczFile from "./downloadWaczFile";
+import SinglefileConverter from "./singlefileConverter";
 
-const SecondStep = ({ url }) => {
+const SecondStep = ({ url, fileInput, setFileInput }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
 
   return (
@@ -72,6 +78,32 @@ const SecondStep = ({ url }) => {
             <Divider />
           </Stack>
         </Box>
+
+        <Stack
+          direction="row"
+          spacing={4}
+          sx={{
+            justifyContent: "flex-start",
+            alignItems: "flex-end",
+          }}
+        >
+          <ListItem disablePadding sx={{ width: "fit-content" }}>
+            <Stack direction="column" spacing={1}>
+              <Typography variant="caption" color={"warning"}>
+                STILL TESTING {/* {keyword("step2_not_recommended_caption")} */}
+              </Typography>
+
+              <ListItemText
+                primary="Use Singlefile" // primary={keyword("step2_scoop_title")}
+                secondary="Save a page using singlefile then convert to WACZ" // secondary={keyword("step2_scoop_subtitle")}
+              />
+            </Stack>
+          </ListItem>
+          <Box>
+            <SinglefileConverter />
+          </Box>
+        </Stack>
+        <Divider />
 
         <Stack
           direction="row"
