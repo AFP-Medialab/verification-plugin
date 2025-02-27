@@ -125,7 +125,7 @@ const ClassRoom = () => {
       case 4:
         return keyword("classroom_gamification");
       /*case 5:
-                                            return keyword("classroom_gamification_2");*/
+                                                  return keyword("classroom_gamification_2");*/
       case 5:
         return keyword("user_resources_title");
       case 6:
@@ -172,7 +172,7 @@ const ClassRoom = () => {
           }
         />
 
-        <Card>
+        <Card variant="outlined">
           <Box display="flex" flexDirection="column">
             <Box mt={1} />
 

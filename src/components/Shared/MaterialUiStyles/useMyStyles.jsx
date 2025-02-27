@@ -154,7 +154,7 @@ const styles = (theme) => ({
 
   toolbar: {
     //...theme.mixins.toolbar,
-    height: "120px",
+    height: "114px",
     paddingBottom: "10px",
   },
   content: {
@@ -743,12 +743,6 @@ const styles = (theme) => ({
   root2: {
     textAlign: "center",
     padding: theme.spacing(3),
-  },
-
-  toolCardStyle: {
-    width: "32%",
-    maxWidth: "400px",
-    minWidth: "250px",
   },
 
   dialogTitleWithButton: {

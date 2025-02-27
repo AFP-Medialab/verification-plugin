@@ -5,8 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import Grid2 from "@mui/material/Grid2";
 import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 
@@ -24,14 +22,12 @@ import {
   setLoccusResult,
 } from "../../../../redux/actions/tools/loccusActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 import LoccusResults from "./loccusResults";
 
 const Loccus = () => {
-  const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Loccus");
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
@@ -147,7 +143,6 @@ const Loccus = () => {
 
       if (!res.data.state || res.data.state !== "available") {
         throw new Error("The file is not available.");
-        return;
       }
 
       // Second, we perform the Loccus authenticity verification
@@ -321,7 +316,6 @@ const Loccus = () => {
     mutationFn: () => {
       return useGetVoiceCloningScore(input, true, dispatch);
     },
-    onSuccess: (data) => {},
   });
 
   const handleSubmit = async () => {
@@ -350,22 +344,8 @@ const Loccus = () => {
 
       <Box m={3} />
 
-      <Card>
-        <CardHeader
-          title={
-            <Grid2
-              container
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <span>{keyword("loccus_link")}</span>
-            </Grid2>
-          }
-          className={classes.headerUploadedAudio}
-        />
-
-        <Box p={3}>
+      <Card variant="outlined">
+        <Box p={4}>
           <form>
             <StringFileUploadField
               labelKeyword={keyword("loccus_link")}
@@ -383,13 +363,15 @@ const Loccus = () => {
               isParentLoading={getAnalysisResultsForAudio.isPending}
             />
           </form>
-          <Box m={2} />
-          {getAnalysisResultsForAudio.isPending && (
+        </Box>
+        {getAnalysisResultsForAudio.isPending && (
+          <>
+            <Box m={2} />
             <Box mt={3}>
               <LinearProgress />
             </Box>
-          )}
-        </Box>
+          </>
+        )}
       </Card>
 
       <Box m={3} />

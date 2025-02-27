@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
 import Grid2 from "@mui/material/Grid2";
 import LinearProgress from "@mui/material/LinearProgress";
 import TextField from "@mui/material/TextField";
@@ -58,13 +57,13 @@ const VideoRights = () => {
   const submitForm = () => {
     if (!isLoading) {
       /*trackEvent(
-                    "submission",
-                    "videorights",
-                    "video rights",
-                    input,
-                    client_id,
-                    uid
-                  );*/
+                                "submission",
+                                "videorights",
+                                "video rights",
+                                input,
+                                client_id,
+                                uid
+                              );*/
       setSubmitted(input);
       dispatch(setVideoRightsLoading(true));
     }
@@ -105,11 +104,7 @@ const VideoRights = () => {
         description={keywordAllTools("navbar_rights_description")}
         icon={<videoRights.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
       />
-      <Card>
-        <CardHeader
-          title={keyword("cardheader_link")}
-          className={classes.headerUploadedImage}
-        />
+      <Card variant="outlined">
         <form className={classes.root2}>
           <Grid2 container direction="row" spacing={3} alignItems="center">
             <Grid2 size="grow">

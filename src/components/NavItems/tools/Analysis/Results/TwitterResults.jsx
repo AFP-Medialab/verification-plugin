@@ -2,7 +2,6 @@ import React from "react";
 import { useDispatch } from "react-redux";
 
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Divider from "@mui/material/Divider";
@@ -48,7 +47,7 @@ const TwitterResults = (props) => {
       {report !== null &&
         report["thumbnails"] !== undefined &&
         report["thumbnails"]["preferred"]["url"] && (
-          <Card>
+          <Card variant="outlined">
             <CardHeader
               title={keyword("cardheader_results")}
               className={classes.headerUploadedImage}
@@ -59,7 +58,7 @@ const TwitterResults = (props) => {
                     dispatch(cleanAnalysisState());
                   }}
                 >
-                  <CloseIcon sx={{ color: "white" }} />
+                  <CloseIcon />
                 </IconButton>
               }
             />
