@@ -488,8 +488,6 @@ function* handleSubjectivityCall(action) {
           textChunks[i],
         );
 
-        console.log(i, textChunkResult);
-
         // merge results
         if (i == 0) {
           result = textChunkResult;
