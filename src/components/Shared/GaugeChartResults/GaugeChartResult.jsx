@@ -145,7 +145,7 @@ const GaugeChartResult = ({
                 id={"gauge-chart"}
                 animate={false}
                 nrOfLevels={4}
-                textColor={"black"}
+                textColor={"var(--mui-palette-text-primary)"}
                 arcsLength={
                   arcsLength
                     ? arcsLength

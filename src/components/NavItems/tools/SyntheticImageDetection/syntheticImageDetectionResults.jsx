@@ -27,6 +27,7 @@ import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
+import theme from "../../../../theme";
 import CustomAlertScore from "../../../Shared/CustomAlertScore";
 import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
 import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
@@ -494,7 +495,8 @@ const SyntheticImageDetectionResults = ({
                           id={"gauge-chart"}
                           animate={false}
                           nrOfLevels={4}
-                          textColor={"black"}
+                          textColor={"#FFFFFF"}
+                          needleColor={theme.palette.text.primary}
                           arcsLength={[
                             (100 - DETECTION_THRESHOLDS.THRESHOLD_1) / 100,
                             (DETECTION_THRESHOLDS.THRESHOLD_2 -
@@ -712,7 +714,10 @@ const SyntheticImageDetectionResults = ({
 
                                 <Box
                                   p={2}
-                                  sx={{ backgroundColor: "#FAFAFA" }}
+                                  sx={{
+                                    backgroundColor:
+                                      "var(--mui-palette-background-paper)",
+                                  }}
                                   mb={2}
                                 >
                                   <Typography>

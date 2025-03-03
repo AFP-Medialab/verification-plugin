@@ -430,7 +430,7 @@ const styles = (theme) => ({
     [theme.breakpoints.up("sm")]: {
       fontSize: "10px",
       minWidth: 100,
-      color: "#4c4c4c",
+      color: "var(--mui-palette-text-secondary)",
     },
   },
   customAllToolsButton: {

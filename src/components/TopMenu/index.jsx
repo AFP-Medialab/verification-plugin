@@ -48,7 +48,10 @@ const TopMenu = ({ topMenuItems }) => {
 
   const iconConditionalStyling = (toolName) => {
     return {
-      fill: topMenuItemSelected === toolName ? "#00926c" : "#4c4c4c",
+      fill:
+        topMenuItemSelected === toolName
+          ? "#00926c"
+          : "var(--mui-palette-text-secondary)",
       fontSize: "24px",
     };
   };
