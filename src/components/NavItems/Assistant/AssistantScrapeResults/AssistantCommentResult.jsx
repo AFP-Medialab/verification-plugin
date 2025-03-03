@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Trans } from "react-i18next";
 import Linkify from "react-linkify";
 import { useSelector } from "react-redux";
@@ -11,6 +10,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Chip from "@mui/material/Chip";
+import LinearProgress from "@mui/material/LinearProgress";
 import Pagination from "@mui/material/Pagination";
 import Skeleton from "@mui/material/Skeleton";
 import Table from "@mui/material/Table";
@@ -36,7 +36,6 @@ import {
   TransMultilingualStanceLink,
   TransMultilingualStanceTooltip,
 } from "../TransComponents";
-import { caaVerificationKeywords } from "./caaVerificationKeywords";
 
 const AssistantCommentResult = ({ collectedComments }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -72,8 +71,29 @@ const AssistantCommentResult = ({ collectedComments }) => {
     comment: "inherit",
   };
 
+  // read in verification keywords from TSV file in public/ folder
+  const [caaVerificationKeywordsTsv, setCaaVerificationKeywordsTsv] = useState(
+    [],
+  );
+
+  useEffect(() => {
+    fetch("/caaVerificationKeywords.tsv")
+      .then((response) => response.text())
+      .then((text) => {
+        let lines = text.split("\n");
+        // skip first line with languages header
+        for (let i = 1; i < lines.length; i++) {
+          let words = lines[i].split("\t");
+          words.forEach((word) => caaVerificationKeywordsTsv.push(word));
+        }
+        setCaaVerificationKeywordsTsv(caaVerificationKeywordsTsv);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+
   // group comments by links, verification and stance
-  // let totalCommentsWithReplies = 0;
   let linkComments = [];
   let verificationComments = [];
   let denyComments = [];
@@ -88,7 +108,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
       ? linkComments.push(collectedComments[i])
       : null;
     // search for verification text
-    caaVerificationKeywords.some((caaVerificationKeyword) =>
+    caaVerificationKeywordsTsv.some((caaVerificationKeyword) =>
       text.split(" ").includes(caaVerificationKeyword),
     )
       ? verificationComments.push(collectedComments[i])
@@ -100,13 +120,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
     stance == "query" ? queryComments.push(collectedComments[i]) : null;
     stance == "support" ? supportComments.push(collectedComments[i]) : null;
     stance == "deny" ? denyComments.push(collectedComments[i]) : null;
-    // // number of comments and replies
-    // totalCommentsWithReplies += 1;
-    // collectedComments[i].replies
-    //   ? (totalCommentsWithReplies += collectedComments[i].replies.length)
-    //   : null;
   }
-  // console.log("totalCommentsWithReplies=", totalCommentsWithReplies);
 
   // for collectedComments
   function renderCommentList(
@@ -342,6 +356,12 @@ const AssistantCommentResult = ({ collectedComments }) => {
           </Tooltip>
         }
       />
+
+      {multilingualStanceLoading ? (
+        <div>
+          <LinearProgress />
+        </div>
+      ) : null}
 
       <CardContent width="100%">
         {/* all comments */}
