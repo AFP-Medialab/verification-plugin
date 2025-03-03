@@ -13,18 +13,17 @@ const metadataSlice = createSlice({
   name: "metadata",
   initialState,
   reducers: {
-    setMetadadaResult(state, action) {
+    setMetadataResult(state, action) {
       return action.payload;
     },
-    setMetadadaLoading(state, action) {
+    setMetadataLoading(state, action) {
       state.loading = action.payload;
     },
     setMetadataIsImage(state, action) {
       state.isImage = action.loading;
     },
-    cleanMetadataState(state, action) {
-      state.url = "";
-      state.result = null;
+    cleanMetadataState() {
+      return initialState;
     },
     setMetadataMediaType(state, action) {
       state.mediaType = action.payload;
@@ -32,8 +31,8 @@ const metadataSlice = createSlice({
   },
 });
 export const {
-  setMetadadaResult,
-  setMetadadaLoading,
+  setMetadataResult,
+  setMetadataLoading,
   setMetadataIsImage,
   cleanMetadataState,
   setMetadataMediaType,

@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from "@mui/material/Button";
 import Fab from "@mui/material/Fab";
 import Snackbar from "@mui/material/Snackbar";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 import { KeyboardArrowUp } from "@mui/icons-material";
 
@@ -53,70 +52,6 @@ const MainContent = ({ tools }) => {
     return canUserSeeTool(tool, role, userAuthenticated);
   });
 
-  const themeFab = createTheme({
-    palette: {
-      primary: {
-        light: "#00926c",
-        main: "#00926c",
-        dark: "#00926c",
-        contrastText: "#fff",
-      },
-    },
-    components: {
-      MuiAppBar: {
-        styleOverrides: {
-          colorPrimary: {
-            backgroundColor: "#ffffff",
-          },
-          root: {
-            zIndex: 1300,
-            height: "87px",
-            boxShadow: "none",
-            paddingTop: "12px",
-          },
-        },
-      },
-      MuiListItem: {
-        styleOverrides: {
-          gutters: {
-            paddingLeft: "26px",
-          },
-        },
-      },
-      MuiAutocomplete: {
-        styleOverrides: {
-          popupIndicatorOpen: {
-            transform: "none!important",
-          },
-          popper: {
-            zIndex: 99999,
-          },
-        },
-      },
-      MuiCard: {
-        styleOverrides: {
-          root: {
-            borderRadius: "10px!important",
-          },
-        },
-      },
-      MuiIconButton: {
-        styleOverrides: {
-          root: {
-            padding: 0,
-          },
-        },
-      },
-      MuiTab: {
-        styleOverrides: {
-          root: {
-            minWidth: "160px",
-          },
-        },
-      },
-    },
-  });
-
   return (
     <main className={classes.content}>
       <div className={classes.toolbar} id="back-to-top-anchor" />
@@ -128,16 +63,14 @@ const MainContent = ({ tools }) => {
       <ScrollTop
         {...{ isCurrentLanguageLeftToRight: isCurrentLanguageLeftToRight }}
       >
-        <ThemeProvider theme={themeFab}>
-          <Fab
-            color="primary"
-            size="large"
-            aria-label="scroll back to top"
-            className={classes.fabTop}
-          >
-            <KeyboardArrowUp />
-          </Fab>
-        </ThemeProvider>
+        <Fab
+          color="primary"
+          size="large"
+          aria-label="scroll back to top"
+          className={classes.fabTop}
+        >
+          <KeyboardArrowUp />
+        </Fab>
       </ScrollTop>
       {error !== null && (
         <MySnackbar

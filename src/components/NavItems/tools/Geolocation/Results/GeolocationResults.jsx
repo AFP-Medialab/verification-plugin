@@ -51,7 +51,7 @@ const GeolocationResults = (props) => {
           size="grow"
         >
           <Grid2 size="grow" style={{ width: "100%" }}>
-            <Card>
+            <Card variant="outlined">
               <CardHeader
                 title={"Image"}
                 className={classes.headerUploadedImage}
@@ -71,7 +71,7 @@ const GeolocationResults = (props) => {
 
           {position && (
             <Grid2 size="grow" style={{ width: "100%" }}>
-              <Card>
+              <Card variant="outlined">
                 <CardHeader
                   title={keyword("geo_location")}
                   className={classes.headerUploadedImage}
@@ -138,7 +138,7 @@ const GeolocationResults = (props) => {
 
         {position && (
           <Grid2 size="grow">
-            <Card>
+            <Card variant="outlined">
               <CardHeader
                 title={keyword("geo_map")}
                 className={classes.headerUploadedImage}

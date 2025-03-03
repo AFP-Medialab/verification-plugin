@@ -7,7 +7,6 @@ import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid2 from "@mui/material/Grid2";
@@ -89,12 +88,12 @@ const Analysis = () => {
   );
   const submitForm = () => {
     /*trackEvent(
-                                  "submission",
-                                  "analysis",
-                                  "video caa analysis",
-                                  input.trim(),
-                                  client_id
-                                );*/
+                                          "submission",
+                                          "analysis",
+                                          "video caa analysis",
+                                          input.trim(),
+                                          client_id
+                                        );*/
     setSubmittedUrl(input.trim());
     dispatch(cleanAnalysisState());
   };
@@ -139,11 +138,7 @@ const Analysis = () => {
         description={keywordAllTools("navbar_analysis_description")}
         icon={<videoAnalysis.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
       />
-      <Card>
-        <CardHeader
-          title={keyword("video_card_header")}
-          className={classes.headerUploadedImage}
-        />
+      <Card variant="outlined">
         <form className={classes.root2}>
           <Grid2 container direction="row" spacing={3} alignItems="center">
             <Grid2 size="grow">

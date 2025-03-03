@@ -154,14 +154,12 @@ const styles = (theme) => ({
 
   toolbar: {
     //...theme.mixins.toolbar,
-    height: "120px",
+    height: "114px",
     paddingBottom: "10px",
   },
   content: {
     flexGrow: 1,
-    paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(3),
-    backgroundColor: "#fafafa",
+    backgroundColor: theme.palette.background.main,
     minHeight: "100vh",
     overflow: "hidden",
   },
@@ -430,7 +428,7 @@ const styles = (theme) => ({
     [theme.breakpoints.up("sm")]: {
       fontSize: "10px",
       minWidth: 100,
-      color: "#4c4c4c",
+      color: "var(--mui-palette-text-secondary)",
     },
   },
   customAllToolsButton: {
@@ -743,12 +741,6 @@ const styles = (theme) => ({
   root2: {
     textAlign: "center",
     padding: theme.spacing(3),
-  },
-
-  toolCardStyle: {
-    width: "32%",
-    maxWidth: "400px",
-    minWidth: "250px",
   },
 
   dialogTitleWithButton: {

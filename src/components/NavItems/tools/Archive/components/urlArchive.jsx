@@ -144,7 +144,6 @@ const UrlArchive = ({ url, mediaUrl }) => {
               variant="outlined"
               onClick={() => saveToInternetArchive(link)}
               startIcon={<IconInternetArchive />}
-              sx={{ textTransform: "none" }}
             >
               {keyword("internet_archive_button")}
             </Button>

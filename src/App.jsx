@@ -1,56 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { HashRouter, Route, Routes } from "react-router-dom";
-import PopUp from "./components/PopUp/PopUp";
-import useAuthenticationAPI from "./components/Shared/Authentication/useAuthenticationAPI";
 import { useDispatch } from "react-redux";
+import { HashRouter, Route, Routes } from "react-router-dom";
+
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import {
   cleanErrorNetwork,
   setErrorNetwork,
 } from "redux/reducers/errorReducer";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import ApplicationLayout from "./components/ApplicationLayout";
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      light: "#00926c",
-      main: "#00926c",
-      dark: "#00926c",
-      contrastText: "#fff",
-    },
-    secondary: {
-      main: "#ffaf33",
-    },
-    error: {
-      main: "rgb(198,57,59)",
-    },
-  },
-  typography: {
-    useNextVariants: "true",
-  },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        containedPrimary: {
-          color: "white",
-        },
-      },
-    },
-    MuiIcon: {
-      styleOverrides: {
-        root: {
-          overflow: "visible",
-        },
-      },
-    },
-    zIndex: {
-      styleOverrides: {
-        drawer: 1099,
-      },
-    },
-  },
-});
+import ApplicationLayout from "./components/ApplicationLayout";
+import PopUp from "./components/PopUp/PopUp";
+import useAuthenticationAPI from "./components/Shared/Authentication/useAuthenticationAPI";
 
 const App = () => {
   const keyword = i18nLoadNamespace("components/Shared/utils");
@@ -100,12 +60,10 @@ const App = () => {
 
   return (
     <HashRouter>
-      <ThemeProvider theme={theme}>
-        <Routes>
-          <Route index path="/" element={<PopUp />} />
-          <Route path={"/app/*"} element={<ApplicationLayout />} />
-        </Routes>
-      </ThemeProvider>
+      <Routes>
+        <Route index path="/" element={<PopUp />} />
+        <Route path={"/app/*"} element={<ApplicationLayout />} />
+      </Routes>
     </HashRouter>
   );
 };

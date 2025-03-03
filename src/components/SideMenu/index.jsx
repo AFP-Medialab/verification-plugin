@@ -257,7 +257,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
         <VideoIcon
           width="24px"
           height="24px"
-          style={{ fill: "#4c4c4c" }}
+          style={{ fill: "var(--mui-palette-text-secondary)" }}
           title={TOOLS_CATEGORIES.VIDEO}
         />
       ),
@@ -272,7 +272,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
         <ImageIcon
           width="24px"
           height="24px"
-          style={{ fill: "#4c4c4c" }}
+          style={{ fill: "var(--mui-palette-text-secondary)" }}
           title={TOOLS_CATEGORIES.IMAGE}
         />
       ),
@@ -287,7 +287,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
         <Audiotrack
           width="24px"
           height="24px"
-          style={{ fill: "#4c4c4c" }}
+          style={{ fill: "var(--mui-palette-text-secondary)" }}
           title={TOOLS_CATEGORIES.AUDIO}
         />
       ),
@@ -302,7 +302,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
         <SearchIcon
           width="24px"
           height="24px"
-          style={{ fill: "#4c4c4c" }}
+          style={{ fill: "var(--mui-palette-text-secondary)" }}
           title={TOOLS_CATEGORIES.SEARCH}
         />
       ),
@@ -317,7 +317,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
         <DataIcon
           width="24px"
           height="24px"
-          style={{ fill: "#4c4c4c" }}
+          style={{ fill: "var(--mui-palette-text-secondary)" }}
           title={TOOLS_CATEGORIES.DATA_ANALYSIS}
         />
       ),
@@ -328,7 +328,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
     },
     {
       titleKeyword: TOOLS_CATEGORIES.OTHER,
-      icon: <MoreHoriz style={{ fill: "#4c4c4c" }} />,
+      icon: <MoreHoriz style={{ fill: "var(--mui-palette-text-secondary)" }} />,
       list: drawerItemsOtherTools,
       variableOpen: openListOtherTools,
       setVariableOpen: setOpenListOtherTools,
@@ -382,8 +382,8 @@ const SideMenu = ({ tools, setOpenAlert }) => {
     }
 
     return {
-      fill: isSelected ? "#00926c" : "#4c4c4c",
-      color: isSelected ? "#00926c" : "#4c4c4c",
+      fill: isSelected ? "#00926c" : "var(--mui-palette-text-secondary)",
+      color: isSelected ? "#00926c" : "var(--mui-palette-text-secondary)",
       fontSize: "24px",
     };
   };
@@ -413,7 +413,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
           style={{
             paddingTop: "16px",
             paddingBottom: "16px",
-            backgroundColor: "#ffffff",
+            backgroundColor: "var(--mui-palette-background-paper)",
             textAlign: "start",
           }}
         >
@@ -587,7 +587,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
           alignItems: "stretch",
           position: "sticky",
           bottom: "0px",
-          backgroundColor: "#ffffff",
+          backgroundColor: "var(--mui-palette-background-paper)",
           zIndex: "9",
         }}
       >

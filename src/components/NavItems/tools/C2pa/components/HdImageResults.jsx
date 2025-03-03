@@ -209,11 +209,7 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
               (role.includes(ROLES.AFP_C2PA_GOLD) ||
                 role.includes(ROLES.EXTRA_FEATURE)) && (
                 <Grid2>
-                  <Button
-                    variant="contained"
-                    onClick={downloadHdImage}
-                    sx={{ textTransform: "none" }}
-                  >
+                  <Button variant="contained" onClick={downloadHdImage}>
                     {keyword("reverse_search_original_image_download_button")}
                   </Button>
                 </Grid2>

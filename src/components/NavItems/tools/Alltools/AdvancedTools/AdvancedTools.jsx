@@ -52,7 +52,6 @@ const registrationValidationSchema = yup.object().shape({
 const AdvancedTools = () => {
   const keyword = i18nLoadNamespace("components/NavItems/AdvancedTools");
 
-  //const classes = useMyStyles();
   // Redux store
   const dispatch = useDispatch();
   const userAuthenticated = useSelector(
@@ -245,7 +244,12 @@ const AdvancedTools = () => {
           justifyContent="center"
           alignItems="flex-start"
         >
-          <Stack direction={"row"} sx={{ color: "black" }}>
+          <Stack
+            direction={"row"}
+            sx={{
+              color: "var(--mui-palette-text-primary)",
+            }}
+          >
             {iconState}
             <Typography variant="caption">{keyword("title")}</Typography>
           </Stack>

@@ -131,13 +131,13 @@ const TwitterAdvancedSearch = () => {
       setEventUrl(url);
       window.open(url);
       /*trackEvent(
-                        "submission",
-                        "twitter_advance_search",
-                        "search twitter request",
-                        url,
-                        client_id,
-                        uid
-                      );*/
+                              "submission",
+                              "twitter_advance_search",
+                              "search twitter request",
+                              url,
+                              client_id,
+                              uid
+                            );*/
     }
   };
 
@@ -150,7 +150,7 @@ const TwitterAdvancedSearch = () => {
       />
       <Alert severity="warning">{keyword("warning_x_search")}</Alert>
       <Box mt={3} />
-      <Card className={cardClasses.root}>
+      <Card variant="outlined" className={cardClasses.root}>
         <CardHeader
           title={keyword("cardheader_parameters")}
           className={classes.headerUploadedImage}

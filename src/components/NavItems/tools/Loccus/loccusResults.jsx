@@ -4,6 +4,7 @@ import { Chart } from "react-chartjs-2";
 import GaugeChart from "react-gauge-chart";
 import { useSelector } from "react-redux";
 
+import { useColorScheme } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -17,7 +18,8 @@ import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { Close, Download, ExpandMore } from "@mui/icons-material";
+import { Download, ExpandMore } from "@mui/icons-material";
+import CloseIcon from "@mui/icons-material/Close";
 
 import { useTrackEvent } from "Hooks/useAnalytics";
 import {
@@ -74,6 +76,8 @@ const LoccusResults = ({
     THRESHOLD_2: 30,
     THRESHOLD_3: 60,
   };
+
+  const { systemMode } = useColorScheme();
 
   /**
    * Reformats a duration to prevent modulo operations done by dayjs when formatting duration values
@@ -296,220 +300,228 @@ const LoccusResults = ({
       alignItems="flex-start"
       spacing={2}
     >
-      <Card sx={{ width: "100%" }}>
-        <CardHeader
-          style={{ borderRadius: "4px 4p x 0px 0px" }}
-          title={keyword("loccus_title")}
-          action={
-            <IconButton aria-label="close" onClick={handleClose}>
-              <Close sx={{ color: "white" }} />
-            </IconButton>
-          }
-        />
-        <Grid2
-          container
-          direction="row"
-          justifyContent="space-evenly"
-          alignItems="flex-start"
-        >
+      <Card variant="outlined" sx={{ width: "100%" }}>
+        <Box m={2}>
+          <CardHeader
+            style={{ borderRadius: "4px 4p x 0px 0px" }}
+            title={keyword("loccus_title")}
+            action={
+              <IconButton aria-label="close" onClick={handleClose}>
+                <CloseIcon />
+              </IconButton>
+            }
+          />
           <Grid2
-            p={4}
-            size={{
-              sm: 12,
-              md: 6,
-            }}
+            container
+            direction="row"
+            justifyContent="space-evenly"
+            alignItems="flex-start"
           >
-            <Box sx={{ width: "100%", position: "relative" }}>
-              <Grid2
-                container
-                direction="column"
-                justifyContent="center"
-                alignItems="flex-start"
-                spacing={4}
-              >
-                <Grid2 width="100%">
-                  <div ref={audioContainerRef} />
-                </Grid2>
-                <Grid2 ref={chunksChartRef} width="100%" height="300px">
-                  <Chart
-                    type={"line"}
-                    data={getChartDataFromChunks(chunks)}
-                    options={chartConfig}
-                  />
-                </Grid2>
-                <Grid2>
-                  <Tooltip
-                    title={keyword("loccus_download_chunks_chart_button")}
-                  >
-                    <IconButton
-                      color="primary"
-                      aria-label="download chart"
-                      onClick={async () =>
-                        await exportReactElementAsJpg(
-                          chunksChartRef,
-                          "loccus_detection_chart",
-                        )
-                      }
+            <Grid2
+              p={4}
+              size={{
+                sm: 12,
+                md: 6,
+              }}
+            >
+              <Box sx={{ width: "100%", position: "relative" }}>
+                <Grid2
+                  container
+                  direction="column"
+                  justifyContent="center"
+                  alignItems="flex-start"
+                  spacing={4}
+                >
+                  <Grid2 width="100%">
+                    <div ref={audioContainerRef} />
+                  </Grid2>
+                  <Grid2 ref={chunksChartRef} width="100%" height="300px">
+                    <Chart
+                      type={"line"}
+                      data={getChartDataFromChunks(chunks)}
+                      options={chartConfig}
+                    />
+                  </Grid2>
+                  <Grid2>
+                    <Tooltip
+                      title={keyword("loccus_download_chunks_chart_button")}
                     >
-                      <Download />
-                    </IconButton>
-                  </Tooltip>
+                      <IconButton
+                        color="primary"
+                        aria-label="download chart"
+                        onClick={async () =>
+                          await exportReactElementAsJpg(
+                            chunksChartRef,
+                            "loccus_detection_chart",
+                          )
+                        }
+                      >
+                        <Download />
+                      </IconButton>
+                    </Tooltip>
+                  </Grid2>
                 </Grid2>
-              </Grid2>
-            </Box>
-          </Grid2>
-          <Grid2
-            size={{
-              sm: 12,
-              md: 6,
-            }}
-          >
-            <Stack direction="column" spacing={4}>
-              <Stack direction="column" p={4} spacing={4}>
-                <Typography variant="h5">
-                  {keyword("loccus_voice_cloning_detection_title")}
-                </Typography>
+              </Box>
+            </Grid2>
+            <Grid2
+              size={{
+                sm: 12,
+                md: 6,
+              }}
+            >
+              <Stack direction="column" spacing={4}>
+                <Stack direction="column" p={4} spacing={4}>
+                  <Typography variant="h5">
+                    {keyword("loccus_voice_cloning_detection_title")}
+                  </Typography>
 
-                {!isInconclusive && (
-                  <Stack
-                    direction={{ sm: "column", md: "row" }}
-                    alignItems={{ sm: "start", md: "center" }}
-                    justifyContent="center"
-                    width="100%"
-                  >
+                  {!isInconclusive && (
                     <Stack
-                      direction="column"
+                      direction={{ sm: "column", md: "row" }}
+                      alignItems={{ sm: "start", md: "center" }}
                       justifyContent="center"
-                      alignItems="center"
-                      spacing={0}
-                      ref={gaugeChartRef}
+                      width="100%"
                     >
-                      <GaugeChart
-                        id={"gauge-chart"}
-                        animate={false}
-                        nrOfLevels={4}
-                        textColor={"black"}
-                        arcsLength={[0.1, 0.2, 0.3, 0.4]}
-                        percent={voiceCloningScore / 100}
-                        style={{ width: 250 }}
-                      />
-
                       <Stack
-                        direction="row"
+                        direction="column"
                         justifyContent="center"
                         alignItems="center"
-                        spacing={10}
+                        spacing={0}
+                        ref={gaugeChartRef}
                       >
-                        <Typography variant="subtitle2">
-                          {keyword("loccus_gauge_no_detection")}
-                        </Typography>
-                        <Typography variant="subtitle2">
-                          {keyword("loccus_gauge_detection")}
-                        </Typography>
-                      </Stack>
-                    </Stack>
-                    <Box alignSelf={{ sm: "flex-start", md: "flex-end" }}>
-                      <Tooltip title={keyword("loccus_download_gauge_button")}>
-                        <IconButton
-                          color="primary"
-                          aria-label="download chart"
-                          onClick={async () =>
-                            await exportReactElementAsJpg(
-                              gaugeChartRef,
-                              "gauge_chart",
-                            )
-                          }
+                        <GaugeChart
+                          id={"gauge-chart"}
+                          animate={false}
+                          nrOfLevels={4}
+                          textColor={systemMode === "dark" ? "white" : "black"}
+                          arcsLength={[0.1, 0.2, 0.3, 0.4]}
+                          percent={voiceCloningScore / 100}
+                          style={{ width: 250 }}
+                        />
+
+                        <Stack
+                          direction="row"
+                          justifyContent="center"
+                          alignItems="center"
+                          spacing={10}
                         >
-                          <Download />
-                        </IconButton>
-                      </Tooltip>
-                    </Box>
-                  </Stack>
-                )}
-
-                {!isInconclusive && (
-                  <GaugeChartModalExplanation
-                    keyword={keyword}
-                    keywordsArr={keywords}
-                    keywordLink={"loccus_scale_explanation_link"}
-                    keywordModalTitle={"loccus_scale_modal_explanation_title"}
-                    colors={colors}
-                  />
-                )}
-
-                <CustomAlertScore
-                  score={voiceCloningScore}
-                  detectionType={DETECTION_TYPES.VOICE_CLONING}
-                  toolName={"Loccus"}
-                  thresholds={DETECTION_THRESHOLDS}
-                  isInconclusive={isInconclusive}
-                />
-
-                {!isInconclusive && (
-                  <Typography>
-                    {keyword("loccus_cloning_additional_explanation_text")}
-                  </Typography>
-                )}
-              </Stack>
-
-              {role.includes(ROLES.EXTRA_FEATURE) && (
-                <>
-                  <Divider />
-                  <Box pb={4} pr={4}>
-                    <Accordion>
-                      <AccordionSummary
-                        expandIcon={<ExpandMore />}
-                        aria-controls="panel-additional-results-content"
-                        id="panel-additional-results"
-                      >
-                        <Typography>
-                          {keyword("loccus_additional_results")}
-                        </Typography>
-                      </AccordionSummary>
-                      <AccordionDetails>
-                        <Stack direction="column" spacing={2}>
-                          <Typography variant="h5">
-                            {keyword("loccus_voice_recording_detection_title")}
+                          <Typography variant="subtitle2">
+                            {keyword("loccus_gauge_no_detection")}
                           </Typography>
-                          <Stack
-                            direction="column"
-                            justifyContent="center"
-                            alignItems="center"
-                            spacing={0}
+                          <Typography variant="subtitle2">
+                            {keyword("loccus_gauge_detection")}
+                          </Typography>
+                        </Stack>
+                      </Stack>
+                      <Box alignSelf={{ sm: "flex-start", md: "flex-end" }}>
+                        <Tooltip
+                          title={keyword("loccus_download_gauge_button")}
+                        >
+                          <IconButton
+                            color="primary"
+                            aria-label="download chart"
+                            onClick={async () =>
+                              await exportReactElementAsJpg(
+                                gaugeChartRef,
+                                "gauge_chart",
+                              )
+                            }
                           >
-                            <GaugeChart
-                              id={"gauge-chart-2"}
-                              animate={false}
-                              nrOfLevels={4}
-                              textColor={"black"}
-                              arcsLength={[0.1, 0.2, 0.3, 0.4]}
-                              percent={voiceRecordingScore / 100}
-                              style={{ width: 250 }}
-                            />
+                            <Download />
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                    </Stack>
+                  )}
 
+                  {!isInconclusive && (
+                    <GaugeChartModalExplanation
+                      keyword={keyword}
+                      keywordsArr={keywords}
+                      keywordLink={"loccus_scale_explanation_link"}
+                      keywordModalTitle={"loccus_scale_modal_explanation_title"}
+                      colors={colors}
+                    />
+                  )}
+
+                  <CustomAlertScore
+                    score={voiceCloningScore}
+                    detectionType={DETECTION_TYPES.VOICE_CLONING}
+                    toolName={"Loccus"}
+                    thresholds={DETECTION_THRESHOLDS}
+                    isInconclusive={isInconclusive}
+                  />
+
+                  {!isInconclusive && (
+                    <Typography>
+                      {keyword("loccus_cloning_additional_explanation_text")}
+                    </Typography>
+                  )}
+                </Stack>
+
+                {role.includes(ROLES.EXTRA_FEATURE) && (
+                  <>
+                    <Divider />
+                    <Box pb={4} pr={4}>
+                      <Accordion>
+                        <AccordionSummary
+                          expandIcon={<ExpandMore />}
+                          aria-controls="panel-additional-results-content"
+                          id="panel-additional-results"
+                        >
+                          <Typography>
+                            {keyword("loccus_additional_results")}
+                          </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <Stack direction="column" spacing={2}>
+                            <Typography variant="h5">
+                              {keyword(
+                                "loccus_voice_recording_detection_title",
+                              )}
+                            </Typography>
                             <Stack
-                              direction="row"
+                              direction="column"
                               justifyContent="center"
                               alignItems="center"
-                              spacing={10}
+                              spacing={0}
                             >
-                              <Typography variant="subtitle2">
-                                {keyword("loccus_gauge_no_detection")}
-                              </Typography>
-                              <Typography variant="subtitle2">
-                                {keyword("loccus_gauge_detection")}
-                              </Typography>
+                              <GaugeChart
+                                id={"gauge-chart-2"}
+                                animate={false}
+                                nrOfLevels={4}
+                                textColor={
+                                  systemMode === "dark" ? "white" : "black"
+                                }
+                                arcsLength={[0.1, 0.2, 0.3, 0.4]}
+                                percent={voiceRecordingScore / 100}
+                                style={{ width: 250 }}
+                              />
+
+                              <Stack
+                                direction="row"
+                                justifyContent="center"
+                                alignItems="center"
+                                spacing={10}
+                              >
+                                <Typography variant="subtitle2">
+                                  {keyword("loccus_gauge_no_detection")}
+                                </Typography>
+                                <Typography variant="subtitle2">
+                                  {keyword("loccus_gauge_detection")}
+                                </Typography>
+                              </Stack>
                             </Stack>
                           </Stack>
-                        </Stack>
-                      </AccordionDetails>
-                    </Accordion>
-                  </Box>
-                </>
-              )}
-            </Stack>
+                        </AccordionDetails>
+                      </Accordion>
+                    </Box>
+                  </>
+                )}
+              </Stack>
+            </Grid2>
           </Grid2>
-        </Grid2>
+        </Box>
       </Card>
     </Stack>
   );
