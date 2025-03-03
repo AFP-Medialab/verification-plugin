@@ -4,6 +4,7 @@ import { Chart } from "react-chartjs-2";
 import GaugeChart from "react-gauge-chart";
 import { useSelector } from "react-redux";
 
+import { useColorScheme } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -75,6 +76,8 @@ const LoccusResults = ({
     THRESHOLD_2: 30,
     THRESHOLD_3: 60,
   };
+
+  const { systemMode } = useColorScheme();
 
   /**
    * Reformats a duration to prevent modulo operations done by dayjs when formatting duration values
@@ -390,7 +393,7 @@ const LoccusResults = ({
                           id={"gauge-chart"}
                           animate={false}
                           nrOfLevels={4}
-                          textColor={"black"}
+                          textColor={systemMode === "dark" ? "white" : "black"}
                           arcsLength={[0.1, 0.2, 0.3, 0.4]}
                           percent={voiceCloningScore / 100}
                           style={{ width: 250 }}
@@ -487,7 +490,9 @@ const LoccusResults = ({
                                 id={"gauge-chart-2"}
                                 animate={false}
                                 nrOfLevels={4}
-                                textColor={"black"}
+                                textColor={
+                                  systemMode === "dark" ? "white" : "black"
+                                }
                                 arcsLength={[0.1, 0.2, 0.3, 0.4]}
                                 percent={voiceRecordingScore / 100}
                                 style={{ width: 250 }}

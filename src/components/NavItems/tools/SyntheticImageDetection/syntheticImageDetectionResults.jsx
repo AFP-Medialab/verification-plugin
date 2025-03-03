@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import GaugeChart from "react-gauge-chart";
 import { useSelector } from "react-redux";
 
+import { useColorScheme } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -27,7 +28,6 @@ import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import theme from "../../../../theme";
 import CustomAlertScore from "../../../Shared/CustomAlertScore";
 import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
 import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
@@ -362,6 +362,8 @@ const SyntheticImageDetectionResults = ({
       updateNddRows(nd.similar_media);
   }, [nd]);
 
+  const { systemMode } = useColorScheme();
+
   return (
     <Card variant="outlined" sx={{ width: "100%" }}>
       <CardContent sx={{ flex: "1 0 auto" }}>
@@ -495,8 +497,9 @@ const SyntheticImageDetectionResults = ({
                           id={"gauge-chart"}
                           animate={false}
                           nrOfLevels={4}
-                          textColor={"#FFFFFF"}
-                          needleColor={theme.palette.text.primary}
+                          textColor={
+                            systemMode === "dark" ? "#FFFFFF" : "#000000"
+                          }
                           arcsLength={[
                             (100 - DETECTION_THRESHOLDS.THRESHOLD_1) / 100,
                             (DETECTION_THRESHOLDS.THRESHOLD_2 -

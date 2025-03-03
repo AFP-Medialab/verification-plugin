@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import GaugeChart from "react-gauge-chart";
 
+import { useColorScheme } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -46,8 +47,9 @@ const GaugeChartResult = ({
   toolName,
   detectionType,
 }) => {
-  //const keyword = (word) => "hi";
   const gaugeChartRef = useRef(null);
+
+  const { systemMode } = useColorScheme();
 
   const previsionalScore = Math.max(
     ...scores.map((score) => score.predictionScore),
@@ -145,7 +147,7 @@ const GaugeChartResult = ({
                 id={"gauge-chart"}
                 animate={false}
                 nrOfLevels={4}
-                textColor={"var(--mui-palette-text-primary)"}
+                textColor={systemMode === "dark" ? "white" : "black"}
                 arcsLength={
                   arcsLength
                     ? arcsLength
