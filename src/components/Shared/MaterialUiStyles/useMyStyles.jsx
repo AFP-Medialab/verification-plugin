@@ -161,7 +161,7 @@ const styles = (theme) => ({
     flexGrow: 1,
     paddingLeft: theme.spacing(3),
     paddingRight: theme.spacing(3),
-    backgroundColor: "#fafafa",
+    backgroundColor: theme.palette.background.main,
     minHeight: "100vh",
     overflow: "hidden",
   },

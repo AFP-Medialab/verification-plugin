@@ -182,7 +182,6 @@ const StringFileUploadField = ({
           >
             <Button
               startIcon={<FolderOpenIcon />}
-              sx={{ textTransform: "none" }}
               style={
                 isDragging
                   ? { cursor: validDrop ? "copy" : "no-drop" }

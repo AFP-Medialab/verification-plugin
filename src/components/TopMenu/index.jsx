@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
+import Divider from "@mui/material/Divider";
 import Grid2 from "@mui/material/Grid2";
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
@@ -64,10 +65,7 @@ const TopMenu = ({ topMenuItems }) => {
 
   return (
     <AppBar position="fixed" width={"100%"}>
-      <Toolbar
-        className={classes.toolbar}
-        style={{ borderBottom: "solid 1px #dedbdb" }}
-      >
+      <Toolbar className={classes.toolbar}>
         <Grid2
           container
           direction="row"
@@ -149,6 +147,7 @@ const TopMenu = ({ topMenuItems }) => {
                     component={Link}
                     sx={{
                       minWidth: "100px",
+                      fontSize: "1rem",
                     }}
                     value={item.title}
                   />
@@ -164,6 +163,7 @@ const TopMenu = ({ topMenuItems }) => {
           </Grid2>
         </Grid2>
       </Toolbar>
+      <Divider sx={{ width: "100%" }} />
     </AppBar>
   );
 };

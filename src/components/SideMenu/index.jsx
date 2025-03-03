@@ -413,7 +413,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
           style={{
             paddingTop: "16px",
             paddingBottom: "16px",
-            backgroundColor: "#ffffff",
+            backgroundColor: "var(--mui-palette-background-paper)",
             textAlign: "start",
           }}
         >
@@ -587,7 +587,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
           alignItems: "stretch",
           position: "sticky",
           bottom: "0px",
-          backgroundColor: "#ffffff",
+          backgroundColor: "var(--mui-palette-background-paper)",
           zIndex: "9",
         }}
       >

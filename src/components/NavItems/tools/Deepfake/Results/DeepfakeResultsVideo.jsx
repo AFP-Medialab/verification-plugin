@@ -15,6 +15,7 @@ import Typography from "@mui/material/Typography";
 
 import CloseIcon from "@mui/icons-material/Close";
 
+import { LineChart } from "@mui/x-charts/LineChart";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
@@ -64,6 +65,42 @@ const DeepfakeResultsVideo = (props) => {
 
   const results = props.result;
   const url = props.url;
+
+  const [xAxisData, setXAxisData] = React.useState([]);
+  const [yAxisData, setYAxisData] = React.useState([]);
+
+  useEffect(() => {
+    if (
+      props.result &&
+      props.result.deepfake_video_report &&
+      props.result.deepfake_video_report.results &&
+      props.result.deepfake_video_report.results.length > 0
+    ) {
+      for (const shotPrediction of props.result.deepfake_video_report.results) {
+        // This needs an undefined check because the value can be 0
+        if (
+          shotPrediction.prediction !== undefined &&
+          typeof shotPrediction.prediction === "number" &&
+          shotPrediction.shot_start !== undefined &&
+          typeof shotPrediction.shot_start === "number" &&
+          shotPrediction.shot_end !== undefined &&
+          typeof shotPrediction.shot_end === "number"
+        ) {
+          // Add X-Axis data twice for start to end value
+          setYAxisData((prev) => [
+            ...prev,
+            shotPrediction.prediction * 100,
+            shotPrediction.prediction * 100,
+          ]);
+          setXAxisData((prev) => [
+            ...prev,
+            shotPrediction.shot_start,
+            shotPrediction.shot_end,
+          ]);
+        }
+      }
+    }
+  }, [props.result]);
 
   const [shotSelectedKey, setShotSelectedKey] = useState(-1);
   const [shotSelectedValue, setShotSelectedValue] = useState(null);
@@ -202,22 +239,43 @@ const DeepfakeResultsVideo = (props) => {
           >
             <Grid2 size={{ xs: 6 }} container direction="column" spacing={2}>
               <Grid2 width="100%" size={{ xs: 6 }} container direction="column">
-                <video
-                  width="100%"
-                  height="auto"
-                  controls
-                  key={results.deepfake_video_report.video_path}
-                  style={{
-                    borderRadius: "10px",
-                    maxHeight: "50vh",
-                  }}
-                >
-                  <source
-                    src={results.deepfake_video_report.video_path + "#t=2,4"}
-                    type="video/mp4"
-                  />
-                  {keyword("deepfake_support")}
-                </video>
+                <Stack direction="column" spacing={4}>
+                  <video
+                    width="100%"
+                    height="auto"
+                    controls
+                    key={results.deepfake_video_report.video_path}
+                    style={{
+                      borderRadius: "10px",
+                      maxHeight: "50vh",
+                    }}
+                  >
+                    <source
+                      src={results.deepfake_video_report.video_path + "#t=2,4"}
+                      type="video/mp4"
+                    />
+                    {keyword("deepfake_support")}
+                  </video>
+                  <Stack direction="column" justifyContent="center">
+                    <LineChart
+                      xAxis={[
+                        {
+                          data: xAxisData,
+                        },
+                      ]}
+                      series={[
+                        {
+                          data: yAxisData,
+                        },
+                      ]}
+                      height={300}
+                      grid={{ vertical: true, horizontal: true }}
+                    />
+                    <Typography>
+                      {keyword("deepfake_video_videoreport_name")}
+                    </Typography>
+                  </Stack>
+                </Stack>
               </Grid2>
             </Grid2>
             <Grid2 size={{ xs: 6 }}>
@@ -261,7 +319,7 @@ const DeepfakeResultsVideo = (props) => {
                   <Typography
                     variant="h6"
                     style={{
-                      color: "#00926c",
+                      colors: "#00926c",
                     }}
                   >
                     {keyword("deepfake_clips")}
@@ -297,7 +355,11 @@ const DeepfakeResultsVideo = (props) => {
                             >
                               <CardActionArea>
                                 <CardContent>
-                                  <Stack direction="column" spacing={1}>
+                                  <Stack
+                                    direction="column"
+                                    spacing={1}
+                                    alignItems="center"
+                                  >
                                     <img
                                       alt="shot"
                                       key={keyShot}
@@ -443,7 +505,6 @@ const DeepfakeResultsVideo = (props) => {
                               {keyword("deepfake_support")}
                             </video>
                           </Grid2>
-
                           <Grid2
                             container
                             direction="column"
@@ -463,6 +524,7 @@ const DeepfakeResultsVideo = (props) => {
                                           style={{
                                             width: "100%",
                                             height: "auto",
+                                            maxWidth: "120px",
                                           }}
                                         />
                                         <Typography>

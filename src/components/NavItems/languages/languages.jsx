@@ -61,13 +61,13 @@ const Languages = (props) => {
         alignItems="center"
       >
         <IconButton onClick={handleClick}>
-          <TranslateIcon fontSize="medium" style={{ color: "#596977" }} />
+          <TranslateIcon fontSize="medium" />
         </IconButton>
         {props.variant !== "notext" && (
           <span
             id="language"
             style={{
-              color: "#596977",
+              color: "var(--mui-palette-text-primary)",
               fontSize: "14px",
               fontWeight: "500",
               marginRight: "2px",
