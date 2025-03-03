@@ -38,7 +38,7 @@ export default function TextFooter({
             className={classes.toolTipIcon}
             onClick={() => setDisplayOrigLang(!displayOrigLang)}
           >
-            {getLanguageName(textLang) ?? textLang}
+            {getLanguageName(textLang, textLang) ?? textLang}
           </Typography>
         </Grid2>
 

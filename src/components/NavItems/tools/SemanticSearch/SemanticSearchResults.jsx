@@ -128,7 +128,10 @@ const SemanticSearchResults = (searchResults) => {
                     ) ?? null
                   }
                   website={resultItem.website}
-                  language={getLanguageName(resultItem.language)}
+                  language={getLanguageName(
+                    resultItem.language,
+                    resultItem.language,
+                  )}
                   similarityScore={resultItem.similarityScore}
                   articleUrl={resultItem.articleUrl}
                   domainUrl={resultItem.domainUrl}
