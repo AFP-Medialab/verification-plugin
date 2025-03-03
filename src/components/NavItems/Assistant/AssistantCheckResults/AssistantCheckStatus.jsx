@@ -67,6 +67,11 @@ const AssistantCheckStatus = () => {
     (state) => state.assistant.machineGeneratedTextFail,
   );
 
+  const multilingualStanceTitle = keyword("multilingual_stance_title");
+  const multilingualStanceFailState = useSelector(
+    (state) => state.assistant.multilingualStanceFail,
+  );
+
   const failStates = [
     { title: scTitle, failed: scFailState },
     { title: dbkfMediaTitle, failed: dbkfMediaFailState },
@@ -78,6 +83,10 @@ const AssistantCheckStatus = () => {
     { title: subjectivityTitle, failed: subjectivityFailState },
     { title: prevFactChecksTitle, failed: prevFactChecksFailState },
     { title: machineGeneratedTextTitle, failed: machineGeneratedTextFailState },
+    {
+      title: multilingualStanceTitle,
+      failed: multilingualStanceFailState,
+    },
   ];
 
   return (
