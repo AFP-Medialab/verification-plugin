@@ -14,6 +14,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import {
+  toByteArray as decodeBase64,
+  fromByteArray as encodeBase64,
+} from "base64-js";
 import { downloadZip, makeZip } from "client-zip";
 import { sha256 } from "hash-wasm";
 import { CDXIndexer, WARCRecord, WARCSerializer } from "warcio";
@@ -22,6 +26,44 @@ const SinglefileConverter = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
 
   const [fileInput, setFileInput] = useState(/** @type {File?} */ null);
+
+  const sign = async (hash) => {
+    //implementation derived from webrecorder's awp-sw library
+    const keyPair = await crypto.subtle.generateKey(
+      {
+        name: "ECDSA",
+        namedCurve: "P-384",
+      },
+      true,
+      ["sign", "verify"],
+    );
+
+    const privateKey = await crypto.subtle.exportKey(
+      "pkcs8",
+      keyPair.privateKey,
+    );
+    const publicKey = await crypto.subtle.exportKey("spki", keyPair.publicKey);
+
+    const keys = {
+      private: encodeBase64(new Uint8Array(privateKey)),
+      public: encodeBase64(new Uint8Array(publicKey)),
+    };
+
+    const data = new TextEncoder().encode(hash);
+    const signatureBuff = await crypto.subtle.sign(
+      {
+        name: "ECDSA",
+        hash: "SHA-256",
+      },
+      keyPair.privateKey,
+      data,
+    );
+    const signature = encodeBase64(new Uint8Array(signatureBuff));
+    return {
+      signature,
+      publicKey: keys.public,
+    };
+  };
 
   const makeWacz = async (warcInput, cdxInput, pageInfo) => {
     const cdxInfo = JSON.parse(cdxInput);
@@ -80,7 +122,7 @@ const SinglefileConverter = () => {
       ],
       wacz_version: "1.1.1",
       software:
-        "InVID WeVerify plug-in singlefile archiver with warcio.js 2.4.2",
+        "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
       created: `${new Date(Date.now()).toISOString()}`,
       title: "singlefile2wacz.wacz",
     };
@@ -93,16 +135,19 @@ const SinglefileConverter = () => {
       JSON.stringify(datapackage_input, null, 2),
     );
 
+    const signature = await sign(datapackage_hash);
+
     const datapackagedigest_input = {
       path: "datapackage.json",
       hash: `sha256:${datapackage_hash}`,
-      // "signedData": {
-      //   "hash": "sha256:2b346207e049fe30ad65415d48a137bca3b969ec425b7a47d34c5d70823d782f",
-      //   "signature": "njdrQ8Snsck3rDNXbqO/HnBItf98OiQ+QX8NfX0WWbBpHdZK14zAPgVpC2pydck6pJkwCTfNl57ZHUVVPKmtBdYm6f+Ik8S45rr1Ed4EV2H5CaoIZ6W77wdiB4G/ohOY",
-      //   "publicKey": "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAE/R/QL0x1ijcwralLX/vNBniFbfbBeJpQAHKy8Gk1r8EkTseqyeYap9QCk+QQcWtLzqUNHKTY408dK1N6ZPk90frmsa/aRWq5XLsxV9928nXcm0bXeCk467nOQKh/P2FL",
-      //   "created": "2025-02-19T09:13:52.274Z",
-      //   "software": "Webrecorder ArchiveWeb.page 0.14.2, using warcio.js 2.4.2"
-      // }
+      signedData: {
+        hash: `sha256:${datapackage_hash}`,
+        signature: signature.signature,
+        publicKey: signature.publicKey,
+        created: new Date(Date.now()).toISOString(),
+        software:
+          "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
+      },
     };
     const datapackagedigest_arch = {
       name: "datapackage-digest.json",
@@ -194,9 +239,10 @@ const SinglefileConverter = () => {
     const warcVersion = "WARC/1.1";
 
     const info = {
-      software: "warcio.js in node",
+      software:
+        "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
       format: "WARC File Format 1.1",
-      isPartOf: "singlefile2wacz.warc",
+      isPartOf: "singlefile2wacz.wacz",
     };
     const filename = "singlefile2wacz.wacz#/archive/data.warc";
 
