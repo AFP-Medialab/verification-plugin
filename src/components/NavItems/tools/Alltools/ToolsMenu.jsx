@@ -328,7 +328,7 @@ const ToolsMenu = () => {
                 >
                   {tools.map((tool, key) => {
                     const element = (
-                      <Grid2 size={{ xs: 4, lg: 3 }} minWidth="200px">
+                      <Grid2 size={{ xs: 4, lg: 3 }} key={key} minWidth="200px">
                         <ToolsMenuItem
                           tool={tool}
                           onClick={() =>
