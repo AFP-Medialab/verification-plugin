@@ -357,7 +357,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
         }
       />
 
-      {multilingualStanceLoading ? (
+      {multilingualStanceLoading || caaVerificationKeywordsTsv.length == 0 ? (
         <div>
           <LinearProgress />
         </div>
