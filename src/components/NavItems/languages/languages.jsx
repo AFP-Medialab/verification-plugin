@@ -55,14 +55,15 @@ const Languages = (props) => {
     <Box>
       <Stack
         direction="column"
-        spacing={1}
+        spacing={0}
         height={"100%"}
         justifyContent="center"
         alignItems="center"
       >
-        <IconButton onClick={handleClick}>
-          <TranslateIcon fontSize="medium" />
+        <IconButton size="medium" onClick={handleClick} sx={{ p: 1 }}>
+          <TranslateIcon fontSize="inherit" />
         </IconButton>
+
         {props.variant !== "notext" && (
           <span
             id="language"
