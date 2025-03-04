@@ -111,7 +111,7 @@ const AssistantVideoResult = () => {
               hidden={downloadVideoFound()}
               frameBorder="0"
               url={preprocessLinkForEmbed(processUrl)}
-              allow="fullscreen"
+              //allow="fullscreen"  // correct way to fix error? "useAssistantApi.jsx:28 Allow attribute will take precedence over 'allowfullscreen'."
               height="400"
               width="100%"
             />

@@ -1,6 +1,8 @@
 import React from "react";
 import { Trans } from "react-i18next";
 
+// Links
+
 export function TransSupportedToolsLink({ keyword }) {
   return (
     <Trans
@@ -91,6 +93,26 @@ export function TransCredibilitySignalsLink({ keyword }) {
   );
 }
 
+export function TransMultilingualStanceLink({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="multilingual_stance_link"
+      components={{
+        multilingualStanceLink: (
+          <a
+            href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#stance-classifier"
+            target="_blank"
+            rel="noopener noreferrer"
+          />
+        ),
+      }}
+    />
+  );
+}
+
+// Tooltips
+
 export function TransSourceCredibilityTooltip({ keyword }) {
   return (
     <Trans
@@ -107,10 +129,34 @@ export function TransSourceCredibilityTooltip({ keyword }) {
   );
 }
 
-export function TransHtmlDoubleLinkBreak({ keyword }) {
+const stanceSupportColour = "#2e7d32";
+const stanceQueryColour = "#ed6c02";
+const stanceDenyColour = "#d32f2f";
+const stanceCommentColour = "#757575";
+
+export function TransMultilingualStanceTooltip({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="multilingual_stance_tooltip"
+      components={{
+        ul: <ul />,
+        li: <li />,
+        strongSupport: <strong style={{ background: stanceSupportColour }} />,
+        strongQuery: <strong style={{ background: stanceQueryColour }} />,
+        strongDeny: <strong style={{ background: stanceDenyColour }} />,
+        strongComment: <strong style={{ background: stanceCommentColour }} />,
+      }}
+    />
+  );
+}
+
+// Whitespace
+
+export function TransHtmlDoubleLineBreak({ keyword }) {
   return <Trans t={keyword} i18nKey="html_double_line_break" />;
 }
 
-export function TransHtmlSingleLinkBreak({ keyword }) {
+export function TransHtmlSingleLineBreak({ keyword }) {
   return <Trans t={keyword} i18nKey="html_single_line_break" />;
 }
