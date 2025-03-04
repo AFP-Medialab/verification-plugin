@@ -154,7 +154,6 @@ const DownloadWaczFile = ({ url }) => {
       >
         <LoadingButton
           variant="outlined"
-          sx={{ textTransform: "none" }}
           onClick={async () => await getWaczFileFromScoop.mutate()}
           loading={getWaczFileFromScoop.isPending}
           loadingPosition="start"

@@ -5,10 +5,8 @@ import { useLocation } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
-import Grid2 from "@mui/material/Grid2";
 import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
@@ -27,7 +25,6 @@ import {
   setSyntheticImageDetectionResult,
 } from "../../../../redux/actions/tools/syntheticImageDetectionActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
@@ -39,7 +36,6 @@ const SyntheticImageDetection = () => {
   const urlParams = new URLSearchParams(location.search);
   const urlParam = urlParams.get("url");
 
-  const classes = useMyStyles();
   const keyword = i18nLoadNamespace(
     "components/NavItems/tools/SyntheticImageDetection",
   );
@@ -383,22 +379,8 @@ const SyntheticImageDetection = () => {
         </Alert>
       </Stack>
 
-      <Card>
-        <CardHeader
-          title={
-            <Grid2
-              container
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <span>{keyword("synthetic_image_detection_link")}</span>
-            </Grid2>
-          }
-          className={classes.headerUploadedImage}
-        />
-
-        <Box p={3}>
+      <Card variant="outlined">
+        <Box p={4}>
           <Stack direction="column" spacing={2}>
             <form>
               <StringFileUploadField

@@ -4,11 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid2 from "@mui/material/Grid2";
+import { ThemeProvider } from "@mui/material/styles";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { ROLES } from "constants/roles";
 
 import { changeLanguage } from "../../redux/reducers/languageReducer";
+import theme from "../../theme";
 import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg?url";
 import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg?url";
 import LogoVera from "../NavBar/images/SVG/Navbar/vera-logo_black.svg?url";
@@ -97,108 +99,114 @@ const PopUp = () => {
   }, []);
 
   return (
-    <div className={classes.popUp}>
-      <Grid2 container>
-        {LOGO_EU ? (
-          <>
-            <Grid2
-              size={{ xs: 6 }}
-              container
-              alignItems="center"
-              justifyContent="center"
-            >
-              <img src={LogoEuCom} alt={LogoEuCom} style={{ width: "100px" }} />
-            </Grid2>
-            <Grid2 size={{ xs: 6 }}>
-              <img src={LogoVera} alt={LogoVera} style={{ width: "100px" }} />
-            </Grid2>
-          </>
-        ) : (
-          <>
-            <Grid2
-              size={{ xs: 7 }}
-              container
-              alignItems="center"
-              justifyContent="center"
-            >
-              <img
-                src={LogoInVidWeverify}
-                alt={LogoInVidWeverify}
-                style={{ width: "150px" }}
-              />
-            </Grid2>
-            <Grid2 size={{ xs: 5 }}>
-              <img src={LogoVera} alt={LogoVera} style={{ width: "100px" }} />
-            </Grid2>
-          </>
-        )}
-        <Box m={1} />
-        <Grid2 size={{ xs: 12 }}>
-          <Button
-            variant="outlined"
-            color="primary"
-            fullWidth={true}
-            onClick={() => window.open("/popup.html#/app/tools")}
-          >
-            {keyword("open_website")}
-          </Button>
-        </Grid2>
-        <Box m={1} />
-        <Grid2 size={{ xs: 12 }}>
-          <Button
-            variant="outlined"
-            color="primary"
-            fullWidth={true}
-            onClick={() => window.open("/popup.html#/app/assistant/")}
-          >
-            {keyword("open_assistant")}
-          </Button>
-        </Grid2>
-        <Box m={1} />
-        <Grid2 size={{ xs: 12 }}>
-          <Button
-            variant="outlined"
-            color="primary"
-            fullWidth={true}
-            onMouseOver={() => loadData()}
-            onClick={() => urlOpenAssistant()}
-          >
-            {keyword("open_assistant_on_page")}
-          </Button>
-        </Grid2>
-        <Box m={1} />
-        <Grid2 size={{ xs: 12 }}>
-          <Button
-            variant="outlined"
-            color="primary"
-            fullWidth={true}
-            onClick={() => window.open("/popup.html#/app/classroom/")}
-          >
-            {keyword("open_classroom")}
-          </Button>
-        </Grid2>
-        <Box m={1} />
-        {userRoles.includes(ROLES.ARCHIVE) ? (
+    <ThemeProvider theme={theme}>
+      <div className={classes.popUp}>
+        <Grid2 container>
+          {LOGO_EU ? (
+            <>
+              <Grid2
+                size={{ xs: 6 }}
+                container
+                alignItems="center"
+                justifyContent="center"
+              >
+                <img
+                  src={LogoEuCom}
+                  alt={LogoEuCom}
+                  style={{ width: "100px" }}
+                />
+              </Grid2>
+              <Grid2 size={{ xs: 6 }}>
+                <img src={LogoVera} alt={LogoVera} style={{ width: "100px" }} />
+              </Grid2>
+            </>
+          ) : (
+            <>
+              <Grid2
+                size={{ xs: 7 }}
+                container
+                alignItems="center"
+                justifyContent="center"
+              >
+                <img
+                  src={LogoInVidWeverify}
+                  alt={LogoInVidWeverify}
+                  style={{ width: "150px" }}
+                />
+              </Grid2>
+              <Grid2 size={{ xs: 5 }}>
+                <img src={LogoVera} alt={LogoVera} style={{ width: "100px" }} />
+              </Grid2>
+            </>
+          )}
+          <Box m={1} />
           <Grid2 size={{ xs: 12 }}>
             <Button
               variant="outlined"
               color="primary"
               fullWidth={true}
-              onClick={() => {
-                window.open(
-                  "/popup.html#/app/tools/archive/" +
-                    encodeURIComponent(pageUrl),
-                );
-              }}
+              onClick={() => window.open("/popup.html#/app/tools")}
             >
-              {keyword("archive_this")}
+              {keyword("open_website")}
             </Button>
           </Grid2>
-        ) : null}
-      </Grid2>
+          <Box m={1} />
+          <Grid2 size={{ xs: 12 }}>
+            <Button
+              variant="outlined"
+              color="primary"
+              fullWidth={true}
+              onClick={() => window.open("/popup.html#/app/assistant/")}
+            >
+              {keyword("open_assistant")}
+            </Button>
+          </Grid2>
+          <Box m={1} />
+          <Grid2 size={{ xs: 12 }}>
+            <Button
+              variant="outlined"
+              color="primary"
+              fullWidth={true}
+              onMouseOver={() => loadData()}
+              onClick={() => urlOpenAssistant()}
+            >
+              {keyword("open_assistant_on_page")}
+            </Button>
+          </Grid2>
+          <Box m={1} />
+          <Grid2 size={{ xs: 12 }}>
+            <Button
+              variant="outlined"
+              color="primary"
+              fullWidth={true}
+              onClick={() => window.open("/popup.html#/app/classroom/")}
+            >
+              {keyword("open_classroom")}
+            </Button>
+          </Grid2>
+          <Box m={1} />
+          {userRoles.includes(ROLES.ARCHIVE) ? (
+            <Grid2 size={{ xs: 12 }}>
+              <Button
+                variant="outlined"
+                color="primary"
+                fullWidth={true}
+                onClick={() => {
+                  window.open(
+                    "/popup.html#/app/tools/archive/" +
+                      encodeURIComponent(pageUrl),
+                  );
+                }}
+              >
+                {keyword("archive_this")}
+              </Button>
+            </Grid2>
+          ) : null}
+        </Grid2>
 
-      <Box m={1} />
-    </div>
+        <Box m={1} />
+      </div>
+    </ThemeProvider>
   );
 };
 export default PopUp;

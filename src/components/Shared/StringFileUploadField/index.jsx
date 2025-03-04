@@ -17,6 +17,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { ClearIcon } from "@mui/x-date-pickers";
 import accept from "attr-accept";
 
+import { prettifyLargeString } from "../../NavItems/tools/Archive/utils";
 import { i18nLoadNamespace } from "../Languages/i18nLoadNamespace";
 
 /**
@@ -181,7 +182,6 @@ const StringFileUploadField = ({
           >
             <Button
               startIcon={<FolderOpenIcon />}
-              sx={{ textTransform: "none" }}
               style={
                 isDragging
                   ? { cursor: validDrop ? "copy" : "no-drop" }
@@ -192,7 +192,9 @@ const StringFileUploadField = ({
               onDrop={onDrop}
             >
               <label htmlFor="file">
-                {fileInput ? fileInput.name : localFileKeyword}
+                {fileInput
+                  ? prettifyLargeString(fileInput.name, 24)
+                  : localFileKeyword}
               </label>
               <input
                 id="file"

@@ -81,7 +81,7 @@ const SemanticSearchResults = (searchResults) => {
 
   return (
     <Box id="SemanticSearchResults" sx={{ scrollMargin: "96px" }}>
-      <Card>
+      <Card variant="outlined">
         <Box>
           <Stack
             direction="column"
