@@ -160,6 +160,13 @@ export default function AssistantTextClassification({
             }
           />
           <CardContent>
+            {credibilitySignal == keyword("machine_generated_text_title") ? (
+              <Typography>
+                {keyword("Overall score for text:")}
+                {/* TODO add single over score box like cat list */}
+              </Typography>
+            ) : null}
+            {/* TODO remove "overall_score" from cat list */}
             <CategoriesList
               categories={filteredCategories}
               thresholdLow={categoryThresholdLow}

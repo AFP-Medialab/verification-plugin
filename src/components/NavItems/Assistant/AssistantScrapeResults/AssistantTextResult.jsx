@@ -104,6 +104,21 @@ const AssistantTextResult = () => {
     (state) => state.assistant.subjectivityFail,
   );
 
+  // machine generated text
+  const machineGeneratedTextTitle = keyword("machine_generated_text_title");
+  const machineGeneratedTextResult = useSelector(
+    (state) => state.assistant.machineGeneratedTextResult,
+  );
+  const machineGeneratedTextLoading = useSelector(
+    (state) => state.assistant.machineGeneratedTextLoading,
+  );
+  const machineGeneratedTextDone = useSelector(
+    (state) => state.assistant.machineGeneratedTextDone,
+  );
+  const machineGeneratedTextFail = useSelector(
+    (state) => state.assistant.machineGeneratedTextFail,
+  );
+
   // display states
   const textBox = document.getElementById("element-to-check");
   const [expanded, setExpanded] = useState(false);
@@ -249,6 +264,11 @@ const AssistantTextResult = () => {
               {...a11yProps(4)}
               disabled={subjectivityFail || subjectivityLoading}
             />
+            <Tab
+              label={machineGeneratedTextTitle}
+              {...a11yProps(5)}
+              disabled={machineGeneratedTextFail || machineGeneratedTextLoading}
+            />
           </Tabs>
 
           {/* extracted raw text */}
@@ -379,6 +399,42 @@ const AssistantTextResult = () => {
                 }
                 textHtmlMap={textHtmlMap}
                 credibilitySignal={keyword("subjectivity_title")}
+              />
+            )}
+          </CustomTabPanel>
+
+          {/* subjectivity */}
+          {/* {console.log("newsFramingResult=", newsFramingResult)} */}
+          {console.log("subjectivityResult=", subjectivityResult)}
+          {console.log(
+            "machineGeneratedTextResult=",
+            machineGeneratedTextResult,
+          )}
+          <CustomTabPanel value={textTabIndex} index={5}>
+            {machineGeneratedTextLoading && (
+              <Stack direction="column" spacing={4} p={4}>
+                <Skeleton variant="rounded" height={40} />
+                <Skeleton variant="rounded" width="50%" height={40} />
+              </Stack>
+            )}
+            {machineGeneratedTextDone && (
+              <AssistantTextClassification
+                text={text}
+                classification={machineGeneratedTextResult.entities}
+                configs={machineGeneratedTextResult.configs}
+                titleText={machineGeneratedTextTitle}
+                categoriesTooltipContent={
+                  <>
+                    <Trans
+                      t={keyword}
+                      i18nKey="machine_generated_text_tooltip"
+                    />
+                    <TransHtmlDoubleLinkBreak keyword={keyword} />
+                    <TransCredibilitySignalsLink keyword={keyword} />
+                  </>
+                }
+                textHtmlMap={textHtmlMap}
+                credibilitySignal={keyword("machine_generated_text_title")}
               />
             )}
           </CustomTabPanel>
