@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 
@@ -8,7 +9,6 @@ import { TOP_MENU_ITEMS } from "../../constants/topMenuItems";
 import theme from "../../theme";
 import MainContent from "../MainContent";
 import NotificationSnackbar from "../NotificationSnackbar";
-import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import SideMenu from "../SideMenu";
 import TopMenu from "../TopMenu";
 
@@ -16,10 +16,8 @@ const ApplicationLayout = () => {
   // Used to display warning messages
   const [openAlert, setOpenAlert] = useState(false);
 
-  const classes = useMyStyles();
-
   return (
-    <div className={classes.flex}>
+    <Box sx={{ display: "flex" }}>
       <NotificationSnackbar openAlert={openAlert} setOpenAlert={setOpenAlert} />
       <ThemeProvider theme={theme}>
         <CssBaseline enableColorScheme />
@@ -27,7 +25,7 @@ const ApplicationLayout = () => {
         <TopMenu topMenuItems={TOP_MENU_ITEMS} />
         <MainContent tools={tools} />
       </ThemeProvider>
-    </div>
+    </Box>
   );
 };
 
