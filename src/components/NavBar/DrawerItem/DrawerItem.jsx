@@ -64,9 +64,6 @@ const DrawerItemContent = ({ tool }) => {
     if (tool.toolGroup === TOOL_GROUPS.VERIFICATION)
       dispatch(selectTopMenuItem(TOP_MENU_ITEMS[0].title));
 
-    if (tool.toolGroup === TOOL_GROUPS.MORE)
-      dispatch(selectTopMenuItem(TOP_MENU_ITEMS[5].title));
-
     dispatch(selectTool(tool.titleKeyword));
   };
 

@@ -99,9 +99,6 @@ const SideMenu = ({ tools, setOpenAlert }) => {
     if (tool.toolGroup === TOOL_GROUPS.VERIFICATION)
       dispatch(selectTopMenuItem(TOP_MENU_ITEMS[0].title));
 
-    if (tool.toolGroup === TOOL_GROUPS.MORE)
-      dispatch(selectTopMenuItem(TOP_MENU_ITEMS[5].title));
-
     dispatch(selectTool(tool.titleKeyword));
   };
 
@@ -165,11 +162,10 @@ const SideMenu = ({ tools, setOpenAlert }) => {
       return;
     }
 
-    tool.toolGroup === TOOL_GROUPS.MORE
-      ? navigate("/app/" + tool.path)
-      : navigate("/app/tools/" + tool.path);
+    navigate("/app/tools/" + tool.path);
 
     handleToolChange(tool);
+    return;
   };
 
   const toolsItem = tools.find((tool) => tool.titleKeyword === "navbar_tools");
