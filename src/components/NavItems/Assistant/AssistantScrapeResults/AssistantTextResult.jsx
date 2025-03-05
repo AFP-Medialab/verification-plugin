@@ -404,10 +404,6 @@ const AssistantTextResult = () => {
           </CustomTabPanel>
 
           {/* machine generated text */}
-          {console.log(
-            "machineGeneratedTextResult=",
-            machineGeneratedTextResult,
-          )}
           <CustomTabPanel value={textTabIndex} index={5}>
             {machineGeneratedTextLoading && (
               <Stack direction="column" spacing={4} p={4}>

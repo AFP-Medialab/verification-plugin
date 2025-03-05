@@ -60,16 +60,7 @@ export default function AssistantTextClassification({
   let sentenceRgbLow, sentenceRgbHigh;
   let sentenceThresholdLow, sentenceThresholdHigh;
   const colourScaleText = keyword("colour_scale");
-  let highlyLikelyHumanRgb,
-    likelyHumanRgb,
-    likelyMachineRgb,
-    highlyLikelyMachineRgb;
-  if (credibilitySignal == keyword("machine_generated_text_title")) {
-    highlyLikelyHumanRgb = configs.highlyLikelyHumanRgb;
-    likelyHumanRgb = configs.likelyHumanRgb;
-    likelyMachineRgb = configs.likelyMachineRgb;
-    highlyLikelyMachineRgb = configs.highlyLikelyMachineRgb;
-  } else if (credibilitySignal == keyword("subjectivity_title")) {
+  if (credibilitySignal == keyword("subjectivity_title")) {
     // subjectivity requires confidence for sentence
     sentenceTooltipText = keyword("confidence_tooltip_sentence");
     sentenceTextLow = keyword("low_confidence");
@@ -189,10 +180,6 @@ export default function AssistantTextClassification({
                 categories={filteredCategories}
                 keyword={keyword}
                 mgtOverallScore={mgtOverallScore}
-                highlyLikelyHumanRgb={highlyLikelyHumanRgb}
-                likelyHumanRgb={likelyHumanRgb}
-                likelyMachineRgb={likelyMachineRgb}
-                highlyLikelyMachineRgb={highlyLikelyMachineRgb}
               />
             ) : (
               <CategoriesList
@@ -223,17 +210,7 @@ export default function AssistantTextClassification({
   );
 }
 
-export function MgtCategoriesList({
-  categories,
-  keyword,
-  mgtOverallScore,
-  // highlyLikelyHumanRgb,
-  // likelyHumanRgb,
-  // likelyMachineRgb,
-  // highlyLikelyMachineRgb
-}) {
-  console.log("categories=", categories);
-
+export function MgtCategoriesList({ categories, keyword, mgtOverallScore }) {
   const orderedMgtCategories = [
     "highly_likely_human",
     "likely_human",
@@ -246,7 +223,7 @@ export function MgtCategoriesList({
 
   let output = [];
   output.push(
-    <ListItem>
+    <ListItem key={`text_${mgtOverallScore}`}>
       <Typography>{keyword(mgtOverallScore)}</Typography>
     </ListItem>,
   );
@@ -262,16 +239,12 @@ export function MgtCategoriesList({
     </ListItem>,
   );
   output.push(
-    <ListItem>
+    <ListItem key={"text_mgt_possible_classes"}>
       {/* TODO check if a good translation exists already */}
-      <Typography>{keyword("sentence_types_detected")}</Typography>
+      <Typography>{keyword("mgt_possible_classes")}</Typography>
     </ListItem>,
   );
-  for (const category in orderedMgtCategories) {
-    //}.forEach((category) => (
-    // TODO problem with this not returning the code?
-    // <>
-    // {console.log(category, categories[category])}
+  for (const category of orderedMgtCategories) {
     output.push(
       <ListItem
         key={category}
@@ -287,50 +260,10 @@ export function MgtCategoriesList({
       </ListItem>,
     );
     output.push(<Divider key={`divider_${category}`} />);
-    //   {/* <Divider key={`divider_${category}`} />
-    // </> */}
   }
 
   return <List>{output}</List>;
 }
-// return (
-//   <List>
-//     <ListItem>
-//       <Typography>{keyword(mgtOverallScore)}</Typography>
-//     </ListItem>
-//     <ListItem
-//       key={mgtOverallScore}
-//       sx={{
-//         background: rgbToString(mgtOverallScorePredRgb),
-//         color: rgbToLuminance(mgtOverallScorePredRgb) > 0.7 ? "black" : "white",
-//       }}
-//     >
-//       <ListItemText primary={keyword(mgtOverallScorePred)} />
-//     </ListItem>
-//     <ListItem>
-//       {/* TODO check if a good translation exists already */}
-//       <Typography>{keyword("sentence_types_detected")}</Typography>
-//     </ListItem>
-//     {orderedMgtCategories.forEach((category) => (
-//       // TODO problem with this not returning the code?
-//       // <>
-//         // {console.log(category, categories[category])}
-
-//         <ListItem
-//           key={category}
-//           sx={{
-//             background: rgbToString(categories[category][0]["rgb"]),
-//             color: rgbToLuminance(categories[category][0]["rgb"]) > 0.7 ? "black" : "white",
-//           }}
-//         >
-//           <ListItemText primary={keyword(category)} />
-//         </ListItem>
-//       //   {/* <Divider key={`divider_${category}`} />
-//       // </> */}
-
-//     ))}
-//   </List>
-//)}
 
 export function CategoriesList({
   categories,
@@ -400,10 +333,6 @@ export function ClassifiedText({
   textHtmlMap = null,
   credibilitySignal,
   keyword,
-  // highlyLikelyHumanRgb,
-  // likelyHumanRgb,
-  // likelyMachineRgb,
-  // highlyLikelyMachineRgb,
 }) {
   let output = text; //Defaults to text output
 
