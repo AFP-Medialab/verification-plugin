@@ -20,7 +20,6 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import Remove from "@mui/icons-material/Remove";
 
-import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult.jsx";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import dayjs from "dayjs";
 import LocaleData from "dayjs/plugin/localeData";
@@ -49,7 +48,6 @@ const getExpandIcon = (
     doneWithEmptyResult ||
     (role && !role.includes(ROLES.BETA_TESTER))
   ) {
-    // "doneWithEmptyResult" is for when subjectivityDone = true and Object.keys(result.entities).length < 1
     // "doneWithEmptyResult" is for when prevFactChecksDone = true and result.length < 1
     return <Remove />;
   } else {
@@ -104,52 +102,6 @@ const AssistantCredSignals = () => {
   const globalLocaleData = dayjs.localeData();
   // for navigating to Semantic Search with text
   const navigate = useNavigate();
-
-  // machine generated text
-  const machineGeneratedTextTitle = keyword("machine_generated_text_title");
-  const machineGeneratedTextResult = useSelector(
-    (state) => state.assistant.machineGeneratedTextResult,
-  );
-  const machineGeneratedTextLoading = useSelector(
-    (state) => state.assistant.machineGeneratedTextLoading,
-  );
-  const machineGeneratedTextDone = useSelector(
-    (state) => state.assistant.machineGeneratedTextDone,
-  );
-  const machineGeneratedTextFail = useSelector(
-    (state) => state.assistant.machineGeneratedTextFail,
-  );
-
-  const DETECTION_THRESHOLDS = {
-    THRESHOLD_1: 5.0,
-    THRESHOLD_2: 50.0,
-    THRESHOLD_3: 95.0,
-  };
-
-  const arcsLength = [0.05, 0.45, 0.45, 0.05];
-
-  const keywords = [
-    "gauge_scale_modal_explanation_rating_1",
-    "gauge_scale_modal_explanation_rating_2",
-    "gauge_scale_modal_explanation_rating_3",
-    "gauge_scale_modal_explanation_rating_4",
-  ];
-  const colors = ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"];
-
-  // methodName = "machinegeneratedtext"
-  const MachineGeneratedTextMethodNames = {
-    machinegeneratedtext: {
-      name: keyword("machine_generated_text_title"),
-      description: keyword("machine_generated_text_tooltip"),
-    },
-  };
-
-  const MachineGeneratedTextMethodNamesResults = {
-    methodName: "machinegeneratedtext",
-    predictionScore: machineGeneratedTextResult
-      ? machineGeneratedTextResult.score * 100.0
-      : null,
-  };
 
   return (
     <Card>
@@ -346,98 +298,6 @@ const AssistantCredSignals = () => {
                   />
                 </div>
               )}
-          </AccordionDetails>
-        </StyledAccordion>
-
-        {/* Machine Generated Text */}
-        <StyledAccordion
-          expanded={expandedAccordion === machineGeneratedTextTitle}
-          onChange={handleChange(machineGeneratedTextTitle)}
-          disabled={
-            machineGeneratedTextLoading ||
-            machineGeneratedTextFail ||
-            //machineGeneratedTextDone ||
-            !role.includes(ROLES.BETA_TESTER)
-          }
-          //disableGutters
-        >
-          <AccordionSummary
-            expandIcon={getExpandIcon(
-              machineGeneratedTextLoading,
-              machineGeneratedTextFail,
-              null,
-              role,
-            )}
-          >
-            <Grid2 container spacing={1} wrap="wrap" width="100%">
-              <Grid2 size={{ xs: 4 }} align="start">
-                <Typography
-                  display="inline"
-                  sx={{ flexShrink: 0, align: "start" }}
-                >
-                  {machineGeneratedTextTitle}
-                </Typography>
-              </Grid2>
-
-              <Grid2 size={{ xs: 8 }} align="start">
-                {role.includes(ROLES.BETA_TESTER) &&
-                  machineGeneratedTextLoading && (
-                    <Skeleton variant="rounded" width="50%" height={40} />
-                  )}
-                {role.includes(ROLES.BETA_TESTER) &&
-                  machineGeneratedTextFail && (
-                    <Typography
-                      sx={{ color: "text.secondary", align: "start" }}
-                    >
-                      {keyword("failed_to_load")}
-                    </Typography>
-                  )}
-                {role.includes(ROLES.BETA_TESTER) &&
-                  machineGeneratedTextDone &&
-                  machineGeneratedTextResult && (
-                    <Typography
-                      sx={{ color: "text.secondary", align: "start" }}
-                    >
-                      {keyword(machineGeneratedTextResult.pred)}
-                      {/* {round(machineGeneratedTextResult.score, 4)} */}
-                    </Typography>
-                  )}
-                {role.includes(ROLES.BETA_TESTER) &&
-                  !machineGeneratedTextDone &&
-                  !machineGeneratedTextLoading &&
-                  !machineGeneratedTextFail &&
-                  !machineGeneratedTextResult && (
-                    <Typography
-                      sx={{ color: "text.secondary", align: "start" }}
-                    >
-                      {keyword("reanalyse_url")}
-                      {/* should now be obselete as saga is re run */}
-                    </Typography>
-                  )}
-                {!role.includes(ROLES.BETA_TESTER) && (
-                  <Typography sx={{ color: "text.secondary", align: "start" }}>
-                    {keyword("login_required")}
-                  </Typography>
-                )}
-              </Grid2>
-            </Grid2>
-          </AccordionSummary>
-
-          <AccordionDetails>
-            {machineGeneratedTextResult ? (
-              <GaugeChartResult
-                keyword={keyword}
-                scores={[MachineGeneratedTextMethodNamesResults]}
-                methodNames={MachineGeneratedTextMethodNames}
-                detectionThresholds={DETECTION_THRESHOLDS}
-                arcsLength={arcsLength}
-                resultsHaveErrors={false}
-                sanitizeDetectionPercentage={(n) => Math.round(n)}
-                gaugeExplanation={{ colors: colors, keywords: keywords }}
-                toolName="Assistant" // this points to the correct translatons .tsv file
-                detectionType={"machine_generated_text"}
-              />
-            ) : null}
           </AccordionDetails>
         </StyledAccordion>
       </CardContent>
