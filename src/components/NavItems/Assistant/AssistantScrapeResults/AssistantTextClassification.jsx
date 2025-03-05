@@ -57,7 +57,10 @@ export default function AssistantTextClassification({
   let sentenceRgbLow, sentenceRgbHigh;
   let sentenceThresholdLow, sentenceThresholdHigh;
   const colourScaleText = keyword("colour_scale");
-  if (credibilitySignal == keyword("subjectivity_title")) {
+  if (
+    credibilitySignal == keyword("subjectivity_title") ||
+    credibilitySignal == keyword("machine_generated_text_title")
+  ) {
     // subjectivity requires confidence for sentence
     sentenceTooltipText = keyword("confidence_tooltip_sentence");
     sentenceTextLow = keyword("low_confidence");
@@ -104,6 +107,7 @@ export default function AssistantTextClassification({
 
   // Separate important sentences from categories, filter by threshold
   for (let label in classification) {
+    console.log(label);
     if (label === importantSentenceKey) {
       // Filter sentences above importanceThresholdLow
       const sentenceIndices = classification[label];
@@ -160,13 +164,6 @@ export default function AssistantTextClassification({
             }
           />
           <CardContent>
-            {credibilitySignal == keyword("machine_generated_text_title") ? (
-              <Typography>
-                {keyword("Overall score for text:")}
-                {/* TODO add single over score box like cat list */}
-              </Typography>
-            ) : null}
-            {/* TODO remove "overall_score" from cat list */}
             <CategoriesList
               categories={filteredCategories}
               thresholdLow={categoryThresholdLow}
@@ -244,7 +241,35 @@ export function CategoriesList({
     );
     index++;
   }
-  return <List>{output}</List>;
+
+  if (credibilitySignal === keyword("machine_generated_text_title")) {
+    console.log("output=", output);
+    const orderedOutput = [
+      output.find((output) => output.key === "highly_likely_human"),
+      output.find((output) => output.key === "1"),
+      output.find((output) => output.key === "likely_human"),
+      output.find((output) => output.key === "2"),
+      output.find((output) => output.key === "likely_machine"),
+      output.find((output) => output.key === "3"),
+      output.find((output) => output.key === "highly_likely_machine"),
+    ];
+    // TODO - fix to check if these exists or not before adding else error
+    return (
+      <List>
+        <ListItem>
+          <Typography>{keyword("Overall score for text:")}</Typography>
+        </ListItem>
+        {/* TODO this needs to be the correct value text */}
+        {output.find((output) => output.key === "mgt_overall_score")}
+        <ListItem>
+          <Typography>{keyword("Sentence types detected:")}</Typography>
+        </ListItem>
+        {orderedOutput}
+      </List>
+    );
+  } else {
+    return <List>{output}</List>;
+  }
 }
 
 /*
