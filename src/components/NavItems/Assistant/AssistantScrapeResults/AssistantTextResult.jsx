@@ -403,9 +403,7 @@ const AssistantTextResult = () => {
             )}
           </CustomTabPanel>
 
-          {/* subjectivity */}
-          {/* {console.log("newsFramingResult=", newsFramingResult)} */}
-          {console.log("subjectivityResult=", subjectivityResult)}
+          {/* machine generated text */}
           {console.log(
             "machineGeneratedTextResult=",
             machineGeneratedTextResult,

@@ -51,16 +51,25 @@ export default function AssistantTextClassification({
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
+  // define category for machine generated text overall score
+  const mgtOverallScore = "mgt_overall_score";
+
   // define sentence and category details
   let sentenceTooltipText;
   let sentenceTextLow, sentenceTextHigh;
   let sentenceRgbLow, sentenceRgbHigh;
   let sentenceThresholdLow, sentenceThresholdHigh;
   const colourScaleText = keyword("colour_scale");
-  if (
-    credibilitySignal == keyword("subjectivity_title") ||
-    credibilitySignal == keyword("machine_generated_text_title")
-  ) {
+  let highlyLikelyHumanRgb,
+    likelyHumanRgb,
+    likelyMachineRgb,
+    highlyLikelyMachineRgb;
+  if (credibilitySignal == keyword("machine_generated_text_title")) {
+    highlyLikelyHumanRgb = configs.highlyLikelyHumanRgb;
+    likelyHumanRgb = configs.likelyHumanRgb;
+    likelyMachineRgb = configs.likelyMachineRgb;
+    highlyLikelyMachineRgb = configs.highlyLikelyMachineRgb;
+  } else if (credibilitySignal == keyword("subjectivity_title")) {
     // subjectivity requires confidence for sentence
     sentenceTooltipText = keyword("confidence_tooltip_sentence");
     sentenceTextLow = keyword("low_confidence");
@@ -107,18 +116,27 @@ export default function AssistantTextClassification({
 
   // Separate important sentences from categories, filter by threshold
   for (let label in classification) {
-    console.log(label);
     if (label === importantSentenceKey) {
-      // Filter sentences above importanceThresholdLow
+      // Filter sentences above importanceThresholdLow unless machine generated text
       const sentenceIndices = classification[label];
       for (let i = 0; i < sentenceIndices.length; i++) {
-        if (sentenceIndices[i].score >= configs.importanceThresholdLow) {
+        if (
+          credibilitySignal != keyword("machine_generated_text_title") &&
+          sentenceIndices[i].score >= configs.importanceThresholdLow
+        ) {
+          filteredSentences.push(sentenceIndices[i]);
+        } else {
           filteredSentences.push(sentenceIndices[i]);
         }
       }
     } else {
-      //Filter categories above confidenceThreshold
-      if (classification[label][0].score >= configs.confidenceThresholdLow) {
+      //Filter categories above confidenceThreshold unless machine generated text
+      if (
+        credibilitySignal != keyword("machine_generated_text_title") &&
+        classification[label][0].score >= configs.confidenceThresholdLow
+      ) {
+        filteredCategories[label] = classification[label];
+      } else {
         filteredCategories[label] = classification[label];
       }
     }
@@ -142,6 +160,8 @@ export default function AssistantTextClassification({
           rgbLow={sentenceRgbLow}
           rgbHigh={sentenceRgbHigh}
           textHtmlMap={textHtmlMap}
+          credibilitySignal={credibilitySignal}
+          keyword={keyword}
         />
       </Grid2>
 
@@ -164,15 +184,27 @@ export default function AssistantTextClassification({
             }
           />
           <CardContent>
-            <CategoriesList
-              categories={filteredCategories}
-              thresholdLow={categoryThresholdLow}
-              thresholdHigh={categoryThresholdHigh}
-              rgbLow={categoryRgbLow}
-              rgbHigh={categoryRgbHigh}
-              keyword={keyword}
-              credibilitySignal={credibilitySignal}
-            />
+            {credibilitySignal === keyword("machine_generated_text_title") ? (
+              <MgtCategoriesList
+                categories={filteredCategories}
+                keyword={keyword}
+                mgtOverallScore={mgtOverallScore}
+                highlyLikelyHumanRgb={highlyLikelyHumanRgb}
+                likelyHumanRgb={likelyHumanRgb}
+                likelyMachineRgb={likelyMachineRgb}
+                highlyLikelyMachineRgb={highlyLikelyMachineRgb}
+              />
+            ) : (
+              <CategoriesList
+                categories={filteredCategories}
+                thresholdLow={categoryThresholdLow}
+                thresholdHigh={categoryThresholdHigh}
+                rgbLow={categoryRgbLow}
+                rgbHigh={categoryRgbHigh}
+                keyword={keyword}
+                credibilitySignal={credibilitySignal}
+              />
+            )}
             {filteredSentences.length > 0 ? (
               <FormControlLabel
                 control={
@@ -190,6 +222,115 @@ export default function AssistantTextClassification({
     </Grid2>
   );
 }
+
+export function MgtCategoriesList({
+  categories,
+  keyword,
+  mgtOverallScore,
+  // highlyLikelyHumanRgb,
+  // likelyHumanRgb,
+  // likelyMachineRgb,
+  // highlyLikelyMachineRgb
+}) {
+  console.log("categories=", categories);
+
+  const orderedMgtCategories = [
+    "highly_likely_human",
+    "likely_human",
+    "likely_machine",
+    "highly_likely_machine",
+  ];
+
+  const mgtOverallScorePred = categories[mgtOverallScore][0]["pred"];
+  const mgtOverallScorePredRgb = categories[mgtOverallScore][0]["rgb"];
+
+  let output = [];
+  output.push(
+    <ListItem>
+      <Typography>{keyword(mgtOverallScore)}</Typography>
+    </ListItem>,
+  );
+  output.push(
+    <ListItem
+      key={mgtOverallScore}
+      sx={{
+        background: rgbToString(mgtOverallScorePredRgb),
+        color: rgbToLuminance(mgtOverallScorePredRgb) > 0.7 ? "black" : "white",
+      }}
+    >
+      <ListItemText primary={keyword(mgtOverallScorePred)} />
+    </ListItem>,
+  );
+  output.push(
+    <ListItem>
+      {/* TODO check if a good translation exists already */}
+      <Typography>{keyword("sentence_types_detected")}</Typography>
+    </ListItem>,
+  );
+  for (const category in orderedMgtCategories) {
+    //}.forEach((category) => (
+    // TODO problem with this not returning the code?
+    // <>
+    // {console.log(category, categories[category])}
+    output.push(
+      <ListItem
+        key={category}
+        sx={{
+          background: rgbToString(categories[category][0]["rgb"]),
+          color:
+            rgbToLuminance(categories[category][0]["rgb"]) > 0.7
+              ? "black"
+              : "white",
+        }}
+      >
+        <ListItemText primary={keyword(category)} />
+      </ListItem>,
+    );
+    output.push(<Divider key={`divider_${category}`} />);
+    //   {/* <Divider key={`divider_${category}`} />
+    // </> */}
+  }
+
+  return <List>{output}</List>;
+}
+// return (
+//   <List>
+//     <ListItem>
+//       <Typography>{keyword(mgtOverallScore)}</Typography>
+//     </ListItem>
+//     <ListItem
+//       key={mgtOverallScore}
+//       sx={{
+//         background: rgbToString(mgtOverallScorePredRgb),
+//         color: rgbToLuminance(mgtOverallScorePredRgb) > 0.7 ? "black" : "white",
+//       }}
+//     >
+//       <ListItemText primary={keyword(mgtOverallScorePred)} />
+//     </ListItem>
+//     <ListItem>
+//       {/* TODO check if a good translation exists already */}
+//       <Typography>{keyword("sentence_types_detected")}</Typography>
+//     </ListItem>
+//     {orderedMgtCategories.forEach((category) => (
+//       // TODO problem with this not returning the code?
+//       // <>
+//         // {console.log(category, categories[category])}
+
+//         <ListItem
+//           key={category}
+//           sx={{
+//             background: rgbToString(categories[category][0]["rgb"]),
+//             color: rgbToLuminance(categories[category][0]["rgb"]) > 0.7 ? "black" : "white",
+//           }}
+//         >
+//           <ListItemText primary={keyword(category)} />
+//         </ListItem>
+//       //   {/* <Divider key={`divider_${category}`} />
+//       // </> */}
+
+//     ))}
+//   </List>
+//)}
 
 export function CategoriesList({
   categories,
@@ -241,35 +382,7 @@ export function CategoriesList({
     );
     index++;
   }
-
-  if (credibilitySignal === keyword("machine_generated_text_title")) {
-    console.log("output=", output);
-    const orderedOutput = [
-      output.find((output) => output.key === "highly_likely_human"),
-      output.find((output) => output.key === "1"),
-      output.find((output) => output.key === "likely_human"),
-      output.find((output) => output.key === "2"),
-      output.find((output) => output.key === "likely_machine"),
-      output.find((output) => output.key === "3"),
-      output.find((output) => output.key === "highly_likely_machine"),
-    ];
-    // TODO - fix to check if these exists or not before adding else error
-    return (
-      <List>
-        <ListItem>
-          <Typography>{keyword("Overall score for text:")}</Typography>
-        </ListItem>
-        {/* TODO this needs to be the correct value text */}
-        {output.find((output) => output.key === "mgt_overall_score")}
-        <ListItem>
-          <Typography>{keyword("Sentence types detected:")}</Typography>
-        </ListItem>
-        {orderedOutput}
-      </List>
-    );
-  } else {
-    return <List>{output}</List>;
-  }
+  return <List>{output}</List>;
 }
 
 /*
@@ -285,18 +398,29 @@ export function ClassifiedText({
   rgbLow,
   rgbHigh,
   textHtmlMap = null,
+  credibilitySignal,
+  keyword,
+  // highlyLikelyHumanRgb,
+  // likelyHumanRgb,
+  // likelyMachineRgb,
+  // highlyLikelyMachineRgb,
 }) {
   let output = text; //Defaults to text output
 
   function wrapHighlightedText(spanText, spanInfo) {
     const spanScore = spanInfo.score;
-    let backgroundRgb = interpRgb(
-      spanScore,
-      thresholdLow,
-      thresholdHigh,
-      rgbLow,
-      rgbHigh,
-    );
+    let backgroundRgb;
+    if (credibilitySignal === keyword("machine_generated_text_title")) {
+      backgroundRgb = spanInfo.rgb;
+    } else {
+      backgroundRgb = interpRgb(
+        spanScore,
+        thresholdLow,
+        thresholdHigh,
+        rgbLow,
+        rgbHigh,
+      );
+    }
     let bgLuminance = rgbToLuminance(backgroundRgb);
     let textColour = "white";
     if (bgLuminance > 0.7) textColour = "black";
