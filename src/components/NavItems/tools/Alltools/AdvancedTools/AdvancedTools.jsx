@@ -302,7 +302,7 @@ const AdvancedTools = () => {
                       <Grid2 mt={2}>
                         <Typography
                           variant="body2"
-                          style={{ color: "#818B95" }}
+                          style={{ color: "var(--mui-palette-text-secondary)" }}
                         >
                           {messageI18NResolver("ACCESSCODEFORM_TITLE")}
                         </Typography>
@@ -348,12 +348,15 @@ const AdvancedTools = () => {
                       <Grid2>
                         <Typography
                           variant="body2"
-                          style={{ color: "#818B95", textAlign: "start" }}
+                          style={{
+                            color: "var(--mui-palette-text-secondary)",
+                            textAlign: "start",
+                          }}
                         >
                           {keyword("text_alreadycode")}
                           <span
                             style={{
-                              color: "#000000",
+                              color: "var(--mui-palette-text-primary)",
                               marginLeft: "5px",
                               fontWeight: "500",
                               cursor: "pointer",
@@ -366,7 +369,10 @@ const AdvancedTools = () => {
                       </Grid2>
                     </Grid2>
                     <Grid2 mt={6}>
-                      <Typography variant="body2" style={{ color: "#818B95" }}>
+                      <Typography
+                        variant="body2"
+                        style={{ color: "var(--mui-palette-text-secondary)" }}
+                      >
                         {messageI18NResolver("REGISTRATIONFORM_TITLE")}
                       </Typography>
                     </Grid2>
@@ -447,7 +453,10 @@ const AdvancedTools = () => {
                 <Box ml={1} margin={1}>
                   <Typography
                     variant="body2"
-                    style={{ color: "#989898", fontSize: "13px" }}
+                    style={{
+                      color: "var(--mui-palette-text-secondary)",
+                      fontSize: "13px",
+                    }}
                   >
                     {messageI18NResolver("ACCESSCODEFORM_SUCCESS_TEXT_SPAM")}
                   </Typography>

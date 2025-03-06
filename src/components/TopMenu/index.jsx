@@ -3,20 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Grid2 from "@mui/material/Grid2";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Toolbar from "@mui/material/Toolbar";
-import { useColorScheme } from "@mui/material/styles";
-
-import DarkModeIcon from "@mui/icons-material/DarkMode";
-import LightModeIcon from "@mui/icons-material/LightMode";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
@@ -29,10 +21,9 @@ import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg";
 import LogoVera from "../NavBar/images/SVG/Navbar/vera-logo_black.svg";
 import Languages from "../NavItems/languages/languages";
 import AdvancedTools from "../NavItems/tools/Alltools/AdvancedTools/AdvancedTools";
+import ColorModeSelect from "./ColorModeSelect";
 
 const TopMenu = ({ topMenuItems }) => {
-  const { mode, setMode, systemMode } = useColorScheme();
-
   const classes = useMyStyles();
 
   const keyword = i18nLoadNamespace("components/NavBar");
@@ -77,43 +68,21 @@ const TopMenu = ({ topMenuItems }) => {
       .addEventListener("change", (e) => setMatchesSmallWidth(e.matches));
   }, []);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const resolvedMode = systemMode || mode;
-  const icon = {
-    light: (
-      <LightModeIcon
-        fontSize="inherit"
-        sx={{ color: "var(--mui-palette-text-primary)" }}
-      />
-    ),
-    dark: (
-      <DarkModeIcon
-        fontSize="inherit"
-        sx={{ color: "var(--mui-palette-text-primary)" }}
-      />
-    ),
-  }[resolvedMode];
-
-  console.log(resolvedMode);
-
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleMode = (targetMode) => () => {
-    setMode(targetMode);
-    handleClose();
-  };
-
   return (
-    <AppBar position="fixed" sx={{ minWidth: "600px", p: 0, width: "100%" }}>
-      <Toolbar sx={{ width: "100%" }}>
+    <AppBar
+      position="fixed"
+      sx={{
+        minWidth: "600px",
+        p: 0,
+        width: "100%",
+      }}
+    >
+      <Toolbar
+        sx={{
+          width: "100%",
+          backgroundColor: "var(--mui-palette-background-paper)",
+        }}
+      >
         <Grid2
           container
           direction="row"
@@ -213,39 +182,7 @@ const TopMenu = ({ topMenuItems }) => {
             >
               <AdvancedTools />
               <Languages />
-              <Box>
-                <IconButton size="medium" sx={{ p: 1 }} onClick={handleClick}>
-                  {icon}
-                </IconButton>
-                <Menu
-                  anchorEl={anchorEl}
-                  id="account-menu"
-                  open={open}
-                  onClose={handleClose}
-                  onClick={handleClose}
-                  transformOrigin={{ horizontal: "right", vertical: "top" }}
-                  anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-                >
-                  <MenuItem
-                    selected={mode === "system"}
-                    onClick={handleMode("system")}
-                  >
-                    System
-                  </MenuItem>
-                  <MenuItem
-                    selected={mode === "light"}
-                    onClick={handleMode("light")}
-                  >
-                    Light
-                  </MenuItem>
-                  <MenuItem
-                    selected={mode === "dark"}
-                    onClick={handleMode("dark")}
-                  >
-                    Dark
-                  </MenuItem>
-                </Menu>
-              </Box>
+              <ColorModeSelect />
             </Stack>
           </Grid2>
         </Grid2>

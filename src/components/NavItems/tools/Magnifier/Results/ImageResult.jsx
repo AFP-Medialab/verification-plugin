@@ -54,7 +54,7 @@ const myTheme = {
   // submenu labels
   "submenu.normalLabel.color": "#fff",
   "submenu.normalLabel.fontWeight": "bold",
-  "submenu.activeLabel.color": "#858585",
+  "submenu.activeLabel.color": "var(--mui-palette-text-secondary)",
   "submenu.activeLabel.fontWeight": "bold",
 };
 
