@@ -18,6 +18,7 @@
   "license": "MIT",
   "dependencies": {
     "@date-io/moment": "^3.0.0",
+    "@emotion/cache": "^11.14.0",
     "@emotion/css": "^11.13.0",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
