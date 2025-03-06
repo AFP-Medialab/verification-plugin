@@ -48,7 +48,7 @@ const AssistantIntroduction = (props) => {
   if (
     !showURL &&
     !showLocal &&
-    classButtonURL !== classes.bigButtonDivSelectted &&
+    classButtonURL !== classes.bigButtonDivSelected &&
     classButtonLocal !== classes.bigButtonDiv &&
     firstRender
   ) {
@@ -63,15 +63,15 @@ const AssistantIntroduction = (props) => {
     (state) => state.assistant.imageVideoSelected,
   );
 
-  if (urlMode && classButtonURL !== classes.bigButtonDivSelectted) {
-    setClassButtonURL(classes.bigButtonDivSelectted);
-    setClassIconURL(classes.bigButtonIconSelectted);
+  if (urlMode && classButtonURL !== classes.bigButtonDivSelected) {
+    setClassButtonURL(classes.bigButtonDivSelected);
+    setClassIconURL(classes.bigButtonIconSelected);
   } else if (
     imageVideoSelected &&
-    classButtonLocal !== classes.bigButtonDivSelectted
+    classButtonLocal !== classes.bigButtonDivSelected
   ) {
-    setClassButtonLocal(classes.bigButtonDivSelectted);
-    setClassIconLocal(classes.bigButtonIconSelectted);
+    setClassButtonLocal(classes.bigButtonDivSelected);
+    setClassIconLocal(classes.bigButtonIconSelected);
   }
 
   const cleanAssistant = () => props.cleanAssistant();
@@ -148,8 +148,8 @@ const AssistantIntroduction = (props) => {
                       });
                       cleanAssistant();
                       dispatch(setUrlMode(!urlMode));
-                      setClassButtonURL(classes.bigButtonDivSelectted);
-                      setClassIconURL(classes.bigButtonIconSelectted);
+                      setClassButtonURL(classes.bigButtonDivSelected);
+                      setClassIconURL(classes.bigButtonIconSelected);
 
                       setClassButtonLocal(classes.bigButtonDiv);
                       setClassIconLocal(classes.bigButtonIcon);
@@ -217,8 +217,8 @@ const AssistantIntroduction = (props) => {
                       setClassButtonURL(classes.bigButtonDiv);
                       setClassIconURL(classes.bigButtonIcon);
 
-                      setClassButtonLocal(classes.bigButtonDivSelectted);
-                      setClassIconLocal(classes.bigButtonIconSelectted);
+                      setClassButtonLocal(classes.bigButtonDivSelected);
+                      setClassIconLocal(classes.bigButtonIconSelected);
 
                       setShowURL(false);
                       setShowLocal(true);

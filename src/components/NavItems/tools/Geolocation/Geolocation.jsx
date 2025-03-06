@@ -5,7 +5,6 @@ import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
 import Grid2 from "@mui/material/Grid2";
 import LinearProgress from "@mui/material/LinearProgress";
 import TextField from "@mui/material/TextField";
@@ -58,11 +57,7 @@ const Geolocation = () => {
 
       <Box m={3} />
 
-      <Card>
-        <CardHeader
-          title={keyword("geo_source")}
-          className={classes.headerUploadedImage}
-        />
+      <Card variant="outlined">
         <form className={classes.root2}>
           <Grid2 container direction="row" spacing={3} alignItems="center">
             <Grid2 size="grow">

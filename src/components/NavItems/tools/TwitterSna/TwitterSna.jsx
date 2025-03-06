@@ -371,13 +371,13 @@ const TwitterSna = () => {
         delete prevResult.socioSemantic4ModeGraph;
       }
       /*trackEvent(
-                                                                    "submission",
-                                                                    "tsna",
-                                                                    "redirect to tsna",
-                                                                    JSON.stringify(newRequest),
-                                                                    client_id,
-                                                                    uid
-                                                                  );*/
+                                                                          "submission",
+                                                                          "tsna",
+                                                                          "redirect to tsna",
+                                                                          JSON.stringify(newRequest),
+                                                                          client_id,
+                                                                          uid
+                                                                        );*/
       setSubmittedRequest(newRequest);
     }
   };
@@ -520,10 +520,10 @@ const TwitterSna = () => {
   }
 
   /*
-                      const verifiedChange = () => {
-                        setVerifiedUsers(!verifiedUsers);
-                      };
-                      */
+                        const verifiedChange = () => {
+                          setVerifiedUsers(!verifiedUsers);
+                        };
+                        */
 
   return (
     <div>
@@ -535,7 +535,7 @@ const TwitterSna = () => {
             <dataAnalysisSna.icon sx={{ fill: "#00926c", fontSize: "40px" }} />
           }
         />
-        <Card className={cardClasses.root}>
+        <Card variant="outlined" className={cardClasses.root}>
           <CardHeader
             title={keyword("cardheader_parameters")}
             className={classes.headerUploadedImage}

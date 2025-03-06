@@ -3,11 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
+import Divider from "@mui/material/Divider";
 import Grid2 from "@mui/material/Grid2";
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Toolbar from "@mui/material/Toolbar";
+
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 
 import { toolsHome } from "../../constants/tools";
 import { selectTopMenuItem } from "../../redux/reducers/navReducer";
@@ -17,8 +21,7 @@ import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg";
 import LogoVera from "../NavBar/images/SVG/Navbar/vera-logo_black.svg";
 import Languages from "../NavItems/languages/languages";
 import AdvancedTools from "../NavItems/tools/Alltools/AdvancedTools/AdvancedTools";
-import { i18nLoadNamespace } from "../Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
+import ColorModeSelect from "./ColorModeSelect";
 
 const TopMenu = ({ topMenuItems }) => {
   const classes = useMyStyles();
@@ -47,7 +50,10 @@ const TopMenu = ({ topMenuItems }) => {
 
   const iconConditionalStyling = (toolName) => {
     return {
-      fill: topMenuItemSelected === toolName ? "#00926c" : "#4c4c4c",
+      fill:
+        topMenuItemSelected === toolName
+          ? "#00926c"
+          : "var(--mui-palette-text-secondary)",
       fontSize: "24px",
     };
   };
@@ -63,10 +69,19 @@ const TopMenu = ({ topMenuItems }) => {
   }, []);
 
   return (
-    <AppBar position="fixed" width={"100%"}>
+    <AppBar
+      position="fixed"
+      sx={{
+        minWidth: "600px",
+        p: 0,
+        width: "100%",
+      }}
+    >
       <Toolbar
-        className={classes.toolbar}
-        style={{ borderBottom: "solid 1px #dedbdb" }}
+        sx={{
+          width: "100%",
+          backgroundColor: "var(--mui-palette-background-paper)",
+        }}
       >
         <Grid2
           container
@@ -75,11 +90,12 @@ const TopMenu = ({ topMenuItems }) => {
           alignItems="center"
           spacing={{ sm: 1, md: 2 }}
           width="100%"
+          height="100%"
+          flexWrap="nowrap"
         >
-          <Grid2 size={{ xs: 2 }}>
+          <Grid2 size={{ xs: 2 }} height="100%">
             <Stack
               direction="row"
-              justifyContent="flex-start"
               alignItems="center"
               spacing={{ sm: 1, md: 2 }}
             >
@@ -118,7 +134,7 @@ const TopMenu = ({ topMenuItems }) => {
               />
             </Stack>
           </Grid2>
-          <Grid2 size={{ xs: 2, sm: 7 }}>
+          <Grid2 size={{ xs: 1, sm: "grow" }}>
             <Tabs
               value={topMenuItemSelected}
               variant="scrollable"
@@ -149,6 +165,7 @@ const TopMenu = ({ topMenuItems }) => {
                     component={Link}
                     sx={{
                       minWidth: "100px",
+                      fontSize: "1rem",
                     }}
                     value={item.title}
                   />
@@ -156,14 +173,21 @@ const TopMenu = ({ topMenuItems }) => {
               })}
             </Tabs>
           </Grid2>
-          <Grid2 size={{ xs: 2 }}>
-            <AdvancedTools />
-          </Grid2>
-          <Grid2 size={{ xs: 1 }}>
-            <Languages />
+          <Grid2>
+            <Stack
+              direction="row"
+              spacing={{ sx: 2, md: 4 }}
+              justifyContent="flex-end"
+              alignItems="center"
+            >
+              <AdvancedTools />
+              <Languages />
+              <ColorModeSelect />
+            </Stack>
           </Grid2>
         </Grid2>
       </Toolbar>
+      <Divider sx={{ width: "100%" }} />
     </AppBar>
   );
 };

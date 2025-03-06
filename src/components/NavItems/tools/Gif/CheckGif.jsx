@@ -88,8 +88,8 @@ const CheckGif = () => {
 
   function changeStylesToLocal() {
     //Change styles of the local button to selected
-    setClassButtonLocal(classes.bigButtonDivSelectted);
-    setClassIconLocal(classes.bigButtonIconSelectted);
+    setClassButtonLocal(classes.bigButtonDivSelected);
+    setClassIconLocal(classes.bigButtonIconSelected);
 
     //Change styles of the URL button to not selected
     setClassButtonURL(classes.bigButtonDiv);
@@ -98,8 +98,8 @@ const CheckGif = () => {
 
   function changeStylesToUrl() {
     //Change styles of the url button to selected
-    setClassButtonURL(classes.bigButtonDivSelectted);
-    setClassIconURL(classes.bigButtonIconSelectted);
+    setClassButtonURL(classes.bigButtonDivSelected);
+    setClassIconURL(classes.bigButtonIconSelected);
 
     //Change styles of the Local button to not selected
     setClassButtonLocal(classes.bigButtonDiv);
@@ -186,15 +186,15 @@ const CheckGif = () => {
 
   //Code to enable the button to upload the images
   /* if (toolState === 22 && imageURL1 !== "" && imageURL2 !== "") {
-                                //console.log("Ready to send"); //DEBUG
-                                dispatch(setStateReady());
-                            }*/
+                                                    //console.log("Ready to send"); //DEBUG
+                                                    dispatch(setStateReady());
+                                                }*/
 
   //Code to enable the button to upload the images
   /* if (toolState === 21 && imageDropped1 !== null && imageDropped2 !== null) {
-                                //console.log("Ready to send"); //DEBUG
-                                dispatch(setStateReady());
-                            }*/
+                                                    //console.log("Ready to send"); //DEBUG
+                                                    dispatch(setStateReady());
+                                                }*/
 
   useEffect(() => {
     if (toolState === 22 && imageURL1 !== "" && imageURL2 !== "") {
@@ -246,23 +246,23 @@ const CheckGif = () => {
     setEventUrl2(imageURL2);
     setEventUrlType2("url original image");
     /*trackEvent(
-                                                      "submission",
-                                                      "checkgif",
-                                                      "url fake image",
-                                                      imageURL1,
-                                                      client_id,
-                                                      uid
-                                                    );
-                                                    trackEvent(
-                                                      "submission",
-                                                      "checkgif",
-                                                      "url original image",
-                                                      imageURL2,
-                                                      client_id,
-                                                      uid
-                                                    );*/
+                                                                                              "submission",
+                                                                                              "checkgif",
+                                                                                              "url fake image",
+                                                                                              imageURL1,
+                                                                                              client_id,
+                                                                                              uid
+                                                                                            );
+                                                                                            trackEvent(
+                                                                                              "submission",
+                                                                                              "checkgif",
+                                                                                              "url original image",
+                                                                                              imageURL2,
+                                                                                              client_id,
+                                                                                              uid
+                                                                                            );*/
     /*submissionEvent(imageURL1);
-                                                        submissionEvent(imageURL2);*/
+                                                                                                submissionEvent(imageURL2);*/
     const files = {
       url_0: imageURL1,
       url_1: imageURL2,
@@ -277,23 +277,23 @@ const CheckGif = () => {
     setEventUrl2(selectedFile2);
     setEventUrlType2("file original image");
     /* trackEvent(
-                                                      "submission",
-                                                      "checkgif",
-                                                      "file fake image",
-                                                      selectedFile1,
-                                                      client_id,
-                                                      uid
-                                                    );
-                                                    trackEvent(
-                                                      "submission",
-                                                      "checkgif",
-                                                      "file original image",
-                                                      selectedFile2,
-                                                      client_id,
-                                                      uid
-                                                    );*/
+                                                                                              "submission",
+                                                                                              "checkgif",
+                                                                                              "file fake image",
+                                                                                              selectedFile1,
+                                                                                              client_id,
+                                                                                              uid
+                                                                                            );
+                                                                                            trackEvent(
+                                                                                              "submission",
+                                                                                              "checkgif",
+                                                                                              "file original image",
+                                                                                              selectedFile2,
+                                                                                              client_id,
+                                                                                              uid
+                                                                                            );*/
     /*submissionEvent(selectedFile1);
-                                                        submissionEvent(selectedFile2);*/
+                                                                                                submissionEvent(selectedFile2);*/
     const files = {
       file1: selectedFile1,
       file2: selectedFile2,
@@ -374,23 +374,13 @@ const CheckGif = () => {
         //=== Load of the images ===
       }
 
-      <Card>
-        <CardHeader
-          title={
-            <Grid2
-              container
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <span>{keyword("cardTitle_source")}</span>
-            </Grid2>
-          }
-          className={classes.headerUploadedImage}
-        />
-
+      <Card variant="outlined">
         <Box m={2}>
-          <Grid2 container spacing={3} alignItems="flex-start">
+          <Grid2 container spacing={4} alignItems="flex-start">
+            <Grid2 size={{ xs: 12 }}>
+              <Typography>{keyword("cardTitle_source")}</Typography>
+            </Grid2>
+
             <Grid2 size={{ xs: 6 }}>
               <Box p={3} className={classButtonURL} onClick={clickURL}>
                 <Grid2
@@ -477,7 +467,7 @@ const CheckGif = () => {
       <Box m={3} />
 
       {toolState >= 2 && (
-        <Card>
+        <Card variant="outlined">
           <CardHeader
             title={
               <Grid2
@@ -488,11 +478,7 @@ const CheckGif = () => {
               >
                 <span>{keyword("title_gifcreation")}</span>
 
-                <Button
-                  variant="contained"
-                  style={{ backgroundColor: "#FFFFFF", color: "black" }}
-                  onClick={newGif}
-                >
+                <Button variant="contained" onClick={newGif}>
                   {keyword("button_new")}
                 </Button>
               </Grid2>
