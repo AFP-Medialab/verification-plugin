@@ -9,6 +9,7 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { green } from "@mui/material/colors";
+import { useColorScheme } from "@mui/material/styles";
 
 import CloseIcon from "@mui/icons-material/Close";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
@@ -59,7 +60,10 @@ const StringFileUploadField = ({
   const [isDragging, setIsDragging] = useState(false);
   const [validDrop, setValidDrop] = useState(false);
 
-  const dropColor = green[50];
+  const { mode, systemMode } = useColorScheme();
+  const resolvedMode = systemMode || mode;
+
+  const dropColor = resolvedMode === "light" ? green[50] : green[900];
 
   const keyword = i18nLoadNamespace("components/Shared/StringFileUploadField");
 

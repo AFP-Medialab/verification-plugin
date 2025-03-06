@@ -287,7 +287,14 @@ const GaugeChartResult = ({
                             </Box>
                           </Stack>
 
-                          <Box p={2} sx={{ backgroundColor: "#FAFAFA" }} mb={2}>
+                          <Box
+                            p={2}
+                            sx={{
+                              backgroundColor:
+                                "var(--mui-palette-background-main)",
+                            }}
+                            mb={2}
+                          >
                             <Typography>
                               {methodNames[item.methodName].description}
                             </Typography>
