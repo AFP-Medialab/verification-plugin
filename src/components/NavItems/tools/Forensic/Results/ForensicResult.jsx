@@ -1032,11 +1032,15 @@ const ForensicResults = (props) => {
                                           >
                                             {isCurrentLanguageLeftToRight ? (
                                               <NavigateBeforeIcon
-                                                style={{ color: "#00000" }}
+                                                sx={{
+                                                  color: "black",
+                                                }}
                                               />
                                             ) : (
                                               <NavigateNextIcon
-                                                style={{ color: "#00000" }}
+                                                sx={{
+                                                  color: "black",
+                                                }}
                                               />
                                             )}
                                           </Fab>
@@ -1070,11 +1074,11 @@ const ForensicResults = (props) => {
                                           >
                                             {isCurrentLanguageLeftToRight ? (
                                               <NavigateNextIcon
-                                                style={{ color: "#00000" }}
+                                                sx={{ color: "black" }}
                                               />
                                             ) : (
                                               <NavigateBeforeIcon
-                                                style={{ color: "#00000" }}
+                                                sx={{ color: "black" }}
                                               />
                                             )}
                                           </Fab>
