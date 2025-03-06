@@ -49,7 +49,8 @@ const GaugeChartResult = ({
 }) => {
   const gaugeChartRef = useRef(null);
 
-  const { systemMode } = useColorScheme();
+  const { mode, systemMode } = useColorScheme();
+  const resolvedMode = systemMode || mode;
 
   const previsionalScore = Math.max(
     ...scores.map((score) => score.predictionScore),
@@ -147,7 +148,7 @@ const GaugeChartResult = ({
                 id={"gauge-chart"}
                 animate={false}
                 nrOfLevels={4}
-                textColor={systemMode === "dark" ? "white" : "black"}
+                textColor={resolvedMode === "dark" ? "white" : "black"}
                 arcsLength={
                   arcsLength
                     ? arcsLength
