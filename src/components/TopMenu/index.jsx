@@ -3,12 +3,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Grid2 from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Toolbar from "@mui/material/Toolbar";
+import { useColorScheme } from "@mui/material/styles";
+
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
+
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 
 import { toolsHome } from "../../constants/tools";
 import { selectTopMenuItem } from "../../redux/reducers/navReducer";
@@ -18,10 +29,10 @@ import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg";
 import LogoVera from "../NavBar/images/SVG/Navbar/vera-logo_black.svg";
 import Languages from "../NavItems/languages/languages";
 import AdvancedTools from "../NavItems/tools/Alltools/AdvancedTools/AdvancedTools";
-import { i18nLoadNamespace } from "../Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 
 const TopMenu = ({ topMenuItems }) => {
+  const { mode, setMode, systemMode } = useColorScheme();
+
   const classes = useMyStyles();
 
   const keyword = i18nLoadNamespace("components/NavBar");
@@ -66,9 +77,43 @@ const TopMenu = ({ topMenuItems }) => {
       .addEventListener("change", (e) => setMatchesSmallWidth(e.matches));
   }, []);
 
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const resolvedMode = systemMode || mode;
+  const icon = {
+    light: (
+      <LightModeIcon
+        fontSize="inherit"
+        sx={{ color: "var(--mui-palette-text-primary)" }}
+      />
+    ),
+    dark: (
+      <DarkModeIcon
+        fontSize="inherit"
+        sx={{ color: "var(--mui-palette-text-primary)" }}
+      />
+    ),
+  }[resolvedMode];
+
+  console.log(resolvedMode);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleMode = (targetMode) => () => {
+    setMode(targetMode);
+    handleClose();
+  };
+
   return (
-    <AppBar position="fixed" width={"100%"}>
-      <Toolbar className={classes.toolbar}>
+    <AppBar position="fixed" sx={{ minWidth: "600px", p: 0, width: "100%" }}>
+      <Toolbar sx={{ width: "100%" }}>
         <Grid2
           container
           direction="row"
@@ -76,11 +121,12 @@ const TopMenu = ({ topMenuItems }) => {
           alignItems="center"
           spacing={{ sm: 1, md: 2 }}
           width="100%"
+          height="100%"
+          flexWrap="nowrap"
         >
-          <Grid2 size={{ xs: 2 }}>
+          <Grid2 size={{ xs: 2 }} height="100%">
             <Stack
               direction="row"
-              justifyContent="flex-start"
               alignItems="center"
               spacing={{ sm: 1, md: 2 }}
             >
@@ -119,7 +165,7 @@ const TopMenu = ({ topMenuItems }) => {
               />
             </Stack>
           </Grid2>
-          <Grid2 size={{ xs: 2, sm: 7 }}>
+          <Grid2 size={{ xs: 1, sm: "grow" }}>
             <Tabs
               value={topMenuItemSelected}
               variant="scrollable"
@@ -158,11 +204,49 @@ const TopMenu = ({ topMenuItems }) => {
               })}
             </Tabs>
           </Grid2>
-          <Grid2 size={{ xs: 2 }}>
-            <AdvancedTools />
-          </Grid2>
-          <Grid2 size={{ xs: 1 }}>
-            <Languages />
+          <Grid2>
+            <Stack
+              direction="row"
+              spacing={{ sx: 2, md: 4 }}
+              justifyContent="flex-end"
+              alignItems="center"
+            >
+              <AdvancedTools />
+              <Languages />
+              <Box>
+                <IconButton size="medium" sx={{ p: 1 }} onClick={handleClick}>
+                  {icon}
+                </IconButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  id="account-menu"
+                  open={open}
+                  onClose={handleClose}
+                  onClick={handleClose}
+                  transformOrigin={{ horizontal: "right", vertical: "top" }}
+                  anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                >
+                  <MenuItem
+                    selected={mode === "system"}
+                    onClick={handleMode("system")}
+                  >
+                    System
+                  </MenuItem>
+                  <MenuItem
+                    selected={mode === "light"}
+                    onClick={handleMode("light")}
+                  >
+                    Light
+                  </MenuItem>
+                  <MenuItem
+                    selected={mode === "dark"}
+                    onClick={handleMode("dark")}
+                  >
+                    Dark
+                  </MenuItem>
+                </Menu>
+              </Box>
+            </Stack>
           </Grid2>
         </Grid2>
       </Toolbar>

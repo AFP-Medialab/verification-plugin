@@ -6,7 +6,7 @@ import { ThemeProvider } from "@mui/material/styles";
 
 import { tools } from "../../constants/tools";
 import { TOP_MENU_ITEMS } from "../../constants/topMenuItems";
-import theme from "../../theme";
+import { theme } from "../../theme";
 import MainContent from "../MainContent";
 import NotificationSnackbar from "../NotificationSnackbar";
 import SideMenu from "../SideMenu";

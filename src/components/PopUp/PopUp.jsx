@@ -6,16 +6,16 @@ import Button from "@mui/material/Button";
 import Grid2 from "@mui/material/Grid2";
 import { ThemeProvider } from "@mui/material/styles";
 
+import { getSupportedBrowserLanguage } from "@Shared/Languages/getSupportedBrowserLanguage";
+import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { ROLES } from "constants/roles";
 
 import { changeLanguage } from "../../redux/reducers/languageReducer";
-import theme from "../../theme";
+import { theme } from "../../theme";
 import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg?url";
 import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg?url";
 import LogoVera from "../NavBar/images/SVG/Navbar/vera-logo_black.svg?url";
-import { getSupportedBrowserLanguage } from "../Shared/Languages/getSupportedBrowserLanguage";
-import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 
 const navigator = window.browser ? window.browser : window.chrome;
 
