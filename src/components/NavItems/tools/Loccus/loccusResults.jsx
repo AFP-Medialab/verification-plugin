@@ -77,7 +77,8 @@ const LoccusResults = ({
     THRESHOLD_3: 60,
   };
 
-  const { systemMode } = useColorScheme();
+  const { systemMode, mode } = useColorScheme();
+  const resolvedMode = systemMode || mode;
 
   /**
    * Reformats a duration to prevent modulo operations done by dayjs when formatting duration values
@@ -393,7 +394,9 @@ const LoccusResults = ({
                           id={"gauge-chart"}
                           animate={false}
                           nrOfLevels={4}
-                          textColor={systemMode === "dark" ? "white" : "black"}
+                          textColor={
+                            resolvedMode === "dark" ? "white" : "black"
+                          }
                           arcsLength={[0.1, 0.2, 0.3, 0.4]}
                           percent={voiceCloningScore / 100}
                           style={{ width: 250 }}
