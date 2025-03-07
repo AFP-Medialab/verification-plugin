@@ -493,9 +493,6 @@ const LoccusResults = ({
                                 id={"gauge-chart-2"}
                                 animate={false}
                                 nrOfLevels={4}
-                                textColor={
-                                  systemMode === "dark" ? "white" : "black"
-                                }
                                 arcsLength={[0.1, 0.2, 0.3, 0.4]}
                                 percent={voiceRecordingScore / 100}
                                 style={{ width: 250 }}
