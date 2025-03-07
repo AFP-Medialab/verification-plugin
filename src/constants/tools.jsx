@@ -573,7 +573,7 @@ const about = new Tool(
   "about",
   TOOL_GROUPS.MORE,
   <About />,
-  null,
+  <Footer type={FOOTER_TYPES.AFP} />,
 );
 
 const c2paData = new Tool(

@@ -31,10 +31,6 @@ const Geolocation = () => {
   );
   const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
   const dispatch = useDispatch();
-  const cleanup = () => {
-    dispatch(resetGeolocation());
-    setInput("");
-  };
 
   const result = useSelector((state) => state.geolocation.result);
   const urlImage = useSelector((state) => state.geolocation.urlImage);
