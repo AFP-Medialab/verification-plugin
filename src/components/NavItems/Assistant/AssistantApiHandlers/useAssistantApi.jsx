@@ -26,7 +26,7 @@ export default function assistantApiCalls() {
   const callChatbot = async (userInput, email, archiveURL) => {
     let chatbotResponse;
     try {
-      chatbotResponse = await axios.post(chatbotEndpoint + "chat/", {
+      chatbotResponse = await axios.post(assistantEndpoint + "gcloud/chatbot", {
         message: userInput,
         email: email,
         archiveURL: archiveURL,
@@ -38,7 +38,7 @@ export default function assistantApiCalls() {
     if (chatbotResponse.data.status === "success") {
       return chatbotResponse.data;
     } else {
-      console.log("Chatbot error:", scrapeResult);
+      console.log("Chatbot error:", chatbotResponse);
       throw new Error("assistant_error_server_error");
     }
   };
