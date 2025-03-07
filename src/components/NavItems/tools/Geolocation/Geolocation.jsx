@@ -3,19 +3,26 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import Grid2 from "@mui/material/Grid2";
 import LinearProgress from "@mui/material/LinearProgress";
-import TextField from "@mui/material/TextField";
+import Stack from "@mui/material/Stack";
 
 import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
+import StringFileUploadField from "@Shared/StringFileUploadField";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import { imageGeolocation } from "../../../../constants/tools";
-import { resetGeolocation } from "../../../../redux/reducers/tools/geolocationReducer";
+import {
+  resetGeolocation,
+  setGeolocationLoading,
+  setGeolocationResult,
+} from "../../../../redux/reducers/tools/geolocationReducer";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import useGeolocate from "./Hooks/useGeolocate";
+import {
+  geolocateLocalFile,
+  handleError,
+  useGeolocate,
+} from "./Hooks/useGeolocate";
 import GeolocationResults from "./Results/GeolocationResults";
 
 const Geolocation = () => {
@@ -36,6 +43,7 @@ const Geolocation = () => {
   const isLoading = useSelector((state) => state.geolocation.loading);
   const [processUrl, setProcessUrl] = useState(false);
   const [input, setInput] = useState(urlImage ? urlImage : "");
+  const [imageFile, setImageFile] = useState(null);
 
   const submitUrl = () => {
     setProcessUrl(true);
@@ -43,70 +51,68 @@ const Geolocation = () => {
 
   useGeolocate(input, processUrl, keyword);
 
+  const handleSubmit = async () => {
+    dispatch(setGeolocationLoading(true));
+    if (input) {
+      submitUrl();
+    } else if (imageFile) {
+      try {
+        const prediction = (await geolocateLocalFile(imageFile)).predictions;
+        dispatch(
+          setGeolocationResult({
+            urlImage: URL.createObjectURL(imageFile),
+            result: prediction,
+            loading: false,
+          }),
+        );
+      } catch (error) {
+        handleError(error, keyword, dispatch);
+        dispatch(setGeolocationLoading(false));
+      }
+    }
+  };
+
+  const handleClose = () => {
+    setImageFile(null);
+  };
+
   return (
-    <div>
-      <HeaderTool
-        name={keywordAllTools("navbar_geolocation")}
-        description={keywordAllTools("navbar_geolocation_description")}
-        icon={
-          <imageGeolocation.icon sx={{ fill: "#00926c", fontSize: "40px" }} />
-        }
-      />
-
-      <Alert severity="warning">{keywordWarning("warning_beta")}</Alert>
-
-      <Box m={3} />
-
-      <Card variant="outlined">
-        <form className={classes.root2}>
-          <Grid2 container direction="row" spacing={3} alignItems="center">
-            <Grid2 size="grow">
-              <TextField
-                id="standard-full-width"
-                label={keyword("geo_link")}
-                placeholder={keyword("geo_paste")}
-                fullWidth
-                disabled={isLoading}
-                value={input}
-                variant="outlined"
-                onChange={(e) => setInput(e.target.value)}
+    <Box>
+      <Stack direction={"column"} spacing={4}>
+        <HeaderTool
+          name={keywordAllTools("navbar_geolocation")}
+          description={keywordAllTools("navbar_geolocation_description")}
+          icon={
+            <imageGeolocation.icon sx={{ fill: "#00926c", fontSize: "40px" }} />
+          }
+        />{" "}
+        <Alert severity="warning">{keywordWarning("warning_beta")}</Alert>
+        <Card variant="outlined">
+          <Box p={4}>
+            <form>
+              <StringFileUploadField
+                labelKeyword={keyword("geo_link")}
+                placeholderKeyword={keyword("geo_paste")}
+                submitButtonKeyword={keyword("geo_submit")}
+                localFileKeyword={keyword("button_localfile")}
+                urlInput={input}
+                setUrlInput={setInput}
+                fileInput={imageFile}
+                setFileInput={setImageFile}
+                handleSubmit={handleSubmit}
+                fileInputTypesAccepted={"image/*"}
+                handleCloseSelectedFile={handleClose}
+                isParentLoading={isLoading}
               />
-            </Grid2>
-            <Grid2>
-              {!result ? (
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  disabled={isLoading}
-                  onClick={submitUrl}
-                >
-                  {keyword("geo_submit")}
-                </Button>
-              ) : (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    cleanup();
-                  }}
-                >
-                  {keyword("button_remove")}
-                </Button>
-              )}
-            </Grid2>
-            <Box m={1} />
-          </Grid2>
-        </form>
-        {isLoading && <LinearProgress />}
-      </Card>
-      <Box m={3} />
-
-      {result && !isLoading && (
-        <GeolocationResults result={result} urlImage={urlImage} />
-      )}
-    </div>
+            </form>
+          </Box>
+          {isLoading && <LinearProgress />}
+        </Card>
+        {result && !isLoading && (
+          <GeolocationResults result={result} urlImage={urlImage} />
+        )}
+      </Stack>
+    </Box>
   );
 };
 export default Geolocation;
