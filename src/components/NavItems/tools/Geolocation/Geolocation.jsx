@@ -7,7 +7,6 @@ import Card from "@mui/material/Card";
 import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 
-import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "@Shared/StringFileUploadField";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
@@ -26,7 +25,6 @@ import {
 import GeolocationResults from "./Results/GeolocationResults";
 
 const Geolocation = () => {
-  const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Geolocalizer");
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
