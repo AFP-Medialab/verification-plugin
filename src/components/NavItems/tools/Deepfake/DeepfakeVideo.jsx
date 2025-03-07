@@ -97,7 +97,9 @@ const Deepfake = () => {
           }
         />
 
-        <Alert severity="warning">{keywordWarning("warning_beta")}</Alert>
+        <Alert severity="warning">
+          {keywordWarning("warning_beta_deepfake_video")}
+        </Alert>
 
         <Card variant="outlined">
           <Box p={4}>
