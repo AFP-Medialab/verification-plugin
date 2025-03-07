@@ -140,6 +140,12 @@ const LoccusResults = ({
         time: {
           unit: "second",
         },
+        grid: {
+          color:
+            resolvedMode === "dark"
+              ? "rgba(200, 200, 200, 0.1)"
+              : "rgba(0, 0, 0, 0.1)",
+        },
 
         ticks: {
           callback: function (val) {
@@ -158,6 +164,12 @@ const LoccusResults = ({
           },
         },
         position: isCurrentLanguageLeftToRight ? "left" : "right",
+        grid: {
+          color:
+            resolvedMode === "dark"
+              ? "rgba(200, 200, 200, 0.1)"
+              : "rgba(0, 0, 0, 0.1)",
+        },
       },
     },
   };
