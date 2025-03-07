@@ -72,6 +72,8 @@ const Geolocation = () => {
 
   const handleClose = () => {
     setImageFile(null);
+    dispatch(resetGeolocation());
+    setInput("");
   };
 
   return (
