@@ -20,12 +20,32 @@ import {
 } from "base64-js";
 import { downloadZip, makeZip } from "client-zip";
 import { sha256 } from "hash-wasm";
-import { CDXIndexer, WARCRecord, WARCSerializer } from "warcio";
+import {
+  CDXAndRecordIndexer,
+  CDXIndexer,
+  WARCRecord,
+  WARCSerializer,
+} from "warcio";
 
 const SinglefileConverter = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
 
   const [fileInput, setFileInput] = useState(/** @type {File?} */ null);
+  const [error, setError] = useState("");
+
+  const domainCertSign = async (hash) => {
+    const resp = await fetch(process.env.REACT_APP_WACZ_SIGNING + hash, {
+      headers: { "x-api-key": "123456789" },
+    });
+    if (resp.status === 200) {
+      const respJson = await resp.json();
+      console.log(respJson);
+      return respJson;
+    } else {
+      setError("Error signing WACZ, please try again");
+      throw new Exception();
+    }
+  };
 
   const sign = async (hash) => {
     //implementation derived from webrecorder's awp-sw library
@@ -65,10 +85,10 @@ const SinglefileConverter = () => {
     };
   };
 
-  const makeWacz = async (warcInput, cdxInput, pageInfo) => {
+  const makeWacz = async (warcInput, cdxInput, pageInfo, recordDigest) => {
     const cdxInfo = JSON.parse(cdxInput);
 
-    const index_input = `${cdxInfo.urlkey} ${cdxInfo.timestamp} {\"url\":\"${cdxInfo.url}\",\"digest\":\"sha256:${cdxInfo.digest}\",\"mime\":\"text/html\",\"offset\":${cdxInfo.offset},\"length\":${cdxInfo.length},\"status\":200,\"filename\":\"data.warc\"}`;
+    const index_input = `${cdxInfo.urlkey} ${cdxInfo.timestamp} {\"url\":\"${cdxInfo.url}\",\"digest\":\"sha256:${cdxInfo.digest}\",\"mime\":\"text/html\",\"offset\":${cdxInfo.offset},\"length\":${cdxInfo.length},\"recordDigest\":\"sha256:${recordDigest}\",\"status\":200,\"filename\":\"data.warc\"}`;
 
     const index_arch = {
       name: "indexes/index.cdx",
@@ -78,7 +98,7 @@ const SinglefileConverter = () => {
 
     const index_hash = await sha256(index_input);
 
-    const pages_input = `{\"format\":\"json-pages-1.0\",\"id\":\"pages\",\"title\":\"All Pages\",\"hasText\":true}\n{\"url\":\"${cdxInfo.url}\", \"size\":${cdxInfo.length}, \"ts\":\"${new Date(Date.parse(pageInfo.date)).toISOString()}\", \"title\":\"${pageInfo.title}\", \"text\":\"\"}`;
+    const pages_input = `{\"format\":\"json-pages-1.0\",\"id\":\"pages\",\"title\":\"All Pages\"}\n{\"url\":\"${cdxInfo.url}\", \"id\":\"12345\", \"size\":${cdxInfo.length}, \"ts\":\"${new Date(Date.parse(pageInfo.date)).toISOString()}\", \"title\":\"${pageInfo.title}\"}`;
 
     const pages_arch = {
       name: "pages/pages.jsonl",
@@ -136,43 +156,63 @@ const SinglefileConverter = () => {
     );
 
     const signature = await sign(datapackage_hash);
-
-    const datapackagedigest_input = {
-      path: "datapackage.json",
-      hash: `sha256:${datapackage_hash}`,
-      signedData: {
+    try {
+      const tstsign = await domainCertSign(datapackage_hash);
+      const signedData = {
         hash: `sha256:${datapackage_hash}`,
-        signature: signature.signature,
-        publicKey: signature.publicKey,
         created: new Date(Date.now()).toISOString(),
         software:
           "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
-      },
-    };
-    const datapackagedigest_arch = {
-      name: "datapackage-digest.json",
-      lastModified: new Date(),
-      input: JSON.stringify(datapackagedigest_input, null, 2),
-    };
+        signature: tstsign.signature,
+        domain: "signature.verification-plugin.eu",
+        domainCert: tstsign.domainCert,
+        timeSignature: tstsign.encodedTST,
+        timestampCert: tstsign.certs.join(),
+        version: "0.1.0",
+      };
 
-    const zip = await downloadZip([
-      datapackage_arch,
-      datapackagedigest_arch,
-      index_arch,
-      pages_arch,
-      archive_arch,
-    ])
-      .blob()
-      .then((res) => {
-        const blobUrl = URL.createObjectURL(res);
-        const a = document.createElement("a");
-        a.href = blobUrl;
-        a.download = `singlefile2wacz.wacz`;
-        a.click();
-      });
+      const datapackagedigest_input = {
+        path: "datapackage.json",
+        hash: `sha256:${datapackage_hash}`,
+        signedData: signedData,
+        // signedData: {
+        //   hash: `sha256:${datapackage_hash}`,
+        //   signature: signature.signature,
+        //   publicKey: signature.publicKey,
+        //   created: new Date(Date.now()).toISOString(),
+        //   software:
+        //     "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
+        // },
+      };
+
+      const datapackagedigest_arch = {
+        name: "datapackage-digest.json",
+        lastModified: new Date(),
+        input: JSON.stringify(datapackagedigest_input, null, 2),
+      };
+
+      const zip = await downloadZip([
+        datapackage_arch,
+        datapackagedigest_arch,
+        index_arch,
+        pages_arch,
+        archive_arch,
+      ])
+        .blob()
+        .then((res) => {
+          const blobUrl = URL.createObjectURL(res);
+          const a = document.createElement("a");
+          a.href = blobUrl;
+          a.download = `singlefile2wacz.wacz`;
+          a.click();
+        });
+    } catch (error) {
+      setError("Error signing WACZ, please try again");
+    }
   };
 
   const singlefile2wacz = async (file2convert) => {
+    setError("");
     const reader = new FileReader();
     reader.onload = async () => {
       const pageIntro = reader.result.slice(0, 500).split("\n"); //TODO: find better way of getting to the saved by singlefile comment
@@ -199,6 +239,7 @@ const SinglefileConverter = () => {
           let tmp = new Uint8Array(res[0].byteLength + res[1].byteLength);
           tmp.set(new Uint8Array(res[0]), 0);
           tmp.set(new Uint8Array(res[1]), res[0].byteLength);
+          const recordDigest = await sha256(res[1]);
           const blob = new Blob([tmp.buffer], {
             type: "application/octet-stream",
           });
@@ -211,7 +252,7 @@ const SinglefileConverter = () => {
             {
               write(chunk) {
                 return new Promise((resolve, reject) => {
-                  makeWacz(blob, chunk, pageInfo);
+                  makeWacz(blob, chunk, pageInfo, recordDigest);
                   resolve();
                 });
               },
@@ -223,9 +264,27 @@ const SinglefileConverter = () => {
             queuingStrategy,
           );
 
-          const indexer = new CDXIndexer();
+          const indexer = new CDXAndRecordIndexer();
 
-          await indexer.writeAll(
+          const files = [
+            { reader: blob.stream(1024 * 128), filename: "data.warc" },
+          ];
+
+          for await (const { cdx, record, reqRecord } of indexer.iterIndex(
+            files,
+          )) {
+            if (cdx.mime === "text/html") {
+              const text = await record.contentText();
+              console.log(`${cdx.url} is an HTML page of size: ${text.length}`);
+              console.log(cdx);
+              console.log(record);
+              console.log(reqRecord);
+            }
+          }
+
+          const realIndexer = new CDXIndexer();
+
+          await realIndexer.writeAll(
             [{ filename: "data.warc", reader: blob.stream(1024 * 128) }],
             writableStream.getWriter(),
           ); //Buffer size chosen based on warcio implementation
@@ -276,48 +335,51 @@ const SinglefileConverter = () => {
   };
 
   return (
-    <ButtonGroup variant="outlined">
-      <Button startIcon={<FolderOpenIcon />} sx={{ textTransform: "none" }}>
-        <label htmlFor="file">
-          {fileInput ? fileInput.name : "Upload the SingleFile page"}
-          {/* {fileInput ? fileInput.name : keyword("archive_wacz_accordion")} */}
-        </label>
-        <input
-          id="file"
-          name="file"
-          type="file"
-          accept={".html"}
-          hidden={true}
-          onChange={(e) => {
-            e.preventDefault();
-            setFileInput(e.target.files[0]);
-            e.target.value = null;
-          }}
-        />
-      </Button>
-      {fileInput instanceof Blob && (
-        <Stack>
-          <Button
-            size="small"
-            aria-label="remove selected file"
-            onClick={(e) => {
+    <div>
+      <ButtonGroup variant="outlined">
+        <Button startIcon={<FolderOpenIcon />} sx={{ textTransform: "none" }}>
+          <label htmlFor="file">
+            {fileInput ? fileInput.name : "Upload the SingleFile page"}
+            {/* {fileInput ? fileInput.name : keyword("archive_wacz_accordion")} */}
+          </label>
+          <input
+            id="file"
+            name="file"
+            type="file"
+            accept={".html"}
+            hidden={true}
+            onChange={(e) => {
               e.preventDefault();
-              setFileInput(null);
+              setFileInput(e.target.files[0]);
+              e.target.value = null;
             }}
-          >
-            <CloseIcon fontSize="small" />
-          </Button>
-          <Button
-            onClick={(e) => {
-              e.preventDefault();
-              singlefile2wacz(fileInput);
-            }}
-          >
-            <label>Convert {/*{keyword("archive_wacz_accordion")} */}</label>
-          </Button>
-        </Stack>
-      )}
-    </ButtonGroup>
+          />
+        </Button>
+        {fileInput instanceof Blob && (
+          <Stack>
+            <Button
+              size="small"
+              aria-label="remove selected file"
+              onClick={(e) => {
+                e.preventDefault();
+                setFileInput(null);
+              }}
+            >
+              <CloseIcon fontSize="small" />
+            </Button>
+            <Button
+              onClick={(e) => {
+                e.preventDefault();
+                singlefile2wacz(fileInput);
+              }}
+            >
+              <label>Convert {/*{keyword("archive_wacz_accordion")} */}</label>
+            </Button>
+          </Stack>
+        )}
+      </ButtonGroup>
+      <Typography color={"error"}>{error}</Typography>
+    </div>
   );
 };
 

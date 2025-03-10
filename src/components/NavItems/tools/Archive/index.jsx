@@ -225,7 +225,6 @@ const Archive = () => {
     setMediaUrl("");
 
     if (fileToUpload) {
-      console.log("file to upload found");
       await archiveFileToWbm.mutate();
     } else {
       const urlToFetch = url && urlInput && urlInput !== url ? urlInput : url;
