@@ -27,18 +27,23 @@ import {
   WARCSerializer,
 } from "warcio";
 
+import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
+
 const SinglefileConverter = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
 
   const [fileInput, setFileInput] = useState(/** @type {File?} */ null);
   const [error, setError] = useState("");
+  const authenticatedRequest = useAuthenticatedRequest();
 
   const domainCertSign = async (hash) => {
-    const resp = await fetch(process.env.REACT_APP_WACZ_SIGNING + hash, {
-      headers: { "x-api-key": "123456789" },
+    const resp = await authenticatedRequest({
+      url: process.env.REACT_APP_WACZ_SIGNING + hash,
+      method: "get",
     });
+    // console.log(resp)
     if (resp.status === 200) {
-      const respJson = await resp.json();
+      const respJson = resp.data;
       console.log(respJson);
       return respJson;
     } else {
@@ -155,9 +160,14 @@ const SinglefileConverter = () => {
       JSON.stringify(datapackage_input, null, 2),
     );
 
-    const signature = await sign(datapackage_hash);
+    // For anonymous signing
+    // const signature = await sign(datapackage_hash);
     try {
       const tstsign = await domainCertSign(datapackage_hash);
+      const cleanCert = tstsign.domainCert.replace("\n", "");
+      // console.log(cleanCert)
+      const cleantsCerts = tstsign.certs.join().replace("\n", "");
+      // console.log(cleantsCerts)
       const signedData = {
         hash: `sha256:${datapackage_hash}`,
         created: new Date(Date.now()).toISOString(),
@@ -165,9 +175,9 @@ const SinglefileConverter = () => {
           "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
         signature: tstsign.signature,
         domain: "signature.verification-plugin.eu",
-        domainCert: tstsign.domainCert,
+        domainCert: cleanCert,
         timeSignature: tstsign.encodedTST,
-        timestampCert: tstsign.certs.join(),
+        timestampCert: cleantsCerts,
         version: "0.1.0",
       };
 
@@ -208,6 +218,7 @@ const SinglefileConverter = () => {
         });
     } catch (error) {
       setError("Error signing WACZ, please try again");
+      console.error(error);
     }
   };
 
@@ -263,24 +274,6 @@ const SinglefileConverter = () => {
             },
             queuingStrategy,
           );
-
-          const indexer = new CDXAndRecordIndexer();
-
-          const files = [
-            { reader: blob.stream(1024 * 128), filename: "data.warc" },
-          ];
-
-          for await (const { cdx, record, reqRecord } of indexer.iterIndex(
-            files,
-          )) {
-            if (cdx.mime === "text/html") {
-              const text = await record.contentText();
-              console.log(`${cdx.url} is an HTML page of size: ${text.length}`);
-              console.log(cdx);
-              console.log(record);
-              console.log(reqRecord);
-            }
-          }
 
           const realIndexer = new CDXIndexer();
 
