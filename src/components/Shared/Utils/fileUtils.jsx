@@ -1,4 +1,10 @@
 import {
+  fileTypeFromBlob,
+  fileTypeFromBuffer,
+  fileTypeFromStream,
+} from "file-type";
+
+import {
   MAX_AUDIO_FILE_SIZE,
   MAX_IMAGE_FILE_SIZE,
   MAX_VIDEO_FILE_SIZE,
@@ -9,6 +15,44 @@ export const FILE_TYPES = {
   image: "image",
   audio: "audio",
   video: "video",
+};
+
+/**
+ * Returns the file type by fetching the remote content
+ * @param url {string} The URL string
+ * @returns {Promise<{readonly ext: string, readonly mime: string}|FileTypeResult|undefined|Error>}
+ */
+export const getFileTypeFromUrl = async (url) => {
+  try {
+    const response = await fetch(url);
+
+    return await fileTypeFromStream(response.body);
+  } catch (error) {
+    console.error(error);
+    throw new Error(`Could not get file type for ${url}`);
+  }
+};
+
+/**
+ * Returns the file type for a Blob, Buffer
+ * @param file {Blob | Buffer}
+ * @returns {Promise<{readonly ext: string, readonly mime: string}|FileTypeResult|undefined|Error>}
+ */
+export const getFileTypeFromFileObject = async (file) => {
+  try {
+    let fileType;
+
+    if (file instanceof Blob) fileType = await fileTypeFromBlob(file);
+    else if (file instanceof Buffer) fileType = fileTypeFromBuffer(file);
+    else
+      throw new Error(
+        `Error: the file type is not supported or file path is invalid ${file}`,
+      );
+
+    return fileType;
+  } catch (error) {
+    return new Error(`Error: could not get file type for ${file}: ${error}`);
+  }
 };
 
 /**

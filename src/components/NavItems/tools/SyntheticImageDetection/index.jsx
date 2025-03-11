@@ -41,7 +41,6 @@ const SyntheticImageDetection = () => {
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const urlParam = urlParams.get("url");
-
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace(
     "components/NavItems/tools/SyntheticImageDetection",
@@ -386,7 +385,7 @@ const SyntheticImageDetection = () => {
         </Alert>
       </Stack>
 
-      <Card>
+      <Card variant="outlined">
         <CardHeader
           title="Chatbot testing: Delete me before integration"
           className={classes.headerUploadedImage}
@@ -412,7 +411,7 @@ const SyntheticImageDetection = () => {
           className={classes.headerUploadedImage}
         />
 
-        <Box p={3}>
+        <Box p={4}>
           <Stack direction="column" spacing={2}>
             <form>
               <StringFileUploadField

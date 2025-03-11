@@ -4,11 +4,12 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import Tooltip from "@mui/material/Tooltip";
 import { alpha, styled } from "@mui/material/styles";
 
 import { Archive, FileUpload, MoreVert, Replay } from "@mui/icons-material";
 
-import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -30,7 +31,7 @@ const StyledMenu = styled((props) => (
     minWidth: 180,
     color: "rgb(55, 65, 81)",
     boxShadow:
-      "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
+      "var(--mui-palette-background-paper) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
     "& .MuiMenu-list": {
       padding: "4px 0",
     },
@@ -74,16 +75,18 @@ export default function CustomizedMenus({
 
   return (
     <div>
-      <IconButton
-        id="customized-button"
-        aria-controls={open ? "customized-menu" : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? "true" : undefined}
-        variant="contained"
-        onClick={handleClick}
-      >
-        <MoreVert />
-      </IconButton>
+      <Tooltip title={keyword("menu_tooltip")}>
+        <IconButton
+          id="customized-button"
+          aria-controls={open ? "customized-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+          variant="contained"
+          onClick={handleClick}
+        >
+          <MoreVert />
+        </IconButton>
+      </Tooltip>
 
       <StyledMenu
         id="customized-menu"

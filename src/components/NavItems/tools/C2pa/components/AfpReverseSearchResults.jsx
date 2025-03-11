@@ -1,34 +1,20 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React from "react";
 
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Grid2 from "@mui/material/Grid2";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
-import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 
-import { TabContext, TabList, TabPanel } from "@mui/lab";
-
-import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
-import { prettyCase } from "../../../../Shared/Utils/stringUtils";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import MetadataList from "@Shared/MetadataList";
 
 const AfpReverseSearchResults = ({
   thumbnailImage,
   thumbnailImageCaption,
   imageMetadata,
 }) => {
-  const role = useSelector((state) => state.userSession.user.roles);
   const keyword = i18nLoadNamespace("components/NavItems/tools/C2pa");
-
-  const [tabValue, setTabValue] = useState("exif");
-
-  const handleTabChange = (event, newValue) => {
-    setTabValue(newValue);
-  };
 
   return (
     <Stack direction="row" spacing={4}>
@@ -77,50 +63,7 @@ const AfpReverseSearchResults = ({
               {keyword("afp_produced_image_info")}
             </Alert>
 
-            {imageMetadata && (
-              <>
-                <Box sx={{ width: "100%", typography: "body1" }}>
-                  <TabContext value={tabValue}>
-                    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                      <TabList
-                        variant="scrollable"
-                        scrollButtons="auto"
-                        onChange={handleTabChange}
-                        aria-label="Image metadata tabs"
-                      >
-                        {Object.keys(imageMetadata)
-                          .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
-                          .map((item, index) => {
-                            return <Tab label={item} value={item} key={item} />;
-                          })}
-                      </TabList>
-                    </Box>
-
-                    {Object.keys(imageMetadata).map((metadataGroup, index) => {
-                      return (
-                        <TabPanel value={metadataGroup} key={index}>
-                          <List>
-                            {Object.entries(imageMetadata[metadataGroup]).map(
-                              ([key, value]) => {
-                                // we may need to improve the value processing later on for a prettier print
-                                return (
-                                  <ListItem key={key} disablePadding>
-                                    <ListItemText
-                                      primary={prettyCase(key)}
-                                      secondary={<>{value.toString()}</>}
-                                    />
-                                  </ListItem>
-                                );
-                              },
-                            )}
-                          </List>
-                        </TabPanel>
-                      );
-                    })}
-                  </TabContext>
-                </Box>
-              </>
-            )}
+            {imageMetadata && <MetadataList metadata={imageMetadata} />}
           </Grid2>
         </Grid2>
       </Box>

@@ -485,6 +485,17 @@ const SyntheticImageDetectionResults = ({
                           )}
                     </Typography>
 
+                    <Accordion defaultExpanded onChange={handleChatbotChange}>
+                      <AccordionSummary expandIcon={<ExpandMore />}>
+                        <Typography>{keyword(chatbotPanelMessage)}</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Box sx={{ mr: 2 }}>
+                          <ChatbotInterface />
+                        </Box>
+                      </AccordionDetails>
+                    </Accordion>
+
                     {filteredNddRows && filteredNddRows.length > 0 && (
                       <Typography
                         variant="h5"
