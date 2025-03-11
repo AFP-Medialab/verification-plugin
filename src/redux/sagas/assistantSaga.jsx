@@ -606,9 +606,6 @@ function* handleAssistantChatbotCall(action) {
     // if (chatbotResponse.userMessageClasses.includes("IMPROVEMENT")) {
     //   sendToSlack(email, message + suffix, "IMPROVEMENT", archiveURL);
     // }
-    if (chatbotResponse.userMessageClasses.includes("EXPLAIN")) {
-      console.log("TODO: Hook up to LLM");
-    }
 
     yield put(addChatbotMessage(chatbotResponse.message, 0));
     yield put(setAssistantLoading(false));
