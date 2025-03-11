@@ -151,16 +151,18 @@ const Keyframes = () => {
                           value={input}
                           variant="outlined"
                           onChange={(e) => setInput(e.target.value)}
-                          InputProps={{
-                            endAdornment: input ? (
-                              <IconButton
-                                size="small"
-                                onClick={() => setInput("")}
-                                disabled={isLoading || isLoadingSimilarity}
-                              >
-                                <ClearIcon />
-                              </IconButton>
-                            ) : undefined,
+                          slotProps={{
+                            input: {
+                              endAdornment: input ? (
+                                <IconButton
+                                  size="small"
+                                  onClick={() => setInput("")}
+                                  disabled={isLoading || isLoadingSimilarity}
+                                >
+                                  <ClearIcon />
+                                </IconButton>
+                              ) : undefined,
+                            },
                           }}
                         />
                       </Grid2>

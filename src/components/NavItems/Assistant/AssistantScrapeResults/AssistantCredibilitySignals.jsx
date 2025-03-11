@@ -76,7 +76,7 @@ const AssistantCredSignals = () => {
   const StyledAccordion = styled(Accordion)(({ theme }) => ({
     ".Mui-disabled": {
       opacity: "1 !important",
-      background: "white",
+      background: "var(--mui-palette-background-paper)",
     },
   }));
 

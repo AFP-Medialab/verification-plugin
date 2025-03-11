@@ -455,7 +455,21 @@ function* handlePersuasionCall(action) {
   }
 }
 
-//const SERVER_TIMEOUT_LIMIT = 6000;
+const SERVER_TIMEOUT_LIMIT = 6000;
+
+const getTextChunks = (text) => {
+  // todo - split around a full stop after SERVER_TIMEOUT_LIMIT
+  let textChunks = [];
+  if (text.length > SERVER_TIMEOUT_LIMIT) {
+    for (let i = 0; i < text.length; i += SERVER_TIMEOUT_LIMIT) {
+      textChunks.push(text.substring(i, i + SERVER_TIMEOUT_LIMIT));
+    }
+  } else {
+    // single chunk as text less than limit
+    textChunks.push(text);
+  }
+  return textChunks;
+};
 
 function* handleSubjectivityCall(action) {
   if (action.type === "CLEAN_STATE") return;
@@ -466,11 +480,79 @@ function* handleSubjectivityCall(action) {
     if (text) {
       yield put(setSubjectivityDetails(null, true, false, false));
 
-      const result = yield call(
-        assistantApi.callSubjectivityService,
-        text,
-        //text.substring(0, SERVER_TIMEOUT_LIMIT),
-      );
+      // collect chunks of text
+      const textChunks = getTextChunks(text);
+
+      // collect results for each chunk
+      let result = {};
+      let step = 0;
+      for (let i = 0; i < textChunks.length; i += 1) {
+        console.log(
+          "Subjectivity service: sending text chunk",
+          i + 1,
+          "/",
+          textChunks.length,
+        );
+        const textChunkResult = yield call(
+          assistantApi.callSubjectivityService,
+          textChunks[i],
+        );
+
+        // merge results
+        if (i == 0) {
+          result = textChunkResult;
+        } else {
+          // add step to sentences indices and Important_Sentence indices
+          step = i * SERVER_TIMEOUT_LIMIT;
+
+          // merge Important_Sentence if any exist
+          let stepImportantSentences = [];
+          for (
+            let j = 0;
+            j < textChunkResult.entities
+              ? textChunkResult.entities.Important_Sentence.length
+              : null;
+            j += 1
+          ) {
+            let importantSentence =
+              textChunkResult.entities.Important_Sentence[j];
+
+            stepImportantSentences.push({
+              indices: [
+                importantSentence.indices[0] + step,
+                importantSentence.indices[1] + step,
+              ],
+              score: importantSentence.score,
+            });
+          }
+
+          // merge sentences
+          let stepSentences = [];
+          for (let k = 0; k < textChunkResult.sentences.length; k += 1) {
+            let sentence = textChunkResult.sentences[k];
+
+            stepSentences.push({
+              indices: [sentence.indices[0] + step, sentence.indices[1] + step],
+              score: sentence.score,
+              label: sentence.label,
+              sentence: sentence.sentence,
+            });
+          }
+
+          // update results
+          result = {
+            text: result.text + textChunkResult.text,
+            configs: result.configs,
+            entities: {
+              Important_Sentence: result.entities.Important_Sentence.concat(
+                stepImportantSentences,
+              ),
+              Subjective: result.entities.Subjective,
+            },
+            sentences: result.sentences.concat(stepSentences),
+          };
+        }
+      }
 
       yield put(setSubjectivityDetails(result, false, true, false));
     }

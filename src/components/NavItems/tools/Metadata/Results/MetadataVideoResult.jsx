@@ -20,7 +20,6 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 
 import { cleanMetadataState } from "../../../../../redux/reducers/tools/metadataReducer";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 
 const MetadataVideoResult = (props) => {
   const classes = useMyStyles();
@@ -348,7 +347,7 @@ const MetadataVideoResult = (props) => {
 
   const dispatch = useDispatch();
   return (
-    <Card>
+    <Card variant="outlined">
       <CardHeader
         title={keyword("cardheader_results")}
         className={classes.headerUploadedImage}
@@ -360,13 +359,11 @@ const MetadataVideoResult = (props) => {
               dispatch(cleanMetadataState());
             }}
           >
-            <CloseIcon sx={{ color: "white" }} />
+            <CloseIcon />
           </IconButton>
         }
       />
       <div className={classes.root2}>
-        <Box m={1} />
-        <OnClickInfo keyword={"metadata_tip"} />
         <Box m={3} />
         <Typography variant={"h5"}>{keyword("metadata_title")}</Typography>
         <div>

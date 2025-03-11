@@ -1,11 +1,13 @@
 import { useEffect } from "react";
-import * as mp4box from "mp4box";
 import { useDispatch } from "react-redux";
-import {
-  setMetadadaResult,
-  setMetadadaLoading,
-} from "../../../../../redux/reducers/tools/metadataReducer";
+
+import * as mp4box from "mp4box";
 import { setError } from "redux/reducers/errorReducer";
+
+import {
+  setMetadataLoading,
+  setMetadataResult,
+} from "../../../../../redux/reducers/tools/metadataReducer";
 
 const useVideoTreatment = (mediaUrl, keyword) => {
   const dispatch = useDispatch();
@@ -14,21 +16,21 @@ const useVideoTreatment = (mediaUrl, keyword) => {
     const handleError = (error) => {
       if (keyword(error) !== "") dispatch(setError(keyword(error)));
       else dispatch(setError("Unknown error"));
-      dispatch(setMetadadaLoading(false));
+      dispatch(setMetadataLoading(false));
     };
 
     let videoTreatment = () => {
       // let extension = mediaUrl.slice(-3);
 
       /* if (extension !== "mp4" || extension !== "m4v") {
-                handleError("description_limitations")
-            }*/
+                            handleError("description_limitations")
+                        }*/
 
       let video = mp4box.createFile();
 
       video.onReady = (info) => {
         dispatch(
-          setMetadadaResult({
+          setMetadataResult({
             url: mediaUrl,
             result: info,
             notification: false,

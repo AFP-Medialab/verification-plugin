@@ -54,6 +54,7 @@ The Verification plugin is a browser based plugin built with React and Redux.
    REACT_APP_DBKF_SEARCH_API=<dbkf_url>
    REACT_APP_DBKF_SIMILARITY_API=<dbkf_similarity_url>
    REACT_APP_BASEURL=<baseurl>
+   REACT_APP_WRAPPER=<wrapper_url>
    REACT_APP_CAA_FORENSICS_URL=<forensics_url>
    REACT_APP_CAA_ANALYSIS_URL=<analysis_url>
    REACT_APP_CAA_ENVISU4_UTILS_URL=<envisu4_url>
