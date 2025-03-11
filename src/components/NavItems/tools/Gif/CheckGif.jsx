@@ -190,15 +190,15 @@ const CheckGif = () => {
 
   //Code to enable the button to upload the images
   /* if (toolState === 22 && imageURL1 !== "" && imageURL2 !== "") {
-                                                                                        //console.log("Ready to send"); //DEBUG
-                                                                                        dispatch(setStateReady());
-                                                                                    }*/
+                                                                                          //console.log("Ready to send"); //DEBUG
+                                                                                          dispatch(setStateReady());
+                                                                                      }*/
 
   //Code to enable the button to upload the images
   /* if (toolState === 21 && imageDropped1 !== null && imageDropped2 !== null) {
-                                                                                        //console.log("Ready to send"); //DEBUG
-                                                                                        dispatch(setStateReady());
-                                                                                    }*/
+                                                                                          //console.log("Ready to send"); //DEBUG
+                                                                                          dispatch(setStateReady());
+                                                                                      }*/
 
   useEffect(() => {
     if (toolState === 22 && imageURL1 !== "" && imageURL2 !== "") {
@@ -250,23 +250,23 @@ const CheckGif = () => {
     setEventUrl2(imageURL2);
     setEventUrlType2("url original image");
     /*trackEvent(
-                                                                                                                                                                      "submission",
-                                                                                                                                                                      "checkgif",
-                                                                                                                                                                      "url fake image",
-                                                                                                                                                                      imageURL1,
-                                                                                                                                                                      client_id,
-                                                                                                                                                                      uid
-                                                                                                                                                                    );
-                                                                                                                                                                    trackEvent(
-                                                                                                                                                                      "submission",
-                                                                                                                                                                      "checkgif",
-                                                                                                                                                                      "url original image",
-                                                                                                                                                                      imageURL2,
-                                                                                                                                                                      client_id,
-                                                                                                                                                                      uid
-                                                                                                                                                                    );*/
+                                                                                                                                                                          "submission",
+                                                                                                                                                                          "checkgif",
+                                                                                                                                                                          "url fake image",
+                                                                                                                                                                          imageURL1,
+                                                                                                                                                                          client_id,
+                                                                                                                                                                          uid
+                                                                                                                                                                        );
+                                                                                                                                                                        trackEvent(
+                                                                                                                                                                          "submission",
+                                                                                                                                                                          "checkgif",
+                                                                                                                                                                          "url original image",
+                                                                                                                                                                          imageURL2,
+                                                                                                                                                                          client_id,
+                                                                                                                                                                          uid
+                                                                                                                                                                        );*/
     /*submissionEvent(imageURL1);
-                                                                                                                                                                        submissionEvent(imageURL2);*/
+                                                                                                                                                                            submissionEvent(imageURL2);*/
     const files = {
       url_0: imageURL1,
       url_1: imageURL2,
@@ -281,23 +281,23 @@ const CheckGif = () => {
     setEventUrl2(selectedFile2);
     setEventUrlType2("file original image");
     /* trackEvent(
-                                                                                                                                                                      "submission",
-                                                                                                                                                                      "checkgif",
-                                                                                                                                                                      "file fake image",
-                                                                                                                                                                      selectedFile1,
-                                                                                                                                                                      client_id,
-                                                                                                                                                                      uid
-                                                                                                                                                                    );
-                                                                                                                                                                    trackEvent(
-                                                                                                                                                                      "submission",
-                                                                                                                                                                      "checkgif",
-                                                                                                                                                                      "file original image",
-                                                                                                                                                                      selectedFile2,
-                                                                                                                                                                      client_id,
-                                                                                                                                                                      uid
-                                                                                                                                                                    );*/
+                                                                                                                                                                          "submission",
+                                                                                                                                                                          "checkgif",
+                                                                                                                                                                          "file fake image",
+                                                                                                                                                                          selectedFile1,
+                                                                                                                                                                          client_id,
+                                                                                                                                                                          uid
+                                                                                                                                                                        );
+                                                                                                                                                                        trackEvent(
+                                                                                                                                                                          "submission",
+                                                                                                                                                                          "checkgif",
+                                                                                                                                                                          "file original image",
+                                                                                                                                                                          selectedFile2,
+                                                                                                                                                                          client_id,
+                                                                                                                                                                          uid
+                                                                                                                                                                        );*/
     /*submissionEvent(selectedFile1);
-                                                                                                                                                                        submissionEvent(selectedFile2);*/
+                                                                                                                                                                            submissionEvent(selectedFile2);*/
     const files = {
       file1: selectedFile1,
       file2: selectedFile2,
@@ -380,7 +380,6 @@ const CheckGif = () => {
         //=== Load of the images ===
       }
 
-      {/*TODO: use a better switch*/}
       <TabContext value={selectedMode}>
         <Box>
           <TabList
