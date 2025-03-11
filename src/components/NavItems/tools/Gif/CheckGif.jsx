@@ -6,16 +6,19 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CircularProgress from "@mui/material/CircularProgress";
+import Divider from "@mui/material/Divider";
 import Grid2 from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
+import Tab from "@mui/material/Tab";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import FileIcon from "@mui/icons-material/InsertDriveFile";
 import LinkIcon from "@mui/icons-material/Link";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import { TabContext, TabList } from "@mui/lab";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
@@ -55,10 +58,12 @@ const CheckGif = () => {
     classes.bigButtonDiv,
   );
 
-  const [classIconURL, setClassIconURL] = useState(classes.bigButtonIcon);
-  const [classIconLocal, setClassIconLocal] = useState(classes.bigButtonIcon);
+  const [selectedMode, setSelectedMode] = useState("URL");
 
-  const [selectedMode, setSelectedMode] = useState("");
+  // Initialize to URL on first render
+  useEffect(() => {
+    dispatch(setStateSelectingUrl());
+  }, []);
 
   if (
     toolState === 1 &&
@@ -67,9 +72,6 @@ const CheckGif = () => {
   ) {
     setClassButtonURL(classes.bigButtonDiv);
     setClassButtonLocal(classes.bigButtonDiv);
-
-    setClassIconURL(classes.bigButtonIcon);
-    setClassIconLocal(classes.bigButtonIcon);
   }
 
   function clickURL() {
@@ -86,24 +88,26 @@ const CheckGif = () => {
     cleanInputs();
   }
 
+  const handleTabSelectedChange = (event, newValue) => {
+    if (newValue === "URL") {
+      clickURL();
+    } else clickLocal();
+  };
+
   function changeStylesToLocal() {
     //Change styles of the local button to selected
     setClassButtonLocal(classes.bigButtonDivSelected);
-    setClassIconLocal(classes.bigButtonIconSelected);
 
     //Change styles of the URL button to not selected
     setClassButtonURL(classes.bigButtonDiv);
-    setClassIconURL(classes.bigButtonIcon);
   }
 
   function changeStylesToUrl() {
     //Change styles of the url button to selected
     setClassButtonURL(classes.bigButtonDivSelected);
-    setClassIconURL(classes.bigButtonIconSelected);
 
     //Change styles of the Local button to not selected
     setClassButtonLocal(classes.bigButtonDiv);
-    setClassIconLocal(classes.bigButtonIcon);
   }
 
   //Load images for the GIF
@@ -186,15 +190,15 @@ const CheckGif = () => {
 
   //Code to enable the button to upload the images
   /* if (toolState === 22 && imageURL1 !== "" && imageURL2 !== "") {
-                                                    //console.log("Ready to send"); //DEBUG
-                                                    dispatch(setStateReady());
-                                                }*/
+                                                                                        //console.log("Ready to send"); //DEBUG
+                                                                                        dispatch(setStateReady());
+                                                                                    }*/
 
   //Code to enable the button to upload the images
   /* if (toolState === 21 && imageDropped1 !== null && imageDropped2 !== null) {
-                                                    //console.log("Ready to send"); //DEBUG
-                                                    dispatch(setStateReady());
-                                                }*/
+                                                                                        //console.log("Ready to send"); //DEBUG
+                                                                                        dispatch(setStateReady());
+                                                                                    }*/
 
   useEffect(() => {
     if (toolState === 22 && imageURL1 !== "" && imageURL2 !== "") {
@@ -246,23 +250,23 @@ const CheckGif = () => {
     setEventUrl2(imageURL2);
     setEventUrlType2("url original image");
     /*trackEvent(
-                                                                                              "submission",
-                                                                                              "checkgif",
-                                                                                              "url fake image",
-                                                                                              imageURL1,
-                                                                                              client_id,
-                                                                                              uid
-                                                                                            );
-                                                                                            trackEvent(
-                                                                                              "submission",
-                                                                                              "checkgif",
-                                                                                              "url original image",
-                                                                                              imageURL2,
-                                                                                              client_id,
-                                                                                              uid
-                                                                                            );*/
+                                                                                                                                                                      "submission",
+                                                                                                                                                                      "checkgif",
+                                                                                                                                                                      "url fake image",
+                                                                                                                                                                      imageURL1,
+                                                                                                                                                                      client_id,
+                                                                                                                                                                      uid
+                                                                                                                                                                    );
+                                                                                                                                                                    trackEvent(
+                                                                                                                                                                      "submission",
+                                                                                                                                                                      "checkgif",
+                                                                                                                                                                      "url original image",
+                                                                                                                                                                      imageURL2,
+                                                                                                                                                                      client_id,
+                                                                                                                                                                      uid
+                                                                                                                                                                    );*/
     /*submissionEvent(imageURL1);
-                                                                                                submissionEvent(imageURL2);*/
+                                                                                                                                                                        submissionEvent(imageURL2);*/
     const files = {
       url_0: imageURL1,
       url_1: imageURL2,
@@ -277,23 +281,23 @@ const CheckGif = () => {
     setEventUrl2(selectedFile2);
     setEventUrlType2("file original image");
     /* trackEvent(
-                                                                                              "submission",
-                                                                                              "checkgif",
-                                                                                              "file fake image",
-                                                                                              selectedFile1,
-                                                                                              client_id,
-                                                                                              uid
-                                                                                            );
-                                                                                            trackEvent(
-                                                                                              "submission",
-                                                                                              "checkgif",
-                                                                                              "file original image",
-                                                                                              selectedFile2,
-                                                                                              client_id,
-                                                                                              uid
-                                                                                            );*/
+                                                                                                                                                                      "submission",
+                                                                                                                                                                      "checkgif",
+                                                                                                                                                                      "file fake image",
+                                                                                                                                                                      selectedFile1,
+                                                                                                                                                                      client_id,
+                                                                                                                                                                      uid
+                                                                                                                                                                    );
+                                                                                                                                                                    trackEvent(
+                                                                                                                                                                      "submission",
+                                                                                                                                                                      "checkgif",
+                                                                                                                                                                      "file original image",
+                                                                                                                                                                      selectedFile2,
+                                                                                                                                                                      client_id,
+                                                                                                                                                                      uid
+                                                                                                                                                                    );*/
     /*submissionEvent(selectedFile1);
-                                                                                                submissionEvent(selectedFile2);*/
+                                                                                                                                                                        submissionEvent(selectedFile2);*/
     const files = {
       file1: selectedFile1,
       file2: selectedFile2,
@@ -319,12 +323,14 @@ const CheckGif = () => {
     cleanInputs();
 
     setClassButtonURL(classes.bigButtonDiv);
-    setClassIconURL(classes.bigButtonIcon);
 
     setClassButtonLocal(classes.bigButtonDiv);
-    setClassIconLocal(classes.bigButtonIcon);
 
     dispatch(setStateInit());
+
+    selectedMode === "URL"
+      ? dispatch(setStateSelectingUrl())
+      : dispatch(setStateSelectingLocal());
   };
 
   function cleanInputs() {
@@ -359,7 +365,7 @@ const CheckGif = () => {
   //============================================================================================
 
   return (
-    <div>
+    <Box sx={{ minWidth: "400px" }}>
       {
         //=== Title ===
       }
@@ -374,95 +380,31 @@ const CheckGif = () => {
         //=== Load of the images ===
       }
 
-      <Card variant="outlined">
-        <Box m={2}>
-          <Grid2 container spacing={4} alignItems="flex-start">
-            <Grid2 size={{ xs: 12 }}>
-              <Typography>{keyword("cardTitle_source")}</Typography>
-            </Grid2>
-
-            <Grid2 size={{ xs: 6 }}>
-              <Box p={3} className={classButtonURL} onClick={clickURL}>
-                <Grid2
-                  container
-                  direction="row"
-                  style={{ flexWrap: "nowrap" }}
-                  spacing={2}
-                >
-                  <Grid2 size={{ xs: 1 }}>
-                    <LinkIcon className={classIconURL} />
-                  </Grid2>
-                  <Grid2>
-                    <Grid2
-                      container
-                      direction="column"
-                      justifyContent="flex-start"
-                      alignItems="flex-start"
-                    >
-                      <Grid2>
-                        <Typography
-                          variant="body1"
-                          style={{ fontWeight: 600 }}
-                          textAlign={"start"}
-                        >
-                          {keyword("title_URL")}
-                        </Typography>
-                      </Grid2>
-
-                      <Box mt={1} />
-
-                      <Grid2>
-                        <Typography variant="body1" textAlign={"start"}>
-                          {keyword("description_URL")}
-                        </Typography>
-                      </Grid2>
-                    </Grid2>
-                  </Grid2>
-                </Grid2>
-              </Box>
-            </Grid2>
-            <Grid2 size={{ xs: 6 }}>
-              <Box p={3} className={classButtonLocal} onClick={clickLocal}>
-                <Grid2
-                  container
-                  direction="row"
-                  style={{ flexWrap: "nowrap" }}
-                  spacing={2}
-                >
-                  <Grid2 size={{ xs: 1 }}>
-                    <FileIcon className={classIconLocal} />
-                  </Grid2>
-
-                  <Grid2>
-                    <Grid2
-                      container
-                      direction="column"
-                      justifyContent="flex-start"
-                      alignItems="flex-start"
-                      spacing={1}
-                    >
-                      <Grid2 size={{ xs: 12 }}>
-                        <Typography
-                          variant="body1"
-                          style={{ fontWeight: 600 }}
-                          textAlign={"start"}
-                        >
-                          {keyword("title_local")}
-                        </Typography>
-                      </Grid2>
-                      <Grid2 size={{ xs: 12 }}>
-                        <Typography variant="body1" textAlign={"start"}>
-                          {keyword("description_local")}
-                        </Typography>
-                      </Grid2>
-                    </Grid2>
-                  </Grid2>
-                </Grid2>
-              </Box>
-            </Grid2>
-          </Grid2>
+      {/*TODO: use a better switch*/}
+      <TabContext value={selectedMode}>
+        <Box>
+          <TabList
+            onChange={handleTabSelectedChange}
+            aria-label="lab API tabs example"
+          >
+            <Tab
+              icon={<LinkIcon />}
+              iconPosition="start"
+              label={keyword("title_URL")}
+              value="URL"
+              sx={{ minWidth: "inherit !important", textTransform: "none" }}
+            />
+            <Tab
+              icon={<UploadFileIcon />}
+              iconPosition="start"
+              label={keyword("title_local")}
+              value="LOCAL"
+              sx={{ minWidth: "inherit", textTransform: "none" }}
+            />
+          </TabList>
+          <Divider />
         </Box>
-      </Card>
+      </TabContext>
 
       <Box m={3} />
 
@@ -487,10 +429,18 @@ const CheckGif = () => {
           />
 
           <Box p={3}>
-            <Grid2 container spacing={3}>
+            <Grid2
+              container
+              direction={{ md: "row", xs: "column" }}
+              spacing={3}
+            >
               <Grid2
-                size={{ xs: 5 }}
-                style={{ borderRight: "0.1em solid #ECECEC", padding: "0.5em" }}
+                size={{ md: 5, xs: 12 }}
+                style={{ padding: "0.5em" }}
+                sx={{
+                  borderRight: { md: "0.1em solid #ECECEC", xs: "none" },
+                  borderBottom: { xs: "0.1em solid #ECECEC", md: "none" },
+                }}
               >
                 <Box p={2}>
                   {selectedMode === "LOCAL" && (
@@ -688,8 +638,7 @@ const CheckGif = () => {
                   )}
                 </Box>
               </Grid2>
-
-              <Grid2 size={{ xs: 7 }} style={{ padding: "0.5em" }}>
+              <Grid2 size={{ md: 7, xs: 12 }} style={{ padding: "0.5em" }}>
                 {(toolState === 21 || toolState === 22 || toolState === 3) && (
                   <Grid2
                     container
@@ -736,7 +685,7 @@ const CheckGif = () => {
           </Box>
         </Card>
       )}
-    </div>
+    </Box>
   );
 };
 export default CheckGif;
