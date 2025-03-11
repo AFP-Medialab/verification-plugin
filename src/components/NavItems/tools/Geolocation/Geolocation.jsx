@@ -81,7 +81,7 @@ const Geolocation = () => {
           icon={
             <imageGeolocation.icon sx={{ fill: "#00926c", fontSize: "40px" }} />
           }
-        />{" "}
+        />
         <Alert severity="warning">{keywordWarning("warning_beta")}</Alert>
         <Card variant="outlined">
           <Box p={4}>

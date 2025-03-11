@@ -552,7 +552,7 @@ const styles = (theme) => ({
 
   root2: {
     textAlign: "center",
-    padding: theme.spacing(3),
+    padding: theme.spacing(4),
   },
 
   fabTop: {
