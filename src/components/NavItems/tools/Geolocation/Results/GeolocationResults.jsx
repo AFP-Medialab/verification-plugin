@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { Icon } from "leaflet";
+import "leaflet/dist/leaflet.css";
 
 import { ROLES } from "../../../../../constants/roles";
 
@@ -44,7 +45,7 @@ const GeolocationResults = ({ result, urlImage }) => {
               <Grid2
                 container
                 direction={{ md: "row", xs: "column" }}
-                justifyContent="space-between"
+                justifyContent="center"
                 alignItems="flex-start"
                 style={{ flexWrap: "nowrap" }}
                 spacing={4}
@@ -61,20 +62,19 @@ const GeolocationResults = ({ result, urlImage }) => {
                   <Grid2
                     size={6}
                     style={{ width: "100%" }}
-                    justifyItems="center"
+                    justifyContent="center"
+                    display="flex"
                   >
-                    <Box width="100%">
-                      <img
-                        src={urlImage}
-                        alt="image submitted"
-                        style={{
-                          maxHeight: "400px",
-                          maxWidth: "-webkit-fill-available",
-                          backgroundSize: "contain",
-                          borderRadius: 10,
-                        }}
-                      />
-                    </Box>
+                    <img
+                      src={urlImage}
+                      alt="image submitted"
+                      style={{
+                        maxHeight: "400px",
+                        maxWidth: "-webkit-fill-available",
+                        backgroundSize: "contain",
+                        borderRadius: 10,
+                      }}
+                    />
                   </Grid2>
                 </Grid2>
 
@@ -87,38 +87,43 @@ const GeolocationResults = ({ result, urlImage }) => {
                     spacing={3}
                     size={{ md: 6, xs: 12 }}
                   >
-                    <Grid2 size={{ md: 6, xs: 12 }} style={{ width: "100%" }}>
-                      <MapContainer
-                        center={[res.latitude, res.longitude]}
-                        zoom={13}
-                        scrollWheelZoom={false}
-                        style={{
-                          width: "100%",
-                          height: "400px",
-                          borderRadius: 10,
-                        }}
-                      >
-                        <TileLayer
-                          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        />
-                        <Marker
-                          position={[res.latitude, res.longitude]}
-                          icon={
-                            new Icon({
-                              iconUrl: "img/marker_location.svg",
-                              iconSize: [60, 60],
-                              iconAnchor: [30, 0],
-                            })
-                          }
+                    <Stack
+                      direction="column"
+                      spacing={4}
+                      sx={{
+                        width: "100%",
+                      }}
+                    >
+                      <Box width="100%">
+                        <MapContainer
+                          center={[res.latitude, res.longitude]}
+                          zoom={13}
+                          scrollWheelZoom={false}
+                          style={{
+                            width: "100%",
+                            height: "400px",
+                            borderRadius: 10,
+                          }}
                         >
-                          <Popup>{keyword("geo_prediction")}</Popup>
-                        </Marker>
-                      </MapContainer>
-                    </Grid2>
-
-                    <Grid2 size={3} style={{ width: "100%" }}>
-                      <Box>
+                          <TileLayer
+                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                          />
+                          <Marker
+                            position={[res.latitude, res.longitude]}
+                            icon={
+                              new Icon({
+                                iconUrl: "img/marker_location.svg",
+                                iconSize: [60, 60],
+                                iconAnchor: [30, 0],
+                              })
+                            }
+                          >
+                            <Popup>{keyword("geo_prediction")}</Popup>
+                          </Marker>
+                        </MapContainer>
+                      </Box>
+                      <Box width="100%">
                         <Grid2
                           container
                           direction="row"
@@ -181,7 +186,7 @@ const GeolocationResults = ({ result, urlImage }) => {
                           {keyword("geo_maps")}
                         </Button>
                       </Box>
-                    </Grid2>
+                    </Stack>
                   </Grid2>
                 )}
               </Grid2>
