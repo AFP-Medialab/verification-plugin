@@ -1,33 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import GaugeChart from "react-gauge-chart";
 import { useDispatch, useSelector } from "react-redux";
 
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardHeader from "@mui/material/CardHeader";
-import Chip from "@mui/material/Chip";
-import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
-import IconButton from "@mui/material/IconButton";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { Close, Download, ExpandMore } from "@mui/icons-material";
-
 import { styled } from "@mui/system";
-import { useTrackEvent } from "Hooks/useAnalytics";
-import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import { submitUserChatbotMessage } from "../../../../redux/actions/tools/assistantActions";

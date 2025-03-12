@@ -396,7 +396,7 @@ const SyntheticImageDetection = () => {
         </Box>
       </Card>
 
-      <Card>
+      <Card variant="outlined">
         <CardHeader
           title={
             <Grid2
