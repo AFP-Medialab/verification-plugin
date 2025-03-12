@@ -3,6 +3,7 @@ import { Trans } from "react-i18next";
 import Linkify from "react-linkify";
 import { useSelector } from "react-redux";
 
+import { useColorScheme } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -42,6 +43,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
   //const sharedKeyword = i18nLoadNamespace("components/Shared/utils");
 
   const classes = useMyStyles();
+
   const pageSize = 5;
   //const numPages = Math.ceil(collectedComments.length / pageSize);
   const [currentAllPage, setCurrentAllPage] = useState(1);
@@ -75,6 +77,11 @@ const AssistantCommentResult = ({ collectedComments }) => {
   const [caaVerificationKeywordsTsv, setCaaVerificationKeywordsTsv] = useState(
     [],
   );
+
+  const { mode, systemMode } = useColorScheme();
+  const resolvedMode = systemMode || mode;
+
+  const backgroundColor = resolvedMode === "dark" ? "#0c0d0d" : "#e0f2f1";
 
   useEffect(() => {
     fetch("/caaVerificationKeywords.tsv")
@@ -158,10 +165,11 @@ const AssistantCommentResult = ({ collectedComments }) => {
       if ("replies" in comment) {
         renderedReplies = renderCommentList(replies, stanceColours, true);
       }
+
       renderedComments.push(
         <TableRow
           key={key}
-          sx={commentReplies ? null : { backgroundColor: "#e0f2f1" }}
+          sx={commentReplies ? null : { backgroundColor: backgroundColor }}
         >
           {/* hash */}
           <TableCell align="center">
