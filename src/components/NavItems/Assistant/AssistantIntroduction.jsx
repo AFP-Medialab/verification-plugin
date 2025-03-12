@@ -89,7 +89,7 @@ const AssistantIntroduction = (props) => {
           />
         }
       />
-      <Card>
+      <Card variant="outlined">
         <CardHeader
           className={classes.assistantCardHeader}
           title={

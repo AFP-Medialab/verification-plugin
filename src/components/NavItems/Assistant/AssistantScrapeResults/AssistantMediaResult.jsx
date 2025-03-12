@@ -116,6 +116,7 @@ const AssistantMediaResult = () => {
 
   return (
     <Card
+      variant="outlined"
       data-testid="url-media-results"
       hidden={!filteredImageList.length && !videoList.length}
     >
