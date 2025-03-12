@@ -87,13 +87,14 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_ERROR_KEY":
     case "SET_PROCESS_URL":
     case "SET_SCRAPED_DATA":
-    case "ADD_CHATBOT_MESSAGE":
+    case "ADD_CHATBOT_MESSAGE": {
       const message = action.payload;
       message.id = state.chatbotMessages.length + 1;
       return {
         ...state,
         chatbotMessages: [...state.chatbotMessages, message],
       };
+    }
     case "SET_PROCESS_URL_ACTIONS":
     case "SET_MODE":
     case "SET_IMAGE_VIDEO_SELECTED":
