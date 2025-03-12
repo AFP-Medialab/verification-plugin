@@ -97,7 +97,7 @@ const ChatbotInterface = (props) => {
               sendMessage();
             }}
           >
-            {keyword("button_submit")}
+            {keyword("submit_button")}
           </Button>
         </Stack>
       </Stack>
