@@ -143,7 +143,7 @@ export default function AssistantTextClassification({
 
       {/* credibility signal box with categories */}
       <Grid2 size={{ xs: 3 }}>
-        <Card>
+        <Card variant="outlined">
           <CardHeader
             className={classes.assistantCardHeader}
             title={titleText}
