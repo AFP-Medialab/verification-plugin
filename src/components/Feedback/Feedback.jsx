@@ -162,7 +162,6 @@ const Feedback = () => {
                       alignItems="center"
                       spacing={0}
                       height={50}
-                      backgroundColor="#00926c"
                       pl={1}
                       pr={1}
                     >
