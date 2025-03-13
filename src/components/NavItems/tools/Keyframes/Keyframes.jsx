@@ -2,12 +2,14 @@ import React, { memo, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
+import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
 import Grid2 from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
-import LinearProgress from "@mui/material/LinearProgress";
+import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import TextField from "@mui/material/TextField";
@@ -24,7 +26,10 @@ import { ClearIcon } from "@mui/x-date-pickers";
 
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { keyframes } from "../../../../constants/tools";
-import { useKeyframeWrapper } from "./Hooks/useKeyframeWrapper";
+import {
+  useKeyframeWrapper,
+  useProcessKeyframes,
+} from "./Hooks/useKeyframeWrapper";
 import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
 import LocalFile from "./LocalFile/LocalFile";
 import KeyFramesResults from "./Results/KeyFramesResults";
@@ -39,10 +44,11 @@ const Keyframes = () => {
 
   const resultUrl = useSelector((state) => state.keyframes.url);
   const resultData = useSelector((state) => state.keyframes.result);
-  const isLoading = useSelector((state) => state.keyframes.loading);
   const isLoadingSimilarity = useSelector(
     (state) => state.keyframes.similarityLoading,
   );
+
+  const role = useSelector((state) => state.userSession.user.roles);
 
   // State used to load images
   const [input, setInput] = useState(resultUrl ? resultUrl : "");
@@ -60,8 +66,13 @@ const Keyframes = () => {
     submittedUrl,
   );
 
-  const submitUrl = () => {
-    setSubmittedUrl(input);
+  const submitUrl = async () => {
+    //setSubmittedUrl(input);
+    try {
+      await executeProcess(input, role);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -96,6 +107,13 @@ const Keyframes = () => {
   const handleTabSelectedChange = (event, newValue) => {
     setTabSelected(newValue);
   };
+
+  const { executeProcess, isPending, status, data, error } =
+    useProcessKeyframes();
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   return (
     <Box>
@@ -147,7 +165,7 @@ const Keyframes = () => {
                           label={keyword("keyframes_input")}
                           // placeholder={keyword("keyframes_input_placeholder")}
                           fullWidth
-                          disabled={isLoading || isLoadingSimilarity}
+                          disabled={isPending || isLoadingSimilarity}
                           value={input}
                           variant="outlined"
                           onChange={(e) => setInput(e.target.value)}
@@ -157,7 +175,7 @@ const Keyframes = () => {
                                 <IconButton
                                   size="small"
                                   onClick={() => setInput("")}
-                                  disabled={isLoading || isLoadingSimilarity}
+                                  disabled={isPending || isLoadingSimilarity}
                                 >
                                   <ClearIcon />
                                 </IconButton>
@@ -176,19 +194,13 @@ const Keyframes = () => {
                             e.preventDefault();
                             submitUrl();
                           }}
-                          loading={isLoading || isLoadingSimilarity}
+                          loading={isPending || isLoadingSimilarity}
                         >
                           {keyword("button_submit")}
                         </LoadingButton>
                       </Grid2>
                     </Grid2>
                   </form>
-                  {isLoading && (
-                    <>
-                      <Box m={3} />
-                      <LinearProgress />
-                    </>
-                  )}
                 </Box>
               </TabPanel>
               <TabPanel value="file">
@@ -199,12 +211,30 @@ const Keyframes = () => {
             </Box>
           </Card>
         </TabContext>
-        {resultData && tabSelected === "url" && (
-          <KeyFramesResults
-            closeResult={handleCloseResult}
-            result={resultData}
-          />
+
+        {status && isPending && (
+          <Alert icon={<CircularProgress size={20} />} severity="info">
+            {status}
+          </Alert>
         )}
+
+        {isPending && (
+          <Card variant="outlined">
+            <Stack direction="column" spacing={4} p={4}>
+              <Skeleton variant="rounded" height={40} />
+              <Stack direction={{ md: "row", xs: "column" }} spacing={4}>
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
+              </Stack>
+            </Stack>
+          </Card>
+        )}
+
+        {error && <Alert severity="error">{error.message}</Alert>}
+
+        {data && tabSelected === "url" && <KeyFramesResults result={data} />}
       </Stack>
     </Box>
   );

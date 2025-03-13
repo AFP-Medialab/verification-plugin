@@ -29,20 +29,39 @@ import {
   SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
 } from "@Shared/ReverseSearch/reverseSearchUtils";
+import LoadingButton from "@mui/lab/LoadingButton";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import ImageGridList from "../../../../Shared/ImageGridList/ImageGridList";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import { useKeyframes } from "../Hooks/usekeyframes";
 
-const KeyFramesResults = (props) => {
+/**
+ *
+ * @param result {KeyframesData}
+ * @returns {Element}
+ * @constructor
+ */
+const KeyFramesResults = ({ result }) => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Keyframes");
   const keywordHelp = i18nLoadNamespace("components/Shared/OnClickInfo");
 
   const [detailed, setDetailed] = useState(false);
 
-  const [simpleList, detailedList] = useKeyframes(props.result);
+  let simpleList = /** @type {string[]} */ [];
+
+  for (const keyframe of result.keyframes) {
+    simpleList.push(keyframe.keyframeUrl);
+  }
+
+  let detailedList = /** @type {string[]} */ [];
+
+  for (const keyframe of result.keyframesXtra) {
+    detailedList.push(keyframe.keyframeUrl);
+  }
+
+  // const [simpleList, detailedList] = [result.keyframes, result.keyframesXtra];
+
   const [cols, setCols] = useState(4);
 
   const similarityResults = useSelector((state) => state.keyframes.similarity);
@@ -119,14 +138,19 @@ const KeyFramesResults = (props) => {
   const keyframe_url = process.env.REACT_APP_KEYFRAME_API;
   const video_id = useSelector((state) => state.keyframes.video_id);
 
+  const [isZipDownloading, setIsZipDownloading] = useState(false);
+
   const downloadAction = () => {
-    const downloadUrl = keyframe_url + "/keyframes/" + video_id + "/Subshots";
+    setIsZipDownloading(true);
+    const downloadUrl = result.zipFileUrl;
+    // const downloadUrl = keyframe_url + "/keyframes/" + video_id + "/Subshots";
     fetch(downloadUrl).then((response) => {
       response.blob().then((blob) => {
         const url = window.URL.createObjectURL(blob);
         let a = document.createElement("a");
         a.href = url;
         a.click();
+        setIsZipDownloading(false);
       });
     });
   };
@@ -265,13 +289,15 @@ const KeyFramesResults = (props) => {
                 </Grid2>
 
                 <Grid2>
-                  <Button
+                  <LoadingButton
                     color="primary"
+                    loadingPosition="start"
+                    loading={isZipDownloading}
                     onClick={downloadAction}
                     startIcon={<DownloadIcon />}
                   >
                     {keyword("keyframes_download_subshots")}
-                  </Button>
+                  </LoadingButton>
                 </Grid2>
 
                 <Grid2 size="grow" style={{ textAlign: "end" }}>
