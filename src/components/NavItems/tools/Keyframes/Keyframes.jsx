@@ -95,13 +95,6 @@ const Keyframes = () => {
     }
   }, [processUrl]);
 
-  /**
-   * Resets input
-   */
-  const handleCloseResult = () => {
-    setInput("");
-  };
-
   const [tabSelected, setTabSelected] = useState("url");
 
   const handleTabSelectedChange = (event, newValue) => {

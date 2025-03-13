@@ -135,9 +135,6 @@ const KeyFramesResults = ({ result }) => {
     setAnchorHelp(null);
   }
 
-  const keyframe_url = process.env.REACT_APP_KEYFRAME_API;
-  const video_id = useSelector((state) => state.keyframes.video_id);
-
   const [isZipDownloading, setIsZipDownloading] = useState(false);
 
   const downloadAction = () => {
@@ -235,8 +232,8 @@ const KeyFramesResults = ({ result }) => {
                 open={openHelp}
                 anchorEl={anchorHelp}
                 onClose={closeHelp}
-                PaperProps={{
-                  style: {
+                slotProps={{
+                  paper: {
                     width: "300px",
                   },
                 }}
