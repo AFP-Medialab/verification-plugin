@@ -93,7 +93,7 @@ const SinglefileConverter = () => {
   const makeWacz = async (warcInput, cdxInput, pageInfo, recordDigest) => {
     const cdxInfo = JSON.parse(cdxInput);
 
-    const index_input = `${cdxInfo.urlkey} ${cdxInfo.timestamp} {\"url\":\"${cdxInfo.url}\",\"digest\":\"sha256:${cdxInfo.digest}\",\"mime\":\"text/html\",\"offset\":${cdxInfo.offset},\"length\":${cdxInfo.length},\"recordDigest\":\"sha256:${recordDigest}\",\"status\":200,\"filename\":\"data.warc\"}`;
+    const index_input = `${cdxInfo.urlkey} ${cdxInfo.timestamp} {\"url\":\"${cdxInfo.url}\",\"digest\":\"sha256:${cdxInfo.digest}\",\"mime\":\"text/html\",\"offset\":${cdxInfo.offset},\"length\":${cdxInfo.length},\"recordDigest\":\"sha256:${recordDigest}\",\"status\":200,\"filename\":\"data.warc.gz\"}`;
 
     const index_arch = {
       name: "indexes/index.cdx",
@@ -114,7 +114,7 @@ const SinglefileConverter = () => {
     const pages_hash = await sha256(pages_input);
 
     const archive_arch = {
-      name: "archive/data.warc",
+      name: "archive/data.warc.gz",
       lastModified: new Date(),
       input: warcInput,
     };
@@ -133,8 +133,8 @@ const SinglefileConverter = () => {
           bytes: new TextEncoder().encode(pages_input).length,
         },
         {
-          name: "data.warc",
-          path: "archive/data.warc",
+          name: "data.warc.gz",
+          path: "archive/data.warc.gz",
           hash: `sha256:${archive_hash}`,
           bytes: warcInput.size,
         },
@@ -185,14 +185,6 @@ const SinglefileConverter = () => {
         path: "datapackage.json",
         hash: `sha256:${datapackage_hash}`,
         signedData: signedData,
-        // signedData: {
-        //   hash: `sha256:${datapackage_hash}`,
-        //   signature: signature.signature,
-        //   publicKey: signature.publicKey,
-        //   created: new Date(Date.now()).toISOString(),
-        //   software:
-        //     "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
-        // },
       };
 
       const datapackagedigest_arch = {
@@ -226,7 +218,8 @@ const SinglefileConverter = () => {
     setError("");
     const reader = new FileReader();
     reader.onload = async () => {
-      const pageIntro = reader.result.slice(0, 500).split("\n"); //TODO: find better way of getting to the saved by singlefile comment
+      const pageIntro = reader.result.slice(0, 1000).split("\n"); //TODO: find better way of getting to the saved by singlefile comment
+      // console.log(pageIntro)
       const pageDate = pageIntro[3].slice(12);
       const pageURL = pageIntro[2].slice(5);
       const pageDateISO = new Date(Date.parse(pageDate)).toISOString();
@@ -255,6 +248,18 @@ const SinglefileConverter = () => {
             type: "application/octet-stream",
           });
 
+          const pako = require("pako");
+          const res0 = pako.gzip(res[0]);
+          const res1 = pako.gzip(res[1]);
+          const resbuf = new Uint8Array(res[0].byteLength + res[1].byteLength);
+          resbuf.set(res0, 0);
+          resbuf.set(res1, res0.byteLength);
+          const gzipArch = resbuf;
+
+          const blob2 = new Blob([gzipArch], {
+            type: "application/gzip",
+          });
+
           const decoder = new TextDecoder("utf-8");
           const queuingStrategy = new CountQueuingStrategy({
             highWaterMark: 1,
@@ -263,7 +268,8 @@ const SinglefileConverter = () => {
             {
               write(chunk) {
                 return new Promise((resolve, reject) => {
-                  makeWacz(blob, chunk, pageInfo, recordDigest);
+                  console.log(chunk);
+                  makeWacz(blob2, chunk, pageInfo, recordDigest);
                   resolve();
                 });
               },
@@ -278,9 +284,9 @@ const SinglefileConverter = () => {
           const realIndexer = new CDXIndexer();
 
           await realIndexer.writeAll(
-            [{ filename: "data.warc", reader: blob.stream(1024 * 128) }],
+            [{ filename: "data.warc.gz", reader: blob2.stream() }],
             writableStream.getWriter(),
-          ); //Buffer size chosen based on warcio implementation
+          );
         },
       );
     };
@@ -296,7 +302,7 @@ const SinglefileConverter = () => {
       format: "WARC File Format 1.1",
       isPartOf: "singlefile2wacz.wacz",
     };
-    const filename = "singlefile2wacz.wacz#/archive/data.warc";
+    const filename = "singlefile2wacz.wacz#/archive/data.warc.gz";
 
     const warcinfo = await WARCRecord.createWARCInfo(
       { filename, warcVersion },
@@ -310,21 +316,53 @@ const SinglefileConverter = () => {
     const date = pageDate;
     const type = "response";
     const httpHeaders = {
-      "Content-Type": 'text/html; charset="UTF-8"',
+      date: Date(),
+      "content-type": 'text/html; charset="UTF-8"',
     };
+
+    // For adding request record if page is saved as a response
+    // const trim = pageUrl.split(":")[1].slice(2).split("/")
+    // const host = pageUrl.split(":")[0]+"://"+trim[0]
+    // const addr = "/"+trim.slice(1).join("/")
+    // console.log(host)
+    // console.log(addr)
+
+    // const samplereq=
+    //   `GET ${addr} HTTP/1.1\nUser-Agent:  Mozilla/4.0 (compatible; MSIE5.01; Windows NT)\nHost: ${host}\nAccept-Language: en-us\nAccept-Encoding: gzip, deflate\nConnection: Keep-Alive\n`
+
+    // async function* reqcontent() {
+    //   yield new TextEncoder().encode(samplereq)
+    // }
+
+    // const reqtype = "request"
+
+    // const reqRecord = await WARCRecord.create(
+    //   {url, date, type:"request", warcVersion,'statusline':""},
+    //   reqcontent()
+    // )
 
     async function* content() {
       yield new TextEncoder().encode(fileContent);
     }
 
     const record = await WARCRecord.create(
-      { url, date, type, warcVersion, httpHeaders },
+      {
+        url,
+        date,
+        type,
+        warcVersion,
+        httpHeaders,
+        warcHeaders: { "content-type": 'text/html; charset="UTF-8"' },
+      },
       content(),
     );
 
     const serializedRecord = await WARCSerializer.serialize(record);
+    // const serializedRequest = await WARCSerializer.serialize(reqRecord)
 
+    // console.log(new TextDecoder().decode(serializedRequest))
     return [serializedWARCInfo, serializedRecord];
+    // return [serializedWARCInfo, serializedRecord,serializedRequest];
   };
 
   return (
