@@ -32,6 +32,7 @@ import {
   setInputSourceCredDetails,
   setInputUrl,
   setMachineGeneratedTextDetails,
+  setMultilingualStanceDetails,
   setMissingMedia,
   setNeDetails,
   setNewsGenreDetails,
@@ -123,6 +124,13 @@ function* getMachineGeneratedTextSaga() {
   yield takeLatest(
     ["SET_SCRAPED_DATA", "AUTH_USER_LOGIN", "CLEAN_STATE"],
     handleMachineGeneratedTextCall,
+  );
+}
+
+function* getMultilingualStanceSaga() {
+  yield takeLatest(
+    ["SET_SCRAPED_DATA", "CLEAN_STATE"],
+    handleMultilingualStanceCall,
   );
 }
 
@@ -707,6 +715,7 @@ function* handleAssistantScrapeCall(action) {
         filteredSR.imageList,
         filteredSR.videoList,
         filteredSR.urlTextHtmlMap,
+        filteredSR.collectedComments,
       ),
     );
     yield put(setAssistantLoading(false));
@@ -718,6 +727,68 @@ function* handleAssistantScrapeCall(action) {
     } else {
       yield put(setErrorKey(error.message));
     }
+  }
+}
+
+// Multilingual Stance Classification for YouTube Comments
+function* handleMultilingualStanceCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const collectedComments = yield select(
+      (state) => state.assistant.collectedComments,
+    );
+
+    function createCommentArray(
+      comments,
+      convertedComments,
+      comparisonText,
+      comparisonTextId,
+    ) {
+      comments.forEach((comment) => {
+        convertedComments.push({
+          text: comment.textOriginal,
+          id_str: comment.id,
+          in_reply_to_status_id_str: comparisonTextId,
+        });
+        // add replies comparing to their top level comment and its id
+        if ("replies" in comment) {
+          createCommentArray(
+            comment.replies,
+            convertedComments,
+            comment.textOriginal,
+            comment.id,
+          );
+        }
+      });
+    }
+
+    // add video title with id as main comparison for top level comments
+    let convertedComments = [
+      {
+        text: collectedComments[0].videoTitle,
+        id_str: collectedComments[0].videoId,
+      },
+    ];
+    createCommentArray(
+      collectedComments,
+      convertedComments,
+      collectedComments[0].videoTitle,
+      collectedComments[0].videoId,
+    );
+
+    if (convertedComments) {
+      yield put(setMultilingualStanceDetails(null, true, false, false));
+
+      const result = yield call(
+        assistantApi.callMultilingualStanceService,
+        convertedComments,
+      );
+
+      yield put(setMultilingualStanceDetails(result, false, true, false));
+    }
+  } catch (error) {
+    yield put(setMultilingualStanceDetails(null, false, false, true));
   }
 }
 
@@ -760,7 +831,17 @@ function* extractFromLocalStorage(instagram_result, inputUrl, urlType) {
   window.localStorage.removeItem("instagram_result");
 
   yield put(setInputUrl(inputUrl, urlType));
-  yield put(setScrapedData(text_result, null, [], image_result, video_result));
+  yield put(
+    setScrapedData(
+      text_result,
+      null,
+      [],
+      image_result,
+      video_result,
+      null,
+      null,
+    ),
+  );
   yield put(setAssistantLoading(false));
 }
 
@@ -790,12 +871,12 @@ function formatTelegramLink(url) {
  **/
 const decideWhetherToScrape = (urlType, contentType) => {
   switch (urlType) {
-    case KNOWN_LINKS.YOUTUBE:
     case KNOWN_LINKS.YOUTUBESHORTS:
     case KNOWN_LINKS.LIVELEAK:
     case KNOWN_LINKS.VIMEO:
     case KNOWN_LINKS.DAILYMOTION:
       return false;
+    case KNOWN_LINKS.YOUTUBE:
     case KNOWN_LINKS.TIKTOK:
     case KNOWN_LINKS.INSTAGRAM:
     case KNOWN_LINKS.FACEBOOK:
@@ -866,6 +947,7 @@ const filterAssistantResults = (
   let urlText = null;
   let urlTextHtmlMap = null;
   let textLang = null;
+  let collectedComments = null;
 
   switch (urlType) {
     case KNOWN_LINKS.YOUTUBE:
@@ -944,6 +1026,10 @@ const filterAssistantResults = (
       .sort()
       .filter((value, index, array) => array.indexOf(value) === index);
     urlTextHtmlMap = scrapeResult.text_html_mapping;
+
+    if ("collected_comments" in scrapeResult) {
+      collectedComments = scrapeResult.collected_comments;
+    }
   }
 
   return {
@@ -953,6 +1039,7 @@ const filterAssistantResults = (
     imageList: imageList,
     linkList: linkList,
     urlTextHtmlMap: urlTextHtmlMap,
+    collectedComments: collectedComments,
   };
 };
 
@@ -1128,5 +1215,6 @@ export default function* assistantSaga() {
     fork(getSubjectivitySaga),
     fork(getPrevFactChecksSaga),
     fork(getMachineGeneratedTextSaga),
+    fork(getMultilingualStanceSaga),
   ]);
 }

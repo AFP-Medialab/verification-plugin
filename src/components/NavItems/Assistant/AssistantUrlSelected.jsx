@@ -25,7 +25,7 @@ import {
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { KNOWN_LINKS } from "./AssistantRuleBook";
 import {
-  TransHtmlDoubleLinkBreak,
+  TransHtmlDoubleLineBreak,
   TransSupportedUrlsLink,
 } from "./TransComponents";
 
@@ -110,7 +110,7 @@ const AssistantUrlSelected = (props) => {
                       li: <li />,
                     }}
                   />
-                  <TransHtmlDoubleLinkBreak keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
                   <TransSupportedUrlsLink keyword={keyword} />
                 </>
               }

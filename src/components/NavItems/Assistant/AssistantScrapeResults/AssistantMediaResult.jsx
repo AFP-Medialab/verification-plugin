@@ -32,7 +32,7 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "../../../Shared/VideoGridList/VideoGridList";
 import { CONTENT_TYPE } from "../AssistantRuleBook";
 import {
-  TransHtmlDoubleLinkBreak,
+  TransHtmlDoubleLineBreak,
   TransSupportedToolsLink,
 } from "../TransComponents";
 import AssistantImageResult from "./AssistantImageResult";
@@ -160,7 +160,7 @@ const AssistantMediaResult = () => {
                         b: <b />,
                       }}
                     />
-                    <TransHtmlDoubleLinkBreak keyword={keyword} />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
                     <TransSupportedToolsLink keyword={keyword} />
                   </>
                 }
@@ -179,7 +179,7 @@ const AssistantMediaResult = () => {
         </div>
       ) : null}
 
-      {/* selected image with recommended tools */}
+      {/* selected image or video with recommended tools */}
       <CardContent sx={{ padding: processUrl == null ? 0 : undefined }}>
         {missingMedia ? (
           <Alert severity="warning">
