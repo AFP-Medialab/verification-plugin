@@ -40,6 +40,35 @@
  * @property {number} beginTime - The time in seconds for the beginning of the frame.
  * @property {number} endFrame - The frame end number.
  * @property {number} endTime - The time in seconds for the end of the frame.
- * @property {number} endTime - The time in seconds for the end of the frame.
  * @property {number} shot - The shot number.
+ */
+
+/**
+ * This defines an image item which along with other items share a similar feature (text, face).
+ * @typedef {Object} ImageItem
+ * @property {number} frame - The frame number.
+ * @property {number} frameTime - The time in seconds for the frame.
+ * @property {string} imageUrl - The image URL.
+ */
+
+/**
+ * This defines an image which represents a feature (text, face) found in a group of frames.
+ * @typedef {Object} ImageRepresentative
+ * @property {number} index - The image index.
+ * @property {string} imageUrl - The image URL.
+ */
+
+/**
+ * This defines a group of images sharing the same feature (text or faces).
+ * The representative image is the image selected or enhanced by the keyframes service.
+ * @typedef {Object} ImagesFeature
+ * @property {ImageItem[]} items - The list of images sharing the same feature
+ * @property {ImageRepresentative} representative - The image selected to represent the group sharing the feature
+ */
+
+/**
+ * This defines the features found in the keyframes (text or faces).
+ * @typedef {Object} KeyframesFeatures
+ * @property {ImagesFeature[]} faces - The list of detected faces
+ * @property {ImagesFeature[]} texts - The list of detected texts
  */

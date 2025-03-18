@@ -13,6 +13,7 @@ import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 
 import LinkIcon from "@mui/icons-material/Link";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
@@ -101,12 +102,25 @@ const Keyframes = () => {
     setTabSelected(newValue);
   };
 
-  const { executeProcess, isPending, status, data, error } =
-    useProcessKeyframes();
+  const {
+    executeProcess,
+    isPending,
+    status,
+    data,
+    error,
+    featureData,
+    isFeatureDataPending,
+    featureDataError,
+    featureStatus,
+  } = useProcessKeyframes();
 
   useEffect(() => {
     console.log(data);
   }, [data]);
+
+  useEffect(() => {
+    console.log(featureData);
+  }, [featureData]);
 
   return (
     <Box>
@@ -228,6 +242,61 @@ const Keyframes = () => {
         {error && <Alert severity="error">{error.message}</Alert>}
 
         {data && tabSelected === "url" && <KeyFramesResults result={data} />}
+
+        {featureStatus && isFeatureDataPending && (
+          <Alert icon={<CircularProgress size={20} />} severity="info">
+            {featureStatus}
+          </Alert>
+        )}
+
+        {isFeatureDataPending && (
+          <Card variant="outlined">
+            <Stack direction="column" spacing={4} p={4}>
+              <Skeleton variant="rounded" height={40} />
+              <Stack direction={{ md: "row", xs: "column" }} spacing={4}>
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
+              </Stack>
+            </Stack>
+          </Card>
+        )}
+
+        {featureDataError && (
+          <Alert severity="error">{featureDataError.message}</Alert>
+        )}
+
+        {featureData && (
+          <>
+            <Card variant="outlined">
+              <Typography>{"Faces"}</Typography>
+              <Grid2 container direction="row" spacing={2} p={4}>
+                {featureData.faces.map((item, i) => (
+                  <Grid2 key={i} size={{ md: 3, lg: 1 }}>
+                    <img
+                      src={item.representative.imageUrl}
+                      style={{ width: "-webkit-fill-available" }}
+                    />
+                  </Grid2>
+                ))}
+              </Grid2>
+            </Card>
+            <Card variant="outlined">
+              <Typography>{"Texts"}</Typography>
+              <Grid2 container direction="row" spacing={2} p={4}>
+                {featureData.texts.map((item, i) => (
+                  <Grid2 key={i} size={{ md: 3, lg: 1 }}>
+                    <img
+                      src={item.representative.imageUrl}
+                      style={{ width: "-webkit-fill-available" }}
+                    />
+                  </Grid2>
+                ))}
+              </Grid2>
+            </Card>
+          </>
+        )}
       </Stack>
     </Box>
   );

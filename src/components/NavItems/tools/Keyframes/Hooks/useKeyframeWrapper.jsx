@@ -119,6 +119,8 @@ export const useKeyframeWrapper = (url, keyword) => {
 
 export const useProcessKeyframes = () => {
   const [status, setStatus] = useState(null);
+  const [featureStatus, setFeatureStatus] = useState(null);
+
   const authenticatedRequest = useAuthenticatedRequest();
 
   // Step 1: Send URL
@@ -206,10 +208,73 @@ export const useProcessKeyframes = () => {
 
   // Step 3: Get Keyframes
 
+  const fetchFeatureDataMutation = useMutation({
+    mutationFn: async (jobId) => {
+      setStatus("Retrieving features...");
+      const config = {
+        method: "get",
+        url: `${process.env.REACT_APP_KEYFRAME_API_2}/keyframes_enhance/${jobId}`,
+      };
+
+      const response = await authenticatedRequest(config);
+      let faces = /** @type {ImagesFeature[]} */ [];
+      let texts = /** @type {ImagesFeature[]} */ [];
+
+      for (const imageFeature of response.data.faces_groups) {
+        const items = /** @type {ImageItem[]} */ [];
+
+        for (const it of imageFeature.items) {
+          items.push({
+            frame: it.frame,
+            frameTime: it.frame_time,
+            imageUrl: it.item_url,
+          });
+        }
+
+        const representative = /** @type {ImageRepresentative} */ {
+          index: imageFeature.representative.item_index,
+          imageUrl: imageFeature.representative.enhanced_url,
+        };
+
+        faces.push({
+          items: items,
+          representative: representative,
+        });
+      }
+
+      for (const imageFeature of response.data.text_groups) {
+        const items = /** @type {ImageItem[]} */ [];
+
+        for (const it of imageFeature.items) {
+          items.push({
+            frame: it.frame,
+            frameTime: it.frame_time,
+            imageUrl: it.item_url,
+          });
+        }
+
+        const representative = /** @type {ImageRepresentative} */ {
+          index: imageFeature.representative.item_index,
+          imageUrl: imageFeature.representative.enhanced_url,
+        };
+
+        texts.push({
+          items: items,
+          representative: representative,
+        });
+      }
+
+      setFeatureStatus("Completed");
+
+      return /** @type {KeyframesFeatures} */ {
+        faces: faces,
+        texts: texts,
+      };
+    },
+  });
+
   const fetchDataMutation = useMutation({
     mutationFn: async (jobId) => {
-      setStatus("Retrieving keyframes...");
-
       const config = {
         method: "get",
         url: `${process.env.REACT_APP_KEYFRAME_API_2}/result/${jobId}`,
@@ -296,6 +361,7 @@ export const useProcessKeyframes = () => {
     try {
       const jobId = await sendUrlMutation.mutateAsync({ url, role });
       await checkStatusMutation.mutateAsync(jobId);
+      await fetchFeatureDataMutation.mutateAsync(jobId);
       return fetchDataMutation.mutateAsync(jobId);
     } catch (error) {
       console.error("Process failed:", error);
@@ -306,7 +372,7 @@ export const useProcessKeyframes = () => {
 
   return {
     executeProcess,
-    status, // Expose status for UI
+    status, //Keyframes status
     isPending:
       sendUrlMutation.isPending ||
       checkStatusMutation.isPending ||
@@ -316,5 +382,10 @@ export const useProcessKeyframes = () => {
       sendUrlMutation.error ||
       checkStatusMutation.error ||
       fetchDataMutation.error,
+
+    featureStatus,
+    isFeatureDataPending: fetchFeatureDataMutation.isPending,
+    featureData: fetchFeatureDataMutation.data,
+    featureDataError: fetchFeatureDataMutation.error,
   };
 };
