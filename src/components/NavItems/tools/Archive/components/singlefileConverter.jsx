@@ -44,7 +44,7 @@ const SinglefileConverter = () => {
     // console.log(resp)
     if (resp.status === 200) {
       const respJson = resp.data;
-      console.log(respJson);
+      // console.log(respJson);
       return respJson;
     } else {
       setError("Error signing WACZ, please try again");
@@ -251,9 +251,13 @@ const SinglefileConverter = () => {
           const pako = require("pako");
           const res0 = pako.gzip(res[0]);
           const res1 = pako.gzip(res[1]);
-          const resbuf = new Uint8Array(res[0].byteLength + res[1].byteLength);
+          const res2 = pako.gzip(res[2]);
+          const resbuf = new Uint8Array(
+            res0.byteLength + res1.byteLength + res2.byteLength,
+          );
           resbuf.set(res0, 0);
-          resbuf.set(res1, res0.byteLength);
+          resbuf.set(res2, res0.byteLength);
+          resbuf.set(res1, res0.byteLength + res2.byteLength);
           const gzipArch = resbuf;
 
           const blob2 = new Blob([gzipArch], {
@@ -268,7 +272,7 @@ const SinglefileConverter = () => {
             {
               write(chunk) {
                 return new Promise((resolve, reject) => {
-                  console.log(chunk);
+                  // console.log(chunk);
                   makeWacz(blob2, chunk, pageInfo, recordDigest);
                   resolve();
                 });
@@ -321,25 +325,24 @@ const SinglefileConverter = () => {
     };
 
     // For adding request record if page is saved as a response
-    // const trim = pageUrl.split(":")[1].slice(2).split("/")
-    // const host = pageUrl.split(":")[0]+"://"+trim[0]
-    // const addr = "/"+trim.slice(1).join("/")
+    const trim = pageUrl.split(":")[1].slice(2).split("/");
+    const host = pageUrl.split(":")[0] + "://" + trim[0];
+    const addr = "/" + trim.slice(1).join("/");
     // console.log(host)
     // console.log(addr)
 
-    // const samplereq=
-    //   `GET ${addr} HTTP/1.1\nUser-Agent:  Mozilla/4.0 (compatible; MSIE5.01; Windows NT)\nHost: ${host}\nAccept-Language: en-us\nAccept-Encoding: gzip, deflate\nConnection: Keep-Alive\n`
+    const samplereq = `GET ${addr} HTTP/1.1\nUser-Agent:  Mozilla/4.0 (compatible; MSIE5.01; Windows NT)\nHost: ${host}\nAccept-Language: en-us\nAccept-Encoding: gzip, deflate\nConnection: Keep-Alive\n`;
 
-    // async function* reqcontent() {
-    //   yield new TextEncoder().encode(samplereq)
-    // }
+    async function* reqcontent() {
+      yield new TextEncoder().encode(samplereq);
+    }
 
-    // const reqtype = "request"
+    const reqtype = "request";
 
-    // const reqRecord = await WARCRecord.create(
-    //   {url, date, type:"request", warcVersion,'statusline':""},
-    //   reqcontent()
-    // )
+    const reqRecord = await WARCRecord.create(
+      { url, date, type: "request", warcVersion, statusline: "" },
+      reqcontent(),
+    );
 
     async function* content() {
       yield new TextEncoder().encode(fileContent);
@@ -358,11 +361,11 @@ const SinglefileConverter = () => {
     );
 
     const serializedRecord = await WARCSerializer.serialize(record);
-    // const serializedRequest = await WARCSerializer.serialize(reqRecord)
+    const serializedRequest = await WARCSerializer.serialize(reqRecord);
 
     // console.log(new TextDecoder().decode(serializedRequest))
-    return [serializedWARCInfo, serializedRecord];
-    // return [serializedWARCInfo, serializedRecord,serializedRequest];
+    // return [serializedWARCInfo, serializedRecord];
+    return [serializedWARCInfo, serializedRecord, serializedRequest];
   };
 
   return (
