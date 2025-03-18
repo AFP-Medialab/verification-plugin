@@ -25,10 +25,12 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
   TransCredibilitySignalsLink,
   TransHtmlDoubleLinkBreak,
+  TransMachineGeneratedTextTooltip,
   TransSupportedToolsLink,
 } from "../TransComponents";
 import AssistantTextClassification from "./AssistantTextClassification";
 import AssistantTextSpanClassification from "./AssistantTextSpanClassification";
+import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
 import TextFooter from "./TextFooter.jsx";
 import { treeMapToElements } from "./assistantUtils";
 
@@ -102,6 +104,21 @@ const AssistantTextResult = () => {
   );
   const subjectivityFail = useSelector(
     (state) => state.assistant.subjectivityFail,
+  );
+
+  // previous fact checks
+  const prevFactChecksTitle = keyword("previous_fact_checks_title");
+  const prevFactChecksResult = useSelector(
+    (state) => state.assistant.prevFactChecksResult,
+  );
+  const prevFactChecksLoading = useSelector(
+    (state) => state.assistant.prevFactChecksLoading,
+  );
+  const prevFactChecksDone = useSelector(
+    (state) => state.assistant.prevFactChecksDone,
+  );
+  const prevFactChecksFail = useSelector(
+    (state) => state.assistant.prevFactChecksFail,
   );
 
   // machine generated text
@@ -187,7 +204,7 @@ const AssistantTextResult = () => {
         action={
           // top left warning and tooltip
           <div style={{ display: "flex" }}>
-            <div hidden={dbkfMatch === null}>
+            <div hidden={dbkfMatch === null && prevFactChecksResult.length < 1}>
               <Tooltip title={keyword("text_warning")}>
                 <WarningOutlined
                   color={"warning"}
@@ -241,7 +258,8 @@ const AssistantTextResult = () => {
             value={textTabIndex}
             onChange={handleTabChange}
             aria-label="extracted text tabs"
-            variant="fullWidth"
+            //variant="fullWidth"
+            variant="scrollable"
           >
             <Tab label={keyword("raw_text")} {...a11yProps(0)} />
             <Tab
@@ -303,6 +321,15 @@ const AssistantTextResult = () => {
                       }}
                     />
                     <TransCredibilitySignalsLink keyword={keyword} />
+                    <TransHtmlDoubleLinkBreak keyword={keyword} />
+                    <ColourGradientTooltipContent
+                      description={keyword("confidence_tooltip_category")}
+                      colourScaleText={keyword("colour_scale")}
+                      textLow={keyword("low_confidence")}
+                      textHigh={keyword("high_confidence")}
+                      rgbLow={newsFramingResult.configs.confidenceRgbLow}
+                      rgbHigh={newsFramingResult.configs.confidenceRgbHigh}
+                    />
                   </>
                 }
                 textHtmlMap={textHtmlMap}
@@ -336,6 +363,15 @@ const AssistantTextResult = () => {
                       }}
                     />
                     <TransCredibilitySignalsLink keyword={keyword} />
+                    <TransHtmlDoubleLinkBreak keyword={keyword} />
+                    <ColourGradientTooltipContent
+                      description={keyword("confidence_tooltip_category")}
+                      colourScaleText={keyword("colour_scale")}
+                      textLow={keyword("low_confidence")}
+                      textHigh={keyword("high_confidence")}
+                      rgbLow={newsGenreResult.configs.confidenceRgbLow}
+                      rgbHigh={newsGenreResult.configs.confidenceRgbHigh}
+                    />
                   </>
                 }
                 textHtmlMap={textHtmlMap}
@@ -369,6 +405,15 @@ const AssistantTextResult = () => {
                       }}
                     />
                     <TransCredibilitySignalsLink keyword={keyword} />
+                    <TransHtmlDoubleLinkBreak keyword={keyword} />
+                    <ColourGradientTooltipContent
+                      description={keyword("confidence_tooltip_category")}
+                      colourScaleText={keyword("colour_scale")}
+                      textLow={keyword("low_confidence")}
+                      textHigh={keyword("high_confidence")}
+                      rgbLow={persuasionResult.configs.confidenceRgbLow}
+                      rgbHigh={persuasionResult.configs.confidenceRgbHigh}
+                    />
                   </>
                 }
                 textHtmlMap={textHtmlMap}
@@ -419,11 +464,7 @@ const AssistantTextResult = () => {
                 titleText={machineGeneratedTextTitle}
                 categoriesTooltipContent={
                   <>
-                    <Trans
-                      t={keyword}
-                      i18nKey="machine_generated_text_tooltip"
-                    />
-                    <TransHtmlDoubleLinkBreak keyword={keyword} />
+                    <TransMachineGeneratedTextTooltip keyword={keyword} />
                     <TransCredibilitySignalsLink keyword={keyword} />
                   </>
                 }

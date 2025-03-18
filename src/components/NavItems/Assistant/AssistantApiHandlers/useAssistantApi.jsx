@@ -192,7 +192,7 @@ export default function assistantApiCalls() {
       },
       (numTries) => {
         console.log(
-          "Could not connect to previous fact checks service, tries " +
+          "Could not connect to subjectivity service, tries " +
             (numTries + 1) +
             "/" +
             MAX_NUM_RETRIES,

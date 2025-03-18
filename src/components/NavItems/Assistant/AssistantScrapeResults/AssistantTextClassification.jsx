@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import GaugeChart from "react-gauge-chart";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -10,11 +11,14 @@ import Grid2 from "@mui/material/Grid2";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
+import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
+import GaugeChartModalExplanation from "components/Shared/GaugeChartResults/GaugeChartModalExplanation";
+import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { v4 as uuidv4 } from "uuid";
 
@@ -32,7 +36,7 @@ import {
 export default function AssistantTextClassification({
   text,
   classification,
-  titleText = "Detected Class",
+  titleText = "",
   importantSentenceKey = "Important_Sentence",
   categoriesTooltipContent = "",
   configs = {
@@ -46,7 +50,7 @@ export default function AssistantTextClassification({
     importanceRgbHigh: [228, 25, 25],
   },
   textHtmlMap = null,
-  credibilitySignal = keyword("news_framing_title"),
+  credibilitySignal = "",
 }) {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -211,58 +215,109 @@ export default function AssistantTextClassification({
 }
 
 export function MgtCategoriesList({ categories, keyword, mgtOverallScore }) {
-  const orderedMgtCategories = [
-    "highly_likely_human",
-    "likely_human",
-    "likely_machine",
-    "highly_likely_machine",
-  ];
-
-  const mgtOverallScorePred = categories[mgtOverallScore][0]["pred"];
-  const mgtOverallScorePredRgb = categories[mgtOverallScore][0]["rgb"];
-
+  // list of categories with overall score first as GaugeUI
   let output = [];
   output.push(
     <ListItem key={`text_${mgtOverallScore}`}>
       <Typography>{keyword(mgtOverallScore)}</Typography>
     </ListItem>,
   );
-  output.push(
-    <ListItem
-      key={mgtOverallScore}
-      sx={{
-        background: rgbToString(mgtOverallScorePredRgb),
-        color: rgbToLuminance(mgtOverallScorePredRgb) > 0.7 ? "black" : "white",
-      }}
-    >
-      <ListItemText primary={keyword(mgtOverallScorePred)} />
-    </ListItem>,
+  // gauge chart
+  const percentScore = Math.round(
+    Number(categories[mgtOverallScore][0].score) * 100.0,
   );
   output.push(
-    <ListItem key={"text_mgt_possible_classes"}>
-      {/* TODO check if a good translation exists already */}
-      <Typography>{keyword("mgt_possible_classes")}</Typography>
-    </ListItem>,
-  );
-  for (const category of orderedMgtCategories) {
-    output.push(
-      <ListItem
-        key={category}
-        sx={{
-          background: rgbToString(categories[category][0]["rgb"]),
-          color:
-            rgbToLuminance(categories[category][0]["rgb"]) > 0.7
-              ? "black"
-              : "white",
+    <ListItem key="gauge_chart">
+      <GaugeChart
+        id={"gauge-chart"}
+        animate={false}
+        nrOfLevels={4}
+        textColor={"black"}
+        arcsLength={[0.05, 0.45, 0.45, 0.05]}
+        percent={categories[mgtOverallScore] ? percentScore / 100.0 : null}
+        style={{
+          minWidth: "175px",
+          //width: "50%",
+          //maxWidth: "500px",
         }}
+      />
+    </ListItem>,
+  );
+  // gauge labels TODO center this!
+  output.push(
+    <ListItem key="gauge_labels">
+      <Stack
+        direction="row"
+        justifyContent="center"
+        //display={"flex"}
+        alignItems="center"
+        spacing={7}
       >
-        <ListItemText primary={keyword(category)} />
-      </ListItem>,
-    );
-    output.push(<Divider key={`divider_${category}`} />);
+        <Typography variant="subtitle2">
+          {keyword("gauge_no_detection")}
+        </Typography>
+        <Typography variant="subtitle2">
+          {keyword("gauge_detection")}
+        </Typography>
+      </Stack>
+    </ListItem>,
+  );
+  // gauge explanation
+  output.push(
+    <ListItem key="gauge_explanantion">
+      <GaugeChartModalExplanation
+        keyword={keyword}
+        keywordsArr={[
+          "gauge_scale_modal_explanation_rating_1",
+          "gauge_scale_modal_explanation_rating_2",
+          "gauge_scale_modal_explanation_rating_3",
+          "gauge_scale_modal_explanation_rating_4",
+        ]}
+        keywordLink={"gauge_scale_explanation_link"}
+        keywordModalTitle={"gauge_scale_modal_explanation_title"}
+        colors={["#00FF00", "#AAFF03", "#FFA903", "#FF0000"]}
+      />
+    </ListItem>,
+  );
+  // divider
+  output.push(<ListItem key="listitem_empty1"></ListItem>);
+  output.push(<Divider key={`divider_${mgtOverallScore}`} />);
+  output.push(<ListItem key="listitem_empty2"></ListItem>);
+  // categories
+  output.push(
+    <ListItem key={"text_detected_classes"}>
+      <Typography>{keyword("detected_classes")}</Typography>
+    </ListItem>,
+  );
+  for (const category in categories) {
+    if (category != mgtOverallScore) {
+      output.push(
+        <ListItem
+          key={category}
+          sx={{
+            background: rgbToString(categories[category][0]["rgb"]),
+            color:
+              rgbToLuminance(categories[category][0]["rgb"]) > 0.7
+                ? "black"
+                : "white",
+          }}
+        >
+          <ListItemText primary={keyword(category)} />
+        </ListItem>,
+      );
+      output.push(<Divider key={`divider_${category}`} />);
+    }
   }
 
-  return <List>{output}</List>;
+  return (
+    //   <div>
+    //     {mgtOverallScoreText}
+    //     {mgtOverallScoreGaugeUI}
+    //     <List>{output}</List>
+    //   </div>
+    // );
+    <List>{output}</List>
+  );
 }
 
 export function CategoriesList({
@@ -339,8 +394,10 @@ export function ClassifiedText({
   function wrapHighlightedText(spanText, spanInfo) {
     const spanScore = spanInfo.score;
     let backgroundRgb;
+    //let mgtTooltipText;
     if (credibilitySignal === keyword("machine_generated_text_title")) {
       backgroundRgb = spanInfo.rgb;
+      //mgtTooltipText = keyword("mgt_detected_sentence_class") + keyword(spanInfo.pred)
     } else {
       backgroundRgb = interpRgb(
         spanScore,
@@ -354,18 +411,26 @@ export function ClassifiedText({
     let textColour = "white";
     if (bgLuminance > 0.7) textColour = "black";
 
-    return (
-      <Tooltip key={uuidv4()} title={tooltipText}>
-        <span
-          style={{
-            background: rgbToString(backgroundRgb),
-            color: textColour,
-          }}
-        >
-          {spanText}
-        </span>
-      </Tooltip>
+    const highlightedSentence = (
+      <span
+        style={{
+          background: rgbToString(backgroundRgb),
+          color: textColour,
+        }}
+      >
+        {spanText}
+      </span>
     );
+
+    if (credibilitySignal != keyword("machine_generated_text_title")) {
+      return (
+        <Tooltip key={uuidv4()} title={tooltipText}>
+          {highlightedSentence}
+        </Tooltip>
+      );
+    } else {
+      return <span key={uuidv4()}>{highlightedSentence}</span>;
+    }
   }
 
   if (highlightSpan && spanIndices.length > 0) {

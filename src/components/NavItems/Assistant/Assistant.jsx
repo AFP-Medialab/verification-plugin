@@ -197,7 +197,7 @@ const Assistant = () => {
             className={classes.assistantCardHeader}
             title={
               <Typography style={{ fontWeight: "bold", fontSize: 20 }}>
-                {keyword("Assistant results")}
+                {keyword("assistant_results")}
               </Typography>
             }
             action={

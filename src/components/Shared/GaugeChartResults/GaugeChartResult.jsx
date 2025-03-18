@@ -138,8 +138,8 @@ const GaugeChartResult = ({
             )}
             <Stack
               direction="column"
-              justifyContent="center"
-              alignItems="center"
+              justifyContent="center" //{detectionType != "machine_generated_text" ?  "center" : "left"}
+              alignItems="center" //{detectionType != "machine_generated_text" ?  "center" : "left"}
             >
               <GaugeChart
                 id={"gauge-chart"}
@@ -162,9 +162,16 @@ const GaugeChartResult = ({
                 }
                 percent={scores ? maxScore / 100 : 0}
                 style={{
-                  minWidth: "250px",
-                  width: "50%",
-                  maxWidth: "500px",
+                  minWidth:
+                    detectionType != "machine_generated_text"
+                      ? "250px"
+                      : "12.5rem",
+                  width:
+                    detectionType != "machine_generated_text" ? "50%" : "75%",
+                  maxWidth:
+                    detectionType != "machine_generated_text"
+                      ? "500px"
+                      : "12.5rem",
                 }}
               />
 
@@ -183,19 +190,21 @@ const GaugeChartResult = ({
               </Stack>
             </Stack>
           </Stack>
-          <Box alignSelf={{ sm: "flex-start", md: "flex-end" }}>
-            <Tooltip title={keyword("gauge_download_gauge_button")}>
-              <IconButton
-                color="primary"
-                aria-label="download chart"
-                onClick={async () =>
-                  await exportReactElementAsJpg(gaugeChartRef, "gauge_chart")
-                }
-              >
-                <Download />
-              </IconButton>
-            </Tooltip>
-          </Box>
+          {detectionType != "machine_generated_text" ? (
+            <Box alignSelf={{ sm: "flex-start", md: "flex-end" }}>
+              <Tooltip title={keyword("gauge_download_gauge_button")}>
+                <IconButton
+                  color="primary"
+                  aria-label="download chart"
+                  onClick={async () =>
+                    await exportReactElementAsJpg(gaugeChartRef, "gauge_chart")
+                  }
+                >
+                  <Download />
+                </IconButton>
+              </Tooltip>
+            </Box>
+          ) : null}
         </Stack>
 
         <GaugeChartModalExplanation
@@ -206,15 +215,22 @@ const GaugeChartResult = ({
           colors={gaugeExplanation.colors}
         />
 
-        <CustomAlertScore
-          score={scores ? maxScore : 0}
-          detectionType={detectionType ? detectionType : undefined}
-          toolName={toolName}
-          thresholds={detectionThresholds}
-        />
-        {resultsHaveErrors && (
-          <Alert severity="error">{keyword("gauge_algorithms_errors")}</Alert>
-        )}
+        {detectionType != "machine_generated_text" ? (
+          <>
+            <CustomAlertScore
+              score={scores ? maxScore : 0}
+              detectionType={detectionType ? detectionType : undefined}
+              toolName={toolName}
+              thresholds={detectionThresholds}
+            />
+            {resultsHaveErrors && (
+              <Alert severity="error">
+                {keyword("gauge_algorithms_errors")}
+              </Alert>
+            )}
+          </>
+        ) : null}
+
         {detectionType != "machine_generated_text" ? (
           <Box sx={{ width: "100%" }}>
             <Accordion defaultExpanded onChange={handleDetailsChange}>

@@ -107,6 +107,27 @@ export function TransSourceCredibilityTooltip({ keyword }) {
   );
 }
 
+export function TransMachineGeneratedTextTooltip({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="machine_generated_text_tooltip"
+      components={{
+        ul: <ul />,
+        li: <li />,
+        highlyLikelyHuman: (
+          <strong style={{ background: "#00fc00", color: "black" }} />
+        ),
+        likelyHuman: (
+          <strong style={{ background: "#aaff00", color: "black" }} />
+        ),
+        likelyMachine: <strong style={{ background: "#fcaa00" }} />,
+        highlyLikelyMachine: <strong style={{ background: "#fc0000" }} />,
+      }}
+    />
+  );
+}
+
 export function TransHtmlDoubleLinkBreak({ keyword }) {
   return <Trans t={keyword} i18nKey="html_double_line_break" />;
 }
