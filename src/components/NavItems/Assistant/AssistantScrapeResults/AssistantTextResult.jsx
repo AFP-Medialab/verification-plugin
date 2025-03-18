@@ -24,7 +24,8 @@ import { setWarningExpanded } from "../../../../redux/actions/tools/assistantAct
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
   TransCredibilitySignalsLink,
-  TransHtmlDoubleLinkBreak,
+  TransHtmlDoubleLineBreak,
+  TransHtmlSingleLineBreak,
   TransSupportedToolsLink,
 } from "../TransComponents";
 import AssistantTextClassification from "./AssistantTextClassification";
@@ -199,7 +200,7 @@ const AssistantTextResult = () => {
                     }}
                   />
                   <TransSupportedToolsLink keyword={keyword} />
-                  <TransHtmlDoubleLinkBreak keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
                   <TransCredibilitySignalsLink keyword={keyword} />
                 </>
               }
@@ -373,7 +374,7 @@ const AssistantTextResult = () => {
                 categoriesTooltipContent={
                   <>
                     <Trans t={keyword} i18nKey="subjectivity_tooltip" />
-                    <TransHtmlDoubleLinkBreak keyword={keyword} />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
                     <TransCredibilitySignalsLink keyword={keyword} />
                   </>
                 }

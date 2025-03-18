@@ -22,7 +22,7 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { TextCopy } from "../../../Shared/Utils/TextCopy";
 import ExtractedSourceCredibilityResult from "../AssistantCheckResults/ExtractedSourceCredibilityResult";
 import {
-  TransHtmlDoubleLinkBreak,
+  TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
 } from "../TransComponents";
@@ -335,9 +335,9 @@ const AssistantLinkResult = () => {
             title={
               <>
                 <Trans t={keyword} i18nKey="extracted_urls_tooltip" />
-                <TransHtmlDoubleLinkBreak keyword={keyword} />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
                 <TransSourceCredibilityTooltip keyword={keyword} />
-                <TransHtmlDoubleLinkBreak keyword={keyword} />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
                 <TransUrlDomainAnalysisLink keyword={keyword} />
               </>
             }
