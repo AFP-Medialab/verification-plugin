@@ -32,6 +32,7 @@ import {
   setInputSourceCredDetails,
   setInputUrl,
   setMachineGeneratedTextDetails,
+  setMissingMedia,
   setNeDetails,
   setNewsGenreDetails,
   setNewsTopicDetails,
@@ -692,6 +693,11 @@ function* handleAssistantScrapeCall(action) {
       scrapeResult,
     );
 
+    yield put(
+      setMissingMedia(
+        urlType === KNOWN_LINKS.INSTAGRAM && scrapeResult.missing_media,
+      ),
+    );
     yield put(setInputUrl(inputUrl, urlType));
     yield put(
       setScrapedData(

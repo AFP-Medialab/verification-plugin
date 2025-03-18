@@ -56,12 +56,10 @@ const TwitterSna = () => {
       MuiCardHeader: {
         styleOverrides: {
           root: {
-            backgroundColor: "#00926c",
             paddingTop: "11px!important",
             paddingBottom: "11px!important",
           },
           title: {
-            color: "white",
             fontSize: "20px!important",
             fontweight: 500,
           },

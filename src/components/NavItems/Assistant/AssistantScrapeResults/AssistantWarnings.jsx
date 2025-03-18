@@ -30,7 +30,7 @@ const AssistantWarnings = () => {
 
   return (
     <Card
-      variant={"outlined"}
+      variant="outlined"
       className={classes.assistantWarningBorder}
       id="warnings"
     >
