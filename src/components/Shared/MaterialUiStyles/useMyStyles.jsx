@@ -318,9 +318,7 @@ const styles = (theme) => ({
   },
   assistantCardHeader: {
     fontSize: theme.typography.h6.fontSize,
-    color: "white",
     textAlign: "start",
-    backgroundColor: theme.palette.primary.main,
   },
   assistantHover: {
     borderWidth: 3,

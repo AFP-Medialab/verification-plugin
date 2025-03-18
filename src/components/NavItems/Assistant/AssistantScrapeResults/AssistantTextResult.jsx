@@ -166,7 +166,7 @@ const AssistantTextResult = () => {
   }
 
   return (
-    <Card data-testid="assistant-text-scraped-text">
+    <Card variant="outlined" data-testid="assistant-text-scraped-text">
       <CardHeader
         className={classes.assistantCardHeader}
         title={keyword("text_title")}

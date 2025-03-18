@@ -116,7 +116,7 @@ const AssistantNEResult = () => {
 
   return (
     <Grid2 size={{ xs: 12 }}>
-      <Card>
+      <Card variant="outlined">
         <CardHeader
           className={classes.assistantCardHeader}
           title={keyword("named_entity_title")}

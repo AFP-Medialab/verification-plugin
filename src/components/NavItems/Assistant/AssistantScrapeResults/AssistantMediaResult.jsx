@@ -5,10 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
+import Collapse from "@mui/material/Collapse";
 import Grid2 from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
 import LinearProgress from "@mui/material/LinearProgress";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
@@ -22,6 +26,7 @@ import {
   setProcessUrl,
   setWarningExpanded,
 } from "../../../../redux/actions/tools/assistantActions";
+import { setStateExpanded } from "../../../../redux/actions/tools/assistantActions";
 import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "../../../Shared/VideoGridList/VideoGridList";
@@ -39,6 +44,7 @@ const AssistantMediaResult = () => {
   const classes = useMyStyles();
   const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
+  const stateExpanded = useSelector((state) => state.assistant.stateExpanded);
 
   // assistant media states
   const processUrl = useSelector((state) => state.assistant.processUrl);
@@ -50,6 +56,7 @@ const AssistantMediaResult = () => {
   );
   const imageList = useSelector((state) => state.assistant.imageList);
   const videoList = useSelector((state) => state.assistant.videoList);
+  const missingMedia = useSelector((state) => state.assistant.missingMedia);
 
   // third party topMenuItem states
   //const ocrLoading = useSelector(state=>state.assistant.ocrLoading)
@@ -116,6 +123,7 @@ const AssistantMediaResult = () => {
 
   return (
     <Card
+      variant="outlined"
       data-testid="url-media-results"
       hidden={!filteredImageList.length && !videoList.length}
     >
@@ -173,6 +181,28 @@ const AssistantMediaResult = () => {
 
       {/* selected image or video with recommended tools */}
       <CardContent sx={{ padding: processUrl == null ? 0 : undefined }}>
+        {missingMedia ? (
+          <Alert severity="warning">
+            <Typography component={"span"}>
+              <Box color={"orange"} fontStyle="italic">
+                {keyword("missing_media_title")}
+                <IconButton
+                  className={classes.assistantIconRight}
+                  onClick={() => dispatch(setStateExpanded(!stateExpanded))}
+                >
+                  <ExpandMoreIcon style={{ color: "orange" }} />
+                </IconButton>
+              </Box>
+            </Typography>
+
+            <Collapse
+              in={stateExpanded}
+              className={classes.assistantBackground}
+            >
+              <Typography>{keyword("missing_media_instructions")}</Typography>
+            </Collapse>
+          </Alert>
+        ) : null}
         {processUrl !== null ? (
           resultIsImage ? (
             <Grid2 container spacing={2}>

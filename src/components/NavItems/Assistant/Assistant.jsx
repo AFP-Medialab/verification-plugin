@@ -196,7 +196,7 @@ const Assistant = () => {
 
       {/* assistant results section */}
       {urlMode && inputUrl ? (
-        <Card sx={{ width: "100%", mb: 2 }}>
+        <Card variant="outlined" sx={{ width: "100%", mb: 2 }}>
           <CardHeader
             className={classes.assistantCardHeader}
             title={
