@@ -112,6 +112,15 @@ export const setAssistantLoading = (loading) => {
   };
 };
 
+export const setMissingMedia = (missingMedia) => {
+  return {
+    type: "SET_MISSING_MEDIA",
+    payload: {
+      missingMedia: missingMedia,
+    },
+  };
+};
+
 export const setDbkfTextMatchDetails = (
   textMatch,
   textMatchLoading,

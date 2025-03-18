@@ -101,6 +101,7 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_PREV_FACT_CHECKS_DETAILS":
     case "SET_MACHINE_GENERATED_TEXT_DETAILS":
     case "SET_LOADING":
+    case "SET_MISSING_MEDIA":
     case "SET_WARNING_EXPANDED":
     case "SET_ASSURANCE_EXPANDED":
     case "SET_STATE_EXPANDED":
