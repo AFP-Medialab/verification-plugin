@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import Alert from "@mui/material/Alert";
@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
+import Fade from "@mui/material/Fade";
 import Grid2 from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
 import Skeleton from "@mui/material/Skeleton";
@@ -28,10 +29,15 @@ import { ClearIcon } from "@mui/x-date-pickers";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { keyframes } from "../../../../constants/tools";
 import {
+  resetKeyframes,
+  setKeyframesUrl,
+} from "../../../../redux/reducers/tools/keyframesReducer";
+import {
   useKeyframeWrapper,
   useProcessKeyframes,
 } from "./Hooks/useKeyframeWrapper";
 import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
+import { ImageWithFade } from "./ImageWithFade";
 import LocalFile from "./LocalFile/LocalFile";
 import KeyFramesResults from "./Results/KeyFramesResults";
 
@@ -43,8 +49,13 @@ const Keyframes = () => {
     "components/NavItems/tools/Alltools",
   );
 
+  const dispatch = useDispatch();
+
   const resultUrl = useSelector((state) => state.keyframes.url);
   const resultData = useSelector((state) => state.keyframes.result);
+  const keyframesFeaturesData = useSelector(
+    (state) => state.keyframes.keyframesFeatures,
+  );
   const isLoadingSimilarity = useSelector(
     (state) => state.keyframes.similarityLoading,
   );
@@ -68,7 +79,9 @@ const Keyframes = () => {
   );
 
   const submitUrl = async () => {
-    //setSubmittedUrl(input);
+    setKeyframesUrl(input);
+    resetKeyframes();
+
     try {
       await executeProcess(input, role);
     } catch (error) {
@@ -106,21 +119,11 @@ const Keyframes = () => {
     executeProcess,
     isPending,
     status,
-    data,
     error,
-    featureData,
     isFeatureDataPending,
     featureDataError,
     featureStatus,
   } = useProcessKeyframes();
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
-  useEffect(() => {
-    console.log(featureData);
-  }, [featureData]);
 
   return (
     <Box>
@@ -220,28 +223,38 @@ const Keyframes = () => {
         </TabContext>
 
         {status && isPending && (
-          <Alert icon={<CircularProgress size={20} />} severity="info">
-            {status}
-          </Alert>
+          <Fade in={isPending} timeout={750}>
+            <Alert icon={<CircularProgress size={20} />} severity="info">
+              {status}
+            </Alert>
+          </Fade>
         )}
 
         {isPending && (
-          <Card variant="outlined">
-            <Stack direction="column" spacing={4} p={4}>
-              <Skeleton variant="rounded" height={40} />
-              <Stack direction={{ md: "row", xs: "column" }} spacing={4}>
-                <Skeleton variant="rounded" width={80} height={80} />
-                <Skeleton variant="rounded" width={80} height={80} />
-                <Skeleton variant="rounded" width={80} height={80} />
-                <Skeleton variant="rounded" width={80} height={80} />
+          <Fade in={isPending} timeout={1500}>
+            <Card variant="outlined">
+              <Stack direction="column" spacing={4} p={2}>
+                <Skeleton variant="rounded" height={40} />
+                <Stack direction={{ md: "row", xs: "column" }} spacing={4}>
+                  <Skeleton variant="rounded" width={80} height={80} />
+                  <Skeleton variant="rounded" width={80} height={80} />
+                  <Skeleton variant="rounded" width={80} height={80} />
+                  <Skeleton variant="rounded" width={80} height={80} />
+                </Stack>
               </Stack>
-            </Stack>
-          </Card>
+            </Card>
+          </Fade>
         )}
 
         {error && <Alert severity="error">{error.message}</Alert>}
 
-        {data && tabSelected === "url" && <KeyFramesResults result={data} />}
+        {resultData && tabSelected === "url" && (
+          <Fade in={resultData && tabSelected === "url"} timeout={1500}>
+            <div>
+              <KeyFramesResults result={resultData} />
+            </div>
+          </Fade>
+        )}
 
         {featureStatus && isFeatureDataPending && (
           <Alert icon={<CircularProgress size={20} />} severity="info">
@@ -250,51 +263,65 @@ const Keyframes = () => {
         )}
 
         {isFeatureDataPending && (
-          <Card variant="outlined">
-            <Stack direction="column" spacing={4} p={4}>
-              <Skeleton variant="rounded" height={40} />
-              <Stack direction={{ md: "row", xs: "column" }} spacing={4}>
-                <Skeleton variant="rounded" width={80} height={80} />
-                <Skeleton variant="rounded" width={80} height={80} />
-                <Skeleton variant="rounded" width={80} height={80} />
-                <Skeleton variant="rounded" width={80} height={80} />
+          <Fade in={isFeatureDataPending} timeout={1500}>
+            <Card variant="outlined">
+              <Stack direction="column" spacing={4} p={2}>
+                <Skeleton variant="rounded" height={40} />
+                <Stack direction={{ md: "row", xs: "column" }} spacing={4}>
+                  <Skeleton variant="rounded" width={80} height={80} />
+                  <Skeleton variant="rounded" width={80} height={80} />
+                  <Skeleton variant="rounded" width={80} height={80} />
+                  <Skeleton variant="rounded" width={80} height={80} />
+                </Stack>
               </Stack>
-            </Stack>
-          </Card>
+            </Card>
+          </Fade>
         )}
 
         {featureDataError && (
           <Alert severity="error">{featureDataError.message}</Alert>
         )}
 
-        {featureData && (
+        {keyframesFeaturesData && tabSelected === "url" && (
           <>
-            <Card variant="outlined">
-              <Typography>{"Faces"}</Typography>
-              <Grid2 container direction="row" spacing={2} p={4}>
-                {featureData.faces.map((item, i) => (
-                  <Grid2 key={i} size={{ md: 3, lg: 1 }}>
-                    <img
-                      src={item.representative.imageUrl}
-                      style={{ width: "-webkit-fill-available" }}
-                    />
-                  </Grid2>
-                ))}
-              </Grid2>
-            </Card>
-            <Card variant="outlined">
-              <Typography>{"Texts"}</Typography>
-              <Grid2 container direction="row" spacing={2} p={4}>
-                {featureData.texts.map((item, i) => (
-                  <Grid2 key={i} size={{ md: 3, lg: 1 }}>
-                    <img
-                      src={item.representative.imageUrl}
-                      style={{ width: "-webkit-fill-available" }}
-                    />
-                  </Grid2>
-                ))}
-              </Grid2>
-            </Card>
+            <Fade in={keyframesFeaturesData !== null} timeout={1500}>
+              <Card variant="outlined">
+                <Box pb={4} pt={2} pl={4} pr={4}>
+                  <Stack direction="column" spacing={2}>
+                    <Typography variant="h6">{"Faces"}</Typography>
+                    <Grid2 container direction="row" spacing={2}>
+                      {keyframesFeaturesData.faces.map((item, i) => (
+                        <Grid2 key={i} size={{ md: 3, lg: 1 }}>
+                          <ImageWithFade
+                            src={item.representative.imageUrl}
+                            alt={`extracted img with face #${i + 1}`}
+                          />
+                        </Grid2>
+                      ))}
+                    </Grid2>
+                  </Stack>
+                </Box>
+              </Card>
+            </Fade>
+            <Fade in={keyframesFeaturesData !== null} timeout={1500}>
+              <Card variant="outlined">
+                <Box p={4}>
+                  <Stack direction="column" spacing={2}>
+                    <Typography variant="h6">{"Texts"}</Typography>
+                    <Grid2 container direction="row" spacing={2}>
+                      {keyframesFeaturesData.texts.map((item, i) => (
+                        <Grid2 key={i} size={{ md: 3, lg: 1 }}>
+                          <ImageWithFade
+                            src={item.representative.imageUrl}
+                            alt={`extracted img with text #${i + 1}`}
+                          />
+                        </Grid2>
+                      ))}
+                    </Grid2>
+                  </Stack>
+                </Box>
+              </Card>
+            </Fade>
           </>
         )}
       </Stack>

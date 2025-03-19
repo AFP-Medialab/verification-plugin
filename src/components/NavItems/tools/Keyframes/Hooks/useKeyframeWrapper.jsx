@@ -9,10 +9,11 @@ import { setError } from "redux/reducers/errorReducer";
 
 import { ROLES } from "../../../../../constants/roles";
 import {
-  cleanKeyframesState,
+  resetKeyframes,
+  setKeyframesFeatures,
   setKeyframesLoading,
   setKeyframesResult,
-} from "../../../../../redux/actions/tools/keyframesActions";
+} from "../../../../../redux/reducers/tools/keyframesReducer";
 
 export const useKeyframeWrapper = (url, keyword) => {
   const dispatch = useDispatch();
@@ -110,7 +111,7 @@ export const useKeyframeWrapper = (url, keyword) => {
     };
 
     if (url === undefined || url === "") return;
-    dispatch(cleanKeyframesState());
+    dispatch(resetKeyframes());
     dispatch(setKeyframesLoading(true));
     postUrl(keyframe_url + "/subshot", jsonData);
     return () => {};
@@ -120,6 +121,8 @@ export const useKeyframeWrapper = (url, keyword) => {
 export const useProcessKeyframes = () => {
   const [status, setStatus] = useState(null);
   const [featureStatus, setFeatureStatus] = useState(null);
+
+  const dispatch = useDispatch();
 
   const authenticatedRequest = useAuthenticatedRequest();
 
@@ -271,6 +274,9 @@ export const useProcessKeyframes = () => {
         texts: texts,
       };
     },
+    onSuccess: (data) => {
+      dispatch(setKeyframesFeatures(data));
+    },
   });
 
   const fetchDataMutation = useMutation({
@@ -353,6 +359,9 @@ export const useProcessKeyframes = () => {
             ? response.data.keyframes_zip
             : "",
       };
+    },
+    onSuccess: (data) => {
+      dispatch(setKeyframesResult(data));
     },
   });
 
