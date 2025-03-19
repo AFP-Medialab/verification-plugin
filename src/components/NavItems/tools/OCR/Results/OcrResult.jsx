@@ -65,8 +65,8 @@ const OcrResult = () => {
   const mainImageId = "ocrMainImageId";
 
   /* if (!scripts) {
-                        dispatch(loadOcrScripts())
-                    }*/
+                              dispatch(loadOcrScripts())
+                          }*/
 
   const handleScriptChange = (event) => {
     dispatch(setSelectedScript(event.target.value));
@@ -195,7 +195,7 @@ const OcrResult = () => {
       <Grid2 size={{ xs: 6 }}>
         <Grid2 container spacing={2} direction={"column"}>
           <Grid2 size={{ xs: 12 }}>
-            <Card variant={"outlined"}>
+            <Card variant="outlined">
               <CardHeader title={keyword("image_analysed")}></CardHeader>
               {loading && <LinearProgress />}
               <CardContent className={classes.ocrImageCard}>
@@ -276,7 +276,7 @@ const OcrResult = () => {
             </Card>
           </Grid2>
           <Grid2 size={{ xs: 12 }} hidden={!fullText}>
-            <Card>
+            <Card variant="outlined">
               <CardHeader title={keyword("complete_text")}></CardHeader>
               <CardContent>
                 <Typography>{fullText}</Typography>
@@ -305,7 +305,7 @@ const OcrResult = () => {
       </Grid2>
 
       <Grid2 size={{ xs: 6 }} hidden={!result}>
-        <Card>
+        <Card variant="outlined">
           <CardHeader title={keyword("blocks")}></CardHeader>
 
           {result && result.bounding_boxes && result.bounding_boxes.length ? (
@@ -385,7 +385,10 @@ const OcrResult = () => {
                       !(index === reprocessBlockSelected && reprocessBlockOpen)
                     }
                   >
-                    <Card className={classes.ocrReprocessBox}>
+                    <Card
+                      variant="outlined"
+                      className={classes.ocrReprocessBox}
+                    >
                       <LinearProgress hidden={!reprocessLoading} />
 
                       <Typography variant={"subtitle1"}>

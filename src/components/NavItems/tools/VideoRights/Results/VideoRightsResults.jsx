@@ -84,7 +84,7 @@ const VideoRightsResults = (props) => {
   ];
 
   return (
-    <Card>
+    <Card variant="outlined">
       <CardHeader
         title={keyword("cardheader_results")}
         className={classes.headerUploadedImage}
@@ -93,7 +93,7 @@ const VideoRightsResults = (props) => {
             aria-label="close"
             onClick={() => dispatch(cleanVideoRightsState())}
           >
-            <CloseIcon sx={{ color: "white" }} />
+            <CloseIcon />
           </IconButton>
         }
       />
