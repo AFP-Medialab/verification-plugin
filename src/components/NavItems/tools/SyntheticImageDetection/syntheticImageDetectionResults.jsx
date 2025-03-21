@@ -296,13 +296,14 @@ const SyntheticImageDetectionResults = ({
         );
   };
 
-  const [chatbotPanelMessage, setChatbotPanelMessage] =
-    useState("hide_chatbot");
+  const [chatbotPanelMessage, setChatbotPanelMessage] = useState(
+    "synthetic_image_detection_hide_chatbot",
+  );
 
   const handleChatbotChange = () => {
-    chatbotPanelMessage === "hide_chatbot"
-      ? setChatbotPanelMessage("show_chatbot")
-      : setChatbotPanelMessage("hide_chatbot");
+    chatbotPanelMessage === "synthetic_image_detection_hide_chatbot"
+      ? setChatbotPanelMessage("synthetic_image_detection_show_chatbot")
+      : setChatbotPanelMessage("synthetic_image_detection_hide_chatbot");
   };
 
   const keywords = [

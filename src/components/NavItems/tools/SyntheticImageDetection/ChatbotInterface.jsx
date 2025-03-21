@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 
 import { styled } from "@mui/system";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { v4 as uuidv4 } from "uuid";
 
 import { submitUserChatbotMessage } from "../../../../redux/actions/tools/assistantActions";
 
@@ -26,9 +27,7 @@ const MessageBubble = styled(Box)(({ sent }) => ({
 
 const ChatbotInterface = (props) => {
   const dispatch = useDispatch();
-  const keyword = i18nLoadNamespace(
-    "components/NavItems/tools/SyntheticImageDetection",
-  );
+  const keyword = i18nLoadNamespace("components/Shared/chatbot");
   const [formInput, setFormInput] = useState("");
   const archiveURL = useSelector(
     (state) => state?.syntheticImageDetection?.duplicates?.archive_url ?? null,
@@ -38,9 +37,12 @@ const ChatbotInterface = (props) => {
     (state) => state.assistant.chatbotMessages,
   ).filter((msg) => msg.message); // Access the entire state
   const userEmail = useSelector((state) => state.userSession.user.email);
+  const [sessionID, setSessionID] = useState(uuidv4());
 
   const sendMessage = () => {
-    dispatch(submitUserChatbotMessage(formInput, userEmail, archiveURL));
+    dispatch(
+      submitUserChatbotMessage(sessionID, formInput, userEmail, archiveURL),
+    );
     setFormInput("");
   };
 
@@ -77,13 +79,13 @@ const ChatbotInterface = (props) => {
           <TextField
             variant="outlined"
             multiline
-            label={keyword("assistant_chatbot_prompt")}
+            label={keyword("chatbot_prompt")}
             style={{ margin: 8 }}
             placeholder={""}
             fullWidth
             value={formInput || ""}
             onChange={(e) => setFormInput(e.target.value)}
-            data-testid="assistant-chatbot-input"
+            data-testid="chatbot-input"
           />
 
           {/* submit button */}
@@ -91,13 +93,13 @@ const ChatbotInterface = (props) => {
             type="submit"
             variant="contained"
             color="primary"
-            data-testid="assistant-url-selected-analyse-btn"
+            data-testid="chatbot-submit-btn"
             onClick={(e) => {
               e.preventDefault();
               sendMessage();
             }}
           >
-            {keyword("submit_button")}
+            {keyword("chatbot_submit_button")}
           </Button>
         </Stack>
       </Stack>

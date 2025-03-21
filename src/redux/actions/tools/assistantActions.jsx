@@ -329,13 +329,19 @@ export const submitInputUrl = (inputUrl) => {
   };
 };
 
-export const submitUserChatbotMessage = (message, email, archiveURL) => {
+export const submitUserChatbotMessage = (
+  sessionID,
+  message,
+  email,
+  archiveURL,
+) => {
   return {
     type: "SUBMIT_USER_CHATBOT_MESSAGE",
     payload: {
       email: email,
       message: message,
       archiveURL: archiveURL,
+      sessionID: sessionID,
     },
   };
 };

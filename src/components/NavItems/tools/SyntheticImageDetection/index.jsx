@@ -35,8 +35,6 @@ import ChatbotInterface from "./ChatbotInterface";
 import { syntheticImageDetectionAlgorithms } from "./SyntheticImageDetectionAlgorithms";
 import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
 
-// Delete me!
-
 const SyntheticImageDetection = () => {
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
@@ -387,7 +385,7 @@ const SyntheticImageDetection = () => {
 
       <Card variant="outlined">
         <CardHeader
-          title="Chatbot testing: Delete me before integration"
+          title={keyword("synthetic_image_detection_hide_chatbot")}
           className={classes.headerUploadedImage}
         />
 

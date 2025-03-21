@@ -665,13 +665,14 @@ function* handleAssistantChatbotCall(action) {
   const message = action.payload.message;
   const email = action.payload.email;
   const archiveURL = action.payload.archiveURL;
+  const sessionID = action.payload.sessionID;
 
-  yield put(setAssistantLoading(true));
   yield put(addChatbotMessage(message, 1));
 
   try {
     const chatbotResponse = yield call(
       assistantApi.callChatbot,
+      sessionID,
       message,
       email,
       archiveURL,
