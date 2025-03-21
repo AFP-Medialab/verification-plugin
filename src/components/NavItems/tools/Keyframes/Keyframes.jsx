@@ -79,8 +79,8 @@ const Keyframes = () => {
   );
 
   const submitUrl = async () => {
-    setKeyframesUrl(input);
-    resetKeyframes();
+    dispatch(resetKeyframes());
+    dispatch(setKeyframesUrl(input));
 
     try {
       await executeProcess(input, role);
