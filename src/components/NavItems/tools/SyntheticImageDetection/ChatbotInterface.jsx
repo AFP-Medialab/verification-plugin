@@ -46,6 +46,15 @@ const ChatbotInterface = (props) => {
     setFormInput("");
   };
 
+  // Detect when the tab is closed and send a special request to the chatbot to clear the session history
+  useEffect(() => {
+    return () => {
+      window.addEventListener("beforeunload", function (e) {
+        dispatch(submitUserChatbotMessage(sessionID, null, null, null));
+      });
+    };
+  });
+
   return (
     <form>
       <Stack>
