@@ -218,81 +218,93 @@ const SinglefileConverter = () => {
     setError("");
     const reader = new FileReader();
     reader.onload = async () => {
-      const pageIntro = reader.result.slice(0, 1000).split("\n"); //TODO: find better way of getting to the saved by singlefile comment
-      // console.log(pageIntro)
-      const pageDate = pageIntro[3].slice(12);
-      const pageURL = pageIntro[2].slice(5);
-      const pageDateISO = new Date(Date.parse(pageDate)).toISOString();
-      const getTitle = () => {
-        for (const l of reader.result.split("/n")) {
-          if (l.includes("<title>")) {
-            const ret = l.match("<title>(.)*</title>")[0].slice(7, -8);
-            const retbytes = new TextEncoder().encode(ret);
-            return new TextDecoder("utf-8").decode(retbytes);
+      try {
+        const lines = reader.result.split("\n");
+        const getSFComment = (lines) => {
+          for (let i = 0; i < lines.length; i++) {
+            if (lines[i].includes("Page saved with SingleFile")) {
+              return i;
+            }
           }
-        }
-        return pageURL;
-      };
-      const pageInfo = {
-        url: pageURL,
-        date: pageDateISO,
-        title: getTitle(),
-      };
-      await warcCreator(reader.result, pageURL, pageDateISO).then(
-        async (res) => {
-          let tmp = new Uint8Array(res[0].byteLength + res[1].byteLength);
-          tmp.set(new Uint8Array(res[0]), 0);
-          tmp.set(new Uint8Array(res[1]), res[0].byteLength);
-          const recordDigest = await sha256(res[1]);
-          const blob = new Blob([tmp.buffer], {
-            type: "application/octet-stream",
-          });
+          throw new Error("No singlefile comment found");
+        };
+        const commentline = getSFComment(lines);
+        const pageDate = lines[commentline + 2].slice(12);
+        const pageURL = lines[commentline + 1].slice(5);
+        const pageDateISO = new Date(Date.parse(pageDate)).toISOString();
+        const getTitle = () => {
+          for (const l of reader.result.slice(0, 10000).split("\n")) {
+            if (l.includes("<title>")) {
+              const ret = l.match("<title>(.)*</title>")[0].slice(7, -8);
+              const retbytes = new TextEncoder().encode(ret);
+              return new TextDecoder("utf-8").decode(retbytes);
+            }
+          }
+          return pageURL;
+        };
+        const pageInfo = {
+          url: pageURL,
+          date: pageDateISO,
+          title: getTitle(),
+        };
+        await warcCreator(reader.result, pageURL, pageDateISO).then(
+          async (res) => {
+            let tmp = new Uint8Array(res[0].byteLength + res[1].byteLength);
+            tmp.set(new Uint8Array(res[0]), 0);
+            tmp.set(new Uint8Array(res[1]), res[0].byteLength);
+            const recordDigest = await sha256(res[1]);
+            const blob = new Blob([tmp.buffer], {
+              type: "application/octet-stream",
+            });
 
-          const pako = require("pako");
-          const res0 = pako.gzip(res[0]);
-          const res1 = pako.gzip(res[1]);
-          const res2 = pako.gzip(res[2]);
-          const resbuf = new Uint8Array(
-            res0.byteLength + res1.byteLength + res2.byteLength,
-          );
-          resbuf.set(res0, 0);
-          resbuf.set(res2, res0.byteLength);
-          resbuf.set(res1, res0.byteLength + res2.byteLength);
-          const gzipArch = resbuf;
+            const pako = require("pako");
+            const res0 = pako.gzip(res[0]);
+            const res1 = pako.gzip(res[1]);
+            const res2 = pako.gzip(res[2]);
+            const resbuf = new Uint8Array(
+              res0.byteLength + res1.byteLength + res2.byteLength,
+            );
+            resbuf.set(res0, 0);
+            resbuf.set(res2, res0.byteLength);
+            resbuf.set(res1, res0.byteLength + res2.byteLength);
+            const gzipArch = resbuf;
 
-          const blob2 = new Blob([gzipArch], {
-            type: "application/gzip",
-          });
+            const blob2 = new Blob([gzipArch], {
+              type: "application/gzip",
+            });
 
-          const decoder = new TextDecoder("utf-8");
-          const queuingStrategy = new CountQueuingStrategy({
-            highWaterMark: 1,
-          });
-          const writableStream = new WritableStream(
-            {
-              write(chunk) {
-                return new Promise((resolve, reject) => {
-                  // console.log(chunk);
-                  makeWacz(blob2, chunk, pageInfo, recordDigest);
-                  resolve();
-                });
+            const decoder = new TextDecoder("utf-8");
+            const queuingStrategy = new CountQueuingStrategy({
+              highWaterMark: 1,
+            });
+            const writableStream = new WritableStream(
+              {
+                write(chunk) {
+                  return new Promise((resolve, reject) => {
+                    makeWacz(blob2, chunk, pageInfo, recordDigest);
+                    resolve();
+                  });
+                },
+                close() {},
+                abort(err) {
+                  console.error("Sink error:", err);
+                },
               },
-              close() {},
-              abort(err) {
-                console.error("Sink error:", err);
-              },
-            },
-            queuingStrategy,
-          );
+              queuingStrategy,
+            );
 
-          const realIndexer = new CDXIndexer();
+            const realIndexer = new CDXIndexer();
 
-          await realIndexer.writeAll(
-            [{ filename: "data.warc.gz", reader: blob2.stream() }],
-            writableStream.getWriter(),
-          );
-        },
-      );
+            await realIndexer.writeAll(
+              [{ filename: "data.warc.gz", reader: blob2.stream() }],
+              writableStream.getWriter(),
+            );
+          },
+        );
+      } catch (error) {
+        console.error(error);
+        setError("Error reading singlefile header");
+      }
     };
     reader.readAsText(file2convert, "utf-8");
   };
@@ -373,8 +385,8 @@ const SinglefileConverter = () => {
       <ButtonGroup variant="outlined">
         <Button startIcon={<FolderOpenIcon />} sx={{ textTransform: "none" }}>
           <label htmlFor="file">
-            {fileInput ? fileInput.name : "Upload the SingleFile page"}
-            {/* {fileInput ? fileInput.name : keyword("archive_wacz_accordion")} */}
+            {/* {fileInput ? fileInput.name : "Upload the SingleFile page"} */}
+            {fileInput ? fileInput.name : keyword("upload_singlefile")}
           </label>
           <input
             id="file"
@@ -407,7 +419,7 @@ const SinglefileConverter = () => {
                 singlefile2wacz(fileInput);
               }}
             >
-              <label>Convert {/*{keyword("archive_wacz_accordion")} */}</label>
+              <label> {keyword("convert_singlefile")} </label>
             </Button>
           </Stack>
         )}
