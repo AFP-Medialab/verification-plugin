@@ -28,6 +28,7 @@ import {
 } from "warcio";
 
 import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
+import { prettifyLargeString } from "../utils";
 
 const SinglefileConverter = (telegramURL, setTelegramURL) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
@@ -389,7 +390,9 @@ const SinglefileConverter = (telegramURL, setTelegramURL) => {
         <Button startIcon={<FolderOpenIcon />} sx={{ textTransform: "none" }}>
           <label htmlFor="file">
             {/* {fileInput ? fileInput.name : "Upload the SingleFile page"} */}
-            {fileInput ? fileInput.name : keyword("upload_singlefile")}
+            {fileInput
+              ? prettifyLargeString(fileInput.name)
+              : keyword("upload_singlefile")}
           </label>
           <input
             id="file"
@@ -400,31 +403,22 @@ const SinglefileConverter = (telegramURL, setTelegramURL) => {
             onChange={(e) => {
               e.preventDefault();
               setFileInput(e.target.files[0]);
+              singlefile2wacz(e.target.files[0]);
               e.target.value = null;
             }}
           />
         </Button>
         {fileInput instanceof Blob && (
-          <Stack>
-            <Button
-              size="small"
-              aria-label="remove selected file"
-              onClick={(e) => {
-                e.preventDefault();
-                setFileInput(null);
-              }}
-            >
-              <CloseIcon fontSize="small" />
-            </Button>
-            <Button
-              onClick={(e) => {
-                e.preventDefault();
-                singlefile2wacz(fileInput);
-              }}
-            >
-              <label> {keyword("convert_singlefile")} </label>
-            </Button>
-          </Stack>
+          <Button
+            size="small"
+            aria-label="remove selected file"
+            onClick={(e) => {
+              e.preventDefault();
+              setFileInput(null);
+            }}
+          >
+            <CloseIcon fontSize="small" />
+          </Button>
         )}
       </ButtonGroup>
       <Typography color={"error"}>{error}</Typography>
