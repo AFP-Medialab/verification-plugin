@@ -14,6 +14,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import LoadingButton from "@mui/lab/LoadingButton";
 import {
   toByteArray as decodeBase64,
   fromByteArray as encodeBase64,
@@ -35,6 +36,7 @@ const SinglefileConverter = (telegramURL, setTelegramURL) => {
 
   const [fileInput, setFileInput] = useState(/** @type {File?} */ null);
   const [error, setError] = useState("");
+  const [processingSinglefile, setProcessingSinglefile] = useState(false);
   const authenticatedRequest = useAuthenticatedRequest();
 
   const domainCertSign = async (hash) => {
@@ -208,9 +210,11 @@ const SinglefileConverter = (telegramURL, setTelegramURL) => {
           a.href = blobUrl;
           a.download = `singlefile2wacz.wacz`;
           a.click();
+          setProcessingSinglefile(false);
         });
     } catch (error) {
       setError("Error signing WACZ, please try again");
+      setProcessingSinglefile(false);
       console.error(error);
     }
   };
@@ -308,6 +312,7 @@ const SinglefileConverter = (telegramURL, setTelegramURL) => {
       } catch (error) {
         console.error(error);
         setError("Error reading singlefile header");
+        setProcessingSinglefile(false);
       }
     };
     reader.readAsText(file2convert, "utf-8");
@@ -386,14 +391,17 @@ const SinglefileConverter = (telegramURL, setTelegramURL) => {
 
   return (
     <div>
-      <ButtonGroup variant="outlined">
-        <Button startIcon={<FolderOpenIcon />} sx={{ textTransform: "none" }}>
-          <label htmlFor="file">
-            {/* {fileInput ? fileInput.name : "Upload the SingleFile page"} */}
-            {fileInput
-              ? prettifyLargeString(fileInput.name)
-              : keyword("upload_singlefile")}
-          </label>
+      <Box>
+        <LoadingButton
+          variant="outlined"
+          loading={processingSinglefile}
+          loadingPosition="start"
+          startIcon={<FolderOpenIcon />}
+          onClick={() => document.getElementById("file").click()}
+        >
+          {fileInput
+            ? prettifyLargeString(fileInput.name)
+            : keyword("upload_singlefile")}
           <input
             id="file"
             name="file"
@@ -403,24 +411,13 @@ const SinglefileConverter = (telegramURL, setTelegramURL) => {
             onChange={(e) => {
               e.preventDefault();
               setFileInput(e.target.files[0]);
+              setProcessingSinglefile(true);
               singlefile2wacz(e.target.files[0]);
               e.target.value = null;
             }}
           />
-        </Button>
-        {fileInput instanceof Blob && (
-          <Button
-            size="small"
-            aria-label="remove selected file"
-            onClick={(e) => {
-              e.preventDefault();
-              setFileInput(null);
-            }}
-          >
-            <CloseIcon fontSize="small" />
-          </Button>
-        )}
-      </ButtonGroup>
+        </LoadingButton>
+      </Box>
       <Typography color={"error"}>{error}</Typography>
     </div>
   );
