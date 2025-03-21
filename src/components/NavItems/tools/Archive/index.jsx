@@ -33,11 +33,9 @@ import FifthStep from "./components/FifthStep";
 import FirstStep from "./components/FirstStep";
 import FourthStep from "./components/FourthStep";
 import SecondStep from "./components/SecondStep";
-import SecondStep_Singlefile from "./components/SecondStep_Singlefile";
 import SixthStep from "./components/SixthStep";
 import CustomizedMenus, { StyledMenu } from "./components/StyledMenu";
 import ThirdStep from "./components/ThirdStep";
-import ThirdStep_Singlefile from "./components/ThirdStep_Singlefile";
 
 const queryClient = new QueryClient();
 

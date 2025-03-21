@@ -29,7 +29,7 @@ import {
 
 import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
 
-const SinglefileConverter = () => {
+const SinglefileConverter = (telegramURL, setTelegramURL) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
 
   const [fileInput, setFileInput] = useState(/** @type {File?} */ null);
@@ -230,7 +230,10 @@ const SinglefileConverter = () => {
         };
         const commentline = getSFComment(lines);
         const pageDate = lines[commentline + 2].slice(12);
-        const pageURL = lines[commentline + 1].slice(5);
+        const pageURL =
+          telegramURL.telegramURL.length > 0
+            ? telegramURL.telegramURL
+            : lines[commentline + 1].slice(5);
         const pageDateISO = new Date(Date.parse(pageDate)).toISOString();
         const getTitle = () => {
           for (const l of reader.result.slice(0, 10000).split("\n")) {
