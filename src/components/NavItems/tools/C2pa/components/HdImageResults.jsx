@@ -13,11 +13,11 @@ import Grid2 from "@mui/material/Grid2";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import { getBlob } from "@Shared/ReverseSearch/utils/searchUtils";
 import { deepClone } from "@mui/x-data-grid/internals";
 
 import { ROLES } from "../../../../../constants/roles";
-import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
-import { getBlob } from "../../../../Shared/ReverseSearch/utils/searchUtils";
 import C2paCard from "./c2paCard";
 
 const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
@@ -156,7 +156,7 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
             <Typography variant="body2">
               {"Two thumbnails are displayed:"}
             </Typography>
-            <Typography variant="body2">
+            <Box>
               <ul>
                 <li>
                   {
@@ -165,7 +165,7 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
                 </li>
                 <li>{"The second thumbnail is the watermarked image."}</li>
               </ul>
-            </Typography>
+            </Box>
           </Alert>
 
           <Grid2
@@ -187,6 +187,7 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
 
             {thumbnailImage &&
               thumbnailImage.url &&
+              thumbnailImage.url.length > 0 &&
               ImageCard(
                 thumbnailImage.url,
                 "Original image from Camera",
@@ -208,11 +209,7 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
               (role.includes(ROLES.AFP_C2PA_GOLD) ||
                 role.includes(ROLES.EXTRA_FEATURE)) && (
                 <Grid2>
-                  <Button
-                    variant="contained"
-                    onClick={downloadHdImage}
-                    sx={{ textTransform: "none" }}
-                  >
+                  <Button variant="contained" onClick={downloadHdImage}>
                     {keyword("reverse_search_original_image_download_button")}
                   </Button>
                 </Grid2>

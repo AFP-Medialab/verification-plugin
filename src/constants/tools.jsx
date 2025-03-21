@@ -314,7 +314,7 @@ const videoMetadata = new Tool(
   null,
   "metadata",
   TOOL_GROUPS.VERIFICATION,
-  <Metadata mediaType={"video"} />,
+  <Metadata />,
   <Footer type={FOOTER_TYPES.AFP} />,
 );
 
@@ -357,7 +357,7 @@ export const imageMetadata = new Tool(
   null,
   "metadata_image",
   TOOL_GROUPS.VERIFICATION,
-  <Metadata mediaType={"image"} />,
+  <Metadata />,
   <Footer type={FOOTER_TYPES.AFP} />,
 );
 
@@ -573,7 +573,7 @@ const about = new Tool(
   "about",
   TOOL_GROUPS.MORE,
   <About />,
-  null,
+  <Footer type={FOOTER_TYPES.AFP} />,
 );
 
 const c2paData = new Tool(

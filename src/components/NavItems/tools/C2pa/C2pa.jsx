@@ -19,7 +19,6 @@ import { ArrowDownward } from "@mui/icons-material";
 
 import HeaderTool from "components/Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "components/Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
 import exifr from "exifr";
 import {
@@ -61,8 +60,6 @@ const C2paData = () => {
   const [imageMetadata, setImageMetadata] = useState(null);
 
   const dispatch = useDispatch();
-
-  const classes = useMyStyles();
 
   const keyword = i18nLoadNamespace("components/NavItems/tools/C2pa");
 
@@ -115,6 +112,7 @@ const C2paData = () => {
     try {
       res = await authenticatedRequest(config);
     } catch (error) {
+      console.log(error);
       setErrorMessage(keyword("error_message_reverse_search_generic"));
       return;
     }
@@ -206,7 +204,7 @@ const C2paData = () => {
         method: "get",
         responseType: "blob",
         maxBodyLength: Infinity,
-        url: `https://plugin-archiving.afp.com/gateway/c2paafp${urls.thumbnailUrl}`,
+        url: `${serverUrl}${urls.thumbnailUrl}`,
         headers: {
           "X-AFP-TRANSACTION-ID": getTransactionId(),
         },

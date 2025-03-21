@@ -355,7 +355,6 @@ const Archive = () => {
                     variant="outlined"
                     startIcon={<ArrowBack />}
                     onClick={() => setStep((prev) => prev - 1)}
-                    sx={{ textTransform: "none" }}
                   >
                     {keyword("back_button")}
                   </Button>

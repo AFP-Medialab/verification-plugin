@@ -24,7 +24,7 @@ import { setAssuranceExpanded } from "../../../../redux/actions/tools/assistantA
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import SourceCredibilityResult from "../AssistantCheckResults/SourceCredibilityResult";
 import {
-  TransHtmlDoubleLinkBreak,
+  TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
 } from "../TransComponents";
@@ -100,7 +100,7 @@ const AssistantSCResults = () => {
               title={
                 <>
                   <TransSourceCredibilityTooltip keyword={keyword} />
-                  <TransHtmlDoubleLinkBreak keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
                   <TransUrlDomainAnalysisLink keyword={keyword} />
                 </>
               }

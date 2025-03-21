@@ -41,8 +41,10 @@ const SideMenuElement = ({
       };
 
     return {
-      fill: isElementSelected ? "#00926c" : "#4c4c4c",
-      color: isElementSelected ? "#00926c" : "#4c4c4c",
+      fill: isElementSelected ? "#00926c" : "var(--mui-palette-text-secondary)",
+      color: isElementSelected
+        ? "#00926c"
+        : "var(--mui-palette-text-secondary)",
       fontSize: "24px",
     };
   };
