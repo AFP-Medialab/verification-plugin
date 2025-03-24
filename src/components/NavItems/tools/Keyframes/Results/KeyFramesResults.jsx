@@ -1,9 +1,6 @@
 import React, { memo, useState } from "react";
 import { useSelector } from "react-redux";
 
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -12,16 +9,13 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
 import Grid2 from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
-import Link from "@mui/material/Link";
 import Popover from "@mui/material/Popover";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import CloseIcon from "@mui/icons-material/Close";
 import DownloadIcon from "@mui/icons-material/Download";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 
@@ -66,11 +60,6 @@ const KeyFramesResults = ({ result }) => {
   }
 
   const [cols, setCols] = useState(4);
-
-  const similarityResults = useSelector((state) => state.keyframes.similarity);
-  const isLoadingSimilarity = useSelector(
-    (state) => state.keyframes.similarityLoading,
-  );
 
   const toggleDetail = () => {
     setDetailed(!detailed);
@@ -171,201 +160,136 @@ const KeyFramesResults = ({ result }) => {
   };
 
   return (
-    <>
-      {similarityResults &&
-        !isLoadingSimilarity &&
-        similarityResults.length > 0 && (
-          <Card variant="outlined">
-            <Box>
-              <Accordion style={{ border: "2px solid #00926c" }}>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon sx={{ color: "primary" }} />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Box
-                    p={1}
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
+    <Card variant="outlined">
+      <CardContent>
+        <Stack direction="column" spacing={4}>
+          <Stack direction="row" justifyContent="space-between">
+            <Typography variant="h6">
+              {keyword("cardheader_results")}
+            </Typography>
+            <IconButton onClick={clickHelp}>
+              <HelpOutlineIcon />
+            </IconButton>
+            <Popover
+              id={help}
+              open={openHelp}
+              anchorEl={anchorHelp}
+              onClose={closeHelp}
+              slotProps={{
+                paper: {
+                  width: "300px",
+                },
+              }}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "center",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "center",
+              }}
+            >
+              <Box p={2}>
+                <Stack direction="column" spacing={2}>
+                  <Stack
+                    direction="row"
+                    sx={{
+                      justifyContent: "space-between",
+                      alignItems: "baseline",
                     }}
                   >
-                    <ReportProblemOutlinedIcon
-                      sx={{ color: "primary", marginRight: "8px" }}
-                    />
-                    <Typography
-                      variant="h6"
-                      align="left"
-                      sx={{ color: "primary" }}
-                    >
-                      {keyword("found_dbkf")}
-                    </Typography>
-                  </Box>
-                </AccordionSummary>
-                <AccordionDetails style={{ flexDirection: "column" }}>
-                  <Box p={1}>
-                    <Typography variant="body1" align="left">
-                      {keyword("dbkf_articles")}
-                    </Typography>
-
-                    <Box m={1} />
-
-                    {similarityResults.map((value, key) => {
-                      return (
-                        <Typography
-                          variant="body1"
-                          align="left"
-                          sx={{ color: "primary" }}
-                          key={key}
-                        >
-                          <Link
-                            target="_blank"
-                            href={value.externalLink}
-                            sx={{ color: "primary" }}
-                          >
-                            {value.externalLink}
-                          </Link>
-                        </Typography>
-                      );
-                    })}
-                  </Box>
-                </AccordionDetails>
-              </Accordion>
-            </Box>
-          </Card>
-        )}
-      <Card variant="outlined">
-        <CardContent>
-          <Stack direction="column" spacing={4}>
-            <Stack direction="row" justifyContent="space-between">
-              <Typography variant="h6">
-                {keyword("cardheader_results")}
-              </Typography>
-              <IconButton onClick={clickHelp}>
-                <HelpOutlineIcon />
-              </IconButton>
-              <Popover
-                id={help}
-                open={openHelp}
-                anchorEl={anchorHelp}
-                onClose={closeHelp}
-                slotProps={{
-                  paper: {
-                    width: "300px",
-                  },
-                }}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "center",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "center",
-                }}
-              >
-                <Box p={2}>
-                  <Stack direction="column" spacing={2}>
-                    <Stack
-                      direction="row"
-                      sx={{
-                        justifyContent: "space-between",
-                        alignItems: "baseline",
-                      }}
-                    >
-                      <Typography variant="h6" gutterBottom>
-                        {keywordHelp("title_tip")}
-                      </Typography>{" "}
-                      <IconButton onClick={closeHelp}>
-                        <CloseIcon />
-                      </IconButton>
-                    </Stack>
-                    <Typography variant="body2">
-                      {keywordHelp("keyframes_tip")}
-                    </Typography>
+                    <Typography variant="h6" gutterBottom>
+                      {keywordHelp("title_tip")}
+                    </Typography>{" "}
+                    <IconButton onClick={closeHelp}>
+                      <CloseIcon />
+                    </IconButton>
                   </Stack>
-                </Box>
-              </Popover>
-            </Stack>
-
-            <Stack direction="column">
-              <Grid2
-                container
-                justifyContent="space-between"
-                spacing={2}
-                alignContent={"center"}
-              >
-                <Grid2>
-                  <Button onClick={() => toggleDetail()}>
-                    {!detailed
-                      ? keyword("keyframe_title_get_detail")
-                      : keyword("keyframe_title_get_simple")}
-                  </Button>
-                </Grid2>
-
-                <Grid2>
-                  <LoadingButton
-                    color="primary"
-                    loadingPosition="start"
-                    loading={isZipDownloading}
-                    onClick={downloadAction}
-                    startIcon={<DownloadIcon />}
-                  >
-                    {keyword("keyframes_download_subshots")}
-                  </LoadingButton>
-                </Grid2>
-
-                <Grid2 size="grow" style={{ textAlign: "end" }}>
-                  <Button onClick={() => zoom(-1)} startIcon={<ZoomOutIcon />}>
-                    {keyword("zoom_out")}
-                  </Button>
-                </Grid2>
-                <Grid2>
-                  <Button onClick={() => zoom(1)} startIcon={<ZoomInIcon />}>
-                    {keyword("zoom_in")}
-                  </Button>
-                </Grid2>
-              </Grid2>
-              <Divider />
-            </Stack>
-
-            {detailed && loadingDetailed && (
-              <Box m={4}>
-                <CircularProgress />
+                  <Typography variant="body2">
+                    {keywordHelp("keyframes_tip")}
+                  </Typography>
+                </Stack>
               </Box>
-            )}
-            {detailed && (
-              <div className={classDetailed}>
-                <ImageGridList
-                  list={detailedList}
-                  cols={cols}
-                  handleClick={imageClick}
-                  style={{ maxHeigth: "none", height: "auto" }}
-                  setLoading={showElementsDetailed}
-                />
-              </div>
-            )}
-
-            {!detailed && loadingSimple && (
-              <Box m={4}>
-                <CircularProgress />
-              </Box>
-            )}
-            {!detailed && (
-              <div className={classSimple}>
-                <ImageGridList
-                  list={simpleList}
-                  cols={cols}
-                  handleClick={imageClick}
-                  style={{ maxHeigth: "none", height: "auto" }}
-                  setLoading={showElementsSimple}
-                />
-              </div>
-            )}
+            </Popover>
           </Stack>
-        </CardContent>
-      </Card>
-    </>
+
+          <Stack direction="column">
+            <Grid2
+              container
+              justifyContent="space-between"
+              spacing={2}
+              alignContent={"center"}
+            >
+              <Grid2>
+                <Button onClick={() => toggleDetail()}>
+                  {!detailed
+                    ? keyword("keyframe_title_get_detail")
+                    : keyword("keyframe_title_get_simple")}
+                </Button>
+              </Grid2>
+
+              <Grid2>
+                <LoadingButton
+                  color="primary"
+                  loadingPosition="start"
+                  loading={isZipDownloading}
+                  onClick={downloadAction}
+                  startIcon={<DownloadIcon />}
+                >
+                  {keyword("keyframes_download_subshots")}
+                </LoadingButton>
+              </Grid2>
+
+              <Grid2 size="grow" style={{ textAlign: "end" }}>
+                <Button onClick={() => zoom(-1)} startIcon={<ZoomOutIcon />}>
+                  {keyword("zoom_out")}
+                </Button>
+              </Grid2>
+              <Grid2>
+                <Button onClick={() => zoom(1)} startIcon={<ZoomInIcon />}>
+                  {keyword("zoom_in")}
+                </Button>
+              </Grid2>
+            </Grid2>
+            <Divider />
+          </Stack>
+
+          {detailed && loadingDetailed && (
+            <Box m={4}>
+              <CircularProgress />
+            </Box>
+          )}
+          {detailed && (
+            <div className={classDetailed}>
+              <ImageGridList
+                list={detailedList}
+                cols={cols}
+                handleClick={imageClick}
+                style={{ maxHeigth: "none", height: "auto" }}
+                setLoading={showElementsDetailed}
+              />
+            </div>
+          )}
+
+          {!detailed && loadingSimple && (
+            <Box m={4}>
+              <CircularProgress />
+            </Box>
+          )}
+          {!detailed && (
+            <div className={classSimple}>
+              <ImageGridList
+                list={simpleList}
+                cols={cols}
+                handleClick={imageClick}
+                style={{ maxHeigth: "none", height: "auto" }}
+                setLoading={showElementsSimple}
+              />
+            </div>
+          )}
+        </Stack>
+      </CardContent>
+    </Card>
   );
 };
 export default memo(KeyFramesResults);

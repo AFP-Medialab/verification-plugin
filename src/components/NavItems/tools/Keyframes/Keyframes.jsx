@@ -2,6 +2,9 @@ import React, { memo, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -10,13 +13,16 @@ import Divider from "@mui/material/Divider";
 import Fade from "@mui/material/Fade";
 import Grid2 from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import LinkIcon from "@mui/icons-material/Link";
+import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 import "@Shared/GoogleAnalytics/MatomoAnalytics";
@@ -59,6 +65,8 @@ const Keyframes = () => {
 
   const role = useSelector((state) => state.userSession.user.roles);
 
+  const similarityResults = useSelector((state) => state.keyframes.similarity);
+
   // State used to load images
   const [input, setInput] = useState(resultUrl ? resultUrl : "");
   const [submittedUrl, setSubmittedUrl] = useState(undefined);
@@ -79,6 +87,7 @@ const Keyframes = () => {
     dispatch(setKeyframesUrl(input));
 
     try {
+      setSubmittedUrl(input);
       await executeProcess(input, role);
     } catch (error) {
       console.error(error);
@@ -90,7 +99,6 @@ const Keyframes = () => {
 
     const uri = decodeURIComponent(url);
     setInput(uri);
-    submitUrl();
   }, [url]);
 
   useEffect(() => {
@@ -217,6 +225,70 @@ const Keyframes = () => {
             </Box>
           </Card>
         </TabContext>
+
+        {similarityResults &&
+          !isLoadingSimilarity &&
+          similarityResults.length > 0 && (
+            <Card variant="outlined">
+              <Box>
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon sx={{ color: "primary" }} />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Box
+                      p={1}
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <ReportProblemOutlinedIcon
+                        sx={{ color: "primary", marginRight: "8px" }}
+                      />
+                      <Typography
+                        variant="h6"
+                        align="left"
+                        sx={{ color: "primary" }}
+                      >
+                        {keyword("found_dbkf")}
+                      </Typography>
+                    </Box>
+                  </AccordionSummary>
+                  <AccordionDetails style={{ flexDirection: "column" }}>
+                    <Box p={1}>
+                      <Typography variant="body1" align="left">
+                        {keyword("dbkf_articles")}
+                      </Typography>
+
+                      <Box m={1} />
+
+                      {similarityResults.map((value, key) => {
+                        return (
+                          <Typography
+                            variant="body1"
+                            align="left"
+                            sx={{ color: "primary" }}
+                            key={key}
+                          >
+                            <Link
+                              target="_blank"
+                              href={value.externalLink}
+                              sx={{ color: "primary" }}
+                            >
+                              {value.externalLink}
+                            </Link>
+                          </Typography>
+                        );
+                      })}
+                    </Box>
+                  </AccordionDetails>
+                </Accordion>
+              </Box>
+            </Card>
+          )}
 
         {status && isPending && (
           <Fade in={isPending} timeout={750}>
