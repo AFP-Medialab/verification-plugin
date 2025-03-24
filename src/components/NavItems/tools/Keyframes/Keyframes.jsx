@@ -32,10 +32,7 @@ import {
   resetKeyframes,
   setKeyframesUrl,
 } from "../../../../redux/reducers/tools/keyframesReducer";
-import {
-  useKeyframeWrapper,
-  useProcessKeyframes,
-} from "./Hooks/useKeyframeWrapper";
+import { useProcessKeyframes } from "./Hooks/useKeyframeWrapper";
 import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
 import { ImageWithFade } from "./ImageWithFade";
 import LocalFile from "./LocalFile/LocalFile";
@@ -67,7 +64,6 @@ const Keyframes = () => {
   const [submittedUrl, setSubmittedUrl] = useState(undefined);
   //const [urlDetected, setUrlDetected] = useState(false)
   useVideoSimilarity(submittedUrl, keyword);
-  useKeyframeWrapper(submittedUrl, keyword);
 
   useTrackEvent(
     "submission",
