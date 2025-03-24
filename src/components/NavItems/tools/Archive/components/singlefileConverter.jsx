@@ -1,37 +1,35 @@
 import React, { useState } from "react";
 
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
-import Divider from "@mui/material/Divider";
-import Link from "@mui/material/Link";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import CloseIcon from "@mui/icons-material/Close";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import LoadingButton from "@mui/lab/LoadingButton";
-import {
-  toByteArray as decodeBase64,
-  fromByteArray as encodeBase64,
-} from "base64-js";
-import { downloadZip, makeZip } from "client-zip";
+import { downloadZip } from "client-zip";
+import dayjs from "dayjs";
 import { sha256 } from "hash-wasm";
-import {
-  CDXAndRecordIndexer,
-  CDXIndexer,
-  WARCRecord,
-  WARCSerializer,
-} from "warcio";
+import { CDXIndexer, WARCRecord, WARCSerializer } from "warcio";
 
 import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
 import { prettifyLargeString } from "../utils";
 
-const SinglefileConverter = (telegramURL, setTelegramURL) => {
+/**
+ *
+ * The Singlefile HTML is read as a text,
+ * passed first to warcio.js WARCRecord and WARCSerializer
+ * to produce WARC formatted strings
+ * CDXIndexer generates an index of the resources in the WARCRecord
+ * Then the WARC strings and the index are gzipped
+ * then combined into a WACZ, the total is hashed
+ * and the digest value is sent to the authentication server for a signature
+ * Once signed, the archive is downloaded.
+ *
+ * @param {*} telegramURL (passed in case a different URL needs to be set for the archive)
+ * @returns
+ */
+const SinglefileConverter = (telegramURL) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
 
   const [fileInput, setFileInput] = useState(/** @type {File?} */ null);
@@ -39,78 +37,90 @@ const SinglefileConverter = (telegramURL, setTelegramURL) => {
   const [processingSinglefile, setProcessingSinglefile] = useState(false);
   const authenticatedRequest = useAuthenticatedRequest();
 
+  /**
+   * Sends a request for domain signature to the authentication server
+   * Input: @param hash digest value of the WACZ
+   * @returns JSON Object with signature, timesignature, domain and timestamp certificates
+   */
   const domainCertSign = async (hash) => {
     const resp = await authenticatedRequest({
       url: process.env.REACT_APP_WACZ_SIGNING + hash,
       method: "get",
     });
-    // console.log(resp)
     if (resp.status === 200) {
       const respJson = resp.data;
-      // console.log(respJson);
       return respJson;
     } else {
       setError("Error signing WACZ, please try again");
-      throw new Exception();
+      throw new Error("Error signing WACZ, please try again");
     }
   };
 
-  const sign = async (hash) => {
-    //implementation derived from webrecorder's awp-sw library
-    const keyPair = await crypto.subtle.generateKey(
-      {
-        name: "ECDSA",
-        namedCurve: "P-384",
-      },
-      true,
-      ["sign", "verify"],
-    );
+  //For anonymous signing
+  // const sign = async (hash) => {
+  //   //implementation derived from webrecorder's awp-sw library
+  //   const keyPair = await crypto.subtle.generateKey(
+  //     {
+  //       name: "ECDSA",
+  //       namedCurve: "P-384",
+  //     },
+  //     true,
+  //     ["sign", "verify"],
+  //   );
 
-    const privateKey = await crypto.subtle.exportKey(
-      "pkcs8",
-      keyPair.privateKey,
-    );
-    const publicKey = await crypto.subtle.exportKey("spki", keyPair.publicKey);
+  //   const privateKey = await crypto.subtle.exportKey(
+  //     "pkcs8",
+  //     keyPair.privateKey,
+  //   );
+  //   const publicKey = await crypto.subtle.exportKey("spki", keyPair.publicKey);
 
-    const keys = {
-      private: encodeBase64(new Uint8Array(privateKey)),
-      public: encodeBase64(new Uint8Array(publicKey)),
-    };
+  //   const keys = {
+  //     private: encodeBase64(new Uint8Array(privateKey)),
+  //     public: encodeBase64(new Uint8Array(publicKey)),
+  //   };
 
-    const data = new TextEncoder().encode(hash);
-    const signatureBuff = await crypto.subtle.sign(
-      {
-        name: "ECDSA",
-        hash: "SHA-256",
-      },
-      keyPair.privateKey,
-      data,
-    );
-    const signature = encodeBase64(new Uint8Array(signatureBuff));
-    return {
-      signature,
-      publicKey: keys.public,
-    };
-  };
+  //   const data = new TextEncoder().encode(hash);
+  //   const signatureBuff = await crypto.subtle.sign(
+  //     {
+  //       name: "ECDSA",
+  //       hash: "SHA-256",
+  //     },
+  //     keyPair.privateKey,
+  //     data,
+  //   );
+  //   const signature = encodeBase64(new Uint8Array(signatureBuff));
+  //   return {
+  //     signature,
+  //     publicKey: keys.public,
+  //   };
+  // };
 
+  /**
+   * Encapsulates the different components of the WACZ into the archive
+   * by filling pre-defined templates of each file (index, pages, data package...)
+   * @param warcInput (the WARC generated from the singlefile by warcio.js)
+   * @param cdxInput (the index file of the WARC generated by warcio.js)
+   * @param pageInfo object containing info about the page being saved including date, url, title
+   * @param recordDigest hash value of the page entry as saved in the WARC
+   */
   const makeWacz = async (warcInput, cdxInput, pageInfo, recordDigest) => {
     const cdxInfo = JSON.parse(cdxInput);
 
-    const index_input = `${cdxInfo.urlkey} ${cdxInfo.timestamp} {\"url\":\"${cdxInfo.url}\",\"digest\":\"sha256:${cdxInfo.digest}\",\"mime\":\"text/html\",\"offset\":${cdxInfo.offset},\"length\":${cdxInfo.length},\"recordDigest\":\"sha256:${recordDigest}\",\"status\":200,\"filename\":\"data.warc.gz\"}`;
+    const index_input = `${cdxInfo.urlkey} ${cdxInfo.timestamp} {"url":"${cdxInfo.url}","digest":"sha256:${cdxInfo.digest}","mime":"text/html","offset":${cdxInfo.offset},"length":${cdxInfo.length},"recordDigest":"sha256:${recordDigest}","status":200,"filename":"data.warc.gz"}`;
 
     const index_arch = {
       name: "indexes/index.cdx",
-      lastModified: new Date(),
+      lastModified: new dayjs(),
       input: index_input,
     };
 
     const index_hash = await sha256(index_input);
 
-    const pages_input = `{\"format\":\"json-pages-1.0\",\"id\":\"pages\",\"title\":\"All Pages\"}\n{\"url\":\"${cdxInfo.url}\", \"id\":\"12345\", \"size\":${cdxInfo.length}, \"ts\":\"${new Date(Date.parse(pageInfo.date)).toISOString()}\", \"title\":\"${pageInfo.title}\"}`;
+    const pages_input = `{"format":"json-pages-1.0","id":"pages","title":"All Pages"}\n{"url":"${cdxInfo.url}", "id":"12345", "size":${cdxInfo.length}, "ts":"${dayjs(pageInfo.date).toISOString()}", "title":"${pageInfo.title}"}`;
 
     const pages_arch = {
       name: "pages/pages.jsonl",
-      lastModified: new Date(),
+      lastModified: dayjs(),
       input: pages_input,
     };
 
@@ -118,7 +128,7 @@ const SinglefileConverter = (telegramURL, setTelegramURL) => {
 
     const archive_arch = {
       name: "archive/data.warc.gz",
-      lastModified: new Date(),
+      lastModified: dayjs(),
       input: warcInput,
     };
 
@@ -151,12 +161,12 @@ const SinglefileConverter = (telegramURL, setTelegramURL) => {
       wacz_version: "1.1.1",
       software:
         "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
-      created: `${new Date(Date.now()).toISOString()}`,
+      created: `${dayjs().toISOString()}`,
       title: "singlefile2wacz.wacz",
     };
     const datapackage_arch = {
       name: "datapackage.json",
-      lastModified: new Date(),
+      lastModified: dayjs(),
       input: JSON.stringify(datapackage_input, null, 2),
     };
     const datapackage_hash = await sha256(
@@ -165,15 +175,16 @@ const SinglefileConverter = (telegramURL, setTelegramURL) => {
 
     // For anonymous signing
     // const signature = await sign(datapackage_hash);
+
+    //Send request for signature and put info into the format required for the datapackage digest file
+
     try {
       const tstsign = await domainCertSign(datapackage_hash);
       const cleanCert = tstsign.domainCert.replace("\n", "");
-      // console.log(cleanCert)
       const cleantsCerts = tstsign.certs.join().replace("\n", "");
-      // console.log(cleantsCerts)
       const signedData = {
         hash: `sha256:${datapackage_hash}`,
-        created: new Date(Date.now()).toISOString(),
+        created: dayjs.toISOString(),
         software:
           "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
         signature: tstsign.signature,
@@ -192,7 +203,7 @@ const SinglefileConverter = (telegramURL, setTelegramURL) => {
 
       const datapackagedigest_arch = {
         name: "datapackage-digest.json",
-        lastModified: new Date(),
+        lastModified: dayjs(),
         input: JSON.stringify(datapackagedigest_input, null, 2),
       };
 
@@ -219,6 +230,11 @@ const SinglefileConverter = (telegramURL, setTelegramURL) => {
     }
   };
 
+  /**
+   * Passes the singlefile input first to WARC creator, then indexer then to the WACZ creator
+   * @param {*} file2convert (The singlefile HTML)
+   */
+
   const singlefile2wacz = async (file2convert) => {
     setError("");
     const reader = new FileReader();
@@ -239,7 +255,7 @@ const SinglefileConverter = (telegramURL, setTelegramURL) => {
           telegramURL.telegramURL.length > 0
             ? telegramURL.telegramURL
             : lines[commentline + 1].slice(5);
-        const pageDateISO = new Date(Date.parse(pageDate)).toISOString();
+        const pageDateISO = dayjs.parse(pageDate).toISOString();
         const getTitle = () => {
           for (const l of reader.result.slice(0, 10000).split("\n")) {
             if (l.includes("<title>")) {
@@ -261,9 +277,6 @@ const SinglefileConverter = (telegramURL, setTelegramURL) => {
             tmp.set(new Uint8Array(res[0]), 0);
             tmp.set(new Uint8Array(res[1]), res[0].byteLength);
             const recordDigest = await sha256(res[1]);
-            const blob = new Blob([tmp.buffer], {
-              type: "application/octet-stream",
-            });
 
             const pako = require("pako");
             const res0 = pako.gzip(res[0]);
@@ -281,7 +294,6 @@ const SinglefileConverter = (telegramURL, setTelegramURL) => {
               type: "application/gzip",
             });
 
-            const decoder = new TextDecoder("utf-8");
             const queuingStrategy = new CountQueuingStrategy({
               highWaterMark: 1,
             });
@@ -318,6 +330,14 @@ const SinglefileConverter = (telegramURL, setTelegramURL) => {
     reader.readAsText(file2convert, "utf-8");
   };
 
+  /**
+   * Converts the singlefile HTML into WARC format using warcio.js
+   *
+   * @param {*} fileContent Text result of reading the HTML Singlefile
+   * @param {*} pageUrl  URL parsed from singlefile comment in HTML
+   * @param {*} pageDate Date parsed from singlefile comment in HTML
+   * @returns
+   */
   const warcCreator = async (fileContent, pageUrl, pageDate) => {
     const warcVersion = "WARC/1.1";
 
@@ -341,7 +361,7 @@ const SinglefileConverter = (telegramURL, setTelegramURL) => {
     const date = pageDate;
     const type = "response";
     const httpHeaders = {
-      date: Date(),
+      date: dayjs(),
       "content-type": 'text/html; charset="UTF-8"',
     };
 
@@ -349,16 +369,12 @@ const SinglefileConverter = (telegramURL, setTelegramURL) => {
     const trim = pageUrl.split(":")[1].slice(2).split("/");
     const host = pageUrl.split(":")[0] + "://" + trim[0];
     const addr = "/" + trim.slice(1).join("/");
-    // console.log(host)
-    // console.log(addr)
 
     const samplereq = `GET ${addr} HTTP/1.1\nUser-Agent:  Mozilla/4.0 (compatible; MSIE5.01; Windows NT)\nHost: ${host}\nAccept-Language: en-us\nAccept-Encoding: gzip, deflate\nConnection: Keep-Alive\n`;
 
     async function* reqcontent() {
       yield new TextEncoder().encode(samplereq);
     }
-
-    const reqtype = "request";
 
     const reqRecord = await WARCRecord.create(
       { url, date, type: "request", warcVersion, statusline: "" },
@@ -384,8 +400,6 @@ const SinglefileConverter = (telegramURL, setTelegramURL) => {
     const serializedRecord = await WARCSerializer.serialize(record);
     const serializedRequest = await WARCSerializer.serialize(reqRecord);
 
-    // console.log(new TextDecoder().decode(serializedRequest))
-    // return [serializedWARCInfo, serializedRecord];
     return [serializedWARCInfo, serializedRecord, serializedRequest];
   };
 

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import Divider from "@mui/material/Divider";
 import Link from "@mui/material/Link";
 import ListItem from "@mui/material/ListItem";
@@ -11,15 +9,12 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
-import CloseIcon from "@mui/icons-material/Close";
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 import DownloadWaczFile from "./downloadWaczFile";
 import SinglefileConverter from "./singlefileConverter";
 
-const SecondStep = ({ url, fileInput, setFileInput }) => {
+const SecondStep = ({ url }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
   const [telegramURL, setTelegramURL] = useState("");
 
