@@ -65,8 +65,6 @@ const KeyFramesResults = ({ result }) => {
     detailedList.push(keyframe.keyframeUrl);
   }
 
-  // const [simpleList, detailedList] = [result.keyframes, result.keyframesXtra];
-
   const [cols, setCols] = useState(4);
 
   const similarityResults = useSelector((state) => state.keyframes.similarity);

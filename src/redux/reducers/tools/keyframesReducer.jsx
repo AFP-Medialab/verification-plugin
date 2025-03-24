@@ -50,28 +50,4 @@ export const {
 } = keyframesSlice.actions;
 const keyframesReducer = keyframesSlice.reducer;
 
-// const keyframesReducer = (state = defaultState, action) => {
-//   switch (action.type) {
-//     case "SET_KEYFRAMES_RESULT":
-//       return {
-//         ...state,
-//         loading: action.payload.loading,
-//         url: action.payload.url,
-//         result: action.payload.result,
-//         video_id: action.payload.video_id,
-//       };
-//     case "SET_KEYFRAMES_LOADING":
-//       return { ...state, loading: action.payload };
-//     case "SET_KEYFRAMES_SIMILARITY_LOADING":
-//       return { ...state, similarityLoading: action.payload };
-//     case "SET_KEYFRAMES_MESSAGE":
-//       return { ...state, message: action.payload };
-//     case "KEYFRAMES_CLEAN_STATE":
-//       return { defaultState };
-//     case "KEYFRAMES_UPDATE_SIMILARITY":
-//       return { ...state, similarity: action.payload };
-//     default:
-//       return state;
-//   }
-// };
 export default keyframesReducer;
