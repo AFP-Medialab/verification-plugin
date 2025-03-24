@@ -400,7 +400,7 @@ const SinglefileConverter = (telegramURL, setTelegramURL) => {
           onClick={() => document.getElementById("file").click()}
         >
           {fileInput
-            ? prettifyLargeString(fileInput.name)
+            ? prettifyLargeString(fileInput.name, 25)
             : keyword("upload_singlefile")}
           <input
             id="file"
