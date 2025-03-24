@@ -362,7 +362,8 @@ const SyntheticImageDetectionResults = ({
       updateNddRows(nd.similar_media);
   }, [nd]);
 
-  const { systemMode } = useColorScheme();
+  const { mode, systemMode } = useColorScheme();
+  const resolvedMode = systemMode || mode;
 
   return (
     <Card variant="outlined" sx={{ width: "100%" }}>
@@ -498,7 +499,7 @@ const SyntheticImageDetectionResults = ({
                           animate={false}
                           nrOfLevels={4}
                           textColor={
-                            systemMode === "dark" ? "#FFFFFF" : "#000000"
+                            resolvedMode === "dark" ? "#FFFFFF" : "#000000"
                           }
                           arcsLength={[
                             (100 - DETECTION_THRESHOLDS.THRESHOLD_1) / 100,
