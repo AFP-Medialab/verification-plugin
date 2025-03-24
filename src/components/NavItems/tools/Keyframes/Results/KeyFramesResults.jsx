@@ -32,6 +32,7 @@ import {
 import LoadingButton from "@mui/lab/LoadingButton";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
+import { ROLES } from "../../../../../constants/roles";
 import ImageGridList from "../../../../Shared/ImageGridList/ImageGridList";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 
@@ -45,6 +46,10 @@ const KeyFramesResults = ({ result }) => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Keyframes");
   const keywordHelp = i18nLoadNamespace("components/Shared/OnClickInfo");
+
+  const role = useSelector((state) => state.userSession.user.roles);
+
+  const jobId = useSelector((state) => state.keyframes.result.session);
 
   const [detailed, setDetailed] = useState(false);
 
@@ -139,8 +144,23 @@ const KeyFramesResults = ({ result }) => {
 
   const downloadAction = () => {
     setIsZipDownloading(true);
-    const downloadUrl = result.zipFileUrl;
-    // const downloadUrl = keyframe_url + "/keyframes/" + video_id + "/Subshots";
+
+    let downloadUrl;
+
+    if (
+      !role.includes(ROLES.BETA_TESTER) &&
+      !role.includes(ROLES.EVALUATION) &&
+      !role.includes(ROLES.EXTRA_FEATURE)
+    ) {
+      downloadUrl =
+        process.env.REACT_APP_KEYFRAME_API +
+        "/keyframes/" +
+        jobId +
+        "/Subshots";
+    } else {
+      downloadUrl = result.zipFileUrl;
+    }
+
     fetch(downloadUrl).then((response) => {
       response.blob().then((blob) => {
         const url = window.URL.createObjectURL(blob);

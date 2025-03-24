@@ -7,6 +7,7 @@ import { isValidUrl } from "@Shared/Utils/URLUtils";
 import axios from "axios";
 import { setError } from "redux/reducers/errorReducer";
 
+import { ROLES } from "../../../../../constants/roles";
 import {
   resetKeyframes,
   setKeyframesFeatures,
@@ -149,11 +150,7 @@ export const useProcessKeyframes = () => {
         data: d,
       };
 
-      console.log(config);
-
       const response = await axios(config);
-
-      console.log(response);
 
       //job id validation
       if (
@@ -354,62 +351,36 @@ export const useProcessKeyframes = () => {
       };
 
       const response = await axios(config);
-      console.log(response.data);
+
+      let keyframes = /** @type {Keyframe[]} */ [];
+      let keyframesXtra = /** @type {Keyframe[]} */ [];
+
+      for (const subshot of response.data.subshots) {
+        subshot.keyframes.forEach((kf, index) => {
+          if (index === 1) {
+            keyframes.push({
+              frame: null,
+              keyframeTime: kf.time,
+              keyframeUrl: kf.url,
+              shot: null,
+              subshot: null,
+            });
+          }
+
+          keyframesXtra.push({
+            frame: null,
+            keyframeTime: kf.time,
+            keyframeUrl: kf.url,
+            shot: null,
+            subshot: null,
+          });
+        });
+      }
 
       setStatus("Completed");
 
-      let shots = /** @type {Shot[]} */ [];
-
-      for (const shot of response.data.shots) {
-        shots.push({
-          shotNumber: response.data.shots.indexOf(shot),
-          beginFrame: shot.beginframe,
-          beginTime: shot.begintime,
-          endFrame: shot.endframe,
-          endTime: shot.endtime,
-        });
-      }
-
-      let subshots = /** @type {Subshot[]} */ [];
-
-      for (const subshot of response.data.subshots) {
-        subshots.push({
-          subshotNumber: response.data.subshots.indexOf(subshot),
-          beginFrame: null,
-          beginTime: subshot.begintime,
-          endFrame: subshot.endframe,
-          endTime: subshot.endtime,
-          shot: subshot.shot,
-        });
-      }
-
-      let keyframes = /** @type {Keyframe[]} */ [];
-      for (const kf of response.data.thumbnails) {
-        keyframes.push({
-          frame: null,
-          keyframeTime: kf.time,
-          keyframeUrl: kf.url,
-          shot: null,
-          subshot: null,
-        });
-      }
-
-      let keyframesXtra = /** @type {Keyframe[]} */ [];
-      for (const kf of response.data.subshots) {
-        keyframesXtra.push({
-          frame: kf.frame,
-          keyframeTime: kf.keyframe_time,
-          keyframeUrl: kf.keyframe_url,
-          shot: kf.shot,
-          subshot: kf.subshot,
-        });
-      }
-
       return /** @type {KeyframesData} */ {
-        session:
-          typeof response.data.session === "string"
-            ? response.data.session
-            : "",
+        session: jobId,
         url: typeof response.data.url === "string" ? response.data.url : "",
         duration:
           typeof response.data.duration === "string"
@@ -421,8 +392,8 @@ export const useProcessKeyframes = () => {
             : 0,
         keyframes: keyframes,
         keyframesXtra: keyframesXtra,
-        shots: shots,
-        subshots: subshots,
+        shots: [],
+        subshots: [],
         zipFileUrl:
           typeof response.data.keyframes_zip === "string"
             ? response.data.keyframes_zip
@@ -525,21 +496,18 @@ export const useProcessKeyframes = () => {
     try {
       let jobId;
 
-      // Use the old service
-      // if (
-      //   !role.includes(ROLES.BETA_TESTER) &&
-      //   !role.includes(ROLES.EVALUATION) &&
-      //   !role.includes(ROLES.EXTRA_FEATURE)
-      // ) {
-      jobId = await sendUrlMutationOld.mutateAsync({ url });
+      // Use the old service if not a beta tester
+      if (
+        !role.includes(ROLES.BETA_TESTER) &&
+        !role.includes(ROLES.EVALUATION) &&
+        !role.includes(ROLES.EXTRA_FEATURE)
+      ) {
+        jobId = await sendUrlMutationOld.mutateAsync({ url });
 
-      await checkStatusMutationOld.mutateAsync(jobId);
+        await checkStatusMutationOld.mutateAsync(jobId);
 
-      await fetchDataMutationOld.mutateAsync(jobId);
-
-      // }
-
-      return;
+        return await fetchDataMutationOld.mutateAsync(jobId);
+      }
 
       jobId = await sendUrlMutation.mutateAsync({ url });
       await checkStatusMutation.mutateAsync(jobId);
@@ -558,11 +526,15 @@ export const useProcessKeyframes = () => {
     isPending:
       sendUrlMutationOld.isPending ||
       checkStatusMutationOld.isPending ||
+      fetchDataMutationOld.isPending ||
       sendUrlMutation.isPending ||
       checkStatusMutation.isPending ||
       fetchDataMutation.isPending,
-    data: fetchDataMutation.data,
+    data: fetchDataMutationOld.data || fetchDataMutation.data,
     error:
+      sendUrlMutationOld.error ||
+      checkStatusMutationOld.error ||
+      fetchDataMutationOld.error ||
       sendUrlMutation.error ||
       checkStatusMutation.error ||
       fetchDataMutation.error,
