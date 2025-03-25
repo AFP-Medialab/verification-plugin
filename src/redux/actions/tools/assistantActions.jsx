@@ -372,9 +372,7 @@ export const submitUserChatbotMessage = (
   return {
     type: "SUBMIT_USER_CHATBOT_MESSAGE",
     payload: {
-      email: email,
       message: message,
-      archiveURL: archiveURL,
       sessionID: sessionID,
     },
   };

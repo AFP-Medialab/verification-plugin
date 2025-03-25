@@ -28,8 +28,6 @@ export default function assistantApiCalls() {
     try {
       chatbotResponse = await axios.post(assistantEndpoint + "gcloud/chatbot", {
         message: userInput,
-        email: email,
-        archiveURL: archiveURL,
         sessionID: sessionID,
       });
     } catch (error) {
