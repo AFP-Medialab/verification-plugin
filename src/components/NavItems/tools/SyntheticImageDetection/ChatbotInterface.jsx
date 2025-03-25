@@ -54,9 +54,10 @@ const ChatbotInterface = (props) => {
 
   const resetChatbot = () => {
     dispatch(clearChatbotMessages());
+    // Clear the session history in the chatbot backend
+    dispatch(submitUserChatbotMessage(sessionID, null, null, null));
     setSessionID(uuidv4());
     setFormInput("");
-    console.log(chatbotMessages);
   };
 
   // Detect when the tab is closed and send a special request to the chatbot to clear the session history
