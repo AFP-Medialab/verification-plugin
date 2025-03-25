@@ -184,7 +184,7 @@ const SinglefileConverter = (telegramURL) => {
       const cleantsCerts = tstsign.certs.join().replace("\n", "");
       const signedData = {
         hash: `sha256:${datapackage_hash}`,
-        created: dayjs.toISOString(),
+        created: dayjs().toISOString(),
         software:
           "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
         signature: tstsign.signature,
@@ -207,7 +207,7 @@ const SinglefileConverter = (telegramURL) => {
         input: JSON.stringify(datapackagedigest_input, null, 2),
       };
 
-      const zip = await downloadZip([
+      await downloadZip([
         datapackage_arch,
         datapackagedigest_arch,
         index_arch,
@@ -255,7 +255,7 @@ const SinglefileConverter = (telegramURL) => {
           telegramURL.telegramURL.length > 0
             ? telegramURL.telegramURL
             : lines[commentline + 1].slice(5);
-        const pageDateISO = dayjs.parse(pageDate).toISOString();
+        const pageDateISO = dayjs(pageDate).toISOString();
         const getTitle = () => {
           for (const l of reader.result.slice(0, 10000).split("\n")) {
             if (l.includes("<title>")) {
