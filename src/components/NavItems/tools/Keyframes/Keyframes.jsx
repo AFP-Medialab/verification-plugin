@@ -70,7 +70,7 @@ const Keyframes = () => {
   // State used to load images
   const [input, setInput] = useState(resultUrl ? resultUrl : "");
   const [submittedUrl, setSubmittedUrl] = useState(undefined);
-  //const [urlDetected, setUrlDetected] = useState(false)
+
   useVideoSimilarity(submittedUrl, keyword);
 
   useTrackEvent(
@@ -81,6 +81,21 @@ const Keyframes = () => {
     null,
     submittedUrl,
   );
+
+  /**
+   * Returns a translation keyword to print a user-friendly error
+   * @param error {Error} The error object
+   * @returns {string} The translation keyword
+   */
+  const handleError = (error) => {
+    if (error.code === "ECONNABORTED" || error.response?.status === 504) {
+      return "error_timeout";
+    } else if (error.response?.status === 500) {
+      return "keyframes_error_unavailable";
+    } else {
+      return "keyframes_error_default";
+    }
+  };
 
   /**
    *
@@ -213,6 +228,7 @@ const Keyframes = () => {
                             e.preventDefault();
                             submitUrl();
                           }}
+                          disabled={!input}
                           loading={isPending || isLoadingSimilarity}
                         >
                           {keyword("button_submit")}
@@ -319,7 +335,7 @@ const Keyframes = () => {
           </Fade>
         )}
 
-        {error && <Alert severity="error">{error.message}</Alert>}
+        {error && <Alert severity="error">{keyword(handleError(error))}</Alert>}
 
         {resultData && tabSelected === "url" && (
           <Fade in={resultData && tabSelected === "url"} timeout={1500}>

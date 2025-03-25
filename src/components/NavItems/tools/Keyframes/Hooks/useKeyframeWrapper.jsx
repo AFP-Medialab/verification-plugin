@@ -42,6 +42,7 @@ export const useProcessKeyframes = () => {
           "Content-Type": "application/json",
         },
         data: d,
+        timeout: 10000, //We are setting a 10sec timeout
       };
 
       const response = await axios(config);
@@ -82,6 +83,7 @@ export const useProcessKeyframes = () => {
           "Content-Type": "application/json",
         },
         data: d,
+        timeout: 10000, //We are setting a 10sec timeout
       };
       const response = await authenticatedRequest(config);
 
