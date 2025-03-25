@@ -57,7 +57,7 @@ const AssistantFileSelected = () => {
           {actionList.map((action, index) => {
             return (
               <Box m={2} key={index}>
-                <Card className={classes.assistantHover} variant={"outlined"}>
+                <Card className={classes.assistantHover} variant="outlined">
                   <ListItem
                     onClick={() => {
                       handleClick(action.path, cType);
@@ -93,7 +93,7 @@ const AssistantFileSelected = () => {
   };
 
   return (
-    <Card>
+    <Card variant="outlined">
       <CardHeader
         className={classes.assistantCardHeader}
         title={

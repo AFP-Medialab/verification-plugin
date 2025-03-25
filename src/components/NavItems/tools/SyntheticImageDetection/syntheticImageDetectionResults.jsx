@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import GaugeChart from "react-gauge-chart";
 import { useSelector } from "react-redux";
 
+import { useColorScheme } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -373,6 +374,9 @@ const SyntheticImageDetectionResults = ({
       updateNddRows(nd.similar_media);
   }, [nd]);
 
+  const { mode, systemMode } = useColorScheme();
+  const resolvedMode = systemMode || mode;
+
   return (
     <Card sx={{ width: "100%" }}>
       <CardHeader
@@ -485,17 +489,6 @@ const SyntheticImageDetectionResults = ({
                           )}
                     </Typography>
 
-                    <Accordion defaultExpanded onChange={handleChatbotChange}>
-                      <AccordionSummary expandIcon={<ExpandMore />}>
-                        <Typography>{keyword(chatbotPanelMessage)}</Typography>
-                      </AccordionSummary>
-                      <AccordionDetails>
-                        <Box sx={{ mr: 2 }}>
-                          <ChatbotInterface />
-                        </Box>
-                      </AccordionDetails>
-                    </Accordion>
-
                     {filteredNddRows && filteredNddRows.length > 0 && (
                       <Typography
                         variant="h5"
@@ -517,7 +510,9 @@ const SyntheticImageDetectionResults = ({
                         id={"gauge-chart"}
                         animate={false}
                         nrOfLevels={4}
-                        textColor={"black"}
+                        textColor={
+                          resolvedMode === "dark" ? "#FFFFFF" : "#000000"
+                        }
                         arcsLength={[
                           (100 - DETECTION_THRESHOLDS.THRESHOLD_1) / 100,
                           (DETECTION_THRESHOLDS.THRESHOLD_2 -

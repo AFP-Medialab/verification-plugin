@@ -11,6 +11,7 @@ const defaultState = {
   linkList: [],
   urlText: null,
   urlTextHtmlMap: null,
+  collectedComments: null,
   textLang: null,
   processUrlActions: [],
   processUrlType: null,
@@ -75,6 +76,11 @@ const defaultState = {
   machineGeneratedTextDone: false,
   machineGeneratedTextFail: false,
 
+  multilingualStanceResult: null,
+  multilingualStanceLoading: false,
+  multilingualStanceDone: false,
+  multilingualStanceFail: false,
+
   loading: false,
   warningExpanded: false,
   assuranceExpanded: false,
@@ -116,7 +122,9 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_SUBJECTIVITY_DETAILS":
     case "SET_PREV_FACT_CHECKS_DETAILS":
     case "SET_MACHINE_GENERATED_TEXT_DETAILS":
+    case "SET_MULTILINGUAL_STANCE_DETAILS":
     case "SET_LOADING":
+    case "SET_MISSING_MEDIA":
     case "SET_WARNING_EXPANDED":
     case "SET_ASSURANCE_EXPANDED":
     case "SET_STATE_EXPANDED":
@@ -139,6 +147,7 @@ const assistantReducer = (state = defaultState, action) => {
         linkList: [],
         urlText: null,
         urlTextHtmlMap: null,
+        collectedComments: null,
         textLang: null,
         processUrlActions: [],
         processUrlType: null,
@@ -200,6 +209,11 @@ const assistantReducer = (state = defaultState, action) => {
         machineGeneratedTextLoading: false,
         machineGeneratedTextDone: false,
         machineGeneratedTextFail: false,
+
+        multilingualStanceResult: null,
+        multilingualStanceLoading: false,
+        multilingualStanceDone: false,
+        multilingualStanceFail: false,
 
         loading: false,
         warningExpanded: false,

@@ -22,7 +22,7 @@ import "tippy.js/dist/tippy.css";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
-  TransHtmlDoubleLinkBreak,
+  TransHtmlDoubleLineBreak,
   TransNamedEntityRecogniserLink,
 } from "../TransComponents";
 
@@ -116,7 +116,7 @@ const AssistantNEResult = () => {
 
   return (
     <Grid2 size={{ xs: 12 }}>
-      <Card>
+      <Card variant="outlined">
         <CardHeader
           className={classes.assistantCardHeader}
           title={keyword("named_entity_title")}
@@ -126,7 +126,7 @@ const AssistantNEResult = () => {
               title={
                 <>
                   <Trans t={keyword} i18nKey="named_entity_tooltip" />
-                  <TransHtmlDoubleLinkBreak keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
                   <TransNamedEntityRecogniserLink keyword={keyword} />
                 </>
               }

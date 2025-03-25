@@ -563,7 +563,7 @@ const AdvancedTools = () => {
                       rules={{
                         pattern: {
                           value:
-                            /^[A-Z0-9._%+-]+@(?!gmail|yahoo|hotmail|outlook|inbox|icloud)[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                            /^[A-Z0-9._%+!#$%&'*+-/=?^_`{|}~-]+@(?!gmail|yahoo|hotmail|outlook|inbox|icloud)[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                           message: "invalid organizational email address",
                         },
                         required: true,
