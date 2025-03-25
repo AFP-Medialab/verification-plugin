@@ -5,13 +5,19 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 import { styled } from "@mui/system";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { v4 as uuidv4 } from "uuid";
 
-import { submitUserChatbotMessage } from "../../../../redux/actions/tools/assistantActions";
+import {
+  clearChatbotMessages,
+  submitUserChatbotMessage,
+} from "../../../../redux/actions/tools/assistantActions";
 
 const MessageBubble = styled(Box)(({ sent }) => ({
   maxWidth: "70%",
@@ -44,6 +50,13 @@ const ChatbotInterface = (props) => {
       submitUserChatbotMessage(sessionID, formInput, userEmail, archiveURL),
     );
     setFormInput("");
+  };
+
+  const resetChatbot = () => {
+    dispatch(clearChatbotMessages());
+    setSessionID(uuidv4());
+    setFormInput("");
+    console.log(chatbotMessages);
   };
 
   // Detect when the tab is closed and send a special request to the chatbot to clear the session history
@@ -85,6 +98,22 @@ const ChatbotInterface = (props) => {
           justifyContent="flex-start"
           alignItems="center"
         >
+          <Button
+            type="submit"
+            variant="contained"
+            color="secondary"
+            data-testid="chatbot-reset-btn"
+            onClick={(e) => {
+              e.preventDefault();
+              resetChatbot();
+            }}
+          >
+            <Tooltip title="chatbot_new_conversation">
+              <Typography>
+                <RestartAltIcon />
+              </Typography>
+            </Tooltip>
+          </Button>
           <TextField
             variant="outlined"
             multiline

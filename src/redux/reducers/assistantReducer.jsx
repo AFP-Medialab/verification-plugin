@@ -95,6 +95,12 @@ const assistantReducer = (state = defaultState, action) => {
         chatbotMessages: [...state.chatbotMessages, message],
       };
     }
+    case "CLEAR_CHATBOT_MESSAGES": {
+      return {
+        ...state,
+        chatbotMessages: [],
+      };
+    }
     case "SET_PROCESS_URL_ACTIONS":
     case "SET_MODE":
     case "SET_IMAGE_VIDEO_SELECTED":

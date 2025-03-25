@@ -28,6 +28,7 @@ import {
 import {
   addChatbotMessage,
   cleanAssistantState,
+  clearChatbotMessages,
   setAssistantLoading,
   setDbkfImageMatchDetails,
   setDbkfTextMatchDetails,

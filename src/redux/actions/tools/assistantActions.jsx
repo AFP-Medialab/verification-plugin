@@ -65,6 +65,12 @@ export const addChatbotMessage = (message, sent) => {
   };
 };
 
+export const clearChatbotMessages = (message, sent) => {
+  return {
+    type: "CLEAR_CHATBOT_MESSAGES",
+  };
+};
+
 export const setScrapedData = (
   text,
   lang,
