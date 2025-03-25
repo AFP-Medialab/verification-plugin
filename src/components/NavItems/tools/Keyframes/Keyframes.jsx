@@ -82,13 +82,17 @@ const Keyframes = () => {
     submittedUrl,
   );
 
-  const submitUrl = async () => {
+  /**
+   *
+   * @param url {?string} Optional URL to pass if it is external
+   * @returns {Promise<void>}
+   */
+  const submitUrl = async (url) => {
     dispatch(resetKeyframes());
-    dispatch(setKeyframesUrl(input));
-
+    dispatch(setKeyframesUrl(url ?? input));
     try {
-      setSubmittedUrl(input);
-      await executeProcess(input, role);
+      setSubmittedUrl(url ?? input);
+      await executeProcess(url ?? input, role);
     } catch (error) {
       console.error(error);
     }
@@ -110,6 +114,7 @@ const Keyframes = () => {
     if (processUrl) {
       setInput(processUrl);
       setSubmittedUrl(processUrl);
+      submitUrl(processUrl);
     }
   }, [processUrl]);
 
