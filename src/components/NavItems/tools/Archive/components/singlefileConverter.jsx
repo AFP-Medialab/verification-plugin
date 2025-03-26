@@ -136,6 +136,8 @@ const SinglefileConverter = (telegramURL) => {
 
     const archive_hash = await sha256(archive_buf);
 
+    const created_time = dayjs().toISOString();
+
     const datapackage_input = {
       profile: "data-package",
       resources: [
@@ -161,7 +163,7 @@ const SinglefileConverter = (telegramURL) => {
       wacz_version: "1.1.1",
       software:
         "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
-      created: `${dayjs().toISOString()}`,
+      created: `${created_time}`,
       title: "singlefile2wacz.wacz",
     };
     const datapackage_arch = {
@@ -184,7 +186,7 @@ const SinglefileConverter = (telegramURL) => {
       const cleantsCerts = tstsign.certs.join().replace("\n", "");
       const signedData = {
         hash: `sha256:${datapackage_hash}`,
-        created: dayjs().toISOString(),
+        created: created_time,
         software:
           "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
         signature: tstsign.signature,
