@@ -86,6 +86,7 @@ export const KNOWN_LINK_PATTERNS = [
     key: KNOWN_LINKS.FACEBOOK,
     patterns: [
       "^(https?:/{2})?(www.)?facebook.com/.*/(videos|photos|posts)/.*",
+      "^(https?:/{2})?(www.)?facebook.com/reel/.*",
     ],
   },
   {
