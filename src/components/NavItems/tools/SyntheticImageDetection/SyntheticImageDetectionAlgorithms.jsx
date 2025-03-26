@@ -72,12 +72,6 @@ export const gigaGanWebpR50Grip = new SyntheticImageDetectionAlgorithm(
   "synthetic_image_detection_gigagan-webp_r50_grip_description",
   [ROLES.EVALUATION, ROLES.EXTRA_FEATURE],
 );
-export const ldmRineMever = new SyntheticImageDetectionAlgorithm(
-  "ldm_rine_mever",
-  "synthetic_image_detection_ldm_rine_mever_name",
-  "synthetic_image_detection_ldm_rine_mever_description",
-  [ROLES.EVALUATION, ROLES.EXTRA_FEATURE],
-);
 export const ldmR50Mever = new SyntheticImageDetectionAlgorithm(
   "ldm_r50_mever",
   "synthetic_image_detection_ldm_r50_mever_name",
@@ -111,7 +105,6 @@ export const syntheticImageDetectionAlgorithms = [
   gigaGanWebpR50Grip,
   ganR50Mever,
   ldmR50Mever,
-  ldmRineMever,
   itwRineMever,
   itwSpaiMever,
 ];
