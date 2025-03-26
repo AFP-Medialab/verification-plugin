@@ -377,7 +377,9 @@ const Keyframes = () => {
               <Card variant="outlined">
                 <Box pb={4} pt={2} pl={4} pr={4}>
                   <Stack direction="column" spacing={2}>
-                    <Typography variant="h6">{"Faces"}</Typography>
+                    <Typography variant="h6">
+                      {keyword("faces_detected_title")}
+                    </Typography>
                     <Grid2 container direction="row" spacing={2}>
                       {keyframesFeaturesData.faces.map((item, i) => (
                         <Grid2 key={i} size={{ md: 3, lg: 1 }}>
@@ -396,7 +398,9 @@ const Keyframes = () => {
               <Card variant="outlined">
                 <Box p={4}>
                   <Stack direction="column" spacing={2}>
-                    <Typography variant="h6">{"Texts"}</Typography>
+                    <Typography variant="h6">
+                      {keyword("text_detected_title")}
+                    </Typography>
                     <Grid2 container direction="row" spacing={2}>
                       {keyframesFeaturesData.texts.map((item, i) => (
                         <Grid2 key={i} size={{ md: 3, lg: 1 }}>
