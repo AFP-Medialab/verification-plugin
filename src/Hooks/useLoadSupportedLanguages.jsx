@@ -20,23 +20,6 @@ const useLoadSupportedLanguage = () => {
     axios.get(languagesUrl).then((result) => {
       const languages = result.data;
 
-      // const filterLanguages = () => {
-      //   const languageKeyToFilter = "ja";
-      //
-      //   return Object.entries(languages)
-      //     .filter(([languageKey]) => languageKey !== languageKeyToFilter)
-      //     .reduce((filteredList, [key, value]) => {
-      //       filteredList[key] = value;
-      //       return filteredList;
-      //     }, {});
-      // };
-      //
-      // const filteredLanguages =
-      //   role.includes(ROLES.EXTRA_FEATURE) ||
-      //   role.includes(ROLES.BETA_LANGUAGES)
-      //     ? languages
-      //     : filterLanguages();
-
       dispatch(loadLanguages(languages));
     });
   }, [userAuthenticated]);
