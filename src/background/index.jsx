@@ -1,11 +1,12 @@
-import { trackEvent } from "../components/Shared/GoogleAnalytics/MatomoAnalytics";
-import {
-  reverseImageSearch,
-  reverseImageSearchAll,
-  SEARCH_ENGINE_SETTINGS,
-} from "../components/Shared/ReverseSearch/reverseSearchUtils";
 import { openTabs } from "components/Shared/ReverseSearch/utils/openTabUtils";
 import { getImgUrl } from "components/Shared/ReverseSearch/utils/searchUtils";
+
+import { trackEvent } from "../components/Shared/GoogleAnalytics/MatomoAnalytics";
+import {
+  SEARCH_ENGINE_SETTINGS,
+  reverseImageSearch,
+  reverseImageSearchAll,
+} from "../components/Shared/ReverseSearch/reverseSearchUtils";
 
 const page_name = "popup.html";
 
@@ -237,4 +238,32 @@ chrome.runtime.onInstalled.addListener(() => {
     contexts: ["image"],
   });
 });
+async function getCurrentTab() {
+  let queryOptions = { active: true, lastFocusedWindow: true };
+  let [tab] = await chrome.tabs.query(queryOptions);
+  return tab;
+}
 chrome.contextMenus.onClicked.addListener(contextClick);
+chrome.webNavigation.onCommitted.addListener(async () => {
+  let currentTab = await getCurrentTab();
+  console.log("hmph");
+  try {
+    chrome.scripting.executeScript({
+      target: { tabId: currentTab.id, allFrames: true },
+      function: () => {
+        console.log("hohoho");
+        var s = document.createElement("script");
+        // must be listed in web_accessible_resources in manifest.json
+        s.src = chrome.runtime.getURL("inject.js");
+        s.onload = function () {
+          this.remove();
+        };
+        (document.head || document.documentElement).appendChild(s);
+      },
+    });
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+chrome.runtime.onStartup.addListener();
