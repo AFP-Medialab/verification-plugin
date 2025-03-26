@@ -10,7 +10,7 @@ import {
   setForensicsResult,
 } from "../../../../../redux/actions/tools/forensicActions";
 
-const useGetImages = async (url, type, keyword) => {
+const useGetImages = (url, type, keyword) => {
   const forensic_base_url = process.env.REACT_APP_CAA_FORENSICS_URL;
 
   const link2dataURL = async (imgLink) => {
