@@ -6,7 +6,6 @@ import { loadLanguages } from "redux/reducers/languageSupportReducer";
 
 const useLoadSupportedLanguage = () => {
   const dispatch = useDispatch();
-  const role = useSelector((state) => state.userSession.user.roles);
   const userAuthenticated = useSelector(
     (state) => state.userSession.userAuthenticated,
   );
