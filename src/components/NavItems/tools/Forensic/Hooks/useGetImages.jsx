@@ -1,15 +1,59 @@
 import { useEffect } from "react";
-import axios from "axios";
 import { useDispatch } from "react-redux";
+
+import axios from "axios";
+import { setError } from "redux/reducers/errorReducer";
+
 import {
   setForensicDisplayItem,
   setForensicsLoading,
   setForensicsResult,
 } from "../../../../../redux/actions/tools/forensicActions";
-import { setError } from "redux/reducers/errorReducer";
 
 const useGetImages = (url, type, keyword) => {
   const forensic_base_url = process.env.REACT_APP_CAA_FORENSICS_URL;
+
+  const link2dataURL = async (imgLink) => {
+    let resp = await fetch(imgLink);
+    let blob = await resp.blob();
+    let read = await new Promise((resolve) => {
+      let reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.readAsDataURL(blob);
+    });
+    return read;
+  };
+
+  const transformObjectLinks = async (obj) => {
+    const ret = await Promise.all(
+      Object.entries(obj).map(async ([k, v]) => {
+        if (v == null) {
+          return [k, v];
+        }
+        if (
+          Array.isArray(v) &&
+          typeof v[0] == "string" &&
+          v[0].includes("http")
+        ) {
+          let links = await Promise.all(
+            v.map(async (l) => await link2dataURL(l)),
+          );
+          return [k, links];
+        }
+        if (!Array.isArray(v) && typeof v == "object") {
+          let nestedObj = await transformObjectLinks(v);
+          return [k, nestedObj];
+        }
+        if (typeof v == "string" && v.includes("http")) {
+          let link = await link2dataURL(v);
+          return [k, link];
+        } else {
+          return [k, v];
+        }
+      }),
+    );
+    return Object.fromEntries(ret);
+  };
 
   const dispatch = useDispatch();
 
@@ -21,15 +65,29 @@ const useGetImages = (url, type, keyword) => {
       dispatch(setForensicsLoading(false));
     };
 
-    const getResult = (reportId) => {
+    const getResult = async (reportId) => {
       axios
         .get(forensic_base_url + "images/reports/" + reportId)
-        .then((response) => {
+        .then(async (response) => {
           if (response.data != null) {
+            const results = Object.entries(response.data).slice(3);
+            const intro = Object.entries(response.data).slice(0, 3);
+            const noLinks = await Promise.all(
+              results.map(async (x) => [
+                x[0],
+                await transformObjectLinks(x[1]),
+              ]),
+            );
+            const concat = Object.assign(
+              {},
+              Object.fromEntries(intro),
+              Object.fromEntries(noLinks),
+            );
+
             dispatch(
               setForensicsResult({
                 url: type === "local" ? response.data.displayItem : url,
-                result: response.data,
+                result: concat,
                 notification: false,
                 loading: false,
                 gifAnimation: false,
