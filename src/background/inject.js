@@ -21,7 +21,13 @@
 
   XHR.send = function () {
     this.addEventListener("load", function () {
-      console.log(this);
+      if (
+        this._url.includes("graphql") &&
+        this.response.slice(0, 10).includes("data")
+      ) {
+        console.log(this);
+        console.log(JSON.parse(this.responseText));
+      }
     });
 
     return send.apply(this, arguments);
