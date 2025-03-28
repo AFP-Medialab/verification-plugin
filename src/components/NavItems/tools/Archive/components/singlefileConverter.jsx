@@ -137,6 +137,7 @@ const SinglefileConverter = (telegramURL) => {
     const archive_hash = await sha256(archive_buf);
 
     const created_time = dayjs().toISOString();
+    console.log(created_time);
 
     const datapackage_input = {
       profile: "data-package",
@@ -181,9 +182,12 @@ const SinglefileConverter = (telegramURL) => {
     //Send request for signature and put info into the format required for the datapackage digest file
 
     try {
-      const tstsign = await domainCertSign(datapackage_hash);
-      const cleanCert = tstsign.domainCert.replace("\n", "");
-      const cleantsCerts = tstsign.certs.join().replace("\n", "");
+      let senthash = "sha256:" + datapackage_hash;
+      console.log(senthash);
+      const tstsign = await domainCertSign(senthash);
+      console.log(dayjs());
+      // const cleanCert = tstsign.domainCert.replace("\n", "");
+      const cleantsCerts = tstsign.certs.join("\n");
       const signedData = {
         hash: `sha256:${datapackage_hash}`,
         created: created_time,
@@ -191,7 +195,7 @@ const SinglefileConverter = (telegramURL) => {
           "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
         signature: tstsign.signature,
         domain: "signature.verification-plugin.eu",
-        domainCert: cleanCert,
+        domainCert: tstsign.domainCert,
         timeSignature: tstsign.encodedTST,
         timestampCert: cleantsCerts,
         version: "0.1.0",
