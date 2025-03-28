@@ -171,17 +171,17 @@ const Feedback = () => {
                         alignItems="center"
                         spacing={2}
                       >
-                        <QuestionAnswerOutlinedIcon sx={{ color: "white" }} />
-                        <Typography color="white">
-                          {keyword("title")}
-                        </Typography>
+                        <QuestionAnswerOutlinedIcon
+                          sx={{ color: "var(--mui-palette-primary-main)" }}
+                        />
+                        <Typography variant="h6">{keyword("title")}</Typography>
                       </Stack>
                       <IconButton
                         key="close"
                         aria-label="close"
                         onClick={() => setDisplayCard(false)}
                       >
-                        <CloseIcon sx={{ color: "white" }} />
+                        <CloseIcon />
                       </IconButton>
                     </Stack>
 
