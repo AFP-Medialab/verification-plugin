@@ -99,9 +99,9 @@ InVID-Translations repository: https://github.com/AFP-Medialab/InVID-Translation
 
 ### Offline Translations
 
-Scripts for creating the offline translations are in this repository: https://github.com/AFP-Medialab/vera-python-scripts
+Scripts for creating the offline translations are in this repository: [verification-plugin-translation-scripts](https://github.com/AFP-Medialab/verification-plugin-translation-scripts)
 
-For offline translations, edit and run [https://github.com/AFP-Medialab/vera-python-scripts/weverify-plugin/local-languages.ipynb](https://github.com/AFP-Medialab/vera-python-scripts/weverify-plugin/local-languages.ipynb) to generate the JSON files
+For offline translations, edit and run [this jupyter notebook](https://github.com/AFP-Medialab/verification-plugin-translation-scripts/blob/main/local-languages.ipynb) to generate the JSON files
 - Edit `invid_translation_project_path=<TRANSLATIONS-PATH>` to local folder for the InVID-Translations
 - Edit `TARGET_PROJECT_HOME=<FRONTEND-PATH>` to local Verification Plugin folder
 - If `write_to_file = True` then the `tsv` to `JSON` conversion will be done, otherwise it will just do a dry run
