@@ -292,7 +292,7 @@ const DeepfakeResultsVideo = (props) => {
                         onClick={async () =>
                           await exportReactElementAsJpg(
                             deepfakeChartRef,
-                            "loccus_detection_chart",
+                            "deepfake_video_detection_chart_download_button_label",
                           )
                         }
                       >
