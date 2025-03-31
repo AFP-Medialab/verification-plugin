@@ -25,6 +25,10 @@ import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const DeepfakeResultsVideo = (props) => {
+  const userAuthenticated = useSelector(
+    (state) => state.userSession && state.userSession.userAuthenticated,
+  );
+
   const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
 
   class DeepfakeResult {
@@ -282,24 +286,27 @@ const DeepfakeResultsVideo = (props) => {
                       {keyword("deepfake_video_videoreport_name")}
                     </Typography>
                   </Stack>
-                  <Box>
-                    <Tooltip
-                      title={keyword("deepfake_video_download_chart_button")}
-                    >
-                      <IconButton
-                        color="primary"
-                        aria-label="download chart"
-                        onClick={async () =>
-                          await exportReactElementAsJpg(
-                            deepfakeChartRef,
-                            "deepfake_video_detection_chart_download_button_label",
-                          )
-                        }
+
+                  {userAuthenticated && (
+                    <Box>
+                      <Tooltip
+                        title={keyword("deepfake_video_download_chart_button")}
                       >
-                        <Download />
-                      </IconButton>
-                    </Tooltip>
-                  </Box>
+                        <IconButton
+                          color="primary"
+                          aria-label="download chart"
+                          onClick={async () =>
+                            await exportReactElementAsJpg(
+                              deepfakeChartRef,
+                              "deepfake_video_detection_chart_download_button_label",
+                            )
+                          }
+                        >
+                          <Download />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
+                  )}
                 </Stack>
               </Grid2>
             </Grid2>
