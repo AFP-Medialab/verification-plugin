@@ -137,7 +137,6 @@ const SinglefileConverter = (telegramURL) => {
     const archive_hash = await sha256(archive_buf);
 
     const created_time = dayjs().toISOString();
-    console.log(created_time);
 
     const datapackage_input = {
       profile: "data-package",
@@ -183,9 +182,7 @@ const SinglefileConverter = (telegramURL) => {
 
     try {
       let senthash = "sha256:" + datapackage_hash;
-      console.log(senthash);
       const tstsign = await domainCertSign(senthash);
-      console.log(dayjs());
       // const cleanCert = tstsign.domainCert.replace("\n", "");
       const cleantsCerts = tstsign.certs.join("\n");
       const signedData = {
@@ -263,14 +260,20 @@ const SinglefileConverter = (telegramURL) => {
             : lines[commentline + 1].slice(5);
         const pageDateISO = dayjs(pageDate).toISOString();
         const getTitle = () => {
-          for (const l of reader.result.slice(0, 10000).split("\n")) {
-            if (l.includes("<title>")) {
-              const ret = l.match("<title>(.)*</title>")[0].slice(7, -8);
-              const retbytes = new TextEncoder().encode(ret);
-              return new TextDecoder("utf-8").decode(retbytes);
-            }
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(reader.result, "text/html");
+          const titleElem = doc.getElementsByTagName("title");
+          if (
+            titleElem &&
+            titleElem.length > 0 &&
+            titleElem[0].innerHTML != ""
+          ) {
+            let title = titleElem[0].innerHTML;
+            let retbytes = new TextEncoder().encode(title);
+            return new TextDecoder("utf-8").decode(retbytes);
+          } else {
+            return pageURL;
           }
-          return pageURL;
         };
         const pageInfo = {
           url: pageURL,
@@ -287,13 +290,16 @@ const SinglefileConverter = (telegramURL) => {
             const pako = require("pako");
             const res0 = pako.gzip(res[0]);
             const res1 = pako.gzip(res[1]);
-            const res2 = pako.gzip(res[2]);
+            // const res2 = pako.gzip(res[2]); //For response/request
             const resbuf = new Uint8Array(
-              res0.byteLength + res1.byteLength + res2.byteLength,
+              res0.byteLength + res1.byteLength, //+ res2.byteLength,
             );
             resbuf.set(res0, 0);
-            resbuf.set(res2, res0.byteLength);
-            resbuf.set(res1, res0.byteLength + res2.byteLength);
+            resbuf.set(res1, res0.byteLength);
+
+            //For response/request
+            // resbuf.set(res2, res0.byteLength);
+            // resbuf.set(res1, res0.byteLength + res2.byteLength);
             const gzipArch = resbuf;
 
             const blob2 = new Blob([gzipArch], {
@@ -365,27 +371,12 @@ const SinglefileConverter = (telegramURL) => {
     // Create a sample response
     const url = pageUrl;
     const date = pageDate;
-    const type = "response";
+    // const type = "response";
+    const type = "resource";
     const httpHeaders = {
       date: dayjs(),
       "content-type": 'text/html; charset="UTF-8"',
     };
-
-    // For adding request record if page is saved as a response
-    const trim = pageUrl.split(":")[1].slice(2).split("/");
-    const host = pageUrl.split(":")[0] + "://" + trim[0];
-    const addr = "/" + trim.slice(1).join("/");
-
-    const samplereq = `GET ${addr} HTTP/1.1\nUser-Agent:  Mozilla/4.0 (compatible; MSIE5.01; Windows NT)\nHost: ${host}\nAccept-Language: en-us\nAccept-Encoding: gzip, deflate\nConnection: Keep-Alive\n`;
-
-    async function* reqcontent() {
-      yield new TextEncoder().encode(samplereq);
-    }
-
-    const reqRecord = await WARCRecord.create(
-      { url, date, type: "request", warcVersion, statusline: "" },
-      reqcontent(),
-    );
 
     async function* content() {
       yield new TextEncoder().encode(fileContent);
@@ -404,9 +395,25 @@ const SinglefileConverter = (telegramURL) => {
     );
 
     const serializedRecord = await WARCSerializer.serialize(record);
-    const serializedRequest = await WARCSerializer.serialize(reqRecord);
+    return [serializedWARCInfo, serializedRecord];
+    //For returning response/request
+    // For adding request record if page is saved as a response
+    // const trim = pageUrl.split(":")[1].slice(2).split("/");
+    // const host = pageUrl.split(":")[0] + "://" + trim[0];
+    // const addr = "/" + trim.slice(1).join("/");
 
-    return [serializedWARCInfo, serializedRecord, serializedRequest];
+    // const samplereq = `GET ${addr} HTTP/1.1\nUser-Agent:  Mozilla/4.0 (compatible; MSIE5.01; Windows NT)\nHost: ${host}\nAccept-Language: en-us\nAccept-Encoding: gzip, deflate\nConnection: Keep-Alive\n`;
+
+    // async function* reqcontent() {
+    //   yield new TextEncoder().encode(samplereq);
+    // }
+    // const reqRecord = await WARCRecord.create(
+    //   { url, date, type: "request", warcVersion, statusline: "" },
+    //   reqcontent(),
+    // );
+    // const serializedRequest = await WARCSerializer.serialize(reqRecord);
+
+    // return [serializedWARCInfo, serializedRecord, serializedRequest];
   };
 
   return (
