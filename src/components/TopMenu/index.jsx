@@ -3,12 +3,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
 import Grid2 from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Toolbar from "@mui/material/Toolbar";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
+import { Settings } from "@mui/icons-material";
+import CloseIcon from "@mui/icons-material/Close";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
@@ -61,6 +69,16 @@ const TopMenu = ({ topMenuItems }) => {
   const [matchesSmallWidth, setMatchesSmallWidth] = useState(
     window.matchMedia("(max-width: 800px)").matches,
   );
+
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+
+  const handleMenuClick = () => {
+    setIsPanelOpen(!isPanelOpen);
+  };
+
+  const handleClosePanel = () => {
+    setIsPanelOpen(false);
+  };
 
   useEffect(() => {
     window
@@ -181,13 +199,63 @@ const TopMenu = ({ topMenuItems }) => {
               alignItems="center"
             >
               <AdvancedTools />
-              <Languages />
-              <ColorModeSelect />
+
+              <Tooltip title={"Settings"}>
+                <IconButton sx={{ p: 1 }} onClick={handleMenuClick}>
+                  <Settings />
+                </IconButton>
+              </Tooltip>
             </Stack>
           </Grid2>
         </Grid2>
       </Toolbar>
       <Divider sx={{ width: "100%" }} />
+      <Drawer
+        anchor="right"
+        open={isPanelOpen}
+        onClose={handleClosePanel}
+        sx={{
+          width: "250px",
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: "300px",
+            boxSizing: "border-box",
+            marginTop: "86px", // Add padding to the top to avoid overlap with the AppBar
+          },
+        }}
+      >
+        <Box p={2}>
+          <Stack direction="column" spacing={4}>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Typography variant="h6">{"Settings"}</Typography>
+              <Box>
+                <IconButton sx={{ p: 1 }} onClick={handleClosePanel}>
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+            </Stack>
+
+            <Stack direction="column" alignItems="start" spacing={1}>
+              <Typography>{"Language"}</Typography>
+              <Languages />
+            </Stack>
+
+            <Stack direction="column" alignItems="start" spacing={1}>
+              <Typography>{"Color theme"}</Typography>
+              <ColorModeSelect />
+            </Stack>
+
+            <Stack direction="column" alignItems="start" spacing={1}>
+              <Typography>{"Font size"}</Typography>
+              {/*  Component to add here to change the default font size... */}
+            </Stack>
+          </Stack>
+        </Box>
+      </Drawer>
     </AppBar>
   );
 };
