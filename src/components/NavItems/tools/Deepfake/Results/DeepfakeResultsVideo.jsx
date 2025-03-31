@@ -350,8 +350,8 @@ const DeepfakeResultsVideo = (props) => {
                 <Box>
                   <Typography
                     variant="h6"
-                    style={{
-                      colors: "#00926c",
+                    sx={{
+                      color: "#00926c",
                     }}
                   >
                     {keyword("deepfake_clips")}
@@ -443,10 +443,12 @@ const DeepfakeResultsVideo = (props) => {
                             open={openHelp}
                             anchorEl={anchorHelp}
                             onClose={closeHelp}
-                            PaperProps={{
-                              style: {
-                                width: "300px",
-                                fontSize: 14,
+                            slotProps={{
+                              paper: {
+                                style: {
+                                  width: "300px",
+                                  fontSize: 14,
+                                },
                               },
                             }}
                             anchorOrigin={{
