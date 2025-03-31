@@ -1,12 +1,14 @@
 import { useEffect } from "react";
-import axios from "axios";
 import { useDispatch } from "react-redux";
-import {
-  setKeyframesResult,
-  setKeyframesLoading,
-  cleanKeyframesState,
-} from "../../../../../redux/actions/tools/keyframesActions";
+
+import axios from "axios";
 import { setError } from "redux/reducers/errorReducer";
+
+import {
+  cleanKeyframesState,
+  setKeyframesLoading,
+  setKeyframesResult,
+} from "../../../../../redux/actions/tools/keyframesActions";
 
 export const useKeyframeWrapper = (url, keyword) => {
   const dispatch = useDispatch();

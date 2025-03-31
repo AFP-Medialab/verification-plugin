@@ -270,6 +270,29 @@ export default function assistantApiCalls() {
     );
   };
 
+  const callMultilingualStanceService = async (comments) => {
+    return await callAsyncWithNumRetries(
+      MAX_NUM_RETRIES,
+      async () => {
+        const result = await axios.post(
+          assistantEndpoint + "gcloud/multilingual-stance-classification",
+          {
+            comments: comments,
+          },
+        );
+        return result.data;
+      },
+      (numTries) => {
+        console.log(
+          "Could not connect to multilingual stance service, tries " +
+            (numTries + 1) +
+            "/" +
+            MAX_NUM_RETRIES,
+        );
+      },
+    );
+  };
+
   return {
     callAssistantScraper,
     callSourceCredibilityService,
@@ -282,5 +305,6 @@ export default function assistantApiCalls() {
     callPrevFactChecksService,
     callMachineGeneratedTextChunksService,
     callMachineGeneratedTextSentencesService,
+    callMultilingualStanceService,
   };
 }

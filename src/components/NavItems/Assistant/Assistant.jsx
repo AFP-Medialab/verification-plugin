@@ -25,6 +25,7 @@ import AssistantCheckStatus from "./AssistantCheckResults/AssistantCheckStatus";
 import AssistantNEResult from "./AssistantCheckResults/AssistantNEResult";
 import AssistantFileSelected from "./AssistantFileSelected";
 import AssistantIntroduction from "./AssistantIntroduction";
+import AssistantCommentResult from "./AssistantScrapeResults/AssistantCommentResult";
 import AssistantCredSignals from "./AssistantScrapeResults/AssistantCredibilitySignals";
 import AssistantLinkResult from "./AssistantScrapeResults/AssistantLinkResult";
 import AssistantMediaResult from "./AssistantScrapeResults/AssistantMediaResult";
@@ -53,6 +54,9 @@ const Assistant = () => {
   const videoList = useSelector((state) => state.assistant.videoList);
   const text = useSelector((state) => state.assistant.urlText);
   const linkList = useSelector((state) => state.assistant.linkList);
+  const collectedComments = useSelector(
+    (state) => state.assistant.collectedComments,
+  );
   const errorKey = useSelector((state) => state.assistant.errorKey);
 
   // checking if user logged in
@@ -192,7 +196,7 @@ const Assistant = () => {
 
       {/* assistant results section */}
       {urlMode && inputUrl ? (
-        <Card sx={{ width: "100%", mb: 2 }}>
+        <Card variant="outlined" sx={{ width: "100%", mb: 2 }}>
           <CardHeader
             className={classes.assistantCardHeader}
             title={
@@ -233,6 +237,15 @@ const Assistant = () => {
               imageVideoSelected ? (
                 <Grid2 size={{ xs: 12 }}>
                   <AssistantMediaResult />
+                </Grid2>
+              ) : null}
+
+              {/* YouTube comments if video */}
+              {collectedComments ? (
+                <Grid2 size={12}>
+                  <AssistantCommentResult
+                    collectedComments={collectedComments}
+                  />
                 </Grid2>
               ) : null}
 

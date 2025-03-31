@@ -62,6 +62,7 @@ export const setScrapedData = (
   images,
   videos,
   textHtmlMap,
+  collectedComments,
 ) => {
   return {
     type: "SET_SCRAPED_DATA",
@@ -72,6 +73,7 @@ export const setScrapedData = (
       imageList: images,
       videoList: videos,
       urlTextHtmlMap: textHtmlMap,
+      collectedComments: collectedComments,
     },
   };
 };
@@ -108,6 +110,15 @@ export const setAssistantLoading = (loading) => {
     type: "SET_LOADING",
     payload: {
       loading: loading,
+    },
+  };
+};
+
+export const setMissingMedia = (missingMedia) => {
+  return {
+    type: "SET_MISSING_MEDIA",
+    payload: {
+      missingMedia: missingMedia,
     },
   };
 };
@@ -268,6 +279,23 @@ export const setMachineGeneratedTextSentencesDetails = (
       machineGeneratedTextSentencesLoading: mgtsLoading,
       machineGeneratedTextSentencesDone: mgtsDone,
       machineGeneratedTextSentencesFail: mgtsFail,
+    },
+  };
+};
+
+export const setMultilingualStanceDetails = (
+  msResult,
+  msLoading,
+  msDone,
+  msFail,
+) => {
+  return {
+    type: "SET_MULTILINGUAL_STANCE_DETAILS",
+    payload: {
+      multilingualStanceResult: msResult,
+      multilingualStanceLoading: msLoading,
+      multilingualStanceDone: msDone,
+      multilingualStanceFail: msFail,
     },
   };
 };

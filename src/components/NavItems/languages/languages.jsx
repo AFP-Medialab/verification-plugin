@@ -55,19 +55,20 @@ const Languages = (props) => {
     <Box>
       <Stack
         direction="column"
-        spacing={1}
+        spacing={0}
         height={"100%"}
         justifyContent="center"
         alignItems="center"
       >
-        <IconButton onClick={handleClick}>
-          <TranslateIcon fontSize="medium" style={{ color: "#596977" }} />
+        <IconButton size="medium" onClick={handleClick} sx={{ p: 1 }}>
+          <TranslateIcon fontSize="inherit" />
         </IconButton>
+
         {props.variant !== "notext" && (
           <span
             id="language"
             style={{
-              color: "#596977",
+              color: "var(--mui-palette-text-primary)",
               fontSize: "14px",
               fontWeight: "500",
               marginRight: "2px",
