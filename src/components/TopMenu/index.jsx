@@ -4,8 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
+import Checkbox from "@mui/material/Checkbox";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid2 from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
@@ -22,6 +24,14 @@ import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 
 import { toolsHome } from "../../constants/tools";
+import {
+  toggleHumanRightsCheckBox,
+  toggleUnlockExplanationCheckBox,
+} from "../../redux/actions";
+import {
+  toggleAnalyticsCheckBox,
+  toggleState,
+} from "../../redux/reducers/cookiesReducers";
 import { selectTopMenuItem } from "../../redux/reducers/navReducer";
 import { resetToolSelected } from "../../redux/reducers/tools/toolReducer";
 import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg";
@@ -36,7 +46,16 @@ const TopMenu = ({ topMenuItems }) => {
 
   const keyword = i18nLoadNamespace("components/NavBar");
 
+  const keywordAboutSettings = i18nLoadNamespace("components/NavItems/About");
+
   const dispatch = useDispatch();
+
+  const humanRights = useSelector((state) => state.humanRightsCheckBox);
+  const interactiveExplanation = useSelector(
+    (state) => state.interactiveExplanation,
+  );
+  const cookiesUsage = useSelector((state) => state.cookies.active);
+  const gaUsage = useSelector((state) => state.cookies.analytics);
 
   const navigate = useNavigate();
 
@@ -221,6 +240,7 @@ const TopMenu = ({ topMenuItems }) => {
             width: "300px",
             boxSizing: "border-box",
             marginTop: "86px", // Add padding to the top to avoid overlap with the AppBar
+            height: "-webkit-fill-available",
           },
         }}
       >
@@ -252,6 +272,59 @@ const TopMenu = ({ topMenuItems }) => {
             <Stack direction="column" alignItems="start" spacing={1}>
               <Typography>{"Font size"}</Typography>
               {/*  Component to add here to change the default font size... */}
+            </Stack>
+
+            <Stack direction="column" spacing={0}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={humanRights}
+                    onChange={() => dispatch(toggleHumanRightsCheckBox())}
+                    value="checkedBox"
+                    color="primary"
+                  />
+                }
+                label={keywordAboutSettings("about_human_rights")}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={interactiveExplanation}
+                    onChange={() => dispatch(toggleUnlockExplanationCheckBox())}
+                    value="checkedBox"
+                    color="primary"
+                  />
+                }
+                label={keywordAboutSettings("quiz_unlock_explanations")}
+              />
+              {cookiesUsage !== null && (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={cookiesUsage}
+                      onChange={() => dispatch(toggleState(cookiesUsage))}
+                      value="checkedBox"
+                      color="primary"
+                    />
+                  }
+                  label={keywordAboutSettings("storage_usage")}
+                />
+              )}
+              {gaUsage !== null && (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={gaUsage}
+                      onChange={() =>
+                        dispatch(toggleAnalyticsCheckBox(gaUsage))
+                      }
+                      value="checkedBox"
+                      color="primary"
+                    />
+                  }
+                  label={keywordAboutSettings("cookies_usage")}
+                />
+              )}
             </Stack>
           </Stack>
         </Box>

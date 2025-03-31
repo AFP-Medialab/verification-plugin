@@ -31,13 +31,15 @@ const ColorModeSelect = () => {
         variant="outlined"
       >
         <ToggleButton value="light">
-          <LightModeIcon />
+          <LightModeIcon sx={{ mr: 1 }} />
+          {keyword("color_mode_light")}
         </ToggleButton>
         <ToggleButton value="system">
           {keyword("color_mode_system")}
         </ToggleButton>
         <ToggleButton value="dark">
-          <DarkModeIcon />
+          <DarkModeIcon sx={{ mr: 1 }} />
+          {keyword("color_mode_dark")}
         </ToggleButton>
       </ToggleButtonGroup>
     </Box>
