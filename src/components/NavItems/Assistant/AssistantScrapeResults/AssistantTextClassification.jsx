@@ -18,7 +18,6 @@ import Typography from "@mui/material/Typography";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import GaugeChartModalExplanation from "components/Shared/GaugeChartResults/GaugeChartModalExplanation";
-import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { v4 as uuidv4 } from "uuid";
 
@@ -422,6 +421,7 @@ export function ClassifiedText({
       </span>
     );
 
+    // machine generated text doens't require a tooltip on the highlighted sentences
     if (credibilitySignal != keyword("machine_generated_text_title")) {
       return (
         <Tooltip key={uuidv4()} title={tooltipText}>

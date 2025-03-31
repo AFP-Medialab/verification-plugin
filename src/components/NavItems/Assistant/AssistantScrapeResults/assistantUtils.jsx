@@ -97,13 +97,19 @@ function treeMapToElementsRecursive(
         const hSpan = spanHighlightIndices[i];
         const hSpanStart = hSpan.indices[0];
         // Sometimes the end index is negative so we have to check this
-        const hSpanEnd = hSpan.indices[1] > -1 ? hSpan.indices[1] : textLength;
+        let hSpanEnd = hSpan.indices[1] > -1 ? hSpan.indices[1] : textLength;
+        // mismatch on last highlight span ending before last span end with machine generated text
+        if (i === spanHighlightIndices.length - 1) {
+          hSpanEnd = textLength;
+        }
+
         if (
           (span.start <= hSpanStart && hSpanStart <= span.end) ||
-          (span.start <= hSpanEnd && hSpanEnd <= span.end)
+          (span.start <= hSpanEnd && hSpanEnd <= span.end) ||
+          (hSpanStart <= span.start && span.end <= hSpanEnd)
         ) {
           if (hSpanStart > currentIndex) {
-            // If span doesn't start before the current index, add unlighlighted text
+            // If span doesn't start before the current index, add unhighlighted text
             childElems.push(text.substring(currentIndex, hSpanStart));
           }
 
@@ -146,7 +152,7 @@ function treeMapToElementsRecursive(
     );
   }
 
-  //Collect attributes
+  // Collect attributes
   let attributes = {};
   if (treeElem.attributes) {
     attributes = { ...treeElem.attributes, key: uuidv4() };
