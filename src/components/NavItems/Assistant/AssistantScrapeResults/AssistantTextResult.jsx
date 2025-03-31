@@ -123,18 +123,35 @@ const AssistantTextResult = () => {
 
   // machine generated text
   const machineGeneratedTextTitle = keyword("machine_generated_text_title");
-  const machineGeneratedTextResult = useSelector(
-    (state) => state.assistant.machineGeneratedTextResult,
+  const machineGeneratedTextChunksResult = useSelector(
+    (state) => state.assistant.machineGeneratedTextChunksResult,
   );
-  const machineGeneratedTextLoading = useSelector(
-    (state) => state.assistant.machineGeneratedTextLoading,
+  const machineGeneratedTextChunksLoading = useSelector(
+    (state) => state.assistant.machineGeneratedTextChunksLoading,
   );
-  const machineGeneratedTextDone = useSelector(
-    (state) => state.assistant.machineGeneratedTextDone,
+  const machineGeneratedTextChunksDone = useSelector(
+    (state) => state.assistant.machineGeneratedTextChunksDone,
   );
-  const machineGeneratedTextFail = useSelector(
-    (state) => state.assistant.machineGeneratedTextFail,
+  const machineGeneratedTextChunksFail = useSelector(
+    (state) => state.assistant.machineGeneratedTextChunksFail,
   );
+  const machineGeneratedTextSentencesResult = useSelector(
+    (state) => state.assistant.machineGeneratedTextSentencesResult,
+  );
+  const machineGeneratedTextSentencesLoading = useSelector(
+    (state) => state.assistant.machineGeneratedTextSentencesLoading,
+  );
+  const machineGeneratedTextSentencesDone = useSelector(
+    (state) => state.assistant.machineGeneratedTextSentencesDone,
+  );
+  const machineGeneratedTextSentencesFail = useSelector(
+    (state) => state.assistant.machineGeneratedTextSentencesFail,
+  );
+  if (machineGeneratedTextChunksDone && machineGeneratedTextSentencesDone) {
+    // use overall score from chunks with sentences
+    machineGeneratedTextSentencesResult.entities["mgt_overall_score"] =
+      machineGeneratedTextChunksResult.entities["mgt_overall_score"];
+  }
 
   // display states
   const textBox = document.getElementById("element-to-check");
@@ -204,7 +221,8 @@ const AssistantTextResult = () => {
         action={
           // top left warning and tooltip
           <div style={{ display: "flex" }}>
-            <div hidden={dbkfMatch === null && prevFactChecksResult.length < 1}>
+            {/* <div hidden={dbkfMatch === null && (prevFactChecksResult && prevFactChecksResult.length < 1)}> */}
+            <div hidden={dbkfMatch === null}>
               <Tooltip title={keyword("text_warning")}>
                 <WarningOutlined
                   color={"warning"}
@@ -285,7 +303,12 @@ const AssistantTextResult = () => {
             <Tab
               label={machineGeneratedTextTitle}
               {...a11yProps(5)}
-              disabled={machineGeneratedTextFail || machineGeneratedTextLoading}
+              disabled={
+                machineGeneratedTextChunksFail ||
+                machineGeneratedTextChunksLoading ||
+                machineGeneratedTextSentencesFail ||
+                machineGeneratedTextSentencesLoading
+              }
             />
           </Tabs>
 
@@ -298,12 +321,6 @@ const AssistantTextResult = () => {
 
           {/* news framing (topic) */}
           <CustomTabPanel value={textTabIndex} index={1}>
-            {newsFramingLoading && (
-              <Stack direction="column" spacing={4} p={4}>
-                <Skeleton variant="rounded" height={40} />
-                <Skeleton variant="rounded" width="50%" height={40} />
-              </Stack>
-            )}
             {newsFramingDone && (
               <AssistantTextClassification
                 text={text}
@@ -340,12 +357,6 @@ const AssistantTextResult = () => {
 
           {/* news genre */}
           <CustomTabPanel value={textTabIndex} index={2}>
-            {newsGenreLoading && (
-              <Stack direction="column" spacing={4} p={4}>
-                <Skeleton variant="rounded" height={40} />
-                <Skeleton variant="rounded" width="50%" height={40} />
-              </Stack>
-            )}
             {newsGenreDone && (
               <AssistantTextClassification
                 text={text}
@@ -382,12 +393,6 @@ const AssistantTextResult = () => {
 
           {/* persuasion */}
           <CustomTabPanel value={textTabIndex} index={3}>
-            {persuasionLoading && (
-              <Stack direction="column" spacing={4} p={4}>
-                <Skeleton variant="rounded" height={40} />
-                <Skeleton variant="rounded" width="50%" height={40} />
-              </Stack>
-            )}
             {persuasionDone && (
               <AssistantTextSpanClassification
                 text={text}
@@ -423,12 +428,6 @@ const AssistantTextResult = () => {
 
           {/* subjectivity */}
           <CustomTabPanel value={textTabIndex} index={4}>
-            {subjectivityLoading && (
-              <Stack direction="column" spacing={4} p={4}>
-                <Skeleton variant="rounded" height={40} />
-                <Skeleton variant="rounded" width="50%" height={40} />
-              </Stack>
-            )}
             {subjectivityDone && (
               <AssistantTextClassification
                 text={text}
@@ -450,28 +449,23 @@ const AssistantTextResult = () => {
 
           {/* machine generated text */}
           <CustomTabPanel value={textTabIndex} index={5}>
-            {machineGeneratedTextLoading && (
-              <Stack direction="column" spacing={4} p={4}>
-                <Skeleton variant="rounded" height={40} />
-                <Skeleton variant="rounded" width="50%" height={40} />
-              </Stack>
-            )}
-            {machineGeneratedTextDone && (
-              <AssistantTextClassification
-                text={text}
-                classification={machineGeneratedTextResult.entities}
-                configs={machineGeneratedTextResult.configs}
-                titleText={machineGeneratedTextTitle}
-                categoriesTooltipContent={
-                  <>
-                    <TransMachineGeneratedTextTooltip keyword={keyword} />
-                    <TransCredibilitySignalsLink keyword={keyword} />
-                  </>
-                }
-                textHtmlMap={textHtmlMap}
-                credibilitySignal={keyword("machine_generated_text_title")}
-              />
-            )}
+            {machineGeneratedTextChunksDone &&
+              machineGeneratedTextSentencesDone && (
+                <AssistantTextClassification
+                  text={text}
+                  classification={machineGeneratedTextSentencesResult.entities}
+                  configs={machineGeneratedTextSentencesResult.configs}
+                  titleText={machineGeneratedTextTitle}
+                  categoriesTooltipContent={
+                    <>
+                      <TransMachineGeneratedTextTooltip keyword={keyword} />
+                      <TransCredibilitySignalsLink keyword={keyword} />
+                    </>
+                  }
+                  textHtmlMap={textHtmlMap}
+                  credibilitySignal={keyword("machine_generated_text_title")}
+                />
+              )}
           </CustomTabPanel>
         </Collapse>
 

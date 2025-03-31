@@ -235,14 +235,12 @@ export function MgtCategoriesList({ categories, keyword, mgtOverallScore }) {
         arcsLength={[0.05, 0.45, 0.45, 0.05]}
         percent={categories[mgtOverallScore] ? percentScore / 100.0 : null}
         style={{
-          minWidth: "175px",
-          //width: "50%",
-          //maxWidth: "500px",
+          width: "100%",
         }}
       />
     </ListItem>,
   );
-  // gauge labels TODO center this!
+  // gauge labels
   output.push(
     <ListItem key="gauge_labels">
       <Stack
@@ -288,8 +286,14 @@ export function MgtCategoriesList({ categories, keyword, mgtOverallScore }) {
       <Typography>{keyword("detected_classes")}</Typography>
     </ListItem>,
   );
-  for (const category in categories) {
-    if (category != mgtOverallScore) {
+  const orderedCategories = [
+    "highly_likely_machine",
+    "likely_machine",
+    "likely_human",
+    "highly_likely_human",
+  ];
+  for (const category of orderedCategories) {
+    if (category != mgtOverallScore && category in categories) {
       output.push(
         <ListItem
           key={category}
@@ -308,15 +312,7 @@ export function MgtCategoriesList({ categories, keyword, mgtOverallScore }) {
     }
   }
 
-  return (
-    //   <div>
-    //     {mgtOverallScoreText}
-    //     {mgtOverallScoreGaugeUI}
-    //     <List>{output}</List>
-    //   </div>
-    // );
-    <List>{output}</List>
-  );
+  return <List>{output}</List>;
 }
 
 export function CategoriesList({

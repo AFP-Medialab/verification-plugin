@@ -31,7 +31,8 @@ import {
   setImageVideoSelected,
   setInputSourceCredDetails,
   setInputUrl,
-  setMachineGeneratedTextDetails,
+  setMachineGeneratedTextChunksDetails,
+  setMachineGeneratedTextSentencesDetails,
   setNeDetails,
   setNewsGenreDetails,
   setNewsTopicDetails,
@@ -118,10 +119,17 @@ function* getPrevFactChecksSaga() {
   );
 }
 
-function* getMachineGeneratedTextSaga() {
+function* getMachineGeneratedTextChunksSaga() {
   yield takeLatest(
     ["SET_SCRAPED_DATA", "AUTH_USER_LOGIN", "CLEAN_STATE"],
-    handleMachineGeneratedTextCall,
+    handleMachineGeneratedTextChunksCall,
+  );
+}
+
+function* getMachineGeneratedTextSentencesSaga() {
+  yield takeLatest(
+    ["SET_SCRAPED_DATA", "AUTH_USER_LOGIN", "CLEAN_STATE"],
+    handleMachineGeneratedTextSentencesCall,
   );
 }
 
@@ -499,7 +507,7 @@ function* handlePrevFactChecksCall(action) {
   }
 }
 
-function* handleMachineGeneratedTextCall(action) {
+function* handleMachineGeneratedTextChunksCall(action) {
   if (action.type === "CLEAN_STATE") return;
 
   try {
@@ -509,17 +517,49 @@ function* handleMachineGeneratedTextCall(action) {
     const role = yield select((state) => state.userSession.user.roles);
 
     if (text && role.includes("BETA_TESTER")) {
-      yield put(setMachineGeneratedTextDetails(null, true, false, false));
+      yield put(setMachineGeneratedTextChunksDetails(null, true, false, false));
 
       const result = yield call(
-        assistantApi.callMachineGeneratedTextService,
+        assistantApi.callMachineGeneratedTextChunksService,
         text.substring(0, URL_BUFFER_LIMIT),
       );
 
-      yield put(setMachineGeneratedTextDetails(result, false, true, false));
+      yield put(
+        setMachineGeneratedTextChunksDetails(result, false, true, false),
+      );
     }
   } catch (error) {
-    yield put(setMachineGeneratedTextDetails(null, false, false, true));
+    yield put(setMachineGeneratedTextChunksDetails(null, false, false, true));
+  }
+}
+
+function* handleMachineGeneratedTextSentencesCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const text = yield select((state) => state.assistant.urlText);
+
+    // this prevents the call from happening if not correct user status
+    const role = yield select((state) => state.userSession.user.roles);
+
+    if (text && role.includes("BETA_TESTER")) {
+      yield put(
+        setMachineGeneratedTextSentencesDetails(null, true, false, false),
+      );
+
+      const result = yield call(
+        assistantApi.callMachineGeneratedTextSentencesService,
+        text.substring(0, URL_BUFFER_LIMIT),
+      );
+
+      yield put(
+        setMachineGeneratedTextSentencesDetails(result, false, true, false),
+      );
+    }
+  } catch (error) {
+    yield put(
+      setMachineGeneratedTextSentencesDetails(null, false, false, true),
+    );
   }
 }
 
@@ -1039,6 +1079,7 @@ export default function* assistantSaga() {
     fork(getPersuasionSaga),
     fork(getSubjectivitySaga),
     fork(getPrevFactChecksSaga),
-    fork(getMachineGeneratedTextSaga),
+    fork(getMachineGeneratedTextChunksSaga),
+    fork(getMachineGeneratedTextSentencesSaga),
   ]);
 }
