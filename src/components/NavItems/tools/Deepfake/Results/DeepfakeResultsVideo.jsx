@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
@@ -11,10 +11,13 @@ import Grid2 from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
 import Popover from "@mui/material/Popover";
 import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
+import { Download } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
+import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult";
@@ -22,6 +25,10 @@ import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const DeepfakeResultsVideo = (props) => {
+  const userAuthenticated = useSelector(
+    (state) => state.userSession && state.userSession.userAuthenticated,
+  );
+
   const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
 
   class DeepfakeResult {
@@ -53,7 +60,7 @@ const DeepfakeResultsVideo = (props) => {
     THRESHOLD_3: 90,
   };
 
-  // const gaugeChartRef = useRef(null);
+  const deepfakeChartRef = useRef(null);
 
   const keywords = [
     "gauge_scale_modal_explanation_rating_1",
@@ -256,7 +263,11 @@ const DeepfakeResultsVideo = (props) => {
                     />
                     {keyword("deepfake_support")}
                   </video>
-                  <Stack direction="column" justifyContent="center">
+                  <Stack
+                    direction="column"
+                    justifyContent="center"
+                    ref={deepfakeChartRef}
+                  >
                     <LineChart
                       xAxis={[
                         {
@@ -275,6 +286,27 @@ const DeepfakeResultsVideo = (props) => {
                       {keyword("deepfake_video_videoreport_name")}
                     </Typography>
                   </Stack>
+
+                  {userAuthenticated && (
+                    <Box>
+                      <Tooltip
+                        title={keyword("deepfake_video_download_chart_button")}
+                      >
+                        <IconButton
+                          color="primary"
+                          aria-label="download chart"
+                          onClick={async () =>
+                            await exportReactElementAsJpg(
+                              deepfakeChartRef,
+                              "deepfake_video_detection_chart_download_button_label",
+                            )
+                          }
+                        >
+                          <Download />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
+                  )}
                 </Stack>
               </Grid2>
             </Grid2>
@@ -318,8 +350,8 @@ const DeepfakeResultsVideo = (props) => {
                 <Box>
                   <Typography
                     variant="h6"
-                    style={{
-                      colors: "#00926c",
+                    sx={{
+                      color: "#00926c",
                     }}
                   >
                     {keyword("deepfake_clips")}
@@ -411,10 +443,12 @@ const DeepfakeResultsVideo = (props) => {
                             open={openHelp}
                             anchorEl={anchorHelp}
                             onClose={closeHelp}
-                            PaperProps={{
-                              style: {
-                                width: "300px",
-                                fontSize: 14,
+                            slotProps={{
+                              paper: {
+                                style: {
+                                  width: "300px",
+                                  fontSize: 14,
+                                },
                               },
                             }}
                             anchorOrigin={{
