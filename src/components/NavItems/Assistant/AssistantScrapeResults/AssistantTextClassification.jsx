@@ -36,6 +36,7 @@ import {
 export default function AssistantTextClassification({
   text,
   classification,
+  overallClassification,
   titleText = "",
   importantSentenceKey = "Important_Sentence",
   categoriesTooltipContent = "",
@@ -60,7 +61,12 @@ export default function AssistantTextClassification({
   const resolvedMode = systemMode || mode;
 
   // define category for machine generated text overall score
-  const mgtOverallScore = "mgt_overall_score";
+  let mgtOverallScoreLabel, overallClassificationScore;
+  if (credibilitySignal === keyword("machine_generated_text_title")) {
+    mgtOverallScoreLabel = "mgt_overall_score";
+    overallClassificationScore =
+      overallClassification[mgtOverallScoreLabel][0].score;
+  }
 
   // define sentence and category details
   let sentenceTooltipText;
@@ -187,7 +193,8 @@ export default function AssistantTextClassification({
               <MgtCategoriesList
                 categories={filteredCategories}
                 keyword={keyword}
-                mgtOverallScore={mgtOverallScore}
+                mgtOverallScoreLabel={mgtOverallScoreLabel}
+                overallClassificationScore={overallClassificationScore}
                 resolvedMode={resolvedMode}
               />
             ) : (
@@ -222,20 +229,19 @@ export default function AssistantTextClassification({
 export function MgtCategoriesList({
   categories,
   keyword,
-  mgtOverallScore,
+  mgtOverallScoreLabel,
+  overallClassificationScore,
   resolvedMode,
 }) {
   // list of categories with overall score first as GaugeUI
   let output = [];
   output.push(
-    <ListItem key={`text_${mgtOverallScore}`}>
-      <Typography>{keyword(mgtOverallScore)}</Typography>
+    <ListItem key={`text_${mgtOverallScoreLabel}`}>
+      <Typography>{keyword(mgtOverallScoreLabel)}</Typography>
     </ListItem>,
   );
   // gauge chart
-  const percentScore = Math.round(
-    Number(categories[mgtOverallScore][0].score) * 100.0,
-  );
+  const percentScore = Math.round(Number(overallClassificationScore) * 100.0);
   output.push(
     <ListItem key="gauge_chart">
       <GaugeChart
@@ -246,7 +252,7 @@ export function MgtCategoriesList({
         needleColor={"#767d86"}
         needleBaseColor={"#767d86"}
         arcsLength={[0.05, 0.45, 0.45, 0.05]}
-        percent={categories[mgtOverallScore] ? percentScore / 100.0 : null}
+        percent={categories[mgtOverallScoreLabel] ? percentScore / 100.0 : null}
         style={{
           width: "100%",
         }}
@@ -290,7 +296,7 @@ export function MgtCategoriesList({
   );
   // divider
   output.push(<ListItem key="listitem_empty1"></ListItem>);
-  output.push(<Divider key={`divider_${mgtOverallScore}`} />);
+  output.push(<Divider key={`divider_${mgtOverallScoreLabel}`} />);
   output.push(<ListItem key="listitem_empty2"></ListItem>);
   // categories
   output.push(
@@ -305,7 +311,7 @@ export function MgtCategoriesList({
     "highly_likely_human",
   ];
   for (const category of orderedCategories) {
-    if (category != mgtOverallScore && category in categories) {
+    if (category != mgtOverallScoreLabel && category in categories) {
       output.push(
         <ListItem
           key={category}
