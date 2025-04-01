@@ -15,7 +15,6 @@ import { Close } from "@mui/icons-material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { setError } from "redux/reducers/errorReducer";
 
-import { ROLES } from "../../../constants/roles.jsx";
 import {
   cleanAssistantState,
   setUrlMode,
@@ -27,7 +26,6 @@ import AssistantNEResult from "./AssistantCheckResults/AssistantNEResult";
 import AssistantFileSelected from "./AssistantFileSelected";
 import AssistantIntroduction from "./AssistantIntroduction";
 import AssistantCommentResult from "./AssistantScrapeResults/AssistantCommentResult";
-import AssistantCredSignals from "./AssistantScrapeResults/AssistantCredibilitySignals";
 import AssistantLinkResult from "./AssistantScrapeResults/AssistantLinkResult";
 import AssistantMediaResult from "./AssistantScrapeResults/AssistantMediaResult";
 import AssistantSCResults from "./AssistantScrapeResults/AssistantSCResults";
@@ -63,9 +61,6 @@ const Assistant = () => {
     (state) => state.assistant.collectedComments,
   );
   const errorKey = useSelector((state) => state.assistant.errorKey);
-
-  // checking if user logged in
-  const role = useSelector((state) => state.userSession.user.roles);
 
   //third party check states
   const neResult = useSelector((state) => state.assistant.neResultCategory);
