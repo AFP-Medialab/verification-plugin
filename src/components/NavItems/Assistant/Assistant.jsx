@@ -105,16 +105,21 @@ const Assistant = () => {
   const persuasionFailState = useSelector(
     (state) => state.assistant.persuasionFail,
   );
-  const previousFactChecksFailState = useSelector(
+  const prevFactChecksFailState = useSelector(
     (state) => state.assistant.previousFactChecksFail,
+  );
+  const prevFactChecksResults = useSelector(
+    (state) => state.assistant.previousFactChecksResults,
   );
   const subjectivityFailState = useSelector(
     (state) => state.assistant.subjectivityFail,
   );
-  const machineGeneratedTextFailState = useSelector(
-    (state) => state.assistant.machineGeneratedTextFail,
+  const machineGeneratedTextChunksFailState = useSelector(
+    (state) => state.assistant.machineGeneratedChunksTextFail,
   );
-  // const mtFailState = useSelector(state => state.assistant.mtFail)
+  const machineGeneratedTextSentencesFailState = useSelector(
+    (state) => state.assistant.machineGeneratedTextSentencesFail,
+  );
 
   //local state
   const [formInput, setFormInput] = useState(inputUrl);
@@ -192,8 +197,9 @@ const Assistant = () => {
       newsGenreFailState ||
       persuasionFailState ||
       subjectivityFailState ||
-      previousFactChecksFailState ||
-      machineGeneratedTextFailState ? (
+      prevFactChecksFailState ||
+      machineGeneratedTextChunksFailState ||
+      machineGeneratedTextSentencesFailState ? (
         <Grid2 size={{ xs: 12 }}>
           <AssistantCheckStatus />
         </Grid2>
@@ -221,7 +227,10 @@ const Assistant = () => {
           <CardContent>
             <Grid2 container spacing={4}>
               {/* warnings and api status checks */}
-              {dbkfTextMatch || dbkfImageResult || dbkfVideoMatch ? (
+              {dbkfTextMatch ||
+              dbkfImageResult ||
+              dbkfVideoMatch ||
+              prevFactChecksResults ? (
                 <Grid2
                   size={{ xs: 12 }}
                   className={classes.assistantGrid}
@@ -274,13 +283,6 @@ const Assistant = () => {
               {text && linkList.length !== 0 ? (
                 <Grid2 size={{ xs: 12 }}>
                   <AssistantLinkResult />
-                </Grid2>
-              ) : null}
-
-              {/* credibility signals */}
-              {role.includes(ROLES.BETA_TESTER) && text ? (
-                <Grid2 size={{ xs: 12 }}>
-                  <AssistantCredSignals />
                 </Grid2>
               ) : null}
             </Grid2>

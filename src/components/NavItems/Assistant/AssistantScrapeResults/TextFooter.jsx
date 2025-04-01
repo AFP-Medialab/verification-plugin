@@ -75,15 +75,7 @@ export default function TextFooter({
   );
 }
 
-export function TextFooterPrevFactChecks({
-  classes,
-  expandMinimiseText,
-  displayExpander,
-  setExpanded,
-  expanded,
-  navigate,
-  keyword,
-}) {
+export function TextFooterPrevFactChecks({ navigate, keyword }) {
   const handleClick = (path) => {
     // instead need to set parameter then load text in SemanticSearch/index.jsx
     navigate("/app/" + path + "/assistantText");
@@ -113,17 +105,6 @@ export function TextFooterPrevFactChecks({
               {keyword("semantic_search_title")}
             </Link>
           </Typography>
-        </Grid2>
-
-        {/* expand/minimise text */}
-        <Grid2 size={1} align={"left"}>
-          <ExpandMinimise
-            classes={classes}
-            expandMinimiseText={expandMinimiseText}
-            displayExpander={displayExpander}
-            setExpanded={setExpanded}
-            expanded={expanded}
-          />
         </Grid2>
       </Grid2>
     </Box>

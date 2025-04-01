@@ -18,7 +18,6 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import { ROLES } from "../../../../constants/roles.jsx";
 import { setWarningExpanded } from "../../../../redux/actions/tools/assistantActions";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
@@ -39,9 +38,6 @@ const AssistantTextResult = () => {
 
   const classes = useMyStyles();
   const dispatch = useDispatch();
-
-  // checking if user logged in
-  const role = useSelector((state) => state.userSession.user.roles);
 
   // assistant media states
   const text = useSelector((state) => state.assistant.urlText);
@@ -134,11 +130,6 @@ const AssistantTextResult = () => {
   const machineGeneratedTextSentencesFail = useSelector(
     (state) => state.assistant.machineGeneratedTextSentencesFail,
   );
-  if (machineGeneratedTextChunksDone && machineGeneratedTextSentencesDone) {
-    // use overall score from chunks with sentences
-    machineGeneratedTextSentencesResult.entities["mgt_overall_score"] =
-      machineGeneratedTextChunksResult.entities["mgt_overall_score"];
-  }
 
   // display states
   const textBox = document.getElementById("element-to-check");
@@ -286,18 +277,16 @@ const AssistantTextResult = () => {
               {...a11yProps(4)}
               disabled={subjectivityFail || subjectivityLoading}
             />
-            {role.includes(ROLES.BETA_TESTER) ? (
-              <Tab
-                label={machineGeneratedTextTitle}
-                {...a11yProps(5)}
-                disabled={
-                  machineGeneratedTextChunksFail ||
-                  machineGeneratedTextChunksLoading ||
-                  machineGeneratedTextSentencesFail ||
-                  machineGeneratedTextSentencesLoading
-                }
-              />
-            ) : null}
+            <Tab
+              label={machineGeneratedTextTitle}
+              {...a11yProps(5)}
+              disabled={
+                machineGeneratedTextChunksFail ||
+                machineGeneratedTextChunksLoading ||
+                machineGeneratedTextSentencesFail ||
+                machineGeneratedTextSentencesLoading
+              }
+            />
           </Tabs>
 
           {/* extracted raw text */}
@@ -436,29 +425,28 @@ const AssistantTextResult = () => {
           </CustomTabPanel>
 
           {/* machine generated text */}
-          {role.includes(ROLES.BETA_TESTER) ? (
-            <CustomTabPanel value={textTabIndex} index={5}>
-              {machineGeneratedTextChunksDone &&
-                machineGeneratedTextSentencesDone && (
-                  <AssistantTextClassification
-                    text={text}
-                    classification={
-                      machineGeneratedTextSentencesResult.entities
-                    }
-                    configs={machineGeneratedTextSentencesResult.configs}
-                    titleText={machineGeneratedTextTitle}
-                    categoriesTooltipContent={
-                      <>
-                        <TransMachineGeneratedTextTooltip keyword={keyword} />
-                        <TransCredibilitySignalsLink keyword={keyword} />
-                      </>
-                    }
-                    textHtmlMap={textHtmlMap}
-                    credibilitySignal={keyword("machine_generated_text_title")}
-                  />
-                )}
-            </CustomTabPanel>
-          ) : null}
+          <CustomTabPanel value={textTabIndex} index={5}>
+            {machineGeneratedTextChunksDone &&
+              machineGeneratedTextSentencesDone && (
+                <AssistantTextClassification
+                  text={text}
+                  classification={machineGeneratedTextSentencesResult.entities}
+                  overallClassification={
+                    machineGeneratedTextChunksResult.entities
+                  }
+                  configs={machineGeneratedTextSentencesResult.configs}
+                  titleText={machineGeneratedTextTitle}
+                  categoriesTooltipContent={
+                    <>
+                      <TransMachineGeneratedTextTooltip keyword={keyword} />
+                      <TransCredibilitySignalsLink keyword={keyword} />
+                    </>
+                  }
+                  textHtmlMap={textHtmlMap}
+                  credibilitySignal={keyword("machine_generated_text_title")}
+                />
+              )}
+          </CustomTabPanel>
         </Collapse>
 
         {/* footer */}
