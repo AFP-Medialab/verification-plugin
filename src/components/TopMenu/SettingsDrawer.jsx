@@ -25,7 +25,7 @@ import Languages from "../NavItems/languages/languages";
 import ColorModeSelect from "./ColorModeSelect";
 
 const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
-  const keywordAboutSettings = i18nLoadNamespace("components/NavItems/About");
+  const keyword = i18nLoadNamespace("components/NavBar");
 
   const dispatch = useDispatch();
 
@@ -58,7 +58,9 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
             justifyContent="space-between"
             alignItems="center"
           >
-            <Typography variant="h6">{"Settings"}</Typography>
+            <Typography variant="h6">
+              {keyword("drawer_settings_title")}
+            </Typography>
             <Box>
               <IconButton sx={{ p: 1 }} onClick={handleClosePanel}>
                 <CloseIcon />
@@ -67,17 +69,17 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
           </Stack>
 
           <Stack direction="column" alignItems="start" spacing={1}>
-            <Typography>{"Language"}</Typography>
+            <Typography>{keyword("drawer_settings_language")}</Typography>
             <Languages />
           </Stack>
 
           <Stack direction="column" alignItems="start" spacing={1}>
-            <Typography>{"Color theme"}</Typography>
+            <Typography>{keyword("drawer_settings_theme")}</Typography>
             <ColorModeSelect />
           </Stack>
 
           <Stack direction="column" alignItems="start" spacing={1}>
-            <Typography>{"Font size"}</Typography>
+            <Typography>{keyword("drawer_settings_font_size")}</Typography>
             <Stack direction="row" alignItems="center" spacing={2}>
               <IconButton
                 onClick={() => {
@@ -110,7 +112,9 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
           </Stack>
 
           <Stack direction="column" spacing={1}>
-            <Typography>{"Other preferences"}</Typography>
+            <Typography>
+              {keyword("drawer_settings_other_preferences")}
+            </Typography>
             <FormControlLabel
               control={
                 <Checkbox
@@ -120,7 +124,7 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
                   color="primary"
                 />
               }
-              label={keywordAboutSettings("quiz_unlock_explanations")}
+              label={keyword("quiz_unlock_explanations")}
             />
             {cookiesUsage !== null && (
               <FormControlLabel
@@ -132,7 +136,7 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
                     color="primary"
                   />
                 }
-                label={keywordAboutSettings("storage_usage")}
+                label={keyword("storage_usage")}
               />
             )}
             {gaUsage !== null && (
@@ -145,7 +149,7 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
                     color="primary"
                   />
                 }
-                label={keywordAboutSettings("cookies_usage")}
+                label={keyword("cookies_usage")}
               />
             )}
           </Stack>
