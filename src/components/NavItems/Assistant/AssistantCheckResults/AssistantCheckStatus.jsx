@@ -63,8 +63,11 @@ const AssistantCheckStatus = () => {
   );
 
   const machineGeneratedTextTitle = keyword("machine_generated_text_title");
-  const machineGeneratedTextFailState = useSelector(
-    (state) => state.assistant.machineGeneratedTextFail,
+  const machineGeneratedTextChunksFailState = useSelector(
+    (state) => state.assistant.machineGeneratedTextChunksFail,
+  );
+  const machineGeneratedTextSentencesFailState = useSelector(
+    (state) => state.assistant.machineGeneratedTextSentencesFail,
   );
 
   const multilingualStanceTitle = keyword("multilingual_stance_title");
@@ -82,7 +85,12 @@ const AssistantCheckStatus = () => {
     { title: persuasionTitle, failed: persuasionFailState },
     { title: subjectivityTitle, failed: subjectivityFailState },
     { title: prevFactChecksTitle, failed: prevFactChecksFailState },
-    { title: machineGeneratedTextTitle, failed: machineGeneratedTextFailState },
+    {
+      title: machineGeneratedTextTitle,
+      failed:
+        machineGeneratedTextChunksFailState ||
+        machineGeneratedTextSentencesFailState,
+    },
     {
       title: multilingualStanceTitle,
       failed: multilingualStanceFailState,
