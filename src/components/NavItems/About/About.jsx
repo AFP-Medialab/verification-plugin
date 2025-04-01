@@ -1,9 +1,7 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid2 from "@mui/material/Grid2";
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
@@ -11,14 +9,6 @@ import Typography from "@mui/material/Typography";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import {
-  toggleHumanRightsCheckBox,
-  toggleUnlockExplanationCheckBox,
-} from "../../../redux/actions";
-import {
-  toggleAnalyticsCheckBox,
-  toggleState,
-} from "../../../redux/reducers/cookiesReducers";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import afpImage from "./images/Logo-AFP-384.png";
@@ -31,13 +21,6 @@ const About = () => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/About");
   const currentLang = useSelector((state) => state.language);
-  const humanRights = useSelector((state) => state.humanRightsCheckBox);
-  const interactiveExplanation = useSelector(
-    (state) => state.interactiveExplanation,
-  );
-  const cookiesUsage = useSelector((state) => state.cookies.active);
-  const gaUsage = useSelector((state) => state.cookies.analytics);
-  const dispatch = useDispatch();
 
   const additionalDangerousContent = () => {
     let res = [];
@@ -194,54 +177,6 @@ const About = () => {
           </>
         ) : null}
       </Grid2>
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={humanRights}
-            onChange={() => dispatch(toggleHumanRightsCheckBox())}
-            value="checkedBox"
-            color="primary"
-          />
-        }
-        label={keyword("about_human_rights")}
-      />
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={interactiveExplanation}
-            onChange={() => dispatch(toggleUnlockExplanationCheckBox())}
-            value="checkedBox"
-            color="primary"
-          />
-        }
-        label={keyword("quiz_unlock_explanations")}
-      />
-      {cookiesUsage !== null && (
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={cookiesUsage}
-              onChange={() => dispatch(toggleState(cookiesUsage))}
-              value="checkedBox"
-              color="primary"
-            />
-          }
-          label={keyword("storage_usage")}
-        />
-      )}
-      {gaUsage !== null && (
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={gaUsage}
-              onChange={() => dispatch(toggleAnalyticsCheckBox(gaUsage))}
-              value="checkedBox"
-              color="primary"
-            />
-          }
-          label={keyword("cookies_usage")}
-        />
-      )}
     </Paper>
   );
 };
