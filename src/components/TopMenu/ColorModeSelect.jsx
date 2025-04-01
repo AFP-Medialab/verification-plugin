@@ -7,6 +7,7 @@ import { useColorScheme } from "@mui/material/styles";
 
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
+import SettingsBrightnessIcon from "@mui/icons-material/SettingsBrightness";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
@@ -35,6 +36,7 @@ const ColorModeSelect = () => {
           {keyword("color_mode_light")}
         </ToggleButton>
         <ToggleButton value="system">
+          <SettingsBrightnessIcon sx={{ mr: 1 }} />
           {keyword("color_mode_system")}
         </ToggleButton>
         <ToggleButton value="dark">

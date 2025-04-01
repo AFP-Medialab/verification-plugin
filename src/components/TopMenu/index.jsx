@@ -3,11 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Checkbox from "@mui/material/Checkbox";
 import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid2 from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
@@ -15,47 +11,27 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
 
 import { Settings } from "@mui/icons-material";
-import CloseIcon from "@mui/icons-material/Close";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 
 import { toolsHome } from "../../constants/tools";
-import {
-  toggleHumanRightsCheckBox,
-  toggleUnlockExplanationCheckBox,
-} from "../../redux/actions";
-import {
-  toggleAnalyticsCheckBox,
-  toggleState,
-} from "../../redux/reducers/cookiesReducers";
 import { selectTopMenuItem } from "../../redux/reducers/navReducer";
 import { resetToolSelected } from "../../redux/reducers/tools/toolReducer";
 import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg";
 import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg";
 import LogoVera from "../NavBar/images/SVG/Navbar/vera-logo_black.svg";
-import Languages from "../NavItems/languages/languages";
 import AdvancedTools from "../NavItems/tools/Alltools/AdvancedTools/AdvancedTools";
-import ColorModeSelect from "./ColorModeSelect";
+import SettingsDrawer from "./SettingsDrawer";
 
 const TopMenu = ({ topMenuItems }) => {
   const classes = useMyStyles();
 
   const keyword = i18nLoadNamespace("components/NavBar");
 
-  const keywordAboutSettings = i18nLoadNamespace("components/NavItems/About");
-
   const dispatch = useDispatch();
-
-  const humanRights = useSelector((state) => state.humanRightsCheckBox);
-  const interactiveExplanation = useSelector(
-    (state) => state.interactiveExplanation,
-  );
-  const cookiesUsage = useSelector((state) => state.cookies.active);
-  const gaUsage = useSelector((state) => state.cookies.analytics);
 
   const navigate = useNavigate();
 
@@ -229,106 +205,10 @@ const TopMenu = ({ topMenuItems }) => {
         </Grid2>
       </Toolbar>
       <Divider sx={{ width: "100%" }} />
-      <Drawer
-        anchor="right"
-        open={isPanelOpen}
-        onClose={handleClosePanel}
-        sx={{
-          width: "250px",
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: "300px",
-            boxSizing: "border-box",
-            marginTop: "86px", // Add padding to the top to avoid overlap with the AppBar
-            height: "-webkit-fill-available",
-          },
-        }}
-      >
-        <Box p={2}>
-          <Stack direction="column" spacing={4}>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Typography variant="h6">{"Settings"}</Typography>
-              <Box>
-                <IconButton sx={{ p: 1 }} onClick={handleClosePanel}>
-                  <CloseIcon />
-                </IconButton>
-              </Box>
-            </Stack>
-
-            <Stack direction="column" alignItems="start" spacing={1}>
-              <Typography>{"Language"}</Typography>
-              <Languages />
-            </Stack>
-
-            <Stack direction="column" alignItems="start" spacing={1}>
-              <Typography>{"Color theme"}</Typography>
-              <ColorModeSelect />
-            </Stack>
-
-            <Stack direction="column" alignItems="start" spacing={1}>
-              <Typography>{"Font size"}</Typography>
-              {/*  Component to add here to change the default font size... */}
-            </Stack>
-
-            <Stack direction="column" spacing={0}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={humanRights}
-                    onChange={() => dispatch(toggleHumanRightsCheckBox())}
-                    value="checkedBox"
-                    color="primary"
-                  />
-                }
-                label={keywordAboutSettings("about_human_rights")}
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={interactiveExplanation}
-                    onChange={() => dispatch(toggleUnlockExplanationCheckBox())}
-                    value="checkedBox"
-                    color="primary"
-                  />
-                }
-                label={keywordAboutSettings("quiz_unlock_explanations")}
-              />
-              {cookiesUsage !== null && (
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={cookiesUsage}
-                      onChange={() => dispatch(toggleState(cookiesUsage))}
-                      value="checkedBox"
-                      color="primary"
-                    />
-                  }
-                  label={keywordAboutSettings("storage_usage")}
-                />
-              )}
-              {gaUsage !== null && (
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={gaUsage}
-                      onChange={() =>
-                        dispatch(toggleAnalyticsCheckBox(gaUsage))
-                      }
-                      value="checkedBox"
-                      color="primary"
-                    />
-                  }
-                  label={keywordAboutSettings("cookies_usage")}
-                />
-              )}
-            </Stack>
-          </Stack>
-        </Box>
-      </Drawer>
+      <SettingsDrawer
+        isPanelOpen={isPanelOpen}
+        handleClosePanel={handleClosePanel}
+      />
     </AppBar>
   );
 };
