@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { useColorScheme } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
@@ -42,14 +43,18 @@ const Assistant = () => {
   const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
-  //form states
+  // for dark mode
+  const { mode, systemMode } = useColorScheme();
+  const resolvedMode = systemMode || mode;
+
+  // form states
   const inputUrl = useSelector((state) => state.assistant.inputUrl);
   const urlMode = useSelector((state) => state.assistant.urlMode);
   const imageVideoSelected = useSelector(
     (state) => state.assistant.imageVideoSelected,
   );
 
-  //result states
+  // result states
   const imageList = useSelector((state) => state.assistant.imageList);
   const videoList = useSelector((state) => state.assistant.videoList);
   const text = useSelector((state) => state.assistant.urlText);
@@ -82,7 +87,7 @@ const Assistant = () => {
   );
   const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
 
-  //third party fail states
+  // third party fail states
   const scFailState = useSelector((state) => state.assistant.inputSCFail);
   const dbkfTextFailState = useSelector(
     (state) => state.assistant.dbkfTextMatchFail,
@@ -206,7 +211,9 @@ const Assistant = () => {
             }
             action={
               <IconButton aria-label="close" onClick={handleClose}>
-                <Close sx={{ color: "white" }} />
+                <Close
+                  sx={{ color: resolvedMode === "dark" ? "white" : "grey" }}
+                />
               </IconButton>
             }
           />
