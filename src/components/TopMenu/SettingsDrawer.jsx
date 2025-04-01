@@ -15,10 +15,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
-import {
-  toggleHumanRightsCheckBox,
-  toggleUnlockExplanationCheckBox,
-} from "../../redux/actions";
+import { toggleUnlockExplanationCheckBox } from "../../redux/actions";
 import {
   toggleAnalyticsCheckBox,
   toggleState,
@@ -32,7 +29,6 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
 
   const dispatch = useDispatch();
 
-  const humanRights = useSelector((state) => state.humanRightsCheckBox);
   const interactiveExplanation = useSelector(
     (state) => state.interactiveExplanation,
   );
@@ -115,17 +111,6 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
 
           <Stack direction="column" spacing={1}>
             <Typography>{"Other preferences"}</Typography>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={humanRights}
-                  onChange={() => dispatch(toggleHumanRightsCheckBox())}
-                  value="checkedBox"
-                  color="primary"
-                />
-              }
-              label={keywordAboutSettings("about_human_rights")}
-            />
             <FormControlLabel
               control={
                 <Checkbox
