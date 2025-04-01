@@ -110,6 +110,17 @@ export default function AssistantTextClassification({
       rgbHigh={sentenceRgbHigh}
     />
   );
+  // tooltip for hovering over categories
+  const categoryTooltipContent = (
+    <ColourGradientTooltipContent
+      description={keyword("confidence_tooltip_category")}
+      colourScaleText={keyword("colour_scale")}
+      textLow={keyword("low_confidence")}
+      textHigh={keyword("high_confidence")}
+      rgbLow={configs.confidenceRgbLow}
+      rgbHigh={configs.confidenceRgbHigh}
+    />
+  );
 
   let filteredCategories = {};
   let filteredSentences = [];
@@ -200,6 +211,7 @@ export default function AssistantTextClassification({
             ) : (
               <CategoriesList
                 categories={filteredCategories}
+                tooltipText={categoryTooltipContent}
                 thresholdLow={categoryThresholdLow}
                 thresholdHigh={categoryThresholdHigh}
                 rgbLow={categoryRgbLow}
@@ -335,6 +347,7 @@ export function MgtCategoriesList({
 
 export function CategoriesList({
   categories,
+  tooltipText,
   thresholdLow,
   thresholdHigh,
   rgbLow,
@@ -383,7 +396,17 @@ export function CategoriesList({
     );
     index++;
   }
-  return <List>{output}</List>;
+  return (
+    <>
+      {credibilitySignal != keyword("subjectivity_title") ? (
+        <Tooltip key={uuidv4()} title={tooltipText}>
+          <List>{output}</List>
+        </Tooltip>
+      ) : (
+        <List>{output}</List>
+      )}
+    </>
+  );
 }
 
 /*

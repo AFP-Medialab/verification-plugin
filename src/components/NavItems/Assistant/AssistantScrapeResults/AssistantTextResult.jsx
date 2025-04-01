@@ -28,7 +28,6 @@ import {
 } from "../TransComponents";
 import AssistantTextClassification from "./AssistantTextClassification";
 import AssistantTextSpanClassification from "./AssistantTextSpanClassification";
-import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
 import TextFooter from "./TextFooter.jsx";
 import { treeMapToElements } from "./assistantUtils";
 
@@ -316,14 +315,6 @@ const AssistantTextResult = () => {
                     />
                     <TransCredibilitySignalsLink keyword={keyword} />
                     <TransHtmlDoubleLineBreak keyword={keyword} />
-                    <ColourGradientTooltipContent
-                      description={keyword("confidence_tooltip_category")}
-                      colourScaleText={keyword("colour_scale")}
-                      textLow={keyword("low_confidence")}
-                      textHigh={keyword("high_confidence")}
-                      rgbLow={newsFramingResult.configs.confidenceRgbLow}
-                      rgbHigh={newsFramingResult.configs.confidenceRgbHigh}
-                    />
                   </>
                 }
                 textHtmlMap={textHtmlMap}
@@ -352,14 +343,6 @@ const AssistantTextResult = () => {
                     />
                     <TransCredibilitySignalsLink keyword={keyword} />
                     <TransHtmlDoubleLineBreak keyword={keyword} />
-                    <ColourGradientTooltipContent
-                      description={keyword("confidence_tooltip_category")}
-                      colourScaleText={keyword("colour_scale")}
-                      textLow={keyword("low_confidence")}
-                      textHigh={keyword("high_confidence")}
-                      rgbLow={newsGenreResult.configs.confidenceRgbLow}
-                      rgbHigh={newsGenreResult.configs.confidenceRgbHigh}
-                    />
                   </>
                 }
                 textHtmlMap={textHtmlMap}
@@ -388,14 +371,6 @@ const AssistantTextResult = () => {
                     />
                     <TransCredibilitySignalsLink keyword={keyword} />
                     <TransHtmlDoubleLineBreak keyword={keyword} />
-                    <ColourGradientTooltipContent
-                      description={keyword("confidence_tooltip_category")}
-                      colourScaleText={keyword("colour_scale")}
-                      textLow={keyword("low_confidence")}
-                      textHigh={keyword("high_confidence")}
-                      rgbLow={persuasionResult.configs.confidenceRgbLow}
-                      rgbHigh={persuasionResult.configs.confidenceRgbHigh}
-                    />
                   </>
                 }
                 textHtmlMap={textHtmlMap}

@@ -63,6 +63,18 @@ export default function AssistantTextSpanClassification({
   const categoryRgbLow = configs.confidenceRgbLow;
   const categoryRgbHigh = configs.confidenceRgbHigh;
 
+  // tooltip for hovering over categories
+  const categoryTooltipContent = (
+    <ColourGradientTooltipContent
+      description={keyword("confidence_tooltip_category")}
+      colourScaleText={keyword("colour_scale")}
+      textLow={keyword("low_confidence")}
+      textHigh={keyword("high_confidence")}
+      rgbLow={configs.confidenceRgbLow}
+      rgbHigh={configs.confidenceRgbHigh}
+    />
+  );
+
   const [doHighlightSentence, setDoHighlightSentence] = useState(true);
 
   function filterLabelsWithMinThreshold(classification, minThreshold) {
@@ -277,6 +289,7 @@ export default function AssistantTextSpanClassification({
           <CardContent>
             <CategoriesListToggle
               categories={uniqueCategories}
+              tooltipContent={categoryTooltipContent}
               thresholdLow={configs.confidenceThresholdLow}
               thresholdHigh={configs.confidenceThresholdHigh}
               rgbLow={configs.confidenceRgbLow}
@@ -295,6 +308,7 @@ export default function AssistantTextSpanClassification({
 
 export function CategoriesListToggle({
   categories,
+  tooltipContent,
   thresholdLow,
   thresholdHigh,
   rgbLow,
@@ -388,12 +402,14 @@ export function CategoriesListToggle({
   }
 
   return (
-    <List>
-      <ListItem>
-        <Typography>{keyword("select_persuasion_technique")}</Typography>
-      </ListItem>
-      {output}
-    </List>
+    <Tooltip key={uuidv4()} title={tooltipContent}>
+      <List>
+        <ListItem>
+          <Typography>{keyword("select_persuasion_technique")}</Typography>
+        </ListItem>
+        {output}
+      </List>
+    </Tooltip>
   );
 }
 
