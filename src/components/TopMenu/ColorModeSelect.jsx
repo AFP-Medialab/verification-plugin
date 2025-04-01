@@ -14,7 +14,7 @@ import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 const ColorModeSelect = () => {
   const keyword = i18nLoadNamespace("components/NavBar");
 
-  const { mode, setMode, systemMode } = useColorScheme();
+  const { mode, setMode } = useColorScheme();
 
   const handleModeChange = (event, newMode) => {
     if (newMode !== null) {
