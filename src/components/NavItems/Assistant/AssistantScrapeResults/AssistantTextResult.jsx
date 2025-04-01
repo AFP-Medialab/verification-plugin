@@ -8,8 +8,6 @@ import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Collapse from "@mui/material/Collapse";
 import LinearProgress from "@mui/material/LinearProgress";
-import Skeleton from "@mui/material/Skeleton";
-import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Tooltip from "@mui/material/Tooltip";
@@ -24,7 +22,7 @@ import { setWarningExpanded } from "../../../../redux/actions/tools/assistantAct
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
   TransCredibilitySignalsLink,
-  TransHtmlDoubleLinkBreak,
+  TransHtmlDoubleLineBreak,
   TransMachineGeneratedTextTooltip,
   TransSupportedToolsLink,
 } from "../TransComponents";
@@ -104,21 +102,6 @@ const AssistantTextResult = () => {
   );
   const subjectivityFail = useSelector(
     (state) => state.assistant.subjectivityFail,
-  );
-
-  // previous fact checks
-  const prevFactChecksTitle = keyword("previous_fact_checks_title");
-  const prevFactChecksResult = useSelector(
-    (state) => state.assistant.prevFactChecksResult,
-  );
-  const prevFactChecksLoading = useSelector(
-    (state) => state.assistant.prevFactChecksLoading,
-  );
-  const prevFactChecksDone = useSelector(
-    (state) => state.assistant.prevFactChecksDone,
-  );
-  const prevFactChecksFail = useSelector(
-    (state) => state.assistant.prevFactChecksFail,
   );
 
   // machine generated text
@@ -338,7 +321,7 @@ const AssistantTextResult = () => {
                       }}
                     />
                     <TransCredibilitySignalsLink keyword={keyword} />
-                    <TransHtmlDoubleLinkBreak keyword={keyword} />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
                     <ColourGradientTooltipContent
                       description={keyword("confidence_tooltip_category")}
                       colourScaleText={keyword("colour_scale")}
@@ -374,7 +357,7 @@ const AssistantTextResult = () => {
                       }}
                     />
                     <TransCredibilitySignalsLink keyword={keyword} />
-                    <TransHtmlDoubleLinkBreak keyword={keyword} />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
                     <ColourGradientTooltipContent
                       description={keyword("confidence_tooltip_category")}
                       colourScaleText={keyword("colour_scale")}
@@ -410,7 +393,7 @@ const AssistantTextResult = () => {
                       }}
                     />
                     <TransCredibilitySignalsLink keyword={keyword} />
-                    <TransHtmlDoubleLinkBreak keyword={keyword} />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
                     <ColourGradientTooltipContent
                       description={keyword("confidence_tooltip_category")}
                       colourScaleText={keyword("colour_scale")}

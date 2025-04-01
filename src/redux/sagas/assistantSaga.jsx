@@ -1254,7 +1254,6 @@ export default function* assistantSaga() {
     fork(getPersuasionSaga),
     fork(getSubjectivitySaga),
     fork(getPrevFactChecksSaga),
-    fork(getMachineGeneratedTextSaga),
     fork(getMultilingualStanceSaga),
     fork(getMachineGeneratedTextChunksSaga),
     fork(getMachineGeneratedTextSentencesSaga),

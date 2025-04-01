@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import GaugeChart from "react-gauge-chart";
 
+import { useColorScheme } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
@@ -53,6 +54,10 @@ export default function AssistantTextClassification({
 }) {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
+
+  // for dark mode
+  const { mode, systemMode } = useColorScheme();
+  const resolvedMode = systemMode || mode;
 
   // define category for machine generated text overall score
   const mgtOverallScore = "mgt_overall_score";
@@ -183,6 +188,7 @@ export default function AssistantTextClassification({
                 categories={filteredCategories}
                 keyword={keyword}
                 mgtOverallScore={mgtOverallScore}
+                resolvedMode={resolvedMode}
               />
             ) : (
               <CategoriesList
@@ -213,7 +219,12 @@ export default function AssistantTextClassification({
   );
 }
 
-export function MgtCategoriesList({ categories, keyword, mgtOverallScore }) {
+export function MgtCategoriesList({
+  categories,
+  keyword,
+  mgtOverallScore,
+  resolvedMode,
+}) {
   // list of categories with overall score first as GaugeUI
   let output = [];
   output.push(
@@ -231,7 +242,9 @@ export function MgtCategoriesList({ categories, keyword, mgtOverallScore }) {
         id={"gauge-chart"}
         animate={false}
         nrOfLevels={4}
-        textColor={"black"}
+        textColor={resolvedMode === "dark" ? "white" : "black"}
+        needleColor={"#5e646b"}
+        needleBaseColor={"#5e646b"}
         arcsLength={[0.05, 0.45, 0.45, 0.05]}
         percent={categories[mgtOverallScore] ? percentScore / 100.0 : null}
         style={{
@@ -246,7 +259,6 @@ export function MgtCategoriesList({ categories, keyword, mgtOverallScore }) {
       <Stack
         direction="row"
         justifyContent="center"
-        //display={"flex"}
         alignItems="center"
         spacing={7}
       >
