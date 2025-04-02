@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
-import Collapse from "@mui/material/Collapse";
 import Grid2 from "@mui/material/Grid2";
 import Skeleton from "@mui/material/Skeleton";
 import Typography from "@mui/material/Typography";
@@ -66,14 +65,14 @@ const PreviousFactCheckResults = () => {
       >
         <Grid2 container spacing={1} wrap="wrap" width="100%">
           <Grid2 size={4} align="start">
-            <Typography display="inline" sx={{ flexShrink: 0, align: "start" }}>
+            <Typography display="inline" sx={{ align: "start" }}>
               {prevFactChecksTitle}
             </Typography>
           </Grid2>
 
           <Grid2 size={8} align="start">
             {prevFactChecksLoading && (
-              <Skeleton variant="rounded" width="50%" height={40} />
+              <Skeleton variant="rounded" width="50%" height={25} />
             )}
             {prevFactChecksFail && (
               <Typography sx={{ color: "text.secondary", align: "start" }}>

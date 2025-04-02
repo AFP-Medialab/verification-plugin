@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
@@ -43,7 +43,7 @@ const AssistantWarnings = () => {
       className={classes.assistantWarningBorder}
       id="warnings"
     >
-      <Grid2 container>
+      <Grid2 container width="100%">
         <Grid2 size={{ xs: 12 }} style={{ display: "flex" }}>
           <CardMedia>
             <Box m={1}>
