@@ -139,21 +139,12 @@ const AssistantTextResult = () => {
   const textBox = document.getElementById("element-to-check");
   const [expanded, setExpanded] = useState(false);
   const [displayOrigLang, setDisplayOrigLang] = useState(true);
-  const [displayExpander, setDisplayExpander] = useState(true);
   const [textTabIndex, setTextTabIndex] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTextTabIndex(newValue);
   };
 
   useEffect(() => {
-    // if (translatedText) {
-    //   setDisplayOrigLang(false);
-    // }
-    const elementToCheck = document.getElementById("element-to-check");
-    if (elementToCheck.offsetHeight < elementToCheck.scrollHeight) {
-      setDisplayExpander(true);
-    }
-
     if (textHtmlMap !== null) {
       // HTML text is contained in an xml document, we need to parse it and
       // extract all contents in the <main> node#
@@ -441,7 +432,6 @@ const AssistantTextResult = () => {
           textLang={textLang}
           expandMinimiseText={expandMinimiseText}
           text={text}
-          displayExpander={displayExpander}
           setExpanded={setExpanded}
           expanded={expanded}
         />
