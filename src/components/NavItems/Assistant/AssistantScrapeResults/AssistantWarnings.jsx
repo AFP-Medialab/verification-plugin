@@ -36,6 +36,9 @@ const AssistantWarnings = () => {
   const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
   const dbkfImageMatch = useSelector((state) => state.assistant.dbkfImageMatch);
   const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
+  const prevFactCheckResult = useSelector(
+    (state) => state.assistant.prevFactCheckResult,
+  );
 
   return (
     <Card
@@ -76,7 +79,13 @@ const AssistantWarnings = () => {
 
             {(dbkfImageMatch || dbkfVideoMatch) && <DbkfMediaResults />}
 
-            {role.includes(ROLES.BETA_TESTER) && <PreviousFactCheckResults />}
+            {role.includes(ROLES.BETA_TESTER) ? (
+              prevFactCheckResult ? (
+                prevFactCheckResult.length > 0 ? (
+                  <PreviousFactCheckResults />
+                ) : null
+              ) : null
+            ) : null}
           </Collapse>
         </Grid2>
       </Grid2>
