@@ -43,12 +43,12 @@ export default function AssistantTextSpanClassification({
   configs = {
     confidenceThresholdLow: 0.8,
     confidenceThresholdHigh: 1.0,
-    importanceThresholdLow: 0.0,
+    importanceThresholdLow: 0.8,
     importanceThresholdHigh: 1.0,
-    confidenceRgbLow: [175, 9, 193],
-    confidenceRgbHigh: [34, 0, 255],
-    importanceRgbLow: [221, 222, 7],
-    importanceRgbHigh: [228, 25, 25],
+    confidenceRgbLow: [32, 180, 172],
+    confidenceRgbHigh: [34, 41, 180],
+    importanceRgbLow: [252, 225, 28],
+    importanceRgbHigh: [252, 108, 28],
   },
   textHtmlMap = null,
 }) {
