@@ -403,9 +403,8 @@ export const useProcessKeyframes = () => {
     try {
       let jobId;
 
-      // Use the old service if not a beta tester
+      // Use the old service if not an evaluation user
       if (
-        !role.includes(ROLES.BETA_TESTER) &&
         !role.includes(ROLES.EVALUATION) &&
         !role.includes(ROLES.EXTRA_FEATURE)
       ) {
