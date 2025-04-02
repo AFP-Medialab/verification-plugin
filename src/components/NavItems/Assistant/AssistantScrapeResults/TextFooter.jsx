@@ -114,20 +114,20 @@ export function TextFooterPrevFactChecks({ navigate, keyword }) {
 export function ExpandMinimise({
   classes,
   expandMinimiseText,
-  displayExpander,
   setExpanded,
   expanded,
 }) {
   return (
     <Tooltip title={expandMinimiseText} sx={{ cursor: "pointer" }}>
-      {displayExpander ? (
-        expanded ? (
+      <Box>
+        {expanded ? (
           <ExpandLessOutlined
             className={classes.toolTipIcon}
             onClick={() => {
               setExpanded(!expanded);
             }}
             color="primary"
+            style={{ display: "inline-flex" }}
           />
         ) : (
           <ExpandMoreOutlined
@@ -136,9 +136,10 @@ export function ExpandMinimise({
               setExpanded(!expanded);
             }}
             color="primary"
+            style={{ display: "inline-flex" }}
           />
-        )
-      ) : null}
+        )}
+      </Box>
     </Tooltip>
   );
 }
