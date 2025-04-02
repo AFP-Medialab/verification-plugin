@@ -98,10 +98,6 @@ function treeMapToElementsRecursive(
         const hSpanStart = hSpan.indices[0];
         // Sometimes the end index is negative so we have to check this
         let hSpanEnd = hSpan.indices[1] > -1 ? hSpan.indices[1] : textLength;
-        // mismatch on last highlight span ending before last span end with machine generated text
-        if (i === spanHighlightIndices.length - 1) {
-          hSpanEnd = textLength;
-        }
 
         if (
           (span.start <= hSpanStart && hSpanStart <= span.end) ||

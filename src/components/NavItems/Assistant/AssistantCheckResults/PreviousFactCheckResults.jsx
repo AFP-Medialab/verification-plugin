@@ -12,9 +12,9 @@ import Typography from "@mui/material/Typography";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
+import styled from "@emotion/styled";
 import ResultDisplayItem from "components/NavItems/tools/SemanticSearch/components/ResultDisplayItem";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "components/Shared/MaterialUiStyles/useMyStyles";
 import { getLanguageName } from "components/Shared/Utils/languageUtils";
 import dayjs from "dayjs";
 import LocaleData from "dayjs/plugin/localeData";
@@ -23,8 +23,15 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 import { TextFooterPrevFactChecks } from "../AssistantScrapeResults/TextFooter";
 
 const PreviousFactCheckResults = () => {
-  const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
+
+  //style disabled accordion
+  const StyledAccordion = styled(Accordion)(({ theme }) => ({
+    ".Mui-disabled": {
+      opacity: "1 !important",
+      background: "var(--mui-palette-background-paper)",
+    },
+  }));
 
   // previous fact checks
   const prevFactChecksTitle = keyword("previous_fact_checks_title");
@@ -48,19 +55,23 @@ const PreviousFactCheckResults = () => {
   // for navigating to Semantic Search with text
   const navigate = useNavigate();
 
-  console.log("pfc=", prevFactChecksResult);
-
   return (
-    <Accordion>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+    <StyledAccordion disabled={prevFactChecksLoading || prevFactChecksFail}>
+      <AccordionSummary
+        expandIcon={
+          prevFactChecksDone && prevFactChecksResult.length > 0 ? (
+            <ExpandMoreIcon />
+          ) : null
+        }
+      >
         <Grid2 container spacing={1} wrap="wrap" width="100%">
-          <Grid2 size={{ xs: 4 }} align="start">
+          <Grid2 size={4} align="start">
             <Typography display="inline" sx={{ flexShrink: 0, align: "start" }}>
               {prevFactChecksTitle}
             </Typography>
           </Grid2>
 
-          <Grid2 size={{ xs: 8 }} align="start">
+          <Grid2 size={8} align="start">
             {prevFactChecksLoading && (
               <Skeleton variant="rounded" width="50%" height={40} />
             )}
@@ -86,46 +97,38 @@ const PreviousFactCheckResults = () => {
       <AccordionDetails>
         {prevFactChecksDone && prevFactChecksResult.length > 0 && (
           <div>
-            <Collapse
-              // in={expanded}
-              collapsedSize={150}
-              id={"element-to-check4"}
-            >
-              {prevFactChecksResult
-                ? prevFactChecksResult.map((resultItem) => {
-                    // date in correct format
-                    const date = resultItem.published_at.slice(0, 10);
+            {prevFactChecksResult.map((resultItem) => {
+              // date in correct format
+              const date = resultItem.published_at.slice(0, 10);
 
-                    return (
-                      <ResultDisplayItem
-                        key={resultItem.id}
-                        id={resultItem.id}
-                        claim={resultItem.claim_en}
-                        title={resultItem.title_en}
-                        claimOriginalLanguage={resultItem.claim}
-                        titleOriginalLanguage={resultItem.title}
-                        rating={resultItem.rating}
-                        date={
-                          dayjs(date).format(
-                            globalLocaleData.longDateFormat("LL"),
-                          ) ?? null
-                        }
-                        website={resultItem.website}
-                        language={getLanguageName(resultItem.source_language)}
-                        similarityScore={resultItem.score}
-                        articleUrl={resultItem.url}
-                        domainUrl={resultItem.source_name}
-                        imageUrl={resultItem.image_url}
-                      />
-                    );
-                  })
-                : null}
-            </Collapse>
+              return (
+                <ResultDisplayItem
+                  key={resultItem.id}
+                  id={resultItem.id}
+                  claim={resultItem.claim_en}
+                  title={resultItem.title_en}
+                  claimOriginalLanguage={resultItem.claim}
+                  titleOriginalLanguage={resultItem.title}
+                  rating={resultItem.rating}
+                  date={
+                    dayjs(date).format(globalLocaleData.longDateFormat("LL")) ??
+                    null
+                  }
+                  website={resultItem.website}
+                  language={getLanguageName(resultItem.source_language)}
+                  similarityScore={resultItem.score}
+                  articleUrl={resultItem.url}
+                  domainUrl={resultItem.source_name}
+                  imageUrl={resultItem.image_url}
+                />
+              );
+            })}
+
             <TextFooterPrevFactChecks navigate={navigate} keyword={keyword} />
           </div>
         )}
       </AccordionDetails>
-    </Accordion>
+    </StyledAccordion>
   );
 };
 
