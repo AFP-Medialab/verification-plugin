@@ -1,8 +1,10 @@
 import React from "react";
 
 import Box from "@mui/material/Box";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import { useColorScheme } from "@mui/material/styles";
 
 import DarkModeIcon from "@mui/icons-material/DarkMode";
@@ -13,37 +15,35 @@ import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 const ColorModeSelect = () => {
   const keyword = i18nLoadNamespace("components/NavBar");
-
   const { mode, setMode } = useColorScheme();
-
-  const handleModeChange = (event, newMode) => {
-    if (newMode !== null) {
-      setMode(newMode);
-    }
-  };
 
   return (
     <Box>
-      <ToggleButtonGroup
-        color="primary"
+      <Select
         value={mode}
-        exclusive
-        onChange={handleModeChange}
+        onChange={(e) => setMode(e.target.value)}
         variant="outlined"
+        sx={{ minWidth: 120 }}
       >
-        <ToggleButton value="light">
-          <LightModeIcon sx={{ mr: 1 }} />
-          {keyword("color_mode_light")}
-        </ToggleButton>
-        <ToggleButton value="system">
-          <SettingsBrightnessIcon sx={{ mr: 1 }} />
-          {keyword("color_mode_system")}
-        </ToggleButton>
-        <ToggleButton value="dark">
-          <DarkModeIcon sx={{ mr: 1 }} />
-          {keyword("color_mode_dark")}
-        </ToggleButton>
-      </ToggleButtonGroup>
+        <MenuItem value="light">
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <LightModeIcon />
+            <Typography>{keyword("color_mode_light")}</Typography>
+          </Stack>
+        </MenuItem>
+        <MenuItem value="system">
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <SettingsBrightnessIcon />
+            <Typography>{keyword("color_mode_system")}</Typography>
+          </Stack>
+        </MenuItem>
+        <MenuItem value="dark">
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <DarkModeIcon />
+            <Typography>{keyword("color_mode_dark")}</Typography>
+          </Stack>
+        </MenuItem>
+      </Select>
     </Box>
   );
 };
