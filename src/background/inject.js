@@ -27,6 +27,7 @@
       ) {
         console.log(this);
         console.log(JSON.parse(this.responseText));
+        chrome.runtime.sendMessage(JSON.parse(this.responseText));
       }
     });
 

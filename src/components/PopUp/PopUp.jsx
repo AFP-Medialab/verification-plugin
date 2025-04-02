@@ -77,6 +77,10 @@ const PopUp = () => {
     });
   };
 
+  const sendMessage = () => {
+    chrome.runtime.sendMessage({ greeting: "nfokho" });
+  };
+
   useEffect(() => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const currentTab = tabs[0];
@@ -171,6 +175,18 @@ const PopUp = () => {
               onClick={() => urlOpenAssistant()}
             >
               {keyword("open_assistant_on_page")}
+            </Button>
+          </Grid2>
+          <Box m={1} />
+          <Grid2 size={{ xs: 12 }}>
+            <Button
+              variant="outlined"
+              color="primary"
+              fullWidth={true}
+              onMouseOver={() => loadData()}
+              onClick={() => sendMessage()}
+            >
+              Send message
             </Button>
           </Grid2>
           <Box m={1} />

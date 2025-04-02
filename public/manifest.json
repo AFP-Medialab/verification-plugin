@@ -16,7 +16,8 @@
     "webNavigation",
     "activeTab",
     "scripting",
-    "tabs"
+    "tabs",
+    "runtime"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -39,5 +40,8 @@
         "<all_urls>"
       ]
     }
-  ]
+  ],
+  "externally_connectable": {
+    "matches": ["<all_urls>"]
+  }
 }

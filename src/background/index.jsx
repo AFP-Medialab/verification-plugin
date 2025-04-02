@@ -1,5 +1,6 @@
 import { openTabs } from "components/Shared/ReverseSearch/utils/openTabUtils";
 import { getImgUrl } from "components/Shared/ReverseSearch/utils/searchUtils";
+import Dexie from "dexie";
 
 import { trackEvent } from "../components/Shared/GoogleAnalytics/MatomoAnalytics";
 import {
@@ -8,6 +9,10 @@ import {
   reverseImageSearchAll,
 } from "../components/Shared/ReverseSearch/reverseSearchUtils";
 
+const db = new Dexie("tweetTest");
+db.version(1).stores({
+  tweets: "id,tweet",
+});
 const page_name = "popup.html";
 
 const mediaAssistant = (info) => {
@@ -246,12 +251,15 @@ async function getCurrentTab() {
 chrome.contextMenus.onClicked.addListener(contextClick);
 chrome.webNavigation.onCommitted.addListener(async () => {
   let currentTab = await getCurrentTab();
+  if (!currentTab.url.includes(".x.com")) {
+    return;
+  }
   console.log("hmph");
   try {
     chrome.scripting.executeScript({
       target: { tabId: currentTab.id, allFrames: true },
       function: () => {
-        console.log("hohoho");
+        console.log("huhuhu");
         var s = document.createElement("script");
         // must be listed in web_accessible_resources in manifest.json
         s.src = chrome.runtime.getURL("inject.js");
@@ -265,5 +273,51 @@ chrome.webNavigation.onCommitted.addListener(async () => {
     console.log(e);
   }
 });
+
+chrome.runtime.onMessage.addListener(
+  async function (request, sender, sendResponse) {
+    const jp = require("jsonpath");
+    if (request.greeting == "nfokho") {
+      console.log("wzik");
+      const t = await db.tweets.toArray();
+      console.log(t.length);
+      console.log(t);
+      let x = t.map((ent) => ({
+        username: "@" + jp.query(ent, "$..user_results..screen_name")[0],
+        display_name: jp.query(ent, "$..user_results..name")[0],
+        tweet_text: jp.query(ent, "$..full_text")[0],
+        links: jp.query(ent, "$..entities..urls"),
+        date: jp.query(ent, "$..created_at")[0],
+        likes: jp.query(ent, "$..favorite_count")[0],
+        quotes: jp.query(ent, "$..quote_count")[0],
+        retweets: jp.query(ent, "$..retweet_count")[0],
+        replies: jp.query(ent, "$..reply_count")[0],
+      }));
+      console.log(x);
+      console.log(x.filter((v) => v.links.length > 0));
+    }
+  },
+);
+
+chrome.runtime.onMessageExternal.addListener(
+  async function (request, sender, sendResponse) {
+    const jp = require("jsonpath");
+    const entryIds = jp.query(request, "$..entryId");
+    if (jp.query(request, "$..entryId").length > 0) {
+      for (let entryId of entryIds) {
+        let current = jp.query(
+          request,
+          `$..entries[?(@.entryId=="${entryId}")]`,
+        );
+        jp.query(
+          request,
+          `$..entries[?(@.entryId=="${entryId}")]..tweet_results`,
+        ).length > 0
+          ? await db.tweets.put({ id: entryId, tweet: current[0] })
+          : {};
+      }
+    }
+  },
+);
 
 chrome.runtime.onStartup.addListener();
