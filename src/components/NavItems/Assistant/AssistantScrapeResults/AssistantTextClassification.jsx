@@ -399,7 +399,7 @@ export function CategoriesList({
   return (
     <>
       {credibilitySignal != keyword("subjectivity_title") ? (
-        <Tooltip key={uuidv4()} title={tooltipText}>
+        <Tooltip title={tooltipText}>
           <List>{output}</List>
         </Tooltip>
       ) : (
@@ -458,7 +458,7 @@ export function ClassifiedText({
       </span>
     );
 
-    // machine generated text doens't require a tooltip on the highlighted sentences
+    // machine generated text doesn't require a tooltip on the highlighted sentences
     if (credibilitySignal != keyword("machine_generated_text_title")) {
       return (
         <Tooltip key={uuidv4()} title={tooltipText}>

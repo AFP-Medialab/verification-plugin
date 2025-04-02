@@ -402,7 +402,7 @@ export function CategoriesListToggle({
   }
 
   return (
-    <Tooltip key={uuidv4()} title={tooltipContent}>
+    <Tooltip title={tooltipContent}>
       <List>
         <ListItem>
           <Typography>{keyword("select_persuasion_technique")}</Typography>
