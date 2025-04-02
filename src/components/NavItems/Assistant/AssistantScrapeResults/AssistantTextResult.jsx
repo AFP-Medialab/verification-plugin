@@ -31,12 +31,17 @@ import AssistantTextSpanClassification from "./AssistantTextSpanClassification";
 import TextFooter from "./TextFooter.jsx";
 import { treeMapToElements } from "./assistantUtils";
 
+// import { ROLES } from "constants/roles";
+
 const AssistantTextResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const expandMinimiseText = keyword("expand_minimise_text");
 
   const classes = useMyStyles();
   const dispatch = useDispatch();
+
+  // // checking if user logged in
+  // const role = useSelector((state) => state.userSession.user.roles);
 
   // assistant media states
   const text = useSelector((state) => state.assistant.urlText);
@@ -276,6 +281,7 @@ const AssistantTextResult = () => {
               {...a11yProps(4)}
               disabled={subjectivityFail || subjectivityLoading}
             />
+            {/* {role.includes(BETA_TESTER) ? */}
             <Tab
               label={machineGeneratedTextTitle}
               {...a11yProps(5)}
@@ -286,6 +292,7 @@ const AssistantTextResult = () => {
                 machineGeneratedTextSentencesLoading
               }
             />
+            {/* : null } */}
           </Tabs>
 
           {/* extracted raw text */}
@@ -400,6 +407,7 @@ const AssistantTextResult = () => {
           </CustomTabPanel>
 
           {/* machine generated text */}
+          {/* {role.includes(BETA_TESTER) ? */}
           <CustomTabPanel value={textTabIndex} index={5}>
             {machineGeneratedTextChunksDone &&
               machineGeneratedTextSentencesDone && (
@@ -422,6 +430,7 @@ const AssistantTextResult = () => {
                 />
               )}
           </CustomTabPanel>
+          {/* : null } */}
         </Collapse>
 
         {/* footer */}
