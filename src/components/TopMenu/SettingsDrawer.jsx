@@ -61,7 +61,7 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
             <Typography variant="h6">
               {keyword("drawer_settings_title")}
             </Typography>
-            <Box>
+            <Box pr={1}>
               <IconButton sx={{ p: 1 }} onClick={handleClosePanel}>
                 <CloseIcon />
               </IconButton>
