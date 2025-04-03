@@ -251,7 +251,12 @@ async function getCurrentTab() {
 chrome.contextMenus.onClicked.addListener(contextClick);
 chrome.webNavigation.onCommitted.addListener(async () => {
   let currentTab = await getCurrentTab();
-  if (!currentTab.url.includes(".x.com")) {
+  console.log(currentTab.url);
+  if (
+    !currentTab.url.includes(".x.com") &&
+    !currentTab.url.includes("/x.com")
+  ) {
+    console.log("womp womp");
     return;
   }
   console.log("hmph");
@@ -282,11 +287,15 @@ chrome.runtime.onMessage.addListener(
       const t = await db.tweets.toArray();
       console.log(t.length);
       console.log(t);
-      let x = t.map((ent) => ({
+      const ts = jp.query(t, "$..tweet_results");
+      let x = ts.map((ent) => ({
         username: "@" + jp.query(ent, "$..user_results..screen_name")[0],
         display_name: jp.query(ent, "$..user_results..name")[0],
         tweet_text: jp.query(ent, "$..full_text")[0],
-        links: jp.query(ent, "$..entities..urls"),
+        links: jp
+          .query(ent, "$..result.legacy.entities.urls")
+          .flat(1)
+          .map((obj) => (obj.expanded_url ? obj.expanded_url : {})),
         date: jp.query(ent, "$..created_at")[0],
         likes: jp.query(ent, "$..favorite_count")[0],
         quotes: jp.query(ent, "$..quote_count")[0],
