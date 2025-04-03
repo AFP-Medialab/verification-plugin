@@ -83,7 +83,13 @@ const MetadataList = ({ metadata }) => {
                 {Object.keys(metadata)
                   .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
                   .map((item, index) => {
-                    return <Tab label={item} value={item} key={index} />;
+                    return (
+                      <Tab
+                        label={item.toUpperCase()}
+                        value={item}
+                        key={index}
+                      />
+                    );
                   })}
               </TabList>
             </Box>

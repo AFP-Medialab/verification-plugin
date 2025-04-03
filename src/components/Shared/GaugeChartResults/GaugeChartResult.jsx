@@ -26,6 +26,7 @@ import GaugeChartModalExplanation from "./GaugeChartModalExplanation";
  * @param scores {Array<Object>} The results of the analysis
  * @param methodNames {Object} Objet containing the information on the different methods used
  * @param detectionThresholds {Object} Object containing the detection thresholds
+ * @param arcsLength {number[]} The array with the arcs lengths
  * @param resultsHaveErrors {boolean}
  * @param sanitizeDetectionPercentage {(arg: number) => number} Function
  * @param gaugeExplanation {Object} Object containing the explainations for the colors of the gauge
@@ -218,7 +219,7 @@ const GaugeChartResult = ({
         {resultsHaveErrors && (
           <Alert severity="error">{keyword("gauge_algorithms_errors")}</Alert>
         )}
-        {detectionType != "machine_generated_text" ? (
+        {detectionType !== "machine_generated_text" ? (
           <Box sx={{ width: "100%" }}>
             <Accordion defaultExpanded onChange={handleDetailsChange}>
               <AccordionSummary expandIcon={<ExpandMore />}>

@@ -7,8 +7,8 @@ import Skeleton from "@mui/material/Skeleton";
  * A component that displays a skeleton while the image is loading
  * and then fades in the image after it loaded
  *
- * @param src {The src of the image}
- * @param alt {The alt of the image}
+ * @param src {string} The src of the image
+ * @param alt {string} The alt of the image
  * @returns {Element}
  * @constructor
  */

@@ -259,8 +259,8 @@ const Feedback = () => {
                         disabled={message && !isFeedbackSending ? false : true}
                         loading={isFeedbackSending}
                         onClick={(e) => {
-                          e.preventDefault(),
-                            handleClick(e, message, messageType);
+                          e.preventDefault();
+                          handleClick(e, message, messageType);
                         }}
                       >
                         {isFeedbackSent

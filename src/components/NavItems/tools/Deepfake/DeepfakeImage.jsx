@@ -13,14 +13,12 @@ import { setError } from "redux/reducers/errorReducer";
 import { imageDeepfake } from "../../../../constants/tools";
 import { resetDeepfake } from "../../../../redux/actions/tools/deepfakeImageActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import UseGetDeepfake from "./Hooks/useGetDeepfake";
 import DeepfakeResultsImage from "./Results/DeepfakeResultsImage";
 
 const Deepfake = () => {
   //const { url } = useParams();
-  const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",

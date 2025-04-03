@@ -1,16 +1,19 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import PropTypes from "prop-types";
-import clsx from "clsx";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import ErrorIcon from "@mui/icons-material/Error";
-import InfoIcon from "@mui/icons-material/Info";
-import CloseIcon from "@mui/icons-material/Close";
-import { amber, green } from "@mui/material/colors";
+
 import IconButton from "@mui/material/IconButton";
 import Snackbar from "@mui/material/Snackbar";
 import SnackbarContent from "@mui/material/SnackbarContent";
+import { amber, green } from "@mui/material/colors";
+
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CloseIcon from "@mui/icons-material/Close";
+import ErrorIcon from "@mui/icons-material/Error";
+import InfoIcon from "@mui/icons-material/Info";
 import WarningIcon from "@mui/icons-material/Warning";
+
+import clsx from "clsx";
+import PropTypes from "prop-types";
+
 import useClasses from "../Shared/MaterialUiStyles/useClasses";
 
 const variantIcon = {
@@ -59,9 +62,6 @@ const MySnackbar = (props) => {
   const classes = useClasses(useStyles1);
   const { message, onClose, variant, ...other } = props;
   const Icon = variantIcon[variant];
-
-  const currentLang = useSelector((state) => state.language);
-  const isCurrentLanguageLeftToRight = currentLang !== "ar";
 
   return (
     <div>

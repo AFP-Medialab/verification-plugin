@@ -89,7 +89,9 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
                   window.dispatchEvent(new Event("storage"));
                 }}
                 disabled={getStoredFontSize() === MIN_FONT_SIZE}
-                sx={{ p: 1 }}
+                sx={{
+                  p: 1,
+                }}
                 color="primary"
               >
                 <RemoveIcon />
