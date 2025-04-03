@@ -12,6 +12,7 @@ export const isValidUrl = (urlStr) => {
     new URL(urlStr);
     return true;
   } catch (e) {
+    console.error(e);
     return false;
   }
 };

@@ -24,6 +24,7 @@ const ColorModeSelect = () => {
         onChange={(e) => setMode(e.target.value)}
         variant="outlined"
         sx={{ minWidth: 120 }}
+        size="small"
       >
         <MenuItem value="light">
           <Stack direction="row" alignItems="center" spacing={1}>
