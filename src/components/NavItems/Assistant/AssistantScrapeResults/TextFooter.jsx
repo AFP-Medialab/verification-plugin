@@ -1,8 +1,10 @@
 import React from "react";
 
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import Grid2 from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
@@ -116,30 +118,55 @@ export function ExpandMinimise({
   expandMinimiseText,
   setExpanded,
   expanded,
+  type,
 }) {
-  return (
-    <Tooltip title={expandMinimiseText} sx={{ cursor: "pointer" }}>
-      <Box>
-        {expanded ? (
-          <ExpandLessOutlined
-            className={classes.toolTipIcon}
-            onClick={() => {
-              setExpanded(!expanded);
-            }}
-            color="primary"
-            style={{ display: "inline-flex" }}
-          />
-        ) : (
-          <ExpandMoreOutlined
-            className={classes.toolTipIcon}
-            onClick={() => {
-              setExpanded(!expanded);
-            }}
-            color="primary"
-            style={{ display: "inline-flex" }}
-          />
-        )}
-      </Box>
-    </Tooltip>
+  return type === "BUTTON" ? (
+    <Button
+      variant="outlined"
+      color="primary"
+      size={"large"}
+      fullWidth
+      onClick={() => {
+        setExpanded(!expanded);
+      }}
+    >
+      {expanded ? (
+        <ExpandLessOutlined
+          className={classes.toolTipIcon}
+          color="primary"
+          style={{ display: "inline-flex" }}
+        />
+      ) : (
+        <ExpandMoreOutlined
+          className={classes.toolTipIcon}
+          color="primary"
+          style={{ display: "inline-flex" }}
+        />
+      )}
+      {expandMinimiseText}
+    </Button>
+  ) : (
+    <IconButton
+      onClick={() => setExpanded(!expanded)}
+      sx={{
+        "&:hover": {
+          backgroundColor: "inherit",
+        },
+      }}
+    >
+      {expanded ? (
+        <ExpandLessOutlined
+          className={classes.toolTipIcon}
+          color="primary"
+          style={{ display: "inline-flex" }}
+        />
+      ) : (
+        <ExpandMoreOutlined
+          className={classes.toolTipIcon}
+          color="primary"
+          style={{ display: "inline-flex" }}
+        />
+      )}
+    </IconButton>
   );
 }
