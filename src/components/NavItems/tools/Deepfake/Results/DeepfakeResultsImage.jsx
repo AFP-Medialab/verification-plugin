@@ -135,7 +135,7 @@ const DeepfakeResultsImage = (props) => {
       );
 
       const elementProbability = Math.round(element.prediction * 100);
-      let elementBorderClass = null;
+      let elementBorderClass;
 
       if (elementProbability >= 80) {
         elementBorderClass = classes.deepfakeSquareBorderRed;
