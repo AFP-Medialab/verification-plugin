@@ -1,19 +1,16 @@
 /**
  * Authentication Redux reducer function.
  */
-
-import _ from "lodash";
-
 import {
-  AUTH_USER_REGISTRATION_LOADING,
-  AUTH_USER_REGISTRATION_SENT,
   AUTH_ACCESS_CODE_REQUEST_LOADING,
   AUTH_ACCESS_CODE_REQUEST_SENT,
-  AUTH_USER_LOGIN_LOADING,
-  AUTH_USER_LOGIN,
-  AUTH_USER_LOGOUT,
   AUTH_TOKEN_INVALID,
   AUTH_TOKEN_REFRESHED,
+  AUTH_USER_LOGIN,
+  AUTH_USER_LOGIN_LOADING,
+  AUTH_USER_LOGOUT,
+  AUTH_USER_REGISTRATION_LOADING,
+  AUTH_USER_REGISTRATION_SENT,
   AUTH_USER_SESSION_EXPIRED,
 } from "../actions/authenticationActions";
 
@@ -108,11 +105,11 @@ function authenticationReducer(state = defaultState, action) {
         user: action.payload.user,
       };
     /*state.userAuthenticated = true;
-      state.accessToken = action.payload.accessToken;
-      state.accessTokenExpiry = action.payload.accessTokenExpiry;
-      // state.user = action.payload.user;
-      _.merge(state.user, action.payload.user);
-      break;*/
+          state.accessToken = action.payload.accessToken;
+          state.accessTokenExpiry = action.payload.accessTokenExpiry;
+          // state.user = action.payload.user;
+          _.merge(state.user, action.payload.user);
+          break;*/
 
     case AUTH_USER_SESSION_EXPIRED:
       return {

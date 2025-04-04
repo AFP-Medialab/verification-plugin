@@ -26,6 +26,7 @@ import GaugeChartModalExplanation from "./GaugeChartModalExplanation";
  * @param scores {Array<Object>} The results of the analysis
  * @param methodNames {Object} Objet containing the information on the different methods used
  * @param detectionThresholds {Object} Object containing the detection thresholds
+ * @param arcsLength {number[]} The array with the arcs lengths
  * @param resultsHaveErrors {boolean}
  * @param sanitizeDetectionPercentage {(arg: number) => number} Function
  * @param gaugeExplanation {Object} Object containing the explainations for the colors of the gauge

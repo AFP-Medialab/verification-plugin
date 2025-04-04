@@ -31,7 +31,6 @@ const SideMenuElement = ({
 
   /**
    * Changes the color of the icon dynamically if the topMenuItem is selected
-   * @param tool {Tool}
    * @returns {{fontSize: string, fill: (string)}|{fontSize: string}}
    */
   const iconConditionalStyling = () => {
