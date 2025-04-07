@@ -24,6 +24,10 @@ const DbkfMediaResults = () => {
   const dbkfImageMatch = useSelector((state) => state.assistant.dbkfImageMatch);
   const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
 
+  let numResultsDetected = 0;
+  dbkfImageMatch ? (numResultsDetected += dbkfImageMatch.length) : null;
+  dbkfVideoMatch ? (numResultsDetected += dbkfVideoMatch.length) : null;
+
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -35,8 +39,7 @@ const DbkfMediaResults = () => {
           </Grid2>
           <Grid2 size={{ xs: 8 }} align="start">
             <Typography sx={{ color: "text.secondary", align: "start" }}>
-              {dbkfImageMatch.length + dbkfVideoMatch.length}{" "}
-              {keyword("results_detected")}
+              {numResultsDetected} {keyword("results_detected")}
             </Typography>
           </Grid2>
         </Grid2>
