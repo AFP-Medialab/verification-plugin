@@ -135,8 +135,6 @@ const AssistantMediaResult = () => {
         action={
           <div style={{ display: "flex" }}>
             <div>
-              {console.log("dbkfImageMatch=", dbkfImageMatch)}
-              {console.log("dbkfVideoMatch=", dbkfVideoMatch)}
               {(dbkfImageMatch || dbkfVideoMatch) && (
                 <Tooltip title={keyword("image_warning")}>
                   <WarningAmber
