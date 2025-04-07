@@ -329,10 +329,7 @@ export function MgtCategoriesList({
           key={category}
           sx={{
             background: rgbToString(categories[category][0]["rgb"]),
-            color:
-              rgbToLuminance(categories[category][0]["rgb"]) > 0.7
-                ? "black"
-                : "white",
+            color: category == "highly_likely_machine" ? "white" : "black",
           }}
         >
           <ListItemText primary={keyword(category)} />
@@ -429,11 +426,12 @@ export function ClassifiedText({
 
   function wrapHighlightedText(spanText, spanInfo) {
     const spanScore = spanInfo.score;
-    let backgroundRgb;
-    //let mgtTooltipText;
+    let backgroundRgb, bgLuminance;
+    let textColour = "black";
     if (credibilitySignal === keyword("machine_generated_text_title")) {
       backgroundRgb = spanInfo.rgb;
-      //mgtTooltipText = keyword("mgt_detected_sentence_class") + keyword(spanInfo.pred)
+      bgLuminance = rgbToLuminance(backgroundRgb);
+      if (spanInfo.pred == "highly_likely_machine") textColour = "white";
     } else {
       backgroundRgb = interpRgb(
         spanScore,
@@ -442,10 +440,9 @@ export function ClassifiedText({
         rgbLow,
         rgbHigh,
       );
+      bgLuminance = rgbToLuminance(backgroundRgb);
+      if (bgLuminance < 0.7) textColour = "white";
     }
-    let bgLuminance = rgbToLuminance(backgroundRgb);
-    let textColour = "white";
-    if (bgLuminance > 0.7) textColour = "black";
 
     const highlightedSentence = (
       <span
