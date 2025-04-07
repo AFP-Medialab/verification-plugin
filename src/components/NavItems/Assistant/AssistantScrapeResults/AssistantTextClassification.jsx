@@ -452,6 +452,7 @@ export function ClassifiedText({
         style={{
           background: rgbToString(backgroundRgb),
           color: textColour,
+          paddingBottom: "0.2em",
         }}
       >
         {spanText}
