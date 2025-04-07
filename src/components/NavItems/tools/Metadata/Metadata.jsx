@@ -1,3 +1,4 @@
+import { useMutation } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
@@ -5,13 +6,17 @@ import { useLocation, useParams } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
+import CircularProgress from "@mui/material/CircularProgress";
+import Fade from "@mui/material/Fade";
 import Stack from "@mui/material/Stack";
 
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import { isValidUrl } from "@Shared/Utils/URLUtils";
 import {
   getFileTypeFromFileObject,
   getFileTypeFromUrl,
 } from "@Shared/Utils/fileUtils";
+import { parseMetadata } from "@uswriting/exiftool";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
 import exifr from "exifr";
@@ -25,7 +30,6 @@ import {
 } from "../../../../redux/reducers/tools/metadataReducer";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
-import useVideoTreatment from "./Hooks/useVideoTreatment";
 import MetadataImageResult from "./Results/MetadataImageResult";
 import MetadataVideoResult from "./Results/MetadataVideoResult";
 
@@ -67,7 +71,48 @@ const Metadata = () => {
     mergeOutput: false,
   };
 
-  useVideoTreatment(videoUrl, keyword);
+  const extractVideoMetadata = async (url) => {
+    if (!isValidUrl(url)) {
+      throw new Error("Invalid URL");
+    }
+
+    // Fetch the video
+    const response = await fetch(url, {
+      mode: "cors",
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error ${response.status}`);
+    }
+
+    const blob = await response.blob();
+
+    // Parse the metadata
+    const jsonMetadata = await parseMetadata(
+      new File([blob], "video-file", {
+        type: blob.type,
+      }),
+      {
+        args: ["-a", "-g1", "-json", "-n"],
+        transform: (data) => JSON.parse(data),
+      },
+    );
+
+    if (!jsonMetadata.success) {
+      throw new Error("No metadata found.");
+    }
+
+    return jsonMetadata.data[0];
+  };
+
+  const getVideoMetadata = useMutation({
+    mutationFn: (url) => {
+      return extractVideoMetadata(url);
+    },
+    onSuccess: (data) => {
+      setMetadataResult(data);
+    },
+  });
 
   const client_id = getclientId();
   useTrackEvent(
@@ -133,6 +178,7 @@ const Metadata = () => {
   const submitUrl = async () => {
     // Reset state
     cleanMetadataState();
+    getVideoMetadata.reset();
     setImageMetadata(null);
     setError(false);
 
@@ -146,8 +192,16 @@ const Metadata = () => {
         ? await getFileTypeFromUrl(input)
         : await getFileTypeFromFileObject(fileInput);
 
-      if (!fileType) {
+      if (!fileType || fileType instanceof Error) {
         throw new Error("Unable to determine file type");
+      }
+
+      if (fileType.mime.includes("video")) {
+        const video = input || URL.createObjectURL(fileInput);
+
+        setVideoUrl(video);
+        getVideoMetadata.mutate(video);
+        return;
       }
 
       if (fileType.mime.includes("image")) {
@@ -175,10 +229,10 @@ const Metadata = () => {
         return;
       }
 
-      if (fileType.mime.includes("video")) {
-        setVideoUrl(input || URL.createObjectURL(fileInput));
-        return;
-      }
+      // if (fileType.mime.includes("video")) {
+      //   setVideoUrl(input || URL.createObjectURL(fileInput));
+      //   return;
+      // }
 
       throw new Error("Unsupported file type");
     } catch (error) {
@@ -186,10 +240,6 @@ const Metadata = () => {
       setError(error.message);
     }
   };
-
-  useEffect(() => {
-    setVideoUrl(null);
-  }, [videoUrl]);
 
   useEffect(() => {
     setImageurl(null);
@@ -288,6 +338,26 @@ const Metadata = () => {
       <Box m={4} />
 
       {error && <Alert severity="error">{error}</Alert>}
+
+      {getVideoMetadata.isPending && (
+        <Fade in={getVideoMetadata.isPending} timeout={750}>
+          <Alert icon={<CircularProgress size={20} />} severity="info">
+            {"Loading..."}
+          </Alert>
+        </Fade>
+      )}
+
+      {getVideoMetadata.isError && (
+        <Alert severity="error">{keyword("metadata_generic_error")}</Alert>
+      )}
+
+      {getVideoMetadata.isSuccess && videoUrl && (
+        <MetadataVideoResult
+          metadata={getVideoMetadata.data}
+          videoSrc={videoUrl}
+          handleClose={handleCloseResult}
+        />
+      )}
 
       {resultData ? (
         resultIsImage ? (

@@ -20,12 +20,6 @@ const useVideoTreatment = (mediaUrl, keyword) => {
     };
 
     let videoTreatment = () => {
-      // let extension = mediaUrl.slice(-3);
-
-      /* if (extension !== "mp4" || extension !== "m4v") {
-                            handleError("description_limitations")
-                        }*/
-
       let video = mp4box.createFile();
 
       video.onReady = (info) => {
@@ -48,6 +42,7 @@ const useVideoTreatment = (mediaUrl, keyword) => {
       let fileReader = new FileReader();
       fileReader.onload = () => {
         let arrayBuffer = fileReader.result;
+
         arrayBuffer.fileStart = 0;
         video.appendBuffer(arrayBuffer);
         video.flush();

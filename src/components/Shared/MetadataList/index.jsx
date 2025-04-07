@@ -24,8 +24,6 @@ const MetadataList = ({ metadata }) => {
 
   // Sync tabValue when metadata updates
   useEffect(() => {
-    console.log(metadata);
-
     const sortedKeys = Object.keys(metadata).sort();
     if (sortedKeys.length) {
       setTabValue(sortedKeys[0]);
@@ -44,11 +42,20 @@ const MetadataList = ({ metadata }) => {
     longitude,
     longitudeRef,
   ) => {
-    if (!latitude || !latitudeRef || !longitude || !longitudeRef) {
+    if (!latitude || !longitude) {
       return <></>;
     }
 
     let url = "https://www.google.com/maps/place/"; //38%C2%B054'35.4%22N+1%C2%B026'19.2%22E/
+
+    if (!Array.isArray(latitude)) {
+      return `${url}${latitude},${longitude}`;
+    }
+
+    if (!latitudeRef || !longitudeRef) {
+      return <></>;
+    }
+
     let lat =
       latitude[0] +
       "%C2%B0" +
@@ -120,22 +127,29 @@ const MetadataList = ({ metadata }) => {
           </TabContext>
 
           {metadata &&
-            tabValue === "gps" &&
-            metadata["gps"] &&
-            metadata["gps"]["GPSLatitude"] &&
-            metadata["gps"]["GPSLatitudeRef"] &&
-            metadata["gps"]["GPSLongitude"] &&
-            metadata["gps"]["GPSLongitudeRef"] && (
+            (tabValue === "gps" || tabValue === "Composite") &&
+            ((metadata["gps"]?.GPSLatitude ??
+              metadata["Composite"]?.GPSLatitude) ||
+              (metadata["gps"]?.GPSLatitudeRef ??
+                metadata["Composite"]?.GPSLatitudeRef) ||
+              (metadata["gps"]?.GPSLongitude ??
+                metadata["Composite"]?.GPSLongitude) ||
+              (metadata["gps"]?.GPSLongitudeRef ??
+                metadata["Composite"]?.GPSLongitudeRef)) && (
               <Button
                 variant="contained"
                 color="primary"
                 onClick={() =>
                   window.open(
                     getGoogleMapsLink(
-                      metadata["gps"]["GPSLatitude"],
-                      metadata["gps"]["GPSLatitudeRef"],
-                      metadata["gps"]["GPSLongitude"],
-                      metadata["gps"]["GPSLongitudeRef"],
+                      metadata["Composite"]?.GPSLatitude ??
+                        metadata["gps"]?.GPSLatitude,
+                      metadata["Composite"]?.GPSLatitudeRef ??
+                        metadata["gps"]?.GPSLatitudeRef,
+                      metadata["Composite"]?.GPSLongitude ??
+                        metadata["gps"]?.GPSLongitude,
+                      metadata["Composite"]?.GPSLongitudeRef ??
+                        metadata["gps"]?.GPSLongitudeRef,
                     ),
                     "_blank",
                     "noopener,noreferrer",
