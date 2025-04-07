@@ -34,7 +34,7 @@ const DbkfMediaResults = () => {
         <Grid2 container spacing={1} wrap="wrap" width="100%">
           <Grid2 size={{ xs: 4 }} align="start">
             <Typography display="inline" sx={{ flexShrink: 0, align: "start" }}>
-              {keyword("dbkf_text_title")}
+              {keyword("dbkf_media_title")}
             </Typography>
           </Grid2>
           <Grid2 size={{ xs: 8 }} align="start">
