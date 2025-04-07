@@ -103,8 +103,8 @@ const Assistant = () => {
   const prevFactChecksFailState = useSelector(
     (state) => state.assistant.previousFactChecksFail,
   );
-  const prevFactChecksResults = useSelector(
-    (state) => state.assistant.previousFactChecksResults,
+  const prevFactChecksResult = useSelector(
+    (state) => state.assistant.prevFactChecksResult,
   );
   const subjectivityFailState = useSelector(
     (state) => state.assistant.subjectivityFail,
@@ -225,7 +225,7 @@ const Assistant = () => {
               {dbkfTextMatch ||
               dbkfImageResult ||
               dbkfVideoMatch ||
-              prevFactChecksResults ? (
+              prevFactChecksResult ? (
                 <Grid2
                   size={{ xs: 12 }}
                   className={classes.assistantGrid}

@@ -13,7 +13,7 @@ import Tabs from "@mui/material/Tabs";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { WarningOutlined } from "@mui/icons-material";
+import { WarningAmber } from "@mui/icons-material";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -31,17 +31,12 @@ import AssistantTextSpanClassification from "./AssistantTextSpanClassification";
 import TextFooter from "./TextFooter.jsx";
 import { treeMapToElements } from "./assistantUtils";
 
-// import { ROLES } from "constants/roles";
-
 const AssistantTextResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const expandMinimiseText = keyword("expand_minimise_text");
 
   const classes = useMyStyles();
   const dispatch = useDispatch();
-
-  // // checking if user logged in
-  // const role = useSelector((state) => state.userSession.user.roles);
 
   // assistant media states
   const text = useSelector((state) => state.assistant.urlText);
@@ -50,9 +45,9 @@ const AssistantTextResult = () => {
   const [textHtmlOutput, setTextHtmlOutput] = useState(null);
 
   // third party check states
-  const dbkfMatch = useSelector((state) => state.assistant.dbkfTextMatch);
+  const dbkfTextMatch = null; //useSelector((state) => state.assistant.dbkfTextMatch);
   const mtLoading = useSelector((state) => state.assistant.mtLoading);
-  const dbkfMatchLoading = useSelector(
+  const dbkfTextMatchLoading = useSelector(
     (state) => state.assistant.dbkfTextMatchLoading,
   );
 
@@ -135,6 +130,11 @@ const AssistantTextResult = () => {
     (state) => state.assistant.machineGeneratedTextSentencesFail,
   );
 
+  // previous fact-checks
+  const prevFactChecksResult = useSelector(
+    (state) => state.assistant.prevFactChecksResult,
+  );
+
   // display states
   const textBox = document.getElementById("element-to-check");
   const [expanded, setExpanded] = useState(false);
@@ -192,12 +192,13 @@ const AssistantTextResult = () => {
         className={classes.assistantCardHeader}
         title={keyword("text_title")}
         action={
-          // top left warning and tooltip
+          // top right warning and tooltip
           <div style={{ display: "flex" }}>
-            {/* <div hidden={dbkfMatch === null && (prevFactChecksResult && prevFactChecksResult.length < 1)}> */}
-            <div hidden={dbkfMatch === null}>
+            <div
+              hidden={dbkfTextMatch === null && prevFactChecksResult === null}
+            >
               <Tooltip title={keyword("text_warning")}>
-                <WarningOutlined
+                <WarningAmber
                   color={"warning"}
                   className={classes.toolTipWarning}
                   sx={{ cursor: "pointer" }}
@@ -233,7 +234,7 @@ const AssistantTextResult = () => {
           </div>
         }
       />
-      {dbkfMatchLoading && mtLoading && (
+      {dbkfTextMatchLoading && mtLoading && (
         <LinearProgress variant={"indeterminate"} color={"secondary"} />
       )}
       <CardContent
@@ -272,7 +273,6 @@ const AssistantTextResult = () => {
               {...a11yProps(4)}
               disabled={subjectivityFail || subjectivityLoading}
             />
-            {/* {role.includes(BETA_TESTER) ? */}
             <Tab
               label={machineGeneratedTextTitle}
               {...a11yProps(5)}
@@ -283,7 +283,6 @@ const AssistantTextResult = () => {
                 machineGeneratedTextSentencesLoading
               }
             />
-            {/* : null } */}
           </Tabs>
 
           {/* extracted raw text */}
@@ -398,7 +397,6 @@ const AssistantTextResult = () => {
           </CustomTabPanel>
 
           {/* machine generated text */}
-          {/* {role.includes(BETA_TESTER) ? */}
           <CustomTabPanel value={textTabIndex} index={5}>
             {machineGeneratedTextChunksDone &&
               machineGeneratedTextSentencesDone && (
@@ -421,7 +419,6 @@ const AssistantTextResult = () => {
                 />
               )}
           </CustomTabPanel>
-          {/* : null } */}
         </Collapse>
 
         {/* footer */}

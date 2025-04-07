@@ -590,7 +590,12 @@ function* handlePrevFactChecksCall(action) {
       );
 
       yield put(
-        setPrevFactChecksDetails(result.fact_checks, false, true, false),
+        setPrevFactChecksDetails(
+          result.fact_checks.length > 0 ? result.fact_checks : null,
+          false,
+          true,
+          false,
+        ),
       );
     }
   } catch (error) {
