@@ -167,6 +167,10 @@ export const useProcessKeyframes = () => {
             : currentStatus;
         const statusPercentage = currentStatus.split(":").pop();
 
+        if (statusMessage.includes("failed")) {
+          throw new Error(statusMessage);
+        }
+
         setStatus(`Processing... ${statusMessage} ${statusPercentage}%`);
 
         if (currentStatus !== "completed:::100") {
@@ -426,8 +430,21 @@ export const useProcessKeyframes = () => {
     }
   };
 
+  const resetFetchingKeyframes = () => {
+    sendUrlMutationOld.reset();
+    checkStatusMutationOld.reset();
+    fetchDataMutationOld.reset();
+
+    sendUrlMutation.reset();
+    checkStatusMutation.reset();
+    fetchDataMutation.reset();
+
+    setStatus(null);
+  };
+
   return {
     executeProcess,
+    resetFetchingKeyframes,
     status, //Keyframes status
     isPending:
       sendUrlMutationOld.isPending ||
