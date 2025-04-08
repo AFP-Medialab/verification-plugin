@@ -147,7 +147,15 @@ export const useProcessKeyframes = () => {
     mutationFn: async (jobId) => {
       let currentStatus;
 
+      // Sometimes the API can return an empty status. We retry polling the status up to 3 times.
+      let emptyStatusTriesNumber = 0;
+      const EMPTY_STATUS_MAX_TRIES = 3;
+
       do {
+        if (emptyStatusTriesNumber > EMPTY_STATUS_MAX_TRIES) {
+          throw new Error("Empty status. Try again.");
+        }
+
         const config = {
           method: "get",
           url: `${process.env.REACT_APP_KEYFRAME_API_2}/status/${jobId}`,
@@ -171,7 +179,12 @@ export const useProcessKeyframes = () => {
           throw new Error(statusMessage);
         }
 
-        setStatus(`Processing... ${statusMessage} ${statusPercentage}%`);
+        if (!statusMessage) {
+          emptyStatusTriesNumber++;
+          setStatus(`Processing... Trying to retrieve the status`);
+        } else {
+          setStatus(`Processing... ${statusMessage} ${statusPercentage}%`);
+        }
 
         if (currentStatus !== "completed:::100") {
           await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 3s before next check
