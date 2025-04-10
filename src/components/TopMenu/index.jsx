@@ -123,8 +123,8 @@ const TopMenu = ({ topMenuItems }) => {
                     height: "auto",
                     width: "100%",
                     minWidth: "24px",
-                    maxWidth: "60px",
-                    maxHeight: "60px",
+                    maxWidth: "48px",
+                    maxHeight: "48px",
                   }}
                   alt="logo"
                   className={classes.logoLeft}
@@ -136,8 +136,8 @@ const TopMenu = ({ topMenuItems }) => {
                     height: "auto",
                     width: "200%",
                     minWidth: "48px",
-                    maxWidth: "120px",
-                    maxHeight: "60px",
+                    maxWidth: "96px",
+                    maxHeight: "48px",
                   }}
                   alt="logo"
                   className={classes.logoLeft}
@@ -149,8 +149,8 @@ const TopMenu = ({ topMenuItems }) => {
                   height: "auto",
                   width: "100%",
                   minWidth: "24px",
-                  maxWidth: "60px",
-                  maxHeight: "60px",
+                  maxWidth: "48px",
+                  maxHeight: "48px",
                 }}
                 alt="logo"
                 className={classes.logoRight}
