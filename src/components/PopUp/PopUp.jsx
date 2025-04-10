@@ -30,7 +30,33 @@ const PopUp = () => {
   const [pageUrl, setPageUrl] = useState(null);
 
   const urlOpenAssistant = () => {
-    window.open("/popup.html#/app/assistant/" + encodeURIComponent(pageUrl));
+    // window.open("/popup.html#/app/assistant/" + encodeURIComponent(pageUrl));
+    console.log("CLICK");
+    try {
+      // Execute script in the currently active tab
+      chrome.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
+        const result = chrome.scripting
+          .executeScript({
+            target: { tabId: tabs[0].id },
+            func: () => {
+              // This code runs in the content script context
+              return document.documentElement.outerHTML;
+            },
+          })
+          .then((result) => {
+            console.log("result", result);
+            console.log("result", result[0].result);
+          });
+
+        // if (result && result.length > 0 && result[0].result) {
+        //   console.log('Page Source:', result[0].result);
+        // } else {
+        //   console.log('Could not retrieve page source.');
+        // }
+      });
+    } catch (error) {
+      console.error("Error getting page source:", error);
+    }
   };
 
   const userAuthenticated = useSelector(
