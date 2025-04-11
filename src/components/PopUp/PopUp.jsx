@@ -17,7 +17,6 @@ import { theme } from "../../theme";
 import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg?url";
 import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg?url";
 import LogoVeraBlack from "../NavBar/images/SVG/Navbar/vera-logo_black.svg?url";
-import LogoVeraWhite from "../NavBar/images/SVG/Navbar/vera-logo_white.svg?url";
 
 const navigator = window.browser ? window.browser : window.chrome;
 
@@ -123,7 +122,7 @@ const PopUp = () => {
               </Grid2>
               <Grid2 size={{ xs: 6 }}>
                 <img
-                  src={resolvedMode === "light" ? LogoVeraBlack : LogoVeraWhite}
+                  src={LogoVeraBlack}
                   alt={"logo_vera"}
                   style={{ width: "100px" }}
                 />
@@ -145,7 +144,7 @@ const PopUp = () => {
               </Grid2>
               <Grid2 size={{ xs: 5 }}>
                 <img
-                  src={resolvedMode === "light" ? LogoVeraBlack : LogoVeraWhite}
+                  src={LogoVeraBlack}
                   alt={"logo_vera"}
                   style={{ width: "100px" }}
                 />
