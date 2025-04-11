@@ -34,6 +34,7 @@
     "@tanstack/react-query": "^5.61.5",
     "@tanstack/react-query-devtools": "^5.61.5",
     "@types/chrome": "^0.0.272",
+    "@uswriting/exiftool": "^1.0.3",
     "@wavesurfer/react": "^1.0.7",
     "@webrecorder/awp-sw": "^0.5.3",
     "attr-accept": "^2.2.5",

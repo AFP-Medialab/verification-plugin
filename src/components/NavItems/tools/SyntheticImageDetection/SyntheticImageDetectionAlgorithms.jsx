@@ -92,6 +92,27 @@ export const itwSpaiMever = new SyntheticImageDetectionAlgorithm(
   [ROLES.EVALUATION, ROLES.EXTRA_FEATURE],
 );
 
+export const sd21BfreeDino2reg4Grip = new SyntheticImageDetectionAlgorithm(
+  "sd21_bfree-dino2reg4_grip",
+  "synthetic_image_detection_sd21_bfree-dino2reg4_grip_name",
+  "synthetic_image_detection_sd21_bfree-dino2reg4_grip_description",
+  [ROLES.EVALUATION, ROLES.EXTRA_FEATURE],
+);
+
+export const multiBfreeDino2reg4Grip = new SyntheticImageDetectionAlgorithm(
+  "multi_bfree-dino2reg4_grip",
+  "synthetic_image_detection_multi_bfree-dino2reg4_grip_name",
+  "synthetic_image_detection_multi_bfree-dino2reg4_grip_description",
+  [ROLES.EVALUATION, ROLES.EXTRA_FEATURE],
+);
+
+export const sd21BfreeSiglipGrip = new SyntheticImageDetectionAlgorithm(
+  "sd21_bfree-siglip_grip",
+  "synthetic_image_detection_sd21_bfree-siglip_grip_name",
+  "synthetic_image_detection_sd21_bfree-siglip_grip_description",
+  [ROLES.EVALUATION, ROLES.EXTRA_FEATURE],
+);
+
 /**
  * The list of the synthetic image detection algorithms
  * TODO:Use SET
@@ -107,6 +128,9 @@ export const syntheticImageDetectionAlgorithms = [
   ldmR50Mever,
   itwRineMever,
   itwSpaiMever,
+  sd21BfreeDino2reg4Grip,
+  multiBfreeDino2reg4Grip,
+  sd21BfreeSiglipGrip,
 ];
 
 /**

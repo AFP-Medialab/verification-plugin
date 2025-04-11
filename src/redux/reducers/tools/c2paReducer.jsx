@@ -33,7 +33,7 @@ const c2paSlice = createSlice({
     c2paLoadingSet(state, action) {
       state.loading = action.payload;
     },
-    resetC2paState(state, action) {
+    resetC2paState(state) {
       state.result = null;
       state.url = null;
       state.currentManifest = null;
@@ -45,7 +45,7 @@ const c2paSlice = createSlice({
       state.currentHdImageId = null;
       state.mainHdImageId = null;
     },
-    c2paIngredientResultCleaned(state, action) {
+    c2paIngredientResultCleaned(state) {
       state.ingredientResult = null;
     },
     c2paValidationIssuesSet(state, action) {

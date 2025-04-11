@@ -52,7 +52,7 @@ const Tutorial = () => {
   }
 
   return (
-    <Paper className={classes.root}>
+    <Paper variant="outlined" className={classes.root}>
       <Box justifyContent="center" display="flex" flexDirection="column">
         <CustomTile text={keyword("tuto_title")} />
         <Box m={1} />

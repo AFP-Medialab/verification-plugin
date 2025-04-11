@@ -28,7 +28,7 @@ export const useVideoSimilarity = (url, keyword) => {
         })
         .catch((error) => {
           //handleError("keyframes_error_VIDEO_SIMILARITY");
-          //console.error(error);
+          console.error(error);
           dispatch(setKeyframesSimilarityLoading(false));
         });
     };

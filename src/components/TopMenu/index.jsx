@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
+import { useMediaQuery } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Divider from "@mui/material/Divider";
 import Grid2 from "@mui/material/Grid2";
@@ -20,6 +21,7 @@ import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 import { toolsHome } from "../../constants/tools";
 import { selectTopMenuItem } from "../../redux/reducers/navReducer";
 import { resetToolSelected } from "../../redux/reducers/tools/toolReducer";
+import { theme } from "../../theme";
 import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg";
 import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg";
 import LogoVera from "../NavBar/images/SVG/Navbar/vera-logo_black.svg";
@@ -61,10 +63,6 @@ const TopMenu = ({ topMenuItems }) => {
     };
   };
 
-  const [matchesSmallWidth, setMatchesSmallWidth] = useState(
-    window.matchMedia("(max-width: 800px)").matches,
-  );
-
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const handleMenuClick = () => {
@@ -75,17 +73,12 @@ const TopMenu = ({ topMenuItems }) => {
     setIsPanelOpen(false);
   };
 
-  useEffect(() => {
-    window
-      .matchMedia("(max-width: 800px)")
-      .addEventListener("change", (e) => setMatchesSmallWidth(e.matches));
-  }, []);
+  const isDisplayMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
     <AppBar
       position="fixed"
       sx={{
-        minWidth: "600px",
         p: 0,
         width: "100%",
       }}
@@ -105,19 +98,33 @@ const TopMenu = ({ topMenuItems }) => {
           width="100%"
           height="100%"
           flexWrap="nowrap"
+          minHeight="86px"
         >
-          <Grid2 size={{ xs: 2 }} height="100%">
+          <Grid2
+            size={{ xs: 2 }}
+            height="100%"
+            display="flex"
+            alignItems="center"
+            justifyContent="start"
+          >
             <Stack
               direction="row"
               alignItems="center"
-              spacing={{ sm: 1, md: 2 }}
+              justifyContent="start"
+              spacing={1}
+              sx={{
+                width: "100%",
+                height: "auto",
+              }}
             >
               {LOGO_EU ? (
                 <LogoEuCom
                   style={{
                     height: "auto",
-                    minWidth: "48px",
-                    width: { sm: "48px", md: "80px" },
+                    width: "100%",
+                    minWidth: "24px",
+                    maxWidth: "48px",
+                    maxHeight: "48px",
                   }}
                   alt="logo"
                   className={classes.logoLeft}
@@ -127,8 +134,10 @@ const TopMenu = ({ topMenuItems }) => {
                 <LogoInVidWeverify
                   style={{
                     height: "auto",
-                    minWidth: "96px",
-                    width: { sm: "96px", md: "96px" },
+                    width: "200%",
+                    minWidth: "48px",
+                    maxWidth: "96px",
+                    maxHeight: "48px",
                   }}
                   alt="logo"
                   className={classes.logoLeft}
@@ -138,8 +147,10 @@ const TopMenu = ({ topMenuItems }) => {
               <LogoVera
                 style={{
                   height: "auto",
-                  minWidth: "48px",
-                  width: { sm: "48px", md: "80px" },
+                  width: "100%",
+                  minWidth: "24px",
+                  maxWidth: "48px",
+                  maxHeight: "48px",
                 }}
                 alt="logo"
                 className={classes.logoRight}
@@ -147,7 +158,14 @@ const TopMenu = ({ topMenuItems }) => {
               />
             </Stack>
           </Grid2>
-          <Grid2 size={{ xs: 1, sm: "grow" }}>
+          <Grid2
+            size={{ xs: 1, sm: "grow" }}
+            pl={isDisplayMobile ? 4 : 0}
+            pr={isDisplayMobile ? 4 : 0}
+            sx={{
+              width: "-webkit-fill-available",
+            }}
+          >
             <Tabs
               value={topMenuItemSelected}
               variant="scrollable"
@@ -159,33 +177,27 @@ const TopMenu = ({ topMenuItems }) => {
               TabIndicatorProps={{
                 style: { display: "none" },
               }}
-              sx={
-                matchesSmallWidth
-                  ? {
-                      color: "black",
-                      maxWidth: "33vw",
-                    }
-                  : { color: "black" }
-              }
+              sx={{
+                color: "var(--mui-palette-text-primary)",
+              }}
             >
-              {topMenuItems.map((item, index) => {
-                return (
-                  <Tab
-                    key={index}
-                    label={keyword(item.title)}
-                    icon={<item.icon sx={iconConditionalStyling(item.title)} />}
-                    to={item.path}
-                    component={Link}
-                    sx={{
-                      minWidth: "100px",
-                      fontSize: "1rem",
-                    }}
-                    value={item.title}
-                  />
-                );
-              })}
+              {topMenuItems.map((item, index) => (
+                <Tab
+                  key={index}
+                  label={keyword(item.title)}
+                  icon={<item.icon sx={iconConditionalStyling(item.title)} />}
+                  to={item.path}
+                  component={Link}
+                  sx={{
+                    minWidth: "100px",
+                    fontSize: "1rem",
+                  }}
+                  value={item.title}
+                />
+              ))}
             </Tabs>
           </Grid2>
+
           <Grid2>
             <Stack
               direction="row"

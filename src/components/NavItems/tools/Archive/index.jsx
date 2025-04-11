@@ -51,7 +51,7 @@ const Archive = () => {
 
   const [urlResults, setUrlResults] = useState(false);
 
-  const [fileToUpload, setFileToUpload] = useState(/** @type {File?} */ null);
+  const [fileToUpload, setFileToUpload] = useState(/** @type {?File} */ null);
 
   const [archiveLinks, setArchiveLinks] = useState([]);
 

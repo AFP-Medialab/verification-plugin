@@ -288,6 +288,7 @@ const ToolsMenu = () => {
           indicatorColor={"primary"}
           variant="scrollable"
           scrollButtons="auto"
+          allowScrollButtonsMobile
         >
           {categoriesAllowedForUser.map((category, index) => {
             //  if(category.value.length !==0){

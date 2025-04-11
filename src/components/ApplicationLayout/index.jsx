@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -28,8 +29,14 @@ const ApplicationLayout = () => {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
+  const currentLang = useSelector((state) => state.language);
+
+  // Set UI direction based on language reading direction
+  const direction = currentLang !== "ar" ? "ltr" : "rtl";
+
   const theme = {
     ...defaultTheme,
+    direction: direction,
     typography: {
       fontSize: fontSize,
     },

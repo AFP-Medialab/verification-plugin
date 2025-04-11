@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
+import CircularProgress from "@mui/material/CircularProgress";
+import Fade from "@mui/material/Fade";
 import Stack from "@mui/material/Stack";
 
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
@@ -14,7 +16,6 @@ import {
 } from "@Shared/Utils/fileUtils";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
-import exifr from "exifr";
 
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { imageMetadata as imageMetadataTool } from "../../../../constants/tools";
@@ -25,13 +26,16 @@ import {
 } from "../../../../redux/reducers/tools/metadataReducer";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
-import useVideoTreatment from "./Hooks/useVideoTreatment";
 import MetadataImageResult from "./Results/MetadataImageResult";
 import MetadataVideoResult from "./Results/MetadataVideoResult";
+import {
+  getImageMetadataFromFile,
+  getImageMetadataFromUrl,
+} from "./api/imageMetadataApi";
+import { useVideoMetadataMutation } from "./hooks/useVideoMetadataMutation";
 
 const Metadata = () => {
   const { url, type } = useParams();
-  const location = useLocation();
 
   const keyword = i18nLoadNamespace("components/NavItems/tools/Metadata");
 
@@ -49,7 +53,7 @@ const Metadata = () => {
 
   const [input, setInput] = useState(resultUrl ? resultUrl : "");
   const [fileInput, setFileInput] = useState(null);
-  const [imageUrl, setImageurl] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
   const [urlDetected, setUrlDetected] = useState(false);
   const [error, setError] = useState(false);
@@ -57,17 +61,6 @@ const Metadata = () => {
   const [imageMetadata, setImageMetadata] = useState(
     resultData ? resultData : null,
   );
-
-  const exifrOptions = {
-    exif: true,
-    gps: true,
-    iptc: true,
-    jfif: true,
-    tiff: true,
-    mergeOutput: false,
-  };
-
-  useVideoTreatment(videoUrl, keyword);
 
   const client_id = getclientId();
   useTrackEvent(
@@ -89,52 +82,30 @@ const Metadata = () => {
     uid,
   );
 
-  async function getImageMetadataFromUrl(url) {
-    try {
-      // Validate the URL format
-      if (!url || typeof url !== "string" || !/^https?:\/\//.test(url)) {
-        return new Error("Invalid URL provided");
-      }
+  const getVideoMetadata = useVideoMetadataMutation({
+    onSuccess: (data) => {
+      dispatch(
+        setMetadataResult({
+          url: videoUrl,
+          result: data instanceof Error ? null : data,
+          notification: false,
+          loading: false,
+          isImage: false,
+        }),
+      );
+    },
+  });
 
-      // Fetch the image
-      const response = await fetch(url);
-
-      // Check for a successful response
-      if (!response.ok) {
-        return new Error(
-          `Failed to fetch image: ${response.status} ${response.statusText}`,
-        );
-      }
-
-      // Check if the content-type is an image
-      const contentType = response.headers.get("Content-Type");
-      if (!contentType || !contentType.startsWith("image/")) {
-        return new Error("The provided URL is not an image");
-      }
-
-      // Convert response to a Blob
-      const blob = await response.blob();
-
-      // Extract metadata using exifr
-      const metadata = await exifr.parse(blob, exifrOptions);
-
-      // Handle missing metadata
-      if (!metadata) {
-        return new Error("No EXIF metadata found in the image");
-      }
-
-      return metadata;
-    } catch (error) {
-      console.error("Error extracting metadata:", error.message);
-      return null; // Return null instead of throwing to prevent app crashes
-    }
-  }
-
-  const submitUrl = async () => {
-    // Reset state
-    cleanMetadataState();
+  const resetMetadataState = () => {
+    dispatch(cleanMetadataState());
+    getVideoMetadata.reset();
     setImageMetadata(null);
     setError(false);
+    setImageUrl(null);
+  };
+
+  const submitUrl = async () => {
+    resetMetadataState();
 
     try {
       if (!input && !fileInput) {
@@ -146,19 +117,27 @@ const Metadata = () => {
         ? await getFileTypeFromUrl(input)
         : await getFileTypeFromFileObject(fileInput);
 
-      if (!fileType) {
+      if (!fileType || fileType instanceof Error) {
         throw new Error("Unable to determine file type");
+      }
+
+      if (fileType.mime.includes("video")) {
+        const video = input || URL.createObjectURL(fileInput);
+
+        setVideoUrl(video);
+        getVideoMetadata.mutate(video);
+        return;
       }
 
       if (fileType.mime.includes("image")) {
         // Set the image URL
         const imageUrl = input || URL.createObjectURL(fileInput);
-        setImageurl(imageUrl);
+        setImageUrl(imageUrl);
 
         // Extract metadata
         const metadata = input
           ? await getImageMetadataFromUrl(input)
-          : await exifr.parse(fileInput, exifrOptions);
+          : await getImageMetadataFromFile(fileInput);
 
         setImageMetadata(metadata instanceof Error ? null : metadata);
 
@@ -175,11 +154,6 @@ const Metadata = () => {
         return;
       }
 
-      if (fileType.mime.includes("video")) {
-        setVideoUrl(input || URL.createObjectURL(fileInput));
-        return;
-      }
-
       throw new Error("Unsupported file type");
     } catch (error) {
       console.error("Error in submitUrl:", error.message);
@@ -188,11 +162,7 @@ const Metadata = () => {
   };
 
   useEffect(() => {
-    setVideoUrl(null);
-  }, [videoUrl]);
-
-  useEffect(() => {
-    setImageurl(null);
+    setImageUrl(null);
   }, [imageUrl]);
 
   useEffect(() => {
@@ -202,22 +172,7 @@ const Metadata = () => {
     }
   }, [urlDetected]);
 
-  const [initTool, setInitTool] = useState(true);
-
   const dispatch = useDispatch();
-
-  if (initTool) {
-    if (location.state != null) {
-      if (location.state.media === "image") {
-        dispatch(setMetadataMediaType("image"));
-      } else if (location.state.media === "video") {
-        dispatch(setMetadataMediaType("video"));
-      }
-    } else {
-      // console.log(mediaType);
-    }
-    setInitTool(false);
-  }
 
   useEffect(() => {
     if (url && url !== KNOWN_LINKS.OWN) {
@@ -243,6 +198,7 @@ const Metadata = () => {
 
   const handleCloseFile = () => {
     setFileInput(null);
+    resetMetadataState();
   };
 
   return (
@@ -289,21 +245,30 @@ const Metadata = () => {
 
       {error && <Alert severity="error">{error}</Alert>}
 
-      {resultData ? (
-        resultIsImage ? (
-          <MetadataImageResult
-            result={resultData}
-            metadata={imageMetadata}
-            closeResult={handleCloseResult}
-            imageSrc={resultUrl}
-          />
-        ) : (
-          <MetadataVideoResult
-            result={resultData}
-            closeResult={handleCloseResult}
-          />
-        )
-      ) : null}
+      {getVideoMetadata.isPending && (
+        <Fade in={getVideoMetadata.isPending} timeout={750}>
+          <Alert icon={<CircularProgress size={20} />} severity="info">
+            {"Loading..."}
+          </Alert>
+        </Fade>
+      )}
+
+      {getVideoMetadata.isError && (
+        <Alert severity="error">{keyword("metadata_generic_error")}</Alert>
+      )}
+
+      {resultData && !resultIsImage && resultUrl && (
+        <MetadataVideoResult metadata={resultData} videoSrc={resultUrl} />
+      )}
+
+      {resultData && resultIsImage && (
+        <MetadataImageResult
+          result={resultData}
+          metadata={imageMetadata}
+          closeResult={handleCloseResult}
+          imageSrc={resultUrl}
+        />
+      )}
     </Box>
   );
 };

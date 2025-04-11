@@ -1,10 +1,11 @@
+import React from "react";
+
 import { DatePicker, DateTimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
-import moment from "moment-timezone";
 
 /**
- * date and time picjer or just date picker, with a first and a second date
- * @param {boolean} time determines wheter or not the user also picks the time
+ * date and time picker or just date picker, with a first and a second date
+ * @param {boolean} time determines whether the user also picks the time
  * @param {boolean} disabled
  * @param {string} keywordFromDate
  * @param {string} keywordUntilDate

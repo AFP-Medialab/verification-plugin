@@ -22,18 +22,8 @@ const About = () => {
   const keyword = i18nLoadNamespace("components/NavItems/About");
   const currentLang = useSelector((state) => state.language);
 
-  const additionalDangerousContent = () => {
-    let res = [];
-    let cpt = 1;
-    while (keyword("additional_about_" + cpt) !== "") {
-      res.push("additional_about_" + cpt);
-      cpt++;
-    }
-    return res;
-  };
-
   return (
-    <Paper className={classes.root}>
+    <Paper variant="outlined" className={classes.root}>
       <Box
         justifyContent="center"
         display="flex"
@@ -55,15 +45,6 @@ const About = () => {
           <Link href={"mailto:" + keyword("invid_email")}>
             {keyword("invid_email")}
           </Link>
-          {/*
-                        keyword("feedBack_part_2")
-                    }
-                    {
-                            keyword("feedback_widget")
-                    }
-                    {
-                        keyword("feedback_part_3")
-                    */}
         </Typography>
         <Box m={3} />
         <Typography variant={"h6"}>{keyword("disclaimer")}</Typography>
@@ -85,7 +66,6 @@ const About = () => {
           <Link target="_blank" href={keyword("info_invid_link_twitter")}>
             {keyword("twitter")}
           </Link>
-          {/*keyword("info_weverify_part_3")*/}
         </Typography>
         <Typography variant={"body2"} align={"justify"}>
           {keyword("info_invid_part_1")}
@@ -127,15 +107,6 @@ const About = () => {
             {keyword("arij_link_label")}
           </Link>
         </Typography>
-        {/*additionalDangerousContent().map((value, key) => {
-          return (
-            <div
-              className={"content"}
-              key={key}
-              dangerouslySetInnerHTML={{ __html: value }}
-            ></div>
-          );
-        })*/}
       </Box>
       <Grid2
         container

@@ -78,7 +78,7 @@ const Interactive = () => {
   };
 
   return (
-    <Paper className={classes.root}>
+    <Paper variant="outlined" className={classes.root}>
       <Box justifyContent="center" display="flex" flexDirection="column">
         <CustomTile text={keyword("quiz_title")} />
         {carousel.map((obj, key) => {
