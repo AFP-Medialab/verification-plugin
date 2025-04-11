@@ -279,16 +279,15 @@ chrome.webNavigation.onCommitted.addListener(async () => {
   }
 });
 
-chrome.runtime.onMessage.addListener(
-  async function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  (async (request) => {
     const jp = require("jsonpath");
-    if (request.greeting == "nfokho") {
-      console.log("wzik");
+    if (request.prompt === "getTweets") {
       const t = await db.tweets.toArray();
-      console.log(t.length);
       console.log(t);
       const ts = jp.query(t, "$..tweet_results");
       let x = ts.map((ent) => ({
+        id: jp.query(ent, "$.result..rest_id")[0],
         username: "@" + jp.query(ent, "$..user_results..screen_name")[0],
         display_name: jp.query(ent, "$..user_results..name")[0],
         tweet_text: jp.query(ent, "$..full_text")[0],
@@ -296,17 +295,21 @@ chrome.runtime.onMessage.addListener(
           .query(ent, "$..result.legacy.entities.urls")
           .flat(1)
           .map((obj) => (obj.expanded_url ? obj.expanded_url : {})),
-        date: jp.query(ent, "$..created_at")[0],
+        date: jp.query(ent, "$.result.legacy.created_at")[0],
         likes: jp.query(ent, "$..favorite_count")[0],
         quotes: jp.query(ent, "$..quote_count")[0],
         retweets: jp.query(ent, "$..retweet_count")[0],
         replies: jp.query(ent, "$..reply_count")[0],
       }));
-      console.log(x);
       console.log(x.filter((v) => v.links.length > 0));
+      sendResponse(x);
+    } else if (request.prompt === "viewTweets") {
+      const t = await db.tweets.toArray();
+      console.log(t);
     }
-  },
-);
+  })(request);
+  return true;
+});
 
 chrome.runtime.onMessageExternal.addListener(
   async function (request, sender, sendResponse) {

@@ -11,6 +11,7 @@ import {
 
 import { FOOTER_TYPES, Footer } from "@Shared/Footer/Footer";
 import C2paData from "components/NavItems/tools/C2pa/C2pa";
+import TwitterSnaV2 from "components/NavItems/tools/TwitterSna/TwitterSnaV2";
 
 import CsvSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/CSV_SNA.svg";
 import TwitterSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/Twitter_sna.svg";
@@ -542,6 +543,19 @@ const dataAnalysisCrowdtangle = new Tool(
   null,
 );
 
+export const dataAnalysisSnaV2 = new Tool(
+  "navbar_twitter_sna_v2",
+  "navbar_twitter_sna_description_v2",
+  twitterSnaSvgIcon,
+  TOOLS_CATEGORIES.DATA_ANALYSIS,
+  [TOOL_STATUS_ICON.LOCK],
+  [ROLES.REGISTERED_USER],
+  "twitterSnaV2",
+  TOOL_GROUPS.VERIFICATION,
+  <TwitterSnaV2 />,
+  <Footer type={FOOTER_TYPES.USFD_AFP_EU_DISINFOLAB} />,
+);
+
 /**
  * Other tools
  **/
@@ -612,6 +626,7 @@ export const tools = Object.freeze([
   searchXnetwork,
   dataAnalysisSna,
   dataAnalysisCrowdtangle,
+  dataAnalysisSnaV2,
   archiving,
   about,
   c2paData,

@@ -78,7 +78,7 @@ const PopUp = () => {
   };
 
   const sendMessage = () => {
-    chrome.runtime.sendMessage({ greeting: "nfokho" });
+    chrome.runtime.sendMessage({ prompt: "viewTweets" });
   };
 
   useEffect(() => {
