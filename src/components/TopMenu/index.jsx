@@ -5,10 +5,14 @@ import { Link, useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Divider from "@mui/material/Divider";
 import Grid2 from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Toolbar from "@mui/material/Toolbar";
+import Tooltip from "@mui/material/Tooltip";
+
+import { Settings } from "@mui/icons-material";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
@@ -19,9 +23,8 @@ import { resetToolSelected } from "../../redux/reducers/tools/toolReducer";
 import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg";
 import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg";
 import LogoVera from "../NavBar/images/SVG/Navbar/vera-logo_black.svg";
-import Languages from "../NavItems/languages/languages";
 import AdvancedTools from "../NavItems/tools/Alltools/AdvancedTools/AdvancedTools";
-import ColorModeSelect from "./ColorModeSelect";
+import SettingsDrawer from "./SettingsDrawer";
 
 const TopMenu = ({ topMenuItems }) => {
   const classes = useMyStyles();
@@ -61,6 +64,16 @@ const TopMenu = ({ topMenuItems }) => {
   const [matchesSmallWidth, setMatchesSmallWidth] = useState(
     window.matchMedia("(max-width: 800px)").matches,
   );
+
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+
+  const handleMenuClick = () => {
+    setIsPanelOpen(!isPanelOpen);
+  };
+
+  const handleClosePanel = () => {
+    setIsPanelOpen(false);
+  };
 
   useEffect(() => {
     window
@@ -181,13 +194,21 @@ const TopMenu = ({ topMenuItems }) => {
               alignItems="center"
             >
               <AdvancedTools />
-              <Languages />
-              <ColorModeSelect />
+
+              <Tooltip title={"Settings"}>
+                <IconButton sx={{ p: 1 }} onClick={handleMenuClick}>
+                  <Settings />
+                </IconButton>
+              </Tooltip>
             </Stack>
           </Grid2>
         </Grid2>
       </Toolbar>
       <Divider sx={{ width: "100%" }} />
+      <SettingsDrawer
+        isPanelOpen={isPanelOpen}
+        handleClosePanel={handleClosePanel}
+      />
     </AppBar>
   );
 };
