@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import { Map } from "@mui/icons-material";
 
 import { TabContext, TabList, TabPanel } from "@mui/lab";
+import _ from "lodash";
 
 import { i18nLoadNamespace } from "../Languages/i18nLoadNamespace";
 import { prettyCase } from "../Utils/stringUtils";
@@ -22,9 +23,34 @@ const MetadataList = ({ metadata }) => {
     Object.keys(metadata).length ? Object.keys(metadata).sort()[0] : false,
   );
 
+  /**
+   * Put UserData first in the array if it exists
+   * @param arr {String[]}
+   * @returns {String[]}
+   */
+  const moveUserDataToFirstPositionInArray = (arr) => {
+    // Copy the array to prevent modifying it directly
+    const arrCopy = _.clone(arr);
+
+    let udIndex;
+    for (let i = 0; i < arrCopy.length; i++) {
+      if (arrCopy[i] === "UserData") {
+        udIndex = i;
+      }
+    }
+
+    if (udIndex) {
+      const udItem = arrCopy.splice(udIndex, 1)[0];
+      arrCopy.splice(0, 0, udItem);
+    }
+    return arrCopy;
+  };
+
   // Sync tabValue when metadata updates
   useEffect(() => {
-    const sortedKeys = Object.keys(metadata).sort();
+    let sortedKeys = Object.keys(metadata).sort();
+    sortedKeys = moveUserDataToFirstPositionInArray(sortedKeys);
+
     if (sortedKeys.length) {
       setTabValue(sortedKeys[0]);
     } else {
@@ -87,17 +113,15 @@ const MetadataList = ({ metadata }) => {
                 onChange={handleTabChange}
                 aria-label="Image metadata tabs"
               >
-                {Object.keys(metadata)
-                  .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
-                  .map((item, index) => {
-                    return (
-                      <Tab
-                        label={item.toUpperCase()}
-                        value={item}
-                        key={index}
-                      />
-                    );
-                  })}
+                {moveUserDataToFirstPositionInArray(
+                  Object.keys(metadata).sort(([keyA], [keyB]) =>
+                    keyA.localeCompare(keyB),
+                  ),
+                ).map((item, index) => {
+                  return (
+                    <Tab label={item.toUpperCase()} value={item} key={index} />
+                  );
+                })}
               </TabList>
             </Box>
 
