@@ -609,10 +609,7 @@ function* handleMachineGeneratedTextChunksCall(action) {
   try {
     const text = yield select((state) => state.assistant.urlText);
 
-    // this prevents the call from happening if not correct user status
-    const role = yield select((state) => state.userSession.user.roles);
-
-    if (text && role.includes("BETA_TESTER")) {
+    if (text) {
       yield put(setMachineGeneratedTextChunksDetails(null, true, false, false));
 
       const result = yield call(
@@ -635,10 +632,7 @@ function* handleMachineGeneratedTextSentencesCall(action) {
   try {
     const text = yield select((state) => state.assistant.urlText);
 
-    // this prevents the call from happening if not correct user status
-    const role = yield select((state) => state.userSession.user.roles);
-
-    if (text && role.includes("BETA_TESTER")) {
+    if (text) {
       yield put(
         setMachineGeneratedTextSentencesDetails(null, true, false, false),
       );
