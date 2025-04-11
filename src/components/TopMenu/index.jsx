@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
-import { useMediaQuery } from "@mui/material";
+import { useColorScheme, useMediaQuery } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Divider from "@mui/material/Divider";
 import Grid2 from "@mui/material/Grid2";
@@ -24,7 +24,8 @@ import { resetToolSelected } from "../../redux/reducers/tools/toolReducer";
 import { theme } from "../../theme";
 import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg";
 import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg";
-import LogoVera from "../NavBar/images/SVG/Navbar/vera-logo_black.svg";
+import LogoVeraBlack from "../NavBar/images/SVG/Navbar/vera-logo_black.svg";
+import LogoVeraWhite from "../NavBar/images/SVG/Navbar/vera-logo_white.svg";
 import AdvancedTools from "../NavItems/tools/Alltools/AdvancedTools/AdvancedTools";
 import SettingsDrawer from "./SettingsDrawer";
 
@@ -74,6 +75,9 @@ const TopMenu = ({ topMenuItems }) => {
   };
 
   const isDisplayMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const { systemMode, mode } = useColorScheme();
+  const resolvedMode = systemMode || mode;
 
   return (
     <AppBar
@@ -144,18 +148,34 @@ const TopMenu = ({ topMenuItems }) => {
                   onClick={handleHomeIconClick}
                 />
               )}
-              <LogoVera
-                style={{
-                  height: "auto",
-                  width: "100%",
-                  minWidth: "24px",
-                  maxWidth: "48px",
-                  maxHeight: "48px",
-                }}
-                alt="logo"
-                className={classes.logoRight}
-                onClick={handleHomeIconClick}
-              />
+
+              {resolvedMode === "light" ? (
+                <LogoVeraBlack
+                  style={{
+                    height: "auto",
+                    width: "100%",
+                    minWidth: "24px",
+                    maxWidth: "48px",
+                    maxHeight: "48px",
+                  }}
+                  alt="logo"
+                  className={classes.logoRight}
+                  onClick={handleHomeIconClick}
+                />
+              ) : (
+                <LogoVeraWhite
+                  style={{
+                    height: "auto",
+                    width: "100%",
+                    minWidth: "24px",
+                    maxWidth: "48px",
+                    maxHeight: "48px",
+                  }}
+                  alt="logo"
+                  className={classes.logoRight}
+                  onClick={handleHomeIconClick}
+                />
+              )}
             </Stack>
           </Grid2>
           <Grid2

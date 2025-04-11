@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import { useColorScheme } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid2 from "@mui/material/Grid2";
@@ -15,7 +16,8 @@ import { changeLanguage } from "../../redux/reducers/languageReducer";
 import { theme } from "../../theme";
 import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg?url";
 import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg?url";
-import LogoVera from "../NavBar/images/SVG/Navbar/vera-logo_black.svg?url";
+import LogoVeraBlack from "../NavBar/images/SVG/Navbar/vera-logo_black.svg?url";
+import LogoVeraWhite from "../NavBar/images/SVG/Navbar/vera-logo_white.svg?url";
 
 const navigator = window.browser ? window.browser : window.chrome;
 
@@ -98,6 +100,9 @@ const PopUp = () => {
     }
   }, []);
 
+  const { systemMode, mode } = useColorScheme();
+  const resolvedMode = systemMode || mode;
+
   return (
     <ThemeProvider theme={theme}>
       <div className={classes.popUp}>
@@ -117,7 +122,11 @@ const PopUp = () => {
                 />
               </Grid2>
               <Grid2 size={{ xs: 6 }}>
-                <img src={LogoVera} alt={LogoVera} style={{ width: "100px" }} />
+                <img
+                  src={resolvedMode === "light" ? LogoVeraBlack : LogoVeraWhite}
+                  alt={"logo_vera"}
+                  style={{ width: "100px" }}
+                />
               </Grid2>
             </>
           ) : (
@@ -135,7 +144,11 @@ const PopUp = () => {
                 />
               </Grid2>
               <Grid2 size={{ xs: 5 }}>
-                <img src={LogoVera} alt={LogoVera} style={{ width: "100px" }} />
+                <img
+                  src={resolvedMode === "light" ? LogoVeraBlack : LogoVeraWhite}
+                  alt={"logo_vera"}
+                  style={{ width: "100px" }}
+                />
               </Grid2>
             </>
           )}
