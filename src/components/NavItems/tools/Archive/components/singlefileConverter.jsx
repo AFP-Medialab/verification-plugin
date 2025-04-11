@@ -371,8 +371,8 @@ const SinglefileConverter = (telegramURL) => {
     // Create a sample response
     const url = pageUrl;
     const date = pageDate;
-    // const type = "response";
-    const type = "resource";
+    const type = "response";
+    // const type = "resource";
     const httpHeaders = {
       date: dayjs(),
       "content-type": 'text/html; charset="UTF-8"',
