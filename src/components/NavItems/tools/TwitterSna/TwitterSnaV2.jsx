@@ -144,6 +144,7 @@ const TwitterSnaV2 = () => {
   const [edgeWeight, setEdgeWeight] = useState(0.5);
 
   const inputRef = useRef();
+  const fgRef = useRef();
 
   const required_fields = {
     Object: "objects",
@@ -645,33 +646,31 @@ const TwitterSnaV2 = () => {
       links: e,
     };
     // return (<CommunityForceGraph rawData={data}></CommunityForceGraph>)
-    return <LabeledGraph graphData={data}></LabeledGraph>;
-    //For 2D Graph
-    // return  (
-    //   <>
-
-    //       <CardHeader
-    //                 title="COOR Graph"
-    //               />
-    //       <ForceGraph2D
-    //         width={1400}
-    //         height={700}
-    //         ref={fgRef}
-    //         graphData={data}
-    //         nodeAutoColorBy="id"
-    //         nodeLabel="id"
-    //         nodeCanvasObjectMode={() => 'after'}
-    //         nodeCanvasObject={(node, ctx, globalScale) => {
-    //           const label = node.id;
-    //           const fontSize = 12 / globalScale;
-    //           ctx.font = `${fontSize}px Sans-Serif`;
-    //           ctx.fillStyle = 'black';
-    //           ctx.textAlign = 'center';
-    //           ctx.textBaseline = 'middle';
-    //           ctx.fillText(label, node.x, node.y);
-    //         }}
-    //         />
-    //   </>)
+    // return <LabeledGraph graphData={data}></LabeledGraph>;
+    // For 2D Graph
+    return (
+      <>
+        <CardHeader title="COOR Graph" />
+        <ForceGraph2D
+          width={1400}
+          height={700}
+          ref={fgRef}
+          graphData={data}
+          nodeAutoColorBy="id"
+          nodeLabel="id"
+          nodeCanvasObjectMode={() => "after"}
+          nodeCanvasObject={(node, ctx, globalScale) => {
+            const label = node.id;
+            const fontSize = 12 / globalScale;
+            ctx.font = `${fontSize}px Sans-Serif`;
+            ctx.fillStyle = "black";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(label, node.x, node.y);
+          }}
+        />
+      </>
+    );
   };
 
   return (
@@ -947,14 +946,20 @@ const TwitterSnaV2 = () => {
                         variant="outlined"
                         sx={{ width: "200px" }}
                         value={timeWindow}
-                        onChange={(e) => setTimeWindow(e.target.value)}
+                        onChange={(e) => {
+                          setGraph(false);
+                          setTimeWindow(e.target.value);
+                        }}
                       />
                       <Typography pl={2}> Edge weight:</Typography>
                       <TextField
                         variant="outlined"
                         sx={{ width: "200px" }}
                         value={edgeWeight}
-                        onChange={(e) => setEdgeWeight(e.target.value)}
+                        onChange={(e) => {
+                          setGraph(false);
+                          setEdgeWeight(e.target.value);
+                        }}
                       />
                       <Button
                         variant="outlined"
