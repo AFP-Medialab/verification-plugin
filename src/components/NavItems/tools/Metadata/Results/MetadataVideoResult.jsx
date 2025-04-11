@@ -9,9 +9,6 @@ import Grid2 from "@mui/material/Grid2";
 import MetadataList from "@Shared/MetadataList";
 
 const MetadataVideoResult = ({ metadata, videoSrc }) => {
-  console.log(metadata);
-  console.log(videoSrc);
-
   return (
     <Card variant="outlined">
       <Grid2
@@ -24,7 +21,7 @@ const MetadataVideoResult = ({ metadata, videoSrc }) => {
           p: 4,
         }}
       >
-        <Grid2 item size={{ md: 12, lg: 6 }}>
+        <Grid2 size={{ md: 12, lg: 6 }}>
           <video
             width="100%"
             height="auto"
@@ -40,7 +37,7 @@ const MetadataVideoResult = ({ metadata, videoSrc }) => {
             <source src={videoSrc} type="video/ogg" />
           </video>
         </Grid2>
-        <Grid2 item size={{ md: 12, lg: 6 }}>
+        <Grid2 size={{ md: 12, lg: 6 }}>
           {metadata ? (
             <MetadataList metadata={metadata} />
           ) : (
