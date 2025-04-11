@@ -140,14 +140,19 @@ const TwitterSnaV2 = () => {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [uploadedData, setUploadedData] = useState(null);
 
+  const [timeWindow, setTimeWindow] = useState(60);
+  const [edgeWeight, setEdgeWeight] = useState(0.5);
+
   const inputRef = useRef();
 
   const required_fields = {
     Object: "objects",
     "User ID": "username",
     "Entry ID": "id",
-    "Share time": "ts",
+    "Share Time": "ts",
   };
+
+  const required_fields_labels = new Map();
 
   const handleUploadClick = () => {
     inputRef.current.click();
@@ -163,84 +168,155 @@ const TwitterSnaV2 = () => {
         setUploadedData(res.data);
       },
     });
-    setShowUploadModal(true);
+    setLoading(false);
   };
 
   const processUploadedFile = () => {
+    setShowUploadModal(false);
     let file = uploadedFile;
-    let TIME_WINDOW = 60;
-    let EDGE_THRESH = 0.95;
-    Papa.parse(file, {
-      header: true,
-      complete: (res) => {
-        console.log("----------------START CSV PROCESSING--------------");
-        console.log(res.data);
-        let accountNameMap = new Map(
-          res.data.map((item) => [item["Facebook Id"], item["Page Name"]]),
-        );
-        console.log(accountNameMap);
-        let reformatedTweets = Array.from(
-          new Map(res.data.map((item) => [item.URL, item])).values(),
-        )
-          .filter((x) => x.Link && x.Link.length > 0)
-          .map(
-            ({
-              Link,
-              ["Post Created"]: date,
-              URL,
-              ["Facebook Id"]: fid,
-              ...rest
-            }) => ({
-              objects: Link,
-              date: date.slice(0, -4),
-              username: fid,
-              id: URL,
-              ...rest,
-            }),
-          );
-        console.log(reformatedTweets);
-        setTweets(reformatedTweets);
+    let TIME_WINDOW = timeWindow;
+    let EDGE_THRESH = edgeWeight;
+    let accountNameMap = new Map(
+      uploadedData.map((item) => [item["Facebook Id"], item["Page Name"]]),
+    );
+    console.log(accountNameMap);
+    let reformatedTweets = Array.from(
+      new Map(
+        uploadedData.map((item) => [
+          item[required_fields_labels.get("Entry ID")],
+          item,
+        ]),
+      ).values(),
+    )
+      .filter(
+        (x) =>
+          x[required_fields_labels.get("Object")] &&
+          x[required_fields_labels.get("Object")].length > 0,
+      )
+      .map(
+        ({
+          [required_fields_labels.get("Object")]: objects,
+          [required_fields_labels.get("Share Time")]: date,
+          [required_fields_labels.get("Entry ID")]: id,
+          [required_fields_labels.get("User ID")]: uid,
+          ...rest
+        }) => ({
+          objects: objects,
+          date: date.slice(0, -4),
+          username: uid,
+          id: id,
+          ...rest,
+        }),
+      );
+    console.log(reformatedTweets);
+    setTweets(reformatedTweets);
 
-        let coor_result = detectCOOR(
-          TIME_WINDOW,
-          EDGE_THRESH,
-          reformatedTweets,
-        );
-        console.log(coor_result);
-        console.log(Object.keys(coor_result));
-        console.log(
-          Object.keys(coor_result)
-            .map((x) => x.split("-"))
-            .filter((x) => x.length > 2),
-        );
-        let candidates =
-          EDGE_THRESH > 0
-            ? Object.entries(coor_result).filter((x) => x[1].threshold > 0)
-            : Object.entries(coor_result);
-        console.log(candidates);
-        let nodes = candidates
-          .map((x) => x[0].split("-"))
-          .flat(2)
-          .filter(onlyUnique);
-        console.log(nodes);
+    let coor_result = detectCOOR(TIME_WINDOW, EDGE_THRESH, reformatedTweets);
+    console.log(coor_result);
+    console.log(Object.keys(coor_result));
+    console.log(
+      Object.keys(coor_result)
+        .map((x) => x.split("-"))
+        .filter((x) => x.length > 2),
+    );
+    let candidates =
+      EDGE_THRESH > 0
+        ? Object.entries(coor_result).filter((x) => x[1].threshold > 0)
+        : Object.entries(coor_result);
+    console.log(candidates);
+    let nodes = candidates
+      .map((x) => x[0].split("-"))
+      .flat(2)
+      .filter(onlyUnique);
+    console.log(nodes);
 
-        // Object.entries(grC).map(x=>console.log(x))
-        console.log(candidates);
-        let edges = nodes.map((x) => ({
-          source: accountNameMap.get(x),
-          dst: candidates
-            .filter((y) => y[0].includes(x))
-            .map((z) => z[0].split("-").filter((k) => k != x))
-            .flat()
-            .map((z) => accountNameMap.get(z)),
-        }));
-        console.log(edges);
+    // Object.entries(grC).map(x=>console.log(x))
+    console.log(candidates);
+    let edges = nodes.map((x) => ({
+      source: accountNameMap.get(x),
+      dst: candidates
+        .filter((y) => y[0].includes(x))
+        .map((z) => z[0].split("-").filter((k) => k != x))
+        .flat()
+        .map((z) => accountNameMap.get(z)),
+    }));
+    console.log(edges);
 
-        setGraphData(edges);
-        setGraph(true);
-        setLoading(false);
-      },
-    });
+    setGraphData(edges);
+    setGraph(true);
+    setLoading(false);
+
+    // Papa.parse(file, {
+    //   header: true,
+    //   complete: (res) => {
+    //     console.log("----------------START CSV PROCESSING--------------");
+    //     console.log(res.data);
+    //     let accountNameMap = new Map(
+    //       res.data.map((item) => [item["Facebook Id"], item["Page Name"]]),
+    //     );
+    //     console.log(accountNameMap);
+    //     let reformatedTweets = Array.from(
+    //       new Map(res.data.map((item) => [item.URL, item])).values(),
+    //     )
+    //       .filter((x) => x.Link && x.Link.length > 0)
+    //       .map(
+    //         ({
+    //           Link,
+    //           ["Post Created"]: date,
+    //           URL,
+    //           ["Facebook Id"]: fid,
+    //           ...rest
+    //         }) => ({
+    //           objects: Link,
+    //           date: date.slice(0, -4),
+    //           username: fid,
+    //           id: URL,
+    //           ...rest,
+    //         }),
+    //       );
+    //     console.log(reformatedTweets);
+    //     setTweets(reformatedTweets);
+
+    //     let coor_result = detectCOOR(
+    //       TIME_WINDOW,
+    //       EDGE_THRESH,
+    //       reformatedTweets,
+    //     );
+    //     console.log(coor_result);
+    //     console.log(Object.keys(coor_result));
+    //     console.log(
+    //       Object.keys(coor_result)
+    //         .map((x) => x.split("-"))
+    //         .filter((x) => x.length > 2),
+    //     );
+    //     let candidates =
+    //       EDGE_THRESH > 0
+    //         ? Object.entries(coor_result).filter((x) => x[1].threshold > 0)
+    //         : Object.entries(coor_result);
+    //     console.log(candidates);
+    //     let nodes = candidates
+    //       .map((x) => x[0].split("-"))
+    //       .flat(2)
+    //       .filter(onlyUnique);
+    //     console.log(nodes);
+
+    //     // Object.entries(grC).map(x=>console.log(x))
+    //     console.log(candidates);
+    //     let edges = nodes.map((x) => ({
+    //       source: accountNameMap.get(x),
+    //       dst: candidates
+    //         .filter((y) => y[0].includes(x))
+    //         .map((z) => z[0].split("-").filter((k) => k != x))
+    //         .flat()
+    //         .map((z) => accountNameMap.get(z)),
+    //     }));
+    //     console.log(edges);
+
+    //     setGraphData(edges);
+    //     setGraph(true);
+    //     setLoading(false);
+    //   },
+    // });
     // setLoading(true)
     // setTweets()
     // do something with the file here
@@ -387,7 +463,15 @@ const TwitterSnaV2 = () => {
       new Map(tweets.map((item) => [item.id, item])).values(),
     );
     setTweets(dedpulicatedTweets);
-    let reformatedTweets = dedpulicatedTweets.map(({ links, ...rest }) => ({
+
+    setLoading(false);
+  };
+
+  const runTweetCoor = () => {
+    let TIME_WINDOW = timeWindow;
+    let EDGE_THRESH = edgeWeight;
+
+    let reformatedTweets = allTweets.map(({ links, ...rest }) => ({
       objects: links,
       ...rest,
     }));
@@ -416,7 +500,6 @@ const TwitterSnaV2 = () => {
 
     setGraphData(edges);
     setGraph(true);
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -611,7 +694,11 @@ const TwitterSnaV2 = () => {
               {Object.keys(required_fields).map((k) => (
                 <FormControl key={k} fullWidth>
                   <InputLabel>{k}</InputLabel>
-                  <Select>
+                  <Select
+                    onChange={(e) => {
+                      required_fields_labels.set(k, e.target.value);
+                    }}
+                  >
                     {Object.keys(uploadedData[0]).map((x) => (
                       <MenuItem key={x} value={x}>
                         {x}
@@ -631,6 +718,7 @@ const TwitterSnaV2 = () => {
                     borderColor: "darkgreen",
                   },
                 }}
+                onClick={processUploadedFile}
               >
                 Upload
               </Button>
@@ -851,6 +939,43 @@ const TwitterSnaV2 = () => {
                   <Typography component="span"> COOR Graph </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
+                  <Box>
+                    <Box p={2}></Box>
+                    <Stack direction="row" spacing={2} alignItems="center">
+                      <Typography pl={2}> Time window:</Typography>
+                      <TextField
+                        variant="outlined"
+                        sx={{ width: "200px" }}
+                        value={timeWindow}
+                        onChange={(e) => setTimeWindow(e.target.value)}
+                      />
+                      <Typography pl={2}> Edge weight:</Typography>
+                      <TextField
+                        variant="outlined"
+                        sx={{ width: "200px" }}
+                        value={edgeWeight}
+                        onChange={(e) => setEdgeWeight(e.target.value)}
+                      />
+                      <Button
+                        variant="outlined"
+                        sx={{
+                          color: "green",
+                          borderColor: "green",
+                          backgroundColor: "transparent",
+                          "&:hover": {
+                            backgroundColor: "rgba(0, 128, 0, 0.1)", // light green on hover
+                            borderColor: "darkgreen",
+                          },
+                        }}
+                        onClick={
+                          uploadedData ? setShowUploadModal : runTweetCoor
+                        }
+                      >
+                        Run COOR Detection
+                      </Button>
+                    </Stack>
+                  </Box>
+                  <Box p={2}></Box>
                   {graphSet ? showGraph() : <></>}
                 </AccordionDetails>
               </Accordion>
