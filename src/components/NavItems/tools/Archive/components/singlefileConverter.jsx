@@ -115,7 +115,6 @@ const SinglefileConverter = (telegramURL) => {
     };
 
     const index_hash = await sha256(index_input);
-    console.log(pageInfo.title);
     const pages_input = `{"format":"json-pages-1.0","id":"pages","title":"All Pages"}\n{"url":"${cdxInfo.url}", "id":"12345", "size":${cdxInfo.length}, "ts":"${dayjs(pageInfo.date).toISOString()}", "title":"${pageInfo.title}"}`;
 
     const pages_arch = {
