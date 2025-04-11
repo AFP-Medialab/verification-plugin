@@ -24,6 +24,8 @@ import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResu
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
+import { ROLES } from "../../../../../constants/roles";
+
 const DeepfakeResultsVideo = (props) => {
   const userAuthenticated = useSelector(
     (state) => state.userSession && state.userSession.userAuthenticated,
@@ -76,14 +78,24 @@ const DeepfakeResultsVideo = (props) => {
   const [xAxisData, setXAxisData] = React.useState([]);
   const [yAxisData, setYAxisData] = React.useState([]);
 
+  const role = useSelector((state) => state.userSession.user.roles);
+
+  /**
+   * Alternate between v1 and v2 based on user role
+   * @type {string}
+   */
+  const faceswapAlgorithm = role.includes(ROLES.EVALUATION)
+    ? "faceswap_fsfm_report"
+    : "deepfake_video_report";
+
   useEffect(() => {
     if (
       props.result &&
-      props.result.deepfake_video_report &&
-      props.result.deepfake_video_report.results &&
-      props.result.deepfake_video_report.results.length > 0
+      props.result[faceswapAlgorithm] &&
+      props.result[faceswapAlgorithm].results &&
+      props.result[faceswapAlgorithm].results.length > 0
     ) {
-      for (const shotPrediction of props.result.deepfake_video_report.results) {
+      for (const shotPrediction of props.result[faceswapAlgorithm].results) {
         // This needs an undefined check because the value can be 0
         if (
           shotPrediction.prediction !== undefined &&
@@ -140,29 +152,29 @@ const DeepfakeResultsVideo = (props) => {
   );
 
   useEffect(() => {
-    const prediction = results.deepfake_video_report.prediction;
+    const prediction = results[faceswapAlgorithm].prediction;
     let shot = -1;
 
     if (
       !results ||
-      !results.deepfake_video_report ||
-      !results.deepfake_video_report.results
+      !results[faceswapAlgorithm] ||
+      !results[faceswapAlgorithm].results
     ) {
       return;
     }
 
     for (
       let i = 0;
-      i < results.deepfake_video_report.results.length && shot === -1;
+      i < results[faceswapAlgorithm].results.length && shot === -1;
       i++
     ) {
-      if (results.deepfake_video_report.results[i].prediction === prediction) {
+      if (results[faceswapAlgorithm].results[i].prediction === prediction) {
         shot = i;
       }
     }
 
     if (shot !== -1) {
-      clickShot(results.deepfake_video_report.results[shot], shot);
+      clickShot(results[faceswapAlgorithm].results[shot], shot);
     }
   }, []);
 
@@ -175,14 +187,11 @@ const DeepfakeResultsVideo = (props) => {
 
     let res = [];
 
-    if (
-      results.deepfake_video_report &&
-      results.deepfake_video_report.prediction
-    ) {
+    if (results[faceswapAlgorithm] && results[faceswapAlgorithm].prediction) {
       res.push(
         new DeepfakeResult(
           Object.keys(DeepfakeImageDetectionMethodNames)[0],
-          results.deepfake_video_report.prediction * 100,
+          results[faceswapAlgorithm].prediction * 100,
         ),
       );
     }
@@ -251,14 +260,14 @@ const DeepfakeResultsVideo = (props) => {
                     width="100%"
                     height="auto"
                     controls
-                    key={results.deepfake_video_report.video_path}
+                    key={results[faceswapAlgorithm].video_path}
                     style={{
                       borderRadius: "10px",
                       maxHeight: "50vh",
                     }}
                   >
                     <source
-                      src={results.deepfake_video_report.video_path + "#t=2,4"}
+                      src={results[faceswapAlgorithm].video_path + "#t=2,4"}
                       type="video/mp4"
                     />
                     {keyword("deepfake_support")}
@@ -346,7 +355,7 @@ const DeepfakeResultsVideo = (props) => {
             spacing={2}
           >
             <Grid2 size={7}>
-              {!!results.deepfake_video_report.results && (
+              {!!results[faceswapAlgorithm].results && (
                 <Box>
                   <Typography
                     variant="h6"
@@ -359,7 +368,7 @@ const DeepfakeResultsVideo = (props) => {
                   <Box m={1} />
 
                   <Grid2 container spacing={3} width="100%">
-                    {results.deepfake_video_report.results.map(
+                    {results[faceswapAlgorithm].results.map(
                       (valueShot, keyShot) => {
                         const shotStart = valueShot.shot_start;
                         const shotEnd = valueShot.shot_end;
@@ -420,8 +429,8 @@ const DeepfakeResultsVideo = (props) => {
             </Grid2>
             <Grid2 size={5}>
               {results &&
-                results.deepfake_video_report &&
-                results.deepfake_video_report.results && (
+                results[faceswapAlgorithm] &&
+                results[faceswapAlgorithm].results && (
                   <Card
                     variant="outlined"
                     style={{ overflow: "visible" }}
@@ -514,7 +523,7 @@ const DeepfakeResultsVideo = (props) => {
                               height="auto"
                               controls
                               key={
-                                results.deepfake_video_report.video_path +
+                                results[faceswapAlgorithm].video_path +
                                 "#t=" +
                                 shotSelectedValue.shot_start +
                                 "," +
@@ -528,7 +537,7 @@ const DeepfakeResultsVideo = (props) => {
                             >
                               <source
                                 src={
-                                  results.deepfake_video_report.video_path +
+                                  results[faceswapAlgorithm].video_path +
                                   "#t=" +
                                   shotSelectedValue.shot_start +
                                   "," +
