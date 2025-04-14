@@ -31,8 +31,8 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { getLanguageName } from "../../../Shared/Utils/languageUtils";
 import {
   TransCredibilitySignalsLink,
-  TransHtmlDoubleLinkBreak,
-  TransHtmlSingleLinkBreak,
+  TransHtmlDoubleLineBreak,
+  TransHtmlSingleLineBreak,
 } from "../TransComponents";
 import ResultDisplayItem from "./../../tools/SemanticSearch/components/ResultDisplayItem.jsx";
 import TextFooterPrevFactChecks from "./TextFooter.jsx";
@@ -76,7 +76,7 @@ const AssistantCredSignals = () => {
   const StyledAccordion = styled(Accordion)(({ theme }) => ({
     ".Mui-disabled": {
       opacity: "1 !important",
-      background: "white",
+      background: "var(--mui-palette-background-paper)",
     },
   }));
 
@@ -152,7 +152,7 @@ const AssistantCredSignals = () => {
   };
 
   return (
-    <Card>
+    <Card variant="outlined">
       <CardHeader
         className={classes.assistantCardHeader}
         // title
@@ -174,9 +174,9 @@ const AssistantCredSignals = () => {
                     b: <b />,
                   }}
                 />
-                <TransHtmlDoubleLinkBreak keyword={keyword} />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
                 <TransCredibilitySignalsLink keyword={keyword} />
-                <TransHtmlDoubleLinkBreak keyword={keyword} />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
                 <Trans
                   t={keyword}
                   i18nKey="previous_fact_checks_title_bold"
@@ -184,9 +184,9 @@ const AssistantCredSignals = () => {
                     b: <b />,
                   }}
                 />
-                <TransHtmlSingleLinkBreak keyword={keyword} />
+                <TransHtmlSingleLineBreak keyword={keyword} />
                 <Trans t={keyword} i18nKey="previous_fact_checks_tooltip" />
-                <TransHtmlDoubleLinkBreak keyword={keyword} />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
                 <Trans
                   t={keyword}
                   i18nKey="machine_generated_text_title_bold"
@@ -194,7 +194,7 @@ const AssistantCredSignals = () => {
                     b: <b />,
                   }}
                 />
-                <TransHtmlSingleLinkBreak keyword={keyword} />
+                <TransHtmlSingleLineBreak keyword={keyword} />
                 <Trans t={keyword} i18nKey="machine_generated_text_tooltip" />
               </>
             }

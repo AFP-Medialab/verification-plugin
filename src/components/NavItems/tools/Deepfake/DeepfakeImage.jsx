@@ -4,8 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import Grid2 from "@mui/material/Grid2";
 import LinearProgress from "@mui/material/LinearProgress";
 
 import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
@@ -15,14 +13,12 @@ import { setError } from "redux/reducers/errorReducer";
 import { imageDeepfake } from "../../../../constants/tools";
 import { resetDeepfake } from "../../../../redux/actions/tools/deepfakeImageActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import UseGetDeepfake from "./Hooks/useGetDeepfake";
 import DeepfakeResultsImage from "./Results/DeepfakeResultsImage";
 
 const Deepfake = () => {
   //const { url } = useParams();
-  const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
@@ -114,51 +110,33 @@ const Deepfake = () => {
 
       <Box m={3} />
 
-      <Card>
-        <CardHeader
-          title={
-            <Grid2
-              container
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <span>{keyword("deepfake_image_link")}</span>
-            </Grid2>
-          }
-          className={classes.headerUploadedImage}
-        />
-
-        <Box p={3}>
-          {selectedMode !== "" && (
-            <div>
-              <Box>
-                <form>
-                  <StringFileUploadField
-                    labelKeyword={keyword("deepfake_image_link")}
-                    placeholderKeyword={keyword("deepfake_placeholder")}
-                    submitButtonKeyword={keyword("submit_button")}
-                    localFileKeyword={keyword("button_localfile")}
-                    urlInput={input}
-                    setUrlInput={setInput}
-                    fileInput={imageFile}
-                    setFileInput={setImageFile}
-                    handleSubmit={handleSubmit}
-                    fileInputTypesAccepted={"image/*"}
-                    handleCloseSelectedFile={handleClose}
-                    preprocessLocalFile={preprocessImage}
-                  />
-                </form>
-                <Box m={2} />
-                {isLoading && (
-                  <Box mt={3}>
-                    <LinearProgress />
-                  </Box>
-                )}
+      <Card variant="outlined">
+        {selectedMode !== "" && (
+          <Box m={4}>
+            <form>
+              <StringFileUploadField
+                labelKeyword={keyword("deepfake_image_link")}
+                placeholderKeyword={keyword("deepfake_placeholder")}
+                submitButtonKeyword={keyword("submit_button")}
+                localFileKeyword={keyword("button_localfile")}
+                urlInput={input}
+                setUrlInput={setInput}
+                fileInput={imageFile}
+                setFileInput={setImageFile}
+                handleSubmit={handleSubmit}
+                fileInputTypesAccepted={"image/*"}
+                handleCloseSelectedFile={handleClose}
+                preprocessLocalFile={preprocessImage}
+              />
+            </form>
+            <Box m={2} />
+            {isLoading && (
+              <Box mt={3}>
+                <LinearProgress />
               </Box>
-            </div>
-          )}
-        </Box>
+            )}
+          </Box>
+        )}
       </Card>
 
       <Box m={3} />

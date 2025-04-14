@@ -9,7 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { Close } from "@mui/icons-material";
+import CloseIcon from "@mui/icons-material/Close";
 
 import { useTrackEvent } from "Hooks/useAnalytics";
 import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult";
@@ -135,7 +135,7 @@ const DeepfakeResultsImage = (props) => {
       );
 
       const elementProbability = Math.round(element.prediction * 100);
-      let elementBorderClass = null;
+      let elementBorderClass;
 
       if (elementProbability >= 80) {
         elementBorderClass = classes.deepfakeSquareBorderRed;
@@ -196,143 +196,145 @@ const DeepfakeResultsImage = (props) => {
       alignItems="flex-start"
       spacing={2}
     >
-      <Card sx={{ width: "100%" }}>
-        <CardHeader
-          style={{ borderRadius: "4px 4px 0px 0px" }}
-          title={keyword("deepfake_image_title")}
-          action={
-            <IconButton aria-label="close" onClick={handleClose}>
-              <Close sx={{ color: "white" }} />
-            </IconButton>
-          }
-        />
-        <Grid2
-          container
-          direction="row"
-          justifyContent="space-evenly"
-          alignItems="flex-start"
-        >
+      <Card variant="outlined" sx={{ width: "100%" }}>
+        <Box p={2}>
+          <CardHeader
+            style={{ borderRadius: "4px 4px 0px 0px" }}
+            title={keyword("deepfake_image_title")}
+            action={
+              <IconButton aria-label="close" onClick={handleClose}>
+                <CloseIcon />
+              </IconButton>
+            }
+          />
           <Grid2
-            size={{
-              sm: 12,
-              md: 6,
-            }}
+            container
+            direction="row"
+            justifyContent="space-evenly"
+            alignItems="flex-start"
           >
-            <Box sx={{ width: "100%", height: "100%", position: "relative" }}>
-              <Grid2
-                container
-                direction="row"
-                justifyContent="center"
-                alignItems="flex-start"
-                ref={imgContainerRef}
-                p={4}
-              >
+            <Grid2
+              size={{
+                sm: 12,
+                md: 6,
+              }}
+            >
+              <Box sx={{ width: "100%", height: "100%", position: "relative" }}>
+                <Grid2
+                  container
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="flex-start"
+                  ref={imgContainerRef}
+                  p={4}
+                >
+                  {!!(
+                    deepfakeScore &&
+                    deepfakeScore.predictionScore &&
+                    rectangles &&
+                    rectanglesReady
+                  ) && (
+                    <Grid2>
+                      {rectangles.map((valueRectangle, keyRectangle) => {
+                        return (
+                          <Box
+                            key={keyRectangle}
+                            className={classes.deepfakeSquare}
+                            pr={4}
+                            pb={4}
+                            mt={4}
+                            sx={{
+                              top: valueRectangle.top,
+                              left: valueRectangle.left,
+                            }}
+                          >
+                            <Box
+                              className={valueRectangle.borderClass}
+                              sx={{
+                                width: valueRectangle.width,
+                                height: valueRectangle.height,
+                              }}
+                            />
+
+                            <Box
+                              mt={1}
+                              p={1}
+                              sx={{
+                                backgroundColor: "#ffffff",
+                                borderRadius: "2px",
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "start",
+                                width: "fit-content",
+                              }}
+                            >
+                              <Typography>
+                                {valueRectangle.probability}%
+                              </Typography>
+                            </Box>
+                          </Box>
+                        );
+                      })}
+                    </Grid2>
+                  )}
+
+                  <img
+                    src={url}
+                    alt={"Displays the results of the deepfake topMenuItem"}
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "60vh",
+                      borderRadius: "10px",
+                    }}
+                    crossOrigin={"anonymous"}
+                    ref={imgElement}
+                    onLoad={drawRectangles}
+                  />
+                </Grid2>
+              </Box>
+            </Grid2>
+            <Grid2
+              size={{
+                sm: 12,
+                md: 6,
+              }}
+            >
+              <Stack direction="column" p={4} spacing={4}>
                 {!!(
                   deepfakeScore &&
                   deepfakeScore.predictionScore &&
-                  rectangles &&
-                  rectanglesReady
+                  deepfakeScore.predictionScore >= 70
                 ) && (
-                  <Grid2>
-                    {rectangles.map((valueRectangle, keyRectangle) => {
-                      return (
-                        <Box
-                          key={keyRectangle}
-                          className={classes.deepfakeSquare}
-                          pr={4}
-                          pb={4}
-                          mt={4}
-                          sx={{
-                            top: valueRectangle.top,
-                            left: valueRectangle.left,
-                          }}
-                        >
-                          <Box
-                            className={valueRectangle.borderClass}
-                            sx={{
-                              width: valueRectangle.width,
-                              height: valueRectangle.height,
-                            }}
-                          />
-
-                          <Box
-                            mt={1}
-                            p={1}
-                            sx={{
-                              backgroundColor: "#ffffff",
-                              borderRadius: "2px",
-                              display: "flex",
-                              flexDirection: "column",
-                              alignItems: "start",
-                              width: "fit-content",
-                            }}
-                          >
-                            <Typography>
-                              {valueRectangle.probability}%
-                            </Typography>
-                          </Box>
-                        </Box>
-                      );
-                    })}
-                  </Grid2>
+                  <Typography variant="h5" sx={{ color: "red" }}>
+                    {`${keyword("deepfake_image_detection_alert")} ` +
+                      `${DeepfakeImageDetectionMethodNames[
+                        deepfakeScore.methodName
+                      ].name.toLowerCase()} ` +
+                      `${keyword("deepfake_image_detection_alert_2")}`}
+                  </Typography>
                 )}
-
-                <img
-                  src={url}
-                  alt={"Displays the results of the deepfake topMenuItem"}
-                  style={{
-                    maxWidth: "100%",
-                    maxHeight: "60vh",
-                    borderRadius: "10px",
-                  }}
-                  crossOrigin={"anonymous"}
-                  ref={imgElement}
-                  onLoad={drawRectangles}
-                />
-              </Grid2>
-            </Box>
+                {(!deepfakeScore || !deepfakeScore.predictionScore) && (
+                  <Typography variant="h5" sx={{ color: "red" }}>
+                    {keyword("deepfake_no_face_detection")}
+                  </Typography>
+                )}
+                {deepfakeScore && (
+                  <GaugeChartResult
+                    keyword={keyword}
+                    scores={[deepfakeScore]}
+                    methodNames={DeepfakeImageDetectionMethodNames}
+                    detectionThresholds={DETECTION_THRESHOLDS}
+                    resultsHaveErrors={false}
+                    sanitizeDetectionPercentage={(n) => Math.round(n)}
+                    gaugeExplanation={{ colors: colors, keywords: keywords }}
+                    toolName={"Deepfake"}
+                    detectionType={"image"}
+                  />
+                )}
+              </Stack>
+            </Grid2>
           </Grid2>
-          <Grid2
-            size={{
-              sm: 12,
-              md: 6,
-            }}
-          >
-            <Stack direction="column" p={4} spacing={4}>
-              {!!(
-                deepfakeScore &&
-                deepfakeScore.predictionScore &&
-                deepfakeScore.predictionScore >= 70
-              ) && (
-                <Typography variant="h5" sx={{ color: "red" }}>
-                  {`${keyword("deepfake_image_detection_alert")} ` +
-                    `${DeepfakeImageDetectionMethodNames[
-                      deepfakeScore.methodName
-                    ].name.toLowerCase()} ` +
-                    `${keyword("deepfake_image_detection_alert_2")}`}
-                </Typography>
-              )}
-              {(!deepfakeScore || !deepfakeScore.predictionScore) && (
-                <Typography variant="h5" sx={{ color: "red" }}>
-                  {keyword("deepfake_no_face_detection")}
-                </Typography>
-              )}
-              {deepfakeScore && (
-                <GaugeChartResult
-                  keyword={keyword}
-                  scores={[deepfakeScore]}
-                  methodNames={DeepfakeImageDetectionMethodNames}
-                  detectionThresholds={DETECTION_THRESHOLDS}
-                  resultsHaveErrors={false}
-                  sanitizeDetectionPercentage={(n) => Math.round(n)}
-                  gaugeExplanation={{ colors: colors, keywords: keywords }}
-                  toolName={"Deepfake"}
-                  detectionType={"image"}
-                />
-              )}
-            </Stack>
-          </Grid2>
-        </Grid2>
+        </Box>
       </Card>
     </Stack>
   );

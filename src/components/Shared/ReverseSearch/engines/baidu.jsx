@@ -25,7 +25,7 @@ const reverseImageSearchBaidu = (
   data.append("from", "pc");
   data.append("range", '{"page_from": "searchIndex"}');
   data.append("image", imageObject.obj);
-  if (imageObject.imageFormat == IMAGE_FORMATS.URI) {
+  if (imageObject.imageFormat === IMAGE_FORMATS.URI) {
     data.append("image_source", "PC_UPLOAD_SEARCH_URL");
   } else {
     data.append("image_source", "PC_UPLOAD_SEARCH_FILE");

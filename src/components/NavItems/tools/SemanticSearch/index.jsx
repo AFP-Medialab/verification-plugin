@@ -25,7 +25,6 @@ import {
 } from "@mui/icons-material";
 
 import LoadingButton from "@mui/lab/LoadingButton";
-import { DatePicker } from "@mui/x-date-pickers";
 import axios from "axios";
 import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
 import dayjs from "dayjs";
@@ -359,7 +358,7 @@ const SemanticSearch = () => {
   const displaySearchResults = () => {
     if (isLoading)
       return (
-        <Card>
+        <Card variant="outlined">
           <Stack direction="column" spacing={4} p={4}>
             <Skeleton variant="rounded" height={40} />
             <Skeleton variant="rounded" width={400} height={40} />
@@ -395,8 +394,8 @@ const SemanticSearch = () => {
           }
         />
         <Alert severity="info">{keyword("semantic_search_tip")}</Alert>
-        <Card>
-          <Box p={3}>
+        <Card variant="outlined">
+          <Box p={4}>
             <form>
               <Stack spacing={4}>
                 <Stack

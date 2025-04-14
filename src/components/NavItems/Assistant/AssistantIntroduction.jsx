@@ -24,8 +24,9 @@ import AssistantIcon from "../../NavBar/images/navbar/assistant-icon-primary.svg
 import HeaderTool from "../../Shared/HeaderTool/HeaderTool";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import {
-  TransHtmlDoubleLinkBreak,
+  TransHtmlDoubleLineBreak,
   TransSupportedToolsLink,
+  TransSupportedUrlsLink,
 } from "./TransComponents";
 
 const AssistantIntroduction = (props) => {
@@ -48,7 +49,7 @@ const AssistantIntroduction = (props) => {
   if (
     !showURL &&
     !showLocal &&
-    classButtonURL !== classes.bigButtonDivSelectted &&
+    classButtonURL !== classes.bigButtonDivSelected &&
     classButtonLocal !== classes.bigButtonDiv &&
     firstRender
   ) {
@@ -63,15 +64,15 @@ const AssistantIntroduction = (props) => {
     (state) => state.assistant.imageVideoSelected,
   );
 
-  if (urlMode && classButtonURL !== classes.bigButtonDivSelectted) {
-    setClassButtonURL(classes.bigButtonDivSelectted);
-    setClassIconURL(classes.bigButtonIconSelectted);
+  if (urlMode && classButtonURL !== classes.bigButtonDivSelected) {
+    setClassButtonURL(classes.bigButtonDivSelected);
+    setClassIconURL(classes.bigButtonIconSelected);
   } else if (
     imageVideoSelected &&
-    classButtonLocal !== classes.bigButtonDivSelectted
+    classButtonLocal !== classes.bigButtonDivSelected
   ) {
-    setClassButtonLocal(classes.bigButtonDivSelectted);
-    setClassIconLocal(classes.bigButtonIconSelectted);
+    setClassButtonLocal(classes.bigButtonDivSelected);
+    setClassIconLocal(classes.bigButtonIconSelected);
   }
 
   const cleanAssistant = () => props.cleanAssistant();
@@ -89,7 +90,7 @@ const AssistantIntroduction = (props) => {
           />
         }
       />
-      <Card>
+      <Card variant="outlined">
         <CardHeader
           className={classes.assistantCardHeader}
           title={
@@ -109,9 +110,9 @@ const AssistantIntroduction = (props) => {
                       b: <b />,
                     }}
                   />
-                  <TransHtmlDoubleLinkBreak keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
                   <Trans t={keyword} i18nKey="assistant_help_1" />
-                  <TransHtmlDoubleLinkBreak keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
                   <Trans
                     t={keyword}
                     i18nKey="assistant_help_2"
@@ -148,8 +149,8 @@ const AssistantIntroduction = (props) => {
                       });
                       cleanAssistant();
                       dispatch(setUrlMode(!urlMode));
-                      setClassButtonURL(classes.bigButtonDivSelectted);
-                      setClassIconURL(classes.bigButtonIconSelectted);
+                      setClassButtonURL(classes.bigButtonDivSelected);
+                      setClassIconURL(classes.bigButtonIconSelected);
 
                       setClassButtonLocal(classes.bigButtonDiv);
                       setClassIconLocal(classes.bigButtonIcon);
@@ -217,8 +218,8 @@ const AssistantIntroduction = (props) => {
                       setClassButtonURL(classes.bigButtonDiv);
                       setClassIconURL(classes.bigButtonIcon);
 
-                      setClassButtonLocal(classes.bigButtonDivSelectted);
-                      setClassIconLocal(classes.bigButtonIconSelectted);
+                      setClassButtonLocal(classes.bigButtonDivSelected);
+                      setClassIconLocal(classes.bigButtonIconSelected);
 
                       setShowURL(false);
                       setShowLocal(true);

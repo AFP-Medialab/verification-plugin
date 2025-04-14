@@ -4,17 +4,21 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Grid2 from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { green } from "@mui/material/colors";
+import { useColorScheme } from "@mui/material/styles";
 
 import CloseIcon from "@mui/icons-material/Close";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 
 import LoadingButton from "@mui/lab/LoadingButton";
+import { ClearIcon } from "@mui/x-date-pickers";
 import accept from "attr-accept";
 
+import { prettifyLargeString } from "../../NavItems/tools/Archive/utils";
 import { i18nLoadNamespace } from "../Languages/i18nLoadNamespace";
 
 /**
@@ -56,7 +60,10 @@ const StringFileUploadField = ({
   const [isDragging, setIsDragging] = useState(false);
   const [validDrop, setValidDrop] = useState(false);
 
-  const dropColor = green[50];
+  const { mode, systemMode } = useColorScheme();
+  const resolvedMode = systemMode || mode;
+
+  const dropColor = resolvedMode === "light" ? green[50] : green[900];
 
   const keyword = i18nLoadNamespace("components/Shared/StringFileUploadField");
 
@@ -141,6 +148,19 @@ const StringFileUploadField = ({
               variant="outlined"
               disabled={isParentLoading || fileInput instanceof Blob}
               onChange={(e) => setUrlInput(e.target.value)}
+              slotProps={{
+                input: {
+                  endAdornment: urlInput ? (
+                    <IconButton
+                      size="small"
+                      onClick={() => setUrlInput("")}
+                      disabled={isParentLoading}
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  ) : undefined,
+                },
+              }}
             />
           </Grid2>
           <Grid2>
@@ -166,7 +186,6 @@ const StringFileUploadField = ({
           >
             <Button
               startIcon={<FolderOpenIcon />}
-              sx={{ textTransform: "none" }}
               style={
                 isDragging
                   ? { cursor: validDrop ? "copy" : "no-drop" }
@@ -177,7 +196,9 @@ const StringFileUploadField = ({
               onDrop={onDrop}
             >
               <label htmlFor="file">
-                {fileInput ? fileInput.name : localFileKeyword}
+                {fileInput
+                  ? prettifyLargeString(fileInput.name, 24)
+                  : localFileKeyword}
               </label>
               <input
                 id="file"

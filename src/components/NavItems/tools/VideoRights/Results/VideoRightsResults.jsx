@@ -84,7 +84,7 @@ const VideoRightsResults = (props) => {
   ];
 
   return (
-    <Card>
+    <Card variant="outlined">
       <CardHeader
         title={keyword("cardheader_results")}
         className={classes.headerUploadedImage}
@@ -93,7 +93,7 @@ const VideoRightsResults = (props) => {
             aria-label="close"
             onClick={() => dispatch(cleanVideoRightsState())}
           >
-            <CloseIcon sx={{ color: "white" }} />
+            <CloseIcon />
           </IconButton>
         }
       />
@@ -179,7 +179,12 @@ const VideoRightsResults = (props) => {
         {licenseDetails.map((obj, index) => {
           if (obj.elements.length > 0) {
             return (
-              <Paper key={index} className={classes.root} elevation={3}>
+              <Paper
+                variant="outlined"
+                key={index}
+                className={classes.root}
+                elevation={3}
+              >
                 <Button
                   variant={"contained"}
                   className={obj.color}

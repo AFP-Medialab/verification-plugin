@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import GaugeChart from "react-gauge-chart";
 
+import { useColorScheme } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -25,6 +26,7 @@ import GaugeChartModalExplanation from "./GaugeChartModalExplanation";
  * @param scores {Array<Object>} The results of the analysis
  * @param methodNames {Object} Objet containing the information on the different methods used
  * @param detectionThresholds {Object} Object containing the detection thresholds
+ * @param arcsLength {number[]} The array with the arcs lengths
  * @param resultsHaveErrors {boolean}
  * @param sanitizeDetectionPercentage {(arg: number) => number} Function
  * @param gaugeExplanation {Object} Object containing the explainations for the colors of the gauge
@@ -46,8 +48,10 @@ const GaugeChartResult = ({
   toolName,
   detectionType,
 }) => {
-  //const keyword = (word) => "hi";
   const gaugeChartRef = useRef(null);
+
+  const { mode, systemMode } = useColorScheme();
+  const resolvedMode = systemMode || mode;
 
   const previsionalScore = Math.max(
     ...scores.map((score) => score.predictionScore),
@@ -145,7 +149,7 @@ const GaugeChartResult = ({
                 id={"gauge-chart"}
                 animate={false}
                 nrOfLevels={4}
-                textColor={"black"}
+                textColor={resolvedMode === "dark" ? "white" : "black"}
                 arcsLength={
                   arcsLength
                     ? arcsLength
@@ -215,7 +219,7 @@ const GaugeChartResult = ({
         {resultsHaveErrors && (
           <Alert severity="error">{keyword("gauge_algorithms_errors")}</Alert>
         )}
-        {detectionType != "machine_generated_text" ? (
+        {detectionType !== "machine_generated_text" ? (
           <Box sx={{ width: "100%" }}>
             <Accordion defaultExpanded onChange={handleDetailsChange}>
               <AccordionSummary expandIcon={<ExpandMore />}>
@@ -285,7 +289,14 @@ const GaugeChartResult = ({
                             </Box>
                           </Stack>
 
-                          <Box p={2} sx={{ backgroundColor: "#FAFAFA" }} mb={2}>
+                          <Box
+                            p={2}
+                            sx={{
+                              backgroundColor:
+                                "var(--mui-palette-background-main)",
+                            }}
+                            mb={2}
+                          >
                             <Typography>
                               {methodNames[item.methodName].description}
                             </Typography>

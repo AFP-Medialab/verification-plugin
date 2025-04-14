@@ -71,11 +71,7 @@ const ForensicResults = (props) => {
     components: {
       MuiCardHeader: {
         styleOverrides: {
-          root: {
-            backgroundColor: "#00926c",
-          },
           title: {
-            color: "white",
             fontSize: 20,
             fontWeight: 500,
           },
@@ -635,7 +631,7 @@ const ForensicResults = (props) => {
                 size={{ xs: 6 }}
                 style={{ display: "flex", flexDirection: "column" }}
               >
-                <Card>
+                <Card variant="outlined">
                   <CardHeader
                     title={
                       <Grid2
@@ -703,7 +699,7 @@ const ForensicResults = (props) => {
 
                 <Box mt={3}></Box>
 
-                <Card className={classes.lensesCard}>
+                <Card variant="outlined" className={classes.lensesCard}>
                   <CardHeader
                     title={
                       <Grid2
@@ -855,7 +851,7 @@ const ForensicResults = (props) => {
               </Grid2>
 
               <Grid2 size={{ xs: 6 }}>
-                <Card className={classes.cardFilters}>
+                <Card variant="outlined" className={classes.cardFilters}>
                   <CardHeader
                     title={
                       <Grid2
@@ -1032,11 +1028,15 @@ const ForensicResults = (props) => {
                                           >
                                             {isCurrentLanguageLeftToRight ? (
                                               <NavigateBeforeIcon
-                                                style={{ color: "#00000" }}
+                                                sx={{
+                                                  color: "black",
+                                                }}
                                               />
                                             ) : (
                                               <NavigateNextIcon
-                                                style={{ color: "#00000" }}
+                                                sx={{
+                                                  color: "black",
+                                                }}
                                               />
                                             )}
                                           </Fab>
@@ -1070,11 +1070,11 @@ const ForensicResults = (props) => {
                                           >
                                             {isCurrentLanguageLeftToRight ? (
                                               <NavigateNextIcon
-                                                style={{ color: "#00000" }}
+                                                sx={{ color: "black" }}
                                               />
                                             ) : (
                                               <NavigateBeforeIcon
-                                                style={{ color: "#00000" }}
+                                                sx={{ color: "black" }}
                                               />
                                             )}
                                           </Fab>

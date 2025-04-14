@@ -5,10 +5,8 @@ import { useParams } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
 import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
@@ -20,56 +18,17 @@ import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { imageForensic } from "../../../../constants/tools";
 import { resetForensicState } from "../../../../redux/actions/tools/forensicActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import useGetImages from "./Hooks/useGetImages";
 import ForensicResults from "./Results/ForensicResult";
 
 const Forensic = () => {
   const { url } = useParams();
-  const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Forensic");
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
   );
   const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
-
-  const theme = createTheme({
-    components: {
-      MuiCardHeader: {
-        styleOverrides: {
-          root: {
-            backgroundColor: "#00926c",
-          },
-          title: {
-            color: "white",
-            fontSize: 20,
-            fontweight: 500,
-          },
-        },
-      },
-
-      MuiTab: {
-        styleOverrides: {
-          wrapper: {
-            fontSize: 12,
-          },
-          root: {
-            minWidth: "25%!important",
-          },
-        },
-      },
-    },
-
-    palette: {
-      primary: {
-        light: "#00926c",
-        main: "#00926c",
-        dark: "#00926c",
-        contrastText: "#fff",
-      },
-    },
-  });
 
   const resultUrl = useSelector((state) => state.forensic.url);
   const resultData = useSelector((state) => state.forensic.result);
@@ -187,65 +146,55 @@ const Forensic = () => {
   };
 
   return (
-    <div>
-      <ThemeProvider theme={theme}>
-        <Stack direction="column" spacing={2}>
-          <HeaderTool
-            name={keywordAllTools("navbar_forensic")}
-            description={keywordAllTools("navbar_forensic_description")}
-            icon={
-              <imageForensic.icon sx={{ fill: "#00926c", fontSize: "40px" }} />
-            }
-          />
+    <Stack direction="column" spacing={2}>
+      <HeaderTool
+        name={keywordAllTools("navbar_forensic")}
+        description={keywordAllTools("navbar_forensic_description")}
+        icon={<imageForensic.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
+      />
 
-          <Alert severity="warning">{keywordWarning("warning_forensic")}</Alert>
+      <Alert severity="warning">{keywordWarning("warning_forensic")}</Alert>
 
-          <Card style={{ display: resultData || loading ? "none" : "block" }}>
-            <CardHeader
-              title={keyword("cardheader_source")}
-              className={classes.headerUploadedImage}
+      <Card variant="outlined">
+        <Box p={4}>
+          <form>
+            <StringFileUploadField
+              labelKeyword={keyword("forensic_input")}
+              placeholderKeyword={keyword("forensic_input_placeholder")}
+              submitButtonKeyword={keyword("button_submit")}
+              localFileKeyword={keyword("button_localfile")}
+              urlInput={input}
+              setUrlInput={setInput}
+              fileInput={imageFile}
+              setFileInput={setImageFile}
+              handleSubmit={submitUrl}
+              fileInputTypesAccepted={"image/*"}
+              handleCloseSelectedFile={handleCloseSelectedFile}
+              preprocessLocalFile={preprocessImage}
             />
-            <Box p={3}>
-              <form>
-                <StringFileUploadField
-                  labelKeyword={keyword("forensic_input")}
-                  placeholderKeyword={keyword("forensic_input_placeholder")}
-                  submitButtonKeyword={keyword("button_submit")}
-                  localFileKeyword={keyword("button_localfile")}
-                  urlInput={input}
-                  setUrlInput={setInput}
-                  fileInput={imageFile}
-                  setFileInput={setImageFile}
-                  handleSubmit={submitUrl}
-                  fileInputTypesAccepted={"image/*"}
-                  handleCloseSelectedFile={handleCloseSelectedFile}
-                  preprocessLocalFile={preprocessImage}
-                />
-              </form>
-            </Box>
-          </Card>
+          </form>
+        </Box>
+      </Card>
 
-          {loading && (
-            <div>
-              <LinearProgress />
-            </div>
-          )}
+      {loading && (
+        <div>
+          <LinearProgress />
+        </div>
+      )}
 
-          {resultData && (
-            <ForensicResults
-              result={resultData}
-              url={resultUrl}
-              type={type}
-              loaded={loaded}
-              gifAnimation={gifAnimationState}
-              resetImage={resetImage}
-              masksData={masks}
-              onClose={handleCloseSelectedFile}
-            />
-          )}
-        </Stack>
-      </ThemeProvider>
-    </div>
+      {resultData && (
+        <ForensicResults
+          result={resultData}
+          url={resultUrl}
+          type={type}
+          loaded={loaded}
+          gifAnimation={gifAnimationState}
+          resetImage={resetImage}
+          masksData={masks}
+          onClose={handleCloseSelectedFile}
+        />
+      )}
+    </Stack>
   );
 };
 export default Forensic;

@@ -1,18 +1,28 @@
 import React, { memo, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
+import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
+import Fade from "@mui/material/Fade";
 import Grid2 from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
-import LinearProgress from "@mui/material/LinearProgress";
+import Link from "@mui/material/Link";
+import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import LinkIcon from "@mui/icons-material/Link";
+import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 import "@Shared/GoogleAnalytics/MatomoAnalytics";
@@ -24,8 +34,13 @@ import { ClearIcon } from "@mui/x-date-pickers";
 
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { keyframes } from "../../../../constants/tools";
-import { useKeyframeWrapper } from "./Hooks/useKeyframeWrapper";
+import {
+  resetKeyframes,
+  setKeyframesUrl,
+} from "../../../../redux/reducers/tools/keyframesReducer";
+import { useProcessKeyframes } from "./Hooks/useKeyframeWrapper";
 import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
+import { ImageWithFade } from "./ImageWithFade";
 import LocalFile from "./LocalFile/LocalFile";
 import KeyFramesResults from "./Results/KeyFramesResults";
 
@@ -37,19 +52,26 @@ const Keyframes = () => {
     "components/NavItems/tools/Alltools",
   );
 
+  const dispatch = useDispatch();
+
   const resultUrl = useSelector((state) => state.keyframes.url);
   const resultData = useSelector((state) => state.keyframes.result);
-  const isLoading = useSelector((state) => state.keyframes.loading);
+  const keyframesFeaturesData = useSelector(
+    (state) => state.keyframes.keyframesFeatures,
+  );
   const isLoadingSimilarity = useSelector(
     (state) => state.keyframes.similarityLoading,
   );
 
+  const role = useSelector((state) => state.userSession.user.roles);
+
+  const similarityResults = useSelector((state) => state.keyframes.similarity);
+
   // State used to load images
   const [input, setInput] = useState(resultUrl ? resultUrl : "");
   const [submittedUrl, setSubmittedUrl] = useState(undefined);
-  //const [urlDetected, setUrlDetected] = useState(false)
+
   useVideoSimilarity(submittedUrl, keyword);
-  useKeyframeWrapper(submittedUrl, keyword);
 
   useTrackEvent(
     "submission",
@@ -60,8 +82,36 @@ const Keyframes = () => {
     submittedUrl,
   );
 
-  const submitUrl = () => {
-    setSubmittedUrl(input);
+  /**
+   * Returns a translation keyword to print a user-friendly error
+   * @param error {Error} The error object
+   * @returns {string} The translation keyword
+   */
+  const handleError = (error) => {
+    if (error.code === "ECONNABORTED" || error.response?.status === 504) {
+      return "error_timeout";
+    } else if (error.response?.status === 500) {
+      return "keyframes_error_unavailable";
+    } else {
+      return "keyframes_error_default";
+    }
+  };
+
+  /**
+   *
+   * @param url {?string} Optional URL to pass if it is external
+   * @returns {Promise<void>}
+   */
+  const submitUrl = async (url) => {
+    dispatch(resetKeyframes());
+    dispatch(setKeyframesUrl(url ?? input));
+    resetFetchingKeyframes();
+    try {
+      setSubmittedUrl(url ?? input);
+      await executeProcess(url ?? input, role);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -69,7 +119,6 @@ const Keyframes = () => {
 
     const uri = decodeURIComponent(url);
     setInput(uri);
-    submitUrl();
   }, [url]);
 
   useEffect(() => {
@@ -81,21 +130,26 @@ const Keyframes = () => {
     if (processUrl) {
       setInput(processUrl);
       setSubmittedUrl(processUrl);
+      submitUrl(processUrl);
     }
   }, [processUrl]);
-
-  /**
-   * Resets input
-   */
-  const handleCloseResult = () => {
-    setInput("");
-  };
 
   const [tabSelected, setTabSelected] = useState("url");
 
   const handleTabSelectedChange = (event, newValue) => {
     setTabSelected(newValue);
   };
+
+  const {
+    executeProcess,
+    resetFetchingKeyframes,
+    isPending,
+    status,
+    error,
+    isFeatureDataPending,
+    featureDataError,
+    featureStatus,
+  } = useProcessKeyframes();
 
   return (
     <Box>
@@ -147,20 +201,22 @@ const Keyframes = () => {
                           label={keyword("keyframes_input")}
                           // placeholder={keyword("keyframes_input_placeholder")}
                           fullWidth
-                          disabled={isLoading || isLoadingSimilarity}
+                          disabled={isPending || isLoadingSimilarity}
                           value={input}
                           variant="outlined"
                           onChange={(e) => setInput(e.target.value)}
-                          InputProps={{
-                            endAdornment: input ? (
-                              <IconButton
-                                size="small"
-                                onClick={() => setInput("")}
-                                disabled={isLoading || isLoadingSimilarity}
-                              >
-                                <ClearIcon />
-                              </IconButton>
-                            ) : undefined,
+                          slotProps={{
+                            input: {
+                              endAdornment: input ? (
+                                <IconButton
+                                  size="small"
+                                  onClick={() => setInput("")}
+                                  disabled={isPending || isLoadingSimilarity}
+                                >
+                                  <ClearIcon />
+                                </IconButton>
+                              ) : undefined,
+                            },
                           }}
                         />
                       </Grid2>
@@ -174,19 +230,14 @@ const Keyframes = () => {
                             e.preventDefault();
                             submitUrl();
                           }}
-                          loading={isLoading || isLoadingSimilarity}
+                          disabled={!input}
+                          loading={isPending || isLoadingSimilarity}
                         >
                           {keyword("button_submit")}
                         </LoadingButton>
                       </Grid2>
                     </Grid2>
                   </form>
-                  {isLoading && (
-                    <>
-                      <Box m={3} />
-                      <LinearProgress />
-                    </>
-                  )}
                 </Box>
               </TabPanel>
               <TabPanel value="file">
@@ -197,11 +248,176 @@ const Keyframes = () => {
             </Box>
           </Card>
         </TabContext>
+
+        {similarityResults &&
+          !isLoadingSimilarity &&
+          similarityResults.length > 0 && (
+            <Card variant="outlined">
+              <Box>
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon sx={{ color: "primary" }} />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Box
+                      p={1}
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <ReportProblemOutlinedIcon
+                        sx={{ color: "primary", marginRight: "8px" }}
+                      />
+                      <Typography
+                        variant="h6"
+                        align="left"
+                        sx={{ color: "primary" }}
+                      >
+                        {keyword("found_dbkf")}
+                      </Typography>
+                    </Box>
+                  </AccordionSummary>
+                  <AccordionDetails style={{ flexDirection: "column" }}>
+                    <Box p={1}>
+                      <Typography variant="body1" align="left">
+                        {keyword("dbkf_articles")}
+                      </Typography>
+
+                      <Box m={1} />
+
+                      {similarityResults.map((value, key) => {
+                        return (
+                          <Typography
+                            variant="body1"
+                            align="left"
+                            sx={{ color: "primary" }}
+                            key={key}
+                          >
+                            <Link
+                              target="_blank"
+                              href={value.externalLink}
+                              sx={{ color: "primary" }}
+                            >
+                              {value.externalLink}
+                            </Link>
+                          </Typography>
+                        );
+                      })}
+                    </Box>
+                  </AccordionDetails>
+                </Accordion>
+              </Box>
+            </Card>
+          )}
+
+        {status && isPending && (
+          <Fade in={isPending} timeout={750}>
+            <Alert icon={<CircularProgress size={20} />} severity="info">
+              {status}
+            </Alert>
+          </Fade>
+        )}
+
+        {isPending && (
+          <Fade in={isPending} timeout={1500}>
+            <Card variant="outlined">
+              <Stack direction="column" spacing={4} p={2}>
+                <Skeleton variant="rounded" height={40} />
+                <Stack direction={{ md: "row", xs: "column" }} spacing={4}>
+                  <Skeleton variant="rounded" width={80} height={80} />
+                  <Skeleton variant="rounded" width={80} height={80} />
+                  <Skeleton variant="rounded" width={80} height={80} />
+                  <Skeleton variant="rounded" width={80} height={80} />
+                </Stack>
+              </Stack>
+            </Card>
+          </Fade>
+        )}
+
+        {error && <Alert severity="error">{keyword(handleError(error))}</Alert>}
+
         {resultData && tabSelected === "url" && (
-          <KeyFramesResults
-            closeResult={handleCloseResult}
-            result={resultData}
-          />
+          <Fade in={resultData && tabSelected === "url"} timeout={1500}>
+            <div>
+              <KeyFramesResults result={resultData} />
+            </div>
+          </Fade>
+        )}
+
+        {featureStatus && isFeatureDataPending && (
+          <Alert icon={<CircularProgress size={20} />} severity="info">
+            {featureStatus}
+          </Alert>
+        )}
+
+        {isFeatureDataPending && (
+          <Fade in={isFeatureDataPending} timeout={1500}>
+            <Card variant="outlined">
+              <Stack direction="column" spacing={4} p={2}>
+                <Skeleton variant="rounded" height={40} />
+                <Stack direction={{ md: "row", xs: "column" }} spacing={4}>
+                  <Skeleton variant="rounded" width={80} height={80} />
+                  <Skeleton variant="rounded" width={80} height={80} />
+                  <Skeleton variant="rounded" width={80} height={80} />
+                  <Skeleton variant="rounded" width={80} height={80} />
+                </Stack>
+              </Stack>
+            </Card>
+          </Fade>
+        )}
+
+        {featureDataError && (
+          <Alert severity="error">{featureDataError.message}</Alert>
+        )}
+
+        {keyframesFeaturesData && tabSelected === "url" && (
+          <>
+            <Fade in={keyframesFeaturesData !== null} timeout={1500}>
+              <Card variant="outlined">
+                <Box pb={4} pt={2} pl={4} pr={4}>
+                  <Stack direction="column" spacing={2}>
+                    <Typography variant="h6">
+                      {keyword("faces_detected_title")}
+                    </Typography>
+                    <Grid2 container direction="row" spacing={2}>
+                      {keyframesFeaturesData.faces.map((item, i) => (
+                        <Grid2 key={i} size={{ md: 3, lg: 1 }}>
+                          <ImageWithFade
+                            src={item.representative.imageUrl}
+                            alt={`extracted img with face #${i + 1}`}
+                          />
+                        </Grid2>
+                      ))}
+                    </Grid2>
+                  </Stack>
+                </Box>
+              </Card>
+            </Fade>
+            <Fade in={keyframesFeaturesData !== null} timeout={1500}>
+              <Card variant="outlined">
+                <Box p={4}>
+                  <Stack direction="column" spacing={2}>
+                    <Typography variant="h6">
+                      {keyword("text_detected_title")}
+                    </Typography>
+                    <Grid2 container direction="row" spacing={2}>
+                      {keyframesFeaturesData.texts.map((item, i) => (
+                        <Grid2 key={i} size={{ md: 3, lg: 1 }}>
+                          <ImageWithFade
+                            src={item.representative.imageUrl}
+                            alt={`extracted img with text #${i + 1}`}
+                          />
+                        </Grid2>
+                      ))}
+                    </Grid2>
+                  </Stack>
+                </Box>
+              </Card>
+            </Fade>
+          </>
         )}
       </Stack>
     </Box>
