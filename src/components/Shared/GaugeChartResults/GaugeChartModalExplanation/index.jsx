@@ -9,7 +9,8 @@ import Modal from "@mui/material/Modal";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { Close, Square } from "@mui/icons-material";
+import { Square } from "@mui/icons-material";
+import CloseIcon from "@mui/icons-material/Close";
 
 /**
  *
@@ -101,7 +102,7 @@ const GaugeChartModalExplanation = ({
                 aria-label="close popup"
                 onClick={toggleModal}
               >
-                <Close />
+                <CloseIcon />
               </IconButton>
             </Stack>
             <Stack

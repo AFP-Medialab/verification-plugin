@@ -1,25 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
+import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
+import Divider from "@mui/material/Divider";
 import Grid2 from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
 import Popover from "@mui/material/Popover";
 import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { Close } from "@mui/icons-material";
+import { Download } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
+import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
+import { LineChart } from "@mui/x-charts/LineChart";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
+import { ROLES } from "../../../../../constants/roles";
+
 const DeepfakeResultsVideo = (props) => {
+  const userAuthenticated = useSelector(
+    (state) => state.userSession && state.userSession.userAuthenticated,
+  );
+
   const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
 
   class DeepfakeResult {
@@ -51,7 +62,7 @@ const DeepfakeResultsVideo = (props) => {
     THRESHOLD_3: 90,
   };
 
-  // const gaugeChartRef = useRef(null);
+  const deepfakeChartRef = useRef(null);
 
   const keywords = [
     "gauge_scale_modal_explanation_rating_1",
@@ -63,6 +74,52 @@ const DeepfakeResultsVideo = (props) => {
 
   const results = props.result;
   const url = props.url;
+
+  const [xAxisData, setXAxisData] = React.useState([]);
+  const [yAxisData, setYAxisData] = React.useState([]);
+
+  const role = useSelector((state) => state.userSession.user.roles);
+
+  /**
+   * Alternate between v1 and v2 based on user role
+   * @type {string}
+   */
+  const faceswapAlgorithm = role.includes(ROLES.EVALUATION)
+    ? "faceswap_fsfm_report"
+    : "deepfake_video_report";
+
+  useEffect(() => {
+    if (
+      props.result &&
+      props.result[faceswapAlgorithm] &&
+      props.result[faceswapAlgorithm].results &&
+      props.result[faceswapAlgorithm].results.length > 0
+    ) {
+      for (const shotPrediction of props.result[faceswapAlgorithm].results) {
+        // This needs an undefined check because the value can be 0
+        if (
+          shotPrediction.prediction !== undefined &&
+          typeof shotPrediction.prediction === "number" &&
+          shotPrediction.shot_start !== undefined &&
+          typeof shotPrediction.shot_start === "number" &&
+          shotPrediction.shot_end !== undefined &&
+          typeof shotPrediction.shot_end === "number"
+        ) {
+          // Add X-Axis data twice for start to end value
+          setYAxisData((prev) => [
+            ...prev,
+            shotPrediction.prediction * 100,
+            shotPrediction.prediction * 100,
+          ]);
+          setXAxisData((prev) => [
+            ...prev,
+            shotPrediction.shot_start,
+            shotPrediction.shot_end,
+          ]);
+        }
+      }
+    }
+  }, [props.result]);
 
   const [shotSelectedKey, setShotSelectedKey] = useState(-1);
   const [shotSelectedValue, setShotSelectedValue] = useState(null);
@@ -95,29 +152,29 @@ const DeepfakeResultsVideo = (props) => {
   );
 
   useEffect(() => {
-    const prediction = results.deepfake_video_report.prediction;
+    const prediction = results[faceswapAlgorithm].prediction;
     let shot = -1;
 
     if (
       !results ||
-      !results.deepfake_video_report ||
-      !results.deepfake_video_report.results
+      !results[faceswapAlgorithm] ||
+      !results[faceswapAlgorithm].results
     ) {
       return;
     }
 
     for (
       let i = 0;
-      i < results.deepfake_video_report.results.length && shot === -1;
+      i < results[faceswapAlgorithm].results.length && shot === -1;
       i++
     ) {
-      if (results.deepfake_video_report.results[i].prediction === prediction) {
+      if (results[faceswapAlgorithm].results[i].prediction === prediction) {
         shot = i;
       }
     }
 
     if (shot !== -1) {
-      clickShot(results.deepfake_video_report.results[shot], shot);
+      clickShot(results[faceswapAlgorithm].results[shot], shot);
     }
   }, []);
 
@@ -130,14 +187,11 @@ const DeepfakeResultsVideo = (props) => {
 
     let res = [];
 
-    if (
-      results.deepfake_video_report &&
-      results.deepfake_video_report.prediction
-    ) {
+    if (results[faceswapAlgorithm] && results[faceswapAlgorithm].prediction) {
       res.push(
         new DeepfakeResult(
           Object.keys(DeepfakeImageDetectionMethodNames)[0],
-          results.deepfake_video_report.prediction * 100,
+          results[faceswapAlgorithm].prediction * 100,
         ),
       );
     }
@@ -182,340 +236,363 @@ const DeepfakeResultsVideo = (props) => {
   };
 
   return (
-    <Card sx={{ width: "100%" }}>
+    <Card variant="outlined" sx={{ width: "100%" }}>
       <CardHeader
-        style={{ borderRadius: "4px 4px 0px 0px" }}
         title={keyword("deepfake_video_title")}
         action={
           <IconButton aria-label="close" onClick={handleClose}>
-            <Close sx={{ color: "white" }} />
+            <CloseIcon />
           </IconButton>
         }
       />
       <CardContent>
-        <Grid2
-          container
-          direction="row"
-          justifyContent="space-evenly"
-          alignItems="flex-start"
-        >
-          <Grid2 size={{ xs: 6 }} container direction="column" spacing={3}>
-            <Grid2 width="100%" size={{ xs: 6 }} container direction="column">
-              <video
-                width="100%"
-                height="auto"
-                controls
-                key={results.deepfake_video_report.video_path}
-                style={{
-                  borderRadius: "10px",
-                  boxShadow:
-                    "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
-                }}
-              >
-                <source
-                  src={results.deepfake_video_report.video_path + "#t=2,4"}
-                  type="video/mp4"
-                />
-                {keyword("deepfake_support")}
-              </video>
-            </Grid2>
-            {!!results.deepfake_video_report.results && (
-              <Grid2 size={{ xs: 6 }} container width="100%" direction="column">
-                <Typography
-                  variant="body1"
-                  style={{
-                    color: "#00926c",
-                    fontSize: "24px",
-                    fontWeight: "500",
-                  }}
-                >
-                  {keyword("deepfake_clips")}
-                </Typography>
-                <Box m={1} />
-
-                <Grid2 container spacing={3}>
-                  {results.deepfake_video_report.results.map(
-                    (valueShot, keyShot) => {
-                      const shotStart = valueShot.shot_start;
-                      const shotEnd = valueShot.shot_end;
-
-                      const startMin = ("0" + Math.floor(shotStart / 60)).slice(
-                        -2,
-                      );
-                      const startSec = ("0" + (shotStart % 60)).slice(-2);
-                      const endMin = ("0" + Math.floor(shotEnd / 60)).slice(-2);
-                      const endSec = ("0" + (shotEnd % 60)).slice(-2);
-
-                      return (
-                        <Grid2 size={{ sm: 4, xs: 12 }} key={keyShot}>
-                          {keyShot === shotSelectedKey ? (
-                            <Box
-                              onClick={() => clickShot(valueShot, keyShot)}
-                              style={{
-                                backgroundColor: "#00926c",
-                                borderRadius: "10px",
-                                overflow: "hidden",
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                boxShadow:
-                                  "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
-                              }}
-                            >
-                              <img
-                                alt="shot"
-                                key={keyShot}
-                                src={valueShot.shot_image}
-                                style={{ width: "100%", height: "auto" }}
-                              />
-                              <Box mt={1} />
-                              <Typography
-                                variant="body1"
-                                style={{ fontSize: "14px", color: "#ffffff" }}
-                              >
-                                {startMin}:{startSec}
-                                {" - "}
-                                {endMin}:{endSec}
-                              </Typography>
-                              <Box mt={1} />
-                            </Box>
-                          ) : (
-                            <Box
-                              onClick={() => clickShot(valueShot, keyShot)}
-                              style={{
-                                backgroundColor: "#ffffff",
-                                borderRadius: "10px",
-                                overflow: "hidden",
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                boxShadow:
-                                  "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
-                              }}
-                            >
-                              <img
-                                alt="shot"
-                                key={keyShot}
-                                src={valueShot.shot_image}
-                                style={{ width: "100%", height: "auto" }}
-                              />
-                              <Box mt={1} />
-                              <Typography
-                                variant="body1"
-                                style={{ fontSize: "14px" }}
-                              >
-                                {startMin}:{startSec}
-                                {" - "}
-                                {endMin}:{endSec}
-                              </Typography>
-                              <Box mt={1} />
-                            </Box>
-                          )}
-                        </Grid2>
-                      );
-                    },
-                  )}
-                </Grid2>
-              </Grid2>
-            )}
-          </Grid2>
-          <Grid2 size={{ xs: 6 }} p={2}>
-            <Stack direction="column" p={4} spacing={4}>
-              {deepfakeScores && deepfakeScores.length === 0 && (
-                <Typography variant="h5" sx={{ color: "red" }}>
-                  {keyword("deepfake_no_face_detection")}
-                </Typography>
-              )}
-              {deepfakeScores && deepfakeScores.length !== 0 && (
-                <GaugeChartResult
-                  keyword={keyword}
-                  scores={deepfakeScores}
-                  methodNames={DeepfakeImageDetectionMethodNames}
-                  detectionThresholds={DETECTION_THRESHOLDS}
-                  resultsHaveErrors={false}
-                  sanitizeDetectionPercentage={(n) => Math.round(n)}
-                  gaugeExplanation={{ keywords: keywords, colors: colors }}
-                  toolName={"Deepfake"}
-                  detectionType={"video"}
-                />
-              )}
-            </Stack>
-          </Grid2>
-        </Grid2>
-
-        <Box m={3} />
-
-        {results &&
-          results.deepfake_video_report &&
-          results.deepfake_video_report.results && (
-            <Card style={{ overflow: "visible" }} mb={3}>
-              <CardHeader
-                style={{ borderRadius: "4px 4px 0px 0px" }}
-                title={
-                  <Grid2
-                    container
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
+        <Stack direction="column" spacing={4}>
+          <Grid2
+            container
+            direction="row"
+            justifyContent="space-evenly"
+            alignItems="flex-start"
+          >
+            <Grid2 size={{ xs: 6 }} container direction="column" spacing={2}>
+              <Grid2 width="100%" size={{ xs: 6 }} container direction="column">
+                <Stack direction="column" spacing={4}>
+                  <video
+                    width="100%"
+                    height="auto"
+                    controls
+                    key={results[faceswapAlgorithm].video_path}
+                    style={{
+                      borderRadius: "10px",
+                      maxHeight: "50vh",
+                    }}
                   >
-                    <span>{keyword("deepfake_results")}</span>
-
-                    <Popover
-                      id={help}
-                      open={openHelp}
-                      anchorEl={anchorHelp}
-                      onClose={closeHelp}
-                      PaperProps={{
-                        style: {
-                          width: "300px",
-                          fontSize: 14,
+                    <source
+                      src={results[faceswapAlgorithm].video_path + "#t=2,4"}
+                      type="video/mp4"
+                    />
+                    {keyword("deepfake_support")}
+                  </video>
+                  <Stack
+                    direction="column"
+                    justifyContent="center"
+                    ref={deepfakeChartRef}
+                  >
+                    <LineChart
+                      xAxis={[
+                        {
+                          data: xAxisData,
                         },
-                      }}
-                      anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "center",
-                      }}
-                      transformOrigin={{
-                        vertical: "top",
-                        horizontal: "center",
-                      }}
-                    >
-                      <Box p={3}>
+                      ]}
+                      series={[
+                        {
+                          data: yAxisData,
+                        },
+                      ]}
+                      height={300}
+                      grid={{ vertical: true, horizontal: true }}
+                    />
+                    <Typography>
+                      {keyword("deepfake_video_videoreport_name")}
+                    </Typography>
+                  </Stack>
+
+                  {userAuthenticated && (
+                    <Box>
+                      <Tooltip
+                        title={keyword("deepfake_video_download_chart_button")}
+                      >
+                        <IconButton
+                          color="primary"
+                          aria-label="download chart"
+                          onClick={async () =>
+                            await exportReactElementAsJpg(
+                              deepfakeChartRef,
+                              "deepfake_video_detection_chart_download_button_label",
+                            )
+                          }
+                        >
+                          <Download />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
+                  )}
+                </Stack>
+              </Grid2>
+            </Grid2>
+            <Grid2 size={{ xs: 6 }}>
+              <Stack direction="column" spacing={4}>
+                {deepfakeScores && deepfakeScores.length === 0 && (
+                  <Typography variant="h5" sx={{ color: "red" }}>
+                    {keyword("deepfake_no_face_detection")}
+                  </Typography>
+                )}
+                {deepfakeScores && deepfakeScores.length !== 0 && (
+                  <GaugeChartResult
+                    keyword={keyword}
+                    scores={deepfakeScores}
+                    methodNames={DeepfakeImageDetectionMethodNames}
+                    detectionThresholds={DETECTION_THRESHOLDS}
+                    resultsHaveErrors={false}
+                    sanitizeDetectionPercentage={(n) => Math.round(n)}
+                    gaugeExplanation={{ keywords: keywords, colors: colors }}
+                    toolName={"Deepfake"}
+                    detectionType={"video"}
+                  />
+                )}
+              </Stack>
+            </Grid2>
+          </Grid2>
+
+          <Divider />
+
+          <Grid2
+            container
+            direction="row"
+            sx={{
+              justifyContent: "flex-start",
+              alignItems: "flex-start",
+            }}
+            spacing={2}
+          >
+            <Grid2 size={7}>
+              {!!results[faceswapAlgorithm].results && (
+                <Box>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      color: "#00926c",
+                    }}
+                  >
+                    {keyword("deepfake_clips")}
+                  </Typography>
+                  <Box m={1} />
+
+                  <Grid2 container spacing={3} width="100%">
+                    {results[faceswapAlgorithm].results.map(
+                      (valueShot, keyShot) => {
+                        const shotStart = valueShot.shot_start;
+                        const shotEnd = valueShot.shot_end;
+
+                        const startMin = (
+                          "0" + Math.floor(shotStart / 60)
+                        ).slice(-2);
+                        const startSec = ("0" + (shotStart % 60)).slice(-2);
+                        const endMin = ("0" + Math.floor(shotEnd / 60)).slice(
+                          -2,
+                        );
+                        const endSec = ("0" + (shotEnd % 60)).slice(-2);
+
+                        return (
+                          <Grid2 size={{ md: 3, sm: 12 }} key={keyShot}>
+                            <Card
+                              variant="outlined"
+                              onClick={() => clickShot(valueShot, keyShot)}
+                              sx={{
+                                backgroundColor:
+                                  keyShot === shotSelectedKey
+                                    ? "#00926c"
+                                    : "var(--mui-palette-background-paper)",
+                              }}
+                            >
+                              <CardActionArea>
+                                <CardContent>
+                                  <Stack
+                                    direction="column"
+                                    spacing={1}
+                                    alignItems="center"
+                                  >
+                                    <img
+                                      alt="shot"
+                                      key={keyShot}
+                                      src={valueShot.shot_image}
+                                      style={{
+                                        maxWidth: "100px",
+                                        maxHeight: "15vh",
+                                      }}
+                                    />
+                                    <Typography variant="caption">
+                                      {startMin}:{startSec}
+                                      {" - "}
+                                      {endMin}:{endSec}
+                                    </Typography>
+                                  </Stack>
+                                </CardContent>
+                              </CardActionArea>
+                            </Card>
+                          </Grid2>
+                        );
+                      },
+                    )}
+                  </Grid2>
+                </Box>
+              )}
+            </Grid2>
+            <Grid2 size={5}>
+              {results &&
+                results[faceswapAlgorithm] &&
+                results[faceswapAlgorithm].results && (
+                  <Card
+                    variant="outlined"
+                    style={{ overflow: "visible" }}
+                    mb={3}
+                  >
+                    <CardHeader
+                      style={{ borderRadius: "4px 4px 0px 0px" }}
+                      title={
                         <Grid2
                           container
                           direction="row"
                           justifyContent="space-between"
-                          alignItems="stretch"
+                          alignItems="center"
                         >
-                          <Typography variant="h6" gutterBottom>
-                            {keyword("deepfake_title_what")}
-                          </Typography>
+                          <span>{keyword("deepfake_results")}</span>
 
-                          <CloseIcon onClick={closeHelp} />
+                          <Popover
+                            id={help}
+                            open={openHelp}
+                            anchorEl={anchorHelp}
+                            onClose={closeHelp}
+                            slotProps={{
+                              paper: {
+                                style: {
+                                  width: "300px",
+                                  fontSize: 14,
+                                },
+                              },
+                            }}
+                            anchorOrigin={{
+                              vertical: "bottom",
+                              horizontal: "center",
+                            }}
+                            transformOrigin={{
+                              vertical: "top",
+                              horizontal: "center",
+                            }}
+                          >
+                            <Box p={2}>
+                              <Grid2
+                                container
+                                direction="row"
+                                justifyContent="space-between"
+                                alignItems="stretch"
+                              >
+                                <Typography variant="h6" gutterBottom>
+                                  {keyword("deepfake_title_what")}
+                                </Typography>
+
+                                <CloseIcon onClick={closeHelp} />
+                              </Grid2>
+                              <Box m={1} />
+                              <Typography variant="body2">
+                                {keyword("deepfake_filters_explanation_video")}
+                              </Typography>
+                            </Box>
+                          </Popover>
                         </Grid2>
-                        <Box m={1} />
-                        <Typography variant="body2">
-                          {keyword("deepfake_filters_explanation_video")}
-                        </Typography>
-                      </Box>
-                    </Popover>
-                  </Grid2>
-                }
-              />
-              <div>
-                <Box p={3}>
-                  {shotSelectedValue === null ? (
-                    <Grid2
-                      container
-                      direction="column"
-                      justifyContent="center"
-                      alignItems="center"
-                      style={{ height: "350px" }}
-                    >
-                      <Box p={4}>
-                        <Typography
-                          variant="h6"
-                          style={{ color: "#C9C9C9" }}
-                          align="center"
+                      }
+                    />
+                    <Box p={2}>
+                      {shotSelectedValue === null ? (
+                        <Grid2
+                          container
+                          direction="column"
+                          justifyContent="center"
+                          alignItems="center"
+                          style={{ height: "350px" }}
                         >
-                          {keyword("deepfake_select")}
-                        </Typography>
-                      </Box>
-                    </Grid2>
-                  ) : (
-                    <Grid2 container direction="row" spacing={4}>
-                      <Grid2 container direction="column" size={{ xs: 6 }}>
-                        <Typography variant="h6">
-                          {keyword("deepfake_clip")}
-                        </Typography>
-
-                        <Box m={1} />
-
-                        <video
-                          ref={videoClip}
-                          height="auto"
-                          controls
-                          key={
-                            results.deepfake_video_report.video_path +
-                            "#t=" +
-                            shotSelectedValue.shot_start +
-                            "," +
-                            shotSelectedValue.shot_end
-                          }
-                          style={{
-                            borderRadius: "10px",
-                            boxShadow:
-                              "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
-                            maxHeight: "60vh",
-                            maxWidth: "100%",
-                          }}
-                        >
-                          <source
-                            src={
-                              results.deepfake_video_report.video_path +
-                              "#t=" +
-                              shotSelectedValue.shot_start +
-                              "," +
-                              shotSelectedValue.shot_end
-                            }
-                            type="video/mp4"
-                          />
-                          {keyword("deepfake_support")}
-                        </video>
-                      </Grid2>
-
-                      <Grid2 container direction="column" size={{ xs: 6 }}>
-                        <Typography variant="h6">
-                          {keyword("deepfake_faces")}
-                        </Typography>
-                        <Box m={1} />
-
-                        <Grid2 container direction="row" spacing={3}>
-                          {shotSelectedValue.face_image_paths.map(
-                            (valueFace, keyFace) => {
-                              return (
-                                <Grid2
-                                  size={{ sm: 4, xs: 12 }}
-                                  key={keyFace}
-                                  style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    alignItems: "center",
-                                  }}
-                                >
-                                  <img
-                                    alt="face"
-                                    key={keyFace}
-                                    src={valueFace}
-                                    style={{ width: "100%", height: "auto" }}
-                                  />
-                                  <Box mt={1} />
-                                  <Typography variant="h3">
-                                    {Math.round(
-                                      shotSelectedValue.face_predictions[
-                                        keyFace
-                                      ] * 100,
-                                    )}
-                                    %
-                                  </Typography>
-                                  <Typography
-                                    variant="h6"
-                                    style={{ color: "#989898" }}
-                                  >
-                                    {keyword("deepfake_name")}
-                                  </Typography>
-                                </Grid2>
-                              );
-                            },
-                          )}
+                          <Box p={2}>
+                            <Typography
+                              variant="h6"
+                              style={{ color: "#C9C9C9" }}
+                              align="center"
+                            >
+                              {keyword("deepfake_select")}
+                            </Typography>
+                          </Box>
                         </Grid2>
-                      </Grid2>
-                    </Grid2>
-                  )}
-                </Box>
-              </div>
-            </Card>
-          )}
+                      ) : (
+                        <Grid2 container direction="row" spacing={2}>
+                          <Grid2
+                            container
+                            direction="column"
+                            size={{ md: 6, xs: 12 }}
+                          >
+                            <Typography>{keyword("deepfake_clip")}</Typography>
+                            <video
+                              ref={videoClip}
+                              height="auto"
+                              controls
+                              key={
+                                results[faceswapAlgorithm].video_path +
+                                "#t=" +
+                                shotSelectedValue.shot_start +
+                                "," +
+                                shotSelectedValue.shot_end
+                              }
+                              style={{
+                                borderRadius: "10px",
+                                maxHeight: "30vh",
+                                maxWidth: "100%",
+                              }}
+                            >
+                              <source
+                                src={
+                                  results[faceswapAlgorithm].video_path +
+                                  "#t=" +
+                                  shotSelectedValue.shot_start +
+                                  "," +
+                                  shotSelectedValue.shot_end
+                                }
+                                type="video/mp4"
+                              />
+                              {keyword("deepfake_support")}
+                            </video>
+                          </Grid2>
+                          <Grid2
+                            container
+                            direction="column"
+                            size={{ md: 6, xs: 12 }}
+                          >
+                            <Typography>{keyword("deepfake_faces")}</Typography>
+                            <Grid2 container direction="column" spacing={2}>
+                              {shotSelectedValue.face_image_paths.map(
+                                (valueFace, keyFace) => {
+                                  return (
+                                    <Grid2 size={12} key={keyFace}>
+                                      <Stack direction="column" spacing={2}>
+                                        <img
+                                          alt="face"
+                                          key={keyFace}
+                                          src={valueFace}
+                                          style={{
+                                            width: "100%",
+                                            height: "auto",
+                                            maxWidth: "120px",
+                                          }}
+                                        />
+                                        <Typography>
+                                          {Math.round(
+                                            shotSelectedValue.face_predictions[
+                                              keyFace
+                                            ] * 100,
+                                          )}
+                                          % {keyword("deepfake_name")}
+                                        </Typography>
+                                      </Stack>
+                                    </Grid2>
+                                  );
+                                },
+                              )}
+                            </Grid2>
+                          </Grid2>
+                        </Grid2>
+                      )}
+                    </Box>
+                  </Card>
+                )}
+            </Grid2>
+          </Grid2>
+        </Stack>
       </CardContent>
     </Card>
   );

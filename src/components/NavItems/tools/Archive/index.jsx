@@ -12,11 +12,14 @@ import Typography from "@mui/material/Typography";
 
 import { ArrowBack } from "@mui/icons-material";
 
+import { downloadZip, makeZip } from "client-zip";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { sha256 } from "hash-wasm";
 import {
   archiveStateCleaned,
   setArchiveUrl,
 } from "redux/reducers/tools/archiveReducer";
+import { CDXIndexer, WARCRecord, WARCSerializer } from "warcio";
 
 import { archiving } from "../../../../constants/tools";
 import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
@@ -48,7 +51,7 @@ const Archive = () => {
 
   const [urlResults, setUrlResults] = useState(false);
 
-  const [fileToUpload, setFileToUpload] = useState(/** @type {File?} */ null);
+  const [fileToUpload, setFileToUpload] = useState(/** @type {?File} */ null);
 
   const [archiveLinks, setArchiveLinks] = useState([]);
 
@@ -352,7 +355,6 @@ const Archive = () => {
                     variant="outlined"
                     startIcon={<ArrowBack />}
                     onClick={() => setStep((prev) => prev - 1)}
-                    sx={{ textTransform: "none" }}
                   >
                     {keyword("back_button")}
                   </Button>

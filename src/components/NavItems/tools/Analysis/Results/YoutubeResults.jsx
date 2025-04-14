@@ -105,7 +105,7 @@ const YoutubeResults = (props) => {
       {report !== null &&
         report["thumbnails"] !== undefined &&
         report["thumbnails"]["preferred"]["url"] && (
-          <Card>
+          <Card variant="outlined">
             <CardHeader
               title={keyword("cardheader_results")}
               className={classes.headerUploadedImage}
@@ -116,7 +116,7 @@ const YoutubeResults = (props) => {
                     dispatch(cleanAnalysisState());
                   }}
                 >
-                  <CloseIcon sx={{ color: "white" }} />
+                  <CloseIcon />
                 </IconButton>
               }
             />

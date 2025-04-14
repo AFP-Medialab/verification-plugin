@@ -32,7 +32,6 @@ import DataIcon from "../../../NavBar/images/SVG/DataAnalysis/Data_analysis.svg"
 import ImageIcon from "../../../NavBar/images/SVG/Image/Images.svg";
 import SearchIcon from "../../../NavBar/images/SVG/Search/Search.svg";
 import VideoIcon from "../../../NavBar/images/SVG/Video/Video.svg";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import ToolsMenuItem from "./ToolsMenuItem";
 
 function TabPanel(props) {
@@ -62,7 +61,6 @@ function TabPanel(props) {
  */
 const ToolsMenu = () => {
   const navigate = useNavigate();
-  const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Alltools");
   const keywordNavbar = i18nLoadNamespace("components/NavBar");
   const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
@@ -145,7 +143,7 @@ const ToolsMenu = () => {
         <SvgIcon
           component={VideoIcon}
           sx={{
-            fontSize: "40px",
+            fontSize: "24px",
           }}
           inheritViewBox
         />
@@ -159,7 +157,7 @@ const ToolsMenu = () => {
         <SvgIcon
           component={ImageIcon}
           sx={{
-            fontSize: "40px",
+            fontSize: "24px",
           }}
           inheritViewBox
         />
@@ -169,7 +167,7 @@ const ToolsMenu = () => {
       type: TOOLS_CATEGORIES.AUDIO,
       name: keywordNavbar(TOOLS_CATEGORIES.AUDIO),
       value: toolsAudio,
-      icon: <Audiotrack width="40px" height="40px" />,
+      icon: <Audiotrack width="24px" height="24px" />,
     },
     {
       type: TOOLS_CATEGORIES.SEARCH,
@@ -179,7 +177,7 @@ const ToolsMenu = () => {
         <SvgIcon
           component={SearchIcon}
           sx={{
-            fontSize: "40px",
+            fontSize: "24px",
           }}
           inheritViewBox
         />
@@ -193,7 +191,7 @@ const ToolsMenu = () => {
         <SvgIcon
           component={DataIcon}
           sx={{
-            fontSize: "40px",
+            fontSize: "24px",
           }}
           inheritViewBox
         />
@@ -203,7 +201,7 @@ const ToolsMenu = () => {
       type: TOOLS_CATEGORIES.OTHER,
       name: keywordNavbar(TOOLS_CATEGORIES.OTHER),
       value: otherTools,
-      icon: <MoreHorizIcon width="40px" height="40px" />,
+      icon: <MoreHorizIcon width="24px" height="24px" />,
     },
   ];
 
@@ -283,13 +281,14 @@ const ToolsMenu = () => {
           {keywordWarning("warning_advanced_tools")}
         </Alert>
       </Snackbar>
-      <Card>
+      <Card variant="outlined">
         <Tabs
           value={value}
           onChange={handleChange}
           indicatorColor={"primary"}
           variant="scrollable"
           scrollButtons="auto"
+          allowScrollButtonsMobile
         >
           {categoriesAllowedForUser.map((category, index) => {
             //  if(category.value.length !==0){
@@ -300,7 +299,6 @@ const ToolsMenu = () => {
                 iconPosition="start"
                 label={
                   <Typography
-                    variant="h6"
                     style={{
                       textTransform: "capitalize",
                     }}
@@ -310,34 +308,35 @@ const ToolsMenu = () => {
                 }
               />
             );
-            // }
           })}
         </Tabs>
 
         <Box sx={{ m: 1 }} />
 
-        <div style={{ minHeight: "340px" }}>
+        <Box sx={{ minHeight: "55vh" }}>
           {categoriesAllowedForUser.map((category, index) => {
             const tools = category.value;
-            //if(tools.length !==0){
 
             return (
               <TabPanel value={value} index={index} key={index}>
                 <Grid2
                   container
-                  justifyContent="flex-start"
+                  sx={{
+                    justifyContent: "flex-start",
+                    alignItems: "stretch",
+                  }}
                   spacing={2}
-                  className={classes.toolCardsContainer}
                 >
                   {tools.map((tool, key) => {
                     const element = (
-                      <Grid2
-                        className={classes.toolCardStyle}
-                        key={key}
-                        onClick={() => handleClick(tool.path, tool.rolesNeeded)}
-                        minWidth="250px"
-                      >
-                        <ToolsMenuItem tool={tool} />
+                      <Grid2 size={{ xs: 4, lg: 3 }} key={key} minWidth="200px">
+                        <ToolsMenuItem
+                          tool={tool}
+                          onClick={() =>
+                            handleClick(tool.path, tool.rolesNeeded)
+                          }
+                          key={key}
+                        />
                       </Grid2>
                     );
                     if (
@@ -357,7 +356,7 @@ const ToolsMenu = () => {
               </TabPanel>
             );
           })}
-        </div>
+        </Box>
       </Card>
 
       <Box sx={{ m: 3 }} />
