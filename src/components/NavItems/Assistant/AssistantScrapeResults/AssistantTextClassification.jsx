@@ -261,8 +261,8 @@ export function MgtCategoriesList({
         animate={false}
         nrOfLevels={4}
         textColor={resolvedMode === "dark" ? "white" : "black"}
-        needleColor={"#767d86"}
-        needleBaseColor={"#767d86"}
+        needleColor={resolvedMode == "dark" ? "#5A5A5A" : "#D3D3D3"}
+        needleBaseColor={resolvedMode == "dark" ? "#5A5A5A" : "#D3D3D3"}
         arcsLength={[0.05, 0.45, 0.45, 0.05]}
         percent={categories[mgtOverallScoreLabel] ? percentScore / 100.0 : null}
         style={{
