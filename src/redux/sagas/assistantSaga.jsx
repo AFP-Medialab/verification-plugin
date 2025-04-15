@@ -676,6 +676,8 @@ function* handleAssistantChatbotCall(action) {
   const email = action.payload.email;
   const archiveURL = action.payload.archiveURL;
   const sessionID = action.payload.sessionID;
+  const tool = action.payload.tool;
+  const result = action.payload.result;
 
   yield put(addChatbotMessage(message, 1));
 
@@ -686,6 +688,8 @@ function* handleAssistantChatbotCall(action) {
       message,
       email,
       archiveURL,
+      tool,
+      result,
     );
     const suffix = "\n[Sent via the chatbot assistant]";
 

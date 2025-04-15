@@ -631,7 +631,10 @@ const SyntheticImageDetectionResults = ({
                 </AccordionSummary>
                 <AccordionDetails>
                   <Box sx={{ mr: 2 }}>
-                    <ChatbotInterface />
+                    <ChatbotInterface
+                      tool="syntheticImageDetection"
+                      result={syntheticImageScores}
+                    />
                   </Box>
                 </AccordionDetails>
               </Accordion>

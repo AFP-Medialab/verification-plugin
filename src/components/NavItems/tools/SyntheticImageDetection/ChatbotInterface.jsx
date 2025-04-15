@@ -31,7 +31,7 @@ const MessageBubble = styled(Box)(({ sent }) => ({
   transition: "transform 0.2s ease",
 }));
 
-const ChatbotInterface = (props) => {
+const ChatbotInterface = ({ tool, result }) => {
   const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/Shared/chatbot");
   const [formInput, setFormInput] = useState("");
@@ -47,7 +47,14 @@ const ChatbotInterface = (props) => {
 
   const sendMessage = () => {
     dispatch(
-      submitUserChatbotMessage(sessionID, formInput, userEmail, archiveURL),
+      submitUserChatbotMessage(
+        sessionID,
+        formInput,
+        userEmail,
+        archiveURL,
+        tool,
+        result,
+      ),
     );
     setFormInput("");
   };
@@ -55,7 +62,7 @@ const ChatbotInterface = (props) => {
   const resetChatbot = () => {
     dispatch(clearChatbotMessages());
     // Clear the session history in the chatbot backend
-    dispatch(submitUserChatbotMessage(sessionID, null, null, null));
+    dispatch(submitUserChatbotMessage(sessionID));
     setSessionID(uuidv4());
     setFormInput("");
   };
@@ -64,7 +71,7 @@ const ChatbotInterface = (props) => {
   useEffect(() => {
     return () => {
       window.addEventListener("beforeunload", function (e) {
-        dispatch(submitUserChatbotMessage(sessionID, null, null, null));
+        dispatch(submitUserChatbotMessage(sessionID));
       });
     };
   });

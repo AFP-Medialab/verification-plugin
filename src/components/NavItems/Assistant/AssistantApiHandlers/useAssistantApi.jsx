@@ -23,12 +23,21 @@ export default function assistantApiCalls() {
     }
   }
 
-  const callChatbot = async (sessionID, userInput, email, archiveURL) => {
+  const callChatbot = async (
+    sessionID,
+    userInput = null,
+    email = null,
+    archiveURL = null,
+    tool = null,
+    result = null,
+  ) => {
     let chatbotResponse;
     try {
       chatbotResponse = await axios.post(assistantEndpoint + "gcloud/chatbot", {
         message: userInput,
         sessionID: sessionID,
+        tool: tool,
+        result: result,
       });
     } catch (error) {
       handleAssistantError(error);

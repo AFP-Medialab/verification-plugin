@@ -365,15 +365,21 @@ export const submitInputUrl = (inputUrl) => {
 
 export const submitUserChatbotMessage = (
   sessionID,
-  message,
-  email,
-  archiveURL,
+  message = null,
+  email = null,
+  archiveURL = null,
+  tool = null,
+  result = null,
 ) => {
   return {
     type: "SUBMIT_USER_CHATBOT_MESSAGE",
     payload: {
       message: message,
       sessionID: sessionID,
+      email: email,
+      archiveURL: archiveURL,
+      tool: tool,
+      result: result,
     },
   };
 };

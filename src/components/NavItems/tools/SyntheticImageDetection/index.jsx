@@ -390,7 +390,7 @@ const SyntheticImageDetection = () => {
         />
 
         <Box sx={{ mr: 2 }}>
-          <ChatbotInterface />
+          <ChatbotInterface tool="syntheticImageDetection" />
         </Box>
       </Card>
 
