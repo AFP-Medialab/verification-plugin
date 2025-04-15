@@ -10,6 +10,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { downloadZip } from "client-zip";
 import dayjs from "dayjs";
 import { sha256 } from "hash-wasm";
+import uuid from "uuid-random";
 import { CDXIndexer, WARCRecord, WARCSerializer } from "warcio";
 
 import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
@@ -372,8 +373,8 @@ const SinglefileConverter = (telegramURL) => {
     // Create a sample response
     const url = pageUrl;
     const date = pageDate;
-    const type = "response";
-    // const type = "resource";
+    // const type = "response";
+    const type = "resource"; //For resource records
     const httpHeaders = {
       date: dayjs(),
       "content-type": 'text/html; charset="UTF-8"',
@@ -383,14 +384,30 @@ const SinglefileConverter = (telegramURL) => {
       yield new TextEncoder().encode(fileContent);
     }
 
+    // For response record
+    // const record = await WARCRecord.create(
+    //   {
+    //     url,
+    //     date,
+    //     type,
+    //     warcVersion,
+    //     httpHeaders,
+    //     warcHeaders: { "content-type": 'text/html; charset="UTF-8"' },
+    //   },
+    //   content(),
+    // );
+
+    // For resource records
     const record = await WARCRecord.create(
       {
-        url,
-        date,
-        type,
-        warcVersion,
-        httpHeaders,
-        warcHeaders: { "content-type": 'text/html; charset="UTF-8"' },
+        warcVersion: "WARC/1.1",
+        warcHeaders: {
+          "WARC-Target-URI": url,
+          "WARC-Date": date,
+          "WARC-Type": type,
+          "WARC-Record-ID": `<urn:uuid:${uuid()}>`,
+          "Content-Type": "text/html; charset=UTF-8",
+        },
       },
       content(),
     );
