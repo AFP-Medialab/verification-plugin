@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Slider from "@mui/material/Slider";
 import Typography from "@mui/material/Typography";
 
@@ -158,14 +158,14 @@ const AnimatedGif = ({
   }
 
   return isPopup ? (
-    <Grid2
+    <Grid
       container
       spacing={4}
       direction="row"
       justifyContent="flex-start"
       alignItems="flex-start"
     >
-      <Grid2 size={{ xs: 8 }}>
+      <Grid size={{ xs: 8 }}>
         <Box className={classes.wrapperImageFilter}>
           {/*<CardMedia*/}
           {/*  component="img"*/}
@@ -193,15 +193,15 @@ const AnimatedGif = ({
             />
           </Box>
         </Box>
-      </Grid2>
-      <Grid2
+      </Grid>
+      <Grid
         size={{ xs: 4 }}
         container
         spacing={6}
         direction="column"
         justifyContent="flex-start"
       >
-        <Grid2>
+        <Grid>
           <Typography gutterBottom>{keyword("slider_title")}</Typography>
           <Slider
             defaultValue={-1100}
@@ -214,14 +214,14 @@ const AnimatedGif = ({
             onChange={(e, val) => changeSpeed(val)}
             onChangeCommitted={() => commitChangeSpeed(speed)}
           />
-        </Grid2>
-        <Grid2
+        </Grid>
+        <Grid
           container
           spacing={2}
           justifyContent="flex-start"
           alignItems="stretch"
         >
-          <Grid2 size={{ xs: 12 }}>
+          <Grid size={{ xs: 12 }}>
             <Button
               fullWidth={true}
               variant="contained"
@@ -231,8 +231,8 @@ const AnimatedGif = ({
             >
               {keyword("button_download")}
             </Button>
-          </Grid2>
-          <Grid2 size={{ xs: 12 }}>
+          </Grid>
+          <Grid size={{ xs: 12 }}>
             <Button
               fullWidth={true}
               variant="contained"
@@ -242,14 +242,14 @@ const AnimatedGif = ({
             >
               {keyword("button_video")}
             </Button>
-          </Grid2>
-        </Grid2>
-      </Grid2>
-    </Grid2>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
   ) : (
     <div>
       <Box p={2} className={classes.height100}>
-        <Grid2
+        <Grid
           container
           direction="column"
           justifyContent="space-between"
@@ -305,7 +305,7 @@ const AnimatedGif = ({
             <Box m={1} />
             <Alert severity="info">{keyword("fake_annotation_tip")}</Alert>
           </Box>
-          <Grid2
+          <Grid
             container
             direction="column"
             justifyContent="center"
@@ -330,8 +330,8 @@ const AnimatedGif = ({
 
             <Box m={2} />
 
-            <Grid2 container spacing={3} justifyContent="space-evenly">
-              <Grid2>
+            <Grid container spacing={3} justifyContent="space-evenly">
+              <Grid>
                 <Button
                   variant="contained"
                   color="primary"
@@ -340,8 +340,8 @@ const AnimatedGif = ({
                 >
                   {keyword("button_download")}
                 </Button>
-              </Grid2>
-              <Grid2>
+              </Grid>
+              <Grid>
                 <Button
                   variant="contained"
                   color="primary"
@@ -350,12 +350,12 @@ const AnimatedGif = ({
                 >
                   {keyword("button_video")}
                 </Button>
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
 
             <Box m={2} />
-          </Grid2>
-        </Grid2>
+          </Grid>
+        </Grid>
       </Box>
     </div>
   );

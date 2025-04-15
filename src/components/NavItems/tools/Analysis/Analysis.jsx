@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import TextField from "@mui/material/TextField";
 
@@ -88,12 +88,12 @@ const Analysis = () => {
   );
   const submitForm = () => {
     /*trackEvent(
-                                          "submission",
-                                          "analysis",
-                                          "video caa analysis",
-                                          input.trim(),
-                                          client_id
-                                        );*/
+                                              "submission",
+                                              "analysis",
+                                              "video caa analysis",
+                                              input.trim(),
+                                              client_id
+                                            );*/
     setSubmittedUrl(input.trim());
     dispatch(cleanAnalysisState());
   };
@@ -140,8 +140,8 @@ const Analysis = () => {
       />
       <Card variant="outlined">
         <form className={classes.root2}>
-          <Grid2 container direction="row" spacing={3} alignItems="center">
-            <Grid2 size="grow">
+          <Grid container direction="row" spacing={3} alignItems="center">
+            <Grid size="grow">
               <TextField
                 id="standard-full-width"
                 data-testid="analysis_video_input"
@@ -165,8 +165,8 @@ const Analysis = () => {
                   }
                 }}
               />
-            </Grid2>
-            <Grid2>
+            </Grid>
+            <Grid>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -179,9 +179,9 @@ const Analysis = () => {
                 }
                 label={keyword("api_repro")}
               />
-            </Grid2>
+            </Grid>
 
-            <Grid2>
+            <Grid>
               <Button
                 type="submit"
                 data-testid="analysis_video_submit"
@@ -195,9 +195,9 @@ const Analysis = () => {
               >
                 {keyword("button_submit")}
               </Button>
-            </Grid2>
+            </Grid>
             <Box m={1} />
-          </Grid2>
+          </Grid>
         </form>
         {isLoading ? <LinearProgress hidden={!isLoading} /> : null}
       </Card>

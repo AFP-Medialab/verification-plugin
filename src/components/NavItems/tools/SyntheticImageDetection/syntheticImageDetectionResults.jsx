@@ -12,7 +12,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -378,27 +378,27 @@ const SyntheticImageDetectionResults = ({
             </IconButton>
           </Stack>
 
-          <Grid2
+          <Grid
             container
             direction="row"
             justifyContent="space-evenly"
             alignItems="flex-start"
             spacing={2}
           >
-            <Grid2
+            <Grid
               container
               direction="column"
               justifyContent="flex-start"
               size={{ sm: 12, md: 6 }}
               spacing={4}
             >
-              <Grid2
+              <Grid
                 sx={{
                   maxWidth: "100%",
                 }}
               >
                 <Box p={2} sx={{ width: "100%", height: "100%" }}>
-                  <Grid2
+                  <Grid
                     container
                     direction="row"
                     justifyContent="flex-start"
@@ -431,11 +431,11 @@ const SyntheticImageDetectionResults = ({
                         </ListItem>
                       </List>
                     </Stack>
-                  </Grid2>
+                  </Grid>
                 </Box>
-              </Grid2>
-            </Grid2>
-            <Grid2 size={{ sm: 12, md: 6 }}>
+              </Grid>
+            </Grid>
+            <Grid size={{ sm: 12, md: 6 }}>
               {syntheticImageScores.length > 0 ? (
                 <Stack
                   direction="column"
@@ -608,10 +608,10 @@ const SyntheticImageDetectionResults = ({
                   </Alert>
                 </Stack>
               )}
-            </Grid2>
-            <Grid2 container size={{ xs: 12 }} spacing={4}>
+            </Grid>
+            <Grid container size={{ xs: 12 }} spacing={4}>
               {filteredNddRows && filteredNddRows.length > 0 && (
-                <Grid2
+                <Grid
                   sx={{
                     width: "100%",
                   }}
@@ -633,10 +633,10 @@ const SyntheticImageDetectionResults = ({
                       </AccordionDetails>
                     </Accordion>
                   </Box>
-                </Grid2>
+                </Grid>
               )}
 
-              <Grid2 sx={{ width: "100%" }}>
+              <Grid sx={{ width: "100%" }}>
                 <Box pl={4} pr={4}>
                   <Accordion
                     defaultExpanded={false}
@@ -739,9 +739,9 @@ const SyntheticImageDetectionResults = ({
                     </AccordionDetails>
                   </Accordion>
                 </Box>
-              </Grid2>
-            </Grid2>
-          </Grid2>
+              </Grid>
+            </Grid>
+          </Grid>
         </Stack>
       </CardContent>
     </Card>

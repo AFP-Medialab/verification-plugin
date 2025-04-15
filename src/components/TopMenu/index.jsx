@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useColorScheme, useMediaQuery } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
@@ -93,7 +93,7 @@ const TopMenu = ({ topMenuItems }) => {
           backgroundColor: "var(--mui-palette-background-paper)",
         }}
       >
-        <Grid2
+        <Grid
           container
           direction="row"
           justifyContent="space-between"
@@ -104,7 +104,7 @@ const TopMenu = ({ topMenuItems }) => {
           flexWrap="nowrap"
           minHeight="86px"
         >
-          <Grid2
+          <Grid
             size={{ xs: 2 }}
             height="100%"
             display="flex"
@@ -177,8 +177,8 @@ const TopMenu = ({ topMenuItems }) => {
                 />
               )}
             </Stack>
-          </Grid2>
-          <Grid2
+          </Grid>
+          <Grid
             size={{ xs: 1, sm: "grow" }}
             pl={isDisplayMobile ? 4 : 0}
             pr={isDisplayMobile ? 4 : 0}
@@ -216,9 +216,9 @@ const TopMenu = ({ topMenuItems }) => {
                 />
               ))}
             </Tabs>
-          </Grid2>
+          </Grid>
 
-          <Grid2>
+          <Grid>
             <Stack
               direction="row"
               spacing={{ sx: 2, md: 4 }}
@@ -233,8 +233,8 @@ const TopMenu = ({ topMenuItems }) => {
                 </IconButton>
               </Tooltip>
             </Stack>
-          </Grid2>
-        </Grid2>
+          </Grid>
+        </Grid>
       </Toolbar>
       <Divider sx={{ width: "100%" }} />
       <SettingsDrawer

@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
@@ -43,7 +43,7 @@ const AssistantFileSelected = () => {
 
   const generateList = (title, cType, actionList) => {
     return (
-      <Grid2 size={{ xs: 6 }}>
+      <Grid size={{ xs: 6 }}>
         <Box mx={2} my={0.5}>
           <Typography
             textAlign={"start"}
@@ -88,7 +88,7 @@ const AssistantFileSelected = () => {
             );
           })}
         </List>
-      </Grid2>
+      </Grid>
     );
   };
 
@@ -103,22 +103,22 @@ const AssistantFileSelected = () => {
         }
       />
       <CardContent>
-        <Grid2 container spacing={3}>
-          <Grid2 size={{ xs: 6 }}>
+        <Grid container spacing={3}>
+          <Grid size={{ xs: 6 }}>
             {generateList(
               keyword("upload_image"),
               CONTENT_TYPE.IMAGE,
               imageActions,
             )}
-          </Grid2>
-          <Grid2 size={{ xs: 6 }}>
+          </Grid>
+          <Grid size={{ xs: 6 }}>
             {generateList(
               keyword("upload_video"),
               CONTENT_TYPE.VIDEO,
               videoActions,
             )}
-          </Grid2>
-        </Grid2>
+          </Grid>
+        </Grid>
       </CardContent>
     </Card>
   );

@@ -12,7 +12,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import TextField from "@mui/material/TextField";
@@ -125,7 +125,7 @@ const ClassRoom = () => {
       case 4:
         return keyword("classroom_gamification");
       /*case 5:
-                                                  return keyword("classroom_gamification_2");*/
+                                                        return keyword("classroom_gamification_2");*/
       case 5:
         return keyword("user_resources_title");
       case 6:
@@ -227,14 +227,14 @@ const ClassRoom = () => {
                 return (
                   <div key={index}>
                     <Box m={1} />
-                    <Grid2
+                    <Grid
                       key={index}
                       container
                       direction="row"
                       justifyContent="space-between"
                       spacing={2}
                     >
-                      <Grid2
+                      <Grid
                         container
                         direction="row"
                         size={{ xs: 10 }}
@@ -242,14 +242,14 @@ const ClassRoom = () => {
                         alignItems="flex-start"
                         spacing={2}
                       >
-                        <Grid2 size={{ xs: 1 }}>
+                        <Grid size={{ xs: 1 }}>
                           <CastForEducation fontSize={"large"} />
-                        </Grid2>
-                        <Grid2 size="grow">
+                        </Grid>
+                        <Grid size="grow">
                           <Typography variant={"h6"}>{value.title}</Typography>
-                        </Grid2>
-                      </Grid2>
-                      <Grid2 size="grow">
+                        </Grid>
+                      </Grid>
+                      <Grid size="grow">
                         <Button
                           variant="contained"
                           color="primary"
@@ -257,8 +257,8 @@ const ClassRoom = () => {
                         >
                           {keyword("display")}
                         </Button>
-                      </Grid2>
-                    </Grid2>
+                      </Grid>
+                    </Grid>
                     <Divider />
                   </div>
                 );
@@ -292,18 +292,18 @@ const ClassRoom = () => {
                                 />
                             </TabPanel>*/}
             <TabPanel value={value} index={5}>
-              <Grid2 container direction="column" spacing={2}>
-                <Grid2 mb={2}>
+              <Grid container direction="column" spacing={2}>
+                <Grid mb={2}>
                   <Typography variant={"h5"}>
                     {keyword("user_resources_intro")}
                   </Typography>
-                </Grid2>
-                <Grid2>
+                </Grid>
+                <Grid>
                   <Typography variant="body1" align={"justify"}>
                     {keyword("user_resources_intro_remote")}
                   </Typography>
-                </Grid2>
-                <Grid2>
+                </Grid>
+                <Grid>
                   <TextField
                     inputRef={(ref) => setInputRef(ref)}
                     id="standard-full-width"
@@ -311,8 +311,8 @@ const ClassRoom = () => {
                     placeholder="URL"
                     fullWidth
                   />
-                </Grid2>
-                <Grid2>
+                </Grid>
+                <Grid>
                   <Button
                     variant="contained"
                     color="primary"
@@ -320,8 +320,8 @@ const ClassRoom = () => {
                   >
                     {keyword("display")}
                   </Button>
-                </Grid2>
-                <Grid2 mt={4}>
+                </Grid>
+                <Grid mt={4}>
                   <Typography variant="body1">{keyword("examples")}</Typography>
                   <Typography variant="body1">
                     {keyword("youtube_example")}
@@ -332,8 +332,8 @@ const ClassRoom = () => {
                   <Typography variant="body1">
                     {keyword("website_example")}
                   </Typography>
-                </Grid2>
-              </Grid2>
+                </Grid>
+              </Grid>
             </TabPanel>
             <TabPanel value={value} index={6}>
               {glossary().map((obj, key) => {

@@ -11,7 +11,7 @@ import CardHeader from "@mui/material/CardHeader";
 import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import InputLabel from "@mui/material/InputLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -369,13 +369,13 @@ const TwitterSna = () => {
         delete prevResult.socioSemantic4ModeGraph;
       }
       /*trackEvent(
-                                                                          "submission",
-                                                                          "tsna",
-                                                                          "redirect to tsna",
-                                                                          JSON.stringify(newRequest),
-                                                                          client_id,
-                                                                          uid
-                                                                        );*/
+                                                                                "submission",
+                                                                                "tsna",
+                                                                                "redirect to tsna",
+                                                                                JSON.stringify(newRequest),
+                                                                                client_id,
+                                                                                uid
+                                                                              );*/
       setSubmittedRequest(newRequest);
     }
   };
@@ -518,10 +518,10 @@ const TwitterSna = () => {
   }
 
   /*
-                        const verifiedChange = () => {
-                          setVerifiedUsers(!verifiedUsers);
-                        };
-                        */
+                          const verifiedChange = () => {
+                            setVerifiedUsers(!verifiedUsers);
+                          };
+                          */
 
   return (
     <div>
@@ -539,7 +539,7 @@ const TwitterSna = () => {
             className={classes.headerUploadedImage}
           />
           <Box p={4}>
-            <Grid2 container direction="column">
+            <Grid container direction="column">
               <Typography
                 variant="h6"
                 align="left"
@@ -549,8 +549,8 @@ const TwitterSna = () => {
               </Typography>
               <Box m={1} />
 
-              <Grid2 container spacing={4} alignItems="center">
-                <Grid2 size={{ xs: 8 }}>
+              <Grid container spacing={4} alignItems="center">
+                <Grid size={{ xs: 8 }}>
                   <TextField
                     disabled={searchFormDisabled}
                     error={keyWordsError}
@@ -566,22 +566,22 @@ const TwitterSna = () => {
                     fullWidth
                     variant="outlined"
                   />
-                </Grid2>
+                </Grid>
 
-                <Grid2
+                <Grid
                   size={{ xs: 4 }}
                   container
                   direction="row"
                   justifyContent="flex-start"
                   alignItems="center"
                 >
-                  <Grid2>
+                  <Grid>
                     <SearchIcon style={{ color: "#757575" }} />
-                  </Grid2>
-                  <Grid2>
+                  </Grid>
+                  <Grid>
                     <Box m={1} />
-                  </Grid2>
-                  <Grid2 size="grow">
+                  </Grid>
+                  <Grid size="grow">
                     <Typography
                       variant="body2"
                       align="left"
@@ -589,14 +589,14 @@ const TwitterSna = () => {
                     >
                       {keyword("explanation_allelements")}
                     </Typography>
-                  </Grid2>
-                </Grid2>
-              </Grid2>
+                  </Grid>
+                </Grid>
+              </Grid>
 
               <Box m={1} />
 
-              <Grid2 container spacing={4} alignItems="center">
-                <Grid2 size={{ xs: 8 }}>
+              <Grid container spacing={4} alignItems="center">
+                <Grid size={{ xs: 8 }}>
                   <TextField
                     disabled={searchFormDisabled}
                     error={keyWordsAnyError}
@@ -612,22 +612,22 @@ const TwitterSna = () => {
                     fullWidth
                     variant="outlined"
                   />
-                </Grid2>
+                </Grid>
 
-                <Grid2
+                <Grid
                   size={{ xs: 4 }}
                   container
                   direction="row"
                   justifyContent="flex-start"
                   alignItems="center"
                 >
-                  <Grid2>
+                  <Grid>
                     <SearchIcon style={{ color: "#757575" }} />
-                  </Grid2>
-                  <Grid2>
+                  </Grid>
+                  <Grid>
                     <Box m={1} />
-                  </Grid2>
-                  <Grid2 size="grow">
+                  </Grid>
+                  <Grid size="grow">
                     <Typography
                       variant="body2"
                       align="left"
@@ -635,9 +635,9 @@ const TwitterSna = () => {
                     >
                       {keyword("explanation_anyelements")}
                     </Typography>
-                  </Grid2>
-                </Grid2>
-              </Grid2>
+                  </Grid>
+                </Grid>
+              </Grid>
 
               <Box m={2} />
 
@@ -650,8 +650,8 @@ const TwitterSna = () => {
               </Typography>
               <Box m={1} />
 
-              <Grid2 container spacing={4} alignItems="center">
-                <Grid2 size={{ xs: 8 }}>
+              <Grid container spacing={4} alignItems="center">
+                <Grid size={{ xs: 8 }}>
                   <DateAndTimePicker
                     time={true}
                     disabled={searchFormDisabled}
@@ -662,22 +662,22 @@ const TwitterSna = () => {
                     handleSinceChange={handleSinceDateChange}
                     handleUntilChange={handleUntilDateChange}
                   />
-                </Grid2>
+                </Grid>
 
-                <Grid2
+                <Grid
                   size={{ xs: 4 }}
                   container
                   direction="row"
                   justifyContent="flex-start"
                   alignItems="center"
                 >
-                  <Grid2>
+                  <Grid>
                     <CalendarTodayIcon style={{ color: "#757575" }} />
-                  </Grid2>
-                  <Grid2>
+                  </Grid>
+                  <Grid>
                     <Box m={1} />
-                  </Grid2>
-                  <Grid2 size="grow">
+                  </Grid>
+                  <Grid size="grow">
                     <Typography
                       variant="body2"
                       align="left"
@@ -685,14 +685,14 @@ const TwitterSna = () => {
                     >
                       {keyword("explanation_dates")}
                     </Typography>
-                  </Grid2>
-                </Grid2>
-              </Grid2>
+                  </Grid>
+                </Grid>
+              </Grid>
 
               <Box m={1} />
 
-              <Grid2 container spacing={4} alignItems="center">
-                <Grid2 size={{ xs: 8 }}>
+              <Grid container spacing={4} alignItems="center">
+                <Grid size={{ xs: 8 }}>
                   <Typography
                     variant="h6"
                     align="left"
@@ -700,22 +700,22 @@ const TwitterSna = () => {
                   >
                     {keyword("twittersna_title_timezone")}
                   </Typography>
-                </Grid2>
+                </Grid>
 
-                <Grid2
+                <Grid
                   size={{ xs: 4 }}
                   container
                   direction="row"
                   justifyContent="flex-start"
                   alignItems="center"
                 >
-                  <Grid2>
+                  <Grid>
                     <GlobeIcon style={{ color: "#757575" }} />
-                  </Grid2>
-                  <Grid2>
+                  </Grid>
+                  <Grid>
                     <Box m={1} />
-                  </Grid2>
-                  <Grid2 size="grow">
+                  </Grid>
+                  <Grid size="grow">
                     <Typography
                       variant="body2"
                       align="left"
@@ -723,9 +723,9 @@ const TwitterSna = () => {
                     >
                       {keyword("explanation_timezone")}
                     </Typography>
-                  </Grid2>
-                </Grid2>
-              </Grid2>
+                  </Grid>
+                </Grid>
+              </Grid>
 
               <Box m={1} />
 
@@ -742,7 +742,7 @@ const TwitterSna = () => {
                     onChange={(e) => setLocalTime(e.target.value)}
                     row
                   >
-                    <Grid2
+                    <Grid
                       container
                       direction="column"
                       justifyContent="flex-start"
@@ -760,7 +760,7 @@ const TwitterSna = () => {
                         label={keyword("twitter_sna_gmt")}
                         labelPlacement="end"
                       />
-                    </Grid2>
+                    </Grid>
                   </RadioGroup>
                 </FormControl>
               </Box>
@@ -785,7 +785,7 @@ const TwitterSna = () => {
                 </AccordionSummary>
                 <AccordionDetails style={{ flexDirection: "column" }}>
                   <Box pl={3} pr={3}>
-                    <Grid2 container direction="column" spacing={0}>
+                    <Grid container direction="column" spacing={0}>
                       <Typography
                         variant="h6"
                         align="left"
@@ -795,8 +795,8 @@ const TwitterSna = () => {
                       </Typography>
                       <Box m={1} />
 
-                      <Grid2 container spacing={4} alignItems="center">
-                        <Grid2 size={{ xs: 8 }}>
+                      <Grid container spacing={4} alignItems="center">
+                        <Grid size={{ xs: 8 }}>
                           <TextField
                             disabled={searchFormDisabled}
                             value={bannedWords}
@@ -807,22 +807,22 @@ const TwitterSna = () => {
                             fullWidth
                             variant="outlined"
                           />
-                        </Grid2>
+                        </Grid>
 
-                        <Grid2
+                        <Grid
                           size={{ xs: 4 }}
                           container
                           direction="row"
                           justifyContent="flex-start"
                           alignItems="center"
                         >
-                          <Grid2>
+                          <Grid>
                             <ExcludeIcon style={{ color: "#757575" }} />
-                          </Grid2>
-                          <Grid2>
+                          </Grid>
+                          <Grid>
                             <Box m={1} />
-                          </Grid2>
-                          <Grid2 size="grow">
+                          </Grid>
+                          <Grid size="grow">
                             <Typography
                               variant="body2"
                               align="left"
@@ -830,14 +830,14 @@ const TwitterSna = () => {
                             >
                               {keyword("explanation_exclude")}
                             </Typography>
-                          </Grid2>
-                        </Grid2>
-                      </Grid2>
+                          </Grid>
+                        </Grid>
+                      </Grid>
 
                       <Box m={1} />
 
-                      <Grid2 container spacing={4} alignItems="center">
-                        <Grid2 size={{ xs: 8 }}>
+                      <Grid container spacing={4} alignItems="center">
+                        <Grid size={{ xs: 8 }}>
                           <FormControl
                             variant="outlined"
                             className={classes.formControl}
@@ -929,22 +929,22 @@ const TwitterSna = () => {
                               </option>
                             </Select>
                           </FormControl>
-                        </Grid2>
+                        </Grid>
 
-                        <Grid2
+                        <Grid
                           size={{ xs: 4 }}
                           container
                           direction="row"
                           justifyContent="flex-start"
                           alignItems="center"
                         >
-                          <Grid2>
+                          <Grid>
                             <TranslateIcon style={{ color: "#757575" }} />
-                          </Grid2>
-                          <Grid2>
+                          </Grid>
+                          <Grid>
                             <Box m={1} />
-                          </Grid2>
-                          <Grid2 size="grow">
+                          </Grid>
+                          <Grid size="grow">
                             <Typography
                               variant="body2"
                               align="left"
@@ -952,9 +952,9 @@ const TwitterSna = () => {
                             >
                               {keyword("explanation_language")}
                             </Typography>
-                          </Grid2>
-                        </Grid2>
-                      </Grid2>
+                          </Grid>
+                        </Grid>
+                      </Grid>
                       <Box m={2} />
                       <Typography
                         variant="h6"
@@ -965,8 +965,8 @@ const TwitterSna = () => {
                       </Typography>
                       <Box m={1} />
 
-                      <Grid2 container spacing={4} alignItems="center">
-                        <Grid2 size={{ xs: 8 }}>
+                      <Grid container spacing={4} alignItems="center">
+                        <Grid size={{ xs: 8 }}>
                           <TextField
                             disabled={searchFormDisabled}
                             value={usersInput}
@@ -979,22 +979,22 @@ const TwitterSna = () => {
                             fullWidth
                             variant="outlined"
                           />
-                        </Grid2>
+                        </Grid>
 
-                        <Grid2
+                        <Grid
                           size={{ xs: 4 }}
                           container
                           direction="row"
                           justifyContent="flex-start"
                           alignItems="center"
                         >
-                          <Grid2>
+                          <Grid>
                             <PersonOutlineIcon style={{ color: "#757575" }} />
-                          </Grid2>
-                          <Grid2>
+                          </Grid>
+                          <Grid>
                             <Box m={1} />
-                          </Grid2>
-                          <Grid2 size="grow">
+                          </Grid>
+                          <Grid size="grow">
                             <Typography
                               variant="body2"
                               align="left"
@@ -1002,16 +1002,16 @@ const TwitterSna = () => {
                             >
                               {keyword("explanation_account")}
                             </Typography>
-                          </Grid2>
-                        </Grid2>
-                      </Grid2>
+                          </Grid>
+                        </Grid>
+                      </Grid>
 
                       {/*
 
                         <Box m={1} />
 
-                       <Grid2 container spacing={4} alignItems="center" style={{ paddingLeft: "0px" }}>
-                         <Grid2 size={{xs: 8}}>
+                       <Grid container spacing={4} alignItems="center" style={{ paddingLeft: "0px" }}>
+                         <Grid size={{xs: 8}}>
                             <Box pl={3}>
                               <FormControl component="fieldset" disabled={searchFormDisabled}>
                                 <FormControlLabel
@@ -1030,29 +1030,29 @@ const TwitterSna = () => {
                               </FormControl>
                             </Box>
 
-                          </Grid2>
+                          </Grid>
 
-                         <Grid2 size={{xs: 4}} container direction="row" justifyContent="flex-start" alignItems="center">
-                           <Grid2>
+                         <Grid size={{xs: 4}} container direction="row" justifyContent="flex-start" alignItems="center">
+                           <Grid>
                               <DoneIcon style={{ color: "#757575" }} />
-                            </Grid2>
-                            <Grid2>
+                            </Grid>
+                            <Grid>
                               <Box m={1} />
-                            </Grid2>
-                             <Grid2 size="grow">
+                            </Grid>
+                             <Grid size="grow">
                               <Typography variant="body2" align="left" style={{ color: "#757575" }}>
                                 {keyword("explanation_verified")}
                               </Typography>
-                            </Grid2>
-                          </Grid2>
-                        </Grid2>
+                            </Grid>
+                          </Grid>
+                        </Grid>
 
                                 */}
 
                       <Box m={2} />
 
-                      <Grid2 container spacing={4} alignItems="center">
-                        <Grid2 size={{ xs: 8 }}>
+                      <Grid container spacing={4} alignItems="center">
+                        <Grid size={{ xs: 8 }}>
                           <Typography
                             variant="h6"
                             align="left"
@@ -1060,22 +1060,22 @@ const TwitterSna = () => {
                           >
                             {keyword("twittersna_title_media")}
                           </Typography>
-                        </Grid2>
+                        </Grid>
 
-                        <Grid2
+                        <Grid
                           size={{ xs: 4 }}
                           container
                           direction="row"
                           justifyContent="flex-start"
                           alignItems="center"
                         >
-                          <Grid2>
+                          <Grid>
                             <PermMediaIcon style={{ color: "#757575" }} />
-                          </Grid2>
-                          <Grid2>
+                          </Grid>
+                          <Grid>
                             <Box m={1} />
-                          </Grid2>
-                          <Grid2 size="grow">
+                          </Grid>
+                          <Grid size="grow">
                             <Typography
                               variant="body2"
                               align="left"
@@ -1083,9 +1083,9 @@ const TwitterSna = () => {
                             >
                               {keyword("explanation_media")}
                             </Typography>
-                          </Grid2>
-                        </Grid2>
-                      </Grid2>
+                          </Grid>
+                        </Grid>
+                      </Grid>
 
                       <Box m={0} />
 
@@ -1121,27 +1121,27 @@ const TwitterSna = () => {
 
                       <Box m={2} />
 
-                      <Grid2 container spacing={4} alignItems="center">
-                        <Grid2 size={{ xs: 8 }}>
+                      <Grid container spacing={4} alignItems="center">
+                        <Grid size={{ xs: 8 }}>
                           <Typography variant="h6" align="left">
                             {keyword("twittersna_title_advanced")}
                           </Typography>
-                        </Grid2>
+                        </Grid>
 
-                        <Grid2
+                        <Grid
                           size={{ xs: 4 }}
                           container
                           direction="row"
                           justifyContent="flex-start"
                           alignItems="center"
                         >
-                          <Grid2>
+                          <Grid>
                             <LaptopIcon style={{ color: "#757575" }} />
-                          </Grid2>
-                          <Grid2>
+                          </Grid>
+                          <Grid>
                             <Box m={1} />
-                          </Grid2>
-                          <Grid2 size="grow">
+                          </Grid>
+                          <Grid size="grow">
                             <Typography
                               variant="body2"
                               align="left"
@@ -1149,9 +1149,9 @@ const TwitterSna = () => {
                             >
                               {keyword("explanation_cache")}
                             </Typography>
-                          </Grid2>
-                        </Grid2>
-                      </Grid2>
+                          </Grid>
+                        </Grid>
+                      </Grid>
 
                       <Box m={0} />
 
@@ -1171,7 +1171,7 @@ const TwitterSna = () => {
                           />
                         </Box>
                       )}
-                    </Grid2>
+                    </Grid>
                   </Box>
                 </AccordionDetails>
               </Accordion>
@@ -1196,7 +1196,7 @@ const TwitterSna = () => {
 
               <Box m={1} />
               {!userAuthenticated && <OnWarningInfo keyword={"warning_sna"} />}
-            </Grid2>
+            </Grid>
           </Box>
         </Card>
       </ThemeProvider>

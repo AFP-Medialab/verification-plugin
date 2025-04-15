@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Fab from "@mui/material/Fab";
 import Fade from "@mui/material/Fade";
 import IconButton from "@mui/material/IconButton";
@@ -16,7 +17,6 @@ import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
 
-import LoadingButton from "@mui/lab/LoadingButton";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const Feedback = () => {
@@ -252,7 +252,7 @@ const Feedback = () => {
                           onChange={(e) => setMessage(e.target.value)}
                         />
                       </Stack>
-                      <LoadingButton
+                      <Button
                         type="submit"
                         fullWidth
                         variant="contained"
@@ -266,7 +266,7 @@ const Feedback = () => {
                         {isFeedbackSent
                           ? keyword("sent")
                           : keyword("submit_text")}
-                      </LoadingButton>
+                      </Button>
                     </Stack>
                   </Paper>
                 </Box>

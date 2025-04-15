@@ -40,6 +40,8 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
       anchor="right"
       open={isPanelOpen}
       onClose={handleClosePanel}
+      variant="temporary"
+      closeAfterTransition={false}
       sx={{
         width: "300px",
         flexShrink: 0,
@@ -67,7 +69,6 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
               </IconButton>
             </Box>
           </Stack>
-
           <Stack direction="column" alignItems="start" spacing={1}>
             <Typography>{keyword("drawer_settings_language")}</Typography>
             <Languages />

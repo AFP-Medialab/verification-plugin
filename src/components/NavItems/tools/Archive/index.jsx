@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
@@ -271,7 +271,7 @@ const Archive = () => {
             <Stack direction="column" spacing={4}>
               <Stack direction="row" justifyContent={"space-between"}>
                 <Box>
-                  <Grid2
+                  <Grid
                     container
                     direction="row"
                     justifyContent="flex-start"
@@ -288,7 +288,7 @@ const Archive = () => {
                     <Typography variant="h5" color={"primary"}>
                       {keyword("archive_name")}
                     </Typography>
-                  </Grid2>
+                  </Grid>
                 </Box>
                 <Box>
                   <CustomizedMenus

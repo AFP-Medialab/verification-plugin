@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Fade from "@mui/material/Fade";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Modal from "@mui/material/Modal";
 
@@ -196,19 +196,19 @@ const ImageResult = ({ handleCloseResults }) => {
           </Modal>
 
           <Box m={1} />
-          <Grid2
+          <Grid
             container
             direction="row"
             justifyContent="center"
             alignItems="center"
             spacing={3}
           >
-            <Grid2>
+            <Grid>
               <Button color="primary" variant="contained" onClick={handleOpen}>
                 {keyword("edit_image")}
               </Button>
-            </Grid2>
-            <Grid2>
+            </Grid>
+            <Grid>
               <a
                 style={{ textDecoration: "none" }}
                 href={resultImage}
@@ -218,8 +218,8 @@ const ImageResult = ({ handleCloseResults }) => {
                   {keyword("download")}
                 </Button>
               </a>
-            </Grid2>
-          </Grid2>
+            </Grid>
+          </Grid>
           <Box m={2} />
           <Loop src={resultImage} />
           <Box m={2} />

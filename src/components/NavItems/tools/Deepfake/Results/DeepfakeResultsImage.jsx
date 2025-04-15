@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -207,20 +207,20 @@ const DeepfakeResultsImage = (props) => {
               </IconButton>
             }
           />
-          <Grid2
+          <Grid
             container
             direction="row"
             justifyContent="space-evenly"
             alignItems="flex-start"
           >
-            <Grid2
+            <Grid
               size={{
                 sm: 12,
                 md: 6,
               }}
             >
               <Box sx={{ width: "100%", height: "100%", position: "relative" }}>
-                <Grid2
+                <Grid
                   container
                   direction="row"
                   justifyContent="center"
@@ -234,7 +234,7 @@ const DeepfakeResultsImage = (props) => {
                     rectangles &&
                     rectanglesReady
                   ) && (
-                    <Grid2>
+                    <Grid>
                       {rectangles.map((valueRectangle, keyRectangle) => {
                         return (
                           <Box
@@ -275,7 +275,7 @@ const DeepfakeResultsImage = (props) => {
                           </Box>
                         );
                       })}
-                    </Grid2>
+                    </Grid>
                   )}
 
                   <img
@@ -290,10 +290,10 @@ const DeepfakeResultsImage = (props) => {
                     ref={imgElement}
                     onLoad={drawRectangles}
                   />
-                </Grid2>
+                </Grid>
               </Box>
-            </Grid2>
-            <Grid2
+            </Grid>
+            <Grid
               size={{
                 sm: 12,
                 md: 6,
@@ -332,8 +332,8 @@ const DeepfakeResultsImage = (props) => {
                   />
                 )}
               </Stack>
-            </Grid2>
-          </Grid2>
+            </Grid>
+          </Grid>
         </Box>
       </Card>
     </Stack>

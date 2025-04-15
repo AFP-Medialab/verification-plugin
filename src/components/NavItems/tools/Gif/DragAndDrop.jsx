@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 
 class DragAndDrop extends Component {
   state = {
@@ -68,7 +68,7 @@ class DragAndDrop extends Component {
         ref={this.dropRef}
       >
         {this.state.drag && (
-          <Grid2
+          <Grid
             container
             spacing={0}
             direction="column"
@@ -86,7 +86,7 @@ class DragAndDrop extends Component {
               zIndex: 9999,
             }}
           >
-            <Grid2
+            <Grid
               style={{
                 textAlign: "center",
                 color: "grey",
@@ -94,8 +94,8 @@ class DragAndDrop extends Component {
               }}
             >
               <div>Drop the image here</div>
-            </Grid2>
-          </Grid2>
+            </Grid>
+          </Grid>
         )}
         {this.props.children}
       </div>

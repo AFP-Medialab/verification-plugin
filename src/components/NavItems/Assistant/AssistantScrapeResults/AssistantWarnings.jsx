@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import Collapse from "@mui/material/Collapse";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 
@@ -34,8 +34,8 @@ const AssistantWarnings = () => {
       className={classes.assistantWarningBorder}
       id="warnings"
     >
-      <Grid2 container>
-        <Grid2 size={{ xs: 12 }} style={{ display: "flex" }}>
+      <Grid container>
+        <Grid size={{ xs: 12 }} style={{ display: "flex" }}>
           <CardMedia>
             <Box m={1}>
               <WarningAmber color={"warning"} fontSize={"large"} />
@@ -55,8 +55,8 @@ const AssistantWarnings = () => {
           >
             <ExpandMoreIcon color={"warning"} />
           </IconButton>
-        </Grid2>
-        <Grid2 size={{ xs: 12 }}>
+        </Grid>
+        <Grid size={{ xs: 12 }}>
           <Collapse
             in={warningExpanded}
             className={classes.assistantBackground}
@@ -66,8 +66,8 @@ const AssistantWarnings = () => {
 
             <DbkfMediaResults />
           </Collapse>
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     </Card>
   );
 };

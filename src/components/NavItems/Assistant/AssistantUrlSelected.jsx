@@ -3,15 +3,18 @@ import { Trans } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { Box, CardHeader, Skeleton, TextField, Tooltip } from "@mui/material/";
-import Button from "@mui/material//Button";
-import Card from "@mui/material//Card";
-import CardContent from "@mui/material//CardContent";
-import Typography from "@mui/material//Typography";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
 // version 5.2.0
-
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 

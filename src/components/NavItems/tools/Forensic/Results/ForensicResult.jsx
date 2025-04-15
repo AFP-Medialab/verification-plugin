@@ -10,7 +10,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Divider from "@mui/material/Divider";
 import Fab from "@mui/material/Fab";
 import Fade from "@mui/material/Fade";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Popover from "@mui/material/Popover";
 import Snackbar from "@mui/material/Snackbar";
@@ -626,25 +626,25 @@ const ForensicResults = (props) => {
               }
             />
 
-            <Grid2 container spacing={3}>
-              <Grid2
+            <Grid container spacing={3}>
+              <Grid
                 size={{ xs: 6 }}
                 style={{ display: "flex", flexDirection: "column" }}
               >
                 <Card variant="outlined">
                   <CardHeader
                     title={
-                      <Grid2
+                      <Grid
                         container
                         direction="row"
                         justifyContent="space-between"
                         alignItems="center"
                       >
-                        <Grid2>
+                        <Grid>
                           <span>{keyword("forensic_title_image")}</span>
-                        </Grid2>
+                        </Grid>
 
-                        <Grid2 size="grow">
+                        <Grid size="grow">
                           <Box ml={2}>
                             <IconButton
                               style={{ color: "white", padding: "0" }}
@@ -654,9 +654,9 @@ const ForensicResults = (props) => {
                               <LinkIcon />
                             </IconButton>
                           </Box>
-                        </Grid2>
+                        </Grid>
 
-                        <Grid2>
+                        <Grid>
                           <Button
                             variant="contained"
                             style={{
@@ -667,8 +667,8 @@ const ForensicResults = (props) => {
                           >
                             {keyword("forensic_button_newImage")}
                           </Button>
-                        </Grid2>
-                      </Grid2>
+                        </Grid>
+                      </Grid>
                     }
                     className={classes.headerUploadedImage}
                   />
@@ -702,7 +702,7 @@ const ForensicResults = (props) => {
                 <Card variant="outlined" className={classes.lensesCard}>
                   <CardHeader
                     title={
-                      <Grid2
+                      <Grid
                         container
                         direction="row"
                         justifyContent="space-between"
@@ -735,7 +735,7 @@ const ForensicResults = (props) => {
                           }}
                         >
                           <Box p={3}>
-                            <Grid2
+                            <Grid
                               container
                               direction="row"
                               justifyContent="space-between"
@@ -746,7 +746,7 @@ const ForensicResults = (props) => {
                               </Typography>
 
                               <CloseIcon onClick={closeHelpLenses} />
-                            </Grid2>
+                            </Grid>
 
                             <Box m={1} />
                             <Typography variant="body2">
@@ -754,17 +754,17 @@ const ForensicResults = (props) => {
                             </Typography>
                           </Box>
                         </Popover>
-                      </Grid2>
+                      </Grid>
                     }
                   />
 
                   <Box p={3}>
-                    <Grid2 container spacing={3}>
+                    <Grid container spacing={3}>
                       {filters.current
                         .slice(filtersProp.idStartLenses)
                         .map((value, key) => {
                           return (
-                            <Grid2 key={key} size={{ xs: 4 }}>
+                            <Grid key={key} size={{ xs: 4 }}>
                               <ImageCanvas
                                 className={classes.imageFilter}
                                 imgSrc={value.map}
@@ -820,7 +820,7 @@ const ForensicResults = (props) => {
                                   }}
                                 >
                                   <Box p={3}>
-                                    <Grid2
+                                    <Grid
                                       container
                                       direction="row"
                                       justifyContent="space-between"
@@ -833,7 +833,7 @@ const ForensicResults = (props) => {
                                       <CloseIcon
                                         onClick={handleCloseFilterExplanation}
                                       />
-                                    </Grid2>
+                                    </Grid>
                                     <Box m={1} />
 
                                     <Typography variant="body2" align="justify">
@@ -842,19 +842,19 @@ const ForensicResults = (props) => {
                                   </Box>
                                 </Popover>
                               </Box>
-                            </Grid2>
+                            </Grid>
                           );
                         })}
-                    </Grid2>
+                    </Grid>
                   </Box>
                 </Card>
-              </Grid2>
+              </Grid>
 
-              <Grid2 size={{ xs: 6 }}>
+              <Grid size={{ xs: 6 }}>
                 <Card variant="outlined" className={classes.cardFilters}>
                   <CardHeader
                     title={
-                      <Grid2
+                      <Grid
                         container
                         direction="row"
                         justifyContent="space-between"
@@ -887,7 +887,7 @@ const ForensicResults = (props) => {
                           }}
                         >
                           <Box p={3}>
-                            <Grid2
+                            <Grid
                               container
                               direction="row"
                               justifyContent="space-between"
@@ -898,14 +898,14 @@ const ForensicResults = (props) => {
                               </Typography>
 
                               <CloseIcon onClick={closeHelpFilters} />
-                            </Grid2>
+                            </Grid>
                             <Box m={1} />
                             <Typography variant="body2">
                               {keyword("forensic_filters_explanation")}
                             </Typography>
                           </Box>
                         </Popover>
-                      </Grid2>
+                      </Grid>
                     }
                   ></CardHeader>
 
@@ -973,7 +973,7 @@ const ForensicResults = (props) => {
 
                     return (
                       <TabPanel value={value} key={keyTab} index={valueTab}>
-                        <Grid2 container spacing={3}>
+                        <Grid container spacing={3}>
                           {filtersTab.map((value, key) => {
                             if (
                               value.id === "zero_report" ||
@@ -983,7 +983,7 @@ const ForensicResults = (props) => {
                               arrowsToDisplay(value.id);
                             }
                             return (
-                              <Grid2 key={key} size={{ xs: 4 }}>
+                              <Grid key={key} size={{ xs: 4 }}>
                                 {value.id === "zero_report" ||
                                 value.id === "ghost_report" ||
                                 value.id === "cagi_report" ? (
@@ -1009,7 +1009,7 @@ const ForensicResults = (props) => {
                                       threshold={0}
                                     />
                                     <div className={classes.imageOverlay}>
-                                      <Grid2
+                                      <Grid
                                         container
                                         direction="row"
                                         justifyContent="space-around"
@@ -1084,7 +1084,7 @@ const ForensicResults = (props) => {
                                             style={{ visibility: "hidden" }}
                                           ></Fab>
                                         )}
-                                      </Grid2>
+                                      </Grid>
                                     </div>
                                   </div>
                                 ) : (
@@ -1107,7 +1107,7 @@ const ForensicResults = (props) => {
                                         threshold={0}
                                       />
                                       <div className={classes.imageOverlay}>
-                                        <Grid2
+                                        <Grid
                                           container
                                           direction="row"
                                           justifyContent="space-around"
@@ -1127,7 +1127,7 @@ const ForensicResults = (props) => {
                                               style={{ color: "#000000" }}
                                             />
                                           </Fab>
-                                        </Grid2>
+                                        </Grid>
                                       </div>
                                     </div>
                                   )
@@ -1204,7 +1204,7 @@ const ForensicResults = (props) => {
                                   }}
                                 >
                                   <Box p={3}>
-                                    <Grid2
+                                    <Grid
                                       container
                                       direction="row"
                                       justifyContent="space-between"
@@ -1225,7 +1225,7 @@ const ForensicResults = (props) => {
                                       <CloseIcon
                                         onClick={handleCloseFilterExplanation}
                                       />
-                                    </Grid2>
+                                    </Grid>
                                     <Box m={1} />
 
                                     {value.id === "cagi_report" ? (
@@ -1242,10 +1242,10 @@ const ForensicResults = (props) => {
                                     )}
                                   </Box>
                                 </Popover>
-                              </Grid2>
+                              </Grid>
                             );
                           })}
-                        </Grid2>
+                        </Grid>
 
                         {valueTab !== 3 && <DetectionProgressBar />}
 
@@ -1284,8 +1284,8 @@ const ForensicResults = (props) => {
                     );
                   })}
                 </Card>
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
 
             <Popover
               id={gifPopover}
@@ -1317,7 +1317,7 @@ const ForensicResults = (props) => {
               }}
             >
               <Box p={3}>
-                <Grid2
+                <Grid
                   container
                   direction="row"
                   justifyContent="space-between"
@@ -1329,7 +1329,7 @@ const ForensicResults = (props) => {
                   <IconButton onClick={closeGifPopover}>
                     <CloseIcon />
                   </IconButton>
-                </Grid2>
+                </Grid>
                 <Box m={2} />
                 <AnimatedGif
                   toolState={gifState}

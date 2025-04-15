@@ -11,7 +11,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Collapse from "@mui/material/Collapse";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import LinearProgress from "@mui/material/LinearProgress";
 import Tooltip from "@mui/material/Tooltip";
@@ -205,23 +205,23 @@ const AssistantMediaResult = () => {
         ) : null}
         {processUrl !== null ? (
           resultIsImage ? (
-            <Grid2 container spacing={2}>
-              <Grid2 size={6}>
+            <Grid container spacing={2}>
+              <Grid size={6}>
                 <AssistantImageResult />
-              </Grid2>
-              <Grid2 size={6}>
+              </Grid>
+              <Grid size={6}>
                 <AssistantProcessUrlActions />
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
           ) : (
-            <Grid2 container spacing={2}>
-              <Grid2 size={6}>
+            <Grid container spacing={2}>
+              <Grid size={6}>
                 <AssistantVideoResult />
-              </Grid2>
-              <Grid2 size={6}>
+              </Grid>
+              <Grid size={6}>
                 <AssistantProcessUrlActions />
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
           )
         ) : null}
       </CardContent>

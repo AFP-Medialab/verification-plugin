@@ -2,7 +2,7 @@ import React from "react";
 
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
@@ -30,9 +30,9 @@ export default function TextFooter({
   return (
     <Box>
       <Divider />
-      <Grid2 container spacing={2}>
+      <Grid container spacing={2}>
         {/* language detected */}
-        <Grid2 size={9} align={"left"} pt={1}>
+        <Grid size={9} align={"left"} pt={1}>
           <Typography
             display="inline"
             className={classes.toolTipIcon}
@@ -40,28 +40,28 @@ export default function TextFooter({
           >
             {getLanguageName(textLang, textLang) ?? textLang}
           </Typography>
-        </Grid2>
+        </Grid>
 
         {/* copy to clipboard */}
-        <Grid2 size={{ xs: 1 }} align={"right"} display="flex" pt={1.5}>
+        <Grid size={{ xs: 1 }} align={"right"} display="flex" pt={1.5}>
           <Tooltip title={keyword("copy_to_clipboard")}>
             <div>
               <TextCopy text={text} index={text} />
             </div>
           </Tooltip>
-        </Grid2>
+        </Grid>
 
         {/* translate */}
-        <Grid2 size={{ xs: 1 }} align={"right"} display="flex" pt={2}>
+        <Grid size={{ xs: 1 }} align={"right"} display="flex" pt={2}>
           <Tooltip title={keyword("translate")}>
             <div>
               <Translate text={text} />
             </div>
           </Tooltip>
-        </Grid2>
+        </Grid>
 
         {/* expand/minimise text */}
-        <Grid2 size={{ xs: 1 }} align={"right"} display="flex" pt={1}>
+        <Grid size={{ xs: 1 }} align={"right"} display="flex" pt={1}>
           <ExpandMinimise
             classes={classes}
             expandMinimiseText={expandMinimiseText}
@@ -69,8 +69,8 @@ export default function TextFooter({
             setExpanded={setExpanded}
             expanded={expanded}
           />
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     </Box>
   );
 }
@@ -92,14 +92,14 @@ export function TextFooterPrevFactChecks({
   return (
     <Box>
       <Divider />
-      <Grid2 container>
+      <Grid container>
         {/* empty */}
-        <Grid2 size={{ xs: 1 }} align={"start"}>
+        <Grid size={{ xs: 1 }} align={"start"}>
           <></>
-        </Grid2>
+        </Grid>
 
         {/* see more details */}
-        <Grid2 size={{ xs: 10 }} align={"center"}>
+        <Grid size={{ xs: 10 }} align={"center"}>
           <Typography
             component={"div"}
             sx={{ color: "text.secondary", align: "start" }}
@@ -113,10 +113,10 @@ export function TextFooterPrevFactChecks({
               {keyword("semantic_search_title")}
             </Link>
           </Typography>
-        </Grid2>
+        </Grid>
 
         {/* expand/minimise text */}
-        <Grid2 size={1} align={"left"}>
+        <Grid size={1} align={"left"}>
           <ExpandMinimise
             classes={classes}
             expandMinimiseText={expandMinimiseText}
@@ -124,8 +124,8 @@ export function TextFooterPrevFactChecks({
             setExpanded={setExpanded}
             expanded={expanded}
           />
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     </Box>
   );
 }

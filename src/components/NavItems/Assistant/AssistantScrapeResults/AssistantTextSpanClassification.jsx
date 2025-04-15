@@ -5,7 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -249,15 +249,15 @@ export default function AssistantTextSpanClassification({
   }
 
   return (
-    <Grid2 container>
-      <Grid2 size={{ xs: 9 }} sx={{ paddingRight: "1em" }}>
+    <Grid container>
+      <Grid size={{ xs: 9 }} sx={{ paddingRight: "1em" }}>
         <MultiCategoryClassifiedText
           categoriesText={categoriesText}
           currentLabel={currentLabel}
           allCategoriesLabel={allCategoriesLabel}
         />
-      </Grid2>
-      <Grid2 size={{ xs: 3 }}>
+      </Grid>
+      <Grid size={{ xs: 3 }}>
         <Card>
           <CardHeader
             className={classes.assistantCardHeader}
@@ -288,8 +288,8 @@ export default function AssistantTextSpanClassification({
             />
           </CardContent>
         </Card>
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   );
 }
 

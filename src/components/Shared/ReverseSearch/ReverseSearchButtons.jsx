@@ -1,7 +1,7 @@
 import React from "react";
 
 import Button from "@mui/material/Button";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 
 import { SEARCH_ENGINE_SETTINGS } from "components/Shared/ReverseSearch/reverseSearchUtils";
 
@@ -25,10 +25,10 @@ export const ReverseSearchButtons = ({
   });
   return (
     <>
-      <Grid2 container justifyContent="center" spacing={2}>
+      <Grid container justifyContent="center" spacing={2}>
         {enginesMap.map((engine, index) => {
           return (
-            <Grid2 key={index}>
+            <Grid key={index}>
               <Button
                 className={classes.button}
                 variant="contained"
@@ -37,105 +37,105 @@ export const ReverseSearchButtons = ({
               >
                 {keyword(engine.CONTEXT_MENU_ID)}
               </Button>
-            </Grid2>
+            </Grid>
           );
         })}
         {children}
-      </Grid2>
+      </Grid>
     </>
   );
 
   /*return (
-        <>
-         <Grid2 container justifyContent="center" spacing={2}>
-           <Grid2>
-              <Button
-                className={classes.button}
-                variant="contained"
-                color={"primary"}
-                onClick={async () =>
-                  await reverseSearch(
-                    SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME,
-                  )
-                }
-              >
-                {keyword("reverse_search_google_lens")}
-              </Button>
-            </Grid2>
-           <Grid2>
-              <Button
-                className={classes.button}
-                variant="contained"
-                color={"primary"}
-                onClick={async () =>
-                  await reverseSearch(SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME)
-                }
-              >
-                {keyword("reverse_search_yandex")}
-              </Button>
-            </Grid2>
-           <Grid2>
-              <Button
-                className={classes.button}
-                variant="contained"
-                color={"primary"}
-                onClick={async () =>
-                  await reverseSearch(SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME)
-                }
-              >
-                {keyword("reverse_search_tineye")}
-              </Button>
-            </Grid2>
-           <Grid2>
-              <Button
-                className={classes.button}
-                variant="contained"
-                color={"primary"}
-                onClick={async () =>
-                  await reverseSearch(SEARCH_ENGINE_SETTINGS.GOOGLE_FACT_CHECK.NAME)
-                }
-              >
-                {keyword("reverse_google_factcheck")}
-              </Button>
-            </Grid2>
-           <Grid2>
-              <Button
-                className={classes.button}
-                variant="contained"
-                color={"primary"}
-                onClick={async () =>
-                  await reverseSearch(SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME)
-                }
-              >
-                {keyword("reverse_search_bing")}
-              </Button>
-            </Grid2>
-           <Grid2>
-              <Button
-                className={classes.button}
-                variant="contained"
-                color={"primary"}
-                onClick={async () =>
-                  await reverseSearch(SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME)
-                }
-              >
-                {keyword("reverse_search_baidu")}
-              </Button>
-            </Grid2>
-           <Grid2>
-              <Button
-                className={classes.button}
-                variant="contained"
-                color={"primary"}
-                onClick={async () =>
-                  await reverseSearch(SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.NAME)
-                }
-              >
-                {keyword("reverse_search_dbkf")}
-              </Button>
-            </Grid2>
-            {children}
-          </Grid2>
-        </>
-      );*/
+          <>
+           <Grid container justifyContent="center" spacing={2}>
+             <Grid>
+                <Button
+                  className={classes.button}
+                  variant="contained"
+                  color={"primary"}
+                  onClick={async () =>
+                    await reverseSearch(
+                      SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME,
+                    )
+                  }
+                >
+                  {keyword("reverse_search_google_lens")}
+                </Button>
+              </Grid>
+             <Grid>
+                <Button
+                  className={classes.button}
+                  variant="contained"
+                  color={"primary"}
+                  onClick={async () =>
+                    await reverseSearch(SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME)
+                  }
+                >
+                  {keyword("reverse_search_yandex")}
+                </Button>
+              </Grid>
+             <Grid>
+                <Button
+                  className={classes.button}
+                  variant="contained"
+                  color={"primary"}
+                  onClick={async () =>
+                    await reverseSearch(SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME)
+                  }
+                >
+                  {keyword("reverse_search_tineye")}
+                </Button>
+              </Grid>
+             <Grid>
+                <Button
+                  className={classes.button}
+                  variant="contained"
+                  color={"primary"}
+                  onClick={async () =>
+                    await reverseSearch(SEARCH_ENGINE_SETTINGS.GOOGLE_FACT_CHECK.NAME)
+                  }
+                >
+                  {keyword("reverse_google_factcheck")}
+                </Button>
+              </Grid>
+             <Grid>
+                <Button
+                  className={classes.button}
+                  variant="contained"
+                  color={"primary"}
+                  onClick={async () =>
+                    await reverseSearch(SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME)
+                  }
+                >
+                  {keyword("reverse_search_bing")}
+                </Button>
+              </Grid>
+             <Grid>
+                <Button
+                  className={classes.button}
+                  variant="contained"
+                  color={"primary"}
+                  onClick={async () =>
+                    await reverseSearch(SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME)
+                  }
+                >
+                  {keyword("reverse_search_baidu")}
+                </Button>
+              </Grid>
+             <Grid>
+                <Button
+                  className={classes.button}
+                  variant="contained"
+                  color={"primary"}
+                  onClick={async () =>
+                    await reverseSearch(SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.NAME)
+                  }
+                >
+                  {keyword("reverse_search_dbkf")}
+                </Button>
+              </Grid>
+              {children}
+            </Grid>
+          </>
+        );*/
 };

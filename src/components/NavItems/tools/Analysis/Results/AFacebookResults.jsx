@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 
@@ -174,7 +174,7 @@ const AFacebookResults = (props) => {
                 <ReverseSearchButtons reverseSearch={reverseSearch}>
                   {report["verification_cues"] &&
                     report["verification_cues"]["twitter_search_url"] && (
-                      <Grid2>
+                      <Grid>
                         <Button
                           className={classes.button}
                           variant="contained"
@@ -187,7 +187,7 @@ const AFacebookResults = (props) => {
                         >
                           {keyword("button_reverse_twitter")}
                         </Button>
-                      </Grid2>
+                      </Grid>
                     )}
                 </ReverseSearchButtons>
               </div>

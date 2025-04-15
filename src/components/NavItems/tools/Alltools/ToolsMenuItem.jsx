@@ -1,10 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-import { Box, Grid2, Typography } from "@mui/material/";
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 
 import FiberNewIcon from "@mui/icons-material/FiberNew";
 import ScienceIcon from "@mui/icons-material/Science";
@@ -38,45 +40,45 @@ const ToolsMenuItem = ({ tool, onClick }) => {
     <Card variant="outlined" onClick={onClick} sx={{ height: "100%" }}>
       <CardActionArea sx={{ height: "100%" }}>
         <CardContent sx={{ height: "100%" }}>
-          <Grid2
+          <Grid
             container
             direction="row"
             alignItems="flex-start"
             justifyContent="flex-start"
             spacing={1}
           >
-            <Grid2>
+            <Grid>
               <tool.icon sx={{ color: "#00926c" }} />
-            </Grid2>
+            </Grid>
 
-            <Grid2 size="grow">
+            <Grid size="grow">
               <Typography letiant="h6">{keyword(tool.titleKeyword)}</Typography>
-            </Grid2>
+            </Grid>
 
             {showRedesign && (
-              <Grid2 style={{ marginLeft: "auto", color: "#F44336" }}>
+              <Grid style={{ marginLeft: "auto", color: "#F44336" }}>
                 <ImprovedIcon title="Upgraded" width="40px" height="40px" />
-              </Grid2>
+              </Grid>
             )}
 
             {showNew && (
-              <Grid2 style={{ marginLeft: "auto", color: "#F44336" }}>
+              <Grid style={{ marginLeft: "auto", color: "#F44336" }}>
                 <FiberNewIcon />
-              </Grid2>
+              </Grid>
             )}
 
             {showExperimental && (
-              <Grid2 style={{ marginLeft: "auto", color: "#F44336" }}>
+              <Grid style={{ marginLeft: "auto", color: "#F44336" }}>
                 <ScienceIcon />
-              </Grid2>
+              </Grid>
             )}
 
             {showLock && !userAuthenticated && (
-              <Grid2 style={{ marginLeft: "auto" }}>
+              <Grid style={{ marginLeft: "auto" }}>
                 <AuthenticationIcon />
-              </Grid2>
+              </Grid>
             )}
-          </Grid2>
+          </Grid>
 
           <Box style={{ minHeight: "45px" }}>
             <Typography sx={{ fontSize: "10px" }}>

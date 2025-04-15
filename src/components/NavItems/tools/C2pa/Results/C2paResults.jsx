@@ -11,7 +11,7 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
@@ -87,15 +87,15 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
    */
   const title = (title, information) => {
     return (
-      <Grid2 container direction="row" alignItems="center">
-        <Grid2>
+      <Grid container direction="row" alignItems="center">
+        <Grid>
           <Typography variant="h6">{keyword(title)}</Typography>
-        </Grid2>
-        <Grid2 m={2} />
+        </Grid>
+        <Grid m={2} />
         <Tooltip title={<h3>{keyword(information)}</h3>}>
           <HelpIcon />
         </Tooltip>
-      </Grid2>
+      </Grid>
     );
   };
 
@@ -109,9 +109,9 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
 
   return (
     // </Card>
-    <Grid2 container direction="row" spacing={3} p={4}>
-      <Grid2 container justifyContent="start" size={{ md: 12, lg: 6 }}>
-        <Grid2>
+    <Grid container direction="row" spacing={3} p={4}>
+      <Grid container justifyContent="start" size={{ md: 12, lg: 6 }}>
+        <Grid>
           {isImage ? (
             <img
               src={url}
@@ -132,9 +132,9 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
               <source src={url} />
             </video>
           )}
-        </Grid2>
-      </Grid2>
-      <Grid2 size={{ md: 12, lg: 6 }}>
+        </Grid>
+      </Grid>
+      <Grid size={{ md: 12, lg: 6 }}>
         <Card p={1}>
           <CardContent>
             {!manifestData ? (
@@ -479,8 +479,8 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
             ) : null}
           </CardContent>
         </Card>
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   );
 };
 

@@ -11,7 +11,7 @@ import Card from "@mui/material/Card";
 import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
 import Fade from "@mui/material/Fade";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import Skeleton from "@mui/material/Skeleton";
@@ -29,7 +29,6 @@ import "@Shared/GoogleAnalytics/MatomoAnalytics";
 import HeaderTool from "@Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import LoadingButton from "@mui/lab/LoadingButton";
 import { ClearIcon } from "@mui/x-date-pickers";
 
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
@@ -189,13 +188,13 @@ const Keyframes = () => {
               <TabPanel value="url">
                 <Box>
                   <form>
-                    <Grid2
+                    <Grid
                       container
                       direction="row"
                       spacing={3}
                       alignItems="center"
                     >
-                      <Grid2 size="grow">
+                      <Grid size="grow">
                         <TextField
                           id="standard-full-width"
                           label={keyword("keyframes_input")}
@@ -219,10 +218,10 @@ const Keyframes = () => {
                             },
                           }}
                         />
-                      </Grid2>
+                      </Grid>
 
-                      <Grid2>
-                        <LoadingButton
+                      <Grid>
+                        <Button
                           type="submit"
                           variant="contained"
                           color="primary"
@@ -234,9 +233,9 @@ const Keyframes = () => {
                           loading={isPending || isLoadingSimilarity}
                         >
                           {keyword("button_submit")}
-                        </LoadingButton>
-                      </Grid2>
-                    </Grid2>
+                        </Button>
+                      </Grid>
+                    </Grid>
                   </form>
                 </Box>
               </TabPanel>
@@ -382,16 +381,16 @@ const Keyframes = () => {
                     <Typography variant="h6">
                       {keyword("faces_detected_title")}
                     </Typography>
-                    <Grid2 container direction="row" spacing={2}>
+                    <Grid container direction="row" spacing={2}>
                       {keyframesFeaturesData.faces.map((item, i) => (
-                        <Grid2 key={i} size={{ md: 3, lg: 1 }}>
+                        <Grid key={i} size={{ md: 3, lg: 1 }}>
                           <ImageWithFade
                             src={item.representative.imageUrl}
                             alt={`extracted img with face #${i + 1}`}
                           />
-                        </Grid2>
+                        </Grid>
                       ))}
-                    </Grid2>
+                    </Grid>
                   </Stack>
                 </Box>
               </Card>
@@ -403,16 +402,16 @@ const Keyframes = () => {
                     <Typography variant="h6">
                       {keyword("text_detected_title")}
                     </Typography>
-                    <Grid2 container direction="row" spacing={2}>
+                    <Grid container direction="row" spacing={2}>
                       {keyframesFeaturesData.texts.map((item, i) => (
-                        <Grid2 key={i} size={{ md: 3, lg: 1 }}>
+                        <Grid key={i} size={{ md: 3, lg: 1 }}>
                           <ImageWithFade
                             src={item.representative.imageUrl}
                             alt={`extracted img with text #${i + 1}`}
                           />
-                        </Grid2>
+                        </Grid>
                       ))}
-                    </Grid2>
+                    </Grid>
                   </Stack>
                 </Box>
               </Card>

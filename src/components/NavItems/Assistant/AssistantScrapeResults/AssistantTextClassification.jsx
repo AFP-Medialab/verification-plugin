@@ -6,7 +6,7 @@ import CardHeader from "@mui/material/CardHeader";
 import Checkbox from "@mui/material/Checkbox";
 import Divider from "@mui/material/Divider";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -125,9 +125,9 @@ export default function AssistantTextClassification({
   }
 
   return (
-    <Grid2 container>
+    <Grid container>
       {/* text being displayed */}
-      <Grid2 sx={{ paddingRight: "1em" }} size={9}>
+      <Grid sx={{ paddingRight: "1em" }} size={9}>
         <ClassifiedText
           text={text}
           spanIndices={filteredSentences}
@@ -139,10 +139,10 @@ export default function AssistantTextClassification({
           rgbHigh={sentenceRgbHigh}
           textHtmlMap={textHtmlMap}
         />
-      </Grid2>
+      </Grid>
 
       {/* credibility signal box with categories */}
-      <Grid2 size={{ xs: 3 }}>
+      <Grid size={{ xs: 3 }}>
         <Card variant="outlined">
           <CardHeader
             className={classes.assistantCardHeader}
@@ -182,8 +182,8 @@ export default function AssistantTextClassification({
             ) : null}
           </CardContent>
         </Card>
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   );
 }
 

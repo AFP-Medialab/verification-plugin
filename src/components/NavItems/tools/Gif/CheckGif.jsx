@@ -7,7 +7,7 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Tab from "@mui/material/Tab";
 import TextField from "@mui/material/TextField";
@@ -190,15 +190,15 @@ const CheckGif = () => {
 
   //Code to enable the button to upload the images
   /* if (toolState === 22 && imageURL1 !== "" && imageURL2 !== "") {
-                                                                                          //console.log("Ready to send"); //DEBUG
-                                                                                          dispatch(setStateReady());
-                                                                                      }*/
+                                                                                            //console.log("Ready to send"); //DEBUG
+                                                                                            dispatch(setStateReady());
+                                                                                        }*/
 
   //Code to enable the button to upload the images
   /* if (toolState === 21 && imageDropped1 !== null && imageDropped2 !== null) {
-                                                                                          //console.log("Ready to send"); //DEBUG
-                                                                                          dispatch(setStateReady());
-                                                                                      }*/
+                                                                                            //console.log("Ready to send"); //DEBUG
+                                                                                            dispatch(setStateReady());
+                                                                                        }*/
 
   useEffect(() => {
     if (toolState === 22 && imageURL1 !== "" && imageURL2 !== "") {
@@ -250,23 +250,23 @@ const CheckGif = () => {
     setEventUrl2(imageURL2);
     setEventUrlType2("url original image");
     /*trackEvent(
-                                                                                                                                                                          "submission",
-                                                                                                                                                                          "checkgif",
-                                                                                                                                                                          "url fake image",
-                                                                                                                                                                          imageURL1,
-                                                                                                                                                                          client_id,
-                                                                                                                                                                          uid
-                                                                                                                                                                        );
-                                                                                                                                                                        trackEvent(
-                                                                                                                                                                          "submission",
-                                                                                                                                                                          "checkgif",
-                                                                                                                                                                          "url original image",
-                                                                                                                                                                          imageURL2,
-                                                                                                                                                                          client_id,
-                                                                                                                                                                          uid
-                                                                                                                                                                        );*/
+                                                                                                                                                                              "submission",
+                                                                                                                                                                              "checkgif",
+                                                                                                                                                                              "url fake image",
+                                                                                                                                                                              imageURL1,
+                                                                                                                                                                              client_id,
+                                                                                                                                                                              uid
+                                                                                                                                                                            );
+                                                                                                                                                                            trackEvent(
+                                                                                                                                                                              "submission",
+                                                                                                                                                                              "checkgif",
+                                                                                                                                                                              "url original image",
+                                                                                                                                                                              imageURL2,
+                                                                                                                                                                              client_id,
+                                                                                                                                                                              uid
+                                                                                                                                                                            );*/
     /*submissionEvent(imageURL1);
-                                                                                                                                                                            submissionEvent(imageURL2);*/
+                                                                                                                                                                                submissionEvent(imageURL2);*/
     const files = {
       url_0: imageURL1,
       url_1: imageURL2,
@@ -281,23 +281,23 @@ const CheckGif = () => {
     setEventUrl2(selectedFile2);
     setEventUrlType2("file original image");
     /* trackEvent(
-                                                                                                                                                                          "submission",
-                                                                                                                                                                          "checkgif",
-                                                                                                                                                                          "file fake image",
-                                                                                                                                                                          selectedFile1,
-                                                                                                                                                                          client_id,
-                                                                                                                                                                          uid
-                                                                                                                                                                        );
-                                                                                                                                                                        trackEvent(
-                                                                                                                                                                          "submission",
-                                                                                                                                                                          "checkgif",
-                                                                                                                                                                          "file original image",
-                                                                                                                                                                          selectedFile2,
-                                                                                                                                                                          client_id,
-                                                                                                                                                                          uid
-                                                                                                                                                                        );*/
+                                                                                                                                                                              "submission",
+                                                                                                                                                                              "checkgif",
+                                                                                                                                                                              "file fake image",
+                                                                                                                                                                              selectedFile1,
+                                                                                                                                                                              client_id,
+                                                                                                                                                                              uid
+                                                                                                                                                                            );
+                                                                                                                                                                            trackEvent(
+                                                                                                                                                                              "submission",
+                                                                                                                                                                              "checkgif",
+                                                                                                                                                                              "file original image",
+                                                                                                                                                                              selectedFile2,
+                                                                                                                                                                              client_id,
+                                                                                                                                                                              uid
+                                                                                                                                                                            );*/
     /*submissionEvent(selectedFile1);
-                                                                                                                                                                            submissionEvent(selectedFile2);*/
+                                                                                                                                                                                submissionEvent(selectedFile2);*/
     const files = {
       file1: selectedFile1,
       file2: selectedFile2,
@@ -411,7 +411,7 @@ const CheckGif = () => {
         <Card variant="outlined">
           <CardHeader
             title={
-              <Grid2
+              <Grid
                 container
                 direction="row"
                 justifyContent="space-between"
@@ -422,18 +422,14 @@ const CheckGif = () => {
                 <Button variant="contained" onClick={newGif}>
                   {keyword("button_new")}
                 </Button>
-              </Grid2>
+              </Grid>
             }
             className={classes.headerUploadedImage}
           />
 
           <Box p={3}>
-            <Grid2
-              container
-              direction={{ md: "row", xs: "column" }}
-              spacing={3}
-            >
-              <Grid2
+            <Grid container direction={{ md: "row", xs: "column" }} spacing={3}>
+              <Grid
                 size={{ md: 5, xs: 12 }}
                 style={{ padding: "0.5em" }}
                 sx={{
@@ -451,7 +447,7 @@ const CheckGif = () => {
                       <Box m={2} />
 
                       {!showDropZone1 && (
-                        <Grid2
+                        <Grid
                           container
                           spacing={1}
                           direction="row"
@@ -466,12 +462,12 @@ const CheckGif = () => {
                           <IconButton onClick={removeImage1}>
                             <DeleteOutlineIcon fontSize="small" />
                           </IconButton>
-                        </Grid2>
+                        </Grid>
                       )}
 
                       {showDropZone1 && (
                         <DragAndDrop handleDrop={(files) => handleDrop(files)}>
-                          <Grid2
+                          <Grid
                             container
                             spacing={0}
                             direction="column"
@@ -479,7 +475,7 @@ const CheckGif = () => {
                             justifyContent="center"
                             className={classes.dropZone}
                           >
-                            <Grid2 className={classes.inputContainer}>
+                            <Grid className={classes.inputContainer}>
                               <input
                                 accept="image/*"
                                 className={classes.input}
@@ -499,8 +495,8 @@ const CheckGif = () => {
                                   </label>
                                 </Box>
                               </div>
-                            </Grid2>
-                          </Grid2>
+                            </Grid>
+                          </Grid>
                         </DragAndDrop>
                       )}
 
@@ -513,7 +509,7 @@ const CheckGif = () => {
                       <Box m={2} />
 
                       {!showDropZone2 && (
-                        <Grid2
+                        <Grid
                           container
                           spacing={1}
                           direction="row"
@@ -528,12 +524,12 @@ const CheckGif = () => {
                           <IconButton onClick={removeImage2}>
                             <DeleteOutlineIcon fontSize="small" />
                           </IconButton>
-                        </Grid2>
+                        </Grid>
                       )}
 
                       {showDropZone2 && (
                         <DragAndDrop handleDrop={(files) => handleDrop2(files)}>
-                          <Grid2
+                          <Grid
                             container
                             spacing={0}
                             direction="column"
@@ -541,7 +537,7 @@ const CheckGif = () => {
                             justifyContent="center"
                             className={classes.dropZone}
                           >
-                            <Grid2 className={classes.inputContainer}>
+                            <Grid className={classes.inputContainer}>
                               <input
                                 accept="image/*"
                                 className={classes.input}
@@ -561,8 +557,8 @@ const CheckGif = () => {
                                   </label>
                                 </Box>
                               </div>
-                            </Grid2>
-                          </Grid2>
+                            </Grid>
+                          </Grid>
                         </DragAndDrop>
                       )}
 
@@ -636,10 +632,10 @@ const CheckGif = () => {
                     </div>
                   )}
                 </Box>
-              </Grid2>
-              <Grid2 size={{ md: 7, xs: 12 }} style={{ padding: "0.5em" }}>
+              </Grid>
+              <Grid size={{ md: 7, xs: 12 }} style={{ padding: "0.5em" }}>
                 {(toolState === 21 || toolState === 22 || toolState === 3) && (
-                  <Grid2
+                  <Grid
                     container
                     direction="column"
                     justifyContent="center"
@@ -656,11 +652,11 @@ const CheckGif = () => {
                         {keyword("text_preview")}
                       </Typography>
                     </Box>
-                  </Grid2>
+                  </Grid>
                 )}
 
                 {toolState === 4 && (
-                  <Grid2
+                  <Grid
                     container
                     direction="column"
                     justifyContent="center"
@@ -668,7 +664,7 @@ const CheckGif = () => {
                     className={classes.height100}
                   >
                     <CircularProgress />
-                  </Grid2>
+                  </Grid>
                 )}
 
                 {(toolState === 5 || toolState === 7) && (
@@ -679,8 +675,8 @@ const CheckGif = () => {
                     isCanvas={true}
                   ></AnimatedGif>
                 )}
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
           </Box>
         </Card>
       )}

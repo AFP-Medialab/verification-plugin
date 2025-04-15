@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import TextField from "@mui/material/TextField";
 
@@ -57,13 +57,13 @@ const VideoRights = () => {
   const submitForm = () => {
     if (!isLoading) {
       /*trackEvent(
-                                "submission",
-                                "videorights",
-                                "video rights",
-                                input,
-                                client_id,
-                                uid
-                              );*/
+                                      "submission",
+                                      "videorights",
+                                      "video rights",
+                                      input,
+                                      client_id,
+                                      uid
+                                    );*/
       setSubmitted(input);
       dispatch(setVideoRightsLoading(true));
     }
@@ -106,8 +106,8 @@ const VideoRights = () => {
       />
       <Card variant="outlined">
         <form className={classes.root2}>
-          <Grid2 container direction="row" spacing={3} alignItems="center">
-            <Grid2 size="grow">
+          <Grid container direction="row" spacing={3} alignItems="center">
+            <Grid size="grow">
               <TextField
                 value={input}
                 id="standard-full-width"
@@ -118,8 +118,8 @@ const VideoRights = () => {
                 variant="outlined"
                 onChange={(e) => setInput(e.target.value)}
               />
-            </Grid2>
-            <Grid2>
+            </Grid>
+            <Grid>
               <Button
                 type="submit"
                 variant="contained"
@@ -129,8 +129,8 @@ const VideoRights = () => {
               >
                 {keyword("button_submit")}
               </Button>
-            </Grid2>
-          </Grid2>
+            </Grid>
+          </Grid>
           {isLoading && (
             <>
               <Box m={3} />

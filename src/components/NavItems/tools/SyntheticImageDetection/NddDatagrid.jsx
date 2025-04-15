@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -84,20 +84,20 @@ const NddDataGrid = ({ rows }) => {
     if (!urls || !Array.isArray(urls) || urls.length === 0) return <></>;
 
     return (
-      <Grid2
+      <Grid
         container
         justifyContent="flex-start"
         alignItems="center"
         spacing={2}
       >
         {urls.map((url, index) => (
-          <Grid2 key={index}>
+          <Grid key={index}>
             <Link href={url} target="_blank" rel="noopener noreferrer">
               <Typography>{`#${index + 1}`}</Typography>
             </Link>
-          </Grid2>
+          </Grid>
         ))}
-      </Grid2>
+      </Grid>
     );
   };
 

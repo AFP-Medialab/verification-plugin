@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Icon from "@mui/material/Icon";
 import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
@@ -217,8 +217,8 @@ const VideoRightsResults = (props) => {
         <div className={classes.listRoot}>
           {result.user !== undefined && (
             <Paper className={classes.listItem}>
-              <Grid2 container wrap="nowrap" spacing={2} alignItems={"center"}>
-                <Grid2>
+              <Grid container wrap="nowrap" spacing={2} alignItems={"center"}>
+                <Grid>
                   {result.kind === "youTubeVideos" && (
                     <YouTubeIcon color={"primary"} fontSize={"large"} />
                   )}
@@ -228,8 +228,8 @@ const VideoRightsResults = (props) => {
                   {result.kind === "twitterVideos" && (
                     <TwitterIcon color={"primary"} fontSize={"large"} />
                   )}
-                </Grid2>
-                <Grid2 size="grow">
+                </Grid>
+                <Grid size="grow">
                   <a
                     href={result.user.url}
                     target="_blank"
@@ -238,13 +238,13 @@ const VideoRightsResults = (props) => {
                     {" "}
                     {result.user.name}
                   </a>
-                </Grid2>
-              </Grid2>
+                </Grid>
+              </Grid>
             </Paper>
           )}
           <Paper className={classes.listItem}>
-            <Grid2 container wrap="nowrap" spacing={2} alignItems={"center"}>
-              <Grid2>
+            <Grid container wrap="nowrap" spacing={2} alignItems={"center"}>
+              <Grid>
                 <Icon classes={{ root: classes.iconRoot }}>
                   <img
                     className={classes.imageIcon}
@@ -252,8 +252,8 @@ const VideoRightsResults = (props) => {
                     alt={invidLogo}
                   />
                 </Icon>
-              </Grid2>
-              <Grid2 size="grow">
+              </Grid>
+              <Grid size="grow">
                 Or try:{" "}
                 <a
                   href={result.RIGHTS_APP + "/" + result.id}
@@ -263,8 +263,8 @@ const VideoRightsResults = (props) => {
                   InVID Rights Management Tool
                 </a>
                 .
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
           </Paper>
         </div>
         <Box m={4} />

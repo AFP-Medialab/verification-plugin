@@ -24,7 +24,6 @@ import {
   ManageSearch,
 } from "@mui/icons-material";
 
-import LoadingButton from "@mui/lab/LoadingButton";
 import axios from "axios";
 import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
 import dayjs from "dayjs";
@@ -421,7 +420,7 @@ const SemanticSearch = () => {
                       setSearchString(e.target.value);
                     }}
                   />
-                  <LoadingButton
+                  <Button
                     type="submit"
                     variant="contained"
                     disabled={isLoading || !searchString}
@@ -432,7 +431,7 @@ const SemanticSearch = () => {
                     }}
                   >
                     {keyword("semantic_search_form_submit_button")}
-                  </LoadingButton>
+                  </Button>
                 </Stack>
                 <Box>
                   <Stack direction="row" spacing={2}>

@@ -6,7 +6,7 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
@@ -62,8 +62,8 @@ const AssistantSCResults = () => {
 
   return (
     <Card variant={"outlined"} className={classes.sourceCredibilityBorder}>
-      <Grid2 container>
-        <Grid2 size={{ xs: 11 }} className={classes.displayFlex}>
+      <Grid container>
+        <Grid size={{ xs: 11 }} className={classes.displayFlex}>
           {/* icon */}
           <CardMedia>
             <Box m={1}>
@@ -88,9 +88,9 @@ const AssistantSCResults = () => {
           >
             <ExpandMoreIcon color={"primary"} />
           </IconButton>
-        </Grid2>
+        </Grid>
 
-        <Grid2 size={{ xs: 1 }}>
+        <Grid size={{ xs: 1 }}>
           {/* help tooltip */}
           <Box mt={1.5} align="right">
             <Tooltip
@@ -109,9 +109,9 @@ const AssistantSCResults = () => {
               <HelpOutlineOutlinedIcon color={"action"} />
             </Tooltip>
           </Box>
-        </Grid2>
+        </Grid>
 
-        <Grid2 size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <Collapse
             in={assuranceExpanded}
             className={classes.assistantBackground}
@@ -163,8 +163,8 @@ const AssistantSCResults = () => {
               ) : null}
             </Box>
           </Collapse>
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     </Card>
   );
 };

@@ -6,7 +6,6 @@ import Typography from "@mui/material/Typography";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-import LoadingButton from "@mui/lab/LoadingButton";
 import { downloadZip } from "client-zip";
 import dayjs from "dayjs";
 import { sha256 } from "hash-wasm";
@@ -420,7 +419,7 @@ const SinglefileConverter = (telegramURL) => {
   return (
     <div>
       <Box>
-        <LoadingButton
+        <Button
           variant="outlined"
           loading={processingSinglefile}
           loadingPosition="start"
@@ -444,7 +443,7 @@ const SinglefileConverter = (telegramURL) => {
               e.target.value = null;
             }}
           />
-        </LoadingButton>
+        </Button>
       </Box>
       <Typography color={"error"}>{error}</Typography>
     </div>

@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
@@ -42,7 +42,7 @@ const GeolocationResults = ({ result, urlImage }) => {
                     }%`}</Typography>
                   </Box>
                 )}
-              <Grid2
+              <Grid
                 container
                 direction={{ md: "row", xs: "column" }}
                 justifyContent="center"
@@ -51,7 +51,7 @@ const GeolocationResults = ({ result, urlImage }) => {
                 spacing={4}
                 p={4}
               >
-                <Grid2
+                <Grid
                   container
                   direction="column"
                   justifyContent="flex-start"
@@ -59,7 +59,7 @@ const GeolocationResults = ({ result, urlImage }) => {
                   spacing={3}
                   size={{ md: 6, xs: 12 }}
                 >
-                  <Grid2
+                  <Grid
                     size={6}
                     style={{ width: "100%" }}
                     justifyContent="center"
@@ -75,11 +75,11 @@ const GeolocationResults = ({ result, urlImage }) => {
                         borderRadius: 10,
                       }}
                     />
-                  </Grid2>
-                </Grid2>
+                  </Grid>
+                </Grid>
 
                 {res.latitude && res.longitude && (
-                  <Grid2
+                  <Grid
                     container
                     direction="column"
                     justifyContent="flex-start"
@@ -124,7 +124,7 @@ const GeolocationResults = ({ result, urlImage }) => {
                         </MapContainer>
                       </Box>
                       <Box width="100%">
-                        <Grid2
+                        <Grid
                           container
                           direction="row"
                           justifyContent="space-between"
@@ -132,7 +132,7 @@ const GeolocationResults = ({ result, urlImage }) => {
                           style={{ flexWrap: "nowrap" }}
                           spacing={1}
                         >
-                          <Grid2
+                          <Grid
                             container
                             direction="column"
                             justifyContent="flex-start"
@@ -146,9 +146,9 @@ const GeolocationResults = ({ result, urlImage }) => {
                             </Typography>
 
                             <Typography variant="h5">{res.latitude}</Typography>
-                          </Grid2>
+                          </Grid>
 
-                          <Grid2
+                          <Grid
                             container
                             direction="column"
                             justifyContent="flex-start"
@@ -164,8 +164,8 @@ const GeolocationResults = ({ result, urlImage }) => {
                             <Typography variant="h5">
                               {res.longitude}
                             </Typography>
-                          </Grid2>
-                        </Grid2>
+                          </Grid>
+                        </Grid>
 
                         <Box m={4} />
 
@@ -187,9 +187,9 @@ const GeolocationResults = ({ result, urlImage }) => {
                         </Button>
                       </Box>
                     </Stack>
-                  </Grid2>
+                  </Grid>
                 )}
-              </Grid2>
+              </Grid>
             </Card>
           ))}
       </Stack>

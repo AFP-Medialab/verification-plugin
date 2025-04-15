@@ -11,7 +11,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Collapse from "@mui/material/Collapse";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Skeleton from "@mui/material/Skeleton";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
@@ -235,17 +235,17 @@ const AssistantCredSignals = () => {
               role,
             )}
           >
-            <Grid2 container spacing={1} wrap="wrap" width="100%">
-              <Grid2 size={{ xs: 4 }} align="start">
+            <Grid container spacing={1} wrap="wrap" width="100%">
+              <Grid size={{ xs: 4 }} align="start">
                 <Typography
                   display="inline"
                   sx={{ flexShrink: 0, align: "start" }}
                 >
                   {prevFactChecksTitle}
                 </Typography>
-              </Grid2>
+              </Grid>
 
-              <Grid2 size={{ xs: 8 }} align="start">
+              <Grid size={{ xs: 8 }} align="start">
                 {role.includes(ROLES.BETA_TESTER) && prevFactChecksLoading && (
                   <Skeleton variant="rounded" width="50%" height={40} />
                 )}
@@ -289,8 +289,8 @@ const AssistantCredSignals = () => {
                       {keyword("none_detected")}
                     </Typography>
                   )}
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
           </AccordionSummary>
 
           <AccordionDetails>
@@ -369,17 +369,17 @@ const AssistantCredSignals = () => {
               role,
             )}
           >
-            <Grid2 container spacing={1} wrap="wrap" width="100%">
-              <Grid2 size={{ xs: 4 }} align="start">
+            <Grid container spacing={1} wrap="wrap" width="100%">
+              <Grid size={{ xs: 4 }} align="start">
                 <Typography
                   display="inline"
                   sx={{ flexShrink: 0, align: "start" }}
                 >
                   {machineGeneratedTextTitle}
                 </Typography>
-              </Grid2>
+              </Grid>
 
-              <Grid2 size={{ xs: 8 }} align="start">
+              <Grid size={{ xs: 8 }} align="start">
                 {role.includes(ROLES.BETA_TESTER) &&
                   machineGeneratedTextLoading && (
                     <Skeleton variant="rounded" width="50%" height={40} />
@@ -419,8 +419,8 @@ const AssistantCredSignals = () => {
                     {keyword("login_required")}
                   </Typography>
                 )}
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
           </AccordionSummary>
 
           <AccordionDetails>

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useColorScheme } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import { ThemeProvider } from "@mui/material/styles";
 
 import { getSupportedBrowserLanguage } from "@Shared/Languages/getSupportedBrowserLanguage";
@@ -105,10 +105,10 @@ const PopUp = () => {
   return (
     <ThemeProvider theme={theme}>
       <div className={classes.popUp}>
-        <Grid2 container>
+        <Grid container>
           {LOGO_EU ? (
             <>
-              <Grid2
+              <Grid
                 size={{ xs: 6 }}
                 container
                 alignItems="center"
@@ -119,18 +119,18 @@ const PopUp = () => {
                   alt={LogoEuCom}
                   style={{ width: "100px" }}
                 />
-              </Grid2>
-              <Grid2 size={{ xs: 6 }}>
+              </Grid>
+              <Grid size={{ xs: 6 }}>
                 <img
                   src={LogoVeraBlack}
                   alt={"logo_vera"}
                   style={{ width: "100px" }}
                 />
-              </Grid2>
+              </Grid>
             </>
           ) : (
             <>
-              <Grid2
+              <Grid
                 size={{ xs: 7 }}
                 container
                 alignItems="center"
@@ -141,18 +141,18 @@ const PopUp = () => {
                   alt={LogoInVidWeverify}
                   style={{ width: "150px" }}
                 />
-              </Grid2>
-              <Grid2 size={{ xs: 5 }}>
+              </Grid>
+              <Grid size={{ xs: 5 }}>
                 <img
                   src={LogoVeraBlack}
                   alt={"logo_vera"}
                   style={{ width: "100px" }}
                 />
-              </Grid2>
+              </Grid>
             </>
           )}
           <Box m={1} />
-          <Grid2 size={{ xs: 12 }}>
+          <Grid size={{ xs: 12 }}>
             <Button
               variant="outlined"
               color="primary"
@@ -161,9 +161,9 @@ const PopUp = () => {
             >
               {keyword("open_website")}
             </Button>
-          </Grid2>
+          </Grid>
           <Box m={1} />
-          <Grid2 size={{ xs: 12 }}>
+          <Grid size={{ xs: 12 }}>
             <Button
               variant="outlined"
               color="primary"
@@ -172,9 +172,9 @@ const PopUp = () => {
             >
               {keyword("open_assistant")}
             </Button>
-          </Grid2>
+          </Grid>
           <Box m={1} />
-          <Grid2 size={{ xs: 12 }}>
+          <Grid size={{ xs: 12 }}>
             <Button
               variant="outlined"
               color="primary"
@@ -184,9 +184,9 @@ const PopUp = () => {
             >
               {keyword("open_assistant_on_page")}
             </Button>
-          </Grid2>
+          </Grid>
           <Box m={1} />
-          <Grid2 size={{ xs: 12 }}>
+          <Grid size={{ xs: 12 }}>
             <Button
               variant="outlined"
               color="primary"
@@ -195,10 +195,10 @@ const PopUp = () => {
             >
               {keyword("open_classroom")}
             </Button>
-          </Grid2>
+          </Grid>
           <Box m={1} />
           {userRoles.includes(ROLES.ARCHIVE) ? (
-            <Grid2 size={{ xs: 12 }}>
+            <Grid size={{ xs: 12 }}>
               <Button
                 variant="outlined"
                 color="primary"
@@ -212,9 +212,9 @@ const PopUp = () => {
               >
                 {keyword("archive_this")}
               </Button>
-            </Grid2>
+            </Grid>
           ) : null}
-        </Grid2>
+        </Grid>
 
         <Box m={1} />
       </div>

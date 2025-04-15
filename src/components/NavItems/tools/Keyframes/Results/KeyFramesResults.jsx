@@ -7,7 +7,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Popover from "@mui/material/Popover";
 import Stack from "@mui/material/Stack";
@@ -23,7 +23,6 @@ import {
   SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
 } from "@Shared/ReverseSearch/reverseSearchUtils";
-import LoadingButton from "@mui/lab/LoadingButton";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import { ROLES } from "../../../../../constants/roles";
@@ -214,22 +213,22 @@ const KeyFramesResults = ({ result }) => {
           </Stack>
 
           <Stack direction="column">
-            <Grid2
+            <Grid
               container
               justifyContent="space-between"
               spacing={2}
               alignContent={"center"}
             >
-              <Grid2>
+              <Grid>
                 <Button onClick={() => toggleDetail()}>
                   {!detailed
                     ? keyword("keyframe_title_get_detail")
                     : keyword("keyframe_title_get_simple")}
                 </Button>
-              </Grid2>
+              </Grid>
 
-              <Grid2>
-                <LoadingButton
+              <Grid>
+                <Button
                   color="primary"
                   loadingPosition="start"
                   loading={isZipDownloading}
@@ -237,20 +236,20 @@ const KeyFramesResults = ({ result }) => {
                   startIcon={<DownloadIcon />}
                 >
                   {keyword("keyframes_download_subshots")}
-                </LoadingButton>
-              </Grid2>
+                </Button>
+              </Grid>
 
-              <Grid2 size="grow" style={{ textAlign: "end" }}>
+              <Grid size="grow" style={{ textAlign: "end" }}>
                 <Button onClick={() => zoom(-1)} startIcon={<ZoomOutIcon />}>
                   {keyword("zoom_out")}
                 </Button>
-              </Grid2>
-              <Grid2>
+              </Grid>
+              <Grid>
                 <Button onClick={() => zoom(1)} startIcon={<ZoomInIcon />}>
                   {keyword("zoom_in")}
                 </Button>
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
             <Divider />
           </Stack>
 

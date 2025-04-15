@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -108,7 +108,7 @@ const About = () => {
           </Link>
         </Typography>
       </Box>
-      <Grid2
+      <Grid
         container
         direction="row"
         spacing={2}
@@ -116,38 +116,38 @@ const About = () => {
         alignItems="center"
         mb={4}
       >
-        <Grid2 size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <img className={classes.AboutMedia} src={afpImage} alt={afpImage} />
-        </Grid2>
-        <Grid2>
+        </Grid>
+        <Grid>
           <img className={classes.AboutMedia} src={itiImage} alt={itiImage} />
-        </Grid2>
-        <Grid2>
+        </Grid>
+        <Grid>
           <img
             className={classes.AboutMedia}
             src={europeImage}
             alt={europeImage}
           />
-        </Grid2>
+        </Grid>
         {currentLang === "ar" ? (
           <>
-            <Grid2 size={{ xs: 6 }}>
+            <Grid size={{ xs: 6 }}>
               <img
                 className={classes.AboutMediaSmall}
                 src={afcnLogo}
                 alt={afcnLogo}
               />
-            </Grid2>
-            <Grid2 size={{ xs: 6 }}>
+            </Grid>
+            <Grid size={{ xs: 6 }}>
               <img
                 className={classes.AboutMediaSmall}
                 src={arijLogo}
                 alt={arijLogo}
               />
-            </Grid2>
+            </Grid>
           </>
         ) : null}
-      </Grid2>
+      </Grid>
     </Paper>
   );
 };

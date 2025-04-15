@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
@@ -134,8 +134,8 @@ const AssistantIntroduction = (props) => {
 
         <CardContent>
           <Box m={2}>
-            <Grid2 container spacing={3} alignItems="flex-start">
-              <Grid2 size={{ xs: 6 }}>
+            <Grid container spacing={3} alignItems="flex-start">
+              <Grid size={{ xs: 6 }}>
                 <Box
                   data-testid="assistant-webpage-link"
                   p={3}
@@ -160,23 +160,23 @@ const AssistantIntroduction = (props) => {
                     }
                   }}
                 >
-                  <Grid2
+                  <Grid
                     container
                     direction="row"
                     style={{ flexWrap: "nowrap" }}
                     spacing={2}
                   >
-                    <Grid2 size={{ xs: 1 }}>
+                    <Grid size={{ xs: 1 }}>
                       <LinkIcon className={classIconURL} />
-                    </Grid2>
-                    <Grid2>
-                      <Grid2
+                    </Grid>
+                    <Grid>
+                      <Grid
                         container
                         direction="column"
                         justifyContent="flex-start"
                         alignItems="flex-start"
                       >
-                        <Grid2>
+                        <Grid>
                           <Typography
                             variant="body1"
                             style={{ fontWeight: 600 }}
@@ -184,22 +184,22 @@ const AssistantIntroduction = (props) => {
                           >
                             {keyword("assistant_webpage_header")}
                           </Typography>
-                        </Grid2>
+                        </Grid>
 
                         <Box mt={1} />
 
-                        <Grid2>
+                        <Grid>
                           <Typography variant="body1" textAlign={"start"}>
                             {keyword("assistant_webpage_text")}
                           </Typography>
-                        </Grid2>
-                      </Grid2>
-                    </Grid2>
-                  </Grid2>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
                 </Box>
-              </Grid2>
+              </Grid>
 
-              <Grid2 size={{ xs: 6 }}>
+              <Grid size={{ xs: 6 }}>
                 <Box
                   p={3}
                   className={classButtonLocal}
@@ -226,25 +226,25 @@ const AssistantIntroduction = (props) => {
                     }
                   }}
                 >
-                  <Grid2
+                  <Grid
                     container
                     direction="row"
                     style={{ flexWrap: "nowrap" }}
                     spacing={2}
                   >
-                    <Grid2 size={{ xs: 1 }}>
+                    <Grid size={{ xs: 1 }}>
                       <InsertDriveFileIcon className={classIconLocal} />
-                    </Grid2>
+                    </Grid>
 
-                    <Grid2>
-                      <Grid2
+                    <Grid>
+                      <Grid
                         container
                         direction="column"
                         justifyContent="flex-start"
                         alignItems="flex-start"
                         spacing={1}
                       >
-                        <Grid2 size={{ xs: 12 }}>
+                        <Grid size={{ xs: 12 }}>
                           <Typography
                             variant="body1"
                             style={{ fontWeight: 600 }}
@@ -252,18 +252,18 @@ const AssistantIntroduction = (props) => {
                           >
                             {keyword("assistant_file_header")}
                           </Typography>
-                        </Grid2>
-                        <Grid2 size={{ xs: 12 }}>
+                        </Grid>
+                        <Grid size={{ xs: 12 }}>
                           <Typography variant="body1" textAlign={"start"}>
                             {keyword("assistant_file_text")}
                           </Typography>
-                        </Grid2>
-                      </Grid2>
-                    </Grid2>
-                  </Grid2>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
                 </Box>
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
           </Box>
         </CardContent>
       </Card>
