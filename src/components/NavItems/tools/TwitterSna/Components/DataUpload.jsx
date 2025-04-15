@@ -27,6 +27,12 @@ import EntryDetailTable from "./EntryDetailTable";
 // adjust import path as needed
 
 const CheckboxTable = ({
+  inputRef,
+  handleFileChange,
+  handleUploadClick,
+  uploadedFile,
+  deleteTweets,
+  downloadTweetCSV,
   openRowIds,
   setOpenRowIds,
   rows,
@@ -34,6 +40,14 @@ const CheckboxTable = ({
   selected,
   setSelected,
   dataProps,
+  page,
+  setPage,
+  rowsPerPage,
+  setRowsPerPage,
+  searchFilter,
+  setSearchFilter,
+  expanded,
+  setExpanded,
 }) => {
   const toggleCollapse = (id) => {
     setOpenRowIds((prev) =>
@@ -79,90 +93,129 @@ const CheckboxTable = ({
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell padding="checkbox">
-              <Checkbox
-                indeterminate={
-                  selected.length > 0 && selected.length < rows.length
-                }
-                checked={rows.length > 0 && selected.length === rows.length}
-                onChange={handleSelectAllClick}
-              />
-            </TableCell>
-            <TableCell>Data source</TableCell>
-            <TableCell>Number of rows</TableCell>
-            <TableCell align="right">Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => {
-            const isItemSelected = isSelected(row.id);
-            const isOpen = openRowIds.includes(row.id);
+    <>
+      <Stack direction="row" spacing={2} alignItems="center">
+        <Typography variant="h6" align="left">
+          Upload CrowdTangle CSV:
+        </Typography>
+        <input type="file" hidden ref={inputRef} onChange={handleFileChange} />
+        <Button
+          variant="outlined"
+          sx={{
+            color: "green",
+            borderColor: "green",
+            backgroundColor: "transparent",
+            "&:hover": {
+              backgroundColor: "rgba(0, 128, 0, 0.1)", // light green on hover
+              borderColor: "darkgreen",
+            },
+          }}
+          onClick={() => inputRef.current.click()}
+        >
+          {uploadedFile ? uploadedFile.name : "Upload file"}
+        </Button>
+        <Box p={2}></Box>
+      </Stack>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell />
+              <TableCell padding="checkbox">
+                <Checkbox
+                  indeterminate={
+                    selected.length > 0 && selected.length < rows.length
+                  }
+                  checked={rows.length > 0 && selected.length === rows.length}
+                  onChange={handleSelectAllClick}
+                />
+              </TableCell>
+              <TableCell>Data source</TableCell>
+              <TableCell>Number of rows</TableCell>
+              <TableCell align="right">Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows ? (
+              rows.map((row) => {
+                const isItemSelected = isSelected(row.id);
+                const isOpen = openRowIds.includes(row.id);
+                const allTweets = row.content;
+                const headers = row.headers;
 
-            return (
-              <React.Fragment key={row.id}>
-                <TableRow hover role="checkbox" selected={isItemSelected}>
-                  <TableCell>
-                    <IconButton onClick={() => toggleCollapse(row.id)}>
-                      {isOpen ? (
-                        <KeyboardArrowUpIcon />
-                      ) : (
-                        <KeyboardArrowDownIcon />
-                      )}
-                    </IconButton>
-                  </TableCell>
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={isItemSelected}
-                      onChange={() => handleClick(row.id)}
-                    />
-                  </TableCell>
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell>{row.description}</TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      onClick={() => handleSettings(row.id)}
-                      aria-label="settings"
-                    >
-                      <SettingsIcon />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => handleDownload(row.id)}
-                      aria-label="download"
-                    >
-                      <DownloadIcon />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => handleRemove(row.id)}
-                      aria-label="delete"
-                      color="error"
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-
-                <TableRow>
-                  <TableCell colSpan={5} sx={{ p: 0, border: 0 }}>
-                    <Collapse in={isOpen} timeout="auto" unmountOnExit>
-                      <Box sx={{ margin: 2 }}>
-                        <EntryDetailTable
-                          dataProps // adjust headers as needed
+                return (
+                  <React.Fragment key={row.id}>
+                    <TableRow hover role="checkbox" selected={isItemSelected}>
+                      <TableCell>
+                        <IconButton onClick={() => toggleCollapse(row.id)}>
+                          {isOpen ? (
+                            <KeyboardArrowUpIcon />
+                          ) : (
+                            <KeyboardArrowDownIcon />
+                          )}
+                        </IconButton>
+                      </TableCell>
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={isItemSelected}
+                          onChange={() => handleClick(row.id)}
                         />
-                      </Box>
-                    </Collapse>
-                  </TableCell>
-                </TableRow>
-              </React.Fragment>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </TableContainer>
+                      </TableCell>
+                      <TableCell>{row.name}</TableCell>
+                      <TableCell>{row.description}</TableCell>
+                      <TableCell align="right">
+                        <IconButton
+                          onClick={() => handleSettings(row.id)}
+                          aria-label="settings"
+                        >
+                          <SettingsIcon />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => handleDownload(row.id)}
+                          aria-label="download"
+                        >
+                          <DownloadIcon />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => handleRemove(row.id)}
+                          aria-label="delete"
+                          color="error"
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                      <TableCell colSpan={5} sx={{ p: 0, border: 0 }}>
+                        <Collapse in={isOpen} timeout="auto" unmountOnExit>
+                          <Box sx={{ margin: 2 }}>
+                            {EntryDetailTable({
+                              allTweets,
+                              headers,
+                              page,
+                              setPage,
+                              rowsPerPage,
+                              setRowsPerPage,
+                              searchFilter,
+                              setSearchFilter,
+                              expanded,
+                              setExpanded,
+                            })}
+                          </Box>
+                        </Collapse>
+                      </TableCell>
+                    </TableRow>
+                  </React.Fragment>
+                );
+              })
+            ) : (
+              <></>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 };
 

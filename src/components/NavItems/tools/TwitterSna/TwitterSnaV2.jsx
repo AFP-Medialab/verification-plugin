@@ -365,7 +365,7 @@ const TwitterSnaV2 = () => {
       name: "Collected tweets",
       description: dedpulicatedTweets.length,
       content: dedpulicatedTweets,
-      headers: Object.keys(dedpulicatedTweets),
+      headers: Object.keys(dedpulicatedTweets[0]),
     });
 
     setLoading(false);
@@ -639,13 +639,28 @@ const TwitterSnaV2 = () => {
   };
 
   const checkboxTableProps = {
+    inputRef,
+    handleFileChange,
+    handleUploadClick,
+    uploadedFile,
+    deleteTweets,
+    downloadTweetCSV,
     openRowIds,
     setOpenRowIds,
     rows,
     setRows,
     selected,
     setSelected,
-    dataProps,
+    allTweets,
+    page,
+    setPage,
+    rowsPerPage,
+    setRowsPerPage,
+    searchFilter,
+    setSearchFilter,
+    expanded,
+    setExpanded,
+    headers,
   };
 
   return (
@@ -670,9 +685,9 @@ const TwitterSnaV2 = () => {
             </Box>
           ) : (
             <Box p={4}>
-              <CheckboxTable checkboxTableProps />
-              <Box p={4}></Box>
-              {EntryDetailTable(tableProps)}
+              {CheckboxTable(checkboxTableProps)}
+              {/* <Box p={4}></Box> */}
+              {/* {EntryDetailTable(tableProps)} */}
               <Box p={2} />
               {CoorPanel(coorProps)}
             </Box>

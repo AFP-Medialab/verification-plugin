@@ -21,6 +21,7 @@ import { GridExpandMoreIcon } from "@mui/x-data-grid";
 
 const EntryDetailTable = ({
   allTweets,
+  headers,
   page,
   setPage,
   rowsPerPage,
@@ -29,7 +30,6 @@ const EntryDetailTable = ({
   setSearchFilter,
   expanded,
   setExpanded,
-  headers,
 }) => {
   const ExpandableTableCell = ({ text, maxChars = 100 }) => {
     const isLong = text.length > maxChars;
@@ -48,7 +48,6 @@ const EntryDetailTable = ({
       </TableCell>
     );
   };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -75,11 +74,15 @@ const EntryDetailTable = ({
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {headers.map((k) => (
-                <TableCell key={k} align="center" style={{ minWidth: 200 }}>
-                  {k}
-                </TableCell>
-              ))}
+              {headers ? (
+                headers.map((k) => (
+                  <TableCell key={k} align="center" style={{ minWidth: 200 }}>
+                    {k}
+                  </TableCell>
+                ))
+              ) : (
+                <></>
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
