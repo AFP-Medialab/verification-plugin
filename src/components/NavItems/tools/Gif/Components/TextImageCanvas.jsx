@@ -145,7 +145,6 @@ const TextImageCanvas = ({
       </Grid>
     );
   } else {
-    return;
   }
 };
 

@@ -43,7 +43,6 @@ export const useGeolocate = (url, processURL, keyword) => {
           handleError("geo_error_" + error.response.status, keyword, dispatch);
         });
     }
-    // eslint-disable-next-line
   }, [processURL, url]);
 };
 

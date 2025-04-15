@@ -122,7 +122,6 @@ const AnimatedGif = ({
         setIntervalVar(null);
       }
     };
-    // eslint-disable-next-line
   }, [setIntervalVar, interval, toolState, speed]);
 
   useEffect(() => {

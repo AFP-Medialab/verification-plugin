@@ -1,23 +1,24 @@
-import React, { useEffect } from "react";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useSelector } from "react-redux";
 import { CacheProvider } from "@emotion/react";
-import { prefixer } from "stylis";
-import stylisRTLPlugin from "stylis-plugin-rtl";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
 import createCache from "@emotion/cache";
-// eslint-disable-next-line no-unused-vars
-import "dayjs/locale/en";
-import "dayjs/locale/fr";
-import "dayjs/locale/es";
-import "dayjs/locale/el";
-import "dayjs/locale/it";
-import "dayjs/locale/ar";
-import "dayjs/locale/de";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs from "dayjs";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import "dayjs/locale/ar";
+import "dayjs/locale/de";
+import "dayjs/locale/el";
+import "dayjs/locale/en";
+import "dayjs/locale/es";
+import "dayjs/locale/fr";
+import "dayjs/locale/it";
+import { prefixer } from "stylis";
+import stylisRTLPlugin from "stylis-plugin-rtl";
 
 const AppWrapper = ({ children }) => {
   //   const { children } = props;

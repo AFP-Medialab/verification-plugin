@@ -16,6 +16,12 @@ import Typography from "@mui/material/Typography";
 
 import WarningOutlined from "@mui/icons-material/WarningOutlined";
 
+import {
+  SEARCH_ENGINE_SETTINGS,
+  reverseImageSearch,
+} from "@Shared/ReverseSearch/reverseSearchUtils";
+import { TextCopy } from "@Shared/Utils/TextCopy";
+import { Translate } from "@Shared/Utils/Translate";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { setError } from "redux/reducers/errorReducer";
 
@@ -26,12 +32,6 @@ import {
   setSelectedScript,
 } from "../../../../../redux/actions/tools/ocrActions";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import {
-  SEARCH_ENGINE_SETTINGS,
-  reverseImageSearch,
-} from "../../../../Shared/ReverseSearch/reverseSearchUtils";
-import { TextCopy } from "../../../../Shared/Utils/TextCopy";
-import { Translate } from "../../../../Shared/Utils/Translate";
 
 const OcrResult = () => {
   const classes = useMyStyles();
@@ -65,8 +65,8 @@ const OcrResult = () => {
   const mainImageId = "ocrMainImageId";
 
   /* if (!scripts) {
-                                dispatch(loadOcrScripts())
-                            }*/
+                                    dispatch(loadOcrScripts())
+                                }*/
 
   const handleScriptChange = (event) => {
     dispatch(setSelectedScript(event.target.value));
@@ -187,7 +187,6 @@ const OcrResult = () => {
         ro.disconnect();
       };
     }
-    // eslint-disable-next-line
   }, [result]);
 
   return (

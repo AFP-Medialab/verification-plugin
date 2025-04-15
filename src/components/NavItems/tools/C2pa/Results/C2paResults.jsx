@@ -31,7 +31,7 @@ import { c2paCurrentImageIdSet } from "redux/reducers/tools/c2paReducer";
 
 /**
  *
- * @param {Object} result  Object containing the parsed c2pa information for this image
+ * @param {Object} result  Object containing the parsed C2PA information for this image
  * @param {function} handleClose  Closes the result
  * @returns {React.JSX.Element}
  */

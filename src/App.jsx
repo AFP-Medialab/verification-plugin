@@ -60,7 +60,7 @@ const App = () => {
 
   return (
     <HashRouter
-      future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      future={{ v7_startTransition: true, v7_relativeSplatPath: false }}
     >
       <Routes>
         <Route index path="/" element={<PopUp />} />

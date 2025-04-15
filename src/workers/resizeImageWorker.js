@@ -1,4 +1,4 @@
-import { resizeImage } from "../components/Shared/Utils/imageUtils";
+import { resizeImage } from "@Shared/Utils/imageUtils";
 
 self.onmessage = async function (e) {
   const data = e.data;

@@ -10,6 +10,8 @@ import Stack from "@mui/material/Stack";
 
 import { AudioFile } from "@mui/icons-material";
 
+import { isValidUrl } from "@Shared/Utils/URLUtils";
+import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import axios from "axios";
 import useAuthenticatedRequest from "components/Shared/Authentication/useAuthenticatedRequest";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -23,8 +25,6 @@ import {
 } from "../../../../redux/actions/tools/loccusActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
-import { isValidUrl } from "../../../Shared/Utils/URLUtils";
-import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 import LoccusResults from "./loccusResults";
 
 const Loccus = () => {

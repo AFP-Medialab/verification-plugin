@@ -11,6 +11,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 import { OpenInNew } from "@mui/icons-material";
 
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import {
   arSD,
@@ -22,7 +23,6 @@ import {
   itIT,
 } from "@mui/x-data-grid/locales";
 
-import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
 import {
   getAlertColor,
   getAlertLabel,

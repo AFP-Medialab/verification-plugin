@@ -19,6 +19,8 @@ import AuthenticationIcon from "./AdvancedTools/AuthenticationIcon";
 /**
  *
  * @param tool {Tool}
+ * @param onClick
+ * @param onClick {any} The function to call when the element is clicked
  * @returns {Element}
  * @constructor
  */

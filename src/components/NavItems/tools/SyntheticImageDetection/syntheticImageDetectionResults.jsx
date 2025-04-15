@@ -24,13 +24,13 @@ import Typography from "@mui/material/Typography";
 import { Download, ExpandMore } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
+import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import CustomAlertScore from "../../../Shared/CustomAlertScore";
 import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
-import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
 import NddDatagrid from "./NddDatagrid";
 import {
   DETECTION_THRESHOLDS,
@@ -187,7 +187,6 @@ const SyntheticImageDetectionResults = ({
             algorithm.apiServiceName === proGanWebpR50Grip.apiServiceName ||
             algorithm.apiServiceName === gigaGanWebpR50Grip.apiServiceName)
         ) {
-          continue;
         } else {
           res.push(
             new SyntheticImageDetectionAlgorithmResult(

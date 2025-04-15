@@ -13,6 +13,8 @@ import Switch from "@mui/material/Switch";
 
 import { Gradient } from "@mui/icons-material";
 
+import { isValidUrl } from "@Shared/Utils/URLUtils";
+import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import axios from "axios";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { setError } from "redux/reducers/errorReducer";
@@ -26,8 +28,6 @@ import {
 } from "../../../../redux/actions/tools/syntheticImageDetectionActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
-import { isValidUrl } from "../../../Shared/Utils/URLUtils";
-import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 import { syntheticImageDetectionAlgorithms } from "./SyntheticImageDetectionAlgorithms";
 import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
 

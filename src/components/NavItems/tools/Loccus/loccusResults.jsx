@@ -21,6 +21,7 @@ import Typography from "@mui/material/Typography";
 import { Download, ExpandMore } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
+import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import {
   CategoryScale,
@@ -43,7 +44,6 @@ import duration from "dayjs/plugin/duration";
 import { ROLES } from "../../../../constants/roles";
 import CustomAlertScore from "../../../Shared/CustomAlertScore";
 import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
-import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
 
 const LoccusResults = ({
   result,

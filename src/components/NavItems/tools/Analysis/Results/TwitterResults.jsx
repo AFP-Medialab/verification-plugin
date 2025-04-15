@@ -14,6 +14,8 @@ import Typography from "@mui/material/Typography";
 
 import CloseIcon from "@mui/icons-material/Close";
 
+import { ReverseSearchButtons } from "@Shared/ReverseSearch/ReverseSearchButtons";
+import { reverseImageSearch } from "@Shared/ReverseSearch/reverseSearchUtils";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import {
@@ -25,8 +27,6 @@ import {
 import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
-import { ReverseSearchButtons } from "../../../../Shared/ReverseSearch/ReverseSearchButtons";
-import { reverseImageSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 import AnalysisComments from "./AnalysisComments";
 
 const TwitterResults = (props) => {

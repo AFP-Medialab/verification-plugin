@@ -12,14 +12,11 @@ import Typography from "@mui/material/Typography";
 
 import { ArrowBack } from "@mui/icons-material";
 
-import { downloadZip, makeZip } from "client-zip";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { sha256 } from "hash-wasm";
 import {
   archiveStateCleaned,
   setArchiveUrl,
 } from "redux/reducers/tools/archiveReducer";
-import { CDXIndexer, WARCRecord, WARCSerializer } from "warcio";
 
 import { archiving } from "../../../../constants/tools";
 import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
@@ -34,7 +31,7 @@ import FirstStep from "./components/FirstStep";
 import FourthStep from "./components/FourthStep";
 import SecondStep from "./components/SecondStep";
 import SixthStep from "./components/SixthStep";
-import CustomizedMenus, { StyledMenu } from "./components/StyledMenu";
+import CustomizedMenus from "./components/StyledMenu";
 import ThirdStep from "./components/ThirdStep";
 
 const queryClient = new QueryClient();
@@ -48,8 +45,6 @@ const Archive = () => {
   const [urlInput, setUrlInput] = useState("");
 
   const [mediaUrl, setMediaUrl] = useState("");
-
-  const [urlResults, setUrlResults] = useState(false);
 
   const [fileToUpload, setFileToUpload] = useState(/** @type {?File} */ null);
 
@@ -69,11 +64,9 @@ const Archive = () => {
 
   useEffect(() => {
     if (mainUrl) {
-      setUrlResults(true);
       setUrlInput(mainUrl);
       handleSubmit(mainUrl);
     } else if (url && url !== "") {
-      setUrlResults(true);
       setUrlInput(url);
       setArchiveUrl(url);
       handleSubmit(url);
@@ -82,7 +75,6 @@ const Archive = () => {
 
   const handleCloseUrl = () => {
     setFileToUpload(null);
-    setUrlResults(false);
     setErrorMessage("");
     dispatch(archiveStateCleaned());
     setUrlInput("");
@@ -143,7 +135,6 @@ const Archive = () => {
     setErrorMessage("");
 
     setArchiveUrl(url);
-    setUrlResults(true);
     dispatch(setArchiveUrl(url));
 
     const urlType = matchPattern(url, KNOWN_LINK_PATTERNS);
@@ -181,6 +172,7 @@ const Archive = () => {
     try {
       result = await fetchArchivedUrls(fileToUpload);
     } catch (error) {
+      console.error(error);
       // User friendly Errors
       throw new Error("upload_error");
     }

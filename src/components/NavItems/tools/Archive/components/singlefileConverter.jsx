@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
@@ -31,7 +32,7 @@ import { prettifyLargeString } from "../utils";
 const SinglefileConverter = (telegramURL) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
 
-  const [fileInput, setFileInput] = useState(/** @type {File?} */ null);
+  const [fileInput, setFileInput] = useState(/** @type {?File} */ null);
   const [error, setError] = useState("");
   const [processingSinglefile, setProcessingSinglefile] = useState(false);
   const authenticatedRequest = useAuthenticatedRequest();

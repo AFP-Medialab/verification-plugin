@@ -552,7 +552,6 @@ const ForensicResults = (props) => {
       //clearInterval(interval);
       dispatch(setStateInit());
     };
-    // eslint-disable-next-line
   }, []);
 
   const currentLang = useSelector((state) => state.language);

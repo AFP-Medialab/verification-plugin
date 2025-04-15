@@ -7,13 +7,11 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Chip from "@mui/material/Chip";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -22,10 +20,10 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 
+import { TextCopy } from "@Shared/Utils/TextCopy";
+import { Translate } from "@Shared/Utils/Translate";
 import axios from "axios";
 
-import { TextCopy } from "../../../../Shared/Utils/TextCopy";
-import { Translate } from "../../../../Shared/Utils/Translate";
 import styles from "./layout.module.css";
 
 export const CommentsPanel = (props) => {

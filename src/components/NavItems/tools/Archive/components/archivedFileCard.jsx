@@ -6,7 +6,8 @@ import Card from "@mui/material/Card";
 import Fade from "@mui/material/Fade";
 import Stack from "@mui/material/Stack";
 
-import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+
 import ArchiveTable from "./archiveTable";
 
 const ArchivedFileCard = ({ file, archiveLinks }) => {

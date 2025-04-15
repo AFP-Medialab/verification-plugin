@@ -67,7 +67,7 @@ const AssistantProcessUrlActions = () => {
       dl.setAttribute("download", "");
       dl.click();
     } else if (action.path === null) {
-      return; // Do nothing if path is null
+      // Do nothing if path is null
     } else if (resultUrl !== null) {
       navigate("/app/" + action.path + "/");
       //history.push("/app/" + action.path + "/" + encodeURIComponent(resultUrl) + "/" + contentType)

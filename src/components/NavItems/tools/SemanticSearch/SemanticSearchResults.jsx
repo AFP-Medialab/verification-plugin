@@ -6,12 +6,12 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import { getLanguageName } from "@Shared/Utils/languageUtils";
 import dayjs from "dayjs";
 import LocaleData from "dayjs/plugin/localeData";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 
-import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
-import { getLanguageName } from "../../../Shared/Utils/languageUtils";
 import ResultDisplayItem from "./components/ResultDisplayItem";
 import SelectSmall from "./components/SelectSmall";
 

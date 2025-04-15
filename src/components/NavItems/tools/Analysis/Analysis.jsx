@@ -88,12 +88,12 @@ const Analysis = () => {
   );
   const submitForm = () => {
     /*trackEvent(
-                                              "submission",
-                                              "analysis",
-                                              "video caa analysis",
-                                              input.trim(),
-                                              client_id
-                                            );*/
+                                                  "submission",
+                                                  "analysis",
+                                                  "video caa analysis",
+                                                  input.trim(),
+                                                  client_id
+                                                );*/
     setSubmittedUrl(input.trim());
     dispatch(cleanAnalysisState());
   };
@@ -111,7 +111,6 @@ const Analysis = () => {
     if (urlDetected) {
       submitForm();
     }
-    // eslint-disable-next-line
   }, [urlDetected]);
 
   useEffect(() => {

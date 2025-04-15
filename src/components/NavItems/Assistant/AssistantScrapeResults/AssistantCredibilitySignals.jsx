@@ -20,6 +20,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import Remove from "@mui/icons-material/Remove";
 
+import { getLanguageName } from "@Shared/Utils/languageUtils";
 import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult.jsx";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import dayjs from "dayjs";
@@ -28,7 +29,6 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 
 import { ROLES } from "../../../../constants/roles.jsx";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import { getLanguageName } from "../../../Shared/Utils/languageUtils";
 import {
   TransCredibilitySignalsLink,
   TransHtmlDoubleLineBreak,

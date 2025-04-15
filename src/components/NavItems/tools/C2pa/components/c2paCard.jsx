@@ -23,9 +23,8 @@ import {
 import HelpIcon from "@mui/icons-material/Help";
 import MapIcon from "@mui/icons-material/Map";
 
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import moment from "moment/moment";
-
-import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
 
 const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
   const [mainImageId, setMainImageId] = useState(c2paData.mainImageId);

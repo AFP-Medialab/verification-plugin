@@ -20,11 +20,11 @@ import Typography from "@mui/material/Typography";
 
 import { CastForEducation, ExpandMore } from "@mui/icons-material";
 
+import { changeTabEvent } from "@Shared/GoogleAnalytics/GoogleAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import PropTypes from "prop-types";
 
 import IconClassRoom from "../../NavBar/images/SVG/Navbar/Classroom.svg";
-import { changeTabEvent } from "../../Shared/GoogleAnalytics/GoogleAnalytics";
 import HeaderTool from "../../Shared/HeaderTool/HeaderTool";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import youverifyImage from "./Images/YouVerify_Logo.png";
@@ -125,7 +125,7 @@ const ClassRoom = () => {
       case 4:
         return keyword("classroom_gamification");
       /*case 5:
-                                                        return keyword("classroom_gamification_2");*/
+                                                                                                              return keyword("classroom_gamification_2");*/
       case 5:
         return keyword("user_resources_title");
       case 6:

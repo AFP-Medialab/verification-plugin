@@ -34,7 +34,6 @@ export const useVideoSimilarity = (url, keyword) => {
     };
 
     if (url === undefined || url === "") {
-      return;
     } else {
       dispatch(setKeyframesSimilarityLoading(true));
       getData(
