@@ -31,7 +31,7 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import CustomAlertScore from "../../../Shared/CustomAlertScore";
 import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
 import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
-import ChatbotInterface from "./ChatbotInterface";
+import ChatbotInterface from "../../Assistant/ChatbotInterface";
 import NddDatagrid from "./NddDatagrid";
 import {
   DETECTION_THRESHOLDS,

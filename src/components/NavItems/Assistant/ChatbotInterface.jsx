@@ -17,7 +17,7 @@ import { v4 as uuidv4 } from "uuid";
 import {
   clearChatbotMessages,
   submitUserChatbotMessage,
-} from "../../../../redux/actions/tools/assistantActions";
+} from "../../../redux/actions/tools/assistantActions";
 
 const MessageBubble = styled(Box)(({ sent }) => ({
   maxWidth: "70%",

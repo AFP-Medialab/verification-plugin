@@ -31,7 +31,7 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
-import ChatbotInterface from "./ChatbotInterface";
+import ChatbotInterface from "../../Assistant/ChatbotInterface";
 import { syntheticImageDetectionAlgorithms } from "./SyntheticImageDetectionAlgorithms";
 import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
 
