@@ -121,9 +121,36 @@ export function TransSourceCredibilityTooltip({ keyword }) {
       components={{
         ul: <ul />,
         li: <li />,
-        strongWarning: <strong style={{ background: "#d32f2f" }} />,
-        strongMentions: <strong style={{ background: "#ed6c02" }} />,
-        strongFactChecker: <strong style={{ background: "#2e7d32" }} />,
+        strongWarning: (
+          <strong
+            style={{
+              background: "#d32f2f",
+              paddingBottom: "0.2em",
+              paddingRight: "0.1em",
+              paddingLeft: "0.1em",
+            }}
+          />
+        ),
+        strongMentions: (
+          <strong
+            style={{
+              background: "#ed6c02",
+              paddingBottom: "0.2em",
+              paddingRight: "0.1em",
+              paddingLeft: "0.1em",
+            }}
+          />
+        ),
+        strongFactChecker: (
+          <strong
+            style={{
+              background: "#2e7d32",
+              paddingBottom: "0.2em",
+              paddingRight: "0.1em",
+              paddingLeft: "0.1em",
+            }}
+          />
+        ),
       }}
     />
   );
@@ -138,13 +165,48 @@ export function TransMachineGeneratedTextTooltip({ keyword }) {
         ul: <ul />,
         li: <li />,
         highlyLikelyHuman: (
-          <strong style={{ background: "#00fc00", color: "black" }} />
+          <strong
+            style={{
+              background: "#00fc00",
+              color: "black",
+              paddingBottom: "0.2em",
+              paddingRight: "0.1em",
+              paddingLeft: "0.1em",
+            }}
+          />
         ),
         likelyHuman: (
-          <strong style={{ background: "#aaff00", color: "black" }} />
+          <strong
+            style={{
+              background: "#aaff00",
+              color: "black",
+              paddingBottom: "0.2em",
+              paddingRight: "0.1em",
+              paddingLeft: "0.1em",
+            }}
+          />
         ),
-        likelyMachine: <strong style={{ background: "#fcaa00" }} />,
-        highlyLikelyMachine: <strong style={{ background: "#fc0000" }} />,
+        likelyMachine: (
+          <strong
+            style={{
+              background: "#fcaa00",
+              color: "black",
+              paddingBottom: "0.2em",
+              paddingRight: "0.1em",
+              paddingLeft: "0.1em",
+            }}
+          />
+        ),
+        highlyLikelyMachine: (
+          <strong
+            style={{
+              background: "#fc0000",
+              paddingBottom: "0.2em",
+              paddingRight: "0.1em",
+              paddingLeft: "0.1em",
+            }}
+          />
+        ),
       }}
     />
   );
@@ -163,10 +225,46 @@ export function TransMultilingualStanceTooltip({ keyword }) {
       components={{
         ul: <ul />,
         li: <li />,
-        strongSupport: <strong style={{ background: stanceSupportColour }} />,
-        strongQuery: <strong style={{ background: stanceQueryColour }} />,
-        strongDeny: <strong style={{ background: stanceDenyColour }} />,
-        strongComment: <strong style={{ background: stanceCommentColour }} />,
+        strongSupport: (
+          <strong
+            style={{
+              background: stanceSupportColour,
+              paddingBottom: "0.2em",
+              paddingRight: "0.1em",
+              paddingLeft: "0.1em",
+            }}
+          />
+        ),
+        strongQuery: (
+          <strong
+            style={{
+              background: stanceQueryColour,
+              paddingBottom: "0.2em",
+              paddingRight: "0.1em",
+              paddingLeft: "0.1em",
+            }}
+          />
+        ),
+        strongDeny: (
+          <strong
+            style={{
+              background: stanceDenyColour,
+              paddingBottom: "0.2em",
+              paddingRight: "0.1em",
+              paddingLeft: "0.1em",
+            }}
+          />
+        ),
+        strongComment: (
+          <strong
+            style={{
+              background: stanceCommentColour,
+              paddingBottom: "0.2em",
+              paddingRight: "0.1em",
+              paddingLeft: "0.1em",
+            }}
+          />
+        ),
       }}
     />
   );
