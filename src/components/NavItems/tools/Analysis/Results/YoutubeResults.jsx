@@ -130,9 +130,17 @@ const YoutubeResults = (props) => {
                 title={report["video"]["title"]}
                 alt={"img"}
               />
-              <Box m={2} />
+              <Box
+                sx={{
+                  m: 2,
+                }}
+              />
               <Divider />
-              <Box m={2} />
+              <Box
+                sx={{
+                  m: 2,
+                }}
+              />
               <Typography variant={"h6"}>
                 {keyword("youtube_video_name1_2")}
               </Typography>
@@ -143,7 +151,11 @@ const YoutubeResults = (props) => {
               >
                 {report["video"]["description"]}
               </Typography>
-              <Box m={2} />
+              <Box
+                sx={{
+                  m: 2,
+                }}
+              />
               <Divider />
               {report["video"] && (
                 <Table
@@ -167,7 +179,11 @@ const YoutubeResults = (props) => {
               )}
               {report["source"] && (
                 <div>
-                  <Box m={4} />
+                  <Box
+                    sx={{
+                      m: 4,
+                    }}
+                  />
                   <Typography variant={"h6"}>
                     {keyword("youtube_channel_title") +
                       " " +
@@ -201,7 +217,11 @@ const YoutubeResults = (props) => {
                   </Table>
                 </div>
               )}
-              <Box m={2} />
+              <Box
+                sx={{
+                  m: 2,
+                }}
+              />
               {report["verification_comments"] && (
                 <AnalysisComments
                   type="YOUTUBE"
@@ -215,16 +235,32 @@ const YoutubeResults = (props) => {
                 />
               )}
 
-              <Box m={4} />
+              <Box
+                sx={{
+                  m: 4,
+                }}
+              />
               {thumbnails !== undefined && (
                 <div>
-                  <Box m={4} />
+                  <Box
+                    sx={{
+                      m: 4,
+                    }}
+                  />
                   <Typography variant={"h6"}>
                     {keyword("navbar_thumbnails")}
                   </Typography>
-                  <Box m={1} />
+                  <Box
+                    sx={{
+                      m: 1,
+                    }}
+                  />
                   <OnClickInfo keyword={"keyframes_tip"} />
-                  <Box m={1} />
+                  <Box
+                    sx={{
+                      m: 1,
+                    }}
+                  />
                   <div className={classes.imagesRoot}>
                     <ImageUrlGridList
                       list={thumbnails}
@@ -232,7 +268,11 @@ const YoutubeResults = (props) => {
                       style={{ maxHeigth: "none", height: "auto" }}
                     />
                   </div>
-                  <Box m={2} />
+                  <Box
+                    sx={{
+                      m: 2,
+                    }}
+                  />
                   <ReverseSearchButtons reverseSearch={reverseSearch}>
                     {report["verification_cues"] &&
                       report["verification_cues"]["twitter_search_url"] && (

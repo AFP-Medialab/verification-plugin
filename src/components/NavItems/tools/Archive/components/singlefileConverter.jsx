@@ -47,12 +47,11 @@ const SinglefileConverter = (telegramURL) => {
       url: process.env.REACT_APP_WACZ_SIGNING + hash,
       method: "get",
     });
-    if (resp.status === 200) {
-      const respJson = resp.data;
-      return respJson;
-    } else {
+    if (resp.status !== 200) {
       setError("Error signing WACZ, please try again");
       throw new Error("Error signing WACZ, please try again");
+    } else {
+      return resp.data;
     }
   };
 

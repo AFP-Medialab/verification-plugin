@@ -47,7 +47,11 @@ const SourceCredibilityResult = (props) => {
                         </Typography>
                       ) : null}
                     </Typography>
-                    <Box mb={0.5} />
+                    <Box
+                      sx={{
+                        mb: 0.5,
+                      }}
+                    />
                   </div>
                 }
                 secondary={

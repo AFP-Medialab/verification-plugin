@@ -329,7 +329,13 @@ const ToolsMenu = () => {
                 >
                   {tools.map((tool, key) => {
                     const element = (
-                      <Grid size={{ xs: 4, lg: 3 }} key={key} minWidth="200px">
+                      <Grid
+                        size={{ xs: 4, lg: 3 }}
+                        key={key}
+                        sx={{
+                          minWidth: "200px",
+                        }}
+                      >
                         <ToolsMenuItem
                           tool={tool}
                           onClick={() =>
@@ -358,11 +364,8 @@ const ToolsMenu = () => {
           })}
         </Box>
       </Card>
-
       <Box sx={{ m: 3 }} />
-
       <Box sx={{ m: 4 }} />
-
       <Dialog
         height={"400px"}
         fullWidth

@@ -85,10 +85,12 @@ const Url = (params) => {
 const Details = (params) => {
   return (
     <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      flexDirection="row"
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
+      }}
     >
       {<TextCopy text={params.url} index={params.url} />}
       {params.done && params.domainOrAccount !== null && (

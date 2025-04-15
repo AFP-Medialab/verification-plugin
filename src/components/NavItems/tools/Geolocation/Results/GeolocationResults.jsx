@@ -34,7 +34,12 @@ const GeolocationResults = ({ result, urlImage }) => {
               {userRoles.includes(ROLES.EXTRA_FEATURE) &&
                 res.confidence &&
                 typeof res.confidence === "number" && (
-                  <Box width="100%" p={4}>
+                  <Box
+                    sx={{
+                      width: "100%",
+                      p: 4,
+                    }}
+                  >
                     <Typography>{`Confidence score: ${
                       res.confidence >= 0.5
                         ? Math.round(res.confidence * 100)
@@ -45,25 +50,31 @@ const GeolocationResults = ({ result, urlImage }) => {
               <Grid
                 container
                 direction={{ md: "row", xs: "column" }}
-                justifyContent="center"
-                alignItems="flex-start"
                 style={{ flexWrap: "nowrap" }}
                 spacing={4}
-                p={4}
+                sx={{
+                  justifyContent: "center",
+                  alignItems: "flex-start",
+                  p: 4,
+                }}
               >
                 <Grid
                   container
                   direction="column"
-                  justifyContent="flex-start"
-                  alignItems="flex-start"
                   spacing={3}
                   size={{ md: 6, xs: 12 }}
+                  sx={{
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                  }}
                 >
                   <Grid
                     size={6}
                     style={{ width: "100%" }}
-                    justifyContent="center"
-                    display="flex"
+                    sx={{
+                      justifyContent: "center",
+                      display: "flex",
+                    }}
                   >
                     <img
                       src={urlImage}
@@ -82,10 +93,12 @@ const GeolocationResults = ({ result, urlImage }) => {
                   <Grid
                     container
                     direction="column"
-                    justifyContent="flex-start"
-                    alignItems="flex-start"
                     spacing={3}
                     size={{ md: 6, xs: 12 }}
+                    sx={{
+                      justifyContent: "flex-start",
+                      alignItems: "flex-start",
+                    }}
                   >
                     <Stack
                       direction="column"
@@ -94,7 +107,11 @@ const GeolocationResults = ({ result, urlImage }) => {
                         width: "100%",
                       }}
                     >
-                      <Box width="100%">
+                      <Box
+                        sx={{
+                          width: "100%",
+                        }}
+                      >
                         <MapContainer
                           center={[res.latitude, res.longitude]}
                           zoom={13}
@@ -123,20 +140,28 @@ const GeolocationResults = ({ result, urlImage }) => {
                           </Marker>
                         </MapContainer>
                       </Box>
-                      <Box width="100%">
+                      <Box
+                        sx={{
+                          width: "100%",
+                        }}
+                      >
                         <Grid
                           container
                           direction="row"
-                          justifyContent="space-between"
-                          alignItems="flex-start"
                           style={{ flexWrap: "nowrap" }}
                           spacing={1}
+                          sx={{
+                            justifyContent: "space-between",
+                            alignItems: "flex-start",
+                          }}
                         >
                           <Grid
                             container
                             direction="column"
-                            justifyContent="flex-start"
-                            alignItems="flex-start"
+                            sx={{
+                              justifyContent: "flex-start",
+                              alignItems: "flex-start",
+                            }}
                           >
                             <Typography
                               variant="body1"
@@ -151,8 +176,10 @@ const GeolocationResults = ({ result, urlImage }) => {
                           <Grid
                             container
                             direction="column"
-                            justifyContent="flex-start"
-                            alignItems="flex-start"
+                            sx={{
+                              justifyContent: "flex-start",
+                              alignItems: "flex-start",
+                            }}
                           >
                             <Typography
                               variant="body1"
@@ -167,7 +194,11 @@ const GeolocationResults = ({ result, urlImage }) => {
                           </Grid>
                         </Grid>
 
-                        <Box m={4} />
+                        <Box
+                          sx={{
+                            m: 4,
+                          }}
+                        />
 
                         <Button
                           variant="outlined"

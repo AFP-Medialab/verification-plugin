@@ -204,7 +204,6 @@ const AssistantCredSignals = () => {
           </Tooltip>
         }
       />
-
       <CardContent
         style={{
           wordBreak: "break-word",
@@ -235,11 +234,21 @@ const AssistantCredSignals = () => {
               role,
             )}
           >
-            <Grid container spacing={1} wrap="wrap" width="100%">
+            <Grid
+              container
+              spacing={1}
+              wrap="wrap"
+              sx={{
+                width: "100%",
+              }}
+            >
               <Grid size={{ xs: 4 }} align="start">
                 <Typography
-                  display="inline"
-                  sx={{ flexShrink: 0, align: "start" }}
+                  sx={{
+                    display: "inline",
+                    flexShrink: 0,
+                    align: "start",
+                  }}
                 >
                   {prevFactChecksTitle}
                 </Typography>
@@ -369,11 +378,21 @@ const AssistantCredSignals = () => {
               role,
             )}
           >
-            <Grid container spacing={1} wrap="wrap" width="100%">
+            <Grid
+              container
+              spacing={1}
+              wrap="wrap"
+              sx={{
+                width: "100%",
+              }}
+            >
               <Grid size={{ xs: 4 }} align="start">
                 <Typography
-                  display="inline"
-                  sx={{ flexShrink: 0, align: "start" }}
+                  sx={{
+                    display: "inline",
+                    flexShrink: 0,
+                    align: "start",
+                  }}
                 >
                   {machineGeneratedTextTitle}
                 </Typography>

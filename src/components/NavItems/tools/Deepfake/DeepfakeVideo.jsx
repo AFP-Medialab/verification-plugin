@@ -101,7 +101,11 @@ const Deepfake = () => {
         </Alert>
 
         <Card variant="outlined">
-          <Box p={4}>
+          <Box
+            sx={{
+              p: 4,
+            }}
+          >
             <form>
               <StringFileUploadField
                 labelKeyword={keyword("deepfake_video_link")}

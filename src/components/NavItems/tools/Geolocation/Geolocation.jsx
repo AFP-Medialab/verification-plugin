@@ -86,7 +86,11 @@ const Geolocation = () => {
           {keywordWarning("warning_beta_geolocation")}
         </Alert>
         <Card variant="outlined">
-          <Box p={4}>
+          <Box
+            sx={{
+              p: 4,
+            }}
+          >
             <form>
               <StringFileUploadField
                 labelKeyword={keyword("geo_link")}

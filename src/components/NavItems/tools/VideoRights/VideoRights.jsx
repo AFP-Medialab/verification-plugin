@@ -106,7 +106,14 @@ const VideoRights = () => {
       />
       <Card variant="outlined">
         <form className={classes.root2}>
-          <Grid container direction="row" spacing={3} alignItems="center">
+          <Grid
+            container
+            direction="row"
+            spacing={3}
+            sx={{
+              alignItems: "center",
+            }}
+          >
             <Grid size="grow">
               <TextField
                 value={input}
@@ -133,15 +140,21 @@ const VideoRights = () => {
           </Grid>
           {isLoading && (
             <>
-              <Box m={3} />
+              <Box
+                sx={{
+                  m: 3,
+                }}
+              />
               <LinearProgress />
             </>
           )}
         </form>
       </Card>
-
-      <Box m={3} />
-
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
       {resultResult && <VideoRightsResults result={resultResult} />}
     </div>
   );

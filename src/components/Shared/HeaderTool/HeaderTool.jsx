@@ -9,14 +9,24 @@ import Typography from "@mui/material/Typography";
  */
 const HeaderTool = ({ name, description, icon }) => {
   return (
-    <Grid container direction="column" alignItems="start" spacing={1} mb={4}>
+    <Grid
+      container
+      direction="column"
+      spacing={1}
+      sx={{
+        alignItems: "start",
+        mb: 4,
+      }}
+    >
       <Box>
         <Grid
           container
           direction="row"
-          justifyContent="flex-start"
-          alignItems="center"
           spacing={1}
+          sx={{
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
         >
           {icon}
           <Typography variant="h5" color={"primary"}>
@@ -24,7 +34,11 @@ const HeaderTool = ({ name, description, icon }) => {
           </Typography>
         </Grid>
       </Box>
-      <Grid textAlign="start">
+      <Grid
+        sx={{
+          textAlign: "start",
+        }}
+      >
         <Typography>{description}</Typography>
       </Grid>
     </Grid>

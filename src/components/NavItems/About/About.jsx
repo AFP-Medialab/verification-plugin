@@ -25,13 +25,19 @@ const About = () => {
   return (
     <Paper variant="outlined" className={classes.root}>
       <Box
-        justifyContent="center"
-        display="flex"
-        flexDirection="column"
         align={"center"}
+        sx={{
+          justifyContent: "center",
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
         <CustomTile text={keyword("about_title")} />
-        <Box m={3} />
+        <Box
+          sx={{
+            m: 3,
+          }}
+        />
         <Typography variant={"body2"} align={"justify"}>
           {keyword("source_part_1")}
           {keyword("mit_licence_link_label")}
@@ -46,17 +52,29 @@ const About = () => {
             {keyword("invid_email")}
           </Link>
         </Typography>
-        <Box m={3} />
+        <Box
+          sx={{
+            m: 3,
+          }}
+        />
         <Typography variant={"h6"}>{keyword("disclaimer")}</Typography>
         <Typography variant={"body2"} align={"justify"}>
           {keyword("disclaimer_text")}
         </Typography>
-        <Box m={3} />
+        <Box
+          sx={{
+            m: 3,
+          }}
+        />
         <Typography variant={"h6"}>{keyword("privacy")}</Typography>
         <Typography variant={"body2"} align={"justify"}>
           {keyword("privacy_text")}
         </Typography>
-        <Box m={3} />
+        <Box
+          sx={{
+            m: 3,
+          }}
+        />
         <Typography variant={"body2"} align={"justify"}>
           {keyword("info_weverify_part_1")}
           <Link target="_blank" href={keyword("info_weverify_link_website")}>
@@ -112,9 +130,11 @@ const About = () => {
         container
         direction="row"
         spacing={2}
-        justifyContent="center"
-        alignItems="center"
-        mb={4}
+        sx={{
+          justifyContent: "center",
+          alignItems: "center",
+          mb: 4,
+        }}
       >
         <Grid size={{ xs: 12 }}>
           <img className={classes.AboutMedia} src={afpImage} alt={afpImage} />

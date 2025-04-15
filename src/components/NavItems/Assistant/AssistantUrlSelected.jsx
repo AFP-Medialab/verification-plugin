@@ -131,8 +131,10 @@ const AssistantUrlSelected = (props) => {
                 <Stack
                   direction="row"
                   spacing={2}
-                  justifyContent="flex-start"
-                  alignItems="center"
+                  sx={{
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
                 >
                   {/* text box */}
                   <TextField
@@ -165,8 +167,10 @@ const AssistantUrlSelected = (props) => {
                 {inputUrl === null ? null : (
                   <Stack
                     direction="row"
-                    justifyContent="flex-start"
-                    alignItems="left"
+                    sx={{
+                      justifyContent: "flex-start",
+                      alignItems: "left",
+                    }}
                   >
                     <Button
                       onClick={() => handleArchive()}
@@ -181,10 +185,15 @@ const AssistantUrlSelected = (props) => {
           </Box>
         </CardContent>
       </Card>
-
       {loading && (
         <Card sx={{ mt: 4 }}>
-          <Stack direction="column" spacing={4} p={4}>
+          <Stack
+            direction="column"
+            spacing={4}
+            sx={{
+              p: 4,
+            }}
+          >
             <Skeleton variant="rounded" height={40} />
             <Skeleton variant="rounded" width="50%" height={40} />
           </Stack>

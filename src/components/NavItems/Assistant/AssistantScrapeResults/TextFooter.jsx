@@ -31,18 +31,33 @@ export default function TextFooter({
       <Divider />
       <Grid container spacing={2}>
         {/* language detected */}
-        <Grid size={9} align={"left"} pt={1}>
+        <Grid
+          size={9}
+          align={"left"}
+          sx={{
+            pt: 1,
+          }}
+        >
           <Typography
-            display="inline"
             className={classes.toolTipIcon}
             onClick={() => setDisplayOrigLang(!displayOrigLang)}
+            sx={{
+              display: "inline",
+            }}
           >
             {getLanguageName(textLang, textLang) ?? textLang}
           </Typography>
         </Grid>
 
         {/* copy to clipboard */}
-        <Grid size={{ xs: 1 }} align={"right"} display="flex" pt={1.5}>
+        <Grid
+          size={{ xs: 1 }}
+          align={"right"}
+          sx={{
+            display: "flex",
+            pt: 1.5,
+          }}
+        >
           <Tooltip title={keyword("copy_to_clipboard")}>
             <div>
               <TextCopy text={text} index={text} />
@@ -51,7 +66,14 @@ export default function TextFooter({
         </Grid>
 
         {/* translate */}
-        <Grid size={{ xs: 1 }} align={"right"} display="flex" pt={2}>
+        <Grid
+          size={{ xs: 1 }}
+          align={"right"}
+          sx={{
+            display: "flex",
+            pt: 2,
+          }}
+        >
           <Tooltip title={keyword("translate")}>
             <div>
               <Translate text={text} />
@@ -60,7 +82,14 @@ export default function TextFooter({
         </Grid>
 
         {/* expand/minimise text */}
-        <Grid size={{ xs: 1 }} align={"right"} display="flex" pt={1}>
+        <Grid
+          size={{ xs: 1 }}
+          align={"right"}
+          sx={{
+            display: "flex",
+            pt: 1,
+          }}
+        >
           <ExpandMinimise
             classes={classes}
             expandMinimiseText={expandMinimiseText}

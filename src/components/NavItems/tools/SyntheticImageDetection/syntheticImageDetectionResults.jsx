@@ -368,7 +368,12 @@ const SyntheticImageDetectionResults = ({
     <Card variant="outlined" sx={{ width: "100%" }}>
       <CardContent sx={{ flex: "1 0 auto" }}>
         <Stack direction="column" spacing={4}>
-          <Stack direction="row" justifyContent="space-between">
+          <Stack
+            direction="row"
+            sx={{
+              justifyContent: "space-between",
+            }}
+          >
             <Typography variant="h6">
               {keyword("synthetic_image_detection_title")}
             </Typography>
@@ -380,30 +385,40 @@ const SyntheticImageDetectionResults = ({
           <Grid
             container
             direction="row"
-            justifyContent="space-evenly"
-            alignItems="flex-start"
             spacing={2}
+            sx={{
+              justifyContent: "space-evenly",
+              alignItems: "flex-start",
+            }}
           >
             <Grid
               container
               direction="column"
-              justifyContent="flex-start"
               size={{ sm: 12, md: 6 }}
               spacing={4}
+              sx={{
+                justifyContent: "flex-start",
+              }}
             >
               <Grid
                 sx={{
                   maxWidth: "100%",
                 }}
               >
-                <Box p={2} sx={{ width: "100%", height: "100%" }}>
+                <Box
+                  sx={{
+                    p: 2,
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
                   <Grid
                     container
                     direction="row"
-                    justifyContent="flex-start"
-                    alignItems="flex-start"
                     ref={imgContainerRef}
                     sx={{
+                      justifyContent: "flex-start",
+                      alignItems: "flex-start",
                       maxWidth: "100%",
                     }}
                   >
@@ -438,34 +453,46 @@ const SyntheticImageDetectionResults = ({
               {syntheticImageScores.length > 0 ? (
                 <Stack
                   direction="column"
-                  p={4}
-                  justifyContent="flex-start"
-                  alignItems="flex-start"
                   spacing={4}
-                  width="100%"
-                  sx={{ boxSizing: "border-box" }}
-                  position="relative"
+                  sx={{
+                    p: 4,
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                    width: "100%",
+                    position: "relative",
+                    boxSizing: "border-box",
+                  }}
                 >
                   <Stack
                     direction={{ sm: "column", md: "row" }}
-                    alignItems={{ sm: "start", md: "center" }}
-                    justifyContent="center"
-                    width="100%"
+                    sx={{
+                      alignItems: { sm: "start", md: "center" },
+                      justifyContent: "center",
+                      width: "100%",
+                    }}
                   >
-                    <Box m={2}></Box>
+                    <Box
+                      sx={{
+                        m: 2,
+                      }}
+                    ></Box>
                     <Stack
                       direction="column"
-                      justifyContent="center"
-                      alignItems="center"
                       spacing={2}
                       ref={gaugeChartRef}
-                      p={2}
+                      sx={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                        p: 2,
+                      }}
                     >
                       <Typography
                         variant="h5"
                         align="center"
-                        alignSelf="center"
-                        sx={{ color: "red" }}
+                        sx={{
+                          alignSelf: "center",
+                          color: "red",
+                        }}
                       >
                         {maxScore > DETECTION_THRESHOLDS.THRESHOLD_2
                           ? keyword(
@@ -480,8 +507,10 @@ const SyntheticImageDetectionResults = ({
                         <Typography
                           variant="h5"
                           align="center"
-                          alignSelf="center"
-                          sx={{ color: "red" }}
+                          sx={{
+                            alignSelf: "center",
+                            color: "red",
+                          }}
                         >
                           {keyword(
                             "synthetic_image_detection_generic_detection_text_ndd",
@@ -490,8 +519,10 @@ const SyntheticImageDetectionResults = ({
                       )}
                       <Stack
                         direction="column"
-                        justifyContent="center"
-                        alignItems="center"
+                        sx={{
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
                       >
                         <GaugeChart
                           id={"gauge-chart"}
@@ -520,9 +551,11 @@ const SyntheticImageDetectionResults = ({
 
                         <Stack
                           direction="row"
-                          justifyContent="center"
-                          alignItems="center"
                           spacing={10}
+                          sx={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
                         >
                           <Typography variant="subtitle2">
                             {keyword(
@@ -537,7 +570,11 @@ const SyntheticImageDetectionResults = ({
                         </Stack>
                       </Stack>
                     </Stack>
-                    <Box alignSelf={{ sm: "flex-start", md: "flex-end" }}>
+                    <Box
+                      sx={{
+                        alignSelf: { sm: "flex-start", md: "flex-end" },
+                      }}
+                    >
                       <Tooltip
                         title={keyword(
                           "synthetic_image_detection_download_gauge_button",
@@ -595,12 +632,14 @@ const SyntheticImageDetectionResults = ({
               ) : (
                 <Stack
                   direction="column"
-                  p={4}
-                  justifyContent="flex-start"
-                  alignItems="flex-start"
                   spacing={4}
-                  width="100%"
-                  sx={{ boxSizing: "border-box" }}
+                  sx={{
+                    p: 4,
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                    width: "100%",
+                    boxSizing: "border-box",
+                  }}
                 >
                   <Alert severity="error">
                     {keyword("synthetic_image_detection_error_generic")}
@@ -615,7 +654,12 @@ const SyntheticImageDetectionResults = ({
                     width: "100%",
                   }}
                 >
-                  <Box pl={4} pr={4}>
+                  <Box
+                    sx={{
+                      pl: 4,
+                      pr: 4,
+                    }}
+                  >
                     <Accordion
                       defaultExpanded
                       onChange={handleNddDetailsChange}
@@ -636,7 +680,12 @@ const SyntheticImageDetectionResults = ({
               )}
 
               <Grid sx={{ width: "100%" }}>
-                <Box pl={4} pr={4}>
+                <Box
+                  sx={{
+                    pl: 4,
+                    pr: 4,
+                  }}
+                >
                   <Accordion
                     defaultExpanded={false}
                     onChange={handleDetailsChange}
@@ -660,8 +709,10 @@ const SyntheticImageDetectionResults = ({
                               <Stack direction="column" spacing={2}>
                                 <Stack
                                   direction="row"
-                                  alignItems="flex-start"
-                                  justifyContent="space-between"
+                                  sx={{
+                                    alignItems: "flex-start",
+                                    justifyContent: "space-between",
+                                  }}
                                 >
                                   <Box>
                                     <Typography
@@ -673,7 +724,9 @@ const SyntheticImageDetectionResults = ({
                                     <Stack
                                       direction={{ lg: "row", md: "column" }}
                                       spacing={2}
-                                      alignItems="center"
+                                      sx={{
+                                        alignItems: "center",
+                                      }}
                                     >
                                       <Stack direction="row" spacing={1}>
                                         {item.isError ? (
@@ -716,12 +769,13 @@ const SyntheticImageDetectionResults = ({
                                 </Stack>
 
                                 <Box
-                                  p={2}
                                   sx={{
+                                    p: 2,
+                                    mb: 2,
+
                                     backgroundColor:
                                       "var(--mui-palette-background-paper)",
                                   }}
-                                  mb={2}
                                 >
                                   <Typography>
                                     {keyword(item.description)}

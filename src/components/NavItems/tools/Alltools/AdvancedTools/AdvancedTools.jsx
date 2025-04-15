@@ -254,9 +254,11 @@ const AdvancedTools = () => {
       ) : (
         <Stack
           direction="column"
-          justifyContent="flex-start"
-          alignItems="center"
           spacing={{ xs: 1 }}
+          sx={{
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
         >
           <Button
             variant="outlined"
@@ -269,8 +271,10 @@ const AdvancedTools = () => {
           </Button>
           <Stack
             direction="column"
-            justifyContent="center"
-            alignItems="flex-start"
+            sx={{
+              justifyContent: "center",
+              alignItems: "flex-start",
+            }}
           >
             <Stack
               direction={"row"}
@@ -295,9 +299,11 @@ const AdvancedTools = () => {
           <Grid
             container
             direction="column"
-            justifyContent="flex-start"
-            alignItems="flex-start"
-            p={2}
+            sx={{
+              justifyContent: "flex-start",
+              alignItems: "flex-start",
+              p: 2,
+            }}
           >
             <form>
               <Grid>
@@ -312,23 +318,31 @@ const AdvancedTools = () => {
                   <Grid
                     container
                     direction="column"
-                    justifyContent="flex-start"
-                    alignItems="stretch"
                     spacing={2}
+                    sx={{
+                      justifyContent: "flex-start",
+                      alignItems: "stretch",
+                    }}
                   >
                     <Grid
                       container
                       direction="column"
-                      justifyContent="flex-start"
-                      alignItems="stretch"
                       spacing={2}
+                      sx={{
+                        justifyContent: "flex-start",
+                        alignItems: "stretch",
+                      }}
                     >
                       <Grid>
                         <Typography variant="body2">
                           {keyword("text_general")}
                         </Typography>
                       </Grid>
-                      <Grid mt={2}>
+                      <Grid
+                        sx={{
+                          mt: 2,
+                        }}
+                      >
                         <Typography
                           variant="body2"
                           style={{ color: "var(--mui-palette-text-secondary)" }}
@@ -397,7 +411,11 @@ const AdvancedTools = () => {
                         </Typography>
                       </Grid>
                     </Grid>
-                    <Grid mt={6}>
+                    <Grid
+                      sx={{
+                        mt: 6,
+                      }}
+                    >
                       <Typography
                         variant="body2"
                         style={{ color: "var(--mui-palette-text-secondary)" }}
@@ -423,15 +441,21 @@ const AdvancedTools = () => {
           </Grid>
         )}
         {dialogState === 1 && (
-          <Box p={2}>
+          <Box
+            sx={{
+              p: 2,
+            }}
+          >
             <form>
               <DialogTitle id="max-width-dialog-title">
                 <Grid
                   container
                   direction="row"
-                  justifyContent="flex-start"
-                  alignItems="center"
                   style={{ width: "100%" }}
+                  sx={{
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
                 >
                   <Grid>
                     <IconButton
@@ -455,7 +479,11 @@ const AdvancedTools = () => {
                   {messageI18NResolver("ACCESSCODEFORM_SUCCESS_TEXT")}
                 </Typography>
 
-                <Box m={2} />
+                <Box
+                  sx={{
+                    m: 2,
+                  }}
+                />
 
                 <TextField
                   label={"Code"}
@@ -477,9 +505,18 @@ const AdvancedTools = () => {
                   }}
                 />
 
-                <Box m={2} />
+                <Box
+                  sx={{
+                    m: 2,
+                  }}
+                />
 
-                <Box ml={1} margin={1}>
+                <Box
+                  sx={{
+                    ml: 1,
+                    margin: 1,
+                  }}
+                >
                   <Typography
                     variant="body2"
                     style={{
@@ -511,7 +548,11 @@ const AdvancedTools = () => {
         )}
 
         {dialogState === 2 && (
-          <Box p={2}>
+          <Box
+            sx={{
+              p: 2,
+            }}
+          >
             <DialogTitle id="max-width-dialog-title">
               <Typography
                 gutterBottom
@@ -537,7 +578,11 @@ const AdvancedTools = () => {
         )}
 
         {dialogState === 3 && (
-          <Box p={2}>
+          <Box
+            sx={{
+              p: 2,
+            }}
+          >
             <DialogTitle id="max-width-dialog-title">
               <Typography
                 gutterBottom
@@ -550,11 +595,21 @@ const AdvancedTools = () => {
               <Typography variant="body2">
                 {messageI18NResolver("AUTHCARD_EXPLANATION_TEXT")}
               </Typography>
-              <Box m={2} />
+              <Box
+                sx={{
+                  m: 2,
+                }}
+              />
               <form
                 onSubmit={registrationForm.handleSubmit(registrationOnSubmit)}
               >
-                <Grid container justifyContent="center" spacing={2}>
+                <Grid
+                  container
+                  spacing={2}
+                  sx={{
+                    justifyContent: "center",
+                  }}
+                >
                   <Grid size={{ xs: 12 }}>
                     <Controller
                       name="email"
@@ -822,7 +877,11 @@ const AdvancedTools = () => {
                   </Grid>
 
                   <Grid size={{ xs: 12 }}>
-                    <Box mt={2}>
+                    <Box
+                      sx={{
+                        mt: 2,
+                      }}
+                    >
                       <Button
                         variant="contained"
                         color="primary"
@@ -841,7 +900,11 @@ const AdvancedTools = () => {
         )}
 
         {dialogState === 4 && (
-          <Box p={2}>
+          <Box
+            sx={{
+              p: 2,
+            }}
+          >
             <DialogTitle id="max-width-dialog-title">
               <Typography
                 gutterBottom

@@ -133,9 +133,12 @@ const Magnifier = () => {
           />
         }
       />
-
       <Card variant="outlined">
-        <Box p={4}>
+        <Box
+          sx={{
+            p: 4,
+          }}
+        >
           <form>
             <StringFileUploadField
               labelKeyword={keyword("magnifier_urlbox")}
@@ -154,15 +157,21 @@ const Magnifier = () => {
           </form>
 
           {isLoading && (
-            <Box mt={3}>
+            <Box
+              sx={{
+                mt: 3,
+              }}
+            >
               <LinearProgress />
             </Box>
           )}
         </Box>
       </Card>
-
-      <Box m={3} />
-
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
       {magnifierResult && (
         <ImageResult handleCloseResults={handleCloseSelectedFile} />
       )}

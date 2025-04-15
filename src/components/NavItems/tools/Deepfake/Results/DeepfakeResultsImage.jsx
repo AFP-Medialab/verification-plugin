@@ -192,12 +192,18 @@ const DeepfakeResultsImage = (props) => {
   return (
     <Stack
       direction="row"
-      justifyContent="flex-start"
-      alignItems="flex-start"
       spacing={2}
+      sx={{
+        justifyContent: "flex-start",
+        alignItems: "flex-start",
+      }}
     >
       <Card variant="outlined" sx={{ width: "100%" }}>
-        <Box p={2}>
+        <Box
+          sx={{
+            p: 2,
+          }}
+        >
           <CardHeader
             style={{ borderRadius: "4px 4px 0px 0px" }}
             title={keyword("deepfake_image_title")}
@@ -210,8 +216,10 @@ const DeepfakeResultsImage = (props) => {
           <Grid
             container
             direction="row"
-            justifyContent="space-evenly"
-            alignItems="flex-start"
+            sx={{
+              justifyContent: "space-evenly",
+              alignItems: "flex-start",
+            }}
           >
             <Grid
               size={{
@@ -223,10 +231,12 @@ const DeepfakeResultsImage = (props) => {
                 <Grid
                   container
                   direction="row"
-                  justifyContent="center"
-                  alignItems="flex-start"
                   ref={imgContainerRef}
-                  p={4}
+                  sx={{
+                    justifyContent: "center",
+                    alignItems: "flex-start",
+                    p: 4,
+                  }}
                 >
                   {!!(
                     deepfakeScore &&
@@ -240,10 +250,10 @@ const DeepfakeResultsImage = (props) => {
                           <Box
                             key={keyRectangle}
                             className={classes.deepfakeSquare}
-                            pr={4}
-                            pb={4}
-                            mt={4}
                             sx={{
+                              pr: 4,
+                              pb: 4,
+                              mt: 4,
                               top: valueRectangle.top,
                               left: valueRectangle.left,
                             }}
@@ -255,11 +265,10 @@ const DeepfakeResultsImage = (props) => {
                                 height: valueRectangle.height,
                               }}
                             />
-
                             <Box
-                              mt={1}
-                              p={1}
                               sx={{
+                                mt: 1,
+                                p: 1,
                                 backgroundColor: "#ffffff",
                                 borderRadius: "2px",
                                 display: "flex",
@@ -299,7 +308,13 @@ const DeepfakeResultsImage = (props) => {
                 md: 6,
               }}
             >
-              <Stack direction="column" p={4} spacing={4}>
+              <Stack
+                direction="column"
+                spacing={4}
+                sx={{
+                  p: 4,
+                }}
+              >
                 {!!(
                   deepfakeScore &&
                   deepfakeScore.predictionScore &&

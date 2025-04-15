@@ -37,14 +37,27 @@ const AssistantWarnings = () => {
       <Grid container>
         <Grid size={{ xs: 12 }} style={{ display: "flex" }}>
           <CardMedia>
-            <Box m={1}>
+            <Box
+              sx={{
+                m: 1,
+              }}
+            >
               <WarningAmber color={"warning"} fontSize={"large"} />
             </Box>
           </CardMedia>
-          <Box m={1} />
+          <Box
+            sx={{
+              m: 1,
+            }}
+          />
           <div>
             <Typography component={"span"} variant={"h6"} color={"warning"}>
-              <Box mt={1.5} fontWeight="fontWeightBold">
+              <Box
+                sx={{
+                  mt: 1.5,
+                  fontWeight: "fontWeightBold",
+                }}
+              >
                 {keyword("warning_title")}
               </Box>
             </Typography>
@@ -61,7 +74,11 @@ const AssistantWarnings = () => {
             in={warningExpanded}
             className={classes.assistantBackground}
           >
-            <Box m={1} />
+            <Box
+              sx={{
+                m: 1,
+              }}
+            />
             <DbkfTextResults />
 
             <DbkfMediaResults />

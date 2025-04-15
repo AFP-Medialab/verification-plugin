@@ -178,9 +178,12 @@ const OCR = () => {
         description={keywordAllTools("navbar_ocr_description")}
         icon={<imageOcr.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
       />
-
       <Card variant="outlined">
-        <Box p={4}>
+        <Box
+          sx={{
+            p: 4,
+          }}
+        >
           <form>
             <StringFileUploadField
               labelKeyword={keyword("ocr_urlbox")}
@@ -199,9 +202,11 @@ const OCR = () => {
           </form>
         </Box>
       </Card>
-
-      <Box m={3} />
-
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
       {ocrInputUrl ? <OcrResult /> : null}
     </div>
   );

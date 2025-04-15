@@ -120,7 +120,11 @@ const ImageResult = ({ handleCloseResults }) => {
 
   return (
     <Card variant="outlined">
-      <Box m={2}>
+      <Box
+        sx={{
+          m: 2,
+        }}
+      >
         <CardHeader
           title={keyword("cardheader_results")}
           className={classes.headerUploadedImage}
@@ -172,7 +176,11 @@ const ImageResult = ({ handleCloseResults }) => {
                   usageStatistics={false}
                   ref={imageEditor}
                 />
-                <Box m={1} />
+                <Box
+                  sx={{
+                    m: 1,
+                  }}
+                />
 
                 <div className={classes.modalButton}>
                   <Button
@@ -195,13 +203,19 @@ const ImageResult = ({ handleCloseResults }) => {
             </Fade>
           </Modal>
 
-          <Box m={1} />
+          <Box
+            sx={{
+              m: 1,
+            }}
+          />
           <Grid
             container
             direction="row"
-            justifyContent="center"
-            alignItems="center"
             spacing={3}
+            sx={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
             <Grid>
               <Button color="primary" variant="contained" onClick={handleOpen}>
@@ -220,9 +234,17 @@ const ImageResult = ({ handleCloseResults }) => {
               </a>
             </Grid>
           </Grid>
-          <Box m={2} />
+          <Box
+            sx={{
+              m: 2,
+            }}
+          />
           <Loop src={resultImage} />
-          <Box m={2} />
+          <Box
+            sx={{
+              m: 2,
+            }}
+          />
           <ReverseSearchButtons
             isimageUrl={isImageUrl}
             reverseSearch={reverseSearch}

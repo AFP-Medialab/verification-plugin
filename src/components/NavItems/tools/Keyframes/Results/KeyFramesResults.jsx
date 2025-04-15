@@ -162,7 +162,12 @@ const KeyFramesResults = ({ result }) => {
     <Card variant="outlined">
       <CardContent>
         <Stack direction="column" spacing={4}>
-          <Stack direction="row" justifyContent="space-between">
+          <Stack
+            direction="row"
+            sx={{
+              justifyContent: "space-between",
+            }}
+          >
             <Typography variant="h6">
               {keyword("cardheader_results")}
             </Typography>
@@ -188,7 +193,11 @@ const KeyFramesResults = ({ result }) => {
                 horizontal: "center",
               }}
             >
-              <Box p={2}>
+              <Box
+                sx={{
+                  p: 2,
+                }}
+              >
                 <Stack direction="column" spacing={2}>
                   <Stack
                     direction="row"
@@ -215,9 +224,11 @@ const KeyFramesResults = ({ result }) => {
           <Stack direction="column">
             <Grid
               container
-              justifyContent="space-between"
               spacing={2}
-              alignContent={"center"}
+              sx={{
+                justifyContent: "space-between",
+                alignContent: "center",
+              }}
             >
               <Grid>
                 <Button onClick={() => toggleDetail()}>
@@ -254,7 +265,11 @@ const KeyFramesResults = ({ result }) => {
           </Stack>
 
           {detailed && loadingDetailed && (
-            <Box m={4}>
+            <Box
+              sx={{
+                m: 4,
+              }}
+            >
               <CircularProgress />
             </Box>
           )}
@@ -271,7 +286,11 @@ const KeyFramesResults = ({ result }) => {
           )}
 
           {!detailed && loadingSimple && (
-            <Box m={4}>
+            <Box
+              sx={{
+                m: 4,
+              }}
+            >
               <CircularProgress />
             </Box>
           )}

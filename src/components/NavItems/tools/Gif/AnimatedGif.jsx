@@ -161,8 +161,10 @@ const AnimatedGif = ({
       container
       spacing={4}
       direction="row"
-      justifyContent="flex-start"
-      alignItems="flex-start"
+      sx={{
+        justifyContent: "flex-start",
+        alignItems: "flex-start",
+      }}
     >
       <Grid size={{ xs: 8 }}>
         <Box className={classes.wrapperImageFilter}>
@@ -198,7 +200,9 @@ const AnimatedGif = ({
         container
         spacing={6}
         direction="column"
-        justifyContent="flex-start"
+        sx={{
+          justifyContent: "flex-start",
+        }}
       >
         <Grid>
           <Typography gutterBottom>{keyword("slider_title")}</Typography>
@@ -217,8 +221,10 @@ const AnimatedGif = ({
         <Grid
           container
           spacing={2}
-          justifyContent="flex-start"
-          alignItems="stretch"
+          sx={{
+            justifyContent: "flex-start",
+            alignItems: "stretch",
+          }}
         >
           <Grid size={{ xs: 12 }}>
             <Button
@@ -247,19 +253,31 @@ const AnimatedGif = ({
     </Grid>
   ) : (
     <div>
-      <Box p={2} className={classes.height100}>
+      <Box
+        className={classes.height100}
+        sx={{
+          p: 2,
+        }}
+      >
         <Grid
           container
           direction="column"
-          justifyContent="space-between"
-          alignItems="flex-start"
           className={classes.height100}
+          sx={{
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+          }}
         >
           <Typography variant="h6" className={classes.headingGif}>
             {keyword("title_preview")}
           </Typography>
 
-          <Box justifyContent="center" className={classes.wrapperImageFilter}>
+          <Box
+            className={classes.wrapperImageFilter}
+            sx={{
+              justifyContent: "center",
+            }}
+          >
             <Box className={classes.imagesGifImage}>
               <TextImageCanvas
                 imgSrc={homoImg1}
@@ -278,7 +296,11 @@ const AnimatedGif = ({
                 annotation={false}
               />
             </Box>
-            <Box m={3} />
+            <Box
+              sx={{
+                m: 3,
+              }}
+            />
             {(annotation || paused) && (
               <>
                 <Button
@@ -290,7 +312,11 @@ const AnimatedGif = ({
                 >
                   {paused ? keyword("button_play") : keyword("button_modify")}
                 </Button>
-                <Box m={1} />
+                <Box
+                  sx={{
+                    m: 1,
+                  }}
+                />
               </>
             )}
             <Button
@@ -301,16 +327,26 @@ const AnimatedGif = ({
             >
               {annotation ? keyword("button_remove") : keyword("button_add")}
             </Button>
-            <Box m={1} />
+            <Box
+              sx={{
+                m: 1,
+              }}
+            />
             <Alert severity="info">{keyword("fake_annotation_tip")}</Alert>
           </Box>
           <Grid
             container
             direction="column"
-            justifyContent="center"
-            alignItems="center"
+            sx={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-            <Box m={3} />
+            <Box
+              sx={{
+                m: 3,
+              }}
+            />
 
             <Typography gutterBottom>{keyword("slider_title")}</Typography>
 
@@ -327,9 +363,19 @@ const AnimatedGif = ({
               className={classes.sliderClass}
             />
 
-            <Box m={2} />
+            <Box
+              sx={{
+                m: 2,
+              }}
+            />
 
-            <Grid container spacing={3} justifyContent="space-evenly">
+            <Grid
+              container
+              spacing={3}
+              sx={{
+                justifyContent: "space-evenly",
+              }}
+            >
               <Grid>
                 <Button
                   variant="contained"
@@ -352,7 +398,11 @@ const AnimatedGif = ({
               </Grid>
             </Grid>
 
-            <Box m={2} />
+            <Box
+              sx={{
+                m: 2,
+              }}
+            />
           </Grid>
         </Grid>
       </Box>

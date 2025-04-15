@@ -79,7 +79,13 @@ const Interactive = () => {
 
   return (
     <Paper variant="outlined" className={classes.root}>
-      <Box justifyContent="center" display="flex" flexDirection="column">
+      <Box
+        sx={{
+          justifyContent: "center",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <CustomTile text={keyword("quiz_title")} />
         {carousel.map((obj, key) => {
           const isImage =
@@ -108,9 +114,11 @@ const Interactive = () => {
               </div>
               <Grid
                 container
-                justifyContent="space-between"
                 spacing={2}
-                alignContent={"center"}
+                sx={{
+                  justifyContent: "space-between",
+                  alignContent: "center",
+                }}
               >
                 <Grid>
                   <Fab color={"primary"} onClick={previous}>
@@ -146,9 +154,11 @@ const Interactive = () => {
               {isImage ? (
                 <Grid
                   container
-                  justifyContent="center"
                   spacing={2}
-                  alignContent={"center"}
+                  sx={{
+                    justifyContent: "center",
+                    alignContent: "center",
+                  }}
                 >
                   <Grid>
                     <Button
@@ -195,8 +205,11 @@ const Interactive = () => {
                   {keyword("quiz_keyframes")}
                 </Button>
               )}
-
-              <Box m={3} />
+              <Box
+                sx={{
+                  m: 3,
+                }}
+              />
               <Typography variant={"h5"}>{obj.title}</Typography>
               <Accordion expanded={answerExpanded} onChange={handleExpanded}>
                 <AccordionSummary
@@ -206,9 +219,11 @@ const Interactive = () => {
                 >
                   <Grid
                     container
-                    justifyContent="space-between"
                     spacing={2}
-                    alignContent={"center"}
+                    sx={{
+                      justifyContent: "space-between",
+                      alignContent: "center",
+                    }}
                   >
                     <Grid>
                       <Typography className={classes.heading} align={"justify"}>

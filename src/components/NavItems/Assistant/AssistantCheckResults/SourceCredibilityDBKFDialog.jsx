@@ -62,7 +62,13 @@ const SourceCredibilityDBKFDialog = (props) => {
                 {keyword("source_cred_popup_header_domain")} {source}
               </Typography>
             </Grid>
-            <Grid size={{ xs: 1 }} display="flex" justifyContent="flex-end">
+            <Grid
+              size={{ xs: 1 }}
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
               {/* tooltip help */}
               <Tooltip
                 interactive={"true"}

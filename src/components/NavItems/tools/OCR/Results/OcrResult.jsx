@@ -211,13 +211,19 @@ const OcrResult = () => {
                     className={classes.ocrImageCanvas}
                   />
                 </div>
-                <Box m={2} />
+                <Box
+                  sx={{
+                    m: 2,
+                  }}
+                />
                 <Grid
                   container
                   direction="row"
-                  justifyContent="space-between"
-                  alignItems="flex-start"
                   spacing={2}
+                  sx={{
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                  }}
                 >
                   {/* TODO: iterate through all the search engines */}
                   <Grid size={{ xs: 6 }}>
@@ -280,13 +286,19 @@ const OcrResult = () => {
               <CardContent>
                 <Typography>{fullText}</Typography>
 
-                <Box mt={4}>
+                <Box
+                  sx={{
+                    mt: 4,
+                  }}
+                >
                   <Grid
                     container
                     direction="row"
-                    justifyContent="space-between"
-                    alignItems="flex-start"
                     spacing={2}
+                    sx={{
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                    }}
                   >
                     <Grid size={{ xs: 6 }}>
                       <TextCopy text={fullText} index="-1" type={"BUTTON"} />
@@ -302,7 +314,6 @@ const OcrResult = () => {
           </Grid>
         </Grid>
       </Grid>
-
       <Grid size={{ xs: 6 }} hidden={!result}>
         <Card variant="outlined">
           <CardHeader title={keyword("blocks")}></CardHeader>
@@ -314,11 +325,19 @@ const OcrResult = () => {
                   {index > 0 ? (
                     <Grid size={{ xs: 12 }}>
                       <Divider />
-                      <Box m={2} />
+                      <Box
+                        sx={{
+                          m: 2,
+                        }}
+                      />
                     </Grid>
                   ) : (
                     <Grid size={{ xs: 12 }}>
-                      <Box m={1} />
+                      <Box
+                        sx={{
+                          m: 1,
+                        }}
+                      />
                     </Grid>
                   )}
 
@@ -393,7 +412,11 @@ const OcrResult = () => {
                       <Typography variant={"subtitle1"}>
                         {keyword("reprocess_text")}
                       </Typography>
-                      <Box m={3} />
+                      <Box
+                        sx={{
+                          m: 3,
+                        }}
+                      />
 
                       {scripts ? (
                         <Grid container spacing={2}>
@@ -415,7 +438,11 @@ const OcrResult = () => {
                           </Grid>
 
                           <Grid size={{ xs: 6 }}>
-                            <Box m={1} />
+                            <Box
+                              sx={{
+                                m: 1,
+                              }}
+                            />
                             <Button
                               size={"large"}
                               variant={"contained"}

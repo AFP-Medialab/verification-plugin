@@ -72,8 +72,6 @@ class DragAndDrop extends Component {
             container
             spacing={0}
             direction="column"
-            alignItems="center"
-            justifyContent="center"
             style={{
               border: "dashed #00926c 2px",
               backgroundColor: "rgba(255,255,255,.8)",
@@ -84,6 +82,10 @@ class DragAndDrop extends Component {
               left: 0,
               right: 0,
               zIndex: 9999,
+            }}
+            sx={{
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             <Grid

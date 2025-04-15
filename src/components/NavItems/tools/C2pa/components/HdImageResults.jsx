@@ -145,8 +145,20 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
 
   return (
     <Stack direction="row" spacing={4}>
-      <Box width="100%">
-        <Grid container direction="row" spacing={4} p={4} width="100%">
+      <Box
+        sx={{
+          width: "100%",
+        }}
+      >
+        <Grid
+          container
+          direction="row"
+          spacing={4}
+          sx={{
+            p: 4,
+            width: "100%",
+          }}
+        >
           <Alert severity="info">
             <Typography variant="body2">
               {
@@ -173,7 +185,9 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
             direction="column"
             size={{ md: 12, lg: 6 }}
             spacing={4}
-            alignItems="start"
+            sx={{
+              alignItems: "start",
+            }}
           >
             {ImageCard(
               // hdImage,

@@ -130,10 +130,15 @@ const Feedback = () => {
   return (
     <Stack
       direction="column"
-      justifyContent="flex-end"
-      alignItems="flex-end"
       spacing={2}
-      sx={{ position: "fixed", bottom: 20, right: 15, zIndex: 9998 }}
+      sx={{
+        justifyContent: "flex-end",
+        alignItems: "flex-end",
+        position: "fixed",
+        bottom: 20,
+        right: 15,
+        zIndex: 9998,
+      }}
     >
       <Box ref={containerRef}>
         <Slide
@@ -150,7 +155,11 @@ const Feedback = () => {
               unmountOnExit
             >
               {
-                <Box width={380}>
+                <Box
+                  sx={{
+                    width: 380,
+                  }}
+                >
                   <Paper
                     component="form"
                     elevation={6}
@@ -158,18 +167,22 @@ const Feedback = () => {
                   >
                     <Stack
                       direction="row"
-                      justifyContent="space-between"
-                      alignItems="center"
                       spacing={0}
-                      height={50}
-                      pl={1}
-                      pr={1}
+                      sx={{
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        height: 50,
+                        pl: 1,
+                        pr: 1,
+                      }}
                     >
                       <Stack
                         direction="row"
-                        justifyContent="flex-start"
-                        alignItems="center"
                         spacing={2}
+                        sx={{
+                          justifyContent: "flex-start",
+                          alignItems: "center",
+                        }}
                       >
                         <QuestionAnswerOutlinedIcon
                           sx={{ color: "var(--mui-palette-primary-main)" }}
@@ -185,7 +198,12 @@ const Feedback = () => {
                       </IconButton>
                     </Stack>
 
-                    <Stack spacing={2} p={2}>
+                    <Stack
+                      spacing={2}
+                      sx={{
+                        p: 2,
+                      }}
+                    >
                       <Stack>
                         <Typography color="primary">
                           {keyword("type")}

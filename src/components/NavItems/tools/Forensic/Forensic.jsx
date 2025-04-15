@@ -152,11 +152,13 @@ const Forensic = () => {
         description={keywordAllTools("navbar_forensic_description")}
         icon={<imageForensic.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
       />
-
       <Alert severity="warning">{keywordWarning("warning_forensic")}</Alert>
-
       <Card variant="outlined">
-        <Box p={4}>
+        <Box
+          sx={{
+            p: 4,
+          }}
+        >
           <form>
             <StringFileUploadField
               labelKeyword={keyword("forensic_input")}
@@ -175,13 +177,11 @@ const Forensic = () => {
           </form>
         </Box>
       </Card>
-
       {loading && (
         <div>
           <LinearProgress />
         </div>
       )}
-
       {resultData && (
         <ForensicResults
           result={resultData}

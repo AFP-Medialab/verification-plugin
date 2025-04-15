@@ -250,11 +250,20 @@ const DeepfakeResultsVideo = (props) => {
           <Grid
             container
             direction="row"
-            justifyContent="space-evenly"
-            alignItems="flex-start"
+            sx={{
+              justifyContent: "space-evenly",
+              alignItems: "flex-start",
+            }}
           >
             <Grid size={{ xs: 6 }} container direction="column" spacing={2}>
-              <Grid width="100%" size={{ xs: 6 }} container direction="column">
+              <Grid
+                size={{ xs: 6 }}
+                container
+                direction="column"
+                sx={{
+                  width: "100%",
+                }}
+              >
                 <Stack direction="column" spacing={4}>
                   <video
                     width="100%"
@@ -274,8 +283,10 @@ const DeepfakeResultsVideo = (props) => {
                   </video>
                   <Stack
                     direction="column"
-                    justifyContent="center"
                     ref={deepfakeChartRef}
+                    sx={{
+                      justifyContent: "center",
+                    }}
                   >
                     <LineChart
                       xAxis={[
@@ -365,9 +376,19 @@ const DeepfakeResultsVideo = (props) => {
                   >
                     {keyword("deepfake_clips")}
                   </Typography>
-                  <Box m={1} />
+                  <Box
+                    sx={{
+                      m: 1,
+                    }}
+                  />
 
-                  <Grid container spacing={3} width="100%">
+                  <Grid
+                    container
+                    spacing={3}
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
                     {results[faceswapAlgorithm].results.map(
                       (valueShot, keyShot) => {
                         const shotStart = valueShot.shot_start;
@@ -399,7 +420,9 @@ const DeepfakeResultsVideo = (props) => {
                                   <Stack
                                     direction="column"
                                     spacing={1}
-                                    alignItems="center"
+                                    sx={{
+                                      alignItems: "center",
+                                    }}
                                   >
                                     <img
                                       alt="shot"
@@ -442,8 +465,10 @@ const DeepfakeResultsVideo = (props) => {
                         <Grid
                           container
                           direction="row"
-                          justifyContent="space-between"
-                          alignItems="center"
+                          sx={{
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
                         >
                           <span>{keyword("deepfake_results")}</span>
 
@@ -469,12 +494,18 @@ const DeepfakeResultsVideo = (props) => {
                               horizontal: "center",
                             }}
                           >
-                            <Box p={2}>
+                            <Box
+                              sx={{
+                                p: 2,
+                              }}
+                            >
                               <Grid
                                 container
                                 direction="row"
-                                justifyContent="space-between"
-                                alignItems="stretch"
+                                sx={{
+                                  justifyContent: "space-between",
+                                  alignItems: "stretch",
+                                }}
                               >
                                 <Typography variant="h6" gutterBottom>
                                   {keyword("deepfake_title_what")}
@@ -482,7 +513,11 @@ const DeepfakeResultsVideo = (props) => {
 
                                 <CloseIcon onClick={closeHelp} />
                               </Grid>
-                              <Box m={1} />
+                              <Box
+                                sx={{
+                                  m: 1,
+                                }}
+                              />
                               <Typography variant="body2">
                                 {keyword("deepfake_filters_explanation_video")}
                               </Typography>
@@ -491,16 +526,26 @@ const DeepfakeResultsVideo = (props) => {
                         </Grid>
                       }
                     />
-                    <Box p={2}>
+                    <Box
+                      sx={{
+                        p: 2,
+                      }}
+                    >
                       {shotSelectedValue === null ? (
                         <Grid
                           container
                           direction="column"
-                          justifyContent="center"
-                          alignItems="center"
                           style={{ height: "350px" }}
+                          sx={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
                         >
-                          <Box p={2}>
+                          <Box
+                            sx={{
+                              p: 2,
+                            }}
+                          >
                             <Typography
                               variant="h6"
                               style={{ color: "#C9C9C9" }}

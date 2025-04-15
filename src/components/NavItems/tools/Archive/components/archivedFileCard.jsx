@@ -15,11 +15,19 @@ const ArchivedFileCard = ({ file, archiveLinks }) => {
 
   return (
     <Card variant="outlined">
-      <Box p={3}>
+      <Box
+        sx={{
+          p: 3,
+        }}
+      >
         <form>
           <Stack spacing={4}>
             <Box>
-              <Box mb={4}>
+              <Box
+                sx={{
+                  mb: 4,
+                }}
+              >
                 <Fade in={true} timeout={750}>
                   <Alert severity="success">{keyword("upload_success")}</Alert>
                 </Fade>

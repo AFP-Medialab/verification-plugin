@@ -74,9 +74,17 @@ const TwitterResults = (props) => {
                 className={classes.image}
                 alt={"img"}
               />
-              <Box m={2} />
+              <Box
+                sx={{
+                  m: 2,
+                }}
+              />
               <Divider />
-              <Box m={2} />
+              <Box
+                sx={{
+                  m: 2,
+                }}
+              />
               <Typography variant={"h6"}>
                 {keyword("youtube_video_name1_2")}
               </Typography>
@@ -90,7 +98,11 @@ const TwitterResults = (props) => {
                   {report["video"]["full_text"]}
                 </Typography>
               )}
-              <Box m={2} />
+              <Box
+                sx={{
+                  m: 2,
+                }}
+              />
               <Divider />
               {report["video"] && (
                 <Table
@@ -269,7 +281,11 @@ const TwitterResults = (props) => {
               )}
               {report["source"] && (
                 <div>
-                  <Box m={4} />
+                  <Box
+                    sx={{
+                      m: 4,
+                    }}
+                  />
                   <Typography variant={"h6"}>
                     {keyword("profile_creator") +
                       ": " +
@@ -421,17 +437,33 @@ const TwitterResults = (props) => {
                   setAnalysisVerifiedComments={setAnalysisVerifiedComments}
                 />
               )}
-              <Box m={4} />
+              <Box
+                sx={{
+                  m: 4,
+                }}
+              />
 
               {thumbnails !== undefined && (
                 <div>
-                  <Box m={4} />
+                  <Box
+                    sx={{
+                      m: 4,
+                    }}
+                  />
                   <Typography variant={"h6"}>
                     {keyword("navbar_thumbnails")}
                   </Typography>
-                  <Box m={1} />
+                  <Box
+                    sx={{
+                      m: 1,
+                    }}
+                  />
                   <OnClickInfo keyword={"keyframes_tip"} />
-                  <Box m={1} />
+                  <Box
+                    sx={{
+                      m: 1,
+                    }}
+                  />
                   <div className={classes.imagesRoot}>
                     <ImageUrlGridList
                       list={thumbnails}
@@ -439,7 +471,11 @@ const TwitterResults = (props) => {
                       style={{ maxHeigth: "none", height: "auto" }}
                     />
                   </div>
-                  <Box m={2} />
+                  <Box
+                    sx={{
+                      m: 2,
+                    }}
+                  />
                   <ReverseSearchButtons reverseSearch={reverseSearch}>
                     <></>
                   </ReverseSearchButtons>

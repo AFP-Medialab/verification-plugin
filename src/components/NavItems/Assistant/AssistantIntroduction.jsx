@@ -133,12 +133,21 @@ const AssistantIntroduction = (props) => {
         />
 
         <CardContent>
-          <Box m={2}>
-            <Grid container spacing={3} alignItems="flex-start">
+          <Box
+            sx={{
+              m: 2,
+            }}
+          >
+            <Grid
+              container
+              spacing={3}
+              sx={{
+                alignItems: "flex-start",
+              }}
+            >
               <Grid size={{ xs: 6 }}>
                 <Box
                   data-testid="assistant-webpage-link"
-                  p={3}
                   className={classButtonURL}
                   onClick={() => {
                     if (!urlMode) {
@@ -159,6 +168,9 @@ const AssistantIntroduction = (props) => {
                       setShowLocal(false);
                     }
                   }}
+                  sx={{
+                    p: 3,
+                  }}
                 >
                   <Grid
                     container
@@ -173,23 +185,36 @@ const AssistantIntroduction = (props) => {
                       <Grid
                         container
                         direction="column"
-                        justifyContent="flex-start"
-                        alignItems="flex-start"
+                        sx={{
+                          justifyContent: "flex-start",
+                          alignItems: "flex-start",
+                        }}
                       >
                         <Grid>
                           <Typography
                             variant="body1"
                             style={{ fontWeight: 600 }}
-                            textAlign={"start"}
+                            sx={{
+                              textAlign: "start",
+                            }}
                           >
                             {keyword("assistant_webpage_header")}
                           </Typography>
                         </Grid>
 
-                        <Box mt={1} />
+                        <Box
+                          sx={{
+                            mt: 1,
+                          }}
+                        />
 
                         <Grid>
-                          <Typography variant="body1" textAlign={"start"}>
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              textAlign: "start",
+                            }}
+                          >
                             {keyword("assistant_webpage_text")}
                           </Typography>
                         </Grid>
@@ -201,7 +226,6 @@ const AssistantIntroduction = (props) => {
 
               <Grid size={{ xs: 6 }}>
                 <Box
-                  p={3}
                   className={classButtonLocal}
                   onClick={() => {
                     if (!imageVideoSelected) {
@@ -225,6 +249,9 @@ const AssistantIntroduction = (props) => {
                       setShowLocal(true);
                     }
                   }}
+                  sx={{
+                    p: 3,
+                  }}
                 >
                   <Grid
                     container
@@ -240,21 +267,30 @@ const AssistantIntroduction = (props) => {
                       <Grid
                         container
                         direction="column"
-                        justifyContent="flex-start"
-                        alignItems="flex-start"
                         spacing={1}
+                        sx={{
+                          justifyContent: "flex-start",
+                          alignItems: "flex-start",
+                        }}
                       >
                         <Grid size={{ xs: 12 }}>
                           <Typography
                             variant="body1"
                             style={{ fontWeight: 600 }}
-                            textAlign={"start"}
+                            sx={{
+                              textAlign: "start",
+                            }}
                           >
                             {keyword("assistant_file_header")}
                           </Typography>
                         </Grid>
                         <Grid size={{ xs: 12 }}>
-                          <Typography variant="body1" textAlign={"start"}>
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              textAlign: "start",
+                            }}
+                          >
                             {keyword("assistant_file_text")}
                           </Typography>
                         </Grid>

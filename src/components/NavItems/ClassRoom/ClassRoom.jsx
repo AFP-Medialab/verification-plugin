@@ -41,7 +41,13 @@ function TabPanel(props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      <Box p={3}>{children}</Box>
+      <Box
+        sx={{
+          p: 3,
+        }}
+      >
+        {children}
+      </Box>
     </Typography>
   );
 }
@@ -173,8 +179,17 @@ const ClassRoom = () => {
         />
 
         <Card variant="outlined">
-          <Box display="flex" flexDirection="column">
-            <Box mt={1} />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Box
+              sx={{
+                mt: 1,
+              }}
+            />
 
             <Tabs
               indicatorColor="primary"
@@ -206,7 +221,13 @@ const ClassRoom = () => {
                       </Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                      <Typography textAlign={"start"}>{obj.content}</Typography>
+                      <Typography
+                        sx={{
+                          textAlign: "start",
+                        }}
+                      >
+                        {obj.content}
+                      </Typography>
                     </AccordionDetails>
                   </Accordion>
                 );
@@ -226,21 +247,29 @@ const ClassRoom = () => {
               {EducationalResources().map((value, index) => {
                 return (
                   <div key={index}>
-                    <Box m={1} />
+                    <Box
+                      sx={{
+                        m: 1,
+                      }}
+                    />
                     <Grid
                       key={index}
                       container
                       direction="row"
-                      justifyContent="space-between"
                       spacing={2}
+                      sx={{
+                        justifyContent: "space-between",
+                      }}
                     >
                       <Grid
                         container
                         direction="row"
                         size={{ xs: 10 }}
-                        justifyContent="flex-start"
-                        alignItems="flex-start"
                         spacing={2}
+                        sx={{
+                          justifyContent: "flex-start",
+                          alignItems: "flex-start",
+                        }}
                       >
                         <Grid size={{ xs: 1 }}>
                           <CastForEducation fontSize={"large"} />
@@ -293,7 +322,11 @@ const ClassRoom = () => {
                             </TabPanel>*/}
             <TabPanel value={value} index={5}>
               <Grid container direction="column" spacing={2}>
-                <Grid mb={2}>
+                <Grid
+                  sx={{
+                    mb: 2,
+                  }}
+                >
                   <Typography variant={"h5"}>
                     {keyword("user_resources_intro")}
                   </Typography>
@@ -321,7 +354,11 @@ const ClassRoom = () => {
                     {keyword("display")}
                   </Button>
                 </Grid>
-                <Grid mt={4}>
+                <Grid
+                  sx={{
+                    mt: 4,
+                  }}
+                >
                   <Typography variant="body1">{keyword("examples")}</Typography>
                   <Typography variant="body1">
                     {keyword("youtube_example")}
@@ -339,17 +376,28 @@ const ClassRoom = () => {
               {glossary().map((obj, key) => {
                 return (
                   <div key={key}>
-                    <Typography variant="h6" display="inline">
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        display: "inline",
+                      }}
+                    >
                       {obj.word + " : "}
                     </Typography>
                     <Typography
                       variant="body1"
-                      display="inline"
                       align={"justify"}
+                      sx={{
+                        display: "inline",
+                      }}
                     >
                       {obj.definition}
                     </Typography>
-                    <Box m={2} />
+                    <Box
+                      sx={{
+                        m: 2,
+                      }}
+                    />
                   </div>
                 );
               })}

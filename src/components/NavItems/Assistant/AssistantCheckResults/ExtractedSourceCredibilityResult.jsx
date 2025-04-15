@@ -54,7 +54,11 @@ const ExtractedSourceCredibilityResult = ({
                   align={"left"}
                   color={"textPrimary"}
                 ></Typography>
-                <Box mb={0.5} />
+                <Box
+                  sx={{
+                    mb: 0.5,
+                  }}
+                />
               </div>
             }
             secondary={

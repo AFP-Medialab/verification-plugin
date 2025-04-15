@@ -141,7 +141,6 @@ const ExtractedSourceCredibilityDBKFDialog = ({
           onClick={handleClickOpen}
         />
       </Tooltip>
-
       <Dialog
         onClose={handleClose}
         maxWidth={"lg"}
@@ -162,7 +161,13 @@ const ExtractedSourceCredibilityDBKFDialog = ({
               </Typography>
             </Grid>
 
-            <Grid size={{ xs: 1 }} display="flex" justifyContent="flex-end">
+            <Grid
+              size={{ xs: 1 }}
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
               {/* tooltip help */}
               <Tooltip
                 interactive={"true"}

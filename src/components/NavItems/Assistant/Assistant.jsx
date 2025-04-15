@@ -151,18 +151,29 @@ const Assistant = () => {
       container
       spacing={4}
       direction="column"
-      justifyContent="flex-start"
-      alignItems="center"
       className={classes.root}
+      sx={{
+        justifyContent: "flex-start",
+        alignItems: "center",
+      }}
     >
       {/* introduction */}
-      <Grid size="grow" width="100%">
+      <Grid
+        size="grow"
+        sx={{
+          width: "100%",
+        }}
+      >
         <AssistantIntroduction cleanAssistant={cleanAssistant} />
       </Grid>
-
       {/* url entry field */}
       {urlMode ? (
-        <Grid size="grow" width="100%">
+        <Grid
+          size="grow"
+          sx={{
+            width: "100%",
+          }}
+        >
           <AssistantUrlSelected
             formInput={formInput}
             setFormInput={setFormInput}
@@ -170,14 +181,17 @@ const Assistant = () => {
           />
         </Grid>
       ) : null}
-
       {/* local file selection field */}
       {imageVideoSelected ? (
-        <Grid size="grow" width="100%">
+        <Grid
+          size="grow"
+          sx={{
+            width: "100%",
+          }}
+        >
           <AssistantFileSelected />
         </Grid>
       ) : null}
-
       {/* assistant status */}
       {scFailState ||
       dbkfTextFailState ||
@@ -193,7 +207,6 @@ const Assistant = () => {
           <AssistantCheckStatus />
         </Grid>
       ) : null}
-
       {/* assistant results section */}
       {urlMode && inputUrl ? (
         <Card variant="outlined" sx={{ width: "100%", mb: 2 }}>

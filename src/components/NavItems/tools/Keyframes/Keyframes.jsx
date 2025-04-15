@@ -193,7 +193,9 @@ const Keyframes = () => {
                       container
                       direction="row"
                       spacing={3}
-                      alignItems="center"
+                      sx={{
+                        alignItems: "center",
+                      }}
                     >
                       <Grid size="grow">
                         <TextField
@@ -261,11 +263,13 @@ const Keyframes = () => {
                     id="panel1a-header"
                   >
                     <Box
-                      p={1}
                       style={{
                         display: "flex",
                         flexDirection: "row",
                         alignItems: "center",
+                      }}
+                      sx={{
+                        p: 1,
                       }}
                     >
                       <ReportProblemOutlinedIcon
@@ -281,12 +285,20 @@ const Keyframes = () => {
                     </Box>
                   </AccordionSummary>
                   <AccordionDetails style={{ flexDirection: "column" }}>
-                    <Box p={1}>
+                    <Box
+                      sx={{
+                        p: 1,
+                      }}
+                    >
                       <Typography variant="body1" align="left">
                         {keyword("dbkf_articles")}
                       </Typography>
 
-                      <Box m={1} />
+                      <Box
+                        sx={{
+                          m: 1,
+                        }}
+                      />
 
                       {similarityResults.map((value, key) => {
                         return (
@@ -324,7 +336,13 @@ const Keyframes = () => {
         {isPending && (
           <Fade in={isPending} timeout={1500}>
             <Card variant="outlined">
-              <Stack direction="column" spacing={4} p={2}>
+              <Stack
+                direction="column"
+                spacing={4}
+                sx={{
+                  p: 2,
+                }}
+              >
                 <Skeleton variant="rounded" height={40} />
                 <Stack direction={{ md: "row", xs: "column" }} spacing={4}>
                   <Skeleton variant="rounded" width={80} height={80} />
@@ -356,7 +374,13 @@ const Keyframes = () => {
         {isFeatureDataPending && (
           <Fade in={isFeatureDataPending} timeout={1500}>
             <Card variant="outlined">
-              <Stack direction="column" spacing={4} p={2}>
+              <Stack
+                direction="column"
+                spacing={4}
+                sx={{
+                  p: 2,
+                }}
+              >
                 <Skeleton variant="rounded" height={40} />
                 <Stack direction={{ md: "row", xs: "column" }} spacing={4}>
                   <Skeleton variant="rounded" width={80} height={80} />
@@ -377,7 +401,14 @@ const Keyframes = () => {
           <>
             <Fade in={keyframesFeaturesData !== null} timeout={1500}>
               <Card variant="outlined">
-                <Box pb={4} pt={2} pl={4} pr={4}>
+                <Box
+                  sx={{
+                    pb: 4,
+                    pt: 2,
+                    pl: 4,
+                    pr: 4,
+                  }}
+                >
                   <Stack direction="column" spacing={2}>
                     <Typography variant="h6">
                       {keyword("faces_detected_title")}
@@ -398,7 +429,11 @@ const Keyframes = () => {
             </Fade>
             <Fade in={keyframesFeaturesData !== null} timeout={1500}>
               <Card variant="outlined">
-                <Box p={4}>
+                <Box
+                  sx={{
+                    p: 4,
+                  }}
+                >
                   <Stack direction="column" spacing={2}>
                     <Typography variant="h6">
                       {keyword("text_detected_title")}

@@ -368,17 +368,14 @@ const CheckGif = () => {
       {
         //=== Title ===
       }
-
       <HeaderTool
         name={keywordAllTools("navbar_gif")}
         description={keywordAllTools("navbar_gif_description")}
         icon={<imageGif.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
       />
-
       {
         //=== Load of the images ===
       }
-
       <TabContext value={selectedMode}>
         <Box>
           <TabList
@@ -403,9 +400,11 @@ const CheckGif = () => {
           <Divider />
         </Box>
       </TabContext>
-
-      <Box m={3} />
-
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
       {toolState >= 2 && (
         <Card variant="outlined">
           <CardHeader
@@ -413,8 +412,10 @@ const CheckGif = () => {
               <Grid
                 container
                 direction="row"
-                justifyContent="space-between"
-                alignItems="center"
+                sx={{
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
               >
                 <span>{keyword("title_gifcreation")}</span>
 
@@ -426,7 +427,11 @@ const CheckGif = () => {
             className={classes.headerUploadedImage}
           />
 
-          <Box p={3}>
+          <Box
+            sx={{
+              p: 3,
+            }}
+          >
             <Grid container direction={{ md: "row", xs: "column" }} spacing={3}>
               <Grid
                 size={{ md: 5, xs: 12 }}
@@ -436,22 +441,32 @@ const CheckGif = () => {
                   borderBottom: { xs: "0.1em solid #ECECEC", md: "none" },
                 }}
               >
-                <Box p={2}>
+                <Box
+                  sx={{
+                    p: 2,
+                  }}
+                >
                   {selectedMode === "LOCAL" && (
                     <div>
                       <Typography variant="h6" className={classes.headingGif}>
                         {keyword("title_image1")}
                       </Typography>
 
-                      <Box m={2} />
+                      <Box
+                        sx={{
+                          m: 2,
+                        }}
+                      />
 
                       {!showDropZone1 && (
                         <Grid
                           container
                           spacing={1}
                           direction="row"
-                          justifyContent="flex-start"
-                          alignItems="flex-start"
+                          sx={{
+                            justifyContent: "flex-start",
+                            alignItems: "flex-start",
+                          }}
                         >
                           <img
                             src={imageDropped1}
@@ -470,9 +485,11 @@ const CheckGif = () => {
                             container
                             spacing={0}
                             direction="column"
-                            alignItems="center"
-                            justifyContent="center"
                             className={classes.dropZone}
+                            sx={{
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
                           >
                             <Grid className={classes.inputContainer}>
                               <input
@@ -485,7 +502,11 @@ const CheckGif = () => {
                                 onChange={(e) => handleInput(e)}
                               />
                               <div>
-                                <Box textAlign="center">
+                                <Box
+                                  sx={{
+                                    textAlign: "center",
+                                  }}
+                                >
                                   <label
                                     htmlFor="raised-button-file"
                                     className={classes.inputLabel}
@@ -499,21 +520,31 @@ const CheckGif = () => {
                         </DragAndDrop>
                       )}
 
-                      <Box m={4} />
+                      <Box
+                        sx={{
+                          m: 4,
+                        }}
+                      />
 
                       <Typography variant="h6" className={classes.headingGif}>
                         {keyword("title_image2")}
                       </Typography>
 
-                      <Box m={2} />
+                      <Box
+                        sx={{
+                          m: 2,
+                        }}
+                      />
 
                       {!showDropZone2 && (
                         <Grid
                           container
                           spacing={1}
                           direction="row"
-                          justifyContent="flex-start"
-                          alignItems="flex-start"
+                          sx={{
+                            justifyContent: "flex-start",
+                            alignItems: "flex-start",
+                          }}
                         >
                           <img
                             src={imageDropped2}
@@ -532,9 +563,11 @@ const CheckGif = () => {
                             container
                             spacing={0}
                             direction="column"
-                            alignItems="center"
-                            justifyContent="center"
                             className={classes.dropZone}
+                            sx={{
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
                           >
                             <Grid className={classes.inputContainer}>
                               <input
@@ -547,7 +580,12 @@ const CheckGif = () => {
                                 onChange={(e) => handleInput2(e)}
                               />
                               <div>
-                                <Box p={2} textAlign="center">
+                                <Box
+                                  sx={{
+                                    p: 2,
+                                    textAlign: "center",
+                                  }}
+                                >
                                   <label
                                     htmlFor="raised-button-file"
                                     className={classes.inputLabel}
@@ -561,7 +599,11 @@ const CheckGif = () => {
                         </DragAndDrop>
                       )}
 
-                      <Box m={4} />
+                      <Box
+                        sx={{
+                          m: 4,
+                        }}
+                      />
 
                       <Button
                         variant="contained"
@@ -581,7 +623,11 @@ const CheckGif = () => {
                         {keyword("title_image1")}
                       </Typography>
 
-                      <Box m={2} />
+                      <Box
+                        sx={{
+                          m: 2,
+                        }}
+                      />
 
                       <TextField
                         id="outlined-multiline-static"
@@ -596,13 +642,21 @@ const CheckGif = () => {
                         }}
                       />
 
-                      <Box m={4} />
+                      <Box
+                        sx={{
+                          m: 4,
+                        }}
+                      />
 
                       <Typography variant="h6" className={classes.headingGif}>
                         {keyword("title_image2")}
                       </Typography>
 
-                      <Box m={2} />
+                      <Box
+                        sx={{
+                          m: 2,
+                        }}
+                      />
 
                       <TextField
                         id="outlined-multiline-static"
@@ -617,7 +671,11 @@ const CheckGif = () => {
                         }}
                       />
 
-                      <Box m={4} />
+                      <Box
+                        sx={{
+                          m: 4,
+                        }}
+                      />
 
                       <Button
                         variant="contained"
@@ -637,12 +695,18 @@ const CheckGif = () => {
                   <Grid
                     container
                     direction="column"
-                    justifyContent="center"
-                    alignItems="center"
                     className={classes.height100}
+                    sx={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                   >
                     <imageGif.icon sx={{ fill: "#C9C9C9", fontSize: "40px" }} />
-                    <Box p={4}>
+                    <Box
+                      sx={{
+                        p: 4,
+                      }}
+                    >
                       <Typography
                         variant="h6"
                         style={{ color: "#C9C9C9" }}
@@ -658,9 +722,11 @@ const CheckGif = () => {
                   <Grid
                     container
                     direction="column"
-                    justifyContent="center"
-                    alignItems="center"
                     className={classes.height100}
+                    sx={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                   >
                     <CircularProgress />
                   </Grid>

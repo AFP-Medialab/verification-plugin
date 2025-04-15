@@ -57,7 +57,13 @@ const NddDataGrid = ({ rows }) => {
       row.detectionResults[index].predictionScore;
 
     return (
-      <Stack direction="column" spacing={2} alignItems="start">
+      <Stack
+        direction="column"
+        spacing={2}
+        sx={{
+          alignItems: "start",
+        }}
+      >
         <Stack direction="row" spacing={1}>
           <>
             <Typography>
@@ -86,9 +92,11 @@ const NddDataGrid = ({ rows }) => {
     return (
       <Grid
         container
-        justifyContent="flex-start"
-        alignItems="center"
         spacing={2}
+        sx={{
+          justifyContent: "flex-start",
+          alignItems: "center",
+        }}
       >
         {urls.map((url, index) => (
           <Grid key={index}>

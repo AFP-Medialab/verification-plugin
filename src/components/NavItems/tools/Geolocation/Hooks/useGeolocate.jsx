@@ -36,7 +36,11 @@ export const useGeolocate = (url, processURL, keyword) => {
               }),
             );
           } else {
-            handleError("geo_error_" + response.data.status, keyword, dispatch);
+            handleError(
+              "geo_error_" + response.data?.status,
+              keyword,
+              dispatch,
+            );
           }
         })
         .catch((error) => {

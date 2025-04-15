@@ -96,27 +96,31 @@ const TopMenu = ({ topMenuItems }) => {
         <Grid
           container
           direction="row"
-          justifyContent="space-between"
-          alignItems="center"
           spacing={{ sm: 1, md: 2 }}
-          width="100%"
-          height="100%"
-          flexWrap="nowrap"
-          minHeight="86px"
+          sx={{
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+            height: "100%",
+            flexWrap: "nowrap",
+            minHeight: "86px",
+          }}
         >
           <Grid
             size={{ xs: 2 }}
-            height="100%"
-            display="flex"
-            alignItems="center"
-            justifyContent="start"
+            sx={{
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "start",
+            }}
           >
             <Stack
               direction="row"
-              alignItems="center"
-              justifyContent="start"
               spacing={1}
               sx={{
+                alignItems: "center",
+                justifyContent: "start",
                 width: "100%",
                 height: "auto",
               }}
@@ -180,9 +184,9 @@ const TopMenu = ({ topMenuItems }) => {
           </Grid>
           <Grid
             size={{ xs: 1, sm: "grow" }}
-            pl={isDisplayMobile ? 4 : 0}
-            pr={isDisplayMobile ? 4 : 0}
             sx={{
+              pl: isDisplayMobile ? 4 : 0,
+              pr: isDisplayMobile ? 4 : 0,
               width: "-webkit-fill-available",
             }}
           >
@@ -194,8 +198,16 @@ const TopMenu = ({ topMenuItems }) => {
               allowScrollButtonsMobile
               indicatorColor="primary"
               textColor="primary"
-              TabIndicatorProps={{
-                style: { display: "none" },
+              slotProps={{
+                indicator: {
+                  ...{
+                    style: { display: "none" },
+                  },
+
+                  ...{
+                    display: "none",
+                  },
+                },
               }}
               sx={{
                 color: "var(--mui-palette-text-primary)",
@@ -222,8 +234,10 @@ const TopMenu = ({ topMenuItems }) => {
             <Stack
               direction="row"
               spacing={{ sx: 2, md: 4 }}
-              justifyContent="flex-end"
-              alignItems="center"
+              sx={{
+                justifyContent: "flex-end",
+                alignItems: "center",
+              }}
             >
               <AdvancedTools />
 

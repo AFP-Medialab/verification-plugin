@@ -251,7 +251,12 @@ const Archive = () => {
   return (
     <Box sx={{ minHeight: "65vh" }}>
       <Card variant="outlined" sx={{ height: "100%" }}>
-        <Box p={3} sx={{ height: "fill-available" }}>
+        <Box
+          sx={{
+            p: 3,
+            height: "fill-available",
+          }}
+        >
           <Stack
             direction="column"
             sx={{
@@ -261,14 +266,21 @@ const Archive = () => {
             spacing={2}
           >
             <Stack direction="column" spacing={4}>
-              <Stack direction="row" justifyContent={"space-between"}>
+              <Stack
+                direction="row"
+                sx={{
+                  justifyContent: "space-between",
+                }}
+              >
                 <Box>
                   <Grid
                     container
                     direction="row"
-                    justifyContent="flex-start"
-                    alignItems="center"
                     spacing={1}
+                    sx={{
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                    }}
                   >
                     <archiving.icon
                       style={{
@@ -376,7 +388,11 @@ const Archive = () => {
           </Stack>
         </Box>
       </Card>
-      <Box p={2} />
+      <Box
+        sx={{
+          p: 2,
+        }}
+      />
     </Box>
   );
 };

@@ -61,8 +61,10 @@ const TextImageCanvas = ({
       <Grid
         container
         direction="row"
-        justifyContent="flex-start"
-        alignItems="center"
+        sx={{
+          justifyContent: "flex-start",
+          alignItems: "center",
+        }}
       >
         <Grid>
           <Stage width={width} height={height}>
@@ -87,7 +89,11 @@ const TextImageCanvas = ({
             <>
               <Grid container direction="column">
                 <Grid>
-                  <Box m={3} />
+                  <Box
+                    sx={{
+                      m: 3,
+                    }}
+                  />
                   <FormControl>
                     <InputLabel id="demo-simple-select-label">
                       {keyword("colour_label")}
@@ -113,8 +119,10 @@ const TextImageCanvas = ({
                   <Grid
                     container
                     direction="column"
-                    justifyContent="center"
-                    alignItems="center"
+                    sx={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                   >
                     <Typography gutterBottom>
                       {keyword("text_size_label")}
@@ -134,9 +142,17 @@ const TextImageCanvas = ({
                   </Grid>
                 </Grid>
                 <Grid>
-                  <Box m={1} />
+                  <Box
+                    sx={{
+                      m: 1,
+                    }}
+                  />
                   <Alert severity="info">{keyword("draggable_text_tip")}</Alert>
-                  <Box m={3} />
+                  <Box
+                    sx={{
+                      m: 3,
+                    }}
+                  />
                 </Grid>
               </Grid>
             </>

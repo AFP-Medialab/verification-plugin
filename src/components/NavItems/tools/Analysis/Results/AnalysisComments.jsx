@@ -282,10 +282,17 @@ const AnalysisComments = (props) => {
       verifiedComments.length >= 1 ||
       linkComments.length >= 1) && (
       <div>
-        <Box m={4} />
+        <Box
+          sx={{
+            m: 4,
+          }}
+        />
         <Typography variant={"h6"}>{keyword(props.title)}</Typography>
-
-        <Box m={2} />
+        <Box
+          sx={{
+            m: 2,
+          }}
+        />
         {verificationComments.length >= 1 && (
           <CommentsPanel
             title={props.type === "TWITTER" ? "twitter_reply" : "api_comments"}
@@ -298,8 +305,11 @@ const AnalysisComments = (props) => {
             com_type={"coms"}
           />
         )}
-        <Box m={2} />
-
+        <Box
+          sx={{
+            m: 2,
+          }}
+        />
         {verifiedComments.length >= 1 && (
           <CommentsPanel
             title={
@@ -318,7 +328,11 @@ const AnalysisComments = (props) => {
             com_type={"vercoms"}
           />
         )}
-        <Box m={2} />
+        <Box
+          sx={{
+            m: 2,
+          }}
+        />
         {linkComments.length >= 1 && (
           <CommentsPanel
             title={

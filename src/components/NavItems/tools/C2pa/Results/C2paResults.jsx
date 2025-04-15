@@ -87,11 +87,21 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
    */
   const title = (title, information) => {
     return (
-      <Grid container direction="row" alignItems="center">
+      <Grid
+        container
+        direction="row"
+        sx={{
+          alignItems: "center",
+        }}
+      >
         <Grid>
           <Typography variant="h6">{keyword(title)}</Typography>
         </Grid>
-        <Grid m={2} />
+        <Grid
+          sx={{
+            m: 2,
+          }}
+        />
         <Tooltip title={<h3>{keyword(information)}</h3>}>
           <HelpIcon />
         </Tooltip>
@@ -109,8 +119,21 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
 
   return (
     // </Card>
-    <Grid container direction="row" spacing={3} p={4}>
-      <Grid container justifyContent="start" size={{ md: 12, lg: 6 }}>
+    <Grid
+      container
+      direction="row"
+      spacing={3}
+      sx={{
+        p: 4,
+      }}
+    >
+      <Grid
+        container
+        size={{ md: 12, lg: 6 }}
+        sx={{
+          justifyContent: "start",
+        }}
+      >
         <Grid>
           {isImage ? (
             <img
@@ -138,7 +161,11 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
         <Card p={1}>
           <CardContent>
             {!manifestData ? (
-              <Box m={1}>
+              <Box
+                sx={{
+                  m: 1,
+                }}
+              >
                 {depthExceeded ? (
                   <Alert>
                     {isImage
@@ -159,33 +186,61 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                     )}
                   </Stack>
                 )}
-                <Box m={1} />
+                <Box
+                  sx={{
+                    m: 1,
+                  }}
+                />
               </Box>
             ) : (
               <>
                 {validationIssues ? (
-                  <Box m={1}>
+                  <Box
+                    sx={{
+                      m: 1,
+                    }}
+                  >
                     <Alert severity="error" m={1}>
                       {validationMessage(validationIssues)}
                     </Alert>
-                    <Box m={2} />
+                    <Box
+                      sx={{
+                        m: 2,
+                      }}
+                    />
                   </Box>
                 ) : null}
                 <Typography variant="h5">
                   {keyword("c2pa_information")}
                 </Typography>
-                <Box m={1} />
+                <Box
+                  sx={{
+                    m: 1,
+                  }}
+                />
                 <Stack>
                   <Typography>{manifestData.title}</Typography>
-                  <Box m={1} />
-                  <Box p={1}>
+                  <Box
+                    sx={{
+                      m: 1,
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      p: 1,
+                    }}
+                  >
                     <Stack>
                       {title(
                         "content_credentials_title",
                         "content_credential_explanation",
                       )}
 
-                      <Box p={1}>
+                      <Box
+                        sx={{
+                          p: 1,
+                        }}
+                      >
                         <Typography>
                           {keyword("content_credentials_issuer") +
                             manifestData.signatureInfo.issuer}
@@ -198,14 +253,26 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                         </Typography>
                       </Box>
                     </Stack>
-                    <Box m={1} />
+                    <Box
+                      sx={{
+                        m: 1,
+                      }}
+                    />
                     <Divider m={1} />
                   </Box>
 
-                  <Box p={1}>
+                  <Box
+                    sx={{
+                      p: 1,
+                    }}
+                  >
                     <Stack>
                       {title("credit_title", "credit_explanation")}
-                      <Box p={1}>
+                      <Box
+                        sx={{
+                          p: 1,
+                        }}
+                      >
                         {manifestData.producer && (
                           <>
                             <Typography>
@@ -236,14 +303,26 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                         )}
                       </Box>
                     </Stack>
-                    <Box m={1} />
+                    <Box
+                      sx={{
+                        m: 1,
+                      }}
+                    />
                     <Divider m={1} />
                   </Box>
 
-                  <Box p={1}>
+                  <Box
+                    sx={{
+                      p: 1,
+                    }}
+                  >
                     <Stack>
                       {title("capture_info_title", "capture_info_explanation")}
-                      <Box p={1}>
+                      <Box
+                        sx={{
+                          p: 1,
+                        }}
+                      >
                         {manifestData.captureInfo && (
                           <>
                             {manifestData.captureInfo.make ? (
@@ -283,7 +362,11 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                               </>
                             ) : null}
                             {longitude && latitude ? (
-                              <Box p={3}>
+                              <Box
+                                sx={{
+                                  p: 3,
+                                }}
+                              >
                                 {!isNaN(longitude) && !isNaN(latitude) ? (
                                   <>
                                     <MapContainer
@@ -310,7 +393,11 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                                         }
                                       ></Marker>
                                     </MapContainer>
-                                    <Box m={1} />
+                                    <Box
+                                      sx={{
+                                        m: 1,
+                                      }}
+                                    />
                                   </>
                                 ) : null}
 
@@ -334,7 +421,11 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                               </Box>
                             ) : null}
                             {manifestData.captureInfo.allCaptureInfo ? (
-                              <Box p={1}>
+                              <Box
+                                sx={{
+                                  p: 1,
+                                }}
+                              >
                                 <Accordion>
                                   <AccordionSummary expandIcon={<ExpandMore />}>
                                     <Typography>
@@ -376,37 +467,73 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                         )}
                       </Box>
                     </Stack>
-                    <Box m={1} />
+                    <Box
+                      sx={{
+                        m: 1,
+                      }}
+                    />
                     <Divider />
                   </Box>
 
-                  <Box p={1}>
+                  <Box
+                    sx={{
+                      p: 1,
+                    }}
+                  >
                     {title("process_title", "process_explanation")}
-                    <Box p={1}>
+                    <Box
+                      sx={{
+                        p: 1,
+                      }}
+                    >
                       {manifestData.editsAndActivity ||
                       manifestData.children ? (
                         <Stack>
                           {manifestData.editsAndActivity ? (
                             <>
-                              <Typography fontSize={18}>
+                              <Typography
+                                sx={{
+                                  fontSize: 18,
+                                }}
+                              >
                                 {keyword("process_edits")}
                               </Typography>
-                              <Box m={1} />
-                              <Box paddingLeft={2}>
+                              <Box
+                                sx={{
+                                  m: 1,
+                                }}
+                              />
+                              <Box
+                                sx={{
+                                  paddingLeft: 2,
+                                }}
+                              >
                                 {manifestData.editsAndActivity.map(
                                   (obj, key) => {
                                     return (
                                       <Stack key={key}>
                                         <Stack direction="row">
                                           <img src={obj.icon} />
-                                          <Typography paddingLeft={1}>
+                                          <Typography
+                                            sx={{
+                                              paddingLeft: 1,
+                                            }}
+                                          >
                                             {obj.label + ":"}
                                           </Typography>
                                         </Stack>
-                                        <Typography paddingLeft={1}>
+                                        <Typography
+                                          sx={{
+                                            paddingLeft: 1,
+                                          }}
+                                        >
                                           {obj.description}
                                         </Typography>
-                                        <Box m={0.5} />
+                                        <Box
+                                          sx={{
+                                            m: 0.5,
+                                          }}
+                                        />
                                       </Stack>
                                     );
                                   },
@@ -417,11 +544,25 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
 
                           {manifestData.children ? (
                             <>
-                              <Typography fontSize={18}>
+                              <Typography
+                                sx={{
+                                  fontSize: 18,
+                                }}
+                              >
                                 {keyword("process_ingredients")}
                               </Typography>
-                              <Box m={1} />
-                              <Stack direction="row" spacing={1} p={1}>
+                              <Box
+                                sx={{
+                                  m: 1,
+                                }}
+                              />
+                              <Stack
+                                direction="row"
+                                spacing={1}
+                                sx={{
+                                  p: 1,
+                                }}
+                              >
                                 {manifestData.children.map((obj, key) => {
                                   return (
                                     <Box key={key}>
@@ -457,7 +598,12 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
               </>
             )}
             {parentId ? (
-              <Box maxWidth="fit-content" marginInline="auto">
+              <Box
+                sx={{
+                  maxWidth: "fit-content",
+                  marginInline: "auto",
+                }}
+              >
                 <Button
                   onClick={() => setImage(parentId)}
                   startIcon={<KeyboardArrowLeft />}
@@ -465,7 +611,11 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                 >
                   {keyword("previous_image")}
                 </Button>
-                <Box m={0.5} />
+                <Box
+                  sx={{
+                    m: 0.5,
+                  }}
+                />
                 {parentId !== mainImageId ? (
                   <Button
                     onClick={() => setImage(mainImageId)}

@@ -39,15 +39,29 @@ const ResultDisplayItem = ({
   const [showOriginalTitle, setShowOriginalTitle] = useState(false);
 
   return (
-    <Box width="100%" key={id}>
-      <Grid container direction="row" p={2} justifyContent="space-between">
+    <Box
+      key={id}
+      sx={{
+        width: "100%",
+      }}
+    >
+      <Grid
+        container
+        direction="row"
+        sx={{
+          p: 2,
+          justifyContent: "space-between",
+        }}
+      >
         <Grid
           container
           direction="row"
           size={{ xs: 10 }}
           spacing={2}
-          justifyContent="flex-start"
-          alignItems="flex-start"
+          sx={{
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+          }}
         >
           <Grid>
             <Avatar
@@ -59,9 +73,11 @@ const ResultDisplayItem = ({
           <Grid size="grow">
             <Stack
               direction="column"
-              justifyContent="flex-start"
-              alignItems="flex-start"
               spacing={2}
+              sx={{
+                justifyContent: "flex-start",
+                alignItems: "flex-start",
+              }}
             >
               <Stack direction="column">
                 <Typography sx={{ textAlign: "start" }}>
@@ -118,7 +134,12 @@ const ResultDisplayItem = ({
             </Stack>
           </Grid>
         </Grid>
-        <Grid size={{ xs: 2 }} pl={4}>
+        <Grid
+          size={{ xs: 2 }}
+          sx={{
+            pl: 4,
+          }}
+        >
           <Stack direction="column" spacing={2}>
             <Link
               href={`https://${domainUrl}`}
@@ -135,9 +156,11 @@ const ResultDisplayItem = ({
       <Stack
         direction="row"
         spacing={2}
-        p={2}
-        justifyContent="flex-start"
-        alignItems="flex-start"
+        sx={{
+          p: 2,
+          justifyContent: "flex-start",
+          alignItems: "flex-start",
+        }}
       ></Stack>
       <Divider orientation="horizontal" flexItem />
     </Box>

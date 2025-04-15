@@ -341,11 +341,17 @@ const Loccus = () => {
         </Alert>
         <Alert severity="info">{keyword("loccus_tip")}</Alert>
       </Stack>
-
-      <Box m={3} />
-
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
       <Card variant="outlined">
-        <Box p={4}>
+        <Box
+          sx={{
+            p: 4,
+          }}
+        >
           <form>
             <StringFileUploadField
               labelKeyword={keyword("loccus_link")}
@@ -366,20 +372,29 @@ const Loccus = () => {
         </Box>
         {getAnalysisResultsForAudio.isPending && (
           <>
-            <Box m={2} />
-            <Box mt={3}>
+            <Box
+              sx={{
+                m: 2,
+              }}
+            />
+            <Box
+              sx={{
+                mt: 3,
+              }}
+            >
               <LinearProgress />
             </Box>
           </>
         )}
       </Card>
-
-      <Box m={3} />
-
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
       {getAnalysisResultsForAudio.isError && (
         <Alert severity="error">{keyword("loccus_generic_error")}</Alert>
       )}
-
       {result && (
         <LoccusResults
           result={result}

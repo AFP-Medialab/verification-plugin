@@ -148,9 +148,11 @@ const DownloadWaczFile = ({ url }) => {
     <Box>
       <Stack
         direction="row"
-        justifyContent="flex-start"
-        alignItems="center"
         spacing={2}
+        sx={{
+          justifyContent: "flex-start",
+          alignItems: "center",
+        }}
       >
         <Button
           variant="outlined"

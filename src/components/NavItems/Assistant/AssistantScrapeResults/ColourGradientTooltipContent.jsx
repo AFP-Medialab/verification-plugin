@@ -10,12 +10,24 @@ export function ColourGradientScale({ textLow, textHigh, rgbList }) {
     <>
       <Grid container>
         <Grid size={{ xs: 6 }}>
-          <Typography align="left" fontSize="small" fontWeight="bold">
+          <Typography
+            align="left"
+            sx={{
+              fontSize: "small",
+              fontWeight: "bold",
+            }}
+          >
             {textLow}
           </Typography>
         </Grid>
         <Grid size={{ xs: 6 }}>
-          <Typography align="right" fontSize="small" fontWeight="bold">
+          <Typography
+            align="right"
+            sx={{
+              fontSize: "small",
+              fontWeight: "bold",
+            }}
+          >
             {textHigh}
           </Typography>
         </Grid>

@@ -123,7 +123,11 @@ const AFacebookResults = (props) => {
               className={classes.image}
               alt={"img"}
             />
-            <Box m={2} />
+            <Box
+              sx={{
+                m: 2,
+              }}
+            />
             <Button
               variant="contained"
               color="primary"
@@ -131,14 +135,26 @@ const AFacebookResults = (props) => {
             >
               {keyword("facebook_delete_result")}
             </Button>
-            <Box m={2} />
+            <Box
+              sx={{
+                m: 2,
+              }}
+            />
             <Divider />
-            <Box m={2} />
+            <Box
+              sx={{
+                m: 2,
+              }}
+            />
             <Typography variant={"h6"}>
               {report.video && keyword("video_description")}
               {report.image && keyword("image_description")}
             </Typography>
-            <Box m={2} />
+            <Box
+              sx={{
+                m: 2,
+              }}
+            />
             {props.children}
             {report["verification_comments"] && (
               <AnalysisComments
@@ -152,17 +168,33 @@ const AFacebookResults = (props) => {
                 setAnalysisVerifiedComments={setAnalysisVerifiedComments}
               />
             )}
-            <Box m={4} />
+            <Box
+              sx={{
+                m: 4,
+              }}
+            />
 
             {thumbnails !== null && (
               <div>
-                <Box m={4} />
+                <Box
+                  sx={{
+                    m: 4,
+                  }}
+                />
                 <Typography variant={"h6"}>
                   {keyword("navbar_thumbnails")}
                 </Typography>
-                <Box m={1} />
+                <Box
+                  sx={{
+                    m: 1,
+                  }}
+                />
                 <OnClickInfo keyword={"keyframes_tip"} />
-                <Box m={1} />
+                <Box
+                  sx={{
+                    m: 1,
+                  }}
+                />
                 <div className={classes.imagesRoot}>
                   <ImageUrlGridList
                     list={thumbnails}
@@ -170,7 +202,11 @@ const AFacebookResults = (props) => {
                     style={{ maxHeigth: "none", height: "auto" }}
                   />
                 </div>
-                <Box m={2} />
+                <Box
+                  sx={{
+                    m: 2,
+                  }}
+                />
                 <ReverseSearchButtons reverseSearch={reverseSearch}>
                   {report["verification_cues"] &&
                     report["verification_cues"]["twitter_search_url"] && (

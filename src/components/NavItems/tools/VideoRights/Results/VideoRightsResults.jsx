@@ -99,7 +99,11 @@ const VideoRightsResults = (props) => {
       />
       <div className={classes.root2}>
         <Typography variant={"h5"}>{"Reuse Conditions"}</Typography>
-        <Box m={2} />
+        <Box
+          sx={{
+            m: 2,
+          }}
+        />
         {result.kind === "youTubeVideos" && result.license === "youtube" && (
           <Typography variant={"body2"}>
             {"YouTube License Summary"}
@@ -169,13 +173,25 @@ const VideoRightsResults = (props) => {
             </a>
           </Typography>
         )}
-        <Box m={4} />
+        <Box
+          sx={{
+            m: 4,
+          }}
+        />
         <Divider />
-        <Box m={4} />
+        <Box
+          sx={{
+            m: 4,
+          }}
+        />
         <Typography variant={"h5"}>
           {keyword("license_" + result.license)}
         </Typography>
-        <Box m={2} />
+        <Box
+          sx={{
+            m: 2,
+          }}
+        />
         {licenseDetails.map((obj, index) => {
           if (obj.elements.length > 0) {
             return (
@@ -205,11 +221,23 @@ const VideoRightsResults = (props) => {
             );
           } else return null;
         })}
-        <Box m={4} />
+        <Box
+          sx={{
+            m: 4,
+          }}
+        />
         <Divider />
-        <Box m={4} />
+        <Box
+          sx={{
+            m: 4,
+          }}
+        />
         <Typography variant={"h5"}>{"Contact"}</Typography>
-        <Box m={2} />
+        <Box
+          sx={{
+            m: 2,
+          }}
+        />
         <Typography variant={"body2"}>
           For other uses, it is recommended to contact the video uploader and{" "}
           <b>request permission</b>:
@@ -217,7 +245,14 @@ const VideoRightsResults = (props) => {
         <div className={classes.listRoot}>
           {result.user !== undefined && (
             <Paper className={classes.listItem}>
-              <Grid container wrap="nowrap" spacing={2} alignItems={"center"}>
+              <Grid
+                container
+                wrap="nowrap"
+                spacing={2}
+                sx={{
+                  alignItems: "center",
+                }}
+              >
                 <Grid>
                   {result.kind === "youTubeVideos" && (
                     <YouTubeIcon color={"primary"} fontSize={"large"} />
@@ -243,7 +278,14 @@ const VideoRightsResults = (props) => {
             </Paper>
           )}
           <Paper className={classes.listItem}>
-            <Grid container wrap="nowrap" spacing={2} alignItems={"center"}>
+            <Grid
+              container
+              wrap="nowrap"
+              spacing={2}
+              sx={{
+                alignItems: "center",
+              }}
+            >
               <Grid>
                 <Icon classes={{ root: classes.iconRoot }}>
                   <img
@@ -267,11 +309,23 @@ const VideoRightsResults = (props) => {
             </Grid>
           </Paper>
         </div>
-        <Box m={4} />
+        <Box
+          sx={{
+            m: 4,
+          }}
+        />
         <Divider />
-        <Box m={4} />
+        <Box
+          sx={{
+            m: 4,
+          }}
+        />
         <Typography variant={"h5"}>{"Copyright Exceptions"}</Typography>
-        <Box m={2} />
+        <Box
+          sx={{
+            m: 2,
+          }}
+        />
         <Typography variant={"body2"}>
           <b>Exceptionally</b>, in some jurisdictions, this video might be
           directly reused to report about
@@ -294,11 +348,23 @@ const VideoRightsResults = (props) => {
           . This reuse is under your or your organization sole responsibility
           and, in any case, proper <b>attribution</b> should be provided.
         </Typography>
-        <Box m={4} />
+        <Box
+          sx={{
+            m: 4,
+          }}
+        />
         <Divider />
-        <Box m={4} />
+        <Box
+          sx={{
+            m: 4,
+          }}
+        />
         <Typography variant={"h5"}>{"How to Give Attribution"}</Typography>
-        <Box m={2} />
+        <Box
+          sx={{
+            m: 2,
+          }}
+        />
         <Typography variant={"body2"}>{result.attribution}</Typography>
       </div>
     </Card>

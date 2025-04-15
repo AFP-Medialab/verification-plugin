@@ -131,7 +131,6 @@ const AssistantMediaResult = () => {
         className={classes.assistantCardHeader}
         title={keyword("media_title")}
         subheader={keyword("media_below")}
-        subheaderTypographyProps={{ sx: { color: "white" } }}
         action={
           <div style={{ display: "flex" }}>
             <div>
@@ -171,20 +170,26 @@ const AssistantMediaResult = () => {
             </div>
           </div>
         }
+        slotProps={{
+          subheader: { sx: { color: "white" } },
+        }}
       />
-
       {dbkfMediaMatchLoading ? (
         <div>
           <LinearProgress />
         </div>
       ) : null}
-
       {/* selected image or video with recommended tools */}
       <CardContent sx={{ padding: processUrl == null ? 0 : undefined }}>
         {missingMedia ? (
           <Alert severity="warning">
             <Typography component={"span"}>
-              <Box color={"orange"} fontStyle="italic">
+              <Box
+                sx={{
+                  color: "orange",
+                  fontStyle: "italic",
+                }}
+              >
                 {keyword("missing_media_title")}
                 <IconButton
                   className={classes.assistantIconRight}
@@ -225,7 +230,6 @@ const AssistantMediaResult = () => {
           )
         ) : null}
       </CardContent>
-
       {/* image grid and video grid of extracted media */}
       {!singleMediaPresent ? (
         <div>

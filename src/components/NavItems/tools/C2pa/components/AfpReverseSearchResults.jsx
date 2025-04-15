@@ -18,8 +18,20 @@ const AfpReverseSearchResults = ({
 
   return (
     <Stack direction="row" spacing={4}>
-      <Box width="100%">
-        <Grid container direction="row" spacing={2} p={4} width="100%">
+      <Box
+        sx={{
+          width: "100%",
+        }}
+      >
+        <Grid
+          container
+          direction="row"
+          spacing={2}
+          sx={{
+            p: 4,
+            width: "100%",
+          }}
+        >
           <Grid
             container
             direction="column"
@@ -38,7 +50,11 @@ const AfpReverseSearchResults = ({
 
             {thumbnailImageCaption &&
             typeof thumbnailImageCaption === "string" ? (
-              <Grid mt={2}>
+              <Grid
+                sx={{
+                  mt: 2,
+                }}
+              >
                 <Stack direction="column" spacing={1}>
                   <Typography>{keyword("image_caption_title")}</Typography>
 

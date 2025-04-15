@@ -149,7 +149,11 @@ const TwitterAdvancedSearch = () => {
         icon={<searchTwitter.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
       />
       <Alert severity="warning">{keyword("warning_x_search")}</Alert>
-      <Box mt={3} />
+      <Box
+        sx={{
+          mt: 3,
+        }}
+      />
       <Card variant="outlined" className={cardClasses.root}>
         <CardHeader
           title={keyword("cardheader_parameters")}
@@ -204,7 +208,11 @@ const TwitterAdvancedSearch = () => {
               />
             </RadioGroup>
           </FormControl>
-          <Box m={2} />
+          <Box
+            sx={{
+              m: 2,
+            }}
+          />
           <Button variant="contained" color="primary" onClick={onSubmit}>
             {keyword("button_submit")}
           </Button>

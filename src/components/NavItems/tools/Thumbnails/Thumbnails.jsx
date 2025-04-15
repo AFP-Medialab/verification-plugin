@@ -242,11 +242,21 @@ const Thumbnails = () => {
         description={keywordAllTools("navbar_thumbnails_description")}
         icon={<thumbnails.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
       />
-
       <Card variant="outlined">
-        <Box p={4}>
+        <Box
+          sx={{
+            p: 4,
+          }}
+        >
           <form>
-            <Grid container direction="row" spacing={3} alignItems="center">
+            <Grid
+              container
+              direction="row"
+              spacing={3}
+              sx={{
+                alignItems: "center",
+              }}
+            >
               <Grid size="grow">
                 <TextField
                   id="standard-full-width"
@@ -290,7 +300,11 @@ const Thumbnails = () => {
             </Grid>
           </form>
 
-          <Box m={2} />
+          <Box
+            sx={{
+              m: 2,
+            }}
+          />
           <FormControl component="fieldset">
             <FormGroup row>
               {Object.entries(SEARCH_ENGINE_SETTINGS).map(
@@ -316,15 +330,21 @@ const Thumbnails = () => {
           </FormControl>
           {isLoading && (
             <>
-              <Box m={3} />
+              <Box
+                sx={{
+                  m: 3,
+                }}
+              />
               <LinearProgress />
             </>
           )}
         </Box>
       </Card>
-
-      <Box m={3} />
-
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
       {resultData && resultData.length !== 0 && !isImgLoading && (
         <Card variant="outlined">
           <CardHeader
@@ -341,7 +361,11 @@ const Thumbnails = () => {
           />
           <div className={classes.root2}>
             <OnClickInfo keyword={"thumbnails_tip"} />
-            <Box m={2} />
+            <Box
+              sx={{
+                m: 2,
+              }}
+            />
 
             <ImageGridList
               list={resultData}

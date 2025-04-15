@@ -115,10 +115,8 @@ const StringFileUploadField = ({
     >
       {isDragging && (
         <Stack
-          justifyContent="center"
-          alignItems="center"
-          height="100%"
           sx={{
+            height: "100%",
             border: "4px dashed #00926c",
             backgroundColor: dropColor,
             justifyContent: "center",
@@ -133,9 +131,19 @@ const StringFileUploadField = ({
           <Typography>{keyword("droppable_zone")}</Typography>
         </Stack>
       )}
-
-      <Box visibility={isDragging ? "hidden" : "visible"}>
-        <Grid container direction="row" spacing={3} alignItems="center">
+      <Box
+        sx={{
+          visibility: isDragging ? "hidden" : "visible",
+        }}
+      >
+        <Grid
+          container
+          direction="row"
+          spacing={3}
+          sx={{
+            alignItems: "center",
+          }}
+        >
           <Grid size="grow">
             <TextField
               type="url"
@@ -178,7 +186,11 @@ const StringFileUploadField = ({
             </Button>
           </Grid>
         </Grid>
-        <Grid mt={2}>
+        <Grid
+          sx={{
+            mt: 2,
+          }}
+        >
           <ButtonGroup
             variant="outlined"
             disabled={isParentLoading || urlInput !== ""}

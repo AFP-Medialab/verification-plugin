@@ -16,13 +16,7 @@ export default function useAuthenticatedRequest() {
   const authenticationAPI = useAuthenticationAPI();
   const store = useStore();
 
-  /**
-   * Handle authentication on a service request.
-   *
-   * @param {Object} axiosConfig
-   * @returns {Promise<Object>} Result as a Promise.
-   */
-  const authenticatedRequest = (axiosConfig) => {
+  return (axiosConfig) => {
     const userSession = store.getState().userSession;
     const userAuthenticated = userSession && userSession.userAuthenticated;
     const accessToken = userSession && userSession.accessToken;
@@ -66,6 +60,4 @@ export default function useAuthenticatedRequest() {
       return Promise.reject(error);
     });
   };
-
-  return authenticatedRequest;
 }

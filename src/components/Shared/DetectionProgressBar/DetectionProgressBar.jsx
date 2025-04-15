@@ -24,13 +24,19 @@ export const DetectionProgressBar = (props) => {
   }, []);
 
   return (
-    <Box mr={"43px"}>
+    <Box
+      sx={{
+        mr: "43px",
+      }}
+    >
       <CardMedia image={MakoScale} style={style} />
       <Grid
         container
         direction="row"
-        justifyContent="space-between"
-        alignItems="center"
+        sx={{
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
       >
         <Grid>
           <Typography variant="body1">

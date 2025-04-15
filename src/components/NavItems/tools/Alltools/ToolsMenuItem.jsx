@@ -45,9 +45,11 @@ const ToolsMenuItem = ({ tool, onClick }) => {
           <Grid
             container
             direction="row"
-            alignItems="flex-start"
-            justifyContent="flex-start"
             spacing={1}
+            sx={{
+              alignItems: "flex-start",
+              justifyContent: "flex-start",
+            }}
           >
             <Grid>
               <tool.icon sx={{ color: "#00926c" }} />

@@ -372,15 +372,23 @@ const SyntheticImageDetection = () => {
           />
         }
       />
-
-      <Stack direction="column" spacing={2} mb={4}>
+      <Stack
+        direction="column"
+        spacing={2}
+        sx={{
+          mb: 4,
+        }}
+      >
         <Alert severity="warning">
           {keywordWarning("warning_beta_synthetic_image_detection")}
         </Alert>
       </Stack>
-
       <Card variant="outlined">
-        <Box p={4}>
+        <Box
+          sx={{
+            p: 4,
+          }}
+        >
           <Stack direction="column" spacing={2}>
             <form>
               <StringFileUploadField
@@ -419,16 +427,22 @@ const SyntheticImageDetection = () => {
             )}
 
             {isLoading && (
-              <Box mt={3}>
+              <Box
+                sx={{
+                  mt: 3,
+                }}
+              >
                 <LinearProgress />
               </Box>
             )}
           </Stack>
         </Box>
       </Card>
-
-      <Box m={3} />
-
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
       {result && (
         <SyntheticImageDetectionResults
           results={result}

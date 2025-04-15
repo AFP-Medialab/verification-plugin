@@ -111,8 +111,10 @@ const PopUp = () => {
               <Grid
                 size={{ xs: 6 }}
                 container
-                alignItems="center"
-                justifyContent="center"
+                sx={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
                 <img
                   src={LogoEuCom}
@@ -133,8 +135,10 @@ const PopUp = () => {
               <Grid
                 size={{ xs: 7 }}
                 container
-                alignItems="center"
-                justifyContent="center"
+                sx={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
                 <img
                   src={LogoInVidWeverify}
@@ -151,7 +155,11 @@ const PopUp = () => {
               </Grid>
             </>
           )}
-          <Box m={1} />
+          <Box
+            sx={{
+              m: 1,
+            }}
+          />
           <Grid size={{ xs: 12 }}>
             <Button
               variant="outlined"
@@ -162,7 +170,11 @@ const PopUp = () => {
               {keyword("open_website")}
             </Button>
           </Grid>
-          <Box m={1} />
+          <Box
+            sx={{
+              m: 1,
+            }}
+          />
           <Grid size={{ xs: 12 }}>
             <Button
               variant="outlined"
@@ -173,7 +185,11 @@ const PopUp = () => {
               {keyword("open_assistant")}
             </Button>
           </Grid>
-          <Box m={1} />
+          <Box
+            sx={{
+              m: 1,
+            }}
+          />
           <Grid size={{ xs: 12 }}>
             <Button
               variant="outlined"
@@ -185,7 +201,11 @@ const PopUp = () => {
               {keyword("open_assistant_on_page")}
             </Button>
           </Grid>
-          <Box m={1} />
+          <Box
+            sx={{
+              m: 1,
+            }}
+          />
           <Grid size={{ xs: 12 }}>
             <Button
               variant="outlined"
@@ -196,7 +216,11 @@ const PopUp = () => {
               {keyword("open_classroom")}
             </Button>
           </Grid>
-          <Box m={1} />
+          <Box
+            sx={{
+              m: 1,
+            }}
+          />
           {userRoles.includes(ROLES.ARCHIVE) ? (
             <Grid size={{ xs: 12 }}>
               <Button
@@ -216,7 +240,11 @@ const PopUp = () => {
           ) : null}
         </Grid>
 
-        <Box m={1} />
+        <Box
+          sx={{
+            m: 1,
+          }}
+        />
       </div>
     </ThemeProvider>
   );

@@ -124,9 +124,11 @@ const UrlArchive = ({ url, mediaUrl }) => {
         <Stack direction="column" spacing={1}>
           <Stack
             direction="row"
-            justifyContent={"start"}
-            alignItems={"center"}
             spacing={1}
+            sx={{
+              justifyContent: "start",
+              alignItems: "center",
+            }}
           >
             <Typography>{keyword(link_type_keyword)}</Typography>
             <Link href={link} target="_blank">
@@ -207,7 +209,13 @@ const UrlArchive = ({ url, mediaUrl }) => {
   return (
     <Card variant="outlined" m={2}>
       <CardContent>
-        <Typography variant="h6" component="div" pb={2}>
+        <Typography
+          variant="h6"
+          component="div"
+          sx={{
+            pb: 2,
+          }}
+        >
           {keyword("links_card_title")}
         </Typography>
         <Stack spacing={4}>{getArchiveLinksForPlatform(platform)}</Stack>

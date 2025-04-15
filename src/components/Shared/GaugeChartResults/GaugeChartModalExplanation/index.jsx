@@ -83,9 +83,11 @@ const GaugeChartModalExplanation = ({
           <Box sx={gaugeColorsModalStyle}>
             <Stack
               direction="row"
-              justifyContent="space-between"
-              alignItems="center"
               spacing={2}
+              sx={{
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
             >
               <Typography
                 id="transition-modal-title"
@@ -109,15 +111,19 @@ const GaugeChartModalExplanation = ({
               id="transition-modal-description"
               direction="column"
               spacing={2}
-              mt={2}
+              sx={{
+                mt: 2,
+              }}
             >
               {keywordsArr.map((translation, index) => {
                 return (
                   <Stack
                     key={index}
                     direction="row"
-                    alignItems="center"
                     spacing={1}
+                    sx={{
+                      alignItems: "center",
+                    }}
                   >
                     <Square fontSize="large" sx={{ color: colors[index] }} />
                     <Typography>{keyword(translation)}</Typography>

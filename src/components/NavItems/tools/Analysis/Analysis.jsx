@@ -139,7 +139,14 @@ const Analysis = () => {
       />
       <Card variant="outlined">
         <form className={classes.root2}>
-          <Grid container direction="row" spacing={3} alignItems="center">
+          <Grid
+            container
+            direction="row"
+            spacing={3}
+            sx={{
+              alignItems: "center",
+            }}
+          >
             <Grid size="grow">
               <TextField
                 id="standard-full-width"
@@ -195,14 +202,26 @@ const Analysis = () => {
                 {keyword("button_submit")}
               </Button>
             </Grid>
-            <Box m={1} />
+            <Box
+              sx={{
+                m: 1,
+              }}
+            />
           </Grid>
         </form>
         {isLoading ? <LinearProgress hidden={!isLoading} /> : null}
       </Card>
-      <Box m={3} />
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
       {showFacebookIframe && (
-        <Box m={4}>
+        <Box
+          sx={{
+            m: 4,
+          }}
+        >
           <Iframe
             frameBorder="0"
             url={"https://mever.iti.gr/plugin_login_fb"}

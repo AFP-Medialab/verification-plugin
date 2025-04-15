@@ -358,7 +358,13 @@ const SemanticSearch = () => {
     if (isLoading)
       return (
         <Card variant="outlined">
-          <Stack direction="column" spacing={4} p={4}>
+          <Stack
+            direction="column"
+            spacing={4}
+            sx={{
+              p: 4,
+            }}
+          >
             <Skeleton variant="rounded" height={40} />
             <Skeleton variant="rounded" width={400} height={40} />
           </Stack>
@@ -394,14 +400,20 @@ const SemanticSearch = () => {
         />
         <Alert severity="info">{keyword("semantic_search_tip")}</Alert>
         <Card variant="outlined">
-          <Box p={4}>
+          <Box
+            sx={{
+              p: 4,
+            }}
+          >
             <form>
               <Stack spacing={4}>
                 <Stack
                   direction="row"
                   spacing={2}
-                  justifyContent="flex-start"
-                  alignItems="center"
+                  sx={{
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
                 >
                   <TextField
                     fullWidth
@@ -504,9 +516,11 @@ const SemanticSearch = () => {
                           <Box sx={searchEngineModalStyle}>
                             <Stack
                               direction="row"
-                              justifyContent="space-between"
-                              alignItems="center"
                               spacing={2}
+                              sx={{
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                              }}
                             >
                               <Typography
                                 id="transition-modal-title"
@@ -532,7 +546,9 @@ const SemanticSearch = () => {
                               id="transition-modal-description"
                               direction="column"
                               spacing={2}
-                              mt={2}
+                              sx={{
+                                mt: 2,
+                              }}
                             >
                               {searchEngineModes.map((searchEngine, index) => {
                                 return (

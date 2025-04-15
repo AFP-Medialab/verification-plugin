@@ -66,16 +66,28 @@ const AssistantSCResults = () => {
         <Grid size={{ xs: 11 }} className={classes.displayFlex}>
           {/* icon */}
           <CardMedia>
-            <Box m={1}>
+            <Box
+              sx={{
+                m: 1,
+              }}
+            >
               <FindInPageIcon fontSize={"large"} color={"primary"} />
             </Box>
           </CardMedia>
 
           {/* spacing */}
-          <Box m={1} />
+          <Box
+            sx={{
+              m: 1,
+            }}
+          />
 
           {/* title */}
-          <Box mt={1.5}>
+          <Box
+            sx={{
+              mt: 1.5,
+            }}
+          >
             <Typography component={"span"} variant={"h6"}>
               {keyword("url_domain_analysis")}
             </Typography>
@@ -92,7 +104,12 @@ const AssistantSCResults = () => {
 
         <Grid size={{ xs: 1 }}>
           {/* help tooltip */}
-          <Box mt={1.5} align="right">
+          <Box
+            align="right"
+            sx={{
+              mt: 1.5,
+            }}
+          >
             <Tooltip
               interactive={"true"}
               leaveDelay={50}
@@ -116,7 +133,12 @@ const AssistantSCResults = () => {
             in={assuranceExpanded}
             className={classes.assistantBackground}
           >
-            <Box mt={3} ml={2}>
+            <Box
+              sx={{
+                mt: 3,
+                ml: 2,
+              }}
+            >
               {positiveSourceCred && positiveSourceCred.length > 0 ? (
                 <div>
                   <Chip

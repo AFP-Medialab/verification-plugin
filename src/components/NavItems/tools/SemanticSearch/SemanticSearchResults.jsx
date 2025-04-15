@@ -86,15 +86,19 @@ const SemanticSearchResults = (searchResults) => {
           <Stack
             direction="column"
             spacing={2}
-            p={2}
-            justifyContent="flex-start"
-            alignItems="flex-start"
+            sx={{
+              p: 2,
+              justifyContent: "flex-start",
+              alignItems: "flex-start",
+            }}
           >
             <Stack
               direction="row-reverse"
               spacing={2}
-              justifyContent="flex-start"
-              alignItems="center"
+              sx={{
+                justifyContent: "flex-start",
+                alignItems: "center",
+              }}
             >
               <Typography>
                 {results.length} {keyword("semantic_search_nb_of_results")}
@@ -140,7 +144,12 @@ const SemanticSearchResults = (searchResults) => {
               );
             })}
 
-            <Box alignSelf="center" pt={4}>
+            <Box
+              sx={{
+                alignSelf: "center",
+                pt: 4,
+              }}
+            >
               <Pagination
                 count={totalNumberOfPages}
                 color="primary"

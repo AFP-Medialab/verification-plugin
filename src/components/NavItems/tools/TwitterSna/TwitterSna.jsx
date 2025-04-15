@@ -538,7 +538,11 @@ const TwitterSna = () => {
             title={keyword("cardheader_parameters")}
             className={classes.headerUploadedImage}
           />
-          <Box p={4}>
+          <Box
+            sx={{
+              p: 4,
+            }}
+          >
             <Grid container direction="column">
               <Typography
                 variant="h6"
@@ -547,9 +551,19 @@ const TwitterSna = () => {
               >
                 {keyword("twittersna_title_elements")}
               </Typography>
-              <Box m={1} />
+              <Box
+                sx={{
+                  m: 1,
+                }}
+              />
 
-              <Grid container spacing={4} alignItems="center">
+              <Grid
+                container
+                spacing={4}
+                sx={{
+                  alignItems: "center",
+                }}
+              >
                 <Grid size={{ xs: 8 }}>
                   <TextField
                     disabled={searchFormDisabled}
@@ -572,14 +586,20 @@ const TwitterSna = () => {
                   size={{ xs: 4 }}
                   container
                   direction="row"
-                  justifyContent="flex-start"
-                  alignItems="center"
+                  sx={{
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
                 >
                   <Grid>
                     <SearchIcon style={{ color: "#757575" }} />
                   </Grid>
                   <Grid>
-                    <Box m={1} />
+                    <Box
+                      sx={{
+                        m: 1,
+                      }}
+                    />
                   </Grid>
                   <Grid size="grow">
                     <Typography
@@ -593,9 +613,19 @@ const TwitterSna = () => {
                 </Grid>
               </Grid>
 
-              <Box m={1} />
+              <Box
+                sx={{
+                  m: 1,
+                }}
+              />
 
-              <Grid container spacing={4} alignItems="center">
+              <Grid
+                container
+                spacing={4}
+                sx={{
+                  alignItems: "center",
+                }}
+              >
                 <Grid size={{ xs: 8 }}>
                   <TextField
                     disabled={searchFormDisabled}
@@ -618,14 +648,20 @@ const TwitterSna = () => {
                   size={{ xs: 4 }}
                   container
                   direction="row"
-                  justifyContent="flex-start"
-                  alignItems="center"
+                  sx={{
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
                 >
                   <Grid>
                     <SearchIcon style={{ color: "#757575" }} />
                   </Grid>
                   <Grid>
-                    <Box m={1} />
+                    <Box
+                      sx={{
+                        m: 1,
+                      }}
+                    />
                   </Grid>
                   <Grid size="grow">
                     <Typography
@@ -639,7 +675,11 @@ const TwitterSna = () => {
                 </Grid>
               </Grid>
 
-              <Box m={2} />
+              <Box
+                sx={{
+                  m: 2,
+                }}
+              />
 
               <Typography
                 variant="h6"
@@ -648,9 +688,19 @@ const TwitterSna = () => {
               >
                 {keyword("twittersna_title_time")}
               </Typography>
-              <Box m={1} />
+              <Box
+                sx={{
+                  m: 1,
+                }}
+              />
 
-              <Grid container spacing={4} alignItems="center">
+              <Grid
+                container
+                spacing={4}
+                sx={{
+                  alignItems: "center",
+                }}
+              >
                 <Grid size={{ xs: 8 }}>
                   <DateAndTimePicker
                     time={true}
@@ -668,14 +718,20 @@ const TwitterSna = () => {
                   size={{ xs: 4 }}
                   container
                   direction="row"
-                  justifyContent="flex-start"
-                  alignItems="center"
+                  sx={{
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
                 >
                   <Grid>
                     <CalendarTodayIcon style={{ color: "#757575" }} />
                   </Grid>
                   <Grid>
-                    <Box m={1} />
+                    <Box
+                      sx={{
+                        m: 1,
+                      }}
+                    />
                   </Grid>
                   <Grid size="grow">
                     <Typography
@@ -689,9 +745,19 @@ const TwitterSna = () => {
                 </Grid>
               </Grid>
 
-              <Box m={1} />
+              <Box
+                sx={{
+                  m: 1,
+                }}
+              />
 
-              <Grid container spacing={4} alignItems="center">
+              <Grid
+                container
+                spacing={4}
+                sx={{
+                  alignItems: "center",
+                }}
+              >
                 <Grid size={{ xs: 8 }}>
                   <Typography
                     variant="h6"
@@ -706,14 +772,20 @@ const TwitterSna = () => {
                   size={{ xs: 4 }}
                   container
                   direction="row"
-                  justifyContent="flex-start"
-                  alignItems="center"
+                  sx={{
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
                 >
                   <Grid>
                     <GlobeIcon style={{ color: "#757575" }} />
                   </Grid>
                   <Grid>
-                    <Box m={1} />
+                    <Box
+                      sx={{
+                        m: 1,
+                      }}
+                    />
                   </Grid>
                   <Grid size="grow">
                     <Typography
@@ -727,9 +799,17 @@ const TwitterSna = () => {
                 </Grid>
               </Grid>
 
-              <Box m={1} />
+              <Box
+                sx={{
+                  m: 1,
+                }}
+              />
 
-              <Box pl={3}>
+              <Box
+                sx={{
+                  pl: 3,
+                }}
+              >
                 <FormControl
                   component="fieldset"
                   disabled={searchFormDisabled}
@@ -745,8 +825,10 @@ const TwitterSna = () => {
                     <Grid
                       container
                       direction="column"
-                      justifyContent="flex-start"
-                      alignItems="flex-start"
+                      sx={{
+                        justifyContent: "flex-start",
+                        alignItems: "flex-start",
+                      }}
                     >
                       <FormControlLabel
                         value={"true"}
@@ -765,7 +847,11 @@ const TwitterSna = () => {
                 </FormControl>
               </Box>
 
-              <Box m={2} />
+              <Box
+                sx={{
+                  m: 2,
+                }}
+              />
 
               <Accordion>
                 <AccordionSummary
@@ -773,7 +859,14 @@ const TwitterSna = () => {
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
-                  <Box pl={3} pr={3} pt={1} pb={1}>
+                  <Box
+                    sx={{
+                      pl: 3,
+                      pr: 3,
+                      pt: 1,
+                      pb: 1,
+                    }}
+                  >
                     <Typography
                       variant="h6"
                       align="left"
@@ -784,7 +877,12 @@ const TwitterSna = () => {
                   </Box>
                 </AccordionSummary>
                 <AccordionDetails style={{ flexDirection: "column" }}>
-                  <Box pl={3} pr={3}>
+                  <Box
+                    sx={{
+                      pl: 3,
+                      pr: 3,
+                    }}
+                  >
                     <Grid container direction="column" spacing={0}>
                       <Typography
                         variant="h6"
@@ -793,9 +891,19 @@ const TwitterSna = () => {
                       >
                         {keyword("twittersna_title_words")}
                       </Typography>
-                      <Box m={1} />
+                      <Box
+                        sx={{
+                          m: 1,
+                        }}
+                      />
 
-                      <Grid container spacing={4} alignItems="center">
+                      <Grid
+                        container
+                        spacing={4}
+                        sx={{
+                          alignItems: "center",
+                        }}
+                      >
                         <Grid size={{ xs: 8 }}>
                           <TextField
                             disabled={searchFormDisabled}
@@ -813,14 +921,20 @@ const TwitterSna = () => {
                           size={{ xs: 4 }}
                           container
                           direction="row"
-                          justifyContent="flex-start"
-                          alignItems="center"
+                          sx={{
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                          }}
                         >
                           <Grid>
                             <ExcludeIcon style={{ color: "#757575" }} />
                           </Grid>
                           <Grid>
-                            <Box m={1} />
+                            <Box
+                              sx={{
+                                m: 1,
+                              }}
+                            />
                           </Grid>
                           <Grid size="grow">
                             <Typography
@@ -834,9 +948,19 @@ const TwitterSna = () => {
                         </Grid>
                       </Grid>
 
-                      <Box m={1} />
+                      <Box
+                        sx={{
+                          m: 1,
+                        }}
+                      />
 
-                      <Grid container spacing={4} alignItems="center">
+                      <Grid
+                        container
+                        spacing={4}
+                        sx={{
+                          alignItems: "center",
+                        }}
+                      >
                         <Grid size={{ xs: 8 }}>
                           <FormControl
                             variant="outlined"
@@ -935,14 +1059,20 @@ const TwitterSna = () => {
                           size={{ xs: 4 }}
                           container
                           direction="row"
-                          justifyContent="flex-start"
-                          alignItems="center"
+                          sx={{
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                          }}
                         >
                           <Grid>
                             <TranslateIcon style={{ color: "#757575" }} />
                           </Grid>
                           <Grid>
-                            <Box m={1} />
+                            <Box
+                              sx={{
+                                m: 1,
+                              }}
+                            />
                           </Grid>
                           <Grid size="grow">
                             <Typography
@@ -955,7 +1085,11 @@ const TwitterSna = () => {
                           </Grid>
                         </Grid>
                       </Grid>
-                      <Box m={2} />
+                      <Box
+                        sx={{
+                          m: 2,
+                        }}
+                      />
                       <Typography
                         variant="h6"
                         align="left"
@@ -963,9 +1097,19 @@ const TwitterSna = () => {
                       >
                         {keyword("twittersna_title_accounts")}
                       </Typography>
-                      <Box m={1} />
+                      <Box
+                        sx={{
+                          m: 1,
+                        }}
+                      />
 
-                      <Grid container spacing={4} alignItems="center">
+                      <Grid
+                        container
+                        spacing={4}
+                        sx={{
+                          alignItems: "center",
+                        }}
+                      >
                         <Grid size={{ xs: 8 }}>
                           <TextField
                             disabled={searchFormDisabled}
@@ -985,14 +1129,20 @@ const TwitterSna = () => {
                           size={{ xs: 4 }}
                           container
                           direction="row"
-                          justifyContent="flex-start"
-                          alignItems="center"
+                          sx={{
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                          }}
                         >
                           <Grid>
                             <PersonOutlineIcon style={{ color: "#757575" }} />
                           </Grid>
                           <Grid>
-                            <Box m={1} />
+                            <Box
+                              sx={{
+                                m: 1,
+                              }}
+                            />
                           </Grid>
                           <Grid size="grow">
                             <Typography
@@ -1049,9 +1199,19 @@ const TwitterSna = () => {
 
                                 */}
 
-                      <Box m={2} />
+                      <Box
+                        sx={{
+                          m: 2,
+                        }}
+                      />
 
-                      <Grid container spacing={4} alignItems="center">
+                      <Grid
+                        container
+                        spacing={4}
+                        sx={{
+                          alignItems: "center",
+                        }}
+                      >
                         <Grid size={{ xs: 8 }}>
                           <Typography
                             variant="h6"
@@ -1066,14 +1226,20 @@ const TwitterSna = () => {
                           size={{ xs: 4 }}
                           container
                           direction="row"
-                          justifyContent="flex-start"
-                          alignItems="center"
+                          sx={{
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                          }}
                         >
                           <Grid>
                             <PermMediaIcon style={{ color: "#757575" }} />
                           </Grid>
                           <Grid>
-                            <Box m={1} />
+                            <Box
+                              sx={{
+                                m: 1,
+                              }}
+                            />
                           </Grid>
                           <Grid size="grow">
                             <Typography
@@ -1087,9 +1253,17 @@ const TwitterSna = () => {
                         </Grid>
                       </Grid>
 
-                      <Box m={0} />
+                      <Box
+                        sx={{
+                          m: 0,
+                        }}
+                      />
 
-                      <Box pl={3}>
+                      <Box
+                        sx={{
+                          pl: 3,
+                        }}
+                      >
                         <FormControlLabel
                           control={
                             <Checkbox
@@ -1103,7 +1277,11 @@ const TwitterSna = () => {
                           label={keyword("twitterStats_media_images")}
                           style={{ paddingLeft: "0px" }}
                         />
-                        <Box mt={0} />
+                        <Box
+                          sx={{
+                            mt: 0,
+                          }}
+                        />
                         <FormControlLabel
                           control={
                             <Checkbox
@@ -1119,9 +1297,19 @@ const TwitterSna = () => {
                         />
                       </Box>
 
-                      <Box m={2} />
+                      <Box
+                        sx={{
+                          m: 2,
+                        }}
+                      />
 
-                      <Grid container spacing={4} alignItems="center">
+                      <Grid
+                        container
+                        spacing={4}
+                        sx={{
+                          alignItems: "center",
+                        }}
+                      >
                         <Grid size={{ xs: 8 }}>
                           <Typography variant="h6" align="left">
                             {keyword("twittersna_title_advanced")}
@@ -1132,14 +1320,20 @@ const TwitterSna = () => {
                           size={{ xs: 4 }}
                           container
                           direction="row"
-                          justifyContent="flex-start"
-                          alignItems="center"
+                          sx={{
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                          }}
                         >
                           <Grid>
                             <LaptopIcon style={{ color: "#757575" }} />
                           </Grid>
                           <Grid>
-                            <Box m={1} />
+                            <Box
+                              sx={{
+                                m: 1,
+                              }}
+                            />
                           </Grid>
                           <Grid size="grow">
                             <Typography
@@ -1153,10 +1347,18 @@ const TwitterSna = () => {
                         </Grid>
                       </Grid>
 
-                      <Box m={0} />
+                      <Box
+                        sx={{
+                          m: 0,
+                        }}
+                      />
 
                       {cacheCheck() && (
-                        <Box pl={3}>
+                        <Box
+                          sx={{
+                            pl: 3,
+                          }}
+                        >
                           <FormControlLabel
                             control={
                               <Checkbox
@@ -1176,7 +1378,11 @@ const TwitterSna = () => {
                 </AccordionDetails>
               </Accordion>
 
-              <Box m={2} />
+              <Box
+                sx={{
+                  m: 2,
+                }}
+              />
 
               <Button
                 fullWidth
@@ -1194,7 +1400,11 @@ const TwitterSna = () => {
                 {keyword("button_submit")}
               </Button>
 
-              <Box m={1} />
+              <Box
+                sx={{
+                  m: 1,
+                }}
+              />
               {!userAuthenticated && <OnWarningInfo keyword={"warning_sna"} />}
             </Grid>
           </Box>

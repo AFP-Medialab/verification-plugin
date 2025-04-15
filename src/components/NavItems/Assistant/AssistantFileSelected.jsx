@@ -44,11 +44,18 @@ const AssistantFileSelected = () => {
   const generateList = (title, cType, actionList) => {
     return (
       <Grid size={{ xs: 6 }}>
-        <Box mx={2} my={0.5}>
+        <Box
+          sx={{
+            mx: 2,
+            my: 0.5,
+          }}
+        >
           <Typography
-            textAlign={"start"}
             variant={"h6"}
             style={{ fontWeight: "bold" }}
+            sx={{
+              textAlign: "start",
+            }}
           >
             {title}
           </Typography>
@@ -56,7 +63,12 @@ const AssistantFileSelected = () => {
         <List>
           {actionList.map((action, index) => {
             return (
-              <Box m={2} key={index}>
+              <Box
+                key={index}
+                sx={{
+                  m: 2,
+                }}
+              >
                 <Card className={classes.assistantHover} variant="outlined">
                   <ListItem
                     onClick={() => {
@@ -66,19 +78,36 @@ const AssistantFileSelected = () => {
                     <ListItemAvatar>{action.icon}</ListItemAvatar>
                     <ListItemText
                       primary={
-                        <Typography textAlign={"start"} component={"span"}>
-                          <Box fontWeight="fontWeightBold">
+                        <Typography
+                          component={"span"}
+                          sx={{
+                            textAlign: "start",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              fontWeight: "fontWeightBold",
+                            }}
+                          >
                             {keyword(action.title)}
                           </Box>
                         </Typography>
                       }
                       secondary={
                         <Typography
-                          textAlign={"start"}
                           color={"textSecondary"}
                           component={"span"}
+                          sx={{
+                            textAlign: "start",
+                          }}
                         >
-                          <Box fontStyle="italic">{keyword(action.text)}</Box>
+                          <Box
+                            sx={{
+                              fontStyle: "italic",
+                            }}
+                          >
+                            {keyword(action.text)}
+                          </Box>
                         </Typography>
                       }
                     />
