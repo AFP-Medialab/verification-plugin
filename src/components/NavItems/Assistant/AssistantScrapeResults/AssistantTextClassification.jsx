@@ -130,6 +130,16 @@ export default function AssistantTextClassification({
     setDoHighlightSentence(event.target.checked);
   };
 
+  // traffic light colours for machine generated text
+  const colours = ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"];
+  const coloursDark = ["#4eff4e", "#d2ff79", "#ffbd3e", "#ff4e4e"];
+  const orderedCategories = [
+    "highly_likely_human",
+    "likely_human",
+    "likely_machine",
+    "highly_likely_machine",
+  ];
+
   // Separate important sentences from categories, filter by threshold
   for (let label in classification) {
     if (label === importantSentenceKey) {
@@ -178,6 +188,7 @@ export default function AssistantTextClassification({
           textHtmlMap={textHtmlMap}
           credibilitySignal={credibilitySignal}
           keyword={keyword}
+          resolvedMode={resolvedMode}
         />
       </Grid2>
 
@@ -207,6 +218,9 @@ export default function AssistantTextClassification({
                 mgtOverallScoreLabel={mgtOverallScoreLabel}
                 overallClassificationScore={overallClassificationScore}
                 resolvedMode={resolvedMode}
+                colours={colours}
+                coloursDark={coloursDark}
+                orderedCategories={orderedCategories}
               />
             ) : (
               <CategoriesList
@@ -244,6 +258,9 @@ export function MgtCategoriesList({
   mgtOverallScoreLabel,
   overallClassificationScore,
   resolvedMode,
+  colours,
+  coloursDark,
+  orderedCategories,
 }) {
   // list of categories with overall score first as GaugeUI
   let output = [];
@@ -261,13 +278,14 @@ export function MgtCategoriesList({
         animate={false}
         nrOfLevels={4}
         textColor={resolvedMode === "dark" ? "white" : "black"}
-        needleColor={resolvedMode == "dark" ? "#5A5A5A" : "#D3D3D3"}
-        needleBaseColor={resolvedMode == "dark" ? "#5A5A5A" : "#D3D3D3"}
+        needleColor={resolvedMode === "dark" ? "#5A5A5A" : "#D3D3D3"}
+        needleBaseColor={resolvedMode === "dark" ? "#5A5A5A" : "#D3D3D3"}
         arcsLength={[0.05, 0.45, 0.45, 0.05]}
         percent={categories[mgtOverallScoreLabel] ? percentScore / 100.0 : null}
         style={{
           width: "100%",
         }}
+        colors={resolvedMode === "dark" ? coloursDark : colours}
       />
     </ListItem>,
   );
@@ -302,7 +320,7 @@ export function MgtCategoriesList({
         ]}
         keywordLink={"gauge_scale_explanation_link"}
         keywordModalTitle={"gauge_scale_modal_explanation_title"}
-        colors={["#00FF00", "#AAFF03", "#FFA903", "#FF0000"]}
+        colors={resolvedMode === "dark" ? coloursDark : colours}
       />
     </ListItem>,
   );
@@ -316,19 +334,17 @@ export function MgtCategoriesList({
       <Typography>{keyword("detected_classes")}</Typography>
     </ListItem>,
   );
-  const orderedCategories = [
-    "highly_likely_machine",
-    "likely_machine",
-    "likely_human",
-    "highly_likely_human",
-  ];
   for (const category of orderedCategories) {
     if (category != mgtOverallScoreLabel && category in categories) {
       output.push(
         <ListItem
           key={category}
           sx={{
-            background: rgbToString(categories[category][0]["rgb"]),
+            background: rgbToString(
+              resolvedMode === "dark"
+                ? categories[category][0]["rgbDark"]
+                : categories[category][0]["rgb"],
+            ),
             color: category == "highly_likely_machine" ? "white" : "black",
           }}
         >
@@ -421,6 +437,7 @@ export function ClassifiedText({
   textHtmlMap = null,
   credibilitySignal,
   keyword,
+  resolvedMode,
 }) {
   let output = text; //Defaults to text output
 
@@ -429,7 +446,7 @@ export function ClassifiedText({
     let backgroundRgb, bgLuminance;
     let textColour = "black";
     if (credibilitySignal === keyword("machine_generated_text_title")) {
-      backgroundRgb = spanInfo.rgb;
+      backgroundRgb = resolvedMode === "dark" ? spanInfo.rgbDark : spanInfo.rgb;
       bgLuminance = rgbToLuminance(backgroundRgb);
       if (spanInfo.pred == "highly_likely_machine") textColour = "white";
     } else {
