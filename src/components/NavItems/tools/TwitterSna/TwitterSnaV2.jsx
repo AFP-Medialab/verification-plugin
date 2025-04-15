@@ -4,33 +4,12 @@ import ForceGraph2D from "react-force-graph-2d";
 import ForceGraph3D from "react-force-graph-3d";
 
 import { createTheme } from "@mui/material";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CircularProgress from "@mui/material/CircularProgress";
-import FormControl from "@mui/material/FormControl";
-import Grid2 from "@mui/material/Grid2";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Modal from "@mui/material/Modal";
-import Paper from "@mui/material/Paper";
-import Select from "@mui/material/Select";
-import Stack from "@mui/material/Stack";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
-import { GridExpandMoreIcon } from "@mui/x-data-grid";
 import HeaderTool from "components/Shared/HeaderTool/HeaderTool";
 import dayjs from "dayjs";
 import MultiGraph from "graphology";
@@ -43,37 +22,11 @@ import { dataAnalysisSna } from "../../../../constants/tools";
 import useMyStyles, {
   myCardStyles,
 } from "../../../Shared/MaterialUiStyles/useMyStyles";
-
-const CustomTableCell = ({ text, maxChars = 100 }) => {
-  const [expanded, setExpanded] = useState(false);
-  const isLong = text.length > maxChars;
-
-  const handleToggle = () => setExpanded((prev) => !prev);
-
-  return (
-    <TableCell sx={{ whiteSpace: "normal", wordBreak: "break-word" }}>
-      <Typography variant="body2">
-        {expanded || !isLong ? text : `${text.slice(0, maxChars)}...`}
-      </Typography>
-      {isLong && (
-        <Button onClick={handleToggle} size="small">
-          {expanded ? "Show less" : "Show more"}
-        </Button>
-      )}
-    </TableCell>
-  );
-};
-
-const modalStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-};
+import CoorPanel from "./Components/CoorPanel";
+import DataUpload from "./Components/DataUpload";
+import CheckboxTable from "./Components/DataUpload";
+import EntryDetailTable from "./Components/EntryDetailTable";
+import HandleUploadModal from "./Components/HandleUploadModal";
 
 const TwitterSnaV2 = () => {
   const theme = createTheme({
@@ -139,6 +92,7 @@ const TwitterSnaV2 = () => {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [uploadedData, setUploadedData] = useState(null);
+  const [expanded, setExpanded] = useState(false);
 
   const [timeWindow, setTimeWindow] = useState(60);
   const [edgeWeight, setEdgeWeight] = useState(0.5);
@@ -152,6 +106,27 @@ const TwitterSnaV2 = () => {
     "Entry ID": "id",
     "Share Time": "ts",
   };
+
+  const [dataSources, setDataSources] = useState([]);
+  const [headers, setHeaders] = useState([]);
+
+  useEffect(() => {
+    if (dataSources.length > 0) {
+      setTweets(
+        [].concat.apply(
+          [],
+          dataSources.map((x) => x.content),
+        ),
+      );
+      setHeaders(
+        [].concat.apply(
+          [],
+          dataSources.map((x) => x.headers),
+        ),
+      );
+      console.log(headers);
+    }
+  }, [dataSources]);
 
   const required_fields_labels = new Map();
 
@@ -167,6 +142,13 @@ const TwitterSnaV2 = () => {
       header: true,
       complete: (res) => {
         setUploadedData(res.data);
+        dataSources.push({
+          id: dataSources.length + 1,
+          name: file.name,
+          description: res.data.length,
+          content: res.data,
+          headers: Object.keys(res.data[0]),
+        });
       },
     });
     setLoading(false);
@@ -246,90 +228,6 @@ const TwitterSnaV2 = () => {
     setGraphData(edges);
     setGraph(true);
     setLoading(false);
-
-    // Papa.parse(file, {
-    //   header: true,
-    //   complete: (res) => {
-    //     console.log("----------------START CSV PROCESSING--------------");
-    //     console.log(res.data);
-    //     let accountNameMap = new Map(
-    //       res.data.map((item) => [item["Facebook Id"], item["Page Name"]]),
-    //     );
-    //     console.log(accountNameMap);
-    //     let reformatedTweets = Array.from(
-    //       new Map(res.data.map((item) => [item.URL, item])).values(),
-    //     )
-    //       .filter((x) => x.Link && x.Link.length > 0)
-    //       .map(
-    //         ({
-    //           Link,
-    //           ["Post Created"]: date,
-    //           URL,
-    //           ["Facebook Id"]: fid,
-    //           ...rest
-    //         }) => ({
-    //           objects: Link,
-    //           date: date.slice(0, -4),
-    //           username: fid,
-    //           id: URL,
-    //           ...rest,
-    //         }),
-    //       );
-    //     console.log(reformatedTweets);
-    //     setTweets(reformatedTweets);
-
-    //     let coor_result = detectCOOR(
-    //       TIME_WINDOW,
-    //       EDGE_THRESH,
-    //       reformatedTweets,
-    //     );
-    //     console.log(coor_result);
-    //     console.log(Object.keys(coor_result));
-    //     console.log(
-    //       Object.keys(coor_result)
-    //         .map((x) => x.split("-"))
-    //         .filter((x) => x.length > 2),
-    //     );
-    //     let candidates =
-    //       EDGE_THRESH > 0
-    //         ? Object.entries(coor_result).filter((x) => x[1].threshold > 0)
-    //         : Object.entries(coor_result);
-    //     console.log(candidates);
-    //     let nodes = candidates
-    //       .map((x) => x[0].split("-"))
-    //       .flat(2)
-    //       .filter(onlyUnique);
-    //     console.log(nodes);
-
-    //     // Object.entries(grC).map(x=>console.log(x))
-    //     console.log(candidates);
-    //     let edges = nodes.map((x) => ({
-    //       source: accountNameMap.get(x),
-    //       dst: candidates
-    //         .filter((y) => y[0].includes(x))
-    //         .map((z) => z[0].split("-").filter((k) => k != x))
-    //         .flat()
-    //         .map((z) => accountNameMap.get(z)),
-    //     }));
-    //     console.log(edges);
-
-    //     setGraphData(edges);
-    //     setGraph(true);
-    //     setLoading(false);
-    //   },
-    // });
-    // setLoading(true)
-    // setTweets()
-    // do something with the file here
-  };
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
   };
 
   function onlyUnique(value, index, array) {
@@ -454,8 +352,6 @@ const TwitterSnaV2 = () => {
   };
 
   const getTweets = async () => {
-    let TIME_WINDOW = 600;
-    let EDGE_THRESH = 0.5;
     const tweets = await chrome.runtime.sendMessage({
       prompt: "getTweets",
     });
@@ -464,6 +360,13 @@ const TwitterSnaV2 = () => {
       new Map(tweets.map((item) => [item.id, item])).values(),
     );
     setTweets(dedpulicatedTweets);
+    dataSources.push({
+      id: "tweets",
+      name: "Collected tweets",
+      description: dedpulicatedTweets.length,
+      content: dedpulicatedTweets,
+      headers: Object.keys(dedpulicatedTweets),
+    });
 
     setLoading(false);
   };
@@ -673,59 +576,82 @@ const TwitterSnaV2 = () => {
     );
   };
 
+  const modalProps = {
+    showUploadModal,
+    setShowUploadModal,
+    setLoading,
+    required_fields,
+    required_fields_labels,
+    uploadedData,
+    processUploadedFile,
+  };
+
+  const tableProps = {
+    allTweets,
+    page,
+    setPage,
+    rowsPerPage,
+    setRowsPerPage,
+    searchFilter,
+    setSearchFilter,
+    expanded,
+    setExpanded,
+    headers,
+  };
+
+  const coorProps = {
+    timeWindow,
+    setGraph,
+    setTimeWindow,
+    edgeWeight,
+    setEdgeWeight,
+    uploadedData,
+    setShowUploadModal,
+    runTweetCoor,
+    graphSet,
+    showGraph,
+  };
+
+  const [selected, setSelected] = useState([]);
+
+  const initialRows = [
+    { id: 1, name: "Item One", description: "First item" },
+    { id: 2, name: "Item Two", description: "Second item" },
+    { id: 3, name: "Item Three", description: "Third item" },
+  ];
+
+  const [rows, setRows] = useState(dataSources);
+
+  const [openRowIds, setOpenRowIds] = useState([]);
+
+  const dataProps = {
+    inputRef,
+    handleFileChange,
+    handleUploadClick,
+    uploadedFile,
+    allTweets,
+    deleteTweets,
+    downloadTweetCSV,
+    selected,
+    setSelected,
+    rows,
+    setRows,
+  };
+
+  const checkboxTableProps = {
+    openRowIds,
+    setOpenRowIds,
+    rows,
+    setRows,
+    selected,
+    setSelected,
+    dataProps,
+  };
+
   return (
     <div>
       <ThemeProvider theme={theme}>
-        {uploadedData ? (
-          <Modal
-            open={showUploadModal}
-            onClose={() => {
-              setUploadedData(null);
-              setUploadedFile(null);
-              setShowUploadModal(false);
-              setLoading(false);
-            }}
-          >
-            <Box display="flex" flexDirection="column" gap={2} sx={modalStyle}>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                Set required fields for COOR Analysis
-              </Typography>
-              {Object.keys(required_fields).map((k) => (
-                <FormControl key={k} fullWidth>
-                  <InputLabel>{k}</InputLabel>
-                  <Select
-                    onChange={(e) => {
-                      required_fields_labels.set(k, e.target.value);
-                    }}
-                  >
-                    {Object.keys(uploadedData[0]).map((x) => (
-                      <MenuItem key={x} value={x}>
-                        {x}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              ))}
-              <Button
-                variant="outlined"
-                sx={{
-                  color: "green",
-                  borderColor: "green",
-                  backgroundColor: "transparent",
-                  "&:hover": {
-                    backgroundColor: "rgba(0, 128, 0, 0.1)", // light green on hover
-                    borderColor: "darkgreen",
-                  },
-                }}
-                onClick={processUploadedFile}
-              >
-                Upload
-              </Button>
-            </Box>
-          </Modal>
-        ) : (
-          <></>
-        )}
+        {uploadedData ? HandleUploadModal(modalProps) : <></>}
         <HeaderTool
           name={"Twitter SNA V2"}
           description={"New twitter analysis tool"}
@@ -744,246 +670,11 @@ const TwitterSnaV2 = () => {
             </Box>
           ) : (
             <Box p={4}>
-              <Stack direction="row" spacing={2} alignItems="center">
-                <Typography variant="h6" align="left">
-                  Upload CrowdTangle CSV:
-                </Typography>
-                <input
-                  type="file"
-                  hidden
-                  ref={inputRef}
-                  onChange={handleFileChange}
-                />
-                <Button
-                  variant="outlined"
-                  sx={{
-                    color: "green",
-                    borderColor: "green",
-                    backgroundColor: "transparent",
-                    "&:hover": {
-                      backgroundColor: "rgba(0, 128, 0, 0.1)", // light green on hover
-                      borderColor: "darkgreen",
-                    },
-                  }}
-                  onClick={handleUploadClick}
-                >
-                  {uploadedFile ? uploadedFile.name : "Upload file"}
-                </Button>
-              </Stack>
+              <CheckboxTable checkboxTableProps />
               <Box p={4}></Box>
-              <Grid2 container spacing={4} alignItems="center">
-                <Grid2>
-                  <Typography
-                    variant="h6"
-                    align="left"
-                    style={{ paddingLeft: "0px" }}
-                  >
-                    {"Total number of tweets collected: " + allTweets.length}{" "}
-                    {/** keyword */}
-                  </Typography>
-                </Grid2>
-                <Grid2
-                  size={{ xs: 4 }}
-                  container
-                  direction="row"
-                  justifyContent="flex-start"
-                  alignItems="center"
-                >
-                  <Grid2 size={{ xs: 8 }}>
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      color="error"
-                      onClick={deleteTweets}
-                    >
-                      Delete {/** keyword */}
-                    </Button>
-                  </Grid2>
-                  <Grid2 size={{ xs: 8 }}>
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      color="primary"
-                      onClick={downloadTweetCSV}
-                    >
-                      Download CSV {/** keyword */}
-                    </Button>
-                  </Grid2>
-                </Grid2>
-              </Grid2>
-              <Box p={4}></Box>
-              <Paper elevation={3} sx={{ width: "100%" }}>
-                <Accordion>
-                  <AccordionSummary
-                    expandIcon={<GridExpandMoreIcon />}
-                    aria-controls="panel1-content"
-                    id="panel1-header"
-                  >
-                    <Typography component="span"> Tweet details </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Box p={2}></Box>
-                    <Stack direction="row" spacing={2} alignItems="center">
-                      <Typography pl={2}> Search:</Typography>
-                      <TextField
-                        variant="outlined"
-                        sx={{ width: "400px" }}
-                        value={searchFilter}
-                        onChange={(e) => setSearchFilter(e.target.value)}
-                      />
-                    </Stack>
-                    <Box p={2}></Box>
-                    <TableContainer sx={{ maxHeight: 600 }}>
-                      <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
-                          <TableRow>
-                            {Object.keys(allTweets[0]).map((k) => (
-                              <TableCell
-                                key={k}
-                                align="center"
-                                style={{ minWidth: 200 }}
-                              >
-                                {k}
-                              </TableCell>
-                            ))}
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {searchFilter.length > 0
-                            ? allTweets
-                                .filter((x) =>
-                                  Object.entries(x)
-                                    .flat(2)
-                                    .some((k) =>
-                                      k.toString().includes(searchFilter),
-                                    ),
-                                )
-                                .slice(
-                                  page * rowsPerPage,
-                                  page * rowsPerPage + rowsPerPage,
-                                )
-                                .map((x) => {
-                                  return (
-                                    <TableRow
-                                      hover
-                                      role="checkbox"
-                                      tabIndex={-1}
-                                      key={x.id + "#"}
-                                    >
-                                      {Object.keys(allTweets[0]).map((k) => (
-                                        <CustomTableCell
-                                          text={x[k] ? x[k] : "Missing"}
-                                          key={k}
-                                          align="left"
-                                        ></CustomTableCell>
-                                      ))}
-                                    </TableRow>
-                                  );
-                                })
-                            : allTweets
-                                .slice(
-                                  page * rowsPerPage,
-                                  page * rowsPerPage + rowsPerPage,
-                                )
-                                .map((x) => {
-                                  return (
-                                    <TableRow
-                                      hover
-                                      role="checkbox"
-                                      tabIndex={-1}
-                                      key={x.id + "#"}
-                                    >
-                                      {Object.keys(allTweets[0]).map((k) => (
-                                        <CustomTableCell
-                                          text={x[k] ? x[k] : "Missing"}
-                                          key={k}
-                                          align="left"
-                                        ></CustomTableCell>
-                                      ))}
-                                    </TableRow>
-                                  );
-                                })}
-                        </TableBody>
-                      </Table>
-                      <TablePagination
-                        rowsPerPageOptions={[10, 25, 100]}
-                        component="div"
-                        count={
-                          searchFilter.length > 0
-                            ? allTweets.filter((x) =>
-                                Object.entries(x)
-                                  .flat(2)
-                                  .some((k) =>
-                                    k.toString().includes(searchFilter),
-                                  ),
-                              ).length
-                            : allTweets.length
-                        }
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                      />
-                    </TableContainer>
-                  </AccordionDetails>
-                </Accordion>
-              </Paper>
+              {EntryDetailTable(tableProps)}
               <Box p={2} />
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<GridExpandMoreIcon />}
-                  aria-controls="panel1-content"
-                  id="panel1-header"
-                >
-                  <Typography component="span"> COOR Graph </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Box>
-                    <Box p={2}></Box>
-                    <Stack direction="row" spacing={2} alignItems="center">
-                      <Typography pl={2}> Time window:</Typography>
-                      <TextField
-                        variant="outlined"
-                        sx={{ width: "200px" }}
-                        value={timeWindow}
-                        onChange={(e) => {
-                          setGraph(false);
-                          setTimeWindow(e.target.value);
-                        }}
-                      />
-                      <Typography pl={2}> Edge weight:</Typography>
-                      <TextField
-                        variant="outlined"
-                        sx={{ width: "200px" }}
-                        value={edgeWeight}
-                        onChange={(e) => {
-                          setGraph(false);
-                          setEdgeWeight(e.target.value);
-                        }}
-                      />
-                      <Button
-                        variant="outlined"
-                        sx={{
-                          color: "green",
-                          borderColor: "green",
-                          backgroundColor: "transparent",
-                          "&:hover": {
-                            backgroundColor: "rgba(0, 128, 0, 0.1)", // light green on hover
-                            borderColor: "darkgreen",
-                          },
-                        }}
-                        onClick={
-                          uploadedData ? setShowUploadModal : runTweetCoor
-                        }
-                      >
-                        Run COOR Detection
-                      </Button>
-                    </Stack>
-                  </Box>
-                  <Box p={2}></Box>
-                  {graphSet ? showGraph() : <></>}
-                </AccordionDetails>
-              </Accordion>
+              {CoorPanel(coorProps)}
             </Box>
           )}
         </Card>
