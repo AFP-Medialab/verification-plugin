@@ -105,6 +105,7 @@ const Keyframes = () => {
   const submitUrl = async (url) => {
     dispatch(resetKeyframes());
     dispatch(setKeyframesUrl(url ?? input));
+    resetFetchingKeyframes();
     try {
       setSubmittedUrl(url ?? input);
       await executeProcess(url ?? input, role);
@@ -141,6 +142,7 @@ const Keyframes = () => {
 
   const {
     executeProcess,
+    resetFetchingKeyframes,
     isPending,
     status,
     error,
