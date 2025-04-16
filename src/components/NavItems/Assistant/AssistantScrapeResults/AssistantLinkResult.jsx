@@ -116,7 +116,7 @@ const sourceTypeListFilterOperators = getGridSingleSelectOperators()
   .filter((operator) => operator.value === "isAnyOf")
   .map((operator) => {
     const newOperator = { ...operator };
-    const newGetApplyFilterFn = (filterItem) => {
+    newOperator.getApplyFilterFn = (filterItem) => {
       return (params) => {
         let isOk = true;
         filterItem?.value?.forEach((fv) => {
@@ -125,7 +125,6 @@ const sourceTypeListFilterOperators = getGridSingleSelectOperators()
         return isOk;
       };
     };
-    newOperator.getApplyFilterFn = newGetApplyFilterFn;
     return newOperator;
   });
 
