@@ -93,6 +93,7 @@ const TwitterSnaV2 = () => {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [uploadedData, setUploadedData] = useState(null);
   const [expanded, setExpanded] = useState(false);
+  const [customExpanded, setCustomExpanded] = useState(false);
 
   const [timeWindow, setTimeWindow] = useState(60);
   const [edgeWeight, setEdgeWeight] = useState(0.5);
@@ -107,26 +108,15 @@ const TwitterSnaV2 = () => {
     "Share Time": "ts",
   };
 
+  const metaDefaultFields = new Map([
+    ["Object", "Link"],
+    ["User ID", "Facebook Id"],
+    ["Entry ID", "URL"],
+    ["Share Time", "Post Created"],
+  ]);
+
   const [dataSources, setDataSources] = useState([]);
   const [headers, setHeaders] = useState([]);
-
-  useEffect(() => {
-    if (dataSources.length > 0) {
-      setTweets(
-        [].concat.apply(
-          [],
-          dataSources.map((x) => x.content),
-        ),
-      );
-      setHeaders(
-        [].concat.apply(
-          [],
-          dataSources.map((x) => x.headers),
-        ),
-      );
-      console.log(headers);
-    }
-  }, [dataSources]);
 
   const required_fields_labels = new Map();
 
@@ -142,16 +132,54 @@ const TwitterSnaV2 = () => {
       header: true,
       complete: (res) => {
         setUploadedData(res.data);
-        dataSources.push({
-          id: dataSources.length + 1,
-          name: file.name,
-          description: res.data.length,
-          content: res.data,
-          headers: Object.keys(res.data[0]),
-        });
+        setShowUploadModal(true);
       },
     });
+  };
+
+  const addUploadToDataSources = () => {
+    let fieldMap = metaSelected ? metaDefaultFields : required_fields_labels;
+    let accountNameMap = metaSelected
+      ? new Map(
+          uploadedData.map((item) => [item["Facebook Id"], item["Page Name"]]),
+        )
+      : {};
+
+    let reformatedTweets = Array.from(
+      new Map(
+        uploadedData.map((item) => [item[fieldMap.get("Entry ID")], item]),
+      ).values(),
+    )
+      .filter(
+        (x) =>
+          x[fieldMap.get("Object")] && x[fieldMap.get("Object")].length > 0,
+      )
+      .map(
+        ({
+          [fieldMap.get("Object")]: objects,
+          [fieldMap.get("Share Time")]: date,
+          [fieldMap.get("Entry ID")]: id,
+          [fieldMap.get("User ID")]: uid,
+          ...rest
+        }) => ({
+          objects: objects,
+          date: metaSelected ? date.slice(0, -4) : date,
+          username: uid,
+          id: id,
+          ...rest,
+        }),
+      );
+    dataSources.push({
+      id: dataSources.length + 1,
+      name: uploadedFile.name,
+      description: uploadedData.length,
+      content: reformatedTweets,
+      headers: Object.keys(reformatedTweets[0]),
+      accountNameMap: accountNameMap,
+    });
     setLoading(false);
+    setShowUploadModal(false);
+    setUploadedFile(null);
   };
 
   const processUploadedFile = () => {
@@ -360,15 +388,58 @@ const TwitterSnaV2 = () => {
       new Map(tweets.map((item) => [item.id, item])).values(),
     );
     setTweets(dedpulicatedTweets);
+    let reformatedTweets = dedpulicatedTweets.map(({ links, ...rest }) => ({
+      objects: links,
+      ...rest,
+    }));
     dataSources.push({
       id: "tweets",
       name: "Collected tweets",
-      description: dedpulicatedTweets.length,
-      content: dedpulicatedTweets,
-      headers: Object.keys(dedpulicatedTweets[0]),
+      description: reformatedTweets.length,
+      content: reformatedTweets,
+      headers: Object.keys(reformatedTweets[0]),
     });
 
     setLoading(false);
+  };
+
+  const runCoorAnalysis = () => {
+    let TIME_WINDOW = timeWindow;
+    let EDGE_THRESH = edgeWeight;
+    let selectedSources = dataSources.filter((source) =>
+      selected.includes(source.id),
+    );
+    let selectedContent = selectedSources
+      .map((source) => source.content)
+      .flat();
+    let nameMaps = new Map(
+      selectedSources
+        .map((source) =>
+          source.accountNameMap ? source.accountNameMap : new Map(),
+        )
+        .flatMap((m) => [...m]),
+    );
+    console.log(nameMaps);
+    let coor_result = detectCOOR(TIME_WINDOW, EDGE_THRESH, selectedContent);
+    let candidates =
+      EDGE_THRESH > 0
+        ? Object.entries(coor_result).filter((x) => x[1].threshold > 0)
+        : Object.entries(coor_result);
+    let nodes = candidates
+      .map((x) => x[0].split("-"))
+      .flat(2)
+      .filter(onlyUnique);
+    let edges = nodes.map((x) => ({
+      source: nameMaps.has(x) ? nameMaps.get(x) : x,
+      dst: candidates
+        .filter((y) => y[0].includes(x))
+        .map((z) => z[0].split("-").filter((k) => k != x))
+        .flat()
+        .map((z) => (nameMaps.has(z) ? nameMaps.get(z) : z)),
+    }));
+
+    setGraphData(edges);
+    setGraph(true);
   };
 
   const runTweetCoor = () => {
@@ -576,6 +647,8 @@ const TwitterSnaV2 = () => {
     );
   };
 
+  const [metaSelected, setMetaSelected] = useState(false);
+
   const modalProps = {
     showUploadModal,
     setShowUploadModal,
@@ -583,7 +656,11 @@ const TwitterSnaV2 = () => {
     required_fields,
     required_fields_labels,
     uploadedData,
-    processUploadedFile,
+    addUploadToDataSources,
+    customExpanded,
+    setCustomExpanded,
+    metaSelected,
+    setMetaSelected,
   };
 
   const tableProps = {
@@ -607,7 +684,7 @@ const TwitterSnaV2 = () => {
     setEdgeWeight,
     uploadedData,
     setShowUploadModal,
-    runTweetCoor,
+    runCoorAnalysis,
     graphSet,
     showGraph,
   };

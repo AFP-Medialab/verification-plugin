@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Collapse from "@mui/material/Collapse";
 import FormControl from "@mui/material/FormControl";
+import IconButton from "@mui/material/IconButton";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Modal from "@mui/material/Modal";
 import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
+
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
+// Replace this with the actual path to your Meta logo image
+const metaLogoUrl =
+  "https://upload.wikimedia.org/wikipedia/commons/a/ab/Meta-Logo.png";
 
 const modalStyle = {
   position: "absolute",
@@ -27,8 +36,20 @@ const HandleUploadModal = ({
   required_fields,
   required_fields_labels,
   uploadedData,
-  processUploadedFile,
+  addUploadToDataSources,
+  customExpanded,
+  setCustomExpanded,
+  metaSelected,
+  setMetaSelected,
 }) => {
+  const handleMetaClick = () => {
+    setMetaSelected((prev) => !prev);
+  };
+
+  const handleCustomToggle = () => {
+    setCustomExpanded((prev) => !prev);
+  };
+
   return (
     <Modal
       open={showUploadModal}
@@ -41,22 +62,60 @@ const HandleUploadModal = ({
         <Typography id="modal-modal-title" variant="h6" component="h2">
           Set required fields for COOR Analysis
         </Typography>
-        {Object.keys(required_fields).map((k) => (
-          <FormControl key={k} fullWidth>
-            <InputLabel>{k}</InputLabel>
-            <Select
-              onChange={(e) => {
-                required_fields_labels.set(k, e.target.value);
-              }}
-            >
-              {Object.keys(uploadedData[0]).map((x) => (
-                <MenuItem key={x} value={x}>
-                  {x}
-                </MenuItem>
+
+        {/* Meta Logo Box */}
+        <Box
+          onClick={handleMetaClick}
+          sx={{
+            width: 50,
+            height: 50,
+            borderRadius: 2,
+            border: metaSelected ? "2px solid blue" : "1px solid #ccc",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            "&:hover": {
+              backgroundColor: "#f5f5f5",
+            },
+          }}
+        >
+          <img src={metaLogoUrl} alt="Meta" style={{ width: 38, height: 21 }} />
+        </Box>
+
+        {/* Expandable Custom Section */}
+        <Box>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Typography variant="subtitle1">Custom</Typography>
+            <IconButton onClick={handleCustomToggle} size="small">
+              {customExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            </IconButton>
+          </Box>
+          <Collapse in={customExpanded}>
+            <Box display="flex" flexDirection="column" gap={2} mt={2}>
+              {Object.keys(required_fields).map((k) => (
+                <FormControl key={k} fullWidth>
+                  <InputLabel>{k}</InputLabel>
+                  <Select
+                    onChange={(e) => {
+                      required_fields_labels.set(k, e.target.value);
+                    }}
+                  >
+                    {Object.keys(uploadedData[0]).map((x) => (
+                      <MenuItem key={x} value={x}>
+                        {x}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               ))}
-            </Select>
-          </FormControl>
-        ))}
+            </Box>
+          </Collapse>
+        </Box>
         <Button
           variant="outlined"
           sx={{
@@ -64,11 +123,11 @@ const HandleUploadModal = ({
             borderColor: "green",
             backgroundColor: "transparent",
             "&:hover": {
-              backgroundColor: "rgba(0, 128, 0, 0.1)", // light green on hover
+              backgroundColor: "rgba(0, 128, 0, 0.1)",
               borderColor: "darkgreen",
             },
           }}
-          onClick={processUploadedFile}
+          onClick={addUploadToDataSources}
         >
           Upload
         </Button>

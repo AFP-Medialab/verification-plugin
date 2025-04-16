@@ -19,7 +19,7 @@ const CoorPanel = ({
   setEdgeWeight,
   uploadedData,
   setShowUploadModal,
-  runTweetCoor,
+  runCoorAnalysis,
   graphSet,
   showGraph,
 }) => {
@@ -67,7 +67,7 @@ const CoorPanel = ({
                   borderColor: "darkgreen",
                 },
               }}
-              onClick={uploadedData ? setShowUploadModal : runTweetCoor}
+              onClick={runCoorAnalysis}
             >
               Run COOR Detection
             </Button>
