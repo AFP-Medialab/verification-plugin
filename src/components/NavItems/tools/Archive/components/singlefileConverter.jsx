@@ -272,7 +272,8 @@ const SinglefileConverter = (telegramURL) => {
             let retbytes = new TextEncoder().encode(title);
             return new TextDecoder("utf-8")
               .decode(retbytes)
-              .replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+              .replace(/[\x00-\x1F\x7F-\x9F]/g, "")
+              .replace(" ", "");
           } else {
             return pageURL;
           }
@@ -400,9 +401,10 @@ const SinglefileConverter = (telegramURL) => {
     // For resource records
     const record = await WARCRecord.create(
       {
+        url,
         warcVersion: "WARC/1.1",
         warcHeaders: {
-          "WARC-Target-URI": url,
+          // "WARC-Target-URI":url,
           "WARC-Date": date,
           "WARC-Type": type,
           "WARC-Record-ID": `<urn:uuid:${uuid()}>`,
