@@ -182,82 +182,6 @@ const TwitterSnaV2 = () => {
     setUploadedFile(null);
   };
 
-  const processUploadedFile = () => {
-    setShowUploadModal(false);
-    let file = uploadedFile;
-    let TIME_WINDOW = timeWindow;
-    let EDGE_THRESH = edgeWeight;
-    let accountNameMap = new Map(
-      uploadedData.map((item) => [item["Facebook Id"], item["Page Name"]]),
-    );
-    console.log(accountNameMap);
-    let reformatedTweets = Array.from(
-      new Map(
-        uploadedData.map((item) => [
-          item[required_fields_labels.get("Entry ID")],
-          item,
-        ]),
-      ).values(),
-    )
-      .filter(
-        (x) =>
-          x[required_fields_labels.get("Object")] &&
-          x[required_fields_labels.get("Object")].length > 0,
-      )
-      .map(
-        ({
-          [required_fields_labels.get("Object")]: objects,
-          [required_fields_labels.get("Share Time")]: date,
-          [required_fields_labels.get("Entry ID")]: id,
-          [required_fields_labels.get("User ID")]: uid,
-          ...rest
-        }) => ({
-          objects: objects,
-          date: date.slice(0, -4),
-          username: uid,
-          id: id,
-          ...rest,
-        }),
-      );
-    console.log(reformatedTweets);
-    setTweets(reformatedTweets);
-
-    let coor_result = detectCOOR(TIME_WINDOW, EDGE_THRESH, reformatedTweets);
-    console.log(coor_result);
-    console.log(Object.keys(coor_result));
-    console.log(
-      Object.keys(coor_result)
-        .map((x) => x.split("-"))
-        .filter((x) => x.length > 2),
-    );
-    let candidates =
-      EDGE_THRESH > 0
-        ? Object.entries(coor_result).filter((x) => x[1].threshold > 0)
-        : Object.entries(coor_result);
-    console.log(candidates);
-    let nodes = candidates
-      .map((x) => x[0].split("-"))
-      .flat(2)
-      .filter(onlyUnique);
-    console.log(nodes);
-
-    // Object.entries(grC).map(x=>console.log(x))
-    console.log(candidates);
-    let edges = nodes.map((x) => ({
-      source: accountNameMap.get(x),
-      dst: candidates
-        .filter((y) => y[0].includes(x))
-        .map((z) => z[0].split("-").filter((k) => k != x))
-        .flat()
-        .map((z) => accountNameMap.get(z)),
-    }));
-    console.log(edges);
-
-    setGraphData(edges);
-    setGraph(true);
-    setLoading(false);
-  };
-
   function onlyUnique(value, index, array) {
     return array.indexOf(value) === index;
   }
@@ -442,41 +366,6 @@ const TwitterSnaV2 = () => {
     setGraph(true);
   };
 
-  const runTweetCoor = () => {
-    let TIME_WINDOW = timeWindow;
-    let EDGE_THRESH = edgeWeight;
-
-    let reformatedTweets = allTweets.map(({ links, ...rest }) => ({
-      objects: links,
-      ...rest,
-    }));
-    let coor_result = detectCOOR(TIME_WINDOW, EDGE_THRESH, reformatedTweets);
-
-    let candidates =
-      EDGE_THRESH > 0
-        ? Object.entries(coor_result).filter((x) => x[1].threshold > 0)
-        : Object.entries(coor_result);
-    let nodes = candidates
-      .map((x) => x[0].split("-"))
-      .flat(2)
-      .filter(onlyUnique);
-    console.log(nodes);
-
-    // Object.entries(grC).map(x=>console.log(x))
-    console.log(candidates);
-    let edges = nodes.map((x) => ({
-      source: x,
-      dst: candidates
-        .filter((y) => y[0].includes(x))
-        .map((z) => z[0].split("-").filter((k) => k != x))
-        .flat(),
-    }));
-    console.log(edges);
-
-    setGraphData(edges);
-    setGraph(true);
-  };
-
   useEffect(() => {
     getTweets();
   }, []);
@@ -511,6 +400,7 @@ const TwitterSnaV2 = () => {
   const CommunityForceGraph = ({ rawData }) => {
     const processedData = useMemo(() => {
       const graph = new MultiGraph();
+      console.log(graph.multi);
 
       // Add nodes
       rawData.nodes.forEach((node) => {

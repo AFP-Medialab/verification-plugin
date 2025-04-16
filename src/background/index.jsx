@@ -11,7 +11,9 @@ import {
 
 const db = new Dexie("tweetTest");
 db.version(1).stores({
-  tweets: "id,tweet",
+  tweets: "id,tweet,collectionID",
+  collections: "id",
+  recording: "id,state",
 });
 const page_name = "popup.html";
 
@@ -306,6 +308,23 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     } else if (request.prompt === "viewTweets") {
       const t = await db.tweets.toArray();
       console.log(t);
+    } else if (request.prompt === "delete") {
+      db.delete().then(() => db.open());
+    } else if (request.prompt === "getRecordingInfo") {
+      const t = await db.collections.toArray();
+      if (!t.includes("Default Collection")) {
+        await db.collections.put({ id: "Default Collection" });
+      }
+      const r = await db.collections.toArray();
+      const state = await db.recording.toArray();
+      console.log(state);
+      console.log(state.length);
+      if (state.length === 0) {
+        await db.recording.put({ id: "main", state: false });
+      }
+      const s = await db.recording.toArray();
+      console.log(s, r);
+      sendResponse({ recording: s, collections: r });
     }
   })(request);
   return true;

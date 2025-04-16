@@ -3,7 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Collapse from "@mui/material/Collapse";
+import FormControl from "@mui/material/FormControl";
 import Grid2 from "@mui/material/Grid2";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
 import { ThemeProvider } from "@mui/material/styles";
 
 import { getSupportedBrowserLanguage } from "@Shared/Languages/getSupportedBrowserLanguage";
@@ -26,7 +32,6 @@ const PopUp = () => {
   const currentLang = useSelector((state) => state.language);
   const defaultLanguage = useSelector((state) => state.defaultLanguage);
   const LOGO_EU = process.env.REACT_APP_LOGO_EU;
-
   const [pageUrl, setPageUrl] = useState(null);
 
   const urlOpenAssistant = () => {
@@ -102,6 +107,51 @@ const PopUp = () => {
     }
   }, []);
 
+  const getRecordingInfo = async () => {
+    let recInfo = await chrome.runtime.sendMessage({
+      prompt: "getRecordingInfo",
+    });
+    setCollections(recInfo.collections.map((x) => x.id).flat());
+    setRecording(recInfo.recording[0].state != false);
+    console.log(recInfo);
+  };
+
+  useEffect(() => {
+    getRecordingInfo();
+  }, []);
+
+  const [recording, setRecording] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+
+  const [collections, setCollections] = useState(["Default Collection"]);
+  const [selectedCollection, setSelectedCollection] =
+    useState("Default Collection");
+  const [newCollectionName, setNewCollectionName] = useState("");
+
+  const handleAddCollection = () => {
+    if (newCollectionName.trim() && !collections.includes(newCollectionName)) {
+      setCollections([...collections, newCollectionName]);
+      setSelectedCollection(newCollectionName);
+      setNewCollectionName("");
+    }
+  };
+
+  const handleMainButtonClick = () => {
+    if (recording) {
+      // Stop recording and collapse
+      setRecording(false);
+      setExpanded(false);
+    } else {
+      // If already expanded, collapse without starting
+      setExpanded((prev) => !prev);
+    }
+  };
+
+  const handleStartRecording = () => {
+    setRecording(true);
+    setExpanded(false);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <div className={classes.popUp}>
@@ -171,7 +221,6 @@ const PopUp = () => {
               variant="outlined"
               color="primary"
               fullWidth={true}
-              onMouseOver={() => loadData()}
               onClick={() => urlOpenAssistant()}
             >
               {keyword("open_assistant_on_page")}
@@ -183,11 +232,67 @@ const PopUp = () => {
               variant="outlined"
               color="primary"
               fullWidth={true}
-              onMouseOver={() => loadData()}
-              onClick={() => sendMessage()}
+              onClick={() => {
+                chrome.runtime.sendMessage({ prompt: "delete" });
+              }}
             >
-              Send message
+              DELETE
             </Button>
+          </Grid2>
+          <Box m={1} />
+          <Grid2 size={{ xs: 12 }}>
+            <Box display="flex" flexDirection="column">
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={handleMainButtonClick}
+              >
+                {recording ? "Stop Recording" : "Recording"}
+              </Button>
+
+              <Collapse in={expanded}>
+                <Box mt={1} display="flex" flexDirection="column" gap={2}>
+                  <FormControl fullWidth>
+                    <InputLabel>Select Collection</InputLabel>
+                    <Select
+                      value={selectedCollection}
+                      onChange={(e) => setSelectedCollection(e.target.value)}
+                      label="Select Collection"
+                    >
+                      {collections.map((name) => (
+                        <MenuItem key={name} value={name}>
+                          {name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  <Box display="flex" gap={1}>
+                    <TextField
+                      label="New Collection"
+                      value={newCollectionName}
+                      onChange={(e) => setNewCollectionName(e.target.value)}
+                      fullWidth
+                    />
+                    <Button
+                      variant="outlined"
+                      onClick={handleAddCollection}
+                      color="primary"
+                    >
+                      Add
+                    </Button>
+                  </Box>
+
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleStartRecording}
+                  >
+                    Start
+                  </Button>
+                </Box>
+              </Collapse>
+            </Box>
           </Grid2>
           <Box m={1} />
           <Grid2 size={{ xs: 12 }}>
