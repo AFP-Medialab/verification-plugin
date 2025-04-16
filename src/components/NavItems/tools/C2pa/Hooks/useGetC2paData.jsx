@@ -103,7 +103,7 @@ async function readManifest(manifest, parent, result, url, depth) {
 
         try {
           ingredientUrl = thumbnail.getUrl();
-        } catch (error) {
+        } catch {
           ingredientUrl = null;
         }
 

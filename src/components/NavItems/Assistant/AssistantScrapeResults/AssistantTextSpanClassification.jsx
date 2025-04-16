@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import { styled } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
@@ -14,7 +15,6 @@ import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-import { styled } from "@mui/system";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { v4 as uuidv4 } from "uuid";
 
@@ -330,7 +330,7 @@ export function CategoriesListToggle({
 
   for (const category in categories) {
     // don't display overall category
-    if (category == allCategoriesLabel) {
+    if (category === allCategoriesLabel) {
       continue;
     }
 

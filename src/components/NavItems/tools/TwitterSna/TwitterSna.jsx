@@ -320,11 +320,6 @@ const TwitterSna = () => {
     if (since && date < since) setUntilError(true);
     setUntil(dayjs(date));
   };
-  const pastDate = (currentDate) => {
-    const itemDate = currentDate.toDate();
-    if (since) return since > itemDate;
-    return false;
-  };
 
   const session = useSelector((state) => state.userSession);
   const uid = session && session.user ? session.user.id : null;
@@ -369,13 +364,13 @@ const TwitterSna = () => {
         delete prevResult.socioSemantic4ModeGraph;
       }
       /*trackEvent(
-                                                                                "submission",
-                                                                                "tsna",
-                                                                                "redirect to tsna",
-                                                                                JSON.stringify(newRequest),
-                                                                                client_id,
-                                                                                uid
-                                                                              );*/
+                                                                                      "submission",
+                                                                                      "tsna",
+                                                                                      "redirect to tsna",
+                                                                                      JSON.stringify(newRequest),
+                                                                                      client_id,
+                                                                                      uid
+                                                                                    );*/
       setSubmittedRequest(newRequest);
     }
   };
@@ -518,10 +513,10 @@ const TwitterSna = () => {
   }
 
   /*
-                          const verifiedChange = () => {
-                            setVerifiedUsers(!verifiedUsers);
-                          };
-                          */
+                            const verifiedChange = () => {
+                              setVerifiedUsers(!verifiedUsers);
+                            };
+                            */
 
   return (
     <div>

@@ -25,7 +25,6 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
   TransCredibilitySignalsLink,
   TransHtmlDoubleLineBreak,
-  TransHtmlSingleLineBreak,
   TransSupportedToolsLink,
 } from "../TransComponents";
 import AssistantTextClassification from "./AssistantTextClassification";

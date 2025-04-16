@@ -399,7 +399,7 @@ const Keyframes = () => {
 
         {keyframesFeaturesData && tabSelected === "url" && (
           <>
-            <Fade in={keyframesFeaturesData !== null} timeout={1500}>
+            <Fade in={keyframesFeaturesData} timeout={1500}>
               <Card variant="outlined">
                 <Box
                   sx={{
@@ -427,7 +427,7 @@ const Keyframes = () => {
                 </Box>
               </Card>
             </Fade>
-            <Fade in={keyframesFeaturesData !== null} timeout={1500}>
+            <Fade in={keyframesFeaturesData} timeout={1500}>
               <Card variant="outlined">
                 <Box
                   sx={{

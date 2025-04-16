@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { useColorScheme } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
@@ -98,9 +97,6 @@ const PopUp = () => {
       dispatch(changeLanguage(supportedBrowserLang));
     }
   }, []);
-
-  const { systemMode, mode } = useColorScheme();
-  const resolvedMode = systemMode || mode;
 
   return (
     <ThemeProvider theme={theme}>

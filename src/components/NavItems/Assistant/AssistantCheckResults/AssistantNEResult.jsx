@@ -77,8 +77,8 @@ const AssistantNEResult = () => {
     display: "inline-block",
   };
 
-  const customRenderer = (tag, size, color) => {
-    const { className, style, ...props } = tag.props || {};
+  const customRenderer = (tag, size) => {
+    const { className, style } = tag.props || {};
     const fontSize = size + "px";
     const tagStyle = {
       ...styles,
@@ -139,7 +139,7 @@ const AssistantNEResult = () => {
         {neLoading && <LinearProgress />}
         <CardContent>
           <ButtonGroup sx={{ paddingBottom: "15px" }}>
-            {neResult.map((tag, index) => (
+            {neResult.map((tag) => (
               <Button
                 className={
                   visibleCategories[tag.category.toLowerCase()]

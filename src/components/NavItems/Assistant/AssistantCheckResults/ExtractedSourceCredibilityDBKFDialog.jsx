@@ -117,7 +117,6 @@ const renderEvidence = (keyword, evidence, source, scope) => {
 const ExtractedSourceCredibilityDBKFDialog = ({
   sourceCredibility,
   url,
-  domainOrAccount,
   urlColor,
 }) => {
   //central

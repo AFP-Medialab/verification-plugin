@@ -124,9 +124,9 @@ const AssistantCommentResult = ({ collectedComments }) => {
     const stance = multilingualStanceResult
       ? multilingualStanceResult[collectedComments[i].id].stance
       : null;
-    stance == "query" ? queryComments.push(collectedComments[i]) : null;
-    stance == "support" ? supportComments.push(collectedComments[i]) : null;
-    stance == "deny" ? denyComments.push(collectedComments[i]) : null;
+    stance === "query" ? queryComments.push(collectedComments[i]) : null;
+    stance === "support" ? supportComments.push(collectedComments[i]) : null;
+    stance === "deny" ? denyComments.push(collectedComments[i]) : null;
   }
 
   // for collectedComments
@@ -326,18 +326,23 @@ const AssistantCommentResult = ({ collectedComments }) => {
   function allPageChangeHandler(event, page) {
     setCurrentAllPage(page);
   }
+
   function linkPageChangeHandler(event, page) {
     setCurrentLinkPage(page);
   }
+
   function verificationPageChangeHandler(event, page) {
     setCurrentVerificationPage(page);
   }
+
   function supportPageChangeHandler(event, page) {
     setCurrentSupportPage(page);
   }
+
   function queryPageChangeHandler(event, page) {
     setCurrentQueryPage(page);
   }
+
   function denyPageChangeHandler(event, page) {
     setCurrentDenyPage(page);
   }
@@ -365,7 +370,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
         }
       />
 
-      {multilingualStanceLoading || caaVerificationKeywordsTsv.length == 0 ? (
+      {multilingualStanceLoading || caaVerificationKeywordsTsv.length === 0 ? (
         <div>
           <LinearProgress />
         </div>

@@ -231,13 +231,13 @@ const Assistant = () => {
                 <Grid
                   size={{ xs: 12 }}
                   className={classes.assistantGrid}
-                  hidden={urlMode === null || urlMode === false}
+                  hidden={urlMode === false}
                 >
                   <AssistantWarnings />
                 </Grid>
               ) : null}
 
-              {/* source crediblity//URL domain analysis results */}
+              {/* source credibility//URL domain analysis results */}
               {positiveSourceCred || cautionSourceCred || mixedSourceCred ? (
                 <Grid size={{ xs: 12 }}>
                   <AssistantSCResults />

@@ -160,7 +160,6 @@ const TextImageCanvas = ({
         </Grid>
       </Grid>
     );
-  } else {
   }
 };
 

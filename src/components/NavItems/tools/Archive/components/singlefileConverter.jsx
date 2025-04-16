@@ -264,7 +264,7 @@ const SinglefileConverter = (telegramURL) => {
           if (
             titleElem &&
             titleElem.length > 0 &&
-            titleElem[0].innerHTML != ""
+            titleElem[0].innerHTML !== ""
           ) {
             let title = titleElem[0].innerHTML;
             let retbytes = new TextEncoder().encode(title);

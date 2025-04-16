@@ -225,7 +225,7 @@ const SemanticSearch = () => {
   useEffect(() => {
     //takes in text parameter from url
     if (url) {
-      const uri = url !== null ? decodeURIComponent(url) : undefined;
+      const uri = decodeURIComponent(url);
       if (uri === "assistantText" && text) {
         text = text.replaceAll("\n", " ");
         setSearchString(text);

@@ -73,7 +73,7 @@ const AssistantCredSignals = () => {
   };
 
   //style disabled accordion
-  const StyledAccordion = styled(Accordion)(({ theme }) => ({
+  const StyledAccordion = styled(Accordion)(() => ({
     ".Mui-disabled": {
       opacity: "1 !important",
       background: "var(--mui-palette-background-paper)",
@@ -453,7 +453,7 @@ const AssistantCredSignals = () => {
                 resultsHaveErrors={false}
                 sanitizeDetectionPercentage={(n) => Math.round(n)}
                 gaugeExplanation={{ colors: colors, keywords: keywords }}
-                toolName="Assistant" // this points to the correct translatons .tsv file
+                toolName="Assistant" // this points to the correct translations .tsv file
                 detectionType={"machine_generated_text"}
               />
             ) : null}

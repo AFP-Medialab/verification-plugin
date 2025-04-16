@@ -90,7 +90,7 @@ const AFacebookResults = (props) => {
 
   return (
     <div>
-      {report !== null && (
+      {report && (
         <Card variant="outlined">
           <CardHeader
             title={keyword("cardheader_results")}
@@ -199,7 +199,7 @@ const AFacebookResults = (props) => {
                   <ImageUrlGridList
                     list={thumbnails}
                     cols={3}
-                    style={{ maxHeigth: "none", height: "auto" }}
+                    style={{ maxHeight: "none", height: "auto" }}
                   />
                 </div>
                 <Box

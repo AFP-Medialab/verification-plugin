@@ -16,7 +16,6 @@ export const useVideoSimilarity = (url, keyword) => {
       axios
         .get(dbkfApiUrl)
         .then((response) => {
-          //console.log(response);
           const resultData = [];
 
           Object.values(response.data).forEach((value) => {
@@ -27,17 +26,14 @@ export const useVideoSimilarity = (url, keyword) => {
           dispatch(setKeyframesSimilarityLoading(false));
         })
         .catch((error) => {
-          //handleError("keyframes_error_VIDEO_SIMILARITY");
           console.error(error);
           dispatch(setKeyframesSimilarityLoading(false));
         });
     };
 
-    if (url === undefined || url === "") {
-    } else {
+    if (url) {
       dispatch(setKeyframesSimilarityLoading(true));
       getData(
-        //"https://weverify-demo.ontotext.com/similarity/similarVideos?collection_id=similarity&threshold_similarity=" +
         similarityAPI +
           "/similarVideos?collection_id=similarity&threshold_similarity=" +
           keyword("dbkf_threshold") +
@@ -45,7 +41,5 @@ export const useVideoSimilarity = (url, keyword) => {
           url,
       );
     }
-
-    //postUrl("http://multimedia2.iti.gr/video_analysis/segmentation", jsonData);
   }, [url]);
 };

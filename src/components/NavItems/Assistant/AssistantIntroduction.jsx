@@ -26,7 +26,6 @@ import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import {
   TransHtmlDoubleLineBreak,
   TransSupportedToolsLink,
-  TransSupportedUrlsLink,
 } from "./TransComponents";
 
 const AssistantIntroduction = (props) => {

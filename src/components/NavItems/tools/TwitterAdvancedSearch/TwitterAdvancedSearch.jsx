@@ -94,12 +94,6 @@ const TwitterAdvancedSearch = () => {
     setSelectedToDate(dayjs(date));
   };
 
-  const pastDate = (currentDate) => {
-    const itemDate = currentDate.toDate();
-    if (fromDate) return fromDate > itemDate;
-    return false;
-  };
-
   const session = useSelector((state) => state.userSession);
   const uid = session && session.user ? session.user.id : null;
   const client_id = getclientId();
@@ -131,13 +125,13 @@ const TwitterAdvancedSearch = () => {
       setEventUrl(url);
       window.open(url);
       /*trackEvent(
-                              "submission",
-                              "twitter_advance_search",
-                              "search twitter request",
-                              url,
-                              client_id,
-                              uid
-                            );*/
+                                    "submission",
+                                    "twitter_advance_search",
+                                    "search twitter request",
+                                    url,
+                                    client_id,
+                                    uid
+                                  );*/
     }
   };
 

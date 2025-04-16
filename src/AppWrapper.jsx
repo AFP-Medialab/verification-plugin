@@ -1,3 +1,4 @@
+// noinspection SpellCheckingInspection
 import { CacheProvider } from "@emotion/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -24,7 +25,7 @@ const AppWrapper = ({ children }) => {
   //   const { children } = props;
   const currentLang = useSelector((state) => state.language);
 
-  // Set UI dicrection based on language reading direction
+  // Set UI direction based on language reading direction
   const direction = currentLang !== "ar" ? "ltr" : "rtl";
 
   useEffect(() => {

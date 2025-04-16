@@ -443,7 +443,7 @@ const TwitterResults = (props) => {
                 }}
               />
 
-              {thumbnails !== undefined && (
+              {
                 <div>
                   <Box
                     sx={{
@@ -480,7 +480,7 @@ const TwitterResults = (props) => {
                     <></>
                   </ReverseSearchButtons>
                 </div>
-              )}
+              }
             </div>
           </Card>
         )}

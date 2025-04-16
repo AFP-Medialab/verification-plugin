@@ -16,6 +16,7 @@ import Typography from "@mui/material/Typography";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
@@ -57,7 +58,7 @@ export default function AssistantTextClassification({
   let sentenceRgbLow, sentenceRgbHigh;
   let sentenceThresholdLow, sentenceThresholdHigh;
   const colourScaleText = keyword("colour_scale");
-  if (credibilitySignal == keyword("subjectivity_title")) {
+  if (credibilitySignal === keyword("subjectivity_title")) {
     // subjectivity requires confidence for sentence
     sentenceTooltipText = keyword("confidence_tooltip_sentence");
     sentenceTextLow = keyword("low_confidence");
@@ -199,9 +200,9 @@ export function CategoriesList({
   if (_.isEmpty(categories)) {
     return (
       <p>
-        {credibilitySignal == keyword("news_framing_title") &&
+        {credibilitySignal === keyword("news_framing_title") &&
           keyword("no_detected_topics")}
-        {credibilitySignal == keyword("subjectivity_title") &&
+        {credibilitySignal === keyword("subjectivity_title") &&
           keyword("no_detected_sentences")}
       </p>
     );

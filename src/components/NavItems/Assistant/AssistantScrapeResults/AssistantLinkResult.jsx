@@ -53,7 +53,7 @@ const Status = (params) => {
           size="small"
         />
       ) : null}
-      {params.done && params.urlResults.resolvedDomain == "" ? (
+      {params.done && params.urlResults.resolvedDomain === "" ? (
         <Chip
           label={keyword(params.sourceTypes.unlabelled)}
           color={params.trafficLightColors.unlabelled}
@@ -116,7 +116,7 @@ const sourceTypeListFilterOperators = getGridSingleSelectOperators()
   .filter((operator) => operator.value === "isAnyOf")
   .map((operator) => {
     const newOperator = { ...operator };
-    const newGetApplyFilterFn = (filterItem, column) => {
+    const newGetApplyFilterFn = (filterItem) => {
       return (params) => {
         let isOk = true;
         filterItem?.value?.forEach((fv) => {

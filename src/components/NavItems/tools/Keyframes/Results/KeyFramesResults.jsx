@@ -279,7 +279,7 @@ const KeyFramesResults = ({ result }) => {
                 list={detailedList}
                 cols={cols}
                 handleClick={imageClick}
-                style={{ maxHeigth: "none", height: "auto" }}
+                style={{ maxHeight: "none", height: "auto" }}
                 setLoading={showElementsDetailed}
               />
             </div>
@@ -300,7 +300,7 @@ const KeyFramesResults = ({ result }) => {
                 list={simpleList}
                 cols={cols}
                 handleClick={imageClick}
-                style={{ maxHeigth: "none", height: "auto" }}
+                style={{ maxHeight: "none", height: "auto" }}
                 setLoading={showElementsSimple}
               />
             </div>
