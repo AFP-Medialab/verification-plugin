@@ -102,7 +102,7 @@ const styles = (theme) => ({
 
   content: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.main,
+    backgroundColor: "var(--mui-palette-background-main)",
     minHeight: "100vh",
     overflow: "hidden",
   },
