@@ -2,10 +2,11 @@
 import { CacheProvider } from "@emotion/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider } from "@mui/material/styles";
 
 import createCache from "@emotion/cache";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -20,6 +21,8 @@ import "dayjs/locale/fr";
 import "dayjs/locale/it";
 import { prefixer } from "stylis";
 import stylisRTLPlugin from "stylis-plugin-rtl";
+
+import { theme as defaultTheme, getStoredFontSize } from "./theme";
 
 const AppWrapper = ({ children }) => {
   //   const { children } = props;
@@ -41,9 +44,25 @@ const AppWrapper = ({ children }) => {
     key: "empty",
   });
 
-  const theme = createTheme({
+  const [fontSize, setFontSize] = useState(getStoredFontSize());
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const newFontSize = getStoredFontSize();
+      setFontSize(newFontSize);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
+  const theme = {
+    ...defaultTheme,
     direction: direction,
-  });
+    typography: {
+      fontSize: fontSize,
+    },
+  };
 
   if (dayjs.locale() !== currentLang) {
     dayjs.locale(currentLang);
@@ -58,6 +77,7 @@ const AppWrapper = ({ children }) => {
     >
       <CacheProvider value={direction === "rtl" ? cacheRtl : emptyCache}>
         <ThemeProvider theme={theme}>
+          <CssBaseline />
           <QueryClientProvider client={queryClient}>
             {children}
             <ReactQueryDevtools initialIsOpen={false}></ReactQueryDevtools>
