@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 
 import { OpenInNew } from "@mui/icons-material";
 
@@ -23,6 +23,7 @@ import {
   itIT,
 } from "@mui/x-data-grid/locales";
 
+import { theme as defaultTheme } from "../../../../theme";
 import {
   getAlertColor,
   getAlertLabel,
@@ -221,20 +222,19 @@ const NddDataGrid = ({ rows }) => {
   /* This is needed to fix the pagination arrows for RTL languages
    * See https://mui.com/x/react-data-grid/localization/#rtl-support
    */
-  const theme = createTheme(
-    {
-      direction: isCurrentLanguageLeftToRight ? "ltr" : "rtl",
-      palette: {
-        primary: {
-          light: "#00926c",
-          main: "#00926c",
-          dark: "#00926c",
-          contrastText: "#fff",
-        },
+  const theme = {
+    ...defaultTheme,
+    direction: isCurrentLanguageLeftToRight ? "ltr" : "rtl",
+    palette: {
+      primary: {
+        light: "#00926c",
+        main: "#00926c",
+        dark: "#00926c",
+        contrastText: "#fff",
       },
     },
     datagridLanguage,
-  );
+  };
 
   return (
     <ThemeProvider theme={theme}>

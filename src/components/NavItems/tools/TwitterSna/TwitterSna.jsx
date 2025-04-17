@@ -18,7 +18,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -42,6 +42,7 @@ import { setError } from "redux/reducers/errorReducer";
 
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { dataAnalysisSna } from "../../../../constants/tools";
+import { theme as defaultTheme } from "../../../../theme";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useMyStyles, {
   myCardStyles,
@@ -51,7 +52,8 @@ import { replaceAll } from "../TwitterAdvancedSearch/createUrl";
 import useTwitterSnaRequest from "./Hooks/useTwitterSnaRequest";
 
 const TwitterSna = () => {
-  const theme = createTheme({
+  const theme = {
+    ...defaultTheme,
     components: {
       MuiCardHeader: {
         styleOverrides: {
@@ -92,16 +94,7 @@ const TwitterSna = () => {
         },
       },
     },
-
-    palette: {
-      primary: {
-        light: "#00926c",
-        main: "#00926c",
-        dark: "#00926c",
-        contrastText: "#fff",
-      },
-    },
-  });
+  };
 
   const classes = useMyStyles();
   const cardClasses = myCardStyles();
@@ -364,13 +357,13 @@ const TwitterSna = () => {
         delete prevResult.socioSemantic4ModeGraph;
       }
       /*trackEvent(
-                                                                                                              "submission",
-                                                                                                              "tsna",
-                                                                                                              "redirect to tsna",
-                                                                                                              JSON.stringify(newRequest),
-                                                                                                              client_id,
-                                                                                                              uid
-                                                                                                            );*/
+                                                                                                                    "submission",
+                                                                                                                    "tsna",
+                                                                                                                    "redirect to tsna",
+                                                                                                                    JSON.stringify(newRequest),
+                                                                                                                    client_id,
+                                                                                                                    uid
+                                                                                                                  );*/
       setSubmittedRequest(newRequest);
     }
   };
@@ -513,10 +506,10 @@ const TwitterSna = () => {
   }
 
   /*
-                                    const verifiedChange = () => {
-                                      setVerifiedUsers(!verifiedUsers);
-                                    };
-                                    */
+                                      const verifiedChange = () => {
+                                        setVerifiedUsers(!verifiedUsers);
+                                      };
+                                      */
 
   return (
     <div>
