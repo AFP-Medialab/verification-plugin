@@ -35,10 +35,6 @@ const PopUp = () => {
     window.open("/popup.html#/app/assistant/" + encodeURIComponent(pageUrl));
   };
 
-  const userAuthenticated = useSelector(
-    (state) => state.userSession && state.userSession.userAuthenticated,
-  );
-  console.log(userAuthenticated);
   const userRoles = useSelector((state) => state.userSession.user.roles);
 
   const createScript = () => {
