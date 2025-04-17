@@ -88,12 +88,12 @@ const Analysis = () => {
   );
   const submitForm = () => {
     /*trackEvent(
-                                                  "submission",
-                                                  "analysis",
-                                                  "video caa analysis",
-                                                  input.trim(),
-                                                  client_id
-                                                );*/
+                                                      "submission",
+                                                      "analysis",
+                                                      "video caa analysis",
+                                                      input.trim(),
+                                                      client_id
+                                                    );*/
     setSubmittedUrl(input.trim());
     dispatch(cleanAnalysisState());
   };
@@ -135,7 +135,11 @@ const Analysis = () => {
       <HeaderTool
         name={keywordAllTools("navbar_analysis_video")}
         description={keywordAllTools("navbar_analysis_description")}
-        icon={<videoAnalysis.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
+        icon={
+          <videoAnalysis.icon
+            sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+          />
+        }
       />
       <Card variant="outlined">
         <form className={classes.root2}>

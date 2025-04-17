@@ -144,13 +144,13 @@ const Thumbnails = () => {
     if (url !== null && url !== "" && isYtUrl(url)) {
       setEventUrl(url);
       /*trackEvent(
-                                                                                            "submission",
-                                                                                            "thumbnails",
-                                                                                            "youtube thumbnail",
-                                                                                            url,
-                                                                                            client_id,
-                                                                                            uid
-                                                                                          );*/
+                                                                                                  "submission",
+                                                                                                  "thumbnails",
+                                                                                                  "youtube thumbnail",
+                                                                                                  url,
+                                                                                                  client_id,
+                                                                                                  uid
+                                                                                                );*/
       let images = get_images(url);
       dispatch(
         setThumbnailsResult({
@@ -240,7 +240,11 @@ const Thumbnails = () => {
       <HeaderTool
         name={keywordAllTools("navbar_thumbnails")}
         description={keywordAllTools("navbar_thumbnails_description")}
-        icon={<thumbnails.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
+        icon={
+          <thumbnails.icon
+            sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+          />
+        }
       />
       <Card variant="outlined">
         <Box

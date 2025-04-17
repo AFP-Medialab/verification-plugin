@@ -117,7 +117,7 @@ const StringFileUploadField = ({
         <Stack
           sx={{
             height: "100%",
-            border: "4px dashed #00926c",
+            border: "4px dashed var(--mui-palette-primary-main)",
             backgroundColor: dropColor,
             justifyContent: "center",
             alignItems: "center",

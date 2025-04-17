@@ -371,7 +371,7 @@ const DeepfakeResultsVideo = (props) => {
                   <Typography
                     variant="h6"
                     sx={{
-                      color: "#00926c",
+                      color: "var(--mui-palette-primary-main)",
                     }}
                   >
                     {keyword("deepfake_clips")}
@@ -411,7 +411,7 @@ const DeepfakeResultsVideo = (props) => {
                               sx={{
                                 backgroundColor:
                                   keyShot === shotSelectedKey
-                                    ? "#00926c"
+                                    ? "var(--mui-palette-primary-main)"
                                     : "var(--mui-palette-background-paper)",
                               }}
                             >

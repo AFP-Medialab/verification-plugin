@@ -28,7 +28,7 @@ const styles = (theme) => ({
 
   neededField: {
     "& label": {
-      color: "#00926c",
+      color: "var(--mui-palette-primary-main)",
     },
   },
 
@@ -523,12 +523,12 @@ const styles = (theme) => ({
     cursor: "pointer",
 
     "&:hover": {
-      border: "solid #00926c 2px",
+      border: "solid var(--mui-palette-primary-main) 2px",
     },
   },
 
   bigButtonDivSelected: {
-    border: "solid #00926c 3px",
+    border: "solid var(--mui-palette-primary-main) 3px",
     borderRadius: "25px",
   },
 
@@ -541,7 +541,7 @@ const styles = (theme) => ({
   bigButtonIconSelected: {
     height: "50px",
     width: "auto",
-    color: "#00926c",
+    color: "var(--mui-palette-primary-main)",
   },
 
   height100: {

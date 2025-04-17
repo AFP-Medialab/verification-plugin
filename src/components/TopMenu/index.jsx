@@ -58,7 +58,7 @@ const TopMenu = ({ topMenuItems }) => {
     return {
       fill:
         topMenuItemSelected === toolName
-          ? "#00926c"
+          ? "var(--mui-palette-primary-main)"
           : "var(--mui-palette-text-secondary)",
       fontSize: "24px",
     };

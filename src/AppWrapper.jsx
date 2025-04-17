@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import CssBaseline from "@mui/material/CssBaseline";
+import GlobalStyles from "@mui/material/GlobalStyles";
 import { ThemeProvider } from "@mui/material/styles";
 
 import createCache from "@emotion/cache";
@@ -78,6 +79,13 @@ const AppWrapper = ({ children }) => {
       <CacheProvider value={direction === "rtl" ? cacheRtl : emptyCache}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
+          <GlobalStyles
+            styles={{
+              body: {
+                backgroundColor: "var(--mui-palette-background-main)",
+              },
+            }}
+          />
           <QueryClientProvider client={queryClient}>
             {children}
             <ReactQueryDevtools initialIsOpen={false}></ReactQueryDevtools>

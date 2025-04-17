@@ -103,7 +103,11 @@ const Deepfake = () => {
       <HeaderTool
         name={keywordAllTools("navbar_deepfake_image")}
         description={keywordAllTools("navbar_deepfake_image_description")}
-        icon={<imageDeepfake.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
+        icon={
+          <imageDeepfake.icon
+            sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+          />
+        }
       />
       <Alert severity="warning">{keywordWarning("warning_beta")}</Alert>
       <Box

@@ -125,13 +125,13 @@ const TwitterAdvancedSearch = () => {
       setEventUrl(url);
       window.open(url);
       /*trackEvent(
-                                    "submission",
-                                    "twitter_advance_search",
-                                    "search twitter request",
-                                    url,
-                                    client_id,
-                                    uid
-                                  );*/
+                                          "submission",
+                                          "twitter_advance_search",
+                                          "search twitter request",
+                                          url,
+                                          client_id,
+                                          uid
+                                        );*/
     }
   };
 
@@ -140,7 +140,11 @@ const TwitterAdvancedSearch = () => {
       <HeaderTool
         name={keywordAllTools("navbar_twitter")}
         description={keywordAllTools("navbar_twitter_description")}
-        icon={<searchTwitter.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
+        icon={
+          <searchTwitter.icon
+            sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+          />
+        }
       />
       <Alert severity="warning">{keyword("warning_x_search")}</Alert>
       <Box

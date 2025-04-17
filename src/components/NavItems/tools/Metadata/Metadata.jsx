@@ -209,7 +209,7 @@ const Metadata = () => {
         icon={
           <imageMetadataTool.icon
             sx={{
-              fill: "#00926c",
+              fill: "var(--mui-palette-primary-main)",
               fontSize: "40px",
             }}
           />

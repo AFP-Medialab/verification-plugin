@@ -93,7 +93,7 @@ const GaugeChartModalExplanation = ({
                 id="transition-modal-title"
                 variant="subtitle2"
                 style={{
-                  color: "#00926c",
+                  color: "var(--mui-palette-primary-main)",
                   fontSize: "24px",
                 }}
               >

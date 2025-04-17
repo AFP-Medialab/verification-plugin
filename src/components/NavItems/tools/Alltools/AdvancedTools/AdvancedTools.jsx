@@ -308,7 +308,12 @@ const AdvancedTools = () => {
             <form>
               <Grid>
                 <DialogTitle id="max-width-dialog-title">
-                  <Typography style={{ color: "#00926c", fontSize: "24px" }}>
+                  <Typography
+                    style={{
+                      color: "var(--mui-palette-primary-main)",
+                      fontSize: "24px",
+                    }}
+                  >
                     {keyword("title")}
                   </Typography>
                 </DialogTitle>
@@ -468,7 +473,12 @@ const AdvancedTools = () => {
                   </Grid>
 
                   <Grid>
-                    <Typography style={{ color: "#00926c", fontSize: "24px" }}>
+                    <Typography
+                      style={{
+                        color: "var(--mui-palette-primary-main)",
+                        fontSize: "24px",
+                      }}
+                    >
                       {messageI18NResolver("ACCESSCODEFORM_EMAIL_CHECK")}
                     </Typography>
                   </Grid>
@@ -556,7 +566,10 @@ const AdvancedTools = () => {
             <DialogTitle id="max-width-dialog-title">
               <Typography
                 gutterBottom
-                style={{ color: "#00926c", fontSize: "24px" }}
+                style={{
+                  color: "var(--mui-palette-primary-main)",
+                  fontSize: "24px",
+                }}
               >
                 {keyword("title_tools_unlocked")}
               </Typography>
@@ -586,7 +599,10 @@ const AdvancedTools = () => {
             <DialogTitle id="max-width-dialog-title">
               <Typography
                 gutterBottom
-                style={{ color: "#00926c", fontSize: "24px" }}
+                sx={{
+                  color: "var(--mui-palette-primary-main)",
+                  fontSize: "24px",
+                }}
               >
                 {messageI18NResolver("REGISTRATIONFORM_TITLE_WINDOW")}
               </Typography>
@@ -908,7 +924,10 @@ const AdvancedTools = () => {
             <DialogTitle id="max-width-dialog-title">
               <Typography
                 gutterBottom
-                style={{ color: "#00926c", fontSize: "24px" }}
+                sx={{
+                  color: "var(--mui-palette-primary-main)",
+                  fontSize: "24px",
+                }}
               >
                 {messageI18NResolver("REGISTRATIONFORM_SUCCESS_TITLE")}
               </Typography>

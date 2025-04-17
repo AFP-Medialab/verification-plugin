@@ -377,8 +377,12 @@ const SideMenu = ({ tools, setOpenAlert }) => {
     }
 
     return {
-      fill: isSelected ? "#00926c" : "var(--mui-palette-text-secondary)",
-      color: isSelected ? "#00926c" : "var(--mui-palette-text-secondary)",
+      fill: isSelected
+        ? "var(--mui-palette-primary-main)"
+        : "var(--mui-palette-text-secondary)",
+      color: isSelected
+        ? "var(--mui-palette-primary-main)"
+        : "var(--mui-palette-text-secondary)",
       fontSize: "24px",
     };
   };

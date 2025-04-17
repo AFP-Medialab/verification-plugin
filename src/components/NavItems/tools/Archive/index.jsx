@@ -285,7 +285,7 @@ const Archive = () => {
                     <archiving.icon
                       style={{
                         fontSize: "40px",
-                        fill: "#00926c",
+                        fill: "var(--mui-palette-primary-main)",
                       }}
                     />
 

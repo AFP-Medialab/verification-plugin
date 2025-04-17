@@ -84,7 +84,7 @@ const TwitterSna = () => {
             "&:before": {
               width: "0px",
             },
-            border: "1px solid #00926c",
+            border: "1px solid var(--mui-palette-primary-main)",
           },
           rounded: {
             borderRadius: "15px",
@@ -364,13 +364,13 @@ const TwitterSna = () => {
         delete prevResult.socioSemantic4ModeGraph;
       }
       /*trackEvent(
-                                                                                      "submission",
-                                                                                      "tsna",
-                                                                                      "redirect to tsna",
-                                                                                      JSON.stringify(newRequest),
-                                                                                      client_id,
-                                                                                      uid
-                                                                                    );*/
+                                                                                                              "submission",
+                                                                                                              "tsna",
+                                                                                                              "redirect to tsna",
+                                                                                                              JSON.stringify(newRequest),
+                                                                                                              client_id,
+                                                                                                              uid
+                                                                                                            );*/
       setSubmittedRequest(newRequest);
     }
   };
@@ -513,10 +513,10 @@ const TwitterSna = () => {
   }
 
   /*
-                            const verifiedChange = () => {
-                              setVerifiedUsers(!verifiedUsers);
-                            };
-                            */
+                                    const verifiedChange = () => {
+                                      setVerifiedUsers(!verifiedUsers);
+                                    };
+                                    */
 
   return (
     <div>
@@ -525,7 +525,9 @@ const TwitterSna = () => {
           name={keywordAllTools("navbar_twitter_sna")}
           description={keywordAllTools("navbar_twitter_sna_description")}
           icon={
-            <dataAnalysisSna.icon sx={{ fill: "#00926c", fontSize: "40px" }} />
+            <dataAnalysisSna.icon
+              sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+            />
           }
         />
         <Card variant="outlined" className={cardClasses.root}>
@@ -850,7 +852,11 @@ const TwitterSna = () => {
 
               <Accordion>
                 <AccordionSummary
-                  expandIcon={<ExpandMoreIcon style={{ color: "#00926c" }} />}
+                  expandIcon={
+                    <ExpandMoreIcon
+                      style={{ color: "var(--mui-palette-primary-main)" }}
+                    />
+                  }
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
@@ -865,7 +871,7 @@ const TwitterSna = () => {
                     <Typography
                       variant="h6"
                       align="left"
-                      style={{ color: "#00926c" }}
+                      sx={{ color: "var(--mui-palette-primary-main)" }}
                     >
                       {keyword("twittersna_title_optional")}
                     </Typography>

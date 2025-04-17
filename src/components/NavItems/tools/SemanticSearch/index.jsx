@@ -395,7 +395,13 @@ const SemanticSearch = () => {
           name={keyword("semantic_search_title")}
           description={keyword("semantic_search_description")}
           icon={
-            <ManageSearch sx={{ fill: "#00926c", width: 40, height: 40 }} />
+            <ManageSearch
+              sx={{
+                fill: "var(--mui-palette-primary-main)",
+                width: 40,
+                height: 40,
+              }}
+            />
           }
         />
         <Alert severity="info">{keyword("semantic_search_tip")}</Alert>
@@ -525,8 +531,8 @@ const SemanticSearch = () => {
                               <Typography
                                 id="transition-modal-title"
                                 variant="subtitle2"
-                                style={{
-                                  color: "#00926c",
+                                sx={{
+                                  color: "var(--mui-palette-primary-main)",
                                   fontSize: "24px",
                                 }}
                               >

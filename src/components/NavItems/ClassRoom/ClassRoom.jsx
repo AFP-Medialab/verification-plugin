@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Iframe from "react-iframe";
 
-import { ThemeProvider, createTheme } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -13,6 +12,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import TextField from "@mui/material/TextField";
@@ -131,7 +131,7 @@ const ClassRoom = () => {
       case 4:
         return keyword("classroom_gamification");
       /*case 5:
-                                                                                                              return keyword("classroom_gamification_2");*/
+                                                                                                                                                                          return keyword("classroom_gamification_2");*/
       case 5:
         return keyword("user_resources_title");
       case 6:
@@ -141,43 +141,22 @@ const ClassRoom = () => {
     }
   };
 
-  const theme = createTheme({
-    components: {
-      MuiTab: {
-        styleOverrides: {
-          wrapper: {
-            fontSize: "10px",
-          },
-          root: {
-            minWidth: "100px!important",
-          },
-        },
-      },
-    },
-    palette: {
-      primary: {
-        light: "#00926c",
-        main: "#00926c",
-        dark: "#00926c",
-        contrastText: "#fff",
-      },
-    },
-  });
-
   return (
-    <div>
-      <ThemeProvider theme={theme}>
+    <Box>
+      <Stack direction="column" spacing={2}>
         <HeaderTool
           name={keyword("classroom_title")}
           icon={
             <IconClassRoom
-              style={{ fill: "#00926c", marginRight: "10px" }}
+              style={{
+                fill: "var(--mui-palette-primary-main)",
+                marginRight: "10px",
+              }}
               width="40px"
               height="40px"
             />
           }
         />
-
         <Card variant="outlined">
           <Box
             sx={{
@@ -195,17 +174,45 @@ const ClassRoom = () => {
               indicatorColor="primary"
               value={value}
               onChange={handleChange}
-              aria-label="simple tabs example"
-              variant="fullWidth"
+              variant="scrollable"
+              scrollButtons="auto"
             >
-              <Tab label={tabTitle(0)} {...a11yProps(0)} />
-              <Tab label={tabTitle(1)} {...a11yProps(1)} />
-              <Tab label={tabTitle(2)} {...a11yProps(2)} />
-              <Tab label={tabTitle(3)} {...a11yProps(3)} />
-              <Tab label={tabTitle(4)} {...a11yProps(4)} />
+              <Tab
+                sx={{ minWidth: "100px !important" }}
+                label={tabTitle(0)}
+                {...a11yProps(0)}
+              />
+              <Tab
+                sx={{ minWidth: "100px !important" }}
+                label={tabTitle(1)}
+                {...a11yProps(1)}
+              />
+              <Tab
+                sx={{ minWidth: "100px !important" }}
+                label={tabTitle(2)}
+                {...a11yProps(2)}
+              />
+              <Tab
+                sx={{ minWidth: "100px !important" }}
+                label={tabTitle(3)}
+                {...a11yProps(3)}
+              />
+              <Tab
+                sx={{ minWidth: "100px !important" }}
+                label={tabTitle(4)}
+                {...a11yProps(4)}
+              />
               {/* <Tab label={tabTitle(5)}  {...a11yProps(5)} />*/}
-              <Tab label={tabTitle(5)} {...a11yProps(5)} />
-              <Tab label={tabTitle(6)} {...a11yProps(6)} />
+              <Tab
+                sx={{ minWidth: "100px !important" }}
+                label={tabTitle(5)}
+                {...a11yProps(5)}
+              />
+              <Tab
+                sx={{ minWidth: "100px !important" }}
+                label={tabTitle(6)}
+                {...a11yProps(6)}
+              />
             </Tabs>
             <TabPanel value={value} index={0}>
               {introduction(5).map((obj, index) => {
@@ -434,8 +441,8 @@ const ClassRoom = () => {
             </DialogActions>
           </Dialog>
         </Card>
-      </ThemeProvider>
-    </div>
+      </Stack>
+    </Box>
   );
 };
 export default ClassRoom;

@@ -52,7 +52,7 @@ const ToolsMenuItem = ({ tool, onClick }) => {
             }}
           >
             <Grid>
-              <tool.icon sx={{ color: "#00926c" }} />
+              <tool.icon sx={{ color: "var(--mui-palette-primary-main)" }} />
             </Grid>
 
             <Grid size="grow">

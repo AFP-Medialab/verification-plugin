@@ -157,7 +157,11 @@ const Keyframes = () => {
         <HeaderTool
           name={keywordAllTools("navbar_keyframes")}
           description={keywordAllTools("navbar_keyframes_description")}
-          icon={<keyframes.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
+          icon={
+            <keyframes.icon
+              sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+            />
+          }
         />
 
         <TabContext value={tabSelected}>

@@ -79,7 +79,9 @@ const Geolocation = () => {
           name={keywordAllTools("navbar_geolocation")}
           description={keywordAllTools("navbar_geolocation_description")}
           icon={
-            <imageGeolocation.icon sx={{ fill: "#00926c", fontSize: "40px" }} />
+            <imageGeolocation.icon
+              sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+            />
           }
         />
         <Alert severity="warning">

@@ -57,13 +57,13 @@ const VideoRights = () => {
   const submitForm = () => {
     if (!isLoading) {
       /*trackEvent(
-                                      "submission",
-                                      "videorights",
-                                      "video rights",
-                                      input,
-                                      client_id,
-                                      uid
-                                    );*/
+                                            "submission",
+                                            "videorights",
+                                            "video rights",
+                                            input,
+                                            client_id,
+                                            uid
+                                          );*/
       setSubmitted(input);
       dispatch(setVideoRightsLoading(true));
     }
@@ -102,7 +102,11 @@ const VideoRights = () => {
       <HeaderTool
         name={keywordAllTools("navbar_rights")}
         description={keywordAllTools("navbar_rights_description")}
-        icon={<videoRights.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
+        icon={
+          <videoRights.icon
+            sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+          />
+        }
       />
       <Card variant="outlined">
         <form className={classes.root2}>

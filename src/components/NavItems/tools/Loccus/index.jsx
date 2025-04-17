@@ -331,7 +331,11 @@ const Loccus = () => {
         description={keywordAllTools("navbar_loccus_description")}
         icon={
           <AudioFile
-            style={{ fill: "#00926c", height: "40px", width: "auto" }}
+            style={{
+              fill: "var(--mui-palette-primary-main)",
+              height: "40px",
+              width: "auto",
+            }}
           />
         }
       />

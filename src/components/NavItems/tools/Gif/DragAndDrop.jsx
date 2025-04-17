@@ -73,7 +73,7 @@ class DragAndDrop extends Component {
             spacing={0}
             direction="column"
             style={{
-              border: "dashed #00926c 2px",
+              border: "dashed var(--mui-palette-primary-main) 2px",
               backgroundColor: "rgba(255,255,255,.8)",
               borderRadius: "25px",
               position: "absolute",

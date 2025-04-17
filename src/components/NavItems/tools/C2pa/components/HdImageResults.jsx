@@ -123,7 +123,7 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
         sx={{
           width: 345,
           border: isSelected
-            ? "3px solid #00926c"
+            ? "3px solid var(--mui-palette-primary-main)"
             : "1px solid rgba(0, 0, 0, 0.12)",
         }}
       >
