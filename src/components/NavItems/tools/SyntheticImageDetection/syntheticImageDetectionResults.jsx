@@ -39,7 +39,10 @@ import {
   getSyntheticImageDetectionAlgorithmFromApiName,
   gigaGanWebpR50Grip,
   ldmWebpR50Grip,
+  multiBfreeDino2reg4Grip,
   proGanWebpR50Grip,
+  sd21BfreeDino2reg4Grip,
+  sd21BfreeSiglipGrip,
   syntheticImageDetectionAlgorithms,
 } from "./SyntheticImageDetectionAlgorithms";
 
@@ -169,7 +172,12 @@ const SyntheticImageDetectionResults = ({
           imageType === "image/webp" &&
           (algorithm.apiServiceName === ldmWebpR50Grip.apiServiceName ||
             algorithm.apiServiceName === proGanWebpR50Grip.apiServiceName ||
-            algorithm.apiServiceName === gigaGanWebpR50Grip.apiServiceName)
+            algorithm.apiServiceName === gigaGanWebpR50Grip.apiServiceName ||
+            algorithm.apiServiceName ===
+              sd21BfreeDino2reg4Grip.apiServiceName ||
+            algorithm.apiServiceName ===
+              multiBfreeDino2reg4Grip.apiServiceName ||
+            algorithm.apiServiceName === sd21BfreeSiglipGrip.apiServiceName)
         ) {
           res.push(
             new SyntheticImageDetectionAlgorithmResult(
