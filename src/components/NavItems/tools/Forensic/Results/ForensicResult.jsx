@@ -1242,20 +1242,6 @@ const ForensicResults = (props) => {
                                         </IconButton>
                                       </Box>
                                     )}
-                                    {value.score && (
-                                      <Box
-                                        align="center"
-                                        sx={{
-                                          width: "100%",
-                                          pl: 1,
-                                        }}
-                                      >
-                                        {keyword("forensic_score") +
-                                          ": " +
-                                          (value.score * 100).toPrecision(2) +
-                                          " %"}
-                                      </Box>
-                                    )}
                                   </div>
                                 )}
                                 <Popover
