@@ -22,6 +22,7 @@ import { toolsHome } from "../../constants/tools";
 import { selectTopMenuItem } from "../../redux/reducers/navReducer";
 import { resetToolSelected } from "../../redux/reducers/tools/toolReducer";
 import { theme } from "../../theme";
+import LogoEuComWhite from "../NavBar/images/SVG/Navbar/ep-logo-white.svg";
 import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg";
 import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg";
 import LogoVeraBlack from "../NavBar/images/SVG/Navbar/vera-logo_black.svg";
@@ -126,18 +127,33 @@ const TopMenu = ({ topMenuItems }) => {
               }}
             >
               {LOGO_EU ? (
-                <LogoEuCom
-                  style={{
-                    height: "auto",
-                    width: "100%",
-                    minWidth: "24px",
-                    maxWidth: "48px",
-                    maxHeight: "48px",
-                  }}
-                  alt="logo"
-                  className={classes.logoLeft}
-                  onClick={handleHomeIconClick}
-                />
+                resolvedMode === "light" ? (
+                  <LogoEuCom
+                    style={{
+                      height: "auto",
+                      width: "100%",
+                      minWidth: "48px",
+                      maxWidth: "96px",
+                      maxHeight: "48px",
+                    }}
+                    alt="logo"
+                    className={classes.logoLeft}
+                    onClick={handleHomeIconClick}
+                  />
+                ) : (
+                  <LogoEuComWhite
+                    style={{
+                      height: "auto",
+                      width: "100%",
+                      minWidth: "48px",
+                      maxWidth: "96px",
+                      maxHeight: "48px",
+                    }}
+                    alt="logo"
+                    className={classes.logoLeft}
+                    onClick={handleHomeIconClick}
+                  />
+                )
               ) : (
                 <LogoInVidWeverify
                   style={{

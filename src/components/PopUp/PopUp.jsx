@@ -12,6 +12,7 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import { ROLES } from "constants/roles";
 
 import { changeLanguage } from "../../redux/reducers/languageReducer";
+import LogoEuComWhite from "../NavBar/images/SVG/Navbar/ep-logo-white.svg?url";
 import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg?url";
 import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg?url";
 import LogoVeraBlack from "../NavBar/images/SVG/Navbar/vera-logo_black.svg?url";
@@ -110,13 +111,17 @@ const PopUp = () => {
                 justifyContent: "center",
               }}
             >
-              <img src={LogoEuCom} alt={LogoEuCom} style={{ width: "100px" }} />
+              <img
+                src={resolvedMode === "light" ? LogoEuCom : LogoEuComWhite}
+                alt={"European Parliament Logo"}
+                style={{ width: "128px" }}
+              />
             </Grid>
             <Grid size={{ xs: 6 }}>
               <img
                 src={resolvedMode === "light" ? LogoVeraBlack : LogoVeraWhite}
                 alt={"logo_vera"}
-                style={{ width: "100px" }}
+                style={{ width: "96px" }}
               />
             </Grid>
           </>
