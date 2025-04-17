@@ -177,15 +177,17 @@ const Forensic = () => {
               fileInputTypesAccepted={"image/*"}
               handleCloseSelectedFile={handleCloseSelectedFile}
               preprocessLocalFile={preprocessImage}
+              isParentLoading={loading}
             />
           </form>
         </Box>
+        {loading && (
+          <div>
+            <LinearProgress />
+          </div>
+        )}
       </Card>
-      {loading && (
-        <div>
-          <LinearProgress />
-        </div>
-      )}
+
       {resultData && (
         <ForensicResults
           result={resultData}

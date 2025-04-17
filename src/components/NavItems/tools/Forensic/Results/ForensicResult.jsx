@@ -17,7 +17,7 @@ import Snackbar from "@mui/material/Snackbar";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -40,6 +40,7 @@ import {
   setStateBackResults,
   setStateInit,
 } from "../../../../../redux/reducers/tools/gifReducer";
+import { theme as defaultTheme } from "../../../../../theme";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import AnimatedGif from "../../Gif/AnimatedGif";
 import ImageCanvas from "../components/imageCanvas/imageCanvas";
@@ -71,7 +72,8 @@ function TabPanel(props) {
 const ForensicResults = (props) => {
   const dispatch = useDispatch();
   const displayItem = useSelector((state) => state.forensic.displayItem);
-  const theme = createTheme({
+  const theme = {
+    ...defaultTheme,
     components: {
       MuiCardHeader: {
         styleOverrides: {
@@ -93,16 +95,7 @@ const ForensicResults = (props) => {
         },
       },
     },
-
-    palette: {
-      primary: {
-        light: "#00926c",
-        main: "#00926c",
-        dark: "#00926c",
-        contrastText: "#fff",
-      },
-    },
-  });
+  };
 
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Forensic");
@@ -660,7 +653,10 @@ const ForensicResults = (props) => {
                             }}
                           >
                             <IconButton
-                              style={{ color: "white", padding: "0" }}
+                              style={{
+                                color: "var(--mui-palette-primary-main)",
+                                padding: "0",
+                              }}
                               component="span"
                               onClick={handleClickCopyURL}
                             >
@@ -730,7 +726,7 @@ const ForensicResults = (props) => {
                       >
                         <span>{keyword("forensic_title_lenses")}</span>
                         <WarningIcon
-                          style={{ color: "#FFFFFF" }}
+                          style={{ color: "var(--mui-palette-primary-main)" }}
                           onClick={clickHelpLenses}
                         />
 
@@ -914,7 +910,7 @@ const ForensicResults = (props) => {
                       >
                         <span>{keyword("forensic_title_filters")}</span>
                         <HelpOutlineIcon
-                          style={{ color: "#FFFFFF" }}
+                          style={{ color: "var(--mui-palette-primary-main)" }}
                           onClick={clickHelpFilters}
                         />
 
