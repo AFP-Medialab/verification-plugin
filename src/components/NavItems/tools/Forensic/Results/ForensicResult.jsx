@@ -673,8 +673,9 @@ const ForensicResults = (props) => {
                           <Button
                             variant="contained"
                             style={{
-                              backgroundColor: "#FFFFFF",
-                              color: "black",
+                              backgroundColor:
+                                "var(--mui-palette-primary-main)",
+                              color: "white",
                             }}
                             onClick={newImage}
                           >
