@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 
+import { useMediaQuery } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -13,17 +14,21 @@ import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import LockIcon from "@mui/icons-material/Lock";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
+import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import _ from "lodash";
 import { setError } from "redux/reducers/errorReducer";
 import * as yup from "yup";
 
+import { theme } from "../../../../../theme";
 import { ERR_AUTH_UNKNOWN_ERROR } from "../../../../Shared/Authentication/authenticationErrors";
 import useAuthenticationAPI from "../../../../Shared/Authentication/useAuthenticationAPI";
 
@@ -222,39 +227,65 @@ const AdvancedTools = () => {
     dispatch(setError(errMsg));
   };
 
+  const isDisplayMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
     <Box>
-      <Stack
-        direction="column"
-        justifyContent="flex-start"
-        alignItems="center"
-        spacing={{ xs: 1 }}
-      >
-        <Button
-          variant="outlined"
-          color={colorButton}
-          onClick={handleClickOpen}
+      {isDisplayMobile ? (
+        <Tooltip
+          title={
+            userAuthenticated
+              ? messageI18NResolver("LOGUSER_LOGOUT_LABEL")
+              : messageI18NResolver("LOGINFORM_SUBMIT_LABEL")
+          }
         >
-          {userAuthenticated
-            ? messageI18NResolver("LOGUSER_LOGOUT_LABEL")
-            : messageI18NResolver("LOGINFORM_SUBMIT_LABEL")}
-        </Button>
-        <Stack
-          direction="column"
-          justifyContent="center"
-          alignItems="flex-start"
-        >
-          <Stack
-            direction={"row"}
+          <IconButton
+            onClick={handleClickOpen}
             sx={{
-              color: "var(--mui-palette-text-primary)",
+              p: 1,
             }}
           >
-            {iconState}
-            <Typography variant="caption">{keyword("title")}</Typography>
+            {userAuthenticated ? (
+              <LogoutIcon color={colorButton} />
+            ) : (
+              <LoginIcon color={colorButton} />
+            )}
+          </IconButton>
+        </Tooltip>
+      ) : (
+        <Stack
+          direction="column"
+          justifyContent="flex-start"
+          alignItems="center"
+          spacing={{ xs: 1 }}
+        >
+          <Button
+            variant="outlined"
+            color={colorButton}
+            onClick={handleClickOpen}
+          >
+            {userAuthenticated
+              ? messageI18NResolver("LOGUSER_LOGOUT_LABEL")
+              : messageI18NResolver("LOGINFORM_SUBMIT_LABEL")}
+          </Button>
+          <Stack
+            direction="column"
+            justifyContent="center"
+            alignItems="flex-start"
+          >
+            <Stack
+              direction={"row"}
+              sx={{
+                color: "var(--mui-palette-text-primary)",
+              }}
+            >
+              {iconState}
+              <Typography variant="caption">{keyword("title")}</Typography>
+            </Stack>
           </Stack>
         </Stack>
-      </Stack>
+      )}
+
       <Dialog
         fullWidth
         maxWidth={"xs"}
@@ -563,7 +594,7 @@ const AdvancedTools = () => {
                       rules={{
                         pattern: {
                           value:
-                            /^[A-Z0-9._%+-]+@(?!gmail|yahoo|hotmail|outlook|inbox|icloud)[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                            /^[A-Z0-9._%+!#$%&'*+-/=?^_`{|}~-]+@(?!gmail|yahoo|hotmail|outlook|inbox|icloud)[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                           message: "invalid organizational email address",
                         },
                         required: true,

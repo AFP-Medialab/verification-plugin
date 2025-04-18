@@ -12,6 +12,9 @@ import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { ThemeProvider } from "@mui/material/styles";
 
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowRight";
+
 import { getSupportedBrowserLanguage } from "@Shared/Languages/getSupportedBrowserLanguage";
 import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -113,6 +116,9 @@ const PopUp = () => {
     });
     setCollections(recInfo.collections.map((x) => x.id).flat());
     setRecording(recInfo.recording[0].state != false);
+    recInfo.recording[0].state != false
+      ? setSelectedCollection(recInfo.recording[0].state)
+      : {};
     console.log(recInfo);
   };
 
@@ -130,6 +136,10 @@ const PopUp = () => {
 
   const handleAddCollection = () => {
     if (newCollectionName.trim() && !collections.includes(newCollectionName)) {
+      chrome.runtime.sendMessage({
+        prompt: "addCollection",
+        newCollectionName: newCollectionName,
+      });
       setCollections([...collections, newCollectionName]);
       setSelectedCollection(newCollectionName);
       setNewCollectionName("");
@@ -141,6 +151,7 @@ const PopUp = () => {
       // Stop recording and collapse
       setRecording(false);
       setExpanded(false);
+      chrome.runtime.sendMessage({ prompt: "stopRecording" });
     } else {
       // If already expanded, collapse without starting
       setExpanded((prev) => !prev);
@@ -148,6 +159,10 @@ const PopUp = () => {
   };
 
   const handleStartRecording = () => {
+    chrome.runtime.sendMessage({
+      prompt: "startRecording",
+      currentCollectionName: selectedCollection,
+    });
     setRecording(true);
     setExpanded(false);
   };
@@ -246,8 +261,19 @@ const PopUp = () => {
                 variant="outlined"
                 color="primary"
                 onClick={handleMainButtonClick}
+                endIcon={
+                  !recording ? (
+                    expanded ? (
+                      <KeyboardArrowUpIcon />
+                    ) : (
+                      <KeyboardArrowDownIcon />
+                    )
+                  ) : null
+                }
               >
-                {recording ? "Stop Recording" : "Recording"}
+                {recording
+                  ? `Stop Recording:  ${selectedCollection}`
+                  : "Start recording"}
               </Button>
 
               <Collapse in={expanded}>

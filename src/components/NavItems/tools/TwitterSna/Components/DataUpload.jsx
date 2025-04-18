@@ -94,28 +94,6 @@ const CheckboxTable = ({
 
   return (
     <>
-      <Stack direction="row" spacing={2} alignItems="center">
-        <Typography variant="h6" align="left">
-          Upload CrowdTangle CSV:
-        </Typography>
-        <input type="file" hidden ref={inputRef} onChange={handleFileChange} />
-        <Button
-          variant="outlined"
-          sx={{
-            color: "green",
-            borderColor: "green",
-            backgroundColor: "transparent",
-            "&:hover": {
-              backgroundColor: "rgba(0, 128, 0, 0.1)", // light green on hover
-              borderColor: "darkgreen",
-            },
-          }}
-          onClick={() => inputRef.current.click()}
-        >
-          {uploadedFile ? uploadedFile.name : "Upload file"}
-        </Button>
-        <Box p={2}></Box>
-      </Stack>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -136,7 +114,7 @@ const CheckboxTable = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows ? (
+            {rows && rows.length > 0 ? (
               rows.map((row) => {
                 const isItemSelected = isSelected(row.id);
                 const isOpen = openRowIds.includes(row.id);
@@ -210,11 +188,43 @@ const CheckboxTable = ({
                 );
               })
             ) : (
-              <></>
+              <TableRow>
+                <TableCell colSpan={5} sx={{ p: 0, border: 0 }}>
+                  <Box sx={{ margin: 2 }}>
+                    <Typography>
+                      Tweets you collect will appear here alongside uploaded
+                      data.
+                    </Typography>
+                  </Box>
+                </TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>
       </TableContainer>
+      <Box p={2}></Box>
+      <Stack direction="row" spacing={2} alignItems="center">
+        <Typography variant="h6" align="left">
+          Upload CrowdTangle CSV:
+        </Typography>
+        <input type="file" hidden ref={inputRef} onChange={handleFileChange} />
+        <Button
+          variant="outlined"
+          sx={{
+            color: "green",
+            borderColor: "green",
+            backgroundColor: "transparent",
+            "&:hover": {
+              backgroundColor: "rgba(0, 128, 0, 0.1)", // light green on hover
+              borderColor: "darkgreen",
+            },
+          }}
+          onClick={() => inputRef.current.click()}
+        >
+          {uploadedFile ? uploadedFile.name : "Upload file"}
+        </Button>
+        <Box p={2}></Box>
+      </Stack>
     </>
   );
 };

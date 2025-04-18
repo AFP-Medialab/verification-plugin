@@ -252,21 +252,23 @@ async function getCurrentTab() {
 }
 chrome.contextMenus.onClicked.addListener(contextClick);
 chrome.webNavigation.onCommitted.addListener(async () => {
+  let recordingState = await db.recording.toArray();
+  let recordingSession = recordingState[0].state;
+  console.log(recordingSession);
+  if (recordingSession === false) {
+    return;
+  }
   let currentTab = await getCurrentTab();
-  console.log(currentTab.url);
   if (
     !currentTab.url.includes(".x.com") &&
     !currentTab.url.includes("/x.com")
   ) {
-    console.log("womp womp");
     return;
   }
-  console.log("hmph");
   try {
     chrome.scripting.executeScript({
       target: { tabId: currentTab.id, allFrames: true },
       function: () => {
-        console.log("huhuhu");
         var s = document.createElement("script");
         // must be listed in web_accessible_resources in manifest.json
         s.src = chrome.runtime.getURL("inject.js");
@@ -288,20 +290,29 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       const t = await db.tweets.toArray();
       console.log(t);
       const ts = jp.query(t, "$..tweet_results");
-      let x = ts.map((ent) => ({
-        id: jp.query(ent, "$.result..rest_id")[0],
-        username: "@" + jp.query(ent, "$..user_results..screen_name")[0],
-        display_name: jp.query(ent, "$..user_results..name")[0],
-        tweet_text: jp.query(ent, "$..full_text")[0],
+      console.log(ts);
+      let y = t.map((tw) => {
+        return {
+          collID: tw.collectionID,
+          res: jp.query(tw, "$..tweet_results")[0],
+        };
+      });
+      console.log(y);
+      let x = y.map((ent) => ({
+        collectionID: ent.collID,
+        id: jp.query(ent.res, "$.result..rest_id")[0],
+        username: "@" + jp.query(ent.res, "$..user_results..screen_name")[0],
+        display_name: jp.query(ent.res, "$..user_results..name")[0],
+        tweet_text: jp.query(ent.res, "$..full_text")[0],
         links: jp
           .query(ent, "$..result.legacy.entities.urls")
           .flat(1)
           .map((obj) => (obj.expanded_url ? obj.expanded_url : {})),
-        date: jp.query(ent, "$.result.legacy.created_at")[0],
-        likes: jp.query(ent, "$..favorite_count")[0],
-        quotes: jp.query(ent, "$..quote_count")[0],
-        retweets: jp.query(ent, "$..retweet_count")[0],
-        replies: jp.query(ent, "$..reply_count")[0],
+        date: jp.query(ent.res, "$.result.legacy.created_at")[0],
+        likes: jp.query(ent.res, "$..favorite_count")[0],
+        quotes: jp.query(ent.res, "$..quote_count")[0],
+        retweets: jp.query(ent.res, "$..retweet_count")[0],
+        replies: jp.query(ent.res, "$..reply_count")[0],
       }));
       console.log(x.filter((v) => v.links.length > 0));
       sendResponse(x);
@@ -325,6 +336,15 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       const s = await db.recording.toArray();
       console.log(s, r);
       sendResponse({ recording: s, collections: r });
+    } else if (request.prompt === "addCollection") {
+      await db.collections.put({ id: request.newCollectionName });
+    } else if (request.prompt === "stopRecording") {
+      await db.recording.put({ id: "main", state: false });
+    } else if (request.prompt === "startRecording") {
+      await db.recording.put({
+        id: "main",
+        state: request.currentCollectionName,
+      });
     }
   })(request);
   return true;
@@ -334,6 +354,12 @@ chrome.runtime.onMessageExternal.addListener(
   async function (request, sender, sendResponse) {
     const jp = require("jsonpath");
     const entryIds = jp.query(request, "$..entryId");
+    const session = await db.recording.toArray();
+
+    const currentSession = session[0].state;
+    if (currentSession === false) {
+      return;
+    }
     if (jp.query(request, "$..entryId").length > 0) {
       for (let entryId of entryIds) {
         let current = jp.query(
@@ -344,7 +370,11 @@ chrome.runtime.onMessageExternal.addListener(
           request,
           `$..entries[?(@.entryId=="${entryId}")]..tweet_results`,
         ).length > 0
-          ? await db.tweets.put({ id: entryId, tweet: current[0] })
+          ? await db.tweets.put({
+              id: entryId,
+              tweet: current[0],
+              collectionID: currentSession,
+            })
           : {};
       }
     }

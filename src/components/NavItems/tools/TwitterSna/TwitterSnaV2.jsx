@@ -97,6 +97,7 @@ const TwitterSnaV2 = () => {
 
   const [timeWindow, setTimeWindow] = useState(60);
   const [edgeWeight, setEdgeWeight] = useState(0.5);
+  const [minParticipation, setMinParticipation] = useState(1);
 
   const inputRef = useRef();
   const fgRef = useRef();
@@ -229,7 +230,19 @@ const TwitterSnaV2 = () => {
 
   const detectCOOR = (time_window, edge_weight, data) => {
     let data_filtered = data.filter((v) => v.objects.length > 0); //Only keep entries with objects
-    let data_grouped = Object.groupBy(data_filtered, ({ objects }) => objects); //Group entries by the same object
+    let data_min_participants = Object.groupBy(
+      data_filtered,
+      ({ username }) => username,
+    );
+    let data_min_participants_filtered = Object.keys(data_min_participants)
+      .map((k) => data_min_participants[k])
+      .filter((x) => x.length >= minParticipation)
+      .flat();
+
+    let data_grouped = Object.groupBy(
+      data_min_participants_filtered,
+      ({ objects }) => objects,
+    ); //Group entries by the same object
     let data_sharers = Object.entries(data_grouped).filter(
       (v) => v[1].map((o) => o.username).filter(onlyUnique).length > 1,
     ); //Keep entries with objects shared by more than 1 user
@@ -308,21 +321,41 @@ const TwitterSnaV2 = () => {
       prompt: "getTweets",
     });
     console.log(tweets);
-    const dedpulicatedTweets = Array.from(
-      new Map(tweets.map((item) => [item.id, item])).values(),
-    );
-    setTweets(dedpulicatedTweets);
-    let reformatedTweets = dedpulicatedTweets.map(({ links, ...rest }) => ({
-      objects: links,
-      ...rest,
-    }));
-    dataSources.push({
-      id: "tweets",
-      name: "Collected tweets",
-      description: reformatedTweets.length,
-      content: reformatedTweets,
-      headers: Object.keys(reformatedTweets[0]),
+    // const dedpulicatedTweets = Array.from(
+    //   new Map(tweets.map((item) => [item.id, item])).values(),
+    // );
+    // setTweets(dedpulicatedTweets);
+    // let reformatedTweets = dedpulicatedTweets.map(({ links, ...rest }) => ({
+    //   objects: links,
+    //   ...rest,
+    // }));
+
+    let x = Object.groupBy(tweets, ({ collectionID }) => collectionID);
+    Object.keys(x).map((k, idx) => {
+      let tweets = x[k];
+      let dedpulicatedTweets = Array.from(
+        new Map(tweets.map((item) => [item.id, item])).values(),
+      );
+      let reformatedTweets = dedpulicatedTweets.map(({ links, ...rest }) => ({
+        objects: links,
+        ...rest,
+      }));
+      dataSources.push({
+        id: `tweets~${idx}`,
+        name: k,
+        description: reformatedTweets.length,
+        content: reformatedTweets,
+        headers:
+          reformatedTweets.length > 0 ? Object.keys(reformatedTweets[0]) : [],
+      });
     });
+    // dataSources.push({
+    //   id: "tweets",
+    //   name: "Collected tweets",
+    //   description: reformatedTweets.length,
+    //   content: reformatedTweets,
+    //   headers: reformatedTweets.length>0 ? Object.keys(reformatedTweets[0]) : [],
+    // });
 
     setLoading(false);
   };
@@ -572,6 +605,8 @@ const TwitterSnaV2 = () => {
     setTimeWindow,
     edgeWeight,
     setEdgeWeight,
+    minParticipation,
+    setMinParticipation,
     uploadedData,
     setShowUploadModal,
     runCoorAnalysis,

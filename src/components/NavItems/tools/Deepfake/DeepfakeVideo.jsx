@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -120,14 +119,6 @@ const Deepfake = () => {
                 isParentLoading={isLoading}
               />
             </form>
-            {isLoading && (
-              <>
-                <Box m={2} />
-                <Box mt={3}>
-                  <LinearProgress />
-                </Box>
-              </>
-            )}
           </Box>
         </Card>
 

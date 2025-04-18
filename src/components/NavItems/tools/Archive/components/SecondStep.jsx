@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
@@ -6,14 +6,17 @@ import Link from "@mui/material/Link";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 import DownloadWaczFile from "./downloadWaczFile";
+import SinglefileConverter from "./singlefileConverter";
 
 const SecondStep = ({ url }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
+  const [telegramURL, setTelegramURL] = useState("");
 
   return (
     <Stack direction="column" spacing={6}>
@@ -72,6 +75,52 @@ const SecondStep = ({ url }) => {
             <Divider />
           </Stack>
         </Box>
+
+        <Stack
+          direction="row"
+          spacing={4}
+          sx={{
+            justifyContent: "flex-start",
+            alignItems: "flex-end",
+          }}
+        >
+          <ListItem disablePadding sx={{ width: "fit-content" }}>
+            <Stack direction="column" spacing={1}>
+              <Typography variant="caption" color={"warning"}>
+                {keyword("singlefile_warning")}
+              </Typography>
+
+              <ListItemText
+                primary={keyword("step2_singlefile_title")}
+                secondary={keyword("step2_singlefile_subtitle")}
+              />
+            </Stack>
+          </ListItem>
+          <Box>
+            <SinglefileConverter
+              telegramURL={telegramURL}
+              setTelegramURL={setTelegramURL}
+            />
+          </Box>
+        </Stack>
+        <Stack>
+          <ListItem disablePadding sx={{ width: "fit-content" }}>
+            <Stack direction="column" spacing={1}>
+              <ListItemText
+                primary={keyword("step2_singlefile_set_telegram")}
+                secondary={keyword("step2_singlefile_set_telegram_subtitle")}
+              />
+            </Stack>
+          </ListItem>
+          <TextField
+            variant="filled"
+            label={keyword("singlefile_telegram_label")}
+            sx={{ width: "50%" }}
+            value={telegramURL}
+            onChange={(e) => setTelegramURL(e.target.value)}
+          ></TextField>
+        </Stack>
+        <Divider />
 
         <Stack
           direction="row"

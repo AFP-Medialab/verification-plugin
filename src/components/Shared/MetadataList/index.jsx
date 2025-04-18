@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import { Map } from "@mui/icons-material";
 
 import { TabContext, TabList, TabPanel } from "@mui/lab";
+import _ from "lodash";
 
 import { i18nLoadNamespace } from "../Languages/i18nLoadNamespace";
 import { prettyCase } from "../Utils/stringUtils";
@@ -22,11 +23,34 @@ const MetadataList = ({ metadata }) => {
     Object.keys(metadata).length ? Object.keys(metadata).sort()[0] : false,
   );
 
+  /**
+   * Put UserData first in the array if it exists
+   * @param arr {String[]}
+   * @returns {String[]}
+   */
+  const moveUserDataToFirstPositionInArray = (arr) => {
+    // Copy the array to prevent modifying it directly
+    const arrCopy = _.clone(arr);
+
+    let udIndex;
+    for (let i = 0; i < arrCopy.length; i++) {
+      if (arrCopy[i] === "UserData") {
+        udIndex = i;
+      }
+    }
+
+    if (udIndex) {
+      const udItem = arrCopy.splice(udIndex, 1)[0];
+      arrCopy.splice(0, 0, udItem);
+    }
+    return arrCopy;
+  };
+
   // Sync tabValue when metadata updates
   useEffect(() => {
-    console.log(metadata);
+    let sortedKeys = Object.keys(metadata).sort();
+    sortedKeys = moveUserDataToFirstPositionInArray(sortedKeys);
 
-    const sortedKeys = Object.keys(metadata).sort();
     if (sortedKeys.length) {
       setTabValue(sortedKeys[0]);
     } else {
@@ -44,11 +68,20 @@ const MetadataList = ({ metadata }) => {
     longitude,
     longitudeRef,
   ) => {
-    if (!latitude || !latitudeRef || !longitude || !longitudeRef) {
+    if (!latitude || !longitude) {
       return <></>;
     }
 
     let url = "https://www.google.com/maps/place/"; //38%C2%B054'35.4%22N+1%C2%B026'19.2%22E/
+
+    if (!Array.isArray(latitude)) {
+      return `${url}${latitude},${longitude}`;
+    }
+
+    if (!latitudeRef || !longitudeRef) {
+      return <></>;
+    }
+
     let lat =
       latitude[0] +
       "%C2%B0" +
@@ -80,11 +113,15 @@ const MetadataList = ({ metadata }) => {
                 onChange={handleTabChange}
                 aria-label="Image metadata tabs"
               >
-                {Object.keys(metadata)
-                  .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
-                  .map((item, index) => {
-                    return <Tab label={item} value={item} key={index} />;
-                  })}
+                {moveUserDataToFirstPositionInArray(
+                  Object.keys(metadata).sort(([keyA], [keyB]) =>
+                    keyA.localeCompare(keyB),
+                  ),
+                ).map((item, index) => {
+                  return (
+                    <Tab label={item.toUpperCase()} value={item} key={index} />
+                  );
+                })}
               </TabList>
             </Box>
 
@@ -114,22 +151,29 @@ const MetadataList = ({ metadata }) => {
           </TabContext>
 
           {metadata &&
-            tabValue === "gps" &&
-            metadata["gps"] &&
-            metadata["gps"]["GPSLatitude"] &&
-            metadata["gps"]["GPSLatitudeRef"] &&
-            metadata["gps"]["GPSLongitude"] &&
-            metadata["gps"]["GPSLongitudeRef"] && (
+            (tabValue === "gps" || tabValue === "Composite") &&
+            ((metadata["gps"]?.GPSLatitude ??
+              metadata["Composite"]?.GPSLatitude) ||
+              (metadata["gps"]?.GPSLatitudeRef ??
+                metadata["Composite"]?.GPSLatitudeRef) ||
+              (metadata["gps"]?.GPSLongitude ??
+                metadata["Composite"]?.GPSLongitude) ||
+              (metadata["gps"]?.GPSLongitudeRef ??
+                metadata["Composite"]?.GPSLongitudeRef)) && (
               <Button
                 variant="contained"
                 color="primary"
                 onClick={() =>
                   window.open(
                     getGoogleMapsLink(
-                      metadata["gps"]["GPSLatitude"],
-                      metadata["gps"]["GPSLatitudeRef"],
-                      metadata["gps"]["GPSLongitude"],
-                      metadata["gps"]["GPSLongitudeRef"],
+                      metadata["Composite"]?.GPSLatitude ??
+                        metadata["gps"]?.GPSLatitude,
+                      metadata["Composite"]?.GPSLatitudeRef ??
+                        metadata["gps"]?.GPSLatitudeRef,
+                      metadata["Composite"]?.GPSLongitude ??
+                        metadata["gps"]?.GPSLongitude,
+                      metadata["Composite"]?.GPSLongitudeRef ??
+                        metadata["gps"]?.GPSLongitudeRef,
                     ),
                     "_blank",
                     "noopener,noreferrer",

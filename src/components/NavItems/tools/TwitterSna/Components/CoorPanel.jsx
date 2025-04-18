@@ -17,6 +17,8 @@ const CoorPanel = ({
   setTimeWindow,
   edgeWeight,
   setEdgeWeight,
+  minParticipation,
+  setMinParticipation,
   uploadedData,
   setShowUploadModal,
   runCoorAnalysis,
@@ -30,7 +32,7 @@ const CoorPanel = ({
         aria-controls="panel1-content"
         id="panel1-header"
       >
-        <Typography component="span"> COOR Graph </Typography>
+        <Typography component="span"> COOR Analysis </Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Box>
@@ -39,7 +41,7 @@ const CoorPanel = ({
             <Typography pl={2}> Time window:</Typography>
             <TextField
               variant="outlined"
-              sx={{ width: "200px" }}
+              sx={{ width: "100px" }}
               value={timeWindow}
               onChange={(e) => {
                 setGraph(false);
@@ -49,11 +51,21 @@ const CoorPanel = ({
             <Typography pl={2}> Edge weight:</Typography>
             <TextField
               variant="outlined"
-              sx={{ width: "200px" }}
+              sx={{ width: "100px" }}
               value={edgeWeight}
               onChange={(e) => {
                 setGraph(false);
                 setEdgeWeight(e.target.value);
+              }}
+            />
+            <Typography pl={2}> Minimum participation:</Typography>
+            <TextField
+              variant="outlined"
+              sx={{ width: "100px" }}
+              value={minParticipation}
+              onChange={(e) => {
+                setGraph(false);
+                setMinParticipation(e.target.value);
               }}
             />
             <Button
