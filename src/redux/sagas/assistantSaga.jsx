@@ -774,57 +774,65 @@ function* handleMultilingualStanceCall(action) {
   if (action.type === "CLEAN_STATE") return;
 
   try {
-    const collectedComments = yield select(
-      (state) => state.assistant.collectedComments,
-    );
+    const inputUrl = yield select((state) => state.assistant.inputUrl); //action.payload.inputUrl;
+    const urlType = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
 
-    function createCommentArray(
-      comments,
-      convertedComments,
-      comparisonText,
-      comparisonTextId,
+    // only run stance classifier for youtube
+    if (
+      urlType === KNOWN_LINKS.YOUTUBE ||
+      urlType === KNOWN_LINKS.YOUTUBESHORTS
     ) {
-      comments.forEach((comment) => {
-        convertedComments.push({
-          text: comment.textOriginal,
-          id_str: comment.id,
-          in_reply_to_status_id_str: comparisonTextId,
-        });
-        // add replies comparing to their top level comment and its id
-        if ("replies" in comment) {
-          createCommentArray(
-            comment.replies,
-            convertedComments,
-            comment.textOriginal,
-            comment.id,
-          );
-        }
-      });
-    }
-
-    // add video title with id as main comparison for top level comments
-    let convertedComments = [
-      {
-        text: collectedComments[0].videoTitle,
-        id_str: collectedComments[0].videoId,
-      },
-    ];
-    createCommentArray(
-      collectedComments,
-      convertedComments,
-      collectedComments[0].videoTitle,
-      collectedComments[0].videoId,
-    );
-
-    if (convertedComments) {
       yield put(setMultilingualStanceDetails(null, true, false, false));
-
-      const result = yield call(
-        assistantApi.callMultilingualStanceService,
-        convertedComments,
+      const collectedComments = yield select(
+        (state) => state.assistant.collectedComments,
       );
 
-      yield put(setMultilingualStanceDetails(result, false, true, false));
+      function createCommentArray(
+        comments,
+        convertedComments,
+        comparisonText,
+        comparisonTextId,
+      ) {
+        comments.forEach((comment) => {
+          convertedComments.push({
+            text: comment.textOriginal,
+            id_str: comment.id,
+            in_reply_to_status_id_str: comparisonTextId,
+          });
+          // add replies comparing to their top level comment and its id
+          if ("replies" in comment) {
+            createCommentArray(
+              comment.replies,
+              convertedComments,
+              comment.textOriginal,
+              comment.id,
+            );
+          }
+        });
+      }
+
+      // add video title with id as main comparison for top level comments
+      let convertedComments = [
+        {
+          text: collectedComments[0].videoTitle,
+          id_str: collectedComments[0].videoId,
+        },
+      ];
+      createCommentArray(
+        collectedComments,
+        convertedComments,
+        collectedComments[0].videoTitle,
+        collectedComments[0].videoId,
+      );
+
+      if (convertedComments) {
+        const result = yield call(
+          assistantApi.callMultilingualStanceService,
+          convertedComments,
+        );
+
+        yield put(setMultilingualStanceDetails(result, false, true, false));
+      }
     }
   } catch (error) {
     yield put(setMultilingualStanceDetails(null, false, false, true));
