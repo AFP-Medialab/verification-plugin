@@ -20,6 +20,7 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import GaugeChartModalExplanation from "components/Shared/GaugeChartResults/GaugeChartModalExplanation";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";

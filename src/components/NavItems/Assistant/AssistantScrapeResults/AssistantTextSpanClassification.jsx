@@ -16,6 +16,7 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import { styled } from "@mui/system";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
@@ -134,10 +135,6 @@ export default function AssistantTextSpanClassification({
       const techniqueScore = spanInfo.techniques[persuasionTechnique];
 
       // collect category information for highlighted spans
-      // let span = {
-      //   indices: [spanStart, spandEnd],
-      //   score: techniqueScore,
-      // };
       if (categories[persuasionTechnique]) {
         categories[persuasionTechnique].push({
           indices: [spanStart, spandEnd],
@@ -174,7 +171,6 @@ export default function AssistantTextSpanClassification({
             cursor: "pointer",
           }}
         >
-          {/* {persuasionTechnique.replaceAll("_", " ")} */}
           {keyword(persuasionTechnique)}
         </div>,
       );
@@ -240,6 +236,8 @@ export default function AssistantTextSpanClassification({
     } else if (textHtmlMap) {
       // Text formatted but not highlighted
       output = treeMapToElements(text, textHtmlMap);
+    } else {
+      output = text;
     }
 
     categoriesText[collection] = output;
@@ -318,7 +316,9 @@ export function CategoriesListToggle({
   onCategoryChange = () => {},
   keyword,
 }) {
-  if (categories.length < 1) return <p>{noCategoriesText}</p>;
+  if (_.isEmpty(categories)) {
+    return <p>{noCategoriesText}</p>;
+  }
 
   let output = [];
   let index = 0;
