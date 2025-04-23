@@ -8,14 +8,12 @@ import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Collapse from "@mui/material/Collapse";
 import LinearProgress from "@mui/material/LinearProgress";
-import Skeleton from "@mui/material/Skeleton";
-import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { WarningOutlined } from "@mui/icons-material";
+import { WarningAmber } from "@mui/icons-material";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -25,7 +23,7 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
   TransCredibilitySignalsLink,
   TransHtmlDoubleLineBreak,
-  TransHtmlSingleLineBreak,
+  TransMachineGeneratedTextTooltip,
   TransSupportedToolsLink,
 } from "../TransComponents";
 import AssistantTextClassification from "./AssistantTextClassification";
@@ -47,9 +45,9 @@ const AssistantTextResult = () => {
   const [textHtmlOutput, setTextHtmlOutput] = useState(null);
 
   // third party check states
-  const dbkfMatch = useSelector((state) => state.assistant.dbkfTextMatch);
+  const dbkfTextMatch = null; //useSelector((state) => state.assistant.dbkfTextMatch);
   const mtLoading = useSelector((state) => state.assistant.mtLoading);
-  const dbkfMatchLoading = useSelector(
+  const dbkfTextMatchLoading = useSelector(
     (state) => state.assistant.dbkfTextMatchLoading,
   );
 
@@ -105,25 +103,48 @@ const AssistantTextResult = () => {
     (state) => state.assistant.subjectivityFail,
   );
 
+  // machine generated text
+  const machineGeneratedTextTitle = keyword("machine_generated_text_title");
+  const machineGeneratedTextChunksResult = useSelector(
+    (state) => state.assistant.machineGeneratedTextChunksResult,
+  );
+  const machineGeneratedTextChunksLoading = useSelector(
+    (state) => state.assistant.machineGeneratedTextChunksLoading,
+  );
+  const machineGeneratedTextChunksDone = useSelector(
+    (state) => state.assistant.machineGeneratedTextChunksDone,
+  );
+  const machineGeneratedTextChunksFail = useSelector(
+    (state) => state.assistant.machineGeneratedTextChunksFail,
+  );
+  const machineGeneratedTextSentencesResult = useSelector(
+    (state) => state.assistant.machineGeneratedTextSentencesResult,
+  );
+  const machineGeneratedTextSentencesLoading = useSelector(
+    (state) => state.assistant.machineGeneratedTextSentencesLoading,
+  );
+  const machineGeneratedTextSentencesDone = useSelector(
+    (state) => state.assistant.machineGeneratedTextSentencesDone,
+  );
+  const machineGeneratedTextSentencesFail = useSelector(
+    (state) => state.assistant.machineGeneratedTextSentencesFail,
+  );
+
+  // previous fact-checks
+  const prevFactChecksResult = useSelector(
+    (state) => state.assistant.prevFactChecksResult,
+  );
+
   // display states
   const textBox = document.getElementById("element-to-check");
   const [expanded, setExpanded] = useState(false);
   const [displayOrigLang, setDisplayOrigLang] = useState(true);
-  const [displayExpander, setDisplayExpander] = useState(true);
   const [textTabIndex, setTextTabIndex] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTextTabIndex(newValue);
   };
 
   useEffect(() => {
-    // if (translatedText) {
-    //   setDisplayOrigLang(false);
-    // }
-    const elementToCheck = document.getElementById("element-to-check");
-    if (elementToCheck.offsetHeight < elementToCheck.scrollHeight) {
-      setDisplayExpander(true);
-    }
-
     if (textHtmlMap !== null) {
       // HTML text is contained in an xml document, we need to parse it and
       // extract all contents in the <main> node#
@@ -171,11 +192,13 @@ const AssistantTextResult = () => {
         className={classes.assistantCardHeader}
         title={keyword("text_title")}
         action={
-          // top left warning and tooltip
+          // top right warning and tooltip
           <div style={{ display: "flex" }}>
-            <div hidden={dbkfMatch === null}>
+            <div
+              hidden={dbkfTextMatch === null && prevFactChecksResult === null}
+            >
               <Tooltip title={keyword("text_warning")}>
-                <WarningOutlined
+                <WarningAmber
                   color={"warning"}
                   className={classes.toolTipWarning}
                   sx={{ cursor: "pointer" }}
@@ -211,7 +234,7 @@ const AssistantTextResult = () => {
           </div>
         }
       />
-      {dbkfMatchLoading && mtLoading && (
+      {dbkfTextMatchLoading && mtLoading && (
         <LinearProgress variant={"indeterminate"} color={"secondary"} />
       )}
       <CardContent
@@ -227,7 +250,7 @@ const AssistantTextResult = () => {
             value={textTabIndex}
             onChange={handleTabChange}
             aria-label="extracted text tabs"
-            variant="fullWidth"
+            variant="scrollable"
           >
             <Tab label={keyword("raw_text")} {...a11yProps(0)} />
             <Tab
@@ -250,6 +273,16 @@ const AssistantTextResult = () => {
               {...a11yProps(4)}
               disabled={subjectivityFail || subjectivityLoading}
             />
+            <Tab
+              label={machineGeneratedTextTitle}
+              {...a11yProps(5)}
+              disabled={
+                machineGeneratedTextChunksFail ||
+                machineGeneratedTextChunksLoading ||
+                machineGeneratedTextSentencesFail ||
+                machineGeneratedTextSentencesLoading
+              }
+            />
           </Tabs>
 
           {/* extracted raw text */}
@@ -261,12 +294,6 @@ const AssistantTextResult = () => {
 
           {/* news framing (topic) */}
           <CustomTabPanel value={textTabIndex} index={1}>
-            {newsFramingLoading && (
-              <Stack direction="column" spacing={4} p={4}>
-                <Skeleton variant="rounded" height={40} />
-                <Skeleton variant="rounded" width="50%" height={40} />
-              </Stack>
-            )}
             {newsFramingDone && (
               <AssistantTextClassification
                 text={text}
@@ -284,6 +311,7 @@ const AssistantTextResult = () => {
                       }}
                     />
                     <TransCredibilitySignalsLink keyword={keyword} />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
                   </>
                 }
                 textHtmlMap={textHtmlMap}
@@ -294,12 +322,6 @@ const AssistantTextResult = () => {
 
           {/* news genre */}
           <CustomTabPanel value={textTabIndex} index={2}>
-            {newsGenreLoading && (
-              <Stack direction="column" spacing={4} p={4}>
-                <Skeleton variant="rounded" height={40} />
-                <Skeleton variant="rounded" width="50%" height={40} />
-              </Stack>
-            )}
             {newsGenreDone && (
               <AssistantTextClassification
                 text={text}
@@ -317,6 +339,7 @@ const AssistantTextResult = () => {
                       }}
                     />
                     <TransCredibilitySignalsLink keyword={keyword} />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
                   </>
                 }
                 textHtmlMap={textHtmlMap}
@@ -327,12 +350,6 @@ const AssistantTextResult = () => {
 
           {/* persuasion */}
           <CustomTabPanel value={textTabIndex} index={3}>
-            {persuasionLoading && (
-              <Stack direction="column" spacing={4} p={4}>
-                <Skeleton variant="rounded" height={40} />
-                <Skeleton variant="rounded" width="50%" height={40} />
-              </Stack>
-            )}
             {persuasionDone && (
               <AssistantTextSpanClassification
                 text={text}
@@ -350,6 +367,7 @@ const AssistantTextResult = () => {
                       }}
                     />
                     <TransCredibilitySignalsLink keyword={keyword} />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
                   </>
                 }
                 textHtmlMap={textHtmlMap}
@@ -359,12 +377,6 @@ const AssistantTextResult = () => {
 
           {/* subjectivity */}
           <CustomTabPanel value={textTabIndex} index={4}>
-            {subjectivityLoading && (
-              <Stack direction="column" spacing={4} p={4}>
-                <Skeleton variant="rounded" height={40} />
-                <Skeleton variant="rounded" width="50%" height={40} />
-              </Stack>
-            )}
             {subjectivityDone && (
               <AssistantTextClassification
                 text={text}
@@ -383,6 +395,30 @@ const AssistantTextResult = () => {
               />
             )}
           </CustomTabPanel>
+
+          {/* machine generated text */}
+          <CustomTabPanel value={textTabIndex} index={5}>
+            {machineGeneratedTextChunksDone &&
+              machineGeneratedTextSentencesDone && (
+                <AssistantTextClassification
+                  text={text}
+                  classification={machineGeneratedTextSentencesResult.entities}
+                  overallClassification={
+                    machineGeneratedTextChunksResult.entities
+                  }
+                  configs={machineGeneratedTextSentencesResult.configs}
+                  titleText={machineGeneratedTextTitle}
+                  categoriesTooltipContent={
+                    <>
+                      <TransMachineGeneratedTextTooltip keyword={keyword} />
+                      <TransCredibilitySignalsLink keyword={keyword} />
+                    </>
+                  }
+                  textHtmlMap={textHtmlMap}
+                  credibilitySignal={keyword("machine_generated_text_title")}
+                />
+              )}
+          </CustomTabPanel>
         </Collapse>
 
         {/* footer */}
@@ -393,7 +429,6 @@ const AssistantTextResult = () => {
           textLang={textLang}
           expandMinimiseText={expandMinimiseText}
           text={text}
-          displayExpander={displayExpander}
           setExpanded={setExpanded}
           expanded={expanded}
         />

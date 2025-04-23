@@ -229,17 +229,6 @@ const AssistantMediaResult = () => {
       {/* image grid and video grid of extracted media */}
       {!singleMediaPresent ? (
         <div>
-          {/* select media */}
-          {/*<CardContent>
-            <Typography
-              component={"div"}
-              sx={{ textAlign: "start" }}
-              variant={"subtitle1"}
-            >
-              {keyword("media_below")}
-            </Typography>
-          </CardContent>*/}
-
           <CardContent style={{ wordBreak: "break-word" }}>
             {/* image list */}
             {filteredImageList.length > 0 ? (

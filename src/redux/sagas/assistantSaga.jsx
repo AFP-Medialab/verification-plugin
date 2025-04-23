@@ -31,7 +31,8 @@ import {
   setImageVideoSelected,
   setInputSourceCredDetails,
   setInputUrl,
-  setMachineGeneratedTextDetails,
+  setMachineGeneratedTextChunksDetails,
+  setMachineGeneratedTextSentencesDetails,
   setMissingMedia,
   setMultilingualStanceDetails,
   setNeDetails,
@@ -120,10 +121,17 @@ function* getPrevFactChecksSaga() {
   );
 }
 
-function* getMachineGeneratedTextSaga() {
+function* getMachineGeneratedTextChunksSaga() {
   yield takeLatest(
     ["SET_SCRAPED_DATA", "AUTH_USER_LOGIN", "CLEAN_STATE"],
-    handleMachineGeneratedTextCall,
+    handleMachineGeneratedTextChunksCall,
+  );
+}
+
+function* getMachineGeneratedTextSentencesSaga() {
+  yield takeLatest(
+    ["SET_SCRAPED_DATA", "AUTH_USER_LOGIN", "CLEAN_STATE"],
+    handleMachineGeneratedTextSentencesCall,
   );
 }
 
@@ -582,7 +590,12 @@ function* handlePrevFactChecksCall(action) {
       );
 
       yield put(
-        setPrevFactChecksDetails(result.fact_checks, false, true, false),
+        setPrevFactChecksDetails(
+          result.fact_checks.length > 0 ? result.fact_checks : null,
+          false,
+          true,
+          false,
+        ),
       );
     }
   } catch (error) {
@@ -590,27 +603,53 @@ function* handlePrevFactChecksCall(action) {
   }
 }
 
-function* handleMachineGeneratedTextCall(action) {
+function* handleMachineGeneratedTextChunksCall(action) {
   if (action.type === "CLEAN_STATE") return;
 
   try {
     const text = yield select((state) => state.assistant.urlText);
 
-    // this prevents the call from happening if not correct user status
-    const role = yield select((state) => state.userSession.user.roles);
-
-    if (text && role.includes("BETA_TESTER")) {
-      yield put(setMachineGeneratedTextDetails(null, true, false, false));
+    if (text) {
+      yield put(setMachineGeneratedTextChunksDetails(null, true, false, false));
 
       const result = yield call(
-        assistantApi.callMachineGeneratedTextService,
+        assistantApi.callMachineGeneratedTextChunksService,
         text.substring(0, URL_BUFFER_LIMIT),
       );
 
-      yield put(setMachineGeneratedTextDetails(result, false, true, false));
+      yield put(
+        setMachineGeneratedTextChunksDetails(result, false, true, false),
+      );
     }
   } catch (error) {
-    yield put(setMachineGeneratedTextDetails(null, false, false, true));
+    yield put(setMachineGeneratedTextChunksDetails(null, false, false, true));
+  }
+}
+
+function* handleMachineGeneratedTextSentencesCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const text = yield select((state) => state.assistant.urlText);
+
+    if (text) {
+      yield put(
+        setMachineGeneratedTextSentencesDetails(null, true, false, false),
+      );
+
+      const result = yield call(
+        assistantApi.callMachineGeneratedTextSentencesService,
+        text.substring(0, URL_BUFFER_LIMIT),
+      );
+
+      yield put(
+        setMachineGeneratedTextSentencesDetails(result, false, true, false),
+      );
+    }
+  } catch (error) {
+    yield put(
+      setMachineGeneratedTextSentencesDetails(null, false, false, true),
+    );
   }
 }
 
@@ -735,57 +774,65 @@ function* handleMultilingualStanceCall(action) {
   if (action.type === "CLEAN_STATE") return;
 
   try {
-    const collectedComments = yield select(
-      (state) => state.assistant.collectedComments,
-    );
+    const inputUrl = yield select((state) => state.assistant.inputUrl); //action.payload.inputUrl;
+    const urlType = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
 
-    function createCommentArray(
-      comments,
-      convertedComments,
-      comparisonText,
-      comparisonTextId,
+    // only run stance classifier for youtube
+    if (
+      urlType === KNOWN_LINKS.YOUTUBE ||
+      urlType === KNOWN_LINKS.YOUTUBESHORTS
     ) {
-      comments.forEach((comment) => {
-        convertedComments.push({
-          text: comment.textOriginal,
-          id_str: comment.id,
-          in_reply_to_status_id_str: comparisonTextId,
-        });
-        // add replies comparing to their top level comment and its id
-        if ("replies" in comment) {
-          createCommentArray(
-            comment.replies,
-            convertedComments,
-            comment.textOriginal,
-            comment.id,
-          );
-        }
-      });
-    }
-
-    // add video title with id as main comparison for top level comments
-    let convertedComments = [
-      {
-        text: collectedComments[0].videoTitle,
-        id_str: collectedComments[0].videoId,
-      },
-    ];
-    createCommentArray(
-      collectedComments,
-      convertedComments,
-      collectedComments[0].videoTitle,
-      collectedComments[0].videoId,
-    );
-
-    if (convertedComments) {
       yield put(setMultilingualStanceDetails(null, true, false, false));
-
-      const result = yield call(
-        assistantApi.callMultilingualStanceService,
-        convertedComments,
+      const collectedComments = yield select(
+        (state) => state.assistant.collectedComments,
       );
 
-      yield put(setMultilingualStanceDetails(result, false, true, false));
+      function createCommentArray(
+        comments,
+        convertedComments,
+        comparisonText,
+        comparisonTextId,
+      ) {
+        comments.forEach((comment) => {
+          convertedComments.push({
+            text: comment.textOriginal,
+            id_str: comment.id,
+            in_reply_to_status_id_str: comparisonTextId,
+          });
+          // add replies comparing to their top level comment and its id
+          if ("replies" in comment) {
+            createCommentArray(
+              comment.replies,
+              convertedComments,
+              comment.textOriginal,
+              comment.id,
+            );
+          }
+        });
+      }
+
+      // add video title with id as main comparison for top level comments
+      let convertedComments = [
+        {
+          text: collectedComments[0].videoTitle,
+          id_str: collectedComments[0].videoId,
+        },
+      ];
+      createCommentArray(
+        collectedComments,
+        convertedComments,
+        collectedComments[0].videoTitle,
+        collectedComments[0].videoId,
+      );
+
+      if (convertedComments) {
+        const result = yield call(
+          assistantApi.callMultilingualStanceService,
+          convertedComments,
+        );
+
+        yield put(setMultilingualStanceDetails(result, false, true, false));
+      }
     }
   } catch (error) {
     yield put(setMultilingualStanceDetails(null, false, false, true));
@@ -1214,7 +1261,8 @@ export default function* assistantSaga() {
     fork(getPersuasionSaga),
     fork(getSubjectivitySaga),
     fork(getPrevFactChecksSaga),
-    fork(getMachineGeneratedTextSaga),
     fork(getMultilingualStanceSaga),
+    fork(getMachineGeneratedTextChunksSaga),
+    fork(getMachineGeneratedTextSentencesSaga),
   ]);
 }
