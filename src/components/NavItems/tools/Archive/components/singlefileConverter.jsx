@@ -58,43 +58,43 @@ const SinglefileConverter = (telegramURL) => {
   };
 
   //For anonymous signing
-  // const sign = async (hash) => {
-  //   //implementation derived from webrecorder's awp-sw library
-  //   const keyPair = await crypto.subtle.generateKey(
-  //     {
-  //       name: "ECDSA",
-  //       namedCurve: "P-384",
-  //     },
-  //     true,
-  //     ["sign", "verify"],
-  //   );
+  const sign = async (hash) => {
+    //implementation derived from webrecorder's awp-sw library
+    const keyPair = await crypto.subtle.generateKey(
+      {
+        name: "ECDSA",
+        namedCurve: "P-384",
+      },
+      true,
+      ["sign", "verify"],
+    );
 
-  //   const privateKey = await crypto.subtle.exportKey(
-  //     "pkcs8",
-  //     keyPair.privateKey,
-  //   );
-  //   const publicKey = await crypto.subtle.exportKey("spki", keyPair.publicKey);
+    const privateKey = await crypto.subtle.exportKey(
+      "pkcs8",
+      keyPair.privateKey,
+    );
+    const publicKey = await crypto.subtle.exportKey("spki", keyPair.publicKey);
 
-  //   const keys = {
-  //     private: encodeBase64(new Uint8Array(privateKey)),
-  //     public: encodeBase64(new Uint8Array(publicKey)),
-  //   };
+    const keys = {
+      private: new Uint8Array(privateKey).toBase64,
+      public: new Uint8Array(publicKey).toBase64,
+    };
 
-  //   const data = new TextEncoder().encode(hash);
-  //   const signatureBuff = await crypto.subtle.sign(
-  //     {
-  //       name: "ECDSA",
-  //       hash: "SHA-256",
-  //     },
-  //     keyPair.privateKey,
-  //     data,
-  //   );
-  //   const signature = encodeBase64(new Uint8Array(signatureBuff));
-  //   return {
-  //     signature,
-  //     publicKey: keys.public,
-  //   };
-  // };
+    const data = new TextEncoder().encode(hash);
+    const signatureBuff = await crypto.subtle.sign(
+      {
+        name: "ECDSA",
+        hash: "SHA-256",
+      },
+      keyPair.privateKey,
+      data,
+    );
+    const signature = new Uint8Array(signatureBuff).toBase64;
+    return {
+      signature,
+      publicKey: keys.public,
+    };
+  };
 
   /**
    * Encapsulates the different components of the WACZ into the archive
@@ -176,32 +176,32 @@ const SinglefileConverter = (telegramURL) => {
     );
 
     // For anonymous signing
-    // const signature = await sign(datapackage_hash);
+    const signature = await sign(datapackage_hash);
 
     //Send request for signature and put info into the format required for the datapackage digest file
 
     try {
       let senthash = "sha256:" + datapackage_hash;
-      const tstsign = await domainCertSign(senthash);
-      // const cleanCert = tstsign.domainCert.replace("\n", "");
-      const cleantsCerts = tstsign.certs.join("\n");
-      const signedData = {
-        hash: `sha256:${datapackage_hash}`,
-        created: created_time,
-        software:
-          "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
-        signature: tstsign.signature,
-        domain: "signature.verification-plugin.eu",
-        domainCert: tstsign.domainCert,
-        timeSignature: tstsign.encodedTST,
-        timestampCert: cleantsCerts,
-        version: "0.1.0",
-      };
+      // const tstsign = await domainCertSign(senthash);
+      // // const cleanCert = tstsign.domainCert.replace("\n", "");
+      // const cleantsCerts = tstsign.certs.join("\n");
+      // const signedData = {
+      //   hash: `sha256:${datapackage_hash}`,
+      //   created: created_time,
+      //   software:
+      //     "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
+      //   signature: tstsign.signature,
+      //   domain: "signature.verification-plugin.eu",
+      //   domainCert: tstsign.domainCert,
+      //   timeSignature: tstsign.encodedTST,
+      //   timestampCert: cleantsCerts,
+      //   version: "0.1.0",
+      // };
 
       const datapackagedigest_input = {
         path: "datapackage.json",
         hash: `sha256:${datapackage_hash}`,
-        signedData: signedData,
+        signedData: signature,
       };
 
       const datapackagedigest_arch = {
@@ -369,36 +369,27 @@ const SinglefileConverter = (telegramURL) => {
       info,
     );
 
-    const serializedWARCInfo = await WARCSerializer.serialize(warcinfo);
+    const serializedWARCInfo_ = await WARCSerializer.serialize(warcinfo);
+    const trimmedWARCInfo = new TextDecoder()
+      .decode(serializedWARCInfo_)
+      .slice(0, -1);
+    const serializedWARCInfo = new TextEncoder().encode(trimmedWARCInfo);
 
     // Create a sample response
     const url = pageUrl;
     const date = pageDate;
     // const type = "response";
-    const type = "resource"; //For resource records
     const httpHeaders = {
       date: dayjs(),
-      "content-type": 'text/html; charset="UTF-8"',
+      "Content-Type": "text/html;charset=UTF-8",
     };
 
     async function* content() {
       yield new TextEncoder().encode(fileContent);
     }
 
-    // For response record
-    // const record = await WARCRecord.create(
-    //   {
-    //     url,
-    //     date,
-    //     type,
-    //     warcVersion,
-    //     httpHeaders,
-    //     warcHeaders: { "content-type": 'text/html; charset="UTF-8"' },
-    //   },
-    //   content(),
-    // );
-
     // For resource records
+    const type = "resource";
     const record = await WARCRecord.create(
       {
         url,
@@ -408,13 +399,32 @@ const SinglefileConverter = (telegramURL) => {
           "WARC-Date": date,
           "WARC-Type": type,
           "WARC-Record-ID": `<urn:uuid:${uuid()}>`,
-          "Content-Type": "text/html;charset=UTF-8",
+          "Content-Type": 'text/html;charset="UTF-8"',
         },
       },
       content(),
     );
+    //For response records
+    // const type = response
+    // const record = await WARCRecord.create(
+    //   {
+    //     url,
+    //     warcVersion: "WARC/1.1",
+    //     httpHeaders,
+    //     warcHeaders: {
+    //       // "WARC-Target-URI":url,
+    //       "WARC-Date": date,
+    //       "WARC-Type": type,
+    //       "WARC-Record-ID": `<urn:uuid:${uuid()}>`,
+    //       "Content-Type": 'message/http',
+    //     },
+    //   },
+    //   content(),
+    // );
 
     const serializedRecord = await WARCSerializer.serialize(record);
+    console.log(new TextDecoder().decode(serializedWARCInfo));
+    console.log(new TextDecoder().decode(serializedRecord));
     return [serializedWARCInfo, serializedRecord];
     //For returning response/request
     // For adding request record if page is saved as a response

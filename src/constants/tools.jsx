@@ -552,7 +552,7 @@ export const archiving = new Tool(
   archiveSvgIcon,
   TOOLS_CATEGORIES.OTHER,
   [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.NEW, TOOL_STATUS_ICON.LOCK],
-  [ROLES.ARCHIVE],
+  null,
   "archive",
   TOOL_GROUPS.VERIFICATION,
   <Archive />,
