@@ -5,6 +5,10 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
@@ -12,6 +16,7 @@ import Typography from "@mui/material/Typography";
 import { GridExpandMoreIcon } from "@mui/x-data-grid";
 
 const CoorPanel = ({
+  selected,
   timeWindow,
   setGraph,
   setTimeWindow,
@@ -24,6 +29,8 @@ const CoorPanel = ({
   runCoorAnalysis,
   graphSet,
   showGraph,
+  objectChoice,
+  setObjectChoice,
 }) => {
   return (
     <Accordion>
@@ -68,6 +75,29 @@ const CoorPanel = ({
                 setMinParticipation(e.target.value);
               }}
             />
+            {selected.length > 0 &&
+            selected.every((x) => x.includes("tweets~")) ? (
+              <>
+                <Typography pl={2}> Object:</Typography>
+                <FormControl>
+                  <InputLabel id="object-select-label">Object</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={objectChoice}
+                    label="Age"
+                    onChange={(e) => setObjectChoice(e.target.value)}
+                  >
+                    <MenuItem value={"links"}>Link</MenuItem>
+                    <MenuItem value={"hashtags"}>Hashtags</MenuItem>
+                    <MenuItem value={"mentions"}>Mentions</MenuItem>
+                    <MenuItem value={"tweet_text"}>Text</MenuItem>
+                  </Select>
+                </FormControl>
+              </>
+            ) : (
+              <></>
+            )}
             <Button
               variant="outlined"
               sx={{

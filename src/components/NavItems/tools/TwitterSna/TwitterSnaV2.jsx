@@ -94,6 +94,7 @@ const TwitterSnaV2 = () => {
   const [uploadedData, setUploadedData] = useState(null);
   const [expanded, setExpanded] = useState(false);
   const [customExpanded, setCustomExpanded] = useState(false);
+  const [objectChoice, setObjectChoice] = useState("links");
 
   const [timeWindow, setTimeWindow] = useState(60);
   const [edgeWeight, setEdgeWeight] = useState(0.5);
@@ -336,10 +337,28 @@ const TwitterSnaV2 = () => {
       let dedpulicatedTweets = Array.from(
         new Map(tweets.map((item) => [item.id, item])).values(),
       );
-      let reformatedTweets = dedpulicatedTweets.map(({ links, ...rest }) => ({
-        objects: links,
-        ...rest,
-      }));
+      let reformatedTweets = dedpulicatedTweets.map(
+        ({
+          id,
+          username,
+          display_name,
+          tweet_text,
+          links,
+          mentions,
+          hashtags,
+          ...rest
+        }) => ({
+          id,
+          username,
+          display_name,
+          tweet_text,
+          objects: links,
+          links: links,
+          mentions: mentions.map((x) => "@" + x).join(","),
+          hashtags: hashtags.map((x) => "#" + x).join(","),
+          ...rest,
+        }),
+      );
       dataSources.push({
         id: `tweets~${idx}`,
         name: k,
@@ -369,6 +388,23 @@ const TwitterSnaV2 = () => {
     let selectedContent = selectedSources
       .map((source) => source.content)
       .flat();
+    console.log(objectChoice);
+    console.log(
+      selected.length > 0 && selected.every((x) => x.includes("tweets~")),
+    );
+    console.log(selectedContent[0]);
+    console.log(selectedContent[0][objectChoice]);
+    let filteredContent =
+      selected.length > 0 && selected.every((x) => x.includes("tweets~"))
+        ? selectedContent
+            .map((o) => {
+              let x = o[objectChoice];
+              o.objects = x;
+              return o;
+            })
+            .filter((x) => x.objects.length > 0)
+        : selectedContent;
+    console.log(filteredContent);
     let nameMaps = new Map(
       selectedSources
         .map((source) =>
@@ -377,7 +413,7 @@ const TwitterSnaV2 = () => {
         .flatMap((m) => [...m]),
     );
     console.log(nameMaps);
-    let coor_result = detectCOOR(TIME_WINDOW, EDGE_THRESH, selectedContent);
+    let coor_result = detectCOOR(TIME_WINDOW, EDGE_THRESH, filteredContent);
     let candidates =
       EDGE_THRESH > 0
         ? Object.entries(coor_result).filter((x) => x[1].threshold > 0)
@@ -599,7 +635,10 @@ const TwitterSnaV2 = () => {
     headers,
   };
 
+  const [selected, setSelected] = useState([]);
+
   const coorProps = {
+    selected,
     timeWindow,
     setGraph,
     setTimeWindow,
@@ -612,15 +651,9 @@ const TwitterSnaV2 = () => {
     runCoorAnalysis,
     graphSet,
     showGraph,
+    objectChoice,
+    setObjectChoice,
   };
-
-  const [selected, setSelected] = useState([]);
-
-  const initialRows = [
-    { id: 1, name: "Item One", description: "First item" },
-    { id: 2, name: "Item Two", description: "Second item" },
-    { id: 3, name: "Item Three", description: "Third item" },
-  ];
 
   const [rows, setRows] = useState(dataSources);
 

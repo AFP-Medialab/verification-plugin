@@ -286,8 +286,10 @@ chrome.webNavigation.onCommitted.addListener(async () => {
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   (async (request) => {
     const jp = require("jsonpath");
+
     if (request.prompt === "getTweets") {
       const t = await db.tweets.toArray();
+
       console.log(t);
       const ts = jp.query(t, "$..tweet_results");
       console.log(ts);
@@ -308,6 +310,14 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
           .query(ent, "$..result.legacy.entities.urls")
           .flat(1)
           .map((obj) => (obj.expanded_url ? obj.expanded_url : {})),
+        mentions: jp
+          .query(ent, "$..result.legacy.entities.user_mentions")
+          .flat(1)
+          .map((obj) => (obj.screen_name ? obj.screen_name : {})),
+        hashtags: jp
+          .query(ent, "$..result.legacy.entities.hashtags")
+          .flat(1)
+          .map((obj) => (obj.text ? obj.text : {})),
         date: jp.query(ent.res, "$.result.legacy.created_at")[0],
         likes: jp.query(ent.res, "$..favorite_count")[0],
         quotes: jp.query(ent.res, "$..quote_count")[0],
