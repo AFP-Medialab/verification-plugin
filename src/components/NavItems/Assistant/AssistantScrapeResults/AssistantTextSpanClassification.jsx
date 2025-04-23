@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import { useColorScheme } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
@@ -44,37 +45,48 @@ export default function AssistantTextSpanClassification({
   configs = {
     confidenceThresholdLow: 0.8,
     confidenceThresholdHigh: 1.0,
-    importanceThresholdLow: 0.8,
-    importanceThresholdHigh: 1.0,
-    confidenceRgbLow: [32, 180, 172],
-    confidenceRgbHigh: [34, 41, 180],
-    importanceRgbLow: [252, 225, 28],
-    importanceRgbHigh: [252, 108, 28],
+    greenRgb: [0, 255, 0],
+    lightGreenRgb: [170, 255, 0],
+    orangeRgb: [255, 170, 0],
+    redRgb: [255, 0, 0],
+    greenRgbDark: [78, 255, 78],
+    lightGreenRgbDark: [210, 255, 121],
+    orangeRgbDark: [255, 189, 62],
+    redRgbDark: [255, 78, 78],
   },
   textHtmlMap = null,
 }) {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
+  // for dark mode
+  const { mode, systemMode } = useColorScheme();
+  const resolvedMode = systemMode || mode;
+
   // sub card header tooltip for categories
   const colourScaleText = keyword("colour_scale");
   const categoryTooltipText = keyword("confidence_tooltip_technique");
-  const categoryTextLow = keyword("low_confidence");
-  const categoryTextHigh = keyword("high_confidence");
-  const categoryRgbLow = configs.confidenceRgbLow;
-  const categoryRgbHigh = configs.confidenceRgbHigh;
+  const categoryTextLow = keyword("low_severity"); // keyword("low_confidence");
+  const categoryTextHigh = keyword("high_severity"); // keyword("high_confidence");
+  const categoryThresholdLow = configs.confidenceThresholdLow;
+  const categoryThresholdHigh = configs.confidenceThresholdHigh;
+  const categoryRgbLow =
+    resolvedMode === "dark" ? configs.orangeRgbDark : configs.orangeRgb;
+  const categoryRgbHigh =
+    resolvedMode === "dark" ? configs.redRgbDark : configs.redRgb;
+  const primaryRgb = [0, 146, 108];
 
-  // tooltip for hovering over categories
-  const categoryTooltipContent = (
-    <ColourGradientTooltipContent
-      description={keyword("confidence_tooltip_category")}
-      colourScaleText={keyword("colour_scale")}
-      textLow={keyword("low_confidence")}
-      textHigh={keyword("high_confidence")}
-      rgbLow={configs.confidenceRgbLow}
-      rgbHigh={configs.confidenceRgbHigh}
-    />
-  );
+  // // tooltip for hovering over categories
+  // const categoryTooltipContent = (
+  //   <ColourGradientTooltipContent
+  //     description={keyword("confidence_tooltip_category")}
+  //     colourScaleText={keyword("colour_scale")}
+  //     textLow={keyword("low_confidence")}
+  //     textHigh={keyword("high_confidence")}
+  //     rgbLow={resolvedMode === "dark" ? configs.orangeRgbDark : configs.orangeRgb}
+  //     rgbHigh={resolvedMode === "dark" ? configs.redRgbDark : configs.redRgb}
+  //   />
+  // );
 
   const [doHighlightSentence, setDoHighlightSentence] = useState(true);
 
@@ -123,7 +135,7 @@ export default function AssistantTextSpanClassification({
   // wrap function for calculating spanhighlights and categories
   function wrapHighlightedText(spanText, spanInfo, spanStart, spandEnd) {
     let backgroundRgb = [210, 210, 210];
-    let backgroundRgbHover = [255, 100, 100];
+    let backgroundRgbHover = primaryRgb;
     let textColour = "black";
 
     let techniqueContent = [];
@@ -151,10 +163,10 @@ export default function AssistantTextSpanClassification({
 
       let techniqueBackgroundRgb = interpRgb(
         techniqueScore,
-        configs.confidenceThresholdLow,
-        configs.confidenceThresholdHigh,
-        configs.confidenceRgbLow,
-        configs.confidenceRgbHigh,
+        categoryThresholdLow,
+        categoryThresholdHigh,
+        categoryRgbLow,
+        categoryRgbHigh,
       );
       let bgLuminance = rgbToLuminance(techniqueBackgroundRgb);
       let techniqueTextColour = "white";
@@ -197,6 +209,7 @@ export default function AssistantTextSpanClassification({
             color: textColour,
             ":hover": {
               background: rgbToString(backgroundRgbHover),
+              color: resolvedMode === "dark" ? "black" : "white",
             },
           }}
         >
@@ -287,11 +300,11 @@ export default function AssistantTextSpanClassification({
           <CardContent>
             <CategoriesListToggle
               categories={uniqueCategories}
-              tooltipContent={categoryTooltipContent}
+              //tooltipContent={categoryTooltipContent}
               thresholdLow={configs.confidenceThresholdLow}
               thresholdHigh={configs.confidenceThresholdHigh}
-              rgbLow={configs.confidenceRgbLow}
-              rgbHigh={configs.confidenceRgbHigh}
+              rgbLow={categoryRgbLow}
+              rgbHigh={categoryRgbHigh}
               noCategoriesText={keyword("no_detected_techniques")}
               allCategoriesLabel={allCategoriesLabel}
               onCategoryChange={handleCategorySelect}
@@ -306,7 +319,7 @@ export default function AssistantTextSpanClassification({
 
 export function CategoriesListToggle({
   categories,
-  tooltipContent,
+  //tooltipContent,
   thresholdLow,
   thresholdHigh,
   rgbLow,
@@ -342,7 +355,11 @@ export function CategoriesListToggle({
     onCategoryChange(currentCategory);
   }
 
-  for (const category in categories) {
+  // order categories by highest number of sentences first
+  const sortedCategories = Object.fromEntries(
+    Object.entries(categories).sort(([, a], [, b]) => b.length - a.length),
+  );
+  for (const category in sortedCategories) {
     // don't display overall category
     if (category == allCategoriesLabel) {
       continue;
@@ -402,14 +419,14 @@ export function CategoriesListToggle({
   }
 
   return (
-    <Tooltip title={tooltipContent}>
-      <List>
-        <ListItem>
-          <Typography>{keyword("select_persuasion_technique")}</Typography>
-        </ListItem>
-        {output}
-      </List>
-    </Tooltip>
+    //<Tooltip title={tooltipContent}>
+    //</Tooltip>
+    <List>
+      <ListItem>
+        <Typography>{keyword("select_persuasion_technique")}</Typography>
+      </ListItem>
+      {output}
+    </List>
   );
 }
 

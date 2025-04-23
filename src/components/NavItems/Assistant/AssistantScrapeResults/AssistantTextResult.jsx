@@ -311,7 +311,6 @@ const AssistantTextResult = () => {
                       }}
                     />
                     <TransCredibilitySignalsLink keyword={keyword} />
-                    <TransHtmlDoubleLineBreak keyword={keyword} />
                   </>
                 }
                 textHtmlMap={textHtmlMap}
@@ -339,7 +338,6 @@ const AssistantTextResult = () => {
                       }}
                     />
                     <TransCredibilitySignalsLink keyword={keyword} />
-                    <TransHtmlDoubleLineBreak keyword={keyword} />
                   </>
                 }
                 textHtmlMap={textHtmlMap}
@@ -367,7 +365,6 @@ const AssistantTextResult = () => {
                       }}
                     />
                     <TransCredibilitySignalsLink keyword={keyword} />
-                    <TransHtmlDoubleLineBreak keyword={keyword} />
                   </>
                 }
                 textHtmlMap={textHtmlMap}

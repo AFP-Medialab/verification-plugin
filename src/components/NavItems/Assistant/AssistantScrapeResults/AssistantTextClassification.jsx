@@ -44,12 +44,14 @@ export default function AssistantTextClassification({
   configs = {
     confidenceThresholdLow: 0.8,
     confidenceThresholdHigh: 1.0,
-    importanceThresholdLow: 0.8,
-    importanceThresholdHigh: 1.0,
-    confidenceRgbLow: [32, 180, 172],
-    confidenceRgbHigh: [34, 41, 180],
-    importanceRgbLow: [252, 225, 28],
-    importanceRgbHigh: [252, 108, 28],
+    greenRgb: [0, 255, 0],
+    lightGreenRgb: [170, 255, 0],
+    orangeRgb: [255, 170, 0],
+    redRgb: [255, 0, 0],
+    greenRgbDark: [78, 255, 78],
+    lightGreenRgbDark: [210, 255, 121],
+    orangeRgbDark: [255, 189, 62],
+    redRgbDark: [255, 78, 78],
   },
   textHtmlMap = null,
   credibilitySignal = "",
@@ -73,34 +75,59 @@ export default function AssistantTextClassification({
   let sentenceTooltipText;
   let sentenceTextLow, sentenceTextHigh;
   let sentenceRgbLow, sentenceRgbHigh;
+  let categoryRgbLow, categoryRgbHigh;
   let sentenceThresholdLow, sentenceThresholdHigh;
+  let categoryThresholdLow, categoryThresholdHigh;
+  const primaryRgb = [0, 146, 108];
   const colourScaleText = keyword("colour_scale");
   if (credibilitySignal == keyword("subjectivity_title")) {
-    // subjectivity requires confidence for sentence
+    // subjectivity
     sentenceTooltipText = keyword("confidence_tooltip_sentence");
     sentenceTextLow = keyword("low_confidence");
     sentenceTextHigh = keyword("high_confidence");
-    sentenceRgbLow = configs.confidenceRgbLow;
-    sentenceRgbHigh = configs.confidenceRgbHigh;
-    sentenceThresholdLow = configs.confidenceThresholdLow;
-    sentenceThresholdHigh = configs.confidenceThresholdHigh;
-  } else {
-    // news framing and news genre requires importance for sentence
+    sentenceRgbLow =
+      resolvedMode === "dark" ? configs.orangeRgbDark : configs.orangeRgb;
+    sentenceRgbHigh =
+      resolvedMode === "dark" ? configs.redRgbDark : configs.redRgb;
+    categoryRgbLow = primaryRgb;
+    categoryRgbHigh = primaryRgb;
+  } else if (credibilitySignal == keyword("news_framing_title")) {
+    // news framing
     sentenceTooltipText = keyword("importance_tooltip_sentence");
     sentenceTextLow = keyword("low_importance");
     sentenceTextHigh = keyword("high_importance");
-    sentenceRgbLow = configs.importanceRgbLow;
-    sentenceRgbHigh = configs.importanceRgbHigh;
-    sentenceThresholdLow = configs.importanceThresholdLow;
-    sentenceThresholdHigh = configs.importanceThresholdHigh;
+    sentenceRgbLow = primaryRgb;
+    sentenceRgbHigh = primaryRgb;
+    categoryRgbLow =
+      resolvedMode === "dark"
+        ? configs.lightGreenRgbDark
+        : configs.lightGreenRgb;
+    categoryRgbHigh =
+      resolvedMode === "dark" ? configs.greenRgbDark : configs.greenRgb;
+  } else {
+    // news genre
+    // machine generated text
+    sentenceTooltipText = keyword("importance_tooltip_sentence");
+    sentenceTextLow = keyword("low_importance");
+    sentenceTextHigh = keyword("high_importance");
+    sentenceRgbLow =
+      resolvedMode === "dark"
+        ? configs.lightGreenRgbDark
+        : configs.lightGreenRgb;
+    sentenceRgbHigh =
+      resolvedMode === "dark" ? configs.greenRgbDark : configs.greenRgb;
+    categoryRgbLow = primaryRgb;
+    categoryRgbHigh = primaryRgb;
   }
   // category is confidence for news framing, news genre and subjectivity
-  const categoryRgbLow = configs.confidenceRgbLow;
-  const categoryRgbHigh = configs.confidenceRgbHigh;
-  const categoryThresholdLow = configs.confidenceThresholdLow;
-  const categoryThresholdHigh = configs.confidenceThresholdHigh;
+  // TODO rethink threshold code
+  sentenceThresholdLow = configs.confidenceThresholdLow;
+  categoryThresholdLow = configs.confidenceThresholdLow;
+  sentenceThresholdHigh = configs.confidenceThresholdHigh;
+  categoryThresholdHigh = configs.confidenceThresholdHigh;
 
   // tooltip for hovering over highlighted sentences
+  // genre, subjectivity only
   const sentenceTooltipContent = (
     <ColourGradientTooltipContent
       description={sentenceTooltipText}
@@ -112,14 +139,15 @@ export default function AssistantTextClassification({
     />
   );
   // tooltip for hovering over categories
+  // news framing/topic only
   const categoryTooltipContent = (
     <ColourGradientTooltipContent
       description={keyword("confidence_tooltip_category")}
       colourScaleText={keyword("colour_scale")}
       textLow={keyword("low_confidence")}
       textHigh={keyword("high_confidence")}
-      rgbLow={configs.confidenceRgbLow}
-      rgbHigh={configs.confidenceRgbHigh}
+      rgbLow={categoryRgbLow}
+      rgbHigh={categoryRgbHigh}
     />
   );
 
@@ -132,8 +160,18 @@ export default function AssistantTextClassification({
   };
 
   // traffic light colours for machine generated text
-  const colours = ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"];
-  const coloursDark = ["#4eff4e", "#d2ff79", "#ffbd3e", "#ff4e4e"];
+  const colours = [
+    rgbToString(configs.greenRgb),
+    rgbToString(configs.lightGreenRgb),
+    rgbToString(configs.orangeRgb),
+    rgbToString(configs.redRgb),
+  ];
+  const coloursDark = [
+    rgbToString(configs.greenRgbDark),
+    rgbToString(configs.lightGreenRgbDark),
+    rgbToString(configs.orangeRgbDark),
+    rgbToString(configs.redRgbDark),
+  ];
   const orderedCategories = [
     "highly_likely_human",
     "likely_human",
@@ -149,7 +187,7 @@ export default function AssistantTextClassification({
       for (let i = 0; i < sentenceIndices.length; i++) {
         if (
           credibilitySignal != keyword("machine_generated_text_title") &&
-          sentenceIndices[i].score >= configs.importanceThresholdLow
+          sentenceIndices[i].score >= configs.confidenceThresholdLow
         ) {
           filteredSentences.push(sentenceIndices[i]);
         } else {
@@ -412,7 +450,7 @@ export function CategoriesList({
   }
   return (
     <>
-      {credibilitySignal != keyword("subjectivity_title") ? (
+      {credibilitySignal === keyword("news_framing_title") ? (
         <Tooltip title={tooltipText}>
           <List>{output}</List>
         </Tooltip>
@@ -440,7 +478,7 @@ export function ClassifiedText({
   keyword,
   resolvedMode,
 }) {
-  let output = text; //Defaults to text output
+  let output = text; // Defaults to text output
 
   function wrapHighlightedText(spanText, spanInfo) {
     const spanScore = spanInfo.score;
@@ -474,15 +512,18 @@ export function ClassifiedText({
       </span>
     );
 
-    // machine generated text doesn't require a tooltip on the highlighted sentences
-    if (credibilitySignal != keyword("machine_generated_text_title")) {
+    // machine generated text and news framing/topic don't require a tooltip on the highlighted sentences
+    if (
+      credibilitySignal === keyword("machine_generated_text_title") ||
+      credibilitySignal === keyword("news_framing_title")
+    ) {
+      return <span key={uuidv4()}>{highlightedSentence}</span>;
+    } else {
       return (
         <Tooltip key={uuidv4()} title={tooltipText}>
           {highlightedSentence}
         </Tooltip>
       );
-    } else {
-      return <span key={uuidv4()}>{highlightedSentence}</span>;
     }
   }
 

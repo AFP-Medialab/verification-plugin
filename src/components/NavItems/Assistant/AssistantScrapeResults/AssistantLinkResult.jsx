@@ -323,12 +323,7 @@ const AssistantLinkResult = () => {
     <Card variant="outlined">
       <CardHeader
         className={classes.assistantCardHeader}
-        title={
-          <Typography variant={"h5"}>
-            {" "}
-            {keyword("extracted_urls_url_domain_analysis")}{" "}
-          </Typography>
-        }
+        title={keyword("extracted_urls_url_domain_analysis")}
         action={
           <Tooltip
             interactive={"true"}
