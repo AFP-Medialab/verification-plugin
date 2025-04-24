@@ -399,7 +399,7 @@ const SinglefileConverter = (telegramURL) => {
           "WARC-Date": date,
           "WARC-Type": type,
           "WARC-Record-ID": `<urn:uuid:${uuid()}>`,
-          "Content-Type": 'text/html;charset="UTF-8"',
+          "Content-Type": "text/html",
         },
       },
       content(),

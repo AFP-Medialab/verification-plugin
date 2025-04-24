@@ -479,7 +479,7 @@ const searchSemantic = new Tool(
   manageSearchSvgIcon,
   TOOLS_CATEGORIES.SEARCH,
   [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.NEW, TOOL_STATUS_ICON.LOCK],
-  [ROLES.REGISTERED_USER],
+  null,
   "semanticSearch",
   TOOL_GROUPS.VERIFICATION,
   <SemanticSearch />,
