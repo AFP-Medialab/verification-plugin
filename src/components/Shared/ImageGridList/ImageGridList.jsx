@@ -4,14 +4,13 @@ import Grid from "@mui/material/Grid";
 
 import useClasses from "../MaterialUiStyles/useClasses";
 
-const styles = (theme) => ({
+const styles = () => ({
   root: {
     width: "100%",
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "space-around",
     overflow: "hidden",
-    backgroundColor: theme.palette.background.paper,
   },
   imageList: {
     width: "100%",
