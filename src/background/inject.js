@@ -1,5 +1,6 @@
 (function (xhr) {
   var XHR = XMLHttpRequest.prototype;
+  let pluginId = document.currentScript.dataset.params;
 
   var open = XHR.open;
   var send = XHR.send;
@@ -25,9 +26,7 @@
         this._url.includes("graphql") &&
         this.response.slice(0, 10).includes("data")
       ) {
-        console.log(this);
-        console.log(JSON.parse(this.responseText));
-        chrome.runtime.sendMessage(JSON.parse(this.responseText));
+        chrome.runtime.sendMessage(pluginId, JSON.parse(this.responseText));
       }
     });
 

@@ -172,7 +172,7 @@ const TwitterSnaV2 = () => {
         }),
       );
     dataSources.push({
-      id: dataSources.length + 1,
+      id: (dataSources.length + 1).toString(),
       name: uploadedFile.name,
       description: uploadedData.length,
       content: reformatedTweets,
@@ -467,61 +467,120 @@ const TwitterSnaV2 = () => {
   };
 
   const CommunityForceGraph = ({ rawData }) => {
-    const processedData = useMemo(() => {
-      const graph = new MultiGraph();
-      console.log(graph.multi);
+    const graph = new MultiGraph();
+    rawData.nodes.forEach((node, idx) => {
+      !graph.hasNode(node.id)
+        ? graph.addNode(node.id, {})
+        : graph.addNode(node.id + idx, {});
+    });
+    rawData.links.forEach((link) => {
+      if (
+        graph.hasNode(link.source) &&
+        graph.hasNode(link.target) &&
+        !graph.hasUndirectedEdge(link.source, link.target)
+      ) {
+        graph.addUndirectedEdge(link.source, link.target);
+      }
+    });
+    const communities = louvain(graph);
+    console.log(communities);
 
-      // Add nodes
-      rawData.nodes.forEach((node) => {
-        graph.addNode(node.id, {});
-      });
+    graph.updateEachNodeAttributes((_, attr, key) => ({
+      ...attr,
+      community: communities[key],
+    }));
 
-      // Add edges
-      rawData.links.forEach((link) => {
-        if (
-          graph.hasNode(link.source) &&
-          graph.hasNode(link.target) &&
-          !graph.hasEdge({ source: link.source, target: link.target })
-        ) {
-          graph.addUndirectedEdge(link.source, link.target);
-        }
-      });
+    // graph.forEachNode((node)=>console.log(node))
 
-      // Run Louvain
-      const communities = louvain(graph);
-      graph.updateEachNodeAttributes((_, attr, key) => ({
-        ...attr,
-        community: communities[key],
-      }));
+    // Calculate degrees
+    const degrees = {};
+    graph.forEachNode((node) => {
+      degrees[node] = graph.degree(node);
+    });
 
-      // Calculate degrees
-      const degrees = {};
-      graph.forEachNode((node) => {
-        degrees[node] = graph.degree(node);
-      });
+    // // Prepare data for ForceGraph
+    const nodes = graph.nodes().map((id) => ({
+      id,
+      // val: degrees[id], // used for node size
+      group: communities[id],
+    }));
 
-      // Prepare data for ForceGraph
-      const nodes = graph.nodes().map((id) => ({
-        id,
-        val: degrees[id], // used for node size
-        group: graph.getNodeAttribute(id, "community"),
-      }));
+    // console.log(nodes)
 
-      const links = graph.edges().map((edge) => {
-        const { source, target } = graph.extremities(edge);
-        return { source, target };
-      });
+    // const links = graph.edges().map((edge) => {
+    //   const { source, target } = graph.extremities(edge);
+    //   return { source, target };
+    // });
 
-      return { nodes, links };
-    }, [rawData]);
+    // const processedData = (() => {
+    //   const graph = new MultiGraph();
+    //   console.log(graph.multi);
 
+    //   // Add nodes
+    //   rawData.nodes.forEach((node) => {
+    //     graph.addNode(node.id, {});
+    //   });
+
+    //   // Add edges
+    //   rawData.links.forEach((link) => {
+    //     if (
+    //       graph.hasNode(link.source) &&
+
+    //       graph.hasNode(link.target)
+    //     ) {
+
+    //       graph.addUndirectedEdge(link.source, link.target);
+    //     }
+    //   });
+    //   console.log("OK")
+    //   // Run Louvain
+    //   const communities = louvain(graph);
+    //   console.log(communities)
+    //   graph.updateEachNodeAttributes((_, attr, key) => ({
+    //     ...attr,
+    //     community: communities[key],
+    //   }));
+
+    //   // Calculate degrees
+    //   const degrees = {};
+    //   graph.forEachNode((node) => {
+    //     degrees[node] = graph.degree(node);
+    //   });
+
+    //   // Prepare data for ForceGraph
+    //   const nodes = graph.nodes().map((id) => ({
+    //     id,
+    //     val: degrees[id], // used for node size
+    //     group: graph.getNodeAttribute(id, "community"),
+    //   }));
+
+    //   const links = graph.edges().map((edge) => {
+    //     const { source, target } = graph.extremities(edge);
+    //     return { source, target };
+    //   });
+
+    //   return { nodes, links };
+    // }, [rawData]);
+
+    // console.log(processedData[0])
+    let links = rawData.links;
     return (
       <ForceGraph2D
-        graphData={processedData}
+        graphData={{ nodes, links }}
         nodeRelSize={6} // this + `val` determines size
         nodeAutoColorBy="group"
         linkColor={() => "#aaa"}
         nodeLabel="id"
+        nodeCanvasObjectMode={() => "after"}
+        nodeCanvasObject={(node, ctx) => {
+          const label = node.id;
+          const fontSize = 4;
+          ctx.font = `${fontSize}px Sans-Serif`;
+          ctx.fillStyle = "black";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(label, node.x, node.y);
+        }}
       />
     );
   };
@@ -578,7 +637,15 @@ const TwitterSnaV2 = () => {
       nodes: n,
       links: e,
     };
-    // return (<CommunityForceGraph rawData={data}></CommunityForceGraph>)
+    if (graphData.length === 0) {
+      return (
+        <>
+          {" "}
+          <Typography> No coordinated behavior detected </Typography>
+        </>
+      );
+    }
+    return <CommunityForceGraph rawData={data}></CommunityForceGraph>;
     // return <LabeledGraph graphData={data}></LabeledGraph>;
     // For 2D Graph
     return (

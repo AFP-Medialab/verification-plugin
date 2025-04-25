@@ -269,7 +269,9 @@ chrome.webNavigation.onCommitted.addListener(async () => {
     chrome.scripting.executeScript({
       target: { tabId: currentTab.id, allFrames: true },
       function: () => {
+        let pluginId = chrome.runtime.id;
         var s = document.createElement("script");
+        s.dataset.params = pluginId;
         // must be listed in web_accessible_resources in manifest.json
         s.src = chrome.runtime.getURL("inject.js");
         s.onload = function () {
@@ -324,7 +326,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         retweets: jp.query(ent.res, "$..retweet_count")[0],
         replies: jp.query(ent.res, "$..reply_count")[0],
       }));
-      console.log(x.filter((v) => v.links.length > 0));
       sendResponse(x);
     } else if (request.prompt === "viewTweets") {
       const t = await db.tweets.toArray();
@@ -365,8 +366,11 @@ chrome.runtime.onMessageExternal.addListener(
     const jp = require("jsonpath");
     const entryIds = jp.query(request, "$..entryId");
     const session = await db.recording.toArray();
+    console.log("RECEIVED REQUEST TO SAVE TWEETS");
+    console.log(request);
 
     const currentSession = session[0].state;
+    console.log("CURRENTLY RECORDING ? " + currentSession);
     if (currentSession === false) {
       return;
     }

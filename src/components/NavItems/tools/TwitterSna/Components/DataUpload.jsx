@@ -74,6 +74,9 @@ const CheckboxTable = ({
       newSelected = selected.filter((item) => item !== id);
     }
 
+    console.log(selected);
+    console.log(newSelected);
+
     setSelected(newSelected);
   };
 
