@@ -36,7 +36,11 @@ const DbkfTextResults = () => {
                     >
                       {keyword("dbkf_text_warning")}
                     </Typography>
-                    <Box mb={0.5} />
+                    <Box
+                      sx={{
+                        mb: 0.5,
+                      }}
+                    />
                   </div>
                 }
                 secondary={

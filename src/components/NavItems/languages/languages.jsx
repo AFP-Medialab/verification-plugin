@@ -51,9 +51,11 @@ const Languages = () => {
       <Stack
         direction="column"
         spacing={0}
-        height={"100%"}
-        justifyContent="center"
-        alignItems="center"
+        sx={{
+          height: "100%",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
         <Select
           value={storeLanguage}

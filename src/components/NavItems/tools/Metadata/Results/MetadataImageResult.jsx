@@ -12,12 +12,12 @@ const MetadataImageResult = ({ metadata, imageSrc }) => {
     <Card variant="outlined">
       <Stack
         direction={{ md: "column", lg: "row" }}
+        spacing={4}
         sx={{
+          p: 4,
           justifyContent: { md: "flex-start", lg: "center" },
           alignItems: "flex-start",
         }}
-        spacing={4}
-        p={4}
       >
         <Box
           style={{

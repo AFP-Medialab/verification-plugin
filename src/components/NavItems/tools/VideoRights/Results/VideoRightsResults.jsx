@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Icon from "@mui/material/Icon";
 import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
@@ -99,7 +99,11 @@ const VideoRightsResults = (props) => {
       />
       <div className={classes.root2}>
         <Typography variant={"h5"}>{"Reuse Conditions"}</Typography>
-        <Box m={2} />
+        <Box
+          sx={{
+            m: 2,
+          }}
+        />
         {result.kind === "youTubeVideos" && result.license === "youtube" && (
           <Typography variant={"body2"}>
             {"YouTube License Summary"}
@@ -169,13 +173,25 @@ const VideoRightsResults = (props) => {
             </a>
           </Typography>
         )}
-        <Box m={4} />
+        <Box
+          sx={{
+            m: 4,
+          }}
+        />
         <Divider />
-        <Box m={4} />
+        <Box
+          sx={{
+            m: 4,
+          }}
+        />
         <Typography variant={"h5"}>
           {keyword("license_" + result.license)}
         </Typography>
-        <Box m={2} />
+        <Box
+          sx={{
+            m: 2,
+          }}
+        />
         {licenseDetails.map((obj, index) => {
           if (obj.elements.length > 0) {
             return (
@@ -205,11 +221,23 @@ const VideoRightsResults = (props) => {
             );
           } else return null;
         })}
-        <Box m={4} />
+        <Box
+          sx={{
+            m: 4,
+          }}
+        />
         <Divider />
-        <Box m={4} />
+        <Box
+          sx={{
+            m: 4,
+          }}
+        />
         <Typography variant={"h5"}>{"Contact"}</Typography>
-        <Box m={2} />
+        <Box
+          sx={{
+            m: 2,
+          }}
+        />
         <Typography variant={"body2"}>
           For other uses, it is recommended to contact the video uploader and{" "}
           <b>request permission</b>:
@@ -217,8 +245,15 @@ const VideoRightsResults = (props) => {
         <div className={classes.listRoot}>
           {result.user !== undefined && (
             <Paper className={classes.listItem}>
-              <Grid2 container wrap="nowrap" spacing={2} alignItems={"center"}>
-                <Grid2>
+              <Grid
+                container
+                wrap="nowrap"
+                spacing={2}
+                sx={{
+                  alignItems: "center",
+                }}
+              >
+                <Grid>
                   {result.kind === "youTubeVideos" && (
                     <YouTubeIcon color={"primary"} fontSize={"large"} />
                   )}
@@ -228,8 +263,8 @@ const VideoRightsResults = (props) => {
                   {result.kind === "twitterVideos" && (
                     <TwitterIcon color={"primary"} fontSize={"large"} />
                   )}
-                </Grid2>
-                <Grid2 size="grow">
+                </Grid>
+                <Grid size="grow">
                   <a
                     href={result.user.url}
                     target="_blank"
@@ -238,13 +273,20 @@ const VideoRightsResults = (props) => {
                     {" "}
                     {result.user.name}
                   </a>
-                </Grid2>
-              </Grid2>
+                </Grid>
+              </Grid>
             </Paper>
           )}
           <Paper className={classes.listItem}>
-            <Grid2 container wrap="nowrap" spacing={2} alignItems={"center"}>
-              <Grid2>
+            <Grid
+              container
+              wrap="nowrap"
+              spacing={2}
+              sx={{
+                alignItems: "center",
+              }}
+            >
+              <Grid>
                 <Icon classes={{ root: classes.iconRoot }}>
                   <img
                     className={classes.imageIcon}
@@ -252,8 +294,8 @@ const VideoRightsResults = (props) => {
                     alt={invidLogo}
                   />
                 </Icon>
-              </Grid2>
-              <Grid2 size="grow">
+              </Grid>
+              <Grid size="grow">
                 Or try:{" "}
                 <a
                   href={result.RIGHTS_APP + "/" + result.id}
@@ -263,15 +305,27 @@ const VideoRightsResults = (props) => {
                   InVID Rights Management Tool
                 </a>
                 .
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
           </Paper>
         </div>
-        <Box m={4} />
+        <Box
+          sx={{
+            m: 4,
+          }}
+        />
         <Divider />
-        <Box m={4} />
+        <Box
+          sx={{
+            m: 4,
+          }}
+        />
         <Typography variant={"h5"}>{"Copyright Exceptions"}</Typography>
-        <Box m={2} />
+        <Box
+          sx={{
+            m: 2,
+          }}
+        />
         <Typography variant={"body2"}>
           <b>Exceptionally</b>, in some jurisdictions, this video might be
           directly reused to report about
@@ -294,11 +348,23 @@ const VideoRightsResults = (props) => {
           . This reuse is under your or your organization sole responsibility
           and, in any case, proper <b>attribution</b> should be provided.
         </Typography>
-        <Box m={4} />
+        <Box
+          sx={{
+            m: 4,
+          }}
+        />
         <Divider />
-        <Box m={4} />
+        <Box
+          sx={{
+            m: 4,
+          }}
+        />
         <Typography variant={"h5"}>{"How to Give Attribution"}</Typography>
-        <Box m={2} />
+        <Box
+          sx={{
+            m: 2,
+          }}
+        />
         <Typography variant={"body2"}>{result.attribution}</Typography>
       </div>
     </Card>

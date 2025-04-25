@@ -3,7 +3,7 @@ import React, { useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
@@ -14,7 +14,6 @@ import { useColorScheme } from "@mui/material/styles";
 import CloseIcon from "@mui/icons-material/Close";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 
-import LoadingButton from "@mui/lab/LoadingButton";
 import { ClearIcon } from "@mui/x-date-pickers";
 import accept from "attr-accept";
 
@@ -116,11 +115,9 @@ const StringFileUploadField = ({
     >
       {isDragging && (
         <Stack
-          justifyContent="center"
-          alignItems="center"
-          height="100%"
           sx={{
-            border: "4px dashed #00926c",
+            height: "100%",
+            border: "4px dashed var(--mui-palette-primary-main)",
             backgroundColor: dropColor,
             justifyContent: "center",
             alignItems: "center",
@@ -134,10 +131,20 @@ const StringFileUploadField = ({
           <Typography>{keyword("droppable_zone")}</Typography>
         </Stack>
       )}
-
-      <Box visibility={isDragging ? "hidden" : "visible"}>
-        <Grid2 container direction="row" spacing={3} alignItems="center">
-          <Grid2 size="grow">
+      <Box
+        sx={{
+          visibility: isDragging ? "hidden" : "visible",
+        }}
+      >
+        <Grid
+          container
+          direction="row"
+          spacing={3}
+          sx={{
+            alignItems: "center",
+          }}
+        >
+          <Grid size="grow">
             <TextField
               type="url"
               id="standard-full-width"
@@ -162,9 +169,9 @@ const StringFileUploadField = ({
                 },
               }}
             />
-          </Grid2>
-          <Grid2>
-            <LoadingButton
+          </Grid>
+          <Grid>
+            <Button
               type="submit"
               variant="contained"
               color="primary"
@@ -176,10 +183,14 @@ const StringFileUploadField = ({
               disabled={(urlInput === "" && !fileInput) || isParentLoading}
             >
               {submitButtonKeyword}
-            </LoadingButton>
-          </Grid2>
-        </Grid2>
-        <Grid2 mt={2}>
+            </Button>
+          </Grid>
+        </Grid>
+        <Grid
+          sx={{
+            mt: 2,
+          }}
+        >
           <ButtonGroup
             variant="outlined"
             disabled={isParentLoading || urlInput !== ""}
@@ -229,7 +240,7 @@ const StringFileUploadField = ({
               </Button>
             )}
           </ButtonGroup>
-        </Grid2>
+        </Grid>
       </Box>
     </Box>
   );

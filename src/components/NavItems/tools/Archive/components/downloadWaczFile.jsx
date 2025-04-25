@@ -2,13 +2,13 @@ import { useMutation } from "@tanstack/react-query";
 import React from "react";
 
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import { Download } from "@mui/icons-material";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-import LoadingButton from "@mui/lab/LoadingButton";
 
 import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
 
@@ -148,11 +148,13 @@ const DownloadWaczFile = ({ url }) => {
     <Box>
       <Stack
         direction="row"
-        justifyContent="flex-start"
-        alignItems="center"
         spacing={2}
+        sx={{
+          justifyContent: "flex-start",
+          alignItems: "center",
+        }}
       >
-        <LoadingButton
+        <Button
           variant="outlined"
           onClick={async () => await getWaczFileFromScoop.mutate()}
           loading={getWaczFileFromScoop.isPending}
@@ -162,7 +164,7 @@ const DownloadWaczFile = ({ url }) => {
           {getWaczFileFromScoop.isPending
             ? keyword("scoop_button_loading")
             : keyword("scoop_button_download")}
-        </LoadingButton>
+        </Button>
         {getWaczFileFromScoop.isError && (
           <Typography variant="body2" color="error">
             {keyword("archiving_error")}
