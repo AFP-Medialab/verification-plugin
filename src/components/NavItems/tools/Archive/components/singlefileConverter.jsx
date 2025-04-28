@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -32,6 +33,7 @@ import { prettifyLargeString } from "../utils";
  */
 const SinglefileConverter = (telegramURL) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
+  const userID = useSelector((state) => state.userSession.user.id);
 
   const [fileInput, setFileInput] = useState(/** @type {File?} */ null);
   const [error, setError] = useState("");
@@ -361,6 +363,9 @@ const SinglefileConverter = (telegramURL) => {
         "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
       format: "WARC File Format 1.1",
       isPartOf: "singlefile2wacz.wacz",
+      "WARC-Creator-Info": userID + "@verification-plugin.eu",
+      "WARC-Creator-Agent":
+        "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
     };
     const filename = "singlefile2wacz.wacz#/archive/data.warc.gz";
 
@@ -370,9 +375,7 @@ const SinglefileConverter = (telegramURL) => {
     );
 
     const serializedWARCInfo_ = await WARCSerializer.serialize(warcinfo);
-    const trimmedWARCInfo = new TextDecoder()
-      .decode(serializedWARCInfo_)
-      .slice(0, -1);
+    const trimmedWARCInfo = new TextDecoder().decode(serializedWARCInfo_);
     const serializedWARCInfo = new TextEncoder().encode(trimmedWARCInfo);
 
     // Create a sample response
@@ -390,16 +393,20 @@ const SinglefileConverter = (telegramURL) => {
 
     // For resource records
     const type = "resource";
+
     const record = await WARCRecord.create(
       {
         url,
-        warcVersion: "WARC/1.1",
+        warcVersion,
         warcHeaders: {
           // "WARC-Target-URI":url,
           "WARC-Date": date,
           "WARC-Type": type,
           "WARC-Record-ID": `<urn:uuid:${uuid()}>`,
           "Content-Type": "text/html",
+          "WARC-Creator-Info": userID + "@verification-plugin.eu",
+          "WARC-Creator-Agent":
+            "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
         },
       },
       content(),
