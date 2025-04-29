@@ -5,6 +5,7 @@ import ForceGraph3D from "react-force-graph-3d";
 
 import { createTheme } from "@mui/material";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -15,6 +16,7 @@ import dayjs from "dayjs";
 import MultiGraph from "graphology";
 import louvain from "graphology-communities-louvain";
 import Papa from "papaparse";
+import { Brush } from "recharts";
 import * as THREE from "three";
 import SpriteText from "three-spritetext";
 
@@ -27,6 +29,8 @@ import DataUpload from "./Components/DataUpload";
 import CheckboxTable from "./Components/DataUpload";
 import EntryDetailTable from "./Components/EntryDetailTable";
 import HandleUploadModal from "./Components/HandleUploadModal";
+import PropagationTimeline from "./Components/PropagationTimeline";
+import SNAPanel from "./Components/SNAPanel";
 
 const TwitterSnaV2 = () => {
   const theme = createTheme({
@@ -388,12 +392,6 @@ const TwitterSnaV2 = () => {
     let selectedContent = selectedSources
       .map((source) => source.content)
       .flat();
-    console.log(objectChoice);
-    console.log(
-      selected.length > 0 && selected.every((x) => x.includes("tweets~")),
-    );
-    console.log(selectedContent[0]);
-    console.log(selectedContent[0][objectChoice]);
     let filteredContent =
       selected.length > 0 && selected.every((x) => x.includes("tweets~"))
         ? selectedContent
@@ -404,7 +402,6 @@ const TwitterSnaV2 = () => {
             })
             .filter((x) => x.objects.length > 0)
         : selectedContent;
-    console.log(filteredContent);
     let nameMaps = new Map(
       selectedSources
         .map((source) =>
@@ -412,7 +409,6 @@ const TwitterSnaV2 = () => {
         )
         .flatMap((m) => [...m]),
     );
-    console.log(nameMaps);
     let coor_result = detectCOOR(TIME_WINDOW, EDGE_THRESH, filteredContent);
     let candidates =
       EDGE_THRESH > 0
@@ -765,6 +761,46 @@ const TwitterSnaV2 = () => {
     headers,
   };
 
+  const [plot, setPlot] = useState(undefined);
+
+  const [SNATab, setSNATab] = useState(0);
+
+  const propTimelineProps = {
+    dataSources,
+    selected,
+    setPlot,
+    plot,
+    SNATab,
+    setSNATab,
+  };
+
+  const [activityChart, setActivityChart] = useState(undefined);
+
+  const accountActivityProps = {
+    dataSources,
+    selected,
+    activityChart,
+    setActivityChart,
+  };
+
+  const [mentionGraph, setMentionGraph] = useState(undefined);
+
+  const mostMentionProps = {
+    dataSources,
+    selected,
+    mentionGraph,
+    setMentionGraph,
+  };
+
+  const SNATabProps = {
+    SNATab,
+    setSNATab,
+    propTimelineProps,
+    accountActivityProps,
+    coorProps,
+    mostMentionProps,
+  };
+
   return (
     <div>
       <ThemeProvider theme={theme}>
@@ -777,10 +813,6 @@ const TwitterSnaV2 = () => {
           }
         />
         <Card variant="outlined" className={cardClasses.root}>
-          <CardHeader
-            title={"Collected tweets"}
-            className={classes.headerUploadedImage}
-          />
           {isLoading ? (
             <Box sx={{ display: "flex", justifyContent: "center" }}>
               <CircularProgress />
@@ -791,7 +823,7 @@ const TwitterSnaV2 = () => {
               {/* <Box p={4}></Box> */}
               {/* {EntryDetailTable(tableProps)} */}
               <Box p={2} />
-              {CoorPanel(coorProps)}
+              {SNAPanel(SNATabProps)}
             </Box>
           )}
         </Card>
