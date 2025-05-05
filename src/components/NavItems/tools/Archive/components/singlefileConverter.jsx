@@ -430,8 +430,6 @@ const SinglefileConverter = (telegramURL) => {
     // );
 
     const serializedRecord = await WARCSerializer.serialize(record);
-    console.log(new TextDecoder().decode(serializedWARCInfo));
-    console.log(new TextDecoder().decode(serializedRecord));
     return [serializedWARCInfo, serializedRecord];
     //For returning response/request
     // For adding request record if page is saved as a response
