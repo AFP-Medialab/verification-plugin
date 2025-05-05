@@ -149,7 +149,7 @@ const TwitterSnaV2 = () => {
       ? new Map(
           uploadedData.map((item) => [item["Facebook Id"], item["Page Name"]]),
         )
-      : {};
+      : new Map();
 
     let reformatedTweets = Array.from(
       new Map(
@@ -175,12 +175,23 @@ const TwitterSnaV2 = () => {
           ...rest,
         }),
       );
+    let reformatedTweets_withHashtag = metaSelected
+      ? reformatedTweets.map(({ ["Message"]: text, ...rest }) => ({
+          ...rest,
+          text,
+          hashtags: text
+            .split(" ")
+            .filter((x) => x.length > 2 && x.includes("#"))
+            .join(","),
+        }))
+      : reformatedTweets;
+    console.log(reformatedTweets);
     dataSources.push({
       id: (dataSources.length + 1).toString(),
       name: uploadedFile.name,
       description: uploadedData.length,
-      content: reformatedTweets,
-      headers: Object.keys(reformatedTweets[0]),
+      content: reformatedTweets_withHashtag,
+      headers: Object.keys(reformatedTweets_withHashtag[0]),
       accountNameMap: accountNameMap,
     });
     setLoading(false);
@@ -775,12 +786,15 @@ const TwitterSnaV2 = () => {
   };
 
   const [activityChart, setActivityChart] = useState(undefined);
+  const [activitySelect, setActivitySelect] = useState("entries");
 
   const accountActivityProps = {
     dataSources,
     selected,
     activityChart,
     setActivityChart,
+    activitySelect,
+    setActivitySelect,
   };
 
   const [mentionGraph, setMentionGraph] = useState(undefined);
@@ -792,6 +806,15 @@ const TwitterSnaV2 = () => {
     setMentionGraph,
   };
 
+  const [hashtagGraph, setHashtagGraph] = useState("");
+
+  const hashtagProps = {
+    dataSources,
+    selected,
+    hashtagGraph,
+    setHashtagGraph,
+  };
+
   const SNATabProps = {
     SNATab,
     setSNATab,
@@ -799,6 +822,7 @@ const TwitterSnaV2 = () => {
     accountActivityProps,
     coorProps,
     mostMentionProps,
+    hashtagProps,
   };
 
   return (

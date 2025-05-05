@@ -104,7 +104,7 @@ const EntryDetailTable = ({
                       >
                         {headers.map((k) => (
                           <ExpandableTableCell
-                            text={x[k] ? x[k] : "Missing"}
+                            text={x[k] ? x[k].toString() : "Missing"}
                             key={k ? k : Math.floor(Math.random() * 100000)}
                             align="left"
                           ></ExpandableTableCell>
@@ -124,7 +124,7 @@ const EntryDetailTable = ({
                       >
                         {headers.map((k) => (
                           <ExpandableTableCell
-                            text={x[k] ? x[k] : "Missing"}
+                            text={x[k] ? x[k].toString() : "Missing"}
                             key={k}
                             align="left"
                           ></ExpandableTableCell>

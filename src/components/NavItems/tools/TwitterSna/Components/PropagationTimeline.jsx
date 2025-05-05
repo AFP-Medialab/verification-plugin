@@ -137,7 +137,10 @@ const PropagationTimeline = (props) => {
       <Box>
         <Box p={2}></Box>
         <Stack direction="row" spacing={2} alignItems="center">
-          <Typography pl={2}> Show propagation timeline:</Typography>
+          <Typography pl={2}>
+            {" "}
+            Distribution of tweets in collection over time:
+          </Typography>
           <Button
             variant="outlined"
             sx={{

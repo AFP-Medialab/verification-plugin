@@ -1,7 +1,9 @@
 import React from "react";
 
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
@@ -16,46 +18,43 @@ import {
   YAxis,
 } from "recharts";
 
-const TOP_N = 40;
-
-const MostMentions = (props) => {
+const Hashtags = (props) => {
+  let MAX_USERS = 40;
+  let hashtagGraph = props.hashtagGraph;
+  let setHashtagGraph = props.setHashtagGraph;
   let dataSources = props.dataSources;
   let selected = props.selected;
-  let mentionGraph = props.mentionGraph;
-  let setMentionGraph = props.setMentionGraph;
+  let selectedSources = dataSources.filter((source) =>
+    selected.includes(source.id),
+  );
+  let selectedContent = selectedSources.map((source) => source.content).flat();
+  let nameMaps = new Map(
+    selectedSources
+      .map((source) =>
+        source.accountNameMap ? source.accountNameMap : new Map(),
+      )
+      .flatMap((m) => [...m]),
+  );
 
-  const getMentions = () => {
-    console.log(mentionGraph);
-    console.log(setMentionGraph);
-    let selectedSources = dataSources.filter((source) =>
-      selected.includes(source.id),
-    );
-    let selectedContent = selectedSources
-      .map((source) => source.content)
+  const analyzeHashtags = () => {
+    let existingHashtags = selectedContent
+      .map((x) =>
+        x.hashtags?.replace("‚", ",").replace("‚", ",").split(",").flat(),
+      )
       .flat();
-    let nameMaps = new Map(
-      selectedSources
-        .map((source) =>
-          source.accountNameMap ? source.accountNameMap : new Map(),
-        )
-        .flatMap((m) => [...m]),
-    );
-    let allMentions = selectedContent
-      .map((x) => x.mentions.split(",").flat())
-      .flat()
-      .filter((x) => x.length > 0);
-    let groupedMentions = allMentions.reduce(function (acc, curr) {
+    let groupedHashtags = existingHashtags.reduce(function (acc, curr) {
       return acc[curr] ? ++acc[curr] : (acc[curr] = 1), acc;
     }, {});
-    console.log(groupedMentions);
-    let sorted = Object.entries(groupedMentions)
+    console.log(groupedHashtags);
+    let sorted = Object.entries(groupedHashtags)
       .map((k) => ({ name: k[0], occurences: k[1] }))
-      .sort((a, b) => b.occurences - a.occurences); // sort descending
+      .sort((a, b) => b.occurences - a.occurences)
+      .filter((x) => x.name.length > 0); // sort descending
 
-    const data = sorted.slice(0, TOP_N);
-    const rest = sorted.slice(TOP_N);
-    if (rest.length > 0) {
-      const otherEntry = rest.reduce(
+    const firstUsers = sorted.slice(0, MAX_USERS);
+    const others = sorted.slice(MAX_USERS);
+    if (others.length > 0) {
+      const otherEntry = others.reduce(
         (acc, curr) => ({
           name: "Other",
           occurences: acc.occurences + curr.occurences,
@@ -64,15 +63,12 @@ const MostMentions = (props) => {
         { name: "Other", occurences: 0 },
       );
 
-      data.push(otherEntry);
+      firstUsers.push(otherEntry);
     }
-
     const chartWidth = sorted.length * 60;
-    console.log(data);
-
     const handleBarClick = (data) => {
       if (data.isOther) {
-        setMentionGraph(
+        setHashtagGraph(
           <div style={{ width: "100%", overflowX: "auto" }}>
             <BarChart
               width={chartWidth}
@@ -98,10 +94,10 @@ const MostMentions = (props) => {
       }
     };
 
-    setMentionGraph(
+    setHashtagGraph(
       <ResponsiveContainer width="100%" height={400}>
         <BarChart
-          data={data}
+          data={firstUsers}
           margin={{ top: 20, right: 30, left: 20, bottom: 100 }}
           onClick={({ activePayload }) => {
             if (activePayload?.[0]?.payload?.isOther)
@@ -119,7 +115,7 @@ const MostMentions = (props) => {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="occurences" fill="#8884d8" name="Mentions" />
+          <Bar dataKey="occurences" fill="#8884d8" name="Uses" />
         </BarChart>
       </ResponsiveContainer>,
     );
@@ -130,14 +126,13 @@ const MostMentions = (props) => {
       <Stack direction="row" spacing={2} alignItems="center">
         <Typography>
           {" "}
-          Users most mentioned in the collected tweets (TWITTER ONLY){" "}
+          Hashtags used in collection and their frequency{" "}
         </Typography>
-        <Button onClick={getMentions}>Show graph</Button>
+        <Button onClick={analyzeHashtags}>Show graph</Button>
       </Stack>
-      <Box p={2} />
-      {mentionGraph ? mentionGraph : <></>}
+      {hashtagGraph ? hashtagGraph : <></>}
     </>
   );
 };
 
-export default MostMentions;
+export default Hashtags;

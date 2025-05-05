@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 
 import AccountActivity from "./AccountActivity";
 import CoorPanel from "./CoorPanel";
+import Hashtags from "./Hashtags";
 import MostMentions from "./MostMentions";
 import PropagationTimeline from "./PropagationTimeline";
 
@@ -46,6 +47,7 @@ const SNAPanel = (props) => {
   let propTimelineProps = props.propTimelineProps;
   let COORProps = props.coorProps;
   let mostMentionProps = props.mostMentionProps;
+  let hashtagProps = props.hashtagProps;
 
   const handleChange = (event, newValue) => {
     setSNATab(newValue);
@@ -62,12 +64,12 @@ const SNAPanel = (props) => {
             variant="scrollable"
             scrollButtons="auto"
           >
-            <Tab label="Propagation graph" {...a11yProps(0)} />
+            <Tab label="Temporal distribution" {...a11yProps(0)} />
             <Tab label="Account activity" {...a11yProps(1)} />
             <Tab label="Coordinated behavior" {...a11yProps(2)} />
-            <Tab label="Most mentioned" {...a11yProps(3)} />
-            <Tab label="Hashtags " {...a11yProps(4)} />
-            <Tab label="Text analysis " {...a11yProps(5)} />
+            <Tab label="Most mentioned users" {...a11yProps(3)} />
+            <Tab label="Hashtag analysis" {...a11yProps(4)} />
+            <Tab label="Text analysis" {...a11yProps(5)} />
           </Tabs>
         </Box>
         <CustomTabPanel value={SNATab} index={0}>
@@ -83,7 +85,7 @@ const SNAPanel = (props) => {
           {MostMentions(mostMentionProps)}
         </CustomTabPanel>
         <CustomTabPanel value={SNATab} index={4}>
-          Item #5
+          {Hashtags(hashtagProps)}
         </CustomTabPanel>
         <CustomTabPanel value={SNATab} index={5}>
           Item #6
