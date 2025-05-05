@@ -40,6 +40,8 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
       anchor="right"
       open={isPanelOpen}
       onClose={handleClosePanel}
+      variant="temporary"
+      closeAfterTransition={false}
       sx={{
         width: "300px",
         flexShrink: 0,
@@ -51,36 +53,69 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
         },
       }}
     >
-      <Box p={2}>
+      <Box
+        sx={{
+          p: 2,
+        }}
+      >
         <Stack direction="column" spacing={4}>
           <Stack
             direction="row"
-            justifyContent="space-between"
-            alignItems="center"
+            sx={{
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
           >
             <Typography variant="h6">
               {keyword("drawer_settings_title")}
             </Typography>
-            <Box pr={1}>
+            <Box
+              sx={{
+                pr: 1,
+              }}
+            >
               <IconButton sx={{ p: 1 }} onClick={handleClosePanel}>
                 <CloseIcon />
               </IconButton>
             </Box>
           </Stack>
-
-          <Stack direction="column" alignItems="start" spacing={1}>
+          <Stack
+            direction="column"
+            spacing={1}
+            sx={{
+              alignItems: "start",
+            }}
+          >
             <Typography>{keyword("drawer_settings_language")}</Typography>
             <Languages />
           </Stack>
 
-          <Stack direction="column" alignItems="start" spacing={1}>
+          <Stack
+            direction="column"
+            spacing={1}
+            sx={{
+              alignItems: "start",
+            }}
+          >
             <Typography>{keyword("drawer_settings_theme")}</Typography>
             <ColorModeSelect />
           </Stack>
 
-          <Stack direction="column" alignItems="start" spacing={1}>
+          <Stack
+            direction="column"
+            spacing={1}
+            sx={{
+              alignItems: "start",
+            }}
+          >
             <Typography>{keyword("drawer_settings_font_size")}</Typography>
-            <Stack direction="row" alignItems="center" spacing={2}>
+            <Stack
+              direction="row"
+              spacing={2}
+              sx={{
+                alignItems: "center",
+              }}
+            >
               <IconButton
                 onClick={() => {
                   const currentSize = getStoredFontSize();

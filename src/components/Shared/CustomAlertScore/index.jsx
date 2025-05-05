@@ -1,7 +1,7 @@
 import React from "react";
 
 import Alert from "@mui/material/Alert";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
 import CopyButton from "../CopyButton";
@@ -143,11 +143,11 @@ const CustomAlertScore = ({
         />
       }
     >
-      <Grid2 container>
-        <Grid2 size={{ xs: 12 }} align="start">
+      <Grid container>
+        <Grid size={{ xs: 12 }} align="start">
           <Typography variant="body1">{alertSettings.displayText}</Typography>
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     </Alert>
   );
 };

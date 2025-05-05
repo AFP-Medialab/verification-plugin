@@ -4,7 +4,7 @@ import { Image, Layer, Stage, Text } from "react-konva";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
@@ -58,13 +58,15 @@ const TextImageCanvas = ({
     const height = 600 / imgRatio;
 
     return (
-      <Grid2
+      <Grid
         container
         direction="row"
-        justifyContent="flex-start"
-        alignItems="center"
+        sx={{
+          justifyContent: "flex-start",
+          alignItems: "center",
+        }}
       >
-        <Grid2>
+        <Grid>
           <Stage width={width} height={height}>
             <Layer ref={stageRef}>
               <Image image={img} width={width} height={height} />
@@ -81,13 +83,17 @@ const TextImageCanvas = ({
               )}
             </Layer>
           </Stage>
-        </Grid2>
-        <Grid2>
+        </Grid>
+        <Grid>
           {paused && (
             <>
-              <Grid2 container direction="column">
-                <Grid2>
-                  <Box m={3} />
+              <Grid container direction="column">
+                <Grid>
+                  <Box
+                    sx={{
+                      m: 3,
+                    }}
+                  />
                   <FormControl>
                     <InputLabel id="demo-simple-select-label">
                       {keyword("colour_label")}
@@ -108,13 +114,15 @@ const TextImageCanvas = ({
                       </MenuItem>
                     </Select>
                   </FormControl>
-                </Grid2>
-                <Grid2>
-                  <Grid2
+                </Grid>
+                <Grid>
+                  <Grid
                     container
                     direction="column"
-                    justifyContent="center"
-                    alignItems="center"
+                    sx={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                   >
                     <Typography gutterBottom>
                       {keyword("text_size_label")}
@@ -131,21 +139,27 @@ const TextImageCanvas = ({
                       }}
                       className={classes.sliderClass}
                     />
-                  </Grid2>
-                </Grid2>
-                <Grid2>
-                  <Box m={1} />
+                  </Grid>
+                </Grid>
+                <Grid>
+                  <Box
+                    sx={{
+                      m: 1,
+                    }}
+                  />
                   <Alert severity="info">{keyword("draggable_text_tip")}</Alert>
-                  <Box m={3} />
-                </Grid2>
-              </Grid2>
+                  <Box
+                    sx={{
+                      m: 3,
+                    }}
+                  />
+                </Grid>
+              </Grid>
             </>
           )}
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     );
-  } else {
-    return;
   }
 };
 

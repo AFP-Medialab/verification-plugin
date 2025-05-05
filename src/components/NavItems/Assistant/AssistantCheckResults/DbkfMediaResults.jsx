@@ -44,7 +44,11 @@ const DbkfMediaResults = () => {
                         {keyword("dbkf_image_warning") +
                           parseFloat(value.similarity).toFixed(2)}
                       </Typography>
-                      <Box mb={0.5} />
+                      <Box
+                        sx={{
+                          mb: 0.5,
+                        }}
+                      />
                     </div>
                   }
                   secondary={
@@ -67,7 +71,6 @@ const DbkfMediaResults = () => {
               </ListItem>
             ))
         : null}
-
       {dbkfVideoMatch
         ? dbkfVideoMatch
             .filter(
@@ -92,7 +95,11 @@ const DbkfMediaResults = () => {
                           " " +
                           parseFloat(value.similarity).toFixed(2)}
                       </Typography>
-                      <Box mb={0.5} />
+                      <Box
+                        sx={{
+                          mb: 0.5,
+                        }}
+                      />
                     </div>
                   }
                   secondary={

@@ -1,4 +1,8 @@
+import { isValidUrl } from "@Shared/Utils/URLUtils";
 import axios from "axios";
+import { setError } from "redux/reducers/errorReducer";
+
+import { ROLES } from "../../../../../constants/roles";
 import {
   setDeepfakeLoadingImage,
   setDeepfakeResultImage,
@@ -7,9 +11,6 @@ import {
   setDeepfakeLoadingVideo,
   setDeepfakeResultVideo,
 } from "../../../../../redux/actions/tools/deepfakeVideoActions";
-import { setError } from "redux/reducers/errorReducer";
-import { isValidUrl } from "../../../../Shared/Utils/URLUtils";
-import { ROLES } from "../../../../../constants/roles";
 
 async function UseGetDeepfake(
   keyword,
@@ -38,6 +39,7 @@ async function UseGetDeepfake(
     modeURL = "videos/";
     // services = "deepfake_video,ftcn,face_reenact";
     services = "deepfake_video";
+    if (role.includes(ROLES.EVALUATION)) services += ",faceswap_fsfm";
     if (role.includes(ROLES.EXTRA_FEATURE)) services += ",ftcn";
   }
 

@@ -1,9 +1,9 @@
-import { trackEvent } from "../components/Shared/GoogleAnalytics/MatomoAnalytics";
+import { trackEvent } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import {
+  SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
   reverseImageSearchAll,
-  SEARCH_ENGINE_SETTINGS,
-} from "../components/Shared/ReverseSearch/reverseSearchUtils";
+} from "@Shared/ReverseSearch/reverseSearchUtils";
 import { openTabs } from "components/Shared/ReverseSearch/utils/openTabUtils";
 import { getImgUrl } from "components/Shared/ReverseSearch/utils/searchUtils";
 

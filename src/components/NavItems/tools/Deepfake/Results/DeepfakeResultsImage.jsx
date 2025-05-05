@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -192,12 +192,18 @@ const DeepfakeResultsImage = (props) => {
   return (
     <Stack
       direction="row"
-      justifyContent="flex-start"
-      alignItems="flex-start"
       spacing={2}
+      sx={{
+        justifyContent: "flex-start",
+        alignItems: "flex-start",
+      }}
     >
       <Card variant="outlined" sx={{ width: "100%" }}>
-        <Box p={2}>
+        <Box
+          sx={{
+            p: 2,
+          }}
+        >
           <CardHeader
             style={{ borderRadius: "4px 4px 0px 0px" }}
             title={keyword("deepfake_image_title")}
@@ -207,26 +213,30 @@ const DeepfakeResultsImage = (props) => {
               </IconButton>
             }
           />
-          <Grid2
+          <Grid
             container
             direction="row"
-            justifyContent="space-evenly"
-            alignItems="flex-start"
+            sx={{
+              justifyContent: "space-evenly",
+              alignItems: "flex-start",
+            }}
           >
-            <Grid2
+            <Grid
               size={{
                 sm: 12,
                 md: 6,
               }}
             >
               <Box sx={{ width: "100%", height: "100%", position: "relative" }}>
-                <Grid2
+                <Grid
                   container
                   direction="row"
-                  justifyContent="center"
-                  alignItems="flex-start"
                   ref={imgContainerRef}
-                  p={4}
+                  sx={{
+                    justifyContent: "center",
+                    alignItems: "flex-start",
+                    p: 4,
+                  }}
                 >
                   {!!(
                     deepfakeScore &&
@@ -234,16 +244,16 @@ const DeepfakeResultsImage = (props) => {
                     rectangles &&
                     rectanglesReady
                   ) && (
-                    <Grid2>
+                    <Grid>
                       {rectangles.map((valueRectangle, keyRectangle) => {
                         return (
                           <Box
                             key={keyRectangle}
                             className={classes.deepfakeSquare}
-                            pr={4}
-                            pb={4}
-                            mt={4}
                             sx={{
+                              pr: 4,
+                              pb: 4,
+                              mt: 4,
                               top: valueRectangle.top,
                               left: valueRectangle.left,
                             }}
@@ -255,11 +265,10 @@ const DeepfakeResultsImage = (props) => {
                                 height: valueRectangle.height,
                               }}
                             />
-
                             <Box
-                              mt={1}
-                              p={1}
                               sx={{
+                                mt: 1,
+                                p: 1,
                                 backgroundColor: "#ffffff",
                                 borderRadius: "2px",
                                 display: "flex",
@@ -275,7 +284,7 @@ const DeepfakeResultsImage = (props) => {
                           </Box>
                         );
                       })}
-                    </Grid2>
+                    </Grid>
                   )}
 
                   <img
@@ -290,16 +299,22 @@ const DeepfakeResultsImage = (props) => {
                     ref={imgElement}
                     onLoad={drawRectangles}
                   />
-                </Grid2>
+                </Grid>
               </Box>
-            </Grid2>
-            <Grid2
+            </Grid>
+            <Grid
               size={{
                 sm: 12,
                 md: 6,
               }}
             >
-              <Stack direction="column" p={4} spacing={4}>
+              <Stack
+                direction="column"
+                spacing={4}
+                sx={{
+                  p: 4,
+                }}
+              >
                 {!!(
                   deepfakeScore &&
                   deepfakeScore.predictionScore &&
@@ -332,8 +347,8 @@ const DeepfakeResultsImage = (props) => {
                   />
                 )}
               </Stack>
-            </Grid2>
-          </Grid2>
+            </Grid>
+          </Grid>
         </Box>
       </Card>
     </Stack>

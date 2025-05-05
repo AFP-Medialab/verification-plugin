@@ -3,15 +3,15 @@ import React from "react";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 
-// Import Grid2 component
+// Import Grid component
 import MetadataList from "@Shared/MetadataList";
 
 const MetadataVideoResult = ({ metadata, videoSrc }) => {
   return (
     <Card variant="outlined">
-      <Grid2
+      <Grid
         container
         spacing={4}
         direction={{ md: "column", lg: "row" }}
@@ -21,7 +21,7 @@ const MetadataVideoResult = ({ metadata, videoSrc }) => {
           p: 4,
         }}
       >
-        <Grid2 size={{ md: 12, lg: 6 }}>
+        <Grid size={{ md: 12, lg: 6 }}>
           <video
             width="100%"
             height="auto"
@@ -36,8 +36,8 @@ const MetadataVideoResult = ({ metadata, videoSrc }) => {
             <source src={videoSrc} type="video/webm" />
             <source src={videoSrc} type="video/ogg" />
           </video>
-        </Grid2>
-        <Grid2 size={{ md: 12, lg: 6 }}>
+        </Grid>
+        <Grid size={{ md: 12, lg: 6 }}>
           {metadata ? (
             <MetadataList metadata={metadata} />
           ) : (
@@ -47,8 +47,8 @@ const MetadataVideoResult = ({ metadata, videoSrc }) => {
               </Alert>
             </Box>
           )}
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     </Card>
   );
 };

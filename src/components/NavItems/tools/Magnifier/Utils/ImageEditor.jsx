@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef, forwardRef } from "react";
-import TuiImageEditor from "tui-image-editor";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 
-import "tui-image-editor/dist/tui-image-editor.css";
 import "tui-color-picker/dist/tui-color-picker.css";
+import TuiImageEditor from "tui-image-editor";
+import "tui-image-editor/dist/tui-image-editor.css";
 
 const getNumber = (value) => Number(value.replace("px", ""));
 
@@ -25,7 +25,7 @@ const ImageEditor = forwardRef((props, instance) => {
     instance.current = new TuiImageEditor(rootEl.current, {
       ...props,
     });
-    instance.current.on("objectActivated", function (evt, a, b) {
+    instance.current.on("objectActivated", function () {
       setLoaded(false);
       setZoom(1);
     });

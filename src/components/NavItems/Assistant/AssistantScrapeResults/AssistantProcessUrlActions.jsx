@@ -67,7 +67,7 @@ const AssistantProcessUrlActions = () => {
       dl.setAttribute("download", "");
       dl.click();
     } else if (action.path === null) {
-      return; // Do nothing if path is null
+      // Do nothing if path is null
     } else if (resultUrl !== null) {
       navigate("/app/" + action.path + "/");
       //history.push("/app/" + action.path + "/" + encodeURIComponent(resultUrl) + "/" + contentType)
@@ -88,7 +88,13 @@ const AssistantProcessUrlActions = () => {
       <List>
         {processUrlActions.map((action, index) => {
           return (
-            <Box m={2} key={index} style={{ cursor: "pointer" }}>
+            <Box
+              key={index}
+              style={{ cursor: "pointer" }}
+              sx={{
+                m: 2,
+              }}
+            >
               <Card className={classes.assistantHover} variant={"outlined"}>
                 <ListItem onClick={() => handleClick(action)}>
                   <ListItemAvatar>
@@ -101,8 +107,10 @@ const AssistantProcessUrlActions = () => {
                     primary={
                       <Typography component={"span"}>
                         <Box
-                          fontWeight="fontWeightBold"
                           data-testid={action.title}
+                          sx={{
+                            fontWeight: "fontWeightBold",
+                          }}
                         >
                           {keyword(action.title)}
                         </Box>
@@ -110,7 +118,11 @@ const AssistantProcessUrlActions = () => {
                     }
                     secondary={
                       <Typography color={"textSecondary"} component={"span"}>
-                        <Box fontStyle="italic">
+                        <Box
+                          sx={{
+                            fontStyle: "italic",
+                          }}
+                        >
                           <Trans t={keyword} i18nKey={action.text} />
                         </Box>
                       </Typography>
