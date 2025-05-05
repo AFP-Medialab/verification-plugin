@@ -11,7 +11,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { downloadZip } from "client-zip";
 import dayjs from "dayjs";
 import { sha256 } from "hash-wasm";
-import uuid from "uuid-random";
+import { v4 as uuidv4 } from "uuid";
 import { CDXIndexer, WARCRecord, WARCSerializer } from "warcio";
 
 import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
@@ -403,7 +403,7 @@ const SinglefileConverter = (telegramURL) => {
           // "WARC-Target-URI":url,
           "WARC-Date": date,
           "WARC-Type": type,
-          "WARC-Record-ID": `<urn:uuid:${uuid()}>`,
+          "WARC-Record-ID": `<urn:uuid:${uuidv4()}>`,
           "Content-Type": "text/html",
           "WARC-Creator-Info": userID + "@verification-plugin.eu",
           "WARC-Creator-Agent":
