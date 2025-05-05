@@ -25,9 +25,12 @@ const TextAnalysis = (props) => {
           ? x.text
               .toLowerCase()
               .split(" ")
-              .filter((x) => !x.includes("https:") && !x.includes("#"))
+              .filter(
+                (x) =>
+                  !x.includes("https:") && !x.includes("#") && !x.includes("@"),
+              )
               .reduce(function (acc, curr) {
-                return acc[curr] ? ++acc[curr] : (acc[curr] = 1), acc;
+                return acc[curr] ? (acc[curr] += 1) : (acc[curr] = 1), acc;
               }, {})
           : {};
         return ret;
@@ -60,9 +63,8 @@ const TextAnalysis = (props) => {
     console.log(sorted);
 
     let tfidf = sorted.map((x) => ({
-      word: x[0],
-      tfidf:
-        x[1].occurences * Math.log(1 + selectedContent.length / x[1].documents),
+      word: x.name,
+      tfidf: x.occurences * Math.log(1 + selectedContent.length / x.documents),
     }));
     console.log(tfidf.sort((a, b) => b.tfidf - a.tfidf));
   };
