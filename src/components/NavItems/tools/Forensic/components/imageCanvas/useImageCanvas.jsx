@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
-import { applyThresholdAndGradient, preloadImage } from "../../utils";
 import { useSelector } from "react-redux";
+
+import { applyThresholdAndGradient, preloadImage } from "../../utils";
 
 /**
  * hook to perform the image processing in the canvas
@@ -8,7 +9,7 @@ import { useSelector } from "react-redux";
  * @param isGrayscaleColorInverted {boolean} set to true if working with an inverted grayscale
  * @param applyColorScale {boolean} set to true if working with a color scale
  * @param threshold {number} the threshold value between 0 and 255. The detection starts from 50%
- * @param filterDataUrl {function(string)} function to retrieve the DataUrl computed by the component
+ * @param filterDataURL {function(string)} function to retrieve the DataUrl computed by the component
  * @returns {React.MutableRefObject<null>}
  */
 const useImageCanvas = (

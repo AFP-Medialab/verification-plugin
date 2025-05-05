@@ -9,7 +9,7 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import Link from "@mui/material/Link";
 import Tooltip from "@mui/material/Tooltip";
@@ -77,8 +77,8 @@ const AssistantNEResult = () => {
     display: "inline-block",
   };
 
-  const customRenderer = (tag, size, color) => {
-    const { className, style, ...props } = tag.props || {};
+  const customRenderer = (tag, size) => {
+    const { className, style } = tag.props || {};
     const fontSize = size + "px";
     const tagStyle = {
       ...styles,
@@ -115,7 +115,7 @@ const AssistantNEResult = () => {
   };
 
   return (
-    <Grid2 size={{ xs: 12 }}>
+    <Grid size={{ xs: 12 }}>
       <Card variant="outlined">
         <CardHeader
           className={classes.assistantCardHeader}
@@ -139,7 +139,7 @@ const AssistantNEResult = () => {
         {neLoading && <LinearProgress />}
         <CardContent>
           <ButtonGroup sx={{ paddingBottom: "15px" }}>
-            {neResult.map((tag, index) => (
+            {neResult.map((tag) => (
               <Button
                 className={
                   visibleCategories[tag.category.toLowerCase()]
@@ -158,8 +158,8 @@ const AssistantNEResult = () => {
               </Button>
             ))}
           </ButtonGroup>
-          <Grid2 container>
-            <Grid2 align={"center"}>
+          <Grid container>
+            <Grid align={"center"}>
               <TagCloud
                 tags={neResultCount}
                 shuffle={false}
@@ -167,11 +167,11 @@ const AssistantNEResult = () => {
                 maxSize={45}
                 renderer={customRenderer}
               />
-            </Grid2>
-          </Grid2>
+            </Grid>
+          </Grid>
         </CardContent>
       </Card>
-    </Grid2>
+    </Grid>
   );
 };
 

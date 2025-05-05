@@ -6,7 +6,7 @@ import CardHeader from "@mui/material/CardHeader";
 import Checkbox from "@mui/material/Checkbox";
 import Divider from "@mui/material/Divider";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -16,6 +16,7 @@ import Typography from "@mui/material/Typography";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
@@ -57,7 +58,7 @@ export default function AssistantTextClassification({
   let sentenceRgbLow, sentenceRgbHigh;
   let sentenceThresholdLow, sentenceThresholdHigh;
   const colourScaleText = keyword("colour_scale");
-  if (credibilitySignal == keyword("subjectivity_title")) {
+  if (credibilitySignal === keyword("subjectivity_title")) {
     // subjectivity requires confidence for sentence
     sentenceTooltipText = keyword("confidence_tooltip_sentence");
     sentenceTextLow = keyword("low_confidence");
@@ -120,14 +121,14 @@ export default function AssistantTextClassification({
     }
   }
 
-  if (Object.keys(filteredCategories).length == 0) {
+  if (Object.keys(filteredCategories).length === 0) {
     filteredSentences = [];
   }
 
   return (
-    <Grid2 container>
+    <Grid container>
       {/* text being displayed */}
-      <Grid2 sx={{ paddingRight: "1em" }} size={9}>
+      <Grid sx={{ paddingRight: "1em" }} size={9}>
         <ClassifiedText
           text={text}
           spanIndices={filteredSentences}
@@ -139,10 +140,10 @@ export default function AssistantTextClassification({
           rgbHigh={sentenceRgbHigh}
           textHtmlMap={textHtmlMap}
         />
-      </Grid2>
+      </Grid>
 
       {/* credibility signal box with categories */}
-      <Grid2 size={{ xs: 3 }}>
+      <Grid size={{ xs: 3 }}>
         <Card variant="outlined">
           <CardHeader
             className={classes.assistantCardHeader}
@@ -182,8 +183,8 @@ export default function AssistantTextClassification({
             ) : null}
           </CardContent>
         </Card>
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   );
 }
 
@@ -199,9 +200,9 @@ export function CategoriesList({
   if (_.isEmpty(categories)) {
     return (
       <p>
-        {credibilitySignal == keyword("news_framing_title") &&
+        {credibilitySignal === keyword("news_framing_title") &&
           keyword("no_detected_topics")}
-        {credibilitySignal == keyword("subjectivity_title") &&
+        {credibilitySignal === keyword("subjectivity_title") &&
           keyword("no_detected_sentences")}
       </p>
     );

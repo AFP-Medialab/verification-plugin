@@ -1,12 +1,12 @@
-import { resizeImage } from "../components/Shared/Utils/imageUtils";
+import { resizeImage } from "@Shared/Utils/imageUtils";
 
+// eslint-disable-next-line no-undef
 self.onmessage = async function (e) {
   const data = e.data;
 
-  // console.log(e);
   const result = await resizeImage(data);
-  // console.log(result);
 
   // Send the result back to the main thread
+  // eslint-disable-next-line no-undef
   self.postMessage(result);
 };

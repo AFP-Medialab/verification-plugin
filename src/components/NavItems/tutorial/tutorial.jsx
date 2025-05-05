@@ -53,15 +53,33 @@ const Tutorial = () => {
 
   return (
     <Paper variant="outlined" className={classes.root}>
-      <Box justifyContent="center" display="flex" flexDirection="column">
+      <Box
+        sx={{
+          justifyContent: "center",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <CustomTile text={keyword("tuto_title")} />
-        <Box m={1} />
+        <Box
+          sx={{
+            m: 1,
+          }}
+        />
         <Typography variant="h3">{keyword("tuto_h_1")}</Typography>
-        <Box m={2} />
+        <Box
+          sx={{
+            m: 2,
+          }}
+        />
         <Box item={"true"}>
           <img src={popImg} alt={""} className={classes.InteractiveMedia} />
         </Box>
-        <Box m={1} />
+        <Box
+          sx={{
+            m: 1,
+          }}
+        />
         <div
           className={"content"}
           style={dangerousDivStyle}
@@ -73,9 +91,17 @@ const Tutorial = () => {
           dangerouslySetInnerHTML={{ __html: keyword("tuto_2") }}
         ></div>
 
-        <Box m={1} />
+        <Box
+          sx={{
+            m: 1,
+          }}
+        />
         <Typography variant="h3">{keyword("tuto_h_2")}</Typography>
-        <Box m={1} />
+        <Box
+          sx={{
+            m: 1,
+          }}
+        />
         <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
