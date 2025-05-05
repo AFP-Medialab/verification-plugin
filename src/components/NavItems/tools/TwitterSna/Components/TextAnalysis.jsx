@@ -48,11 +48,23 @@ const TextAnalysis = (props) => {
     );
 
     console.log(acc);
-    let sorted = Object.entries(s)
-      .map((k) => ({ name: k[0], occurences: k[1] }))
+    let sorted = Object.entries(acc)
+      .map((k) => ({
+        name: k[0],
+        occurences: k[1].occurences,
+        documents: k[1].documents,
+      }))
       .sort((a, b) => b.occurences - a.occurences)
       .filter((x) => x.name.length > 0);
+
     console.log(sorted);
+
+    let tfidf = sorted.map((x) => ({
+      word: x[0],
+      tfidf:
+        x[1].occurences * Math.log(1 + selectedContent.length / x[1].documents),
+    }));
+    console.log(tfidf.sort((a, b) => b.tfidf - a.tfidf));
   };
 
   return (
