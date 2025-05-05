@@ -184,26 +184,26 @@ const SinglefileConverter = (telegramURL) => {
 
     try {
       let senthash = "sha256:" + datapackage_hash;
-      // const tstsign = await domainCertSign(senthash);
-      // // const cleanCert = tstsign.domainCert.replace("\n", "");
-      // const cleantsCerts = tstsign.certs.join("\n");
-      // const signedData = {
-      //   hash: `sha256:${datapackage_hash}`,
-      //   created: created_time,
-      //   software:
-      //     "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
-      //   signature: tstsign.signature,
-      //   domain: "signature.verification-plugin.eu",
-      //   domainCert: tstsign.domainCert,
-      //   timeSignature: tstsign.encodedTST,
-      //   timestampCert: cleantsCerts,
-      //   version: "0.1.0",
-      // };
+      const tstsign = await domainCertSign(senthash);
+      // const cleanCert = tstsign.domainCert.replace("\n", "");
+      const cleantsCerts = tstsign.certs.join("\n");
+      const signedData = {
+        hash: `sha256:${datapackage_hash}`,
+        created: created_time,
+        software:
+          "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
+        signature: tstsign.signature,
+        domain: "signature.verification-plugin.eu",
+        domainCert: tstsign.domainCert,
+        timeSignature: tstsign.encodedTST,
+        timestampCert: cleantsCerts,
+        version: "0.1.0",
+      };
 
       const datapackagedigest_input = {
         path: "datapackage.json",
         hash: `sha256:${datapackage_hash}`,
-        signedData: signature,
+        signedData: signedData,
       };
 
       const datapackagedigest_arch = {
