@@ -366,7 +366,7 @@ const TwitterSnaV2 = () => {
           id,
           username,
           display_name,
-          tweet_text,
+          text: tweet_text,
           objects: links,
           links: links,
           mentions: mentions.map((x) => "@" + x).join(","),
@@ -815,6 +815,10 @@ const TwitterSnaV2 = () => {
     setHashtagGraph,
   };
 
+  const textAnalysisProps = {
+    dataSources,
+    selected,
+  };
   const SNATabProps = {
     SNATab,
     setSNATab,
@@ -823,6 +827,7 @@ const TwitterSnaV2 = () => {
     coorProps,
     mostMentionProps,
     hashtagProps,
+    textAnalysisProps,
   };
 
   return (

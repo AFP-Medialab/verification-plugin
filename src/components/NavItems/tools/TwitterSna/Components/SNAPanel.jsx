@@ -11,6 +11,7 @@ import CoorPanel from "./CoorPanel";
 import Hashtags from "./Hashtags";
 import MostMentions from "./MostMentions";
 import PropagationTimeline from "./PropagationTimeline";
+import TextAnalysis from "./TextAnalysis";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -48,6 +49,7 @@ const SNAPanel = (props) => {
   let COORProps = props.coorProps;
   let mostMentionProps = props.mostMentionProps;
   let hashtagProps = props.hashtagProps;
+  let textAnalysisProps = props.textAnalysisProps;
 
   const handleChange = (event, newValue) => {
     setSNATab(newValue);
@@ -88,7 +90,7 @@ const SNAPanel = (props) => {
           {Hashtags(hashtagProps)}
         </CustomTabPanel>
         <CustomTabPanel value={SNATab} index={5}>
-          Item #6
+          {TextAnalysis(textAnalysisProps)}
         </CustomTabPanel>
       </Box>
     </>
