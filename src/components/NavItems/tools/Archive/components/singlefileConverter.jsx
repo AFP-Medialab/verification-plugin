@@ -51,8 +51,7 @@ const SinglefileConverter = (telegramURL) => {
       method: "get",
     });
     if (resp.status === 200) {
-      const respJson = resp.data;
-      return respJson;
+      return resp.data;
     } else {
       setError("Error signing WACZ, please try again");
       throw new Error("Error signing WACZ, please try again");
@@ -60,43 +59,43 @@ const SinglefileConverter = (telegramURL) => {
   };
 
   //For anonymous signing
-  const sign = async (hash) => {
-    //implementation derived from webrecorder's awp-sw library
-    const keyPair = await crypto.subtle.generateKey(
-      {
-        name: "ECDSA",
-        namedCurve: "P-384",
-      },
-      true,
-      ["sign", "verify"],
-    );
+  // const sign = async (hash) => {
+  //   //implementation derived from webrecorder's awp-sw library
+  //   const keyPair = await crypto.subtle.generateKey(
+  //     {
+  //       name: "ECDSA",
+  //       namedCurve: "P-384",
+  //     },
+  //     true,
+  //     ["sign", "verify"],
+  //   );
 
-    const privateKey = await crypto.subtle.exportKey(
-      "pkcs8",
-      keyPair.privateKey,
-    );
-    const publicKey = await crypto.subtle.exportKey("spki", keyPair.publicKey);
+  //   const privateKey = await crypto.subtle.exportKey(
+  //     "pkcs8",
+  //     keyPair.privateKey,
+  //   );
+  //   const publicKey = await crypto.subtle.exportKey("spki", keyPair.publicKey);
 
-    const keys = {
-      private: new Uint8Array(privateKey).toBase64,
-      public: new Uint8Array(publicKey).toBase64,
-    };
+  //   const keys = {
+  //     private: new Uint8Array(privateKey).toBase64,
+  //     public: new Uint8Array(publicKey).toBase64,
+  //   };
 
-    const data = new TextEncoder().encode(hash);
-    const signatureBuff = await crypto.subtle.sign(
-      {
-        name: "ECDSA",
-        hash: "SHA-256",
-      },
-      keyPair.privateKey,
-      data,
-    );
-    const signature = new Uint8Array(signatureBuff).toBase64;
-    return {
-      signature,
-      publicKey: keys.public,
-    };
-  };
+  //   const data = new TextEncoder().encode(hash);
+  //   const signatureBuff = await crypto.subtle.sign(
+  //     {
+  //       name: "ECDSA",
+  //       hash: "SHA-256",
+  //     },
+  //     keyPair.privateKey,
+  //     data,
+  //   );
+  //   const signature = new Uint8Array(signatureBuff).toBase64;
+  //   return {
+  //     signature,
+  //     publicKey: keys.public,
+  //   };
+  // };
 
   /**
    * Encapsulates the different components of the WACZ into the archive
@@ -178,7 +177,7 @@ const SinglefileConverter = (telegramURL) => {
     );
 
     // For anonymous signing
-    const signature = await sign(datapackage_hash);
+    // const signature = await sign(datapackage_hash);
 
     //Send request for signature and put info into the format required for the datapackage digest file
 
@@ -272,10 +271,13 @@ const SinglefileConverter = (telegramURL) => {
           ) {
             let title = titleElem[0].innerHTML;
             let retbytes = new TextEncoder().encode(title);
-            return new TextDecoder("utf-8")
-              .decode(retbytes)
-              .replace(/[\x00-\x1F\x7F-\x9F]/g, "")
-              .replace(" ", "");
+            return (
+              new TextDecoder("utf-8")
+                .decode(retbytes)
+                // eslint-disable-next-line no-control-regex
+                .replace(/[\x00-\x1F\x7F-\x9F]/g, "")
+                .replace(" ", "")
+            );
           } else {
             return pageURL;
           }
@@ -305,9 +307,8 @@ const SinglefileConverter = (telegramURL) => {
             //For response/request
             // resbuf.set(res2, res0.byteLength);
             // resbuf.set(res1, res0.byteLength + res2.byteLength);
-            const gzipArch = resbuf;
 
-            const blob2 = new Blob([gzipArch], {
+            const blob2 = new Blob([resbuf], {
               type: "application/gzip",
             });
 
@@ -317,7 +318,7 @@ const SinglefileConverter = (telegramURL) => {
             const writableStream = new WritableStream(
               {
                 write(chunk) {
-                  return new Promise((resolve, reject) => {
+                  return new Promise((resolve) => {
                     makeWacz(blob2, chunk, pageInfo, recordDigest);
                     resolve();
                   });
@@ -382,10 +383,10 @@ const SinglefileConverter = (telegramURL) => {
     const url = pageUrl;
     const date = pageDate;
     // const type = "response";
-    const httpHeaders = {
-      date: dayjs(),
-      "Content-Type": "text/html;charset=UTF-8",
-    };
+    // const httpHeaders = {
+    //   date: dayjs(),
+    //   "Content-Type": "text/html;charset=UTF-8",
+    // };
 
     async function* content() {
       yield new TextEncoder().encode(fileContent);
