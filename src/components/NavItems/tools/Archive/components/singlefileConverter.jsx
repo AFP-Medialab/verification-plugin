@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-import LoadingButton from "@mui/lab/LoadingButton";
 import { downloadZip } from "client-zip";
 import dayjs from "dayjs";
 import { sha256 } from "hash-wasm";
@@ -32,7 +32,7 @@ import { prettifyLargeString } from "../utils";
 const SinglefileConverter = (telegramURL) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
 
-  const [fileInput, setFileInput] = useState(/** @type {File?} */ null);
+  const [fileInput, setFileInput] = useState(/** @type {?File} */ null);
   const [error, setError] = useState("");
   const [processingSinglefile, setProcessingSinglefile] = useState(false);
   const authenticatedRequest = useAuthenticatedRequest();
@@ -47,12 +47,11 @@ const SinglefileConverter = (telegramURL) => {
       url: process.env.REACT_APP_WACZ_SIGNING + hash,
       method: "get",
     });
-    if (resp.status === 200) {
-      const respJson = resp.data;
-      return respJson;
-    } else {
+    if (resp.status !== 200) {
       setError("Error signing WACZ, please try again");
       throw new Error("Error signing WACZ, please try again");
+    } else {
+      return resp.data;
     }
   };
 
@@ -265,7 +264,7 @@ const SinglefileConverter = (telegramURL) => {
           if (
             titleElem &&
             titleElem.length > 0 &&
-            titleElem[0].innerHTML != ""
+            titleElem[0].innerHTML !== ""
           ) {
             let title = titleElem[0].innerHTML;
             let retbytes = new TextEncoder().encode(title);
@@ -420,7 +419,7 @@ const SinglefileConverter = (telegramURL) => {
   return (
     <div>
       <Box>
-        <LoadingButton
+        <Button
           variant="outlined"
           loading={processingSinglefile}
           loadingPosition="start"
@@ -444,7 +443,7 @@ const SinglefileConverter = (telegramURL) => {
               e.target.value = null;
             }}
           />
-        </LoadingButton>
+        </Button>
       </Box>
       <Typography color={"error"}>{error}</Typography>
     </div>

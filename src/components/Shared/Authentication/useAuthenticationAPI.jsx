@@ -1,25 +1,11 @@
 /**
  * Authentication API hook.
  */
+import { useDispatch, useSelector } from "react-redux";
 
 import axios from "axios";
-import _ from "lodash";
 import { jwtDecode } from "jwt-decode";
-
-import {
-  ERR_AUTH_ABORT_ERROR,
-  ERR_AUTH_BAD_REQUEST,
-  ERR_AUTH_INVALID_CREDENTIALS,
-  ERR_AUTH_INVALID_PARAMS,
-  ERR_AUTH_INVALID_TOKEN,
-  ERR_AUTH_INVALID_USER_STATE,
-  ERR_AUTH_SERVER_ERROR,
-  ERR_AUTH_SESSION_EXPIRED,
-  ERR_AUTH_UNKNOWN_ERROR,
-  ERR_AUTH_USER_EXPIRED,
-} from "./authenticationErrors";
-
-import { useDispatch, useSelector } from "react-redux";
+import _ from "lodash";
 
 import {
   userAccessCodeRequestLoadingAction,
@@ -32,6 +18,18 @@ import {
   userSessionExpiredAction,
   userTokenRefreshedAction,
 } from "../../../redux/actions/authenticationActions";
+import {
+  ERR_AUTH_ABORT_ERROR,
+  ERR_AUTH_BAD_REQUEST,
+  ERR_AUTH_INVALID_CREDENTIALS,
+  ERR_AUTH_INVALID_PARAMS,
+  ERR_AUTH_INVALID_TOKEN,
+  ERR_AUTH_INVALID_USER_STATE,
+  ERR_AUTH_SERVER_ERROR,
+  ERR_AUTH_SESSION_EXPIRED,
+  ERR_AUTH_UNKNOWN_ERROR,
+  ERR_AUTH_USER_EXPIRED,
+} from "./authenticationErrors";
 
 /**
  * Authentication API hook.
@@ -193,7 +191,7 @@ export default function useAuthenticationAPI() {
   };
 
   /**
-   * Login user using it's access code.
+   * Log the user in using their access code.
    *
    * @param {Object} request
    * @returns {Promise<Object>} Result as a Promise.

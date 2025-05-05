@@ -63,7 +63,7 @@ export default function transform(
     "FormLabelRoot",
     "GlobalStyles",
     "Grid",
-    "Grid2",
+    "Grid",
     "Grow",
     "Hidden",
     "Icon",

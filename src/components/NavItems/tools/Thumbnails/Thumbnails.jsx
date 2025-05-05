@@ -10,7 +10,7 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import LinearProgress from "@mui/material/LinearProgress";
 import TextField from "@mui/material/TextField";
@@ -144,13 +144,13 @@ const Thumbnails = () => {
     if (url !== null && url !== "" && isYtUrl(url)) {
       setEventUrl(url);
       /*trackEvent(
-                                                                    "submission",
-                                                                    "thumbnails",
-                                                                    "youtube thumbnail",
-                                                                    url,
-                                                                    client_id,
-                                                                    uid
-                                                                  );*/
+                                                                                                  "submission",
+                                                                                                  "thumbnails",
+                                                                                                  "youtube thumbnail",
+                                                                                                  url,
+                                                                                                  client_id,
+                                                                                                  uid
+                                                                                                );*/
       let images = get_images(url);
       dispatch(
         setThumbnailsResult({
@@ -219,7 +219,6 @@ const Thumbnails = () => {
     if (resultData) {
       getHeight();
     }
-    // eslint-disable-next-line
   }, [resultData]);
 
   useEffect(() => {
@@ -241,14 +240,28 @@ const Thumbnails = () => {
       <HeaderTool
         name={keywordAllTools("navbar_thumbnails")}
         description={keywordAllTools("navbar_thumbnails_description")}
-        icon={<thumbnails.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
+        icon={
+          <thumbnails.icon
+            sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+          />
+        }
       />
-
       <Card variant="outlined">
-        <Box p={4}>
+        <Box
+          sx={{
+            p: 4,
+          }}
+        >
           <form>
-            <Grid2 container direction="row" spacing={3} alignItems="center">
-              <Grid2 size="grow">
+            <Grid
+              container
+              direction="row"
+              spacing={3}
+              sx={{
+                alignItems: "center",
+              }}
+            >
+              <Grid size="grow">
                 <TextField
                   id="standard-full-width"
                   label={keyword("youtube_input")}
@@ -258,8 +271,8 @@ const Thumbnails = () => {
                   onChange={(e) => handleChangeValue(e)}
                   value={input}
                 />
-              </Grid2>
-              <Grid2>
+              </Grid>
+              <Grid>
                 {
                   <FormControlLabel
                     control={
@@ -274,8 +287,8 @@ const Thumbnails = () => {
                     labelPlacement="end"
                   />
                 }
-              </Grid2>
-              <Grid2>
+              </Grid>
+              <Grid>
                 <Button
                   type="submit"
                   variant="contained"
@@ -287,11 +300,15 @@ const Thumbnails = () => {
                 >
                   {keyword("button_submit")}
                 </Button>
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
           </form>
 
-          <Box m={2} />
+          <Box
+            sx={{
+              m: 2,
+            }}
+          />
           <FormControl component="fieldset">
             <FormGroup row>
               {Object.entries(SEARCH_ENGINE_SETTINGS).map(
@@ -317,15 +334,21 @@ const Thumbnails = () => {
           </FormControl>
           {isLoading && (
             <>
-              <Box m={3} />
+              <Box
+                sx={{
+                  m: 3,
+                }}
+              />
               <LinearProgress />
             </>
           )}
         </Box>
       </Card>
-
-      <Box m={3} />
-
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
       {resultData && resultData.length !== 0 && !isImgLoading && (
         <Card variant="outlined">
           <CardHeader
@@ -342,7 +365,11 @@ const Thumbnails = () => {
           />
           <div className={classes.root2}>
             <OnClickInfo keyword={"thumbnails_tip"} />
-            <Box m={2} />
+            <Box
+              sx={{
+                m: 2,
+              }}
+            />
 
             <ImageGridList
               list={resultData}

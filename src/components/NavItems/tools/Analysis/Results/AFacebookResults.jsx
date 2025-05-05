@@ -6,22 +6,22 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 
 import CloseIcon from "@mui/icons-material/Close";
 
+import { submissionEvent } from "@Shared/GoogleAnalytics/GoogleAnalytics";
+import { ReverseSearchButtons } from "@Shared/ReverseSearch/ReverseSearchButtons";
+import { reverseImageSearch } from "@Shared/ReverseSearch/reverseSearchUtils";
 import axios from "axios";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import _ from "lodash";
 
-import { submissionEvent } from "../../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
-import { ReverseSearchButtons } from "../../../../Shared/ReverseSearch/ReverseSearchButtons";
-import { reverseImageSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 import AnalysisComments from "./AnalysisComments";
 
 const AFacebookResults = (props) => {
@@ -90,7 +90,7 @@ const AFacebookResults = (props) => {
 
   return (
     <div>
-      {report !== null && (
+      {report && (
         <Card variant="outlined">
           <CardHeader
             title={keyword("cardheader_results")}
@@ -123,7 +123,11 @@ const AFacebookResults = (props) => {
               className={classes.image}
               alt={"img"}
             />
-            <Box m={2} />
+            <Box
+              sx={{
+                m: 2,
+              }}
+            />
             <Button
               variant="contained"
               color="primary"
@@ -131,14 +135,26 @@ const AFacebookResults = (props) => {
             >
               {keyword("facebook_delete_result")}
             </Button>
-            <Box m={2} />
+            <Box
+              sx={{
+                m: 2,
+              }}
+            />
             <Divider />
-            <Box m={2} />
+            <Box
+              sx={{
+                m: 2,
+              }}
+            />
             <Typography variant={"h6"}>
               {report.video && keyword("video_description")}
               {report.image && keyword("image_description")}
             </Typography>
-            <Box m={2} />
+            <Box
+              sx={{
+                m: 2,
+              }}
+            />
             {props.children}
             {report["verification_comments"] && (
               <AnalysisComments
@@ -152,29 +168,49 @@ const AFacebookResults = (props) => {
                 setAnalysisVerifiedComments={setAnalysisVerifiedComments}
               />
             )}
-            <Box m={4} />
+            <Box
+              sx={{
+                m: 4,
+              }}
+            />
 
             {thumbnails !== null && (
               <div>
-                <Box m={4} />
+                <Box
+                  sx={{
+                    m: 4,
+                  }}
+                />
                 <Typography variant={"h6"}>
                   {keyword("navbar_thumbnails")}
                 </Typography>
-                <Box m={1} />
+                <Box
+                  sx={{
+                    m: 1,
+                  }}
+                />
                 <OnClickInfo keyword={"keyframes_tip"} />
-                <Box m={1} />
+                <Box
+                  sx={{
+                    m: 1,
+                  }}
+                />
                 <div className={classes.imagesRoot}>
                   <ImageUrlGridList
                     list={thumbnails}
                     cols={3}
-                    style={{ maxHeigth: "none", height: "auto" }}
+                    style={{ maxHeight: "none", height: "auto" }}
                   />
                 </div>
-                <Box m={2} />
+                <Box
+                  sx={{
+                    m: 2,
+                  }}
+                />
                 <ReverseSearchButtons reverseSearch={reverseSearch}>
                   {report["verification_cues"] &&
                     report["verification_cues"]["twitter_search_url"] && (
-                      <Grid2>
+                      <Grid>
                         <Button
                           className={classes.button}
                           variant="contained"
@@ -187,7 +223,7 @@ const AFacebookResults = (props) => {
                         >
                           {keyword("button_reverse_twitter")}
                         </Button>
-                      </Grid2>
+                      </Grid>
                     )}
                 </ReverseSearchButtons>
               </div>

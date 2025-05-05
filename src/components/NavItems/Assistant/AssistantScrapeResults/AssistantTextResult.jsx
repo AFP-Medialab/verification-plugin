@@ -25,7 +25,6 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
   TransCredibilitySignalsLink,
   TransHtmlDoubleLineBreak,
-  TransHtmlSingleLineBreak,
   TransSupportedToolsLink,
 } from "../TransComponents";
 import AssistantTextClassification from "./AssistantTextClassification";
@@ -262,7 +261,13 @@ const AssistantTextResult = () => {
           {/* news framing (topic) */}
           <CustomTabPanel value={textTabIndex} index={1}>
             {newsFramingLoading && (
-              <Stack direction="column" spacing={4} p={4}>
+              <Stack
+                direction="column"
+                spacing={4}
+                sx={{
+                  p: 4,
+                }}
+              >
                 <Skeleton variant="rounded" height={40} />
                 <Skeleton variant="rounded" width="50%" height={40} />
               </Stack>
@@ -295,7 +300,13 @@ const AssistantTextResult = () => {
           {/* news genre */}
           <CustomTabPanel value={textTabIndex} index={2}>
             {newsGenreLoading && (
-              <Stack direction="column" spacing={4} p={4}>
+              <Stack
+                direction="column"
+                spacing={4}
+                sx={{
+                  p: 4,
+                }}
+              >
                 <Skeleton variant="rounded" height={40} />
                 <Skeleton variant="rounded" width="50%" height={40} />
               </Stack>
@@ -328,7 +339,13 @@ const AssistantTextResult = () => {
           {/* persuasion */}
           <CustomTabPanel value={textTabIndex} index={3}>
             {persuasionLoading && (
-              <Stack direction="column" spacing={4} p={4}>
+              <Stack
+                direction="column"
+                spacing={4}
+                sx={{
+                  p: 4,
+                }}
+              >
                 <Skeleton variant="rounded" height={40} />
                 <Skeleton variant="rounded" width="50%" height={40} />
               </Stack>
@@ -360,7 +377,13 @@ const AssistantTextResult = () => {
           {/* subjectivity */}
           <CustomTabPanel value={textTabIndex} index={4}>
             {subjectivityLoading && (
-              <Stack direction="column" spacing={4} p={4}>
+              <Stack
+                direction="column"
+                spacing={4}
+                sx={{
+                  p: 4,
+                }}
+              >
                 <Skeleton variant="rounded" height={40} />
                 <Skeleton variant="rounded" width="50%" height={40} />
               </Stack>

@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -25,13 +25,19 @@ const About = () => {
   return (
     <Paper variant="outlined" className={classes.root}>
       <Box
-        justifyContent="center"
-        display="flex"
-        flexDirection="column"
         align={"center"}
+        sx={{
+          justifyContent: "center",
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
         <CustomTile text={keyword("about_title")} />
-        <Box m={3} />
+        <Box
+          sx={{
+            m: 3,
+          }}
+        />
         <Typography variant={"body2"} align={"justify"}>
           {keyword("source_part_1")}
           {keyword("mit_licence_link_label")}
@@ -46,17 +52,29 @@ const About = () => {
             {keyword("invid_email")}
           </Link>
         </Typography>
-        <Box m={3} />
+        <Box
+          sx={{
+            m: 3,
+          }}
+        />
         <Typography variant={"h6"}>{keyword("disclaimer")}</Typography>
         <Typography variant={"body2"} align={"justify"}>
           {keyword("disclaimer_text")}
         </Typography>
-        <Box m={3} />
+        <Box
+          sx={{
+            m: 3,
+          }}
+        />
         <Typography variant={"h6"}>{keyword("privacy")}</Typography>
         <Typography variant={"body2"} align={"justify"}>
           {keyword("privacy_text")}
         </Typography>
-        <Box m={3} />
+        <Box
+          sx={{
+            m: 3,
+          }}
+        />
         <Typography variant={"body2"} align={"justify"}>
           {keyword("info_weverify_part_1")}
           <Link target="_blank" href={keyword("info_weverify_link_website")}>
@@ -108,46 +126,48 @@ const About = () => {
           </Link>
         </Typography>
       </Box>
-      <Grid2
+      <Grid
         container
         direction="row"
         spacing={2}
-        justifyContent="center"
-        alignItems="center"
-        mb={4}
+        sx={{
+          justifyContent: "center",
+          alignItems: "center",
+          mb: 4,
+        }}
       >
-        <Grid2 size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <img className={classes.AboutMedia} src={afpImage} alt={afpImage} />
-        </Grid2>
-        <Grid2>
+        </Grid>
+        <Grid>
           <img className={classes.AboutMedia} src={itiImage} alt={itiImage} />
-        </Grid2>
-        <Grid2>
+        </Grid>
+        <Grid>
           <img
             className={classes.AboutMedia}
             src={europeImage}
             alt={europeImage}
           />
-        </Grid2>
+        </Grid>
         {currentLang === "ar" ? (
           <>
-            <Grid2 size={{ xs: 6 }}>
+            <Grid size={{ xs: 6 }}>
               <img
                 className={classes.AboutMediaSmall}
                 src={afcnLogo}
                 alt={afcnLogo}
               />
-            </Grid2>
-            <Grid2 size={{ xs: 6 }}>
+            </Grid>
+            <Grid size={{ xs: 6 }}>
               <img
                 className={classes.AboutMediaSmall}
                 src={arijLogo}
                 alt={arijLogo}
               />
-            </Grid2>
+            </Grid>
           </>
         ) : null}
-      </Grid2>
+      </Grid>
     </Paper>
   );
 };

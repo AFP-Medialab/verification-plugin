@@ -7,7 +7,7 @@ import Chip from "@mui/material/Chip";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import List from "@mui/material/List";
@@ -117,7 +117,6 @@ const renderEvidence = (keyword, evidence, source, scope) => {
 const ExtractedSourceCredibilityDBKFDialog = ({
   sourceCredibility,
   url,
-  domainOrAccount,
   urlColor,
 }) => {
   //central
@@ -141,7 +140,6 @@ const ExtractedSourceCredibilityDBKFDialog = ({
           onClick={handleClickOpen}
         />
       </Tooltip>
-
       <Dialog
         onClose={handleClose}
         maxWidth={"lg"}
@@ -150,9 +148,9 @@ const ExtractedSourceCredibilityDBKFDialog = ({
       >
         <DialogTitle>
           {/* display the url */}
-          <Grid2 container>
+          <Grid container>
             {/* url */}
-            <Grid2 size={{ xs: 11 }}>
+            <Grid size={{ xs: 11 }}>
               <Typography sx={{ wordWrap: "break-word" }}>
                 {keyword("assistant_urlbox")}
                 {": "}
@@ -160,9 +158,15 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                   {url}
                 </Link>
               </Typography>
-            </Grid2>
+            </Grid>
 
-            <Grid2 size={{ xs: 1 }} display="flex" justifyContent="flex-end">
+            <Grid
+              size={{ xs: 1 }}
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
               {/* tooltip help */}
               <Tooltip
                 interactive={"true"}
@@ -184,8 +188,8 @@ const ExtractedSourceCredibilityDBKFDialog = ({
               <IconButton onClick={handleClose}>
                 <CloseIcon />
               </IconButton>
-            </Grid2>
-          </Grid2>
+            </Grid>
+          </Grid>
         </DialogTitle>
 
         <DialogContent dividers>

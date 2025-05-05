@@ -9,7 +9,7 @@ import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
@@ -123,7 +123,7 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
         sx={{
           width: 345,
           border: isSelected
-            ? "3px solid #00926c"
+            ? "3px solid var(--mui-palette-primary-main)"
             : "1px solid rgba(0, 0, 0, 0.12)",
         }}
       >
@@ -145,8 +145,20 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
 
   return (
     <Stack direction="row" spacing={4}>
-      <Box width="100%">
-        <Grid2 container direction="row" spacing={4} p={4} width="100%">
+      <Box
+        sx={{
+          width: "100%",
+        }}
+      >
+        <Grid
+          container
+          direction="row"
+          spacing={4}
+          sx={{
+            p: 4,
+            width: "100%",
+          }}
+        >
           <Alert severity="info">
             <Typography variant="body2">
               {
@@ -168,12 +180,14 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
             </Box>
           </Alert>
 
-          <Grid2
+          <Grid
             container
             direction="column"
             size={{ md: 12, lg: 6 }}
             spacing={4}
-            alignItems="start"
+            sx={{
+              alignItems: "start",
+            }}
           >
             {ImageCard(
               // hdImage,
@@ -194,8 +208,8 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
                 keyword("reverse_search_results_hd_camera_label"),
                 selectedImage === thumbnailImage.url,
               )}
-          </Grid2>
-          <Grid2
+          </Grid>
+          <Grid
             container
             direction="column"
             size={{ md: 12, lg: 6 }}
@@ -208,11 +222,11 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
             {hdImage &&
               (role.includes(ROLES.AFP_C2PA_GOLD) ||
                 role.includes(ROLES.EXTRA_FEATURE)) && (
-                <Grid2>
+                <Grid>
                   <Button variant="contained" onClick={downloadHdImage}>
                     {keyword("reverse_search_original_image_download_button")}
                   </Button>
-                </Grid2>
+                </Grid>
               )}
 
             {processedC2paData && resizedHdImageUrl && (
@@ -223,8 +237,8 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
                 resizedImageUrl={resizedHdImageUrl}
               />
             )}
-          </Grid2>
-        </Grid2>
+          </Grid>
+        </Grid>
       </Box>
     </Stack>
   );
