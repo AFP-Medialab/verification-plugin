@@ -55,7 +55,7 @@ const SinglefileConverter = (telegramURL) => {
     } else {
       setError("Error signing WACZ, please try again");
       throw new Error("Error signing WACZ, please try again");
-    } 
+    }
   };
 
   //For anonymous signing

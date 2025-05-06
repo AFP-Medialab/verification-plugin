@@ -60,7 +60,8 @@ const SourceCredibilityResult = (props) => {
                     component={"div"}
                     color={"textSecondary"}
                   >
-                    {value.credibilityScope.includes("/") ? (
+                    {value.credibilityScope &&
+                    value.credibilityScope.includes("/") ? (
                       <Typography variant={"subtitle2"}>
                         {` ${" "} ${keyword("account_scope")} ${value.credibilityScope} `}
                       </Typography>
