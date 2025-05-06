@@ -11,7 +11,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Collapse from "@mui/material/Collapse";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import LinearProgress from "@mui/material/LinearProgress";
 import Tooltip from "@mui/material/Tooltip";
@@ -131,7 +131,6 @@ const AssistantMediaResult = () => {
         className={classes.assistantCardHeader}
         title={keyword("media_title")}
         subheader={keyword("media_below")}
-        subheaderTypographyProps={{ sx: { color: "white" } }}
         action={
           <div style={{ display: "flex" }}>
             <div>
@@ -171,20 +170,26 @@ const AssistantMediaResult = () => {
             </div>
           </div>
         }
+        slotProps={{
+          subheader: { sx: { color: "white" } },
+        }}
       />
-
       {dbkfMediaMatchLoading ? (
         <div>
           <LinearProgress />
         </div>
       ) : null}
-
       {/* selected image or video with recommended tools */}
       <CardContent sx={{ padding: processUrl == null ? 0 : undefined }}>
         {missingMedia ? (
           <Alert severity="warning">
             <Typography component={"span"}>
-              <Box color={"orange"} fontStyle="italic">
+              <Box
+                sx={{
+                  color: "orange",
+                  fontStyle: "italic",
+                }}
+              >
                 {keyword("missing_media_title")}
                 <IconButton
                   className={classes.assistantIconRight}
@@ -205,27 +210,26 @@ const AssistantMediaResult = () => {
         ) : null}
         {processUrl !== null ? (
           resultIsImage ? (
-            <Grid2 container spacing={2}>
-              <Grid2 size={6}>
+            <Grid container spacing={2}>
+              <Grid size={6}>
                 <AssistantImageResult />
-              </Grid2>
-              <Grid2 size={6}>
+              </Grid>
+              <Grid size={6}>
                 <AssistantProcessUrlActions />
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
           ) : (
-            <Grid2 container spacing={2}>
-              <Grid2 size={6}>
+            <Grid container spacing={2}>
+              <Grid size={6}>
                 <AssistantVideoResult />
-              </Grid2>
-              <Grid2 size={6}>
+              </Grid>
+              <Grid size={6}>
                 <AssistantProcessUrlActions />
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
           )
         ) : null}
       </CardContent>
-
       {/* image grid and video grid of extracted media */}
       {!singleMediaPresent ? (
         <div>

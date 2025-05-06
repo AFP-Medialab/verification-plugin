@@ -92,7 +92,9 @@ const Deepfake = () => {
           name={keywordAllTools("navbar_deepfake_video")}
           description={keywordAllTools("navbar_deepfake_video_description")}
           icon={
-            <videoDeepfake.icon sx={{ fill: "#00926c", fontSize: "40px" }} />
+            <videoDeepfake.icon
+              sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+            />
           }
         />
 
@@ -101,7 +103,11 @@ const Deepfake = () => {
         </Alert>
 
         <Card variant="outlined">
-          <Box p={4}>
+          <Box
+            sx={{
+              p: 4,
+            }}
+          >
             <form>
               <StringFileUploadField
                 labelKeyword={keyword("deepfake_video_link")}

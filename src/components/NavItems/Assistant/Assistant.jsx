@@ -6,7 +6,7 @@ import { useColorScheme } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 
@@ -152,37 +152,51 @@ const Assistant = () => {
   };
 
   return (
-    <Grid2
+    <Grid
       container
       spacing={4}
       direction="column"
-      justifyContent="flex-start"
-      alignItems="center"
       className={classes.root}
+      sx={{
+        justifyContent: "flex-start",
+        alignItems: "center",
+      }}
     >
       {/* introduction */}
-      <Grid2 size="grow" width="100%">
+      <Grid
+        size="grow"
+        sx={{
+          width: "100%",
+        }}
+      >
         <AssistantIntroduction cleanAssistant={cleanAssistant} />
-      </Grid2>
-
+      </Grid>
       {/* url entry field */}
       {urlMode ? (
-        <Grid2 size="grow" width="100%">
+        <Grid
+          size="grow"
+          sx={{
+            width: "100%",
+          }}
+        >
           <AssistantUrlSelected
             formInput={formInput}
             setFormInput={setFormInput}
             cleanAssistant={cleanAssistant}
           />
-        </Grid2>
+        </Grid>
       ) : null}
-
       {/* local file selection field */}
       {imageVideoSelected ? (
-        <Grid2 size="grow" width="100%">
+        <Grid
+          size="grow"
+          sx={{
+            width: "100%",
+          }}
+        >
           <AssistantFileSelected />
-        </Grid2>
+        </Grid>
       ) : null}
-
       {/* assistant status */}
       {scFailState ||
       dbkfTextFailState ||
@@ -195,11 +209,10 @@ const Assistant = () => {
       prevFactChecksFailState ||
       machineGeneratedTextChunksFailState ||
       machineGeneratedTextSentencesFailState ? (
-        <Grid2 size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <AssistantCheckStatus />
-        </Grid2>
+        </Grid>
       ) : null}
-
       {/* assistant results section */}
       {urlMode && inputUrl ? (
         <Card variant="outlined" sx={{ width: "100%", mb: 2 }}>
@@ -220,71 +233,71 @@ const Assistant = () => {
           />
 
           <CardContent>
-            <Grid2 container spacing={4}>
+            <Grid container spacing={4}>
               {/* warnings and api status checks */}
               {dbkfTextMatch ||
               dbkfImageResult ||
               dbkfVideoMatch ||
               prevFactChecksResult ? (
-                <Grid2
+                <Grid
                   size={{ xs: 12 }}
                   className={classes.assistantGrid}
-                  hidden={urlMode === null || urlMode === false}
+                  hidden={urlMode === false}
                 >
                   <AssistantWarnings />
-                </Grid2>
+                </Grid>
               ) : null}
 
-              {/* source crediblity//URL domain analysis results */}
+              {/* source credibility//URL domain analysis results */}
               {positiveSourceCred || cautionSourceCred || mixedSourceCred ? (
-                <Grid2 size={{ xs: 12 }}>
+                <Grid size={{ xs: 12 }}>
                   <AssistantSCResults />
-                </Grid2>
+                </Grid>
               ) : null}
 
               {/* media results */}
               {imageList.length > 0 ||
               videoList.length > 0 ||
               imageVideoSelected ? (
-                <Grid2 size={{ xs: 12 }}>
+                <Grid size={{ xs: 12 }}>
                   <AssistantMediaResult />
-                </Grid2>
+                </Grid>
               ) : null}
 
               {/* YouTube comments if video */}
               {collectedComments ? (
-                <Grid2 size={12}>
+                <Grid size={12}>
                   <AssistantCommentResult
                     collectedComments={collectedComments}
                   />
-                </Grid2>
+                </Grid>
               ) : null}
 
               {/* text results */}
               {text ? (
-                <Grid2 size={{ xs: 12 }}>
+                <Grid size={{ xs: 12 }}>
                   <AssistantTextResult />
-                </Grid2>
+                </Grid>
               ) : null}
 
               {/* named entity results */}
               {text && neResult ? (
-                <Grid2 size={{ xs: 12 }}>
+                <Grid size={{ xs: 12 }}>
                   <AssistantNEResult />
-                </Grid2>
+                </Grid>
               ) : null}
 
               {/* extracted urls with url domain analysis */}
               {text && linkList.length !== 0 ? (
-                <Grid2 size={{ xs: 12 }}>
+                <Grid size={{ xs: 12 }}>
                   <AssistantLinkResult />
-                </Grid2>
+                </Grid>
               ) : null}
-            </Grid2>
+            </Grid>
           </CardContent>
         </Card>
       ) : null}
-    </Grid2>
+    </Grid>
   );
 };
 export default Assistant;

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -41,21 +41,21 @@ const PreviousFactCheckResults = () => {
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Grid2 container spacing={1} wrap="wrap" width="100%">
-          <Grid2 size={4} align="start">
+        <Grid container spacing={1} wrap="wrap" width="100%">
+          <Grid size={4} align="start">
             <Typography display="inline" sx={{ align: "start" }}>
               {prevFactChecksTitle}
             </Typography>
-          </Grid2>
+          </Grid>
 
-          <Grid2 size={8} align="start">
+          <Grid size={8} align="start">
             {prevFactChecksDone && prevFactChecksResult.length > 0 && (
               <Typography sx={{ color: "text.secondary", align: "start" }}>
                 {keyword("previous_fact_checks_found")}
               </Typography>
             )}
-          </Grid2>
-        </Grid2>
+          </Grid>
+        </Grid>
       </AccordionSummary>
 
       <AccordionDetails>

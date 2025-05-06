@@ -13,6 +13,8 @@ import Switch from "@mui/material/Switch";
 
 import { Gradient } from "@mui/icons-material";
 
+import { isValidUrl } from "@Shared/Utils/URLUtils";
+import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import axios from "axios";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { setError } from "redux/reducers/errorReducer";
@@ -26,8 +28,6 @@ import {
 } from "../../../../redux/actions/tools/syntheticImageDetectionActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
-import { isValidUrl } from "../../../Shared/Utils/URLUtils";
-import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 import { syntheticImageDetectionAlgorithms } from "./SyntheticImageDetectionAlgorithms";
 import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
 
@@ -368,19 +368,31 @@ const SyntheticImageDetection = () => {
         )}
         icon={
           <Gradient
-            style={{ fill: "#00926c", height: "40px", width: "auto" }}
+            style={{
+              fill: "var(--mui-palette-primary-main)",
+              height: "40px",
+              width: "auto",
+            }}
           />
         }
       />
-
-      <Stack direction="column" spacing={2} mb={4}>
+      <Stack
+        direction="column"
+        spacing={2}
+        sx={{
+          mb: 4,
+        }}
+      >
         <Alert severity="warning">
           {keywordWarning("warning_beta_synthetic_image_detection")}
         </Alert>
       </Stack>
-
       <Card variant="outlined">
-        <Box p={4}>
+        <Box
+          sx={{
+            p: 4,
+          }}
+        >
           <Stack direction="column" spacing={2}>
             <form>
               <StringFileUploadField
@@ -419,16 +431,22 @@ const SyntheticImageDetection = () => {
             )}
 
             {isLoading && (
-              <Box mt={3}>
+              <Box
+                sx={{
+                  mt: 3,
+                }}
+              >
                 <LinearProgress />
               </Box>
             )}
           </Stack>
         </Box>
       </Card>
-
-      <Box m={3} />
-
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
       {result && (
         <SyntheticImageDetectionResults
           results={result}

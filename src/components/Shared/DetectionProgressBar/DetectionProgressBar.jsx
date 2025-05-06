@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
 import CardMedia from "@mui/material/CardMedia";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -24,26 +24,32 @@ export const DetectionProgressBar = (props) => {
   }, []);
 
   return (
-    <Box mr={"43px"}>
+    <Box
+      sx={{
+        mr: "43px",
+      }}
+    >
       <CardMedia image={MakoScale} style={style} />
-      <Grid2
+      <Grid
         container
         direction="row"
-        justifyContent="space-between"
-        alignItems="center"
+        sx={{
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
       >
-        <Grid2>
+        <Grid>
           <Typography variant="body1">
             {keyword("forensic_text_nodetection")}
           </Typography>
-        </Grid2>
+        </Grid>
 
-        <Grid2>
+        <Grid>
           <Typography variant="body1">
             {keyword("forensic_text_detection")}
           </Typography>
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     </Box>
   );
 };

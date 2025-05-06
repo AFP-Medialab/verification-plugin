@@ -28,7 +28,7 @@ const SourceCredibilityResult = (props) => {
             <ListItem key={key}>
               <ListItemText
                 primary={
-                  <div sx={{ ml: 2 }}>
+                  <Box sx={{ ml: 2 }}>
                     <Typography
                       variant={"body1"}
                       component={"div"}
@@ -47,8 +47,12 @@ const SourceCredibilityResult = (props) => {
                         </Typography>
                       ) : null}
                     </Typography>
-                    <Box mb={0.5} />
-                  </div>
+                    <Box
+                      sx={{
+                        mb: 0.5,
+                      }}
+                    />
+                  </Box>
                 }
                 secondary={
                   <Typography

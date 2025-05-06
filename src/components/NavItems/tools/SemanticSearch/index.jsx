@@ -24,7 +24,8 @@ import {
   ManageSearch,
 } from "@mui/icons-material";
 
-import LoadingButton from "@mui/lab/LoadingButton";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import { getLanguageName } from "@Shared/Utils/languageUtils";
 import axios from "axios";
 import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
 import dayjs from "dayjs";
@@ -32,8 +33,6 @@ import isEqual from "lodash/isEqual";
 
 import languageDictionary from "../../../../LocalDictionary/iso-639-1-languages";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
-import { getLanguageName } from "../../../Shared/Utils/languageUtils";
 import SemanticSearchResults from "./SemanticSearchResults";
 import CheckboxesTags from "./components/CheckboxesTags";
 import SelectSmall from "./components/SelectSmall";
@@ -226,7 +225,7 @@ const SemanticSearch = () => {
   useEffect(() => {
     //takes in text parameter from url
     if (url) {
-      const uri = url !== null ? decodeURIComponent(url) : undefined;
+      const uri = decodeURIComponent(url);
       if (uri === "assistantText" && text) {
         text = text.replaceAll("\n", " ");
         setSearchString(text);
@@ -359,7 +358,13 @@ const SemanticSearch = () => {
     if (isLoading)
       return (
         <Card variant="outlined">
-          <Stack direction="column" spacing={4} p={4}>
+          <Stack
+            direction="column"
+            spacing={4}
+            sx={{
+              p: 4,
+            }}
+          >
             <Skeleton variant="rounded" height={40} />
             <Skeleton variant="rounded" width={400} height={40} />
           </Stack>
@@ -390,19 +395,31 @@ const SemanticSearch = () => {
           name={keyword("semantic_search_title")}
           description={keyword("semantic_search_description")}
           icon={
-            <ManageSearch sx={{ fill: "#00926c", width: 40, height: 40 }} />
+            <ManageSearch
+              sx={{
+                fill: "var(--mui-palette-primary-main)",
+                width: 40,
+                height: 40,
+              }}
+            />
           }
         />
         <Alert severity="info">{keyword("semantic_search_tip")}</Alert>
         <Card variant="outlined">
-          <Box p={4}>
+          <Box
+            sx={{
+              p: 4,
+            }}
+          >
             <form>
               <Stack spacing={4}>
                 <Stack
                   direction="row"
                   spacing={2}
-                  justifyContent="flex-start"
-                  alignItems="center"
+                  sx={{
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
                 >
                   <TextField
                     fullWidth
@@ -421,7 +438,7 @@ const SemanticSearch = () => {
                       setSearchString(e.target.value);
                     }}
                   />
-                  <LoadingButton
+                  <Button
                     type="submit"
                     variant="contained"
                     disabled={isLoading || !searchString}
@@ -432,7 +449,7 @@ const SemanticSearch = () => {
                     }}
                   >
                     {keyword("semantic_search_form_submit_button")}
-                  </LoadingButton>
+                  </Button>
                 </Stack>
                 <Box>
                   <Stack direction="row" spacing={2}>
@@ -505,15 +522,17 @@ const SemanticSearch = () => {
                           <Box sx={searchEngineModalStyle}>
                             <Stack
                               direction="row"
-                              justifyContent="space-between"
-                              alignItems="center"
                               spacing={2}
+                              sx={{
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                              }}
                             >
                               <Typography
                                 id="transition-modal-title"
                                 variant="subtitle2"
-                                style={{
-                                  color: "#00926c",
+                                sx={{
+                                  color: "var(--mui-palette-primary-main)",
                                   fontSize: "24px",
                                 }}
                               >
@@ -533,7 +552,9 @@ const SemanticSearch = () => {
                               id="transition-modal-description"
                               direction="column"
                               spacing={2}
-                              mt={2}
+                              sx={{
+                                mt: 2,
+                              }}
                             >
                               {searchEngineModes.map((searchEngine, index) => {
                                 return (

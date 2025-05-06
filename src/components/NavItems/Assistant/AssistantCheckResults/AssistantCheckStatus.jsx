@@ -100,7 +100,12 @@ const AssistantCheckStatus = () => {
   return (
     <Alert severity="warning">
       <Typography component={"span"}>
-        <Box color={"orange"} fontStyle="italic">
+        <Box
+          sx={{
+            color: "orange",
+            fontStyle: "italic",
+          }}
+        >
           {keyword("status_subtitle")}
           <IconButton
             className={classes.assistantIconRight}
@@ -110,7 +115,6 @@ const AssistantCheckStatus = () => {
           </IconButton>
         </Box>
       </Typography>
-
       <Collapse in={stateExpanded} className={classes.assistantBackground}>
         <List disablePadding={true}>
           {failStates.map((value, key) =>

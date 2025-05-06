@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { v4 as uuid } from "uuid";
+
 const initialState = {
   active: null,
   analytics: null,
@@ -16,7 +17,7 @@ const cookiesSlice = createSlice({
       return {
         active: true,
         analytics: true,
-        //analytics: false, //tempory disable for test
+        //analytics: false, //temporarily disable for test
         id: id,
       };
     },

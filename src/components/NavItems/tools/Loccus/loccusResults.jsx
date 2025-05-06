@@ -12,7 +12,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
@@ -21,6 +21,7 @@ import Typography from "@mui/material/Typography";
 import { Download, ExpandMore } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
+import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import {
   CategoryScale,
@@ -43,7 +44,6 @@ import duration from "dayjs/plugin/duration";
 import { ROLES } from "../../../../constants/roles";
 import CustomAlertScore from "../../../Shared/CustomAlertScore";
 import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
-import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
 
 const LoccusResults = ({
   result,
@@ -309,12 +309,18 @@ const LoccusResults = ({
   return (
     <Stack
       direction="row"
-      justifyContent="flex-start"
-      alignItems="flex-start"
       spacing={2}
+      sx={{
+        justifyContent: "flex-start",
+        alignItems: "flex-start",
+      }}
     >
       <Card variant="outlined" sx={{ width: "100%" }}>
-        <Box m={2}>
+        <Box
+          sx={{
+            m: 2,
+          }}
+        >
           <CardHeader
             style={{ borderRadius: "4px 4p x 0px 0px" }}
             title={keyword("loccus_title")}
@@ -324,38 +330,54 @@ const LoccusResults = ({
               </IconButton>
             }
           />
-          <Grid2
+          <Grid
             container
             direction="row"
-            justifyContent="space-evenly"
-            alignItems="flex-start"
+            sx={{
+              justifyContent: "space-evenly",
+              alignItems: "flex-start",
+            }}
           >
-            <Grid2
-              p={4}
+            <Grid
               size={{
                 sm: 12,
                 md: 6,
               }}
+              sx={{
+                p: 4,
+              }}
             >
               <Box sx={{ width: "100%", position: "relative" }}>
-                <Grid2
+                <Grid
                   container
                   direction="column"
-                  justifyContent="center"
-                  alignItems="flex-start"
                   spacing={4}
+                  sx={{
+                    justifyContent: "center",
+                    alignItems: "flex-start",
+                  }}
                 >
-                  <Grid2 width="100%">
+                  <Grid
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
                     <div ref={audioContainerRef} />
-                  </Grid2>
-                  <Grid2 ref={chunksChartRef} width="100%" height="300px">
+                  </Grid>
+                  <Grid
+                    ref={chunksChartRef}
+                    sx={{
+                      width: "100%",
+                      height: "300px",
+                    }}
+                  >
                     <Chart
                       type={"line"}
                       data={getChartDataFromChunks(chunks)}
                       options={chartConfig}
                     />
-                  </Grid2>
-                  <Grid2>
+                  </Grid>
+                  <Grid>
                     <Tooltip
                       title={keyword("loccus_download_chunks_chart_button")}
                     >
@@ -372,18 +394,24 @@ const LoccusResults = ({
                         <Download />
                       </IconButton>
                     </Tooltip>
-                  </Grid2>
-                </Grid2>
+                  </Grid>
+                </Grid>
               </Box>
-            </Grid2>
-            <Grid2
+            </Grid>
+            <Grid
               size={{
                 sm: 12,
                 md: 6,
               }}
             >
               <Stack direction="column" spacing={4}>
-                <Stack direction="column" p={4} spacing={4}>
+                <Stack
+                  direction="column"
+                  spacing={4}
+                  sx={{
+                    p: 4,
+                  }}
+                >
                   <Typography variant="h5">
                     {keyword("loccus_voice_cloning_detection_title")}
                   </Typography>
@@ -391,16 +419,20 @@ const LoccusResults = ({
                   {!isInconclusive && (
                     <Stack
                       direction={{ sm: "column", md: "row" }}
-                      alignItems={{ sm: "start", md: "center" }}
-                      justifyContent="center"
-                      width="100%"
+                      sx={{
+                        alignItems: { sm: "start", md: "center" },
+                        justifyContent: "center",
+                        width: "100%",
+                      }}
                     >
                       <Stack
                         direction="column"
-                        justifyContent="center"
-                        alignItems="center"
                         spacing={0}
                         ref={gaugeChartRef}
+                        sx={{
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
                       >
                         <GaugeChart
                           id={"gauge-chart"}
@@ -416,9 +448,11 @@ const LoccusResults = ({
 
                         <Stack
                           direction="row"
-                          justifyContent="center"
-                          alignItems="center"
                           spacing={10}
+                          sx={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
                         >
                           <Typography variant="subtitle2">
                             {keyword("loccus_gauge_no_detection")}
@@ -428,7 +462,11 @@ const LoccusResults = ({
                           </Typography>
                         </Stack>
                       </Stack>
-                      <Box alignSelf={{ sm: "flex-start", md: "flex-end" }}>
+                      <Box
+                        sx={{
+                          alignSelf: { sm: "flex-start", md: "flex-end" },
+                        }}
+                      >
                         <Tooltip
                           title={keyword("loccus_download_gauge_button")}
                         >
@@ -477,7 +515,12 @@ const LoccusResults = ({
                 {role.includes(ROLES.EXTRA_FEATURE) && (
                   <>
                     <Divider />
-                    <Box pb={4} pr={4}>
+                    <Box
+                      sx={{
+                        pb: 4,
+                        pr: 4,
+                      }}
+                    >
                       <Accordion>
                         <AccordionSummary
                           expandIcon={<ExpandMore />}
@@ -497,9 +540,11 @@ const LoccusResults = ({
                             </Typography>
                             <Stack
                               direction="column"
-                              justifyContent="center"
-                              alignItems="center"
                               spacing={0}
+                              sx={{
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
                             >
                               <GaugeChart
                                 id={"gauge-chart-2"}
@@ -512,9 +557,11 @@ const LoccusResults = ({
 
                               <Stack
                                 direction="row"
-                                justifyContent="center"
-                                alignItems="center"
                                 spacing={10}
+                                sx={{
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}
                               >
                                 <Typography variant="subtitle2">
                                   {keyword("loccus_gauge_no_detection")}
@@ -531,8 +578,8 @@ const LoccusResults = ({
                   </>
                 )}
               </Stack>
-            </Grid2>
-          </Grid2>
+            </Grid>
+          </Grid>
         </Box>
       </Card>
     </Stack>

@@ -40,9 +40,11 @@ const SideMenuElement = ({
       };
 
     return {
-      fill: isElementSelected ? "#00926c" : "var(--mui-palette-text-secondary)",
+      fill: isElementSelected
+        ? "var(--mui-palette-primary-main)"
+        : "var(--mui-palette-text-secondary)",
       color: isElementSelected
-        ? "#00926c"
+        ? "var(--mui-palette-primary-main)"
         : "var(--mui-palette-text-secondary)",
       fontSize: "24px",
     };
