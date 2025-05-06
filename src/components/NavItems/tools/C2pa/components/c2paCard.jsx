@@ -10,7 +10,7 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
@@ -23,9 +23,8 @@ import {
 import HelpIcon from "@mui/icons-material/Help";
 import MapIcon from "@mui/icons-material/Map";
 
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import moment from "moment/moment";
-
-import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
 
 const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
   const [mainImageId, setMainImageId] = useState(c2paData.mainImageId);
@@ -34,7 +33,7 @@ const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
   const url = c2paData.result[currentImageId].url;
   const parentId = c2paData.result[currentImageId].parent;
   const manifestData = c2paData.result[currentImageId].manifestData;
-  const validationIssues = c2paData.result[currentImageId].validationIssues;
+  // const validationIssues = c2paData.result[currentImageId].validationIssues;
 
   const latitude =
     manifestData && manifestData.captureInfo
@@ -73,13 +72,13 @@ const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
     }
   }, [currentImageSrc]);
 
-  const validationMessage = (issues) => {
-    if (issues.trustedSourceIssue && issues.errorMessages.length <= 2) {
-      return keyword("content_credentials_unknown_source");
-    } else {
-      return keyword("content_credentials_invalid");
-    }
-  };
+  // const validationMessage = (issues) => {
+  //   if (issues.trustedSourceIssue && issues.errorMessages.length <= 2) {
+  //     return keyword("content_credentials_unknown_source");
+  //   } else {
+  //     return keyword("content_credentials_invalid");
+  //   }
+  // };
 
   /**
    *
@@ -89,15 +88,25 @@ const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
    */
   const title = (title, information) => {
     return (
-      <Grid2 container direction="row" alignItems="center">
-        <Grid2>
+      <Grid
+        container
+        direction="row"
+        sx={{
+          alignItems: "center",
+        }}
+      >
+        <Grid>
           <Typography variant="h6">{keyword(title)}</Typography>
-        </Grid2>
-        <Grid2 m={2} />
+        </Grid>
+        <Grid
+          sx={{
+            m: 2,
+          }}
+        />
         <Tooltip title={<h3>{keyword(information)}</h3>}>
           <HelpIcon />
         </Tooltip>
-      </Grid2>
+      </Grid>
     );
   };
 
@@ -106,7 +115,11 @@ const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
       <Card p={1}>
         <CardContent>
           {!manifestData ? (
-            <Box m={1}>
+            <Box
+              sx={{
+                m: 1,
+              }}
+            >
               {depthExceeded ? (
                 <Alert>
                   {isImage
@@ -120,33 +133,61 @@ const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
                     : keyword("no_c2pa_info_video")}
                 </Alert>
               )}
-              <Box m={1} />
+              <Box
+                sx={{
+                  m: 1,
+                }}
+              />
             </Box>
           ) : (
             <>
-              {validationIssues ? (
-                <Box m={1}>
-                  <Alert severity="error" m={1}>
-                    {validationMessage(validationIssues)}
-                  </Alert>
-                  <Box m={2} />
-                </Box>
-              ) : null}
+              {/*{validationIssues ? (*/}
+              {/*  <Box*/}
+              {/*    sx={{*/}
+              {/*      m: 1,*/}
+              {/*    }}*/}
+              {/*  >*/}
+              {/*    <Alert severity="error" m={1}>*/}
+              {/*      {validationMessage(validationIssues)}*/}
+              {/*    </Alert>*/}
+              {/*    <Box*/}
+              {/*      sx={{*/}
+              {/*        m: 2,*/}
+              {/*      }}*/}
+              {/*    />*/}
+              {/*  </Box>*/}
+              {/*) : null}*/}
               <Typography variant="h5">
                 {keyword("c2pa_information")}
               </Typography>
-              <Box m={1} />
+              <Box
+                sx={{
+                  m: 1,
+                }}
+              />
               <Stack>
                 <Typography>{manifestData.title}</Typography>
-                <Box m={1} />
-                <Box p={1}>
+                <Box
+                  sx={{
+                    m: 1,
+                  }}
+                />
+                <Box
+                  sx={{
+                    p: 1,
+                  }}
+                >
                   <Stack>
                     {title(
                       "content_credentials_title",
                       "content_credential_explanation",
                     )}
 
-                    <Box p={1}>
+                    <Box
+                      sx={{
+                        p: 1,
+                      }}
+                    >
                       <Typography>
                         {keyword("content_credentials_issuer") +
                           manifestData.signatureInfo.issuer}
@@ -159,14 +200,26 @@ const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
                       </Typography>
                     </Box>
                   </Stack>
-                  <Box m={1} />
+                  <Box
+                    sx={{
+                      m: 1,
+                    }}
+                  />
                   <Divider m={1} />
                 </Box>
                 {manifestData.producer && (
-                  <Box p={1}>
+                  <Box
+                    sx={{
+                      p: 1,
+                    }}
+                  >
                     <Stack>
                       {title("credit_title", "credit_explanation")}
-                      <Box p={1}>
+                      <Box
+                        sx={{
+                          p: 1,
+                        }}
+                      >
                         <>
                           <Typography>
                             {manifestData.producer.name
@@ -196,16 +249,28 @@ const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
                       </Box>
                     </Stack>
 
-                    <Box m={1} />
+                    <Box
+                      sx={{
+                        m: 1,
+                      }}
+                    />
                     <Divider m={1} />
                   </Box>
                 )}
 
                 {manifestData.captureInfo && (
-                  <Box p={1}>
+                  <Box
+                    sx={{
+                      p: 1,
+                    }}
+                  >
                     <Stack>
                       {title("capture_info_title", "capture_info_explanation")}
-                      <Box p={1}>
+                      <Box
+                        sx={{
+                          p: 1,
+                        }}
+                      >
                         <>
                           {manifestData.captureInfo.make ? (
                             <Typography>
@@ -244,7 +309,11 @@ const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
                             </>
                           ) : null}
                           {longitude && latitude ? (
-                            <Box p={3}>
+                            <Box
+                              sx={{
+                                p: 3,
+                              }}
+                            >
                               {!isNaN(longitude) && !isNaN(latitude) ? (
                                 <>
                                   <MapContainer
@@ -271,7 +340,11 @@ const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
                                       }
                                     ></Marker>
                                   </MapContainer>
-                                  <Box m={1} />
+                                  <Box
+                                    sx={{
+                                      m: 1,
+                                    }}
+                                  />
                                 </>
                               ) : null}
 
@@ -295,7 +368,11 @@ const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
                             </Box>
                           ) : null}
                           {manifestData.captureInfo.allCaptureInfo ? (
-                            <Box p={1}>
+                            <Box
+                              sx={{
+                                p: 1,
+                              }}
+                            >
                               <Accordion>
                                 <AccordionSummary expandIcon={<ExpandMore />}>
                                   <Typography>
@@ -337,36 +414,72 @@ const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
                       </Box>
                     </Stack>
 
-                    <Box m={1} />
+                    <Box
+                      sx={{
+                        m: 1,
+                      }}
+                    />
                     <Divider />
                   </Box>
                 )}
 
-                <Box p={1}>
+                <Box
+                  sx={{
+                    p: 1,
+                  }}
+                >
                   {title("process_title", "process_explanation")}
-                  <Box p={1}>
+                  <Box
+                    sx={{
+                      p: 1,
+                    }}
+                  >
                     {manifestData.editsAndActivity || manifestData.children ? (
                       <Stack>
                         {manifestData.editsAndActivity ? (
                           <>
-                            <Typography fontSize={18}>
+                            <Typography
+                              sx={{
+                                fontSize: 18,
+                              }}
+                            >
                               {keyword("process_edits")}
                             </Typography>
-                            <Box m={1} />
-                            <Box paddingLeft={2}>
+                            <Box
+                              sx={{
+                                m: 1,
+                              }}
+                            />
+                            <Box
+                              sx={{
+                                paddingLeft: 2,
+                              }}
+                            >
                               {manifestData.editsAndActivity.map((obj, key) => {
                                 return (
                                   <Stack key={key}>
                                     <Stack direction="row">
                                       <img src={obj.icon} />
-                                      <Typography paddingLeft={1}>
+                                      <Typography
+                                        sx={{
+                                          paddingLeft: 1,
+                                        }}
+                                      >
                                         {obj.label + ":"}
                                       </Typography>
                                     </Stack>
-                                    <Typography paddingLeft={1}>
+                                    <Typography
+                                      sx={{
+                                        paddingLeft: 1,
+                                      }}
+                                    >
                                       {obj.description}
                                     </Typography>
-                                    <Box m={0.5} />
+                                    <Box
+                                      sx={{
+                                        m: 0.5,
+                                      }}
+                                    />
                                   </Stack>
                                 );
                               })}
@@ -376,11 +489,25 @@ const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
 
                         {manifestData.children ? (
                           <>
-                            <Typography fontSize={18}>
+                            <Typography
+                              sx={{
+                                fontSize: 18,
+                              }}
+                            >
                               {keyword("process_ingredients")}
                             </Typography>
-                            <Box m={1} />
-                            <Stack direction="row" spacing={1} p={1}>
+                            <Box
+                              sx={{
+                                m: 1,
+                              }}
+                            />
+                            <Stack
+                              direction="row"
+                              spacing={1}
+                              sx={{
+                                p: 1,
+                              }}
+                            >
                               {manifestData.children.map((obj, key) => {
                                 return (
                                   <Box key={key}>
@@ -419,7 +546,12 @@ const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
             </>
           )}
           {parentId ? (
-            <Box maxWidth="fit-content" marginInline="auto">
+            <Box
+              sx={{
+                maxWidth: "fit-content",
+                marginInline: "auto",
+              }}
+            >
               <Button
                 onClick={() => {
                   setCurrentImageId(parentId);
@@ -430,7 +562,11 @@ const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
               >
                 {keyword("previous_image")}
               </Button>
-              <Box m={0.5} />
+              <Box
+                sx={{
+                  m: 0.5,
+                }}
+              />
               {parentId !== mainImageId ? (
                 <Button
                   onClick={() => {

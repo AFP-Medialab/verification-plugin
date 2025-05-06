@@ -12,6 +12,7 @@ const useGenerateApiUrl = (serviceUrl, url, reprocess) => {
         setFacebookIframe(false);
       }
     }
+
     window.addEventListener("message", facebooktokenChange);
     return () => {
       window.removeEventListener("message", facebooktokenChange);
@@ -31,7 +32,6 @@ const useGenerateApiUrl = (serviceUrl, url, reprocess) => {
     if (url && url.startsWith("https://www.facebook.com")) {
       if (facebookToken === null) {
         setFacebookIframe(true);
-        return;
       } else {
         analysis_url += "&fb_access_token=" + facebookToken;
         setFacebookIframe(false);
@@ -41,7 +41,6 @@ const useGenerateApiUrl = (serviceUrl, url, reprocess) => {
       setFacebookIframe(false);
       setFinalUrl(analysis_url);
     }
-    // eslint-disable-next-line
   }, [url, facebookToken, reprocess]);
 
   return [finalUrl, showFacebookIframe];

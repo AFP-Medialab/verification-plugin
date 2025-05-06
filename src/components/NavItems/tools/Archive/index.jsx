@@ -6,20 +6,17 @@ import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import { ArrowBack } from "@mui/icons-material";
 
-import { downloadZip, makeZip } from "client-zip";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { sha256 } from "hash-wasm";
 import {
   archiveStateCleaned,
   setArchiveUrl,
 } from "redux/reducers/tools/archiveReducer";
-import { CDXIndexer, WARCRecord, WARCSerializer } from "warcio";
 
 import { archiving } from "../../../../constants/tools";
 import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
@@ -34,7 +31,7 @@ import FirstStep from "./components/FirstStep";
 import FourthStep from "./components/FourthStep";
 import SecondStep from "./components/SecondStep";
 import SixthStep from "./components/SixthStep";
-import CustomizedMenus, { StyledMenu } from "./components/StyledMenu";
+import CustomizedMenus from "./components/StyledMenu";
 import ThirdStep from "./components/ThirdStep";
 
 const queryClient = new QueryClient();
@@ -48,8 +45,6 @@ const Archive = () => {
   const [urlInput, setUrlInput] = useState("");
 
   const [mediaUrl, setMediaUrl] = useState("");
-
-  const [urlResults, setUrlResults] = useState(false);
 
   const [fileToUpload, setFileToUpload] = useState(/** @type {?File} */ null);
 
@@ -69,11 +64,9 @@ const Archive = () => {
 
   useEffect(() => {
     if (mainUrl) {
-      setUrlResults(true);
       setUrlInput(mainUrl);
       handleSubmit(mainUrl);
     } else if (url && url !== "") {
-      setUrlResults(true);
       setUrlInput(url);
       setArchiveUrl(url);
       handleSubmit(url);
@@ -82,7 +75,6 @@ const Archive = () => {
 
   const handleCloseUrl = () => {
     setFileToUpload(null);
-    setUrlResults(false);
     setErrorMessage("");
     dispatch(archiveStateCleaned());
     setUrlInput("");
@@ -143,7 +135,6 @@ const Archive = () => {
     setErrorMessage("");
 
     setArchiveUrl(url);
-    setUrlResults(true);
     dispatch(setArchiveUrl(url));
 
     const urlType = matchPattern(url, KNOWN_LINK_PATTERNS);
@@ -181,6 +172,7 @@ const Archive = () => {
     try {
       result = await fetchArchivedUrls(fileToUpload);
     } catch (error) {
+      console.error(error);
       // User friendly Errors
       throw new Error("upload_error");
     }
@@ -259,7 +251,12 @@ const Archive = () => {
   return (
     <Box sx={{ minHeight: "65vh" }}>
       <Card variant="outlined" sx={{ height: "100%" }}>
-        <Box p={3} sx={{ height: "fill-available" }}>
+        <Box
+          sx={{
+            p: 3,
+            height: "fill-available",
+          }}
+        >
           <Stack
             direction="column"
             sx={{
@@ -269,26 +266,33 @@ const Archive = () => {
             spacing={2}
           >
             <Stack direction="column" spacing={4}>
-              <Stack direction="row" justifyContent={"space-between"}>
+              <Stack
+                direction="row"
+                sx={{
+                  justifyContent: "space-between",
+                }}
+              >
                 <Box>
-                  <Grid2
+                  <Grid
                     container
                     direction="row"
-                    justifyContent="flex-start"
-                    alignItems="center"
                     spacing={1}
+                    sx={{
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                    }}
                   >
                     <archiving.icon
                       style={{
                         fontSize: "40px",
-                        fill: "#00926c",
+                        fill: "var(--mui-palette-primary-main)",
                       }}
                     />
 
                     <Typography variant="h5" color={"primary"}>
                       {keyword("archive_name")}
                     </Typography>
-                  </Grid2>
+                  </Grid>
                 </Box>
                 <Box>
                   <CustomizedMenus
@@ -384,7 +388,11 @@ const Archive = () => {
           </Stack>
         </Box>
       </Card>
-      <Box p={2} />
+      <Box
+        sx={{
+          p: 2,
+        }}
+      />
     </Box>
   );
 };

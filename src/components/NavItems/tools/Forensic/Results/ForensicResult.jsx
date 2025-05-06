@@ -10,14 +10,14 @@ import CardMedia from "@mui/material/CardMedia";
 import Divider from "@mui/material/Divider";
 import Fab from "@mui/material/Fab";
 import Fade from "@mui/material/Fade";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Popover from "@mui/material/Popover";
 import Snackbar from "@mui/material/Snackbar";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -40,6 +40,7 @@ import {
   setStateBackResults,
   setStateInit,
 } from "../../../../../redux/reducers/tools/gifReducer";
+import { theme as defaultTheme } from "../../../../../theme";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import AnimatedGif from "../../Gif/AnimatedGif";
 import ImageCanvas from "../components/imageCanvas/imageCanvas";
@@ -56,7 +57,11 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box p={3}>
+        <Box
+          sx={{
+            p: 3,
+          }}
+        >
           <Typography component="span">{children}</Typography>
         </Box>
       )}
@@ -67,7 +72,8 @@ function TabPanel(props) {
 const ForensicResults = (props) => {
   const dispatch = useDispatch();
   const displayItem = useSelector((state) => state.forensic.displayItem);
-  const theme = createTheme({
+  const theme = {
+    ...defaultTheme,
     components: {
       MuiCardHeader: {
         styleOverrides: {
@@ -89,16 +95,7 @@ const ForensicResults = (props) => {
         },
       },
     },
-
-    palette: {
-      primary: {
-        light: "#00926c",
-        main: "#00926c",
-        dark: "#00926c",
-        contrastText: "#fff",
-      },
-    },
-  });
+  };
 
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Forensic");
@@ -552,7 +549,6 @@ const ForensicResults = (props) => {
       //clearInterval(interval);
       dispatch(setStateInit());
     };
-    // eslint-disable-next-line
   }, []);
 
   const currentLang = useSelector((state) => state.language);
@@ -592,10 +588,14 @@ const ForensicResults = (props) => {
           {keywordWarning("warning_advanced_tools")}
         </Alert>
       </Snackbar>
-
       <div className={classes.newForensics}>
         <ThemeProvider theme={theme}>
-          <Box mt={5} mb={5}>
+          <Box
+            sx={{
+              mt: 5,
+              mb: 5,
+            }}
+          >
             <Snackbar
               anchorOrigin={
                 isCurrentLanguageLeftToRight
@@ -626,49 +626,59 @@ const ForensicResults = (props) => {
               }
             />
 
-            <Grid2 container spacing={3}>
-              <Grid2
+            <Grid container spacing={3}>
+              <Grid
                 size={{ xs: 6 }}
                 style={{ display: "flex", flexDirection: "column" }}
               >
                 <Card variant="outlined">
                   <CardHeader
                     title={
-                      <Grid2
+                      <Grid
                         container
                         direction="row"
-                        justifyContent="space-between"
-                        alignItems="center"
+                        sx={{
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
                       >
-                        <Grid2>
+                        <Grid>
                           <span>{keyword("forensic_title_image")}</span>
-                        </Grid2>
+                        </Grid>
 
-                        <Grid2 size="grow">
-                          <Box ml={2}>
+                        <Grid size="grow">
+                          <Box
+                            sx={{
+                              ml: 2,
+                            }}
+                          >
                             <IconButton
-                              style={{ color: "white", padding: "0" }}
+                              style={{
+                                color: "var(--mui-palette-primary-main)",
+                                padding: "0",
+                              }}
                               component="span"
                               onClick={handleClickCopyURL}
                             >
                               <LinkIcon />
                             </IconButton>
                           </Box>
-                        </Grid2>
+                        </Grid>
 
-                        <Grid2>
+                        <Grid>
                           <Button
                             variant="contained"
                             style={{
-                              backgroundColor: "#FFFFFF",
-                              color: "black",
+                              backgroundColor:
+                                "var(--mui-palette-primary-main)",
+                              color: "white",
                             }}
                             onClick={newImage}
                           >
                             {keyword("forensic_button_newImage")}
                           </Button>
-                        </Grid2>
-                      </Grid2>
+                        </Grid>
+                      </Grid>
                     }
                     className={classes.headerUploadedImage}
                   />
@@ -697,20 +707,26 @@ const ForensicResults = (props) => {
                   </div>
                 </Card>
 
-                <Box mt={3}></Box>
+                <Box
+                  sx={{
+                    mt: 3,
+                  }}
+                ></Box>
 
                 <Card variant="outlined" className={classes.lensesCard}>
                   <CardHeader
                     title={
-                      <Grid2
+                      <Grid
                         container
                         direction="row"
-                        justifyContent="space-between"
-                        alignItems="center"
+                        sx={{
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
                       >
                         <span>{keyword("forensic_title_lenses")}</span>
                         <WarningIcon
-                          style={{ color: "#FFFFFF" }}
+                          style={{ color: "var(--mui-palette-primary-main)" }}
                           onClick={clickHelpLenses}
                         />
 
@@ -719,12 +735,6 @@ const ForensicResults = (props) => {
                           open={openHelpLenses}
                           anchorEl={anchorHelpLenses}
                           onClose={closeHelpLenses}
-                          PaperProps={{
-                            style: {
-                              width: "300px",
-                              fontSize: 14,
-                            },
-                          }}
                           anchorOrigin={{
                             vertical: "bottom",
                             horizontal: "center",
@@ -733,38 +743,60 @@ const ForensicResults = (props) => {
                             vertical: "top",
                             horizontal: "center",
                           }}
+                          slotProps={{
+                            paper: {
+                              style: {
+                                width: "300px",
+                                fontSize: 14,
+                              },
+                            },
+                          }}
                         >
-                          <Box p={3}>
-                            <Grid2
+                          <Box
+                            sx={{
+                              p: 3,
+                            }}
+                          >
+                            <Grid
                               container
                               direction="row"
-                              justifyContent="space-between"
-                              alignItems="stretch"
+                              sx={{
+                                justifyContent: "space-between",
+                                alignItems: "stretch",
+                              }}
                             >
                               <Typography variant="h6" gutterBottom>
                                 {keyword("forensic_title_what")}
                               </Typography>
 
                               <CloseIcon onClick={closeHelpLenses} />
-                            </Grid2>
+                            </Grid>
 
-                            <Box m={1} />
+                            <Box
+                              sx={{
+                                m: 1,
+                              }}
+                            />
                             <Typography variant="body2">
                               {keyword("forensic_lenses_explanation")}
                             </Typography>
                           </Box>
                         </Popover>
-                      </Grid2>
+                      </Grid>
                     }
                   />
 
-                  <Box p={3}>
-                    <Grid2 container spacing={3}>
+                  <Box
+                    sx={{
+                      p: 3,
+                    }}
+                  >
+                    <Grid container spacing={3}>
                       {filters.current
                         .slice(filtersProp.idStartLenses)
                         .map((value, key) => {
                           return (
-                            <Grid2 key={key} size={{ xs: 4 }}>
+                            <Grid key={key} size={{ xs: 4 }}>
                               <ImageCanvas
                                 className={classes.imageFilter}
                                 imgSrc={value.map}
@@ -782,8 +814,10 @@ const ForensicResults = (props) => {
                               />
                               <Box
                                 align="center"
-                                width="100%"
                                 className={classes.lensesTitles}
+                                sx={{
+                                  width: "100%",
+                                }}
                               >
                                 {keyword("forensic_title_" + value.id)}
                                 <IconButton
@@ -804,12 +838,6 @@ const ForensicResults = (props) => {
                                   }
                                   anchorEl={anchorFilterExplanation}
                                   onClose={handleCloseFilterExplanation}
-                                  PaperProps={{
-                                    style: {
-                                      width: "300px",
-                                      fontSize: 14,
-                                    },
-                                  }}
                                   anchorOrigin={{
                                     vertical: "bottom",
                                     horizontal: "center",
@@ -818,13 +846,27 @@ const ForensicResults = (props) => {
                                     vertical: "top",
                                     horizontal: "center",
                                   }}
+                                  slotProps={{
+                                    paper: {
+                                      style: {
+                                        width: "300px",
+                                        fontSize: 14,
+                                      },
+                                    },
+                                  }}
                                 >
-                                  <Box p={3}>
-                                    <Grid2
+                                  <Box
+                                    sx={{
+                                      p: 3,
+                                    }}
+                                  >
+                                    <Grid
                                       container
                                       direction="row"
-                                      justifyContent="space-between"
-                                      alignItems="stretch"
+                                      sx={{
+                                        justifyContent: "space-between",
+                                        alignItems: "stretch",
+                                      }}
                                     >
                                       <Typography variant="body1">
                                         {keyword("forensic_title_" + value.id)}
@@ -833,8 +875,12 @@ const ForensicResults = (props) => {
                                       <CloseIcon
                                         onClick={handleCloseFilterExplanation}
                                       />
-                                    </Grid2>
-                                    <Box m={1} />
+                                    </Grid>
+                                    <Box
+                                      sx={{
+                                        m: 1,
+                                      }}
+                                    />
 
                                     <Typography variant="body2" align="justify">
                                       {keyword("forensic_card_" + value.id)}
@@ -842,27 +888,29 @@ const ForensicResults = (props) => {
                                   </Box>
                                 </Popover>
                               </Box>
-                            </Grid2>
+                            </Grid>
                           );
                         })}
-                    </Grid2>
+                    </Grid>
                   </Box>
                 </Card>
-              </Grid2>
+              </Grid>
 
-              <Grid2 size={{ xs: 6 }}>
+              <Grid size={{ xs: 6 }}>
                 <Card variant="outlined" className={classes.cardFilters}>
                   <CardHeader
                     title={
-                      <Grid2
+                      <Grid
                         container
                         direction="row"
-                        justifyContent="space-between"
-                        alignItems="center"
+                        sx={{
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
                       >
                         <span>{keyword("forensic_title_filters")}</span>
                         <HelpOutlineIcon
-                          style={{ color: "#FFFFFF" }}
+                          style={{ color: "var(--mui-palette-primary-main)" }}
                           onClick={clickHelpFilters}
                         />
 
@@ -871,12 +919,6 @@ const ForensicResults = (props) => {
                           open={openHelpFilters}
                           anchorEl={anchorHelpFilters}
                           onClose={closeHelpFilters}
-                          PaperProps={{
-                            style: {
-                              width: "300px",
-                              fontSize: 14,
-                            },
-                          }}
                           anchorOrigin={{
                             vertical: "bottom",
                             horizontal: "center",
@@ -885,27 +927,45 @@ const ForensicResults = (props) => {
                             vertical: "top",
                             horizontal: "center",
                           }}
+                          slotProps={{
+                            paper: {
+                              style: {
+                                width: "300px",
+                                fontSize: 14,
+                              },
+                            },
+                          }}
                         >
-                          <Box p={3}>
-                            <Grid2
+                          <Box
+                            sx={{
+                              p: 3,
+                            }}
+                          >
+                            <Grid
                               container
                               direction="row"
-                              justifyContent="space-between"
-                              alignItems="stretch"
+                              sx={{
+                                justifyContent: "space-between",
+                                alignItems: "stretch",
+                              }}
                             >
                               <Typography variant="h6" gutterBottom>
                                 {keyword("forensic_title_what")}
                               </Typography>
 
                               <CloseIcon onClick={closeHelpFilters} />
-                            </Grid2>
-                            <Box m={1} />
+                            </Grid>
+                            <Box
+                              sx={{
+                                m: 1,
+                              }}
+                            />
                             <Typography variant="body2">
                               {keyword("forensic_filters_explanation")}
                             </Typography>
                           </Box>
                         </Popover>
-                      </Grid2>
+                      </Grid>
                     }
                   ></CardHeader>
 
@@ -973,7 +1033,7 @@ const ForensicResults = (props) => {
 
                     return (
                       <TabPanel value={value} key={keyTab} index={valueTab}>
-                        <Grid2 container spacing={3}>
+                        <Grid container spacing={3}>
                           {filtersTab.map((value, key) => {
                             if (
                               value.id === "zero_report" ||
@@ -983,7 +1043,7 @@ const ForensicResults = (props) => {
                               arrowsToDisplay(value.id);
                             }
                             return (
-                              <Grid2 key={key} size={{ xs: 4 }}>
+                              <Grid key={key} size={{ xs: 4 }}>
                                 {value.id === "zero_report" ||
                                 value.id === "ghost_report" ||
                                 value.id === "cagi_report" ? (
@@ -1009,12 +1069,14 @@ const ForensicResults = (props) => {
                                       threshold={0}
                                     />
                                     <div className={classes.imageOverlay}>
-                                      <Grid2
+                                      <Grid
                                         container
                                         direction="row"
-                                        justifyContent="space-around"
-                                        alignItems="center"
-                                        width="100%"
+                                        sx={{
+                                          justifyContent: "space-around",
+                                          alignItems: "center",
+                                          width: "100%",
+                                        }}
                                       >
                                         {value.arrows[0] ? (
                                           <Fab
@@ -1084,7 +1146,7 @@ const ForensicResults = (props) => {
                                             style={{ visibility: "hidden" }}
                                           ></Fab>
                                         )}
-                                      </Grid2>
+                                      </Grid>
                                     </div>
                                   </div>
                                 ) : (
@@ -1107,12 +1169,14 @@ const ForensicResults = (props) => {
                                         threshold={0}
                                       />
                                       <div className={classes.imageOverlay}>
-                                        <Grid2
+                                        <Grid
                                           container
                                           direction="row"
-                                          justifyContent="space-around"
-                                          alignItems="center"
-                                          width="100%"
+                                          sx={{
+                                            justifyContent: "space-around",
+                                            alignItems: "center",
+                                            width: "100%",
+                                          }}
                                         >
                                           <Fab
                                             size="medium"
@@ -1127,16 +1191,20 @@ const ForensicResults = (props) => {
                                               style={{ color: "#000000" }}
                                             />
                                           </Fab>
-                                        </Grid2>
+                                        </Grid>
                                       </div>
                                     </div>
                                   )
                                 )}
-
                                 {value.id !== "" && (
                                   <div>
                                     {value.id === "cagi_report" ? (
-                                      <Box align="center" width="100%">
+                                      <Box
+                                        align="center"
+                                        sx={{
+                                          width: "100%",
+                                        }}
+                                      >
                                         {value.name[value.currentDisplayed]}
                                         <IconButton
                                           className={classes.margin}
@@ -1152,7 +1220,13 @@ const ForensicResults = (props) => {
                                         </IconButton>
                                       </Box>
                                     ) : (
-                                      <Box align="center" width="100%" pl={1}>
+                                      <Box
+                                        align="center"
+                                        sx={{
+                                          width: "100%",
+                                          pl: 1,
+                                        }}
+                                      >
                                         {keyword("forensic_title_" + value.id)}
                                         <IconButton
                                           className={classes.margin}
@@ -1168,17 +1242,8 @@ const ForensicResults = (props) => {
                                         </IconButton>
                                       </Box>
                                     )}
-                                    {value.score && (
-                                      <Box align="center" width="100%" pl={1}>
-                                        {keyword("forensic_score") +
-                                          ": " +
-                                          (value.score * 100).toPrecision(2) +
-                                          " %"}
-                                      </Box>
-                                    )}
                                   </div>
                                 )}
-
                                 <Popover
                                   id={idExpl}
                                   open={
@@ -1188,12 +1253,6 @@ const ForensicResults = (props) => {
                                   }
                                   anchorEl={anchorFilterExplanation}
                                   onClose={handleCloseFilterExplanation}
-                                  PaperProps={{
-                                    style: {
-                                      width: "300px",
-                                      fontSize: 14,
-                                    },
-                                  }}
                                   anchorOrigin={{
                                     vertical: "bottom",
                                     horizontal: "center",
@@ -1202,13 +1261,27 @@ const ForensicResults = (props) => {
                                     vertical: "top",
                                     horizontal: "center",
                                   }}
+                                  slotProps={{
+                                    paper: {
+                                      style: {
+                                        width: "300px",
+                                        fontSize: 14,
+                                      },
+                                    },
+                                  }}
                                 >
-                                  <Box p={3}>
-                                    <Grid2
+                                  <Box
+                                    sx={{
+                                      p: 3,
+                                    }}
+                                  >
+                                    <Grid
                                       container
                                       direction="row"
-                                      justifyContent="space-between"
-                                      alignItems="stretch"
+                                      sx={{
+                                        justifyContent: "space-between",
+                                        alignItems: "stretch",
+                                      }}
                                     >
                                       {value.id === "cagi_report" ? (
                                         <Typography variant="body1">
@@ -1225,8 +1298,12 @@ const ForensicResults = (props) => {
                                       <CloseIcon
                                         onClick={handleCloseFilterExplanation}
                                       />
-                                    </Grid2>
-                                    <Box m={1} />
+                                    </Grid>
+                                    <Box
+                                      sx={{
+                                        m: 1,
+                                      }}
+                                    />
 
                                     {value.id === "cagi_report" ? (
                                       <Typography variant="body2">
@@ -1242,40 +1319,71 @@ const ForensicResults = (props) => {
                                     )}
                                   </Box>
                                 </Popover>
-                              </Grid2>
+                              </Grid>
                             );
                           })}
-                        </Grid2>
-
+                        </Grid>
                         {valueTab !== 3 && <DetectionProgressBar />}
-
-                        <Box m={2} />
+                        <Box
+                          sx={{
+                            m: 2,
+                          }}
+                        />
                         <Alert
                           icon={<EmojiObjectsIcon fontSize="inherit" />}
                           severity="info"
                         >
                           {keyword("forensic_text_hoverinfo")}
                         </Alert>
-                        <Box mt={2} mb={2}>
+                        <Box
+                          sx={{
+                            mt: 2,
+                            mb: 2,
+                          }}
+                        >
                           <Divider />
                         </Box>
-
-                        <Box display="flex" mb={2}>
-                          <Box mr={2}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            mb: 2,
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              mr: 2,
+                            }}
+                          >
                             <InfoIcon style={{ color: "#333333" }} />
                           </Box>
                           <Box>{textDescription}</Box>
                         </Box>
-
-                        <Box display="flex" mb={2}>
-                          <Box mr={2}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            mb: 2,
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              mr: 2,
+                            }}
+                          >
                             <CheckCircleIcon style={{ color: "#8BC34A" }} />
                           </Box>
                           <Box>{textLook}</Box>
                         </Box>
-
-                        <Box display="flex" mb={2}>
-                          <Box mr={2}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            mb: 2,
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              mr: 2,
+                            }}
+                          >
                             <CancelIcon style={{ color: "#EB5757" }} />
                           </Box>
                           <Box>{textIgnore}</Box>
@@ -1284,8 +1392,8 @@ const ForensicResults = (props) => {
                     );
                   })}
                 </Card>
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
 
             <Popover
               id={gifPopover}
@@ -1294,19 +1402,6 @@ const ForensicResults = (props) => {
               onClose={closeGifPopover}
               anchorReference="anchorPosition"
               anchorPosition={{ top: 0, left: 0 }}
-              PaperProps={{
-                style: {
-                  width: "60vw",
-                  height: "70vh",
-                  marginTop: "5vh",
-                  marginLeft: "5vw",
-                  marginBottom: "5vh",
-                  marginRight: "5vw",
-                  fontSize: 14,
-                  justifyContent: "center",
-                  alignItems: "center",
-                },
-              }}
               anchorOrigin={{
                 vertical: "center",
                 horizontal: "center",
@@ -1315,13 +1410,34 @@ const ForensicResults = (props) => {
                 vertical: "center",
                 horizontal: "center",
               }}
+              slotProps={{
+                paper: {
+                  style: {
+                    width: "60vw",
+                    height: "70vh",
+                    marginTop: "5vh",
+                    marginLeft: "5vw",
+                    marginBottom: "5vh",
+                    marginRight: "5vw",
+                    fontSize: 14,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  },
+                },
+              }}
             >
-              <Box p={3}>
-                <Grid2
+              <Box
+                sx={{
+                  p: 3,
+                }}
+              >
+                <Grid
                   container
                   direction="row"
-                  justifyContent="space-between"
-                  alignItems="stretch"
+                  sx={{
+                    justifyContent: "space-between",
+                    alignItems: "stretch",
+                  }}
                 >
                   <Typography variant="h6" gutterBottom>
                     {keyword("forensic_title_export")}
@@ -1329,8 +1445,12 @@ const ForensicResults = (props) => {
                   <IconButton onClick={closeGifPopover}>
                     <CloseIcon />
                   </IconButton>
-                </Grid2>
-                <Box m={2} />
+                </Grid>
+                <Box
+                  sx={{
+                    m: 2,
+                  }}
+                />
                 <AnimatedGif
                   toolState={gifState}
                   homoImg1={imageDisplayed}

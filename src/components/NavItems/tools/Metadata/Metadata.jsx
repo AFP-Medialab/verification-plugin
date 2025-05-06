@@ -209,7 +209,7 @@ const Metadata = () => {
         icon={
           <imageMetadataTool.icon
             sx={{
-              fill: "#00926c",
+              fill: "var(--mui-palette-primary-main)",
               fontSize: "40px",
             }}
           />
@@ -219,12 +219,18 @@ const Metadata = () => {
         <Alert severity="info">{keyword("description_limitations")}</Alert>
         <Alert severity="info">{keywordTip("metadata_tip")}</Alert>
       </Stack>
-
-      <Box m={4} />
-
+      <Box
+        sx={{
+          m: 4,
+        }}
+      />
       <Card variant="outlined">
         <form>
-          <Box p={4}>
+          <Box
+            sx={{
+              p: 4,
+            }}
+          >
             <StringFileUploadField
               labelKeyword={keyword("metadata_content_input")}
               placeholderKeyword={keyword("metadata_content_input_placeholder")}
@@ -241,10 +247,12 @@ const Metadata = () => {
           </Box>
         </form>
       </Card>
-      <Box m={4} />
-
+      <Box
+        sx={{
+          m: 4,
+        }}
+      />
       {error && <Alert severity="error">{error}</Alert>}
-
       {getVideoMetadata.isPending && (
         <Fade in={getVideoMetadata.isPending} timeout={750}>
           <Alert icon={<CircularProgress size={20} />} severity="info">
@@ -252,15 +260,12 @@ const Metadata = () => {
           </Alert>
         </Fade>
       )}
-
       {getVideoMetadata.isError && (
         <Alert severity="error">{keyword("metadata_generic_error")}</Alert>
       )}
-
       {resultData && !resultIsImage && resultUrl && (
         <MetadataVideoResult metadata={resultData} videoSrc={resultUrl} />
       )}
-
       {resultData && resultIsImage && (
         <MetadataImageResult
           result={resultData}

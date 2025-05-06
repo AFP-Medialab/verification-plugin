@@ -1,4 +1,5 @@
-import { convertMomentToGMT } from "../../../Shared/DateTimePicker/convertToGMT";
+import { convertMomentToGMT } from "@Shared/DateTimePicker/convertToGMT";
+
 export function replaceAll(str, find, replace) {
   return str.replace(new RegExp(find, "g"), replace);
 }

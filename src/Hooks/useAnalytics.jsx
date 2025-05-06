@@ -1,12 +1,13 @@
-import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
+
 import {
   trackEvent,
   trackEventAnonymous,
   trackPageView,
   trackPageViewAnonymous,
-} from "../components/Shared/GoogleAnalytics/MatomoAnalytics";
-import { history } from "../components/Shared/History/History";
+} from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import { history } from "@Shared/History/History";
 
 export const useTrackPageView = (path, client_id, uid, toolName) => {
   const analytics = useSelector((state) => state.cookies.analytics);
