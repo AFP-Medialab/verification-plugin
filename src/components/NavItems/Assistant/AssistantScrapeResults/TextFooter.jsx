@@ -136,6 +136,17 @@ export function TextFooterPrevFactChecks({ navigate, keyword }) {
             </Link>
           </Typography>
         </Grid>
+
+        {/* expand/minimise text */}
+        <Grid size={1} align={"left"}>
+          <ExpandMinimise
+            classes={classes}
+            expandMinimiseText={expandMinimiseText}
+            displayExpander={displayExpander}
+            setExpanded={setExpanded}
+            expanded={expanded}
+          />
+        </Grid>
       </Grid>
     </Box>
   );

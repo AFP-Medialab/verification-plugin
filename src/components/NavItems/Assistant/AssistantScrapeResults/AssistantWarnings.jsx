@@ -46,7 +46,7 @@ const AssistantWarnings = () => {
       className={classes.assistantWarningBorder}
       id="warnings"
     >
-      <Grid container width="100%">
+      <Grid container>
         <Grid size={{ xs: 12 }} style={{ display: "flex" }}>
           <CardMedia>
             <Box
