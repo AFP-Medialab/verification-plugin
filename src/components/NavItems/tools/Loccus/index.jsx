@@ -10,6 +10,8 @@ import Stack from "@mui/material/Stack";
 
 import { AudioFile } from "@mui/icons-material";
 
+import { isValidUrl } from "@Shared/Utils/URLUtils";
+import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import axios from "axios";
 import useAuthenticatedRequest from "components/Shared/Authentication/useAuthenticatedRequest";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -23,8 +25,6 @@ import {
 } from "../../../../redux/actions/tools/loccusActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
-import { isValidUrl } from "../../../Shared/Utils/URLUtils";
-import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 import LoccusResults from "./loccusResults";
 
 const Loccus = () => {
@@ -331,7 +331,11 @@ const Loccus = () => {
         description={keywordAllTools("navbar_loccus_description")}
         icon={
           <AudioFile
-            style={{ fill: "#00926c", height: "40px", width: "auto" }}
+            style={{
+              fill: "var(--mui-palette-primary-main)",
+              height: "40px",
+              width: "auto",
+            }}
           />
         }
       />
@@ -341,11 +345,17 @@ const Loccus = () => {
         </Alert>
         <Alert severity="info">{keyword("loccus_tip")}</Alert>
       </Stack>
-
-      <Box m={3} />
-
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
       <Card variant="outlined">
-        <Box p={4}>
+        <Box
+          sx={{
+            p: 4,
+          }}
+        >
           <form>
             <StringFileUploadField
               labelKeyword={keyword("loccus_link")}
@@ -366,20 +376,29 @@ const Loccus = () => {
         </Box>
         {getAnalysisResultsForAudio.isPending && (
           <>
-            <Box m={2} />
-            <Box mt={3}>
+            <Box
+              sx={{
+                m: 2,
+              }}
+            />
+            <Box
+              sx={{
+                mt: 3,
+              }}
+            >
               <LinearProgress />
             </Box>
           </>
         )}
       </Card>
-
-      <Box m={3} />
-
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
       {getAnalysisResultsForAudio.isError && (
         <Alert severity="error">{keyword("loccus_generic_error")}</Alert>
       )}
-
       {result && (
         <LoccusResults
           result={result}

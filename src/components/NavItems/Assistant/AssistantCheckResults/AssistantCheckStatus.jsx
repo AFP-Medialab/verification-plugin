@@ -63,8 +63,11 @@ const AssistantCheckStatus = () => {
   );
 
   const machineGeneratedTextTitle = keyword("machine_generated_text_title");
-  const machineGeneratedTextFailState = useSelector(
-    (state) => state.assistant.machineGeneratedTextFail,
+  const machineGeneratedTextChunksFailState = useSelector(
+    (state) => state.assistant.machineGeneratedTextChunksFail,
+  );
+  const machineGeneratedTextSentencesFailState = useSelector(
+    (state) => state.assistant.machineGeneratedTextSentencesFail,
   );
 
   const multilingualStanceTitle = keyword("multilingual_stance_title");
@@ -82,7 +85,12 @@ const AssistantCheckStatus = () => {
     { title: persuasionTitle, failed: persuasionFailState },
     { title: subjectivityTitle, failed: subjectivityFailState },
     { title: prevFactChecksTitle, failed: prevFactChecksFailState },
-    { title: machineGeneratedTextTitle, failed: machineGeneratedTextFailState },
+    {
+      title: machineGeneratedTextTitle,
+      failed:
+        machineGeneratedTextChunksFailState ||
+        machineGeneratedTextSentencesFailState,
+    },
     {
       title: multilingualStanceTitle,
       failed: multilingualStanceFailState,
@@ -92,7 +100,12 @@ const AssistantCheckStatus = () => {
   return (
     <Alert severity="warning">
       <Typography component={"span"}>
-        <Box color={"orange"} fontStyle="italic">
+        <Box
+          sx={{
+            color: "orange",
+            fontStyle: "italic",
+          }}
+        >
           {keyword("status_subtitle")}
           <IconButton
             className={classes.assistantIconRight}
@@ -102,7 +115,6 @@ const AssistantCheckStatus = () => {
           </IconButton>
         </Box>
       </Typography>
-
       <Collapse in={stateExpanded} className={classes.assistantBackground}>
         <List disablePadding={true}>
           {failStates.map((value, key) =>

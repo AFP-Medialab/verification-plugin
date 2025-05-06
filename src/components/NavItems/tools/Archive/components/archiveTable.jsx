@@ -15,10 +15,10 @@ import Tooltip from "@mui/material/Tooltip";
 import DoneIcon from "@mui/icons-material/Done";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 
-import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
 import { prettifyLargeString } from "../utils";
 
 export const ArchiveTable = (props) => {

@@ -1,11 +1,11 @@
 /**
  * Make authenticated requests hook.
  */
-
 import { useStore } from "react-redux";
 
-import useAuthenticationAPI from "./useAuthenticationAPI";
 import axios from "axios";
+
+import useAuthenticationAPI from "./useAuthenticationAPI";
 
 /**
  * Authenticated service request hook.
@@ -16,15 +16,7 @@ export default function useAuthenticatedRequest() {
   const authenticationAPI = useAuthenticationAPI();
   const store = useStore();
 
-  /**
-   * Handle authentication on a service request.
-   *
-   * @param {Object} axiosConfig
-   * @param {*} successHandler
-   * @param {*} errorHandler
-   * @returns {Promise<Object>} Result as a Promise.
-   */
-  const authenticatedRequest = (axiosConfig) => {
+  return (axiosConfig) => {
     const userSession = store.getState().userSession;
     const userAuthenticated = userSession && userSession.userAuthenticated;
     const accessToken = userSession && userSession.accessToken;
@@ -68,6 +60,4 @@ export default function useAuthenticatedRequest() {
       return Promise.reject(error);
     });
   };
-
-  return authenticatedRequest;
 }

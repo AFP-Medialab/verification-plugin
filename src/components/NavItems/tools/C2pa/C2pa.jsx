@@ -312,7 +312,11 @@ const C2paData = () => {
         description={keyword("c2pa_description")}
       />
       <Card variant="outlined" sx={{ minWidth: 500 }}>
-        <Box p={4}>
+        <Box
+          sx={{
+            p: 4,
+          }}
+        >
           <form>
             <Stack direction="column" spacing={4}>
               <StringFileUploadField
@@ -351,7 +355,11 @@ const C2paData = () => {
               )}
 
               {isLoading && (
-                <Box mt={3}>
+                <Box
+                  sx={{
+                    mt: 3,
+                  }}
+                >
                   <LinearProgress />
                 </Box>
               )}
@@ -359,9 +367,11 @@ const C2paData = () => {
           </form>
         </Box>
       </Card>
-
-      <Box m={4} />
-
+      <Box
+        sx={{
+          m: 4,
+        }}
+      />
       <Stack direction="column" spacing={4}>
         {loadingProgress && (
           <Alert icon={<CircularProgress size={20} />} severity="info">
@@ -441,7 +451,11 @@ const C2paData = () => {
           </Accordion>
         )}
 
-        <Box m={4} />
+        <Box
+          sx={{
+            m: 4,
+          }}
+        />
       </Stack>
     </Box>
   );

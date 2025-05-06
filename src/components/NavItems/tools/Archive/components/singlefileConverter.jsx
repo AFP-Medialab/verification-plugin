@@ -1,15 +1,17 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-import LoadingButton from "@mui/lab/LoadingButton";
 import { downloadZip } from "client-zip";
 import dayjs from "dayjs";
 import { sha256 } from "hash-wasm";
+import { v4 as uuidv4 } from "uuid";
 import { CDXIndexer, WARCRecord, WARCSerializer } from "warcio";
 
 import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
@@ -31,8 +33,9 @@ import { prettifyLargeString } from "../utils";
  */
 const SinglefileConverter = (telegramURL) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
+  const userID = useSelector((state) => state.userSession.user.id);
 
-  const [fileInput, setFileInput] = useState(/** @type {File?} */ null);
+  const [fileInput, setFileInput] = useState(/** @type {?File} */ null);
   const [error, setError] = useState("");
   const [processingSinglefile, setProcessingSinglefile] = useState(false);
   const authenticatedRequest = useAuthenticatedRequest();
@@ -48,8 +51,7 @@ const SinglefileConverter = (telegramURL) => {
       method: "get",
     });
     if (resp.status === 200) {
-      const respJson = resp.data;
-      return respJson;
+      return resp.data;
     } else {
       setError("Error signing WACZ, please try again");
       throw new Error("Error signing WACZ, please try again");
@@ -75,8 +77,8 @@ const SinglefileConverter = (telegramURL) => {
   //   const publicKey = await crypto.subtle.exportKey("spki", keyPair.publicKey);
 
   //   const keys = {
-  //     private: encodeBase64(new Uint8Array(privateKey)),
-  //     public: encodeBase64(new Uint8Array(publicKey)),
+  //     private: new Uint8Array(privateKey).toBase64,
+  //     public: new Uint8Array(publicKey).toBase64,
   //   };
 
   //   const data = new TextEncoder().encode(hash);
@@ -88,7 +90,7 @@ const SinglefileConverter = (telegramURL) => {
   //     keyPair.privateKey,
   //     data,
   //   );
-  //   const signature = encodeBase64(new Uint8Array(signatureBuff));
+  //   const signature = new Uint8Array(signatureBuff).toBase64;
   //   return {
   //     signature,
   //     publicKey: keys.public,
@@ -265,13 +267,17 @@ const SinglefileConverter = (telegramURL) => {
           if (
             titleElem &&
             titleElem.length > 0 &&
-            titleElem[0].innerHTML != ""
+            titleElem[0].innerHTML !== ""
           ) {
             let title = titleElem[0].innerHTML;
             let retbytes = new TextEncoder().encode(title);
-            return new TextDecoder("utf-8")
-              .decode(retbytes)
-              .replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+            return (
+              new TextDecoder("utf-8")
+                .decode(retbytes)
+                // eslint-disable-next-line no-control-regex
+                .replace(/[\x00-\x1F\x7F-\x9F]/g, "")
+                .replace(" ", "")
+            );
           } else {
             return pageURL;
           }
@@ -301,9 +307,8 @@ const SinglefileConverter = (telegramURL) => {
             //For response/request
             // resbuf.set(res2, res0.byteLength);
             // resbuf.set(res1, res0.byteLength + res2.byteLength);
-            const gzipArch = resbuf;
 
-            const blob2 = new Blob([gzipArch], {
+            const blob2 = new Blob([resbuf], {
               type: "application/gzip",
             });
 
@@ -313,7 +318,7 @@ const SinglefileConverter = (telegramURL) => {
             const writableStream = new WritableStream(
               {
                 write(chunk) {
-                  return new Promise((resolve, reject) => {
+                  return new Promise((resolve) => {
                     makeWacz(blob2, chunk, pageInfo, recordDigest);
                     resolve();
                   });
@@ -359,6 +364,9 @@ const SinglefileConverter = (telegramURL) => {
         "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
       format: "WARC File Format 1.1",
       isPartOf: "singlefile2wacz.wacz",
+      "WARC-Creator-Info": userID + "@verification-plugin.eu",
+      "WARC-Creator-Agent":
+        "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
     };
     const filename = "singlefile2wacz.wacz#/archive/data.warc.gz";
 
@@ -367,33 +375,60 @@ const SinglefileConverter = (telegramURL) => {
       info,
     );
 
-    const serializedWARCInfo = await WARCSerializer.serialize(warcinfo);
+    const serializedWARCInfo_ = await WARCSerializer.serialize(warcinfo);
+    const trimmedWARCInfo = new TextDecoder().decode(serializedWARCInfo_);
+    const serializedWARCInfo = new TextEncoder().encode(trimmedWARCInfo);
 
     // Create a sample response
     const url = pageUrl;
     const date = pageDate;
-    const type = "response";
-    // const type = "resource";
-    const httpHeaders = {
-      date: dayjs(),
-      "content-type": 'text/html; charset="UTF-8"',
-    };
+    // const type = "response";
+    // const httpHeaders = {
+    //   date: dayjs(),
+    //   "Content-Type": "text/html;charset=UTF-8",
+    // };
 
     async function* content() {
       yield new TextEncoder().encode(fileContent);
     }
 
+    // For resource records
+    const type = "resource";
+
     const record = await WARCRecord.create(
       {
         url,
-        date,
-        type,
         warcVersion,
-        httpHeaders,
-        warcHeaders: { "content-type": 'text/html; charset="UTF-8"' },
+        warcHeaders: {
+          // "WARC-Target-URI":url,
+          "WARC-Date": date,
+          "WARC-Type": type,
+          "WARC-Record-ID": `<urn:uuid:${uuidv4()}>`,
+          "Content-Type": "text/html",
+          "WARC-Creator-Info": userID + "@verification-plugin.eu",
+          "WARC-Creator-Agent":
+            "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
+        },
       },
       content(),
     );
+    //For response records
+    // const type = response
+    // const record = await WARCRecord.create(
+    //   {
+    //     url,
+    //     warcVersion: "WARC/1.1",
+    //     httpHeaders,
+    //     warcHeaders: {
+    //       // "WARC-Target-URI":url,
+    //       "WARC-Date": date,
+    //       "WARC-Type": type,
+    //       "WARC-Record-ID": `<urn:uuid:${uuid()}>`,
+    //       "Content-Type": 'message/http',
+    //     },
+    //   },
+    //   content(),
+    // );
 
     const serializedRecord = await WARCSerializer.serialize(record);
     return [serializedWARCInfo, serializedRecord];
@@ -420,7 +455,7 @@ const SinglefileConverter = (telegramURL) => {
   return (
     <div>
       <Box>
-        <LoadingButton
+        <Button
           variant="outlined"
           loading={processingSinglefile}
           loadingPosition="start"
@@ -444,7 +479,7 @@ const SinglefileConverter = (telegramURL) => {
               e.target.value = null;
             }}
           />
-        </LoadingButton>
+        </Button>
       </Box>
       <Typography color={"error"}>{error}</Typography>
     </div>
