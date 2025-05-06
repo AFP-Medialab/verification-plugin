@@ -31,7 +31,8 @@ import {
   setImageVideoSelected,
   setInputSourceCredDetails,
   setInputUrl,
-  setMachineGeneratedTextDetails,
+  setMachineGeneratedTextChunksDetails,
+  setMachineGeneratedTextSentencesDetails,
   setMissingMedia,
   setMultilingualStanceDetails,
   setNeDetails,
@@ -120,10 +121,17 @@ function* getPrevFactChecksSaga() {
   );
 }
 
-function* getMachineGeneratedTextSaga() {
+function* getMachineGeneratedTextChunksSaga() {
   yield takeLatest(
     ["SET_SCRAPED_DATA", "AUTH_USER_LOGIN", "CLEAN_STATE"],
-    handleMachineGeneratedTextCall,
+    handleMachineGeneratedTextChunksCall,
+  );
+}
+
+function* getMachineGeneratedTextSentencesSaga() {
+  yield takeLatest(
+    ["SET_SCRAPED_DATA", "AUTH_USER_LOGIN", "CLEAN_STATE"],
+    handleMachineGeneratedTextSentencesCall,
   );
 }
 
@@ -582,7 +590,12 @@ function* handlePrevFactChecksCall(action) {
       );
 
       yield put(
-        setPrevFactChecksDetails(result.fact_checks, false, true, false),
+        setPrevFactChecksDetails(
+          result.fact_checks.length > 0 ? result.fact_checks : null,
+          false,
+          true,
+          false,
+        ),
       );
     }
   } catch {
@@ -590,27 +603,53 @@ function* handlePrevFactChecksCall(action) {
   }
 }
 
-function* handleMachineGeneratedTextCall(action) {
+function* handleMachineGeneratedTextChunksCall(action) {
   if (action.type === "CLEAN_STATE") return;
 
   try {
     const text = yield select((state) => state.assistant.urlText);
 
-    // this prevents the call from happening if not correct user status
-    const role = yield select((state) => state.userSession.user.roles);
-
-    if (text && role.includes("BETA_TESTER")) {
-      yield put(setMachineGeneratedTextDetails(null, true, false, false));
+    if (text) {
+      yield put(setMachineGeneratedTextChunksDetails(null, true, false, false));
 
       const result = yield call(
-        assistantApi.callMachineGeneratedTextService,
+        assistantApi.callMachineGeneratedTextChunksService,
         text.substring(0, URL_BUFFER_LIMIT),
       );
 
-      yield put(setMachineGeneratedTextDetails(result, false, true, false));
+      yield put(
+        setMachineGeneratedTextChunksDetails(result, false, true, false),
+      );
     }
-  } catch {
-    yield put(setMachineGeneratedTextDetails(null, false, false, true));
+  } catch (error) {
+    yield put(setMachineGeneratedTextChunksDetails(null, false, false, true));
+  }
+}
+
+function* handleMachineGeneratedTextSentencesCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const text = yield select((state) => state.assistant.urlText);
+
+    if (text) {
+      yield put(
+        setMachineGeneratedTextSentencesDetails(null, true, false, false),
+      );
+
+      const result = yield call(
+        assistantApi.callMachineGeneratedTextSentencesService,
+        text.substring(0, URL_BUFFER_LIMIT),
+      );
+
+      yield put(
+        setMachineGeneratedTextSentencesDetails(result, false, true, false),
+      );
+    }
+  } catch (error) {
+    yield put(
+      setMachineGeneratedTextSentencesDetails(null, false, false, true),
+    );
   }
 }
 
@@ -1199,7 +1238,8 @@ export default function* assistantSaga() {
     fork(getPersuasionSaga),
     fork(getSubjectivitySaga),
     fork(getPrevFactChecksSaga),
-    fork(getMachineGeneratedTextSaga),
     fork(getMultilingualStanceSaga),
+    fork(getMachineGeneratedTextChunksSaga),
+    fork(getMachineGeneratedTextSentencesSaga),
   ]);
 }
