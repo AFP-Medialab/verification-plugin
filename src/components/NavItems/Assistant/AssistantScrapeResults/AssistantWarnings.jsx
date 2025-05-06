@@ -13,19 +13,31 @@ import { WarningAmber } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { ROLES } from "constants/roles";
 
 import { setWarningExpanded } from "../../../../redux/actions/tools/assistantActions";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import DbkfMediaResults from "../AssistantCheckResults/DbkfMediaResults";
 import DbkfTextResults from "../AssistantCheckResults/DbkfTextResults";
+import PreviousFactCheckResults from "../AssistantCheckResults/PreviousFactCheckResults";
 
 const AssistantWarnings = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const classes = useMyStyles();
   const dispatch = useDispatch();
 
+  // checking if user logged in
+  const role = useSelector((state) => state.userSession.user.roles);
+
+  // state
   const warningExpanded = useSelector(
     (state) => state.assistant.warningExpanded,
+  );
+  const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
+  const dbkfImageMatch = useSelector((state) => state.assistant.dbkfImageMatch);
+  const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
+  const prevFactChecksResult = useSelector(
+    (state) => state.assistant.prevFactChecksResult,
   );
 
   return (
@@ -74,14 +86,15 @@ const AssistantWarnings = () => {
             in={warningExpanded}
             className={classes.assistantBackground}
           >
-            <Box
-              sx={{
-                m: 1,
-              }}
-            />
-            <DbkfTextResults />
+            <Box m={1} />
 
-            <DbkfMediaResults />
+            {dbkfTextMatch && <DbkfTextResults />}
+
+            {(dbkfImageMatch || dbkfVideoMatch) && <DbkfMediaResults />}
+
+            {role.includes(ROLES.BETA_TESTER) && prevFactChecksResult && (
+              <PreviousFactCheckResults />
+            )}
           </Collapse>
         </Grid>
       </Grid>
