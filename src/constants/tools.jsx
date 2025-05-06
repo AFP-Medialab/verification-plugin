@@ -523,7 +523,7 @@ const machineGeneratedText = new Tool(
   mgtSvgIcon,
   TOOLS_CATEGORIES.SEARCH,
   null,
-  null,
+  [ROLES.EXTRA_FEATURE],
   "mgt",
   TOOL_GROUPS.VERIFICATION,
   <MachineGeneratedText />,
