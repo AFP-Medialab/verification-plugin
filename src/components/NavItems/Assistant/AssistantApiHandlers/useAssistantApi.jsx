@@ -45,15 +45,35 @@ export default function assistantApiCalls() {
   };
 
   const callNamedEntityService = async (text, lang) => {
-    const namedEntityResult = await axios.post(
-      assistantEndpoint + "gcloud/named-entity",
-      {
-        content: text,
-        lang: lang,
-      },
-    );
-
-    return namedEntityResult.data;
+    try {
+      const namedEntityResult = await axios.post(
+        assistantEndpoint + "gcloud/named-entity",
+        {
+          content: text,
+          lang: lang,
+        },
+      );
+      const query = `SELECT (REPLACE(STR(?concept), "http://www.wikidata.org/entity/", "") AS ?conceptID)
+                          (REPLACE(STR(?article), "https://en.wikipedia.org/wiki/", "http://dbpedia.org/page/") AS ?articleID)
+                   WHERE {
+                     VALUES ?concept { wd:Q142 wd:Q183 }
+                     ?article schema:about ?concept .
+                     ?article schema:isPartOf <https://en.wikipedia.org/> .
+                   }`;
+      const mappingResult = await axios.get(
+        `https://query.wikidata.org/sparql?format=json&query=${encodeURIComponent(query)}`,
+      );
+      const bindings = mappingResult.data.results.bindings;
+      const mapping = {};
+      for (const i in bindings) {
+        const entity = bindings[i];
+        mapping[entity.conceptID.value] = entity.articleID.value;
+      }
+      console.log("MAPPING", mapping);
+      return namedEntityResult.data;
+    } catch (error) {
+      console.log("ERROR", error);
+    }
   };
 
   const callOcrService = async (data, script, mode) => {
