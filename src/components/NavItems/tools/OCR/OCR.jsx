@@ -168,6 +168,7 @@ const OCR = () => {
       undefined,
       preprocessingSuccess,
       preprocessingError,
+      4000000,
     );
   };
 
