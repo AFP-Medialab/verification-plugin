@@ -332,6 +332,21 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       console.log(t);
     } else if (request.prompt === "delete") {
       db.delete().then(() => db.open());
+    } else if (request.prompt === "deleteTweets") {
+      console.log("del");
+      const x = await db.tweets
+        .where("collectionID")
+        .equalsIgnoreCase(request.collection)
+        .toArray();
+      console.log(x);
+      await db.tweets
+        .where("collectionID")
+        .equalsIgnoreCase(request.collection)
+        .delete();
+      await db.collections
+        .where("id")
+        .equalsIgnoreCase(request.collection)
+        .delete();
     } else if (request.prompt === "getRecordingInfo") {
       const t = await db.collections.toArray();
       if (!t.includes("Default Collection")) {

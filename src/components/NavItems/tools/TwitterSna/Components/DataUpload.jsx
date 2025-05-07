@@ -6,6 +6,8 @@ import Checkbox from "@mui/material/Checkbox";
 import Collapse from "@mui/material/Collapse";
 import Grid2 from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Table from "@mui/material/Table";
@@ -31,8 +33,6 @@ const CheckboxTable = ({
   handleFileChange,
   handleUploadClick,
   uploadedFile,
-  deleteTweets,
-  downloadTweetCSV,
   openRowIds,
   setOpenRowIds,
   rows,
@@ -48,12 +48,18 @@ const CheckboxTable = ({
   setSearchFilter,
   expanded,
   setExpanded,
+  dlAnchorEl,
+  setDlAnchorEl,
+  dataSources,
+  setDataSources,
 }) => {
   const toggleCollapse = (id) => {
     setOpenRowIds((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
     );
   };
+
+  const open = Boolean(dlAnchorEl);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -83,14 +89,58 @@ const CheckboxTable = ({
   const handleRemove = (id) => {
     setRows(rows.filter((row) => row.id !== id));
     setSelected(selected.filter((item) => item !== id));
+    if (id.includes("tweets~")) {
+      console.log(id);
+      let colID = dataSources.filter((x) => x.id === id)[0].name;
+      chrome.runtime.sendMessage({ prompt: "deleteTweets", collection: colID });
+    }
+    setDataSources(dataSources.filter((x) => x.id != id));
   };
 
   const handleSettings = (id) => {
     // Placeholder
   };
 
+  const downloadTweetCSV = () => {
+    let id = dlAnchorEl.getAttribute("rowkey");
+    let selectedData = dataSources.filter((source) => source.id === id)[0];
+    let headers = selectedData.headers.join(",");
+    let csvData = selectedData.content
+      .map((obj) =>
+        Object.values(obj).map(
+          (y) =>
+            `"${y.toString().replaceAll('"', '""').replaceAll("\n", " ")}"`,
+        ),
+      )
+      .join("\n");
+
+    let csvFile = headers + `\n` + csvData;
+
+    const blob = new Blob([csvFile], { type: "text/csv;charset=utf-8;" });
+    const a = document.createElement("a");
+    const blobUrl = URL.createObjectURL(blob);
+    a.href = blobUrl;
+    a.download = `${selectedData.name}_export.csv`;
+    a.click();
+    setDlAnchorEl(null);
+  };
+
+  const downloadTweetsJson = () => {
+    let id = dlAnchorEl.getAttribute("rowkey");
+    let selectedData = dataSources.filter((source) => source.id === id)[0];
+    let dl = JSON.stringify(selectedData.content);
+    const blob = new Blob([dl], { type: "application/json;charset=utf-8;" });
+    const a = document.createElement("a");
+    const blobUrl = URL.createObjectURL(blob);
+    a.href = blobUrl;
+    a.download = `${selectedData.name}_export.json`;
+    a.click();
+    setDlAnchorEl(null);
+  };
+
   const handleDownload = (id) => {
-    // Placeholder
+    console.log(id);
+    setDlAnchorEl(document.getElementById("dl_button" + id));
   };
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
@@ -152,11 +202,36 @@ const CheckboxTable = ({
                           <SettingsIcon />
                         </IconButton>
                         <IconButton
-                          onClick={() => handleDownload(row.id)}
+                          onClick={() => {
+                            handleDownload(row.id);
+                          }}
                           aria-label="download"
+                          id={"dl_button" + row.id}
+                          aria-controls={
+                            open ? "basic-menu" + row.id : undefined
+                          }
+                          aria-haspopup="true"
+                          aria-expanded={open ? "true" : undefined}
+                          rowkey={row.id}
                         >
                           <DownloadIcon />
                         </IconButton>
+                        <Menu
+                          id={"basic-menu" + row.id}
+                          anchorEl={dlAnchorEl}
+                          open={open}
+                          onClose={() => setDlAnchorEl(null)}
+                          MenuListProps={{
+                            "aria-labelledby": "basic-button",
+                          }}
+                        >
+                          <MenuItem onClick={() => downloadTweetCSV()}>
+                            CSV
+                          </MenuItem>
+                          <MenuItem onClick={() => downloadTweetsJson()}>
+                            JSON
+                          </MenuItem>
+                        </Menu>
                         <IconButton
                           onClick={() => handleRemove(row.id)}
                           aria-label="delete"

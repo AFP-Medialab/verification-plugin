@@ -446,33 +446,6 @@ const TwitterSnaV2 = () => {
     getTweets();
   }, []);
 
-  const downloadTweetCSV = () => {
-    let csvData = allTweets
-      .filter((v) => v.links.length > 0)
-      .map((obj, idx) => [
-        idx,
-        obj.username,
-        obj.id,
-        obj.links[0],
-        dayjs(obj.date).unix(),
-      ])
-      .join("\n");
-
-    let csvFile =
-      ` ,account_id,content_id,object_id,timestamp_share\n` + csvData;
-
-    const blob = new Blob([csvFile], { type: "text/csv;charset=utf-8;" });
-    const a = document.createElement("a");
-    const blobUrl = URL.createObjectURL(blob);
-    a.href = blobUrl;
-    a.download = `COOR_Test.csv`;
-    a.click();
-  };
-
-  const deleteTweets = () => {
-    chrome.runtime.sendMessage({ prompt: "deleteTweets" });
-  };
-
   const CommunityForceGraph = ({ rawData }) => {
     const graph = new MultiGraph();
     rawData.nodes.forEach((node, idx) => {
@@ -655,29 +628,29 @@ const TwitterSnaV2 = () => {
     return <CommunityForceGraph rawData={data}></CommunityForceGraph>;
     // return <LabeledGraph graphData={data}></LabeledGraph>;
     // For 2D Graph
-    return (
-      <>
-        <CardHeader title="COOR Graph" />
-        <ForceGraph2D
-          width={1400}
-          height={700}
-          ref={fgRef}
-          graphData={data}
-          nodeAutoColorBy="id"
-          nodeLabel="id"
-          nodeCanvasObjectMode={() => "after"}
-          nodeCanvasObject={(node, ctx, globalScale) => {
-            const label = node.id;
-            const fontSize = 12 / globalScale;
-            ctx.font = `${fontSize}px Sans-Serif`;
-            ctx.fillStyle = "black";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText(label, node.x, node.y);
-          }}
-        />
-      </>
-    );
+    // return (
+    //   <>
+    //     <CardHeader title="COOR Graph" />
+    //     <ForceGraph2D
+    //       width={1400}
+    //       height={700}
+    //       ref={fgRef}
+    //       graphData={data}
+    //       nodeAutoColorBy="id"
+    //       nodeLabel="id"
+    //       nodeCanvasObjectMode={() => "after"}
+    //       nodeCanvasObject={(node, ctx, globalScale) => {
+    //         const label = node.id;
+    //         const fontSize = 12 / globalScale;
+    //         ctx.font = `${fontSize}px Sans-Serif`;
+    //         ctx.fillStyle = "black";
+    //         ctx.textAlign = "center";
+    //         ctx.textBaseline = "middle";
+    //         ctx.fillText(label, node.x, node.y);
+    //       }}
+    //     />
+    //   </>
+    // );
   };
 
   const [metaSelected, setMetaSelected] = useState(false);
@@ -694,19 +667,6 @@ const TwitterSnaV2 = () => {
     setCustomExpanded,
     metaSelected,
     setMetaSelected,
-  };
-
-  const tableProps = {
-    allTweets,
-    page,
-    setPage,
-    rowsPerPage,
-    setRowsPerPage,
-    searchFilter,
-    setSearchFilter,
-    expanded,
-    setExpanded,
-    headers,
   };
 
   const [selected, setSelected] = useState([]);
@@ -733,27 +693,13 @@ const TwitterSnaV2 = () => {
 
   const [openRowIds, setOpenRowIds] = useState([]);
 
-  const dataProps = {
-    inputRef,
-    handleFileChange,
-    handleUploadClick,
-    uploadedFile,
-    allTweets,
-    deleteTweets,
-    downloadTweetCSV,
-    selected,
-    setSelected,
-    rows,
-    setRows,
-  };
+  const [dlAnchorEl, setDlAnchorEl] = useState(null);
 
   const checkboxTableProps = {
     inputRef,
     handleFileChange,
     handleUploadClick,
     uploadedFile,
-    deleteTweets,
-    downloadTweetCSV,
     openRowIds,
     setOpenRowIds,
     rows,
@@ -770,6 +716,10 @@ const TwitterSnaV2 = () => {
     expanded,
     setExpanded,
     headers,
+    dlAnchorEl,
+    setDlAnchorEl,
+    dataSources,
+    setDataSources,
   };
 
   const [plot, setPlot] = useState(undefined);
@@ -815,9 +765,16 @@ const TwitterSnaV2 = () => {
     setHashtagGraph,
   };
 
+  const [wordCloud, setWordCloud] = useState(undefined);
+  const [langSelect, setLangSelect] = useState("ENG");
+
   const textAnalysisProps = {
     dataSources,
     selected,
+    wordCloud,
+    setWordCloud,
+    langSelect,
+    setLangSelect,
   };
   const SNATabProps = {
     SNATab,

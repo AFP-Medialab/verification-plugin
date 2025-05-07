@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
@@ -33,7 +33,16 @@ import { MAX_FONT_SIZE, MIN_FONT_SIZE, getStoredFontSize } from "../../theme";
 import Languages from "../NavItems/languages/languages";
 import ColorModeSelect from "./ColorModeSelect";
 
-const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
+const SettingsDrawer = ({
+  isPanelOpen,
+  handleClosePanel,
+  recording,
+  setRecording,
+  collections,
+  setCollections,
+  selectedCollection,
+  setSelectedCollection,
+}) => {
   const keyword = i18nLoadNamespace("components/NavBar");
 
   const dispatch = useDispatch();
@@ -44,12 +53,8 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
   const cookiesUsage = useSelector((state) => state.cookies.active);
   const gaUsage = useSelector((state) => state.cookies.analytics);
 
-  const [recording, setRecording] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
-  const [collections, setCollections] = useState(["Default Collection"]);
-  const [selectedCollection, setSelectedCollection] =
-    useState("Default Collection");
   const [newCollectionName, setNewCollectionName] = useState("");
 
   const handleAddCollection = () => {

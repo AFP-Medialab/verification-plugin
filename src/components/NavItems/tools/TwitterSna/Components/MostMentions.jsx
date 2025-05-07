@@ -132,7 +132,21 @@ const MostMentions = (props) => {
           {" "}
           Users most mentioned in the collected tweets (TWITTER ONLY){" "}
         </Typography>
-        <Button onClick={getMentions}>Show graph</Button>
+        <Button
+          variant="outlined"
+          sx={{
+            color: "green",
+            borderColor: "green",
+            backgroundColor: "transparent",
+            "&:hover": {
+              backgroundColor: "rgba(0, 128, 0, 0.1)", // light green on hover
+              borderColor: "darkgreen",
+            },
+          }}
+          onClick={getMentions}
+        >
+          Show graph
+        </Button>
       </Stack>
       <Box p={2} />
       {mentionGraph ? mentionGraph : <></>}

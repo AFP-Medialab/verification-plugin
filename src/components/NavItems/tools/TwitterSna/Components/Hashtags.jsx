@@ -128,7 +128,21 @@ const Hashtags = (props) => {
           {" "}
           Hashtags used in collection and their frequency{" "}
         </Typography>
-        <Button onClick={analyzeHashtags}>Show graph</Button>
+        <Button
+          variant="outlined"
+          sx={{
+            color: "green",
+            borderColor: "green",
+            backgroundColor: "transparent",
+            "&:hover": {
+              backgroundColor: "rgba(0, 128, 0, 0.1)", // light green on hover
+              borderColor: "darkgreen",
+            },
+          }}
+          onClick={analyzeHashtags}
+        >
+          Show graph
+        </Button>
       </Stack>
       {hashtagGraph ? hashtagGraph : <></>}
     </>

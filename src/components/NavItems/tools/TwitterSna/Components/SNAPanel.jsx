@@ -66,7 +66,7 @@ const SNAPanel = (props) => {
             variant="scrollable"
             scrollButtons="auto"
           >
-            <Tab label="Temporal distribution" {...a11yProps(0)} />
+            <Tab label="Timeline distribution" {...a11yProps(0)} />
             <Tab label="Account activity" {...a11yProps(1)} />
             <Tab label="Coordinated behavior" {...a11yProps(2)} />
             <Tab label="Most mentioned users" {...a11yProps(3)} />

@@ -321,7 +321,21 @@ const AccountActivity = (props) => {
               .map((x) => x.item)}
           </Select>
         </FormControl>
-        <Button onClick={measureActivity}>Show graph</Button>
+        <Button
+          variant="outlined"
+          sx={{
+            color: "green",
+            borderColor: "green",
+            backgroundColor: "transparent",
+            "&:hover": {
+              backgroundColor: "rgba(0, 128, 0, 0.1)", // light green on hover
+              borderColor: "darkgreen",
+            },
+          }}
+          onClick={measureActivity}
+        >
+          Show graph
+        </Button>
       </Stack>
       <Box p={2} />
       {activityChart ? activityChart : <></>}
