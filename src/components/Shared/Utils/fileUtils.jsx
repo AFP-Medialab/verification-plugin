@@ -61,14 +61,18 @@ export const getFileTypeFromFileObject = async (file) => {
  * @param userRole The user role
  * @returns {boolean} True if the file is too large
  */
-export const isImageFileTooLarge = (imageFile, userRole) => {
+export const isImageFileTooLarge = (
+  imageFile,
+  userRole,
+  max_image_file_size = MAX_IMAGE_FILE_SIZE,
+) => {
   if (!imageFile.type.includes("image")) {
     throw new Error("Invalid file type. This file is not an image.");
   }
 
   return (
     (!userRole || !userRole.includes(ROLES.EXTRA_FEATURE)) &&
-    imageFile.size >= MAX_IMAGE_FILE_SIZE
+    imageFile.size >= max_image_file_size
   );
 };
 
@@ -122,10 +126,14 @@ export const preprocessFileUpload = (
   preprocessingFn,
   onSuccess,
   onError,
+  max_image_file_size = MAX_IMAGE_FILE_SIZE,
 ) => {
   const fileType = file.type.split("/")[0];
 
-  if (fileType === FILE_TYPES.image && isImageFileTooLarge(file, role)) {
+  if (
+    fileType === FILE_TYPES.image &&
+    isImageFileTooLarge(file, role, max_image_file_size)
+  ) {
     onError();
     return undefined;
   } else if (fileType === FILE_TYPES.audio && isAudioFileTooLarge(file, role)) {
