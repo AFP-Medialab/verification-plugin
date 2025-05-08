@@ -1,24 +1,14 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import {
-  toggleHumanRightsCheckBox,
-  toggleUnlockExplanationCheckBox,
-} from "../../../redux/actions";
-import {
-  toggleAnalyticsCheckBox,
-  toggleState,
-} from "../../../redux/reducers/cookiesReducers";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import afpImage from "./images/Logo-AFP-384.png";
@@ -31,34 +21,23 @@ const About = () => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/About");
   const currentLang = useSelector((state) => state.language);
-  const humanRights = useSelector((state) => state.humanRightsCheckBox);
-  const interactiveExplanation = useSelector(
-    (state) => state.interactiveExplanation,
-  );
-  const cookiesUsage = useSelector((state) => state.cookies.active);
-  const gaUsage = useSelector((state) => state.cookies.analytics);
-  const dispatch = useDispatch();
-
-  const additionalDangerousContent = () => {
-    let res = [];
-    let cpt = 1;
-    while (keyword("additional_about_" + cpt) !== "") {
-      res.push("additional_about_" + cpt);
-      cpt++;
-    }
-    return res;
-  };
 
   return (
-    <Paper className={classes.root}>
+    <Paper variant="outlined" className={classes.root}>
       <Box
-        justifyContent="center"
-        display="flex"
-        flexDirection="column"
         align={"center"}
+        sx={{
+          justifyContent: "center",
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
         <CustomTile text={keyword("about_title")} />
-        <Box m={3} />
+        <Box
+          sx={{
+            m: 3,
+          }}
+        />
         <Typography variant={"body2"} align={"justify"}>
           {keyword("source_part_1")}
           {keyword("mit_licence_link_label")}
@@ -72,27 +51,30 @@ const About = () => {
           <Link href={"mailto:" + keyword("invid_email")}>
             {keyword("invid_email")}
           </Link>
-          {/*
-                        keyword("feedBack_part_2")
-                    }
-                    {
-                            keyword("feedback_widget")
-                    }
-                    {
-                        keyword("feedback_part_3")
-                    */}
         </Typography>
-        <Box m={3} />
+        <Box
+          sx={{
+            m: 3,
+          }}
+        />
         <Typography variant={"h6"}>{keyword("disclaimer")}</Typography>
         <Typography variant={"body2"} align={"justify"}>
           {keyword("disclaimer_text")}
         </Typography>
-        <Box m={3} />
+        <Box
+          sx={{
+            m: 3,
+          }}
+        />
         <Typography variant={"h6"}>{keyword("privacy")}</Typography>
         <Typography variant={"body2"} align={"justify"}>
           {keyword("privacy_text")}
         </Typography>
-        <Box m={3} />
+        <Box
+          sx={{
+            m: 3,
+          }}
+        />
         <Typography variant={"body2"} align={"justify"}>
           {keyword("info_weverify_part_1")}
           <Link target="_blank" href={keyword("info_weverify_link_website")}>
@@ -102,7 +84,6 @@ const About = () => {
           <Link target="_blank" href={keyword("info_invid_link_twitter")}>
             {keyword("twitter")}
           </Link>
-          {/*keyword("info_weverify_part_3")*/}
         </Typography>
         <Typography variant={"body2"} align={"justify"}>
           {keyword("info_invid_part_1")}
@@ -144,104 +125,49 @@ const About = () => {
             {keyword("arij_link_label")}
           </Link>
         </Typography>
-        {/*additionalDangerousContent().map((value, key) => {
-          return (
-            <div
-              className={"content"}
-              key={key}
-              dangerouslySetInnerHTML={{ __html: value }}
-            ></div>
-          );
-        })*/}
       </Box>
-      <Grid2
+      <Grid
         container
         direction="row"
         spacing={2}
-        justifyContent="center"
-        alignItems="center"
-        mb={4}
+        sx={{
+          justifyContent: "center",
+          alignItems: "center",
+          mb: 4,
+        }}
       >
-        <Grid2 size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <img className={classes.AboutMedia} src={afpImage} alt={afpImage} />
-        </Grid2>
-        <Grid2>
+        </Grid>
+        <Grid>
           <img className={classes.AboutMedia} src={itiImage} alt={itiImage} />
-        </Grid2>
-        <Grid2>
+        </Grid>
+        <Grid>
           <img
             className={classes.AboutMedia}
             src={europeImage}
             alt={europeImage}
           />
-        </Grid2>
+        </Grid>
         {currentLang === "ar" ? (
           <>
-            <Grid2 size={{ xs: 6 }}>
+            <Grid size={{ xs: 6 }}>
               <img
                 className={classes.AboutMediaSmall}
                 src={afcnLogo}
                 alt={afcnLogo}
               />
-            </Grid2>
-            <Grid2 size={{ xs: 6 }}>
+            </Grid>
+            <Grid size={{ xs: 6 }}>
               <img
                 className={classes.AboutMediaSmall}
                 src={arijLogo}
                 alt={arijLogo}
               />
-            </Grid2>
+            </Grid>
           </>
         ) : null}
-      </Grid2>
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={humanRights}
-            onChange={() => dispatch(toggleHumanRightsCheckBox())}
-            value="checkedBox"
-            color="primary"
-          />
-        }
-        label={keyword("about_human_rights")}
-      />
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={interactiveExplanation}
-            onChange={() => dispatch(toggleUnlockExplanationCheckBox())}
-            value="checkedBox"
-            color="primary"
-          />
-        }
-        label={keyword("quiz_unlock_explanations")}
-      />
-      {cookiesUsage !== null && (
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={cookiesUsage}
-              onChange={() => dispatch(toggleState(cookiesUsage))}
-              value="checkedBox"
-              color="primary"
-            />
-          }
-          label={keyword("storage_usage")}
-        />
-      )}
-      {gaUsage !== null && (
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={gaUsage}
-              onChange={() => dispatch(toggleAnalyticsCheckBox(gaUsage))}
-              value="checkedBox"
-              color="primary"
-            />
-          }
-          label={keyword("cookies_usage")}
-        />
-      )}
+      </Grid>
     </Paper>
   );
 };

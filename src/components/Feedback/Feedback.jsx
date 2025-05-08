@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Fab from "@mui/material/Fab";
 import Fade from "@mui/material/Fade";
 import IconButton from "@mui/material/IconButton";
@@ -16,7 +17,6 @@ import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
 
-import LoadingButton from "@mui/lab/LoadingButton";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const API_URL = process.env.REACT_APP_MY_WEB_HOOK_URL;
@@ -143,10 +143,15 @@ const Feedback = () => {
   return (
     <Stack
       direction="column"
-      justifyContent="flex-end"
-      alignItems="flex-end"
       spacing={2}
-      sx={{ position: "fixed", bottom: 20, right: 15, zIndex: 9998 }}
+      sx={{
+        justifyContent: "flex-end",
+        alignItems: "flex-end",
+        position: "fixed",
+        bottom: 20,
+        right: 15,
+        zIndex: 9998,
+      }}
     >
       <Box ref={containerRef}>
         <Slide
@@ -163,7 +168,11 @@ const Feedback = () => {
               unmountOnExit
             >
               {
-                <Box width={380}>
+                <Box
+                  sx={{
+                    width: 380,
+                  }}
+                >
                   <Paper
                     component="form"
                     elevation={6}
@@ -171,34 +180,43 @@ const Feedback = () => {
                   >
                     <Stack
                       direction="row"
-                      justifyContent="space-between"
-                      alignItems="center"
                       spacing={0}
-                      height={50}
-                      pl={1}
-                      pr={1}
+                      sx={{
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        height: 50,
+                        pl: 1,
+                        pr: 1,
+                      }}
                     >
                       <Stack
                         direction="row"
-                        justifyContent="flex-start"
-                        alignItems="center"
                         spacing={2}
+                        sx={{
+                          justifyContent: "flex-start",
+                          alignItems: "center",
+                        }}
                       >
-                        <QuestionAnswerOutlinedIcon sx={{ color: "white" }} />
-                        <Typography color="white">
-                          {keyword("title")}
-                        </Typography>
+                        <QuestionAnswerOutlinedIcon
+                          sx={{ color: "var(--mui-palette-primary-main)" }}
+                        />
+                        <Typography variant="h6">{keyword("title")}</Typography>
                       </Stack>
                       <IconButton
                         key="close"
                         aria-label="close"
                         onClick={() => setDisplayCard(false)}
                       >
-                        <CloseIcon sx={{ color: "white" }} />
+                        <CloseIcon />
                       </IconButton>
                     </Stack>
 
-                    <Stack spacing={2} p={2}>
+                    <Stack
+                      spacing={2}
+                      sx={{
+                        p: 2,
+                      }}
+                    >
                       <Stack>
                         <Typography color="primary">
                           {keyword("type")}
@@ -265,21 +283,21 @@ const Feedback = () => {
                           onChange={(e) => setMessage(e.target.value)}
                         />
                       </Stack>
-                      <LoadingButton
+                      <Button
                         type="submit"
                         fullWidth
                         variant="contained"
                         disabled={message && !isFeedbackSending ? false : true}
                         loading={isFeedbackSending}
                         onClick={(e) => {
-                          e.preventDefault(),
-                            handleClick(e, message, messageType);
+                          e.preventDefault();
+                          handleClick(e, message, messageType);
                         }}
                       >
                         {isFeedbackSent
                           ? keyword("sent")
                           : keyword("submit_text")}
-                      </LoadingButton>
+                      </Button>
                     </Stack>
                   </Paper>
                 </Box>

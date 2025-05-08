@@ -13,14 +13,12 @@ import { setError } from "redux/reducers/errorReducer";
 import { imageDeepfake } from "../../../../constants/tools";
 import { resetDeepfake } from "../../../../redux/actions/tools/deepfakeImageActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import UseGetDeepfake from "./Hooks/useGetDeepfake";
 import DeepfakeResultsImage from "./Results/DeepfakeResultsImage";
 
 const Deepfake = () => {
   //const { url } = useParams();
-  const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
@@ -105,16 +103,25 @@ const Deepfake = () => {
       <HeaderTool
         name={keywordAllTools("navbar_deepfake_image")}
         description={keywordAllTools("navbar_deepfake_image_description")}
-        icon={<imageDeepfake.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
+        icon={
+          <imageDeepfake.icon
+            sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+          />
+        }
       />
-
       <Alert severity="warning">{keywordWarning("warning_beta")}</Alert>
-
-      <Box m={3} />
-
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
       <Card variant="outlined">
         {selectedMode !== "" && (
-          <Box m={4}>
+          <Box
+            sx={{
+              m: 4,
+            }}
+          >
             <form>
               <StringFileUploadField
                 labelKeyword={keyword("deepfake_image_link")}
@@ -131,18 +138,28 @@ const Deepfake = () => {
                 preprocessLocalFile={preprocessImage}
               />
             </form>
-            <Box m={2} />
+            <Box
+              sx={{
+                m: 2,
+              }}
+            />
             {isLoading && (
-              <Box mt={3}>
+              <Box
+                sx={{
+                  mt: 3,
+                }}
+              >
                 <LinearProgress />
               </Box>
             )}
           </Box>
         )}
       </Card>
-
-      <Box m={3} />
-
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
       {result && (
         <DeepfakeResultsImage
           result={result}

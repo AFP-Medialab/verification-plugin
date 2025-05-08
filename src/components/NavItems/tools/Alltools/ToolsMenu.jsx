@@ -10,7 +10,7 @@ import Card from "@mui/material/Card";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Snackbar from "@mui/material/Snackbar";
 import SvgIcon from "@mui/material/SvgIcon";
 import Tab from "@mui/material/Tab";
@@ -288,6 +288,7 @@ const ToolsMenu = () => {
           indicatorColor={"primary"}
           variant="scrollable"
           scrollButtons="auto"
+          allowScrollButtonsMobile
         >
           {categoriesAllowedForUser.map((category, index) => {
             //  if(category.value.length !==0){
@@ -318,7 +319,7 @@ const ToolsMenu = () => {
 
             return (
               <TabPanel value={value} index={index} key={index}>
-                <Grid2
+                <Grid
                   container
                   sx={{
                     justifyContent: "flex-start",
@@ -328,7 +329,13 @@ const ToolsMenu = () => {
                 >
                   {tools.map((tool, key) => {
                     const element = (
-                      <Grid2 size={{ xs: 4, lg: 3 }} key={key} minWidth="200px">
+                      <Grid
+                        size={{ xs: 4, lg: 3 }}
+                        key={key}
+                        sx={{
+                          minWidth: "200px",
+                        }}
+                      >
                         <ToolsMenuItem
                           tool={tool}
                           onClick={() =>
@@ -336,7 +343,7 @@ const ToolsMenu = () => {
                           }
                           key={key}
                         />
-                      </Grid2>
+                      </Grid>
                     );
                     if (
                       tool.rolesNeeded &&
@@ -351,17 +358,14 @@ const ToolsMenu = () => {
                       return element;
                     }
                   })}
-                </Grid2>
+                </Grid>
               </TabPanel>
             );
           })}
         </Box>
       </Card>
-
       <Box sx={{ m: 3 }} />
-
       <Box sx={{ m: 4 }} />
-
       <Dialog
         height={"400px"}
         fullWidth

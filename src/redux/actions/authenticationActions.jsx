@@ -114,6 +114,7 @@ export function userLoginLoadingAction(loading = true) {
  *
  * @param {String} accessToken User's JWT access token.
  * @param {Date} accessTokenExpiry The JWT access token expiry date.
+ * @param {String} refreshToken The JWT refresh token.
  * @param {Object} user Logged in user information.
  * @returns
  */

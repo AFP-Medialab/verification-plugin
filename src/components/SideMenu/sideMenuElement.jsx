@@ -31,7 +31,6 @@ const SideMenuElement = ({
 
   /**
    * Changes the color of the icon dynamically if the topMenuItem is selected
-   * @param tool {Tool}
    * @returns {{fontSize: string, fill: (string)}|{fontSize: string}}
    */
   const iconConditionalStyling = () => {
@@ -41,9 +40,11 @@ const SideMenuElement = ({
       };
 
     return {
-      fill: isElementSelected ? "#00926c" : "var(--mui-palette-text-secondary)",
+      fill: isElementSelected
+        ? "var(--mui-palette-primary-main)"
+        : "var(--mui-palette-text-secondary)",
       color: isElementSelected
-        ? "#00926c"
+        ? "var(--mui-palette-primary-main)"
         : "var(--mui-palette-text-secondary)",
       fontSize: "24px",
     };

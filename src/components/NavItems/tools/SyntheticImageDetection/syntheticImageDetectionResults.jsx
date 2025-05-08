@@ -10,10 +10,9 @@ import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import CardHeader from "@mui/material/CardHeader";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -22,15 +21,16 @@ import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { Close, Download, ExpandMore } from "@mui/icons-material";
+import { Download, ExpandMore } from "@mui/icons-material";
+import CloseIcon from "@mui/icons-material/Close";
 
+import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import CustomAlertScore from "../../../Shared/CustomAlertScore";
 import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
-import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
 import ChatbotInterface from "../../Assistant/ChatbotInterface";
 import NddDatagrid from "./NddDatagrid";
 import {
@@ -40,7 +40,10 @@ import {
   getSyntheticImageDetectionAlgorithmFromApiName,
   gigaGanWebpR50Grip,
   ldmWebpR50Grip,
+  multiBfreeDino2reg4Grip,
   proGanWebpR50Grip,
+  sd21BfreeDino2reg4Grip,
+  sd21BfreeSiglipGrip,
   syntheticImageDetectionAlgorithms,
 } from "./SyntheticImageDetectionAlgorithms";
 
@@ -170,7 +173,12 @@ const SyntheticImageDetectionResults = ({
           imageType === "image/webp" &&
           (algorithm.apiServiceName === ldmWebpR50Grip.apiServiceName ||
             algorithm.apiServiceName === proGanWebpR50Grip.apiServiceName ||
-            algorithm.apiServiceName === gigaGanWebpR50Grip.apiServiceName)
+            algorithm.apiServiceName === gigaGanWebpR50Grip.apiServiceName ||
+            algorithm.apiServiceName ===
+              sd21BfreeDino2reg4Grip.apiServiceName ||
+            algorithm.apiServiceName ===
+              multiBfreeDino2reg4Grip.apiServiceName ||
+            algorithm.apiServiceName === sd21BfreeSiglipGrip.apiServiceName)
         ) {
           res.push(
             new SyntheticImageDetectionAlgorithmResult(
@@ -188,7 +196,6 @@ const SyntheticImageDetectionResults = ({
             algorithm.apiServiceName === proGanWebpR50Grip.apiServiceName ||
             algorithm.apiServiceName === gigaGanWebpR50Grip.apiServiceName)
         ) {
-          continue;
         } else {
           res.push(
             new SyntheticImageDetectionAlgorithmResult(
@@ -263,15 +270,20 @@ const SyntheticImageDetectionResults = ({
       );
     }
 
-    const floor = Math.floor(percentage);
+    const rounded =
+      percentage > 50 ? Math.round(percentage) : Math.floor(percentage);
 
-    if (floor >= 100) return 99;
-    if (floor <= 0) return 1;
+    if (rounded >= 100) return 99;
+    if (rounded <= 0) return 1;
 
-    return floor;
+    return rounded;
   };
   const [detailsPanelMessage, setDetailsPanelMessage] = useState(
     "synthetic_image_detection_additional_results",
+  );
+
+  const [chatbotPanelMessage, setChatbotPanelMessage] = useState(
+    "synthetic_image_detection_hide_chatbot",
   );
   const handleDetailsChange = () => {
     detailsPanelMessage === "synthetic_image_detection_additional_results_hide"
@@ -279,6 +291,12 @@ const SyntheticImageDetectionResults = ({
       : setDetailsPanelMessage(
           "synthetic_image_detection_additional_results_hide",
         );
+  };
+
+  const handleChatbotChange = () => {
+    chatbotPanelMessage === "synthetic_image_detection_hide_chatbot"
+      ? setChatbotPanelMessage("synthetic_image_detection_show_chatbot")
+      : setChatbotPanelMessage("synthetic_image_detection_hide_chatbot");
   };
 
   const [nddDetailsPanelMessage, setNddDetailsPanelMessage] = useState(
@@ -293,16 +311,6 @@ const SyntheticImageDetectionResults = ({
       : setNddDetailsPanelMessage(
           "synthetic_image_detection_ndd_additional_results_hide",
         );
-  };
-
-  const [chatbotPanelMessage, setChatbotPanelMessage] = useState(
-    "synthetic_image_detection_hide_chatbot",
-  );
-
-  const handleChatbotChange = () => {
-    chatbotPanelMessage === "synthetic_image_detection_hide_chatbot"
-      ? setChatbotPanelMessage("synthetic_image_detection_show_chatbot")
-      : setChatbotPanelMessage("synthetic_image_detection_hide_chatbot");
   };
 
   const keywords = [
@@ -376,393 +384,458 @@ const SyntheticImageDetectionResults = ({
   const resolvedMode = systemMode || mode;
 
   return (
-    <Card sx={{ width: "100%" }}>
-      <CardHeader
-        style={{ borderRadius: "4px 4px 0px 0px" }}
-        title={keyword("synthetic_image_detection_title")}
-        action={
-          <IconButton aria-label="close" onClick={handleClose}>
-            <Close sx={{ color: "white" }} />
-          </IconButton>
-        }
-      />
+    <Card variant="outlined" sx={{ width: "100%" }}>
       <CardContent sx={{ flex: "1 0 auto" }}>
-        <Grid2
-          container
-          direction="row"
-          justifyContent="space-evenly"
-          alignItems="flex-start"
-          spacing={2}
-        >
-          <Grid2
-            container
-            direction="column"
-            justifyContent="flex-start"
-            size={{ sm: 12, md: 6 }}
-            spacing={4}
+        <Stack direction="column" spacing={4}>
+          <Stack
+            direction="row"
+            sx={{
+              justifyContent: "space-between",
+            }}
           >
-            <Grid2
+            <Typography variant="h6">
+              {keyword("synthetic_image_detection_title")}
+            </Typography>
+            <IconButton aria-label="close" onClick={handleClose}>
+              <CloseIcon />
+            </IconButton>
+          </Stack>
+
+          <Grid
+            container
+            direction="row"
+            spacing={2}
+            sx={{
+              justifyContent: "space-evenly",
+              alignItems: "flex-start",
+            }}
+          >
+            <Grid
+              container
+              direction="column"
+              size={{ sm: 12, md: 6 }}
+              spacing={4}
               sx={{
-                maxWidth: "100%",
+                justifyContent: "flex-start",
               }}
             >
-              <Box sx={{ width: "100%", height: "100%" }}>
-                <Grid2
-                  container
-                  direction="row"
-                  justifyContent="flex-start"
-                  alignItems="flex-start"
-                  ref={imgContainerRef}
-                  p={4}
+              <Grid
+                sx={{
+                  maxWidth: "100%",
+                }}
+              >
+                <Box
                   sx={{
-                    maxWidth: "100%",
+                    p: 2,
+                    width: "100%",
+                    height: "100%",
                   }}
                 >
-                  <Stack direction="column">
-                    <img
-                      src={url}
-                      alt={"Displays the results of the deepfake topMenuItem"}
-                      style={{
-                        maxWidth: "100%",
-                        maxHeight: "60vh",
-                        borderRadius: "10px",
-                      }}
-                      crossOrigin={"anonymous"}
-                      ref={imgElement}
-                    />
-                    <List dense={true}>
-                      <ListItem>
-                        <ListItemText
-                          primary={keyword(
-                            "synthetic_image_detection_image_type",
-                          )}
-                          secondary={imageType}
-                        />
-                      </ListItem>
-                    </List>
-                  </Stack>
-                </Grid2>
-              </Box>
-            </Grid2>
-          </Grid2>
-          <Grid2 size={{ sm: 12, md: 6 }}>
-            {syntheticImageScores.length > 0 ? (
-              <Stack
-                direction="column"
-                p={4}
-                justifyContent="flex-start"
-                alignItems="flex-start"
-                spacing={4}
-                width="100%"
-                sx={{ boxSizing: "border-box" }}
-                position="relative"
-              >
-                <Stack
-                  direction={{ sm: "column", md: "row" }}
-                  alignItems={{ sm: "start", md: "center" }}
-                  justifyContent="center"
-                  width="100%"
-                >
-                  <Box m={2}></Box>
-                  <Stack
-                    direction="column"
-                    justifyContent="center"
-                    alignItems="center"
-                    spacing={2}
-                    ref={gaugeChartRef}
-                    p={2}
+                  <Grid
+                    container
+                    direction="row"
+                    ref={imgContainerRef}
+                    sx={{
+                      justifyContent: "flex-start",
+                      alignItems: "flex-start",
+                      maxWidth: "100%",
+                    }}
                   >
-                    <Typography
-                      variant="h5"
-                      align="center"
-                      alignSelf="center"
-                      sx={{ color: "red" }}
+                    <Stack direction="column">
+                      <img
+                        src={url}
+                        alt={"Displays the results of the deepfake topMenuItem"}
+                        style={{
+                          maxWidth: "100%",
+                          maxHeight: "60vh",
+                          borderRadius: "10px",
+                        }}
+                        crossOrigin={"anonymous"}
+                        ref={imgElement}
+                      />
+                      <List dense={true}>
+                        <ListItem>
+                          <ListItemText
+                            primary={keyword(
+                              "synthetic_image_detection_image_type",
+                            )}
+                            secondary={imageType}
+                          />
+                        </ListItem>
+                      </List>
+                    </Stack>
+                  </Grid>
+                </Box>
+              </Grid>
+            </Grid>
+            <Grid size={{ sm: 12, md: 6 }}>
+              {syntheticImageScores.length > 0 ? (
+                <Stack
+                  direction="column"
+                  spacing={4}
+                  sx={{
+                    p: 4,
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                    width: "100%",
+                    position: "relative",
+                    boxSizing: "border-box",
+                  }}
+                >
+                  <Stack
+                    direction={{ sm: "column", md: "row" }}
+                    sx={{
+                      alignItems: { sm: "start", md: "center" },
+                      justifyContent: "center",
+                      width: "100%",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        m: 2,
+                      }}
+                    ></Box>
+                    <Stack
+                      direction="column"
+                      spacing={2}
+                      ref={gaugeChartRef}
+                      sx={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                        p: 2,
+                      }}
                     >
-                      {maxScore > DETECTION_THRESHOLDS.THRESHOLD_2
-                        ? keyword(
-                            "synthetic_image_detection_generic_detection_text",
-                          )
-                        : keyword(
-                            "synthetic_image_detection_generic_inconclusive_text",
-                          )}
-                    </Typography>
-
-                    {filteredNddRows && filteredNddRows.length > 0 && (
                       <Typography
                         variant="h5"
                         align="center"
-                        alignSelf="center"
-                        sx={{ color: "red" }}
-                      >
-                        {keyword(
-                          "synthetic_image_detection_generic_detection_text_ndd",
-                        )}
-                      </Typography>
-                    )}
-                    <Stack
-                      direction="column"
-                      justifyContent="center"
-                      alignItems="center"
-                    >
-                      <GaugeChart
-                        id={"gauge-chart"}
-                        animate={false}
-                        nrOfLevels={4}
-                        textColor={
-                          resolvedMode === "dark" ? "#FFFFFF" : "#000000"
-                        }
-                        arcsLength={[
-                          (100 - DETECTION_THRESHOLDS.THRESHOLD_1) / 100,
-                          (DETECTION_THRESHOLDS.THRESHOLD_2 -
-                            DETECTION_THRESHOLDS.THRESHOLD_1) /
-                            100,
-                          (DETECTION_THRESHOLDS.THRESHOLD_3 -
-                            DETECTION_THRESHOLDS.THRESHOLD_2) /
-                            100,
-                          (100 - DETECTION_THRESHOLDS.THRESHOLD_3) / 100,
-                        ]}
-                        percent={syntheticImageScores ? maxScore / 100 : 0}
-                        style={{
-                          minWidth: "250px",
-                          width: "50%",
-                          maxWidth: "500px",
+                        sx={{
+                          alignSelf: "center",
+                          color: "red",
                         }}
-                      />
-
-                      <Stack
-                        direction="row"
-                        justifyContent="center"
-                        alignItems="center"
-                        spacing={10}
                       >
-                        <Typography variant="subtitle2">
+                        {maxScore > DETECTION_THRESHOLDS.THRESHOLD_2
+                          ? keyword(
+                              "synthetic_image_detection_generic_detection_text",
+                            )
+                          : keyword(
+                              "synthetic_image_detection_generic_inconclusive_text",
+                            )}
+                      </Typography>
+
+                      {filteredNddRows && filteredNddRows.length > 0 && (
+                        <Typography
+                          variant="h5"
+                          align="center"
+                          sx={{
+                            alignSelf: "center",
+                            color: "red",
+                          }}
+                        >
                           {keyword(
-                            "synthetic_image_detection_gauge_no_detection",
+                            "synthetic_image_detection_generic_detection_text_ndd",
                           )}
                         </Typography>
-                        <Typography variant="subtitle2">
-                          {keyword("synthetic_image_detection_gauge_detection")}
-                        </Typography>
+                      )}
+                      <Stack
+                        direction="column"
+                        sx={{
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <GaugeChart
+                          id={"gauge-chart"}
+                          animate={false}
+                          nrOfLevels={4}
+                          textColor={
+                            resolvedMode === "dark" ? "#FFFFFF" : "#000000"
+                          }
+                          arcsLength={[
+                            (100 - DETECTION_THRESHOLDS.THRESHOLD_1) / 100,
+                            (DETECTION_THRESHOLDS.THRESHOLD_2 -
+                              DETECTION_THRESHOLDS.THRESHOLD_1) /
+                              100,
+                            (DETECTION_THRESHOLDS.THRESHOLD_3 -
+                              DETECTION_THRESHOLDS.THRESHOLD_2) /
+                              100,
+                            (100 - DETECTION_THRESHOLDS.THRESHOLD_3) / 100,
+                          ]}
+                          percent={syntheticImageScores ? maxScore / 100 : 0}
+                          style={{
+                            minWidth: "250px",
+                            width: "50%",
+                            maxWidth: "500px",
+                          }}
+                        />
+
+                        <Stack
+                          direction="row"
+                          spacing={10}
+                          sx={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Typography variant="subtitle2">
+                            {keyword(
+                              "synthetic_image_detection_gauge_no_detection",
+                            )}
+                          </Typography>
+                          <Typography variant="subtitle2">
+                            {keyword(
+                              "synthetic_image_detection_gauge_detection",
+                            )}
+                          </Typography>
+                        </Stack>
                       </Stack>
                     </Stack>
-                  </Stack>
-                  <Box alignSelf={{ sm: "flex-start", md: "flex-end" }}>
-                    <Tooltip
-                      title={keyword(
-                        "synthetic_image_detection_download_gauge_button",
-                      )}
+                    <Box
+                      sx={{
+                        alignSelf: { sm: "flex-start", md: "flex-end" },
+                      }}
                     >
-                      <IconButton
-                        color="primary"
-                        aria-label="download chart"
-                        onClick={async () =>
-                          await exportReactElementAsJpg(
-                            gaugeChartRef,
-                            "gauge_chart",
-                          )
-                        }
+                      <Tooltip
+                        title={keyword(
+                          "synthetic_image_detection_download_gauge_button",
+                        )}
                       >
-                        <Download />
-                      </IconButton>
-                    </Tooltip>
-                  </Box>
+                        <IconButton
+                          color="primary"
+                          aria-label="download chart"
+                          onClick={async () =>
+                            await exportReactElementAsJpg(
+                              gaugeChartRef,
+                              "gauge_chart",
+                            )
+                          }
+                        >
+                          <Download />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
+                  </Stack>
+
+                  <GaugeChartModalExplanation
+                    keyword={keyword}
+                    keywordsArr={keywords}
+                    keywordLink={
+                      "synthetic_image_detection_scale_explanation_link"
+                    }
+                    keywordModalTitle={
+                      "synthetic_image_detection_scale_modal_explanation_title"
+                    }
+                    colors={colors}
+                  />
+
+                  <CustomAlertScore
+                    score={syntheticImageScores ? maxScore : 0}
+                    detectionType={undefined}
+                    toolName={"SyntheticImageDetection"}
+                    thresholds={DETECTION_THRESHOLDS}
+                  />
+
+                  {resultsHaveErrors && (
+                    <Alert severity="error">
+                      {keyword("synthetic_image_detection_algorithms_errors")}
+                    </Alert>
+                  )}
+
+                  {nd && nd.similar_media && nd.similar_media.length > 0 && (
+                    <Alert icon={false} severity="error">
+                      <Typography variant="body1">
+                        {keyword("synthetic_image_detection_ndd_info")}
+                      </Typography>
+                    </Alert>
+                  )}
                 </Stack>
-
-                <GaugeChartModalExplanation
-                  keyword={keyword}
-                  keywordsArr={keywords}
-                  keywordLink={
-                    "synthetic_image_detection_scale_explanation_link"
-                  }
-                  keywordModalTitle={
-                    "synthetic_image_detection_scale_modal_explanation_title"
-                  }
-                  colors={colors}
-                />
-
-                <CustomAlertScore
-                  score={syntheticImageScores ? maxScore : 0}
-                  detectionType={undefined}
-                  toolName={"SyntheticImageDetection"}
-                  thresholds={DETECTION_THRESHOLDS}
-                />
-
-                {resultsHaveErrors && (
+              ) : (
+                <Stack
+                  direction="column"
+                  spacing={4}
+                  sx={{
+                    p: 4,
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                    width: "100%",
+                    boxSizing: "border-box",
+                  }}
+                >
                   <Alert severity="error">
-                    {keyword("synthetic_image_detection_algorithms_errors")}
+                    {keyword("synthetic_image_detection_error_generic")}
                   </Alert>
-                )}
-
-                {nd && nd.similar_media && nd.similar_media.length > 0 && (
-                  <Alert icon={false} severity="error">
-                    <Typography variant="body1">
-                      {keyword("synthetic_image_detection_ndd_info")}
-                    </Typography>
-                  </Alert>
-                )}
-              </Stack>
-            ) : (
-              <Stack
-                direction="column"
-                p={4}
-                justifyContent="flex-start"
-                alignItems="flex-start"
-                spacing={4}
-                width="100%"
-                sx={{ boxSizing: "border-box" }}
-              >
-                <Alert severity="error">
-                  {keyword("synthetic_image_detection_error_generic")}
-                </Alert>
-              </Stack>
-            )}
-          </Grid2>
-          <Grid2
-            sx={{
-              width: "100%",
-            }}
-          >
-            <Box pl={4} pr={4}>
-              <Accordion defaultExpanded onChange={handleChatbotChange}>
-                <AccordionSummary expandIcon={<ExpandMore />}>
-                  <Typography>{keyword(chatbotPanelMessage)}</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Box sx={{ mr: 2 }}>
-                    <ChatbotInterface
-                      tool="syntheticImageDetection"
-                      result={syntheticImageScores}
-                    />
+                </Stack>
+              )}
+            </Grid>
+            <Grid
+              sx={{
+                width: "100%",
+              }}
+            >
+              <Box pl={4} pr={4}>
+                <Accordion defaultExpanded onChange={handleChatbotChange}>
+                  <AccordionSummary expandIcon={<ExpandMore />}>
+                    <Typography>{keyword(chatbotPanelMessage)}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Box sx={{ mr: 2 }}>
+                      <ChatbotInterface
+                        tool="syntheticImageDetection"
+                        result={syntheticImageScores}
+                      />
+                    </Box>
+                  </AccordionDetails>
+                </Accordion>
+              </Box>
+            </Grid>
+            <Grid container size={{ xs: 12 }} spacing={4}>
+              {filteredNddRows && filteredNddRows.length > 0 && (
+                <Grid
+                  sx={{
+                    width: "100%",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      pl: 4,
+                      pr: 4,
+                    }}
+                  >
+                    <Accordion
+                      defaultExpanded
+                      onChange={handleNddDetailsChange}
+                    >
+                      <AccordionSummary expandIcon={<ExpandMore />}>
+                        <Typography>
+                          {keyword(nddDetailsPanelMessage)}
+                        </Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Stack direction={"column"} spacing={4}>
+                          <NddDatagrid rows={filteredNddRows} />
+                        </Stack>
+                      </AccordionDetails>
+                    </Accordion>
                   </Box>
-                </AccordionDetails>
-              </Accordion>
-            </Box>
-          </Grid2>
-          <Grid2 container size={{ xs: 12 }} spacing={4}>
-            {filteredNddRows && filteredNddRows.length > 0 && (
-              <Grid2
-                sx={{
-                  width: "100%",
-                }}
-              >
-                <Box pl={4} pr={4}>
-                  <Accordion defaultExpanded onChange={handleNddDetailsChange}>
+                </Grid>
+              )}
+
+              <Grid sx={{ width: "100%" }}>
+                <Box
+                  sx={{
+                    pl: 4,
+                    pr: 4,
+                  }}
+                >
+                  <Accordion
+                    defaultExpanded={false}
+                    onChange={handleDetailsChange}
+                  >
                     <AccordionSummary expandIcon={<ExpandMore />}>
-                      <Typography>{keyword(nddDetailsPanelMessage)}</Typography>
+                      <Typography>{keyword(detailsPanelMessage)}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                       <Stack direction={"column"} spacing={4}>
-                        <NddDatagrid rows={filteredNddRows} />
+                        {syntheticImageScores.map((item, key) => {
+                          let predictionScore;
+
+                          if (typeof item.predictionScore === "number") {
+                            predictionScore = sanitizeDetectionPercentage(
+                              item.predictionScore,
+                            );
+                          }
+
+                          return (
+                            <Stack direction="column" spacing={4} key={key}>
+                              <Stack direction="column" spacing={2}>
+                                <Stack
+                                  direction="row"
+                                  sx={{
+                                    alignItems: "flex-start",
+                                    justifyContent: "space-between",
+                                  }}
+                                >
+                                  <Box>
+                                    <Typography
+                                      variant={"h6"}
+                                      sx={{ fontWeight: "bold" }}
+                                    >
+                                      {keyword(item.name)}
+                                    </Typography>
+                                    <Stack
+                                      direction={{ lg: "row", md: "column" }}
+                                      spacing={2}
+                                      sx={{
+                                        alignItems: "center",
+                                      }}
+                                    >
+                                      <Stack direction="row" spacing={1}>
+                                        {item.isError ? (
+                                          <Alert severity="error">
+                                            {keyword(
+                                              "synthetic_image_detection_error_generic",
+                                            )}
+                                          </Alert>
+                                        ) : (
+                                          <>
+                                            <Typography>
+                                              {keyword(
+                                                "synthetic_image_detection_probability_text",
+                                              )}{" "}
+                                            </Typography>
+                                            <Typography
+                                              sx={{
+                                                color:
+                                                  getPercentageColorCode(
+                                                    predictionScore,
+                                                  ),
+                                              }}
+                                            >
+                                              {predictionScore}%
+                                            </Typography>
+                                          </>
+                                        )}
+                                      </Stack>
+                                      {!item.isError && (
+                                        <Chip
+                                          label={getAlertLabel(
+                                            predictionScore,
+                                            keyword,
+                                          )}
+                                          color={getAlertColor(predictionScore)}
+                                        />
+                                      )}
+                                    </Stack>
+                                  </Box>
+                                </Stack>
+
+                                <Box
+                                  sx={{
+                                    p: 2,
+                                    mb: 2,
+
+                                    backgroundColor:
+                                      "var(--mui-palette-background-paper)",
+                                  }}
+                                >
+                                  <Typography>
+                                    {keyword(item.description)}
+                                  </Typography>
+                                </Box>
+                              </Stack>
+                              {syntheticImageScores.length > key + 1 && (
+                                <Divider />
+                              )}
+                            </Stack>
+                          );
+                        })}
                       </Stack>
                     </AccordionDetails>
                   </Accordion>
                 </Box>
-              </Grid2>
-            )}
-
-            <Grid2 sx={{ width: "100%" }}>
-              <Box pl={4} pr={4}>
-                <Accordion
-                  defaultExpanded={false}
-                  onChange={handleDetailsChange}
-                >
-                  <AccordionSummary expandIcon={<ExpandMore />}>
-                    <Typography>{keyword(detailsPanelMessage)}</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Stack direction={"column"} spacing={4}>
-                      {syntheticImageScores.map((item, key) => {
-                        let predictionScore;
-
-                        if (typeof item.predictionScore === "number") {
-                          predictionScore = sanitizeDetectionPercentage(
-                            item.predictionScore,
-                          );
-                        }
-
-                        return (
-                          <Stack direction="column" spacing={4} key={key}>
-                            <Stack direction="column" spacing={2}>
-                              <Stack
-                                direction="row"
-                                alignItems="flex-start"
-                                justifyContent="space-between"
-                              >
-                                <Box>
-                                  <Typography
-                                    variant={"h6"}
-                                    sx={{ fontWeight: "bold" }}
-                                  >
-                                    {keyword(item.name)}
-                                  </Typography>
-                                  <Stack
-                                    direction={{ lg: "row", md: "column" }}
-                                    spacing={2}
-                                    alignItems="center"
-                                  >
-                                    <Stack direction="row" spacing={1}>
-                                      {item.isError ? (
-                                        <Alert severity="error">
-                                          {keyword(
-                                            "synthetic_image_detection_error_generic",
-                                          )}
-                                        </Alert>
-                                      ) : (
-                                        <>
-                                          <Typography>
-                                            {keyword(
-                                              "synthetic_image_detection_probability_text",
-                                            )}{" "}
-                                          </Typography>
-                                          <Typography
-                                            sx={{
-                                              color:
-                                                getPercentageColorCode(
-                                                  predictionScore,
-                                                ),
-                                            }}
-                                          >
-                                            {predictionScore}%
-                                          </Typography>
-                                        </>
-                                      )}
-                                    </Stack>
-                                    {!item.isError && (
-                                      <Chip
-                                        label={getAlertLabel(
-                                          predictionScore,
-                                          keyword,
-                                        )}
-                                        color={getAlertColor(predictionScore)}
-                                      />
-                                    )}
-                                  </Stack>
-                                </Box>
-                              </Stack>
-
-                              <Box
-                                p={2}
-                                sx={{ backgroundColor: "#FAFAFA" }}
-                                mb={2}
-                              >
-                                <Typography>
-                                  {keyword(item.description)}
-                                </Typography>
-                              </Box>
-                            </Stack>
-                            {syntheticImageScores.length > key + 1 && (
-                              <Divider />
-                            )}
-                          </Stack>
-                        );
-                      })}
-                    </Stack>
-                  </AccordionDetails>
-                </Accordion>
-              </Box>
-            </Grid2>
-          </Grid2>
-        </Grid2>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Stack>
       </CardContent>
     </Card>
   );

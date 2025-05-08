@@ -6,7 +6,7 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
@@ -62,20 +62,32 @@ const AssistantSCResults = () => {
 
   return (
     <Card variant={"outlined"} className={classes.sourceCredibilityBorder}>
-      <Grid2 container>
-        <Grid2 size={{ xs: 11 }} className={classes.displayFlex}>
+      <Grid container>
+        <Grid size={{ xs: 11 }} className={classes.displayFlex}>
           {/* icon */}
           <CardMedia>
-            <Box m={1}>
+            <Box
+              sx={{
+                m: 1,
+              }}
+            >
               <FindInPageIcon fontSize={"large"} color={"primary"} />
             </Box>
           </CardMedia>
 
           {/* spacing */}
-          <Box m={1} />
+          <Box
+            sx={{
+              m: 1,
+            }}
+          />
 
           {/* title */}
-          <Box mt={1.5}>
+          <Box
+            sx={{
+              mt: 1.5,
+            }}
+          >
             <Typography component={"span"} variant={"h6"}>
               {keyword("url_domain_analysis")}
             </Typography>
@@ -88,11 +100,16 @@ const AssistantSCResults = () => {
           >
             <ExpandMoreIcon color={"primary"} />
           </IconButton>
-        </Grid2>
+        </Grid>
 
-        <Grid2 size={{ xs: 1 }}>
+        <Grid size={{ xs: 1 }}>
           {/* help tooltip */}
-          <Box mt={1.5} align="right">
+          <Box
+            align="right"
+            sx={{
+              mt: 1.5,
+            }}
+          >
             <Tooltip
               interactive={"true"}
               leaveDelay={50}
@@ -109,14 +126,19 @@ const AssistantSCResults = () => {
               <HelpOutlineOutlinedIcon color={"action"} />
             </Tooltip>
           </Box>
-        </Grid2>
+        </Grid>
 
-        <Grid2 size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <Collapse
             in={assuranceExpanded}
             className={classes.assistantBackground}
           >
-            <Box mt={3} ml={2}>
+            <Box
+              sx={{
+                mt: 3,
+                ml: 2,
+              }}
+            >
               {positiveSourceCred && positiveSourceCred.length > 0 ? (
                 <div>
                   <Chip
@@ -163,8 +185,8 @@ const AssistantSCResults = () => {
               ) : null}
             </Box>
           </Collapse>
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     </Card>
   );
 };

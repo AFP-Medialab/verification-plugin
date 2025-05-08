@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -93,7 +92,9 @@ const Deepfake = () => {
           name={keywordAllTools("navbar_deepfake_video")}
           description={keywordAllTools("navbar_deepfake_video_description")}
           icon={
-            <videoDeepfake.icon sx={{ fill: "#00926c", fontSize: "40px" }} />
+            <videoDeepfake.icon
+              sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+            />
           }
         />
 
@@ -102,7 +103,11 @@ const Deepfake = () => {
         </Alert>
 
         <Card variant="outlined">
-          <Box p={4}>
+          <Box
+            sx={{
+              p: 4,
+            }}
+          >
             <form>
               <StringFileUploadField
                 labelKeyword={keyword("deepfake_video_link")}
@@ -120,14 +125,6 @@ const Deepfake = () => {
                 isParentLoading={isLoading}
               />
             </form>
-            {isLoading && (
-              <>
-                <Box m={2} />
-                <Box mt={3}>
-                  <LinearProgress />
-                </Box>
-              </>
-            )}
           </Box>
         </Card>
 

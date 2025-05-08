@@ -265,19 +265,36 @@ export const setPrevFactChecksDetails = (
   };
 };
 
-export const setMachineGeneratedTextDetails = (
-  mgtResult,
-  mgtLoading,
-  mgtDone,
-  mgtFail,
+export const setMachineGeneratedTextChunksDetails = (
+  mgtcResult,
+  mgtcLoading,
+  mgtcDone,
+  mgtcFail,
 ) => {
   return {
-    type: "SET_MACHINE_GENERATED_TEXT_DETAILS",
+    type: "SET_MACHINE_GENERATED_TEXT_CHUNKS_DETAILS",
     payload: {
-      machineGeneratedTextResult: mgtResult,
-      machineGeneratedTextLoading: mgtLoading,
-      machineGeneratedTextDone: mgtDone,
-      machineGeneratedTextFail: mgtFail,
+      machineGeneratedTextChunksResult: mgtcResult,
+      machineGeneratedTextChunksLoading: mgtcLoading,
+      machineGeneratedTextChunksDone: mgtcDone,
+      machineGeneratedTextChunksFail: mgtcFail,
+    },
+  };
+};
+
+export const setMachineGeneratedTextSentencesDetails = (
+  mgtsResult,
+  mgtsLoading,
+  mgtsDone,
+  mgtsFail,
+) => {
+  return {
+    type: "SET_MACHINE_GENERATED_TEXT_SENTENCES_DETAILS",
+    payload: {
+      machineGeneratedTextSentencesResult: mgtsResult,
+      machineGeneratedTextSentencesLoading: mgtsLoading,
+      machineGeneratedTextSentencesDone: mgtsDone,
+      machineGeneratedTextSentencesFail: mgtsFail,
     },
   };
 };

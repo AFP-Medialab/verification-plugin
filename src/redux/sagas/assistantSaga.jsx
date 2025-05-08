@@ -37,7 +37,8 @@ import {
   setImageVideoSelected,
   setInputSourceCredDetails,
   setInputUrl,
-  setMachineGeneratedTextDetails,
+  setMachineGeneratedTextChunksDetails,
+  setMachineGeneratedTextSentencesDetails,
   setMissingMedia,
   setMultilingualStanceDetails,
   setNeDetails,
@@ -130,10 +131,17 @@ function* getPrevFactChecksSaga() {
   );
 }
 
-function* getMachineGeneratedTextSaga() {
+function* getMachineGeneratedTextChunksSaga() {
   yield takeLatest(
     ["SET_SCRAPED_DATA", "AUTH_USER_LOGIN", "CLEAN_STATE"],
-    handleMachineGeneratedTextCall,
+    handleMachineGeneratedTextChunksCall,
+  );
+}
+
+function* getMachineGeneratedTextSentencesSaga() {
+  yield takeLatest(
+    ["SET_SCRAPED_DATA", "AUTH_USER_LOGIN", "CLEAN_STATE"],
+    handleMachineGeneratedTextSentencesCall,
   );
 }
 
@@ -307,7 +315,7 @@ function* handleSourceCredibilityCall(action) {
       const batchLinksString = batchLinks.join(" ");
       links.push(batchLinksString);
 
-      if (links.length == parallelCalls) {
+      if (links.length === parallelCalls) {
         const [batchResult1, batchResult2] = yield all([
           call(assistantApi.callSourceCredibilityService, [links[0]]),
           call(assistantApi.callSourceCredibilityService, [links[1]]),
@@ -398,12 +406,12 @@ function* handleDbkfTextCall(action) {
     if (text) {
       let textToUse = text.length > 500 ? text.substring(0, 500) : text;
       /*
-            let textRegex = /[\W]$/
-            //Infinite loop for some url exemple: https://twitter.com/TheArchitect009/status/1427280578496303107
-            while(textToUse.match(textRegex)){
-                if(textToUse.length === 1) break
-                textToUse = text.slice(0, -1)
-            }*/
+                                                            let textRegex = /[\W]$/
+                                                            //Infinite loop for some url exemple: https://twitter.com/TheArchitect009/status/1427280578496303107
+                                                            while(textToUse.match(textRegex)){
+                                                                if(textToUse.length === 1) break
+                                                                textToUse = text.slice(0, -1)
+                                                            }*/
       let result = yield call(dbkfAPI.callTextSimilarityEndpoint, textToUse);
       let filteredResult = result.length ? result : null;
 
@@ -427,7 +435,7 @@ function* handleNewsTopicCall(action) {
       const result = yield call(assistantApi.callNewsFramingService, text);
       yield put(setNewsTopicDetails(result, false, true, false));
     }
-  } catch (error) {
+  } catch {
     yield put(setNewsTopicDetails(null, false, false, true));
   }
 }
@@ -444,7 +452,7 @@ function* handleNewsGenreCall(action) {
       const result = yield call(assistantApi.callNewsGenreService, text);
       yield put(setNewsGenreDetails(result, false, true, false));
     }
-  } catch (error) {
+  } catch {
     yield put(setNewsGenreDetails(null, false, false, true));
   }
 }
@@ -461,7 +469,7 @@ function* handlePersuasionCall(action) {
       const result = yield call(assistantApi.callPersuasionService, text);
       yield put(setPersuasionDetails(result, false, true, false));
     }
-  } catch (error) {
+  } catch {
     yield put(setPersuasionDetails(null, false, false, true));
   }
 }
@@ -510,7 +518,7 @@ function* handleSubjectivityCall(action) {
         );
 
         // merge results
-        if (i == 0) {
+        if (i === 0) {
           result = textChunkResult;
         } else {
           // add step to sentences indices and Important_Sentence indices
@@ -567,7 +575,7 @@ function* handleSubjectivityCall(action) {
 
       yield put(setSubjectivityDetails(result, false, true, false));
     }
-  } catch (error) {
+  } catch {
     yield put(setSubjectivityDetails(null, false, false, true));
   }
 }
@@ -592,35 +600,66 @@ function* handlePrevFactChecksCall(action) {
       );
 
       yield put(
-        setPrevFactChecksDetails(result.fact_checks, false, true, false),
+        setPrevFactChecksDetails(
+          result.fact_checks.length > 0 ? result.fact_checks : null,
+          false,
+          true,
+          false,
+        ),
       );
     }
-  } catch (error) {
+  } catch {
     yield put(setPrevFactChecksDetails(null, false, false, true));
   }
 }
 
-function* handleMachineGeneratedTextCall(action) {
+function* handleMachineGeneratedTextChunksCall(action) {
   if (action.type === "CLEAN_STATE") return;
 
   try {
     const text = yield select((state) => state.assistant.urlText);
 
-    // this prevents the call from happening if not correct user status
-    const role = yield select((state) => state.userSession.user.roles);
-
-    if (text && role.includes("BETA_TESTER")) {
-      yield put(setMachineGeneratedTextDetails(null, true, false, false));
+    if (text) {
+      yield put(setMachineGeneratedTextChunksDetails(null, true, false, false));
 
       const result = yield call(
-        assistantApi.callMachineGeneratedTextService,
+        assistantApi.callMachineGeneratedTextChunksService,
         text.substring(0, URL_BUFFER_LIMIT),
       );
 
-      yield put(setMachineGeneratedTextDetails(result, false, true, false));
+      yield put(
+        setMachineGeneratedTextChunksDetails(result, false, true, false),
+      );
     }
   } catch (error) {
-    yield put(setMachineGeneratedTextDetails(null, false, false, true));
+    yield put(setMachineGeneratedTextChunksDetails(null, false, false, true));
+  }
+}
+
+function* handleMachineGeneratedTextSentencesCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const text = yield select((state) => state.assistant.urlText);
+
+    if (text) {
+      yield put(
+        setMachineGeneratedTextSentencesDetails(null, true, false, false),
+      );
+
+      const result = yield call(
+        assistantApi.callMachineGeneratedTextSentencesService,
+        text.substring(0, URL_BUFFER_LIMIT),
+      );
+
+      yield put(
+        setMachineGeneratedTextSentencesDetails(result, false, true, false),
+      );
+    }
+  } catch (error) {
+    yield put(
+      setMachineGeneratedTextSentencesDetails(null, false, false, true),
+    );
   }
 }
 
@@ -666,7 +705,7 @@ function* handleNamedEntityCall(action) {
         );
       }
     }
-  } catch (error) {
+  } catch {
     yield put(setNeDetails(null, null, false, false, true));
   }
 }
@@ -839,7 +878,7 @@ function* handleMultilingualStanceCall(action) {
 
       yield put(setMultilingualStanceDetails(result, false, true, false));
     }
-  } catch (error) {
+  } catch {
     yield put(setMultilingualStanceDetails(null, false, false, true));
   }
 }
@@ -918,6 +957,7 @@ function formatTelegramLink(url) {
   // Add ?embed=1 if not already present
   return hasEmbed ? newUrl : `${newUrl}?embed=1`;
 }
+
 /**
  * PREPROCESS FUNCTIONS
  **/
@@ -940,10 +980,8 @@ const decideWhetherToScrape = (urlType, contentType) => {
     case KNOWN_LINKS.VK:
       return true;
     case KNOWN_LINKS.MISC:
-      if (contentType === null) {
-        return true;
-      }
-      return false;
+      return contentType === null;
+
     default:
       throw new Error("please_give_a_correct_link");
   }
@@ -1234,20 +1272,6 @@ const addToRelevantSourceCred = (sourceCredList, result) => {
   });
 };
 
-const scaleNumbers = (unscaledNums) => {
-  let scaled = [];
-  let maxRange = Math.max.apply(Math, unscaledNums);
-  let minRange = Math.min.apply(Math, unscaledNums);
-
-  for (let i = 0; i < unscaledNums.length; i++) {
-    let unscaled = unscaledNums[i];
-    let scaledNum = (100 * (unscaled - minRange)) / (maxRange - minRange);
-
-    scaled.push(scaledNum);
-  }
-  return scaled;
-};
-
 /**
  * EXPORT
  **/
@@ -1267,7 +1291,8 @@ export default function* assistantSaga() {
     fork(getPersuasionSaga),
     fork(getSubjectivitySaga),
     fork(getPrevFactChecksSaga),
-    fork(getMachineGeneratedTextSaga),
     fork(getMultilingualStanceSaga),
+    fork(getMachineGeneratedTextChunksSaga),
+    fork(getMachineGeneratedTextSentencesSaga),
   ]);
 }

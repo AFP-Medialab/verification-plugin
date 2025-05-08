@@ -79,12 +79,20 @@ const Geolocation = () => {
           name={keywordAllTools("navbar_geolocation")}
           description={keywordAllTools("navbar_geolocation_description")}
           icon={
-            <imageGeolocation.icon sx={{ fill: "#00926c", fontSize: "40px" }} />
+            <imageGeolocation.icon
+              sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+            />
           }
         />
-        <Alert severity="warning">{keywordWarning("warning_beta")}</Alert>
+        <Alert severity="warning">
+          {keywordWarning("warning_beta_geolocation")}
+        </Alert>
         <Card variant="outlined">
-          <Box p={4}>
+          <Box
+            sx={{
+              p: 4,
+            }}
+          >
             <form>
               <StringFileUploadField
                 labelKeyword={keyword("geo_link")}

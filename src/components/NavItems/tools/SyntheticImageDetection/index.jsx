@@ -8,13 +8,15 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
 
 import { Gradient } from "@mui/icons-material";
 
+import { isValidUrl } from "@Shared/Utils/URLUtils";
+import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import axios from "axios";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { setError } from "redux/reducers/errorReducer";
@@ -29,8 +31,6 @@ import {
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
-import { isValidUrl } from "../../../Shared/Utils/URLUtils";
-import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 import ChatbotInterface from "../../Assistant/ChatbotInterface";
 import { syntheticImageDetectionAlgorithms } from "./SyntheticImageDetectionAlgorithms";
 import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
@@ -372,17 +372,25 @@ const SyntheticImageDetection = () => {
         )}
         icon={
           <Gradient
-            style={{ fill: "#00926c", height: "40px", width: "auto" }}
+            style={{
+              fill: "var(--mui-palette-primary-main)",
+              height: "40px",
+              width: "auto",
+            }}
           />
         }
       />
-
-      <Stack direction="column" spacing={2} mb={4}>
+      <Stack
+        direction="column"
+        spacing={2}
+        sx={{
+          mb: 4,
+        }}
+      >
         <Alert severity="warning">
           {keywordWarning("warning_beta_synthetic_image_detection")}
         </Alert>
       </Stack>
-
       <Card variant="outlined">
         <CardHeader
           title={keyword("synthetic_image_detection_hide_chatbot")}
@@ -397,14 +405,14 @@ const SyntheticImageDetection = () => {
       <Card variant="outlined">
         <CardHeader
           title={
-            <Grid2
+            <Grid
               container
               direction="row"
               justifyContent="space-between"
               alignItems="center"
             >
               <span>{keyword("synthetic_image_detection_link")}</span>
-            </Grid2>
+            </Grid>
           }
           className={classes.headerUploadedImage}
         />
@@ -448,16 +456,22 @@ const SyntheticImageDetection = () => {
             )}
 
             {isLoading && (
-              <Box mt={3}>
+              <Box
+                sx={{
+                  mt: 3,
+                }}
+              >
                 <LinearProgress />
               </Box>
             )}
           </Stack>
         </Box>
       </Card>
-
-      <Box m={3} />
-
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
       {result && (
         <SyntheticImageDetectionResults
           results={result}

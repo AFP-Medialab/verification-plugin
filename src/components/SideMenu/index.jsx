@@ -24,6 +24,7 @@ import {
   MoreHoriz,
 } from "@mui/icons-material";
 
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import clsx from "clsx";
 
 import { ROLES } from "../../constants/roles";
@@ -41,7 +42,6 @@ import DataIcon from "../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
 import ImageIcon from "../NavBar/images/SVG/Image/Images.svg";
 import SearchIcon from "../NavBar/images/SVG/Search/Search.svg";
 import VideoIcon from "../NavBar/images/SVG/Video/Video.svg";
-import { i18nLoadNamespace } from "../Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import SideMenuElement from "./sideMenuElement";
 
@@ -165,7 +165,6 @@ const SideMenu = ({ tools, setOpenAlert }) => {
     navigate("/app/tools/" + tool.path);
 
     handleToolChange(tool);
-    return;
   };
 
   const toolsItem = tools.find((tool) => tool.titleKeyword === "navbar_tools");
@@ -378,8 +377,12 @@ const SideMenu = ({ tools, setOpenAlert }) => {
     }
 
     return {
-      fill: isSelected ? "#00926c" : "var(--mui-palette-text-secondary)",
-      color: isSelected ? "#00926c" : "var(--mui-palette-text-secondary)",
+      fill: isSelected
+        ? "var(--mui-palette-primary-main)"
+        : "var(--mui-palette-text-secondary)",
+      color: isSelected
+        ? "var(--mui-palette-primary-main)"
+        : "var(--mui-palette-text-secondary)",
       fontSize: "24px",
     };
   };

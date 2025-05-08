@@ -436,7 +436,7 @@ export const imageGeolocation = new Tool(
   "geolocation",
   TOOL_GROUPS.VERIFICATION,
   <Geolocation />,
-  <Footer type={FOOTER_TYPES.AFP} />,
+  <Footer type={FOOTER_TYPES.ITI} />,
 );
 
 /**

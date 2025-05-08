@@ -9,7 +9,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Fab from "@mui/material/Fab";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -20,14 +20,14 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
+import {
+  SEARCH_ENGINE_SETTINGS,
+  reverseImageSearch,
+} from "@Shared/ReverseSearch/reverseSearchUtils";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
-import {
-  SEARCH_ENGINE_SETTINGS,
-  reverseImageSearch,
-} from "../../Shared/ReverseSearch/reverseSearchUtils";
 
 const Interactive = () => {
   const classes = useMyStyles();
@@ -78,8 +78,14 @@ const Interactive = () => {
   };
 
   return (
-    <Paper className={classes.root}>
-      <Box justifyContent="center" display="flex" flexDirection="column">
+    <Paper variant="outlined" className={classes.root}>
+      <Box
+        sx={{
+          justifyContent: "center",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <CustomTile text={keyword("quiz_title")} />
         {carousel.map((obj, key) => {
           const isImage =
@@ -106,13 +112,15 @@ const Interactive = () => {
                   />
                 )}
               </div>
-              <Grid2
+              <Grid
                 container
-                justifyContent="space-between"
                 spacing={2}
-                alignContent={"center"}
+                sx={{
+                  justifyContent: "space-between",
+                  alignContent: "center",
+                }}
               >
-                <Grid2>
+                <Grid>
                   <Fab color={"primary"} onClick={previous}>
                     {isCurrentLanguageLeftToRight ? (
                       <NavigateBeforeIcon
@@ -126,8 +134,8 @@ const Interactive = () => {
                       />
                     )}
                   </Fab>
-                </Grid2>
-                <Grid2>
+                </Grid>
+                <Grid>
                   <Fab color={"primary"} onClick={next}>
                     {isCurrentLanguageLeftToRight ? (
                       <NavigateNextIcon
@@ -141,16 +149,18 @@ const Interactive = () => {
                       />
                     )}
                   </Fab>
-                </Grid2>
-              </Grid2>
+                </Grid>
+              </Grid>
               {isImage ? (
-                <Grid2
+                <Grid
                   container
-                  justifyContent="center"
                   spacing={2}
-                  alignContent={"center"}
+                  sx={{
+                    justifyContent: "center",
+                    alignContent: "center",
+                  }}
                 >
-                  <Grid2>
+                  <Grid>
                     <Button
                       variant="contained"
                       color="primary"
@@ -164,8 +174,8 @@ const Interactive = () => {
                     >
                       {keyword("quiz_similarity")}
                     </Button>
-                  </Grid2>
-                  <Grid2>
+                  </Grid>
+                  <Grid>
                     <Button
                       data-testid="interactive-forensic"
                       variant="contained"
@@ -179,8 +189,8 @@ const Interactive = () => {
                     >
                       {keyword("quiz_forensic")}
                     </Button>
-                  </Grid2>
-                </Grid2>
+                  </Grid>
+                </Grid>
               ) : (
                 <Button
                   variant="contained"
@@ -195,8 +205,11 @@ const Interactive = () => {
                   {keyword("quiz_keyframes")}
                 </Button>
               )}
-
-              <Box m={3} />
+              <Box
+                sx={{
+                  m: 3,
+                }}
+              />
               <Typography variant={"h5"}>{obj.title}</Typography>
               <Accordion expanded={answerExpanded} onChange={handleExpanded}>
                 <AccordionSummary
@@ -204,25 +217,27 @@ const Interactive = () => {
                   aria-controls="panel4bh-content"
                   id="panel4bh-header"
                 >
-                  <Grid2
+                  <Grid
                     container
-                    justifyContent="space-between"
                     spacing={2}
-                    alignContent={"center"}
+                    sx={{
+                      justifyContent: "space-between",
+                      alignContent: "center",
+                    }}
                   >
-                    <Grid2>
+                    <Grid>
                       <Typography className={classes.heading} align={"justify"}>
                         {keyword("quiz_explanations")}
                       </Typography>
-                    </Grid2>
-                    <Grid2>
+                    </Grid>
+                    <Grid>
                       {answersAvailable ? (
                         <LockOpenIcon />
                       ) : (
                         <LockOutlinedIcon />
                       )}
-                    </Grid2>
-                  </Grid2>
+                    </Grid>
+                  </Grid>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Typography align={"justify"}>
