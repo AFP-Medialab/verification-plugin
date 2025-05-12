@@ -96,15 +96,11 @@ export default function assistantApiCalls() {
         mapping["<" + entity.iri.value + ">"]["schemaTypes"] =
           entity.schemaTypes.value.split(",");
       }
-      console.log(mapping);
-      console.log(namedEntityResult.data);
 
       const features = Object.values(mapping).reduce((acc, obj) => {
         acc[obj.concept] = obj;
         return acc;
       }, {});
-
-      console.log(features);
 
       const entities = { Person: [], Location: [], Organization: [] };
       for (const entity of namedEntityResult.data.response.annotations
@@ -113,6 +109,9 @@ export default function assistantApiCalls() {
           ...entity.features,
           ...features[entity.features.concept],
         };
+        entity.features.originalText = entity.features.string;
+        entity.features.string = entity.features.title;
+        delete entity.features["title"];
         if (
           new Set(entity.features.schemaTypes).intersection(
             new Set([
@@ -144,7 +143,6 @@ export default function assistantApiCalls() {
           entities["Organization"].push(entity);
         }
       }
-      console.log(entities);
       namedEntityResult.data.response.annotations = entities;
 
       return namedEntityResult.data;
