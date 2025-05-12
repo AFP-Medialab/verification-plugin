@@ -32,7 +32,7 @@ const MachineGeneratedText = () => {
 
     try {
       const dt =
-        await assistantApiCalls().callMachineGeneratedTextService(text);
+        await assistantApiCalls().callMachineGeneratedTextChunksService(text);
       setResult(dt);
     } catch {
       console.error("error");
