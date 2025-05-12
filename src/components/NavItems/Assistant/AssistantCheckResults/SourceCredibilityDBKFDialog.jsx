@@ -56,7 +56,7 @@ const SourceCredibilityDBKFDialog = (props) => {
       <Dialog onClose={handleClose} maxWidth={"lg"} open={open}>
         <DialogTitle>
           <Grid container>
-            <Grid container size={{ xs: 11 }} direction="row">
+            <Grid size={{ xs: 11 }}>
               <Typography variant="body1" component="div">
                 <Chip label={keyword(sourceType)} color={color} size="small" />{" "}
                 {keyword("source_cred_popup_header_domain")} {source}
