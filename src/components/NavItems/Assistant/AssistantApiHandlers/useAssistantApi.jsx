@@ -53,23 +53,100 @@ export default function assistantApiCalls() {
           lang: lang,
         },
       );
-      const query = `SELECT (REPLACE(STR(?concept), "http://www.wikidata.org/entity/", "") AS ?conceptID)
-                          (REPLACE(STR(?article), "https://en.wikipedia.org/wiki/", "http://dbpedia.org/page/") AS ?articleID)
-                   WHERE {
-                     VALUES ?concept { wd:Q142 wd:Q183 }
-                     ?article schema:about ?concept .
-                     ?article schema:isPartOf <https://en.wikipedia.org/> .
-                   }`;
+      const concepts =
+        namedEntityResult.data.response.annotations.Unclassified.map(
+          (e) => "wd:" + e.features.concept,
+        ).join(" ");
+      const wdQuery = `
+      SELECT (REPLACE(STR(?concept), "http://www.wikidata.org/entity/", "") AS ?conceptID)
+      (REPLACE(STR(?article), "https://en.wikipedia.org/wiki/", "http://dbpedia.org/page/") AS ?link)
+      (REPLACE(STR(?article), "https://en.wikipedia.org/wiki/", "http://dbpedia.org/resource/") AS ?iri)
+      ?title
+      WHERE {
+        VALUES ?concept { ${concepts} }
+        ?article schema:about ?concept .
+        ?article schema:isPartOf <https://en.wikipedia.org/> .
+        ?article schema:name ?title .
+      }`;
       const mappingResult = await axios.get(
-        `https://query.wikidata.org/sparql?format=json&query=${encodeURIComponent(query)}`,
+        `https://query.wikidata.org/sparql?format=json&query=${encodeURIComponent(wdQuery)}`,
       );
-      const bindings = mappingResult.data.results.bindings;
       const mapping = {};
-      for (const i in bindings) {
-        const entity = bindings[i];
-        mapping[entity.conceptID.value] = entity.articleID.value;
+      for (const entity of mappingResult.data.results.bindings) {
+        mapping["<" + entity.iri.value + ">"] = {
+          concept: entity.conceptID.value,
+          title: entity.title.value,
+          link: entity.link.value,
+        };
       }
-      console.log("MAPPING", mapping);
+      const dbQuery = `
+      SELECT ?iri ?abstract (GROUP_CONCAT(DISTINCT ?type; SEPARATOR = ",") AS ?schemaTypes)
+      WHERE {
+        VALUES ?iri { ${Object.keys(mapping).join(" ")} }
+        ?iri dbo:abstract ?abstract .
+        ?iri rdf:type ?type .
+        FILTER (lang(?abstract) = "en")
+      }`;
+      const dbpediaResult = await axios.get(
+        `https://dbpedia.org/sparql?query=${encodeURIComponent(dbQuery)}&format=application%2Fsparql-results%2Bjson&timeout=30000&signal_void=on&signal_unconnected=on`,
+      );
+      for (const entity of dbpediaResult.data.results.bindings) {
+        mapping["<" + entity.iri.value + ">"]["abstract"] =
+          entity.abstract.value;
+        mapping["<" + entity.iri.value + ">"]["schemaTypes"] =
+          entity.schemaTypes.value.split(",");
+      }
+      console.log(mapping);
+      console.log(namedEntityResult.data);
+
+      const features = Object.values(mapping).reduce((acc, obj) => {
+        acc[obj.concept] = obj;
+        return acc;
+      }, {});
+
+      console.log(features);
+
+      const entities = { Person: [], Location: [], Organization: [] };
+      for (const entity of namedEntityResult.data.response.annotations
+        .Unclassified) {
+        entity.features = {
+          ...entity.features,
+          ...features[entity.features.concept],
+        };
+        if (
+          new Set(entity.features.schemaTypes).intersection(
+            new Set([
+              "http://schema.org/Person",
+              "http://dbpedia.org/ontology/Person",
+            ]),
+          ).size > 0
+        ) {
+          entities["Person"].push(entity);
+        }
+        if (
+          new Set(entity.features.schemaTypes).intersection(
+            new Set([
+              "http://schema.org/Location",
+              "http://dbpedia.org/ontology/Location",
+            ]),
+          ).size > 0
+        ) {
+          entities["Location"].push(entity);
+        }
+        if (
+          new Set(entity.features.schemaTypes).intersection(
+            new Set([
+              "http://schema.org/Organization",
+              "http://dbpedia.org/ontology/Organisation",
+            ]),
+          ).size > 0
+        ) {
+          entities["Organization"].push(entity);
+        }
+      }
+      console.log(entities);
+      namedEntityResult.data.response.annotations = entities;
+
       return namedEntityResult.data;
     } catch (error) {
       console.log("ERROR", error);
