@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -11,6 +11,8 @@ import Typography from "@mui/material/Typography";
 
 import { ExpandLessOutlined, ExpandMoreOutlined } from "@mui/icons-material";
 
+
+import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 import { TextCopy } from "@Shared/Utils/TextCopy";
 import { Translate } from "@Shared/Utils/Translate";
 import { getLanguageName } from "@Shared/Utils/languageUtils";
@@ -110,6 +112,10 @@ export function TextFooterPrevFactChecks({ navigate, keyword }) {
     // instead need to set parameter then load text in SemanticSearch/index.jsx
     navigate("/app/" + path + "/assistantText");
   };
+  const classes = useMyStyles();
+  const expandMinimiseText = keyword("expand_minimise_text");
+  const [displayExpander, setDisplayExpander] = useState(true);
+  const [expanded, setExpanded] = useState(false);
 
   return (
     <Box>
