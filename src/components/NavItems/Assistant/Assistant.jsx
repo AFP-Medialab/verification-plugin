@@ -115,6 +115,9 @@ const Assistant = () => {
   const machineGeneratedTextSentencesFailState = useSelector(
     (state) => state.assistant.machineGeneratedTextSentencesFail,
   );
+  const multilingualStanceFailState = useSelector(
+    (state) => state.assistant.multilingualStanceFail,
+  );
 
   //local state
   const [formInput, setFormInput] = useState(inputUrl);
@@ -208,7 +211,8 @@ const Assistant = () => {
       subjectivityFailState ||
       prevFactChecksFailState ||
       machineGeneratedTextChunksFailState ||
-      machineGeneratedTextSentencesFailState ? (
+      machineGeneratedTextSentencesFailState ||
+      multilingualStanceFailState ? (
         <Grid size={{ xs: 12 }}>
           <AssistantCheckStatus />
         </Grid>
