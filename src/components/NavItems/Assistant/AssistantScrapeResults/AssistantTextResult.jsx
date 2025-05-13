@@ -254,27 +254,53 @@ const AssistantTextResult = () => {
           >
             <Tab label={keyword("raw_text")} {...a11yProps(0)} />
             <Tab
-              label={newsFramingTitle}
+              label={
+                <div>
+                  {newsFramingTitle}
+                  {newsFramingLoading && <LinearProgress />}
+                </div>
+              }
               {...a11yProps(1)}
               disabled={newsFramingFail || newsFramingLoading}
             />
             <Tab
-              label={newsGenreTitle}
+              label={
+                <div>
+                  {newsGenreTitle}
+                  {newsGenreLoading && <LinearProgress />}
+                </div>
+              }
               {...a11yProps(2)}
               disabled={newsGenreFail || newsGenreLoading}
             />
             <Tab
-              label={persuasionTitle}
+              label={
+                <div>
+                  {persuasionTitle}
+                  {persuasionLoading && <LinearProgress />}
+                </div>
+              }
               {...a11yProps(3)}
               disabled={persuasionFail || persuasionLoading}
             />
             <Tab
-              label={subjectivityTitle}
+              label={
+                <div>
+                  {subjectivityTitle}
+                  {subjectivityLoading && <LinearProgress />}
+                </div>
+              }
               {...a11yProps(4)}
               disabled={subjectivityFail || subjectivityLoading}
             />
             <Tab
-              label={machineGeneratedTextTitle}
+              label={
+                <div>
+                  {machineGeneratedTextTitle}
+                  {(machineGeneratedTextChunksLoading ||
+                    machineGeneratedTextSentencesLoading) && <LinearProgress />}
+                </div>
+              }
               {...a11yProps(5)}
               disabled={
                 machineGeneratedTextChunksFail ||
