@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import MuiAccordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
+import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
@@ -168,26 +169,38 @@ const ExtractedSourceCredibilityDBKFDialog = ({
               }}
             >
               {/* tooltip help */}
-              <Tooltip
-                interactive={"true"}
-                leaveDelay={50}
-                style={{ display: "flex", marginLeft: "auto" }}
-                title={
-                  <>
-                    <TransSourceCredibilityTooltip keyword={keyword} />
-                    <TransHtmlDoubleLineBreak keyword={keyword} />
-                    <TransUrlDomainAnalysisLink keyword={keyword} />
-                  </>
-                }
-                classes={{ tooltip: classes.assistantTooltip }}
+              <Box
+                sx={{
+                  pt: 0.75,
+                }}
               >
-                <HelpOutlineOutlinedIcon color={"action"} />
-              </Tooltip>
+                <Tooltip
+                  interactive={"true"}
+                  leaveDelay={50}
+                  style={{ display: "flex", marginLeft: "auto" }}
+                  title={
+                    <>
+                      <TransSourceCredibilityTooltip keyword={keyword} />
+                      <TransHtmlDoubleLineBreak keyword={keyword} />
+                      <TransUrlDomainAnalysisLink keyword={keyword} />
+                    </>
+                  }
+                  classes={{ tooltip: classes.assistantTooltip }}
+                >
+                  <HelpOutlineOutlinedIcon color={"action"} />
+                </Tooltip>
+              </Box>
 
               {/* close button */}
-              <IconButton onClick={handleClose}>
-                <CloseIcon />
-              </IconButton>
+              <Box
+                sx={{
+                  pr: 1,
+                }}
+              >
+                <IconButton onClick={handleClose}>
+                  <CloseIcon />
+                </IconButton>
+              </Box>
             </Grid>
           </Grid>
         </DialogTitle>
