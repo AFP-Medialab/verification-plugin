@@ -74,12 +74,20 @@ const AssistantWarnings = () => {
               </Box>
             </Typography>
           </div>
-          <IconButton
-            className={classes.assistantIconRight}
-            onClick={() => dispatch(setWarningExpanded(!warningExpanded))}
+          <Box
+            sx={{
+              pr: 1,
+              pt: 1,
+            }}
           >
-            <ExpandMoreIcon color={"warning"} />
-          </IconButton>
+            <IconButton
+              className={classes.assistantIconRight}
+              onClick={() => dispatch(setWarningExpanded(!warningExpanded))}
+              sx={{ p: 1 }}
+            >
+              <ExpandMoreIcon color={"warning"} />
+            </IconButton>
+          </Box>
         </Grid>
         <Grid size={{ xs: 12 }}>
           <Collapse
