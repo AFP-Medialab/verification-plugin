@@ -53,17 +53,18 @@ export default function assistantApiCalls() {
           lang: lang,
         },
       );
-      const concepts =
+      const concepts = new Set(
         namedEntityResult.data.response.annotations.Unclassified.map(
           (e) => "wd:" + e.features.concept,
-        ).join(" ");
+        ),
+      );
       const wdQuery = `
       SELECT (REPLACE(STR(?concept), "http://www.wikidata.org/entity/", "") AS ?conceptID)
       (REPLACE(STR(?article), "https://en.wikipedia.org/wiki/", "http://dbpedia.org/page/") AS ?link)
       (REPLACE(STR(?article), "https://en.wikipedia.org/wiki/", "http://dbpedia.org/resource/") AS ?iri)
       ?title
       WHERE {
-        VALUES ?concept { ${concepts} }
+        VALUES ?concept { ${[...concepts].join(" ")} }
         ?article schema:about ?concept .
         ?article schema:isPartOf <https://en.wikipedia.org/> .
         ?article schema:name ?title .
