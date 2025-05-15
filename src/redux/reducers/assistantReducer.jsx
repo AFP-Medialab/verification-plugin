@@ -17,6 +17,8 @@ const defaultState = {
   processUrlType: null,
   inputUrlType: null,
 
+  chatbotMessages: [],
+
   positiveSourceCred: null,
   cautionSourceCred: null,
   mixedSourceCred: null,
@@ -96,6 +98,20 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_ERROR_KEY":
     case "SET_PROCESS_URL":
     case "SET_SCRAPED_DATA":
+    case "ADD_CHATBOT_MESSAGE": {
+      const message = action.payload;
+      message.id = state.chatbotMessages.length + 1;
+      return {
+        ...state,
+        chatbotMessages: [...state.chatbotMessages, message],
+      };
+    }
+    case "CLEAR_CHATBOT_MESSAGES": {
+      return {
+        ...state,
+        chatbotMessages: [],
+      };
+    }
     case "SET_PROCESS_URL_ACTIONS":
     case "SET_MODE":
     case "SET_IMAGE_VIDEO_SELECTED":
@@ -126,6 +142,8 @@ const assistantReducer = (state = defaultState, action) => {
         urlMode: false,
         imageVideoSelected: false,
         singleMediaPresent: null,
+
+        chatbotMessages: [],
 
         inputUrl: null,
         errorKey: null,
