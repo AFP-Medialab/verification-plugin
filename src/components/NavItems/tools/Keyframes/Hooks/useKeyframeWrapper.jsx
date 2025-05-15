@@ -134,7 +134,7 @@ export const useProcessKeyframes = () => {
         setStatus(`Processing...`);
 
         if (currentStatus !== "SUBSHOT_DETECTION_ANALYSIS_COMPLETED") {
-          await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 3s before next check
+          await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 3 s before next check
         }
       } while (currentStatus !== "SUBSHOT_DETECTION_ANALYSIS_COMPLETED");
 
