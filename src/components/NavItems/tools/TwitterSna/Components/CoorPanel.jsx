@@ -17,6 +17,7 @@ import { GridExpandMoreIcon } from "@mui/x-data-grid";
 
 const CoorPanel = ({
   selected,
+  dataSources,
   timeWindow,
   setGraph,
   setTimeWindow,
@@ -32,6 +33,9 @@ const CoorPanel = ({
   objectChoice,
   setObjectChoice,
 }) => {
+  let selectedSources = dataSources.filter((source) =>
+    selected.includes(source.id),
+  );
   return (
     <>
       <Box>
@@ -68,7 +72,13 @@ const CoorPanel = ({
             }}
           />
           {selected.length > 0 &&
-          selected.every((x) => x.includes("tweets~")) ? (
+          selectedSources.every(
+            (x) =>
+              x.headers.includes("links") &&
+              x.headers.includes("hashtags") &&
+              x.headers.includes("mentions") &&
+              x.headers.includes("text"),
+          ) ? (
             <>
               <Typography pl={2}> Object:</Typography>
               <FormControl>

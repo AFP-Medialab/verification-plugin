@@ -11,11 +11,15 @@ import Typography from "@mui/material/Typography";
 import { GridExpandMoreIcon } from "@mui/x-data-grid";
 import dayjs from "dayjs";
 
+import DetailModal from "./DetailModal";
+
 const PropagationTimeline = (props) => {
   let dataSources = props.dataSources;
   let selected = props.selected;
   let setPlot = props.setPlot;
   let plot = props.plot;
+  let setOpenDetailModal = props.setOpenDetailModal;
+  let setDetailContent = props.setDetailContent;
 
   const setPropagationTimeline = () => {
     console.log(dataSources);
@@ -35,6 +39,9 @@ const PropagationTimeline = (props) => {
     let plotPoints = selectedContent.map((x) => ({
       user: nameMaps.has(x.username) ? nameMaps.get(x.username) : x.username,
       shareTime: x.date,
+      text: x.text ? x.text : "",
+      hashtags: x.hashtags ? x.hashtags : "",
+      original: x.TweetLink ? x.TweetLink : "",
       likes: x.likes ? x.likes : 0,
       quotes: x.quotes ? x.quotes : 0,
       retweets: x.retweets ? x.retweets : 0,
@@ -107,7 +114,11 @@ const PropagationTimeline = (props) => {
         {
           type: "line",
           smooth: true,
-          symbol: "none",
+          symbol: "circle", // Show dots
+          symbolSize: 6, // Dot size
+          itemStyle: {
+            color: "#82ca9d",
+          },
           lineStyle: {
             width: 3,
           },
@@ -125,9 +136,26 @@ const PropagationTimeline = (props) => {
       },
     };
 
+    const handleClick = (params) => {
+      // Placeholder for what to do when a dot is clicked
+      const clickedDate = dayjs(params.value[0]).format("YYYY-MM-DD");
+      console.log(`Clicked dot: ${clickedDate}`);
+      console.log(
+        plotPoints.filter(
+          (x) => dayjs(x.shareTime).format("YYYY-MM-DD") === clickedDate,
+        ),
+      );
+      setDetailContent(
+        plotPoints.filter(
+          (x) => dayjs(x.shareTime).format("YYYY-MM-DD") === clickedDate,
+        ),
+      );
+      setOpenDetailModal(true);
+    };
+
     setPlot(
       <div style={{ width: "100%", height: "500px" }}>
-        <ReactECharts option={option} />
+        <ReactECharts option={option} onEvents={{ click: handleClick }} />
       </div>,
     );
   };

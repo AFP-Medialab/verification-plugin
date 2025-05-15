@@ -307,7 +307,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         id: jp.query(ent.res, "$.result..rest_id")[0],
         username: "@" + jp.query(ent.res, "$..user_results..screen_name")[0],
         display_name: jp.query(ent.res, "$..user_results..name")[0],
-        tweet_text: jp.query(ent.res, "$..full_text")[0],
+        tweet_text: jp.query(ent.res, "$..result.legacy.full_text")[0],
         links: jp
           .query(ent, "$..result.legacy.entities.urls")
           .flat(1)
@@ -325,7 +325,16 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         quotes: jp.query(ent.res, "$..quote_count")[0],
         retweets: jp.query(ent.res, "$..retweet_count")[0],
         replies: jp.query(ent.res, "$..reply_count")[0],
+        views: jp.query(ent.res, "$..result.views.count")[0]
+          ? jp.query(ent.res, "$..result.views.count")[0]
+          : 0,
+        TweetLink:
+          "https://x.com/" +
+          jp.query(ent.res, "$..user_results..screen_name")[0] +
+          "/status/" +
+          jp.query(ent.res, "$.result..rest_id")[0],
       }));
+      console.log(x);
       sendResponse(x);
     } else if (request.prompt === "viewTweets") {
       const t = await db.tweets.toArray();

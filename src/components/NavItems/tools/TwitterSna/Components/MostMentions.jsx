@@ -23,6 +23,8 @@ const MostMentions = (props) => {
   let selected = props.selected;
   let mentionGraph = props.mentionGraph;
   let setMentionGraph = props.setMentionGraph;
+  let setDetailContent = props.setDetailContent;
+  let setOpenDetailModal = props.setOpenDetailModal;
 
   const getMentions = () => {
     console.log(mentionGraph);
@@ -79,6 +81,10 @@ const MostMentions = (props) => {
               height={400}
               data={sorted}
               margin={{ top: 20, right: 30, left: 20, bottom: 100 }}
+              onClick={({ activePayload }) => {
+                if (activePayload?.[0]?.payload)
+                  handleBarClick(activePayload[0].payload);
+              }}
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis
@@ -95,6 +101,11 @@ const MostMentions = (props) => {
             </BarChart>
           </div>,
         );
+      } else {
+        setDetailContent(
+          selectedContent.filter((x) => x.mentions.includes(data.name)),
+        );
+        setOpenDetailModal(true);
       }
     };
 
@@ -104,7 +115,7 @@ const MostMentions = (props) => {
           data={data}
           margin={{ top: 20, right: 30, left: 20, bottom: 100 }}
           onClick={({ activePayload }) => {
-            if (activePayload?.[0]?.payload?.isOther)
+            if (activePayload?.[0]?.payload)
               handleBarClick(activePayload[0].payload);
           }}
         >

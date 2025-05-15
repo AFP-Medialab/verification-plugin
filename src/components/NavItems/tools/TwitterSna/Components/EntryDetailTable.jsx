@@ -30,6 +30,10 @@ const EntryDetailTable = ({
   setSearchFilter,
   expanded,
   setExpanded,
+  orderBy,
+  setOrderBy,
+  order,
+  setOrder,
 }) => {
   const ExpandableTableCell = ({ text, maxChars = 100 }) => {
     const isLong = text.length > maxChars;
@@ -57,6 +61,39 @@ const EntryDetailTable = ({
     setPage(0);
   };
 
+  const filteredTweets =
+    searchFilter.length > 0
+      ? allTweets.filter(
+          (x) =>
+            Object.values(x)
+              .flat(2)
+              .toString()
+              .toLowerCase()
+              .includes(searchFilter.toLowerCase()),
+          // .some((k) =>k ? k.toString().toLowerCase().includes(searchFilter.toLowerCase()) : false)
+        )
+      : allTweets;
+
+  const sortedTweets = [...filteredTweets].sort((a, b) => {
+    if (!orderBy) return 0;
+    const aVal = a[orderBy] ?? "";
+    const bVal = b[orderBy] ?? "";
+    return orderBy === "asc"
+      ? aVal.toString().localeCompare(bVal.toString())
+      : bVal.toString().localeCompare(aVal.toString());
+  });
+
+  const pagedTweets = sortedTweets.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage,
+  );
+
+  const handleSort = (field) => {
+    const isAsc = orderBy === field && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(field);
+  };
+
   return (
     <Paper elevation={1} sx={{ width: "100%" }}>
       <Box p={2}></Box>
@@ -76,8 +113,27 @@ const EntryDetailTable = ({
             <TableRow>
               {headers ? (
                 headers.map((k) => (
-                  <TableCell key={k} align="center" style={{ minWidth: 200 }}>
-                    {k}
+                  <TableCell
+                    key={k}
+                    align="center"
+                    onClick={() => handleSort(k)}
+                    style={{
+                      minWidth: 200,
+                      cursor: "pointer",
+                      userSelect: "none",
+                    }}
+                  >
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <span>{k}</span>
+                      {orderBy === k && (
+                        <span>{orderBy === "asc" ? "▲" : "▼"}</span>
+                      )}
+                    </Stack>
                   </TableCell>
                 ))
               ) : (
@@ -86,66 +142,23 @@ const EntryDetailTable = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {searchFilter.length > 0
-              ? allTweets
-                  .filter((x) =>
-                    Object.entries(x)
-                      .flat(2)
-                      .some((k) => k.toString().includes(searchFilter)),
-                  )
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((x) => {
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={x.id + "#"}
-                      >
-                        {headers.map((k) => (
-                          <ExpandableTableCell
-                            text={x[k] ? x[k].toString() : "Missing"}
-                            key={k ? k : Math.floor(Math.random() * 100000)}
-                            align="left"
-                          ></ExpandableTableCell>
-                        ))}
-                      </TableRow>
-                    );
-                  })
-              : allTweets
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((x) => {
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={x.id + "#"}
-                      >
-                        {headers.map((k) => (
-                          <ExpandableTableCell
-                            text={x[k] ? x[k].toString() : "Missing"}
-                            key={k}
-                            align="left"
-                          ></ExpandableTableCell>
-                        ))}
-                      </TableRow>
-                    );
-                  })}
+            {pagedTweets.map((x) => (
+              <TableRow hover role="checkbox" tabIndex={-1} key={x.id + "#"}>
+                {headers.map((k) => (
+                  <ExpandableTableCell
+                    text={x[k] ? x[k].toString() : "Missing"}
+                    key={k}
+                    align="left"
+                  />
+                ))}
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
         <TablePagination
           rowsPerPageOptions={[10, 25, 100]}
           component="div"
-          count={
-            searchFilter.length > 0
-              ? allTweets.filter((x) =>
-                  Object.entries(x)
-                    .flat(2)
-                    .some((k) => k.toString().includes(searchFilter)),
-                ).length
-              : allTweets.length
-          }
+          count={sortedTweets.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

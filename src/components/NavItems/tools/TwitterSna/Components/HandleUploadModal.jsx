@@ -9,10 +9,14 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Modal from "@mui/material/Modal";
 import Select from "@mui/material/Select";
+import Stack from "@mui/material/Stack";
+import SvgIcon from "@mui/material/SvgIcon";
 import Typography from "@mui/material/Typography";
 
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
+import SNAIcon from "../../../../NavBar/images/SVG/DataAnalysis/Twitter_sna.svg";
 
 // Replace this with the actual path to your Meta logo image
 const metaLogoUrl =
@@ -41,9 +45,19 @@ const HandleUploadModal = ({
   setCustomExpanded,
   metaSelected,
   setMetaSelected,
+  snaSelected,
+  setSnaSelected,
 }) => {
   const handleMetaClick = () => {
     setMetaSelected((prev) => !prev);
+    setSnaSelected(false);
+    setCustomExpanded(false);
+  };
+
+  const handleSnaClick = () => {
+    setSnaSelected((prev) => !prev);
+    setMetaSelected(false);
+    setCustomExpanded(false);
   };
 
   const handleCustomToggle = () => {
@@ -63,25 +77,55 @@ const HandleUploadModal = ({
           Set required fields for COOR Analysis
         </Typography>
 
-        {/* Meta Logo Box */}
-        <Box
-          onClick={handleMetaClick}
-          sx={{
-            width: 50,
-            height: 50,
-            borderRadius: 2,
-            border: metaSelected ? "2px solid blue" : "1px solid #ccc",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            "&:hover": {
-              backgroundColor: "#f5f5f5",
-            },
-          }}
-        >
-          <img src={metaLogoUrl} alt="Meta" style={{ width: 38, height: 21 }} />
-        </Box>
+        <Stack direction={"row"} spacing={2} alignItems="center">
+          {/* Meta Logo Box */}
+          <Box
+            onClick={handleMetaClick}
+            sx={{
+              width: 50,
+              height: 50,
+              borderRadius: 2,
+              border: metaSelected ? "2px solid blue" : "1px solid #ccc",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              "&:hover": {
+                backgroundColor: "#f5f5f5",
+              },
+            }}
+          >
+            <img
+              src={metaLogoUrl}
+              alt="Meta"
+              style={{ width: 38, height: 21 }}
+            />
+          </Box>
+
+          <Box
+            onClick={handleSnaClick}
+            sx={{
+              width: 50,
+              height: 50,
+              borderRadius: 2,
+              border: snaSelected ? "2px solid blue" : "1px solid #ccc",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              "&:hover": {
+                backgroundColor: "#f5f5f5",
+              },
+            }}
+          >
+            <SvgIcon
+              component={SNAIcon}
+              inheritViewBox
+              style={{ width: 38, height: 21 }}
+            />
+            {/* <img src={snaIconUrl} alt="Sna" style={{ width: 38, height: 21 }} /> */}
+          </Box>
+        </Stack>
 
         {/* Expandable Custom Section */}
         <Box>

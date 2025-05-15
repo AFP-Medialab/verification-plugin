@@ -33,6 +33,9 @@ const TextAnalysis = (props) => {
       .flatMap((m) => [...m]),
   );
 
+  let setOpenDetailModal = props.setOpenDetailModal;
+  let setDetailContent = props.setDetailContent;
+
   const countWords = () => {
     let acc = {};
     let s = selectedContent
@@ -108,7 +111,22 @@ const TextAnalysis = (props) => {
     let wordCloudData = sorted
       .slice(0, 100)
       .map((x) => ({ text: x.name, value: x.occurences }));
-    setWordCloud(<ReactWordcloud words={wordCloudData} options={options} />);
+    let wordCloudCallbacks = {
+      onWordClick: (word) => {
+        console.log(word);
+        setDetailContent(
+          selectedContent.filter((x) => x.text?.includes(word.text)),
+        );
+        setOpenDetailModal(true);
+      },
+    };
+    setWordCloud(
+      <ReactWordcloud
+        words={wordCloudData}
+        options={options}
+        callbacks={wordCloudCallbacks}
+      />,
+    );
   };
 
   return (

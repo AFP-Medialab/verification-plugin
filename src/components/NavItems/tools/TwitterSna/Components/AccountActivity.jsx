@@ -86,6 +86,9 @@ const AccountActivity = (props) => {
     selected.includes(source.id),
   );
 
+  let setOpenDetailModal = props.setOpenDetailModal;
+  let setDetailContent = props.setDetailContent;
+
   const measureActivity = () => {
     let selectedContent = selectedSources
       .map((source) => source.content)
@@ -114,12 +117,14 @@ const AccountActivity = (props) => {
     const pieData = Object.entries(groupedContent)
       .map(([username, entries]) => ({
         username: nameMaps.has(username) ? nameMaps.get(username) : username,
+        ogName: username,
         entries: entries.length,
         likes: entries.reduce((acc, cur) => acc + parseInt(cur.likes || 0), 0),
         retweets: entries.reduce(
           (acc, cur) => acc + parseInt(cur.retweets || 0),
           0,
         ),
+        views: entries.reduce((acc, cur) => acc + parseInt(cur.views || 0), 0),
         Likes: entries.reduce(
           (acc, current) => acc + parseInt(current["Likes"] || 0),
           0,
@@ -182,6 +187,10 @@ const AccountActivity = (props) => {
               height={400}
               data={pieData}
               margin={{ top: 20, right: 30, left: 20, bottom: 100 }}
+              onClick={({ activePayload }) => {
+                if (activePayload?.[0]?.payload)
+                  handleBarClick(activePayload[0].payload);
+              }}
             >
               <Legend />
               <CartesianGrid strokeDasharray="3 3" />
@@ -202,6 +211,11 @@ const AccountActivity = (props) => {
             </BarChart>
           </div>,
         );
+      } else {
+        // console.log(data.username)
+        // console.log(groupedContent[data.username])
+        setDetailContent(groupedContent[data.ogName]);
+        setOpenDetailModal(true);
       }
     };
 
@@ -211,7 +225,7 @@ const AccountActivity = (props) => {
           data={topUsers}
           margin={{ top: 20, right: 30, left: 20, bottom: 100 }}
           onClick={({ activePayload }) => {
-            if (activePayload?.[0]?.payload?.isOther)
+            if (activePayload?.[0]?.payload)
               handleBarClick(activePayload[0].payload);
           }}
         >
@@ -263,6 +277,14 @@ const AccountActivity = (props) => {
       item: (
         <MenuItem key={"activity-select-likes"} value={"likes"}>
           Likes
+        </MenuItem>
+      ),
+    },
+    {
+      key: "views",
+      item: (
+        <MenuItem key={"activity-select-views"} value={"views"}>
+          Views
         </MenuItem>
       ),
     },

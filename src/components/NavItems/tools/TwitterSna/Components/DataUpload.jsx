@@ -16,6 +16,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import TableSortLabel from "@mui/material/TableSortLabel";
 import Typography from "@mui/material/Typography";
 
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -23,6 +24,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import SettingsIcon from "@mui/icons-material/Settings";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import EntryDetailTable from "./EntryDetailTable";
 
@@ -52,6 +54,14 @@ const CheckboxTable = ({
   setDlAnchorEl,
   dataSources,
   setDataSources,
+  orderBy,
+  setOrderBy,
+  order,
+  setOrder,
+  sortedTweets,
+  setSortedTweets,
+  setOpenDetailModal,
+  setDetailContent,
 }) => {
   const toggleCollapse = (id) => {
     setOpenRowIds((prev) =>
@@ -105,11 +115,13 @@ const CheckboxTable = ({
     let id = dlAnchorEl.getAttribute("rowkey");
     let selectedData = dataSources.filter((source) => source.id === id)[0];
     let headers = selectedData.headers.join(",");
+    console.log(selectedData);
     let csvData = selectedData.content
       .map((obj) =>
-        Object.values(obj).map(
-          (y) =>
-            `"${y.toString().replaceAll('"', '""').replaceAll("\n", " ")}"`,
+        selectedData.headers.map((k) =>
+          obj[k]
+            ? `"${obj[k].toString().replaceAll('"', '""').replaceAll("\n", " ")}"`
+            : "missing",
         ),
       )
       .join("\n");
@@ -178,12 +190,13 @@ const CheckboxTable = ({
                   <React.Fragment key={row.id}>
                     <TableRow hover role="checkbox" selected={isItemSelected}>
                       <TableCell>
-                        <IconButton onClick={() => toggleCollapse(row.id)}>
-                          {isOpen ? (
-                            <KeyboardArrowUpIcon />
-                          ) : (
-                            <KeyboardArrowDownIcon />
-                          )}
+                        <IconButton
+                          onClick={() => {
+                            setDetailContent(row.content);
+                            setOpenDetailModal(true);
+                          }}
+                        >
+                          <VisibilityIcon />
                         </IconButton>
                       </TableCell>
                       <TableCell padding="checkbox">
@@ -239,27 +252,6 @@ const CheckboxTable = ({
                         >
                           <DeleteIcon />
                         </IconButton>
-                      </TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell colSpan={5} sx={{ p: 0, border: 0 }}>
-                        <Collapse in={isOpen} timeout="auto" unmountOnExit>
-                          <Box sx={{ margin: 2 }}>
-                            {EntryDetailTable({
-                              allTweets,
-                              headers,
-                              page,
-                              setPage,
-                              rowsPerPage,
-                              setRowsPerPage,
-                              searchFilter,
-                              setSearchFilter,
-                              expanded,
-                              setExpanded,
-                            })}
-                          </Box>
-                        </Collapse>
                       </TableCell>
                     </TableRow>
                   </React.Fragment>

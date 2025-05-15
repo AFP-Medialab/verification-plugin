@@ -35,11 +35,18 @@ const Hashtags = (props) => {
       )
       .flatMap((m) => [...m]),
   );
+  let setOpenDetailModal = props.setOpenDetailModal;
+  let setDetailContent = props.setDetailContent;
 
   const analyzeHashtags = () => {
     let existingHashtags = selectedContent
       .map((x) =>
-        x.hashtags?.replace("‚", ",").replace("‚", ",").split(",").flat(),
+        x.hashtags
+          ?.replace("‚", ",")
+          .replace("‚", ",")
+          .toLowerCase()
+          .split(",")
+          .flat(),
       )
       .flat();
     let groupedHashtags = existingHashtags.reduce(function (acc, curr) {
@@ -75,6 +82,10 @@ const Hashtags = (props) => {
               height={400}
               data={sorted}
               margin={{ top: 20, right: 30, left: 20, bottom: 100 }}
+              onClick={({ activePayload }) => {
+                if (activePayload?.[0]?.payload)
+                  handleBarClick(activePayload[0].payload);
+              }}
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis
@@ -91,6 +102,11 @@ const Hashtags = (props) => {
             </BarChart>
           </div>,
         );
+      } else {
+        setDetailContent(
+          selectedContent.filter((x) => x.hashtags.includes(data.name)),
+        );
+        setOpenDetailModal(true);
       }
     };
 
@@ -100,7 +116,7 @@ const Hashtags = (props) => {
           data={firstUsers}
           margin={{ top: 20, right: 30, left: 20, bottom: 100 }}
           onClick={({ activePayload }) => {
-            if (activePayload?.[0]?.payload?.isOther)
+            if (activePayload?.[0]?.payload)
               handleBarClick(activePayload[0].payload);
           }}
         >

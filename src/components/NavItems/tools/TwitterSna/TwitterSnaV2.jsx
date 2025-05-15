@@ -27,6 +27,7 @@ import useMyStyles, {
 import CoorPanel from "./Components/CoorPanel";
 import DataUpload from "./Components/DataUpload";
 import CheckboxTable from "./Components/DataUpload";
+import DetailModal from "./Components/DetailModal";
 import EntryDetailTable from "./Components/EntryDetailTable";
 import HandleUploadModal from "./Components/HandleUploadModal";
 import PropagationTimeline from "./Components/PropagationTimeline";
@@ -104,6 +105,9 @@ const TwitterSnaV2 = () => {
   const [edgeWeight, setEdgeWeight] = useState(0.5);
   const [minParticipation, setMinParticipation] = useState(1);
 
+  const [detailContent, setDetailContent] = useState([]);
+  const [openDetailModal, setOpenDetailModal] = useState(false);
+
   const inputRef = useRef();
   const fgRef = useRef();
 
@@ -119,6 +123,15 @@ const TwitterSnaV2 = () => {
     ["User ID", "Facebook Id"],
     ["Entry ID", "URL"],
     ["Share Time", "Post Created"],
+  ]);
+
+  const [snaSelected, setSnaSelected] = useState(false);
+
+  const snaDefaultFields = new Map([
+    ["Object", "objects"],
+    ["User ID", "username"],
+    ["Entry ID", "id"],
+    ["Share Time", "date"],
   ]);
 
   const [dataSources, setDataSources] = useState([]);
@@ -144,50 +157,57 @@ const TwitterSnaV2 = () => {
   };
 
   const addUploadToDataSources = () => {
-    let fieldMap = metaSelected ? metaDefaultFields : required_fields_labels;
+    let fieldMap = (function () {
+      if (metaSelected) {
+        return metaDefaultFields;
+      } else if (snaSelected) {
+        return snaDefaultFields;
+      } else return required_fields_labels;
+    })();
+    // console.log(fieldMap)
     let accountNameMap = metaSelected
       ? new Map(
           uploadedData.map((item) => [item["Facebook Id"], item["Page Name"]]),
         )
       : new Map();
 
+    // let objectField = fieldMap.get("Object")
     let reformatedTweets = Array.from(
       new Map(
         uploadedData.map((item) => [item[fieldMap.get("Entry ID")], item]),
       ).values(),
-    )
-      .filter(
-        (x) =>
-          x[fieldMap.get("Object")] && x[fieldMap.get("Object")].length > 0,
-      )
-      .map(
-        ({
-          [fieldMap.get("Object")]: objects,
-          [fieldMap.get("Share Time")]: date,
-          [fieldMap.get("Entry ID")]: id,
-          [fieldMap.get("User ID")]: uid,
-          ...rest
-        }) => ({
-          objects: objects,
-          date: metaSelected ? date.slice(0, -4) : date,
-          username: uid,
-          id: id,
-          ...rest,
-        }),
-      );
-    let reformatedTweets_withHashtag = metaSelected
-      ? reformatedTweets.map(({ ["Message"]: text, ...rest }) => ({
-          ...rest,
-          text,
-          hashtags: text
-            .split(" ")
-            .filter((x) => x.length > 2 && x.includes("#"))
-            .join(","),
-        }))
-      : reformatedTweets;
+    ).map(
+      ({
+        [fieldMap.get("Object")]: objects,
+        [fieldMap.get("Share Time")]: date,
+        [fieldMap.get("Entry ID")]: id,
+        [fieldMap.get("User ID")]: uid,
+        ...rest
+      }) => ({
+        objects: objects,
+        [fieldMap.get("Object")]: objects,
+        date: metaSelected ? date.slice(0, -4) : date,
+        username: uid,
+        id: id,
+        ...rest,
+      }),
+    );
+    let reformatedTweets_withHashtag =
+      !snaSelected && Object.keys(reformatedTweets[0]).includes("text")
+        ? reformatedTweets.map(({ ["Message"]: text, ...rest }) => ({
+            ...rest,
+            text,
+            hashtags: text
+              ?.split(" ")
+              .filter((x) => x.length > 2 && x.includes("#"))
+              .join(","),
+          }))
+        : reformatedTweets;
     console.log(reformatedTweets);
     dataSources.push({
-      id: (dataSources.length + 1).toString(),
+      id: snaSelected
+        ? "tweets~upload#" + (dataSources.length + 1).toString()
+        : (dataSources.length + 1).toString(),
       name: uploadedFile.name,
       description: uploadedData.length,
       content: reformatedTweets_withHashtag,
@@ -411,7 +431,7 @@ const TwitterSnaV2 = () => {
               o.objects = x;
               return o;
             })
-            .filter((x) => x.objects.length > 0)
+            .filter((x) => x.objects?.length > 0)
         : selectedContent;
     let nameMaps = new Map(
       selectedSources
@@ -436,6 +456,7 @@ const TwitterSnaV2 = () => {
         .map((z) => z[0].split("-").filter((k) => k != x))
         .flat()
         .map((z) => (nameMaps.has(z) ? nameMaps.get(z) : z)),
+      ogName: x,
     }));
 
     setGraphData(edges);
@@ -485,64 +506,6 @@ const TwitterSnaV2 = () => {
       group: communities[id],
     }));
 
-    // console.log(nodes)
-
-    // const links = graph.edges().map((edge) => {
-    //   const { source, target } = graph.extremities(edge);
-    //   return { source, target };
-    // });
-
-    // const processedData = (() => {
-    //   const graph = new MultiGraph();
-    //   console.log(graph.multi);
-
-    //   // Add nodes
-    //   rawData.nodes.forEach((node) => {
-    //     graph.addNode(node.id, {});
-    //   });
-
-    //   // Add edges
-    //   rawData.links.forEach((link) => {
-    //     if (
-    //       graph.hasNode(link.source) &&
-
-    //       graph.hasNode(link.target)
-    //     ) {
-
-    //       graph.addUndirectedEdge(link.source, link.target);
-    //     }
-    //   });
-    //   console.log("OK")
-    //   // Run Louvain
-    //   const communities = louvain(graph);
-    //   console.log(communities)
-    //   graph.updateEachNodeAttributes((_, attr, key) => ({
-    //     ...attr,
-    //     community: communities[key],
-    //   }));
-
-    //   // Calculate degrees
-    //   const degrees = {};
-    //   graph.forEachNode((node) => {
-    //     degrees[node] = graph.degree(node);
-    //   });
-
-    //   // Prepare data for ForceGraph
-    //   const nodes = graph.nodes().map((id) => ({
-    //     id,
-    //     val: degrees[id], // used for node size
-    //     group: graph.getNodeAttribute(id, "community"),
-    //   }));
-
-    //   const links = graph.edges().map((edge) => {
-    //     const { source, target } = graph.extremities(edge);
-    //     return { source, target };
-    //   });
-
-    //   return { nodes, links };
-    // }, [rawData]);
-
-    // console.log(processedData[0])
     let links = rawData.links;
     return (
       <ForceGraph2D
@@ -553,13 +516,37 @@ const TwitterSnaV2 = () => {
         nodeLabel="id"
         nodeCanvasObjectMode={() => "after"}
         nodeCanvasObject={(node, ctx) => {
-          const label = node.id;
+          let selectedSources = dataSources.filter((source) =>
+            selected.includes(source.id),
+          );
+          let nameMaps = new Map(
+            selectedSources
+              .map((source) =>
+                source.accountNameMap ? source.accountNameMap : new Map(),
+              )
+              .flatMap((m) => [...m]),
+          );
+          let label = nameMaps.has(node.id) ? nameMaps.get(node.id) : node.id;
           const fontSize = 4;
           ctx.font = `${fontSize}px Sans-Serif`;
           ctx.fillStyle = "black";
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
           ctx.fillText(label, node.x, node.y);
+        }}
+        onNodeClick={(node) => {
+          console.log(node);
+          let selectedSources = dataSources.filter((source) =>
+            selected.includes(source.id),
+          );
+          let selectedContent = selectedSources
+            .map((source) => source.content)
+            .flat();
+          console.log(selectedContent.filter((x) => x.username === node.id));
+          setDetailContent(
+            selectedContent.filter((x) => x.username === node.id),
+          );
+          setOpenDetailModal(true);
         }}
       />
     );
@@ -609,7 +596,7 @@ const TwitterSnaV2 = () => {
   };
 
   const showGraph = () => {
-    let n = graphData.map((x) => ({ id: x.source }));
+    let n = graphData.map((x) => ({ id: x.source, ogName: x.ogName }));
     let e = graphData
       .map((x) => x.dst.map((y) => ({ source: x.source, target: y })))
       .flat();
@@ -667,12 +654,15 @@ const TwitterSnaV2 = () => {
     setCustomExpanded,
     metaSelected,
     setMetaSelected,
+    snaSelected,
+    setSnaSelected,
   };
 
   const [selected, setSelected] = useState([]);
 
   const coorProps = {
     selected,
+    dataSources,
     timeWindow,
     setGraph,
     setTimeWindow,
@@ -694,6 +684,12 @@ const TwitterSnaV2 = () => {
   const [openRowIds, setOpenRowIds] = useState([]);
 
   const [dlAnchorEl, setDlAnchorEl] = useState(null);
+
+  const [orderBy, setOrderBy] = useState("name"); // default sort field
+
+  const [order, setOrder] = useState("desc"); // 'asc' or 'desc'
+
+  const [sortedTweets, setSortedTweets] = useState(allTweets);
 
   const checkboxTableProps = {
     inputRef,
@@ -720,11 +716,52 @@ const TwitterSnaV2 = () => {
     setDlAnchorEl,
     dataSources,
     setDataSources,
+    orderBy,
+    setOrderBy,
+    order,
+    setOrder,
+    setOpenDetailModal,
+    setDetailContent,
   };
 
   const [plot, setPlot] = useState(undefined);
 
   const [SNATab, setSNATab] = useState(0);
+
+  // const [detailAllTweets, setDetailAllTweets] = useState([])
+  // const [detailHeaders,setDetailHeaders] = useState([])
+  // const [detailPage,setDetailPage] = useState(0)
+  // const [detailSearchFilter,setDetailSearchFilter] = useState("")
+  // const [detailExpanded,setDetailExpanded] = useState(false)
+  // const [detailOrderBy,setDetailOrderBy] = useState("name")
+  // const [detailOrder,setDetailOrder] = useState("asc")
+
+  // const detailModalProps = {
+  //   detailAllTweets,
+  //   detailHeaders,
+  //   detailPage,
+  //   detailSetPage,
+  //   searchFilter,
+  //   setSearchFilter,
+  //   expanded,
+  //   setExpanded,
+  //   orderBy, setOrderBy,
+  //   order, setOrder,
+  // }
+
+  const [detailSearchFilter, detailSetSearchFilter] = useState("");
+  const [detailRows, setDetailRows] = useState(detailContent);
+
+  const detailModalProps = {
+    openDetailModal,
+    setOpenDetailModal,
+    detailContent,
+    detailSearchFilter,
+    detailSetSearchFilter,
+    setDetailContent,
+    detailRows,
+    setDetailRows,
+  };
 
   const propTimelineProps = {
     dataSources,
@@ -733,6 +770,8 @@ const TwitterSnaV2 = () => {
     plot,
     SNATab,
     setSNATab,
+    setOpenDetailModal,
+    setDetailContent,
   };
 
   const [activityChart, setActivityChart] = useState(undefined);
@@ -745,6 +784,8 @@ const TwitterSnaV2 = () => {
     setActivityChart,
     activitySelect,
     setActivitySelect,
+    setOpenDetailModal,
+    setDetailContent,
   };
 
   const [mentionGraph, setMentionGraph] = useState(undefined);
@@ -754,6 +795,8 @@ const TwitterSnaV2 = () => {
     selected,
     mentionGraph,
     setMentionGraph,
+    setOpenDetailModal,
+    setDetailContent,
   };
 
   const [hashtagGraph, setHashtagGraph] = useState("");
@@ -763,6 +806,8 @@ const TwitterSnaV2 = () => {
     selected,
     hashtagGraph,
     setHashtagGraph,
+    setOpenDetailModal,
+    setDetailContent,
   };
 
   const [wordCloud, setWordCloud] = useState(undefined);
@@ -775,6 +820,8 @@ const TwitterSnaV2 = () => {
     setWordCloud,
     langSelect,
     setLangSelect,
+    setOpenDetailModal,
+    setDetailContent,
   };
   const SNATabProps = {
     SNATab,
@@ -790,6 +837,7 @@ const TwitterSnaV2 = () => {
   return (
     <div>
       <ThemeProvider theme={theme}>
+        {DetailModal(detailModalProps)}
         {uploadedData ? HandleUploadModal(modalProps) : <></>}
         <HeaderTool
           name={"Twitter SNA V2"}
