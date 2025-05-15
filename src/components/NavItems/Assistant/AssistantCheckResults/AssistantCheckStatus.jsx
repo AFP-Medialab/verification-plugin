@@ -16,6 +16,11 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 
 import { setStateExpanded } from "../../../../redux/actions/tools/assistantActions";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import {
+  KNOWN_LINKS,
+  KNOWN_LINK_PATTERNS,
+  matchPattern,
+} from "../AssistantRuleBook";
 
 const AssistantCheckStatus = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -75,6 +80,9 @@ const AssistantCheckStatus = () => {
     (state) => state.assistant.multilingualStanceFail,
   );
 
+  const inputUrl = useSelector((state) => state.assistant.inputUrl);
+  const urlType = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
+
   const failStates = [
     { title: scTitle, failed: scFailState },
     { title: dbkfMediaTitle, failed: dbkfMediaFailState },
@@ -93,7 +101,10 @@ const AssistantCheckStatus = () => {
     },
     {
       title: multilingualStanceTitle,
-      failed: multilingualStanceFailState,
+      failed:
+        multilingualStanceFailState &&
+        (urlType === KNOWN_LINKS.YOUTUBE ||
+          urlType === KNOWN_LINKS.YOUTUBESHORTS),
     },
   ];
 

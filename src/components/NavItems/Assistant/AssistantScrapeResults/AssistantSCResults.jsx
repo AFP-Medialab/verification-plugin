@@ -94,12 +94,20 @@ const AssistantSCResults = () => {
           </Box>
 
           {/* expand button */}
-          <IconButton
-            className={classes.assistantIconRight}
-            onClick={() => dispatch(setAssuranceExpanded(!assuranceExpanded))}
+          <Box
+            sx={{
+              pr: 1,
+              pt: 1,
+            }}
           >
-            <ExpandMoreIcon color={"primary"} />
-          </IconButton>
+            <IconButton
+              className={classes.assistantIconRight}
+              onClick={() => dispatch(setAssuranceExpanded(!assuranceExpanded))}
+              sx={{ p: 1 }}
+            >
+              <ExpandMoreIcon color={"primary"} />
+            </IconButton>
+          </Box>
         </Grid>
 
         <Grid size={{ xs: 1 }}>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
@@ -56,7 +57,7 @@ const SourceCredibilityDBKFDialog = (props) => {
       <Dialog onClose={handleClose} maxWidth={"lg"} open={open}>
         <DialogTitle>
           <Grid container>
-            <Grid size={{ xs: 11 }} direction="row">
+            <Grid size={{ xs: 11 }}>
               <Typography variant="body1" component="div">
                 <Chip label={keyword(sourceType)} color={color} size="small" />{" "}
                 {keyword("source_cred_popup_header_domain")} {source}
@@ -70,26 +71,38 @@ const SourceCredibilityDBKFDialog = (props) => {
               }}
             >
               {/* tooltip help */}
-              <Tooltip
-                interactive={"true"}
-                leaveDelay={50}
-                style={{ display: "flex", marginLeft: "auto" }}
-                title={
-                  <>
-                    <TransSourceCredibilityTooltip keyword={keyword} />
-                    <TransHtmlDoubleLineBreak keyword={keyword} />
-                    <TransUrlDomainAnalysisLink keyword={keyword} />
-                  </>
-                }
-                classes={{ tooltip: classes.assistantTooltip }}
+              <Box
+                sx={{
+                  pt: 0.75,
+                }}
               >
-                <HelpOutlineOutlinedIcon color={"action"} />
-              </Tooltip>
+                <Tooltip
+                  interactive={"true"}
+                  leaveDelay={50}
+                  style={{ display: "flex", marginLeft: "auto" }}
+                  title={
+                    <>
+                      <TransSourceCredibilityTooltip keyword={keyword} />
+                      <TransHtmlDoubleLineBreak keyword={keyword} />
+                      <TransUrlDomainAnalysisLink keyword={keyword} />
+                    </>
+                  }
+                  classes={{ tooltip: classes.assistantTooltip }}
+                >
+                  <HelpOutlineOutlinedIcon color={"action"} />
+                </Tooltip>
+              </Box>
 
               {/* close button */}
-              <IconButton onClick={handleClose}>
-                <CloseIcon />
-              </IconButton>
+              <Box
+                sx={{
+                  pr: 1,
+                }}
+              >
+                <IconButton onClick={handleClose}>
+                  <CloseIcon />
+                </IconButton>
+              </Box>
             </Grid>
           </Grid>
         </DialogTitle>
