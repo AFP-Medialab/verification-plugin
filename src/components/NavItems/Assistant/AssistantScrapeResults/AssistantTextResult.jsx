@@ -24,6 +24,7 @@ import {
   TransCredibilitySignalsLink,
   TransHtmlDoubleLineBreak,
   TransMachineGeneratedTextTooltip,
+  TransPersuasionTechniquesTooltip,
   TransSupportedToolsLink,
 } from "../TransComponents";
 import AssistantTextClassification from "./AssistantTextClassification";
@@ -356,14 +357,7 @@ const AssistantTextResult = () => {
                 titleText={persuasionTitle}
                 categoriesTooltipContent={
                   <>
-                    <Trans
-                      t={keyword}
-                      i18nKey="persuasion_techniques_tooltip"
-                      components={{
-                        ul: <ul />,
-                        li: <li />,
-                      }}
-                    />
+                    <TransPersuasionTechniquesTooltip keyword={keyword} />
                     <TransCredibilitySignalsLink keyword={keyword} />
                   </>
                 }
