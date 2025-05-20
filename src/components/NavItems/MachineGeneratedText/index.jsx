@@ -91,12 +91,6 @@ const MachineGeneratedText = () => {
   });
 
   const HighlightedText = ({ text, chunks }) => {
-    const getColor = (score) => {
-      if (score < 0.1) return "#4CAF50";
-      if (score < 0.5) return "#8BC34A";
-      return "#FF9800";
-    };
-
     return (
       <Box>
         {chunks.entities.Important_Sentence.map((chunk, index) => {
