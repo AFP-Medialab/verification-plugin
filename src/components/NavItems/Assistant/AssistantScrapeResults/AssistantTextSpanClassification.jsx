@@ -38,22 +38,23 @@ const StyledSpan = styled("span")(({ theme }) => ({
   ...theme,
 }));
 
+// split text for category and technique
+function getCategoryTechnique(category) {
+  return category.split("__");
+}
+
 export default function AssistantTextSpanClassification({
   text,
   classification,
   titleText = "Detected Class",
   categoriesTooltipContent = "",
   configs = {
-    confidenceThresholdLow: 0.8,
-    confidenceThresholdHigh: 1.0,
-    greenRgb: [0, 255, 0],
-    lightGreenRgb: [170, 255, 0],
-    orangeRgb: [255, 170, 0],
-    redRgb: [255, 0, 0],
-    greenRgbDark: [78, 255, 78],
-    lightGreenRgbDark: [210, 255, 121],
-    orangeRgbDark: [255, 189, 62],
-    redRgbDark: [255, 78, 78],
+    perCategoryJustificationRgb: [150, 0, 255],
+    perCategorySimplificationRgb: [0, 150, 255],
+    perCategoryDistractionRgb: [100, 0, 255],
+    perCategoryCallRgb: [0, 100, 255],
+    perCategoryManipulativeRgb: [220, 0, 255],
+    perCategoryAttackRgb: [0, 200, 255],
   },
   textHtmlMap = null,
 }) {
@@ -71,10 +72,10 @@ export default function AssistantTextSpanClassification({
   // const categoryTextHigh = keyword("high_severity"); // keyword("high_confidence");
   // const categoryThresholdLow = configs.confidenceThresholdLow;
   // const categoryThresholdHigh = configs.confidenceThresholdHigh;
-  const categoryRgbLow =
-    resolvedMode === "dark" ? configs.orangeRgbDark : configs.orangeRgb;
-  const categoryRgbHigh =
-    resolvedMode === "dark" ? configs.redRgbDark : configs.redRgb;
+  // const categoryRgbLow =
+  //   resolvedMode === "dark" ? configs.orangeRgbDark : configs.orangeRgb;
+  // const categoryRgbHigh =
+  //   resolvedMode === "dark" ? configs.redRgbDark : configs.redRgb;
   const primaryRgb = [0, 146, 108];
 
   // // tooltip for hovering over categories
@@ -108,12 +109,15 @@ export default function AssistantTextSpanClassification({
     return filteredLabels;
   }
 
+  // slider set up
   const [importantSentenceThreshold, setImportantSentenceThreshold] =
     React.useState(80);
+
   const handleSliderChange = (event, newValue) => {
     setImportantSentenceThreshold(newValue);
   };
 
+  // filter classification
   let filteredClassification = filterLabelsWithMinThreshold(
     classification,
     //configs.confidenceThresholdLow, // this to be set by slider
@@ -128,12 +132,12 @@ export default function AssistantTextSpanClassification({
 
   // defining persuasion technique category colours
   const persausionTechniqueCategoryColours = {
-    Justification: [150, 0, 255],
-    Simplification: [0, 150, 255],
-    Distraction: [100, 0, 255],
-    Call: [0, 100, 255],
-    Manipulative_Wording: [220, 0, 255],
-    Attack_on_Reputation: [0, 200, 255],
+    Justification: configs.perCategoryJustificationRgb,
+    Simplification: configs.perCategorySimplificationRgb,
+    Distraction: configs.perCategoryDistractionRgb,
+    Call: configs.perCategoryCallRgb,
+    Manipulative_Wording: configs.perCategoryManipulativeRgb,
+    Attack_on_Reputation: configs.perCategoryAttackRgb,
   };
 
   // finding categories and their spans with scores, and the text for each category
@@ -180,7 +184,7 @@ export default function AssistantTextSpanClassification({
       }
 
       let [persuasionTechniqueCategory, persuasionTechnique] =
-        persuasionTechniqueLabel.split("__");
+        getCategoryTechnique(persuasionTechniqueLabel);
       let divText =
         keyword(persuasionTechniqueCategory) +
         ": " +
@@ -323,10 +327,10 @@ export default function AssistantTextSpanClassification({
               categories={uniqueCategories}
               colours={persausionTechniqueCategoryColours}
               //tooltipContent={categoryTooltipContent}
-              thresholdLow={configs.confidenceThresholdLow}
-              thresholdHigh={configs.confidenceThresholdHigh}
-              rgbLow={categoryRgbLow}
-              rgbHigh={categoryRgbHigh}
+              // thresholdLow={configs.confidenceThresholdLow}
+              // thresholdHigh={configs.confidenceThresholdHigh}
+              // rgbLow={categoryRgbLow}
+              // rgbHigh={categoryRgbHigh}
               noCategoriesText={keyword("no_detected_techniques")}
               allCategoriesLabel={allCategoriesLabel}
               onCategoryChange={handleCategorySelect}
@@ -368,6 +372,7 @@ export function CategoriesListToggle({
       <Typography>{keyword("important_sentence_threshold")}</Typography>
     </ListItem>,
   );
+
   const marks = [];
   for (let i = 0; i <= 10; i += 2) {
     marks.push({
@@ -376,7 +381,6 @@ export function CategoriesListToggle({
     });
   }
 
-  // Scale function to convert from slider value (0-100) to display value (0-1.0)
   const scaleValue = (value) => {
     return value / 100;
   };
@@ -463,7 +467,7 @@ export function CategoriesListToggle({
 
     // format of category is "persuasionTechniqueCategory__persuasionTechnique"
     const [persuasionTechniqueCategory, persuasionTechnique] =
-      category.split("__");
+      getCategoryTechnique(category);
     let backgroundRgb = colours[persuasionTechniqueCategory];
     let bgLuminance = rgbToLuminance(backgroundRgb);
     let textColour = "white";
