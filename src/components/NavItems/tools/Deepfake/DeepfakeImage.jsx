@@ -6,12 +6,12 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import LinearProgress from "@mui/material/LinearProgress";
 
+import { imageDeepfake } from "@/constants/tools";
+import { resetDeepfake } from "@/redux/actions/tools/deepfakeImageActions";
 import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { setError } from "redux/reducers/errorReducer";
 
-import { imageDeepfake } from "../../../../constants/tools";
-import { resetDeepfake } from "../../../../redux/actions/tools/deepfakeImageActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import UseGetDeepfake from "./Hooks/useGetDeepfake";

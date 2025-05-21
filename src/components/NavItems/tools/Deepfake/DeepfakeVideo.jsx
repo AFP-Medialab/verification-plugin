@@ -6,13 +6,13 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 
+import { videoDeepfake } from "@/constants/tools";
+import { resetDeepfake } from "@/redux/actions/tools/deepfakeVideoActions";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
 import { preprocessFileUpload } from "components/Shared/Utils/fileUtils";
 import { setError } from "redux/reducers/errorReducer";
 
-import { videoDeepfake } from "../../../../constants/tools";
-import { resetDeepfake } from "../../../../redux/actions/tools/deepfakeVideoActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import UseGetDeepfake from "./Hooks/useGetDeepfake";
 import DeepfakeResultsVideo from "./Results/DeepfakeResultsVideo";

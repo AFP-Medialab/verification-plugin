@@ -8,15 +8,15 @@ import Card from "@mui/material/Card";
 import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { imageForensic } from "@/constants/tools";
+import { resetForensicState } from "@/redux/actions/tools/forensicActions";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import axios from "axios";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { setError } from "redux/reducers/errorReducer";
 
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { imageForensic } from "../../../../constants/tools";
-import { resetForensicState } from "../../../../redux/actions/tools/forensicActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import useGetImages from "./Hooks/useGetImages";

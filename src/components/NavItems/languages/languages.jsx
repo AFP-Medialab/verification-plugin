@@ -7,11 +7,11 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 
+import { setStorageTrue } from "@/redux/reducers/cookiesReducers";
+import { changeDefaultLanguage } from "@/redux/reducers/defaultLanguageReducer";
+import { changeLanguage } from "@/redux/reducers/languageReducer";
 import useLoadSupportedLanguage from "Hooks/useLoadSupportedLanguages";
 
-import { setStorageTrue } from "../../../redux/reducers/cookiesReducers";
-import { changeDefaultLanguage } from "../../../redux/reducers/defaultLanguageReducer";
-import { changeLanguage } from "../../../redux/reducers/languageReducer";
 import DefaultLanguageDialog from "./defaultLanguageDialog";
 
 const Languages = () => {

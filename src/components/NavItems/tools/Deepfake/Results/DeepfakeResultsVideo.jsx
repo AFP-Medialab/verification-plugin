@@ -17,14 +17,13 @@ import Typography from "@mui/material/Typography";
 import { Download } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
+import { ROLES } from "@/constants/roles";
 import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-
-import { ROLES } from "../../../../../constants/roles";
 
 const DeepfakeResultsVideo = (props) => {
   const userAuthenticated = useSelector(

@@ -18,13 +18,13 @@ import Typography from "@mui/material/Typography";
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-
-import { useTrackEvent } from "../../../Hooks/useAnalytics";
+import { useTrackEvent } from "@/Hooks/useAnalytics";
 import {
   cleanAssistantState,
   submitInputUrl,
-} from "../../../redux/actions/tools/assistantActions";
+} from "@/redux/actions/tools/assistantActions";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { KNOWN_LINKS } from "./AssistantRuleBook";
 import {

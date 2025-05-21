@@ -9,6 +9,12 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Fade from "@mui/material/Fade";
 import Stack from "@mui/material/Stack";
 
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import {
+  cleanMetadataState,
+  setMetadataMediaType,
+  setMetadataResult,
+} from "@/redux/reducers/tools/metadataReducer";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import {
   getFileTypeFromFileObject,
@@ -17,13 +23,7 @@ import {
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
 
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { imageMetadata as imageMetadataTool } from "../../../../constants/tools";
-import {
-  cleanMetadataState,
-  setMetadataMediaType,
-  setMetadataResult,
-} from "../../../../redux/reducers/tools/metadataReducer";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import MetadataImageResult from "./Results/MetadataImageResult";
