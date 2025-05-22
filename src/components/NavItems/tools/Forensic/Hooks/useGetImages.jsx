@@ -1,14 +1,13 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import axios from "axios";
-import { setError } from "redux/reducers/errorReducer";
-
 import {
   setForensicDisplayItem,
   setForensicsLoading,
   setForensicsResult,
-} from "../../../../../redux/actions/tools/forensicActions";
+} from "@/redux/actions/tools/forensicActions";
+import axios from "axios";
+import { setError } from "redux/reducers/errorReducer";
 
 const useGetImages = (url, type, keyword) => {
   const forensic_base_url = process.env.REACT_APP_CAA_FORENSICS_URL;

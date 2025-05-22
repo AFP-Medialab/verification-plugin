@@ -10,6 +10,11 @@ import Stack from "@mui/material/Stack";
 
 import { AudioFile } from "@mui/icons-material";
 
+import {
+  resetLoccusAudio,
+  setLoccusLoading,
+  setLoccusResult,
+} from "@/redux/actions/tools/loccusActions";
 import { isValidUrl } from "@Shared/Utils/URLUtils";
 import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import axios from "axios";
@@ -18,11 +23,6 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import { setError } from "redux/reducers/errorReducer";
 import { v4 as uuidv4 } from "uuid";
 
-import {
-  resetLoccusAudio,
-  setLoccusLoading,
-  setLoccusResult,
-} from "../../../../redux/actions/tools/loccusActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import LoccusResults from "./loccusResults";

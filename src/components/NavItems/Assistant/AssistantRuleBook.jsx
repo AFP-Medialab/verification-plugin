@@ -2,7 +2,7 @@ import React from "react";
 
 import DownloadIcon from "@mui/icons-material/Download";
 
-import { ROLES } from "../../../constants/roles.jsx";
+import { ROLES } from "@/constants/roles";
 import {
   imageDeepfake,
   imageForensic,
@@ -14,7 +14,7 @@ import {
   thumbnails,
   videoAnalysis,
   videoDeepfake,
-} from "../../../constants/tools";
+} from "@/constants/tools";
 
 export const NE_SUPPORTED_LANGS = ["en", "pt", "fr", "de", "el", "es", "it"];
 

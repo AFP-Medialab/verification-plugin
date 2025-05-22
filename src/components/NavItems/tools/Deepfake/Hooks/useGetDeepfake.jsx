@@ -1,16 +1,15 @@
-import { isValidUrl } from "@Shared/Utils/URLUtils";
-import axios from "axios";
-import { setError } from "redux/reducers/errorReducer";
-
-import { ROLES } from "../../../../../constants/roles";
+import { ROLES } from "@/constants/roles";
 import {
   setDeepfakeLoadingImage,
   setDeepfakeResultImage,
-} from "../../../../../redux/actions/tools/deepfakeImageActions";
+} from "@/redux/actions/tools/deepfakeImageActions";
 import {
   setDeepfakeLoadingVideo,
   setDeepfakeResultVideo,
-} from "../../../../../redux/actions/tools/deepfakeVideoActions";
+} from "@/redux/actions/tools/deepfakeVideoActions";
+import { isValidUrl } from "@Shared/Utils/URLUtils";
+import axios from "axios";
+import { setError } from "redux/reducers/errorReducer";
 
 async function UseGetDeepfake(
   keyword,

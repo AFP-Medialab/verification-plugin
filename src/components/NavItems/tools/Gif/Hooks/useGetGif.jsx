@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
+import {
+  setStateBackResults,
+  setStateDownloading,
+} from "@/redux/reducers/tools/gifReducer";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { saveAs } from "file-saver";
 import { setError } from "redux/reducers/errorReducer";
 
-import {
-  setStateBackResults,
-  setStateDownloading,
-} from "../../../../../redux/reducers/tools/gifReducer";
 import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
 
 const useGetGif = (

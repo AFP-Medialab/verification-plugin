@@ -20,14 +20,10 @@ import Typography from "@mui/material/Typography";
 import { Audiotrack } from "@mui/icons-material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
+import { ROLES } from "@/constants/roles";
+import { TOOLS_CATEGORIES, canUserSeeTool, tools } from "@/constants/tools";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import { ROLES } from "../../../../constants/roles";
-import {
-  TOOLS_CATEGORIES,
-  canUserSeeTool,
-  tools,
-} from "../../../../constants/tools";
 import DataIcon from "../../../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
 import ImageIcon from "../../../NavBar/images/SVG/Image/Images.svg";
 import SearchIcon from "../../../NavBar/images/SVG/Search/Search.svg";

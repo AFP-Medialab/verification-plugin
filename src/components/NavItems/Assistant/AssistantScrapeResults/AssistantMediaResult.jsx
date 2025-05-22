@@ -21,13 +21,13 @@ import { WarningAmber } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-
 import {
   setProcessUrl,
+  setStateExpanded,
   setWarningExpanded,
-} from "../../../../redux/actions/tools/assistantActions";
-import { setStateExpanded } from "../../../../redux/actions/tools/assistantActions";
+} from "@/redux/actions/tools/assistantActions";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "../../../Shared/VideoGridList/VideoGridList";

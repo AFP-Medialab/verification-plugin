@@ -6,18 +6,18 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import LinearProgress from "@mui/material/LinearProgress";
 
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { imageMagnifier } from "@/constants/tools";
+import {
+  resetMagnifierState,
+  setMagnifierLoading,
+  setMagnifierResult,
+} from "@/redux/actions/tools/magnifierActions";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { setError } from "redux/reducers/errorReducer";
 import "tui-image-editor/dist/tui-image-editor.css";
 
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { imageMagnifier } from "../../../../constants/tools";
-import {
-  resetMagnifierState,
-  setMagnifierLoading,
-  setMagnifierResult,
-} from "../../../../redux/actions/tools/magnifierActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";

@@ -2,8 +2,9 @@ import React, { useState } from "react";
 
 import Box from "@mui/material/Box";
 
-import { tools } from "../../constants/tools";
-import { TOP_MENU_ITEMS } from "../../constants/topMenuItems";
+import { tools } from "@/constants/tools";
+import { TOP_MENU_ITEMS } from "@/constants/topMenuItems";
+
 import MainContent from "../MainContent";
 import NotificationSnackbar from "../NotificationSnackbar";
 import SideMenu from "../SideMenu";

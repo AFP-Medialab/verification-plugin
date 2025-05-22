@@ -31,6 +31,8 @@ import GlobeIcon from "@mui/icons-material/Public";
 import SearchIcon from "@mui/icons-material/Search";
 import TranslateIcon from "@mui/icons-material/Translate";
 
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { dataAnalysisSna } from "@/constants/tools";
 import { convertMomentToGMT } from "@Shared/DateTimePicker/convertToGMT";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
@@ -40,8 +42,6 @@ import dayjs from "dayjs";
 import _ from "lodash";
 import { setError } from "redux/reducers/errorReducer";
 
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { dataAnalysisSna } from "../../../../constants/tools";
 import { theme as defaultTheme } from "../../../../theme";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useMyStyles, {

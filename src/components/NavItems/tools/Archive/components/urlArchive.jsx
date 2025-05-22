@@ -9,12 +9,12 @@ import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { ROLES } from "@/constants/roles";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { history } from "@Shared/History/History";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import { useTrackEvent } from "../../../../../Hooks/useAnalytics";
-import { ROLES } from "../../../../../constants/roles";
 import IconInternetArchive from "../../../../NavBar/images/SVG/Others/archive-icon.svg";
 import CopyButton from "../../../../Shared/CopyButton";
 import { KNOWN_LINKS } from "../../../Assistant/AssistantRuleBook";

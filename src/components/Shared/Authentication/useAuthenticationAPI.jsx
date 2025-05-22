@@ -3,10 +3,6 @@
  */
 import { useDispatch, useSelector } from "react-redux";
 
-import axios from "axios";
-import { jwtDecode } from "jwt-decode";
-import _ from "lodash";
-
 import {
   userAccessCodeRequestLoadingAction,
   userAccessCodeRequestSentAction,
@@ -17,7 +13,11 @@ import {
   userRegistrationSentAction,
   userSessionExpiredAction,
   userTokenRefreshedAction,
-} from "../../../redux/actions/authenticationActions";
+} from "@/redux/actions/authenticationActions";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import _ from "lodash";
+
 import {
   ERR_AUTH_ABORT_ERROR,
   ERR_AUTH_BAD_REQUEST,

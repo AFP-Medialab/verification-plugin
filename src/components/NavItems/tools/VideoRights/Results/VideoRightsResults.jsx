@@ -20,9 +20,9 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 
+import { cleanVideoRightsState } from "@/redux/actions/tools/videoRightsActions";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import { cleanVideoRightsState } from "../../../../../redux/actions/tools/videoRightsActions";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import invidLogo from "../images/InVID-logo.svg?url";
 

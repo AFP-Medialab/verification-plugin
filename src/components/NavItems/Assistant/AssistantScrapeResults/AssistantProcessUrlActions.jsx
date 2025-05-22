@@ -13,6 +13,10 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 
+import {
+  resetSyntheticImageDetectionImage,
+  setSyntheticImageDetectionUrl,
+} from "@/redux/actions/tools/syntheticImageDetectionActions";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import {
@@ -23,10 +27,6 @@ import {
   resetDeepfake as resetDeepfakeVideo,
   setDeepfakeUrlVideo,
 } from "../../../../redux/actions/tools/deepfakeVideoActions";
-import {
-  resetSyntheticImageDetectionImage,
-  setSyntheticImageDetectionUrl,
-} from "../../../../redux/actions/tools/syntheticImageDetectionActions";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { KNOWN_LINKS } from "../AssistantRuleBook";
 

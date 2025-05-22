@@ -31,15 +31,15 @@ import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import WarningIcon from "@mui/icons-material/Warning";
 
-import { DetectionProgressBar } from "components/Shared/DetectionProgressBar/DetectionProgressBar";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-
-import { ROLES } from "../../../../../constants/roles";
-import { setForensicImageRatio } from "../../../../../redux/actions/tools/forensicActions";
+import { ROLES } from "@/constants/roles";
+import { setForensicImageRatio } from "@/redux/actions/tools/forensicActions";
 import {
   setStateBackResults,
   setStateInit,
-} from "../../../../../redux/reducers/tools/gifReducer";
+} from "@/redux/reducers/tools/gifReducer";
+import { DetectionProgressBar } from "components/Shared/DetectionProgressBar/DetectionProgressBar";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import { theme as defaultTheme } from "../../../../../theme";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import AnimatedGif from "../../Gif/AnimatedGif";

@@ -1,3 +1,12 @@
+import {
+  CONTENT_TYPE,
+  KNOWN_LINKS,
+  KNOWN_LINK_PATTERNS,
+  NE_SUPPORTED_LANGS,
+  TYPE_PATTERNS,
+  matchPattern,
+  selectCorrectActions,
+} from "@/components/NavItems/Assistant/AssistantRuleBook";
 import isEqual from "lodash/isEqual";
 import uniqWith from "lodash/uniqWith";
 import {
@@ -12,15 +21,6 @@ import {
 
 import assistantApiCalls from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
 import DBKFApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
-import {
-  CONTENT_TYPE,
-  KNOWN_LINKS,
-  KNOWN_LINK_PATTERNS,
-  NE_SUPPORTED_LANGS,
-  TYPE_PATTERNS,
-  matchPattern,
-  selectCorrectActions,
-} from "../../components/NavItems/Assistant/AssistantRuleBook";
 import {
   cleanAssistantState,
   setAssistantLoading,

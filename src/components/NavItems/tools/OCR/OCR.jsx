@@ -5,14 +5,8 @@ import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 
-import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
-import HeaderTool from "@Shared/HeaderTool/HeaderTool";
-import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
-import { setError } from "redux/reducers/errorReducer";
-
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { imageOcr } from "../../../../constants/tools";
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { imageOcr } from "@/constants/tools";
 import {
   resetOcrState,
   setOcrBinaryImage,
@@ -20,7 +14,13 @@ import {
   setOcrInput,
   setOcrResult,
   setb64InputFile,
-} from "../../../../redux/actions/tools/ocrActions";
+} from "@/redux/actions/tools/ocrActions";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import HeaderTool from "@Shared/HeaderTool/HeaderTool";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
+import { setError } from "redux/reducers/errorReducer";
+
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import OcrResult from "./Results/OcrResult";

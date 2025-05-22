@@ -1,15 +1,14 @@
 import {
+  MAX_AUDIO_FILE_SIZE,
+  MAX_IMAGE_FILE_SIZE,
+  MAX_VIDEO_FILE_SIZE,
+} from "@/config";
+import { ROLES } from "@/constants/roles";
+import {
   fileTypeFromBlob,
   fileTypeFromBuffer,
   fileTypeFromStream,
 } from "file-type";
-
-import {
-  MAX_AUDIO_FILE_SIZE,
-  MAX_IMAGE_FILE_SIZE,
-  MAX_VIDEO_FILE_SIZE,
-} from "../../../config";
-import { ROLES } from "../../../constants/roles";
 
 export const FILE_TYPES = {
   image: "image",

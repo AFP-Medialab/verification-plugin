@@ -12,14 +12,14 @@ import Typography from "@mui/material/Typography";
 
 import { Close } from "@mui/icons-material";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { setError } from "redux/reducers/errorReducer";
-
 import {
   cleanAssistantState,
   setUrlMode,
   submitInputUrl,
-} from "../../../redux/actions/tools/assistantActions";
+} from "@/redux/actions/tools/assistantActions";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { setError } from "redux/reducers/errorReducer";
+
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import AssistantCheckStatus from "./AssistantCheckResults/AssistantCheckStatus";
 import AssistantNEResult from "./AssistantCheckResults/AssistantNEResult";

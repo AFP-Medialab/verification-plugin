@@ -14,12 +14,12 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import LinkIcon from "@mui/icons-material/Link";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-
 import {
   setImageVideoSelected,
   setUrlMode,
-} from "../../../redux/actions/tools/assistantActions";
+} from "@/redux/actions/tools/assistantActions";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import AssistantIcon from "../../NavBar/images/navbar/assistant-icon-primary.svg";
 import HeaderTool from "../../Shared/HeaderTool/HeaderTool";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
