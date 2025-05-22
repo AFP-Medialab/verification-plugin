@@ -20,8 +20,8 @@ const Languages = () => {
   const [open, setOpen] = useState(false);
   const [lang, setLang] = useState("en");
   const storeLanguage = useSelector((state) => state.language);
-  const languagesSupport = useSelector(
-    (state) => state.languagesSupport.languagesList,
+  const languageSupport = useSelector(
+    (state) => state.languageSupport.languagesList,
   );
 
   const dispatch = useDispatch();
@@ -67,9 +67,9 @@ const Languages = () => {
             color: "var(--mui-palette-text-primary)",
           }}
         >
-          {Object.keys(languagesSupport).map((lang) => (
+          {Object.keys(languageSupport).map((lang) => (
             <MenuItem key={lang} value={lang}>
-              {languagesSupport[lang]}
+              {languageSupport[lang]}
             </MenuItem>
           ))}
         </Select>
