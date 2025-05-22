@@ -58,15 +58,16 @@ export default function assistantApiCalls() {
           (e) => "wd:" + e.concept,
         ),
       );
+      const dbpedia = `http://${lang == "en" ? "" : "en."}dbpedia.org`;
       const wdQuery = `
       SELECT (REPLACE(STR(?concept), "http://www.wikidata.org/entity/", "") AS ?conceptID)
-      (REPLACE(STR(?article), "https://en.wikipedia.org/wiki/", "http://dbpedia.org/page/") AS ?link)
-      (REPLACE(STR(?article), "https://en.wikipedia.org/wiki/", "http://dbpedia.org/resource/") AS ?iri)
+      (REPLACE(STR(?article), "https://${lang}.wikipedia.org/wiki/", "${dbpedia}/page/") AS ?link)
+      (REPLACE(STR(?article), "https://${lang}.wikipedia.org/wiki/", "${dbpedia}/resource/") AS ?iri)
       ?title
       WHERE {
         VALUES ?concept { ${[...concepts].join(" ")} }
         ?article schema:about ?concept .
-        ?article schema:isPartOf <https://en.wikipedia.org/> .
+        ?article schema:isPartOf <https://${lang}.wikipedia.org/> .
         ?article schema:name ?title .
       }`;
       const mappingResult = await axios.get(
@@ -86,7 +87,7 @@ export default function assistantApiCalls() {
         VALUES ?iri { ${Object.keys(mapping).join(" ")} }
         ?iri dbo:abstract ?abstract .
         ?iri rdf:type ?type .
-        FILTER (lang(?abstract) = "en")
+        FILTER (lang(?abstract) = "${lang}")
       }`;
       const dbpediaResult = await axios.get(
         `https://dbpedia.org/sparql?query=${encodeURIComponent(dbQuery)}&format=application%2Fsparql-results%2Bjson&timeout=30000&signal_void=on&signal_unconnected=on`,
