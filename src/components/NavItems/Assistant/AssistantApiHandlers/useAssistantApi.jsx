@@ -54,8 +54,8 @@ export default function assistantApiCalls() {
         },
       );
       const concepts = new Set(
-        namedEntityResult.data.response.annotations.Unclassified.map(
-          (e) => "wd:" + e.features.concept,
+        namedEntityResult.data.entities.Unclassified.map(
+          (e) => "wd:" + e.concept,
         ),
       );
       const wdQuery = `
@@ -104,13 +104,12 @@ export default function assistantApiCalls() {
       }, {});
 
       const entities = { Person: [], Location: [], Organization: [] };
-      for (const entity of namedEntityResult.data.response.annotations
-        .Unclassified) {
+      for (const entity of namedEntityResult.data.entities.Unclassified) {
         entity.features = {
           ...entity.features,
-          ...features[entity.features.concept],
+          ...features[entity.concept],
         };
-        entity.features.originalText = entity.features.string;
+        entity.features.originalText = entity.string;
         entity.features.string = entity.features.title;
         delete entity.features["title"];
         if (
@@ -144,7 +143,7 @@ export default function assistantApiCalls() {
           entities["Organization"].push(entity);
         }
       }
-      namedEntityResult.data.response.annotations = entities;
+      namedEntityResult.data.entities = entities;
 
       return namedEntityResult.data;
     } catch (error) {

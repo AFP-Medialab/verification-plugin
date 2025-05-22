@@ -629,7 +629,7 @@ function* handleNamedEntityCall(action) {
       );
       let entities = [];
 
-      Object.entries(result.response.annotations).forEach((entity) => {
+      Object.entries(result.entities).forEach((entity) => {
         entity[1].forEach((instance) => {
           if (instance.features.string) {
             entities.push({
