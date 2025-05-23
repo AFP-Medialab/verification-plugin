@@ -11,9 +11,10 @@ import CardHeader from "@mui/material/CardHeader";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 
+import axios from "axios";
 import HeaderTool from "components/Shared/HeaderTool/HeaderTool";
 import dayjs from "dayjs";
-import MultiGraph from "graphology";
+import MultiGraph, { MultiUndirectedGraph } from "graphology";
 import louvain from "graphology-communities-louvain";
 import Papa from "papaparse";
 import { Brush } from "recharts";
@@ -171,6 +172,8 @@ const TwitterSnaV2 = () => {
         )
       : new Map();
 
+    console.log(fieldMap);
+    console.log(fieldMap.get("Share Time"));
     // let objectField = fieldMap.get("Object")
     let reformatedTweets = Array.from(
       new Map(
@@ -186,23 +189,22 @@ const TwitterSnaV2 = () => {
       }) => ({
         objects: objects,
         [fieldMap.get("Object")]: objects,
-        date: metaSelected ? date.slice(0, -4) : date,
+        date: metaSelected ? date?.slice(0, -4) : date,
         username: uid,
         id: id,
         ...rest,
       }),
     );
-    let reformatedTweets_withHashtag =
-      !snaSelected && Object.keys(reformatedTweets[0]).includes("text")
-        ? reformatedTweets.map(({ ["Message"]: text, ...rest }) => ({
-            ...rest,
-            text,
-            hashtags: text
-              ?.split(" ")
-              .filter((x) => x.length > 2 && x.includes("#"))
-              .join(","),
-          }))
-        : reformatedTweets;
+    let reformatedTweets_withHashtag = metaSelected
+      ? reformatedTweets.map(({ ["Message"]: text, ...rest }) => ({
+          ...rest,
+          text,
+          hashtags: text
+            ?.split(" ")
+            .filter((x) => x.length > 2 && x.includes("#"))
+            .join(","),
+        }))
+      : reformatedTweets;
     console.log(reformatedTweets);
     dataSources.push({
       id: snaSelected
@@ -264,8 +266,8 @@ const TwitterSnaV2 = () => {
     return countMap;
   }
 
-  const detectCOOR = (time_window, edge_weight, data) => {
-    let data_filtered = data.filter((v) => v.objects.length > 0); //Only keep entries with objects
+  const detectCOOR = async (time_window, edge_weight, data) => {
+    let data_filtered = data.filter((v) => v.objects?.length > 0); //Only keep entries with objects
     let data_min_participants = Object.groupBy(
       data_filtered,
       ({ username }) => username,
@@ -414,7 +416,59 @@ const TwitterSnaV2 = () => {
     setLoading(false);
   };
 
-  const runCoorAnalysis = () => {
+  const getTextClusters = async (selectedContent) => {
+    let response;
+    try {
+      let selectedContentWithId = selectedContent.map((x, idx) => {
+        x.content_id = x.id;
+        x.id = idx;
+        return x;
+      });
+      console.log(selectedContentWithId);
+      let resp = await axios.post(
+        "http://localhost:5000/",
+        selectedContentWithId,
+      );
+      response = resp.data;
+    } catch (error) {
+      console.log("womp womp " + error);
+    }
+    return response;
+  };
+
+  const getCoorContent = async (selectedContent) => {
+    console.log(objectChoice);
+    if (objectChoice === "deltaText") {
+      let resp = await getTextClusters(selectedContent);
+      console.log(resp);
+      let filteredContent = resp
+        .map((o) => {
+          let x = o["cluster"];
+          o.objects = x;
+          return o;
+        })
+        .filter(
+          (x) =>
+            x.objects?.length > 0 && x.objects != "NaN" && x.objects != "nan",
+        );
+      console.log(filteredContent);
+      return filteredContent;
+    } else {
+      let filteredContent =
+        selected.length > 0 && selected.every((x) => x.includes("tweets~"))
+          ? selectedContent
+              .map((o) => {
+                let x = o[objectChoice];
+                o.objects = x;
+                return o;
+              })
+              .filter((x) => x.objects?.length > 0)
+          : selectedContent;
+      return filteredContent;
+    }
+  };
+
+  const runCoorAnalysis = async () => {
     let TIME_WINDOW = timeWindow;
     let EDGE_THRESH = edgeWeight;
     let selectedSources = dataSources.filter((source) =>
@@ -423,16 +477,7 @@ const TwitterSnaV2 = () => {
     let selectedContent = selectedSources
       .map((source) => source.content)
       .flat();
-    let filteredContent =
-      selected.length > 0 && selected.every((x) => x.includes("tweets~"))
-        ? selectedContent
-            .map((o) => {
-              let x = o[objectChoice];
-              o.objects = x;
-              return o;
-            })
-            .filter((x) => x.objects?.length > 0)
-        : selectedContent;
+    let filteredContent = await getCoorContent(selectedContent);
     let nameMaps = new Map(
       selectedSources
         .map((source) =>
@@ -440,7 +485,11 @@ const TwitterSnaV2 = () => {
         )
         .flatMap((m) => [...m]),
     );
-    let coor_result = detectCOOR(TIME_WINDOW, EDGE_THRESH, filteredContent);
+    let coor_result = await detectCOOR(
+      TIME_WINDOW,
+      EDGE_THRESH,
+      filteredContent,
+    );
     let candidates =
       EDGE_THRESH > 0
         ? Object.entries(coor_result).filter((x) => x[1].threshold > 0)
@@ -468,7 +517,7 @@ const TwitterSnaV2 = () => {
   }, []);
 
   const CommunityForceGraph = ({ rawData }) => {
-    const graph = new MultiGraph();
+    const graph = new MultiUndirectedGraph();
     rawData.nodes.forEach((node, idx) => {
       !graph.hasNode(node.id)
         ? graph.addNode(node.id, {})
@@ -483,8 +532,9 @@ const TwitterSnaV2 = () => {
         graph.addUndirectedEdge(link.source, link.target);
       }
     });
+    // console.log(graph)
     const communities = louvain(graph);
-    console.log(communities);
+    // console.log(communities);
 
     graph.updateEachNodeAttributes((_, attr, key) => ({
       ...attr,
@@ -535,62 +585,19 @@ const TwitterSnaV2 = () => {
           ctx.fillText(label, node.x, node.y);
         }}
         onNodeClick={(node) => {
-          console.log(node);
+          // console.log(node);
           let selectedSources = dataSources.filter((source) =>
             selected.includes(source.id),
           );
           let selectedContent = selectedSources
             .map((source) => source.content)
             .flat();
-          console.log(selectedContent.filter((x) => x.username === node.id));
+          // console.log(selectedContent.filter((x) => x.username === node.id));
           setDetailContent(
             selectedContent.filter((x) => x.username === node.id),
           );
           setOpenDetailModal(true);
         }}
-      />
-    );
-  };
-
-  const LabeledGraph = ({ graphData }) => {
-    // Calculate node degrees for sizing
-    const nodeDegrees = {};
-    graphData.links.forEach(({ source, target }) => {
-      nodeDegrees[source] = (nodeDegrees[source] || 0) + 1;
-      nodeDegrees[target] = (nodeDegrees[target] || 0) + 1;
-    });
-    return (
-      <ForceGraph3D
-        width={1400}
-        height={700}
-        graphData={graphData}
-        nodeAutoColorBy="id"
-        nodeThreeObject={(node) => {
-          const group = new THREE.Group();
-          const degree = nodeDegrees[node.id] || 1;
-          const radius = 2 + Math.log(degree + 1) * 3;
-
-          // Sphere node
-          const sphere = new THREE.Mesh(
-            new THREE.SphereGeometry(radius),
-            new THREE.MeshStandardMaterial({
-              color: node.color || "steelblue",
-              roughness: 0.4,
-              metalness: 0.3,
-            }),
-          );
-          group.add(sphere);
-
-          // Label
-          const label = new SpriteText(node.id);
-          label.color = "white";
-          label.textHeight = radius * 0.6;
-          label.position.y = radius + 1;
-          group.add(label);
-
-          return group;
-        }}
-        nodeThreeObjectExtend={true}
       />
     );
   };
@@ -823,6 +830,21 @@ const TwitterSnaV2 = () => {
     setOpenDetailModal,
     setDetailContent,
   };
+
+  const [TextSimilarityGraph, setTextSimilarityGraph] = useState(undefined);
+
+  const textSimilarityProps = {
+    dataSources,
+    selected,
+    getTextClusters,
+    TextSimilarityGraph,
+    setTextSimilarityGraph,
+    onlyUnique,
+    CommunityForceGraph,
+    setOpenDetailModal,
+    setDetailContent,
+  };
+
   const SNATabProps = {
     SNATab,
     setSNATab,
@@ -832,6 +854,7 @@ const TwitterSnaV2 = () => {
     mostMentionProps,
     hashtagProps,
     textAnalysisProps,
+    textSimilarityProps,
   };
 
   return (

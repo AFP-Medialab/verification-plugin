@@ -182,9 +182,6 @@ const CheckboxTable = ({
             {rows && rows.length > 0 ? (
               rows.map((row) => {
                 const isItemSelected = isSelected(row.id);
-                const isOpen = openRowIds.includes(row.id);
-                const allTweets = row.content;
-                const headers = row.headers;
 
                 return (
                   <React.Fragment key={row.id}>
@@ -275,7 +272,7 @@ const CheckboxTable = ({
       <Box p={2}></Box>
       <Stack direction="row" spacing={2} alignItems="center">
         <Typography variant="h6" align="left">
-          Upload CrowdTangle CSV:
+          Upload CSV:
         </Typography>
         <input type="file" hidden ref={inputRef} onChange={handleFileChange} />
         <Button

@@ -94,6 +94,7 @@ const CoorPanel = ({
                   <MenuItem value={"hashtags"}>Hashtags</MenuItem>
                   <MenuItem value={"mentions"}>Mentions</MenuItem>
                   <MenuItem value={"tweet_text"}>Text</MenuItem>
+                  <MenuItem value={"deltaText"}>Text similarity</MenuItem>
                 </Select>
               </FormControl>
             </>

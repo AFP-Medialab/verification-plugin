@@ -104,7 +104,9 @@ const Hashtags = (props) => {
         );
       } else {
         setDetailContent(
-          selectedContent.filter((x) => x.hashtags.includes(data.name)),
+          selectedContent.filter((x) =>
+            x.hashtags?.toLowerCase().includes(data.name.toLowerCase()),
+          ),
         );
         setOpenDetailModal(true);
       }

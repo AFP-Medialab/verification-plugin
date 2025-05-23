@@ -307,7 +307,14 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         id: jp.query(ent.res, "$.result..rest_id")[0],
         username: "@" + jp.query(ent.res, "$..user_results..screen_name")[0],
         display_name: jp.query(ent.res, "$..user_results..name")[0],
+        account_created: jp.query(ent.res, "$..user_results..created_at")[0],
+        followers: jp.query(ent.res, "$..user_results..followers_count")[0],
+        total_posts: jp.query(ent.res, "$..user_results..statuses_count")[0],
         tweet_text: jp.query(ent.res, "$..result.legacy.full_text")[0],
+        replying_to:
+          jp.query(ent, "$..result.legacy.in_reply_to_screen_name")[0] || false,
+        isQuote: jp.query(ent, "$..result.legacy.is_quote_status")[0] || false,
+        retweeted: jp.query(ent, "$..result.legacy.retweeted")[0] || false,
         links: jp
           .query(ent, "$..result.legacy.entities.urls")
           .flat(1)
