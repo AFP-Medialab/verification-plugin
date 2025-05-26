@@ -88,14 +88,7 @@ async function UseGetDeepfake(
     }
 
     if (response.data != null) {
-      if (mode === "IMAGE") {
-        dispatch(
-          setDeepfakeResultImage({
-            url: mediaFile ? URL.createObjectURL(mediaFile) : url,
-            result: response.data,
-          }),
-        );
-      } else if (mode === "VIDEO") {
+      if (mode === "VIDEO") {
         dispatch(setDeepfakeResultVideo({ url: url, result: response.data }));
       }
     } else {
