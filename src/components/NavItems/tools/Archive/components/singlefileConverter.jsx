@@ -275,7 +275,8 @@ const SinglefileConverter = (telegramURL) => {
               new TextDecoder("utf-8")
                 .decode(retbytes)
                 // eslint-disable-next-line no-control-regex
-                .replace(/[\x00-\x1F\x7F-\x9F]/g, "")
+                .replaceAll(/[\x00-\x1F\x7F-\x9F]/g, "")
+                .replaceAll('"', '\\"')
                 .replace(" ", "")
             );
           } else {
@@ -389,42 +390,42 @@ const SinglefileConverter = (telegramURL) => {
     }
 
     // For resource records
-    // const type = "resource";
-
-    // const record = await WARCRecord.create(
-    //   {
-    //     url,
-    //     warcVersion,
-    //     warcHeaders: {
-    //       // "WARC-Target-URI":url,
-    //       "WARC-Date": date,
-    //       "WARC-Type": type,
-    //       "WARC-Record-ID": `<urn:uuid:${uuidv4()}>`,
-    //       "Content-Type": "text/html",
-    //       "WARC-Creator-Info": userID + "@verification-plugin.eu",
-    //       "WARC-Creator-Agent":
-    //         "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
-    //     },
-    //   },
-    //   content(),
-    // );
-    //For response records
-    const type = "response";
-    const httpHeaders = {
-      date: dayjs(),
-      "Content-Type": "text/html;charset=UTF-8",
-    };
+    const type = "resource";
 
     const record = await WARCRecord.create(
       {
         url,
-        date,
-        type,
         warcVersion,
-        httpHeaders,
+        warcHeaders: {
+          // "WARC-Target-URI":url,
+          "WARC-Date": date,
+          "WARC-Type": type,
+          "WARC-Record-ID": `<urn:uuid:${uuidv4()}>`,
+          "Content-Type": "text/html",
+          "WARC-Creator-Info": userID + "@verification-plugin.eu",
+          "WARC-Creator-Agent":
+            "InVID WeVerify plugin singlefile archiver with warcio.js 2.4.2",
+        },
       },
       content(),
     );
+    //For response records
+    // const type = "response";
+    // const httpHeaders = {
+    //   date: dayjs(),
+    //   "Content-Type": "text/html;charset=UTF-8",
+    // };
+
+    // const record = await WARCRecord.create(
+    //   {
+    //     url,
+    //     date,
+    //     type,
+    //     warcVersion,
+    //     httpHeaders,
+    //   },
+    //   content(),
+    // );
 
     const serializedRecord = await WARCSerializer.serialize(record);
     return [serializedWARCInfo, serializedRecord];
