@@ -60,7 +60,7 @@ const OCR = () => {
 
   const submitUrl = (src) => {
     const url = imageFile ? b64Image : src;
-    setEventUrl(url);
+    setEventUrl(imageFile ? "local image" : url);
 
     const ocrInput =
       imageFile && imageFile instanceof File
