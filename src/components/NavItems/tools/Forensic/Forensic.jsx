@@ -139,7 +139,7 @@ const Forensic = () => {
     );
   };
 
-  const handleCloseSelectedFile = () => {
+  const resetToolState = () => {
     setImageFile(undefined);
     setInput("");
     dispatch(resetForensicState());
@@ -175,9 +175,10 @@ const Forensic = () => {
               setFileInput={setImageFile}
               handleSubmit={submitUrl}
               fileInputTypesAccepted={"image/*"}
-              handleCloseSelectedFile={handleCloseSelectedFile}
+              handleCloseSelectedFile={resetToolState}
               preprocessLocalFile={preprocessImage}
               isParentLoading={loading}
+              handleClearUrl={resetToolState}
             />
           </form>
         </Box>
@@ -197,7 +198,7 @@ const Forensic = () => {
           gifAnimation={gifAnimationState}
           resetImage={resetImage}
           masksData={masks}
-          onClose={handleCloseSelectedFile}
+          onClose={resetToolState}
         />
       )}
     </Stack>

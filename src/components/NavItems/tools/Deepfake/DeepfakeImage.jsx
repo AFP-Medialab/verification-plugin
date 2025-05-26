@@ -91,7 +91,7 @@ const Deepfake = () => {
     submitUrl();
   };
 
-  const handleClose = () => {
+  const resetState = () => {
     setInput("");
     setImageFile(undefined);
     setType("");
@@ -134,8 +134,10 @@ const Deepfake = () => {
                 setFileInput={setImageFile}
                 handleSubmit={handleSubmit}
                 fileInputTypesAccepted={"image/*"}
-                handleCloseSelectedFile={handleClose}
+                handleCloseSelectedFile={resetState}
                 preprocessLocalFile={preprocessImage}
+                isParentLoading={isLoading}
+                handleClearUrl={resetState}
               />
             </form>
             <Box
@@ -164,7 +166,7 @@ const Deepfake = () => {
         <DeepfakeResultsImage
           result={result}
           url={url}
-          handleClose={handleClose}
+          handleClose={resetState}
         />
       )}
     </div>

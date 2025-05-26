@@ -78,7 +78,7 @@ const Deepfake = () => {
     await submitUrl();
   };
 
-  const handleClose = () => {
+  const resetState = () => {
     setInput("");
     setVideoFile(undefined);
     setType("");
@@ -120,9 +120,10 @@ const Deepfake = () => {
                 setFileInput={setVideoFile}
                 handleSubmit={handleSubmit}
                 fileInputTypesAccepted={"video/*"}
-                handleCloseSelectedFile={handleClose}
+                handleCloseSelectedFile={resetState}
                 preprocessLocalFile={preprocessVideo}
                 isParentLoading={isLoading}
+                handleClearUrl={resetState}
               />
             </form>
           </Box>
@@ -132,7 +133,7 @@ const Deepfake = () => {
           <DeepfakeResultsVideo
             result={result}
             url={url}
-            handleClose={handleClose}
+            handleClose={resetState}
           />
         )}
       </Stack>

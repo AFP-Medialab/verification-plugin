@@ -53,6 +53,7 @@ const StringFileUploadField = ({
   handleCloseSelectedFile,
   preprocessLocalFile,
   isParentLoading,
+  handleClearUrl,
 }) => {
   const fileRef = useRef(null);
 
@@ -160,7 +161,10 @@ const StringFileUploadField = ({
                   endAdornment: urlInput ? (
                     <IconButton
                       size="small"
-                      onClick={() => setUrlInput("")}
+                      onClick={() => {
+                        setUrlInput("");
+                        if (handleClearUrl) handleClearUrl();
+                      }}
                       disabled={isParentLoading}
                     >
                       <ClearIcon />

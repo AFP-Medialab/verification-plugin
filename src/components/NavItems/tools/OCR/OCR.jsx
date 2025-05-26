@@ -157,7 +157,7 @@ const OCR = () => {
     }
   }, [processUrl]);
 
-  const handleCloseSelectedFile = () => {
+  const resetState = () => {
     dispatch(resetOcrState());
   };
 
@@ -201,8 +201,9 @@ const OCR = () => {
               setFileInput={setImageFile}
               handleSubmit={submitUrl}
               fileInputTypesAccepted={"image/*"}
-              handleCloseSelectedFile={handleCloseSelectedFile}
+              handleCloseSelectedFile={resetState}
               preprocessLocalFile={preprocessImage}
+              handleClearUrl={resetState}
             />
           </form>
         </Box>

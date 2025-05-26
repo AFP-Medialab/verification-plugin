@@ -66,7 +66,7 @@ const Geolocation = () => {
     }
   };
 
-  const handleClose = () => {
+  const resetState = () => {
     setImageFile(null);
     dispatch(resetGeolocation());
     setInput("");
@@ -105,8 +105,9 @@ const Geolocation = () => {
                 setFileInput={setImageFile}
                 handleSubmit={handleSubmit}
                 fileInputTypesAccepted={"image/*"}
-                handleCloseSelectedFile={handleClose}
+                handleCloseSelectedFile={resetState}
                 isParentLoading={isLoading}
+                handleClearUrl={resetState}
               />
             </form>
           </Box>
