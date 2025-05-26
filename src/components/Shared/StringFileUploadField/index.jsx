@@ -37,7 +37,7 @@ import { i18nLoadNamespace } from "../Languages/i18nLoadNamespace";
  * @param handleCloseSelectedFile {any} An optional handler function to execute when clearing the file selected
  * @param preprocessLocalFile {any} Optional preprocessing function to process a local file
  * @param isParentLoading {?Boolean | undefined} Optional boolean to change the loading state of the component from a parent component
-
+ @param handleClearUrl {any} An optional handler function to execute when clearing the text field input
  */
 const StringFileUploadField = ({
   labelKeyword,
