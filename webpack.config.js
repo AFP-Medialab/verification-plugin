@@ -96,6 +96,7 @@ module.exports = {
       buffer: require.resolve("buffer"),
     },
     alias: {
+      "@": path.resolve(__dirname, "src"),
       "@workers": path.resolve(__dirname, "src/workers"),
       "@Shared": path.resolve(__dirname, "src/components/Shared"),
     },

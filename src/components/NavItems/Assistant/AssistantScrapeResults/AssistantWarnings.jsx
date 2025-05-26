@@ -12,10 +12,10 @@ import Typography from "@mui/material/Typography";
 import { WarningAmber } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
+import { setWarningExpanded } from "@/redux/actions/tools/assistantActions";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { ROLES } from "constants/roles";
 
-import { setWarningExpanded } from "../../../../redux/actions/tools/assistantActions";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import DbkfMediaResults from "../AssistantCheckResults/DbkfMediaResults";
 import DbkfTextResults from "../AssistantCheckResults/DbkfTextResults";

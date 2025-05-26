@@ -24,20 +24,20 @@ import {
   MoreHoriz,
 } from "@mui/icons-material";
 
-import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-import clsx from "clsx";
-
-import { ROLES } from "../../constants/roles";
+import { ROLES } from "@/constants/roles";
 import {
   TOOLS_CATEGORIES,
   TOOL_GROUPS,
   TOOL_STATUS_ICON,
   canUserSeeTool,
   toolsHome,
-} from "../../constants/tools";
-import { TOP_MENU_ITEMS } from "../../constants/topMenuItems";
-import { selectTopMenuItem } from "../../redux/reducers/navReducer";
-import { selectTool } from "../../redux/reducers/tools/toolReducer";
+} from "@/constants/tools";
+import { TOP_MENU_ITEMS } from "@/constants/topMenuItems";
+import { selectTopMenuItem } from "@/redux/reducers/navReducer";
+import { selectTool } from "@/redux/reducers/tools/toolReducer";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import clsx from "clsx";
+
 import DataIcon from "../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
 import ImageIcon from "../NavBar/images/SVG/Image/Images.svg";
 import SearchIcon from "../NavBar/images/SVG/Search/Search.svg";

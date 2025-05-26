@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
   setTwitterSnaLoading,
   setTwitterSnaResult,
-} from "../../../../../redux/reducers/tools/twitterSnaReducer";
+} from "@/redux/reducers/tools/twitterSnaReducer";
 import _ from "lodash";
 
 const useTwitterSnaRequest = (request) => {

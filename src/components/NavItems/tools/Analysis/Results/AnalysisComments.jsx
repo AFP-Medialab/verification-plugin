@@ -34,8 +34,6 @@ export const CommentsPanel = (props) => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  console.log("props.commentsData", props.commentsData);
-
   const classes = props.classes;
   const keyword = props.keyword;
   const nextPage = props.report.pagination.next;
