@@ -213,7 +213,7 @@ const Loccus = () => {
     }
   };
 
-  const handleClose = () => {
+  const resetState = () => {
     getAnalysisResultsForAudio.reset();
     setInput("");
     setAudioFile(AUDIO_FILE_DEFAULT_STATE);
@@ -236,13 +236,11 @@ const Loccus = () => {
     // TODO: Use ffmpeg to convert the m4a files if possible
     if (
       isChromium &&
-      (file.type.includes("m4a") ||
-        file.type.includes("basic") ||
-        file.type.includes("aiff"))
+      (file.type.includes("basic") || file.type.includes("aiff"))
     ) {
       dispatch(setError(keyword("error_invalid_audio_file")));
 
-      handleClose();
+      resetState();
 
       return Error(keyword("error_invalid_audio_file"));
     }
@@ -368,9 +366,10 @@ const Loccus = () => {
               setFileInput={setAudioFile}
               handleSubmit={handleSubmit}
               fileInputTypesAccepted={"audio/*"}
-              handleCloseSelectedFile={handleClose}
+              handleCloseSelectedFile={resetState}
               preprocessLocalFile={preprocessLocalFile}
               isParentLoading={getAnalysisResultsForAudio.isPending}
+              handleClearUrl={resetState}
             />
           </form>
         </Box>
@@ -404,7 +403,7 @@ const Loccus = () => {
           result={result}
           isInconclusive={isInconclusive}
           url={url}
-          handleClose={handleClose}
+          handleClose={resetState}
           chunks={chunks}
         />
       )}

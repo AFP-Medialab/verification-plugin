@@ -196,7 +196,8 @@ const Metadata = () => {
     setInput("");
   };
 
-  const handleCloseFile = () => {
+  const resetState = () => {
+    setInput("");
     setFileInput(null);
     resetMetadataState();
   };
@@ -242,7 +243,8 @@ const Metadata = () => {
               setFileInput={setFileInput}
               handleSubmit={submitUrl}
               fileInputTypesAccepted={"image/*, video/*"}
-              handleCloseSelectedFile={handleCloseFile}
+              handleCloseSelectedFile={resetState}
+              handleClearUrl={resetState}
             />
           </Box>
         </form>

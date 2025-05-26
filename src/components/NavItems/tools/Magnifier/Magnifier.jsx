@@ -113,7 +113,7 @@ const Magnifier = () => {
     return file;
   };
 
-  const handleCloseSelectedFile = () => {
+  const resetState = () => {
     setImageFile(undefined);
     setInput("");
     dispatch(resetMagnifierState());
@@ -151,8 +151,9 @@ const Magnifier = () => {
               setFileInput={setImageFile}
               handleSubmit={submitUrl}
               fileInputTypesAccepted={"image/*"}
-              handleCloseSelectedFile={handleCloseSelectedFile}
+              handleCloseSelectedFile={resetState}
               preprocessLocalFile={preprocessImage}
+              handleClearUrl={resetState}
             />
           </form>
 
@@ -172,9 +173,7 @@ const Magnifier = () => {
           m: 3,
         }}
       />
-      {magnifierResult && (
-        <ImageResult handleCloseResults={handleCloseSelectedFile} />
-      )}
+      {magnifierResult && <ImageResult handleCloseResults={resetState} />}
     </div>
   );
 };

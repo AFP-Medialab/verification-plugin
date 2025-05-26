@@ -265,7 +265,7 @@ const SyntheticImageDetection = () => {
     });
   }
 
-  const handleClose = () => {
+  const resetState = () => {
     setInput("");
     setImageFile(undefined);
     dispatch(resetSyntheticImageDetectionImage());
@@ -408,9 +408,10 @@ const SyntheticImageDetection = () => {
                 setFileInput={setImageFile}
                 handleSubmit={handleSubmit}
                 fileInputTypesAccepted={"image/*"}
-                handleCloseSelectedFile={handleClose}
+                handleCloseSelectedFile={resetState}
                 preprocessLocalFile={preprocessImage}
                 isParentLoading={isLoading}
+                handleClearUrl={resetState}
               />
             </form>
 
@@ -451,7 +452,7 @@ const SyntheticImageDetection = () => {
         <SyntheticImageDetectionResults
           results={result}
           url={url}
-          handleClose={handleClose}
+          handleClose={resetState}
           nd={nd}
           imageType={imageType}
         />

@@ -39,7 +39,7 @@ const DeepfakeResultsVideo = (props) => {
     }
   }
 
-  const DeepfakeImageDetectionMethodNames = Object.freeze({
+  const DeepfakeVideoDetectionMethodNames = Object.freeze({
     deepfakeVideoReport: {
       name: keyword("deepfake_video_videoreport_name"),
       description: keyword("deepfake_video_videoreport_description"),
@@ -189,7 +189,7 @@ const DeepfakeResultsVideo = (props) => {
     if (results[faceswapAlgorithm] && results[faceswapAlgorithm].prediction) {
       res.push(
         new DeepfakeResult(
-          Object.keys(DeepfakeImageDetectionMethodNames)[0],
+          Object.keys(DeepfakeVideoDetectionMethodNames)[0],
           results[faceswapAlgorithm].prediction * 100,
         ),
       );
@@ -198,7 +198,7 @@ const DeepfakeResultsVideo = (props) => {
     if (results.ftcn_report && results.ftcn_report.prediction) {
       res.push(
         new DeepfakeResult(
-          Object.keys(DeepfakeImageDetectionMethodNames)[1],
+          Object.keys(DeepfakeVideoDetectionMethodNames)[1],
           results.ftcn_report.prediction * 100,
         ),
       );
@@ -207,7 +207,7 @@ const DeepfakeResultsVideo = (props) => {
     if (results.face_reenact_report && results.face_reenact_report.prediction) {
       res.push(
         new DeepfakeResult(
-          Object.keys(DeepfakeImageDetectionMethodNames)[2],
+          Object.keys(DeepfakeVideoDetectionMethodNames)[2],
           results.face_reenact_report.prediction * 100,
         ),
       );
@@ -340,7 +340,7 @@ const DeepfakeResultsVideo = (props) => {
                   <GaugeChartResult
                     keyword={keyword}
                     scores={deepfakeScores}
-                    methodNames={DeepfakeImageDetectionMethodNames}
+                    methodNames={DeepfakeVideoDetectionMethodNames}
                     detectionThresholds={DETECTION_THRESHOLDS}
                     resultsHaveErrors={false}
                     sanitizeDetectionPercentage={(n) => Math.round(n)}

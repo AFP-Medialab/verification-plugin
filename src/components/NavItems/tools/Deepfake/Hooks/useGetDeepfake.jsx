@@ -1,9 +1,5 @@
 import { ROLES } from "@/constants/roles";
 import {
-  setDeepfakeLoadingImage,
-  setDeepfakeResultImage,
-} from "@/redux/actions/tools/deepfakeImageActions";
-import {
   setDeepfakeLoadingVideo,
   setDeepfakeResultVideo,
 } from "@/redux/actions/tools/deepfakeVideoActions";
@@ -29,11 +25,7 @@ async function UseGetDeepfake(
   let modeURL = "";
   let services = "";
 
-  if (mode === "IMAGE") {
-    dispatch(setDeepfakeLoadingImage(true));
-    modeURL = "images/";
-    services = "faceswap_ens_mever";
-  } else if (mode === "VIDEO") {
+  if (mode === "VIDEO") {
     dispatch(setDeepfakeLoadingVideo(true));
     modeURL = "videos/";
     // services = "deepfake_video,ftcn,face_reenact";
@@ -52,9 +44,7 @@ async function UseGetDeepfake(
 
   const handleError = (e) => {
     dispatch(setError(keyword(e)));
-    if (mode === "IMAGE") {
-      dispatch(setDeepfakeLoadingImage(false));
-    } else if (mode === "VIDEO") {
+    if (mode === "VIDEO") {
       dispatch(setDeepfakeLoadingVideo(false));
     }
   };
@@ -98,14 +88,7 @@ async function UseGetDeepfake(
     }
 
     if (response.data != null) {
-      if (mode === "IMAGE") {
-        dispatch(
-          setDeepfakeResultImage({
-            url: mediaFile ? URL.createObjectURL(mediaFile) : url,
-            result: response.data,
-          }),
-        );
-      } else if (mode === "VIDEO") {
+      if (mode === "VIDEO") {
         dispatch(setDeepfakeResultVideo({ url: url, result: response.data }));
       }
     } else {

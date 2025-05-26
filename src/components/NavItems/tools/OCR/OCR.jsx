@@ -60,7 +60,7 @@ const OCR = () => {
 
   const submitUrl = (src) => {
     const url = imageFile ? b64Image : src;
-    setEventUrl(url);
+    setEventUrl(imageFile ? "local_image" : url);
 
     const ocrInput =
       imageFile && imageFile instanceof File
@@ -157,7 +157,7 @@ const OCR = () => {
     }
   }, [processUrl]);
 
-  const handleCloseSelectedFile = () => {
+  const resetState = () => {
     dispatch(resetOcrState());
   };
 
@@ -201,8 +201,9 @@ const OCR = () => {
               setFileInput={setImageFile}
               handleSubmit={submitUrl}
               fileInputTypesAccepted={"image/*"}
-              handleCloseSelectedFile={handleCloseSelectedFile}
+              handleCloseSelectedFile={resetState}
               preprocessLocalFile={preprocessImage}
+              handleClearUrl={resetState}
             />
           </form>
         </Box>

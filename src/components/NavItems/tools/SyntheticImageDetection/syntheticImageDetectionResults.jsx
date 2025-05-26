@@ -767,8 +767,6 @@ const SyntheticImageDetectionResults = ({
                         {syntheticImageScores.map((item, key) => {
                           let predictionScore;
 
-                          console.log(item);
-
                           if (typeof item.predictionScore === "number") {
                             predictionScore = sanitizeDetectionPercentage(
                               item.predictionScore,

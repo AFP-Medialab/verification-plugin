@@ -276,7 +276,7 @@ const C2paData = () => {
     dispatch(c2paLoadingSet(false));
   };
 
-  const handleClose = () => {
+  const resetState = () => {
     setImageFile(undefined);
     setInput("");
     setErrorMessage(null);
@@ -330,8 +330,9 @@ const C2paData = () => {
                 setFileInput={setImageFile}
                 handleSubmit={handleSubmit}
                 fileInputTypesAccepted={"image/*, video/*"}
-                handleCloseSelectedFile={handleClose}
+                handleCloseSelectedFile={resetState}
                 isParentLoading={isLoading}
+                handleClearUrl={resetState}
               />
 
               {(role.includes(ROLES.AFP_C2PA_GOLD) ||

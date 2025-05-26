@@ -14,7 +14,6 @@ import navReducer from "./navReducer";
 import analysisReducer from "./tools/analysisReducer";
 import archiveReducer from "./tools/archiveReducer";
 import c2paReducer from "./tools/c2paReducer";
-import deepfakeReducerImage from "./tools/deepfakeImageReducer";
 import deepfakeReducerVideo from "./tools/deepfakeVideoReducer";
 import forensicReducer from "./tools/forensicReducer";
 import geolocationReducer from "./tools/geolocationReducer";
@@ -62,7 +61,6 @@ const allReducers = combineReducers({
   gif: gifReducer,
   syntheticImageDetection: syntheticImageDetectionReducer,
   syntheticAudioDetection: loccusReducer,
-  deepfakeImage: deepfakeReducerImage,
   deepfakeVideo: deepfakeReducerVideo,
   geolocation: geolocationReducer,
   c2pa: c2paReducer,
