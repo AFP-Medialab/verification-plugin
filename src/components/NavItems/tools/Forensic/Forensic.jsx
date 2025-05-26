@@ -60,6 +60,8 @@ const Forensic = () => {
     uid,
   );
   const submitUrl = () => {
+    dispatch(resetForensicState());
+
     const fileUrl = imageFile ? URL.createObjectURL(imageFile) : input;
 
     setType("url");

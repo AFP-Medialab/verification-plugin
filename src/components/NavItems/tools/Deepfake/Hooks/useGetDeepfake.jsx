@@ -44,9 +44,7 @@ async function UseGetDeepfake(
 
   const handleError = (e) => {
     dispatch(setError(keyword(e)));
-    if (mode === "IMAGE") {
-      dispatch(setDeepfakeLoadingImage(false));
-    } else if (mode === "VIDEO") {
+    if (mode === "VIDEO") {
       dispatch(setDeepfakeLoadingVideo(false));
     }
   };
