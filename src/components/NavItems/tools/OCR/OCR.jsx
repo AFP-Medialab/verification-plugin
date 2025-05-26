@@ -59,7 +59,7 @@ const OCR = () => {
   );
 
   const submitUrl = (src) => {
-    dispatch(resetOcrState());
+    // dispatch(resetOcrState());
 
     const url = imageFile ? b64Image : src;
     setEventUrl(imageFile ? "local_image" : url);
