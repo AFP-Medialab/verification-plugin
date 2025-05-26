@@ -236,9 +236,7 @@ const Loccus = () => {
     // TODO: Use ffmpeg to convert the m4a files if possible
     if (
       isChromium &&
-      (file.type.includes("m4a") ||
-        file.type.includes("basic") ||
-        file.type.includes("aiff"))
+      (file.type.includes("basic") || file.type.includes("aiff"))
     ) {
       dispatch(setError(keyword("error_invalid_audio_file")));
 
