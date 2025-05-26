@@ -7,15 +7,15 @@ import Card from "@mui/material/Card";
 import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 
-import StringFileUploadField from "@Shared/StringFileUploadField";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-
-import { imageGeolocation } from "../../../../constants/tools";
+import { imageGeolocation } from "@/constants/tools";
 import {
   resetGeolocation,
   setGeolocationLoading,
   setGeolocationResult,
-} from "../../../../redux/reducers/tools/geolocationReducer";
+} from "@/redux/reducers/tools/geolocationReducer";
+import StringFileUploadField from "@Shared/StringFileUploadField";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import {
   geolocateLocalFile,
@@ -66,7 +66,7 @@ const Geolocation = () => {
     }
   };
 
-  const handleClose = () => {
+  const resetState = () => {
     setImageFile(null);
     dispatch(resetGeolocation());
     setInput("");
@@ -105,8 +105,9 @@ const Geolocation = () => {
                 setFileInput={setImageFile}
                 handleSubmit={handleSubmit}
                 fileInputTypesAccepted={"image/*"}
-                handleCloseSelectedFile={handleClose}
+                handleCloseSelectedFile={resetState}
                 isParentLoading={isLoading}
+                handleClearUrl={resetState}
               />
             </form>
           </Box>

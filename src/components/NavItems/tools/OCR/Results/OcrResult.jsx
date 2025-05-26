@@ -17,6 +17,12 @@ import Typography from "@mui/material/Typography";
 import WarningOutlined from "@mui/icons-material/WarningOutlined";
 
 import {
+  resetOcrState,
+  setOcrReprocess,
+  setReprocessOpen,
+  setSelectedScript,
+} from "@/redux/actions/tools/ocrActions";
+import {
   SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
 } from "@Shared/ReverseSearch/reverseSearchUtils";
@@ -25,12 +31,6 @@ import { Translate } from "@Shared/Utils/Translate";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { setError } from "redux/reducers/errorReducer";
 
-import {
-  resetOcrState,
-  setOcrReprocess,
-  setReprocessOpen,
-  setSelectedScript,
-} from "../../../../../redux/actions/tools/ocrActions";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 
 const OcrResult = () => {
@@ -65,8 +65,8 @@ const OcrResult = () => {
   const mainImageId = "ocrMainImageId";
 
   /* if (!scripts) {
-                                    dispatch(loadOcrScripts())
-                                }*/
+                                        dispatch(loadOcrScripts())
+                                    }*/
 
   const handleScriptChange = (event) => {
     dispatch(setSelectedScript(event.target.value));
@@ -176,6 +176,10 @@ const OcrResult = () => {
   });
   // when the result comes in, draw the bounding boxes and add the event listener for changes to image size
   useEffect(() => {
+    if (!result) {
+      drawBoundingBoxes([]);
+    }
+
     if (result && result.bounding_boxes.length) {
       drawBoundingBoxes(result.bounding_boxes);
 

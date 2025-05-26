@@ -15,13 +15,13 @@ import Tooltip from "@mui/material/Tooltip";
 
 import { Settings } from "@mui/icons-material";
 
+import { toolsHome } from "@/constants/tools";
+import { selectTopMenuItem } from "@/redux/reducers/navReducer";
+import { resetToolSelected } from "@/redux/reducers/tools/toolReducer";
+import { theme } from "@/theme";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 
-import { toolsHome } from "../../constants/tools";
-import { selectTopMenuItem } from "../../redux/reducers/navReducer";
-import { resetToolSelected } from "../../redux/reducers/tools/toolReducer";
-import { theme } from "../../theme";
 import LogoEuComWhite from "../NavBar/images/SVG/Navbar/ep-logo-white.svg";
 import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg";
 import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg";

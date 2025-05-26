@@ -18,9 +18,9 @@ import FindInPageIcon from "@mui/icons-material/FindInPage";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import SentimentSatisfied from "@mui/icons-material/SentimentSatisfied";
 
+import { setAssuranceExpanded } from "@/redux/actions/tools/assistantActions";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import { setAssuranceExpanded } from "../../../../redux/actions/tools/assistantActions";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import SourceCredibilityResult from "../AssistantCheckResults/SourceCredibilityResult";
 import {
@@ -94,12 +94,20 @@ const AssistantSCResults = () => {
           </Box>
 
           {/* expand button */}
-          <IconButton
-            className={classes.assistantIconRight}
-            onClick={() => dispatch(setAssuranceExpanded(!assuranceExpanded))}
+          <Box
+            sx={{
+              pr: 1,
+              pt: 1,
+            }}
           >
-            <ExpandMoreIcon color={"primary"} />
-          </IconButton>
+            <IconButton
+              className={classes.assistantIconRight}
+              onClick={() => dispatch(setAssuranceExpanded(!assuranceExpanded))}
+              sx={{ p: 1 }}
+            >
+              <ExpandMoreIcon color={"primary"} />
+            </IconButton>
+          </Box>
         </Grid>
 
         <Grid size={{ xs: 1 }}>

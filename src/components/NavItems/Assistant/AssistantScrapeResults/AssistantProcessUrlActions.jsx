@@ -13,20 +13,16 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 
+import {
+  resetSyntheticImageDetectionImage,
+  setSyntheticImageDetectionUrl,
+} from "@/redux/actions/tools/syntheticImageDetectionActions";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import {
-  resetDeepfake as resetDeepfakeImage,
-  setDeepfakeUrlImage,
-} from "../../../../redux/actions/tools/deepfakeImageActions";
 import {
   resetDeepfake as resetDeepfakeVideo,
   setDeepfakeUrlVideo,
 } from "../../../../redux/actions/tools/deepfakeVideoActions";
-import {
-  resetSyntheticImageDetectionImage,
-  setSyntheticImageDetectionUrl,
-} from "../../../../redux/actions/tools/syntheticImageDetectionActions";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { KNOWN_LINKS } from "../AssistantRuleBook";
 
@@ -47,10 +43,6 @@ const AssistantProcessUrlActions = () => {
     const resultUrl = action.useInputUrl ? inputUrl : processUrl;
 
     // deepfake and synthetic image detection set URL actions
-    if (action.path === "tools/deepfakeImage") {
-      dispatch(resetDeepfakeImage());
-      dispatch(setDeepfakeUrlImage({ url: resultUrl }));
-    }
     if (action.path === "tools/deepfakeVideo") {
       dispatch(resetDeepfakeVideo());
       dispatch(setDeepfakeUrlVideo({ url: resultUrl }));

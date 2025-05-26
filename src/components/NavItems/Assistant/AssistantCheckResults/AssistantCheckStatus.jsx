@@ -12,10 +12,15 @@ import Typography from "@mui/material/Typography";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
+import { setStateExpanded } from "@/redux/actions/tools/assistantActions";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import { setStateExpanded } from "../../../../redux/actions/tools/assistantActions";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import {
+  KNOWN_LINKS,
+  KNOWN_LINK_PATTERNS,
+  matchPattern,
+} from "../AssistantRuleBook";
 
 const AssistantCheckStatus = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -63,14 +68,20 @@ const AssistantCheckStatus = () => {
   );
 
   const machineGeneratedTextTitle = keyword("machine_generated_text_title");
-  const machineGeneratedTextFailState = useSelector(
-    (state) => state.assistant.machineGeneratedTextFail,
+  const machineGeneratedTextChunksFailState = useSelector(
+    (state) => state.assistant.machineGeneratedTextChunksFail,
+  );
+  const machineGeneratedTextSentencesFailState = useSelector(
+    (state) => state.assistant.machineGeneratedTextSentencesFail,
   );
 
   const multilingualStanceTitle = keyword("multilingual_stance_title");
   const multilingualStanceFailState = useSelector(
     (state) => state.assistant.multilingualStanceFail,
   );
+
+  const inputUrl = useSelector((state) => state.assistant.inputUrl);
+  const urlType = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
 
   const failStates = [
     { title: scTitle, failed: scFailState },
@@ -82,10 +93,18 @@ const AssistantCheckStatus = () => {
     { title: persuasionTitle, failed: persuasionFailState },
     { title: subjectivityTitle, failed: subjectivityFailState },
     { title: prevFactChecksTitle, failed: prevFactChecksFailState },
-    { title: machineGeneratedTextTitle, failed: machineGeneratedTextFailState },
+    {
+      title: machineGeneratedTextTitle,
+      failed:
+        machineGeneratedTextChunksFailState ||
+        machineGeneratedTextSentencesFailState,
+    },
     {
       title: multilingualStanceTitle,
-      failed: multilingualStanceFailState,
+      failed:
+        multilingualStanceFailState &&
+        (urlType === KNOWN_LINKS.YOUTUBE ||
+          urlType === KNOWN_LINKS.YOUTUBESHORTS),
     },
   ];
 

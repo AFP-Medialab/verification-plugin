@@ -1,14 +1,17 @@
 import React from "react";
 
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import { ExpandLessOutlined, ExpandMoreOutlined } from "@mui/icons-material";
 
+import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 import { TextCopy } from "@Shared/Utils/TextCopy";
 import { Translate } from "@Shared/Utils/Translate";
 import { getLanguageName } from "@Shared/Utils/languageUtils";
@@ -21,7 +24,6 @@ export default function TextFooter({
   textLang,
   expandMinimiseText,
   text,
-  displayExpander,
   setExpanded,
   expanded,
 }) {
@@ -93,7 +95,6 @@ export default function TextFooter({
           <ExpandMinimise
             classes={classes}
             expandMinimiseText={expandMinimiseText}
-            displayExpander={displayExpander}
             setExpanded={setExpanded}
             expanded={expanded}
           />
@@ -104,18 +105,17 @@ export default function TextFooter({
 }
 
 export function TextFooterPrevFactChecks({
-  classes,
-  expandMinimiseText,
-  displayExpander,
-  setExpanded,
-  expanded,
   navigate,
   keyword,
+  setExpanded,
+  expanded,
 }) {
   const handleClick = (path) => {
     // instead need to set parameter then load text in SemanticSearch/index.jsx
     navigate("/app/" + path + "/assistantText");
   };
+  const classes = useMyStyles();
+  const expandMinimiseText = keyword("expand_minimise_text");
 
   return (
     <Box>
@@ -148,7 +148,6 @@ export function TextFooterPrevFactChecks({
           <ExpandMinimise
             classes={classes}
             expandMinimiseText={expandMinimiseText}
-            displayExpander={displayExpander}
             setExpanded={setExpanded}
             expanded={expanded}
           />
@@ -161,31 +160,57 @@ export function TextFooterPrevFactChecks({
 export function ExpandMinimise({
   classes,
   expandMinimiseText,
-  displayExpander,
   setExpanded,
   expanded,
+  type,
 }) {
-  return (
-    <Tooltip title={expandMinimiseText} sx={{ cursor: "pointer" }}>
-      {displayExpander ? (
-        expanded ? (
-          <ExpandLessOutlined
-            className={classes.toolTipIcon}
-            onClick={() => {
-              setExpanded(!expanded);
-            }}
-            color="primary"
-          />
-        ) : (
-          <ExpandMoreOutlined
-            className={classes.toolTipIcon}
-            onClick={() => {
-              setExpanded(!expanded);
-            }}
-            color="primary"
-          />
-        )
-      ) : null}
-    </Tooltip>
+  return type === "BUTTON" ? (
+    <Button
+      variant="outlined"
+      color="primary"
+      size={"large"}
+      fullWidth
+      onClick={() => {
+        setExpanded(!expanded);
+      }}
+    >
+      {expanded ? (
+        <ExpandLessOutlined
+          className={classes.toolTipIcon}
+          color="primary"
+          style={{ display: "inline-flex" }}
+        />
+      ) : (
+        <ExpandMoreOutlined
+          className={classes.toolTipIcon}
+          color="primary"
+          style={{ display: "inline-flex" }}
+        />
+      )}
+      {expandMinimiseText}
+    </Button>
+  ) : (
+    <IconButton
+      onClick={() => setExpanded(!expanded)}
+      sx={{
+        "&:hover": {
+          backgroundColor: "inherit",
+        },
+      }}
+    >
+      {expanded ? (
+        <ExpandLessOutlined
+          className={classes.toolTipIcon}
+          color="primary"
+          style={{ display: "inline-flex" }}
+        />
+      ) : (
+        <ExpandMoreOutlined
+          className={classes.toolTipIcon}
+          color="primary"
+          style={{ display: "inline-flex" }}
+        />
+      )}
+    </IconButton>
   );
 }

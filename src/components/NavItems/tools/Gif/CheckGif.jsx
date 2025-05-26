@@ -17,18 +17,18 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import LinkIcon from "@mui/icons-material/Link";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 
-import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
-import { TabContext, TabList } from "@mui/lab";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { imageGif } from "../../../../constants/tools";
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { imageGif } from "@/constants/tools";
 import {
   setStateInit,
   setStateReady,
   setStateSelectingLocal,
   setStateSelectingUrl,
-} from "../../../../redux/reducers/tools/gifReducer";
+} from "@/redux/reducers/tools/gifReducer";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import { TabContext, TabList } from "@mui/lab";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import AnimatedGif from "./AnimatedGif";

@@ -19,13 +19,13 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 
+import { ROLES } from "@/constants/roles";
 import {
   SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
 } from "@Shared/ReverseSearch/reverseSearchUtils";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import { ROLES } from "../../../../../constants/roles";
 import ImageGridList from "../../../../Shared/ImageGridList/ImageGridList";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 
