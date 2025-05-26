@@ -1,12 +1,11 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import axios from "axios";
-
 import {
   setKeyframesSimilarityLoading,
   setSimilarity,
-} from "../../../../../redux/reducers/tools/keyframesReducer";
+} from "@/redux/reducers/tools/keyframesReducer";
+import axios from "axios";
 
 export const useVideoSimilarity = (url, keyword) => {
   const dispatch = useDispatch();

@@ -1,4 +1,4 @@
-import { ROLES } from "../../../../constants/roles";
+import { ROLES } from "@/constants/roles";
 
 /**
  * @file Provides constants and helper functions used for the synthetic image detection tool

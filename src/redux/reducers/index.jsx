@@ -31,15 +31,24 @@ import twitterSnaReducer from "./tools/twitterSnaReducer";
 import videoRightsReducer from "./tools/videoRightsReducer";
 
 const allReducers = combineReducers({
+  // Global state
   language: languageReducer,
   defaultLanguage: defaultLanguageReducer,
   dictionary: dictionaryReducer,
-  nav: navReducer,
-  tool: toolReducer,
+  languageSupport: languageSupportReducer,
+  cookies: cookiesReducer,
+  error: errorReducer,
   humanRightsCheckBox: humanRightsCheckBoxReducer,
   interactiveExplanation: interactiveExplanationReducer,
-  error: errorReducer,
+
+  // Auth
   userSession: authenticationReducer,
+
+  // Navigation
+  nav: navReducer,
+  tool: toolReducer,
+
+  // Tools
   analysis: analysisReducer,
   forensic: forensicReducer,
   keyframes: keyframesReducer,
@@ -48,7 +57,6 @@ const allReducers = combineReducers({
   thumbnails: thumbnailsReducer,
   twitterSna: twitterSnaReducer,
   videoRights: videoRightsReducer,
-  cookies: cookiesReducer,
   assistant: assistantReducer,
   ocr: ocrReducer,
   gif: gifReducer,
@@ -57,7 +65,6 @@ const allReducers = combineReducers({
   deepfakeImage: deepfakeReducerImage,
   deepfakeVideo: deepfakeReducerVideo,
   geolocation: geolocationReducer,
-  languagesSupport: languageSupportReducer,
   c2pa: c2paReducer,
   archive: archiveReducer,
 });
