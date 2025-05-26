@@ -13,12 +13,12 @@ import Modal from "@mui/material/Modal";
 
 import CloseIcon from "@mui/icons-material/Close";
 
+import { setMagnifierResult } from "@/redux/actions/tools/magnifierActions";
 import { reverseImageSearch } from "@Shared/ReverseSearch/reverseSearchUtils";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { ReverseSearchButtons } from "components/Shared/ReverseSearch/ReverseSearchButtons";
 import "tui-image-editor/dist/tui-image-editor.css";
 
-import { setMagnifierResult } from "../../../../../redux/actions/tools/magnifierActions";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import ImageEditor from "../Utils/ImageEditor";
 import Loop from "./Loop";

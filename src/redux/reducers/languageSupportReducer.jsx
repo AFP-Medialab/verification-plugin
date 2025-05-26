@@ -6,7 +6,7 @@ const initialState = {
 };
 
 const languageSupportSlice = createSlice({
-  name: "languagesSupport",
+  name: "languageSupport",
   initialState,
   reducers: {
     loadLanguages(state, action) {

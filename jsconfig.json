@@ -1,8 +1,18 @@
 {
-    "compilerOptions": {
-      "baseUrl": "./src",
-      "checkJs": false,
-      "jsx": "react"
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
     },
-    "exclude": ["node_modules", "**/node_modules", "dist", "build"]
-  }
+    "checkJs": false,
+    "jsx": "react"
+  },
+  "exclude": [
+    "node_modules",
+    "**/node_modules",
+    "dist",
+    "build"
+  ]
+}

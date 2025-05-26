@@ -18,9 +18,9 @@ import FindInPageIcon from "@mui/icons-material/FindInPage";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import SentimentSatisfied from "@mui/icons-material/SentimentSatisfied";
 
+import { setAssuranceExpanded } from "@/redux/actions/tools/assistantActions";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import { setAssuranceExpanded } from "../../../../redux/actions/tools/assistantActions";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import SourceCredibilityResult from "../AssistantCheckResults/SourceCredibilityResult";
 import {
