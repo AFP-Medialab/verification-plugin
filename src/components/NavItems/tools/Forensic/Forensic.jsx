@@ -116,6 +116,7 @@ const Forensic = () => {
   }, [processUrl]);
 
   const preprocessingSuccess = (file) => {
+    dispatch(resetForensicState());
     setImageFile(file);
     setType("local");
   };
