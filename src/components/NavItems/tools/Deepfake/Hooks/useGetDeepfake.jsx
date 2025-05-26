@@ -1,9 +1,5 @@
 import { ROLES } from "@/constants/roles";
 import {
-  setDeepfakeLoadingImage,
-  setDeepfakeResultImage,
-} from "@/redux/actions/tools/deepfakeImageActions";
-import {
   setDeepfakeLoadingVideo,
   setDeepfakeResultVideo,
 } from "@/redux/actions/tools/deepfakeVideoActions";
@@ -29,11 +25,7 @@ async function UseGetDeepfake(
   let modeURL = "";
   let services = "";
 
-  if (mode === "IMAGE") {
-    dispatch(setDeepfakeLoadingImage(true));
-    modeURL = "images/";
-    services = "faceswap_ens_mever";
-  } else if (mode === "VIDEO") {
+  if (mode === "VIDEO") {
     dispatch(setDeepfakeLoadingVideo(true));
     modeURL = "videos/";
     // services = "deepfake_video,ftcn,face_reenact";
