@@ -23,13 +23,13 @@ import LockOpenIcon from "@mui/icons-material/LockOpen";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 
+import { theme } from "@/theme";
 import { ERR_AUTH_UNKNOWN_ERROR } from "@Shared/Authentication/authenticationErrors";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import _ from "lodash";
 import { setError } from "redux/reducers/errorReducer";
 import * as yup from "yup";
 
-import { theme } from "../../../../../theme";
 import useAuthenticationAPI from "../../../../Shared/Authentication/useAuthenticationAPI";
 
 const registrationValidationSchema = yup.object().shape({

@@ -6,12 +6,12 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 
+import { changeLanguage } from "@/redux/reducers/languageReducer";
 import { getSupportedBrowserLanguage } from "@Shared/Languages/getSupportedBrowserLanguage";
 import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { ROLES } from "constants/roles";
 
-import { changeLanguage } from "../../redux/reducers/languageReducer";
 import LogoEuComWhite from "../NavBar/images/SVG/Navbar/ep-logo-white.svg?url";
 import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg?url";
 import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg?url";

@@ -10,12 +10,12 @@ import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import TextField from "@mui/material/TextField";
 
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { videoRights } from "@/constants/tools";
+import { setVideoRightsLoading } from "@/redux/actions/tools/videoRightsActions";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { videoRights } from "../../../../constants/tools";
-import { setVideoRightsLoading } from "../../../../redux/actions/tools/videoRightsActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";

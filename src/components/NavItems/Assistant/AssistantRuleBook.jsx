@@ -2,9 +2,8 @@ import React from "react";
 
 import DownloadIcon from "@mui/icons-material/Download";
 
-import { ROLES } from "../../../constants/roles.jsx";
+import { ROLES } from "@/constants/roles";
 import {
-  imageDeepfake,
   imageForensic,
   imageMagnifier,
   imageMetadata,
@@ -14,7 +13,7 @@ import {
   thumbnails,
   videoAnalysis,
   videoDeepfake,
-} from "../../../constants/tools";
+} from "@/constants/tools";
 
 export const NE_SUPPORTED_LANGS = ["en", "pt", "fr", "de", "el", "es", "it"];
 
@@ -237,18 +236,6 @@ export const ASSISTANT_ACTIONS = [
     text: "synthetic_image_detection_text",
     tsvPrefix: "synthetic_image_detection",
     path: "tools/syntheticImageDetection",
-    betaTester: true,
-  },
-  {
-    title: "navbar_deepfake_image",
-    icon: <imageDeepfake.icon sx={{ fontSize: "24px" }} />,
-    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
-    cTypes: [CONTENT_TYPE.IMAGE],
-    exceptions: [],
-    useInputUrl: false,
-    text: "deepfake_image_text",
-    tsvPrefix: "deepfakeImage",
-    path: "tools/deepfakeImage",
     betaTester: true,
   },
   {

@@ -293,19 +293,10 @@ export function MgtCategoriesList({
   // gauge labels
   output.push(
     <ListItem key="gauge_labels">
-      <Stack
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        spacing={7}
-      >
-        <Typography variant="subtitle2">
-          {keyword("gauge_no_detection")}
-        </Typography>
-        <Typography variant="subtitle2">
-          {keyword("gauge_detection")}
-        </Typography>
-      </Stack>
+      <Typography variant="subtitle2" sx={{ flex: 1 }}>
+        {keyword("gauge_no_detection")}
+      </Typography>
+      <Typography variant="subtitle2">{keyword("gauge_detection")}</Typography>
     </ListItem>,
   );
   // gauge explanation
