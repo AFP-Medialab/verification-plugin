@@ -152,7 +152,9 @@ export default function AssistantTextClassification({
           sentenceIndices[i].score >= configs.importanceThresholdLow
         ) {
           filteredSentences.push(sentenceIndices[i]);
-        } else {
+        } else if (
+          credibilitySignal === keyword("machine_generated_text_title")
+        ) {
           filteredSentences.push(sentenceIndices[i]);
         }
       }
@@ -163,7 +165,9 @@ export default function AssistantTextClassification({
         classification[label][0].score >= configs.confidenceThresholdLow
       ) {
         filteredCategories[label] = classification[label];
-      } else {
+      } else if (
+        credibilitySignal === keyword("machine_generated_text_title")
+      ) {
         filteredCategories[label] = classification[label];
       }
     }
