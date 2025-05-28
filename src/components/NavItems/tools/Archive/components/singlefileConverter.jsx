@@ -223,7 +223,7 @@ const SinglefileConverter = (telegramURL) => {
           const blobUrl = URL.createObjectURL(res);
           const a = document.createElement("a");
           a.href = blobUrl;
-          a.download = `singlefile2wacz.wacz`;
+          a.download = cdxInfo.url + "_" + dayjs() + `.wacz`;
           a.click();
           setProcessingSinglefile(false);
         });
