@@ -2,15 +2,14 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequest";
-import { isValidUrl } from "@Shared/Utils/URLUtils";
-import axios from "axios";
-
-import { ROLES } from "../../../../../constants/roles";
+import { ROLES } from "@/constants/roles";
 import {
   setKeyframesFeatures,
   setKeyframesResult,
-} from "../../../../../redux/reducers/tools/keyframesReducer";
+} from "@/redux/reducers/tools/keyframesReducer";
+import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequest";
+import { isValidUrl } from "@Shared/Utils/URLUtils";
+import axios from "axios";
 
 export const useProcessKeyframes = () => {
   const [status, setStatus] = useState(null);

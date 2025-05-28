@@ -10,6 +10,11 @@ import Stack from "@mui/material/Stack";
 
 import { AudioFile } from "@mui/icons-material";
 
+import {
+  resetLoccusAudio,
+  setLoccusLoading,
+  setLoccusResult,
+} from "@/redux/actions/tools/loccusActions";
 import { isValidUrl } from "@Shared/Utils/URLUtils";
 import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import axios from "axios";
@@ -18,11 +23,6 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import { setError } from "redux/reducers/errorReducer";
 import { v4 as uuidv4 } from "uuid";
 
-import {
-  resetLoccusAudio,
-  setLoccusLoading,
-  setLoccusResult,
-} from "../../../../redux/actions/tools/loccusActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import LoccusResults from "./loccusResults";
@@ -213,7 +213,7 @@ const Loccus = () => {
     }
   };
 
-  const handleClose = () => {
+  const resetState = () => {
     getAnalysisResultsForAudio.reset();
     setInput("");
     setAudioFile(AUDIO_FILE_DEFAULT_STATE);
@@ -236,13 +236,11 @@ const Loccus = () => {
     // TODO: Use ffmpeg to convert the m4a files if possible
     if (
       isChromium &&
-      (file.type.includes("m4a") ||
-        file.type.includes("basic") ||
-        file.type.includes("aiff"))
+      (file.type.includes("basic") || file.type.includes("aiff"))
     ) {
       dispatch(setError(keyword("error_invalid_audio_file")));
 
-      handleClose();
+      resetState();
 
       return Error(keyword("error_invalid_audio_file"));
     }
@@ -368,9 +366,10 @@ const Loccus = () => {
               setFileInput={setAudioFile}
               handleSubmit={handleSubmit}
               fileInputTypesAccepted={"audio/*"}
-              handleCloseSelectedFile={handleClose}
+              handleCloseSelectedFile={resetState}
               preprocessLocalFile={preprocessLocalFile}
               isParentLoading={getAnalysisResultsForAudio.isPending}
+              handleClearUrl={resetState}
             />
           </form>
         </Box>
@@ -404,7 +403,7 @@ const Loccus = () => {
           result={result}
           isInconclusive={isInconclusive}
           url={url}
-          handleClose={handleClose}
+          handleClose={resetState}
           chunks={chunks}
         />
       )}

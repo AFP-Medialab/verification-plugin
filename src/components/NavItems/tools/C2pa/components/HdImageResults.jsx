@@ -13,11 +13,11 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
+import { ROLES } from "@/constants/roles";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { getBlob } from "@Shared/ReverseSearch/utils/searchUtils";
 import { deepClone } from "@mui/x-data-grid/internals";
 
-import { ROLES } from "../../../../../constants/roles";
 import C2paCard from "./c2paCard";
 
 const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
