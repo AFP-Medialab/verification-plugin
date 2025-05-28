@@ -190,8 +190,20 @@ export default function AssistantTextClassification({
           sentenceIndices[i].score >= configs.confidenceThresholdLow
         ) {
           filteredSentences.push(sentenceIndices[i]);
-        } else {
+          console.log(
+            "addedSentence=",
+            sentenceIndices[i],
+            configs.confidenceThresholdLow,
+          );
+        } else if (
+          credibilitySignal === keyword("machine_generated_text_title")
+        ) {
           filteredSentences.push(sentenceIndices[i]);
+          console.log(
+            "remvdSentence=",
+            sentenceIndices[i],
+            configs.confidenceThresholdLow,
+          );
         }
       }
     } else {
@@ -201,11 +213,16 @@ export default function AssistantTextClassification({
         classification[label][0].score >= configs.confidenceThresholdLow
       ) {
         filteredCategories[label] = classification[label];
-      } else {
+      } else if (
+        credibilitySignal === keyword("machine_generated_text_title")
+      ) {
         filteredCategories[label] = classification[label];
       }
     }
   }
+
+  console.log("filteredSentences=", filteredSentences);
+  console.log("filteredCategories=", filteredCategories);
 
   if (Object.keys(filteredCategories).length == 0) {
     filteredSentences = [];
@@ -479,6 +496,8 @@ export function ClassifiedText({
   resolvedMode,
 }) {
   let output = text; // Defaults to text output
+
+  console.log(spanIndices);
 
   function wrapHighlightedText(spanText, spanInfo) {
     const spanScore = spanInfo.score;

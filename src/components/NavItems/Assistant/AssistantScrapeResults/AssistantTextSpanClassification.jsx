@@ -360,37 +360,35 @@ export function CategoriesListToggle({
   importantSentenceThreshold,
   handleSliderChange,
 }) {
-  // if (_.isEmpty(categories)) {
-  //   return <p>{noCategoriesText}</p>;
-  // }
-
-  let output = [];
+  let sliderList = [];
 
   // slider
-  output.push(
+  sliderList.push(
     <ListItem key={keyword("important_sentence_threshold")}>
       <Typography>{keyword("important_sentence_threshold")}</Typography>
     </ListItem>,
   );
 
-  const marks = [];
-  for (let i = 0; i <= 10; i += 2) {
-    marks.push({
-      value: i * 10,
-      label: (i / 10).toString(),
-    });
-  }
+  const marks = [
+    {
+      value: 0,
+      label: "Low",
+    },
+    {
+      value: 100,
+      label: "High",
+    },
+  ];
 
   const scaleValue = (value) => {
     return value / 100;
   };
 
-  output.push(
+  sliderList.push(
     <ListItem key={"slider"}>
       <Slider
         aria-label="important sentence threshold slider"
         marks={marks}
-        valueLabelDisplay="on"
         scale={scaleValue}
         defaultValue={80} // on loading thing it keeps resetting to 80
         value={importantSentenceThreshold}
@@ -400,20 +398,7 @@ export function CategoriesListToggle({
   );
 
   // categories
-  if (_.isEmpty(categories)) {
-    output.push(
-      <ListItem key={noCategoriesText}>
-        <Typography>{noCategoriesText}</Typography>
-      </ListItem>,
-    );
-    return <List>{output}</List>;
-  }
-  output.push(
-    <ListItem key={keyword("select_persuasion_technique")}>
-      <Typography>{keyword("select_persuasion_technique")}</Typography>
-    </ListItem>,
-  );
-
+  let categoriesList = [];
   let index = 0;
   const [currentCategory, setCurrentCategory] = useState(null);
 
@@ -446,7 +431,7 @@ export function CategoriesListToggle({
     }
 
     if (index > 0) {
-      output.push(<Divider key={index} />);
+      categoriesList.push(<Divider key={index} />);
     }
 
     // // find colour of background givens sum(scores)/num_scores
@@ -480,7 +465,7 @@ export function CategoriesListToggle({
       <Chip color="primary" label={categories[category].length} />
     );
 
-    output.push(
+    categoriesList.push(
       <ListItem
         key={category}
         sx={{
@@ -505,11 +490,26 @@ export function CategoriesListToggle({
     index++;
   }
 
-  return (
-    //<Tooltip title={tooltipContent}>
-    //</Tooltip>
-    <List>{output}</List>
-  );
+  if (_.isEmpty(categoriesList)) {
+    return (
+      <List>
+        {sliderList}
+        <ListItem key={noCategoriesText}>
+          <Typography>{noCategoriesText}</Typography>
+        </ListItem>
+      </List>
+    );
+  } else {
+    return (
+      <List>
+        {sliderList}
+        <ListItem key={keyword("select_persuasion_technique")}>
+          <Typography>{keyword("select_persuasion_technique")}</Typography>
+        </ListItem>
+        {categoriesList}
+      </List>
+    );
+  }
 }
 
 export function MultiCategoryClassifiedText({
