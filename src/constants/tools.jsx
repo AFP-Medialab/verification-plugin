@@ -32,6 +32,7 @@ import ThumbnailsIcon from "../components/NavBar/images/SVG/Video/Thumbnails.svg
 import AnalysisIcon from "../components/NavBar/images/SVG/Video/Video_analysis.svg";
 import VideoRightsIcon from "../components/NavBar/images/SVG/Video/Video_rights.svg";
 import About from "../components/NavItems/About/About";
+import MachineGeneratedText from "../components/NavItems/MachineGeneratedText";
 import ToolsMenu from "../components/NavItems/tools/Alltools/ToolsMenu";
 import Analysis from "../components/NavItems/tools/Analysis/Analysis";
 import Archive from "../components/NavItems/tools/Archive";
@@ -209,6 +210,10 @@ const covidSearchSvgIcon = (props) => {
 
 const xnetworkSvgIcon = (props) => {
   return <SvgIcon component={XnetworkIcon} inheritViewBox {...props} />;
+};
+
+const mgtSvgIcon = (props) => {
+  return <ManageSearch {...props} />;
 };
 
 const twitterSnaSvgIcon = (props) => {
@@ -498,6 +503,19 @@ const searchXnetwork = new Tool(
   null,
 );
 
+const machineGeneratedText = new Tool(
+  "navbar_mgt",
+  "navbar_mgt_description",
+  mgtSvgIcon,
+  TOOLS_CATEGORIES.SEARCH,
+  null,
+  [ROLES.EXTRA_FEATURE],
+  "mgt",
+  TOOL_GROUPS.VERIFICATION,
+  <MachineGeneratedText />,
+  <Footer type={FOOTER_TYPES.USFD} />,
+);
+
 /**
  * Data Analysis tools
  **/
@@ -595,6 +613,7 @@ export const tools = Object.freeze([
   searchSemantic,
   searchCovid,
   searchXnetwork,
+  machineGeneratedText,
   dataAnalysisSna,
   dataAnalysisCrowdtangle,
   archiving,
