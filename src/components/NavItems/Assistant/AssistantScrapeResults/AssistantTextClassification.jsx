@@ -168,7 +168,7 @@ export default function AssistantTextClassification({
   if (Object.keys(filteredCategories).length === 0) {
     filteredSentences = [];
   }
-  if (credibilitySignal === keyword("subjectivity_title") && Object.keys(filteredSentences).length == 0) {
+  if (credibilitySignal === keyword("subjectivity_title") && Object.keys(filteredSentences).length === 0) {
     filteredCategories = [];
   }
 
