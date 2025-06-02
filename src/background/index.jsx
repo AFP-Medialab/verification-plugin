@@ -332,8 +332,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         quotes: jp.query(ent.res, "$..quote_count")[0],
         retweets: jp.query(ent.res, "$..retweet_count")[0],
         replies: jp.query(ent.res, "$..reply_count")[0],
-        views: jp.query(ent.res, "$..result.views.count")[0]
-          ? jp.query(ent.res, "$..result.views.count")[0]
+        views: jp.query(ent.res, "$.result.views.count")[0]
+          ? jp.query(ent.res, "$.result.views.count")[0]
           : 0,
         TweetLink:
           "https://x.com/" +

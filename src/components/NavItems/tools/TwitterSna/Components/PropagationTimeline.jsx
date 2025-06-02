@@ -59,7 +59,7 @@ const PropagationTimeline = (props) => {
       const date = dayjs(item.shareTime).isValid()
         ? dayjs(item.shareTime)
         : dayjs(new Date(item.shareTime));
-      const dateKey = date.format("YYYY-MM-DD");
+      const dateKey = date.format("YYYY-MM-DDTHH");
 
       if (!countsByDate[dateKey]) {
         countsByDate[dateKey] = { count: 0 };
@@ -79,7 +79,7 @@ const PropagationTimeline = (props) => {
       tooltip: {
         trigger: "axis",
         formatter: (params) => {
-          const date = dayjs(params[0].value[0]).format("YYYY-MM-DD");
+          const date = dayjs(params[0].value[0]).format("YYYY-MM-DDTHH");
           const count = params[0].value[1];
           return `${date}<br/>Entries: ${count}`;
         },
@@ -138,16 +138,16 @@ const PropagationTimeline = (props) => {
 
     const handleClick = (params) => {
       // Placeholder for what to do when a dot is clicked
-      const clickedDate = dayjs(params.value[0]).format("YYYY-MM-DD");
+      const clickedDate = dayjs(params.value[0]).format("YYYY-MM-DDTHH");
       console.log(`Clicked dot: ${clickedDate}`);
       console.log(
         plotPoints.filter(
-          (x) => dayjs(x.shareTime).format("YYYY-MM-DD") === clickedDate,
+          (x) => dayjs(x.shareTime).format("YYYY-MM-DDTHH") === clickedDate,
         ),
       );
       setDetailContent(
         plotPoints.filter(
-          (x) => dayjs(x.shareTime).format("YYYY-MM-DD") === clickedDate,
+          (x) => dayjs(x.shareTime).format("YYYY-MM-DDTHH") === clickedDate,
         ),
       );
       setOpenDetailModal(true);
