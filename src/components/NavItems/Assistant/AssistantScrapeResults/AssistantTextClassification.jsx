@@ -24,7 +24,9 @@ import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
+import ColourGradientTooltipContent, {
+  ColourGradientScale,
+} from "./ColourGradientTooltipContent";
 import "./assistantTextResultStyle.css";
 import {
   interpRgb,
@@ -42,7 +44,7 @@ export default function AssistantTextClassification({
   importantSentenceKey = "Important_Sentence",
   categoriesTooltipContent = "",
   configs = {
-    confidenceThresholdLow: 0.8,
+    confidenceThresholdLow: 0.0,
     confidenceThresholdHigh: 1.0,
     greenRgb: [0, 255, 0],
     lightGreenRgb: [170, 255, 0],
@@ -56,6 +58,17 @@ export default function AssistantTextClassification({
   textHtmlMap = null,
   credibilitySignal = "",
 }) {
+  //configs.confidenceThresholdLow = 0.8;
+  console.log(
+    "thresholds=",
+    configs.confidenceThresholdLow,
+    configs.confidenceThresholdHigh,
+  );
+  const impLow = [252, 225, 28];
+  const impHigh = [252, 108, 28];
+  const confLow = [32, 180, 172];
+  const confHigh = [34, 41, 180];
+
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
@@ -85,12 +98,12 @@ export default function AssistantTextClassification({
     sentenceTooltipText = keyword("confidence_tooltip_sentence");
     sentenceTextLow = keyword("low_confidence");
     sentenceTextHigh = keyword("high_confidence");
-    sentenceRgbLow =
-      resolvedMode === "dark" ? configs.orangeRgbDark : configs.orangeRgb;
-    sentenceRgbHigh =
-      resolvedMode === "dark" ? configs.redRgbDark : configs.redRgb;
-    categoryRgbLow = primaryRgb;
-    categoryRgbHigh = primaryRgb;
+    sentenceRgbLow = confLow;
+    // resolvedMode === "dark" ? configs.orangeRgbDark : configs.orangeRgb;
+    sentenceRgbHigh = confHigh;
+    // resolvedMode === "dark" ? configs.redRgbDark : configs.redRgb;
+    categoryRgbLow = confLow; //primaryRgb;
+    categoryRgbHigh = confHigh; //primaryRgb;
   } else if (credibilitySignal == keyword("news_framing_title")) {
     // news framing
     sentenceTooltipText = keyword("importance_tooltip_sentence");
@@ -98,26 +111,26 @@ export default function AssistantTextClassification({
     sentenceTextHigh = keyword("high_importance");
     sentenceRgbLow = primaryRgb;
     sentenceRgbHigh = primaryRgb;
-    categoryRgbLow =
-      resolvedMode === "dark"
-        ? configs.lightGreenRgbDark
-        : configs.lightGreenRgb;
-    categoryRgbHigh =
-      resolvedMode === "dark" ? configs.greenRgbDark : configs.greenRgb;
+    categoryRgbLow = confLow;
+    // resolvedMode === "dark"
+    //   ? configs.lightGreenRgbDark
+    //   : configs.lightGreenRgb;
+    categoryRgbHigh = confHigh;
+    // resolvedMode === "dark" ? configs.greenRgbDark : configs.greenRgb;
   } else {
     // news genre
     // machine generated text
     sentenceTooltipText = keyword("importance_tooltip_sentence");
     sentenceTextLow = keyword("low_importance");
     sentenceTextHigh = keyword("high_importance");
-    sentenceRgbLow =
-      resolvedMode === "dark"
-        ? configs.lightGreenRgbDark
-        : configs.lightGreenRgb;
-    sentenceRgbHigh =
-      resolvedMode === "dark" ? configs.greenRgbDark : configs.greenRgb;
-    categoryRgbLow = primaryRgb;
-    categoryRgbHigh = primaryRgb;
+    sentenceRgbLow = impLow;
+    // resolvedMode === "dark"
+    //   ? configs.lightGreenRgbDark
+    //   : configs.lightGreenRgb;
+    sentenceRgbHigh = impHigh;
+    // resolvedMode === "dark" ? configs.greenRgbDark : configs.greenRgb;
+    categoryRgbLow = impLow; //primaryRgb;
+    categoryRgbHigh = impHigh; //primaryRgb;
   }
   // category is confidence for news framing, news genre and subjectivity
   // TODO rethink threshold code
@@ -185,48 +198,61 @@ export default function AssistantTextClassification({
       // Filter sentences above importanceThresholdLow unless machine generated text
       const sentenceIndices = classification[label];
       for (let i = 0; i < sentenceIndices.length; i++) {
-        if (
-          credibilitySignal != keyword("machine_generated_text_title") &&
-          sentenceIndices[i].score >= configs.confidenceThresholdLow
-        ) {
+        if (credibilitySignal === keyword("machine_generated_text_title")) {
           filteredSentences.push(sentenceIndices[i]);
-          console.log(
-            "addedSentence=",
-            sentenceIndices[i],
-            configs.confidenceThresholdLow,
-          );
-        } else if (
-          credibilitySignal === keyword("machine_generated_text_title")
-        ) {
+        } else if (sentenceIndices[i].score >= configs.confidenceThresholdLow) {
           filteredSentences.push(sentenceIndices[i]);
-          console.log(
-            "remvdSentence=",
-            sentenceIndices[i],
-            configs.confidenceThresholdLow,
-          );
         }
       }
     } else {
       //Filter categories above confidenceThreshold unless machine generated text
-      if (
-        credibilitySignal != keyword("machine_generated_text_title") &&
-        classification[label][0].score >= configs.confidenceThresholdLow
-      ) {
+      if (credibilitySignal === keyword("machine_generated_text_title")) {
         filteredCategories[label] = classification[label];
       } else if (
-        credibilitySignal === keyword("machine_generated_text_title")
+        classification[label][0].score >= configs.confidenceThresholdLow
       ) {
         filteredCategories[label] = classification[label];
       }
     }
   }
 
-  console.log("filteredSentences=", filteredSentences);
-  console.log("filteredCategories=", filteredCategories);
-
   if (Object.keys(filteredCategories).length == 0) {
     filteredSentences = [];
   }
+  if (
+    credibilitySignal === keyword("subjectivity_title") &&
+    Object.keys(filteredSentences).length == 0
+  ) {
+    filteredCategories = [];
+  }
+
+  console.log(credibilitySignal, filteredCategories);
+  console.log(credibilitySignal, filteredSentences);
+
+  // order categories by highest score first
+  const sortedFilteredCategories = {};
+  Object.keys(filteredCategories)
+    .sort(
+      (a, b) =>
+        parseFloat(filteredCategories[b][0].score) -
+        parseFloat(filteredCategories[a][0].score),
+    )
+    .forEach((key) => {
+      sortedFilteredCategories[key] = filteredCategories[key];
+    });
+
+  // highlight important sentences form
+  const highlightImportantSentence = (
+    <FormControlLabel
+      control={
+        <Checkbox
+          checked={doHighlightSentence}
+          onChange={handleHighlightSentences}
+        />
+      }
+      label={keyword("highlight_important_sentence")}
+    />
+  );
 
   return (
     <Grid2 container>
@@ -269,7 +295,7 @@ export default function AssistantTextClassification({
           <CardContent>
             {credibilitySignal === keyword("machine_generated_text_title") ? (
               <MgtCategoriesList
-                categories={filteredCategories}
+                categories={sortedFilteredCategories}
                 keyword={keyword}
                 mgtOverallScoreLabel={mgtOverallScoreLabel}
                 overallClassificationScore={overallClassificationScore}
@@ -280,17 +306,19 @@ export default function AssistantTextClassification({
               />
             ) : (
               <CategoriesList
-                categories={filteredCategories}
+                categories={sortedFilteredCategories}
                 tooltipText={categoryTooltipContent}
                 thresholdLow={categoryThresholdLow}
                 thresholdHigh={categoryThresholdHigh}
                 rgbLow={categoryRgbLow}
                 rgbHigh={categoryRgbHigh}
+                primaryColour={primaryRgb}
                 keyword={keyword}
                 credibilitySignal={credibilitySignal}
+                highlightImportantSentence={highlightImportantSentence}
               />
             )}
-            {filteredSentences.length > 0 ? (
+            {/* {filteredSentences.length > 0 ? (
               <FormControlLabel
                 control={
                   <Checkbox
@@ -300,7 +328,7 @@ export default function AssistantTextClassification({
                 }
                 label={keyword("highlight_important_sentence")}
               />
-            ) : null}
+            ) : null} */}
           </CardContent>
         </Card>
       </Grid2>
@@ -416,13 +444,14 @@ export function MgtCategoriesList({
 
 export function CategoriesList({
   categories,
-  tooltipText,
   thresholdLow,
   thresholdHigh,
   rgbLow,
   rgbHigh,
+  primaryColour,
   keyword,
   credibilitySignal,
+  highlightImportantSentence,
 }) {
   if (_.isEmpty(categories)) {
     return (
@@ -437,17 +466,20 @@ export function CategoriesList({
 
   let output = [];
   let index = 0;
+  let backgroundRgb = primaryColour;
   for (const category in categories) {
     if (index > 0) {
       output.push(<Divider key={index} />);
     }
-    let backgroundRgb = interpRgb(
-      categories[category][0].score,
-      thresholdLow,
-      thresholdHigh,
-      rgbLow,
-      rgbHigh,
-    );
+    if (credibilitySignal === keyword("news_framing_title")) {
+      backgroundRgb = interpRgb(
+        categories[category][0].score,
+        thresholdLow,
+        thresholdHigh,
+        rgbLow,
+        rgbHigh,
+      );
+    }
     let bgLuminance = rgbToLuminance(backgroundRgb);
     let textColour = "white";
     if (bgLuminance > 0.7) textColour = "black";
@@ -465,14 +497,85 @@ export function CategoriesList({
     );
     index++;
   }
+
   return (
+    // <>
+    //   {credibilitySignal === keyword("news_framing_title") ? (
+    //     <Tooltip title={tooltipText}>
+    //       <List>{output}</List>
+    //     </Tooltip>
+    //   ) : (
+    //     <List>{output}</List>
+    //   )}
+    // </>
     <>
       {credibilitySignal === keyword("news_framing_title") ? (
-        <Tooltip title={tooltipText}>
-          <List>{output}</List>
-        </Tooltip>
+        <List>
+          {output}
+          {/* <ListItem>
+            <Typography>Category colour scale:</Typography>
+          </ListItem>
+          <ListItem>
+            <ColourGradientScale
+              textLow={keyword("low_confidence")}
+              textHigh={keyword("high_confidence")}
+              rgbList={[rgbLow, rgbHigh]}
+            />
+          </ListItem> */}
+          <Divider
+            key={"sentence_category"}
+            sx={{ height: "1em", color: "white" }}
+          />
+          <Typography align="left">Category colour scale:</Typography>
+          <ColourGradientScale
+            textLow={keyword("low_confidence")}
+            textHigh={keyword("high_confidence")}
+            rgbList={[rgbLow, rgbHigh]}
+          />
+          {/* <Divider key={"sentence_category"} sx={{ color: "gray"}} /> */}
+          <Divider
+            key={"sentence_category"}
+            sx={{ height: "1em", color: "white" }}
+          />
+          {highlightImportantSentence}
+        </List>
       ) : (
-        <List>{output}</List>
+        <>
+          <List>
+            {output}
+            <Divider
+              key={"sentence_category"}
+              sx={{ height: "1em", color: "white" }}
+            />
+            {/* <Divider key={"sentence_category"} sx={{ color: "gray"}} /> */}
+            {/* {highlightImportantSentence} */}
+            {/* <ListItem>
+            <Typography>Sentence colour scale:</Typography>
+          </ListItem> */}
+            {/* <ListItem>
+            <ColourGradientScale
+              textLow={credibilitySignal === keyword("subjectivity_ttile") ? keyword("low_confidence") : keyword("low_importance")}
+              textHigh={credibilitySignal === keyword("subjectivity_ttile") ? keyword("high_confidence") : keyword("high_importance")}
+              rgbList={[rgbLow, rgbHigh]}
+            />
+          </ListItem> */}
+          </List>
+          <Typography align="left">Sentence colour scale:</Typography>
+          <ColourGradientScale
+            textLow={
+              credibilitySignal === keyword("subjectivity_ttile")
+                ? keyword("low_confidence")
+                : keyword("low_importance")
+            }
+            textHigh={
+              credibilitySignal === keyword("subjectivity_ttile")
+                ? keyword("high_confidence")
+                : keyword("high_importance")
+            }
+            rgbList={[rgbLow, rgbHigh]}
+          />
+          {highlightImportantSentence}
+        </>
       )}
     </>
   );
@@ -495,9 +598,9 @@ export function ClassifiedText({
   keyword,
   resolvedMode,
 }) {
-  let output = text; // Defaults to text output
+  console.log("colour scale thresholds=", thresholdLow, thresholdHigh);
 
-  console.log(spanIndices);
+  let output = text; // Defaults to text output
 
   function wrapHighlightedText(spanText, spanInfo) {
     const spanScore = spanInfo.score;

@@ -187,16 +187,6 @@ const AssistantTextResult = () => {
     }
   }
 
-  console.log("top=", newsFramingResult);
-  console.log("gen=", newsGenreResult);
-  console.log("per=", persuasionResult);
-  console.log("sub=", subjectivityResult);
-  console.log(
-    "mgt=",
-    machineGeneratedTextChunksResult,
-    machineGeneratedTextSentencesResult,
-  );
-
   return (
     <Card variant="outlined" data-testid="assistant-text-scraped-text">
       <CardHeader

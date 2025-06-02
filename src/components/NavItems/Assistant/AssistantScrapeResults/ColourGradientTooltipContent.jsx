@@ -7,27 +7,28 @@ import { rgbListToGradient } from "./assistantUtils";
 
 export function ColourGradientScale({ textLow, textHigh, rgbList }) {
   return (
-    <>
-      <Grid2 container>
-        <Grid2 size={{ xs: 6 }}>
-          <Typography align="left" fontSize="small" fontWeight="bold">
-            {textLow}
-          </Typography>
-        </Grid2>
-        <Grid2 size={{ xs: 6 }}>
-          <Typography align="right" fontSize="small" fontWeight="bold">
-            {textHigh}
-          </Typography>
-        </Grid2>
+    <Grid2 container>
+      <Grid2 size={{ xs: 12 }}>
+        <div
+          style={{
+            width: "100%",
+            height: "1em",
+            borderRadius: "0.5em",
+            background: rgbListToGradient(rgbList),
+          }}
+        />
       </Grid2>
-      <div
-        style={{
-          width: "100%",
-          height: "1em",
-          background: rgbListToGradient(rgbList),
-        }}
-      />
-    </>
+      <Grid2 size={{ xs: 6 }}>
+        <Typography align="left" fontSize="small">
+          {textLow}
+        </Typography>
+      </Grid2>
+      <Grid2 size={{ xs: 6 }}>
+        <Typography align="right" fontSize="small">
+          {textHigh}
+        </Typography>
+      </Grid2>
+    </Grid2>
   );
 }
 
