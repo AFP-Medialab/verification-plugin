@@ -129,7 +129,11 @@ const ImageResult = ({ handleCloseResults }) => {
           title={keyword("cardheader_results")}
           className={classes.headerUploadedImage}
           action={
-            <IconButton aria-label="close" onClick={handleCloseResults}>
+            <IconButton
+              aria-label="close"
+              onClick={handleCloseResults}
+              sx={{ p: 1 }}
+            >
               <CloseIcon />
             </IconButton>
           }

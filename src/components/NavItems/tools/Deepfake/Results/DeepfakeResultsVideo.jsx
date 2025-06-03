@@ -239,7 +239,7 @@ const DeepfakeResultsVideo = (props) => {
       <CardHeader
         title={keyword("deepfake_video_title")}
         action={
-          <IconButton aria-label="close" onClick={handleClose}>
+          <IconButton aria-label="close" onClick={handleClose} sx={{ p: 1 }}>
             <CloseIcon />
           </IconButton>
         }

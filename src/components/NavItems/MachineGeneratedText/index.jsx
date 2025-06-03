@@ -19,6 +19,7 @@ import Typography from "@mui/material/Typography";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 
 import CopyButton from "@Shared/CopyButton";
+import GaugeChartResult from "@Shared/GaugeChartResults/GaugeChartResult";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { ClearIcon } from "@mui/x-date-pickers";
 
@@ -48,7 +49,13 @@ const JsonBlock = ({ children }) => {
 
 const MachineGeneratedText = () => {
   const keyword = i18nLoadNamespace(
+    // "components/NavItems/tools/Assistant",
     "components/NavItems/tools/MachineGeneratedText",
+  );
+
+  // Testing the UI for now, to remove when the standalone tool will not be for testing purposes anymore
+  const assistantKeyword = i18nLoadNamespace(
+    "components/NavItems/tools/Assistant",
   );
 
   const { systemMode, mode } = useColorScheme();
@@ -90,6 +97,37 @@ const MachineGeneratedText = () => {
     },
   });
 
+  const MachineGeneratedTextMethodNames = {
+    machinegeneratedtext: {
+      name: keyword("machine_generated_text_title"),
+      description: keyword("machine_generated_text_tooltip"),
+    },
+  };
+
+  const MachineGeneratedTextMethodNamesResults = {
+    methodName: "machinegeneratedtext",
+    predictionScore: mutationChunks?.data?.entities?.mgt_overall_score
+      ? mutationChunks.data.entities.mgt_overall_score[0].score * 100
+      : null,
+  };
+
+  const DETECTION_THRESHOLDS = {
+    THRESHOLD_1: 5.0,
+    THRESHOLD_2: 50.0,
+    THRESHOLD_3: 95.0,
+  };
+
+  const arcsLength = [0.05, 0.45, 0.45, 0.05];
+
+  const keywords = [
+    "gauge_scale_modal_explanation_rating_1",
+    "gauge_scale_modal_explanation_rating_2",
+    "gauge_scale_modal_explanation_rating_3",
+    "gauge_scale_modal_explanation_rating_4",
+  ];
+
+  const colors = ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"];
+
   const HighlightedText = ({ text, chunks }) => {
     return (
       <Box>
@@ -128,7 +166,7 @@ const MachineGeneratedText = () => {
   };
 
   return (
-    <Stack direction={"column"} spacing={4}>
+    <Stack direction="column" spacing={4}>
       <Card variant="outlined">
         <Box
           sx={{
@@ -248,23 +286,40 @@ const MachineGeneratedText = () => {
           <Card variant="outlined">
             <Box p={4} sx={{ position: "relative" }}>
               <Stack direction="column" spacing={4}>
-                <Typography>
-                  {"Detection score (chunks): " +
-                    Math.round(
-                      mutationChunks.data.entities.mgt_overall_score[0].score *
-                        100,
-                    ) +
-                    "%"}
-                </Typography>
+                <Stack direction="column" spacing={2}>
+                  <Typography>
+                    {"Detection score (chunks): " +
+                      Math.round(
+                        mutationChunks.data.entities.mgt_overall_score[0]
+                          .score * 100,
+                      ) +
+                      "%"}
+                  </Typography>
 
-                <Typography>
-                  {"Detection score (sentences): " +
-                    Math.round(
-                      mutationSentences.data.entities.mgt_overall_score[0]
-                        .score * 100,
-                    ) +
-                    "%"}
-                </Typography>
+                  <Typography>
+                    {"Detection score (sentences): " +
+                      Math.round(
+                        mutationSentences.data.entities.mgt_overall_score[0]
+                          .score * 100,
+                      ) +
+                      "%"}
+                  </Typography>
+
+                  {mutationChunks.data.entities.mgt_overall_score && (
+                    <GaugeChartResult
+                      keyword={assistantKeyword}
+                      scores={[MachineGeneratedTextMethodNamesResults]}
+                      methodNames={MachineGeneratedTextMethodNames}
+                      detectionThresholds={DETECTION_THRESHOLDS}
+                      arcsLength={arcsLength}
+                      resultsHaveErrors={false}
+                      sanitizeDetectionPercentage={(n) => Math.round(n)}
+                      gaugeExplanation={{ colors: colors, keywords: keywords }}
+                      toolName="Assistant" // this points to the correct translations .tsv file
+                      detectionType={"machine_generated_text"}
+                    />
+                  )}
+                </Stack>
 
                 <Tabs
                   value={activeTab}
