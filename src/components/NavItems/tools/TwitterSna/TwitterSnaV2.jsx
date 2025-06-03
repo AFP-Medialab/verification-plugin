@@ -12,6 +12,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 
 import axios from "axios";
+import useAuthenticatedRequest from "components/Shared/Authentication/useAuthenticatedRequest";
 import HeaderTool from "components/Shared/HeaderTool/HeaderTool";
 import dayjs from "dayjs";
 import MultiGraph, { MultiUndirectedGraph } from "graphology";
@@ -111,6 +112,7 @@ const TwitterSnaV2 = () => {
 
   const inputRef = useRef();
   const fgRef = useRef();
+  const authenticatedRequest = useAuthenticatedRequest();
 
   const required_fields = {
     Object: "objects",
@@ -422,13 +424,16 @@ const TwitterSnaV2 = () => {
       let selectedContentWithId = selectedContent.map((x, idx) => {
         x.content_id = x.id;
         x.id = idx;
-        return x;
+        return { id: idx, text: x.text };
       });
       console.log(selectedContentWithId);
-      let resp = await axios.post(
-        "http://localhost:5001/",
-        selectedContentWithId,
-      );
+      const d3ltaRequestConfig = {
+        method: "post",
+        url: "http://localhost:8081/d3lta/cluster",
+        data: selectedContentWithId,
+      };
+
+      let resp = await authenticatedRequest(d3ltaRequestConfig);
       response = resp.data;
     } catch (error) {
       console.log("womp womp " + error);
