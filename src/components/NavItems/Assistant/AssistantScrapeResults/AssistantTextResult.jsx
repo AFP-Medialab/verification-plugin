@@ -760,6 +760,7 @@ const AssistantTextResult = () => {
                 categoriesTooltipContent={newsFramingTooltip}
                 textHtmlMap={textHtmlMap}
                 credibilitySignal={keyword("news_framing_title")}
+                setTextTabIndex={setTextTabIndex}
               />
             )}
           </CustomTabPanel>
@@ -775,6 +776,7 @@ const AssistantTextResult = () => {
                 categoriesTooltipContent={newsGenreTooltip}
                 textHtmlMap={textHtmlMap}
                 credibilitySignal={keyword("news_genre_title")}
+                setTextTabIndex={setTextTabIndex}
               />
             )}
           </CustomTabPanel>
@@ -789,6 +791,7 @@ const AssistantTextResult = () => {
                 titleText={persuasionTitle}
                 categoriesTooltipContent={persuasionTooltip}
                 textHtmlMap={textHtmlMap}
+                setTextTabIndex={setTextTabIndex}
               />
             )}
           </CustomTabPanel>
@@ -804,6 +807,7 @@ const AssistantTextResult = () => {
                 categoriesTooltipContent={subjectivityTooltip}
                 textHtmlMap={textHtmlMap}
                 credibilitySignal={keyword("subjectivity_title")}
+                setTextTabIndex={setTextTabIndex}
               />
             )}
           </CustomTabPanel>
@@ -823,6 +827,7 @@ const AssistantTextResult = () => {
                   categoriesTooltipContent={machineGeneratedTextTooltip}
                   textHtmlMap={textHtmlMap}
                   credibilitySignal={keyword("machine_generated_text_title")}
+                  setTextTabIndex={setTextTabIndex}
                 />
               )}
           </CustomTabPanel>

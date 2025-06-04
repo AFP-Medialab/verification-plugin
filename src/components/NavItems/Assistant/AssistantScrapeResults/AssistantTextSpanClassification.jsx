@@ -29,6 +29,7 @@ import {
   mergeSpanIndices,
   rgbToLuminance,
   rgbToString,
+  summaryReturnButton,
   treeMapToElements,
   wrapPlainTextSpan,
 } from "./assistantUtils";
@@ -53,6 +54,7 @@ export default function AssistantTextSpanClassification({
     perCategoryAttackRgb: [0, 200, 255],
   },
   textHtmlMap = null,
+  setTextTabIndex = 0,
 }) {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -75,16 +77,16 @@ export default function AssistantTextSpanClassification({
   const primaryRgb = [0, 146, 108];
 
   // tooltip for hovering over categories
-  const categoryTooltipContent = (
-    <ColourGradientTooltipContent
-      description={keyword("confidence_tooltip_category")}
-      colourScaleText={keyword("colour_scale")}
-      textLow={keyword("low_confidence")}
-      textHigh={keyword("high_confidence")}
-      rgbLow={configs.confidenceRgbLow}
-      rgbHigh={configs.confidenceRgbHigh}
-    />
-  );
+  // const categoryTooltipContent = (
+  //   <ColourGradientTooltipContent
+  //     description={keyword("confidence_tooltip_category")}
+  //     colourScaleText={keyword("colour_scale")}
+  //     textLow={keyword("low_confidence")}
+  //     textHigh={keyword("high_confidence")}
+  //     rgbLow={configs.confidenceRgbLow}
+  //     rgbHigh={configs.confidenceRgbHigh}
+  //   />
+  // );
 
   const [doHighlightSentence, setDoHighlightSentence] = useState(true);
 
@@ -323,6 +325,7 @@ export default function AssistantTextSpanClassification({
               importantSentenceThreshold={importantSentenceThreshold}
               handleSliderChange={handleSliderChange}
             />
+            {summaryReturnButton(setTextTabIndex, keyword)}
           </CardContent>
         </Card>
       </Grid>

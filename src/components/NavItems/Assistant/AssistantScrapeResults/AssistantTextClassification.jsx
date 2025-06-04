@@ -1,24 +1,20 @@
 import React, { useState } from "react";
-import GaugeChart from "react-gauge-chart";
 
 import { useColorScheme } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Divider from "@mui/material/Divider";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Slider from "@mui/material/Slider";
-import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-import GaugeChartModalExplanation from "components/Shared/GaugeChartResults/GaugeChartModalExplanation";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
@@ -32,6 +28,7 @@ import {
   interpRgb,
   rgbToLuminance,
   rgbToString,
+  summaryReturnButton,
   treeMapToElements,
   wrapPlainTextSpan,
 } from "./assistantUtils";
@@ -54,22 +51,18 @@ export default function AssistantTextClassification({
     lightGreenRgbDark: [210, 255, 121],
     orangeRgbDark: [255, 189, 62],
     redRgbDark: [255, 78, 78],
-    importanceThresholdLow: 0.8,
-    importanceThresholdHigh: 1.0,
-    confidenceRgbLow: [32, 180, 172],
-    confidenceRgbHigh: [34, 41, 180],
-    importanceRgbLow: [252, 225, 28],
-    importanceRgbHigh: [252, 108, 28],
+    // importanceThresholdLow: 0.8,
+    // importanceThresholdHigh: 1.0,
+    // confidenceRgbLow: [32, 180, 172],
+    // confidenceRgbHigh: [34, 41, 180],
+    // importanceRgbLow: [252, 225, 28],
+    // importanceRgbHigh: [252, 108, 28],
   },
   textHtmlMap = null,
   credibilitySignal = "",
+  setTextTabIndex = 0,
 }) {
   //configs.confidenceThresholdLow = 0.8;
-  console.log(
-    "thresholds=",
-    configs.confidenceThresholdLow,
-    configs.confidenceThresholdHigh,
-  );
   const impLow = [252, 225, 28];
   const impHigh = [252, 108, 28];
   const confLow = [32, 180, 172];
@@ -313,6 +306,7 @@ export default function AssistantTextClassification({
                 handleSliderChange={handleSliderChange}
               />
             )}
+            {summaryReturnButton(setTextTabIndex, keyword)}
           </CardContent>
         </Card>
       </Grid>

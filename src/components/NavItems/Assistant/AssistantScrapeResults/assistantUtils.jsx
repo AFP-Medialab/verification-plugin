@@ -1,9 +1,12 @@
 import React from "react";
 import GaugeChart from "react-gauge-chart";
 
+import Button from "@mui/material/Button";
 import ListItem from "@mui/material/ListItem";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+
+import { ArrowBack } from "@mui/icons-material";
 
 import GaugeChartModalExplanation from "components/Shared/GaugeChartResults/GaugeChartModalExplanation";
 import _ from "lodash";
@@ -383,4 +386,21 @@ export function getMgtColours(configs) {
     rgbToString(configs.redRgbDark),
   ];
   return [colours, coloursDark];
+}
+
+// credibility signals: return to summary
+export function summaryReturnButton(setTextTabIndex, keyword) {
+  return (
+    <Stack
+      direction="row"
+      sx={{
+        justifyContent: "flex-start",
+        alignItems: "left",
+      }}
+    >
+      <Button onClick={() => setTextTabIndex(0)} startIcon={<ArrowBack />}>
+        <label>{keyword("summary_title")}</label>
+      </Button>
+    </Stack>
+  );
 }
