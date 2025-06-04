@@ -431,7 +431,13 @@ export function CategoriesListToggle({
       ": " +
       keyword(persuasionTechnique);
     const itemChip = (
-      <Chip color="primary" label={categories[category].length} />
+      <Chip
+        label={categories[category].length}
+        sx={{
+          color: rgbToString(backgroundRgb),
+          backgroundColor: "white",
+        }}
+      />
     );
 
     categoriesList.push(
@@ -443,11 +449,10 @@ export function CategoriesListToggle({
               ? rgbToString(backgroundRgb)
               : rgbToString([140, 140, 140]),
           color: textColour,
-          borderRadius: "0.5em",
-          boxShadow: "0.1em 0.1em 0.1em gray",
+          boxShadow: "0.15em 0.15em 0.15em gray",
           ":hover": {
             background: rgbToString(backgroundRgb),
-            boxShadow: "0.2em 0.2em 0.2em gray",
+            boxShadow: "0.25em 0.25em 0.25em gray",
           },
           cursor: "pointer",
         }}
