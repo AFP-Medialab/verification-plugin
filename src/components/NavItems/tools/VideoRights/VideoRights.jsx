@@ -6,16 +6,16 @@ import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import TextField from "@mui/material/TextField";
 
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { videoRights } from "@/constants/tools";
+import { setVideoRightsLoading } from "@/redux/actions/tools/videoRightsActions";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { videoRights } from "../../../../constants/tools";
-import { setVideoRightsLoading } from "../../../../redux/actions/tools/videoRightsActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
@@ -57,13 +57,13 @@ const VideoRights = () => {
   const submitForm = () => {
     if (!isLoading) {
       /*trackEvent(
-                                "submission",
-                                "videorights",
-                                "video rights",
-                                input,
-                                client_id,
-                                uid
-                              );*/
+                                            "submission",
+                                            "videorights",
+                                            "video rights",
+                                            input,
+                                            client_id,
+                                            uid
+                                          );*/
       setSubmitted(input);
       dispatch(setVideoRightsLoading(true));
     }
@@ -102,12 +102,23 @@ const VideoRights = () => {
       <HeaderTool
         name={keywordAllTools("navbar_rights")}
         description={keywordAllTools("navbar_rights_description")}
-        icon={<videoRights.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
+        icon={
+          <videoRights.icon
+            sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+          />
+        }
       />
       <Card variant="outlined">
         <form className={classes.root2}>
-          <Grid2 container direction="row" spacing={3} alignItems="center">
-            <Grid2 size="grow">
+          <Grid
+            container
+            direction="row"
+            spacing={3}
+            sx={{
+              alignItems: "center",
+            }}
+          >
+            <Grid size="grow">
               <TextField
                 value={input}
                 id="standard-full-width"
@@ -118,8 +129,8 @@ const VideoRights = () => {
                 variant="outlined"
                 onChange={(e) => setInput(e.target.value)}
               />
-            </Grid2>
-            <Grid2>
+            </Grid>
+            <Grid>
               <Button
                 type="submit"
                 variant="contained"
@@ -129,19 +140,25 @@ const VideoRights = () => {
               >
                 {keyword("button_submit")}
               </Button>
-            </Grid2>
-          </Grid2>
+            </Grid>
+          </Grid>
           {isLoading && (
             <>
-              <Box m={3} />
+              <Box
+                sx={{
+                  m: 3,
+                }}
+              />
               <LinearProgress />
             </>
           )}
         </form>
       </Card>
-
-      <Box m={3} />
-
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
       {resultResult && <VideoRightsResults result={resultResult} />}
     </div>
   );

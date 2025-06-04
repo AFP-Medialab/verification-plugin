@@ -26,6 +26,7 @@ export const ImageWithFade = ({ src, alt }) => {
           style={{
             width: "100%",
             display: loaded ? "block" : "none",
+            opacity: 1,
           }}
         />
       </Fade>

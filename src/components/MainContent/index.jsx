@@ -7,17 +7,15 @@ import Snackbar from "@mui/material/Snackbar";
 
 import { KeyboardArrowUp } from "@mui/icons-material";
 
-import { canUserSeeTool } from "../../constants/tools";
-import { TOP_MENU_ITEMS } from "../../constants/topMenuItems";
-import { setFalse, setTrue } from "../../redux/reducers/cookiesReducers";
-import {
-  cleanError,
-  cleanErrorNetwork,
-} from "../../redux/reducers/errorReducer";
+import { canUserSeeTool } from "@/constants/tools";
+import { TOP_MENU_ITEMS } from "@/constants/topMenuItems";
+import { setFalse, setTrue } from "@/redux/reducers/cookiesReducers";
+import { cleanError, cleanErrorNetwork } from "@/redux/reducers/errorReducer";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+
 import Feedback from "../Feedback/Feedback";
 import MySnackbar from "../MySnackbar/MySnackbar";
 import MainContentMenuTopMenuItems from "../NavBar/MainContentMenuTabItems/MainContentMenuTopMenuItems";
-import { i18nLoadNamespace } from "../Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import ScrollTop from "../Shared/ScrollTop/ScrollTop";
 

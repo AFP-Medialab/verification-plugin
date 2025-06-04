@@ -27,19 +27,37 @@ const ColorModeSelect = () => {
         size="small"
       >
         <MenuItem value="light">
-          <Stack direction="row" alignItems="center" spacing={1}>
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{
+              alignItems: "center",
+            }}
+          >
             <LightModeIcon />
             <Typography>{keyword("color_mode_light")}</Typography>
           </Stack>
         </MenuItem>
         <MenuItem value="system">
-          <Stack direction="row" alignItems="center" spacing={1}>
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{
+              alignItems: "center",
+            }}
+          >
             <SettingsBrightnessIcon />
             <Typography>{keyword("color_mode_system")}</Typography>
           </Stack>
         </MenuItem>
         <MenuItem value="dark">
-          <Stack direction="row" alignItems="center" spacing={1}>
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{
+              alignItems: "center",
+            }}
+          >
             <DarkModeIcon />
             <Typography>{keyword("color_mode_dark")}</Typography>
           </Stack>

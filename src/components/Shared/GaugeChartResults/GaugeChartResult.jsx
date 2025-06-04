@@ -107,43 +107,57 @@ const GaugeChartResult = ({
     <>
       <Stack
         direction="column"
-        p={4}
-        justifyContent="flex-start"
-        alignItems="flex-start"
         spacing={4}
-        width="100%"
-        sx={{ boxSizing: "border-box" }}
-        position="relative"
+        sx={{
+          p: 4,
+          justifyContent: "flex-start",
+          alignItems: "flex-start",
+          width: "100%",
+          position: "relative",
+          boxSizing: "border-box",
+        }}
       >
         <Stack
           direction={{ sm: "column", md: "row" }}
-          alignItems={{ sm: "start", md: "center" }}
-          justifyContent="center"
-          width="100%"
+          sx={{
+            alignItems: { sm: "start", md: "center" },
+            justifyContent: "center",
+            width: "100%",
+          }}
         >
-          <Box m={2}></Box>
+          <Box
+            sx={{
+              m: 2,
+            }}
+          ></Box>
           <Stack
             direction="column"
-            justifyContent="center"
-            alignItems="center"
             spacing={2}
             ref={gaugeChartRef}
-            p={2}
+            sx={{
+              justifyContent: "center",
+              alignItems: "center",
+              p: 2,
+            }}
           >
             {maxScore > detectionThresholds.THRESHOLD_2 && (
               <Typography
                 variant="h5"
                 align="center"
-                alignSelf="center"
-                sx={{ color: "red" }}
+                sx={{
+                  alignSelf: "center",
+                  color: "red",
+                }}
               >
                 {keyword("gauge_generic_detection_text")}
               </Typography>
             )}
             <Stack
               direction="column"
-              justifyContent="center"
-              alignItems="center"
+              sx={{
+                justifyContent: "center",
+                alignItems: "center",
+              }}
             >
               <GaugeChart
                 id={"gauge-chart"}
@@ -174,9 +188,11 @@ const GaugeChartResult = ({
 
               <Stack
                 direction="row"
-                justifyContent="center"
-                alignItems="center"
                 spacing={10}
+                sx={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
               >
                 <Typography variant="subtitle2">
                   {keyword("gauge_no_detection")}
@@ -187,7 +203,11 @@ const GaugeChartResult = ({
               </Stack>
             </Stack>
           </Stack>
-          <Box alignSelf={{ sm: "flex-start", md: "flex-end" }}>
+          <Box
+            sx={{
+              alignSelf: { sm: "flex-start", md: "flex-end" },
+            }}
+          >
             <Tooltip title={keyword("gauge_download_gauge_button")}>
               <IconButton
                 color="primary"

@@ -1,10 +1,22 @@
 /**
  * Authentication API hook.
  */
+import { useDispatch, useSelector } from "react-redux";
 
+import {
+  userAccessCodeRequestLoadingAction,
+  userAccessCodeRequestSentAction,
+  userLoginAction,
+  userLoginLoadingAction,
+  userLogoutAction,
+  userRegistrationLoadingAction,
+  userRegistrationSentAction,
+  userSessionExpiredAction,
+  userTokenRefreshedAction,
+} from "@/redux/actions/authenticationActions";
 import axios from "axios";
-import _ from "lodash";
 import { jwtDecode } from "jwt-decode";
+import _ from "lodash";
 
 import {
   ERR_AUTH_ABORT_ERROR,
@@ -18,20 +30,6 @@ import {
   ERR_AUTH_UNKNOWN_ERROR,
   ERR_AUTH_USER_EXPIRED,
 } from "./authenticationErrors";
-
-import { useDispatch, useSelector } from "react-redux";
-
-import {
-  userAccessCodeRequestLoadingAction,
-  userAccessCodeRequestSentAction,
-  userLoginAction,
-  userLoginLoadingAction,
-  userLogoutAction,
-  userRegistrationLoadingAction,
-  userRegistrationSentAction,
-  userSessionExpiredAction,
-  userTokenRefreshedAction,
-} from "../../../redux/actions/authenticationActions";
 
 /**
  * Authentication API hook.
@@ -193,7 +191,7 @@ export default function useAuthenticationAPI() {
   };
 
   /**
-   * Login user using it's access code.
+   * Log the user in using their access code.
    *
    * @param {Object} request
    * @returns {Promise<Object>} Result as a Promise.

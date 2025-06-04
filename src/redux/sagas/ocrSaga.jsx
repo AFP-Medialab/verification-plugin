@@ -1,4 +1,7 @@
+import _ from "lodash";
 import { all, call, fork, put, select, takeLatest } from "redux-saga/effects";
+
+import assistantApiCalls from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
 import {
   setOcrErrorKey,
   setOcrResult,
@@ -7,8 +10,6 @@ import {
   setReprocessOpen,
   setSelectedScript,
 } from "../actions/tools/ocrActions";
-import assistantApiCalls from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
-import _ from "lodash";
 
 const assistantApi = assistantApiCalls();
 
@@ -57,7 +58,7 @@ function* handleOcrCall(action) {
     }
 
     if (ocrResult.bounding_boxes) {
-      ocrResult.bounding_boxes.forEach((value, key) => {
+      ocrResult.bounding_boxes.forEach((value) => {
         fullText = fullText + " " + value.text;
       });
     }

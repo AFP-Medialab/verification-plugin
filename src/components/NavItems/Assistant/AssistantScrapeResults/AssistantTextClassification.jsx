@@ -1,20 +1,24 @@
 import React, { useState } from "react";
+import GaugeChart from "react-gauge-chart";
 
 import { useColorScheme } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Slider from "@mui/material/Slider";
+import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
+import GaugeChartModalExplanation from "components/Shared/GaugeChartResults/GaugeChartModalExplanation";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
@@ -50,6 +54,12 @@ export default function AssistantTextClassification({
     lightGreenRgbDark: [210, 255, 121],
     orangeRgbDark: [255, 189, 62],
     redRgbDark: [255, 78, 78],
+    importanceThresholdLow: 0.8,
+    importanceThresholdHigh: 1.0,
+    confidenceRgbLow: [32, 180, 172],
+    confidenceRgbHigh: [34, 41, 180],
+    importanceRgbLow: [252, 225, 28],
+    importanceRgbHigh: [252, 108, 28],
   },
   textHtmlMap = null,
   credibilitySignal = "",
@@ -157,7 +167,6 @@ export default function AssistantTextClassification({
     />
   );
   // tooltip for hovering over categories
-  // news framing/topic only
   const categoryTooltipContent = (
     <ColourGradientTooltipContent
       description={keyword("confidence_tooltip_category")}
@@ -214,7 +223,7 @@ export default function AssistantTextClassification({
     }
   }
 
-  if (Object.keys(filteredCategories).length == 0) {
+  if (Object.keys(filteredCategories).length === 0) {
     filteredSentences = [];
   }
   if (
@@ -240,9 +249,9 @@ export default function AssistantTextClassification({
     });
 
   return (
-    <Grid2 container>
+    <Grid container>
       {/* text being displayed */}
-      <Grid2 sx={{ paddingRight: "1em" }} size={9}>
+      <Grid sx={{ paddingRight: "1em" }} size={9}>
         <ClassifiedText
           text={text}
           spanIndices={filteredSentences}
@@ -257,10 +266,10 @@ export default function AssistantTextClassification({
           keyword={keyword}
           resolvedMode={resolvedMode}
         />
-      </Grid2>
+      </Grid>
 
       {/* credibility signal box with categories */}
-      <Grid2 size={{ xs: 3 }}>
+      <Grid size={{ xs: 3 }}>
         <Card>
           <CardHeader
             className={classes.assistantCardHeader}
@@ -306,8 +315,8 @@ export default function AssistantTextClassification({
             )}
           </CardContent>
         </Card>
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   );
 }
 
@@ -335,7 +344,6 @@ export function MgtCategoriesList({
   output.push(<ListItem key="listitem_empty1"></ListItem>);
   output.push(<Divider key={`divider_${mgtOverallScoreLabel}`} />);
   output.push(<ListItem key="listitem_empty2"></ListItem>);
-
   // categories
   output.push(
     <ListItem key={"text_detected_classes"}>
@@ -368,6 +376,7 @@ export function MgtCategoriesList({
 
 export function CategoriesList({
   categories,
+  tooltipText,
   thresholdLow,
   thresholdHigh,
   rgbLow,
@@ -381,9 +390,9 @@ export function CategoriesList({
   if (_.isEmpty(categories)) {
     return (
       <p>
-        {credibilitySignal == keyword("news_framing_title") &&
+        {credibilitySignal === keyword("news_framing_title") &&
           keyword("no_detected_topics")}
-        {credibilitySignal == keyword("subjectivity_title") &&
+        {credibilitySignal === keyword("subjectivity_title") &&
           keyword("no_detected_sentences")}
       </p>
     );

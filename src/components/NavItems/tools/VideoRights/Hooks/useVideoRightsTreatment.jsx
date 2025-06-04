@@ -1,10 +1,11 @@
 import { useEffect } from "react";
-import axios from "axios";
 import { useDispatch } from "react-redux";
+
 import {
-  setVideoRightsResult,
   setVideoRightsLoading,
-} from "../../../../../redux/actions/tools/videoRightsActions";
+  setVideoRightsResult,
+} from "@/redux/actions/tools/videoRightsActions";
+import axios from "axios";
 import { setError } from "redux/reducers/errorReducer";
 
 const useVideoRightsTreatment = (url, keyword) => {

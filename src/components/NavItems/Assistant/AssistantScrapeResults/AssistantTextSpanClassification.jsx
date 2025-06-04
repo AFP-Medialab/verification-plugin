@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 
 import { useColorScheme } from "@mui/material";
+import { styled } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -16,7 +17,6 @@ import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-import { styled } from "@mui/system";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
@@ -73,6 +73,18 @@ export default function AssistantTextSpanClassification({
   // const categoryRgbHigh =
   //   resolvedMode === "dark" ? configs.redRgbDark : configs.redRgb;
   const primaryRgb = [0, 146, 108];
+
+  // tooltip for hovering over categories
+  const categoryTooltipContent = (
+    <ColourGradientTooltipContent
+      description={keyword("confidence_tooltip_category")}
+      colourScaleText={keyword("colour_scale")}
+      textLow={keyword("low_confidence")}
+      textHigh={keyword("high_confidence")}
+      rgbLow={configs.confidenceRgbLow}
+      rgbHigh={configs.confidenceRgbHigh}
+    />
+  );
 
   const [doHighlightSentence, setDoHighlightSentence] = useState(true);
 
@@ -275,15 +287,15 @@ export default function AssistantTextSpanClassification({
   }
 
   return (
-    <Grid2 container>
-      <Grid2 size={{ xs: 9 }} sx={{ paddingRight: "1em" }}>
+    <Grid container>
+      <Grid size={{ xs: 9 }} sx={{ paddingRight: "1em" }}>
         <MultiCategoryClassifiedText
           categoriesText={categoriesText}
           currentLabel={currentLabel}
           allCategoriesLabel={allCategoriesLabel}
         />
-      </Grid2>
-      <Grid2 size={{ xs: 3 }}>
+      </Grid>
+      <Grid size={{ xs: 3 }}>
         <Card>
           <CardHeader
             className={classes.assistantCardHeader}
@@ -313,8 +325,8 @@ export default function AssistantTextSpanClassification({
             />
           </CardContent>
         </Card>
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   );
 }
 
@@ -396,7 +408,7 @@ export function CategoriesListToggle({
   );
   for (const category in sortedCategories) {
     // don't display overall category
-    if (category == allCategoriesLabel) {
+    if (category === allCategoriesLabel) {
       continue;
     }
 

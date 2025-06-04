@@ -12,10 +12,15 @@ import Typography from "@mui/material/Typography";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
+import { setStateExpanded } from "@/redux/actions/tools/assistantActions";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import { setStateExpanded } from "../../../../redux/actions/tools/assistantActions";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import {
+  KNOWN_LINKS,
+  KNOWN_LINK_PATTERNS,
+  matchPattern,
+} from "../AssistantRuleBook";
 
 const AssistantCheckStatus = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -75,6 +80,9 @@ const AssistantCheckStatus = () => {
     (state) => state.assistant.multilingualStanceFail,
   );
 
+  const inputUrl = useSelector((state) => state.assistant.inputUrl);
+  const urlType = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
+
   const failStates = [
     { title: scTitle, failed: scFailState },
     { title: dbkfMediaTitle, failed: dbkfMediaFailState },
@@ -93,14 +101,22 @@ const AssistantCheckStatus = () => {
     },
     {
       title: multilingualStanceTitle,
-      failed: multilingualStanceFailState,
+      failed:
+        multilingualStanceFailState &&
+        (urlType === KNOWN_LINKS.YOUTUBE ||
+          urlType === KNOWN_LINKS.YOUTUBESHORTS),
     },
   ];
 
   return (
     <Alert severity="warning">
       <Typography component={"span"}>
-        <Box color={"orange"} fontStyle="italic">
+        <Box
+          sx={{
+            color: "orange",
+            fontStyle: "italic",
+          }}
+        >
           {keyword("status_subtitle")}
           <IconButton
             className={classes.assistantIconRight}
@@ -110,7 +126,6 @@ const AssistantCheckStatus = () => {
           </IconButton>
         </Box>
       </Typography>
-
       <Collapse in={stateExpanded} className={classes.assistantBackground}>
         <List disablePadding={true}>
           {failStates.map((value, key) =>

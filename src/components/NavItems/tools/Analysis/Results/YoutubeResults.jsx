@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -16,19 +16,19 @@ import Typography from "@mui/material/Typography";
 
 import CloseIcon from "@mui/icons-material/Close";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-
 import {
   cleanAnalysisState,
   setAnalysisComments,
   setAnalysisLinkComments,
   setAnalysisVerifiedComments,
-} from "../../../../../redux/actions/tools/analysisActions";
+} from "@/redux/actions/tools/analysisActions";
+import { ReverseSearchButtons } from "@Shared/ReverseSearch/ReverseSearchButtons";
+import { reverseImageSearch } from "@Shared/ReverseSearch/reverseSearchUtils";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
-import { ReverseSearchButtons } from "../../../../Shared/ReverseSearch/ReverseSearchButtons";
-import { reverseImageSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 import AnalysisComments from "./AnalysisComments";
 import TimeToLocalTime from "./TimeToLocalTime";
 
@@ -130,9 +130,17 @@ const YoutubeResults = (props) => {
                 title={report["video"]["title"]}
                 alt={"img"}
               />
-              <Box m={2} />
+              <Box
+                sx={{
+                  m: 2,
+                }}
+              />
               <Divider />
-              <Box m={2} />
+              <Box
+                sx={{
+                  m: 2,
+                }}
+              />
               <Typography variant={"h6"}>
                 {keyword("youtube_video_name1_2")}
               </Typography>
@@ -143,7 +151,11 @@ const YoutubeResults = (props) => {
               >
                 {report["video"]["description"]}
               </Typography>
-              <Box m={2} />
+              <Box
+                sx={{
+                  m: 2,
+                }}
+              />
               <Divider />
               {report["video"] && (
                 <Table
@@ -167,7 +179,11 @@ const YoutubeResults = (props) => {
               )}
               {report["source"] && (
                 <div>
-                  <Box m={4} />
+                  <Box
+                    sx={{
+                      m: 4,
+                    }}
+                  />
                   <Typography variant={"h6"}>
                     {keyword("youtube_channel_title") +
                       " " +
@@ -201,7 +217,11 @@ const YoutubeResults = (props) => {
                   </Table>
                 </div>
               )}
-              <Box m={2} />
+              <Box
+                sx={{
+                  m: 2,
+                }}
+              />
               {report["verification_comments"] && (
                 <AnalysisComments
                   type="YOUTUBE"
@@ -215,16 +235,32 @@ const YoutubeResults = (props) => {
                 />
               )}
 
-              <Box m={4} />
+              <Box
+                sx={{
+                  m: 4,
+                }}
+              />
               {thumbnails !== undefined && (
                 <div>
-                  <Box m={4} />
+                  <Box
+                    sx={{
+                      m: 4,
+                    }}
+                  />
                   <Typography variant={"h6"}>
                     {keyword("navbar_thumbnails")}
                   </Typography>
-                  <Box m={1} />
+                  <Box
+                    sx={{
+                      m: 1,
+                    }}
+                  />
                   <OnClickInfo keyword={"keyframes_tip"} />
-                  <Box m={1} />
+                  <Box
+                    sx={{
+                      m: 1,
+                    }}
+                  />
                   <div className={classes.imagesRoot}>
                     <ImageUrlGridList
                       list={thumbnails}
@@ -232,11 +268,15 @@ const YoutubeResults = (props) => {
                       style={{ maxHeigth: "none", height: "auto" }}
                     />
                   </div>
-                  <Box m={2} />
+                  <Box
+                    sx={{
+                      m: 2,
+                    }}
+                  />
                   <ReverseSearchButtons reverseSearch={reverseSearch}>
                     {report["verification_cues"] &&
                       report["verification_cues"]["twitter_search_url"] && (
-                        <Grid2>
+                        <Grid>
                           <Button
                             className={classes.button}
                             variant="contained"
@@ -251,7 +291,7 @@ const YoutubeResults = (props) => {
                           >
                             {keyword("button_reverse_twitter")}
                           </Button>
-                        </Grid2>
+                        </Grid>
                       )}
                   </ReverseSearchButtons>
                 </div>

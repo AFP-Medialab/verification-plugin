@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
-import Grid2 from "@mui/material/Grid2";
+import Collapse from "@mui/material/Collapse";
+import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -21,6 +22,9 @@ import { TextFooterPrevFactChecks } from "../AssistantScrapeResults/TextFooter";
 
 const PreviousFactCheckResults = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
+
+  // display states
+  const [expanded, setExpanded] = useState(true);
 
   // previous fact checks
   const prevFactChecksTitle = keyword("previous_fact_checks_title");
@@ -41,54 +45,62 @@ const PreviousFactCheckResults = () => {
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Grid2 container spacing={1} wrap="wrap" width="100%">
-          <Grid2 size={4} align="start">
+        <Grid container spacing={1} wrap="wrap" width="100%">
+          <Grid size={4} align="start">
             <Typography display="inline" sx={{ align: "start" }}>
               {prevFactChecksTitle}
             </Typography>
-          </Grid2>
+          </Grid>
 
-          <Grid2 size={8} align="start">
+          <Grid size={8} align="start">
             {prevFactChecksDone && prevFactChecksResult.length > 0 && (
               <Typography sx={{ color: "text.secondary", align: "start" }}>
                 {keyword("previous_fact_checks_found")}
               </Typography>
             )}
-          </Grid2>
-        </Grid2>
+          </Grid>
+        </Grid>
       </AccordionSummary>
 
       <AccordionDetails>
         {prevFactChecksDone && prevFactChecksResult.length > 0 && (
           <div>
-            {prevFactChecksResult.map((resultItem) => {
-              // date in correct format
-              const date = resultItem.published_at.slice(0, 10);
+            <Collapse in={expanded} collapsedSize={500}>
+              {prevFactChecksResult.map((resultItem) => {
+                // date in correct format
+                const date = resultItem.published_at.slice(0, 10);
 
-              return (
-                <ResultDisplayItem
-                  key={resultItem.id}
-                  id={resultItem.id}
-                  claim={resultItem.claim_en}
-                  title={resultItem.title_en}
-                  claimOriginalLanguage={resultItem.claim}
-                  titleOriginalLanguage={resultItem.title}
-                  rating={resultItem.rating}
-                  date={
-                    dayjs(date).format(globalLocaleData.longDateFormat("LL")) ??
-                    null
-                  }
-                  website={resultItem.website}
-                  language={getLanguageName(resultItem.source_language)}
-                  similarityScore={resultItem.score}
-                  articleUrl={resultItem.url}
-                  domainUrl={resultItem.source_name}
-                  imageUrl={resultItem.image_url}
-                />
-              );
-            })}
+                return (
+                  <ResultDisplayItem
+                    key={resultItem.id}
+                    id={resultItem.id}
+                    claim={resultItem.claim_en}
+                    title={resultItem.title_en}
+                    claimOriginalLanguage={resultItem.claim}
+                    titleOriginalLanguage={resultItem.title}
+                    rating={resultItem.rating}
+                    date={
+                      dayjs(date).format(
+                        globalLocaleData.longDateFormat("LL"),
+                      ) ?? null
+                    }
+                    website={resultItem.website}
+                    language={getLanguageName(resultItem.source_language)}
+                    similarityScore={resultItem.score}
+                    articleUrl={resultItem.url}
+                    domainUrl={resultItem.source_name}
+                    imageUrl={resultItem.image_url}
+                  />
+                );
+              })}
+            </Collapse>
 
-            <TextFooterPrevFactChecks navigate={navigate} keyword={keyword} />
+            <TextFooterPrevFactChecks
+              navigate={navigate}
+              keyword={keyword}
+              setExpanded={setExpanded}
+              expanded={expanded}
+            />
           </div>
         )}
       </AccordionDetails>

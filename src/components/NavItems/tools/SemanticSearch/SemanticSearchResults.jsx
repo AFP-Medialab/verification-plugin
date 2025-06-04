@@ -6,12 +6,12 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import { getLanguageName } from "@Shared/Utils/languageUtils";
 import dayjs from "dayjs";
 import LocaleData from "dayjs/plugin/localeData";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 
-import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
-import { getLanguageName } from "../../../Shared/Utils/languageUtils";
 import ResultDisplayItem from "./components/ResultDisplayItem";
 import SelectSmall from "./components/SelectSmall";
 
@@ -86,15 +86,19 @@ const SemanticSearchResults = (searchResults) => {
           <Stack
             direction="column"
             spacing={2}
-            p={2}
-            justifyContent="flex-start"
-            alignItems="flex-start"
+            sx={{
+              p: 2,
+              justifyContent: "flex-start",
+              alignItems: "flex-start",
+            }}
           >
             <Stack
               direction="row-reverse"
               spacing={2}
-              justifyContent="flex-start"
-              alignItems="center"
+              sx={{
+                justifyContent: "flex-start",
+                alignItems: "center",
+              }}
             >
               <Typography>
                 {results.length} {keyword("semantic_search_nb_of_results")}
@@ -140,7 +144,12 @@ const SemanticSearchResults = (searchResults) => {
               );
             })}
 
-            <Box alignSelf="center" pt={4}>
+            <Box
+              sx={{
+                alignSelf: "center",
+                pt: 4,
+              }}
+            >
               <Pagination
                 count={totalNumberOfPages}
                 color="primary"

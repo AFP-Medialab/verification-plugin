@@ -12,6 +12,9 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import TextField from "@mui/material/TextField";
 
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { useInput } from "@/Hooks/useInput";
+import { searchTwitter } from "@/constants/tools";
 import DateAndTimePicker from "@Shared/DateTimePicker/DateAndTimePicker";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import HeaderTool from "@Shared/HeaderTool/HeaderTool";
@@ -21,9 +24,6 @@ import useMyStyles, {
 } from "@Shared/MaterialUiStyles/useMyStyles";
 import dayjs from "dayjs";
 
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { useInput } from "../../../../Hooks/useInput";
-import { searchTwitter } from "../../../../constants/tools";
 import { createUrl } from "./createUrl";
 
 const TwitterAdvancedSearch = () => {
@@ -94,12 +94,6 @@ const TwitterAdvancedSearch = () => {
     setSelectedToDate(dayjs(date));
   };
 
-  const pastDate = (currentDate) => {
-    const itemDate = currentDate.toDate();
-    if (fromDate) return fromDate > itemDate;
-    return false;
-  };
-
   const session = useSelector((state) => state.userSession);
   const uid = session && session.user ? session.user.id : null;
   const client_id = getclientId();
@@ -131,13 +125,13 @@ const TwitterAdvancedSearch = () => {
       setEventUrl(url);
       window.open(url);
       /*trackEvent(
-                              "submission",
-                              "twitter_advance_search",
-                              "search twitter request",
-                              url,
-                              client_id,
-                              uid
-                            );*/
+                                          "submission",
+                                          "twitter_advance_search",
+                                          "search twitter request",
+                                          url,
+                                          client_id,
+                                          uid
+                                        );*/
     }
   };
 
@@ -146,10 +140,18 @@ const TwitterAdvancedSearch = () => {
       <HeaderTool
         name={keywordAllTools("navbar_twitter")}
         description={keywordAllTools("navbar_twitter_description")}
-        icon={<searchTwitter.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
+        icon={
+          <searchTwitter.icon
+            sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+          />
+        }
       />
       <Alert severity="warning">{keyword("warning_x_search")}</Alert>
-      <Box mt={3} />
+      <Box
+        sx={{
+          mt: 3,
+        }}
+      />
       <Card variant="outlined" className={cardClasses.root}>
         <CardHeader
           title={keyword("cardheader_parameters")}
@@ -204,7 +206,11 @@ const TwitterAdvancedSearch = () => {
               />
             </RadioGroup>
           </FormControl>
-          <Box m={2} />
+          <Box
+            sx={{
+              m: 2,
+            }}
+          />
           <Button variant="contained" color="primary" onClick={onSubmit}>
             {keyword("button_submit")}
           </Button>

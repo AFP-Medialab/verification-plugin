@@ -7,15 +7,15 @@ import Card from "@mui/material/Card";
 import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 
-import StringFileUploadField from "@Shared/StringFileUploadField";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-
-import { imageGeolocation } from "../../../../constants/tools";
+import { imageGeolocation } from "@/constants/tools";
 import {
   resetGeolocation,
   setGeolocationLoading,
   setGeolocationResult,
-} from "../../../../redux/reducers/tools/geolocationReducer";
+} from "@/redux/reducers/tools/geolocationReducer";
+import StringFileUploadField from "@Shared/StringFileUploadField";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import {
   geolocateLocalFile,
@@ -66,7 +66,7 @@ const Geolocation = () => {
     }
   };
 
-  const handleClose = () => {
+  const resetState = () => {
     setImageFile(null);
     dispatch(resetGeolocation());
     setInput("");
@@ -79,14 +79,20 @@ const Geolocation = () => {
           name={keywordAllTools("navbar_geolocation")}
           description={keywordAllTools("navbar_geolocation_description")}
           icon={
-            <imageGeolocation.icon sx={{ fill: "#00926c", fontSize: "40px" }} />
+            <imageGeolocation.icon
+              sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+            />
           }
         />
         <Alert severity="warning">
           {keywordWarning("warning_beta_geolocation")}
         </Alert>
         <Card variant="outlined">
-          <Box p={4}>
+          <Box
+            sx={{
+              p: 4,
+            }}
+          >
             <form>
               <StringFileUploadField
                 labelKeyword={keyword("geo_link")}
@@ -99,8 +105,9 @@ const Geolocation = () => {
                 setFileInput={setImageFile}
                 handleSubmit={handleSubmit}
                 fileInputTypesAccepted={"image/*"}
-                handleCloseSelectedFile={handleClose}
+                handleCloseSelectedFile={resetState}
                 isParentLoading={isLoading}
+                handleClearUrl={resetState}
               />
             </form>
           </Box>

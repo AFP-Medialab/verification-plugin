@@ -10,7 +10,7 @@ import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Collapse from "@mui/material/Collapse";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -25,9 +25,9 @@ import Typography from "@mui/material/Typography";
 import { WarningAmber } from "@mui/icons-material";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
+import { setWarningExpanded } from "@/redux/actions/tools/assistantActions";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import { setWarningExpanded } from "../../../../redux/actions/tools/assistantActions";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
   TransCredibilitySignalsLink,
@@ -403,27 +403,53 @@ const AssistantTextResult = () => {
             <Tab label={keyword("summary_title")} {...a11yProps(0)} />
             <Tab label={keyword("raw_text")} {...a11yProps(1)} />
             <Tab
-              label={newsFramingTitle}
+              label={
+                <div>
+                  {newsFramingTitle}
+                  {newsFramingLoading && <LinearProgress />}
+                </div>
+              }
               {...a11yProps(2)}
               disabled={newsFramingFail || newsFramingLoading}
             />
             <Tab
-              label={newsGenreTitle}
+              label={
+                <div>
+                  {newsGenreTitle}
+                  {newsGenreLoading && <LinearProgress />}
+                </div>
+              }
               {...a11yProps(3)}
               disabled={newsGenreFail || newsGenreLoading}
             />
             <Tab
-              label={persuasionTitle}
+              label={
+                <div>
+                  {persuasionTitle}
+                  {persuasionLoading && <LinearProgress />}
+                </div>
+              }
               {...a11yProps(4)}
               disabled={persuasionFail || persuasionLoading}
             />
             <Tab
-              label={subjectivityTitle}
+              label={
+                <div>
+                  {subjectivityTitle}
+                  {subjectivityLoading && <LinearProgress />}
+                </div>
+              }
               {...a11yProps(5)}
               disabled={subjectivityFail || subjectivityLoading}
             />
             <Tab
-              label={machineGeneratedTextTitle}
+              label={
+                <div>
+                  {machineGeneratedTextTitle}
+                  {(machineGeneratedTextChunksLoading ||
+                    machineGeneratedTextSentencesLoading) && <LinearProgress />}
+                </div>
+              }
               {...a11yProps(6)}
               disabled={
                 machineGeneratedTextChunksFail ||
@@ -442,9 +468,9 @@ const AssistantTextResult = () => {
 
           {/* summaries */}
           <CustomTabPanel value={textTabIndex} index={0}>
-            <Grid2 container spacing={2}>
+            <Grid container spacing={2}>
               {/* column 1 */}
-              <Grid2 size={{ xs: 4 }}>
+              <Grid size={{ xs: 4 }}>
                 <Stack spacing={2}>
                   {/* news framing summary */}
                   <Card>
@@ -542,10 +568,10 @@ const AssistantTextResult = () => {
                     </CardActionArea>
                   </Card>
                 </Stack>
-              </Grid2>
+              </Grid>
 
               {/* column 2 */}
-              <Grid2 size={{ xs: 4 }}>
+              <Grid size={{ xs: 4 }}>
                 <Stack spacing={2}>
                   {/* news genre summary */}
                   <Card>
@@ -637,11 +663,11 @@ const AssistantTextResult = () => {
                     </CardActionArea>
                   </Card>
                 </Stack>
-              </Grid2>
+              </Grid>
 
               {/* column 3 */}
               {/* persuasion summary */}
-              <Grid2 size={{ xs: 4 }}>
+              <Grid size={{ xs: 4 }}>
                 <Card>
                   <CardActionArea
                     onClick={() =>
@@ -712,8 +738,8 @@ const AssistantTextResult = () => {
                     </CardContent>
                   </CardActionArea>
                 </Card>
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
           </CustomTabPanel>
 
           {/* extracted raw text */}

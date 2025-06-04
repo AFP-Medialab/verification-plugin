@@ -9,12 +9,12 @@ import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { ROLES } from "@/constants/roles";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { history } from "@Shared/History/History";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import { useTrackEvent } from "../../../../../Hooks/useAnalytics";
-import { ROLES } from "../../../../../constants/roles";
 import IconInternetArchive from "../../../../NavBar/images/SVG/Others/archive-icon.svg";
 import CopyButton from "../../../../Shared/CopyButton";
 import { KNOWN_LINKS } from "../../../Assistant/AssistantRuleBook";
@@ -124,9 +124,11 @@ const UrlArchive = ({ url, mediaUrl }) => {
         <Stack direction="column" spacing={1}>
           <Stack
             direction="row"
-            justifyContent={"start"}
-            alignItems={"center"}
             spacing={1}
+            sx={{
+              justifyContent: "start",
+              alignItems: "center",
+            }}
           >
             <Typography>{keyword(link_type_keyword)}</Typography>
             <Link href={link} target="_blank">
@@ -207,7 +209,13 @@ const UrlArchive = ({ url, mediaUrl }) => {
   return (
     <Card variant="outlined" m={2}>
       <CardContent>
-        <Typography variant="h6" component="div" pb={2}>
+        <Typography
+          variant="h6"
+          component="div"
+          sx={{
+            pb: 2,
+          }}
+        >
           {keyword("links_card_title")}
         </Typography>
         <Stack spacing={4}>{getArchiveLinksForPlatform(platform)}</Stack>

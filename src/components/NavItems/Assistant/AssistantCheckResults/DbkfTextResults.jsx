@@ -5,7 +5,7 @@ import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Box from "@mui/material/Box";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -25,18 +25,18 @@ const DbkfTextResults = () => {
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Grid2 container spacing={1} wrap="wrap" width="100%">
-          <Grid2 size={{ xs: 4 }} align="start">
+        <Grid container spacing={1} wrap="wrap" width="100%">
+          <Grid size={{ xs: 4 }} align="start">
             <Typography display="inline" sx={{ flexShrink: 0, align: "start" }}>
               {keyword("dbkf_text_title")}
             </Typography>
-          </Grid2>
-          <Grid2 size={{ xs: 8 }} align="start">
+          </Grid>
+          <Grid size={{ xs: 8 }} align="start">
             <Typography sx={{ color: "text.secondary", align: "start" }}>
               {dbkfTextMatch.length} {keyword("results_detected")}
             </Typography>
-          </Grid2>
-        </Grid2>
+          </Grid>
+        </Grid>
       </AccordionSummary>
 
       <AccordionDetails>
@@ -57,7 +57,11 @@ const DbkfTextResults = () => {
                     >
                       {keyword("dbkf_text_warning")}
                     </Typography>
-                    <Box mb={0.5} />
+                    <Box
+                      sx={{
+                        mb: 0.5,
+                      }}
+                    />
                   </div>
                 }
                 secondary={

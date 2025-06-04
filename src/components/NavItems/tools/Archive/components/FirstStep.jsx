@@ -66,11 +66,16 @@ const FirstStep = ({ handleClick, url, handleUrlChange }) => {
           ></TextField>
         </Box>
       </Stack>
-
       <List sx={{ maxWidth: "fit-content" }}>
         <ListItem disablePadding>
           <ListItemButton onClick={() => handleNavigation(2)}>
-            <Stack direction="column" spacing={1} width={"100%"}>
+            <Stack
+              direction="column"
+              spacing={1}
+              sx={{
+                width: "100%",
+              }}
+            >
               <Typography variant="caption" color={"success"}>
                 {keyword("step1_recommended_caption")}
               </Typography>
@@ -87,7 +92,13 @@ const FirstStep = ({ handleClick, url, handleUrlChange }) => {
         <Divider />
         <ListItem disablePadding>
           <ListItemButton onClick={() => handleNavigation(6)}>
-            <Stack direction="column" spacing={1} width={"100%"}>
+            <Stack
+              direction="column"
+              spacing={1}
+              sx={{
+                width: "100%",
+              }}
+            >
               <Typography variant="caption" color={"error"}>
                 {keyword("step1_not_recommended_caption")}
               </Typography>

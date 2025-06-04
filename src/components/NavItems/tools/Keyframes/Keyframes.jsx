@@ -7,11 +7,12 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
 import Fade from "@mui/material/Fade";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import Skeleton from "@mui/material/Skeleton";
@@ -25,19 +26,18 @@ import LinkIcon from "@mui/icons-material/Link";
 import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { keyframes } from "@/constants/tools";
+import {
+  resetKeyframes,
+  setKeyframesUrl,
+} from "@/redux/reducers/tools/keyframesReducer";
 import "@Shared/GoogleAnalytics/MatomoAnalytics";
 import HeaderTool from "@Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import LoadingButton from "@mui/lab/LoadingButton";
 import { ClearIcon } from "@mui/x-date-pickers";
 
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { keyframes } from "../../../../constants/tools";
-import {
-  resetKeyframes,
-  setKeyframesUrl,
-} from "../../../../redux/reducers/tools/keyframesReducer";
 import { useProcessKeyframes } from "./Hooks/useKeyframeWrapper";
 import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
 import { ImageWithFade } from "./ImageWithFade";
@@ -157,7 +157,11 @@ const Keyframes = () => {
         <HeaderTool
           name={keywordAllTools("navbar_keyframes")}
           description={keywordAllTools("navbar_keyframes_description")}
-          icon={<keyframes.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
+          icon={
+            <keyframes.icon
+              sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+            />
+          }
         />
 
         <TabContext value={tabSelected}>
@@ -189,13 +193,15 @@ const Keyframes = () => {
               <TabPanel value="url">
                 <Box>
                   <form>
-                    <Grid2
+                    <Grid
                       container
                       direction="row"
                       spacing={3}
-                      alignItems="center"
+                      sx={{
+                        alignItems: "center",
+                      }}
                     >
-                      <Grid2 size="grow">
+                      <Grid size="grow">
                         <TextField
                           id="standard-full-width"
                           label={keyword("keyframes_input")}
@@ -219,10 +225,10 @@ const Keyframes = () => {
                             },
                           }}
                         />
-                      </Grid2>
+                      </Grid>
 
-                      <Grid2>
-                        <LoadingButton
+                      <Grid>
+                        <Button
                           type="submit"
                           variant="contained"
                           color="primary"
@@ -234,9 +240,9 @@ const Keyframes = () => {
                           loading={isPending || isLoadingSimilarity}
                         >
                           {keyword("button_submit")}
-                        </LoadingButton>
-                      </Grid2>
-                    </Grid2>
+                        </Button>
+                      </Grid>
+                    </Grid>
                   </form>
                 </Box>
               </TabPanel>
@@ -261,11 +267,13 @@ const Keyframes = () => {
                     id="panel1a-header"
                   >
                     <Box
-                      p={1}
                       style={{
                         display: "flex",
                         flexDirection: "row",
                         alignItems: "center",
+                      }}
+                      sx={{
+                        p: 1,
                       }}
                     >
                       <ReportProblemOutlinedIcon
@@ -281,12 +289,20 @@ const Keyframes = () => {
                     </Box>
                   </AccordionSummary>
                   <AccordionDetails style={{ flexDirection: "column" }}>
-                    <Box p={1}>
+                    <Box
+                      sx={{
+                        p: 1,
+                      }}
+                    >
                       <Typography variant="body1" align="left">
                         {keyword("dbkf_articles")}
                       </Typography>
 
-                      <Box m={1} />
+                      <Box
+                        sx={{
+                          m: 1,
+                        }}
+                      />
 
                       {similarityResults.map((value, key) => {
                         return (
@@ -324,7 +340,13 @@ const Keyframes = () => {
         {isPending && (
           <Fade in={isPending} timeout={1500}>
             <Card variant="outlined">
-              <Stack direction="column" spacing={4} p={2}>
+              <Stack
+                direction="column"
+                spacing={4}
+                sx={{
+                  p: 2,
+                }}
+              >
                 <Skeleton variant="rounded" height={40} />
                 <Stack direction={{ md: "row", xs: "column" }} spacing={4}>
                   <Skeleton variant="rounded" width={80} height={80} />
@@ -356,7 +378,13 @@ const Keyframes = () => {
         {isFeatureDataPending && (
           <Fade in={isFeatureDataPending} timeout={1500}>
             <Card variant="outlined">
-              <Stack direction="column" spacing={4} p={2}>
+              <Stack
+                direction="column"
+                spacing={4}
+                sx={{
+                  p: 2,
+                }}
+              >
                 <Skeleton variant="rounded" height={40} />
                 <Stack direction={{ md: "row", xs: "column" }} spacing={4}>
                   <Skeleton variant="rounded" width={80} height={80} />
@@ -375,44 +403,55 @@ const Keyframes = () => {
 
         {keyframesFeaturesData && tabSelected === "url" && (
           <>
-            <Fade in={keyframesFeaturesData !== null} timeout={1500}>
+            <Fade in={keyframesFeaturesData} timeout={1500}>
               <Card variant="outlined">
-                <Box pb={4} pt={2} pl={4} pr={4}>
+                <Box
+                  sx={{
+                    pb: 4,
+                    pt: 2,
+                    pl: 4,
+                    pr: 4,
+                  }}
+                >
                   <Stack direction="column" spacing={2}>
                     <Typography variant="h6">
                       {keyword("faces_detected_title")}
                     </Typography>
-                    <Grid2 container direction="row" spacing={2}>
+                    <Grid container direction="row" spacing={2}>
                       {keyframesFeaturesData.faces.map((item, i) => (
-                        <Grid2 key={i} size={{ md: 3, lg: 1 }}>
+                        <Grid key={i} size={{ md: 3, lg: 1 }}>
                           <ImageWithFade
                             src={item.representative.imageUrl}
                             alt={`extracted img with face #${i + 1}`}
                           />
-                        </Grid2>
+                        </Grid>
                       ))}
-                    </Grid2>
+                    </Grid>
                   </Stack>
                 </Box>
               </Card>
             </Fade>
-            <Fade in={keyframesFeaturesData !== null} timeout={1500}>
+            <Fade in={keyframesFeaturesData} timeout={1500}>
               <Card variant="outlined">
-                <Box p={4}>
+                <Box
+                  sx={{
+                    p: 4,
+                  }}
+                >
                   <Stack direction="column" spacing={2}>
                     <Typography variant="h6">
                       {keyword("text_detected_title")}
                     </Typography>
-                    <Grid2 container direction="row" spacing={2}>
+                    <Grid container direction="row" spacing={2}>
                       {keyframesFeaturesData.texts.map((item, i) => (
-                        <Grid2 key={i} size={{ md: 3, lg: 1 }}>
+                        <Grid key={i} size={{ md: 3, lg: 1 }}>
                           <ImageWithFade
                             src={item.representative.imageUrl}
                             alt={`extracted img with text #${i + 1}`}
                           />
-                        </Grid2>
+                        </Grid>
                       ))}
-                    </Grid2>
+                    </Grid>
                   </Stack>
                 </Box>
               </Card>

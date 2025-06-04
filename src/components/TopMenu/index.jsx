@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useColorScheme, useMediaQuery } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
@@ -15,13 +15,14 @@ import Tooltip from "@mui/material/Tooltip";
 
 import { Settings } from "@mui/icons-material";
 
+import { toolsHome } from "@/constants/tools";
+import { selectTopMenuItem } from "@/redux/reducers/navReducer";
+import { resetToolSelected } from "@/redux/reducers/tools/toolReducer";
+import { theme } from "@/theme";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 
-import { toolsHome } from "../../constants/tools";
-import { selectTopMenuItem } from "../../redux/reducers/navReducer";
-import { resetToolSelected } from "../../redux/reducers/tools/toolReducer";
-import { theme } from "../../theme";
+import LogoEuComWhite from "../NavBar/images/SVG/Navbar/ep-logo-white.svg";
 import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg";
 import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg";
 import LogoVeraBlack from "../NavBar/images/SVG/Navbar/vera-logo_black.svg";
@@ -58,7 +59,7 @@ const TopMenu = ({ topMenuItems }) => {
     return {
       fill:
         topMenuItemSelected === toolName
-          ? "#00926c"
+          ? "var(--mui-palette-primary-main)"
           : "var(--mui-palette-text-secondary)",
       fontSize: "24px",
     };
@@ -93,47 +94,66 @@ const TopMenu = ({ topMenuItems }) => {
           backgroundColor: "var(--mui-palette-background-paper)",
         }}
       >
-        <Grid2
+        <Grid
           container
           direction="row"
-          justifyContent="space-between"
-          alignItems="center"
           spacing={{ sm: 1, md: 2 }}
-          width="100%"
-          height="100%"
-          flexWrap="nowrap"
-          minHeight="86px"
+          sx={{
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+            height: "100%",
+            flexWrap: "nowrap",
+            minHeight: "86px",
+          }}
         >
-          <Grid2
+          <Grid
             size={{ xs: 2 }}
-            height="100%"
-            display="flex"
-            alignItems="center"
-            justifyContent="start"
+            sx={{
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "start",
+            }}
           >
             <Stack
               direction="row"
-              alignItems="center"
-              justifyContent="start"
               spacing={1}
               sx={{
+                alignItems: "center",
+                justifyContent: "start",
                 width: "100%",
                 height: "auto",
               }}
             >
               {LOGO_EU ? (
-                <LogoEuCom
-                  style={{
-                    height: "auto",
-                    width: "100%",
-                    minWidth: "24px",
-                    maxWidth: "48px",
-                    maxHeight: "48px",
-                  }}
-                  alt="logo"
-                  className={classes.logoLeft}
-                  onClick={handleHomeIconClick}
-                />
+                resolvedMode === "light" ? (
+                  <LogoEuCom
+                    style={{
+                      height: "auto",
+                      width: "100%",
+                      minWidth: "48px",
+                      maxWidth: "96px",
+                      maxHeight: "48px",
+                    }}
+                    alt="logo"
+                    className={classes.logoLeft}
+                    onClick={handleHomeIconClick}
+                  />
+                ) : (
+                  <LogoEuComWhite
+                    style={{
+                      height: "auto",
+                      width: "100%",
+                      minWidth: "48px",
+                      maxWidth: "96px",
+                      maxHeight: "48px",
+                    }}
+                    alt="logo"
+                    className={classes.logoLeft}
+                    onClick={handleHomeIconClick}
+                  />
+                )
               ) : (
                 <LogoInVidWeverify
                   style={{
@@ -177,12 +197,12 @@ const TopMenu = ({ topMenuItems }) => {
                 />
               )}
             </Stack>
-          </Grid2>
-          <Grid2
+          </Grid>
+          <Grid
             size={{ xs: 1, sm: "grow" }}
-            pl={isDisplayMobile ? 4 : 0}
-            pr={isDisplayMobile ? 4 : 0}
             sx={{
+              pl: isDisplayMobile ? 4 : 0,
+              pr: isDisplayMobile ? 4 : 0,
               width: "-webkit-fill-available",
             }}
           >
@@ -194,8 +214,16 @@ const TopMenu = ({ topMenuItems }) => {
               allowScrollButtonsMobile
               indicatorColor="primary"
               textColor="primary"
-              TabIndicatorProps={{
-                style: { display: "none" },
+              slotProps={{
+                indicator: {
+                  ...{
+                    style: { display: "none" },
+                  },
+
+                  ...{
+                    display: "none",
+                  },
+                },
               }}
               sx={{
                 color: "var(--mui-palette-text-primary)",
@@ -216,14 +244,16 @@ const TopMenu = ({ topMenuItems }) => {
                 />
               ))}
             </Tabs>
-          </Grid2>
+          </Grid>
 
-          <Grid2>
+          <Grid>
             <Stack
               direction="row"
               spacing={{ sx: 2, md: 4 }}
-              justifyContent="flex-end"
-              alignItems="center"
+              sx={{
+                justifyContent: "flex-end",
+                alignItems: "center",
+              }}
             >
               <AdvancedTools />
 
@@ -233,8 +263,8 @@ const TopMenu = ({ topMenuItems }) => {
                 </IconButton>
               </Tooltip>
             </Stack>
-          </Grid2>
-        </Grid2>
+          </Grid>
+        </Grid>
       </Toolbar>
       <Divider sx={{ width: "100%" }} />
       <SettingsDrawer

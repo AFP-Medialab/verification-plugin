@@ -5,14 +5,8 @@ import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 
-import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
-import HeaderTool from "@Shared/HeaderTool/HeaderTool";
-import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
-import { setError } from "redux/reducers/errorReducer";
-
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { imageOcr } from "../../../../constants/tools";
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { imageOcr } from "@/constants/tools";
 import {
   resetOcrState,
   setOcrBinaryImage,
@@ -20,7 +14,13 @@ import {
   setOcrInput,
   setOcrResult,
   setb64InputFile,
-} from "../../../../redux/actions/tools/ocrActions";
+} from "@/redux/actions/tools/ocrActions";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import HeaderTool from "@Shared/HeaderTool/HeaderTool";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
+import { setError } from "redux/reducers/errorReducer";
+
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import OcrResult from "./Results/OcrResult";
@@ -60,7 +60,7 @@ const OCR = () => {
 
   const submitUrl = (src) => {
     const url = imageFile ? b64Image : src;
-    setEventUrl(url);
+    setEventUrl(imageFile ? "local_image" : url);
 
     const ocrInput =
       imageFile && imageFile instanceof File
@@ -157,7 +157,7 @@ const OCR = () => {
     }
   }, [processUrl]);
 
-  const handleCloseSelectedFile = () => {
+  const resetState = () => {
     dispatch(resetOcrState());
   };
 
@@ -168,6 +168,7 @@ const OCR = () => {
       undefined,
       preprocessingSuccess,
       preprocessingError,
+      4000000,
     );
   };
 
@@ -176,11 +177,18 @@ const OCR = () => {
       <HeaderTool
         name={keywordAllTools("navbar_ocr")}
         description={keywordAllTools("navbar_ocr_description")}
-        icon={<imageOcr.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
+        icon={
+          <imageOcr.icon
+            sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+          />
+        }
       />
-
       <Card variant="outlined">
-        <Box p={4}>
+        <Box
+          sx={{
+            p: 4,
+          }}
+        >
           <form>
             <StringFileUploadField
               labelKeyword={keyword("ocr_urlbox")}
@@ -193,15 +201,18 @@ const OCR = () => {
               setFileInput={setImageFile}
               handleSubmit={submitUrl}
               fileInputTypesAccepted={"image/*"}
-              handleCloseSelectedFile={handleCloseSelectedFile}
+              handleCloseSelectedFile={resetState}
               preprocessLocalFile={preprocessImage}
+              handleClearUrl={resetState}
             />
           </form>
         </Box>
       </Card>
-
-      <Box m={3} />
-
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
       {ocrInputUrl ? <OcrResult /> : null}
     </div>
   );
