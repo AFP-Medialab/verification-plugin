@@ -80,7 +80,7 @@ const MachineGeneratedText = () => {
   const mutationChunks = useMutation({
     mutationFn: (text) => getMachineGeneratedTextChunksScores(text),
     onSuccess: (data) => {
-      console.log(data);
+      // console.log(data);
     },
     onError: (error) => {
       console.error(error);
@@ -90,7 +90,7 @@ const MachineGeneratedText = () => {
   const mutationSentences = useMutation({
     mutationFn: (text) => getMachineGeneratedTextSentencesScores(text),
     onSuccess: (data) => {
-      console.log(data);
+      // console.log(data);
     },
     onError: (error) => {
       console.error(error);
@@ -128,12 +128,18 @@ const MachineGeneratedText = () => {
 
   const colors = ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"];
 
+  /**
+   * Returns a component displaying the text submitted and the detection results highlighted in colors based on the detection score.
+   * @param text {string} The text submitted
+   * @param chunks {MachineGeneratedTextResult} The results of the text analysis
+   * @returns {Element}
+   * @constructor
+   */
   const HighlightedText = ({ text, chunks }) => {
     return (
       <Box>
         {chunks.entities.Important_Sentence.map((chunk, index) => {
           const chunkText = text.slice(chunk.indices[0], chunk.indices[1]);
-          // const color = getColor(chunk.score);
           const color = resolvedMode === "light" ? chunk.rgb : chunk.rgbDark;
           const scorePercentage = Math.round(chunk.score * 100);
 
@@ -262,12 +268,12 @@ const MachineGeneratedText = () => {
         </Box>
       </Card>
 
-      {mutationChunks.status === "pending" ||
-        (mutationSentences.status === "pending" && (
-          <Alert icon={<CircularProgress size={20} />} severity="info">
-            {"Loading..."}
-          </Alert>
-        ))}
+      {(mutationChunks.status === "pending" ||
+        mutationSentences.status === "pending") && (
+        <Alert icon={<CircularProgress size={20} />} severity="info">
+          {"Loading..."}
+        </Alert>
+      )}
 
       {mutationChunks.status === "error" ||
         (mutationSentences.status === "error" && (
