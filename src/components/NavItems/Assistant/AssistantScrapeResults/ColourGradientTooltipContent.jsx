@@ -5,41 +5,35 @@ import Typography from "@mui/material/Typography";
 
 import { rgbListToGradient } from "./assistantUtils";
 
-export function ColourGradientScale({ textLow, textHigh, rgbList }) {
+export function ColourGradientScale({
+  colourScaleText,
+  textLow,
+  textHigh,
+  rgbList,
+}) {
   return (
-    <>
-      <Grid container>
-        <Grid size={{ xs: 6 }}>
-          <Typography
-            align="left"
-            sx={{
-              fontSize: "small",
-              fontWeight: "bold",
-            }}
-          >
-            {textLow}
-          </Typography>
-        </Grid>
-        <Grid size={{ xs: 6 }}>
-          <Typography
-            align="right"
-            sx={{
-              fontSize: "small",
-              fontWeight: "bold",
-            }}
-          >
-            {textHigh}
-          </Typography>
-        </Grid>
+    <Grid container>
+      <Grid size={{ xs: 12 }}>
+        <div style={{ textAlign: "start" }}>{colourScaleText}</div>
+        <div
+          style={{
+            width: "100%",
+            height: "1em",
+            background: rgbListToGradient(rgbList),
+          }}
+        />
       </Grid>
-      <div
-        style={{
-          width: "100%",
-          height: "1em",
-          background: rgbListToGradient(rgbList),
-        }}
-      />
-    </>
+      <Grid size={{ xs: 6 }}>
+        <Typography align="left" fontSize="small">
+          {textLow}
+        </Typography>
+      </Grid>
+      <Grid size={{ xs: 6 }}>
+        <Typography align="right" fontSize="small">
+          {textHigh}
+        </Typography>
+      </Grid>
+    </Grid>
   );
 }
 
