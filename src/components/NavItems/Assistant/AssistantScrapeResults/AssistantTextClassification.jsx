@@ -29,6 +29,7 @@ import {
   rgbToLuminance,
   rgbToString,
   summaryReturnButton,
+  thresholdSlider,
   treeMapToElements,
   wrapPlainTextSpan,
 } from "./assistantUtils";
@@ -226,9 +227,6 @@ export default function AssistantTextClassification({
     filteredCategories = [];
   }
 
-  console.log(credibilitySignal, filteredCategories);
-  console.log(credibilitySignal, filteredSentences);
-
   // order categories by highest score first
   const sortedFilteredCategories = {};
   Object.keys(filteredCategories)
@@ -370,7 +368,6 @@ export function MgtCategoriesList({
 
 export function CategoriesList({
   categories,
-  tooltipText,
   thresholdLow,
   thresholdHigh,
   rgbLow,
@@ -391,38 +388,6 @@ export function CategoriesList({
       </p>
     );
   }
-  // slider
-  const marks = [
-    {
-      value: 0,
-      label: "Low",
-    },
-    {
-      value: 99,
-      label: "High",
-    },
-  ];
-  const scaleValue = (value) => {
-    return value / 100;
-  };
-  const thresholdSlider = (
-    <List>
-      <ListItem key={keyword(credibilitySignal) + "_thresholdSlider"}>
-        <Slider
-          aria-label="important sentence threshold slider"
-          marks={marks}
-          step={1}
-          min={0}
-          max={99}
-          scale={scaleValue}
-          defaultValue={80} // on loading thing it keeps resetting to 80
-          value={importantSentenceThreshold}
-          onChange={handleSliderChange}
-        />
-      </ListItem>
-    </List>
-  );
-
   // categories/output
   let output = [];
   let index = 0;
@@ -461,7 +426,11 @@ export function CategoriesList({
   return (
     <>
       <Typography sx={{ textAlign: "start" }}>Certainty level:</Typography>
-      {thresholdSlider}
+      {thresholdSlider(
+        credibilitySignal,
+        importantSentenceThreshold,
+        handleSliderChange,
+      )}
       <List>{output}</List>
     </>
   );
@@ -474,7 +443,6 @@ export function ClassifiedText({
   text,
   spanIndices,
   highlightSpan,
-  tooltipText,
   thresholdLow,
   thresholdHigh,
   rgbLow,
@@ -484,8 +452,6 @@ export function ClassifiedText({
   keyword,
   resolvedMode,
 }) {
-  console.log("colour scale thresholds=", thresholdLow, thresholdHigh);
-
   let output = text; // Defaults to text output
 
   function wrapHighlightedText(spanText, spanInfo) {
@@ -520,19 +486,7 @@ export function ClassifiedText({
       </span>
     );
 
-    // machine generated text and news framing/topic don't require a tooltip on the highlighted sentences
-    if (
-      credibilitySignal === keyword("machine_generated_text_title") ||
-      credibilitySignal === keyword("news_framing_title")
-    ) {
-      return <span key={uuidv4()}>{highlightedSentence}</span>;
-    } else {
-      return (
-        <Tooltip key={uuidv4()} title={tooltipText}>
-          {highlightedSentence}
-        </Tooltip>
-      );
-    }
+    return <span key={uuidv4()}>{highlightedSentence}</span>;
   }
 
   if (highlightSpan && spanIndices.length > 0) {

@@ -30,6 +30,7 @@ import {
   rgbToLuminance,
   rgbToString,
   summaryReturnButton,
+  thresholdSlider,
   treeMapToElements,
   wrapPlainTextSpan,
 } from "./assistantUtils";
@@ -348,40 +349,6 @@ export function CategoriesListToggle({
   importantSentenceThreshold,
   handleSliderChange,
 }) {
-  // slider
-  const marks = [
-    {
-      value: 0,
-      label: "Low",
-    },
-    {
-      value: 99,
-      label: "High",
-    },
-  ];
-  const scaleValue = (value) => {
-    return value / 100;
-  };
-  const thresholdSlider = (
-    <List>
-      <ListItem
-        key={keyword("persuasion_techniques_title") + "_thresholdSlider"}
-      >
-        <Slider
-          aria-label="important sentence threshold slider"
-          marks={marks}
-          step={1}
-          min={0}
-          max={99}
-          scale={scaleValue}
-          defaultValue={80} // on loading thing it keeps resetting to 80
-          value={importantSentenceThreshold}
-          onChange={handleSliderChange}
-        />
-      </ListItem>
-    </List>
-  );
-
   // categories
   let categoriesList = [];
   let index = 0;
@@ -467,27 +434,25 @@ export function CategoriesListToggle({
     index++;
   }
 
-  if (_.isEmpty(categoriesList)) {
-    return (
-      <>
-        <Typography sx={{ textAlign: "start" }}>Certainty level:</Typography>
-        {thresholdSlider}
-        <List>
+  return (
+    <>
+      <Typography sx={{ textAlign: "start" }}>Certainty level:</Typography>
+      {thresholdSlider(
+        "persuasion_techniques_title",
+        importantSentenceThreshold,
+        handleSliderChange,
+      )}
+      <List>
+        {_.isEmpty(categoriesList) ? (
           <ListItem key={noCategoriesText}>
             <Typography>{noCategoriesText}</Typography>
           </ListItem>
-        </List>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <Typography sx={{ textAlign: "start" }}>Certainty level:</Typography>
-        {thresholdSlider}
-        <List>{categoriesList}</List>
-      </>
-    );
-  }
+        ) : (
+          categoriesList
+        )}
+      </List>
+    </>
+  );
 }
 
 export function MultiCategoryClassifiedText({

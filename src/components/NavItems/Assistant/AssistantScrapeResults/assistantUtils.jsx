@@ -2,7 +2,9 @@ import React from "react";
 import GaugeChart from "react-gauge-chart";
 
 import Button from "@mui/material/Button";
+import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
+import Slider from "@mui/material/Slider";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
@@ -402,5 +404,45 @@ export function summaryReturnButton(setTextTabIndex, keyword) {
         <label>{keyword("summary_title")}</label>
       </Button>
     </Stack>
+  );
+}
+
+// credibility signals: threshold slider
+export function thresholdSlider(
+  credibilitySignal,
+  importantSentenceThreshold,
+  handleSliderChange,
+) {
+  const marks = [
+    {
+      value: 0,
+      label: "Low",
+    },
+    {
+      value: 99,
+      label: "High",
+    },
+  ];
+
+  const scaleValue = (value) => {
+    return value / 100;
+  };
+
+  return (
+    <List>
+      <ListItem key={`${credibilitySignal}_thresholdSlider`}>
+        <Slider
+          aria-label="important sentence threshold slider"
+          marks={marks}
+          step={1}
+          min={0}
+          max={99}
+          scale={scaleValue}
+          defaultValue={80} // on loading thing it keeps resetting to 80
+          value={importantSentenceThreshold}
+          onChange={handleSliderChange}
+        />
+      </ListItem>
+    </List>
   );
 }
