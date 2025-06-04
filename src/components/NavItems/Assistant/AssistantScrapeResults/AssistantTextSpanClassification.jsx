@@ -11,7 +11,6 @@ import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import Slider from "@mui/material/Slider";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
@@ -27,6 +26,7 @@ import {
   getPersuasionCategoryTechnique,
   //interpRgb,
   mergeSpanIndices,
+  primaryRgb,
   rgbToLuminance,
   rgbToString,
   summaryReturnButton,
@@ -64,31 +64,6 @@ export default function AssistantTextSpanClassification({
   const { mode, systemMode } = useColorScheme();
   const resolvedMode = systemMode || mode;
 
-  // sub card header tooltip for categories
-  // const colourScaleText = keyword("colour_scale");
-  // const categoryTooltipText = keyword("confidence_tooltip_technique");
-  // const categoryTextLow = keyword("low_severity"); // keyword("low_confidence");
-  // const categoryTextHigh = keyword("high_severity"); // keyword("high_confidence");
-  // const categoryThresholdLow = configs.confidenceThresholdLow;
-  // const categoryThresholdHigh = configs.confidenceThresholdHigh;
-  // const categoryRgbLow =
-  //   resolvedMode === "dark" ? configs.orangeRgbDark : configs.orangeRgb;
-  // const categoryRgbHigh =
-  //   resolvedMode === "dark" ? configs.redRgbDark : configs.redRgb;
-  const primaryRgb = [0, 146, 108];
-
-  // tooltip for hovering over categories
-  // const categoryTooltipContent = (
-  //   <ColourGradientTooltipContent
-  //     description={keyword("confidence_tooltip_category")}
-  //     colourScaleText={keyword("colour_scale")}
-  //     textLow={keyword("low_confidence")}
-  //     textHigh={keyword("high_confidence")}
-  //     rgbLow={configs.confidenceRgbLow}
-  //     rgbHigh={configs.confidenceRgbHigh}
-  //   />
-  // );
-
   const [doHighlightSentence, setDoHighlightSentence] = useState(true);
 
   function filterLabelsWithMinThreshold(classification, minThreshold) {
@@ -119,7 +94,6 @@ export default function AssistantTextSpanClassification({
   // filter classification
   let filteredClassification = filterLabelsWithMinThreshold(
     classification,
-    //configs.confidenceThresholdLow, // this to be set by slider
     importantSentenceThreshold / 100.0,
   );
 
@@ -203,20 +177,8 @@ export default function AssistantTextSpanClassification({
         </div>,
       );
     }
-    //techniqueContent.push(categoryTooltipText);
 
-    let techniquesTooltip = (
-      // <ColourGradientTooltipContent
-      //   description={techniqueContent}
-      //   colourScaleText={colourScaleText}
-      //   textLow={categoryTextLow}
-      //   textHigh={categoryTextHigh}
-      //   rgbLow={categoryRgbLow}
-      //   rgbHigh={categoryRgbHigh}
-      //   // don't need colour scale here anymore? at least not the scale
-      // />
-      <div className={"content"}>{techniqueContent}</div>
-    );
+    let techniquesTooltip = <div className={"content"}>{techniqueContent}</div>;
 
     // Append highlighted text
     return (
@@ -337,11 +299,6 @@ export default function AssistantTextSpanClassification({
 export function CategoriesListToggle({
   categories,
   colours,
-  //tooltipContent,
-  // thresholdLow,
-  // thresholdHigh,
-  // rgbLow,
-  // rgbHigh,
   noCategoriesText,
   allCategoriesLabel,
   onCategoryChange = () => {},

@@ -44,6 +44,7 @@ import {
   getMgtColours,
   getPersuasionCategoryColours,
   getPersuasionCategoryTechnique,
+  primaryRgb,
   rgbToString,
   treeMapToElements,
 } from "./assistantUtils";
@@ -264,8 +265,6 @@ const AssistantTextResult = () => {
           keyword,
         )
       : null;
-
-  const primaryRgb = [0, 146, 108];
 
   // loading
   const summaryLoading = (

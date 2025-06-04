@@ -9,7 +9,6 @@ import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import Slider from "@mui/material/Slider";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
@@ -26,6 +25,7 @@ import {
   createGaugeChart,
   getMgtColours,
   interpRgb,
+  primaryRgb,
   rgbToLuminance,
   rgbToString,
   summaryReturnButton,
@@ -99,7 +99,6 @@ export default function AssistantTextClassification({
   let categoryRgbLow, categoryRgbHigh;
   let sentenceThresholdLow, sentenceThresholdHigh;
   let categoryThresholdLow, categoryThresholdHigh;
-  const primaryRgb = [0, 146, 108];
   const colourScaleText = keyword("colour_scale");
 
   if (credibilitySignal == keyword("subjectivity_title")) {

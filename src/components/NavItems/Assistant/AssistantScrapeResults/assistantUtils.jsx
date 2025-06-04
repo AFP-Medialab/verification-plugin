@@ -390,6 +390,9 @@ export function getMgtColours(configs) {
   return [colours, coloursDark];
 }
 
+// primary colour
+export const primaryRgb = [0, 146, 108];
+
 // credibility signals: return to summary
 export function summaryReturnButton(setTextTabIndex, keyword) {
   return (
