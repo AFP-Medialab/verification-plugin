@@ -22,6 +22,8 @@ import { v4 as uuidv4 } from "uuid";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
+  SummaryReturnButton,
+  ThresholdSlider,
   getPersuasionCategoryColours,
   getPersuasionCategoryTechnique,
   //interpRgb,
@@ -29,8 +31,6 @@ import {
   primaryRgb,
   rgbToLuminance,
   rgbToString,
-  summaryReturnButton,
-  thresholdSlider,
   treeMapToElements,
   wrapPlainTextSpan,
 } from "./assistantUtils";
@@ -288,7 +288,10 @@ export default function AssistantTextSpanClassification({
               importantSentenceThreshold={importantSentenceThreshold}
               handleSliderChange={handleSliderChange}
             />
-            {summaryReturnButton(setTextTabIndex, keyword)}
+            <SummaryReturnButton
+              setTextTabIndex={setTextTabIndex}
+              text={keyword("summary_title")}
+            />
           </CardContent>
         </Card>
       </Grid>
@@ -393,12 +396,14 @@ export function CategoriesListToggle({
 
   return (
     <>
-      <Typography sx={{ textAlign: "start" }}>Certainty level:</Typography>
-      {thresholdSlider(
-        "persuasion_techniques_title",
-        importantSentenceThreshold,
-        handleSliderChange,
-      )}
+      <Typography fontSize="small" sx={{ textAlign: "start" }}>
+        {keyword("threshold_slider_certainty")}
+      </Typography>
+      <ThresholdSlider
+        credibilitySignal={"persuasion_techniques_title"}
+        importantSentenceThreshold={importantSentenceThreshold}
+        handleSliderChange={handleSliderChange}
+      />
       <List>
         {_.isEmpty(categoriesList) ? (
           <ListItem key={noCategoriesText}>

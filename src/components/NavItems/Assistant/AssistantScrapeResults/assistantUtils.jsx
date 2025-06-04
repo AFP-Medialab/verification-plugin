@@ -2,6 +2,7 @@ import React from "react";
 import GaugeChart from "react-gauge-chart";
 
 import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Slider from "@mui/material/Slider";
@@ -305,7 +306,6 @@ export function createGaugeChart(
   mgtOverallScoreLabel,
   overallClassificationScore,
   resolvedMode,
-  //categories,
   colours,
   keyword,
 ) {
@@ -394,7 +394,7 @@ export function getMgtColours(configs) {
 export const primaryRgb = [0, 146, 108];
 
 // credibility signals: return to summary
-export function summaryReturnButton(setTextTabIndex, keyword) {
+export function SummaryReturnButton({ setTextTabIndex, text }) {
   return (
     <Stack
       direction="row"
@@ -404,18 +404,18 @@ export function summaryReturnButton(setTextTabIndex, keyword) {
       }}
     >
       <Button onClick={() => setTextTabIndex(0)} startIcon={<ArrowBack />}>
-        <label>{keyword("summary_title")}</label>
+        <label>{text}</label>
       </Button>
     </Stack>
   );
 }
 
-// credibility signals: threshold slider
-export function thresholdSlider(
+// credibility signals: threshold slider component
+export function ThresholdSlider({
   credibilitySignal,
   importantSentenceThreshold,
   handleSliderChange,
-) {
+}) {
   const marks = [
     {
       value: 0,
@@ -444,8 +444,44 @@ export function thresholdSlider(
           defaultValue={80} // on loading thing it keeps resetting to 80
           value={importantSentenceThreshold}
           onChange={handleSliderChange}
+          fontSize={"small"}
         />
       </ListItem>
     </List>
+  );
+}
+
+// colour scale component
+export function ColourGradientScale({
+  colourScaleText,
+  textLow,
+  textHigh,
+  rgbList,
+}) {
+  return (
+    <Grid container>
+      <Grid size={{ xs: 12 }}>
+        <Typography fontSize="small" style={{ textAlign: "start" }}>
+          {colourScaleText}
+        </Typography>
+        <div
+          style={{
+            width: "100%",
+            height: "1em",
+            background: rgbListToGradient(rgbList),
+          }}
+        />
+      </Grid>
+      <Grid size={{ xs: 6 }}>
+        <Typography align="left" fontSize="small">
+          {textLow}
+        </Typography>
+      </Grid>
+      <Grid size={{ xs: 6 }}>
+        <Typography align="right" fontSize="small">
+          {textHigh}
+        </Typography>
+      </Grid>
+    </Grid>
   );
 }
