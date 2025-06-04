@@ -1,5 +1,11 @@
 import React from "react";
+import GaugeChart from "react-gauge-chart";
 
+import ListItem from "@mui/material/ListItem";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
+import GaugeChartModalExplanation from "components/Shared/GaugeChartResults/GaugeChartModalExplanation";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
@@ -270,3 +276,111 @@ export const mergeSpanIndices = (filteredClassification) => {
 
   return mergedSpanIndices;
 };
+
+// persuasion techniques: split text for category and technique
+export function getPersuasionCategoryTechnique(category) {
+  return category.split("__");
+}
+
+// persuasion techniques: defining persuasion technique category colours
+export function getPersuasionCategoryColours(configs) {
+  const categoryColours = {
+    Justification: configs.perCategoryJustificationRgb,
+    Simplification: configs.perCategorySimplificationRgb,
+    Distraction: configs.perCategoryDistractionRgb,
+    Call: configs.perCategoryCallRgb,
+    Manipulative_Wording: configs.perCategoryManipulativeRgb,
+    Attack_on_Reputation: configs.perCategoryAttackRgb,
+  };
+  return categoryColours;
+}
+
+// machine generated text: gauge chart
+export function createGaugeChart(
+  mgtOverallScoreLabel,
+  overallClassificationScore,
+  resolvedMode,
+  //categories,
+  colours,
+  keyword,
+) {
+  const output = [];
+  output.push(
+    <ListItem key={`text_${mgtOverallScoreLabel}`}>
+      <Typography>{keyword(mgtOverallScoreLabel)}</Typography>
+    </ListItem>,
+  );
+  // gauge chart
+  const percentScore = Math.round(Number(overallClassificationScore) * 100.0);
+  output.push(
+    <ListItem key="gauge_chart">
+      <GaugeChart
+        id={"gauge-chart"}
+        animate={false}
+        nrOfLevels={4}
+        textColor={resolvedMode === "dark" ? "white" : "black"}
+        needleColor={resolvedMode === "dark" ? "#5A5A5A" : "#D3D3D3"}
+        needleBaseColor={resolvedMode === "dark" ? "#5A5A5A" : "#D3D3D3"}
+        arcsLength={[0.05, 0.45, 0.45, 0.05]}
+        percent={overallClassificationScore ? percentScore / 100.0 : null}
+        style={{
+          width: "100%",
+        }}
+        colors={colours}
+      />
+    </ListItem>,
+  );
+  // gauge labels
+  output.push(
+    <ListItem key="gauge_labels">
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        spacing={7}
+      >
+        <Typography variant="subtitle2">
+          {keyword("gauge_no_detection")}
+        </Typography>
+        <Typography variant="subtitle2">
+          {keyword("gauge_detection")}
+        </Typography>
+      </Stack>
+    </ListItem>,
+  );
+  // gauge explanation
+  output.push(
+    <ListItem key="gauge_explanantion">
+      <GaugeChartModalExplanation
+        keyword={keyword}
+        keywordsArr={[
+          "gauge_scale_modal_explanation_rating_1",
+          "gauge_scale_modal_explanation_rating_2",
+          "gauge_scale_modal_explanation_rating_3",
+          "gauge_scale_modal_explanation_rating_4",
+        ]}
+        keywordLink={"gauge_scale_explanation_link"}
+        keywordModalTitle={"gauge_scale_modal_explanation_title"}
+        colors={colours}
+      />
+    </ListItem>,
+  );
+  return output;
+}
+
+// machine generated text: colours from configs
+export function getMgtColours(configs) {
+  const colours = [
+    rgbToString(configs.greenRgb),
+    rgbToString(configs.lightGreenRgb),
+    rgbToString(configs.orangeRgb),
+    rgbToString(configs.redRgb),
+  ];
+  const coloursDark = [
+    rgbToString(configs.greenRgbDark),
+    rgbToString(configs.lightGreenRgbDark),
+    rgbToString(configs.orangeRgbDark),
+    rgbToString(configs.redRgbDark),
+  ];
+  return [colours, coloursDark];
+}
