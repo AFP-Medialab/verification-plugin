@@ -15,19 +15,19 @@ import Switch from "@mui/material/Switch";
 
 import { Gradient } from "@mui/icons-material";
 
+import { ROLES } from "@/constants/roles";
+import {
+  resetSyntheticImageDetectionImage,
+  setSyntheticImageDetectionLoading,
+  setSyntheticImageDetectionNearDuplicates,
+  setSyntheticImageDetectionResult,
+} from "@/redux/actions/tools/syntheticImageDetectionActions";
 import { isValidUrl } from "@Shared/Utils/URLUtils";
 import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import axios from "axios";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { setError } from "redux/reducers/errorReducer";
 
-import { ROLES } from "../../../../constants/roles";
-import {
-  resetSyntheticImageDetectionImage,
-  setSyntheticImageDetectionLoading,
-  setSyntheticImageDetectionNearDuplicates,
-  setSyntheticImageDetectionResult,
-} from "../../../../redux/actions/tools/syntheticImageDetectionActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
@@ -269,7 +269,7 @@ const SyntheticImageDetection = () => {
     });
   }
 
-  const handleClose = () => {
+  const resetState = () => {
     setInput("");
     setImageFile(undefined);
     dispatch(resetSyntheticImageDetectionImage());
@@ -433,9 +433,10 @@ const SyntheticImageDetection = () => {
                 setFileInput={setImageFile}
                 handleSubmit={handleSubmit}
                 fileInputTypesAccepted={"image/*"}
-                handleCloseSelectedFile={handleClose}
+                handleCloseSelectedFile={resetState}
                 preprocessLocalFile={preprocessImage}
                 isParentLoading={isLoading}
+                handleClearUrl={resetState}
               />
             </form>
 
@@ -476,7 +477,7 @@ const SyntheticImageDetection = () => {
         <SyntheticImageDetectionResults
           results={result}
           url={url}
-          handleClose={handleClose}
+          handleClose={resetState}
           nd={nd}
           imageType={imageType}
         />

@@ -5,10 +5,11 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import Container from "@mui/material/Container";
 import Fade from "@mui/material/Fade";
 
-import { useTrackPageView } from "../../../Hooks/useAnalytics";
-import { toolsHome } from "../../../constants/tools";
-import { TOP_MENU_ITEMS } from "../../../constants/topMenuItems";
-import { selectTopMenuItem } from "../../../redux/reducers/navReducer";
+import { useTrackPageView } from "@/Hooks/useAnalytics";
+import { toolsHome } from "@/constants/tools";
+import { TOP_MENU_ITEMS } from "@/constants/topMenuItems";
+import { selectTopMenuItem } from "@/redux/reducers/navReducer";
+
 import DrawerItem from "../DrawerItem/DrawerItem";
 
 /**

@@ -147,23 +147,19 @@ export default function AssistantTextClassification({
       // Filter sentences above importanceThresholdLow unless machine generated text
       const sentenceIndices = classification[label];
       for (let i = 0; i < sentenceIndices.length; i++) {
-        if (
-          credibilitySignal != keyword("machine_generated_text_title") &&
-          sentenceIndices[i].score >= configs.importanceThresholdLow
-        ) {
+        if (credibilitySignal === keyword("machine_generated_text_title")) {
           filteredSentences.push(sentenceIndices[i]);
-        } else {
+        } else if (sentenceIndices[i].score >= configs.importanceThresholdLow) {
           filteredSentences.push(sentenceIndices[i]);
         }
       }
     } else {
       //Filter categories above confidenceThreshold unless machine generated text
-      if (
-        credibilitySignal != keyword("machine_generated_text_title") &&
+      if (credibilitySignal === keyword("machine_generated_text_title")) {
+        filteredCategories[label] = classification[label];
+      } else if (
         classification[label][0].score >= configs.confidenceThresholdLow
       ) {
-        filteredCategories[label] = classification[label];
-      } else {
         filteredCategories[label] = classification[label];
       }
     }
@@ -171,6 +167,12 @@ export default function AssistantTextClassification({
 
   if (Object.keys(filteredCategories).length === 0) {
     filteredSentences = [];
+  }
+  if (
+    credibilitySignal === keyword("subjectivity_title") &&
+    Object.keys(filteredSentences).length === 0
+  ) {
+    filteredCategories = [];
   }
 
   return (
@@ -293,19 +295,10 @@ export function MgtCategoriesList({
   // gauge labels
   output.push(
     <ListItem key="gauge_labels">
-      <Stack
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        spacing={7}
-      >
-        <Typography variant="subtitle2">
-          {keyword("gauge_no_detection")}
-        </Typography>
-        <Typography variant="subtitle2">
-          {keyword("gauge_detection")}
-        </Typography>
-      </Stack>
+      <Typography variant="subtitle2" sx={{ flex: 1 }}>
+        {keyword("gauge_no_detection")}
+      </Typography>
+      <Typography variant="subtitle2">{keyword("gauge_detection")}</Typography>
     </ListItem>,
   );
   // gauge explanation

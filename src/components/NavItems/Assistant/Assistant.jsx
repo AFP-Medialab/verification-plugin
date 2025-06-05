@@ -12,14 +12,14 @@ import Typography from "@mui/material/Typography";
 
 import { Close } from "@mui/icons-material";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { setError } from "redux/reducers/errorReducer";
-
 import {
   cleanAssistantState,
   setUrlMode,
   submitInputUrl,
-} from "../../../redux/actions/tools/assistantActions";
+} from "@/redux/actions/tools/assistantActions";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { setError } from "redux/reducers/errorReducer";
+
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import AssistantCheckStatus from "./AssistantCheckResults/AssistantCheckStatus";
 import AssistantNEResult from "./AssistantCheckResults/AssistantNEResult";
@@ -115,6 +115,9 @@ const Assistant = () => {
   const machineGeneratedTextSentencesFailState = useSelector(
     (state) => state.assistant.machineGeneratedTextSentencesFail,
   );
+  const multilingualStanceFailState = useSelector(
+    (state) => state.assistant.multilingualStanceFail,
+  );
 
   //local state
   const [formInput, setFormInput] = useState(inputUrl);
@@ -208,7 +211,8 @@ const Assistant = () => {
       subjectivityFailState ||
       prevFactChecksFailState ||
       machineGeneratedTextChunksFailState ||
-      machineGeneratedTextSentencesFailState ? (
+      machineGeneratedTextSentencesFailState ||
+      multilingualStanceFailState ? (
         <Grid size={{ xs: 12 }}>
           <AssistantCheckStatus />
         </Grid>

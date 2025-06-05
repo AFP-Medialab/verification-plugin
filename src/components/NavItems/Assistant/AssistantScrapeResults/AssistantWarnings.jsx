@@ -12,10 +12,10 @@ import Typography from "@mui/material/Typography";
 import { WarningAmber } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
+import { setWarningExpanded } from "@/redux/actions/tools/assistantActions";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { ROLES } from "constants/roles";
 
-import { setWarningExpanded } from "../../../../redux/actions/tools/assistantActions";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import DbkfMediaResults from "../AssistantCheckResults/DbkfMediaResults";
 import DbkfTextResults from "../AssistantCheckResults/DbkfTextResults";
@@ -74,12 +74,20 @@ const AssistantWarnings = () => {
               </Box>
             </Typography>
           </div>
-          <IconButton
-            className={classes.assistantIconRight}
-            onClick={() => dispatch(setWarningExpanded(!warningExpanded))}
+          <Box
+            sx={{
+              pr: 1,
+              pt: 1,
+            }}
           >
-            <ExpandMoreIcon color={"warning"} />
-          </IconButton>
+            <IconButton
+              className={classes.assistantIconRight}
+              onClick={() => dispatch(setWarningExpanded(!warningExpanded))}
+              sx={{ p: 1 }}
+            >
+              <ExpandMoreIcon color={"warning"} />
+            </IconButton>
+          </Box>
         </Grid>
         <Grid size={{ xs: 12 }}>
           <Collapse

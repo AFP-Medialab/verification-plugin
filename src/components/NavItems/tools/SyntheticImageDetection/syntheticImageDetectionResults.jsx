@@ -12,18 +12,21 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
+import Switch from "@mui/material/Switch";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import { Download, ExpandMore } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
+import { ROLES } from "@/constants/roles";
 import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
@@ -62,6 +65,16 @@ export const getAlertColor = (n) => {
   }
 };
 
+export const getCerthColor = (n) => {
+  if (n === "VERY_STRONG_EVIDENCE" || n === "STRONG_EVIDENCE") {
+    return "error";
+  } else if (n === "MODERATE_EVIDENCE") {
+    return "warning";
+  } else {
+    return "success";
+  }
+};
+
 export const getAlertLabel = (n, keyword) => {
   if (n >= DETECTION_THRESHOLDS.THRESHOLD_3) {
     return keyword("synthetic_image_detection_alert_label_4");
@@ -71,6 +84,18 @@ export const getAlertLabel = (n, keyword) => {
     return keyword("synthetic_image_detection_alert_label_2");
   } else {
     return keyword("synthetic_image_detection_alert_label_1");
+  }
+};
+
+export const getCerthLabel = (n, keyword) => {
+  if (n === "VERY_STRONG_EVIDENCE") {
+    return "CERTH — " + keyword("synthetic_image_detection_alert_label_4");
+  } else if (n === "STRONG_EVIDENCE") {
+    return "CERTH — " + keyword("synthetic_image_detection_alert_label_3");
+  } else if (n === "MODERATE_EVIDENCE") {
+    return "CERTH — " + keyword("synthetic_image_detection_alert_label_2");
+  } else {
+    return "CERTH — " + keyword("synthetic_image_detection_alert_label_1");
   }
 };
 
@@ -131,8 +156,14 @@ const SyntheticImageDetectionResults = ({
      * @param syntheticImageDetectionAlgorithm {SyntheticImageDetectionAlgorithm}
      * @param predictionScore {number}
      * @param isError {boolean}
+     * @param certhLabel {string} the detection label provided by the API
      */
-    constructor(syntheticImageDetectionAlgorithm, predictionScore, isError) {
+    constructor(
+      syntheticImageDetectionAlgorithm,
+      predictionScore,
+      isError,
+      certhLabel,
+    ) {
       super(
         syntheticImageDetectionAlgorithm.apiServiceName,
         syntheticImageDetectionAlgorithm.name,
@@ -141,6 +172,7 @@ const SyntheticImageDetectionResults = ({
       );
       this.predictionScore = predictionScore;
       this.isError = isError;
+      this.certhLabel = certhLabel;
     }
   }
 
@@ -155,6 +187,12 @@ const SyntheticImageDetectionResults = ({
   const [resultsHaveErrors, setResultsHaveErrors] = useState(false);
 
   const gaugeChartRef = useRef(null);
+
+  const [showCerthLabels, setShowCerthLabels] = useState(true);
+
+  const handleToggleCerthLabel = (event) => {
+    setShowCerthLabels(event.target.checked);
+  };
 
   useEffect(() => {
     setResultsHaveErrors(false);
@@ -187,6 +225,7 @@ const SyntheticImageDetectionResults = ({
                 ? 0
                 : algorithmReport.prediction * 100,
               algorithmReport.prediction === undefined,
+              algorithmReport.label,
             ),
           );
         } else if (
@@ -204,6 +243,7 @@ const SyntheticImageDetectionResults = ({
                 ? 0
                 : algorithmReport.prediction * 100,
               algorithmReport.prediction === undefined,
+              algorithmReport.label,
             ),
           );
         }
@@ -393,10 +433,31 @@ const SyntheticImageDetectionResults = ({
               justifyContent: "space-between",
             }}
           >
-            <Typography variant="h6">
-              {keyword("synthetic_image_detection_title")}
-            </Typography>
-            <IconButton aria-label="close" onClick={handleClose}>
+            <Stack
+              direction="row"
+              spacing={4}
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Typography variant="h6">
+                {keyword("synthetic_image_detection_title")}
+              </Typography>
+
+              {role.includes(ROLES.EXTRA_FEATURE) && (
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={showCerthLabels}
+                      onChange={handleToggleCerthLabel}
+                      color="primary"
+                    />
+                  }
+                  label="Show CERTH labels"
+                />
+              )}
+            </Stack>
+
+            <IconButton aria-label="close" onClick={handleClose} sx={{ p: 1 }}>
               <CloseIcon />
             </IconButton>
           </Stack>
@@ -796,13 +857,32 @@ const SyntheticImageDetectionResults = ({
                                         )}
                                       </Stack>
                                       {!item.isError && (
-                                        <Chip
-                                          label={getAlertLabel(
-                                            predictionScore,
-                                            keyword,
-                                          )}
-                                          color={getAlertColor(predictionScore)}
-                                        />
+                                        <>
+                                          <Chip
+                                            label={getAlertLabel(
+                                              predictionScore,
+                                              keyword,
+                                            )}
+                                            color={getAlertColor(
+                                              predictionScore,
+                                            )}
+                                          />
+                                          {showCerthLabels &&
+                                            role.includes(
+                                              ROLES.EXTRA_FEATURE,
+                                            ) && (
+                                              <Chip
+                                                variant="outlined"
+                                                label={getCerthLabel(
+                                                  item.certhLabel,
+                                                  keyword,
+                                                )}
+                                                color={getCerthColor(
+                                                  item.certhLabel,
+                                                )}
+                                              />
+                                            )}
+                                        </>
                                       )}
                                     </Stack>
                                   </Box>

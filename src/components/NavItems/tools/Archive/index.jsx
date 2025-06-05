@@ -12,13 +12,13 @@ import Typography from "@mui/material/Typography";
 
 import { ArrowBack } from "@mui/icons-material";
 
+import { archiving } from "@/constants/tools";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import {
   archiveStateCleaned,
   setArchiveUrl,
 } from "redux/reducers/tools/archiveReducer";
 
-import { archiving } from "../../../../constants/tools";
 import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
 import assistantApiCalls from "../../Assistant/AssistantApiHandlers/useAssistantApi";
 import {

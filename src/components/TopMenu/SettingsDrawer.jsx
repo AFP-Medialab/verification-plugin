@@ -13,14 +13,14 @@ import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import RemoveIcon from "@mui/icons-material/Remove";
 
-import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-
-import { toggleUnlockExplanationCheckBox } from "../../redux/actions";
+import { toggleUnlockExplanationCheckBox } from "@/redux/actions";
 import {
   toggleAnalyticsCheckBox,
   toggleState,
-} from "../../redux/reducers/cookiesReducers";
-import { MAX_FONT_SIZE, MIN_FONT_SIZE, getStoredFontSize } from "../../theme";
+} from "@/redux/reducers/cookiesReducers";
+import { MAX_FONT_SIZE, MIN_FONT_SIZE, getStoredFontSize } from "@/theme";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+
 import Languages from "../NavItems/languages/languages";
 import ColorModeSelect from "./ColorModeSelect";
 

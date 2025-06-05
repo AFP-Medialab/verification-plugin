@@ -13,12 +13,8 @@ import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import TextField from "@mui/material/TextField";
 
-import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import _ from "lodash";
-
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { videoAnalysis } from "../../../../constants/tools";
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { videoAnalysis } from "@/constants/tools";
 import {
   cleanAnalysisState,
   setAnalysisComments,
@@ -26,7 +22,11 @@ import {
   setAnalysisLoading,
   setAnalysisResult,
   setAnalysisVerifiedComments,
-} from "../../../../redux/actions/tools/analysisActions";
+} from "@/redux/actions/tools/analysisActions";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import _ from "lodash";
+
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
