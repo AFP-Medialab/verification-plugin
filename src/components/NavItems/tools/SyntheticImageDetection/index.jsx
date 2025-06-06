@@ -5,8 +5,10 @@ import { useLocation } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
+import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
@@ -27,7 +29,9 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import { setError } from "redux/reducers/errorReducer";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
+import ChatbotInterface from "../../Assistant/ChatbotInterface";
 import { syntheticImageDetectionAlgorithms } from "./SyntheticImageDetectionAlgorithms";
 import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
 
@@ -35,7 +39,7 @@ const SyntheticImageDetection = () => {
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const urlParam = urlParams.get("url");
-
+  const classes = useMyStyles();
   const keyword = i18nLoadNamespace(
     "components/NavItems/tools/SyntheticImageDetection",
   );
@@ -388,11 +392,32 @@ const SyntheticImageDetection = () => {
         </Alert>
       </Stack>
       <Card variant="outlined">
-        <Box
-          sx={{
-            p: 4,
-          }}
-        >
+        <CardHeader
+          title={keyword("synthetic_image_detection_hide_chatbot")}
+          className={classes.headerUploadedImage}
+        />
+
+        <Box sx={{ mr: 2 }}>
+          <ChatbotInterface tool="syntheticImageDetection" />
+        </Box>
+      </Card>
+
+      <Card variant="outlined">
+        <CardHeader
+          title={
+            <Grid
+              container
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <span>{keyword("synthetic_image_detection_link")}</span>
+            </Grid>
+          }
+          className={classes.headerUploadedImage}
+        />
+
+        <Box p={4}>
           <Stack direction="column" spacing={2}>
             <form>
               <StringFileUploadField

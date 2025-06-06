@@ -17,6 +17,8 @@ const defaultState = {
   processUrlType: null,
   inputUrlType: null,
 
+  chatbotMessages: [],
+
   positiveSourceCred: null,
   cautionSourceCred: null,
   mixedSourceCred: null,
@@ -119,13 +121,28 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_ASSURANCE_EXPANDED":
     case "SET_STATE_EXPANDED":
       return Object.assign({}, state, action.payload);
-
+    case "ADD_CHATBOT_MESSAGE": {
+      const message = action.payload;
+      message.id = state.chatbotMessages.length + 1;
+      return {
+        ...state,
+        chatbotMessages: [...state.chatbotMessages, message],
+      };
+    }
+    case "CLEAR_CHATBOT_MESSAGES": {
+      return {
+        ...state,
+        chatbotMessages: [],
+      };
+    }
     case "CLEAN_STATE":
       return {
         ...state,
         urlMode: false,
         imageVideoSelected: false,
         singleMediaPresent: null,
+
+        chatbotMessages: [],
 
         inputUrl: null,
         errorKey: null,
