@@ -1,7 +1,7 @@
 /**
  * The substring represented by a pair of numbers [start character, end character].
  * @typedef {number[]} Indices
- * @example [0, -1]
+ * @example [0, 10]
  */
 
 /**
