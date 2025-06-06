@@ -44,6 +44,13 @@ const ChatbotInterface = ({ tool, result }) => {
   ).filter((msg) => msg.message); // Access the entire state
   const userEmail = useSelector((state) => state.userSession.user.email);
   const [sessionID, setSessionID] = useState(uuidv4());
+  const [previousResult, setPreviousResult] = useState(null);
+  const [sendResult, setSendResult] = useState(true);
+
+  if (result != previousResult) {
+    setPreviousResult(result);
+    setSendResult(true);
+  }
 
   const sendMessage = () => {
     dispatch(
@@ -52,11 +59,12 @@ const ChatbotInterface = ({ tool, result }) => {
         formInput,
         userEmail,
         archiveURL,
-        tool,
-        result,
+        sendResult ? tool : null,
+        sendResult ? result : null,
       ),
     );
     setFormInput("");
+    setSendResult(false);
   };
 
   const resetChatbot = () => {
@@ -65,6 +73,8 @@ const ChatbotInterface = ({ tool, result }) => {
     dispatch(submitUserChatbotMessage(sessionID));
     setSessionID(uuidv4());
     setFormInput("");
+    setSendResult(true);
+    setPreviousResult(result);
   };
 
   // Detect when the tab is closed and send a special request to the chatbot to clear the session history
@@ -72,6 +82,10 @@ const ChatbotInterface = ({ tool, result }) => {
     return () => {
       window.addEventListener("beforeunload", function (e) {
         dispatch(submitUserChatbotMessage(sessionID));
+        if (sessionID) {
+          dispatch(submitUserChatbotMessage(sessionID));
+          setSessionID(null);
+        }
       });
     };
   });
