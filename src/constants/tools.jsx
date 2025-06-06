@@ -30,7 +30,6 @@ import XnetworkIcon from "../components/NavBar/images/SVG/Search/Xnetwork.svg";
 import KeyframesIcon from "../components/NavBar/images/SVG/Video/Keyframes.svg";
 import ThumbnailsIcon from "../components/NavBar/images/SVG/Video/Thumbnails.svg";
 import AnalysisIcon from "../components/NavBar/images/SVG/Video/Video_analysis.svg";
-import VideoRightsIcon from "../components/NavBar/images/SVG/Video/Video_rights.svg";
 import About from "../components/NavItems/About/About";
 import MachineGeneratedText from "../components/NavItems/MachineGeneratedText";
 import ToolsMenu from "../components/NavItems/tools/Alltools/ToolsMenu";
@@ -50,7 +49,6 @@ import SyntheticImageDetection from "../components/NavItems/tools/SyntheticImage
 import Thumbnails from "../components/NavItems/tools/Thumbnails/Thumbnails";
 import TwitterAdvancedSearch from "../components/NavItems/tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
 import TwitterSna from "../components/NavItems/tools/TwitterSna/TwitterSna";
-import VideoRights from "../components/NavItems/tools/VideoRights/VideoRights";
 import { ROLES } from "./roles";
 
 /**
@@ -154,10 +152,6 @@ const KeyframesSvgIcon = (props) => {
 
 const thumbnailsSvgIcon = (props) => {
   return <SvgIcon component={ThumbnailsIcon} inheritViewBox {...props} />;
-};
-
-const videoRightsSvgIcon = (props) => {
-  return <SvgIcon component={VideoRightsIcon} inheritViewBox {...props} />;
 };
 
 const metadataSvgIcon = (props) => {
@@ -294,19 +288,6 @@ export const thumbnails = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <Thumbnails />,
   <Footer type={FOOTER_TYPES.AFP} />,
-);
-
-export const videoRights = new Tool(
-  "navbar_rights",
-  "navbar_rights_description",
-  videoRightsSvgIcon,
-  TOOLS_CATEGORIES.VIDEO,
-  null,
-  null,
-  "copyright",
-  TOOL_GROUPS.VERIFICATION,
-  <VideoRights />,
-  <Footer type={FOOTER_TYPES.GRIHO} />,
 );
 
 const videoMetadata = new Tool(
@@ -598,7 +579,6 @@ export const tools = Object.freeze([
   videoAnalysis,
   keyframes,
   thumbnails,
-  // videoRights,
   videoMetadata,
   videoDeepfake,
   imageMagnifier,

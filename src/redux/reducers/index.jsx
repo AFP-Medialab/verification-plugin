@@ -27,7 +27,6 @@ import syntheticImageDetectionReducer from "./tools/syntheticImageDetectionReduc
 import thumbnailsReducer from "./tools/thumbnailsReducer";
 import toolReducer from "./tools/toolReducer";
 import twitterSnaReducer from "./tools/twitterSnaReducer";
-import videoRightsReducer from "./tools/videoRightsReducer";
 
 const allReducers = combineReducers({
   // Global state
@@ -55,7 +54,6 @@ const allReducers = combineReducers({
   metadata: metadataReducer,
   thumbnails: thumbnailsReducer,
   twitterSna: twitterSnaReducer,
-  videoRights: videoRightsReducer,
   assistant: assistantReducer,
   ocr: ocrReducer,
   gif: gifReducer,
