@@ -239,7 +239,7 @@ export default function AssistantTextClassification({
             {(credibilitySignal === keyword("news_framing_title") ||
               credibilitySignal === keyword("news_genre_title")) && (
               <ColourGradientScale
-                colourScaleText={keyword("category_colour_scale")} //colourScaleText}
+                colourScaleText={keyword("colour_scale")} //colourScaleText}
                 textLow={keyword("low_confidence")}
                 textHigh={keyword("high_confidence")}
                 rgbList={[categoryRgbLow, categoryRgbHigh]}

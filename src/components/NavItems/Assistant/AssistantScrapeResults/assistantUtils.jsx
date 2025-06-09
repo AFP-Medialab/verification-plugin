@@ -444,14 +444,18 @@ export function ThresholdSlider({
           defaultValue={80} // on loading thing it keeps resetting to 80
           value={importantSentenceThreshold}
           onChange={handleSliderChange}
-          fontSize={"small"}
+          sx={{
+            "& .MuiSlider-markLabel": {
+              fontSize: "small",
+            },
+          }}
         />
       </ListItem>
     </List>
   );
 }
 
-// colour scale component
+// credibility signals: colour scale component
 export function ColourGradientScale({
   colourScaleText,
   textLow,
