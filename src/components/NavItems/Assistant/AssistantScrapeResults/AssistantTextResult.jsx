@@ -281,7 +281,7 @@ const AssistantTextResult = () => {
   function summaryLoading(credibilitySignal) {
     return (
       <ListItem key={`${credibilitySignal}_summaryLoading`}>
-        <Skeleton width="100%" height="100%" />
+        <Skeleton width="100%" height={40} />
       </ListItem>
     );
   }
