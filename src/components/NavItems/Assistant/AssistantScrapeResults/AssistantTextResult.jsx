@@ -27,6 +27,7 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import { setWarningExpanded } from "@/redux/actions/tools/assistantActions";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { v4 as uuidv4 } from "uuid";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
@@ -266,20 +267,41 @@ const AssistantTextResult = () => {
         )
       : null;
 
-  // loading
-  const summaryLoading = (
-    <ListItem>
-      <Skeleton width="100%" height="100%" />
-    </ListItem>
-  );
-  //failed
-  const summaryFailed = (
-    <ListItem>
-      <Typography sx={{ textAlign: "start" }}>
-        {keyword("failed_to_load")}
-      </Typography>
-    </ListItem>
-  );
+  // summary loading
+  function summaryLoading(credibilitySignal) {
+    return (
+      <ListItem key={`${credibilitySignal}_summaryLoading`}>
+        <Skeleton width="100%" height="100%" />
+      </ListItem>
+    );
+  }
+
+  // summary failed
+  function summaryFailed(credibilitySignal) {
+    return (
+      <ListItem key={`${credibilitySignal}_summaryFailed`}>
+        <Typography sx={{ textAlign: "start" }}>
+          {keyword("failed_to_load")}
+        </Typography>
+      </ListItem>
+    );
+  }
+
+  // summary empty
+  function summaryEmpty(credibilitySignal, keyword) {
+    return (
+      <ListItem key={`${credibilitySignal}_summaryEmpty`}>
+        <Typography sx={{ textAlign: "start" }}>
+          {credibilitySignal === newsFramingTitle &&
+            keyword("no_detected_topics")}
+          {credibilitySignal === subjectivityTitle &&
+            keyword("no_detected_sentences")}
+          {credibilitySignal === persuasionTitle &&
+            keyword("no_detected_techniques")}
+        </Typography>
+      </ListItem>
+    );
+  }
 
   // tooltips
   const newsFramingTooltip = (
@@ -480,7 +502,7 @@ const AssistantTextResult = () => {
                     >
                       <CardHeader
                         className={classes.assistantCardHeader}
-                        title={keyword("news_framing_title")}
+                        title={newsFramingTitle}
                         action={
                           <div style={{ display: "flex" }}>
                             <Tooltip
@@ -497,25 +519,29 @@ const AssistantTextResult = () => {
                       />
                       <CardContent>
                         <List key="news_framing_list_summary">
-                          {newsFramingLoading && summaryLoading}
-                          {newsFramingDone &&
-                            newsFramingSummary.map((topic, index) => (
-                              <>
-                                {index != "0" && (
-                                  <Divider key={`divider_${topic}`} />
-                                )}
-                                <ListItem
-                                  key={`listitem_${topic}`}
-                                  sx={{
-                                    background: rgbToString(primaryRgb),
-                                    color: "white",
-                                  }}
-                                >
-                                  <ListItemText primary={keyword(topic)} />
-                                </ListItem>
-                              </>
-                            ))}
-                          {newsFramingFail && summaryFailed}
+                          {newsFramingLoading &&
+                            summaryLoading(newsFramingTitle)}
+                          {newsFramingDone
+                            ? Object.keys(newsFramingResult.entities).length > 0
+                              ? newsFramingSummary.map((topic, index) => (
+                                  <div key={`${index}_div`}>
+                                    {index != "0" && (
+                                      <Divider key={`${index}_Divider`} />
+                                    )}
+                                    <ListItem
+                                      key={`${index}_ListItem`}
+                                      sx={{
+                                        background: rgbToString(primaryRgb),
+                                        color: "white",
+                                      }}
+                                    >
+                                      <ListItemText primary={keyword(topic)} />
+                                    </ListItem>
+                                  </div>
+                                ))
+                              : summaryEmpty(newsFramingTitle, keyword)
+                            : null}
+                          {newsFramingFail && summaryFailed(newsFramingTitle)}
                         </List>
                       </CardContent>
                     </CardActionArea>
@@ -530,7 +556,7 @@ const AssistantTextResult = () => {
                     >
                       <CardHeader
                         className={classes.assistantCardHeader}
-                        title={keyword("subjectivity_title")}
+                        title={subjectivityTitle}
                         action={
                           <div style={{ display: "flex" }}>
                             <Tooltip
@@ -546,23 +572,29 @@ const AssistantTextResult = () => {
                         }
                       />
                       <CardContent>
-                        {subjectivityLoading && summaryLoading}
-                        {subjectivityDone && (
-                          <List>
-                            <ListItem
-                              key={`listitem_${subjectivitySummary}`}
-                              sx={{
-                                background: rgbToString(primaryRgb),
-                                color: "white",
-                              }}
-                            >
-                              <ListItemText
-                                primary={keyword(subjectivitySummary)}
-                              />
-                            </ListItem>
-                          </List>
-                        )}
-                        {subjectivityFail && summaryFailed}
+                        <List>
+                          {subjectivityLoading &&
+                            summaryLoading(subjectivityTitle)}
+                          {subjectivityDone ? (
+                            Object.keys(subjectivityResult.entities).length >
+                            0 ? (
+                              <ListItem
+                                key={`${subjectivitySummary}_ListItem`}
+                                sx={{
+                                  background: rgbToString(primaryRgb),
+                                  color: "white",
+                                }}
+                              >
+                                <ListItemText
+                                  primary={keyword(subjectivitySummary)}
+                                />
+                              </ListItem>
+                            ) : (
+                              summaryEmpty(subjectivityTitle, keyword)
+                            )
+                          ) : null}
+                          {subjectivityFail && summaryFailed(subjectivityTitle)}
+                        </List>
                       </CardContent>
                     </CardActionArea>
                   </Card>
@@ -581,7 +613,7 @@ const AssistantTextResult = () => {
                     >
                       <CardHeader
                         className={classes.assistantCardHeader}
-                        title={keyword("news_genre_title")}
+                        title={newsGenreTitle}
                         action={
                           <div style={{ display: "flex" }}>
                             <Tooltip
@@ -597,11 +629,11 @@ const AssistantTextResult = () => {
                         }
                       />
                       <CardContent>
-                        {newsGenreLoading && summaryLoading}
-                        {newsGenreDone && (
-                          <List>
+                        <List>
+                          {newsGenreLoading && summaryLoading(newsGenreTitle)}
+                          {newsGenreDone && (
                             <ListItem
-                              key={`listitem_${newsGenreSummary}`}
+                              key={`${newsGenreSummary}_ListItem`}
                               sx={{
                                 background: rgbToString(primaryRgb),
                                 color: "white",
@@ -611,9 +643,9 @@ const AssistantTextResult = () => {
                                 primary={keyword(newsGenreSummary)}
                               />
                             </ListItem>
-                          </List>
-                        )}
-                        {newsGenreFail && summaryFailed}
+                          )}
+                          {newsGenreFail && summaryFailed(newsGenreTitle)}
+                        </List>
                       </CardContent>
                     </CardActionArea>
                   </Card>
@@ -630,7 +662,7 @@ const AssistantTextResult = () => {
                     >
                       <CardHeader
                         className={classes.assistantCardHeader}
-                        title={keyword("machine_generated_text_title")}
+                        title={machineGeneratedTextTitle}
                         action={
                           <div style={{ display: "flex" }}>
                             <Tooltip
@@ -649,14 +681,15 @@ const AssistantTextResult = () => {
                         <List>
                           {(machineGeneratedTextChunksLoading ||
                             machineGeneratedTextSentencesLoading) &&
-                            summaryLoading}
+                            summaryLoading(machineGeneratedTextTitle)}
                           {machineGeneratedTextChunksDone &&
                             machineGeneratedTextSentencesDone &&
                             machineGeneratedTextSummary}
                           {(machineGeneratedTextChunksFail ||
                             machineGeneratedTextSentencesFail) &&
-                            summaryFailed}
-                          {/* TODO - appears briefly with a loading so correct the logic */}
+                            machineGeneratedTextChunksDone &&
+                            machineGeneratedTextSentencesDone &&
+                            summaryFailed(machineGeneratedTextTitle)}
                         </List>
                       </CardContent>
                     </CardActionArea>
@@ -675,7 +708,7 @@ const AssistantTextResult = () => {
                   >
                     <CardHeader
                       className={classes.assistantCardHeader}
-                      title={keyword("persuasion_techniques_title")}
+                      title={persuasionTitle}
                       action={
                         <div style={{ display: "flex" }}>
                           <Tooltip
@@ -691,49 +724,51 @@ const AssistantTextResult = () => {
                       }
                     />
                     <CardContent>
-                      {persuasionLoading && summaryLoading}
-                      <List key="persuasion_techniques_list_summary">
-                        {persuasionDone &&
-                          persuasionSummary.map((persuasion, index) => (
-                            <>
-                              {index != "0" && (
-                                <Divider
-                                  key={`divider${index}_${persuasion}`}
-                                />
-                              )}
-                              <ListItem
-                                key={`listitem${index}_${persuasion}`}
-                                sx={{
-                                  background: rgbToString(
-                                    persuasionTechniqueCategoryColours[
-                                      getPersuasionCategoryTechnique(
-                                        persuasion,
-                                      )[0]
-                                    ],
-                                  ),
-                                  color: "white",
-                                }}
-                              >
-                                <ListItemText
-                                  primary={
-                                    keyword(
-                                      getPersuasionCategoryTechnique(
-                                        persuasion,
-                                      )[0],
-                                    ) +
-                                    ": " +
-                                    keyword(
-                                      getPersuasionCategoryTechnique(
-                                        persuasion,
-                                      )[1],
-                                    )
-                                  }
-                                />
-                              </ListItem>
-                            </>
-                          ))}
+                      <List key={uuidv4()}>
+                        {persuasionLoading && summaryLoading(persuasionTitle)}
+                        {persuasionDone
+                          ? Object.keys(persuasionResult.entities).length > 0
+                            ? persuasionSummary.map((persuasion, index) => (
+                                <div key={`${index}_div`}>
+                                  {index != "0" && (
+                                    <Divider key={`${index}_Divider`} />
+                                  )}
+                                  <ListItem
+                                    key={`${index}_ListItem`}
+                                    sx={{
+                                      background: rgbToString(
+                                        persuasionTechniqueCategoryColours[
+                                          getPersuasionCategoryTechnique(
+                                            persuasion,
+                                          )[0]
+                                        ],
+                                      ),
+                                      color: "white",
+                                    }}
+                                  >
+                                    <ListItemText
+                                      key={`${index}_ListItemText`}
+                                      primary={
+                                        keyword(
+                                          getPersuasionCategoryTechnique(
+                                            persuasion,
+                                          )[0],
+                                        ) +
+                                        ": " +
+                                        keyword(
+                                          getPersuasionCategoryTechnique(
+                                            persuasion,
+                                          )[1],
+                                        )
+                                      }
+                                    />
+                                  </ListItem>
+                                </div>
+                              ))
+                            : summaryEmpty(persuasionTitle, keyword)
+                          : null}
+                        {persuasionFail && summaryFailed(persuasionTitle)}
                       </List>
-                      {persuasionFail && summaryFailed}
                     </CardContent>
                   </CardActionArea>
                 </Card>
@@ -758,7 +793,7 @@ const AssistantTextResult = () => {
                 titleText={newsFramingTitle}
                 categoriesTooltipContent={newsFramingTooltip}
                 textHtmlMap={textHtmlMap}
-                credibilitySignal={keyword("news_framing_title")}
+                credibilitySignal={newsFramingTitle}
                 setTextTabIndex={setTextTabIndex}
               />
             )}
@@ -774,7 +809,7 @@ const AssistantTextResult = () => {
                 titleText={newsGenreTitle}
                 categoriesTooltipContent={newsGenreTooltip}
                 textHtmlMap={textHtmlMap}
-                credibilitySignal={keyword("news_genre_title")}
+                credibilitySignal={newsGenreTitle}
                 setTextTabIndex={setTextTabIndex}
               />
             )}
@@ -805,7 +840,7 @@ const AssistantTextResult = () => {
                 titleText={subjectivityTitle}
                 categoriesTooltipContent={subjectivityTooltip}
                 textHtmlMap={textHtmlMap}
-                credibilitySignal={keyword("subjectivity_title")}
+                credibilitySignal={subjectivityTitle}
                 setTextTabIndex={setTextTabIndex}
               />
             )}
@@ -825,7 +860,7 @@ const AssistantTextResult = () => {
                   titleText={machineGeneratedTextTitle}
                   categoriesTooltipContent={machineGeneratedTextTooltip}
                   textHtmlMap={textHtmlMap}
-                  credibilitySignal={keyword("machine_generated_text_title")}
+                  credibilitySignal={machineGeneratedTextTitle}
                   setTextTabIndex={setTextTabIndex}
                 />
               )}
