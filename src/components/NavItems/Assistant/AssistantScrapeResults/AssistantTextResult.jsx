@@ -210,6 +210,8 @@ const AssistantTextResult = () => {
   }
 
   // Summaries
+  const importantSentenceKey = "Important_Sentence";
+
   const newsFramingSummary = newsFramingResult
     ? Object.entries(newsFramingResult.entities)
         .map(([key, items]) => [
@@ -219,12 +221,12 @@ const AssistantTextResult = () => {
         .filter(([key, score]) => score >= 0.8)
         .sort(([, a], [, b]) => b - a)
         .map(([key]) => key)
-        .filter((key) => key != "Important_Sentence")
+        .filter((key) => key != importantSentenceKey)
     : null;
 
   const newsGenreSummary = newsGenreResult
     ? Object.keys(newsGenreResult.entities).filter(
-        (key) => key != "Important_Sentence",
+        (key) => key != importantSentenceKey,
       )
     : null;
 
@@ -245,7 +247,7 @@ const AssistantTextResult = () => {
   //   : null;
   const subjectivitySummary = subjectivityResult
     ? Object.keys(subjectivityResult.entities).filter(
-        (key) => key != "Important_Sentence",
+        (key) => key != importantSentenceKey,
       )
     : null;
 
