@@ -242,16 +242,26 @@ const AssistantTextResult = () => {
     ? getPersuasionCategoryColours(persuasionResult.configs)
     : null;
 
+  const [colours, coloursDark] = machineGeneratedTextChunksResult
+    ? getMgtColours(machineGeneratedTextChunksResult.configs)
+    : subjectivityResult
+      ? getMgtColours(subjectivityResult.configs)
+      : [null, null];
+  const mgtOverallScoreLabel = "mgt_overall_score";
+
   const subjectivitySummary = subjectivityResult
-    ? Object.keys(subjectivityResult.entities).filter(
-        (key) => key != importantSentenceKey,
+    ? createGaugeChart(
+        mgtOverallScoreLabel,
+        subjectivityResult.entities["Subjective"]
+          ? subjectivityResult.entities["Subjective"][0].score
+          : null,
+        resolvedMode,
+        resolvedMode === "dark" ? coloursDark : colours,
+        keyword,
+        ["gauge_no_detection_sub", "gauge_detection_sub"],
       )
     : null;
 
-  const [colours, coloursDark] = machineGeneratedTextChunksResult
-    ? getMgtColours(machineGeneratedTextChunksResult.configs)
-    : [null, null];
-  const mgtOverallScoreLabel = "mgt_overall_score";
   const machineGeneratedTextSummary =
     machineGeneratedTextChunksResult && machineGeneratedTextSentencesResult
       ? createGaugeChart(
@@ -481,12 +491,6 @@ const AssistantTextResult = () => {
             />
           </Tabs>
 
-          {console.log("top=", newsFramingResult)}
-          {console.log("gen=", newsGenreResult)}
-          {console.log("per=", persuasionResult)}
-          {console.log("sub=", subjectivityResult)}
-          {console.log("mgt=", machineGeneratedTextChunksResult)}
-
           {/* summaries */}
           <CustomTabPanel value={textTabIndex} index={0}>
             <Grid container spacing={2}>
@@ -575,24 +579,12 @@ const AssistantTextResult = () => {
                         <List>
                           {subjectivityLoading &&
                             summaryLoading(subjectivityTitle)}
-                          {subjectivityDone ? (
-                            Object.keys(subjectivityResult.entities).length >
-                            0 ? (
-                              <ListItem
-                                key={`${subjectivitySummary}_ListItem`}
-                                sx={{
-                                  background: rgbToString(primaryRgb),
-                                  color: "white",
-                                }}
-                              >
-                                <ListItemText
-                                  primary={`${keyword(subjectivitySummary[0])}: ${Math.round(subjectivityResult.entities[subjectivitySummary[0]][0].score)}%`}
-                                />
-                              </ListItem>
-                            ) : (
-                              summaryEmpty(subjectivityTitle, keyword)
-                            )
-                          ) : null}
+                          {subjectivityDone
+                            ? Object.keys(subjectivityResult.entities).length >
+                              0
+                              ? subjectivitySummary
+                              : summaryEmpty(subjectivityTitle, keyword)
+                            : null}
                           {subjectivityFail && summaryFailed(subjectivityTitle)}
                         </List>
                       </CardContent>

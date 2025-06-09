@@ -235,7 +235,7 @@ export default function AssistantTextClassification({
                 keyword={keyword}
                 mgtOverallScoreLabel={mgtOverallScoreLabel}
                 overallClassificationScore={
-                  sortedFilteredCategories["Subjective"][0].score / 100.0
+                  sortedFilteredCategories["Subjective"][0].score
                 }
                 resolvedMode={resolvedMode}
                 colours={resolvedMode === "dark" ? coloursDark : colours}
