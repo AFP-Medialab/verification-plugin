@@ -242,9 +242,6 @@ const AssistantTextResult = () => {
     ? getPersuasionCategoryColours(persuasionResult.configs)
     : null;
 
-  // const subjectivitySummary = subjectivityResult ?
-  //   `${subjectivityResult.sentences.filter(sentence => sentence.label === "SUBJ").length} / ${subjectivityResult.sentences.length}`
-  //   : null;
   const subjectivitySummary = subjectivityResult
     ? Object.keys(subjectivityResult.entities).filter(
         (key) => key != importantSentenceKey,
@@ -588,7 +585,7 @@ const AssistantTextResult = () => {
                                 }}
                               >
                                 <ListItemText
-                                  primary={keyword(subjectivitySummary)}
+                                  primary={`${keyword(subjectivitySummary[0])}: ${Math.round(subjectivityResult.entities[subjectivitySummary[0]][0].score)}%`}
                                 />
                               </ListItem>
                             ) : (

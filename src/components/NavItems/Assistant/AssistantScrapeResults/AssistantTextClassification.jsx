@@ -362,7 +362,13 @@ export function CategoriesList({
           color: textColour,
         }}
       >
-        <ListItemText primary={keyword(category)} />
+        <ListItemText
+          primary={
+            credibilitySignal === keyword("subjectivity_title")
+              ? `${keyword(category)}: ${Math.round(categories[category][0].score)}%`
+              : keyword(category)
+          }
+        />
       </ListItem>,
     );
     index++;
