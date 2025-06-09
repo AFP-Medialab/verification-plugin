@@ -64,6 +64,12 @@ export default function AssistantTextClassification({
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
+  // titles
+  const newsFramingTitle = keyword("news_framing_title");
+  const newsGenreTitle = keyword("news_genre_title");
+  const subjectivityTitle = keyword("subjectivity_title");
+  const machineGeneratedTextTitle = keyword("machine_generated_text_title");
+
   // for dark mode
   const { mode, systemMode } = useColorScheme();
   const resolvedMode = systemMode || mode;
@@ -78,7 +84,7 @@ export default function AssistantTextClassification({
 
   // define category for machine generated text overall score
   let mgtOverallScoreLabel, overallClassificationScore;
-  if (credibilitySignal === keyword("machine_generated_text_title")) {
+  if (credibilitySignal === machineGeneratedTextTitle) {
     mgtOverallScoreLabel = "mgt_overall_score";
     overallClassificationScore =
       overallClassification[mgtOverallScoreLabel][0].score;
@@ -88,12 +94,15 @@ export default function AssistantTextClassification({
   let categoryRgbLow, categoryRgbHigh;
   let colours, coloursDark, orderedCategories;
   if (
-    credibilitySignal === keyword("news_framing_title") ||
-    credibilitySignal === keyword("news_genre_title")
+    credibilitySignal === newsFramingTitle ||
+    credibilitySignal === newsGenreTitle
   ) {
     categoryRgbLow = configs.confidenceRgbLow;
     categoryRgbHigh = configs.confidenceRgbHigh;
-  } else if (credibilitySignal === keyword("machine_generated_text_title")) {
+  } else if (
+    credibilitySignal === machineGeneratedTextTitle ||
+    credibilitySignal === subjectivityTitle
+  ) {
     // traffic light colours for machine generated text
     [colours, coloursDark] = getMgtColours(configs);
     // TODO should this be here?
@@ -103,9 +112,6 @@ export default function AssistantTextClassification({
       "likely_machine",
       "highly_likely_machine",
     ];
-  } else {
-    categoryRgbLow = primaryRgb;
-    categoryRgbHigh = primaryRgb;
   }
   const sentenceRgbLow = primaryRgb;
   const sentenceRgbHigh = primaryRgb;
@@ -131,7 +137,7 @@ export default function AssistantTextClassification({
       // Filter sentences above importanceThresholdLow unless machine generated text
       const sentenceIndices = classification[label];
       for (let i = 0; i < sentenceIndices.length; i++) {
-        if (credibilitySignal === keyword("machine_generated_text_title")) {
+        if (credibilitySignal === machineGeneratedTextTitle) {
           filteredSentences.push(sentenceIndices[i]);
         } else if (
           sentenceIndices[i].score >=
@@ -142,7 +148,7 @@ export default function AssistantTextClassification({
       }
     } else {
       //Filter categories above confidenceThreshold unless machine generated text
-      if (credibilitySignal === keyword("machine_generated_text_title")) {
+      if (credibilitySignal === machineGeneratedTextTitle) {
         filteredCategories[label] = classification[label];
       } else if (
         classification[label][0].score >= configs.confidenceThresholdLow
@@ -156,7 +162,7 @@ export default function AssistantTextClassification({
     filteredSentences = [];
   }
   if (
-    credibilitySignal === keyword("subjectivity_title") &&
+    credibilitySignal === subjectivityTitle &&
     Object.keys(filteredSentences).length == 0
   ) {
     filteredCategories = [];
@@ -212,8 +218,8 @@ export default function AssistantTextClassification({
             }
           />
           <CardContent>
-            {credibilitySignal === keyword("machine_generated_text_title") ? (
-              <MgtCategoriesList
+            {credibilitySignal === machineGeneratedTextTitle ? (
+              <GaugeCategoriesList
                 categories={sortedFilteredCategories}
                 keyword={keyword}
                 mgtOverallScoreLabel={mgtOverallScoreLabel}
@@ -221,6 +227,23 @@ export default function AssistantTextClassification({
                 resolvedMode={resolvedMode}
                 colours={resolvedMode === "dark" ? coloursDark : colours}
                 orderedCategories={orderedCategories}
+                credibilitySignal={credibilitySignal}
+                gaugeDetectionText={["gauge_no_detection", "gauge_detection"]}
+              />
+            ) : credibilitySignal === subjectivityTitle ? (
+              <GaugeCategoriesList
+                keyword={keyword}
+                mgtOverallScoreLabel={mgtOverallScoreLabel}
+                overallClassificationScore={
+                  sortedFilteredCategories["Subjective"][0].score / 100.0
+                }
+                resolvedMode={resolvedMode}
+                colours={resolvedMode === "dark" ? coloursDark : colours}
+                credibilitySignal={credibilitySignal}
+                gaugeDetectionText={[
+                  "gauge_no_detection_sub",
+                  "gauge_detection_sub",
+                ]}
               />
             ) : (
               <CategoriesList
@@ -236,8 +259,8 @@ export default function AssistantTextClassification({
                 handleSliderChange={handleSliderChange}
               />
             )}
-            {(credibilitySignal === keyword("news_framing_title") ||
-              credibilitySignal === keyword("news_genre_title")) && (
+            {(credibilitySignal === newsFramingTitle ||
+              credibilitySignal === newsGenreTitle) && (
               <ColourGradientScale
                 colourScaleText={keyword("colour_scale")} //colourScaleText}
                 textLow={keyword("low_confidence")}
@@ -256,7 +279,7 @@ export default function AssistantTextClassification({
   );
 }
 
-export function MgtCategoriesList({
+export function GaugeCategoriesList({
   categories,
   keyword,
   mgtOverallScoreLabel,
@@ -264,6 +287,8 @@ export function MgtCategoriesList({
   resolvedMode,
   colours,
   orderedCategories,
+  credibilitySignal,
+  gaugeDetectionText,
 }) {
   // list of categories with overall score first as GaugeUI
   let output = createGaugeChart(
@@ -272,36 +297,39 @@ export function MgtCategoriesList({
     resolvedMode,
     colours,
     keyword,
+    gaugeDetectionText,
   );
 
-  // divider
-  output.push(<ListItem key="listitem_empty1"></ListItem>);
-  output.push(<Divider key={`divider_${mgtOverallScoreLabel}`} />);
-  output.push(<ListItem key="listitem_empty2"></ListItem>);
-  // categories
-  output.push(
-    <ListItem key={"text_detected_classes"}>
-      <Typography>{keyword("detected_classes")}</Typography>
-    </ListItem>,
-  );
-  for (const category of orderedCategories) {
-    if (category != mgtOverallScoreLabel && category in categories) {
-      output.push(
-        <ListItem
-          key={category}
-          sx={{
-            background: rgbToString(
-              resolvedMode === "dark"
-                ? categories[category][0]["rgbDark"]
-                : categories[category][0]["rgb"],
-            ),
-            color: category == "highly_likely_machine" ? "white" : "black",
-          }}
-        >
-          <ListItemText primary={keyword(category)} />
-        </ListItem>,
-      );
-      output.push(<Divider key={`divider_${category}`} />);
+  if (credibilitySignal === keyword("machine_generated_text_title")) {
+    // divider
+    output.push(<ListItem key="listitem_empty1"></ListItem>);
+    output.push(<Divider key={`divider_${mgtOverallScoreLabel}`} />);
+    output.push(<ListItem key="listitem_empty2"></ListItem>);
+    // categories
+    output.push(
+      <ListItem key={"text_detected_classes"}>
+        <Typography>{keyword("detected_classes")}</Typography>
+      </ListItem>,
+    );
+    for (const category of orderedCategories) {
+      if (category != mgtOverallScoreLabel && category in categories) {
+        output.push(
+          <ListItem
+            key={category}
+            sx={{
+              background: rgbToString(
+                resolvedMode === "dark"
+                  ? categories[category][0]["rgbDark"]
+                  : categories[category][0]["rgb"],
+              ),
+              color: category == "highly_likely_machine" ? "white" : "black",
+            }}
+          >
+            <ListItemText primary={keyword(category)} />
+          </ListItem>,
+        );
+        output.push(<Divider key={`divider_${category}`} />);
+      }
     }
   }
 

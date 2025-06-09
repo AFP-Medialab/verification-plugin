@@ -60,6 +60,9 @@ export default function AssistantTextSpanClassification({
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
+  // title
+  const persuasionTitle = keyword("persuasion_techniques_title");
+
   // for dark mode
   const { mode, systemMode } = useColorScheme();
   const resolvedMode = systemMode || mode;
@@ -287,6 +290,7 @@ export default function AssistantTextSpanClassification({
               keyword={keyword}
               importantSentenceThreshold={importantSentenceThreshold}
               handleSliderChange={handleSliderChange}
+              credibilitySignal={persuasionTitle}
             />
             <SummaryReturnButton
               setTextTabIndex={setTextTabIndex}
@@ -308,6 +312,7 @@ export function CategoriesListToggle({
   keyword,
   importantSentenceThreshold,
   handleSliderChange,
+  credibilitySignal,
 }) {
   // categories
   let categoriesList = [];
@@ -400,7 +405,7 @@ export function CategoriesListToggle({
         {keyword("threshold_slider_certainty")}
       </Typography>
       <ThresholdSlider
-        credibilitySignal={"persuasion_techniques_title"}
+        credibilitySignal={credibilitySignal}
         importantSentenceThreshold={importantSentenceThreshold}
         handleSliderChange={handleSliderChange}
       />

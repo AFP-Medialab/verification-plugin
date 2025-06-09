@@ -263,6 +263,7 @@ const AssistantTextResult = () => {
           resolvedMode,
           resolvedMode === "dark" ? coloursDark : colours,
           keyword,
+          ["gauge_no_detection", "gauge_detection"],
         )
       : null;
 

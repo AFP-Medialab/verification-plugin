@@ -308,6 +308,7 @@ export function createGaugeChart(
   resolvedMode,
   colours,
   keyword,
+  gaugeDetectionText,
 ) {
   const output = [];
   output.push(
@@ -339,10 +340,10 @@ export function createGaugeChart(
   output.push(
     <ListItem key="gauge_labels">
       <Typography variant="subtitle2" align="left" flex="1">
-        {keyword("gauge_no_detection")}
+        {keyword(gaugeDetectionText[0])}
       </Typography>
       <Typography variant="subtitle2" align="right">
-        {keyword("gauge_detection")}
+        {keyword(gaugeDetectionText[1])}
       </Typography>
     </ListItem>,
   );
