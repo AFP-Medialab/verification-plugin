@@ -126,11 +126,6 @@ export default function AssistantTextClassification({
   let filteredCategories = {};
   let filteredSentences = [];
 
-  const [doHighlightSentence, setDoHighlightSentence] = useState(true);
-  const handleHighlightSentences = (event) => {
-    setDoHighlightSentence(event.target.checked);
-  };
-
   // Separate important sentences from categories, filter by threshold
   for (let label in classification) {
     if (label === importantSentenceKey) {
@@ -147,7 +142,7 @@ export default function AssistantTextClassification({
         }
       }
     } else {
-      //Filter categories above confidenceThreshold unless machine generated text
+      // Filter categories above confidenceThreshold unless machine generated text
       if (credibilitySignal === machineGeneratedTextTitle) {
         filteredCategories[label] = classification[label];
       } else if (
@@ -158,6 +153,7 @@ export default function AssistantTextClassification({
     }
   }
 
+  // check if categories or sentences is empty
   if (Object.keys(filteredCategories).length === 0) {
     filteredSentences = [];
   }
