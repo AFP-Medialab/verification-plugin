@@ -83,12 +83,7 @@ export default function AssistantTextClassification({
   };
 
   // define category for machine generated text overall score
-  let mgtOverallScoreLabel, overallClassificationScore;
-  if (credibilitySignal === machineGeneratedTextTitle) {
-    mgtOverallScoreLabel = "mgt_overall_score";
-    overallClassificationScore =
-      overallClassification[mgtOverallScoreLabel][0].score;
-  }
+  const mgtOverallScoreLabel = "mgt_overall_score";
 
   // define category and sentence colours
   let categoryRgbLow, categoryRgbHigh;
@@ -142,8 +137,11 @@ export default function AssistantTextClassification({
         }
       }
     } else {
-      // Filter categories above confidenceThreshold unless machine generated text
-      if (credibilitySignal === machineGeneratedTextTitle) {
+      // Filter categories above confidenceThreshold unless machine generated text or subjectivity
+      if (
+        credibilitySignal === machineGeneratedTextTitle ||
+        credibilitySignal === subjectivityTitle
+      ) {
         filteredCategories[label] = classification[label];
       } else if (
         classification[label][0].score >= configs.confidenceThresholdLow
@@ -183,7 +181,6 @@ export default function AssistantTextClassification({
         <ClassifiedText
           text={text}
           spanIndices={filteredSentences}
-          highlightSpan={doHighlightSentence}
           thresholdLow={sentenceThresholdLow}
           thresholdHigh={sentenceThresholdHigh}
           rgbLow={sentenceRgbLow}
@@ -219,7 +216,9 @@ export default function AssistantTextClassification({
                 categories={sortedFilteredCategories}
                 keyword={keyword}
                 mgtOverallScoreLabel={mgtOverallScoreLabel}
-                overallClassificationScore={overallClassificationScore}
+                overallClassificationScore={
+                  overallClassification[mgtOverallScoreLabel][0].score
+                }
                 resolvedMode={resolvedMode}
                 colours={resolvedMode === "dark" ? coloursDark : colours}
                 orderedCategories={orderedCategories}
@@ -421,7 +420,6 @@ Takes input from topic classifier and convert them into html sentence highlighti
 export function ClassifiedText({
   text,
   spanIndices,
-  highlightSpan,
   thresholdLow,
   thresholdHigh,
   rgbLow,
@@ -468,7 +466,7 @@ export function ClassifiedText({
     return <span key={uuidv4()}>{highlightedSentence}</span>;
   }
 
-  if (highlightSpan && spanIndices.length > 0) {
+  if (spanIndices.length > 0) {
     if (textHtmlMap) {
       // Text formatted & highlighted
       output = treeMapToElements(
