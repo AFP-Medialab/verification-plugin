@@ -26,6 +26,7 @@ import {
   ThresholdSlider,
   createGaugeChart,
   getMgtColours,
+  getSubjectivityColours,
   interpRgb,
   primaryRgb,
   rgbToLuminance,
@@ -87,19 +88,17 @@ export default function AssistantTextClassification({
 
   // define category and sentence colours
   let categoryRgbLow, categoryRgbHigh;
-  let colours, coloursDark, orderedCategories;
+  let mgtColours, mgtColoursDark, orderedCategories;
+  let subjectivityColours, subjectivityColoursDark;
   if (
     credibilitySignal === newsFramingTitle ||
     credibilitySignal === newsGenreTitle
   ) {
     categoryRgbLow = configs.confidenceRgbLow;
     categoryRgbHigh = configs.confidenceRgbHigh;
-  } else if (
-    credibilitySignal === machineGeneratedTextTitle ||
-    credibilitySignal === subjectivityTitle
-  ) {
+  } else if (credibilitySignal === machineGeneratedTextTitle) {
     // traffic light colours for machine generated text
-    [colours, coloursDark] = getMgtColours(configs);
+    [mgtColours, mgtColoursDark] = getMgtColours(configs);
     // TODO should this be here?
     orderedCategories = [
       "highly_likely_human",
@@ -107,6 +106,9 @@ export default function AssistantTextClassification({
       "likely_machine",
       "highly_likely_machine",
     ];
+  } else if (credibilitySignal === subjectivityTitle) {
+    [subjectivityColours, subjectivityColoursDark] =
+      getSubjectivityColours(configs);
   }
   const sentenceRgbLow = primaryRgb;
   const sentenceRgbHigh = primaryRgb;
@@ -220,7 +222,7 @@ export default function AssistantTextClassification({
                   overallClassification[mgtOverallScoreLabel][0].score
                 }
                 resolvedMode={resolvedMode}
-                colours={resolvedMode === "dark" ? coloursDark : colours}
+                colours={resolvedMode === "dark" ? mgtColoursDark : mgtColours}
                 orderedCategories={orderedCategories}
                 credibilitySignal={credibilitySignal}
                 gaugeDetectionText={["gauge_no_detection", "gauge_detection"]}
@@ -233,7 +235,11 @@ export default function AssistantTextClassification({
                   sortedFilteredCategories["Subjective"][0].score
                 }
                 resolvedMode={resolvedMode}
-                colours={resolvedMode === "dark" ? coloursDark : colours}
+                colours={
+                  resolvedMode === "dark"
+                    ? subjectivityColoursDark
+                    : subjectivityColours
+                }
                 credibilitySignal={credibilitySignal}
                 gaugeDetectionText={[
                   "gauge_no_detection_sub",
@@ -290,6 +296,9 @@ export function GaugeCategoriesList({
     keyword,
     gaugeDetectionText,
     true,
+    credibilitySignal === keyword("machine_generated_text_title")
+      ? [0.05, 0.45, 0.45, 0.05]
+      : [0.4, 0.25, 0.35],
   );
 
   if (credibilitySignal === keyword("machine_generated_text_title")) {

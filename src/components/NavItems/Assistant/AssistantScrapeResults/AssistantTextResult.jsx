@@ -45,6 +45,7 @@ import {
   getMgtColours,
   getPersuasionCategoryColours,
   getPersuasionCategoryTechnique,
+  getSubjectivityColours,
   interpRgb,
   primaryRgb,
   rgbToLuminance,
@@ -328,13 +329,11 @@ const AssistantTextResult = () => {
     </div>
   ));
 
-  const [colours, coloursDark] = machineGeneratedTextChunksResult
-    ? getMgtColours(machineGeneratedTextChunksResult.configs)
-    : subjectivityResult
-      ? getMgtColours(subjectivityResult.configs)
-      : [null, null];
   const mgtOverallScoreLabel = "mgt_overall_score";
 
+  const [subjectivityColours, subjectivityColoursDark] = subjectivityResult
+    ? getSubjectivityColours(subjectivityResult.configs)
+    : [null, null];
   const subjectivitySummary = subjectivityResult
     ? createGaugeChart(
         mgtOverallScoreLabel,
@@ -342,12 +341,17 @@ const AssistantTextResult = () => {
           ? subjectivityResult.entities["Subjective"][0].score
           : null,
         resolvedMode,
-        resolvedMode === "dark" ? coloursDark : colours,
+        resolvedMode === "dark" ? subjectivityColoursDark : subjectivityColours,
         keyword,
         ["gauge_no_detection_sub", "gauge_detection_sub"],
+        false,
+        [0.4, 0.25, 0],
       )
     : null;
 
+  const [mgtColours, mgtColoursDark] = machineGeneratedTextChunksResult
+    ? getMgtColours(machineGeneratedTextChunksResult.configs)
+    : [null, null];
   const machineGeneratedTextSummary =
     machineGeneratedTextChunksResult && machineGeneratedTextSentencesResult
       ? createGaugeChart(
@@ -357,9 +361,11 @@ const AssistantTextResult = () => {
                 .score
             : null,
           resolvedMode,
-          resolvedMode === "dark" ? coloursDark : colours,
+          resolvedMode === "dark" ? mgtColoursDark : mgtColours,
           keyword,
           ["gauge_no_detection", "gauge_detection"],
+          false,
+          [0.05, 0.45, 0.45, 0.05], // 5%, 50%, 95%
         )
       : null;
 
