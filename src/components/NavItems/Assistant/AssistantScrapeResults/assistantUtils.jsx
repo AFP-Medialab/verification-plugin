@@ -397,8 +397,12 @@ export function SummaryReturnButton({ setTextTabIndex, text }) {
         alignItems: "left",
       }}
     >
-      <Button onClick={() => setTextTabIndex(0)} startIcon={<ArrowBack />}>
-        <label>{text}</label>
+      <Button
+        onClick={() => setTextTabIndex(0)}
+        startIcon={<ArrowBack />}
+        sx={{ cursor: "pointer" }}
+      >
+        {text}
       </Button>
     </Stack>
   );
