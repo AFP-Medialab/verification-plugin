@@ -50,6 +50,7 @@ import {
   primaryRgb,
   rgbToLuminance,
   rgbToString,
+  scrollToElement,
   treeMapToElements,
 } from "./assistantUtils";
 
@@ -201,15 +202,6 @@ const AssistantTextResult = () => {
       id: `simple-tab-${index}`,
       "aria-controls": `simple-tabpanel-${index}`,
     };
-  }
-
-  function scrollToElement(id, padding = 0) {
-    const element = document.getElementById(id);
-    if (element) {
-      const targetPosition =
-        element.getBoundingClientRect().top + window.scrollY - padding;
-      window.scrollTo({ top: targetPosition, behavior: "smooth" });
-    }
   }
 
   // Summaries
@@ -461,7 +453,11 @@ const AssistantTextResult = () => {
   const maxHeight = 620;
 
   return (
-    <Card variant="outlined" data-testid="assistant-text-scraped-text">
+    <Card
+      variant="outlined"
+      data-testid="assistant-text-scraped-text"
+      id="credibility-signals"
+    >
       <CardHeader
         className={classes.assistantCardHeader}
         title={keyword("text_title")}
