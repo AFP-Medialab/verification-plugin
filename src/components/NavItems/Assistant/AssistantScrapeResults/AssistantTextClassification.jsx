@@ -19,9 +19,9 @@ import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
 import "./assistantTextResultStyle.css";
 import {
-  ColourGradientScale,
   SummaryReturnButton,
   ThresholdSlider,
   createGaugeChart,
@@ -47,7 +47,7 @@ export default function AssistantTextClassification({
     confidenceThresholdHigh: 1.0,
     confidenceRgbLow: [32, 180, 172],
     confidenceRgbHigh: [34, 41, 180],
-    // machine generated text
+    // machine generated text and subjectivity
     greenRgb: [0, 255, 0],
     lightGreenRgb: [170, 255, 0],
     orangeRgb: [255, 170, 0],
@@ -239,6 +239,8 @@ export default function AssistantTextClassification({
                   "gauge_no_detection_sub",
                   "gauge_detection_sub",
                 ]}
+                importantSentenceThreshold={importantSentenceThreshold}
+                handleSliderChange={handleSliderChange}
               />
             ) : (
               <CategoriesList
@@ -252,15 +254,7 @@ export default function AssistantTextClassification({
                 credibilitySignal={credibilitySignal}
                 importantSentenceThreshold={importantSentenceThreshold}
                 handleSliderChange={handleSliderChange}
-              />
-            )}
-            {(credibilitySignal === newsFramingTitle ||
-              credibilitySignal === newsGenreTitle) && (
-              <ColourGradientScale
-                colourScaleText={keyword("colour_scale")} //colourScaleText}
-                textLow={keyword("low_confidence")}
-                textHigh={keyword("high_confidence")}
-                rgbList={[categoryRgbLow, categoryRgbHigh]}
+                classes={classes}
               />
             )}
             <SummaryReturnButton
@@ -284,6 +278,8 @@ export function GaugeCategoriesList({
   orderedCategories,
   credibilitySignal,
   gaugeDetectionText,
+  importantSentenceThreshold,
+  handleSliderChange,
 }) {
   // list of categories with overall score first as GaugeUI
   let output = createGaugeChart(
@@ -328,7 +324,23 @@ export function GaugeCategoriesList({
     }
   }
 
-  return <List>{output}</List>;
+  return (
+    <>
+      {credibilitySignal === keyword("subjectivity_title") ? (
+        <>
+          <Typography fontSize="small" sx={{ textAlign: "start" }}>
+            {keyword("threshold_slider_certainty")}
+          </Typography>
+          <ThresholdSlider
+            credibilitySignal={credibilitySignal}
+            importantSentenceThreshold={importantSentenceThreshold}
+            handleSliderChange={handleSliderChange}
+          />
+        </>
+      ) : null}
+      <List>{output}</List>
+    </>
+  );
 }
 
 export function CategoriesList({
@@ -337,42 +349,35 @@ export function CategoriesList({
   thresholdHigh,
   rgbLow,
   rgbHigh,
-  primaryColour,
   keyword,
   credibilitySignal,
   importantSentenceThreshold,
   handleSliderChange,
+  classes,
 }) {
   if (_.isEmpty(categories)) {
     return (
       <p>
         {credibilitySignal === keyword("news_framing_title") &&
           keyword("no_detected_topics")}
-        {credibilitySignal === keyword("subjectivity_title") &&
-          keyword("no_detected_sentences")}
       </p>
     );
   }
   // categories/output
   let output = [];
   let index = 0;
-  let backgroundRgb = primaryColour;
+  // let backgroundRgb = primaryColour;
   for (const category in categories) {
     if (index > 0) {
       output.push(<Divider key={index} />);
     }
-    if (
-      credibilitySignal === keyword("news_framing_title") ||
-      credibilitySignal === keyword("news_genre_title")
-    ) {
-      backgroundRgb = interpRgb(
-        categories[category][0].score,
-        thresholdLow,
-        thresholdHigh,
-        rgbLow,
-        rgbHigh,
-      );
-    }
+    const backgroundRgb = interpRgb(
+      categories[category][0].score,
+      thresholdLow,
+      thresholdHigh,
+      rgbLow,
+      rgbHigh,
+    );
     let bgLuminance = rgbToLuminance(backgroundRgb);
     let textColour = "white";
     if (bgLuminance > 0.7) textColour = "black";
@@ -385,13 +390,7 @@ export function CategoriesList({
           color: textColour,
         }}
       >
-        <ListItemText
-          primary={
-            credibilitySignal === keyword("subjectivity_title")
-              ? `${keyword(category)}: ${Math.round(categories[category][0].score)}%`
-              : keyword(category)
-          }
-        />
+        <ListItemText primary={keyword(category)} />
       </ListItem>,
     );
     index++;
@@ -400,16 +399,28 @@ export function CategoriesList({
   return (
     <>
       <Typography fontSize="small" sx={{ textAlign: "start" }}>
-        {credibilitySignal === keyword("subjectivity_title")
-          ? keyword("threshold_slider_certainty")
-          : keyword("threshold_slider_relevance")}
+        {keyword("threshold_slider_relevance")}
       </Typography>
       <ThresholdSlider
         credibilitySignal={credibilitySignal}
         importantSentenceThreshold={importantSentenceThreshold}
         handleSliderChange={handleSliderChange}
       />
-      <List>{output}</List>
+      <Tooltip
+        classes={{ tooltip: classes.assistantTooltip }}
+        title={
+          <ColourGradientTooltipContent
+            description={keyword("confidence_tooltip_category")}
+            colourScaleText={keyword("colour_scale")}
+            textLow={keyword("low_confidence")}
+            textHigh={keyword("high_confidence")}
+            rgbLow={rgbLow}
+            rgbHigh={rgbHigh}
+          />
+        }
+      >
+        <List>{output}</List>
+      </Tooltip>
     </>
   );
 }
