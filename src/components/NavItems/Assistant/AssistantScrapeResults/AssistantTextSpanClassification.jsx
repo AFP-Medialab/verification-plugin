@@ -67,8 +67,6 @@ export default function AssistantTextSpanClassification({
   const { mode, systemMode } = useColorScheme();
   const resolvedMode = systemMode || mode;
 
-  const [doHighlightSentence, setDoHighlightSentence] = useState(true);
-
   function filterLabelsWithMinThreshold(classification, minThreshold) {
     let filteredLabels = {};
     for (let label in classification) {
@@ -212,7 +210,7 @@ export default function AssistantTextSpanClassification({
       collectFilteredClassification[collection],
     );
 
-    if (doHighlightSentence && mergedSpanIndices.length > 0) {
+    if (mergedSpanIndices.length > 0) {
       if (textHtmlMap) {
         // Text formatted & highlighted
         output = treeMapToElements(
