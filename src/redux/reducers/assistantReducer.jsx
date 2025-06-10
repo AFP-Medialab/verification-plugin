@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 const defaultState = {
   urlMode: false,
   imageVideoSelected: false,
@@ -16,6 +18,9 @@ const defaultState = {
   processUrlActions: [],
   processUrlType: null,
   inputUrlType: null,
+
+  chatbotMessages: [],
+  chatbotSessionID: uuidv4(),
 
   positiveSourceCred: null,
   cautionSourceCred: null,
@@ -119,13 +124,30 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_ASSURANCE_EXPANDED":
     case "SET_STATE_EXPANDED":
       return Object.assign({}, state, action.payload);
-
+    case "ADD_CHATBOT_MESSAGE": {
+      const message = action.payload;
+      message.id = state.chatbotMessages.length + 1;
+      return {
+        ...state,
+        chatbotMessages: [...state.chatbotMessages, message],
+      };
+    }
+    case "CLEAR_CHATBOT_MESSAGES": {
+      return {
+        ...state,
+        chatbotMessages: [],
+        chatbotSessionID: uuidv4(),
+      };
+    }
     case "CLEAN_STATE":
       return {
         ...state,
         urlMode: false,
         imageVideoSelected: false,
         singleMediaPresent: null,
+
+        chatbotMessages: [],
+        chatbotSessionID: uuidv4(),
 
         inputUrl: null,
         errorKey: null,

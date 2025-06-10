@@ -2,6 +2,7 @@ import axios from "axios";
 
 export default function assistantApiCalls() {
   const assistantEndpoint = process.env.REACT_APP_ASSISTANT_URL;
+  const chatbotEndpoint = process.env.REACT_APP_CHATBOT_URL;
 
   function handleAssistantError(errorResponse) {
     if (errorResponse.response) {
@@ -21,6 +22,34 @@ export default function assistantApiCalls() {
       throw new Error("assistant_error");
     }
   }
+
+  const callChatbot = async (
+    sessionID,
+    userInput = null,
+    email = null,
+    archiveURL = null,
+    tool = null,
+    result = null,
+  ) => {
+    let chatbotResponse;
+    try {
+      chatbotResponse = await axios.post(assistantEndpoint + "gcloud/chatbot", {
+        message: userInput,
+        sessionID: sessionID,
+        tool: tool,
+        result: result,
+      });
+    } catch (error) {
+      handleAssistantError(error);
+    }
+
+    if (chatbotResponse.data.status === "success") {
+      return chatbotResponse.data;
+    } else {
+      console.log("Chatbot error:", chatbotResponse);
+      throw new Error("assistant_error_server_error");
+    }
+  };
 
   const callAssistantScraper = async (urlType, userInput) => {
     let scrapeResult;
@@ -294,6 +323,7 @@ export default function assistantApiCalls() {
   };
 
   return {
+    callChatbot,
     callAssistantScraper,
     callSourceCredibilityService,
     callNamedEntityService,
