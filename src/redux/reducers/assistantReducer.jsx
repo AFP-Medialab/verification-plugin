@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 const defaultState = {
   urlMode: false,
   imageVideoSelected: false,
@@ -18,6 +20,7 @@ const defaultState = {
   inputUrlType: null,
 
   chatbotMessages: [],
+  chatbotSessionID: uuidv4(),
 
   positiveSourceCred: null,
   cautionSourceCred: null,
@@ -133,6 +136,7 @@ const assistantReducer = (state = defaultState, action) => {
       return {
         ...state,
         chatbotMessages: [],
+        chatbotSessionID: uuidv4(),
       };
     }
     case "CLEAN_STATE":
@@ -143,6 +147,7 @@ const assistantReducer = (state = defaultState, action) => {
         singleMediaPresent: null,
 
         chatbotMessages: [],
+        chatbotSessionID: uuidv4(),
 
         inputUrl: null,
         errorKey: null,

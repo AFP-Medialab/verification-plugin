@@ -12,7 +12,6 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 import { styled } from "@mui/system";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { v4 as uuidv4 } from "uuid";
 
 import {
   clearChatbotMessages,
@@ -42,8 +41,8 @@ const ChatbotInterface = ({ tool, result }) => {
   const chatbotMessages = useSelector(
     (state) => state.assistant.chatbotMessages,
   ).filter((msg) => msg.message); // Access the entire state
+  const sessionID = useSelector((state) => state.assistant.chatbotSessionID);
   const userEmail = useSelector((state) => state.userSession.user.email);
-  const [sessionID, setSessionID] = useState(uuidv4());
   const [previousResult, setPreviousResult] = useState(null);
   const [sendResult, setSendResult] = useState(true);
 
@@ -71,7 +70,6 @@ const ChatbotInterface = ({ tool, result }) => {
     dispatch(clearChatbotMessages());
     // Clear the session history in the chatbot backend
     dispatch(submitUserChatbotMessage(sessionID));
-    setSessionID(uuidv4());
     setFormInput("");
     setSendResult(true);
     setPreviousResult(result);
