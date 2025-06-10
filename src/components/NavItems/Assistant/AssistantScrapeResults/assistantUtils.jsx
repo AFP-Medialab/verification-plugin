@@ -309,6 +309,7 @@ export function createGaugeChart(
   colours,
   keyword,
   gaugeDetectionText,
+  explanation,
 ) {
   const output = [];
   output.push(
@@ -348,22 +349,24 @@ export function createGaugeChart(
     </ListItem>,
   );
   // gauge explanation
-  output.push(
-    <ListItem key="gauge_explanantion">
-      <GaugeChartModalExplanation
-        keyword={keyword}
-        keywordsArr={[
-          "gauge_scale_modal_explanation_rating_1",
-          "gauge_scale_modal_explanation_rating_2",
-          "gauge_scale_modal_explanation_rating_3",
-          "gauge_scale_modal_explanation_rating_4",
-        ]}
-        keywordLink={"gauge_scale_explanation_link"}
-        keywordModalTitle={"gauge_scale_modal_explanation_title"}
-        colors={colours}
-      />
-    </ListItem>,
-  );
+  if (explanation) {
+    output.push(
+      <ListItem key="gauge_explanantion">
+        <GaugeChartModalExplanation
+          keyword={keyword}
+          keywordsArr={[
+            "gauge_scale_modal_explanation_rating_1",
+            "gauge_scale_modal_explanation_rating_2",
+            "gauge_scale_modal_explanation_rating_3",
+            "gauge_scale_modal_explanation_rating_4",
+          ]}
+          keywordLink={"gauge_scale_explanation_link"}
+          keywordModalTitle={"gauge_scale_modal_explanation_title"}
+          colors={colours}
+        />
+      </ListItem>,
+    );
+  }
   return output;
 }
 

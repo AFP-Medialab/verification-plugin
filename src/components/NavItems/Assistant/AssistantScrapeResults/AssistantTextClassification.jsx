@@ -289,6 +289,7 @@ export function GaugeCategoriesList({
     colours,
     keyword,
     gaugeDetectionText,
+    true,
   );
 
   if (credibilitySignal === keyword("machine_generated_text_title")) {
