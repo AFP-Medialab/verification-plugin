@@ -45,7 +45,9 @@ import {
   getMgtColours,
   getPersuasionCategoryColours,
   getPersuasionCategoryTechnique,
+  interpRgb,
   primaryRgb,
+  rgbToLuminance,
   rgbToString,
   treeMapToElements,
 } from "./assistantUtils";
@@ -212,7 +214,7 @@ const AssistantTextResult = () => {
   // Summaries
   const importantSentenceKey = "Important_Sentence";
 
-  const newsFramingSummary = newsFramingResult
+  const newsFramingCategories = newsFramingResult
     ? Object.entries(newsFramingResult.entities)
         .map(([key, items]) => [
           key,
@@ -222,25 +224,109 @@ const AssistantTextResult = () => {
         .sort(([, a], [, b]) => b - a)
         .map(([key]) => key)
         .filter((key) => key != importantSentenceKey)
-    : null;
+    : [];
+  const newsFramingSummary = newsFramingCategories.map((topic, index) => (
+    <div key={`${index}_div`}>
+      {index != "0" && <Divider key={`${index}_Divider`} />}
+      <ListItem
+        key={`${index}_ListItem`}
+        sx={{
+          background: rgbToString(
+            newsFramingResult
+              ? interpRgb(
+                  newsFramingResult.entities[topic][0].score,
+                  newsFramingResult.configs.confidenceThresholdLow,
+                  newsFramingResult.configs.confidenceThresholdHigh,
+                  newsFramingResult.configs.confidenceRgbLow,
+                  newsFramingResult.configs.confidenceRgbHigh,
+                )
+              : primaryRgb,
+          ),
+          color:
+            rgbToLuminance(
+              newsFramingResult
+                ? interpRgb(
+                    newsFramingResult.entities[topic][0].score,
+                    newsFramingResult.configs.confidenceThresholdLow,
+                    newsFramingResult.configs.confidenceThresholdHigh,
+                    newsFramingResult.configs.confidenceRgbLow,
+                    newsFramingResult.configs.confidenceRgbHigh,
+                  )
+                : primaryRgb,
+            ) > 0.7
+              ? "black"
+              : "white",
+        }}
+      >
+        <ListItemText primary={keyword(topic)} />
+      </ListItem>
+    </div>
+  ));
 
-  const newsGenreSummary = newsGenreResult
+  const newsGenreCategory = newsGenreResult
     ? Object.keys(newsGenreResult.entities).filter(
         (key) => key != importantSentenceKey,
-      )
+      )[0]
     : null;
+  const backgroundRgb = newsGenreResult
+    ? interpRgb(
+        newsGenreResult.entities[newsGenreCategory][0].score,
+        newsGenreResult.configs.confidenceThresholdLow,
+        newsGenreResult.configs.confidenceThresholdHigh,
+        newsGenreResult.configs.confidenceRgbLow,
+        newsGenreResult.configs.confidenceRgbHigh,
+      )
+    : primaryRgb;
+  const newsGenreSummary = (
+    <ListItem
+      key={`${newsGenreSummary}_ListItem`}
+      sx={{
+        background: rgbToString(backgroundRgb),
+        color: rgbToLuminance(backgroundRgb) > 0.7 ? "black" : "white",
+      }}
+    >
+      <ListItemText primary={keyword(newsGenreCategory)} />
+    </ListItem>
+  );
 
-  const persuasionSummary = persuasionResult
+  const persuasionCategories = persuasionResult
     ? Object.entries(persuasionResult.entities)
         .filter(([key, value]) =>
           value.some((item) => parseFloat(item.score) > 0.8),
         )
         .sort(([, a], [, b]) => b.length - a.length)
         .map(([key]) => key)
-    : null;
+    : [];
   const persuasionTechniqueCategoryColours = persuasionResult
     ? getPersuasionCategoryColours(persuasionResult.configs)
     : null;
+  const persuasionSummary = persuasionCategories.map((persuasion, index) => (
+    <div key={`${index}_div`}>
+      {index != "0" && <Divider key={`${index}_Divider`} />}
+      <ListItem
+        key={`${index}_ListItem`}
+        sx={{
+          background: rgbToString(
+            persuasionResult
+              ? persuasionTechniqueCategoryColours[
+                  getPersuasionCategoryTechnique(persuasion)[0]
+                ]
+              : primaryRgb,
+          ),
+          color: "white",
+        }}
+      >
+        <ListItemText
+          key={`${index}_ListItemText`}
+          primary={
+            keyword(getPersuasionCategoryTechnique(persuasion)[0]) +
+            ": " +
+            keyword(getPersuasionCategoryTechnique(persuasion)[1])
+          }
+        />
+      </ListItem>
+    </div>
+  ));
 
   const [colours, coloursDark] = machineGeneratedTextChunksResult
     ? getMgtColours(machineGeneratedTextChunksResult.configs)
@@ -527,22 +613,7 @@ const AssistantTextResult = () => {
                             summaryLoading(newsFramingTitle)}
                           {newsFramingDone
                             ? Object.keys(newsFramingResult.entities).length > 0
-                              ? newsFramingSummary.map((topic, index) => (
-                                  <div key={`${index}_div`}>
-                                    {index != "0" && (
-                                      <Divider key={`${index}_Divider`} />
-                                    )}
-                                    <ListItem
-                                      key={`${index}_ListItem`}
-                                      sx={{
-                                        background: rgbToString(primaryRgb),
-                                        color: "white",
-                                      }}
-                                    >
-                                      <ListItemText primary={keyword(topic)} />
-                                    </ListItem>
-                                  </div>
-                                ))
+                              ? newsFramingSummary
                               : summaryEmpty(newsFramingTitle, keyword)
                             : null}
                           {newsFramingFail && summaryFailed(newsFramingTitle)}
@@ -623,19 +694,7 @@ const AssistantTextResult = () => {
                       <CardContent>
                         <List>
                           {newsGenreLoading && summaryLoading(newsGenreTitle)}
-                          {newsGenreDone && (
-                            <ListItem
-                              key={`${newsGenreSummary}_ListItem`}
-                              sx={{
-                                background: rgbToString(primaryRgb),
-                                color: "white",
-                              }}
-                            >
-                              <ListItemText
-                                primary={keyword(newsGenreSummary)}
-                              />
-                            </ListItem>
-                          )}
+                          {newsGenreDone && newsGenreSummary}
                           {newsGenreFail && summaryFailed(newsGenreTitle)}
                         </List>
                       </CardContent>
@@ -720,43 +779,7 @@ const AssistantTextResult = () => {
                         {persuasionLoading && summaryLoading(persuasionTitle)}
                         {persuasionDone
                           ? Object.keys(persuasionResult.entities).length > 0
-                            ? persuasionSummary.map((persuasion, index) => (
-                                <div key={`${index}_div`}>
-                                  {index != "0" && (
-                                    <Divider key={`${index}_Divider`} />
-                                  )}
-                                  <ListItem
-                                    key={`${index}_ListItem`}
-                                    sx={{
-                                      background: rgbToString(
-                                        persuasionTechniqueCategoryColours[
-                                          getPersuasionCategoryTechnique(
-                                            persuasion,
-                                          )[0]
-                                        ],
-                                      ),
-                                      color: "white",
-                                    }}
-                                  >
-                                    <ListItemText
-                                      key={`${index}_ListItemText`}
-                                      primary={
-                                        keyword(
-                                          getPersuasionCategoryTechnique(
-                                            persuasion,
-                                          )[0],
-                                        ) +
-                                        ": " +
-                                        keyword(
-                                          getPersuasionCategoryTechnique(
-                                            persuasion,
-                                          )[1],
-                                        )
-                                      }
-                                    />
-                                  </ListItem>
-                                </div>
-                              ))
+                            ? persuasionSummary
                             : summaryEmpty(persuasionTitle, keyword)
                           : null}
                         {persuasionFail && summaryFailed(persuasionTitle)}
