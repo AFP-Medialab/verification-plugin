@@ -589,7 +589,8 @@ const AssistantTextResult = () => {
             sx={{
               maxHeight: expanded ? "none" : maxHeight, // Only limit height when collapsed
               overflow: expanded ? "visible" : "auto", // Only scroll when collapsed
-              scrollbarGutter: "stable",
+              scrollbarGutter: "stable", // Reserve space for scrollbar
+              paddingRight: expanded ? "15px" : "0px", // Fallback for older browsers
             }}
           >
             {/* summaries */}
