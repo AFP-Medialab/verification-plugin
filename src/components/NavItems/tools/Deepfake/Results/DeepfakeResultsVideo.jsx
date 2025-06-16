@@ -30,6 +30,9 @@ const DeepfakeResultsVideo = (props) => {
     (state) => state.userSession && state.userSession.userAuthenticated,
   );
 
+  const currentLang = useSelector((state) => state.language);
+  const isCurrentLanguageLeftToRight = currentLang !== "ar";
+
   const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
 
   class DeepfakeResult {
@@ -293,9 +296,21 @@ const DeepfakeResultsVideo = (props) => {
                           data: xAxisData,
                         },
                       ]}
+                      yAxis={[
+                        {
+                          valueFormatter: (value) =>
+                            isCurrentLanguageLeftToRight
+                              ? `${value}%`
+                              : `٪${value}`,
+                        },
+                      ]}
                       series={[
                         {
                           data: yAxisData,
+                          valueFormatter: (value) =>
+                            isCurrentLanguageLeftToRight
+                              ? `${value.toFixed(2)}%`
+                              : `٪${value.toFixed(2)}`,
                         },
                       ]}
                       height={300}
