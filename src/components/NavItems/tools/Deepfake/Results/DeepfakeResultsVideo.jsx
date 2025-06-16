@@ -307,6 +307,10 @@ const DeepfakeResultsVideo = (props) => {
                       series={[
                         {
                           data: yAxisData,
+                          valueFormatter: (value) =>
+                            isCurrentLanguageLeftToRight
+                              ? `${value.toFixed(2)}%`
+                              : `٪${value.toFixed(2)}`,
                         },
                       ]}
                       height={300}
