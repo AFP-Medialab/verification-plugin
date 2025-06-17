@@ -87,6 +87,8 @@ const ToolsMenu = () => {
   const handlePush = (path) => {
     if (path === "csvSna" || path === "factcheck" || path === "xnetwork") {
       window.open(process.env.REACT_APP_TSNA_SERVER + path, "_blank");
+    } else if (path === "disinfoDeck") {
+      window.open(process.env.REACT_APP_DISINFO_DECK_SERVER, "_blank");
     } else {
       navigate("/app/tools/" + path);
     }

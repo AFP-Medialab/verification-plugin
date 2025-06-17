@@ -156,6 +156,11 @@ const SideMenu = ({ tools, setOpenAlert }) => {
       return;
     }
 
+    if (tool.path === "disinfoDeck") {
+      window.open(process.env.REACT_APP_DISINFO_DECK_SERVER, "_blank");
+      return;
+    }
+
     if (tool.category === TOOLS_CATEGORIES.OTHER) {
       navigate("/app/tools/" + tool.path);
       handleToolChange(tool);

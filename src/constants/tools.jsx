@@ -5,6 +5,7 @@ import SvgIcon from "@mui/material/SvgIcon";
 import {
   Archive as ArchiveIcon,
   AudioFile,
+  Dashboard,
   Gradient,
   ManageSearch,
 } from "@mui/icons-material";
@@ -228,6 +229,10 @@ const aboutSvgIcon = (props) => {
 
 const c2paSvgIcon = (props) => {
   return <SvgIcon component={C2paIcon} inheritViewBox {...props} />;
+};
+
+const disinfoDeckIcon = (props) => {
+  return <Dashboard {...props} />;
 };
 
 /**
@@ -489,7 +494,7 @@ const machineGeneratedText = new Tool(
   "navbar_mgt_description",
   mgtSvgIcon,
   TOOLS_CATEGORIES.SEARCH,
-  null,
+  [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.NEW],
   [ROLES.EXTRA_FEATURE],
   "mgt",
   TOOL_GROUPS.VERIFICATION,
@@ -522,6 +527,24 @@ const dataAnalysisCrowdtangle = new Tool(
   null,
   null,
   "csvSna",
+  TOOL_GROUPS.VERIFICATION,
+  null,
+  null,
+);
+
+const disinfoDeck = new Tool(
+  "navbar_disinfo_deck",
+  "navbar_disinfo_deck_description",
+  disinfoDeckIcon,
+  TOOLS_CATEGORIES.DATA_ANALYSIS,
+  [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.NEW],
+  [
+    ROLES.BETA_TESTER,
+    ROLES.EVALUATION,
+    ROLES.EXTRA_FEATURE,
+    ROLES.AFP_C2PA_GOLD,
+  ],
+  "disinfoDeck",
   TOOL_GROUPS.VERIFICATION,
   null,
   null,
@@ -596,6 +619,7 @@ export const tools = Object.freeze([
   machineGeneratedText,
   dataAnalysisSna,
   dataAnalysisCrowdtangle,
+  disinfoDeck,
   archiving,
   about,
   c2paData,
