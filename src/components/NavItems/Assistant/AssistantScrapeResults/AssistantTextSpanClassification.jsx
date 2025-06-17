@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import { useColorScheme } from "@mui/material";
 import { styled } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -20,10 +21,14 @@ import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
 import {
-  interpRgb,
+  SummaryReturnButton,
+  ThresholdSlider,
+  getPersuasionCategoryColours,
+  getPersuasionCategoryTechnique,
+  //interpRgb,
   mergeSpanIndices,
+  primaryRgb,
   rgbToLuminance,
   rgbToString,
   treeMapToElements,
@@ -42,41 +47,25 @@ export default function AssistantTextSpanClassification({
   titleText = "Detected Class",
   categoriesTooltipContent = "",
   configs = {
-    confidenceThresholdLow: 0.8,
-    confidenceThresholdHigh: 1.0,
-    importanceThresholdLow: 0.8,
-    importanceThresholdHigh: 1.0,
-    confidenceRgbLow: [32, 180, 172],
-    confidenceRgbHigh: [34, 41, 180],
-    importanceRgbLow: [252, 225, 28],
-    importanceRgbHigh: [252, 108, 28],
+    perCategoryJustificationRgb: [150, 0, 255],
+    perCategorySimplificationRgb: [0, 150, 255],
+    perCategoryDistractionRgb: [100, 0, 255],
+    perCategoryCallRgb: [0, 100, 255],
+    perCategoryManipulativeRgb: [220, 0, 255],
+    perCategoryAttackRgb: [0, 200, 255],
   },
   textHtmlMap = null,
+  setTextTabIndex = 0,
 }) {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
-  // sub card header tooltip for categories
-  const colourScaleText = keyword("colour_scale");
-  const categoryTooltipText = keyword("confidence_tooltip_technique");
-  const categoryTextLow = keyword("low_confidence");
-  const categoryTextHigh = keyword("high_confidence");
-  const categoryRgbLow = configs.confidenceRgbLow;
-  const categoryRgbHigh = configs.confidenceRgbHigh;
+  // title
+  const persuasionTitle = keyword("persuasion_techniques_title");
 
-  // tooltip for hovering over categories
-  const categoryTooltipContent = (
-    <ColourGradientTooltipContent
-      description={keyword("confidence_tooltip_category")}
-      colourScaleText={keyword("colour_scale")}
-      textLow={keyword("low_confidence")}
-      textHigh={keyword("high_confidence")}
-      rgbLow={configs.confidenceRgbLow}
-      rgbHigh={configs.confidenceRgbHigh}
-    />
-  );
-
-  const [doHighlightSentence, setDoHighlightSentence] = useState(true);
+  // for dark mode
+  const { mode, systemMode } = useColorScheme();
+  const resolvedMode = systemMode || mode;
 
   function filterLabelsWithMinThreshold(classification, minThreshold) {
     let filteredLabels = {};
@@ -95,9 +84,18 @@ export default function AssistantTextSpanClassification({
     return filteredLabels;
   }
 
+  // slider set up
+  const [importantSentenceThreshold, setImportantSentenceThreshold] =
+    React.useState(80);
+
+  const handleSliderChange = (event, newValue) => {
+    setImportantSentenceThreshold(newValue);
+  };
+
+  // filter classification
   let filteredClassification = filterLabelsWithMinThreshold(
     classification,
-    configs.confidenceThresholdLow,
+    importantSentenceThreshold / 100.0,
   );
 
   const [currentLabel, setCurrentLabel] = useState(null);
@@ -105,6 +103,10 @@ export default function AssistantTextSpanClassification({
   function handleCategorySelect(categoryKey) {
     setCurrentLabel(categoryKey);
   }
+
+  // defining persuasion technique category colours
+  const persuasionTechniqueCategoryColours =
+    getPersuasionCategoryColours(configs);
 
   // finding categories and their spans with scores, and the text for each category
   let categories = {};
@@ -123,7 +125,7 @@ export default function AssistantTextSpanClassification({
   // wrap function for calculating spanhighlights and categories
   function wrapHighlightedText(spanText, spanInfo, spanStart, spandEnd) {
     let backgroundRgb = [210, 210, 210];
-    let backgroundRgbHover = [255, 100, 100];
+    let backgroundRgbHover = primaryRgb;
     let textColour = "black";
 
     let techniqueContent = [];
@@ -131,17 +133,17 @@ export default function AssistantTextSpanClassification({
       <h2 key={uuidv4()}>{keyword("detected_techniques")}</h2>,
     );
 
-    for (let persuasionTechnique in spanInfo.techniques) {
-      const techniqueScore = spanInfo.techniques[persuasionTechnique];
+    for (let persuasionTechniqueLabel in spanInfo.techniques) {
+      const techniqueScore = spanInfo.techniques[persuasionTechniqueLabel];
 
       // collect category information for highlighted spans
-      if (categories[persuasionTechnique]) {
-        categories[persuasionTechnique].push({
+      if (categories[persuasionTechniqueLabel]) {
+        categories[persuasionTechniqueLabel].push({
           indices: [spanStart, spandEnd],
           score: techniqueScore,
         });
       } else {
-        categories[persuasionTechnique] = [
+        categories[persuasionTechniqueLabel] = [
           {
             indices: [spanStart, spandEnd],
             score: techniqueScore,
@@ -149,19 +151,20 @@ export default function AssistantTextSpanClassification({
         ];
       }
 
-      let techniqueBackgroundRgb = interpRgb(
-        techniqueScore,
-        configs.confidenceThresholdLow,
-        configs.confidenceThresholdHigh,
-        configs.confidenceRgbLow,
-        configs.confidenceRgbHigh,
-      );
+      let [persuasionTechniqueCategory, persuasionTechnique] =
+        getPersuasionCategoryTechnique(persuasionTechniqueLabel);
+      let divText =
+        keyword(persuasionTechniqueCategory) +
+        ": " +
+        keyword(persuasionTechnique);
+      let techniqueBackgroundRgb =
+        persuasionTechniqueCategoryColours[persuasionTechniqueCategory];
       let bgLuminance = rgbToLuminance(techniqueBackgroundRgb);
       let techniqueTextColour = "white";
       if (bgLuminance > 0.7) techniqueTextColour = "black";
       techniqueContent.push(
         <div
-          key={persuasionTechnique}
+          key={divText}
           style={{
             background: rgbToString(techniqueBackgroundRgb),
             color: rgbToString(techniqueTextColour),
@@ -171,22 +174,12 @@ export default function AssistantTextSpanClassification({
             cursor: "pointer",
           }}
         >
-          {keyword(persuasionTechnique)}
+          {keyword(divText)}
         </div>,
       );
     }
-    techniqueContent.push(categoryTooltipText);
 
-    let techniquesTooltip = (
-      <ColourGradientTooltipContent
-        description={techniqueContent}
-        colourScaleText={colourScaleText}
-        textLow={categoryTextLow}
-        textHigh={categoryTextHigh}
-        rgbLow={categoryRgbLow}
-        rgbHigh={categoryRgbHigh}
-      />
-    );
+    let techniquesTooltip = <div className={"content"}>{techniqueContent}</div>;
 
     // Append highlighted text
     return (
@@ -197,6 +190,7 @@ export default function AssistantTextSpanClassification({
             color: textColour,
             ":hover": {
               background: rgbToString(backgroundRgbHover),
+              color: resolvedMode === "dark" ? "black" : "white",
             },
           }}
         >
@@ -216,7 +210,7 @@ export default function AssistantTextSpanClassification({
       collectFilteredClassification[collection],
     );
 
-    if (doHighlightSentence && mergedSpanIndices.length > 0) {
+    if (mergedSpanIndices.length > 0) {
       if (textHtmlMap) {
         // Text formatted & highlighted
         output = treeMapToElements(
@@ -287,15 +281,18 @@ export default function AssistantTextSpanClassification({
           <CardContent>
             <CategoriesListToggle
               categories={uniqueCategories}
-              tooltipContent={categoryTooltipContent}
-              thresholdLow={configs.confidenceThresholdLow}
-              thresholdHigh={configs.confidenceThresholdHigh}
-              rgbLow={configs.confidenceRgbLow}
-              rgbHigh={configs.confidenceRgbHigh}
+              colours={persuasionTechniqueCategoryColours}
               noCategoriesText={keyword("no_detected_techniques")}
               allCategoriesLabel={allCategoriesLabel}
               onCategoryChange={handleCategorySelect}
               keyword={keyword}
+              importantSentenceThreshold={importantSentenceThreshold}
+              handleSliderChange={handleSliderChange}
+              credibilitySignal={persuasionTitle}
+            />
+            <SummaryReturnButton
+              setTextTabIndex={setTextTabIndex}
+              text={keyword("summary_title")}
             />
           </CardContent>
         </Card>
@@ -306,21 +303,17 @@ export default function AssistantTextSpanClassification({
 
 export function CategoriesListToggle({
   categories,
-  tooltipContent,
-  thresholdLow,
-  thresholdHigh,
-  rgbLow,
-  rgbHigh,
+  colours,
   noCategoriesText,
   allCategoriesLabel,
   onCategoryChange = () => {},
   keyword,
+  importantSentenceThreshold,
+  handleSliderChange,
+  credibilitySignal,
 }) {
-  if (_.isEmpty(categories)) {
-    return <p>{noCategoriesText}</p>;
-  }
-
-  let output = [];
+  // categories
+  let categoriesList = [];
   let index = 0;
   const [currentCategory, setCurrentCategory] = useState(null);
 
@@ -342,41 +335,42 @@ export function CategoriesListToggle({
     onCategoryChange(currentCategory);
   }
 
-  for (const category in categories) {
+  // order categories by highest number of sentences first
+  const sortedCategories = Object.fromEntries(
+    Object.entries(categories).sort(([, a], [, b]) => b.length - a.length),
+  );
+  for (const category in sortedCategories) {
     // don't display overall category
     if (category === allCategoriesLabel) {
       continue;
     }
 
     if (index > 0) {
-      output.push(<Divider key={index} />);
+      categoriesList.push(<Divider key={index} />);
     }
 
-    // find colour of background givens sum(scores)/num_scores
-    let scores = categories[category].map((categoryItem) =>
-      Number(categoryItem.score),
-    );
-    let scoresSum = scores.reduce(
-      (accumulator, currentScore) => accumulator + currentScore,
-      0,
-    );
-    let backgroundRgb = interpRgb(
-      scoresSum / scores.length,
-      thresholdLow,
-      thresholdHigh,
-      rgbLow,
-      rgbHigh,
-    );
+    // format of category is "persuasionTechniqueCategory__persuasionTechnique"
+    const [persuasionTechniqueCategory, persuasionTechnique] =
+      getPersuasionCategoryTechnique(category);
+    let backgroundRgb = colours[persuasionTechniqueCategory];
     let bgLuminance = rgbToLuminance(backgroundRgb);
     let textColour = "white";
     if (bgLuminance > 0.7) textColour = "black";
-
-    const itemText = keyword(category);
+    const itemText =
+      keyword(persuasionTechniqueCategory) +
+      ": " +
+      keyword(persuasionTechnique);
     const itemChip = (
-      <Chip color="primary" label={categories[category].length} />
+      <Chip
+        label={categories[category].length}
+        sx={{
+          color: rgbToString(backgroundRgb),
+          backgroundColor: "white",
+        }}
+      />
     );
 
-    output.push(
+    categoriesList.push(
       <ListItem
         key={category}
         sx={{
@@ -385,8 +379,10 @@ export function CategoriesListToggle({
               ? rgbToString(backgroundRgb)
               : rgbToString([140, 140, 140]),
           color: textColour,
+          boxShadow: "0.15em 0.15em 0.15em gray",
           ":hover": {
             background: rgbToString(backgroundRgb),
+            boxShadow: "0.25em 0.25em 0.25em gray",
           },
           cursor: "pointer",
         }}
@@ -402,14 +398,25 @@ export function CategoriesListToggle({
   }
 
   return (
-    <Tooltip title={tooltipContent}>
+    <>
+      <Typography fontSize="small" sx={{ textAlign: "start" }}>
+        {keyword("threshold_slider_certainty")}
+      </Typography>
+      <ThresholdSlider
+        credibilitySignal={credibilitySignal}
+        importantSentenceThreshold={importantSentenceThreshold}
+        handleSliderChange={handleSliderChange}
+      />
       <List>
-        <ListItem>
-          <Typography>{keyword("select_persuasion_technique")}</Typography>
-        </ListItem>
-        {output}
+        {_.isEmpty(categoriesList) ? (
+          <ListItem key={noCategoriesText}>
+            <Typography>{noCategoriesText}</Typography>
+          </ListItem>
+        ) : (
+          categoriesList
+        )}
       </List>
-    </Tooltip>
+    </>
   );
 }
 
