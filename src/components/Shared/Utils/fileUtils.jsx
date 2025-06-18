@@ -168,3 +168,39 @@ export const preprocessFileUpload = (
     return file;
   }
 };
+
+let workerInstance;
+
+/**
+ * Resizes an image using a shared Web Worker
+ * @param {Blob | File} image - the image to resize
+ * @returns {Promise<Blob>} the resized image
+ */
+export const resizeImageWithWorker = (image) => {
+  if (!workerInstance) {
+    workerInstance = new Worker(
+      new URL("@workers/resizeImageWorker", import.meta.url),
+    );
+  }
+
+  return new Promise((resolve, reject) => {
+    const handleMessage = (event) => {
+      cleanup();
+      resolve(event.data);
+    };
+
+    const handleError = (event) => {
+      cleanup();
+      reject(event.error || new Error("Worker error"));
+    };
+
+    const cleanup = () => {
+      workerInstance.removeEventListener("message", handleMessage);
+      workerInstance.removeEventListener("error", handleError);
+    };
+
+    workerInstance.addEventListener("message", handleMessage);
+    workerInstance.addEventListener("error", handleError);
+    workerInstance.postMessage(image);
+  });
+};
