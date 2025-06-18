@@ -58,12 +58,13 @@ export const getFileTypeFromFileObject = async (file) => {
  * Helper function to check if the image file is too large to be processed.
  * @param imageFile {File} The image file to check
  * @param userRole The user role
+ * @param maxImageFileSize {number} The maximum image file size in bytes if not using the default size
  * @returns {boolean} True if the file is too large
  */
 export const isImageFileTooLarge = (
   imageFile,
   userRole,
-  max_image_file_size = MAX_IMAGE_FILE_SIZE,
+  maxImageFileSize = MAX_IMAGE_FILE_SIZE,
 ) => {
   if (!imageFile.type.includes("image")) {
     throw new Error("Invalid file type. This file is not an image.");
@@ -71,7 +72,7 @@ export const isImageFileTooLarge = (
 
   return (
     (!userRole || !userRole.includes(ROLES.EXTRA_FEATURE)) &&
-    imageFile.size >= max_image_file_size
+    imageFile.size >= maxImageFileSize
   );
 };
 
@@ -116,6 +117,7 @@ export const isAudioFileTooLarge = (audioFile, userRole) => {
  * @param preprocessingFn {File | undefined | Error } Optional additional preprocessing that can return a new preprocessed file or handle additional errors
  * @param onSuccess {function} The function to run on preprocessing success
  * @param onError {function} The function to run in case of a preprocessing error
+ * @param maxImageFileSize {number} The maximum image file in bytes size if not using the default size
  * @returns {File | null | undefined} The processed file if the preprocessing succeeded
  */
 //TODO: Handle custom Error from preprocessingFn
@@ -125,13 +127,13 @@ export const preprocessFileUpload = (
   preprocessingFn,
   onSuccess,
   onError,
-  max_image_file_size = MAX_IMAGE_FILE_SIZE,
+  maxImageFileSize = MAX_IMAGE_FILE_SIZE,
 ) => {
   const fileType = file.type.split("/")[0];
 
   if (
     fileType === FILE_TYPES.image &&
-    isImageFileTooLarge(file, role, max_image_file_size)
+    isImageFileTooLarge(file, role, maxImageFileSize)
   ) {
     onError();
     return undefined;
