@@ -1,3 +1,4 @@
+import syntheticImageDetectionActions from "@/redux/actions/tools/syntheticImageDetectionActions";
 import { combineReducers } from "redux";
 
 import assistantReducer from "./assistantReducer";
@@ -23,7 +24,6 @@ import loccusReducer from "./tools/loccusReducer";
 import magnifierReducer from "./tools/magnifierReducer";
 import metadataReducer from "./tools/metadataReducer";
 import ocrReducer from "./tools/ocrReducer";
-import syntheticImageDetectionReducer from "./tools/syntheticImageDetectionReducer";
 import thumbnailsReducer from "./tools/thumbnailsReducer";
 import toolReducer from "./tools/toolReducer";
 import twitterSnaReducer from "./tools/twitterSnaReducer";
@@ -57,7 +57,7 @@ const allReducers = combineReducers({
   assistant: assistantReducer,
   ocr: ocrReducer,
   gif: gifReducer,
-  syntheticImageDetection: syntheticImageDetectionReducer,
+  syntheticImageDetection: syntheticImageDetectionActions,
   syntheticAudioDetection: loccusReducer,
   deepfakeVideo: deepfakeReducerVideo,
   geolocation: geolocationReducer,

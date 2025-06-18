@@ -1,21 +1,41 @@
-import { createAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-export const resetSyntheticImageDetectionImage = createAction(
-  "SYNTHETIC_IMAGE_DETECTION_RESET",
-);
+const initialState = {
+  url: "",
+  result: null,
+  loading: false,
+  duplicates: null,
+};
 
-export const setSyntheticImageDetectionLoading = createAction(
-  "SET_SYNTHETIC_IMAGE_DETECTION_LOADING",
-);
+const syntheticImageDetectionSlice = createSlice({
+  name: "syntheticImageDetection",
+  initialState,
+  reducers: {
+    resetSyntheticImageDetectionImage: () => initialState,
+    setSyntheticImageDetectionLoading: (state, action) => {
+      state.loading = action.payload;
+    },
+    setSyntheticImageDetectionResult: (state, action) => {
+      state.url = action.payload.url;
+      state.result = action.payload.result;
+      state.loading = false;
+    },
+    setSyntheticImageDetectionNearDuplicates: (state, action) => {
+      state.duplicates = action.payload;
+      state.loading = false;
+    },
+    setSyntheticImageDetectionUrl: (state, action) => {
+      state.url = action.payload.url;
+    },
+  },
+});
 
-export const setSyntheticImageDetectionResult = createAction(
-  "SET_SYNTHETIC_IMAGE_DETECTION_RESULT",
-);
+export const {
+  resetSyntheticImageDetectionImage,
+  setSyntheticImageDetectionLoading,
+  setSyntheticImageDetectionResult,
+  setSyntheticImageDetectionNearDuplicates,
+  setSyntheticImageDetectionUrl,
+} = syntheticImageDetectionSlice.actions;
 
-export const setSyntheticImageDetectionNearDuplicates = createAction(
-  "SET_SYNTHETIC_IMAGE_DETECTION_NEAR_DUPLICATES",
-);
-
-export const setSyntheticImageDetectionUrl = createAction(
-  "SET_SYNTHETIC_IMAGE_DETECTION_URL",
-);
+export default syntheticImageDetectionSlice.reducer;

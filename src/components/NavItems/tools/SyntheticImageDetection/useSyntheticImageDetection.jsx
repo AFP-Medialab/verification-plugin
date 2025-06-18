@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
 import {
+  resetSyntheticImageDetectionImage,
   setSyntheticImageDetectionLoading,
   setSyntheticImageDetectionNearDuplicates,
   setSyntheticImageDetectionResult,
@@ -119,7 +120,7 @@ export const useSyntheticImageDetection = ({ dispatch }) => {
     return { status };
   };
 
-  const mutation = useMutation({
+  const startSyntheticImageDetectionMutation = useMutation({
     mutationFn: startSyntheticImageDetection,
     onError: (error) => {
       dispatch(setError(error.message));
@@ -127,10 +128,10 @@ export const useSyntheticImageDetection = ({ dispatch }) => {
     },
   });
 
-  const jobId = mutation.data?.jobId;
-  const resolvedUrl = mutation.data?.resolvedUrl;
+  const jobId = startSyntheticImageDetectionMutation.data?.jobId;
+  const resolvedUrl = startSyntheticImageDetectionMutation.data?.resolvedUrl;
 
-  const query = useQuery({
+  const detectionQuery = useQuery({
     queryKey: ["syntheticImageDetectionStatus", jobId],
     queryFn: () => fetchJobStatusAndReport(jobId),
     enabled: !!jobId,
@@ -144,29 +145,40 @@ export const useSyntheticImageDetection = ({ dispatch }) => {
   });
 
   useEffect(() => {
-    if (query.data?.status === "COMPLETED") {
+    if (detectionQuery.data?.status === "COMPLETED") {
       dispatch(
         setSyntheticImageDetectionResult({
           url: resolvedUrl,
-          result: query.data.report,
+          result: detectionQuery.data.report,
         }),
       );
       dispatch(
-        setSyntheticImageDetectionNearDuplicates(query.data.similarImages),
+        setSyntheticImageDetectionNearDuplicates(
+          detectionQuery.data.similarImages,
+        ),
       );
       dispatch(setSyntheticImageDetectionLoading(false));
     }
 
-    if (query.error) {
-      dispatch(setError(query.error.message));
+    if (detectionQuery.error) {
+      dispatch(setError(detectionQuery.error.message));
       dispatch(setSyntheticImageDetectionLoading(false));
     }
-  }, [query.data, query.error, dispatch, resolvedUrl]);
+  }, [detectionQuery.data, detectionQuery.error, dispatch, resolvedUrl]);
+
+  const startDetection = async (params) => {
+    startSyntheticImageDetectionMutation.reset();
+    dispatch(resetSyntheticImageDetectionImage());
+    return await startSyntheticImageDetectionMutation.mutateAsync(params);
+  };
 
   return {
-    startDetection: mutation.mutateAsync,
-    detectionStatus: query.data,
-    isLoading: mutation.isPending || query.isLoading || query.isFetching,
-    error: mutation.error || query.error,
+    startDetection,
+    detectionStatus: detectionQuery.data,
+    isLoading:
+      startSyntheticImageDetectionMutation.isPending ||
+      detectionQuery.isLoading ||
+      detectionQuery.isFetching,
+    error: startSyntheticImageDetectionMutation.error || detectionQuery.error,
   };
 };
