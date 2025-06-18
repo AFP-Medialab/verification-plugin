@@ -15,7 +15,10 @@ import { Gradient } from "@mui/icons-material";
 
 import { useSyntheticImageDetection } from "@/components/NavItems/tools/SyntheticImageDetection/useSyntheticImageDetection";
 import { ROLES } from "@/constants/roles";
-import { resetSyntheticImageDetectionImage } from "@/redux/actions/tools/syntheticImageDetectionActions";
+import {
+  resetSyntheticImageDetectionImage,
+  setSyntheticImageDetectionLoading,
+} from "@/redux/actions/tools/syntheticImageDetectionActions";
 import {
   preprocessFileUpload,
   resizeImageWithWorker,
@@ -62,10 +65,8 @@ const SyntheticImageDetection = () => {
     UPLOAD: "local",
   };
 
-  const { getSyntheticImageScores } = useSyntheticImageDetection({
+  const { startDetection } = useSyntheticImageDetection({
     dispatch,
-    keyword,
-    keywordWarning,
   });
 
   useEffect(() => {
@@ -132,7 +133,13 @@ const SyntheticImageDetection = () => {
         ? IMAGE_FROM.URL
         : IMAGE_FROM.UPLOAD;
 
-    await getSyntheticImageScores(urlInput, true, type, processedFile);
+    dispatch(setSyntheticImageDetectionLoading(true));
+
+    await startDetection({
+      type: type,
+      url: urlInput,
+      imageFile: processedFile,
+    });
   };
 
   useEffect(() => {
@@ -157,7 +164,6 @@ const SyntheticImageDetection = () => {
             Accept: "image/webp,image/apng,image/*,*/*;q=0.8",
           },
         }).then(async (response) => {
-          //console.log(response.headers.get("Content-Type"));
           const mimeType = (await response.blob()).type;
           setImageType(mimeType);
         });

@@ -1,67 +1,57 @@
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+
 import {
   setSyntheticImageDetectionLoading,
   setSyntheticImageDetectionNearDuplicates,
   setSyntheticImageDetectionResult,
 } from "@/redux/actions/tools/syntheticImageDetectionActions";
 import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequest";
-import { isValidUrl } from "@Shared/Utils/URLUtils";
 import axios from "axios";
 import { setError } from "redux/reducers/errorReducer";
 
 import { syntheticImageDetectionAlgorithms } from "./SyntheticImageDetectionAlgorithms";
 
-export const useSyntheticImageDetection = ({
-  dispatch,
-  keyword,
-  keywordWarning,
-}) => {
+/**
+ * Hook for managing synthetic image detection lifecycle.
+ * Starts a detection job (local image or remote) and polls for the result.
+ * Automatically dispatches Redux actions with results or errors.
+ *
+ * @param {Object} params - Parameters object
+ * @param {Function} params.dispatch - Redux dispatch function
+ * @returns {{
+ *   startDetection: function({url: string, type: "local" | "url", imageFile: File | null}): Promise<void>,
+ *   detectionStatus: Object | undefined,
+ *   isLoading: boolean,
+ *   error: Error | null
+ * }}
+ */
+export const useSyntheticImageDetection = ({ dispatch }) => {
   const authenticatedRequest = useAuthenticatedRequest();
 
-  function sleep(fn, param) {
-    return new Promise((resolve) => {
-      setTimeout(() => resolve(fn(param)), 3000);
-    });
-  }
+  /**
+   * Starts a synthetic image detection job.
+   *
+   * @param {Object} options
+   * @param {string} options.url - URL of the image (for remote detection)
+   * @param {"local" | "url"} options.type - Type of image (local image or url)
+   * @param {File} [options.imageFile] - Local file to upload
+   * @returns {Promise<{jobId: string, resolvedUrl: string}>}
+   */
+  const startSyntheticImageDetection = async ({ type, url, imageFile }) => {
+    if (!url && !imageFile) throw new Error("Missing URL or image");
 
-  const getSyntheticImageScores = async (url, processURL, type, image) => {
-    if (!processURL || (!url && !image)) return;
-
-    dispatch(setSyntheticImageDetectionLoading(true));
     const modeURL = "images/";
     const baseURL = process.env.REACT_APP_CAA_DEEPFAKE_URL;
-
     const services = syntheticImageDetectionAlgorithms
       .map((algorithm) => algorithm.apiServiceName)
       .join(",");
 
-    const getUserFriendlyError = (error) => {
-      if (!error) return keyword("synthetic_image_detection_error_generic");
-
-      if (
-        error.includes("Received status code 400") ||
-        error.includes("Cannot open image from")
-      ) {
-        return keyword("synthetic_image_detection_error_400");
-      }
-
-      return keyword("synthetic_image_detection_error_generic");
-    };
-
-    const handleError = (e) => {
-      dispatch(setError(e));
-      dispatch(setSyntheticImageDetectionLoading(false));
-    };
-
-    if (!isValidUrl(url) && !image) {
-      handleError(keywordWarning("error_invalid_url"));
-      return;
-    }
-
-    let config, res;
+    let config;
 
     if (type === "local") {
       const formData = new FormData();
-      formData.append("file", image);
+      formData.append("file", imageFile);
 
       config = {
         method: "post",
@@ -80,70 +70,103 @@ export const useSyntheticImageDetection = ({
     }
 
     try {
-      res = await authenticatedRequest(config);
+      const res = await authenticatedRequest(config);
+      if (!res?.data?.id) throw new Error("No job id returned");
+
+      const resolvedUrl = imageFile ? URL.createObjectURL(imageFile) : url;
+      return { jobId: res.data.id, resolvedUrl };
     } catch (error) {
-      const processedError = getUserFriendlyError(
-        error?.response?.data?.message ?? "error_" + error.status,
-      );
-      handleError(processedError);
-      return;
+      const msg =
+        error?.response?.data?.message ?? error.message ?? "Unknown error";
+      throw new Error(msg);
     }
-
-    const getResult = async (id) => {
-      let response;
-      try {
-        response = await axios.get(baseURL + modeURL + "reports/" + id);
-      } catch (error) {
-        handleError("error_" + error.status);
-      }
-
-      if (response?.data) {
-        dispatch(
-          setSyntheticImageDetectionResult({
-            url: image ? URL.createObjectURL(image) : url,
-            result: response.data,
-          }),
-        );
-      }
-
-      if (response?.data?.similar_images?.completed) {
-        let imgSimilarRes;
-
-        try {
-          imgSimilarRes = await axios.get(baseURL + modeURL + "similar/" + id);
-        } catch (error) {
-          handleError("error_" + error.status);
-        }
-
-        if (!imgSimilarRes.data?.similar_media?.length) {
-          dispatch(setSyntheticImageDetectionNearDuplicates(null));
-        }
-
-        dispatch(setSyntheticImageDetectionNearDuplicates(imgSimilarRes.data));
-      }
-    };
-
-    const waitUntilFinish = async (id) => {
-      let response;
-
-      try {
-        response = await axios.get(baseURL + modeURL + "jobs/" + id);
-      } catch (error) {
-        handleError("error_" + error.status);
-      }
-
-      if (response?.data?.status === "PROCESSING") {
-        await sleep(waitUntilFinish, id);
-      } else if (response?.data?.status === "COMPLETED") {
-        await getResult(id);
-      } else {
-        handleError("error_" + response?.data?.status);
-      }
-    };
-
-    if (!res?.data) return;
-    await waitUntilFinish(res.data.id);
   };
 
-  return { getSyntheticImageScores };
+  /**
+   * Polls job status and fetches a report and similar images if available.
+   *
+   * @param {string} jobId - Job ID returned from the detection start
+   * @returns {Promise<{status: string, report?: Object, similarImages?: Object}>}
+   */
+  const fetchJobStatusAndReport = async (jobId) => {
+    const modeURL = "images/";
+    const baseURL = process.env.REACT_APP_CAA_DEEPFAKE_URL;
+
+    const statusRes = await axios.get(baseURL + modeURL + "jobs/" + jobId);
+    const status = statusRes.data?.status;
+
+    if (!status) throw new Error("No status from job");
+
+    if (status === "FAILED") {
+      throw new Error("Job failed");
+    }
+
+    if (status === "COMPLETED") {
+      const reportRes = await axios.get(baseURL + modeURL + "reports/" + jobId);
+
+      let similarImages = null;
+
+      if (reportRes.data?.similar_images?.completed) {
+        const similarRes = await axios.get(
+          baseURL + modeURL + "similar/" + jobId,
+        );
+        similarImages = similarRes.data;
+      }
+
+      return { status, report: reportRes.data, similarImages };
+    }
+
+    return { status };
+  };
+
+  const mutation = useMutation({
+    mutationFn: startSyntheticImageDetection,
+    onError: (error) => {
+      dispatch(setError(error.message));
+      dispatch(setSyntheticImageDetectionLoading(false));
+    },
+  });
+
+  const jobId = mutation.data?.jobId;
+  const resolvedUrl = mutation.data?.resolvedUrl;
+
+  const query = useQuery({
+    queryKey: ["syntheticImageDetectionStatus", jobId],
+    queryFn: () => fetchJobStatusAndReport(jobId),
+    enabled: !!jobId,
+    cacheTime: 0,
+    refetchOnWindowFocus: false,
+    refetchIntervalInBackground: true,
+    refetchInterval: (query) => {
+      const status = query.state.data?.status;
+      return status === "COMPLETED" ? false : 3000;
+    },
+  });
+
+  useEffect(() => {
+    if (query.data?.status === "COMPLETED") {
+      dispatch(
+        setSyntheticImageDetectionResult({
+          url: resolvedUrl,
+          result: query.data.report,
+        }),
+      );
+      dispatch(
+        setSyntheticImageDetectionNearDuplicates(query.data.similarImages),
+      );
+      dispatch(setSyntheticImageDetectionLoading(false));
+    }
+
+    if (query.error) {
+      dispatch(setError(query.error.message));
+      dispatch(setSyntheticImageDetectionLoading(false));
+    }
+  }, [query.data, query.error, dispatch, resolvedUrl]);
+
+  return {
+    startDetection: mutation.mutateAsync,
+    detectionStatus: query.data,
+    isLoading: mutation.isPending || query.isLoading || query.isFetching,
+    error: mutation.error || query.error,
+  };
 };
