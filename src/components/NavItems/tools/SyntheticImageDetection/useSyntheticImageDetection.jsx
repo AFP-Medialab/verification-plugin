@@ -1,17 +1,44 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
+import { getToolkitSettings } from "@/components/NavItems/tools/C2pa/Hooks/useGetC2paData";
 import {
-  resetSyntheticImageDetectionImage,
   setSyntheticImageDetectionLoading,
   setSyntheticImageDetectionNearDuplicates,
   setSyntheticImageDetectionResult,
 } from "@/redux/actions/tools/syntheticImageDetectionActions";
 import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequest";
 import axios from "axios";
+import { createC2pa, selectGenerativeInfo } from "c2pa";
 import { setError } from "redux/reducers/errorReducer";
 
 import { syntheticImageDetectionAlgorithms } from "./SyntheticImageDetectionAlgorithms";
+
+const fetchGenerativeInfoFromC2pa = async (url) => {
+  const settings = await getToolkitSettings();
+  const c2pa = await createC2pa({
+    wasmSrc: "./c2paAssets/toolkit_bg.wasm",
+    workerSrc: "./c2paAssets/c2pa.worker.min.js",
+  });
+
+  const { manifestStore } = await c2pa.read(url, { settings });
+  const activeManifest = manifestStore?.activeManifest;
+  if (!activeManifest) return null;
+
+  let genInfo = null;
+
+  if (!manifestStore.manifests) return null;
+
+  for (const manifestValue of Object.values(manifestStore.manifests)) {
+    const generativeInfo = selectGenerativeInfo(manifestValue);
+
+    if (generativeInfo) {
+      genInfo = generativeInfo;
+    }
+  }
+
+  return genInfo;
+};
 
 /**
  * Hook for managing synthetic image detection lifecycle.
@@ -144,6 +171,14 @@ export const useSyntheticImageDetection = ({ dispatch }) => {
     },
   });
 
+  const c2paQuery = useQuery({
+    queryKey: ["c2paData", resolvedUrl],
+    queryFn: () => fetchGenerativeInfoFromC2pa(resolvedUrl),
+    enabled: !!resolvedUrl,
+    cacheTime: 0,
+    refetchOnWindowFocus: false,
+  });
+
   useEffect(() => {
     if (detectionQuery.data?.status === "COMPLETED") {
       dispatch(
@@ -168,7 +203,7 @@ export const useSyntheticImageDetection = ({ dispatch }) => {
 
   const startDetection = async (params) => {
     startSyntheticImageDetectionMutation.reset();
-    dispatch(resetSyntheticImageDetectionImage());
+
     return await startSyntheticImageDetectionMutation.mutateAsync(params);
   };
 
@@ -180,5 +215,8 @@ export const useSyntheticImageDetection = ({ dispatch }) => {
       detectionQuery.isLoading ||
       detectionQuery.isFetching,
     error: startSyntheticImageDetectionMutation.error || detectionQuery.error,
+    c2paData: c2paQuery.data,
+    c2paLoading: c2paQuery.isLoading,
+    c2paError: c2paQuery.error,
   };
 };

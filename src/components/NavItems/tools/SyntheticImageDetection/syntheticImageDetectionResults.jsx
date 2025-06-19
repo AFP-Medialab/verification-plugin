@@ -27,6 +27,7 @@ import { Download, ExpandMore } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { ROLES } from "@/constants/roles";
+import JsonBlock from "@Shared/JsonBlock";
 import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
@@ -132,6 +133,7 @@ class NddResult {
  * @param url
  * @param handleClose
  * @param nd
+ * @param c2paData
  * @param imageType {Blob.type}
  * @returns {Element}
  * @constructor
@@ -142,6 +144,7 @@ const SyntheticImageDetectionResults = ({
   handleClose,
   nd,
   imageType,
+  c2paData,
 }) => {
   const keyword = i18nLoadNamespace(
     "components/NavItems/tools/SyntheticImageDetection",
@@ -586,6 +589,20 @@ const SyntheticImageDetectionResults = ({
                           )}
                         </Typography>
                       )}
+
+                      {c2paData && (
+                        <Typography
+                          variant="h5"
+                          align="center"
+                          sx={{
+                            alignSelf: "center",
+                            color: "red",
+                          }}
+                        >
+                          {"C2PA metadata with GenAI actions detected"}
+                        </Typography>
+                      )}
+
                       <Stack
                         direction="column"
                         sx={{
@@ -717,6 +734,37 @@ const SyntheticImageDetectionResults = ({
               )}
             </Grid>
             <Grid container size={{ xs: 12 }} spacing={4}>
+              {c2paData && (
+                <Grid
+                  sx={{
+                    width: "100%",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      pl: 4,
+                      pr: 4,
+                    }}
+                  >
+                    <Accordion
+                      defaultExpanded
+                      onChange={handleNddDetailsChange}
+                    >
+                      <AccordionSummary expandIcon={<ExpandMore />}>
+                        <Typography>{"C2PA GenAI Metadata"}</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Stack direction={"column"} spacing={4}>
+                          <JsonBlock>
+                            {JSON.stringify(c2paData, null, 2)}
+                          </JsonBlock>
+                        </Stack>
+                      </AccordionDetails>
+                    </Accordion>
+                  </Box>
+                </Grid>
+              )}
+
               {filteredNddRows && filteredNddRows.length > 0 && (
                 <Grid
                   sx={{
