@@ -335,9 +335,9 @@ const AssistantTextResult = () => {
         resolvedMode,
         resolvedMode === "dark" ? subjectivityColoursDark : subjectivityColours,
         keyword,
-        ["gauge_no_detection_sub", "gauge_detection_sub"],
+        ["Objective", "Subjective"], //["gauge_no_detection_sub", "gauge_detection_sub"],
         false,
-        [0.4, 0.25, 0],
+        [0.4, 0.25, 0.35],
       )
     : null;
 
@@ -524,6 +524,7 @@ const AssistantTextResult = () => {
             value={textTabIndex}
             onChange={handleTabChange}
             aria-label="extracted text tabs"
+            variant="scrollable"
           >
             <Tab label={keyword("summary_title")} {...a11yProps(0)} />
             <Tab label={keyword("raw_text")} {...a11yProps(1)} />
