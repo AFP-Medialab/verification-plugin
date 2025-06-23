@@ -302,6 +302,7 @@ const Archive = () => {
                       handleCloseUrl();
                       setStep(1);
                     }}
+                    handleGoToBuildingWacz={() => setStep(2)}
                     handleGoToWaczUpload={() => setStep(4)}
                     handleGoToWbmStep={() => setStep(6)}
                   />

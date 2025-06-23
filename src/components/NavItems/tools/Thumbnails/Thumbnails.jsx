@@ -357,6 +357,7 @@ const Thumbnails = () => {
               <IconButton
                 aria-label="close"
                 onClick={() => dispatch(cleanThumbnailsState())}
+                sx={{ p: 1 }}
               >
                 <CloseIcon />
               </IconButton>

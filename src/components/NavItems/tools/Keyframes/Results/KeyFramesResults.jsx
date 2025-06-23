@@ -209,7 +209,7 @@ const KeyFramesResults = ({ result }) => {
                     <Typography variant="h6" gutterBottom>
                       {keywordHelp("title_tip")}
                     </Typography>{" "}
-                    <IconButton onClick={closeHelp}>
+                    <IconButton onClick={closeHelp} sx={{ p: 1 }}>
                       <CloseIcon />
                     </IconButton>
                   </Stack>
