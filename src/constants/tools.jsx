@@ -5,6 +5,7 @@ import SvgIcon from "@mui/material/SvgIcon";
 import {
   Archive as ArchiveIcon,
   AudioFile,
+  Dashboard,
   Gradient,
   ManageSearch,
 } from "@mui/icons-material";
@@ -30,8 +31,8 @@ import XnetworkIcon from "../components/NavBar/images/SVG/Search/Xnetwork.svg";
 import KeyframesIcon from "../components/NavBar/images/SVG/Video/Keyframes.svg";
 import ThumbnailsIcon from "../components/NavBar/images/SVG/Video/Thumbnails.svg";
 import AnalysisIcon from "../components/NavBar/images/SVG/Video/Video_analysis.svg";
-import VideoRightsIcon from "../components/NavBar/images/SVG/Video/Video_rights.svg";
 import About from "../components/NavItems/About/About";
+import MachineGeneratedText from "../components/NavItems/MachineGeneratedText";
 import ToolsMenu from "../components/NavItems/tools/Alltools/ToolsMenu";
 import Analysis from "../components/NavItems/tools/Analysis/Analysis";
 import Archive from "../components/NavItems/tools/Archive";
@@ -49,7 +50,6 @@ import SyntheticImageDetection from "../components/NavItems/tools/SyntheticImage
 import Thumbnails from "../components/NavItems/tools/Thumbnails/Thumbnails";
 import TwitterAdvancedSearch from "../components/NavItems/tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
 import TwitterSna from "../components/NavItems/tools/TwitterSna/TwitterSna";
-import VideoRights from "../components/NavItems/tools/VideoRights/VideoRights";
 import { ROLES } from "./roles";
 
 /**
@@ -155,10 +155,6 @@ const thumbnailsSvgIcon = (props) => {
   return <SvgIcon component={ThumbnailsIcon} inheritViewBox {...props} />;
 };
 
-const videoRightsSvgIcon = (props) => {
-  return <SvgIcon component={VideoRightsIcon} inheritViewBox {...props} />;
-};
-
 const metadataSvgIcon = (props) => {
   return <SvgIcon component={MetadataIcon} inheritViewBox {...props} />;
 };
@@ -211,6 +207,10 @@ const xnetworkSvgIcon = (props) => {
   return <SvgIcon component={XnetworkIcon} inheritViewBox {...props} />;
 };
 
+const mgtSvgIcon = (props) => {
+  return <ManageSearch {...props} />;
+};
+
 const twitterSnaSvgIcon = (props) => {
   return <SvgIcon component={TwitterSnaIcon} inheritViewBox {...props} />;
 };
@@ -229,6 +229,10 @@ const aboutSvgIcon = (props) => {
 
 const c2paSvgIcon = (props) => {
   return <SvgIcon component={C2paIcon} inheritViewBox {...props} />;
+};
+
+const disinfoDeckIcon = (props) => {
+  return <Dashboard {...props} />;
 };
 
 /**
@@ -289,19 +293,6 @@ export const thumbnails = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <Thumbnails />,
   <Footer type={FOOTER_TYPES.AFP} />,
-);
-
-export const videoRights = new Tool(
-  "navbar_rights",
-  "navbar_rights_description",
-  videoRightsSvgIcon,
-  TOOLS_CATEGORIES.VIDEO,
-  null,
-  null,
-  "copyright",
-  TOOL_GROUPS.VERIFICATION,
-  <VideoRights />,
-  <Footer type={FOOTER_TYPES.GRIHO} />,
 );
 
 const videoMetadata = new Tool(
@@ -498,6 +489,19 @@ const searchXnetwork = new Tool(
   null,
 );
 
+const machineGeneratedText = new Tool(
+  "navbar_mgt",
+  "navbar_mgt_description",
+  mgtSvgIcon,
+  TOOLS_CATEGORIES.SEARCH,
+  [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.NEW],
+  [ROLES.EXTRA_FEATURE],
+  "mgt",
+  TOOL_GROUPS.VERIFICATION,
+  <MachineGeneratedText />,
+  <Footer type={FOOTER_TYPES.USFD} />,
+);
+
 /**
  * Data Analysis tools
  **/
@@ -523,6 +527,24 @@ const dataAnalysisCrowdtangle = new Tool(
   null,
   null,
   "csvSna",
+  TOOL_GROUPS.VERIFICATION,
+  null,
+  null,
+);
+
+const disinfoDeck = new Tool(
+  "navbar_disinfo_deck",
+  "navbar_disinfo_deck_description",
+  disinfoDeckIcon,
+  TOOLS_CATEGORIES.DATA_ANALYSIS,
+  [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.NEW],
+  [
+    ROLES.BETA_TESTER,
+    ROLES.EVALUATION,
+    ROLES.EXTRA_FEATURE,
+    ROLES.AFP_C2PA_GOLD,
+  ],
+  "disinfoDeck",
   TOOL_GROUPS.VERIFICATION,
   null,
   null,
@@ -580,7 +602,6 @@ export const tools = Object.freeze([
   videoAnalysis,
   keyframes,
   thumbnails,
-  // videoRights,
   videoMetadata,
   videoDeepfake,
   imageMagnifier,
@@ -595,8 +616,10 @@ export const tools = Object.freeze([
   searchSemantic,
   searchCovid,
   searchXnetwork,
+  machineGeneratedText,
   dataAnalysisSna,
   dataAnalysisCrowdtangle,
+  disinfoDeck,
   archiving,
   about,
   c2paData,

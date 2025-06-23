@@ -218,6 +218,7 @@ const Keyframes = () => {
                                   size="small"
                                   onClick={() => setInput("")}
                                   disabled={isPending || isLoadingSimilarity}
+                                  sx={{ p: 1 }}
                                 >
                                   <ClearIcon />
                                 </IconButton>
