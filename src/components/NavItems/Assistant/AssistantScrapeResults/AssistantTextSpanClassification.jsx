@@ -16,6 +16,7 @@ import Typography from "@mui/material/Typography";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
@@ -43,12 +44,12 @@ export default function AssistantTextSpanClassification({
   configs = {
     confidenceThresholdLow: 0.8,
     confidenceThresholdHigh: 1.0,
-    importanceThresholdLow: 0.0,
+    importanceThresholdLow: 0.8,
     importanceThresholdHigh: 1.0,
-    confidenceRgbLow: [175, 9, 193],
-    confidenceRgbHigh: [34, 0, 255],
-    importanceRgbLow: [221, 222, 7],
-    importanceRgbHigh: [228, 25, 25],
+    confidenceRgbLow: [32, 180, 172],
+    confidenceRgbHigh: [34, 41, 180],
+    importanceRgbLow: [252, 225, 28],
+    importanceRgbHigh: [252, 108, 28],
   },
   textHtmlMap = null,
 }) {
@@ -62,6 +63,18 @@ export default function AssistantTextSpanClassification({
   const categoryTextHigh = keyword("high_confidence");
   const categoryRgbLow = configs.confidenceRgbLow;
   const categoryRgbHigh = configs.confidenceRgbHigh;
+
+  // tooltip for hovering over categories
+  const categoryTooltipContent = (
+    <ColourGradientTooltipContent
+      description={keyword("confidence_tooltip_category")}
+      colourScaleText={keyword("colour_scale")}
+      textLow={keyword("low_confidence")}
+      textHigh={keyword("high_confidence")}
+      rgbLow={configs.confidenceRgbLow}
+      rgbHigh={configs.confidenceRgbHigh}
+    />
+  );
 
   const [doHighlightSentence, setDoHighlightSentence] = useState(true);
 
@@ -122,10 +135,6 @@ export default function AssistantTextSpanClassification({
       const techniqueScore = spanInfo.techniques[persuasionTechnique];
 
       // collect category information for highlighted spans
-      // let span = {
-      //   indices: [spanStart, spandEnd],
-      //   score: techniqueScore,
-      // };
       if (categories[persuasionTechnique]) {
         categories[persuasionTechnique].push({
           indices: [spanStart, spandEnd],
@@ -162,7 +171,6 @@ export default function AssistantTextSpanClassification({
             cursor: "pointer",
           }}
         >
-          {/* {persuasionTechnique.replaceAll("_", " ")} */}
           {keyword(persuasionTechnique)}
         </div>,
       );
@@ -228,6 +236,8 @@ export default function AssistantTextSpanClassification({
     } else if (textHtmlMap) {
       // Text formatted but not highlighted
       output = treeMapToElements(text, textHtmlMap);
+    } else {
+      output = text;
     }
 
     categoriesText[collection] = output;
@@ -277,6 +287,7 @@ export default function AssistantTextSpanClassification({
           <CardContent>
             <CategoriesListToggle
               categories={uniqueCategories}
+              tooltipContent={categoryTooltipContent}
               thresholdLow={configs.confidenceThresholdLow}
               thresholdHigh={configs.confidenceThresholdHigh}
               rgbLow={configs.confidenceRgbLow}
@@ -295,6 +306,7 @@ export default function AssistantTextSpanClassification({
 
 export function CategoriesListToggle({
   categories,
+  tooltipContent,
   thresholdLow,
   thresholdHigh,
   rgbLow,
@@ -304,7 +316,9 @@ export function CategoriesListToggle({
   onCategoryChange = () => {},
   keyword,
 }) {
-  if (categories.length < 1) return <p>{noCategoriesText}</p>;
+  if (_.isEmpty(categories)) {
+    return <p>{noCategoriesText}</p>;
+  }
 
   let output = [];
   let index = 0;
@@ -388,12 +402,14 @@ export function CategoriesListToggle({
   }
 
   return (
-    <List>
-      <ListItem>
-        <Typography>{keyword("select_persuasion_technique")}</Typography>
-      </ListItem>
-      {output}
-    </List>
+    <Tooltip title={tooltipContent}>
+      <List>
+        <ListItem>
+          <Typography>{keyword("select_persuasion_technique")}</Typography>
+        </ListItem>
+        {output}
+      </List>
+    </Tooltip>
   );
 }
 

@@ -17,6 +17,7 @@ import Typography from "@mui/material/Typography";
 
 import { ArrowDownward } from "@mui/icons-material";
 
+import { ROLES } from "@/constants/roles";
 import HeaderTool from "components/Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
@@ -31,7 +32,6 @@ import {
 } from "redux/reducers/tools/c2paReducer";
 import { v4 as uuidv4 } from "uuid";
 
-import { ROLES } from "../../../../constants/roles";
 import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
 import getC2paData, { getC2paDataHd } from "./Hooks/useGetC2paData";
 import C2paResults from "./Results/C2paResults";
@@ -276,7 +276,7 @@ const C2paData = () => {
     dispatch(c2paLoadingSet(false));
   };
 
-  const handleClose = () => {
+  const resetState = () => {
     setImageFile(undefined);
     setInput("");
     setErrorMessage(null);
@@ -330,8 +330,9 @@ const C2paData = () => {
                 setFileInput={setImageFile}
                 handleSubmit={handleSubmit}
                 fileInputTypesAccepted={"image/*, video/*"}
-                handleCloseSelectedFile={handleClose}
+                handleCloseSelectedFile={resetState}
                 isParentLoading={isLoading}
+                handleClearUrl={resetState}
               />
 
               {(role.includes(ROLES.AFP_C2PA_GOLD) ||

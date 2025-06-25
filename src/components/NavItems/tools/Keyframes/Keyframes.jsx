@@ -26,18 +26,18 @@ import LinkIcon from "@mui/icons-material/Link";
 import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { keyframes } from "@/constants/tools";
+import {
+  resetKeyframes,
+  setKeyframesUrl,
+} from "@/redux/reducers/tools/keyframesReducer";
 import "@Shared/GoogleAnalytics/MatomoAnalytics";
 import HeaderTool from "@Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { ClearIcon } from "@mui/x-date-pickers";
 
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { keyframes } from "../../../../constants/tools";
-import {
-  resetKeyframes,
-  setKeyframesUrl,
-} from "../../../../redux/reducers/tools/keyframesReducer";
 import { useProcessKeyframes } from "./Hooks/useKeyframeWrapper";
 import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
 import { ImageWithFade } from "./ImageWithFade";
@@ -218,6 +218,7 @@ const Keyframes = () => {
                                   size="small"
                                   onClick={() => setInput("")}
                                   disabled={isPending || isLoadingSimilarity}
+                                  sx={{ p: 1 }}
                                 >
                                   <ClearIcon />
                                 </IconButton>

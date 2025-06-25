@@ -17,6 +17,14 @@ import TextField from "@mui/material/TextField";
 
 import CloseIcon from "@mui/icons-material/Close";
 
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { loadImageSize, useLoading } from "@/Hooks/useInput";
+import { thumbnails } from "@/constants/tools";
+import {
+  cleanThumbnailsState,
+  setThumbnailsLoading,
+  setThumbnailsResult,
+} from "@/redux/reducers/tools/thumbnailsReducer";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import HeaderTool from "@Shared/HeaderTool/HeaderTool";
 import ImageGridList from "@Shared/ImageGridList/ImageGridList";
@@ -29,15 +37,6 @@ import {
   reverseImageSearchAll,
 } from "@Shared/ReverseSearch/reverseSearchUtils";
 import { setError } from "redux/reducers/errorReducer";
-
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { loadImageSize, useLoading } from "../../../../Hooks/useInput";
-import { thumbnails } from "../../../../constants/tools";
-import {
-  cleanThumbnailsState,
-  setThumbnailsLoading,
-  setThumbnailsResult,
-} from "../../../../redux/reducers/tools/thumbnailsReducer";
 
 const Thumbnails = () => {
   const { url } = useParams();
@@ -358,6 +357,7 @@ const Thumbnails = () => {
               <IconButton
                 aria-label="close"
                 onClick={() => dispatch(cleanThumbnailsState())}
+                sx={{ p: 1 }}
               >
                 <CloseIcon />
               </IconButton>

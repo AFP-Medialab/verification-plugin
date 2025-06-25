@@ -21,6 +21,7 @@ import Typography from "@mui/material/Typography";
 import { Download, ExpandMore } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
+import { ROLES } from "@/constants/roles";
 import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import {
@@ -41,7 +42,6 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 
-import { ROLES } from "../../../../constants/roles";
 import CustomAlertScore from "../../../Shared/CustomAlertScore";
 import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
 
@@ -325,7 +325,11 @@ const LoccusResults = ({
             style={{ borderRadius: "4px 4p x 0px 0px" }}
             title={keyword("loccus_title")}
             action={
-              <IconButton aria-label="close" onClick={handleClose}>
+              <IconButton
+                aria-label="close"
+                onClick={handleClose}
+                sx={{ p: 1 }}
+              >
                 <CloseIcon />
               </IconButton>
             }

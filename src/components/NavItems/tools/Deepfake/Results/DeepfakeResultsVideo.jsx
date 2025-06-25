@@ -17,6 +17,7 @@ import Typography from "@mui/material/Typography";
 import { Download } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
+import { ROLES } from "@/constants/roles";
 import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { useTrackEvent } from "Hooks/useAnalytics";
@@ -24,12 +25,13 @@ import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResu
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import { ROLES } from "../../../../../constants/roles";
-
 const DeepfakeResultsVideo = (props) => {
   const userAuthenticated = useSelector(
     (state) => state.userSession && state.userSession.userAuthenticated,
   );
+
+  const currentLang = useSelector((state) => state.language);
+  const isCurrentLanguageLeftToRight = currentLang !== "ar";
 
   const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
 
@@ -40,7 +42,7 @@ const DeepfakeResultsVideo = (props) => {
     }
   }
 
-  const DeepfakeImageDetectionMethodNames = Object.freeze({
+  const DeepfakeVideoDetectionMethodNames = Object.freeze({
     deepfakeVideoReport: {
       name: keyword("deepfake_video_videoreport_name"),
       description: keyword("deepfake_video_videoreport_description"),
@@ -190,7 +192,7 @@ const DeepfakeResultsVideo = (props) => {
     if (results[faceswapAlgorithm] && results[faceswapAlgorithm].prediction) {
       res.push(
         new DeepfakeResult(
-          Object.keys(DeepfakeImageDetectionMethodNames)[0],
+          Object.keys(DeepfakeVideoDetectionMethodNames)[0],
           results[faceswapAlgorithm].prediction * 100,
         ),
       );
@@ -199,7 +201,7 @@ const DeepfakeResultsVideo = (props) => {
     if (results.ftcn_report && results.ftcn_report.prediction) {
       res.push(
         new DeepfakeResult(
-          Object.keys(DeepfakeImageDetectionMethodNames)[1],
+          Object.keys(DeepfakeVideoDetectionMethodNames)[1],
           results.ftcn_report.prediction * 100,
         ),
       );
@@ -208,7 +210,7 @@ const DeepfakeResultsVideo = (props) => {
     if (results.face_reenact_report && results.face_reenact_report.prediction) {
       res.push(
         new DeepfakeResult(
-          Object.keys(DeepfakeImageDetectionMethodNames)[2],
+          Object.keys(DeepfakeVideoDetectionMethodNames)[2],
           results.face_reenact_report.prediction * 100,
         ),
       );
@@ -240,7 +242,7 @@ const DeepfakeResultsVideo = (props) => {
       <CardHeader
         title={keyword("deepfake_video_title")}
         action={
-          <IconButton aria-label="close" onClick={handleClose}>
+          <IconButton aria-label="close" onClick={handleClose} sx={{ p: 1 }}>
             <CloseIcon />
           </IconButton>
         }
@@ -294,9 +296,21 @@ const DeepfakeResultsVideo = (props) => {
                           data: xAxisData,
                         },
                       ]}
+                      yAxis={[
+                        {
+                          valueFormatter: (value) =>
+                            isCurrentLanguageLeftToRight
+                              ? `${value}%`
+                              : `٪${value}`,
+                        },
+                      ]}
                       series={[
                         {
                           data: yAxisData,
+                          valueFormatter: (value) =>
+                            isCurrentLanguageLeftToRight
+                              ? `${value.toFixed(2)}%`
+                              : `٪${value.toFixed(2)}`,
                         },
                       ]}
                       height={300}
@@ -341,7 +355,7 @@ const DeepfakeResultsVideo = (props) => {
                   <GaugeChartResult
                     keyword={keyword}
                     scores={deepfakeScores}
-                    methodNames={DeepfakeImageDetectionMethodNames}
+                    methodNames={DeepfakeVideoDetectionMethodNames}
                     detectionThresholds={DETECTION_THRESHOLDS}
                     resultsHaveErrors={false}
                     sanitizeDetectionPercentage={(n) => Math.round(n)}

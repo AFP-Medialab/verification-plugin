@@ -288,7 +288,7 @@ export default function assistantApiCalls() {
       },
       (numTries) => {
         console.log(
-          "Could not connect to previous fact checks service, tries " +
+          "Could not connect to subjectivity service, tries " +
             (numTries + 1) +
             "/" +
             MAX_NUM_RETRIES,
@@ -320,12 +320,12 @@ export default function assistantApiCalls() {
     );
   };
 
-  const callMachineGeneratedTextService = async (text) => {
+  const callMachineGeneratedTextChunksService = async (text) => {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
       async () => {
         const result = await axios.post(
-          assistantEndpoint + "kinit/machine-generated-text",
+          assistantEndpoint + "kinit/machine-generated-text-chunks",
           {
             content: text,
           },
@@ -334,7 +334,30 @@ export default function assistantApiCalls() {
       },
       (numTries) => {
         console.log(
-          "Could not connect to machine generated text service, tries " +
+          "Could not connect to machine generated text service for chunks, tries " +
+            (numTries + 1) +
+            "/" +
+            MAX_NUM_RETRIES,
+        );
+      },
+    );
+  };
+
+  const callMachineGeneratedTextSentencesService = async (text) => {
+    return await callAsyncWithNumRetries(
+      MAX_NUM_RETRIES,
+      async () => {
+        const result = await axios.post(
+          assistantEndpoint + "kinit/machine-generated-text-sentences",
+          {
+            content: text,
+          },
+        );
+        return result.data;
+      },
+      (numTries) => {
+        console.log(
+          "Could not connect to machine generated text service for sentences, tries " +
             (numTries + 1) +
             "/" +
             MAX_NUM_RETRIES,
@@ -376,7 +399,8 @@ export default function assistantApiCalls() {
     callPersuasionService,
     callSubjectivityService,
     callPrevFactChecksService,
-    callMachineGeneratedTextService,
+    callMachineGeneratedTextChunksService,
+    callMachineGeneratedTextSentencesService,
     callMultilingualStanceService,
   };
 }

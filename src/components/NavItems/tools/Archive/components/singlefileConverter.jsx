@@ -55,7 +55,7 @@ const SinglefileConverter = (telegramURL) => {
     } else {
       setError("Error signing WACZ, please try again");
       throw new Error("Error signing WACZ, please try again");
-    } 
+    }
   };
 
   //For anonymous signing
@@ -223,7 +223,7 @@ const SinglefileConverter = (telegramURL) => {
           const blobUrl = URL.createObjectURL(res);
           const a = document.createElement("a");
           a.href = blobUrl;
-          a.download = `singlefile2wacz.wacz`;
+          a.download = cdxInfo.url + "_" + dayjs() + `.wacz`;
           a.click();
           setProcessingSinglefile(false);
         });
@@ -275,7 +275,8 @@ const SinglefileConverter = (telegramURL) => {
               new TextDecoder("utf-8")
                 .decode(retbytes)
                 // eslint-disable-next-line no-control-regex
-                .replace(/[\x00-\x1F\x7F-\x9F]/g, "")
+                .replaceAll(/[\x00-\x1F\x7F-\x9F]/g, "")
+                .replaceAll('"', '\\"')
                 .replace(" ", "")
             );
           } else {
@@ -383,10 +384,6 @@ const SinglefileConverter = (telegramURL) => {
     const url = pageUrl;
     const date = pageDate;
     // const type = "response";
-    // const httpHeaders = {
-    //   date: dayjs(),
-    //   "Content-Type": "text/html;charset=UTF-8",
-    // };
 
     async function* content() {
       yield new TextEncoder().encode(fileContent);
@@ -413,19 +410,19 @@ const SinglefileConverter = (telegramURL) => {
       content(),
     );
     //For response records
-    // const type = response
+    // const type = "response";
+    // const httpHeaders = {
+    //   date: dayjs(),
+    //   "Content-Type": "text/html;charset=UTF-8",
+    // };
+
     // const record = await WARCRecord.create(
     //   {
     //     url,
-    //     warcVersion: "WARC/1.1",
+    //     date,
+    //     type,
+    //     warcVersion,
     //     httpHeaders,
-    //     warcHeaders: {
-    //       // "WARC-Target-URI":url,
-    //       "WARC-Date": date,
-    //       "WARC-Type": type,
-    //       "WARC-Record-ID": `<urn:uuid:${uuid()}>`,
-    //       "Content-Type": 'message/http',
-    //     },
     //   },
     //   content(),
     // );

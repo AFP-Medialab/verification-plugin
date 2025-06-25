@@ -33,7 +33,7 @@ const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
   const url = c2paData.result[currentImageId].url;
   const parentId = c2paData.result[currentImageId].parent;
   const manifestData = c2paData.result[currentImageId].manifestData;
-  const validationIssues = c2paData.result[currentImageId].validationIssues;
+  // const validationIssues = c2paData.result[currentImageId].validationIssues;
 
   const latitude =
     manifestData && manifestData.captureInfo
@@ -72,13 +72,13 @@ const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
     }
   }, [currentImageSrc]);
 
-  const validationMessage = (issues) => {
-    if (issues.trustedSourceIssue && issues.errorMessages.length <= 2) {
-      return keyword("content_credentials_unknown_source");
-    } else {
-      return keyword("content_credentials_invalid");
-    }
-  };
+  // const validationMessage = (issues) => {
+  //   if (issues.trustedSourceIssue && issues.errorMessages.length <= 2) {
+  //     return keyword("content_credentials_unknown_source");
+  //   } else {
+  //     return keyword("content_credentials_invalid");
+  //   }
+  // };
 
   /**
    *
@@ -141,22 +141,22 @@ const C2PaCard = ({ c2paData, currentImageSrc, setCurrentImageSrc }) => {
             </Box>
           ) : (
             <>
-              {validationIssues ? (
-                <Box
-                  sx={{
-                    m: 1,
-                  }}
-                >
-                  <Alert severity="error" m={1}>
-                    {validationMessage(validationIssues)}
-                  </Alert>
-                  <Box
-                    sx={{
-                      m: 2,
-                    }}
-                  />
-                </Box>
-              ) : null}
+              {/*{validationIssues ? (*/}
+              {/*  <Box*/}
+              {/*    sx={{*/}
+              {/*      m: 1,*/}
+              {/*    }}*/}
+              {/*  >*/}
+              {/*    <Alert severity="error" m={1}>*/}
+              {/*      {validationMessage(validationIssues)}*/}
+              {/*    </Alert>*/}
+              {/*    <Box*/}
+              {/*      sx={{*/}
+              {/*        m: 2,*/}
+              {/*      }}*/}
+              {/*    />*/}
+              {/*  </Box>*/}
+              {/*) : null}*/}
               <Typography variant="h5">
                 {keyword("c2pa_information")}
               </Typography>
