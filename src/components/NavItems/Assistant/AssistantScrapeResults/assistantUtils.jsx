@@ -467,7 +467,7 @@ export function ThresholdSlider({
           min={0}
           max={99}
           scale={scaleValue}
-          defaultValue={80} // on loading thing it keeps resetting to 80
+          //defaultValue={80} // on loading thing it keeps resetting to 80
           value={importantSentenceThreshold}
           onChange={handleSliderChange}
           sx={{
@@ -478,41 +478,6 @@ export function ThresholdSlider({
         />
       </ListItem>
     </List>
-  );
-}
-
-// credibility signals: colour scale component
-export function ColourGradientScale({
-  colourScaleText,
-  textLow,
-  textHigh,
-  rgbList,
-}) {
-  return (
-    <Grid container>
-      <Grid size={{ xs: 12 }}>
-        <Typography fontSize="small" style={{ textAlign: "start" }}>
-          {colourScaleText}
-        </Typography>
-        <div
-          style={{
-            width: "100%",
-            height: "1em",
-            background: rgbListToGradient(rgbList),
-          }}
-        />
-      </Grid>
-      <Grid size={{ xs: 6 }}>
-        <Typography align="left" fontSize="small">
-          {textLow}
-        </Typography>
-      </Grid>
-      <Grid size={{ xs: 6 }}>
-        <Typography align="right" fontSize="small">
-          {textHigh}
-        </Typography>
-      </Grid>
-    </Grid>
   );
 }
 

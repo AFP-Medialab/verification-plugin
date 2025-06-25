@@ -241,13 +241,10 @@ export default function AssistantTextClassification({
                     : subjectivityColours
                 }
                 credibilitySignal={credibilitySignal}
-                gaugeDetectionText={
-                  ["Objective", "Subjective"]
-                  // [
-                  // "gauge_no_detection_sub",
-                  // "gauge_detection_sub",
-                  // ]
-                }
+                gaugeDetectionText={[
+                  "gauge_no_detection_sub",
+                  "gauge_detection_sub",
+                ]}
                 importantSentenceThreshold={importantSentenceThreshold}
                 handleSliderChange={handleSliderChange}
               />

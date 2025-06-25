@@ -72,7 +72,7 @@ const AssistantTextResult = () => {
   const [textHtmlOutput, setTextHtmlOutput] = useState(null);
 
   // third party check states
-  const dbkfTextMatch = null; //useSelector((state) => state.assistant.dbkfTextMatch);
+  const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
   const mtLoading = useSelector((state) => state.assistant.mtLoading);
   const dbkfTextMatchLoading = useSelector(
     (state) => state.assistant.dbkfTextMatchLoading,
@@ -335,7 +335,7 @@ const AssistantTextResult = () => {
         resolvedMode,
         resolvedMode === "dark" ? subjectivityColoursDark : subjectivityColours,
         keyword,
-        ["Objective", "Subjective"], //["gauge_no_detection_sub", "gauge_detection_sub"],
+        ["gauge_no_detection_sub", "gauge_detection_sub"],
         false,
         [0.4, 0.25, 0.35],
       )
@@ -389,7 +389,7 @@ const AssistantTextResult = () => {
           {credibilitySignal === newsFramingTitle &&
             keyword("no_detected_topics")}
           {credibilitySignal === subjectivityTitle &&
-            keyword("no_detected_sentences")}
+            keyword("no_detected_subjective_sentences")}
           {credibilitySignal === persuasionTitle &&
             keyword("no_detected_techniques")}
         </Typography>
@@ -532,7 +532,7 @@ const AssistantTextResult = () => {
               label={
                 <div>
                   {newsFramingTitle}
-                  {newsFramingLoading && <LinearProgress />}
+                  {/* {newsFramingLoading && <LinearProgress />} */}
                 </div>
               }
               {...a11yProps(2)}
@@ -542,7 +542,7 @@ const AssistantTextResult = () => {
               label={
                 <div>
                   {newsGenreTitle}
-                  {newsGenreLoading && <LinearProgress />}
+                  {/* {newsGenreLoading && <LinearProgress />} */}
                 </div>
               }
               {...a11yProps(3)}
@@ -552,7 +552,7 @@ const AssistantTextResult = () => {
               label={
                 <div>
                   {persuasionTitle}
-                  {persuasionLoading && <LinearProgress />}
+                  {/* {persuasionLoading && <LinearProgress />} */}
                 </div>
               }
               {...a11yProps(4)}
@@ -562,7 +562,7 @@ const AssistantTextResult = () => {
               label={
                 <div>
                   {subjectivityTitle}
-                  {subjectivityLoading && <LinearProgress />}
+                  {/* {subjectivityLoading && <LinearProgress />} */}
                 </div>
               }
               {...a11yProps(5)}
@@ -572,8 +572,8 @@ const AssistantTextResult = () => {
               label={
                 <div>
                   {machineGeneratedTextTitle}
-                  {(machineGeneratedTextChunksLoading ||
-                    machineGeneratedTextSentencesLoading) && <LinearProgress />}
+                  {/* {(machineGeneratedTextChunksLoading ||
+                    machineGeneratedTextSentencesLoading) && <LinearProgress />} */}
                 </div>
               }
               {...a11yProps(6)}
