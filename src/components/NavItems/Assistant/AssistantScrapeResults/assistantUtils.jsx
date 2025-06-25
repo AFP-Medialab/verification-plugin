@@ -1,8 +1,8 @@
 import React from "react";
 import GaugeChart from "react-gauge-chart";
 
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Slider from "@mui/material/Slider";
@@ -301,7 +301,7 @@ export function getPersuasionCategoryColours(configs) {
   return categoryColours;
 }
 
-// machine generated text: gauge chart
+// machine generated text and subjectivity: gauge chart
 export function createGaugeChart(
   mgtOverallScoreLabel,
   overallClassificationScore,
@@ -312,46 +312,10 @@ export function createGaugeChart(
   explanation,
   arcsLength,
 ) {
-  const output = [];
-  output.push(
-    <ListItem key={`text_${mgtOverallScoreLabel}`}>
-      <Typography>{keyword(mgtOverallScoreLabel)}</Typography>
-    </ListItem>,
-  );
-  // gauge chart
   const percentScore = Math.round(Number(overallClassificationScore) * 100.0);
-  output.push(
-    <ListItem key="gauge_chart">
-      <GaugeChart
-        id={"gauge-chart"}
-        animate={false}
-        nrOfLevels={4}
-        textColor={resolvedMode === "dark" ? "white" : "black"}
-        needleColor={resolvedMode === "dark" ? "#5A5A5A" : "#D3D3D3"}
-        needleBaseColor={resolvedMode === "dark" ? "#5A5A5A" : "#D3D3D3"}
-        arcsLength={arcsLength}
-        percent={overallClassificationScore ? percentScore / 100.0 : null}
-        style={{
-          width: "100%",
-        }}
-        colors={colours}
-      />
-    </ListItem>,
-  );
-  // gauge labels
-  output.push(
-    <ListItem key="gauge_labels">
-      <Typography variant="subtitle2" align="left" flex="1">
-        {keyword(gaugeDetectionText[0])}
-      </Typography>
-      <Typography variant="subtitle2" align="right">
-        {keyword(gaugeDetectionText[1])}
-      </Typography>
-    </ListItem>,
-  );
-  // gauge explanation
+  // gauge explanation text
+  let keywordsArr;
   if (explanation) {
-    let keywordsArr;
     if (arcsLength.length === 3) {
       keywordsArr = [
         "gauge_scale_modal_explanation_rating_1_sub",
@@ -366,19 +330,54 @@ export function createGaugeChart(
         "gauge_scale_modal_explanation_rating_4_mgt",
       ];
     }
-    output.push(
-      <ListItem key="gauge_explanantion">
-        <GaugeChartModalExplanation
-          keyword={keyword}
-          keywordsArr={keywordsArr}
-          keywordLink={"gauge_scale_explanation_link"}
-          keywordModalTitle={"gauge_scale_modal_explanation_title"}
-          colors={colours}
-        />
-      </ListItem>,
-    );
   }
-  return output;
+  return (
+    <>
+      {/* Gauge title */}
+      <Typography sx={{ textAlign: "start" }}>
+        {keyword(mgtOverallScoreLabel)}
+      </Typography>
+
+      {/* Gauge chart */}
+      <GaugeChart
+        id={"gauge-chart"}
+        animate={false}
+        nrOfLevels={4}
+        textColor={resolvedMode === "dark" ? "white" : "black"}
+        needleColor={resolvedMode === "dark" ? "#5A5A5A" : "#D3D3D3"}
+        needleBaseColor={resolvedMode === "dark" ? "#5A5A5A" : "#D3D3D3"}
+        arcsLength={arcsLength}
+        percent={overallClassificationScore ? percentScore / 100.0 : null}
+        style={{
+          width: "100%",
+        }}
+        colors={colours}
+      />
+
+      {/* Gauge labels */}
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Typography variant="subtitle2" align="left" sx={{ flex: 1 }}>
+          {keyword(gaugeDetectionText[0])}
+        </Typography>
+        <Typography variant="subtitle2" align="right">
+          {keyword(gaugeDetectionText[1])}
+        </Typography>
+      </Box>
+
+      {/* Gauge explanation */}
+      {explanation && (
+        <Box sx={{ textAlign: "start", mt: 2 }}>
+          <GaugeChartModalExplanation
+            keyword={keyword}
+            keywordsArr={keywordsArr}
+            keywordLink={"gauge_scale_explanation_link"}
+            keywordModalTitle={"gauge_scale_modal_explanation_title"}
+            colors={colours}
+          />
+        </Box>
+      )}
+    </>
+  );
 }
 
 // machine generated text: colours from configs

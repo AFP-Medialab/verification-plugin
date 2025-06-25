@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { useColorScheme } from "@mui/material";
 import Card from "@mui/material/Card";
@@ -288,7 +288,7 @@ export function GaugeCategoriesList({
   handleSliderChange,
 }) {
   // list of categories with overall score first as GaugeUI
-  let output = createGaugeChart(
+  const gaugeChart = createGaugeChart(
     mgtOverallScoreLabel,
     overallClassificationScore,
     resolvedMode,
@@ -301,6 +301,7 @@ export function GaugeCategoriesList({
       : [0.4, 0.25, 0.35],
   );
 
+  const output = [];
   if (credibilitySignal === keyword("machine_generated_text_title")) {
     // divider
     output.push(<ListItem key="listitem_empty1"></ListItem>);
@@ -348,6 +349,7 @@ export function GaugeCategoriesList({
           />
         </>
       ) : null}
+      {gaugeChart}
       <List>{output}</List>
     </>
   );
