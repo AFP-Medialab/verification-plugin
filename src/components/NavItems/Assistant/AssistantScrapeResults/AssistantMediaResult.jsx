@@ -269,6 +269,7 @@ const AssistantMediaResult = () => {
                     handleClick={(vidLink) => {
                       submitMediaToProcess(vidLink);
                     }}
+                    style={{ overflowY: "visible" }}
                   />
                 </AccordionDetails>
               </Accordion>
