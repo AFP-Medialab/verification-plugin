@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Alert from "@mui/material/Alert";
@@ -27,8 +27,6 @@ const SyntheticImageDetection = () => {
 
   const dispatch = useDispatch();
 
-  const [imageType, setImageType] = useState(undefined);
-
   const [input, setInput] = useState(url ? url : "");
   const [imageFile, setImageFile] = useState(undefined);
 
@@ -38,40 +36,9 @@ const SyntheticImageDetection = () => {
     dispatch(resetSyntheticImageDetectionImage());
   };
 
-  const { startDetection, c2paData } = useSyntheticImageDetection({
+  const { startDetection, c2paData, imageType } = useSyntheticImageDetection({
     dispatch,
   });
-
-  useEffect(() => {
-    if (!result) return;
-
-    if (imageFile && imageFile instanceof File) {
-      setImageType(imageFile.type);
-    }
-
-    if (
-      input &&
-      typeof input === "string" &&
-      input !== "" &&
-      URL.canParse(input)
-    ) {
-      try {
-        fetch(input, {
-          method: "GET",
-          headers: {
-            "User-Agent":
-              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36",
-            Accept: "image/webp,image/apng,image/*,*/*;q=0.8",
-          },
-        }).then(async (response) => {
-          const mimeType = (await response.blob()).type;
-          setImageType(mimeType);
-        });
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  }, [imageFile, input, result]);
 
   return (
     <Stack direction="column" spacing={4}>

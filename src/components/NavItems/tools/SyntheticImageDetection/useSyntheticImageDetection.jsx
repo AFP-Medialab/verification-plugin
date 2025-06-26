@@ -147,6 +147,23 @@ export const useSyntheticImageDetection = ({ dispatch }) => {
     return { status };
   };
 
+  const fetchMimeType = async (url) => {
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36",
+          Accept: "image/webp,image/apng,image/*,*/*;q=0.8",
+        },
+      });
+      return (await response.blob()).type;
+    } catch (e) {
+      console.error(e);
+      return null;
+    }
+  };
+
   const startSyntheticImageDetectionMutation = useMutation({
     mutationFn: startSyntheticImageDetection,
     onError: (error) => {
@@ -176,6 +193,13 @@ export const useSyntheticImageDetection = ({ dispatch }) => {
     queryFn: () => fetchGenerativeInfoFromC2pa(resolvedUrl),
     enabled: !!resolvedUrl,
     cacheTime: 0,
+    refetchOnWindowFocus: false,
+  });
+
+  const mimeTypeQuery = useQuery({
+    queryKey: ["mimeType", resolvedUrl],
+    queryFn: () => fetchMimeType(resolvedUrl),
+    enabled: !!resolvedUrl,
     refetchOnWindowFocus: false,
   });
 
@@ -218,5 +242,6 @@ export const useSyntheticImageDetection = ({ dispatch }) => {
     c2paData: c2paQuery.data,
     c2paLoading: c2paQuery.isLoading,
     c2paError: c2paQuery.error,
+    imageType: mimeTypeQuery.data,
   };
 };
