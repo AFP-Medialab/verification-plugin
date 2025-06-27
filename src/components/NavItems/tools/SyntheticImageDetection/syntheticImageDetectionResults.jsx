@@ -20,6 +20,10 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
@@ -27,6 +31,7 @@ import { Download, ExpandMore } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { ROLES } from "@/constants/roles";
+import CopyButton from "@Shared/CopyButton";
 import JsonBlock from "@Shared/JsonBlock";
 import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
 import { useTrackEvent } from "Hooks/useAnalytics";
@@ -746,18 +751,55 @@ const SyntheticImageDetectionResults = ({
                       pr: 4,
                     }}
                   >
-                    <Accordion
-                      defaultExpanded
-                      onChange={handleNddDetailsChange}
-                    >
+                    <Accordion defaultExpanded>
                       <AccordionSummary expandIcon={<ExpandMore />}>
                         <Typography>{"C2PA GenAI Metadata"}</Typography>
                       </AccordionSummary>
                       <AccordionDetails>
                         <Stack direction={"column"} spacing={4}>
-                          <JsonBlock>
-                            {JSON.stringify(c2paData, null, 2)}
-                          </JsonBlock>
+                          <Table aria-label="c2pa genAI metadata table">
+                            <TableBody>
+                              <TableRow>
+                                <TableCell component="th" scope="row">
+                                  {"App or device used"}
+                                </TableCell>
+                                <TableCell>
+                                  {c2paData[0]?.assertion?.data?.actions?.[1]
+                                    ?.softwareAgent?.name ||
+                                    c2paData[0]?.softwareAgent?.name}
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell component="th" scope="row">
+                                  {"AI tool used"}
+                                </TableCell>
+                                <TableCell>
+                                  {c2paData[0]?.assertion?.data?.actions?.[0]
+                                    ?.softwareAgent?.name ||
+                                    c2paData[0]?.softwareAgent?.name}
+                                </TableCell>
+                              </TableRow>
+                            </TableBody>
+                          </Table>
+
+                          {role.includes(ROLES.EXTRA_FEATURE) && (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "flex-start",
+                              }}
+                            >
+                              <JsonBlock>
+                                {JSON.stringify(c2paData, null, 2)}
+                              </JsonBlock>
+                              <CopyButton
+                                strToCopy={JSON.stringify(c2paData, null, 2)}
+                                labelBeforeCopy={"Copy JSON"}
+                                labelAfterCopy={"Copied!"}
+                              />
+                            </Box>
+                          )}
                         </Stack>
                       </AccordionDetails>
                     </Accordion>
