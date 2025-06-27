@@ -752,7 +752,11 @@ const SyntheticImageDetectionResults = ({
                   >
                     <Accordion defaultExpanded>
                       <AccordionSummary expandIcon={<ExpandMore />}>
-                        <Typography>{"C2PA GenAI Metadata"}</Typography>
+                        <Typography>
+                          {keyword(
+                            "synthetic_image_detection_c2pa_accordion_summary",
+                          )}
+                        </Typography>
                       </AccordionSummary>
                       <AccordionDetails>
                         <Stack direction={"column"} spacing={4}>
@@ -760,7 +764,9 @@ const SyntheticImageDetectionResults = ({
                             <TableBody>
                               <TableRow>
                                 <TableCell component="th" scope="row">
-                                  {"App or device used"}
+                                  {keyword(
+                                    "synthetic_image_detection_c2pa_app_device_used",
+                                  )}
                                 </TableCell>
                                 <TableCell>
                                   {c2paData[0]?.assertion?.data?.actions?.[1]
@@ -770,7 +776,9 @@ const SyntheticImageDetectionResults = ({
                               </TableRow>
                               <TableRow>
                                 <TableCell component="th" scope="row">
-                                  {"AI tool used"}
+                                  {keyword(
+                                    "synthetic_image_detection_c2pa_ai_tool_used",
+                                  )}
                                 </TableCell>
                                 <TableCell>
                                   {c2paData[0]?.assertion?.data?.actions?.[0]
