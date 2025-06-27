@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { useColorScheme } from "@mui/material";
+import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 /**
@@ -14,9 +15,17 @@ import Typography from "@mui/material/Typography";
 const JsonBlock = ({ children }) => {
   const { systemMode, mode } = useColorScheme();
   const resolvedMode = systemMode || mode;
+  const [collapsedKeys, setCollapsedKeys] = useState({});
+
+  const toggleCollapse = (path) => {
+    setCollapsedKeys((prev) => ({
+      ...prev,
+      [path]: !prev[path],
+    }));
+  };
 
   // Utility to parse JSON and render as styled JSX
-  const parseJsonToJsx = (json, resolvedMode) => {
+  const parseJsonToJsx = (json, resolvedMode, path = "") => {
     if (typeof json === "string") {
       try {
         json = JSON.parse(json);
@@ -31,7 +40,7 @@ const JsonBlock = ({ children }) => {
     const booleanColor = resolvedMode === "dark" ? "#569cd6" : "#0000ff";
     const nullColor = resolvedMode === "dark" ? "#569cd6" : "#0000ff";
 
-    const renderValue = (value) => {
+    const renderValue = (value, currentPath) => {
       if (typeof value === "string")
         return <span style={{ color: stringColor }}>{`"${value}"`}</span>;
       if (typeof value === "number")
@@ -39,41 +48,54 @@ const JsonBlock = ({ children }) => {
       if (typeof value === "boolean")
         return <span style={{ color: booleanColor }}>{value.toString()}</span>;
       if (value === null) return <span style={{ color: nullColor }}>null</span>;
-      if (Array.isArray(value)) return renderObject(value);
-      if (typeof value === "object") return renderObject(value);
+      if (Array.isArray(value) || typeof value === "object")
+        return renderObject(value, 2, currentPath);
       return <span>{String(value)}</span>;
     };
 
-    const renderObject = (obj, indent = 2) => {
+    const renderObject = (obj, indent = 2, parentPath = "") => {
       const entries = Array.isArray(obj) ? obj : Object.entries(obj);
       const isArray = Array.isArray(obj);
+      const open = !collapsedKeys[parentPath];
+
       return (
         <>
+          <span
+            onClick={() => toggleCollapse(parentPath)}
+            style={{ cursor: "pointer", userSelect: "none", marginRight: 4 }}
+          >
+            {open ? "▾" : "▸"}
+          </span>
           <span>{isArray ? "[" : "{"}</span>
-          <br />
-          {entries.map((entry, idx) => {
-            const key = isArray ? idx : entry[0];
-            const val = isArray ? entry : entry[1];
-            return (
-              <div key={idx} style={{ marginLeft: indent * 8 }}>
-                {!isArray && (
-                  <>
-                    <span style={{ color: keyColor }}>{`"${key}"`}</span>
-                    <span>: </span>
-                  </>
-                )}
-                {renderValue(val)}
-                {idx < entries.length - 1 ? "," : ""}
-              </div>
-            );
-          })}
-          <br />
+          {open && (
+            <>
+              <br />
+              {entries.map((entry, idx) => {
+                const key = isArray ? idx : entry[0];
+                const val = isArray ? entry : entry[1];
+                const currentPath = parentPath + "." + key;
+                return (
+                  <Box key={idx} style={{ marginLeft: indent * 8 }}>
+                    {!isArray && (
+                      <>
+                        <span style={{ color: keyColor }}>{`"${key}"`}</span>
+                        <span>: </span>
+                      </>
+                    )}
+                    {renderValue(val, currentPath)}
+                    {idx < entries.length - 1 ? "," : ""}
+                  </Box>
+                );
+              })}
+              {/*<br />*/}
+            </>
+          )}
           <span>{isArray ? "]" : "}"}</span>
         </>
       );
     };
 
-    return [renderObject(json, 2)];
+    return [renderObject(json, 2, path)];
   };
 
   return (
