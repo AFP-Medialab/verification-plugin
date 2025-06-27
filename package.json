@@ -36,7 +36,7 @@
     "attr-accept": "^2.2.5",
     "axios": "^1.7.7",
     "buffer": "^6.0.3",
-    "c2pa": "^0.17.5",
+    "c2pa": "^0.30.9",
     "chart.js": "^4.4.4",
     "chartjs-adapter-dayjs-4": "^1.0.4",
     "client-zip": "^2.4.6",

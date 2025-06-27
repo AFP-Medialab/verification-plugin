@@ -489,6 +489,28 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                       {manifestData.editsAndActivity ||
                       manifestData.children ? (
                         <Stack>
+                          {manifestData.generativeInfo &&
+                            manifestData.generativeInfo[0] && (
+                              <Stack direction="column">
+                                <Typography>
+                                  {manifestData.generativeInfo[0].action.action}
+                                </Typography>
+                                <Typography>
+                                  {
+                                    manifestData.generativeInfo[0].action
+                                      .digitalSourceType
+                                  }
+                                </Typography>
+                                <Typography>{"AI Tool used"}</Typography>
+                                <Typography>
+                                  {
+                                    manifestData.generativeInfo[0].softwareAgent
+                                      .name
+                                  }
+                                </Typography>
+                              </Stack>
+                            )}
+
                           {manifestData.editsAndActivity ? (
                             <>
                               <Typography

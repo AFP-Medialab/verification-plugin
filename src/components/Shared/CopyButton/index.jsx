@@ -38,6 +38,7 @@ const CopyButton = ({ strToCopy, labelBeforeCopy, labelAfterCopy }) => {
           handleIconClick(strToCopy);
         }}
         aria-label="copy url"
+        sx={{ p: 1 }}
       >
         {clicks.includes(strToCopy) ? (
           <DoneIcon color="success" />

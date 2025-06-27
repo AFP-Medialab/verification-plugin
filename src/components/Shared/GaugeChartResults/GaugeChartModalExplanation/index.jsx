@@ -103,6 +103,7 @@ const GaugeChartModalExplanation = ({
                 variant="outlined"
                 aria-label="close popup"
                 onClick={toggleModal}
+                sx={{ p: 1 }}
               >
                 <CloseIcon />
               </IconButton>
