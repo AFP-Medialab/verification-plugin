@@ -1,5 +1,17 @@
 import React from "react";
+import GaugeChart from "react-gauge-chart";
 
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import Slider from "@mui/material/Slider";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
+import { ArrowBack } from "@mui/icons-material";
+
+import GaugeChartModalExplanation from "components/Shared/GaugeChartResults/GaugeChartModalExplanation";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
@@ -270,3 +282,209 @@ export const mergeSpanIndices = (filteredClassification) => {
 
   return mergedSpanIndices;
 };
+
+// persuasion techniques: split text for category and technique
+export function getPersuasionCategoryTechnique(category) {
+  return category.split("__");
+}
+
+// persuasion techniques: defining persuasion technique category colours
+export function getPersuasionCategoryColours(configs) {
+  const categoryColours = {
+    Justification: configs.perCategoryJustificationRgb,
+    Simplification: configs.perCategorySimplificationRgb,
+    Distraction: configs.perCategoryDistractionRgb,
+    Call: configs.perCategoryCallRgb,
+    Manipulative_Wording: configs.perCategoryManipulativeRgb,
+    Attack_on_Reputation: configs.perCategoryAttackRgb,
+  };
+  return categoryColours;
+}
+
+// machine generated text and subjectivity: gauge chart
+export function createGaugeChart(
+  mgtOverallScoreLabel,
+  overallClassificationScore,
+  resolvedMode,
+  colours,
+  keyword,
+  gaugeDetectionText,
+  explanation,
+  arcsLength,
+) {
+  const percentScore = Math.round(Number(overallClassificationScore) * 100.0);
+  // gauge explanation text
+  let keywordsArr;
+  if (explanation) {
+    if (arcsLength.length === 3) {
+      keywordsArr = [
+        "gauge_scale_modal_explanation_rating_1_sub",
+        "gauge_scale_modal_explanation_rating_2_sub",
+        "gauge_scale_modal_explanation_rating_3_sub",
+      ];
+    } else if (arcsLength.length === 4) {
+      keywordsArr = [
+        "gauge_scale_modal_explanation_rating_1_mgt",
+        "gauge_scale_modal_explanation_rating_2_mgt",
+        "gauge_scale_modal_explanation_rating_3_mgt",
+        "gauge_scale_modal_explanation_rating_4_mgt",
+      ];
+    }
+  }
+  return (
+    <>
+      {/* Gauge title */}
+      <Typography sx={{ textAlign: "start" }}>
+        {keyword(mgtOverallScoreLabel)}
+      </Typography>
+
+      {/* Gauge chart */}
+      <GaugeChart
+        id={"gauge-chart"}
+        animate={false}
+        nrOfLevels={4}
+        textColor={resolvedMode === "dark" ? "white" : "black"}
+        needleColor={resolvedMode === "dark" ? "#5A5A5A" : "#D3D3D3"}
+        needleBaseColor={resolvedMode === "dark" ? "#5A5A5A" : "#D3D3D3"}
+        arcsLength={arcsLength}
+        percent={overallClassificationScore ? percentScore / 100.0 : null}
+        style={{
+          width: "100%",
+        }}
+        colors={colours}
+      />
+
+      {/* Gauge labels */}
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Typography variant="subtitle2" align="left" sx={{ flex: 1 }}>
+          {keyword(gaugeDetectionText[0])}
+        </Typography>
+        <Typography variant="subtitle2" align="right">
+          {keyword(gaugeDetectionText[1])}
+        </Typography>
+      </Box>
+
+      {/* Gauge explanation */}
+      {explanation && (
+        <Box sx={{ textAlign: "start", mt: 2 }}>
+          <GaugeChartModalExplanation
+            keyword={keyword}
+            keywordsArr={keywordsArr}
+            keywordLink={"gauge_scale_explanation_link"}
+            keywordModalTitle={"gauge_scale_modal_explanation_title"}
+            colors={colours}
+          />
+        </Box>
+      )}
+    </>
+  );
+}
+
+// machine generated text: colours from configs
+export function getMgtColours(configs) {
+  const colours = [
+    rgbToString(configs.greenRgb),
+    rgbToString(configs.lightGreenRgb),
+    rgbToString(configs.orangeRgb),
+    rgbToString(configs.redRgb),
+  ];
+  const coloursDark = [
+    rgbToString(configs.greenRgbDark),
+    rgbToString(configs.lightGreenRgbDark),
+    rgbToString(configs.orangeRgbDark),
+    rgbToString(configs.redRgbDark),
+  ];
+  return [colours, coloursDark];
+}
+
+export function getSubjectivityColours(configs) {
+  const colours = [
+    rgbToString(configs.greenRgb),
+    rgbToString(configs.orangeRgb),
+    rgbToString(configs.redRgb),
+  ];
+  const coloursDark = [
+    rgbToString(configs.greenRgbDark),
+    rgbToString(configs.orangeRgbDark),
+    rgbToString(configs.redRgbDark),
+  ];
+  return [colours, coloursDark];
+}
+
+// primary colour
+export const primaryRgb = [0, 146, 108];
+
+// credibility signals: return to summary
+export function SummaryReturnButton({ setTextTabIndex, text }) {
+  return (
+    <Stack
+      direction="row"
+      sx={{
+        justifyContent: "flex-start",
+        alignItems: "left",
+      }}
+    >
+      <Button
+        onClick={() => setTextTabIndex(0)}
+        startIcon={<ArrowBack />}
+        sx={{ cursor: "pointer" }}
+      >
+        {text}
+      </Button>
+    </Stack>
+  );
+}
+
+// credibility signals: threshold slider component
+export function ThresholdSlider({
+  credibilitySignal,
+  importantSentenceThreshold,
+  handleSliderChange,
+}) {
+  const marks = [
+    {
+      value: 0,
+      label: "Low",
+    },
+    {
+      value: 99,
+      label: "High",
+    },
+  ];
+
+  const scaleValue = (value) => {
+    return value / 100;
+  };
+
+  return (
+    <List>
+      <ListItem key={`${credibilitySignal}_thresholdSlider`}>
+        <Slider
+          aria-label="important sentence threshold slider"
+          marks={marks}
+          step={1}
+          min={0}
+          max={99}
+          scale={scaleValue}
+          //defaultValue={80} // on loading thing it keeps resetting to 80
+          value={importantSentenceThreshold}
+          onChange={handleSliderChange}
+          sx={{
+            "& .MuiSlider-markLabel": {
+              fontSize: "small",
+            },
+          }}
+        />
+      </ListItem>
+    </List>
+  );
+}
+
+export function scrollToElement(id, padding = 0) {
+  const element = document.getElementById(id);
+  if (element) {
+    const targetPosition =
+      element.getBoundingClientRect().top + window.scrollY - padding;
+    window.scrollTo({ top: targetPosition, behavior: "smooth" });
+  }
+}
