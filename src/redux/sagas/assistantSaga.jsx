@@ -19,10 +19,16 @@ import {
   takeLatest,
 } from "redux-saga/effects";
 
+import {
+  getFeedbackMessage,
+  sendToSlack,
+} from "../../components/Feedback/Feedback";
 import assistantApiCalls from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
 import DBKFApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
 import {
+  addChatbotMessage,
   cleanAssistantState,
+  clearChatbotMessages,
   setAssistantLoading,
   setDbkfImageMatchDetails,
   setDbkfTextMatchDetails,
@@ -70,6 +76,10 @@ function* getMediaActionSaga() {
     ["SET_PROCESS_URL", "AUTH_USER_LOGIN", "AUTH_USER_LOGOUT"],
     handleMediaActionList,
   );
+}
+
+function* getAssistantChatbotSaga() {
+  yield takeLatest("SUBMIT_USER_CHATBOT_MESSAGE", handleAssistantChatbotCall);
 }
 
 function* getAssistantScrapeSaga() {
@@ -707,6 +717,48 @@ function* handleNamedEntityCall(action) {
   }
 }
 
+function* handleAssistantChatbotCall(action) {
+  const message = action.payload.message;
+  const email = action.payload.email;
+  const archiveURL = action.payload.archiveURL;
+  const sessionID = action.payload.sessionID;
+  const tool = action.payload.tool;
+  const result = action.payload.result;
+
+  yield put(addChatbotMessage(message, 1));
+
+  try {
+    const chatbotResponse = yield call(
+      assistantApi.callChatbot,
+      sessionID,
+      message,
+      email,
+      archiveURL,
+      tool,
+      result,
+    );
+    const suffix = "\n[Sent via the chatbot assistant]";
+
+    // UNCOMMENT BEFORE MERGING
+    // if (chatbotResponse.userMessageClasses.includes("BUG")) {
+    //   sendToSlack(email, message + suffix, "BUG", archiveURL);
+    // }
+    // if (chatbotResponse.userMessageClasses.includes("FEATURE")) {
+    //   sendToSlack(email, message + suffix, "FEATURE", archiveURL);
+    // }
+    // if (chatbotResponse.userMessageClasses.includes("IMPROVEMENT")) {
+    //   sendToSlack(email, message + suffix, "IMPROVEMENT", archiveURL);
+    // }
+
+    yield put(addChatbotMessage(chatbotResponse.message, 0));
+    yield put(setAssistantLoading(false));
+  } catch (error) {
+    console.log(error);
+    yield put(setAssistantLoading(false));
+    yield put(setErrorKey(error.message));
+  }
+}
+
 function* handleAssistantScrapeCall(action) {
   let inputUrl = action.payload.inputUrl;
 
@@ -1248,6 +1300,7 @@ export default function* assistantSaga() {
     fork(getMediaSimilaritySaga),
     fork(getMediaListSaga),
     fork(getNamedEntitySaga),
+    fork(getAssistantChatbotSaga),
     fork(getAssistantScrapeSaga),
     fork(getUploadSaga),
     fork(getNewsTopicSaga),

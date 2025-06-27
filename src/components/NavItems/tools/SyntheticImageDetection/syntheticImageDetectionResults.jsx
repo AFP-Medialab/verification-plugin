@@ -34,6 +34,7 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 
 import CustomAlertScore from "../../../Shared/CustomAlertScore";
 import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
+import ChatbotInterface from "../../Assistant/ChatbotInterface";
 import NddDatagrid from "./NddDatagrid";
 import {
   DETECTION_THRESHOLDS,
@@ -320,12 +321,22 @@ const SyntheticImageDetectionResults = ({
   const [detailsPanelMessage, setDetailsPanelMessage] = useState(
     "synthetic_image_detection_additional_results",
   );
+
+  const [chatbotPanelMessage, setChatbotPanelMessage] = useState(
+    "synthetic_image_detection_hide_chatbot",
+  );
   const handleDetailsChange = () => {
     detailsPanelMessage === "synthetic_image_detection_additional_results_hide"
       ? setDetailsPanelMessage("synthetic_image_detection_additional_results")
       : setDetailsPanelMessage(
           "synthetic_image_detection_additional_results_hide",
         );
+  };
+
+  const handleChatbotChange = () => {
+    chatbotPanelMessage === "synthetic_image_detection_hide_chatbot"
+      ? setChatbotPanelMessage("synthetic_image_detection_show_chatbot")
+      : setChatbotPanelMessage("synthetic_image_detection_hide_chatbot");
   };
 
   const [nddDetailsPanelMessage, setNddDetailsPanelMessage] = useState(
@@ -715,6 +726,27 @@ const SyntheticImageDetectionResults = ({
                   </Alert>
                 </Stack>
               )}
+            </Grid>
+            <Grid
+              sx={{
+                width: "100%",
+              }}
+            >
+              <Box pl={4} pr={4}>
+                <Accordion defaultExpanded onChange={handleChatbotChange}>
+                  <AccordionSummary expandIcon={<ExpandMore />}>
+                    <Typography>{keyword(chatbotPanelMessage)}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Box sx={{ mr: 2 }}>
+                      <ChatbotInterface
+                        tool="syntheticImageDetection"
+                        result={syntheticImageScores}
+                      />
+                    </Box>
+                  </AccordionDetails>
+                </Accordion>
+              </Box>
             </Grid>
             <Grid container size={{ xs: 12 }} spacing={4}>
               {filteredNddRows && filteredNddRows.length > 0 && (

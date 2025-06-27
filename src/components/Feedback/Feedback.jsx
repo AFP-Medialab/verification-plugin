@@ -19,9 +19,72 @@ import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlin
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
+const API_URL = process.env.REACT_APP_MY_WEB_HOOK_URL;
+
+const getFeedbackMessage = (email, message, messageType, archiveURL = null) => {
+  if (typeof message !== "string" || typeof messageType !== "string")
+    throw new Error("Invalid message type");
+
+  return {
+    blocks: [
+      {
+        type: "header",
+        text: {
+          type: "plain_text",
+          text: "" + messageType + "",
+        },
+      },
+      ...(email
+        ? [
+            {
+              type: "section",
+              text: {
+                type: "mrkdwn",
+                text: "<mailto:" + email + ">",
+              },
+            },
+          ]
+        : []),
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: "" + message + "",
+        },
+        ...(archiveURL // Conditionally add the accessory
+          ? {
+              accessory: {
+                type: "image",
+                image_url: archiveURL.trim(),
+                alt_text: "Problematic image",
+              },
+            }
+          : {}), // Important: Return an empty object if archiveURL is not defined
+      },
+    ],
+  };
+};
+
+const sendToSlack = async (email, message, messageType, archiveURL = null) => {
+  const feedbackMessage = getFeedbackMessage(
+    email,
+    message,
+    messageType,
+    archiveURL,
+  );
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(feedbackMessage),
+  });
+
+  if (!response.ok) throw response;
+
+  return response;
+};
+
 const Feedback = () => {
   const keyword = i18nLoadNamespace("components/FeedBack");
-  const API_URL = process.env.REACT_APP_MY_WEB_HOOK_URL;
 
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   const [displayCard, setDisplayCard] = useState(false);
@@ -41,56 +104,6 @@ const Feedback = () => {
   const [isFeedbackSent, setIsFeedbackSent] = useState(false);
 
   const containerRef = React.useRef(null);
-
-  const getFeedbackMessage = (message, messageType) => {
-    if (typeof message !== "string" || typeof messageType !== "string")
-      throw new Error("Invalid message type");
-
-    return {
-      blocks: [
-        {
-          type: "header",
-          text: {
-            type: "plain_text",
-            text: "" + messageType + "",
-          },
-        },
-        ...(email
-          ? [
-              {
-                type: "section",
-                text: {
-                  type: "mrkdwn",
-                  text: "<mailto:" + email + ">",
-                },
-              },
-            ]
-          : []),
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: "" + message + "",
-          },
-        },
-      ],
-    };
-  };
-
-  const sendToSlack = async (message, messageType) => {
-    const feedbackMessage = getFeedbackMessage(message, messageType);
-    //console.log(feedbackMessage);
-    //console.log(JSON.stringify(feedbackMessage));
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(feedbackMessage),
-    });
-
-    if (!response.ok) throw response;
-
-    return response;
-  };
 
   const validateEmail = (email) => {
     if (!email) return true; //allow to proceed if the email is empty
@@ -113,7 +126,7 @@ const Feedback = () => {
 
     setIsFeedbackSending(true);
 
-    await sendToSlack(message, messageType);
+    await sendToSlack(email, message, messageType);
 
     //console.log("submitted");
 
@@ -312,3 +325,4 @@ const Feedback = () => {
 };
 
 export default Feedback;
+export { getFeedbackMessage, sendToSlack }; // Named exports

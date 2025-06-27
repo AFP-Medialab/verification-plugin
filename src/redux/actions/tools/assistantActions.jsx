@@ -55,6 +55,22 @@ export const setProcessUrl = (processUrl, processUrlType) => {
   };
 };
 
+export const addChatbotMessage = (message, sent) => {
+  return {
+    type: "ADD_CHATBOT_MESSAGE",
+    payload: {
+      message: message,
+      sent: sent,
+    },
+  };
+};
+
+export const clearChatbotMessages = (message, sent) => {
+  return {
+    type: "CLEAR_CHATBOT_MESSAGES",
+  };
+};
+
 export const setScrapedData = (
   text,
   lang,
@@ -360,6 +376,27 @@ export const submitInputUrl = (inputUrl) => {
     type: "SUBMIT_INPUT_URL",
     payload: {
       inputUrl: inputUrl,
+    },
+  };
+};
+
+export const submitUserChatbotMessage = (
+  sessionID,
+  message = null,
+  email = null,
+  archiveURL = null,
+  tool = null,
+  result = null,
+) => {
+  return {
+    type: "SUBMIT_USER_CHATBOT_MESSAGE",
+    payload: {
+      message: message,
+      sessionID: sessionID,
+      email: email,
+      archiveURL: archiveURL,
+      tool: tool,
+      result: result,
     },
   };
 };
