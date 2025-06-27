@@ -675,11 +675,13 @@ function* handleNamedEntityCall(action) {
       );
       let entities = [];
 
-      Object.entries(result.response.annotations).forEach((entity) => {
+      Object.entries(result.entities).forEach((entity) => {
         entity[1].forEach((instance) => {
           if (instance.features.string) {
             entities.push({
               word: instance.features.string,
+              link: instance.features.link,
+              abstract: instance.features.abstract,
               category: entity[0],
             });
           }
@@ -965,6 +967,8 @@ const buildWordCloudList = (entities) => {
       : accumulator.push({
           value: currentWord["word"],
           category: currentWord["category"],
+          link: currentWord["link"],
+          abstract: currentWord["abstract"],
           count: 1,
         });
 
