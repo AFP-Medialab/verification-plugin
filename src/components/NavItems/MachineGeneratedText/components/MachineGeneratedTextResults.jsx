@@ -8,7 +8,6 @@ import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 
 import HighlightedText from "@/components/NavItems/MachineGeneratedText/components/HighlightedText";
-import CopyButton from "@Shared/CopyButton";
 import GaugeChartResult from "@Shared/GaugeChartResults/GaugeChartResult";
 import JsonBlock from "@Shared/JsonBlock";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
@@ -150,17 +149,6 @@ const MachineGeneratedTextResults = ({
                   2,
                 )}
               </JsonBlock>
-              <CopyButton
-                strToCopy={JSON.stringify(
-                  activeTab === "sentences"
-                    ? mutationSentences.data
-                    : mutationChunks.data,
-                  null,
-                  2,
-                )}
-                labelBeforeCopy={"Copy JSON"}
-                labelAfterCopy={"Copied!"}
-              />
             </Box>
           </Stack>
         </Box>

@@ -31,7 +31,6 @@ import { Download, ExpandMore } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { ROLES } from "@/constants/roles";
-import CopyButton from "@Shared/CopyButton";
 import JsonBlock from "@Shared/JsonBlock";
 import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
 import { useTrackEvent } from "Hooks/useAnalytics";
@@ -793,11 +792,6 @@ const SyntheticImageDetectionResults = ({
                               <JsonBlock>
                                 {JSON.stringify(c2paData, null, 2)}
                               </JsonBlock>
-                              <CopyButton
-                                strToCopy={JSON.stringify(c2paData, null, 2)}
-                                labelBeforeCopy={"Copy JSON"}
-                                labelAfterCopy={"Copied!"}
-                              />
                             </Box>
                           )}
                         </Stack>

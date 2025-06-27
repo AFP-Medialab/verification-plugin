@@ -2,7 +2,10 @@ import React, { useState } from "react";
 
 import { useColorScheme } from "@mui/material";
 import Box from "@mui/material/Box";
+import Collapse from "@mui/material/Collapse";
 import Typography from "@mui/material/Typography";
+
+import CopyButton from "@Shared/CopyButton";
 
 /**
  * A presentational component that renders JSON content in a styled, scrollable block.
@@ -67,29 +70,25 @@ const JsonBlock = ({ children }) => {
             {open ? "▾" : "▸"}
           </span>
           <span>{isArray ? "[" : "{"}</span>
-          {open && (
-            <>
-              <br />
-              {entries.map((entry, idx) => {
-                const key = isArray ? idx : entry[0];
-                const val = isArray ? entry : entry[1];
-                const currentPath = parentPath + "." + key;
-                return (
-                  <Box key={idx} style={{ marginLeft: indent * 8 }}>
-                    {!isArray && (
-                      <>
-                        <span style={{ color: keyColor }}>{`"${key}"`}</span>
-                        <span>: </span>
-                      </>
-                    )}
-                    {renderValue(val, currentPath)}
-                    {idx < entries.length - 1 ? "," : ""}
-                  </Box>
-                );
-              })}
-              {/*<br />*/}
-            </>
-          )}
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            {entries.map((entry, idx) => {
+              const key = isArray ? idx : entry[0];
+              const val = isArray ? entry : entry[1];
+              const currentPath = parentPath + "." + key;
+              return (
+                <Box key={idx} style={{ marginLeft: indent * 8 }}>
+                  {!isArray && (
+                    <>
+                      <span style={{ color: keyColor }}>{`"${key}"`}</span>
+                      <span>: </span>
+                    </>
+                  )}
+                  {renderValue(val, currentPath)}
+                  {idx < entries.length - 1 ? "," : ""}
+                </Box>
+              );
+            })}
+          </Collapse>
           <span>{isArray ? "]" : "}"}</span>
         </>
       );
@@ -99,20 +98,38 @@ const JsonBlock = ({ children }) => {
   };
 
   return (
-    <Typography
-      component="pre"
+    <Box
       sx={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
         backgroundColor: resolvedMode === "dark" ? "#1e1e1e" : "#f5f5f5",
         padding: 2,
         borderRadius: 2,
-        overflowX: "auto",
-        fontFamily: "monospace",
-        flexGrow: 1,
-        marginRight: 2,
+        position: "relative",
       }}
     >
-      {parseJsonToJsx(children, resolvedMode)}
-    </Typography>
+      <Box sx={{ position: "absolute", top: 8, right: 8 }}>
+        <CopyButton
+          strToCopy={children}
+          labelBeforeCopy={"Copy JSON"}
+          labelAfterCopy={"Copied!"}
+        />
+      </Box>
+      <Typography
+        component="pre"
+        sx={{
+          overflowX: "auto",
+          fontFamily: "monospace",
+          flexGrow: 1,
+          marginRight: 2,
+          marginTop: 0,
+        }}
+      >
+        {parseJsonToJsx(children, resolvedMode)}
+      </Typography>
+    </Box>
   );
 };
 
