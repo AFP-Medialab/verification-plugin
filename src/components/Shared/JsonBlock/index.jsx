@@ -6,6 +6,7 @@ import Collapse from "@mui/material/Collapse";
 import Typography from "@mui/material/Typography";
 
 import CopyButton from "@Shared/CopyButton";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 /**
  * A presentational component that renders JSON content in a styled, scrollable block.
@@ -16,6 +17,8 @@ import CopyButton from "@Shared/CopyButton";
  * @returns {JSX.Element} A styled block with the JSON content.
  */
 export const JsonBlock = ({ jsonString }) => {
+  const keyword = i18nLoadNamespace("components/Shared/JsonBlock");
+
   const { systemMode, mode } = useColorScheme();
   const resolvedMode = systemMode || mode;
   const [collapsedKeys, setCollapsedKeys] = useState({});
@@ -33,7 +36,7 @@ export const JsonBlock = ({ jsonString }) => {
       try {
         json = JSON.parse(json);
       } catch {
-        return <span style={{ color: "red" }}>Invalid JSON</span>;
+        return <span style={{ color: "red" }}>{keyword("invalid_json")}</span>;
       }
     }
 
@@ -113,8 +116,8 @@ export const JsonBlock = ({ jsonString }) => {
       <Box sx={{ position: "absolute", top: 8, right: 8 }}>
         <CopyButton
           strToCopy={jsonString}
-          labelBeforeCopy={"Copy JSON"}
-          labelAfterCopy={"Copied!"}
+          labelBeforeCopy={keyword("copy_json")}
+          labelAfterCopy={keyword("copied_json")}
         />
       </Box>
       <Typography
