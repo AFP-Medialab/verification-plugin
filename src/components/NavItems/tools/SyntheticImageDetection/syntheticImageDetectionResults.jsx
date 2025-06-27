@@ -31,7 +31,7 @@ import { Download, ExpandMore } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { ROLES } from "@/constants/roles";
-import JsonBlock from "@Shared/JsonBlock";
+import { JsonBlock } from "@Shared/JsonBlock";
 import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
@@ -789,9 +789,9 @@ const SyntheticImageDetectionResults = ({
                                 alignItems: "flex-start",
                               }}
                             >
-                              <JsonBlock>
-                                {JSON.stringify(c2paData, null, 2)}
-                              </JsonBlock>
+                              <JsonBlock
+                                jsonString={JSON.stringify(c2paData, null, 2)}
+                              />
                             </Box>
                           )}
                         </Stack>

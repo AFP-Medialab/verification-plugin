@@ -12,10 +12,10 @@ import CopyButton from "@Shared/CopyButton";
  * It uses the current MUI color scheme to adjust background color for dark/light modes.
  *
  * @component
- * @param {string} children - The stringified JSON content to display.
+ * @param {string} jsonString - The stringified JSON content to display.
  * @returns {JSX.Element} A styled block with the JSON content.
  */
-const JsonBlock = ({ children }) => {
+export const JsonBlock = ({ jsonString }) => {
   const { systemMode, mode } = useColorScheme();
   const resolvedMode = systemMode || mode;
   const [collapsedKeys, setCollapsedKeys] = useState({});
@@ -112,7 +112,7 @@ const JsonBlock = ({ children }) => {
     >
       <Box sx={{ position: "absolute", top: 8, right: 8 }}>
         <CopyButton
-          strToCopy={children}
+          strToCopy={jsonString}
           labelBeforeCopy={"Copy JSON"}
           labelAfterCopy={"Copied!"}
         />
@@ -127,10 +127,8 @@ const JsonBlock = ({ children }) => {
           marginTop: 0,
         }}
       >
-        {parseJsonToJsx(children, resolvedMode)}
+        {parseJsonToJsx(jsonString, resolvedMode)}
       </Typography>
     </Box>
   );
 };
-
-export default JsonBlock;

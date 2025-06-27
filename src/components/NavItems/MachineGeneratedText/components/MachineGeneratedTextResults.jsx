@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 
 import HighlightedText from "@/components/NavItems/MachineGeneratedText/components/HighlightedText";
 import GaugeChartResult from "@Shared/GaugeChartResults/GaugeChartResult";
-import JsonBlock from "@Shared/JsonBlock";
+import { JsonBlock } from "@Shared/JsonBlock";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 /**
@@ -140,15 +140,15 @@ const MachineGeneratedTextResults = ({
                 alignItems: "flex-start",
               }}
             >
-              <JsonBlock>
-                {JSON.stringify(
+              <JsonBlock
+                jsonString={JSON.stringify(
                   activeTab === "sentences"
                     ? mutationSentences.data
                     : mutationChunks.data,
                   null,
                   2,
                 )}
-              </JsonBlock>
+              />
             </Box>
           </Stack>
         </Box>

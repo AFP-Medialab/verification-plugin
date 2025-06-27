@@ -7,7 +7,7 @@ import Stack from "@mui/material/Stack";
 
 import MachineGeneratedTextForm from "@/components/NavItems/MachineGeneratedText/components/MachineGeneratedTextForm";
 import MachineGeneratedTextResults from "@/components/NavItems/MachineGeneratedText/components/MachineGeneratedTextResults";
-import JsonBlock from "@Shared/JsonBlock";
+import { JsonBlock } from "@Shared/JsonBlock";
 
 import { useMachineGeneratedText } from "./useMachineGeneratedText";
 
@@ -46,9 +46,9 @@ const MachineGeneratedText = () => {
           <Alert severity="error">
             {"An error happened, try again later"}
             <Box mt={2}>
-              <JsonBlock>
-                {JSON.stringify(mutationChunks.error, null, 2)}
-              </JsonBlock>
+              <JsonBlock
+                jsonString={JSON.stringify(mutationChunks.error, null, 2)}
+              />
             </Box>
           </Alert>
         ))}
