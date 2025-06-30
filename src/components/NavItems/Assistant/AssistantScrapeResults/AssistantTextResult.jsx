@@ -731,8 +731,6 @@ const AssistantTextResult = () => {
                               machineGeneratedTextSummary}
                             {(machineGeneratedTextChunksFail ||
                               machineGeneratedTextSentencesFail) &&
-                              machineGeneratedTextChunksDone &&
-                              machineGeneratedTextSentencesDone &&
                               summaryFailed(machineGeneratedTextTitle)}
                           </List>
                         </CardContent>
