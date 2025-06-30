@@ -343,24 +343,6 @@ export function createGaugeChart(
   arcsLength,
 ) {
   const percentScore = Math.round(Number(overallClassificationScore) * 100.0);
-  // gauge explanation text
-  let keywordsArr;
-  if (explanation) {
-    if (arcsLength.length === 3) {
-      keywordsArr = [
-        "gauge_scale_modal_explanation_rating_1_sub",
-        "gauge_scale_modal_explanation_rating_2_sub",
-        "gauge_scale_modal_explanation_rating_3_sub",
-      ];
-    } else if (arcsLength.length === 4) {
-      keywordsArr = [
-        "gauge_scale_modal_explanation_rating_1_mgt",
-        "gauge_scale_modal_explanation_rating_2_mgt",
-        "gauge_scale_modal_explanation_rating_3_mgt",
-        "gauge_scale_modal_explanation_rating_4_mgt",
-      ];
-    }
-  }
   return (
     <>
       {/* Gauge title */}
@@ -395,17 +377,7 @@ export function createGaugeChart(
       </Box>
 
       {/* Gauge explanation */}
-      {explanation && (
-        <Box sx={{ textAlign: "start", mt: 2 }}>
-          <GaugeChartModalExplanation
-            keyword={keyword}
-            keywordsArr={keywordsArr}
-            keywordLink={"gauge_scale_explanation_link"}
-            keywordModalTitle={"gauge_scale_modal_explanation_title"}
-            colors={colours}
-          />
-        </Box>
-      )}
+      {explanation && createGaugeExplanation(keyword, arcsLength, colours)}
     </>
   );
 }
