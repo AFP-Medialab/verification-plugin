@@ -529,53 +529,27 @@ const AssistantTextResult = () => {
             <Tab label={keyword("summary_title")} {...a11yProps(0)} />
             <Tab label={keyword("raw_text")} {...a11yProps(1)} />
             <Tab
-              label={
-                <div>
-                  {newsFramingTitle}
-                  {/* {newsFramingLoading && <LinearProgress />} */}
-                </div>
-              }
+              label={<div>{newsFramingTitle}</div>}
               {...a11yProps(2)}
               disabled={newsFramingFail || newsFramingLoading}
             />
             <Tab
-              label={
-                <div>
-                  {newsGenreTitle}
-                  {/* {newsGenreLoading && <LinearProgress />} */}
-                </div>
-              }
+              label={<div>{newsGenreTitle}</div>}
               {...a11yProps(3)}
               disabled={newsGenreFail || newsGenreLoading}
             />
             <Tab
-              label={
-                <div>
-                  {persuasionTitle}
-                  {/* {persuasionLoading && <LinearProgress />} */}
-                </div>
-              }
+              label={<div>{persuasionTitle}</div>}
               {...a11yProps(4)}
               disabled={persuasionFail || persuasionLoading}
             />
             <Tab
-              label={
-                <div>
-                  {subjectivityTitle}
-                  {/* {subjectivityLoading && <LinearProgress />} */}
-                </div>
-              }
+              label={<div>{subjectivityTitle}</div>}
               {...a11yProps(5)}
               disabled={subjectivityFail || subjectivityLoading}
             />
             <Tab
-              label={
-                <div>
-                  {machineGeneratedTextTitle}
-                  {/* {(machineGeneratedTextChunksLoading ||
-                    machineGeneratedTextSentencesLoading) && <LinearProgress />} */}
-                </div>
-              }
+              label={<div>{machineGeneratedTextTitle}</div>}
               {...a11yProps(6)}
               disabled={
                 machineGeneratedTextChunksFail ||
