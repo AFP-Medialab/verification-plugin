@@ -87,6 +87,14 @@ export const rgbListToGradient = (rgbList) => {
   return output;
 };
 
+/**
+ * Recursively takes HTML tree map and returns highlighted spans
+ * @param text
+ * @param treeElem
+ * @param spanHighlightIndices
+ * @param wrapFunc function(spanText, spanInfo)
+ * @returns Array of plaintext or components directly renderable by react
+ */
 function treeMapToElementsRecursive(
   text,
   treeElem,
@@ -170,7 +178,7 @@ function treeMapToElementsRecursive(
 }
 
 /**
- *
+ * Converts HTML tree map to React components
  * @param text
  * @param mapping
  * @param spanHighlightIndices
@@ -198,7 +206,7 @@ export const treeMapToElements = (
 };
 
 /**
- *
+ * Function for wrapping hightlighted spans
  * @param text
  * @param spanHighlightIndices
  * @param wrapFunc
@@ -240,8 +248,8 @@ export const wrapPlainTextSpan = (text, spanHighlightIndices, wrapFunc) => {
 };
 
 /**
- *   Classification variable is a map of categories where each one has a list of classified spans, we
- *   have to invert that so that we have a list of spans that contains all categories in that span
+ * Classification variable is a map of categories where each one has a list of classified spans, we
+ * have to invert that so that we have a list of spans that contains all categories in that span
  * @param filteredClassification
  * @returns {*[]}
  */
@@ -331,7 +339,18 @@ export function createGaugeExplanation(keyword, arcsLength, colours) {
   );
 }
 
-// machine generated text and subjectivity: gauge chart
+/**
+ * Creates a GaugeChart required by machine generated text and subjectivity
+ * @param mgtOverallScoreLabel
+ * @param overallClassificationScore
+ * @param resolvedMode
+ * @param colours
+ * @param keyword
+ * @param gaugeDetectionText
+ * @param explanation
+ * @param arcsLength
+ * @returns GaugeChart
+ */
 export function createGaugeChart(
   mgtOverallScoreLabel,
   overallClassificationScore,
@@ -382,7 +401,11 @@ export function createGaugeChart(
   );
 }
 
-// machine generated text: colours from configs
+/**
+ * Defines the colours required by machine generated text
+ * @param configs
+ * @returns colours for light and dark mode
+ */
 export function getMgtColours(configs) {
   const colours = [
     rgbToString(configs.greenRgb),
@@ -399,6 +422,11 @@ export function getMgtColours(configs) {
   return [colours, coloursDark];
 }
 
+/**
+ * Defines the colours required by subjectivity
+ * @param configs
+ * @returns colours for light and dark mode
+ */
 export function getSubjectivityColours(configs) {
   const colours = [
     rgbToString(configs.greenRgb),
@@ -413,10 +441,16 @@ export function getSubjectivityColours(configs) {
   return [colours, coloursDark];
 }
 
-// primary colour
+/**
+ * Primary colour code
+ */
 export const primaryRgb = [0, 146, 108];
 
-// credibility signals: return to summary
+/**
+ * Crediblity signal summary button
+ * @param { setTextTabIndex, text }
+ * @returns button to return to summary tab
+ */
 export function SummaryReturnButton({ setTextTabIndex, text }) {
   return (
     <Stack
@@ -437,7 +471,11 @@ export function SummaryReturnButton({ setTextTabIndex, text }) {
   );
 }
 
-// credibility signals: threshold slider component
+/**
+ * Slider component utilised by news framing, news genre, persuasion techniques and subjectivity
+ * @param { credibilitySignal, importantSentenceThreshold, handleSliderChange }
+ * @returns slider component
+ */
 export function ThresholdSlider({
   credibilitySignal,
   importantSentenceThreshold,
@@ -454,6 +492,11 @@ export function ThresholdSlider({
     },
   ];
 
+  /**
+   * Scales slider threshold to change from range 0 to 100 to 0 to 1
+   * @param value
+   * @returns number between 0 and 1
+   */
   const scaleValue = (value) => {
     return value / 100;
   };
@@ -481,6 +524,11 @@ export function ThresholdSlider({
   );
 }
 
+/**
+ * Function to take user direct to a specific element on the page
+ * @param id
+ * @param padding
+ */
 export function scrollToElement(id, padding = 0) {
   const element = document.getElementById(id);
   if (element) {
