@@ -218,43 +218,47 @@ const AssistantTextResult = () => {
         .map(([key]) => key)
         .filter((key) => key != importantSentenceKey)
     : [];
-  const newsFramingSummary = newsFramingCategories.map((topic, index) => (
-    <div key={`${index}_div`}>
-      {index != "0" && <Divider key={`${index}_Divider`} />}
-      <ListItem
-        key={`${index}_ListItem`}
-        sx={{
-          background: rgbToString(
-            newsFramingResult
-              ? interpRgb(
-                  newsFramingResult.entities[topic][0].score,
-                  newsFramingResult.configs.confidenceThresholdLow,
-                  newsFramingResult.configs.confidenceThresholdHigh,
-                  newsFramingResult.configs.confidenceRgbLow,
-                  newsFramingResult.configs.confidenceRgbHigh,
-                )
-              : primaryRgb,
-          ),
-          color:
-            rgbToLuminance(
-              newsFramingResult
-                ? interpRgb(
-                    newsFramingResult.entities[topic][0].score,
-                    newsFramingResult.configs.confidenceThresholdLow,
-                    newsFramingResult.configs.confidenceThresholdHigh,
-                    newsFramingResult.configs.confidenceRgbLow,
-                    newsFramingResult.configs.confidenceRgbHigh,
-                  )
-                : primaryRgb,
-            ) > 0.7
-              ? "black"
-              : "white",
-        }}
-      >
-        <ListItemText primary={keyword(topic)} />
-      </ListItem>
-    </div>
-  ));
+  const newsFramingSummary = (
+    <>
+      {newsFramingCategories.map((topic, index) => (
+        <div key={`${index}_div`}>
+          {index != "0" && <Divider key={`${index}_Divider`} />}
+          <ListItem
+            key={`${index}_ListItem`}
+            sx={{
+              background: rgbToString(
+                newsFramingResult
+                  ? interpRgb(
+                      newsFramingResult.entities[topic][0].score,
+                      newsFramingResult.configs.confidenceThresholdLow,
+                      newsFramingResult.configs.confidenceThresholdHigh,
+                      newsFramingResult.configs.confidenceRgbLow,
+                      newsFramingResult.configs.confidenceRgbHigh,
+                    )
+                  : primaryRgb,
+              ),
+              color:
+                rgbToLuminance(
+                  newsFramingResult
+                    ? interpRgb(
+                        newsFramingResult.entities[topic][0].score,
+                        newsFramingResult.configs.confidenceThresholdLow,
+                        newsFramingResult.configs.confidenceThresholdHigh,
+                        newsFramingResult.configs.confidenceRgbLow,
+                        newsFramingResult.configs.confidenceRgbHigh,
+                      )
+                    : primaryRgb,
+                ) > 0.7
+                  ? "black"
+                  : "white",
+            }}
+          >
+            <ListItemText primary={keyword(topic)} />
+          </ListItem>
+        </div>
+      ))}
+    </>
+  );
 
   const newsGenreCategory = newsGenreResult
     ? Object.keys(newsGenreResult.entities).filter(
@@ -271,15 +275,17 @@ const AssistantTextResult = () => {
       )
     : primaryRgb;
   const newsGenreSummary = (
-    <ListItem
-      key={`${newsGenreSummary}_ListItem`}
-      sx={{
-        background: rgbToString(backgroundRgb),
-        color: rgbToLuminance(backgroundRgb) > 0.7 ? "black" : "white",
-      }}
-    >
-      <ListItemText primary={keyword(newsGenreCategory)} />
-    </ListItem>
+    <>
+      <ListItem
+        key={`${newsGenreSummary}_ListItem`}
+        sx={{
+          background: rgbToString(backgroundRgb),
+          color: rgbToLuminance(backgroundRgb) > 0.7 ? "black" : "white",
+        }}
+      >
+        <ListItemText primary={keyword(newsGenreCategory)} />
+      </ListItem>
+    </>
   );
 
   const persuasionCategories = persuasionResult
