@@ -24,7 +24,7 @@ import "./assistantTextResultStyle.css";
 import {
   SummaryReturnButton,
   ThresholdSlider,
-  createGaugeChart,
+  createGaugeExplanation,
   getMgtColours,
   getSubjectivityColours,
   interpRgb,
@@ -38,7 +38,6 @@ import {
 export default function AssistantTextClassification({
   text,
   classification,
-  overallClassification,
   titleText = "",
   importantSentenceKey = "Important_Sentence",
   categoriesTooltipContent = "",
@@ -61,6 +60,7 @@ export default function AssistantTextClassification({
   textHtmlMap = null,
   credibilitySignal = "",
   setTextTabIndex = 0,
+  summary,
 }) {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -116,12 +116,13 @@ export default function AssistantTextClassification({
   // define category and sentence thresholds
   const sentenceThresholdLow = importantSentenceThreshold / 100.0;
   const sentenceThresholdHigh = 99;
-  const categoryThresholdLow = configs.confidenceThresholdLow;
-  const categoryThresholdHigh = configs.confidenceThresholdHigh;
 
-  // filtering
-  let filteredCategories = {};
+  // filtering sentences for all credibility signals
   let filteredSentences = [];
+  // only filtering cetgories for machine generated text
+  // news framing and news genre previously created as summary
+  // subjectivity has no categories
+  let filteredCategories = {};
 
   // Separate important sentences from categories, filter by threshold
   for (let label in classification) {
@@ -218,22 +219,16 @@ export default function AssistantTextClassification({
                 categories={sortedFilteredCategories}
                 keyword={keyword}
                 mgtOverallScoreLabel={mgtOverallScoreLabel}
-                overallClassificationScore={
-                  overallClassification[mgtOverallScoreLabel][0].score
-                }
                 resolvedMode={resolvedMode}
                 colours={resolvedMode === "dark" ? mgtColoursDark : mgtColours}
                 orderedCategories={orderedCategories}
                 credibilitySignal={credibilitySignal}
-                gaugeDetectionText={["gauge_no_detection", "gauge_detection"]}
+                summary={summary}
               />
             ) : credibilitySignal === subjectivityTitle ? (
               <GaugeCategoriesList
                 keyword={keyword}
                 mgtOverallScoreLabel={mgtOverallScoreLabel}
-                overallClassificationScore={
-                  sortedFilteredCategories["Subjective"][0].score
-                }
                 resolvedMode={resolvedMode}
                 colours={
                   resolvedMode === "dark"
@@ -241,18 +236,13 @@ export default function AssistantTextClassification({
                     : subjectivityColours
                 }
                 credibilitySignal={credibilitySignal}
-                gaugeDetectionText={[
-                  "gauge_no_detection_sub",
-                  "gauge_detection_sub",
-                ]}
                 importantSentenceThreshold={importantSentenceThreshold}
                 handleSliderChange={handleSliderChange}
+                summary={summary}
               />
             ) : (
               <CategoriesList
                 categories={sortedFilteredCategories}
-                thresholdLow={categoryThresholdLow}
-                thresholdHigh={categoryThresholdHigh}
                 rgbLow={categoryRgbLow}
                 rgbHigh={categoryRgbHigh}
                 primaryColour={primaryRgb}
@@ -261,6 +251,7 @@ export default function AssistantTextClassification({
                 importantSentenceThreshold={importantSentenceThreshold}
                 handleSliderChange={handleSliderChange}
                 classes={classes}
+                summary={summary}
               />
             )}
             <SummaryReturnButton
@@ -274,31 +265,26 @@ export default function AssistantTextClassification({
   );
 }
 
+// for Subjectivity and Machine Generated Text
 export function GaugeCategoriesList({
   categories,
   keyword,
   mgtOverallScoreLabel,
-  overallClassificationScore,
   resolvedMode,
   colours,
   orderedCategories,
   credibilitySignal,
-  gaugeDetectionText,
   importantSentenceThreshold,
   handleSliderChange,
+  summary,
 }) {
-  // list of categories with overall score first as GaugeUI
-  const gaugeChart = createGaugeChart(
-    mgtOverallScoreLabel,
-    overallClassificationScore,
-    resolvedMode,
-    colours,
+  // gauage chart explanation
+  const gaugeExplanation = createGaugeExplanation(
     keyword,
-    gaugeDetectionText,
-    true,
     credibilitySignal === keyword("machine_generated_text_title")
       ? [0.05, 0.45, 0.45, 0.05]
       : [0.4, 0.25, 0.35],
+    colours,
   );
 
   const output = [];
@@ -349,16 +335,18 @@ export function GaugeCategoriesList({
           />
         </>
       ) : null}
-      {gaugeChart}
-      <List>{output}</List>
+      {summary}
+      {gaugeExplanation}
+      {credibilitySignal === keyword("machine_generated_text_title") && (
+        <List>{output}</List>
+      )}
     </>
   );
 }
 
+// for news framing and news genre
 export function CategoriesList({
   categories,
-  thresholdLow,
-  thresholdHigh,
   rgbLow,
   rgbHigh,
   keyword,
@@ -366,6 +354,7 @@ export function CategoriesList({
   importantSentenceThreshold,
   handleSliderChange,
   classes,
+  summary,
 }) {
   if (_.isEmpty(categories)) {
     return (
@@ -374,38 +363,6 @@ export function CategoriesList({
           keyword("no_detected_topics")}
       </p>
     );
-  }
-  // categories/output
-  let output = [];
-  let index = 0;
-  // let backgroundRgb = primaryColour;
-  for (const category in categories) {
-    if (index > 0) {
-      output.push(<Divider key={index} />);
-    }
-    const backgroundRgb = interpRgb(
-      categories[category][0].score,
-      thresholdLow,
-      thresholdHigh,
-      rgbLow,
-      rgbHigh,
-    );
-    let bgLuminance = rgbToLuminance(backgroundRgb);
-    let textColour = "white";
-    if (bgLuminance > 0.7) textColour = "black";
-
-    output.push(
-      <ListItem
-        key={category}
-        sx={{
-          background: rgbToString(backgroundRgb),
-          color: textColour,
-        }}
-      >
-        <ListItemText primary={keyword(category)} />
-      </ListItem>,
-    );
-    index++;
   }
 
   return (
@@ -431,7 +388,7 @@ export function CategoriesList({
           />
         }
       >
-        <List>{output}</List>
+        {summary}
       </Tooltip>
     </>
   );

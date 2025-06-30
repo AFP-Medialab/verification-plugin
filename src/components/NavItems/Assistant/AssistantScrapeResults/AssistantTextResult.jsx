@@ -801,6 +801,7 @@ const AssistantTextResult = () => {
                   textHtmlMap={textHtmlMap}
                   credibilitySignal={newsFramingTitle}
                   setTextTabIndex={setTextTabIndex}
+                  summary={newsFramingSummary}
                 />
               )}
             </CustomTabPanel>
@@ -817,6 +818,7 @@ const AssistantTextResult = () => {
                   textHtmlMap={textHtmlMap}
                   credibilitySignal={newsGenreTitle}
                   setTextTabIndex={setTextTabIndex}
+                  summary={newsGenreSummary}
                 />
               )}
             </CustomTabPanel>
@@ -848,6 +850,7 @@ const AssistantTextResult = () => {
                   textHtmlMap={textHtmlMap}
                   credibilitySignal={subjectivityTitle}
                   setTextTabIndex={setTextTabIndex}
+                  summary={subjectivitySummary}
                 />
               )}
             </CustomTabPanel>
@@ -861,15 +864,13 @@ const AssistantTextResult = () => {
                     classification={
                       machineGeneratedTextSentencesResult.entities
                     }
-                    overallClassification={
-                      machineGeneratedTextChunksResult.entities
-                    }
                     configs={machineGeneratedTextSentencesResult.configs}
                     titleText={machineGeneratedTextTitle}
                     categoriesTooltipContent={machineGeneratedTextTooltip}
                     textHtmlMap={textHtmlMap}
                     credibilitySignal={machineGeneratedTextTitle}
                     setTextTabIndex={setTextTabIndex}
+                    summary={machineGeneratedTextSummary}
                   />
                 )}
             </CustomTabPanel>

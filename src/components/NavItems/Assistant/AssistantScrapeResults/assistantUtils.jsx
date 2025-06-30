@@ -301,6 +301,36 @@ export function getPersuasionCategoryColours(configs) {
   return categoryColours;
 }
 
+// machine generated text and subjectivity: gauge chart explanation
+export function createGaugeExplanation(keyword, arcsLength, colours) {
+  let keywordsArr;
+  if (arcsLength.length === 3) {
+    keywordsArr = [
+      "gauge_scale_modal_explanation_rating_1_sub",
+      "gauge_scale_modal_explanation_rating_2_sub",
+      "gauge_scale_modal_explanation_rating_3_sub",
+    ];
+  } else if (arcsLength.length === 4) {
+    keywordsArr = [
+      "gauge_scale_modal_explanation_rating_1_mgt",
+      "gauge_scale_modal_explanation_rating_2_mgt",
+      "gauge_scale_modal_explanation_rating_3_mgt",
+      "gauge_scale_modal_explanation_rating_4_mgt",
+    ];
+  }
+  return (
+    <Box sx={{ textAlign: "start", mt: 2 }}>
+      <GaugeChartModalExplanation
+        keyword={keyword}
+        keywordsArr={keywordsArr}
+        keywordLink={"gauge_scale_explanation_link"}
+        keywordModalTitle={"gauge_scale_modal_explanation_title"}
+        colors={colours}
+      />
+    </Box>
+  );
+}
+
 // machine generated text and subjectivity: gauge chart
 export function createGaugeChart(
   mgtOverallScoreLabel,
