@@ -25,22 +25,9 @@ import Typography from "@mui/material/Typography";
 import { WarningAmber } from "@mui/icons-material";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-import { setWarningExpanded } from "@/redux/actions/tools/assistantActions";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { setImportantSentenceThreshold } from "redux/actions/tools/assistantActions";
-import { v4 as uuidv4 } from "uuid";
-
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import {
-  TransCredibilitySignalsLink,
-  TransHtmlDoubleLineBreak,
-  TransMachineGeneratedTextTooltip,
-  TransPersuasionTechniquesTooltip,
-  TransSupportedToolsLink,
-} from "../TransComponents";
-import AssistantTextClassification from "./AssistantTextClassification";
-import AssistantTextSpanClassification from "./AssistantTextSpanClassification";
-import TextFooter from "./TextFooter.jsx";
+import AssistantTextClassification from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantTextClassification";
+import AssistantTextSpanClassification from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantTextSpanClassification";
+import TextFooter from "@/components/NavItems/Assistant/AssistantScrapeResults/TextFooter";
 import {
   createGaugeChart,
   getMgtColours,
@@ -53,7 +40,21 @@ import {
   rgbToString,
   scrollToElement,
   treeMapToElements,
-} from "./assistantUtils";
+} from "@/components/NavItems/Assistant/AssistantScrapeResults/assistantUtils";
+import {
+  TransCredibilitySignalsLink,
+  TransHtmlDoubleLineBreak,
+  TransMachineGeneratedTextTooltip,
+  TransPersuasionTechniquesTooltip,
+  TransSupportedToolsLink,
+} from "@/components/NavItems/Assistant/TransComponents";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
+import {
+  setImportantSentenceThreshold,
+  setWarningExpanded,
+} from "@/redux/actions/tools/assistantActions";
+import { v4 as uuidv4 } from "uuid";
 
 const AssistantTextResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");

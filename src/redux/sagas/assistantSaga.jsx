@@ -1,3 +1,5 @@
+import assistantApiCalls from "@/components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
+import DBKFApi from "@/components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
 import {
   CONTENT_TYPE,
   KNOWN_LINKS,
@@ -7,20 +9,6 @@ import {
   matchPattern,
   selectCorrectActions,
 } from "@/components/NavItems/Assistant/AssistantRuleBook";
-import isEqual from "lodash/isEqual";
-import uniqWith from "lodash/uniqWith";
-import {
-  all,
-  call,
-  fork,
-  put,
-  select,
-  take,
-  takeLatest,
-} from "redux-saga/effects";
-
-import assistantApiCalls from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
-import DBKFApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
 import {
   cleanAssistantState,
   setAssistantLoading,
@@ -46,7 +34,18 @@ import {
   setSingleMediaPresent,
   setSubjectivityDetails,
   setUrlMode,
-} from "../actions/tools/assistantActions";
+} from "@/redux/actions/tools/assistantActions";
+import isEqual from "lodash/isEqual";
+import uniqWith from "lodash/uniqWith";
+import {
+  all,
+  call,
+  fork,
+  put,
+  select,
+  take,
+  takeLatest,
+} from "redux-saga/effects";
 
 /**
  * APIs

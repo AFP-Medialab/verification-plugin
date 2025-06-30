@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 
 import { ArrowBack } from "@mui/icons-material";
 
-import GaugeChartModalExplanation from "components/Shared/GaugeChartResults/GaugeChartModalExplanation";
+import GaugeChartModalExplanation from "@/components/Shared/GaugeChartResults/GaugeChartModalExplanation";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 

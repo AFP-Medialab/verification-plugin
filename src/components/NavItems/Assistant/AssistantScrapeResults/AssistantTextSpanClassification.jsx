@@ -17,12 +17,6 @@ import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import _ from "lodash";
-import { setImportantSentenceThreshold } from "redux/actions/tools/assistantActions";
-import { v4 as uuidv4 } from "uuid";
-
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
   SummaryReturnButton,
   ThresholdSlider,
@@ -34,7 +28,12 @@ import {
   rgbToString,
   treeMapToElements,
   wrapPlainTextSpan,
-} from "./assistantUtils";
+} from "@/components/NavItems/Assistant/AssistantScrapeResults/assistantUtils";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
+import { setImportantSentenceThreshold } from "@/redux/actions/tools/assistantActions";
+import _ from "lodash";
+import { v4 as uuidv4 } from "uuid";
 
 // Had to create a custom styled span as the default style attribute does not support
 // :hover metaclass
@@ -45,7 +44,7 @@ const StyledSpan = styled("span")(({ theme }) => ({
 export default function AssistantTextSpanClassification({
   text,
   classification,
-  titleText = "Detected Class",
+  titleText = "",
   categoriesTooltipContent = "",
   configs = {
     perCategoryJustificationRgb: [150, 0, 255],
