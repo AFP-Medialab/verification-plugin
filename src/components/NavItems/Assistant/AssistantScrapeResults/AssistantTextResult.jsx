@@ -27,6 +27,7 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import { setWarningExpanded } from "@/redux/actions/tools/assistantActions";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { setImportantSentenceThreshold } from "redux/actions/tools/assistantActions";
 import { v4 as uuidv4 } from "uuid";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
@@ -169,11 +170,9 @@ const AssistantTextResult = () => {
   const [textTabIndex, setTextTabIndex] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTextTabIndex(newValue);
+    // reset slider value on tab change to 80
+    dispatch(setImportantSentenceThreshold(80));
   };
-
-  // slider
-  const [importantSentenceThreshold, setImportantSentenceThreshold] =
-    useState(80);
 
   useEffect(() => {
     if (textHtmlMap !== null) {
@@ -801,96 +800,75 @@ const AssistantTextResult = () => {
 
             {/* news framing (topic) */}
             <CustomTabPanel value={textTabIndex} index={2}>
-              {newsFramingDone && (
-                <AssistantTextClassification
-                  text={text}
-                  classification={newsFramingResult?.entities}
-                  configs={newsFramingResult?.configs}
-                  titleText={newsFramingTitle}
-                  categoriesTooltipContent={newsFramingTooltip}
-                  textHtmlMap={textHtmlMap}
-                  credibilitySignal={newsFramingTitle}
-                  setTextTabIndex={setTextTabIndex}
-                  summary={newsFramingSummary}
-                  importantSentenceThreshold={importantSentenceThreshold}
-                  setImportantSentenceThreshold={setImportantSentenceThreshold}
-                />
-              )}
+              <AssistantTextClassification
+                text={text}
+                classification={newsFramingResult?.entities}
+                configs={newsFramingResult?.configs}
+                titleText={newsFramingTitle}
+                categoriesTooltipContent={newsFramingTooltip}
+                textHtmlMap={textHtmlMap}
+                credibilitySignal={newsFramingTitle}
+                setTextTabIndex={setTextTabIndex}
+                summary={newsFramingSummary}
+              />
             </CustomTabPanel>
 
             {/* news genre */}
             <CustomTabPanel value={textTabIndex} index={3}>
-              {newsGenreDone && (
-                <AssistantTextClassification
-                  text={text}
-                  classification={newsGenreResult.entities}
-                  configs={newsGenreResult.configs}
-                  titleText={newsGenreTitle}
-                  categoriesTooltipContent={newsGenreTooltip}
-                  textHtmlMap={textHtmlMap}
-                  credibilitySignal={newsGenreTitle}
-                  setTextTabIndex={setTextTabIndex}
-                  summary={newsGenreSummary}
-                  importantSentenceThreshold={importantSentenceThreshold}
-                  setImportantSentenceThreshold={setImportantSentenceThreshold}
-                />
-              )}
+              <AssistantTextClassification
+                text={text}
+                classification={newsGenreResult?.entities}
+                configs={newsGenreResult?.configs}
+                titleText={newsGenreTitle}
+                categoriesTooltipContent={newsGenreTooltip}
+                textHtmlMap={textHtmlMap}
+                credibilitySignal={newsGenreTitle}
+                setTextTabIndex={setTextTabIndex}
+                summary={newsGenreSummary}
+              />
             </CustomTabPanel>
 
             {/* persuasion */}
             <CustomTabPanel value={textTabIndex} index={4}>
-              {persuasionDone && (
-                <AssistantTextSpanClassification
-                  text={text}
-                  classification={persuasionResult.entities}
-                  configs={persuasionResult.configs}
-                  titleText={persuasionTitle}
-                  categoriesTooltipContent={persuasionTooltip}
-                  textHtmlMap={textHtmlMap}
-                  setTextTabIndex={setTextTabIndex}
-                  importantSentenceThreshold={importantSentenceThreshold}
-                  setImportantSentenceThreshold={setImportantSentenceThreshold}
-                />
-              )}
+              <AssistantTextSpanClassification
+                text={text}
+                classification={persuasionResult?.entities}
+                configs={persuasionResult?.configs}
+                titleText={persuasionTitle}
+                categoriesTooltipContent={persuasionTooltip}
+                textHtmlMap={textHtmlMap}
+                setTextTabIndex={setTextTabIndex}
+              />
             </CustomTabPanel>
 
             {/* subjectivity */}
             <CustomTabPanel value={textTabIndex} index={5}>
-              {subjectivityDone && (
-                <AssistantTextClassification
-                  text={text}
-                  classification={subjectivityResult.entities}
-                  configs={subjectivityResult.configs}
-                  titleText={subjectivityTitle}
-                  categoriesTooltipContent={subjectivityTooltip}
-                  textHtmlMap={textHtmlMap}
-                  credibilitySignal={subjectivityTitle}
-                  setTextTabIndex={setTextTabIndex}
-                  summary={subjectivitySummary}
-                  importantSentenceThreshold={importantSentenceThreshold}
-                  setImportantSentenceThreshold={setImportantSentenceThreshold}
-                />
-              )}
+              <AssistantTextClassification
+                text={text}
+                classification={subjectivityResult?.entities}
+                configs={subjectivityResult?.configs}
+                titleText={subjectivityTitle}
+                categoriesTooltipContent={subjectivityTooltip}
+                textHtmlMap={textHtmlMap}
+                credibilitySignal={subjectivityTitle}
+                setTextTabIndex={setTextTabIndex}
+                summary={subjectivitySummary}
+              />
             </CustomTabPanel>
 
             {/* machine generated text */}
             <CustomTabPanel value={textTabIndex} index={6}>
-              {machineGeneratedTextChunksDone &&
-                machineGeneratedTextSentencesDone && (
-                  <AssistantTextClassification
-                    text={text}
-                    classification={
-                      machineGeneratedTextSentencesResult.entities
-                    }
-                    configs={machineGeneratedTextSentencesResult.configs}
-                    titleText={machineGeneratedTextTitle}
-                    categoriesTooltipContent={machineGeneratedTextTooltip}
-                    textHtmlMap={textHtmlMap}
-                    credibilitySignal={machineGeneratedTextTitle}
-                    setTextTabIndex={setTextTabIndex}
-                    summary={machineGeneratedTextSummary}
-                  />
-                )}
+              <AssistantTextClassification
+                text={text}
+                classification={machineGeneratedTextSentencesResult?.entities}
+                configs={machineGeneratedTextSentencesResult?.configs}
+                titleText={machineGeneratedTextTitle}
+                categoriesTooltipContent={machineGeneratedTextTooltip}
+                textHtmlMap={textHtmlMap}
+                credibilitySignal={machineGeneratedTextTitle}
+                setTextTabIndex={setTextTabIndex}
+                summary={machineGeneratedTextSummary}
+              />
             </CustomTabPanel>
           </Box>
         </Collapse>

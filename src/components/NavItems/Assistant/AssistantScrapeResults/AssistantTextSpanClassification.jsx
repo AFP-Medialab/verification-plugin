@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { useColorScheme } from "@mui/material";
 import { styled } from "@mui/material";
@@ -18,6 +19,7 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import _ from "lodash";
+import { setImportantSentenceThreshold } from "redux/actions/tools/assistantActions";
 import { v4 as uuidv4 } from "uuid";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
@@ -26,7 +28,6 @@ import {
   ThresholdSlider,
   getPersuasionCategoryColours,
   getPersuasionCategoryTechnique,
-  //interpRgb,
   mergeSpanIndices,
   primaryRgb,
   rgbToLuminance,
@@ -56,10 +57,9 @@ export default function AssistantTextSpanClassification({
   },
   textHtmlMap = null,
   setTextTabIndex = 0,
-  importantSentenceThreshold,
-  setImportantSentenceThreshold,
 }) {
   const classes = useMyStyles();
+  const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   // title
@@ -68,6 +68,15 @@ export default function AssistantTextSpanClassification({
   // for dark mode
   const { mode, systemMode } = useColorScheme();
   const resolvedMode = systemMode || mode;
+
+  // slider
+  const importantSentenceThreshold = useSelector(
+    (state) => state.assistant.importantSentenceThreshold,
+  );
+
+  const handleSliderChange = (event, newValue) => {
+    dispatch(setImportantSentenceThreshold(newValue));
+  };
 
   function filterLabelsWithMinThreshold(classification, minThreshold) {
     let filteredLabels = {};
@@ -281,7 +290,7 @@ export default function AssistantTextSpanClassification({
               onCategoryChange={handleCategorySelect}
               keyword={keyword}
               importantSentenceThreshold={importantSentenceThreshold}
-              setImportantSentenceThreshold={setImportantSentenceThreshold}
+              handleSliderChange={handleSliderChange}
               credibilitySignal={persuasionTitle}
             />
             <SummaryReturnButton
@@ -303,7 +312,7 @@ export function CategoriesListToggle({
   onCategoryChange = () => {},
   keyword,
   importantSentenceThreshold,
-  setImportantSentenceThreshold,
+  handleSliderChange,
   credibilitySignal,
 }) {
   // categories
@@ -399,7 +408,7 @@ export function CategoriesListToggle({
       <ThresholdSlider
         credibilitySignal={credibilitySignal}
         importantSentenceThreshold={importantSentenceThreshold}
-        setImportantSentenceThreshold={setImportantSentenceThreshold}
+        handleSliderChange={handleSliderChange}
       />
       <List>
         {_.isEmpty(categoriesList) ? (

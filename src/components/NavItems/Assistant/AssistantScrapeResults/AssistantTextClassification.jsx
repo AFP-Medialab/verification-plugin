@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { useColorScheme } from "@mui/material";
 import Card from "@mui/material/Card";
@@ -16,6 +17,7 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import _ from "lodash";
+import { setImportantSentenceThreshold } from "redux/actions/tools/assistantActions";
 import { v4 as uuidv4 } from "uuid";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
@@ -61,10 +63,9 @@ export default function AssistantTextClassification({
   credibilitySignal = "",
   setTextTabIndex = 0,
   summary,
-  importantSentenceThreshold,
-  setImportantSentenceThreshold,
 }) {
   const classes = useMyStyles();
+  const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   // titles
@@ -72,6 +73,15 @@ export default function AssistantTextClassification({
   const newsGenreTitle = keyword("news_genre_title");
   const subjectivityTitle = keyword("subjectivity_title");
   const machineGeneratedTextTitle = keyword("machine_generated_text_title");
+
+  // slider
+  const importantSentenceThreshold = useSelector(
+    (state) => state.assistant.importantSentenceThreshold,
+  );
+
+  const handleSliderChange = (event, newValue) => {
+    dispatch(setImportantSentenceThreshold(newValue));
+  };
 
   // for dark mode
   const { mode, systemMode } = useColorScheme();
@@ -231,7 +241,7 @@ export default function AssistantTextClassification({
                 }
                 credibilitySignal={credibilitySignal}
                 importantSentenceThreshold={importantSentenceThreshold}
-                setImportantSentenceThreshold={setImportantSentenceThreshold}
+                handleSliderChange={handleSliderChange}
                 summary={summary}
               />
             ) : (
@@ -243,7 +253,7 @@ export default function AssistantTextClassification({
                 keyword={keyword}
                 credibilitySignal={credibilitySignal}
                 importantSentenceThreshold={importantSentenceThreshold}
-                setImportantSentenceThreshold={setImportantSentenceThreshold}
+                handleSliderChange={handleSliderChange}
                 classes={classes}
                 summary={summary}
               />
@@ -269,7 +279,7 @@ export function GaugeCategoriesList({
   orderedCategories,
   credibilitySignal,
   importantSentenceThreshold,
-  setImportantSentenceThreshold,
+  handleSliderChange,
   summary,
 }) {
   // gauage chart explanation
@@ -325,7 +335,7 @@ export function GaugeCategoriesList({
           <ThresholdSlider
             credibilitySignal={credibilitySignal}
             importantSentenceThreshold={importantSentenceThreshold}
-            setImportantSentenceThreshold={setImportantSentenceThreshold}
+            handleSliderChange={handleSliderChange}
           />
         </>
       ) : null}
@@ -346,7 +356,7 @@ export function CategoriesList({
   keyword,
   credibilitySignal,
   importantSentenceThreshold,
-  setImportantSentenceThreshold,
+  handleSliderChange,
   classes,
   summary,
 }) {
@@ -367,7 +377,7 @@ export function CategoriesList({
       <ThresholdSlider
         credibilitySignal={credibilitySignal}
         importantSentenceThreshold={importantSentenceThreshold}
-        setImportantSentenceThreshold={setImportantSentenceThreshold}
+        handleSliderChange={handleSliderChange}
       />
       <Tooltip
         classes={{ tooltip: classes.assistantTooltip }}

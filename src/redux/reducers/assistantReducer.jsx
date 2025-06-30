@@ -88,6 +88,8 @@ const defaultState = {
   warningExpanded: false,
   assuranceExpanded: false,
   stateExpanded: false,
+
+  importantSentenceThreshold: 80,
 };
 
 const assistantReducer = (state = defaultState, action) => {
@@ -119,6 +121,12 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_ASSURANCE_EXPANDED":
     case "SET_STATE_EXPANDED":
       return Object.assign({}, state, action.payload);
+
+    case "SET_IMPORTANT_SENTENCE_THRESHOLD":
+      return {
+        ...state,
+        importantSentenceThreshold: action.payload,
+      };
 
     case "CLEAN_STATE":
       return {

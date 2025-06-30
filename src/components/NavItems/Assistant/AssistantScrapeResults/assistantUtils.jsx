@@ -441,12 +441,8 @@ export function SummaryReturnButton({ setTextTabIndex, text }) {
 export function ThresholdSlider({
   credibilitySignal,
   importantSentenceThreshold,
-  setImportantSentenceThreshold,
+  handleSliderChange,
 }) {
-  const handleSliderChange = (event, newValue) => {
-    setImportantSentenceThreshold(newValue); // This updates the parent's state
-  };
-
   const marks = [
     {
       value: 0,
@@ -472,7 +468,6 @@ export function ThresholdSlider({
           min={0}
           max={99}
           scale={scaleValue}
-          //defaultValue={80} // on loading thing it keeps resetting to 80
           value={importantSentenceThreshold}
           onChange={handleSliderChange}
           sx={{
