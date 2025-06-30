@@ -469,8 +469,12 @@ export function SummaryReturnButton({ setTextTabIndex, text }) {
 export function ThresholdSlider({
   credibilitySignal,
   importantSentenceThreshold,
-  handleSliderChange,
+  setImportantSentenceThreshold,
 }) {
+  const handleSliderChange = (event, newValue) => {
+    setImportantSentenceThreshold(newValue); // This updates the parent's state
+  };
+
   const marks = [
     {
       value: 0,

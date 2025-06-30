@@ -56,6 +56,8 @@ export default function AssistantTextSpanClassification({
   },
   textHtmlMap = null,
   setTextTabIndex = 0,
+  importantSentenceThreshold,
+  setImportantSentenceThreshold,
 }) {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -83,14 +85,6 @@ export default function AssistantTextSpanClassification({
     }
     return filteredLabels;
   }
-
-  // slider set up
-  const [importantSentenceThreshold, setImportantSentenceThreshold] =
-    React.useState(80);
-
-  const handleSliderChange = (event, newValue) => {
-    setImportantSentenceThreshold(newValue);
-  };
 
   // filter classification
   let filteredClassification = filterLabelsWithMinThreshold(
@@ -287,7 +281,7 @@ export default function AssistantTextSpanClassification({
               onCategoryChange={handleCategorySelect}
               keyword={keyword}
               importantSentenceThreshold={importantSentenceThreshold}
-              handleSliderChange={handleSliderChange}
+              setImportantSentenceThreshold={setImportantSentenceThreshold}
               credibilitySignal={persuasionTitle}
             />
             <SummaryReturnButton
@@ -309,7 +303,7 @@ export function CategoriesListToggle({
   onCategoryChange = () => {},
   keyword,
   importantSentenceThreshold,
-  handleSliderChange,
+  setImportantSentenceThreshold,
   credibilitySignal,
 }) {
   // categories
@@ -405,7 +399,7 @@ export function CategoriesListToggle({
       <ThresholdSlider
         credibilitySignal={credibilitySignal}
         importantSentenceThreshold={importantSentenceThreshold}
-        handleSliderChange={handleSliderChange}
+        setImportantSentenceThreshold={setImportantSentenceThreshold}
       />
       <List>
         {_.isEmpty(categoriesList) ? (

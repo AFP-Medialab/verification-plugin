@@ -171,6 +171,10 @@ const AssistantTextResult = () => {
     setTextTabIndex(newValue);
   };
 
+  // slider
+  const [importantSentenceThreshold, setImportantSentenceThreshold] =
+    useState(80);
+
   useEffect(() => {
     if (textHtmlMap !== null) {
       // HTML text is contained in an xml document, we need to parse it and
@@ -800,14 +804,16 @@ const AssistantTextResult = () => {
               {newsFramingDone && (
                 <AssistantTextClassification
                   text={text}
-                  classification={newsFramingResult.entities}
-                  configs={newsFramingResult.configs}
+                  classification={newsFramingResult?.entities}
+                  configs={newsFramingResult?.configs}
                   titleText={newsFramingTitle}
                   categoriesTooltipContent={newsFramingTooltip}
                   textHtmlMap={textHtmlMap}
                   credibilitySignal={newsFramingTitle}
                   setTextTabIndex={setTextTabIndex}
                   summary={newsFramingSummary}
+                  importantSentenceThreshold={importantSentenceThreshold}
+                  setImportantSentenceThreshold={setImportantSentenceThreshold}
                 />
               )}
             </CustomTabPanel>
@@ -825,6 +831,8 @@ const AssistantTextResult = () => {
                   credibilitySignal={newsGenreTitle}
                   setTextTabIndex={setTextTabIndex}
                   summary={newsGenreSummary}
+                  importantSentenceThreshold={importantSentenceThreshold}
+                  setImportantSentenceThreshold={setImportantSentenceThreshold}
                 />
               )}
             </CustomTabPanel>
@@ -840,6 +848,8 @@ const AssistantTextResult = () => {
                   categoriesTooltipContent={persuasionTooltip}
                   textHtmlMap={textHtmlMap}
                   setTextTabIndex={setTextTabIndex}
+                  importantSentenceThreshold={importantSentenceThreshold}
+                  setImportantSentenceThreshold={setImportantSentenceThreshold}
                 />
               )}
             </CustomTabPanel>
@@ -857,6 +867,8 @@ const AssistantTextResult = () => {
                   credibilitySignal={subjectivityTitle}
                   setTextTabIndex={setTextTabIndex}
                   summary={subjectivitySummary}
+                  importantSentenceThreshold={importantSentenceThreshold}
+                  setImportantSentenceThreshold={setImportantSentenceThreshold}
                 />
               )}
             </CustomTabPanel>

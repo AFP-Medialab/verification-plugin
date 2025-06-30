@@ -61,6 +61,8 @@ export default function AssistantTextClassification({
   credibilitySignal = "",
   setTextTabIndex = 0,
   summary,
+  importantSentenceThreshold,
+  setImportantSentenceThreshold,
 }) {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -74,14 +76,6 @@ export default function AssistantTextClassification({
   // for dark mode
   const { mode, systemMode } = useColorScheme();
   const resolvedMode = systemMode || mode;
-
-  // slider
-  const [importantSentenceThreshold, setImportantSentenceThreshold] =
-    React.useState(80);
-
-  const handleSliderChange = (event, newValue) => {
-    setImportantSentenceThreshold(newValue);
-  };
 
   // define category for machine generated text overall score
   const mgtOverallScoreLabel = "mgt_overall_score";
@@ -237,7 +231,7 @@ export default function AssistantTextClassification({
                 }
                 credibilitySignal={credibilitySignal}
                 importantSentenceThreshold={importantSentenceThreshold}
-                handleSliderChange={handleSliderChange}
+                setImportantSentenceThreshold={setImportantSentenceThreshold}
                 summary={summary}
               />
             ) : (
@@ -249,7 +243,7 @@ export default function AssistantTextClassification({
                 keyword={keyword}
                 credibilitySignal={credibilitySignal}
                 importantSentenceThreshold={importantSentenceThreshold}
-                handleSliderChange={handleSliderChange}
+                setImportantSentenceThreshold={setImportantSentenceThreshold}
                 classes={classes}
                 summary={summary}
               />
@@ -275,7 +269,7 @@ export function GaugeCategoriesList({
   orderedCategories,
   credibilitySignal,
   importantSentenceThreshold,
-  handleSliderChange,
+  setImportantSentenceThreshold,
   summary,
 }) {
   // gauage chart explanation
@@ -331,7 +325,7 @@ export function GaugeCategoriesList({
           <ThresholdSlider
             credibilitySignal={credibilitySignal}
             importantSentenceThreshold={importantSentenceThreshold}
-            handleSliderChange={handleSliderChange}
+            setImportantSentenceThreshold={setImportantSentenceThreshold}
           />
         </>
       ) : null}
@@ -352,7 +346,7 @@ export function CategoriesList({
   keyword,
   credibilitySignal,
   importantSentenceThreshold,
-  handleSliderChange,
+  setImportantSentenceThreshold,
   classes,
   summary,
 }) {
@@ -373,7 +367,7 @@ export function CategoriesList({
       <ThresholdSlider
         credibilitySignal={credibilitySignal}
         importantSentenceThreshold={importantSentenceThreshold}
-        handleSliderChange={handleSliderChange}
+        setImportantSentenceThreshold={setImportantSentenceThreshold}
       />
       <Tooltip
         classes={{ tooltip: classes.assistantTooltip }}
