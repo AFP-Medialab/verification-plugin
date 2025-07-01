@@ -8,7 +8,6 @@ import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
-import Collapse from "@mui/material/Collapse";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -460,7 +459,7 @@ const AssistantTextResult = () => {
   );
 
   // scroll box and collapse default height
-  const maxHeight = 620;
+  const cardMaxHeight = 620;
 
   return (
     <Card
@@ -520,252 +519,80 @@ const AssistantTextResult = () => {
       <CardContent
         style={{
           wordBreak: "break-word",
-          overflowY: "auto",
-          overflowX: "hidden",
         }}
       >
-        <Collapse
-          in={expanded}
-          collapsedSize={maxHeight}
-          id={"element-to-check"}
+        {/* tabs setup */}
+        <Tabs
+          value={textTabIndex}
+          onChange={handleTabChange}
+          aria-label="extracted text tabs"
+          variant="scrollable"
         >
-          {/* tabs setup */}
-          <Tabs
-            value={textTabIndex}
-            onChange={handleTabChange}
-            aria-label="extracted text tabs"
-            variant="scrollable"
-          >
-            <Tab label={keyword("summary_title")} {...a11yProps(0)} />
-            <Tab label={keyword("raw_text")} {...a11yProps(1)} />
-            <Tab
-              label={<div>{newsFramingTitle}</div>}
-              {...a11yProps(2)}
-              disabled={newsFramingFail || newsFramingLoading}
-            />
-            <Tab
-              label={<div>{newsGenreTitle}</div>}
-              {...a11yProps(3)}
-              disabled={newsGenreFail || newsGenreLoading}
-            />
-            <Tab
-              label={<div>{persuasionTitle}</div>}
-              {...a11yProps(4)}
-              disabled={persuasionFail || persuasionLoading}
-            />
-            <Tab
-              label={<div>{subjectivityTitle}</div>}
-              {...a11yProps(5)}
-              disabled={subjectivityFail || subjectivityLoading}
-            />
-            <Tab
-              label={<div>{machineGeneratedTextTitle}</div>}
-              {...a11yProps(6)}
-              disabled={
-                machineGeneratedTextChunksFail ||
-                machineGeneratedTextChunksLoading ||
-                machineGeneratedTextSentencesFail ||
-                machineGeneratedTextSentencesLoading
-              }
-            />
-          </Tabs>
+          <Tab label={keyword("summary_title")} {...a11yProps(0)} />
+          <Tab label={keyword("raw_text")} {...a11yProps(1)} />
+          <Tab
+            label={<div>{newsFramingTitle}</div>}
+            {...a11yProps(2)}
+            disabled={newsFramingFail || newsFramingLoading}
+          />
+          <Tab
+            label={<div>{newsGenreTitle}</div>}
+            {...a11yProps(3)}
+            disabled={newsGenreFail || newsGenreLoading}
+          />
+          <Tab
+            label={<div>{persuasionTitle}</div>}
+            {...a11yProps(4)}
+            disabled={persuasionFail || persuasionLoading}
+          />
+          <Tab
+            label={<div>{subjectivityTitle}</div>}
+            {...a11yProps(5)}
+            disabled={subjectivityFail || subjectivityLoading}
+          />
+          <Tab
+            label={<div>{machineGeneratedTextTitle}</div>}
+            {...a11yProps(6)}
+            disabled={
+              machineGeneratedTextChunksFail ||
+              machineGeneratedTextChunksLoading ||
+              machineGeneratedTextSentencesFail ||
+              machineGeneratedTextSentencesLoading
+            }
+          />
+        </Tabs>
 
-          <Box
-            sx={{
-              maxHeight: expanded ? "none" : maxHeight, // Only limit height when collapsed
-              overflow: expanded ? "visible" : "auto", // Only scroll when collapsed
-              scrollbarGutter: "stable", // Reserve space for scrollbar
-              paddingRight: expanded ? "15px" : "0px", // Fallback for older browsers
-            }}
-          >
-            {/* summaries */}
-            <CustomTabPanel value={textTabIndex} index={0}>
-              <Grid container spacing={2}>
-                {/* column 1 */}
-                <Grid size={{ xs: 4 }}>
-                  <Stack spacing={2}>
-                    {/* news framing summary */}
-                    <Card>
-                      <CardActionArea
-                        onClick={() =>
-                          newsFramingResult ? setTextTabIndex(2) : null
-                        }
-                      >
-                        <CardHeader
-                          className={classes.assistantCardHeader}
-                          title={newsFramingTitle}
-                          action={
-                            <div style={{ display: "flex" }}>
-                              <Tooltip
-                                interactive={"true"}
-                                title={newsFramingTooltip}
-                                classes={{ tooltip: classes.assistantTooltip }}
-                              >
-                                <HelpOutlineOutlinedIcon
-                                  className={classes.toolTipIcon}
-                                />
-                              </Tooltip>
-                            </div>
-                          }
-                        />
-                        <CardContent>
-                          <List key="news_framing_list_summary">
-                            {newsFramingLoading &&
-                              summaryLoading(newsFramingTitle)}
-                            {newsFramingDone
-                              ? Object.keys(newsFramingResult.entities).length >
-                                0
-                                ? newsFramingSummary
-                                : summaryEmpty(newsFramingTitle, keyword)
-                              : null}
-                            {newsFramingFail && summaryFailed(newsFramingTitle)}
-                          </List>
-                        </CardContent>
-                      </CardActionArea>
-                    </Card>
-
-                    {/* subjectivity summary */}
-                    <Card>
-                      <CardActionArea
-                        onClick={() =>
-                          subjectivityResult ? setTextTabIndex(5) : null
-                        }
-                      >
-                        <CardHeader
-                          className={classes.assistantCardHeader}
-                          title={subjectivityTitle}
-                          action={
-                            <div style={{ display: "flex" }}>
-                              <Tooltip
-                                interactive={"true"}
-                                title={subjectivityTooltip}
-                                classes={{ tooltip: classes.assistantTooltip }}
-                              >
-                                <HelpOutlineOutlinedIcon
-                                  className={classes.toolTipIcon}
-                                />
-                              </Tooltip>
-                            </div>
-                          }
-                        />
-                        <CardContent>
-                          <List>
-                            {subjectivityLoading &&
-                              summaryLoading(subjectivityTitle)}
-                            {subjectivityDone
-                              ? Object.keys(subjectivityResult.entities)
-                                  .length > 0
-                                ? subjectivitySummary
-                                : summaryEmpty(subjectivityTitle, keyword)
-                              : null}
-                            {subjectivityFail &&
-                              summaryFailed(subjectivityTitle)}
-                          </List>
-                        </CardContent>
-                      </CardActionArea>
-                    </Card>
-                  </Stack>
-                </Grid>
-
-                {/* column 2 */}
-                <Grid size={{ xs: 4 }}>
-                  <Stack spacing={2}>
-                    {/* news genre summary */}
-                    <Card>
-                      <CardActionArea
-                        onClick={() =>
-                          newsGenreResult ? setTextTabIndex(3) : null
-                        }
-                      >
-                        <CardHeader
-                          className={classes.assistantCardHeader}
-                          title={newsGenreTitle}
-                          action={
-                            <div style={{ display: "flex" }}>
-                              <Tooltip
-                                interactive={"true"}
-                                title={newsGenreTooltip}
-                                classes={{ tooltip: classes.assistantTooltip }}
-                              >
-                                <HelpOutlineOutlinedIcon
-                                  className={classes.toolTipIcon}
-                                />
-                              </Tooltip>
-                            </div>
-                          }
-                        />
-                        <CardContent>
-                          <List>
-                            {newsGenreLoading && summaryLoading(newsGenreTitle)}
-                            {newsGenreDone && newsGenreSummary}
-                            {newsGenreFail && summaryFailed(newsGenreTitle)}
-                          </List>
-                        </CardContent>
-                      </CardActionArea>
-                    </Card>
-
-                    {/* machine generated text summary */}
-                    <Card>
-                      <CardActionArea
-                        onClick={() =>
-                          machineGeneratedTextSentencesResult &&
-                          machineGeneratedTextChunksResult
-                            ? setTextTabIndex(6)
-                            : null
-                        }
-                      >
-                        <CardHeader
-                          className={classes.assistantCardHeader}
-                          title={machineGeneratedTextTitle}
-                          action={
-                            <div style={{ display: "flex" }}>
-                              <Tooltip
-                                interactive={"true"}
-                                title={machineGeneratedTextTooltip}
-                                classes={{ tooltip: classes.assistantTooltip }}
-                              >
-                                <HelpOutlineOutlinedIcon
-                                  className={classes.toolTipIcon}
-                                />
-                              </Tooltip>
-                            </div>
-                          }
-                        />
-                        <CardContent>
-                          <List>
-                            {(machineGeneratedTextChunksLoading ||
-                              machineGeneratedTextSentencesLoading) &&
-                              summaryLoading(machineGeneratedTextTitle)}
-                            {machineGeneratedTextChunksDone &&
-                              machineGeneratedTextSentencesDone &&
-                              machineGeneratedTextSummary}
-                            {(machineGeneratedTextChunksFail ||
-                              machineGeneratedTextSentencesFail) &&
-                              summaryFailed(machineGeneratedTextTitle)}
-                          </List>
-                        </CardContent>
-                      </CardActionArea>
-                    </Card>
-                  </Stack>
-                </Grid>
-
-                {/* column 3 */}
-                {/* persuasion summary */}
-                <Grid size={{ xs: 4 }}>
+        <Box
+          sx={{
+            height: expanded ? "auto" : cardMaxHeight,
+            maxHeight: expanded ? "none" : cardMaxHeight, // limit height when collapsed
+            overflow: expanded ? "visible" : "auto", // scroll when collapsed
+            transition: "height 0.3s ease-in-out, max-height 0.3s ease-in-out",
+            scrollbarGutter: "stable", // reserve space for scrollbar
+            paddingRight: expanded ? "15px" : "0px", // fallback for older browsers
+          }}
+        >
+          {/* summaries */}
+          <CustomTabPanel value={textTabIndex} index={0}>
+            <Grid container spacing={2}>
+              {/* column 1 */}
+              <Grid size={{ xs: 4 }}>
+                <Stack spacing={2}>
+                  {/* news framing summary */}
                   <Card>
                     <CardActionArea
                       onClick={() =>
-                        persuasionResult ? setTextTabIndex(4) : null
+                        newsFramingResult ? setTextTabIndex(2) : null
                       }
                     >
                       <CardHeader
                         className={classes.assistantCardHeader}
-                        title={persuasionTitle}
+                        title={newsFramingTitle}
                         action={
                           <div style={{ display: "flex" }}>
                             <Tooltip
                               interactive={"true"}
-                              title={persuasionTooltip}
+                              title={newsFramingTooltip}
                               classes={{ tooltip: classes.assistantTooltip }}
                             >
                               <HelpOutlineOutlinedIcon
@@ -776,103 +603,267 @@ const AssistantTextResult = () => {
                         }
                       />
                       <CardContent>
-                        <List key={uuidv4()}>
-                          {persuasionLoading && summaryLoading(persuasionTitle)}
-                          {persuasionDone
-                            ? Object.keys(persuasionResult.entities).length > 0
-                              ? persuasionSummary
-                              : summaryEmpty(persuasionTitle, keyword)
+                        <List key="news_framing_list_summary">
+                          {newsFramingLoading &&
+                            summaryLoading(newsFramingTitle)}
+                          {newsFramingDone
+                            ? Object.keys(newsFramingResult.entities).length > 0
+                              ? newsFramingSummary
+                              : summaryEmpty(newsFramingTitle, keyword)
                             : null}
-                          {persuasionFail && summaryFailed(persuasionTitle)}
+                          {newsFramingFail && summaryFailed(newsFramingTitle)}
                         </List>
                       </CardContent>
                     </CardActionArea>
                   </Card>
-                </Grid>
+
+                  {/* subjectivity summary */}
+                  <Card>
+                    <CardActionArea
+                      onClick={() =>
+                        subjectivityResult ? setTextTabIndex(5) : null
+                      }
+                    >
+                      <CardHeader
+                        className={classes.assistantCardHeader}
+                        title={subjectivityTitle}
+                        action={
+                          <div style={{ display: "flex" }}>
+                            <Tooltip
+                              interactive={"true"}
+                              title={subjectivityTooltip}
+                              classes={{ tooltip: classes.assistantTooltip }}
+                            >
+                              <HelpOutlineOutlinedIcon
+                                className={classes.toolTipIcon}
+                              />
+                            </Tooltip>
+                          </div>
+                        }
+                      />
+                      <CardContent>
+                        <List>
+                          {subjectivityLoading &&
+                            summaryLoading(subjectivityTitle)}
+                          {subjectivityDone
+                            ? Object.keys(subjectivityResult.entities).length >
+                              0
+                              ? subjectivitySummary
+                              : summaryEmpty(subjectivityTitle, keyword)
+                            : null}
+                          {subjectivityFail && summaryFailed(subjectivityTitle)}
+                        </List>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                </Stack>
               </Grid>
-            </CustomTabPanel>
 
-            {/* extracted raw text */}
-            <CustomTabPanel value={textTabIndex} index={1}>
-              <Typography component={"div"} sx={{ textAlign: "start" }}>
-                {textHtmlOutput ?? text}
-              </Typography>
-            </CustomTabPanel>
+              {/* column 2 */}
+              <Grid size={{ xs: 4 }}>
+                <Stack spacing={2}>
+                  {/* news genre summary */}
+                  <Card>
+                    <CardActionArea
+                      onClick={() =>
+                        newsGenreResult ? setTextTabIndex(3) : null
+                      }
+                    >
+                      <CardHeader
+                        className={classes.assistantCardHeader}
+                        title={newsGenreTitle}
+                        action={
+                          <div style={{ display: "flex" }}>
+                            <Tooltip
+                              interactive={"true"}
+                              title={newsGenreTooltip}
+                              classes={{ tooltip: classes.assistantTooltip }}
+                            >
+                              <HelpOutlineOutlinedIcon
+                                className={classes.toolTipIcon}
+                              />
+                            </Tooltip>
+                          </div>
+                        }
+                      />
+                      <CardContent>
+                        <List>
+                          {newsGenreLoading && summaryLoading(newsGenreTitle)}
+                          {newsGenreDone && newsGenreSummary}
+                          {newsGenreFail && summaryFailed(newsGenreTitle)}
+                        </List>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
 
-            {/* news framing (topic) */}
-            <CustomTabPanel value={textTabIndex} index={2}>
-              <AssistantTextClassification
-                text={text}
-                classification={newsFramingResult?.entities}
-                configs={newsFramingResult?.configs}
-                titleText={newsFramingTitle}
-                categoriesTooltipContent={newsFramingTooltip}
-                textHtmlMap={textHtmlMap}
-                credibilitySignal={newsFramingTitle}
-                setTextTabIndex={setTextTabIndex}
-                summary={newsFramingSummary}
-              />
-            </CustomTabPanel>
+                  {/* machine generated text summary */}
+                  <Card>
+                    <CardActionArea
+                      onClick={() =>
+                        machineGeneratedTextSentencesResult &&
+                        machineGeneratedTextChunksResult
+                          ? setTextTabIndex(6)
+                          : null
+                      }
+                    >
+                      <CardHeader
+                        className={classes.assistantCardHeader}
+                        title={machineGeneratedTextTitle}
+                        action={
+                          <div style={{ display: "flex" }}>
+                            <Tooltip
+                              interactive={"true"}
+                              title={machineGeneratedTextTooltip}
+                              classes={{ tooltip: classes.assistantTooltip }}
+                            >
+                              <HelpOutlineOutlinedIcon
+                                className={classes.toolTipIcon}
+                              />
+                            </Tooltip>
+                          </div>
+                        }
+                      />
+                      <CardContent>
+                        <List>
+                          {(machineGeneratedTextChunksLoading ||
+                            machineGeneratedTextSentencesLoading) &&
+                            summaryLoading(machineGeneratedTextTitle)}
+                          {machineGeneratedTextChunksDone &&
+                            machineGeneratedTextSentencesDone &&
+                            machineGeneratedTextSummary}
+                          {(machineGeneratedTextChunksFail ||
+                            machineGeneratedTextSentencesFail) &&
+                            summaryFailed(machineGeneratedTextTitle)}
+                        </List>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                </Stack>
+              </Grid>
 
-            {/* news genre */}
-            <CustomTabPanel value={textTabIndex} index={3}>
-              <AssistantTextClassification
-                text={text}
-                classification={newsGenreResult?.entities}
-                configs={newsGenreResult?.configs}
-                titleText={newsGenreTitle}
-                categoriesTooltipContent={newsGenreTooltip}
-                textHtmlMap={textHtmlMap}
-                credibilitySignal={newsGenreTitle}
-                setTextTabIndex={setTextTabIndex}
-                summary={newsGenreSummary}
-              />
-            </CustomTabPanel>
+              {/* column 3 */}
+              {/* persuasion summary */}
+              <Grid size={{ xs: 4 }}>
+                <Card>
+                  <CardActionArea
+                    onClick={() =>
+                      persuasionResult ? setTextTabIndex(4) : null
+                    }
+                  >
+                    <CardHeader
+                      className={classes.assistantCardHeader}
+                      title={persuasionTitle}
+                      action={
+                        <div style={{ display: "flex" }}>
+                          <Tooltip
+                            interactive={"true"}
+                            title={persuasionTooltip}
+                            classes={{ tooltip: classes.assistantTooltip }}
+                          >
+                            <HelpOutlineOutlinedIcon
+                              className={classes.toolTipIcon}
+                            />
+                          </Tooltip>
+                        </div>
+                      }
+                    />
+                    <CardContent>
+                      <List key={uuidv4()}>
+                        {persuasionLoading && summaryLoading(persuasionTitle)}
+                        {persuasionDone
+                          ? Object.keys(persuasionResult.entities).length > 0
+                            ? persuasionSummary
+                            : summaryEmpty(persuasionTitle, keyword)
+                          : null}
+                        {persuasionFail && summaryFailed(persuasionTitle)}
+                      </List>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </Grid>
+            </Grid>
+          </CustomTabPanel>
 
-            {/* persuasion */}
-            <CustomTabPanel value={textTabIndex} index={4}>
-              <AssistantTextSpanClassification
-                text={text}
-                classification={persuasionResult?.entities}
-                configs={persuasionResult?.configs}
-                titleText={persuasionTitle}
-                categoriesTooltipContent={persuasionTooltip}
-                textHtmlMap={textHtmlMap}
-                setTextTabIndex={setTextTabIndex}
-              />
-            </CustomTabPanel>
+          {/* extracted raw text */}
+          <CustomTabPanel value={textTabIndex} index={1}>
+            <Typography component={"div"} sx={{ textAlign: "start" }}>
+              {textHtmlOutput ?? text}
+            </Typography>
+          </CustomTabPanel>
 
-            {/* subjectivity */}
-            <CustomTabPanel value={textTabIndex} index={5}>
-              <AssistantTextClassification
-                text={text}
-                classification={subjectivityResult?.entities}
-                configs={subjectivityResult?.configs}
-                titleText={subjectivityTitle}
-                categoriesTooltipContent={subjectivityTooltip}
-                textHtmlMap={textHtmlMap}
-                credibilitySignal={subjectivityTitle}
-                setTextTabIndex={setTextTabIndex}
-                summary={subjectivitySummary}
-              />
-            </CustomTabPanel>
+          {/* news framing (topic) */}
+          <CustomTabPanel value={textTabIndex} index={2}>
+            <AssistantTextClassification
+              text={text}
+              classification={newsFramingResult?.entities}
+              configs={newsFramingResult?.configs}
+              titleText={newsFramingTitle}
+              categoriesTooltipContent={newsFramingTooltip}
+              textHtmlMap={textHtmlMap}
+              credibilitySignal={newsFramingTitle}
+              setTextTabIndex={setTextTabIndex}
+              summary={newsFramingSummary}
+            />
+          </CustomTabPanel>
 
-            {/* machine generated text */}
-            <CustomTabPanel value={textTabIndex} index={6}>
-              <AssistantTextClassification
-                text={text}
-                classification={machineGeneratedTextSentencesResult?.entities}
-                configs={machineGeneratedTextSentencesResult?.configs}
-                titleText={machineGeneratedTextTitle}
-                categoriesTooltipContent={machineGeneratedTextTooltip}
-                textHtmlMap={textHtmlMap}
-                credibilitySignal={machineGeneratedTextTitle}
-                setTextTabIndex={setTextTabIndex}
-                summary={machineGeneratedTextSummary}
-              />
-            </CustomTabPanel>
-          </Box>
-        </Collapse>
+          {/* news genre */}
+          <CustomTabPanel value={textTabIndex} index={3}>
+            <AssistantTextClassification
+              text={text}
+              classification={newsGenreResult?.entities}
+              configs={newsGenreResult?.configs}
+              titleText={newsGenreTitle}
+              categoriesTooltipContent={newsGenreTooltip}
+              textHtmlMap={textHtmlMap}
+              credibilitySignal={newsGenreTitle}
+              setTextTabIndex={setTextTabIndex}
+              summary={newsGenreSummary}
+            />
+          </CustomTabPanel>
+
+          {/* persuasion */}
+          <CustomTabPanel value={textTabIndex} index={4}>
+            <AssistantTextSpanClassification
+              text={text}
+              classification={persuasionResult?.entities}
+              configs={persuasionResult?.configs}
+              titleText={persuasionTitle}
+              categoriesTooltipContent={persuasionTooltip}
+              textHtmlMap={textHtmlMap}
+              setTextTabIndex={setTextTabIndex}
+            />
+          </CustomTabPanel>
+
+          {/* subjectivity */}
+          <CustomTabPanel value={textTabIndex} index={5}>
+            <AssistantTextClassification
+              text={text}
+              classification={subjectivityResult?.entities}
+              configs={subjectivityResult?.configs}
+              titleText={subjectivityTitle}
+              categoriesTooltipContent={subjectivityTooltip}
+              textHtmlMap={textHtmlMap}
+              credibilitySignal={subjectivityTitle}
+              setTextTabIndex={setTextTabIndex}
+              summary={subjectivitySummary}
+            />
+          </CustomTabPanel>
+
+          {/* machine generated text */}
+          <CustomTabPanel value={textTabIndex} index={6}>
+            <AssistantTextClassification
+              text={text}
+              classification={machineGeneratedTextSentencesResult?.entities}
+              configs={machineGeneratedTextSentencesResult?.configs}
+              titleText={machineGeneratedTextTitle}
+              categoriesTooltipContent={machineGeneratedTextTooltip}
+              textHtmlMap={textHtmlMap}
+              credibilitySignal={machineGeneratedTextTitle}
+              setTextTabIndex={setTextTabIndex}
+              summary={machineGeneratedTextSummary}
+            />
+          </CustomTabPanel>
+        </Box>
 
         {/* footer */}
         <TextFooter
