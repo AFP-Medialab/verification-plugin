@@ -88,7 +88,7 @@ export const rgbListToGradient = (rgbList) => {
 };
 
 /**
- * Recursively takes HTML tree map and returns highlighted spans
+ * Recursively takes tree map and returns highlighted spans
  * @param text
  * @param treeElem
  * @param spanHighlightIndices
@@ -178,7 +178,7 @@ function treeMapToElementsRecursive(
 }
 
 /**
- * Converts HTML tree map to React components
+ * Converts tree map to React components
  * @param text
  * @param mapping
  * @param spanHighlightIndices
@@ -458,6 +458,7 @@ export function SummaryReturnButton({ setTextTabIndex, text }) {
       sx={{
         justifyContent: "flex-start",
         alignItems: "left",
+        paddingTop: 1,
       }}
     >
       <Button
