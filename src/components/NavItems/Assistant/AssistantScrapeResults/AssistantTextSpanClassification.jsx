@@ -123,6 +123,10 @@ export default function AssistantTextSpanClassification({
   }
   const allCategoriesLabel = "all";
   collectFilteredClassification[allCategoriesLabel] = filteredClassification;
+  // add non category for showing text without any highlights
+  // case when user has selected a category and changed the slider to a point where there are no spans for the category
+  const noneCategoriesLabel = "none";
+  collectFilteredClassification[noneCategoriesLabel] = {};
 
   // wrap function for calculating spanhighlights and categories
   function wrapHighlightedText(spanText, spanInfo, spanStart, spandEnd) {
@@ -261,6 +265,7 @@ export default function AssistantTextSpanClassification({
           categoriesText={categoriesText}
           currentLabel={currentLabel}
           allCategoriesLabel={allCategoriesLabel}
+          noneCategoriesLabel={noneCategoriesLabel}
         />
       </Grid>
       <Grid size={{ xs: 3 }}>
@@ -426,12 +431,16 @@ export function MultiCategoryClassifiedText({
   categoriesText,
   currentLabel,
   allCategoriesLabel,
+  noneCategoriesLabel,
 }) {
   // Filter for selecting all labels (currentLabel == null) or just a single label
-  const category =
+  // when selected label has no highlighted spans due to slider change, show all unhighlighted text with none category
+  let category =
     currentLabel !== null && currentLabel in categoriesText
       ? currentLabel
-      : allCategoriesLabel;
+      : currentLabel !== null
+        ? noneCategoriesLabel
+        : allCategoriesLabel;
 
   let output = categoriesText[category];
 
