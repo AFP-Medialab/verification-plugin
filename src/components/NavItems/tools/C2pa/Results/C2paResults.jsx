@@ -13,6 +13,10 @@ import CardContent from "@mui/material/CardContent";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
@@ -158,7 +162,7 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
         </Grid>
       </Grid>
       <Grid size={{ md: 12, lg: 6 }}>
-        <Card p={1}>
+        <Card p={1} variant="outlined">
           <CardContent>
             {!manifestData ? (
               <Box
@@ -488,26 +492,38 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                     >
                       {manifestData.editsAndActivity ||
                       manifestData.children ? (
-                        <Stack>
+                        <Stack spacing={2}>
                           {manifestData.generativeInfo &&
                             manifestData.generativeInfo[0] && (
                               <Stack direction="column">
-                                <Typography>
-                                  {manifestData.generativeInfo[0].action.action}
-                                </Typography>
-                                <Typography>
-                                  {
-                                    manifestData.generativeInfo[0].action
-                                      .digitalSourceType
-                                  }
-                                </Typography>
-                                <Typography>{"AI Tool used"}</Typography>
-                                <Typography>
-                                  {
-                                    manifestData.generativeInfo[0].softwareAgent
-                                      .name
-                                  }
-                                </Typography>
+                                <Table aria-label="c2pa genAI metadata table">
+                                  <TableBody>
+                                    <TableRow>
+                                      <TableCell component="th" scope="row">
+                                        {keyword("c2pa_app_device_used")}
+                                      </TableCell>
+                                      <TableCell>
+                                        {manifestData.generativeInfo[0]
+                                          ?.assertion?.data?.actions?.[1]
+                                          ?.softwareAgent?.name ||
+                                          manifestData.generativeInfo[0]
+                                            ?.softwareAgent?.name}
+                                      </TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                      <TableCell component="th" scope="row">
+                                        {keyword("c2pa_ai_tool_used")}
+                                      </TableCell>
+                                      <TableCell>
+                                        {manifestData.generativeInfo[0]
+                                          ?.assertion?.data?.actions?.[0]
+                                          ?.softwareAgent?.name ||
+                                          manifestData.generativeInfo[0]
+                                            ?.softwareAgent?.name}
+                                      </TableCell>
+                                    </TableRow>
+                                  </TableBody>
+                                </Table>
                               </Stack>
                             )}
 

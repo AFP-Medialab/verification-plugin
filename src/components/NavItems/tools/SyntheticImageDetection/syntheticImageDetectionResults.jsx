@@ -603,7 +603,9 @@ const SyntheticImageDetectionResults = ({
                             color: "red",
                           }}
                         >
-                          {"C2PA metadata with GenAI actions detected"}
+                          {keyword(
+                            "synthetic_image_detection_c2pa_generic_detection_text",
+                          )}
                         </Typography>
                       )}
 

@@ -62,6 +62,10 @@ const SyntheticImageDetection = () => {
         {keywordWarning("warning_beta_synthetic_image_detection")}
       </Alert>
 
+      <Alert severity="warning">
+        {keywordWarning("warning_c2pa_synthetic_image_detection")}
+      </Alert>
+
       <SyntheticImageDetectionForm
         resetState={resetState}
         input={input}
