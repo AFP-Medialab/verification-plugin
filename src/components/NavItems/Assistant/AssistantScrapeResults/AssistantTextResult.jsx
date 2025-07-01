@@ -727,6 +727,8 @@ const AssistantTextResult = () => {
                         <List>
                           {(machineGeneratedTextChunksLoading ||
                             machineGeneratedTextSentencesLoading) &&
+                            !machineGeneratedTextChunksFail &&
+                            !machineGeneratedTextSentencesFail &&
                             summaryLoading(machineGeneratedTextTitle)}
                           {machineGeneratedTextChunksDone &&
                             machineGeneratedTextSentencesDone &&
