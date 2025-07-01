@@ -1,4 +1,5 @@
 import syntheticImageDetectionActions from "@/redux/actions/tools/syntheticImageDetectionActions";
+import toolTabSelected from "@/redux/reducers/toolTabSelectedReducer";
 import { combineReducers } from "redux";
 
 import assistantReducer from "./assistantReducer";
@@ -38,6 +39,9 @@ const allReducers = combineReducers({
   error: errorReducer,
   humanRightsCheckBox: humanRightsCheckBoxReducer,
   interactiveExplanation: interactiveExplanationReducer,
+
+  // Tools menu
+  toolTabSelected: toolTabSelected,
 
   // Auth
   userSession: authenticationReducer,
