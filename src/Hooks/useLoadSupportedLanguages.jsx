@@ -9,6 +9,9 @@ const useLoadSupportedLanguage = () => {
   const userAuthenticated = useSelector(
     (state) => state.userSession.userAuthenticated,
   );
+  const languageIsLoaded = useSelector(
+    (state) => state.languageSupport.alreadyLoaded,
+  );
 
   const languagesUrl =
     process.env.REACT_APP_TRANSLATION_URL +
@@ -16,6 +19,11 @@ const useLoadSupportedLanguage = () => {
     process.env.REACT_APP_TRANSLATION_TAG;
 
   useEffect(() => {
+    // If already loaded, return
+    if (languageIsLoaded) {
+      return;
+    }
+
     axios.get(languagesUrl).then((result) => {
       const languages = result.data;
 
