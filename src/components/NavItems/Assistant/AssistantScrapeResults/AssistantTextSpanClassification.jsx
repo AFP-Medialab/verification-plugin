@@ -33,6 +33,7 @@ import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespa
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { setImportantSentenceThreshold } from "@/redux/actions/tools/assistantActions";
 import _ from "lodash";
+import { setCurrentLabel } from "redux/actions/tools/assistantActions";
 import { v4 as uuidv4 } from "uuid";
 
 // Had to create a custom styled span as the default style attribute does not support
@@ -100,10 +101,11 @@ export default function AssistantTextSpanClassification({
     importantSentenceThreshold / 100.0,
   );
 
-  const [currentLabel, setCurrentLabel] = useState(null);
+  // current label as state to prevent change on page when component remounted
+  const currentLabel = useSelector((state) => state.assistant.currentLabel);
 
-  function handleCategorySelect(categoryKey) {
-    setCurrentLabel(categoryKey);
+  function handleCategorySelect(currentLabel) {
+    dispatch(setCurrentLabel(currentLabel));
   }
 
   // defining persuasion technique category colours
@@ -291,6 +293,7 @@ export default function AssistantTextSpanClassification({
               colours={persuasionTechniqueCategoryColours}
               noCategoriesText={keyword("no_detected_techniques")}
               allCategoriesLabel={allCategoriesLabel}
+              currentLabel={currentLabel}
               onCategoryChange={handleCategorySelect}
               keyword={keyword}
               importantSentenceThreshold={importantSentenceThreshold}
@@ -313,6 +316,7 @@ export function CategoriesListToggle({
   colours,
   noCategoriesText,
   allCategoriesLabel,
+  currentLabel,
   onCategoryChange = () => {},
   keyword,
   importantSentenceThreshold,
@@ -322,7 +326,7 @@ export function CategoriesListToggle({
   // categories
   let categoriesList = [];
   let index = 0;
-  const [currentCategory, setCurrentCategory] = useState(null);
+  const [currentCategory, setCurrentCategory] = useState(currentLabel);
 
   function handleCategorySelect(categoryLabel) {
     if (categoryLabel === currentCategory) {

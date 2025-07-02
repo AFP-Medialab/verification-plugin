@@ -90,6 +90,8 @@ const defaultState = {
   stateExpanded: false,
 
   importantSentenceThreshold: 80,
+
+  currentLabel: "all",
 };
 
 const assistantReducer = (state = defaultState, action) => {
@@ -126,6 +128,12 @@ const assistantReducer = (state = defaultState, action) => {
       return {
         ...state,
         importantSentenceThreshold: action.payload,
+      };
+
+    case "SET_CURRENT_LABEL":
+      return {
+        ...state,
+        currentLabel: action.payload,
       };
 
     case "CLEAN_STATE":

@@ -385,3 +385,10 @@ export const setImportantSentenceThreshold = (threshold) => {
     payload: threshold,
   };
 };
+
+export const setCurrentLabel = (currentLabel) => {
+  return {
+    type: "SET_CURRENT_LABEL",
+    payload: currentLabel,
+  };
+};
