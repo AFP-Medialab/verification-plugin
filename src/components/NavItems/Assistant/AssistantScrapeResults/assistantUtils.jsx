@@ -113,8 +113,8 @@ function treeMapToElementsRecursive(
       // If text span matches with indices for highlighting
       // then try to wrap them in wrapFunc()
       let currentIndex = span.start;
-      for (let i = 0; i < spanHighlightIndices.length; i++) {
-        const hSpan = spanHighlightIndices[i];
+      for (let groupId = 0; groupId < spanHighlightIndices.length; groupId++) {
+        const hSpan = spanHighlightIndices[groupId];
         const hSpanStart = hSpan.indices[0];
         // Sometimes the end index is negative so we have to check this
         let hSpanEnd = hSpan.indices[1] > -1 ? hSpan.indices[1] : textLength;
@@ -139,6 +139,7 @@ function treeMapToElementsRecursive(
                 hSpan,
                 boundedStart,
                 boundedEnd,
+                groupId,
               ),
             );
           } else {

@@ -130,11 +130,21 @@ export default function AssistantTextSpanClassification({
   const noneCategoriesLabel = "none";
   collectFilteredClassification[noneCategoriesLabel] = {};
 
+  // for highlighting connected spans
+  const [hoveredGroup, setHoveredGroup] = useState(null);
+
   // wrap function for calculating spanhighlights and categories
-  function wrapHighlightedText(spanText, spanInfo, spanStart, spandEnd) {
+  function wrapHighlightedText(
+    spanText,
+    spanInfo,
+    spanStart,
+    spandEnd,
+    groupId,
+  ) {
     let backgroundRgb = [210, 210, 210];
     let backgroundRgbHover = primaryRgb;
-    let textColour = "black";
+
+    const isHighlighted = hoveredGroup === groupId;
 
     let techniqueContent = [];
     techniqueContent.push(
@@ -194,13 +204,21 @@ export default function AssistantTextSpanClassification({
       <Tooltip key={uuidv4()} title={techniquesTooltip}>
         <StyledSpan
           sx={{
-            background: rgbToString(backgroundRgb),
-            color: textColour,
+            background: isHighlighted
+              ? rgbToString(backgroundRgbHover)
+              : rgbToString(backgroundRgb),
+            color: isHighlighted
+              ? resolvedMode === "dark"
+                ? "black"
+                : "white"
+              : "black",
             ":hover": {
               background: rgbToString(backgroundRgbHover),
               color: resolvedMode === "dark" ? "black" : "white",
             },
           }}
+          onMouseEnter={() => setHoveredGroup(groupId)}
+          onMouseLeave={() => setHoveredGroup(null)}
         >
           {spanText}
         </StyledSpan>
@@ -371,9 +389,10 @@ export function CategoriesListToggle({
       keyword(persuasionTechniqueCategory) +
       ": " +
       keyword(persuasionTechnique);
+    // category value based on number of unique scores (spans in same group share same score)
     const itemChip = (
       <Chip
-        label={categories[category].length}
+        label={new Set(categories[category].map((obj) => obj.score)).size}
         sx={{
           color: rgbToString(backgroundRgb),
           backgroundColor: "white",
