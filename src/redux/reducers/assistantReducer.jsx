@@ -91,7 +91,7 @@ const defaultState = {
 
   importantSentenceThreshold: 80,
 
-  currentLabel: "all",
+  currentLabel: null,
 };
 
 const assistantReducer = (state = defaultState, action) => {
