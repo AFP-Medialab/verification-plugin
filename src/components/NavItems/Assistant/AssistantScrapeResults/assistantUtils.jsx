@@ -11,9 +11,10 @@ import Typography from "@mui/material/Typography";
 
 import { ArrowBack } from "@mui/icons-material";
 
-import GaugeChartModalExplanation from "components/Shared/GaugeChartResults/GaugeChartModalExplanation/index.jsx";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
+
+import GaugeChartModalExplanation from "../../../../components/Shared/GaugeChartResults/GaugeChartModalExplanation/index";
 
 /**
  * Interpolate RGB between an arbitrary range
