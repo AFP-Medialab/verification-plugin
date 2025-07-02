@@ -413,6 +413,7 @@ export function CategoriesListToggle({
         credibilitySignal={credibilitySignal}
         importantSentenceThreshold={importantSentenceThreshold}
         handleSliderChange={handleSliderChange}
+        keyword={keyword}
       />
       <List>
         {_.isEmpty(categoriesList) ? (

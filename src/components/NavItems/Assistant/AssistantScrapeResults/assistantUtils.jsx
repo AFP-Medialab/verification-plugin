@@ -481,15 +481,16 @@ export function ThresholdSlider({
   credibilitySignal,
   importantSentenceThreshold,
   handleSliderChange,
+  keyword,
 }) {
   const marks = [
     {
       value: 0,
-      label: "Low",
+      label: keyword("threshold_slider_low"),
     },
     {
       value: 99,
-      label: "High",
+      label: keyword("threshold_slider_high"),
     },
   ];
 

@@ -335,6 +335,7 @@ export function GaugeCategoriesList({
             credibilitySignal={credibilitySignal}
             importantSentenceThreshold={importantSentenceThreshold}
             handleSliderChange={handleSliderChange}
+            keyword={keyword}
           />
         </>
       ) : null}
@@ -377,6 +378,7 @@ export function CategoriesList({
         credibilitySignal={credibilitySignal}
         importantSentenceThreshold={importantSentenceThreshold}
         handleSliderChange={handleSliderChange}
+        keyword={keyword}
       />
       <Tooltip
         classes={{ tooltip: classes.assistantTooltip }}
