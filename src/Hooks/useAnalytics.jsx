@@ -34,14 +34,13 @@ export const useTrackEvent = (
   const analytics = useSelector((state) => state.cookies.analytics);
   //console.log("event tracked ", event);
   useEffect(() => {
-    if (event !== undefined && event !== null) {
-      //console.log("Track event");
-      if (analytics) {
-        //go to analytics
-        trackEvent(category, action, name, url, client_id, history, uid);
-      } else {
-        trackEventAnonymous(category, action, name, url, history);
-      }
+    if (!event || !url) return;
+    //console.log("Track event");
+    if (analytics) {
+      //go to analytics
+      trackEvent(category, action, name, url, client_id, history, uid);
+    } else {
+      trackEventAnonymous(category, action, name, url, history);
     }
-  }, [event]);
+  }, [event, url]);
 };
