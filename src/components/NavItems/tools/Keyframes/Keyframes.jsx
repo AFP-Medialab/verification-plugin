@@ -11,7 +11,6 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
-import Fade from "@mui/material/Fade";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
@@ -331,43 +330,35 @@ const Keyframes = () => {
           )}
 
         {status && isPending && (
-          <Fade in={isPending} timeout={750}>
-            <Alert icon={<CircularProgress size={20} />} severity="info">
-              {status}
-            </Alert>
-          </Fade>
+          <Alert icon={<CircularProgress size={20} />} severity="info">
+            {status}
+          </Alert>
         )}
 
         {isPending && (
-          <Fade in={isPending} timeout={1500}>
-            <Card variant="outlined">
-              <Stack
-                direction="column"
-                spacing={4}
-                sx={{
-                  p: 2,
-                }}
-              >
-                <Skeleton variant="rounded" height={40} />
-                <Stack direction={{ md: "row", xs: "column" }} spacing={4}>
-                  <Skeleton variant="rounded" width={80} height={80} />
-                  <Skeleton variant="rounded" width={80} height={80} />
-                  <Skeleton variant="rounded" width={80} height={80} />
-                  <Skeleton variant="rounded" width={80} height={80} />
-                </Stack>
+          <Card variant="outlined">
+            <Stack
+              direction="column"
+              spacing={4}
+              sx={{
+                p: 2,
+              }}
+            >
+              <Skeleton variant="rounded" height={40} />
+              <Stack direction={{ md: "row", xs: "column" }} spacing={4}>
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
               </Stack>
-            </Card>
-          </Fade>
+            </Stack>
+          </Card>
         )}
 
         {error && <Alert severity="error">{keyword(handleError(error))}</Alert>}
 
         {resultData && tabSelected === "url" && (
-          <Fade in={resultData && tabSelected === "url"} timeout={1500}>
-            <div>
-              <KeyFramesResults result={resultData} />
-            </div>
-          </Fade>
+          <KeyFramesResults result={resultData} />
         )}
 
         {featureStatus && isFeatureDataPending && (
@@ -377,25 +368,23 @@ const Keyframes = () => {
         )}
 
         {isFeatureDataPending && (
-          <Fade in={isFeatureDataPending} timeout={1500}>
-            <Card variant="outlined">
-              <Stack
-                direction="column"
-                spacing={4}
-                sx={{
-                  p: 2,
-                }}
-              >
-                <Skeleton variant="rounded" height={40} />
-                <Stack direction={{ md: "row", xs: "column" }} spacing={4}>
-                  <Skeleton variant="rounded" width={80} height={80} />
-                  <Skeleton variant="rounded" width={80} height={80} />
-                  <Skeleton variant="rounded" width={80} height={80} />
-                  <Skeleton variant="rounded" width={80} height={80} />
-                </Stack>
+          <Card variant="outlined">
+            <Stack
+              direction="column"
+              spacing={4}
+              sx={{
+                p: 2,
+              }}
+            >
+              <Skeleton variant="rounded" height={40} />
+              <Stack direction={{ md: "row", xs: "column" }} spacing={4}>
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
               </Stack>
-            </Card>
-          </Fade>
+            </Stack>
+          </Card>
         )}
 
         {featureDataError && (
@@ -404,59 +393,55 @@ const Keyframes = () => {
 
         {keyframesFeaturesData && tabSelected === "url" && (
           <>
-            <Fade in={keyframesFeaturesData} timeout={1500}>
-              <Card variant="outlined">
-                <Box
-                  sx={{
-                    pb: 4,
-                    pt: 2,
-                    pl: 4,
-                    pr: 4,
-                  }}
-                >
-                  <Stack direction="column" spacing={2}>
-                    <Typography variant="h6">
-                      {keyword("faces_detected_title")}
-                    </Typography>
-                    <Grid container direction="row" spacing={2}>
-                      {keyframesFeaturesData.faces.map((item, i) => (
-                        <Grid key={i} size={{ md: 3, lg: 1 }}>
-                          <ImageWithFade
-                            src={item.representative.imageUrl}
-                            alt={`extracted img with face #${i + 1}`}
-                          />
-                        </Grid>
-                      ))}
-                    </Grid>
-                  </Stack>
-                </Box>
-              </Card>
-            </Fade>
-            <Fade in={keyframesFeaturesData} timeout={1500}>
-              <Card variant="outlined">
-                <Box
-                  sx={{
-                    p: 4,
-                  }}
-                >
-                  <Stack direction="column" spacing={2}>
-                    <Typography variant="h6">
-                      {keyword("text_detected_title")}
-                    </Typography>
-                    <Grid container direction="row" spacing={2}>
-                      {keyframesFeaturesData.texts.map((item, i) => (
-                        <Grid key={i} size={{ md: 3, lg: 1 }}>
-                          <ImageWithFade
-                            src={item.representative.imageUrl}
-                            alt={`extracted img with text #${i + 1}`}
-                          />
-                        </Grid>
-                      ))}
-                    </Grid>
-                  </Stack>
-                </Box>
-              </Card>
-            </Fade>
+            <Card variant="outlined">
+              <Box
+                sx={{
+                  pb: 4,
+                  pt: 2,
+                  pl: 4,
+                  pr: 4,
+                }}
+              >
+                <Stack direction="column" spacing={2}>
+                  <Typography variant="h6">
+                    {keyword("faces_detected_title")}
+                  </Typography>
+                  <Grid container direction="row" spacing={2}>
+                    {keyframesFeaturesData.faces.map((item, i) => (
+                      <Grid key={i} size={{ md: 3, lg: 1 }}>
+                        <ImageWithFade
+                          src={item.representative.imageUrl}
+                          alt={`extracted img with face #${i + 1}`}
+                        />
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Stack>
+              </Box>
+            </Card>
+            <Card variant="outlined">
+              <Box
+                sx={{
+                  p: 4,
+                }}
+              >
+                <Stack direction="column" spacing={2}>
+                  <Typography variant="h6">
+                    {keyword("text_detected_title")}
+                  </Typography>
+                  <Grid container direction="row" spacing={2}>
+                    {keyframesFeaturesData.texts.map((item, i) => (
+                      <Grid key={i} size={{ md: 3, lg: 1 }}>
+                        <ImageWithFade
+                          src={item.representative.imageUrl}
+                          alt={`extracted img with text #${i + 1}`}
+                        />
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Stack>
+              </Box>
+            </Card>
           </>
         )}
       </Stack>

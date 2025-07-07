@@ -47,12 +47,12 @@ const KeyFramesResults = ({ result }) => {
   const [detailed, setDetailed] = useState(false);
 
   let simpleList = /** @type {string[]} */ [];
+  let detailedList = /** @type {string[]} */ [];
 
   for (const keyframe of result.keyframes) {
     simpleList.push(keyframe.keyframeUrl);
+    detailedList.push(keyframe.keyframeUrl);
   }
-
-  let detailedList = /** @type {string[]} */ [];
 
   for (const keyframe of result.keyframesXtra) {
     detailedList.push(keyframe.keyframeUrl);
