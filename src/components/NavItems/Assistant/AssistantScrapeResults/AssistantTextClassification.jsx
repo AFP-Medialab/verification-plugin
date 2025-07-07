@@ -50,13 +50,20 @@ export default function AssistantTextClassification({
     confidenceRgbHigh: [34, 41, 180],
     // machine generated text and subjectivity
     greenRgb: [0, 255, 0],
-    lightGreenRgb: [170, 255, 0],
     orangeRgb: [255, 170, 0],
     redRgb: [255, 0, 0],
     greenRgbDark: [78, 255, 78],
-    lightGreenRgbDark: [210, 255, 121],
     orangeRgbDark: [255, 189, 62],
     redRgbDark: [255, 78, 78],
+    // machine generated text
+    lightGreenRgb: [170, 255, 0],
+    lightGreenRgbDark: [210, 255, 121],
+    orderedCategories: [
+      "highly_likely_human",
+      "likely_human",
+      "likely_machine",
+      "highly_likely_machine",
+    ],
   },
   textHtmlMap = null,
   credibilitySignal = "",
@@ -102,13 +109,7 @@ export default function AssistantTextClassification({
   } else if (credibilitySignal === machineGeneratedTextTitle) {
     // traffic light colours for machine generated text
     [mgtColours, mgtColoursDark] = getMgtColours(configs);
-    // TODO should this be here?
-    orderedCategories = [
-      "highly_likely_human",
-      "likely_human",
-      "likely_machine",
-      "highly_likely_machine",
-    ];
+    orderedCategories = configs.orderedCategories;
   } else if (credibilitySignal === subjectivityTitle) {
     [subjectivityColours, subjectivityColoursDark] =
       getSubjectivityColours(configs);
