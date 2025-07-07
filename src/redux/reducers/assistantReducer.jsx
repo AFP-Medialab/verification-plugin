@@ -228,6 +228,10 @@ const assistantReducer = (state = defaultState, action) => {
         warningExpanded: false,
         assuranceExpanded: false,
         stateExpanded: false,
+
+        importantSentenceThreshold: 80,
+
+        currentLabel: null,
       };
 
     default:
