@@ -293,16 +293,6 @@ export function GaugeCategoriesList({
 
   const output = [];
   if (credibilitySignal === keyword("machine_generated_text_title")) {
-    // divider
-    output.push(<ListItem key="listitem_empty1"></ListItem>);
-    output.push(<Divider key={`divider_${mgtOverallScoreLabel}`} />);
-    output.push(<ListItem key="listitem_empty2"></ListItem>);
-    // categories
-    output.push(
-      <ListItem key={"text_detected_classes"}>
-        <Typography>{keyword("detected_classes")}</Typography>
-      </ListItem>,
-    );
     for (const category of orderedCategories) {
       if (category != mgtOverallScoreLabel && category in categories) {
         output.push(
@@ -343,7 +333,13 @@ export function GaugeCategoriesList({
       {summary}
       {gaugeExplanation}
       {credibilitySignal === keyword("machine_generated_text_title") && (
-        <List>{output}</List>
+        <>
+          <Divider key={`divider_${mgtOverallScoreLabel}`} sx={{ my: 2 }} />
+          <Typography sx={{ textAlign: "start" }}>
+            {keyword("detected_classes")}
+          </Typography>
+          <List>{output}</List>
+        </>
       )}
     </>
   );
