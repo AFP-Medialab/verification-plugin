@@ -48,7 +48,7 @@ export const useProcessKeyframes = () => {
   });
 
   // Step 3: Get Keyframes
-  const fetchFeatureDataMutation = useMutation({
+  const fetchKeyframeFeaturesMutation = useMutation({
     mutationFn: async (jobId) => {
       setStatus("Retrieving features...");
       return await fetchKeyframeFeatures(jobId);
@@ -59,7 +59,7 @@ export const useProcessKeyframes = () => {
     },
   });
 
-  const fetchDataMutation = useMutation({
+  const fetchKeyframesMutation = useMutation({
     mutationFn: async (jobId) => {
       return await fetchKeyframes(jobId);
     },
@@ -76,8 +76,8 @@ export const useProcessKeyframes = () => {
 
       jobId = await sendUrlMutation.mutateAsync({ url });
       await checkStatusMutation.mutateAsync(jobId);
-      await fetchFeatureDataMutation.mutateAsync(jobId);
-      return fetchDataMutation.mutateAsync(jobId);
+      await fetchKeyframeFeaturesMutation.mutateAsync(jobId);
+      return fetchKeyframesMutation.mutateAsync(jobId);
     } catch (error) {
       console.error("Process failed:", error);
       setStatus("Error occurred");
@@ -88,7 +88,7 @@ export const useProcessKeyframes = () => {
   const resetFetchingKeyframes = () => {
     sendUrlMutation.reset();
     checkStatusMutation.reset();
-    fetchDataMutation.reset();
+    fetchKeyframesMutation.reset();
 
     setStatus(null);
   };
@@ -100,16 +100,16 @@ export const useProcessKeyframes = () => {
     isPending:
       sendUrlMutation.isPending ||
       checkStatusMutation.isPending ||
-      fetchDataMutation.isPending,
-    data: fetchDataMutation.data,
+      fetchKeyframesMutation.isPending,
+    data: fetchKeyframesMutation.data,
     error:
       sendUrlMutation.error ||
       checkStatusMutation.error ||
-      fetchDataMutation.error,
+      fetchKeyframesMutation.error,
 
     featureStatus,
-    isFeatureDataPending: fetchFeatureDataMutation.isPending,
-    featureData: fetchFeatureDataMutation.data,
-    featureDataError: fetchFeatureDataMutation.error,
+    isFeatureDataPending: fetchKeyframeFeaturesMutation.isPending,
+    featureData: fetchKeyframeFeaturesMutation.data,
+    featureDataError: fetchKeyframeFeaturesMutation.error,
   };
 };
