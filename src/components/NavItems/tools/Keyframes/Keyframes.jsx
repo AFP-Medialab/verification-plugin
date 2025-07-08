@@ -30,6 +30,7 @@ import ImageGrid from "@/components/NavItems/tools/Keyframes/components/ImageGri
 import { keyframes } from "@/constants/tools";
 import {
   resetKeyframes,
+  setKeyframesFeatures,
   setKeyframesUrl,
 } from "@/redux/reducers/tools/keyframesReducer";
 import "@Shared/GoogleAnalytics/MatomoAnalytics";
@@ -146,9 +147,16 @@ const Keyframes = () => {
     status,
     error,
     isFeatureDataPending,
+    featureData,
     featureDataError,
     featureStatus,
-  } = useProcessKeyframes();
+  } = useProcessKeyframes(input);
+
+  useEffect(() => {
+    if (featureData) {
+      dispatch(setKeyframesFeatures(featureData));
+    }
+  }, [featureData]);
 
   return (
     <Box>
