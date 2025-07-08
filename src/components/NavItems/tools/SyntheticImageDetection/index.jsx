@@ -398,7 +398,37 @@ const SyntheticImageDetection = () => {
         />
 
         <Box sx={{ mr: 2 }}>
-          <ChatbotInterface tool="syntheticImageDetection" />
+          <ChatbotInterface
+            tool="syntheticImageDetection"
+            result={[
+              {
+                apiServiceName: "ldm_r50_grip",
+                name: "synthetic_image_detection_diffusion_name",
+                description: "synthetic_image_detection_diffusion_description",
+                rolesNeeded: ["BETA_TESTER"],
+                predictionScore: 99.88337159156801,
+                isError: false,
+                certhLabel: "VERY_STRONG_EVIDENCE",
+              },
+              {
+                apiServiceName: "progan_r50_grip",
+                name: "synthetic_image_detection_progan_name",
+                description: "synthetic_image_detection_progan_description",
+                rolesNeeded: ["BETA_TESTER"],
+                predictionScore: 0.5682699382305145,
+                isError: false,
+                certhLabel: "WEAK_EVIDENCE",
+              },
+              {
+                apiServiceName: "gan_r50_mever",
+                name: "synthetic_image_detection_gan_name",
+                description: "synthetic_image_detection_gan_description",
+                rolesNeeded: ["BETA_TESTER"],
+                predictionScore: 0.39646425284445286,
+                isError: false,
+              },
+            ]}
+          />
         </Box>
       </Card>
 
