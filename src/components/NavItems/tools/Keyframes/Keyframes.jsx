@@ -26,6 +26,7 @@ import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
+import ImageGrid from "@/components/NavItems/tools/Keyframes/components/ImageGrid";
 import { keyframes } from "@/constants/tools";
 import {
   resetKeyframes,
@@ -39,7 +40,6 @@ import { ClearIcon } from "@mui/x-date-pickers";
 
 import { useProcessKeyframes } from "./Hooks/useKeyframeWrapper";
 import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
-import { ImageWithFade } from "./ImageWithFade";
 import LocalFile from "./LocalFile/LocalFile";
 import KeyFramesResults from "./Results/KeyFramesResults";
 
@@ -406,16 +406,10 @@ const Keyframes = () => {
                   <Typography variant="h6">
                     {keyword("faces_detected_title")}
                   </Typography>
-                  <Grid container direction="row" spacing={2}>
-                    {keyframesFeaturesData.faces.map((item, i) => (
-                      <Grid key={i} size={{ md: 3, lg: 1 }}>
-                        <ImageWithFade
-                          src={item.representative.imageUrl}
-                          alt={`extracted img with face #${i + 1}`}
-                        />
-                      </Grid>
-                    ))}
-                  </Grid>
+                  <ImageGrid
+                    images={keyframesFeaturesData.faces}
+                    alt={"extracted img with face"}
+                  />
                 </Stack>
               </Box>
             </Card>
@@ -429,16 +423,10 @@ const Keyframes = () => {
                   <Typography variant="h6">
                     {keyword("text_detected_title")}
                   </Typography>
-                  <Grid container direction="row" spacing={2}>
-                    {keyframesFeaturesData.texts.map((item, i) => (
-                      <Grid key={i} size={{ md: 3, lg: 1 }}>
-                        <ImageWithFade
-                          src={item.representative.imageUrl}
-                          alt={`extracted img with text #${i + 1}`}
-                        />
-                      </Grid>
-                    ))}
-                  </Grid>
+                  <ImageGrid
+                    images={keyframesFeaturesData.texts}
+                    alt={"extracted img with text"}
+                  />
                 </Stack>
               </Box>
             </Card>
