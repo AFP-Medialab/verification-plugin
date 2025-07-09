@@ -28,8 +28,8 @@ import AssistantIntroduction from "./AssistantIntroduction";
 import AssistantCommentResult from "./AssistantScrapeResults/AssistantCommentResult";
 import AssistantLinkResult from "./AssistantScrapeResults/AssistantLinkResult";
 import AssistantMediaResult from "./AssistantScrapeResults/AssistantMediaResult";
-import AssistantSCResults from "./AssistantScrapeResults/AssistantSCResults";
 import AssistantTextResult from "./AssistantScrapeResults/AssistantTextResult";
+import AssistantSCResults from "./AssistantScrapeResults/AssistantUrlDomainAnalysisResults";
 import AssistantWarnings from "./AssistantScrapeResults/AssistantWarnings";
 import AssistantUrlSelected from "./AssistantUrlSelected";
 
