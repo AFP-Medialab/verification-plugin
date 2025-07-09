@@ -4,26 +4,24 @@ import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
-import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FindInPageIcon from "@mui/icons-material/FindInPage";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import SentimentSatisfied from "@mui/icons-material/SentimentSatisfied";
 
+import {
+  renderDomainAnalysisResults,
+  renderSourceTypeChip,
+} from "@/components/NavItems/Assistant/AssistantCheckResults/assistantUtils";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { setAssuranceExpanded } from "@/redux/actions/tools/assistantActions";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import SourceCredibilityResult from "../AssistantCheckResults/SourceCredibilityResult";
-import { renderAccordion } from "../AssistantCheckResults/assistantUtils";
 import {
   TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,
@@ -49,7 +47,6 @@ const AssistantSCResults = () => {
   const mixedSourceCred = useSelector(
     (state) => state.assistant.mixedSourceCred,
   );
-  const inputUrl = useSelector((state) => state.assistant.inputUrl);
   const trafficLightColors = useSelector(
     (state) => state.assistant.trafficLightColors,
   );
@@ -61,16 +58,6 @@ const AssistantSCResults = () => {
     [mixedSourceCred, trafficLightColors.mixed, sourceTypes.mixed],
     [positiveSourceCred, trafficLightColors.positive, sourceTypes.positive],
   ];
-
-  // find colour for URL
-  const urlColor =
-    cautionSourceCred.length > 0
-      ? trafficLightColors.caution
-      : mixedSourceCred.length > 0
-        ? trafficLightColors.mixed
-        : positiveSourceCred.length > 0
-          ? trafficLightColors.positive
-          : trafficLightColors.unlabelled;
 
   return (
     <Card
@@ -158,9 +145,57 @@ const AssistantSCResults = () => {
             className={classes.assistantBackground}
           >
             <Box mt={3} ml={2}>
-              {sourceCredibility
-                ? renderAccordion(keyword, sourceCredibility, (scroll = true))
-                : null}
+              {console.log(sourceCredibility, cautionSourceCred)}
+              {/* Caution/Warning */}
+              {positiveSourceCred?.length > 0 ? (
+                <>
+                  {renderSourceTypeChip(
+                    keyword,
+                    trafficLightColors.positive,
+                    sourceTypes.positive,
+                  )}
+                  {renderDomainAnalysisResults(
+                    keyword,
+                    positiveSourceCred,
+                    trafficLightColors.positive,
+                    sourceTypes.positive,
+                  )}
+                </>
+              ) : null}
+
+              {/* Mixed/Mentions */}
+              {cautionSourceCred?.length > 0 ? (
+                <>
+                  {renderSourceTypeChip(
+                    keyword,
+                    trafficLightColors.caution,
+                    sourceTypes.caution,
+                  )}
+                  {renderDomainAnalysisResults(
+                    keyword,
+                    cautionSourceCred,
+                    trafficLightColors.caution,
+                    sourceTypes.caution,
+                  )}
+                </>
+              ) : null}
+
+              {/* Positive/Fact-checker */}
+              {mixedSourceCred?.length > 0 ? (
+                <>
+                  {renderSourceTypeChip(
+                    keyword,
+                    trafficLightColors.mixed,
+                    sourceTypes.mixed,
+                  )}
+                  {renderDomainAnalysisResults(
+                    keyword,
+                    mixedSourceCred,
+                    trafficLightColors.mixed,
+                    sourceTypes.mixed,
+                  )}
+                </>
+              ) : null}
             </Box>
           </Collapse>
         </Grid>

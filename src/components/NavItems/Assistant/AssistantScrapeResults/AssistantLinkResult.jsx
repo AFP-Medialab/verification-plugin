@@ -16,12 +16,12 @@ import Typography from "@mui/material/Typography";
 import { CheckCircleOutline, TaskAltOutlined } from "@mui/icons-material";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
+import UrlDomainAnalysisResults from "@/components/NavItems/Assistant/AssistantCheckResults/UrlDomainAnalysisResults";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { TextCopy } from "@Shared/Utils/TextCopy";
 import { DataGrid, getGridSingleSelectOperators } from "@mui/x-data-grid";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import ExtractedUrlDomainAnalysisResults from "../AssistantCheckResults/ExtractedUrlDomainAnalysisResults";
 import {
   TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,
@@ -98,7 +98,6 @@ const Details = (params) => {
         <UrlDomainAnalysisResults
           extractedSourceCredibilityResults={params.urlResults}
           url={params.urlResults.resolvedLink}
-          domainOrAccount={params.domainOrAccount}
           urlColor={params.urlColor}
           sourceTypes={params.sourceTypes}
           trafficLightColors={params.trafficLightColors}
