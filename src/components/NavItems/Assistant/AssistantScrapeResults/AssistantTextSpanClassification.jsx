@@ -15,11 +15,11 @@ import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
 import {
   interpRgb,

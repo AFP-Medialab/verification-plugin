@@ -12,18 +12,17 @@ import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-import GaugeChartModalExplanation from "components/Shared/GaugeChartResults/GaugeChartModalExplanation";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import GaugeChartModalExplanation from "@/components/Shared/GaugeChartResults/GaugeChartModalExplanation";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
 import "./assistantTextResultStyle.css";
 import {
@@ -168,7 +167,10 @@ export default function AssistantTextClassification({
   if (Object.keys(filteredCategories).length === 0) {
     filteredSentences = [];
   }
-  if (credibilitySignal === keyword("subjectivity_title") && Object.keys(filteredSentences).length === 0) {
+  if (
+    credibilitySignal === keyword("subjectivity_title") &&
+    Object.keys(filteredSentences).length === 0
+  ) {
     filteredCategories = [];
   }
 
