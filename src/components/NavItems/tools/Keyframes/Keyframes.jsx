@@ -124,6 +124,11 @@ const Keyframes = () => {
     }
   };
 
+  const resetResults = () => {
+    setInput("");
+    dispatch(resetKeyframes());
+  };
+
   useEffect(() => {
     if (!url) return;
 
@@ -224,7 +229,6 @@ const Keyframes = () => {
                         <TextField
                           id="standard-full-width"
                           label={keyword("keyframes_input")}
-                          // placeholder={keyword("keyframes_input_placeholder")}
                           fullWidth
                           disabled={isPending || isLoadingSimilarity}
                           value={input}
@@ -235,7 +239,7 @@ const Keyframes = () => {
                               endAdornment: input ? (
                                 <IconButton
                                   size="small"
-                                  onClick={() => setInput("")}
+                                  onClick={() => resetResults()}
                                   disabled={isPending || isLoadingSimilarity}
                                   sx={{ p: 1 }}
                                 >
@@ -378,7 +382,7 @@ const Keyframes = () => {
         {error && <Alert severity="error">{keyword(handleError(error))}</Alert>}
 
         {resultData && tabSelected === "url" && (
-          <KeyFramesResults result={resultData} />
+          <KeyFramesResults result={resultData} handleClose={resetResults} />
         )}
 
         {isFeatureDataPending && (

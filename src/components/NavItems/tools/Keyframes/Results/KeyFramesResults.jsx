@@ -35,7 +35,7 @@ import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
  * @returns {Element}
  * @constructor
  */
-const KeyFramesResults = ({ result }) => {
+const KeyFramesResults = ({ result, handleClose }) => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Keyframes");
   const keywordHelp = i18nLoadNamespace("components/Shared/OnClickInfo");
@@ -171,9 +171,19 @@ const KeyFramesResults = ({ result }) => {
             <Typography variant="h6">
               {keyword("cardheader_results")}
             </Typography>
-            <IconButton onClick={clickHelp}>
-              <HelpOutlineIcon />
-            </IconButton>
+            <Stack direction="row" spacing={2}>
+              <IconButton onClick={clickHelp} sx={{ p: 1 }}>
+                <HelpOutlineIcon />
+              </IconButton>
+              <IconButton
+                aria-label="close"
+                onClick={handleClose}
+                sx={{ p: 1 }}
+              >
+                <CloseIcon />
+              </IconButton>
+            </Stack>
+
             <Popover
               id={help}
               open={openHelp}
