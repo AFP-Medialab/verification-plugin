@@ -85,7 +85,7 @@ export default function assistantApiCalls() {
       SELECT ?iri ?abstract (GROUP_CONCAT(DISTINCT ?type; SEPARATOR = ",") AS ?schemaTypes)
       WHERE {
         VALUES ?iri { ${Object.keys(mapping).join(" ")} }
-        ?iri dbo:abstract ?abstract .
+        ?iri rdfs:comment ?abstract .
         ?iri rdf:type ?type .
         FILTER (lang(?abstract) = "${lang}")
       }`;
