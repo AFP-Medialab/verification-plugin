@@ -500,7 +500,7 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                                   <TableBody>
                                     <TableRow>
                                       <TableCell component="th" scope="row">
-                                        {keyword("c2pa_app_device_used")}
+                                        {keyword("app_device_used")}
                                       </TableCell>
                                       <TableCell>
                                         {manifestData.generativeInfo[0]
@@ -512,7 +512,7 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                                     </TableRow>
                                     <TableRow>
                                       <TableCell component="th" scope="row">
-                                        {keyword("c2pa_ai_tool_used")}
+                                        {keyword("ai_tool_used")}
                                       </TableCell>
                                       <TableCell>
                                         {manifestData.generativeInfo[0]

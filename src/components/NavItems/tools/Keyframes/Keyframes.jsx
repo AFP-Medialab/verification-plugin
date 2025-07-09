@@ -31,6 +31,7 @@ import { keyframes } from "@/constants/tools";
 import {
   resetKeyframes,
   setKeyframesFeatures,
+  setKeyframesResult,
   setKeyframesUrl,
 } from "@/redux/reducers/tools/keyframesReducer";
 import "@Shared/GoogleAnalytics/MatomoAnalytics";
@@ -70,6 +71,7 @@ const Keyframes = () => {
   // State used to load images
   const [input, setInput] = useState(resultUrl ? resultUrl : "");
   const [submittedUrl, setSubmittedUrl] = useState(undefined);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
 
   useVideoSimilarity(submittedUrl, keyword);
 
@@ -103,12 +105,20 @@ const Keyframes = () => {
    * @returns {Promise<void>}
    */
   const submitUrl = async (url) => {
+    const finalUrl = url ?? input;
+
     dispatch(resetKeyframes());
-    dispatch(setKeyframesUrl(url ?? input));
+    dispatch(setKeyframesUrl(finalUrl));
     resetFetchingKeyframes();
     try {
-      setSubmittedUrl(url ?? input);
-      await executeProcess(url ?? input, role);
+      setSubmittedUrl(finalUrl);
+      setHasSubmitted(true);
+      const result = await executeProcess(finalUrl, role);
+      if (result?.fromCache) {
+        dispatch(setKeyframesResult(result.data));
+        dispatch(setKeyframesFeatures(result.featureData));
+        setHasSubmitted(false);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -145,6 +155,7 @@ const Keyframes = () => {
     resetFetchingKeyframes,
     isPending,
     status,
+    data,
     error,
     isFeatureDataPending,
     featureData,
@@ -153,10 +164,12 @@ const Keyframes = () => {
   } = useProcessKeyframes(input);
 
   useEffect(() => {
-    if (featureData) {
+    if (featureData && data && hasSubmitted) {
       dispatch(setKeyframesFeatures(featureData));
+      dispatch(setKeyframesResult(data));
+      setHasSubmitted(false);
     }
-  }, [featureData]);
+  }, [featureData, data, hasSubmitted]);
 
   return (
     <Box>

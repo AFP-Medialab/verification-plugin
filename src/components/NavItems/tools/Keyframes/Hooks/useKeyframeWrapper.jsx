@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import {
@@ -9,10 +9,11 @@ import {
   usePollKeyframeJobStatus,
 } from "@/components/NavItems/tools/Keyframes/api";
 import { KeyframeInputType } from "@/components/NavItems/tools/Keyframes/api/createKeyframeJob";
-import { setKeyframesResult } from "@/redux/reducers/tools/keyframesReducer";
 import { isValidUrl } from "@Shared/Utils/URLUtils";
 
 export const useProcessKeyframes = (url) => {
+  const urlToJobIdRef = useRef(new Map());
+
   const [status, setStatus] = useState(null);
   const [featureStatus, setFeatureStatus] = useState(null);
 
@@ -49,61 +50,93 @@ export const useProcessKeyframes = (url) => {
   });
 
   // Step 3: Get Keyframes
-  const fetchKeyframeFeaturesMutation = useQuery({
+  const fetchKeyframeFeaturesQuery = useQuery({
     queryKey: ["keyframeFeatures", url],
-    queryFn: async () => {
+    queryFn: async ({ queryKey }) => {
+      const [, url] = queryKey;
+      const jobId = urlToJobIdRef.current.get(url);
+      if (!jobId) throw new Error("No jobId available for url");
+
       setStatus("Retrieving features...");
       return await fetchKeyframeFeatures(jobId);
     },
     enabled: status === "Processing... completed 100%",
     refetchOnWindowFocus: false,
-    gcTime: 1000 * 60 * 60, // 1 hour
+    gcTime: 1000 * 60 * 60,
+    staleTime: 1000 * 60 * 60,
   });
 
-  // const fetchKeyframeFeaturesMutation = useMutation({
-  //   mutationFn: async (jobId) => {
-  //     setStatus("Retrieving features...");
-  //     return await fetchKeyframeFeatures(jobId);
-  //   },
-  //   onSuccess: (data) => {
-  //     setFeatureStatus("Completed");
-  //     dispatch(setKeyframesFeatures(data));
-  //   }
-  // });
+  const fetchKeyframesQuery = useQuery({
+    queryKey: ["keyframes", url],
+    queryFn: async ({ queryKey }) => {
+      const [, url] = queryKey;
+      const jobId = urlToJobIdRef.current.get(url);
+      if (!jobId) throw new Error("No jobId available for url");
 
-  const fetchKeyframesMutation = useMutation({
-    mutationFn: async (jobId) => {
-      return await fetchKeyframes(jobId);
-    },
-    onSuccess: (data) => {
+      const kf = await fetchKeyframes(jobId);
       setStatus("Completed");
-      dispatch(setKeyframesResult(data));
+      return kf;
     },
+    enabled: status === "Processing... completed 100%",
+    refetchOnWindowFocus: false,
+    gcTime: 1000 * 60 * 60,
+    staleTime: 1000 * 60 * 60,
   });
 
   // Execute the whole process
   const executeProcess = async (url) => {
-    try {
-      const jobId = await sendUrlMutation.mutateAsync({ url });
+    // Snapshot the previous value
+    const previousKeyframes = queryClient.getQueryData(["keyframes", url]);
+    const previousKeyframeFeatures = queryClient.getQueryData([
+      "keyframeFeatures",
+      url,
+    ]);
 
-      setJobId(jobId);
-      await checkStatusMutation.mutateAsync(jobId);
-      // await fetchKeyframeFeaturesMutation.(jobId);
-      return fetchKeyframesMutation.mutateAsync(jobId);
-    } catch (error) {
-      console.error("Process failed:", error);
-      setStatus("Error occurred");
-      throw error;
+    if (url && previousKeyframes && previousKeyframeFeatures) {
+      queryClient.setQueryData(["keyframes", url], previousKeyframes);
+      queryClient.setQueryData(
+        ["keyframeFeatures", url],
+        previousKeyframeFeatures,
+      );
+      return {
+        data: previousKeyframes,
+        featureData: previousKeyframeFeatures,
+        fromCache: true,
+      };
+    } else {
+      try {
+        const jobId = await sendUrlMutation.mutateAsync({ url });
+
+        setJobId(jobId);
+        urlToJobIdRef.current.set(url, jobId);
+        await checkStatusMutation.mutateAsync(jobId);
+
+        return {
+          data: undefined,
+          featureData: undefined,
+          fromCache: false,
+        };
+      } catch (error) {
+        console.error("Process failed:", error);
+        setStatus("Error occurred");
+        throw error;
+      }
     }
   };
 
   const resetFetchingKeyframes = () => {
     sendUrlMutation.reset();
     checkStatusMutation.reset();
-    fetchKeyframesMutation.reset();
+    // fetchKeyframesQuery.reset();
 
     setStatus(null);
   };
+
+  const cachedKeyframes = queryClient.getQueryData(["keyframes", url]);
+  const cachedKeyframeFeatures = queryClient.getQueryData([
+    "keyframeFeatures",
+    url,
+  ]);
 
   return {
     executeProcess,
@@ -112,16 +145,16 @@ export const useProcessKeyframes = (url) => {
     isPending:
       sendUrlMutation.isPending ||
       checkStatusMutation.isPending ||
-      fetchKeyframesMutation.isPending,
-    data: fetchKeyframesMutation.data,
+      fetchKeyframesQuery.isFetching,
+    data: fetchKeyframesQuery.data ?? cachedKeyframes,
     error:
       sendUrlMutation.error ||
       checkStatusMutation.error ||
-      fetchKeyframesMutation.error,
+      fetchKeyframesQuery.error,
 
     featureStatus,
-    isFeatureDataPending: fetchKeyframeFeaturesMutation.isFetching,
-    featureData: fetchKeyframeFeaturesMutation.data,
-    featureDataError: fetchKeyframeFeaturesMutation.error,
+    isFeatureDataPending: fetchKeyframeFeaturesQuery.isFetching,
+    featureData: fetchKeyframeFeaturesQuery.data ?? cachedKeyframeFeatures,
+    featureDataError: fetchKeyframeFeaturesQuery.error,
   };
 };
