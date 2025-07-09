@@ -12,6 +12,7 @@ import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import Link from "@mui/material/Link";
 import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
@@ -99,11 +100,22 @@ const AssistantNEResult = () => {
     }
 
     return (
-      <Tooltip key={tag.key || tag.value} title={tag.count} arrow>
+      <Tooltip
+        key={tag.key || tag.value}
+        title={
+          <>
+            <Typography variant="h5">
+              {tag.count} {keyword("named_entity_mentions")}
+            </Typography>
+            <Typography>{tag.abstract}</Typography>
+          </>
+        }
+        arrow
+      >
         <Link
           style={tagStyle}
           className={tagClassName}
-          href={"https://www.google.com/search?q=" + tag.value}
+          href={tag.link}
           rel="noopener noreferrer"
           target={"_blank"}
         >
