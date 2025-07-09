@@ -7,7 +7,7 @@ import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 
 import SourceCredibilityDBKFDialog from "./SourceCredibilityDBKFDialog";
 import { getUrlTypeFromCredScope } from "./assistantUtils";

@@ -16,7 +16,7 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 
 const DbkfTextResults = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
