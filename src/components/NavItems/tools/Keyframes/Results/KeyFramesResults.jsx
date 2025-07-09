@@ -1,5 +1,4 @@
 import React, { memo, useState } from "react";
-import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -19,7 +18,6 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 
-import { ROLES } from "@/constants/roles";
 import {
   SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
@@ -32,6 +30,7 @@ import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 /**
  *
  * @param result {KeyframesData}
+ * @param handleClose {function} The function to call when clicking on the close button
  * @returns {Element}
  * @constructor
  */
@@ -39,10 +38,6 @@ const KeyFramesResults = ({ result, handleClose }) => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Keyframes");
   const keywordHelp = i18nLoadNamespace("components/Shared/OnClickInfo");
-
-  const role = useSelector((state) => state.userSession.user.roles);
-
-  const jobId = useSelector((state) => state.keyframes.result.session);
 
   const [detailed, setDetailed] = useState(false);
 
@@ -131,21 +126,7 @@ const KeyFramesResults = ({ result, handleClose }) => {
   const downloadAction = () => {
     setIsZipDownloading(true);
 
-    let downloadUrl;
-
-    if (
-      !role.includes(ROLES.BETA_TESTER) &&
-      !role.includes(ROLES.EVALUATION) &&
-      !role.includes(ROLES.EXTRA_FEATURE)
-    ) {
-      downloadUrl =
-        process.env.REACT_APP_KEYFRAME_API +
-        "/keyframes/" +
-        jobId +
-        "/Subshots";
-    } else {
-      downloadUrl = result.zipFileUrl;
-    }
+    const downloadUrl = result.zipFileUrl;
 
     fetch(downloadUrl).then((response) => {
       response.blob().then((blob) => {
