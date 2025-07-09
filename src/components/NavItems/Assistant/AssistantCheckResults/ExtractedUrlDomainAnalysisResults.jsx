@@ -31,7 +31,7 @@ import {
   renderUrlTitle,
 } from "./assistantUtils";
 
-const UrlDomainAnalysisResults = ({
+const ExtractedUrlDomainAnalysisResults = ({
   extractedSourceCredibilityResults,
   url,
   urlColor,
@@ -210,4 +210,4 @@ const UrlDomainAnalysisResults = ({
     </List>
   );
 };
-export default UrlDomainAnalysisResults;
+export default ExtractedUrlDomainAnalysisResults;

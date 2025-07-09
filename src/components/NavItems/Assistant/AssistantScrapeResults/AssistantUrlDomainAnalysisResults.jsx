@@ -145,7 +145,6 @@ const AssistantSCResults = () => {
             className={classes.assistantBackground}
           >
             <Box mt={3} ml={2}>
-              {console.log(sourceCredibility, cautionSourceCred)}
               {/* Caution/Warning */}
               {positiveSourceCred?.length > 0 ? (
                 <>
