@@ -1,26 +1,36 @@
 import React, { useEffect } from "react";
-import { Grid2, Stack } from "@mui/material";
+import { Controller, useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+
+import { useMediaQuery } from "@mui/material";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import LockIcon from "@mui/icons-material/Lock";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import TextField from "@mui/material/TextField";
-import LockOpenIcon from "@mui/icons-material/LockOpen";
-import useAuthenticationAPI from "../../../../Shared/Authentication/useAuthenticationAPI";
-import { useDispatch, useSelector } from "react-redux";
-import { ERR_AUTH_UNKNOWN_ERROR } from "../../../../Shared/Authentication/authenticationErrors";
-import { setError } from "redux/reducers/errorReducer";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import { Controller, useForm } from "react-hook-form";
-import * as yup from "yup";
-import _ from "lodash";
 import MenuItem from "@mui/material/MenuItem";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import LockIcon from "@mui/icons-material/Lock";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
+import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
+
+import { theme } from "@/theme";
+import { ERR_AUTH_UNKNOWN_ERROR } from "@Shared/Authentication/authenticationErrors";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import _ from "lodash";
+import { setError } from "redux/reducers/errorReducer";
+import * as yup from "yup";
+
+import useAuthenticationAPI from "../../../../Shared/Authentication/useAuthenticationAPI";
 
 const registrationValidationSchema = yup.object().shape({
   email: yup
@@ -47,7 +57,6 @@ const registrationValidationSchema = yup.object().shape({
 const AdvancedTools = () => {
   const keyword = i18nLoadNamespace("components/NavItems/AdvancedTools");
 
-  //const classes = useMyStyles();
   // Redux store
   const dispatch = useDispatch();
   const userAuthenticated = useSelector(
@@ -94,7 +103,6 @@ const AdvancedTools = () => {
     } else {
       setNotAuthenticatedData();
     }
-    // eslint-disable-next-line
   }, [userAuthenticated]);
 
   const handleClickOpen = () => {
@@ -218,34 +226,68 @@ const AdvancedTools = () => {
     dispatch(setError(errMsg));
   };
 
+  const isDisplayMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
     <Box>
-      <Stack
-        direction="column"
-        justifyContent="flex-start"
-        alignItems="center"
-        spacing={{ xs: 1 }}
-      >
-        <Button
-          variant="outlined"
-          color={colorButton}
-          onClick={handleClickOpen}
+      {isDisplayMobile ? (
+        <Tooltip
+          title={
+            userAuthenticated
+              ? messageI18NResolver("LOGUSER_LOGOUT_LABEL")
+              : messageI18NResolver("LOGINFORM_SUBMIT_LABEL")
+          }
         >
-          {userAuthenticated
-            ? messageI18NResolver("LOGUSER_LOGOUT_LABEL")
-            : messageI18NResolver("LOGINFORM_SUBMIT_LABEL")}
-        </Button>
+          <IconButton
+            onClick={handleClickOpen}
+            sx={{
+              p: 1,
+            }}
+          >
+            {userAuthenticated ? (
+              <LogoutIcon color={colorButton} />
+            ) : (
+              <LoginIcon color={colorButton} />
+            )}
+          </IconButton>
+        </Tooltip>
+      ) : (
         <Stack
           direction="column"
-          justifyContent="center"
-          alignItems="flex-start"
+          spacing={{ xs: 1 }}
+          sx={{
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
         >
-          <Stack direction={"row"} sx={{ color: "black" }}>
-            {iconState}
-            <Typography variant="caption">{keyword("title")}</Typography>
+          <Button
+            variant="outlined"
+            color={colorButton}
+            onClick={handleClickOpen}
+          >
+            {userAuthenticated
+              ? messageI18NResolver("LOGUSER_LOGOUT_LABEL")
+              : messageI18NResolver("LOGINFORM_SUBMIT_LABEL")}
+          </Button>
+          <Stack
+            direction="column"
+            sx={{
+              justifyContent: "center",
+              alignItems: "flex-start",
+            }}
+          >
+            <Stack
+              direction={"row"}
+              sx={{
+                color: "var(--mui-palette-text-primary)",
+              }}
+            >
+              {iconState}
+              <Typography variant="caption">{keyword("title")}</Typography>
+            </Stack>
           </Stack>
         </Stack>
-      </Stack>
+      )}
       <Dialog
         fullWidth
         maxWidth={"xs"}
@@ -254,51 +296,66 @@ const AdvancedTools = () => {
         aria-labelledby="max-width-dialog-title"
       >
         {dialogState === 0 && (
-          <Grid2
+          <Grid
             container
             direction="column"
-            justifyContent="flex-start"
-            alignItems="flex-start"
-            p={2}
+            sx={{
+              justifyContent: "flex-start",
+              alignItems: "flex-start",
+              p: 2,
+            }}
           >
             <form>
-              <Grid2>
+              <Grid>
                 <DialogTitle id="max-width-dialog-title">
-                  <Typography style={{ color: "#00926c", fontSize: "24px" }}>
+                  <Typography
+                    style={{
+                      color: "var(--mui-palette-primary-main)",
+                      fontSize: "24px",
+                    }}
+                  >
                     {keyword("title")}
                   </Typography>
                 </DialogTitle>
-              </Grid2>
-              <Grid2>
+              </Grid>
+              <Grid>
                 <DialogContent sx={{ overflow: "hidden" }}>
-                  <Grid2
+                  <Grid
                     container
                     direction="column"
-                    justifyContent="flex-start"
-                    alignItems="stretch"
                     spacing={2}
+                    sx={{
+                      justifyContent: "flex-start",
+                      alignItems: "stretch",
+                    }}
                   >
-                    <Grid2
+                    <Grid
                       container
                       direction="column"
-                      justifyContent="flex-start"
-                      alignItems="stretch"
                       spacing={2}
+                      sx={{
+                        justifyContent: "flex-start",
+                        alignItems: "stretch",
+                      }}
                     >
-                      <Grid2>
+                      <Grid>
                         <Typography variant="body2">
                           {keyword("text_general")}
                         </Typography>
-                      </Grid2>
-                      <Grid2 mt={2}>
+                      </Grid>
+                      <Grid
+                        sx={{
+                          mt: 2,
+                        }}
+                      >
                         <Typography
                           variant="body2"
-                          style={{ color: "#818B95" }}
+                          style={{ color: "var(--mui-palette-text-secondary)" }}
                         >
                           {messageI18NResolver("ACCESSCODEFORM_TITLE")}
                         </Typography>
-                      </Grid2>
-                      <Grid2>
+                      </Grid>
+                      <Grid>
                         <TextField
                           label={"Email"}
                           value={email}
@@ -320,8 +377,8 @@ const AdvancedTools = () => {
                             }
                           }}
                         />
-                      </Grid2>
-                      <Grid2>
+                      </Grid>
+                      <Grid>
                         <Button
                           type="submit"
                           variant="contained"
@@ -335,16 +392,19 @@ const AdvancedTools = () => {
                         >
                           {messageI18NResolver("ACCESSCODEFORM_SUBMIT_LABEL")}
                         </Button>
-                      </Grid2>
-                      <Grid2>
+                      </Grid>
+                      <Grid>
                         <Typography
                           variant="body2"
-                          style={{ color: "#818B95", textAlign: "start" }}
+                          style={{
+                            color: "var(--mui-palette-text-secondary)",
+                            textAlign: "start",
+                          }}
                         >
                           {keyword("text_alreadycode")}
                           <span
                             style={{
-                              color: "#000000",
+                              color: "var(--mui-palette-text-primary)",
                               marginLeft: "5px",
                               fontWeight: "500",
                               cursor: "pointer",
@@ -354,14 +414,21 @@ const AdvancedTools = () => {
                             {keyword("text_clickhere")}
                           </span>
                         </Typography>
-                      </Grid2>
-                    </Grid2>
-                    <Grid2 mt={6}>
-                      <Typography variant="body2" style={{ color: "#818B95" }}>
+                      </Grid>
+                    </Grid>
+                    <Grid
+                      sx={{
+                        mt: 6,
+                      }}
+                    >
+                      <Typography
+                        variant="body2"
+                        style={{ color: "var(--mui-palette-text-secondary)" }}
+                      >
                         {messageI18NResolver("REGISTRATIONFORM_TITLE")}
                       </Typography>
-                    </Grid2>
-                    <Grid2>
+                    </Grid>
+                    <Grid>
                       <Button
                         variant="outlined"
                         color="primary"
@@ -371,25 +438,31 @@ const AdvancedTools = () => {
                       >
                         {messageI18NResolver("REGISTRATIONFORM_SUBMIT_LABEL")}
                       </Button>
-                    </Grid2>
-                  </Grid2>
+                    </Grid>
+                  </Grid>
                 </DialogContent>
-              </Grid2>
+              </Grid>
             </form>
-          </Grid2>
+          </Grid>
         )}
         {dialogState === 1 && (
-          <Box p={2}>
+          <Box
+            sx={{
+              p: 2,
+            }}
+          >
             <form>
               <DialogTitle id="max-width-dialog-title">
-                <Grid2
+                <Grid
                   container
                   direction="row"
-                  justifyContent="flex-start"
-                  alignItems="center"
                   style={{ width: "100%" }}
+                  sx={{
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
                 >
-                  <Grid2>
+                  <Grid>
                     <IconButton
                       color="primary"
                       onClick={handleClickBack}
@@ -397,21 +470,30 @@ const AdvancedTools = () => {
                     >
                       <ArrowBackIosIcon />
                     </IconButton>
-                  </Grid2>
+                  </Grid>
 
-                  <Grid2>
-                    <Typography style={{ color: "#00926c", fontSize: "24px" }}>
+                  <Grid>
+                    <Typography
+                      style={{
+                        color: "var(--mui-palette-primary-main)",
+                        fontSize: "24px",
+                      }}
+                    >
                       {messageI18NResolver("ACCESSCODEFORM_EMAIL_CHECK")}
                     </Typography>
-                  </Grid2>
-                </Grid2>
+                  </Grid>
+                </Grid>
               </DialogTitle>
               <DialogContent style={{ height: "300px" }}>
                 <Typography variant="body2">
                   {messageI18NResolver("ACCESSCODEFORM_SUCCESS_TEXT")}
                 </Typography>
 
-                <Box m={2} />
+                <Box
+                  sx={{
+                    m: 2,
+                  }}
+                />
 
                 <TextField
                   label={"Code"}
@@ -433,12 +515,24 @@ const AdvancedTools = () => {
                   }}
                 />
 
-                <Box m={2} />
+                <Box
+                  sx={{
+                    m: 2,
+                  }}
+                />
 
-                <Box ml={1} margin={1}>
+                <Box
+                  sx={{
+                    ml: 1,
+                    margin: 1,
+                  }}
+                >
                   <Typography
                     variant="body2"
-                    style={{ color: "#989898", fontSize: "13px" }}
+                    style={{
+                      color: "var(--mui-palette-text-secondary)",
+                      fontSize: "13px",
+                    }}
                   >
                     {messageI18NResolver("ACCESSCODEFORM_SUCCESS_TEXT_SPAM")}
                   </Typography>
@@ -464,11 +558,18 @@ const AdvancedTools = () => {
         )}
 
         {dialogState === 2 && (
-          <Box p={2}>
+          <Box
+            sx={{
+              p: 2,
+            }}
+          >
             <DialogTitle id="max-width-dialog-title">
               <Typography
                 gutterBottom
-                style={{ color: "#00926c", fontSize: "24px" }}
+                style={{
+                  color: "var(--mui-palette-primary-main)",
+                  fontSize: "24px",
+                }}
               >
                 {keyword("title_tools_unlocked")}
               </Typography>
@@ -490,11 +591,18 @@ const AdvancedTools = () => {
         )}
 
         {dialogState === 3 && (
-          <Box p={2}>
+          <Box
+            sx={{
+              p: 2,
+            }}
+          >
             <DialogTitle id="max-width-dialog-title">
               <Typography
                 gutterBottom
-                style={{ color: "#00926c", fontSize: "24px" }}
+                sx={{
+                  color: "var(--mui-palette-primary-main)",
+                  fontSize: "24px",
+                }}
               >
                 {messageI18NResolver("REGISTRATIONFORM_TITLE_WINDOW")}
               </Typography>
@@ -503,12 +611,22 @@ const AdvancedTools = () => {
               <Typography variant="body2">
                 {messageI18NResolver("AUTHCARD_EXPLANATION_TEXT")}
               </Typography>
-              <Box m={2} />
+              <Box
+                sx={{
+                  m: 2,
+                }}
+              />
               <form
                 onSubmit={registrationForm.handleSubmit(registrationOnSubmit)}
               >
-                <Grid2 container justifyContent="center" spacing={2}>
-                  <Grid2 size={{ xs: 12 }}>
+                <Grid
+                  container
+                  spacing={2}
+                  sx={{
+                    justifyContent: "center",
+                  }}
+                >
+                  <Grid size={{ xs: 12 }}>
                     <Controller
                       name="email"
                       render={({ field }) => (
@@ -545,15 +663,15 @@ const AdvancedTools = () => {
                       rules={{
                         pattern: {
                           value:
-                            /^[A-Z0-9._%+-]+@(?!gmail|yahoo|hotmail|outlook|inbox|icloud)[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                            /^[A-Z0-9._%+!#$%&'*+-/=?^_`{|}~-]+@(?!gmail|yahoo|hotmail|outlook|inbox|icloud)[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                           message: "invalid organizational email address",
                         },
                         required: true,
                       }}
                       control={registrationForm.control}
                     />
-                  </Grid2>
-                  <Grid2 size={{ xs: 12 }}>
+                  </Grid>
+                  <Grid size={{ xs: 12 }}>
                     <Controller
                       name="firstName"
                       render={({ field }) => (
@@ -592,8 +710,8 @@ const AdvancedTools = () => {
                       }}
                       control={registrationForm.control}
                     />
-                  </Grid2>
-                  <Grid2 size={{ xs: 12 }}>
+                  </Grid>
+                  <Grid size={{ xs: 12 }}>
                     <Controller
                       name="lastName"
                       render={({ field }) => (
@@ -632,8 +750,8 @@ const AdvancedTools = () => {
                       }}
                       control={registrationForm.control}
                     />
-                  </Grid2>
-                  <Grid2 size={{ xs: 12 }}>
+                  </Grid>
+                  <Grid size={{ xs: 12 }}>
                     <Controller
                       name="organization"
                       render={({ field }) => (
@@ -672,8 +790,8 @@ const AdvancedTools = () => {
                       }}
                       control={registrationForm.control}
                     />
-                  </Grid2>
-                  <Grid2 size={{ xs: 12 }}>
+                  </Grid>
+                  <Grid size={{ xs: 12 }}>
                     <Controller
                       name="organizationRole"
                       render={({ field }) => (
@@ -733,9 +851,9 @@ const AdvancedTools = () => {
                       }}
                       control={registrationForm.control}
                     />
-                  </Grid2>
+                  </Grid>
 
-                  <Grid2 size={{ xs: 12 }}>
+                  <Grid size={{ xs: 12 }}>
                     <Controller
                       name="organizationRoleOther"
                       render={({ field }) => (
@@ -772,10 +890,14 @@ const AdvancedTools = () => {
                       )}
                       control={registrationForm.control}
                     />
-                  </Grid2>
+                  </Grid>
 
-                  <Grid2 size={{ xs: 12 }}>
-                    <Box mt={2}>
+                  <Grid size={{ xs: 12 }}>
+                    <Box
+                      sx={{
+                        mt: 2,
+                      }}
+                    >
                       <Button
                         variant="contained"
                         color="primary"
@@ -785,8 +907,8 @@ const AdvancedTools = () => {
                         {messageI18NResolver("REGISTRATIONFORM_SUBMIT_LABEL")}
                       </Button>
                     </Box>
-                  </Grid2>
-                </Grid2>
+                  </Grid>
+                </Grid>
               </form>
             </DialogContent>
             <DialogActions></DialogActions>
@@ -794,11 +916,18 @@ const AdvancedTools = () => {
         )}
 
         {dialogState === 4 && (
-          <Box p={2}>
+          <Box
+            sx={{
+              p: 2,
+            }}
+          >
             <DialogTitle id="max-width-dialog-title">
               <Typography
                 gutterBottom
-                style={{ color: "#00926c", fontSize: "24px" }}
+                sx={{
+                  color: "var(--mui-palette-primary-main)",
+                  fontSize: "24px",
+                }}
               >
                 {messageI18NResolver("REGISTRATIONFORM_SUCCESS_TITLE")}
               </Typography>

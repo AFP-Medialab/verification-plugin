@@ -1,19 +1,21 @@
 import React from "react";
 
 import Box from "@mui/material/Box";
-import { Grid2, Link } from "@mui/material";
+import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
-import {
-  ExpandLessOutlined,
-  ExpandMoreOutlined,
-  UnfoldMore,
-} from "@mui/icons-material";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { getLanguageName } from "../../../Shared/Utils/languageUtils";
-import { TextCopy } from "../../../Shared/Utils/TextCopy";
-import { Translate } from "../../../Shared/Utils/Translate";
+import { ExpandLessOutlined, ExpandMoreOutlined } from "@mui/icons-material";
+
+import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
+import { TextCopy } from "@Shared/Utils/TextCopy";
+import { Translate } from "@Shared/Utils/Translate";
+import { getLanguageName } from "@Shared/Utils/languageUtils";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 export default function TextFooter({
   classes,
@@ -22,75 +24,110 @@ export default function TextFooter({
   textLang,
   expandMinimiseText,
   text,
-  displayExpander,
   setExpanded,
   expanded,
 }) {
+  const keyword = i18nLoadNamespace("components/Shared/utils");
   return (
     <Box>
       <Divider />
-      <Grid2 container spacing={2}>
+      <Grid container spacing={2}>
         {/* language detected */}
-        <Grid2 size={9} align={"left"} pt={1}>
+        <Grid
+          size={9}
+          align={"left"}
+          sx={{
+            pt: 1,
+          }}
+        >
           <Typography
-            display="inline"
             className={classes.toolTipIcon}
             onClick={() => setDisplayOrigLang(!displayOrigLang)}
+            sx={{
+              display: "inline",
+            }}
           >
-            {getLanguageName(textLang) ?? textLang}
+            {getLanguageName(textLang, textLang) ?? textLang}
           </Typography>
-        </Grid2>
+        </Grid>
 
         {/* copy to clipboard */}
-        <Grid2 size={{ xs: 1 }} align={"right"} display="flex" pt={1.5}>
-          <TextCopy text={text} index={text} />
-        </Grid2>
+        <Grid
+          size={{ xs: 1 }}
+          align={"right"}
+          sx={{
+            display: "flex",
+            pt: 1.5,
+          }}
+        >
+          <Tooltip title={keyword("copy_to_clipboard")}>
+            <div>
+              <TextCopy text={text} index={text} />
+            </div>
+          </Tooltip>
+        </Grid>
 
         {/* translate */}
-        <Grid2 size={{ xs: 1 }} align={"right"} display="flex" pt={2}>
-          <Translate text={text} />
-        </Grid2>
+        <Grid
+          size={{ xs: 1 }}
+          align={"right"}
+          sx={{
+            display: "flex",
+            pt: 2,
+          }}
+        >
+          <Tooltip title={keyword("translate")}>
+            <div>
+              <Translate text={text} />
+            </div>
+          </Tooltip>
+        </Grid>
 
         {/* expand/minimise text */}
-        <Grid2 size={{ xs: 1 }} align={"right"} display="flex" pt={1}>
+        <Grid
+          size={{ xs: 1 }}
+          align={"right"}
+          sx={{
+            display: "flex",
+            pt: 1,
+          }}
+        >
           <ExpandMinimise
             classes={classes}
             expandMinimiseText={expandMinimiseText}
-            displayExpander={displayExpander}
             setExpanded={setExpanded}
             expanded={expanded}
           />
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     </Box>
   );
 }
 
 export function TextFooterPrevFactChecks({
-  classes,
-  expandMinimiseText,
-  displayExpander,
-  setExpanded,
-  expanded,
   navigate,
   keyword,
+  setExpanded,
+  expanded,
 }) {
   const handleClick = (path) => {
     // instead need to set parameter then load text in SemanticSearch/index.jsx
     navigate("/app/" + path + "/assistantText");
   };
+  const classes = useMyStyles();
+  const expandMinimiseText = keyword("expand_minimise_text");
 
   return (
     <Box>
       <Divider />
-      <Grid2 container>
+      <Grid container>
         {/* empty */}
-        <Grid2 size={{ xs: 1 }} align={"start"}>
+        <Grid size={{ xs: 1 }} align={"start"}>
           <></>
-        </Grid2>
+        </Grid>
 
         {/* see more details */}
-        <Grid2 size={{ xs: 10 }} align={"center"}>
+        <Grid size={{ xs: 10 }} align={"center"}>
           <Typography
             component={"div"}
             sx={{ color: "text.secondary", align: "start" }}
@@ -104,19 +141,18 @@ export function TextFooterPrevFactChecks({
               {keyword("semantic_search_title")}
             </Link>
           </Typography>
-        </Grid2>
+        </Grid>
 
         {/* expand/minimise text */}
-        <Grid2 size={1} align={"left"}>
+        <Grid size={1} align={"left"}>
           <ExpandMinimise
             classes={classes}
             expandMinimiseText={expandMinimiseText}
-            displayExpander={displayExpander}
             setExpanded={setExpanded}
             expanded={expanded}
           />
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     </Box>
   );
 }
@@ -124,39 +160,57 @@ export function TextFooterPrevFactChecks({
 export function ExpandMinimise({
   classes,
   expandMinimiseText,
-  displayExpander,
   setExpanded,
   expanded,
+  type,
 }) {
-  return (
-    <Tooltip title={expandMinimiseText}>
-      {/* <UnfoldMore
-        className={classes.toolTipIcon}
-        onClick={() => {
-          setExpanded(!expanded);
-        }}
-        sx={{ cursor: "pointer" }}
-        color={"primary"}
-      /> */}
-      {displayExpander ? (
-        expanded ? (
-          <ExpandLessOutlined
-            className={classes.toolTipIcon}
-            onClick={() => {
-              setExpanded(!expanded);
-            }}
-            color="primary"
-          />
-        ) : (
-          <ExpandMoreOutlined
-            className={classes.toolTipIcon}
-            onClick={() => {
-              setExpanded(!expanded);
-            }}
-            color="primary"
-          />
-        )
-      ) : null}
-    </Tooltip>
+  return type === "BUTTON" ? (
+    <Button
+      variant="outlined"
+      color="primary"
+      size={"large"}
+      fullWidth
+      onClick={() => {
+        setExpanded(!expanded);
+      }}
+    >
+      {expanded ? (
+        <ExpandLessOutlined
+          className={classes.toolTipIcon}
+          color="primary"
+          style={{ display: "inline-flex" }}
+        />
+      ) : (
+        <ExpandMoreOutlined
+          className={classes.toolTipIcon}
+          color="primary"
+          style={{ display: "inline-flex" }}
+        />
+      )}
+      {expandMinimiseText}
+    </Button>
+  ) : (
+    <IconButton
+      onClick={() => setExpanded(!expanded)}
+      sx={{
+        "&:hover": {
+          backgroundColor: "inherit",
+        },
+      }}
+    >
+      {expanded ? (
+        <ExpandLessOutlined
+          className={classes.toolTipIcon}
+          color="primary"
+          style={{ display: "inline-flex" }}
+        />
+      ) : (
+        <ExpandMoreOutlined
+          className={classes.toolTipIcon}
+          color="primary"
+          style={{ display: "inline-flex" }}
+        />
+      )}
+    </IconButton>
   );
 }

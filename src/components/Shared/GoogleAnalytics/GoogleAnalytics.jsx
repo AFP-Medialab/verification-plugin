@@ -27,57 +27,10 @@ export function submissionEvent(payload) {
   };
   matomoCall(actions);
   /*ReactGA.event({
-          category: 'Submission',
-          action: 'Submitted from ' + history.location.pathname,
-          label: payload
-      });*/
-}
-
-export function reverseSearchClick() {
-  // const events = [
-  //   {
-  //     name: "reverse_search",
-  //     params: {
-  //       action:
-  //         "Reverse search " + history.location.pathname + " for " + payload,
-  //       label: payload,
-  //     },
-  //   },
-  // ];
-  /* ReactGA.event({
-          category: 'Reverse search',
-          action: 'Reverse search ' + history.location.pathname + " for " + payload,
-          label: payload
-      });*/
-  return true;
-}
-
-export function loadPage(path) {
-  history.push(path.pathname);
-  const pathname = history.location.pathname;
-  console.log(path);
-  console.log(pathname);
-
-  let events = [
-    {
-      name: "page_view",
-      params: {
-        page_location: pathname,
-      },
-    },
-  ];
-  ga4Call(events);
-
-  let actions = {
-    e_c: "page_view",
-    action_name: pathname,
-    url: "urn:" + pathname,
-    //client_id: "11edc52b-2918-4d71-9058-f7285e29d894",
-    cvar: {
-      page: pathname,
-    },
-  };
-  matomoCall(actions);
+            category: 'Submission',
+            action: 'Submitted from ' + history.location.pathname,
+            label: payload
+        });*/
 }
 
 export function changeTabEvent(tabIndex, tabTitle) {

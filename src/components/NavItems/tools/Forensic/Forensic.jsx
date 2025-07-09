@@ -1,72 +1,34 @@
 import React, { useEffect, useState } from "react";
-import Box from "@mui/material/Box";
 import { useDispatch, useSelector } from "react-redux";
-import useGetImages from "./Hooks/useGetImages";
-import LinearProgress from "@mui/material/LinearProgress";
-import ForensicResults from "./Results/ForensicResult";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { useParams } from "react-router-dom";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import ForensicIcon from "../../../NavBar/images/SVG/Image/Forensic.svg";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+
 import Alert from "@mui/material/Alert";
-import { resetForensicState } from "../../../../redux/actions/tools/forensicActions";
-import { setError } from "redux/reducers/errorReducer";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import LinearProgress from "@mui/material/LinearProgress";
+import Stack from "@mui/material/Stack";
+
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { imageForensic } from "@/constants/tools";
+import { resetForensicState } from "@/redux/actions/tools/forensicActions";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import axios from "axios";
-import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { setError } from "redux/reducers/errorReducer";
+
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
-import { Stack } from "@mui/material";
+import useGetImages from "./Hooks/useGetImages";
+import ForensicResults from "./Results/ForensicResult";
 
 const Forensic = () => {
   const { url } = useParams();
-  const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Forensic");
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
   );
   const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
-
-  const theme = createTheme({
-    components: {
-      MuiCardHeader: {
-        styleOverrides: {
-          root: {
-            backgroundColor: "#00926c",
-          },
-          title: {
-            color: "white",
-            fontSize: 20,
-            fontweight: 500,
-          },
-        },
-      },
-
-      MuiTab: {
-        styleOverrides: {
-          wrapper: {
-            fontSize: 12,
-          },
-          root: {
-            minWidth: "25%!important",
-          },
-        },
-      },
-    },
-
-    palette: {
-      primary: {
-        light: "#00926c",
-        main: "#00926c",
-        dark: "#00926c",
-        contrastText: "#fff",
-      },
-    },
-  });
 
   const resultUrl = useSelector((state) => state.forensic.url);
   const resultData = useSelector((state) => state.forensic.result);
@@ -98,6 +60,8 @@ const Forensic = () => {
     uid,
   );
   const submitUrl = () => {
+    dispatch(resetForensicState());
+
     const fileUrl = imageFile ? URL.createObjectURL(imageFile) : input;
 
     setType("url");
@@ -143,7 +107,16 @@ const Forensic = () => {
     setImageFile(undefined);
   }, [imageFile]);
 
+  const processUrl = useSelector((state) => state.assistant.processUrl);
+  useEffect(() => {
+    if (processUrl) {
+      setInput(processUrl);
+      setUrlDetected(true);
+    }
+  }, [processUrl]);
+
   const preprocessingSuccess = (file) => {
+    dispatch(resetForensicState());
     setImageFile(file);
     setType("local");
   };
@@ -169,76 +142,69 @@ const Forensic = () => {
     );
   };
 
-  const handleCloseSelectedFile = () => {
+  const resetToolState = () => {
     setImageFile(undefined);
     setInput("");
     dispatch(resetForensicState());
   };
 
   return (
-    <div>
-      <ThemeProvider theme={theme}>
-        <Stack direction="column" spacing={2}>
-          <HeaderTool
-            name={keywordAllTools("navbar_forensic")}
-            description={keywordAllTools("navbar_forensic_description")}
-            icon={
-              <ForensicIcon
-                style={{ fill: "#00926c" }}
-                width="40px"
-                height="40px"
-              />
-            }
+    <Stack direction="column" spacing={2}>
+      <HeaderTool
+        name={keywordAllTools("navbar_forensic")}
+        description={keywordAllTools("navbar_forensic_description")}
+        icon={
+          <imageForensic.icon
+            sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
           />
-
-          <Alert severity="warning">{keywordWarning("warning_forensic")}</Alert>
-
-          <Card style={{ display: resultData || loading ? "none" : "block" }}>
-            <CardHeader
-              title={keyword("cardheader_source")}
-              className={classes.headerUploadedImage}
+        }
+      />
+      <Alert severity="warning">{keywordWarning("warning_forensic")}</Alert>
+      <Card variant="outlined">
+        <Box
+          sx={{
+            p: 4,
+          }}
+        >
+          <form>
+            <StringFileUploadField
+              labelKeyword={keyword("forensic_input")}
+              placeholderKeyword={keyword("forensic_input_placeholder")}
+              submitButtonKeyword={keyword("button_submit")}
+              localFileKeyword={keyword("button_localfile")}
+              urlInput={input}
+              setUrlInput={setInput}
+              fileInput={imageFile}
+              setFileInput={setImageFile}
+              handleSubmit={submitUrl}
+              fileInputTypesAccepted={"image/*"}
+              handleCloseSelectedFile={resetToolState}
+              preprocessLocalFile={preprocessImage}
+              isParentLoading={loading}
+              handleClearUrl={resetToolState}
             />
-            <Box p={3}>
-              <form>
-                <StringFileUploadField
-                  labelKeyword={keyword("forensic_input")}
-                  placeholderKeyword={keyword("forensic_input_placeholder")}
-                  submitButtonKeyword={keyword("button_submit")}
-                  localFileKeyword={keyword("button_localfile")}
-                  urlInput={input}
-                  setUrlInput={setInput}
-                  fileInput={imageFile}
-                  setFileInput={setImageFile}
-                  handleSubmit={submitUrl}
-                  fileInputTypesAccepted={"image/*"}
-                  handleCloseSelectedFile={handleCloseSelectedFile}
-                  preprocessLocalFile={preprocessImage}
-                />
-              </form>
-            </Box>
-          </Card>
+          </form>
+        </Box>
+        {loading && (
+          <div>
+            <LinearProgress />
+          </div>
+        )}
+      </Card>
 
-          {loading && (
-            <div>
-              <LinearProgress />
-            </div>
-          )}
-
-          {resultData && (
-            <ForensicResults
-              result={resultData}
-              url={resultUrl}
-              type={type}
-              loaded={loaded}
-              gifAnimation={gifAnimationState}
-              resetImage={resetImage}
-              masksData={masks}
-              onClose={handleCloseSelectedFile}
-            />
-          )}
-        </Stack>
-      </ThemeProvider>
-    </div>
+      {resultData && (
+        <ForensicResults
+          result={resultData}
+          url={resultUrl}
+          type={type}
+          loaded={loaded}
+          gifAnimation={gifAnimationState}
+          resetImage={resetImage}
+          masksData={masks}
+          onClose={resetToolState}
+        />
+      )}
+    </Stack>
   );
 };
 export default Forensic;

@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Image, Layer, Stage, Text } from "react-konva";
-import { preloadImage } from "../../Forensic/utils";
-import {
-  Alert,
-  Box,
-  FormControl,
-  Grid2,
-  InputLabel,
-  MenuItem,
-  Select,
-  Slider,
-  Typography,
-} from "@mui/material";
-import useMyStyles from "components/Shared/MaterialUiStyles/useMyStyles";
+
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import FormControl from "@mui/material/FormControl";
+import Grid from "@mui/material/Grid";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import Slider from "@mui/material/Slider";
+import Typography from "@mui/material/Typography";
+
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "components/Shared/MaterialUiStyles/useMyStyles";
+
+import { preloadImage } from "../../Forensic/utils";
 
 const TextImageCanvas = ({
   imgSrc,
@@ -57,13 +58,15 @@ const TextImageCanvas = ({
     const height = 600 / imgRatio;
 
     return (
-      <Grid2
+      <Grid
         container
         direction="row"
-        justifyContent="flex-start"
-        alignItems="center"
+        sx={{
+          justifyContent: "flex-start",
+          alignItems: "center",
+        }}
       >
-        <Grid2>
+        <Grid>
           <Stage width={width} height={height}>
             <Layer ref={stageRef}>
               <Image image={img} width={width} height={height} />
@@ -80,13 +83,17 @@ const TextImageCanvas = ({
               )}
             </Layer>
           </Stage>
-        </Grid2>
-        <Grid2>
+        </Grid>
+        <Grid>
           {paused && (
             <>
-              <Grid2 container direction="column">
-                <Grid2>
-                  <Box m={3} />
+              <Grid container direction="column">
+                <Grid>
+                  <Box
+                    sx={{
+                      m: 3,
+                    }}
+                  />
                   <FormControl>
                     <InputLabel id="demo-simple-select-label">
                       {keyword("colour_label")}
@@ -107,13 +114,15 @@ const TextImageCanvas = ({
                       </MenuItem>
                     </Select>
                   </FormControl>
-                </Grid2>
-                <Grid2>
-                  <Grid2
+                </Grid>
+                <Grid>
+                  <Grid
                     container
                     direction="column"
-                    justifyContent="center"
-                    alignItems="center"
+                    sx={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                   >
                     <Typography gutterBottom>
                       {keyword("text_size_label")}
@@ -130,21 +139,27 @@ const TextImageCanvas = ({
                       }}
                       className={classes.sliderClass}
                     />
-                  </Grid2>
-                </Grid2>
-                <Grid2>
-                  <Box m={1} />
+                  </Grid>
+                </Grid>
+                <Grid>
+                  <Box
+                    sx={{
+                      m: 1,
+                    }}
+                  />
                   <Alert severity="info">{keyword("draggable_text_tip")}</Alert>
-                  <Box m={3} />
-                </Grid2>
-              </Grid2>
+                  <Box
+                    sx={{
+                      m: 3,
+                    }}
+                  />
+                </Grid>
+              </Grid>
             </>
           )}
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     );
-  } else {
-    return;
   }
 };
 

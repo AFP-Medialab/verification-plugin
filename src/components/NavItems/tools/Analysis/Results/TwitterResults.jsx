@@ -1,32 +1,33 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
+
 import Box from "@mui/material/Box";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Button from "@mui/material/Button";
-import { IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import Typography from "@mui/material/Typography";
+
+import CloseIcon from "@mui/icons-material/Close";
 
 import {
   cleanAnalysisState,
   setAnalysisComments,
   setAnalysisLinkComments,
   setAnalysisVerifiedComments,
-} from "../../../../../redux/actions/tools/analysisActions";
+} from "@/redux/actions/tools/analysisActions";
+import { ReverseSearchButtons } from "@Shared/ReverseSearch/ReverseSearchButtons";
+import { reverseImageSearch } from "@Shared/ReverseSearch/reverseSearchUtils";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
+import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import AnalysisComments from "./AnalysisComments";
-import { reverseImageSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
-import { ReverseSearchButtons } from "../../../../Shared/ReverseSearch/ReverseSearchButtons";
 
 const TwitterResults = (props) => {
   const classes = useMyStyles();
@@ -46,7 +47,7 @@ const TwitterResults = (props) => {
       {report !== null &&
         report["thumbnails"] !== undefined &&
         report["thumbnails"]["preferred"]["url"] && (
-          <Card>
+          <Card variant="outlined">
             <CardHeader
               title={keyword("cardheader_results")}
               className={classes.headerUploadedImage}
@@ -57,7 +58,7 @@ const TwitterResults = (props) => {
                     dispatch(cleanAnalysisState());
                   }}
                 >
-                  <CloseIcon sx={{ color: "white" }} />
+                  <CloseIcon />
                 </IconButton>
               }
             />
@@ -73,9 +74,17 @@ const TwitterResults = (props) => {
                 className={classes.image}
                 alt={"img"}
               />
-              <Box m={2} />
+              <Box
+                sx={{
+                  m: 2,
+                }}
+              />
               <Divider />
-              <Box m={2} />
+              <Box
+                sx={{
+                  m: 2,
+                }}
+              />
               <Typography variant={"h6"}>
                 {keyword("youtube_video_name1_2")}
               </Typography>
@@ -89,7 +98,11 @@ const TwitterResults = (props) => {
                   {report["video"]["full_text"]}
                 </Typography>
               )}
-              <Box m={2} />
+              <Box
+                sx={{
+                  m: 2,
+                }}
+              />
               <Divider />
               {report["video"] && (
                 <Table
@@ -268,7 +281,11 @@ const TwitterResults = (props) => {
               )}
               {report["source"] && (
                 <div>
-                  <Box m={4} />
+                  <Box
+                    sx={{
+                      m: 4,
+                    }}
+                  />
                   <Typography variant={"h6"}>
                     {keyword("profile_creator") +
                       ": " +
@@ -420,17 +437,33 @@ const TwitterResults = (props) => {
                   setAnalysisVerifiedComments={setAnalysisVerifiedComments}
                 />
               )}
-              <Box m={4} />
+              <Box
+                sx={{
+                  m: 4,
+                }}
+              />
 
-              {thumbnails !== undefined && (
+              {
                 <div>
-                  <Box m={4} />
+                  <Box
+                    sx={{
+                      m: 4,
+                    }}
+                  />
                   <Typography variant={"h6"}>
                     {keyword("navbar_thumbnails")}
                   </Typography>
-                  <Box m={1} />
+                  <Box
+                    sx={{
+                      m: 1,
+                    }}
+                  />
                   <OnClickInfo keyword={"keyframes_tip"} />
-                  <Box m={1} />
+                  <Box
+                    sx={{
+                      m: 1,
+                    }}
+                  />
                   <div className={classes.imagesRoot}>
                     <ImageUrlGridList
                       list={thumbnails}
@@ -438,12 +471,16 @@ const TwitterResults = (props) => {
                       style={{ maxHeigth: "none", height: "auto" }}
                     />
                   </div>
-                  <Box m={2} />
+                  <Box
+                    sx={{
+                      m: 2,
+                    }}
+                  />
                   <ReverseSearchButtons reverseSearch={reverseSearch}>
                     <></>
                   </ReverseSearchButtons>
                 </div>
-              )}
+              }
             </div>
           </Card>
         )}

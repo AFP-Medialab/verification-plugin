@@ -62,6 +62,7 @@ export const setScrapedData = (
   images,
   videos,
   textHtmlMap,
+  collectedComments,
 ) => {
   return {
     type: "SET_SCRAPED_DATA",
@@ -72,6 +73,7 @@ export const setScrapedData = (
       imageList: images,
       videoList: videos,
       urlTextHtmlMap: textHtmlMap,
+      collectedComments: collectedComments,
     },
   };
 };
@@ -110,6 +112,15 @@ export const setAssistantLoading = (loading) => {
     type: "SET_LOADING",
     payload: {
       loading: loading,
+    },
+  };
+};
+
+export const setMissingMedia = (missingMedia) => {
+  return {
+    type: "SET_MISSING_MEDIA",
+    payload: {
+      missingMedia: missingMedia,
     },
   };
 };
@@ -240,19 +251,53 @@ export const setPrevFactChecksDetails = (
   };
 };
 
-export const setMachineGeneratedTextDetails = (
-  mgtResult,
-  mgtLoading,
-  mgtDone,
-  mgtFail,
+export const setMachineGeneratedTextChunksDetails = (
+  mgtcResult,
+  mgtcLoading,
+  mgtcDone,
+  mgtcFail,
 ) => {
   return {
-    type: "SET_MACHINE_GENERATED_TEXT_DETAILS",
+    type: "SET_MACHINE_GENERATED_TEXT_CHUNKS_DETAILS",
     payload: {
-      machineGeneratedTextResult: mgtResult,
-      machineGeneratedTextLoading: mgtLoading,
-      machineGeneratedTextDone: mgtDone,
-      machineGeneratedTextFail: mgtFail,
+      machineGeneratedTextChunksResult: mgtcResult,
+      machineGeneratedTextChunksLoading: mgtcLoading,
+      machineGeneratedTextChunksDone: mgtcDone,
+      machineGeneratedTextChunksFail: mgtcFail,
+    },
+  };
+};
+
+export const setMachineGeneratedTextSentencesDetails = (
+  mgtsResult,
+  mgtsLoading,
+  mgtsDone,
+  mgtsFail,
+) => {
+  return {
+    type: "SET_MACHINE_GENERATED_TEXT_SENTENCES_DETAILS",
+    payload: {
+      machineGeneratedTextSentencesResult: mgtsResult,
+      machineGeneratedTextSentencesLoading: mgtsLoading,
+      machineGeneratedTextSentencesDone: mgtsDone,
+      machineGeneratedTextSentencesFail: mgtsFail,
+    },
+  };
+};
+
+export const setMultilingualStanceDetails = (
+  msResult,
+  msLoading,
+  msDone,
+  msFail,
+) => {
+  return {
+    type: "SET_MULTILINGUAL_STANCE_DETAILS",
+    payload: {
+      multilingualStanceResult: msResult,
+      multilingualStanceLoading: msLoading,
+      multilingualStanceDone: msDone,
+      multilingualStanceFail: msFail,
     },
   };
 };

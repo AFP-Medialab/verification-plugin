@@ -1,17 +1,19 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
   setStateError,
   setStateLoading,
   setStateShow,
-} from "../../../../../redux/reducers/tools/gifReducer";
+} from "@/redux/reducers/tools/gifReducer";
 import { setError } from "redux/reducers/errorReducer";
+
 import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
 
 const useGetHomographics = (files, mode, keyword) => {
   const dispatch = useDispatch();
   const toolState = useSelector((state) => state.gif.toolState);
-  const baseURL = process.env.REACT_APP_BASEURL;
+  const baseURL = process.env.REACT_APP_WRAPPER;
 
   const authenticatedRequest = useAuthenticatedRequest();
 

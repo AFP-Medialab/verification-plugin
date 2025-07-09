@@ -1,21 +1,23 @@
 import React from "react";
-import MainContentMenuTopMenuItems from "../NavBar/MainContentMenuTabItems/MainContentMenuTopMenuItems";
-import ScrollTop from "../Shared/ScrollTop/ScrollTop";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Button, Fab, Snackbar } from "@mui/material";
-import { KeyboardArrowUp } from "@mui/icons-material";
-import MySnackbar from "../MySnackbar/MySnackbar";
-import {
-  cleanError,
-  cleanErrorNetwork,
-} from "../../redux/reducers/errorReducer";
-import { setFalse, setTrue } from "../../redux/reducers/cookiesReducers";
-import Feedback from "../Feedback/Feedback";
-import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
-import { canUserSeeTool } from "../../constants/tools";
 import { useDispatch, useSelector } from "react-redux";
-import { i18nLoadNamespace } from "../Shared/Languages/i18nLoadNamespace";
-import { TOP_MENU_ITEMS } from "../../constants/topMenuItems";
+
+import Button from "@mui/material/Button";
+import Fab from "@mui/material/Fab";
+import Snackbar from "@mui/material/Snackbar";
+
+import { KeyboardArrowUp } from "@mui/icons-material";
+
+import { canUserSeeTool } from "@/constants/tools";
+import { TOP_MENU_ITEMS } from "@/constants/topMenuItems";
+import { setFalse, setTrue } from "@/redux/reducers/cookiesReducers";
+import { cleanError, cleanErrorNetwork } from "@/redux/reducers/errorReducer";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+
+import Feedback from "../Feedback/Feedback";
+import MySnackbar from "../MySnackbar/MySnackbar";
+import MainContentMenuTopMenuItems from "../NavBar/MainContentMenuTabItems/MainContentMenuTopMenuItems";
+import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
+import ScrollTop from "../Shared/ScrollTop/ScrollTop";
 
 /**
  *
@@ -48,70 +50,6 @@ const MainContent = ({ tools }) => {
     return canUserSeeTool(tool, role, userAuthenticated);
   });
 
-  const themeFab = createTheme({
-    palette: {
-      primary: {
-        light: "#00926c",
-        main: "#00926c",
-        dark: "#00926c",
-        contrastText: "#fff",
-      },
-    },
-    components: {
-      MuiAppBar: {
-        styleOverrides: {
-          colorPrimary: {
-            backgroundColor: "#ffffff",
-          },
-          root: {
-            zIndex: 1300,
-            height: "87px",
-            boxShadow: "none",
-            paddingTop: "12px",
-          },
-        },
-      },
-      MuiListItem: {
-        styleOverrides: {
-          gutters: {
-            paddingLeft: "26px",
-          },
-        },
-      },
-      MuiAutocomplete: {
-        styleOverrides: {
-          popupIndicatorOpen: {
-            transform: "none!important",
-          },
-          popper: {
-            zIndex: 99999,
-          },
-        },
-      },
-      MuiCard: {
-        styleOverrides: {
-          root: {
-            borderRadius: "10px!important",
-          },
-        },
-      },
-      MuiIconButton: {
-        styleOverrides: {
-          root: {
-            padding: 0,
-          },
-        },
-      },
-      MuiTab: {
-        styleOverrides: {
-          root: {
-            minWidth: "160px",
-          },
-        },
-      },
-    },
-  });
-
   return (
     <main className={classes.content}>
       <div className={classes.toolbar} id="back-to-top-anchor" />
@@ -123,16 +61,14 @@ const MainContent = ({ tools }) => {
       <ScrollTop
         {...{ isCurrentLanguageLeftToRight: isCurrentLanguageLeftToRight }}
       >
-        <ThemeProvider theme={themeFab}>
-          <Fab
-            color="primary"
-            size="large"
-            aria-label="scroll back to top"
-            className={classes.fabTop}
-          >
-            <KeyboardArrowUp />
-          </Fab>
-        </ThemeProvider>
+        <Fab
+          color="primary"
+          size="large"
+          aria-label="scroll back to top"
+          className={classes.fabTop}
+        >
+          <KeyboardArrowUp />
+        </Fab>
       </ScrollTop>
       {error !== null && (
         <MySnackbar

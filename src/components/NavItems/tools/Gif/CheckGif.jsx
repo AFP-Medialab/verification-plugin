@@ -1,32 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+
 import Box from "@mui/material/Box";
-import useGetHomographics from "./Hooks/useGetHomographics";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import Typography from "@mui/material/Typography";
-import { Grid2 } from "@mui/material";
-import Button from "@mui/material/Button";
-import IconGif from "../../../NavBar/images/SVG/Image/Gif.svg";
-import DragAndDrop from "./DragAndDrop";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import LinkIcon from "@mui/icons-material/Link";
-import FileIcon from "@mui/icons-material/InsertDriveFile";
-import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
+import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import Tab from "@mui/material/Tab";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import LinkIcon from "@mui/icons-material/Link";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { imageGif } from "@/constants/tools";
 import {
   setStateInit,
   setStateReady,
   setStateSelectingLocal,
   setStateSelectingUrl,
-} from "../../../../redux/reducers/tools/gifReducer";
+} from "@/redux/reducers/tools/gifReducer";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import { TabContext, TabList } from "@mui/lab";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import IconButton from "@mui/material/IconButton";
-import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import AnimatedGif from "./AnimatedGif";
+import DragAndDrop from "./DragAndDrop";
+import useGetHomographics from "./Hooks/useGetHomographics";
 
 const CheckGif = () => {
   //Init variables
@@ -51,10 +58,12 @@ const CheckGif = () => {
     classes.bigButtonDiv,
   );
 
-  const [classIconURL, setClassIconURL] = useState(classes.bigButtonIcon);
-  const [classIconLocal, setClassIconLocal] = useState(classes.bigButtonIcon);
+  const [selectedMode, setSelectedMode] = useState("URL");
 
-  const [selectedMode, setSelectedMode] = useState("");
+  // Initialize to URL on first render
+  useEffect(() => {
+    dispatch(setStateSelectingUrl());
+  }, []);
 
   if (
     toolState === 1 &&
@@ -63,9 +72,6 @@ const CheckGif = () => {
   ) {
     setClassButtonURL(classes.bigButtonDiv);
     setClassButtonLocal(classes.bigButtonDiv);
-
-    setClassIconURL(classes.bigButtonIcon);
-    setClassIconLocal(classes.bigButtonIcon);
   }
 
   function clickURL() {
@@ -82,24 +88,26 @@ const CheckGif = () => {
     cleanInputs();
   }
 
+  const handleTabSelectedChange = (event, newValue) => {
+    if (newValue === "URL") {
+      clickURL();
+    } else clickLocal();
+  };
+
   function changeStylesToLocal() {
     //Change styles of the local button to selected
-    setClassButtonLocal(classes.bigButtonDivSelectted);
-    setClassIconLocal(classes.bigButtonIconSelectted);
+    setClassButtonLocal(classes.bigButtonDivSelected);
 
     //Change styles of the URL button to not selected
     setClassButtonURL(classes.bigButtonDiv);
-    setClassIconURL(classes.bigButtonIcon);
   }
 
   function changeStylesToUrl() {
     //Change styles of the url button to selected
-    setClassButtonURL(classes.bigButtonDivSelectted);
-    setClassIconURL(classes.bigButtonIconSelectted);
+    setClassButtonURL(classes.bigButtonDivSelected);
 
     //Change styles of the Local button to not selected
     setClassButtonLocal(classes.bigButtonDiv);
-    setClassIconLocal(classes.bigButtonIcon);
   }
 
   //Load images for the GIF
@@ -182,15 +190,15 @@ const CheckGif = () => {
 
   //Code to enable the button to upload the images
   /* if (toolState === 22 && imageURL1 !== "" && imageURL2 !== "") {
-                        //console.log("Ready to send"); //DEBUG
-                        dispatch(setStateReady());
-                    }*/
+                                                                                                //console.log("Ready to send"); //DEBUG
+                                                                                                dispatch(setStateReady());
+                                                                                            }*/
 
   //Code to enable the button to upload the images
   /* if (toolState === 21 && imageDropped1 !== null && imageDropped2 !== null) {
-                        //console.log("Ready to send"); //DEBUG
-                        dispatch(setStateReady());
-                    }*/
+                                                                                                //console.log("Ready to send"); //DEBUG
+                                                                                                dispatch(setStateReady());
+                                                                                            }*/
 
   useEffect(() => {
     if (toolState === 22 && imageURL1 !== "" && imageURL2 !== "") {
@@ -242,23 +250,23 @@ const CheckGif = () => {
     setEventUrl2(imageURL2);
     setEventUrlType2("url original image");
     /*trackEvent(
-                                      "submission",
-                                      "checkgif",
-                                      "url fake image",
-                                      imageURL1,
-                                      client_id,
-                                      uid
-                                    );
-                                    trackEvent(
-                                      "submission",
-                                      "checkgif",
-                                      "url original image",
-                                      imageURL2,
-                                      client_id,
-                                      uid
-                                    );*/
+                                                                                                                                                                                      "submission",
+                                                                                                                                                                                      "checkgif",
+                                                                                                                                                                                      "url fake image",
+                                                                                                                                                                                      imageURL1,
+                                                                                                                                                                                      client_id,
+                                                                                                                                                                                      uid
+                                                                                                                                                                                    );
+                                                                                                                                                                                    trackEvent(
+                                                                                                                                                                                      "submission",
+                                                                                                                                                                                      "checkgif",
+                                                                                                                                                                                      "url original image",
+                                                                                                                                                                                      imageURL2,
+                                                                                                                                                                                      client_id,
+                                                                                                                                                                                      uid
+                                                                                                                                                                                    );*/
     /*submissionEvent(imageURL1);
-                                        submissionEvent(imageURL2);*/
+                                                                                                                                                                                        submissionEvent(imageURL2);*/
     const files = {
       url_0: imageURL1,
       url_1: imageURL2,
@@ -273,23 +281,23 @@ const CheckGif = () => {
     setEventUrl2(selectedFile2);
     setEventUrlType2("file original image");
     /* trackEvent(
-                                      "submission",
-                                      "checkgif",
-                                      "file fake image",
-                                      selectedFile1,
-                                      client_id,
-                                      uid
-                                    );
-                                    trackEvent(
-                                      "submission",
-                                      "checkgif",
-                                      "file original image",
-                                      selectedFile2,
-                                      client_id,
-                                      uid
-                                    );*/
+                                                                                                                                                                                      "submission",
+                                                                                                                                                                                      "checkgif",
+                                                                                                                                                                                      "file fake image",
+                                                                                                                                                                                      selectedFile1,
+                                                                                                                                                                                      client_id,
+                                                                                                                                                                                      uid
+                                                                                                                                                                                    );
+                                                                                                                                                                                    trackEvent(
+                                                                                                                                                                                      "submission",
+                                                                                                                                                                                      "checkgif",
+                                                                                                                                                                                      "file original image",
+                                                                                                                                                                                      selectedFile2,
+                                                                                                                                                                                      client_id,
+                                                                                                                                                                                      uid
+                                                                                                                                                                                    );*/
     /*submissionEvent(selectedFile1);
-                                        submissionEvent(selectedFile2);*/
+                                                                                                                                                                                        submissionEvent(selectedFile2);*/
     const files = {
       file1: selectedFile1,
       file2: selectedFile2,
@@ -315,12 +323,14 @@ const CheckGif = () => {
     cleanInputs();
 
     setClassButtonURL(classes.bigButtonDiv);
-    setClassIconURL(classes.bigButtonIcon);
 
     setClassButtonLocal(classes.bigButtonDiv);
-    setClassIconLocal(classes.bigButtonIcon);
 
     dispatch(setStateInit());
+
+    selectedMode === "URL"
+      ? dispatch(setStateSelectingUrl())
+      : dispatch(setStateSelectingLocal());
   };
 
   function cleanInputs() {
@@ -348,178 +358,119 @@ const CheckGif = () => {
       // Anything in here is fired on component unmount.
       newGif();
     };
-    // eslint-disable-next-line
   }, []);
 
   //HTML Code
   //============================================================================================
 
   return (
-    <div>
+    <Box sx={{ minWidth: "400px" }}>
       {
         //=== Title ===
       }
-
       <HeaderTool
         name={keywordAllTools("navbar_gif")}
         description={keywordAllTools("navbar_gif_description")}
         icon={
-          <IconGif style={{ fill: "#00926c" }} width="40px" height="40px" />
+          <imageGif.icon
+            sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+          />
         }
       />
-
       {
         //=== Load of the images ===
       }
-
-      <Card>
-        <CardHeader
-          title={
-            <Grid2
-              container
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <span>{keyword("cardTitle_source")}</span>
-            </Grid2>
-          }
-          className={classes.headerUploadedImage}
-        />
-
-        <Box m={2}>
-          <Grid2 container spacing={3} alignItems="flex-start">
-            <Grid2 size={{ xs: 6 }}>
-              <Box p={3} className={classButtonURL} onClick={clickURL}>
-                <Grid2
-                  container
-                  direction="row"
-                  style={{ flexWrap: "nowrap" }}
-                  spacing={2}
-                >
-                  <Grid2 size={{ xs: 1 }}>
-                    <LinkIcon className={classIconURL} />
-                  </Grid2>
-                  <Grid2>
-                    <Grid2
-                      container
-                      direction="column"
-                      justifyContent="flex-start"
-                      alignItems="flex-start"
-                    >
-                      <Grid2>
-                        <Typography
-                          variant="body1"
-                          style={{ fontWeight: 600 }}
-                          textAlign={"start"}
-                        >
-                          {keyword("title_URL")}
-                        </Typography>
-                      </Grid2>
-
-                      <Box mt={1} />
-
-                      <Grid2>
-                        <Typography variant="body1" textAlign={"start"}>
-                          {keyword("description_URL")}
-                        </Typography>
-                      </Grid2>
-                    </Grid2>
-                  </Grid2>
-                </Grid2>
-              </Box>
-            </Grid2>
-            <Grid2 size={{ xs: 6 }}>
-              <Box p={3} className={classButtonLocal} onClick={clickLocal}>
-                <Grid2
-                  container
-                  direction="row"
-                  style={{ flexWrap: "nowrap" }}
-                  spacing={2}
-                >
-                  <Grid2 size={{ xs: 1 }}>
-                    <FileIcon className={classIconLocal} />
-                  </Grid2>
-
-                  <Grid2>
-                    <Grid2
-                      container
-                      direction="column"
-                      justifyContent="flex-start"
-                      alignItems="flex-start"
-                      spacing={1}
-                    >
-                      <Grid2 size={{ xs: 12 }}>
-                        <Typography
-                          variant="body1"
-                          style={{ fontWeight: 600 }}
-                          textAlign={"start"}
-                        >
-                          {keyword("title_local")}
-                        </Typography>
-                      </Grid2>
-                      <Grid2 size={{ xs: 12 }}>
-                        <Typography variant="body1" textAlign={"start"}>
-                          {keyword("description_local")}
-                        </Typography>
-                      </Grid2>
-                    </Grid2>
-                  </Grid2>
-                </Grid2>
-              </Box>
-            </Grid2>
-          </Grid2>
+      <TabContext value={selectedMode}>
+        <Box>
+          <TabList
+            onChange={handleTabSelectedChange}
+            aria-label="lab API tabs example"
+          >
+            <Tab
+              icon={<LinkIcon />}
+              iconPosition="start"
+              label={keyword("title_URL")}
+              value="URL"
+              sx={{ minWidth: "inherit !important", textTransform: "none" }}
+            />
+            <Tab
+              icon={<UploadFileIcon />}
+              iconPosition="start"
+              label={keyword("title_local")}
+              value="LOCAL"
+              sx={{ minWidth: "inherit", textTransform: "none" }}
+            />
+          </TabList>
+          <Divider />
         </Box>
-      </Card>
-
-      <Box m={3} />
-
+      </TabContext>
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
       {toolState >= 2 && (
-        <Card>
+        <Card variant="outlined">
           <CardHeader
             title={
-              <Grid2
+              <Grid
                 container
                 direction="row"
-                justifyContent="space-between"
-                alignItems="center"
+                sx={{
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
               >
                 <span>{keyword("title_gifcreation")}</span>
 
-                <Button
-                  variant="contained"
-                  style={{ backgroundColor: "#FFFFFF", color: "black" }}
-                  onClick={newGif}
-                >
+                <Button variant="contained" onClick={newGif}>
                   {keyword("button_new")}
                 </Button>
-              </Grid2>
+              </Grid>
             }
             className={classes.headerUploadedImage}
           />
 
-          <Box p={3}>
-            <Grid2 container spacing={3}>
-              <Grid2
-                size={{ xs: 5 }}
-                style={{ borderRight: "0.1em solid #ECECEC", padding: "0.5em" }}
+          <Box
+            sx={{
+              p: 3,
+            }}
+          >
+            <Grid container direction={{ md: "row", xs: "column" }} spacing={3}>
+              <Grid
+                size={{ md: 5, xs: 12 }}
+                style={{ padding: "0.5em" }}
+                sx={{
+                  borderRight: { md: "0.1em solid #ECECEC", xs: "none" },
+                  borderBottom: { xs: "0.1em solid #ECECEC", md: "none" },
+                }}
               >
-                <Box p={2}>
+                <Box
+                  sx={{
+                    p: 2,
+                  }}
+                >
                   {selectedMode === "LOCAL" && (
                     <div>
                       <Typography variant="h6" className={classes.headingGif}>
                         {keyword("title_image1")}
                       </Typography>
 
-                      <Box m={2} />
+                      <Box
+                        sx={{
+                          m: 2,
+                        }}
+                      />
 
                       {!showDropZone1 && (
-                        <Grid2
+                        <Grid
                           container
                           spacing={1}
                           direction="row"
-                          justifyContent="flex-start"
-                          alignItems="flex-start"
+                          sx={{
+                            justifyContent: "flex-start",
+                            alignItems: "flex-start",
+                          }}
                         >
                           <img
                             src={imageDropped1}
@@ -529,20 +480,22 @@ const CheckGif = () => {
                           <IconButton onClick={removeImage1}>
                             <DeleteOutlineIcon fontSize="small" />
                           </IconButton>
-                        </Grid2>
+                        </Grid>
                       )}
 
                       {showDropZone1 && (
                         <DragAndDrop handleDrop={(files) => handleDrop(files)}>
-                          <Grid2
+                          <Grid
                             container
                             spacing={0}
                             direction="column"
-                            alignItems="center"
-                            justifyContent="center"
                             className={classes.dropZone}
+                            sx={{
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
                           >
-                            <Grid2 className={classes.inputContainer}>
+                            <Grid className={classes.inputContainer}>
                               <input
                                 accept="image/*"
                                 className={classes.input}
@@ -553,7 +506,11 @@ const CheckGif = () => {
                                 onChange={(e) => handleInput(e)}
                               />
                               <div>
-                                <Box textAlign="center">
+                                <Box
+                                  sx={{
+                                    textAlign: "center",
+                                  }}
+                                >
                                   <label
                                     htmlFor="raised-button-file"
                                     className={classes.inputLabel}
@@ -562,26 +519,36 @@ const CheckGif = () => {
                                   </label>
                                 </Box>
                               </div>
-                            </Grid2>
-                          </Grid2>
+                            </Grid>
+                          </Grid>
                         </DragAndDrop>
                       )}
 
-                      <Box m={4} />
+                      <Box
+                        sx={{
+                          m: 4,
+                        }}
+                      />
 
                       <Typography variant="h6" className={classes.headingGif}>
                         {keyword("title_image2")}
                       </Typography>
 
-                      <Box m={2} />
+                      <Box
+                        sx={{
+                          m: 2,
+                        }}
+                      />
 
                       {!showDropZone2 && (
-                        <Grid2
+                        <Grid
                           container
                           spacing={1}
                           direction="row"
-                          justifyContent="flex-start"
-                          alignItems="flex-start"
+                          sx={{
+                            justifyContent: "flex-start",
+                            alignItems: "flex-start",
+                          }}
                         >
                           <img
                             src={imageDropped2}
@@ -591,20 +558,22 @@ const CheckGif = () => {
                           <IconButton onClick={removeImage2}>
                             <DeleteOutlineIcon fontSize="small" />
                           </IconButton>
-                        </Grid2>
+                        </Grid>
                       )}
 
                       {showDropZone2 && (
                         <DragAndDrop handleDrop={(files) => handleDrop2(files)}>
-                          <Grid2
+                          <Grid
                             container
                             spacing={0}
                             direction="column"
-                            alignItems="center"
-                            justifyContent="center"
                             className={classes.dropZone}
+                            sx={{
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
                           >
-                            <Grid2 className={classes.inputContainer}>
+                            <Grid className={classes.inputContainer}>
                               <input
                                 accept="image/*"
                                 className={classes.input}
@@ -615,7 +584,12 @@ const CheckGif = () => {
                                 onChange={(e) => handleInput2(e)}
                               />
                               <div>
-                                <Box p={2} textAlign="center">
+                                <Box
+                                  sx={{
+                                    p: 2,
+                                    textAlign: "center",
+                                  }}
+                                >
                                   <label
                                     htmlFor="raised-button-file"
                                     className={classes.inputLabel}
@@ -624,12 +598,16 @@ const CheckGif = () => {
                                   </label>
                                 </Box>
                               </div>
-                            </Grid2>
-                          </Grid2>
+                            </Grid>
+                          </Grid>
                         </DragAndDrop>
                       )}
 
-                      <Box m={4} />
+                      <Box
+                        sx={{
+                          m: 4,
+                        }}
+                      />
 
                       <Button
                         variant="contained"
@@ -649,7 +627,11 @@ const CheckGif = () => {
                         {keyword("title_image1")}
                       </Typography>
 
-                      <Box m={2} />
+                      <Box
+                        sx={{
+                          m: 2,
+                        }}
+                      />
 
                       <TextField
                         id="outlined-multiline-static"
@@ -664,13 +646,21 @@ const CheckGif = () => {
                         }}
                       />
 
-                      <Box m={4} />
+                      <Box
+                        sx={{
+                          m: 4,
+                        }}
+                      />
 
                       <Typography variant="h6" className={classes.headingGif}>
                         {keyword("title_image2")}
                       </Typography>
 
-                      <Box m={2} />
+                      <Box
+                        sx={{
+                          m: 2,
+                        }}
+                      />
 
                       <TextField
                         id="outlined-multiline-static"
@@ -685,7 +675,11 @@ const CheckGif = () => {
                         }}
                       />
 
-                      <Box m={4} />
+                      <Box
+                        sx={{
+                          m: 4,
+                        }}
+                      />
 
                       <Button
                         variant="contained"
@@ -699,19 +693,24 @@ const CheckGif = () => {
                     </div>
                   )}
                 </Box>
-              </Grid2>
-
-              <Grid2 size={{ xs: 7 }} style={{ padding: "0.5em" }}>
+              </Grid>
+              <Grid size={{ md: 7, xs: 12 }} style={{ padding: "0.5em" }}>
                 {(toolState === 21 || toolState === 22 || toolState === 3) && (
-                  <Grid2
+                  <Grid
                     container
                     direction="column"
-                    justifyContent="center"
-                    alignItems="center"
                     className={classes.height100}
+                    sx={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                   >
-                    <IconGif style={{ fill: "#C9C9C9" }} />
-                    <Box p={4}>
+                    <imageGif.icon sx={{ fill: "#C9C9C9", fontSize: "40px" }} />
+                    <Box
+                      sx={{
+                        p: 4,
+                      }}
+                    >
                       <Typography
                         variant="h6"
                         style={{ color: "#C9C9C9" }}
@@ -720,19 +719,21 @@ const CheckGif = () => {
                         {keyword("text_preview")}
                       </Typography>
                     </Box>
-                  </Grid2>
+                  </Grid>
                 )}
 
                 {toolState === 4 && (
-                  <Grid2
+                  <Grid
                     container
                     direction="column"
-                    justifyContent="center"
-                    alignItems="center"
                     className={classes.height100}
+                    sx={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                   >
                     <CircularProgress />
-                  </Grid2>
+                  </Grid>
                 )}
 
                 {(toolState === 5 || toolState === 7) && (
@@ -743,12 +744,12 @@ const CheckGif = () => {
                     isCanvas={true}
                   ></AnimatedGif>
                 )}
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
           </Box>
         </Card>
       )}
-    </div>
+    </Box>
   );
 };
 export default CheckGif;

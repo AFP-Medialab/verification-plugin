@@ -1,39 +1,53 @@
 import React, { useEffect, useState } from "react";
+import { Trans } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import { CardHeader, Grid2, LinearProgress } from "@mui/material";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Collapse from "@mui/material/Collapse";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import LinearProgress from "@mui/material/LinearProgress";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
-import { CONTENT_TYPE } from "../AssistantRuleBook";
-import AssistantImageResult from "./AssistantImageResult";
-import AssistantVideoResult from "./AssistantVideoResult";
-import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
-import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
+import { WarningAmber } from "@mui/icons-material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+
 import {
   setProcessUrl,
+  setStateExpanded,
   setWarningExpanded,
-} from "../../../../redux/actions/tools/assistantActions";
+} from "@/redux/actions/tools/assistantActions";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "../../../Shared/VideoGridList/VideoGridList";
-import { WarningAmber } from "@mui/icons-material";
+import { CONTENT_TYPE } from "../AssistantRuleBook";
+import {
+  TransHtmlDoubleLineBreak,
+  TransSupportedToolsLink,
+} from "../TransComponents";
+import AssistantImageResult from "./AssistantImageResult";
+import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
+import AssistantVideoResult from "./AssistantVideoResult";
 
 const AssistantMediaResult = () => {
   const classes = useMyStyles();
   const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
+  const stateExpanded = useSelector((state) => state.assistant.stateExpanded);
 
   // assistant media states
   const processUrl = useSelector((state) => state.assistant.processUrl);
-  const urlMode = useSelector((state) => state.assistant.urlMode);
   const resultProcessType = useSelector(
     (state) => state.assistant.processUrlType,
   );
@@ -42,6 +56,7 @@ const AssistantMediaResult = () => {
   );
   const imageList = useSelector((state) => state.assistant.imageList);
   const videoList = useSelector((state) => state.assistant.videoList);
+  const missingMedia = useSelector((state) => state.assistant.missingMedia);
 
   // third party topMenuItem states
   //const ocrLoading = useSelector(state=>state.assistant.ocrLoading)
@@ -81,7 +96,15 @@ const AssistantMediaResult = () => {
         const image = new Image();
         image.src = imageUrl;
         image.onload = () => {
-          resolve({ url: imageUrl, width: image.width, height: image.height });
+          resolve({
+            url: imageUrl,
+            include: image.width > 2 || image.height > 2,
+          });
+        };
+        image.onerror = () => {
+          // We have to include it if there's an error loading as we don't have enough info to filter it out
+          // Instagram seem to have some pretty aggressive security policies, so we get this there
+          resolve({ url: imageUrl, include: true });
         };
       });
     });
@@ -89,7 +112,7 @@ const AssistantMediaResult = () => {
     Promise.all(imagePromises)
       .then((imageDimensions) => {
         const filteredImages = imageDimensions
-          .filter((image) => image.width > 2 && image.height > 2)
+          .filter((image) => image.include)
           .map((image) => image.url);
         setFilteredImageList(filteredImages);
       })
@@ -100,15 +123,14 @@ const AssistantMediaResult = () => {
 
   return (
     <Card
+      variant="outlined"
       data-testid="url-media-results"
-      hidden={!urlMode || (!imageList.length && !videoList.length)}
-      //width={window.innerWidth}
+      hidden={!filteredImageList.length && !videoList.length}
     >
       <CardHeader
         className={classes.assistantCardHeader}
         title={keyword("media_title")}
         subheader={keyword("media_below")}
-        subheaderTypographyProps={{ sx: { color: "white" } }}
         action={
           <div style={{ display: "flex" }}>
             <div>
@@ -129,12 +151,17 @@ const AssistantMediaResult = () => {
               <Tooltip
                 interactive={"true"}
                 title={
-                  <div
-                    className={"content"}
-                    dangerouslySetInnerHTML={{
-                      __html: keyword("media_tooltip"),
-                    }}
-                  />
+                  <>
+                    <Trans
+                      t={keyword}
+                      i18nKey="media_tooltip"
+                      components={{
+                        b: <b />,
+                      }}
+                    />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
+                    <TransSupportedToolsLink keyword={keyword} />
+                  </>
                 }
                 classes={{ tooltip: classes.assistantTooltip }}
               >
@@ -143,53 +170,69 @@ const AssistantMediaResult = () => {
             </div>
           </div>
         }
+        slotProps={{
+          subheader: { sx: { color: "white" } },
+        }}
       />
-
       {dbkfMediaMatchLoading ? (
         <div>
           <LinearProgress />
         </div>
       ) : null}
-
-      {/* selected image with recommended tools */}
+      {/* selected image or video with recommended tools */}
       <CardContent sx={{ padding: processUrl == null ? 0 : undefined }}>
+        {missingMedia ? (
+          <Alert severity="warning">
+            <Typography component={"span"}>
+              <Box
+                sx={{
+                  color: "orange",
+                  fontStyle: "italic",
+                }}
+              >
+                {keyword("missing_media_title")}
+                <IconButton
+                  className={classes.assistantIconRight}
+                  onClick={() => dispatch(setStateExpanded(!stateExpanded))}
+                >
+                  <ExpandMoreIcon style={{ color: "orange" }} />
+                </IconButton>
+              </Box>
+            </Typography>
+
+            <Collapse
+              in={stateExpanded}
+              className={classes.assistantBackground}
+            >
+              <Typography>{keyword("missing_media_instructions")}</Typography>
+            </Collapse>
+          </Alert>
+        ) : null}
         {processUrl !== null ? (
           resultIsImage ? (
-            <Grid2 container spacing={2}>
-              <Grid2 size={6}>
+            <Grid container spacing={2}>
+              <Grid size={6}>
                 <AssistantImageResult />
-              </Grid2>
-              <Grid2 size={6}>
+              </Grid>
+              <Grid size={6}>
                 <AssistantProcessUrlActions />
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
           ) : (
-            <Grid2 container spacing={2}>
-              <Grid2 size={6}>
+            <Grid container spacing={2}>
+              <Grid size={6}>
                 <AssistantVideoResult />
-              </Grid2>
-              <Grid2 size={6}>
+              </Grid>
+              <Grid size={6}>
                 <AssistantProcessUrlActions />
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
           )
         ) : null}
       </CardContent>
-
       {/* image grid and video grid of extracted media */}
       {!singleMediaPresent ? (
         <div>
-          {/* select media */}
-          {/*<CardContent>
-            <Typography
-              component={"div"}
-              sx={{ textAlign: "start" }}
-              variant={"subtitle1"}
-            >
-              {keyword("media_below")}
-            </Typography>
-          </CardContent>*/}
-
           <CardContent style={{ wordBreak: "break-word" }}>
             {/* image list */}
             {filteredImageList.length > 0 ? (
@@ -226,6 +269,7 @@ const AssistantMediaResult = () => {
                     handleClick={(vidLink) => {
                       submitMediaToProcess(vidLink);
                     }}
+                    style={{ overflowY: "visible" }}
                   />
                 </AccordionDetails>
               </Accordion>

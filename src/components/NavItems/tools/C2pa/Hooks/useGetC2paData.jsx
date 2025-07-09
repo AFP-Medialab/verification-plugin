@@ -1,6 +1,7 @@
 import {
   createC2pa,
   selectEditsAndActivity,
+  selectGenerativeInfo,
   selectProducer,
   selectSocialAccounts,
 } from "c2pa";
@@ -62,8 +63,8 @@ const exifData = (assertions) => {
 };
 
 /**
- * This function will recursively parse de data from a c2pa manifest and its children, and add it all to the result object
- * @param {Object} manifest the c2pa manifest to be read
+ * This function will recursively parse de data from a C2PA manifest and its children, and add it all to the result object
+ * @param {Object} manifest the C2PA manifest to be read
  * @param {string=} parent id of manifest's parent if there is one
  * @param {Object} result Object containing the data for the manifests that have already been read
  * @param {string} url image corresponding with the manifest
@@ -89,7 +90,11 @@ async function readManifest(manifest, parent, result, url, depth) {
     };
 
     const editsAndActivity = await selectEditsAndActivity(manifest);
+
     if (editsAndActivity) manifestData.editsAndActivity = editsAndActivity;
+
+    const generativeInfo = await selectGenerativeInfo(manifest);
+    if (generativeInfo) manifestData.generativeInfo = generativeInfo;
 
     const captureInfo = exifData(manifest.assertions.data);
     if (captureInfo) manifestData.captureInfo = captureInfo;
@@ -103,7 +108,7 @@ async function readManifest(manifest, parent, result, url, depth) {
 
         try {
           ingredientUrl = thumbnail.getUrl();
-        } catch (error) {
+        } catch {
           ingredientUrl = null;
         }
 
@@ -112,7 +117,7 @@ async function readManifest(manifest, parent, result, url, depth) {
         );
         let ingredientId;
 
-        // if a child has more than 5 ancestors, c2pa data will not be shown.
+        // if a child has more than 5 ancestors, C2PA data will not be shown.
         if (depth < 5) {
           if (manifest.ingredients[i].manifest) {
             let { id, data } = await readManifest(
@@ -198,9 +203,9 @@ async function loadTrustResource(file) {
 
 /**
  *
- * @returns {Object} settings allowing the c2pa.read function to determine if the source of the Content Credentials is on adobe's trusted list
+ * @returns {Object} settings allowing the C2PA. Read function to determine if the source of the Content Credentials is on adobe's trusted list
  */
-async function getToolkitSettings() {
+export async function getToolkitSettings() {
   const [trustAnchors, allowedList, trustConfig] = await Promise.all(
     ["anchors.pem", "allowed.sha256.txt", "store.cfg"].map(loadTrustResource),
   );
@@ -219,7 +224,7 @@ async function getToolkitSettings() {
 
 /**
  *
- * @param {Object} url the url of the image containing c2pa data
+ * @param {Object} url the url of the image containing C2PA data
  * @param {function} dispatch
  */
 
@@ -278,7 +283,7 @@ async function getC2paData(url, dispatch) {
 
 /**
  *
- * @param {string} url the url of the image containing c2pa data
+ * @param {string} url the url of the image containing C2PA data
  */
 
 export async function getC2paDataHd(url) {

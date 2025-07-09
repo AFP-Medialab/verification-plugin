@@ -1,6 +1,9 @@
-import { React } from "react";
-import { Alert, Snackbar } from "@mui/material";
-import { i18nLoadNamespace } from "../Shared/Languages/i18nLoadNamespace";
+import React from "react";
+
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
+
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 const NotificationSnackbar = ({ openAlert, setOpenAlert }) => {
   const tWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");

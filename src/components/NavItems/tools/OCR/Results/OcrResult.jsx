@@ -4,29 +4,34 @@ import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import { CardContent, Grid2, TextField } from "@mui/material";
+import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import LinearProgress from "@mui/material/LinearProgress";
 import MenuItem from "@mui/material/MenuItem";
+import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+
 import WarningOutlined from "@mui/icons-material/WarningOutlined";
-import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { setError } from "redux/reducers/errorReducer";
+
 import {
   resetOcrState,
   setOcrReprocess,
   setReprocessOpen,
   setSelectedScript,
-} from "../../../../../redux/actions/tools/ocrActions";
-import { TextCopy } from "../../../../Shared/Utils/TextCopy";
-import { Translate } from "../../../../Shared/Utils/Translate";
+} from "@/redux/actions/tools/ocrActions";
 import {
-  reverseImageSearch,
   SEARCH_ENGINE_SETTINGS,
-} from "../../../../Shared/ReverseSearch/reverseSearchUtils";
+  reverseImageSearch,
+} from "@Shared/ReverseSearch/reverseSearchUtils";
+import { TextCopy } from "@Shared/Utils/TextCopy";
+import { Translate } from "@Shared/Utils/Translate";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { setError } from "redux/reducers/errorReducer";
+
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 
 const OcrResult = () => {
   const classes = useMyStyles();
@@ -60,8 +65,8 @@ const OcrResult = () => {
   const mainImageId = "ocrMainImageId";
 
   /* if (!scripts) {
-                        dispatch(loadOcrScripts())
-                    }*/
+                                        dispatch(loadOcrScripts())
+                                    }*/
 
   const handleScriptChange = (event) => {
     dispatch(setSelectedScript(event.target.value));
@@ -171,6 +176,10 @@ const OcrResult = () => {
   });
   // when the result comes in, draw the bounding boxes and add the event listener for changes to image size
   useEffect(() => {
+    if (!result) {
+      drawBoundingBoxes([]);
+    }
+
     if (result && result.bounding_boxes.length) {
       drawBoundingBoxes(result.bounding_boxes);
 
@@ -182,15 +191,14 @@ const OcrResult = () => {
         ro.disconnect();
       };
     }
-    // eslint-disable-next-line
   }, [result]);
 
   return (
-    <Grid2 container spacing={4}>
-      <Grid2 size={{ xs: 6 }}>
-        <Grid2 container spacing={2} direction={"column"}>
-          <Grid2 size={{ xs: 12 }}>
-            <Card variant={"outlined"}>
+    <Grid container spacing={4}>
+      <Grid size={{ xs: 6 }}>
+        <Grid container spacing={2} direction={"column"}>
+          <Grid size={{ xs: 12 }}>
+            <Card variant="outlined">
               <CardHeader title={keyword("image_analysed")}></CardHeader>
               {loading && <LinearProgress />}
               <CardContent className={classes.ocrImageCard}>
@@ -207,16 +215,22 @@ const OcrResult = () => {
                     className={classes.ocrImageCanvas}
                   />
                 </div>
-                <Box m={2} />
-                <Grid2
+                <Box
+                  sx={{
+                    m: 2,
+                  }}
+                />
+                <Grid
                   container
                   direction="row"
-                  justifyContent="space-between"
-                  alignItems="flex-start"
                   spacing={2}
+                  sx={{
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                  }}
                 >
                   {/* TODO: iterate through all the search engines */}
-                  <Grid2 size={{ xs: 6 }}>
+                  <Grid size={{ xs: 6 }}>
                     <Button
                       variant="outlined"
                       color="primary"
@@ -231,9 +245,9 @@ const OcrResult = () => {
                     >
                       {keyword("ocr_search_yandex")}
                     </Button>
-                  </Grid2>
+                  </Grid>
                   {imageIsUrl ? (
-                    <Grid2 size={{ xs: 6 }}>
+                    <Grid size={{ xs: 6 }}>
                       <Button
                         variant="outlined"
                         color="primary"
@@ -248,9 +262,9 @@ const OcrResult = () => {
                       >
                         {keyword("ocr_search_bing")}
                       </Button>
-                    </Grid2>
+                    </Grid>
                   ) : null}
-                  <Grid2 size={{ xs: 6 }}>
+                  <Grid size={{ xs: 6 }}>
                     <Button
                       variant="outlined"
                       color="primary"
@@ -265,60 +279,73 @@ const OcrResult = () => {
                     >
                       {keyword("ocr_search_google_lens")}
                     </Button>
-                  </Grid2>
-                </Grid2>
+                  </Grid>
+                </Grid>
               </CardContent>
             </Card>
-          </Grid2>
-          <Grid2 size={{ xs: 12 }} hidden={!fullText}>
-            <Card>
+          </Grid>
+          <Grid size={{ xs: 12 }} hidden={!fullText}>
+            <Card variant="outlined">
               <CardHeader title={keyword("complete_text")}></CardHeader>
               <CardContent>
                 <Typography>{fullText}</Typography>
 
-                <Box mt={4}>
-                  <Grid2
+                <Box
+                  sx={{
+                    mt: 4,
+                  }}
+                >
+                  <Grid
                     container
                     direction="row"
-                    justifyContent="space-between"
-                    alignItems="flex-start"
                     spacing={2}
+                    sx={{
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                    }}
                   >
-                    <Grid2 size={{ xs: 6 }}>
+                    <Grid size={{ xs: 6 }}>
                       <TextCopy text={fullText} index="-1" type={"BUTTON"} />
-                    </Grid2>
+                    </Grid>
 
-                    <Grid2 size={{ xs: 6 }}>
+                    <Grid size={{ xs: 6 }}>
                       <Translate text={fullText} type={"BUTTON"} />
-                    </Grid2>
-                  </Grid2>
+                    </Grid>
+                  </Grid>
                 </Box>
               </CardContent>
             </Card>
-          </Grid2>
-        </Grid2>
-      </Grid2>
-
-      <Grid2 size={{ xs: 6 }} hidden={!result}>
-        <Card>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid size={{ xs: 6 }} hidden={!result}>
+        <Card variant="outlined">
           <CardHeader title={keyword("blocks")}></CardHeader>
 
           {result && result.bounding_boxes && result.bounding_boxes.length ? (
             <CardContent>
               {result.bounding_boxes.map((ocrResult, index) => (
-                <Grid2 container spacing={2} key={index}>
+                <Grid container spacing={2} key={index}>
                   {index > 0 ? (
-                    <Grid2 size={{ xs: 12 }}>
+                    <Grid size={{ xs: 12 }}>
                       <Divider />
-                      <Box m={2} />
-                    </Grid2>
+                      <Box
+                        sx={{
+                          m: 2,
+                        }}
+                      />
+                    </Grid>
                   ) : (
-                    <Grid2 size={{ xs: 12 }}>
-                      <Box m={1} />
-                    </Grid2>
+                    <Grid size={{ xs: 12 }}>
+                      <Box
+                        sx={{
+                          m: 1,
+                        }}
+                      />
+                    </Grid>
                   )}
 
-                  <Grid2 size={{ xs: 6 }}>
+                  <Grid size={{ xs: 6 }}>
                     <img
                       id={imgPrefix + index}
                       alt={"bounding box" + index}
@@ -333,14 +360,14 @@ const OcrResult = () => {
                       }
                     />
                     <canvas id={canvasPrefix + index} />
-                  </Grid2>
+                  </Grid>
 
-                  <Grid2 size={{ xs: 6 }}>
+                  <Grid size={{ xs: 6 }}>
                     <Typography>{ocrResult.text}</Typography>
-                  </Grid2>
+                  </Grid>
 
-                  <Grid2 size={{ xs: 12 }} className={classes.displayFlex}>
-                    <Grid2
+                  <Grid size={{ xs: 12 }} className={classes.displayFlex}>
+                    <Grid
                       size={{ xs: 6 }}
                       className={classes.ocrActionAreaLeft}
                     >
@@ -363,34 +390,41 @@ const OcrResult = () => {
                           <WarningOutlined color={"primary"} />
                         </IconButton>
                       </Typography>
-                    </Grid2>
+                    </Grid>
 
-                    <Grid2
+                    <Grid
                       size={{ xs: 6 }}
                       className={classes.ocrActionAreaRight}
                     >
                       <TextCopy text={ocrResult.text} index={index} />
                       <Translate text={ocrResult.text} />
-                    </Grid2>
-                  </Grid2>
+                    </Grid>
+                  </Grid>
 
-                  <Grid2
+                  <Grid
                     size={{ xs: 12 }}
                     hidden={
                       !(index === reprocessBlockSelected && reprocessBlockOpen)
                     }
                   >
-                    <Card className={classes.ocrReprocessBox}>
+                    <Card
+                      variant="outlined"
+                      className={classes.ocrReprocessBox}
+                    >
                       <LinearProgress hidden={!reprocessLoading} />
 
                       <Typography variant={"subtitle1"}>
                         {keyword("reprocess_text")}
                       </Typography>
-                      <Box m={3} />
+                      <Box
+                        sx={{
+                          m: 3,
+                        }}
+                      />
 
                       {scripts ? (
-                        <Grid2 container spacing={2}>
-                          <Grid2 size={{ xs: 6 }}>
+                        <Grid container spacing={2}>
+                          <Grid size={{ xs: 6 }}>
                             <TextField
                               fullWidth
                               select
@@ -405,10 +439,14 @@ const OcrResult = () => {
                                 </MenuItem>
                               ))}
                             </TextField>
-                          </Grid2>
+                          </Grid>
 
-                          <Grid2 size={{ xs: 6 }}>
-                            <Box m={1} />
+                          <Grid size={{ xs: 6 }}>
+                            <Box
+                              sx={{
+                                m: 1,
+                              }}
+                            />
                             <Button
                               size={"large"}
                               variant={"contained"}
@@ -421,12 +459,12 @@ const OcrResult = () => {
                             >
                               {keyword("reprocess_button")}
                             </Button>
-                          </Grid2>
-                        </Grid2>
+                          </Grid>
+                        </Grid>
                       ) : null}
                     </Card>
-                  </Grid2>
-                </Grid2>
+                  </Grid>
+                </Grid>
               ))}
             </CardContent>
           ) : (
@@ -435,8 +473,8 @@ const OcrResult = () => {
             </CardContent>
           )}
         </Card>
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   );
 };
 export default OcrResult;

@@ -1,28 +1,32 @@
 import React, { useState } from "react";
-import axios from "axios";
+import Linkify from "react-linkify";
 import { useDispatch } from "react-redux";
+
 import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Linkify from "react-linkify";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import Typography from "@mui/material/Typography";
+
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
-import Typography from "@mui/material/Typography";
-import styles from "./layout.module.css";
-import { TextCopy } from "../../../../Shared/Utils/TextCopy";
-import { Translate } from "../../../../Shared/Utils/Translate";
 
-const CommentsPanel = (props) => {
+import { TextCopy } from "@Shared/Utils/TextCopy";
+import { Translate } from "@Shared/Utils/Translate";
+import axios from "axios";
+
+import styles from "./layout.module.css";
+
+export const CommentsPanel = (props) => {
   const [count_comments, setCount_comments] = useState(1);
   const [expanded, setExpanded] = React.useState(false);
 
@@ -276,10 +280,17 @@ const AnalysisComments = (props) => {
       verifiedComments.length >= 1 ||
       linkComments.length >= 1) && (
       <div>
-        <Box m={4} />
+        <Box
+          sx={{
+            m: 4,
+          }}
+        />
         <Typography variant={"h6"}>{keyword(props.title)}</Typography>
-
-        <Box m={2} />
+        <Box
+          sx={{
+            m: 2,
+          }}
+        />
         {verificationComments.length >= 1 && (
           <CommentsPanel
             title={props.type === "TWITTER" ? "twitter_reply" : "api_comments"}
@@ -292,7 +303,11 @@ const AnalysisComments = (props) => {
             com_type={"coms"}
           />
         )}
-        <Box m={2} />
+        <Box
+          sx={{
+            m: 2,
+          }}
+        />
         {verifiedComments.length >= 1 && (
           <CommentsPanel
             title={
@@ -311,7 +326,11 @@ const AnalysisComments = (props) => {
             com_type={"vercoms"}
           />
         )}
-        <Box m={2} />
+        <Box
+          sx={{
+            m: 2,
+          }}
+        />
         {linkComments.length >= 1 && (
           <CommentsPanel
             title={

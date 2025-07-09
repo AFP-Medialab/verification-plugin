@@ -1,24 +1,26 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import { CardHeader, Grid2 } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import {
   CONTENT_TYPE,
   KNOWN_LINKS,
   selectCorrectActions,
 } from "./AssistantRuleBook";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
-import { useNavigate } from "react-router-dom";
 
 const AssistantFileSelected = () => {
   const classes = useMyStyles();
@@ -41,12 +43,19 @@ const AssistantFileSelected = () => {
 
   const generateList = (title, cType, actionList) => {
     return (
-      <Grid2 size={{ xs: 6 }}>
-        <Box mx={2} my={0.5}>
+      <Grid size={{ xs: 6 }}>
+        <Box
+          sx={{
+            mx: 2,
+            my: 0.5,
+          }}
+        >
           <Typography
-            textAlign={"start"}
             variant={"h6"}
             style={{ fontWeight: "bold" }}
+            sx={{
+              textAlign: "start",
+            }}
           >
             {title}
           </Typography>
@@ -54,8 +63,13 @@ const AssistantFileSelected = () => {
         <List>
           {actionList.map((action, index) => {
             return (
-              <Box m={2} key={index}>
-                <Card className={classes.assistantHover} variant={"outlined"}>
+              <Box
+                key={index}
+                sx={{
+                  m: 2,
+                }}
+              >
+                <Card className={classes.assistantHover} variant="outlined">
                   <ListItem
                     onClick={() => {
                       handleClick(action.path, cType);
@@ -64,19 +78,36 @@ const AssistantFileSelected = () => {
                     <ListItemAvatar>{action.icon}</ListItemAvatar>
                     <ListItemText
                       primary={
-                        <Typography textAlign={"start"} component={"span"}>
-                          <Box fontWeight="fontWeightBold">
+                        <Typography
+                          component={"span"}
+                          sx={{
+                            textAlign: "start",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              fontWeight: "fontWeightBold",
+                            }}
+                          >
                             {keyword(action.title)}
                           </Box>
                         </Typography>
                       }
                       secondary={
                         <Typography
-                          textAlign={"start"}
                           color={"textSecondary"}
                           component={"span"}
+                          sx={{
+                            textAlign: "start",
+                          }}
                         >
-                          <Box fontStyle="italic">{keyword(action.text)}</Box>
+                          <Box
+                            sx={{
+                              fontStyle: "italic",
+                            }}
+                          >
+                            {keyword(action.text)}
+                          </Box>
                         </Typography>
                       }
                     />
@@ -86,12 +117,12 @@ const AssistantFileSelected = () => {
             );
           })}
         </List>
-      </Grid2>
+      </Grid>
     );
   };
 
   return (
-    <Card>
+    <Card variant="outlined">
       <CardHeader
         className={classes.assistantCardHeader}
         title={
@@ -101,22 +132,22 @@ const AssistantFileSelected = () => {
         }
       />
       <CardContent>
-        <Grid2 container spacing={3}>
-          <Grid2 size={{ xs: 6 }}>
+        <Grid container spacing={3}>
+          <Grid size={{ xs: 6 }}>
             {generateList(
               keyword("upload_image"),
               CONTENT_TYPE.IMAGE,
               imageActions,
             )}
-          </Grid2>
-          <Grid2 size={{ xs: 6 }}>
+          </Grid>
+          <Grid size={{ xs: 6 }}>
             {generateList(
               keyword("upload_video"),
               CONTENT_TYPE.VIDEO,
               videoActions,
             )}
-          </Grid2>
-        </Grid2>
+          </Grid>
+        </Grid>
       </CardContent>
     </Card>
   );

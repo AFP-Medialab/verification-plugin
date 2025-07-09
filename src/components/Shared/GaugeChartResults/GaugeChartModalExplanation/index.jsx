@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import {
-  Backdrop,
-  Box,
-  Fade,
-  IconButton,
-  Link,
-  Modal,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { Close, Square } from "@mui/icons-material";
+
+import Backdrop from "@mui/material/Backdrop";
+import Box from "@mui/material/Box";
+import Fade from "@mui/material/Fade";
+import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
+import Modal from "@mui/material/Modal";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
+import { Square } from "@mui/icons-material";
+import CloseIcon from "@mui/icons-material/Close";
 
 /**
  *
@@ -82,15 +83,17 @@ const GaugeChartModalExplanation = ({
           <Box sx={gaugeColorsModalStyle}>
             <Stack
               direction="row"
-              justifyContent="space-between"
-              alignItems="center"
               spacing={2}
+              sx={{
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
             >
               <Typography
                 id="transition-modal-title"
                 variant="subtitle2"
                 style={{
-                  color: "#00926c",
+                  color: "var(--mui-palette-primary-main)",
                   fontSize: "24px",
                 }}
               >
@@ -100,23 +103,28 @@ const GaugeChartModalExplanation = ({
                 variant="outlined"
                 aria-label="close popup"
                 onClick={toggleModal}
+                sx={{ p: 1 }}
               >
-                <Close />
+                <CloseIcon />
               </IconButton>
             </Stack>
             <Stack
               id="transition-modal-description"
               direction="column"
               spacing={2}
-              mt={2}
+              sx={{
+                mt: 2,
+              }}
             >
               {keywordsArr.map((translation, index) => {
                 return (
                   <Stack
                     key={index}
                     direction="row"
-                    alignItems="center"
                     spacing={1}
+                    sx={{
+                      alignItems: "center",
+                    }}
                   >
                     <Square fontSize="large" sx={{ color: colors[index] }} />
                     <Typography>{keyword(translation)}</Typography>

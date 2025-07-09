@@ -1,30 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-import { Box, Card, CardHeader, LinearProgress } from "@mui/material";
-
-import "tui-image-editor/dist/tui-image-editor.css";
-import ImageResult from "./Results/ImageResult";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { useParams } from "react-router-dom";
+
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import LinearProgress from "@mui/material/LinearProgress";
+
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { imageMagnifier } from "@/constants/tools";
 import {
   resetMagnifierState,
   setMagnifierLoading,
   setMagnifierResult,
-} from "../../../../redux/actions/tools/magnifierActions";
-import { setError } from "redux/reducers/errorReducer";
+} from "@/redux/actions/tools/magnifierActions";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
+import { setError } from "redux/reducers/errorReducer";
+import "tui-image-editor/dist/tui-image-editor.css";
 
-import MagnifierIcon from "../../../NavBar/images/SVG/Image/Magnifier.svg";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
+import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
+import ImageResult from "./Results/ImageResult";
 
 const Magnifier = () => {
   const { url } = useParams();
-  const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Magnifier");
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
@@ -100,12 +100,20 @@ const Magnifier = () => {
     }
   }, [url]);
 
+  const processUrl = useSelector((state) => state.assistant.processUrl);
+  useEffect(() => {
+    if (processUrl) {
+      setInput(processUrl);
+      submitUrl(processUrl);
+    }
+  }, [processUrl]);
+
   const preprocessImage = (file) => {
     setImageFile(file);
     return file;
   };
 
-  const handleCloseSelectedFile = () => {
+  const resetState = () => {
     setImageFile(undefined);
     setInput("");
     dispatch(resetMagnifierState());
@@ -117,21 +125,20 @@ const Magnifier = () => {
         name={keywordAllTools("navbar_magnifier")}
         description={keywordAllTools("navbar_magnifier_description")}
         icon={
-          <MagnifierIcon
-            style={{ fill: "#00926c" }}
-            width="40px"
-            height="40px"
+          <imageMagnifier.icon
+            sx={{
+              fill: "var(--mui-palette-primary-main)",
+              fontSize: "40px",
+            }}
           />
         }
       />
-
-      <Card>
-        <CardHeader
-          title={keyword("cardheader_source")}
-          className={classes.headerUploadedImage}
-        />
-
-        <Box p={3}>
+      <Card variant="outlined">
+        <Box
+          sx={{
+            p: 4,
+          }}
+        >
           <form>
             <StringFileUploadField
               labelKeyword={keyword("magnifier_urlbox")}
@@ -144,24 +151,29 @@ const Magnifier = () => {
               setFileInput={setImageFile}
               handleSubmit={submitUrl}
               fileInputTypesAccepted={"image/*"}
-              handleCloseSelectedFile={handleCloseSelectedFile}
+              handleCloseSelectedFile={resetState}
               preprocessLocalFile={preprocessImage}
+              handleClearUrl={resetState}
             />
           </form>
 
           {isLoading && (
-            <Box mt={3}>
+            <Box
+              sx={{
+                mt: 3,
+              }}
+            >
               <LinearProgress />
             </Box>
           )}
         </Box>
       </Card>
-
-      <Box m={3} />
-
-      {magnifierResult && (
-        <ImageResult handleCloseResults={handleCloseSelectedFile} />
-      )}
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
+      {magnifierResult && <ImageResult handleCloseResults={resetState} />}
     </div>
   );
 };

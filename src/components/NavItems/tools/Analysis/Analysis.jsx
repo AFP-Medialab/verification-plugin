@@ -1,19 +1,20 @@
 import React, { memo, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Button from "@mui/material/Button";
-import LinearProgress from "@mui/material/LinearProgress";
-import Box from "@mui/material/Box";
-import YoutubeResults from "./Results/YoutubeResults";
-import TwitterResults from "./Results/TwitterResults";
-import { useAnalysisWrapper } from "./Hooks/useAnalysisWrapper";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Iframe from "react-iframe";
-import useGenerateApiUrl from "./Hooks/useGenerateApiUrl";
-import AFacebookResults from "./Results/AFacebookResults";
-import FacebookVideoDescription from "./Results/FacebookVideoDescription";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Grid from "@mui/material/Grid";
+import LinearProgress from "@mui/material/LinearProgress";
+import TextField from "@mui/material/TextField";
+
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { videoAnalysis } from "@/constants/tools";
 import {
   cleanAnalysisState,
   setAnalysisComments,
@@ -21,20 +22,21 @@ import {
   setAnalysisLoading,
   setAnalysisResult,
   setAnalysisVerifiedComments,
-} from "../../../../redux/actions/tools/analysisActions";
-import { useParams } from "react-router-dom";
-import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import AnalysisIcon from "../../../NavBar/images/SVG/Video/Video_analysis.svg";
-import { Grid2 } from "@mui/material";
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import styles from "./Results/layout.module.css";
-import Alert from "@mui/material/Alert";
-import _ from "lodash";
-import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
+} from "@/redux/actions/tools/analysisActions";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import _ from "lodash";
+
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
+import { useAnalysisWrapper } from "./Hooks/useAnalysisWrapper";
+import useGenerateApiUrl from "./Hooks/useGenerateApiUrl";
+import AFacebookResults from "./Results/AFacebookResults";
+import FacebookVideoDescription from "./Results/FacebookVideoDescription";
+import TwitterResults from "./Results/TwitterResults";
+import YoutubeResults from "./Results/YoutubeResults";
+import styles from "./Results/layout.module.css";
 
 const Analysis = () => {
   const caa_analysis_url = process.env.REACT_APP_CAA_ANALYSIS_URL;
@@ -86,12 +88,12 @@ const Analysis = () => {
   );
   const submitForm = () => {
     /*trackEvent(
-                      "submission",
-                      "analysis",
-                      "video caa analysis",
-                      input.trim(),
-                      client_id
-                    );*/
+                                                      "submission",
+                                                      "analysis",
+                                                      "video caa analysis",
+                                                      input.trim(),
+                                                      client_id
+                                                    );*/
     setSubmittedUrl(input.trim());
     dispatch(cleanAnalysisState());
   };
@@ -109,7 +111,6 @@ const Analysis = () => {
     if (urlDetected) {
       submitForm();
     }
-    // eslint-disable-next-line
   }, [urlDetected]);
 
   useEffect(() => {
@@ -121,27 +122,36 @@ const Analysis = () => {
     }
   }, [url]);
 
+  const processUrl = useSelector((state) => state.assistant.processUrl);
+  useEffect(() => {
+    if (processUrl) {
+      setInput(processUrl);
+      setSubmittedUrl(processUrl);
+    }
+  }, [processUrl]);
+
   return (
     <div>
       <HeaderTool
         name={keywordAllTools("navbar_analysis_video")}
         description={keywordAllTools("navbar_analysis_description")}
         icon={
-          <AnalysisIcon
-            style={{ fill: "#00926c" }}
-            width="40px"
-            height="40px"
+          <videoAnalysis.icon
+            sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
           />
         }
       />
-      <Card>
-        <CardHeader
-          title={keyword("video_card_header")}
-          className={classes.headerUploadedImage}
-        />
+      <Card variant="outlined">
         <form className={classes.root2}>
-          <Grid2 container direction="row" spacing={3} alignItems="center">
-            <Grid2 size="grow">
+          <Grid
+            container
+            direction="row"
+            spacing={3}
+            sx={{
+              alignItems: "center",
+            }}
+          >
+            <Grid size="grow">
               <TextField
                 id="standard-full-width"
                 data-testid="analysis_video_input"
@@ -165,8 +175,8 @@ const Analysis = () => {
                   }
                 }}
               />
-            </Grid2>
-            <Grid2>
+            </Grid>
+            <Grid>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -179,9 +189,9 @@ const Analysis = () => {
                 }
                 label={keyword("api_repro")}
               />
-            </Grid2>
+            </Grid>
 
-            <Grid2>
+            <Grid>
               <Button
                 type="submit"
                 data-testid="analysis_video_submit"
@@ -195,15 +205,27 @@ const Analysis = () => {
               >
                 {keyword("button_submit")}
               </Button>
-            </Grid2>
-            <Box m={1} />
-          </Grid2>
+            </Grid>
+            <Box
+              sx={{
+                m: 1,
+              }}
+            />
+          </Grid>
         </form>
         {isLoading ? <LinearProgress hidden={!isLoading} /> : null}
       </Card>
-      <Box m={3} />
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
       {showFacebookIframe && (
-        <Box m={4}>
+        <Box
+          sx={{
+            m: 4,
+          }}
+        >
           <Iframe
             frameBorder="0"
             url={"https://mever.iti.gr/plugin_login_fb"}

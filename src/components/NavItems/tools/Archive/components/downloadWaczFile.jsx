@@ -1,10 +1,16 @@
-import React from "react";
-import { Box, Stack, Typography } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
-import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
-import LoadingButton from "@mui/lab/LoadingButton";
+import React from "react";
+
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
 import { Download } from "@mui/icons-material";
-import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
+
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+
+import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
 
 /**
  *
@@ -142,22 +148,23 @@ const DownloadWaczFile = ({ url }) => {
     <Box>
       <Stack
         direction="row"
-        justifyContent="flex-start"
-        alignItems="center"
         spacing={2}
+        sx={{
+          justifyContent: "flex-start",
+          alignItems: "center",
+        }}
       >
-        <LoadingButton
+        <Button
           variant="outlined"
-          sx={{ textTransform: "none" }}
           onClick={async () => await getWaczFileFromScoop.mutate()}
           loading={getWaczFileFromScoop.isPending}
           loadingPosition="start"
           startIcon={<Download />}
         >
           {getWaczFileFromScoop.isPending
-            ? "Processing..."
-            : "Download .wacz file"}
-        </LoadingButton>
+            ? keyword("scoop_button_loading")
+            : keyword("scoop_button_download")}
+        </Button>
         {getWaczFileFromScoop.isError && (
           <Typography variant="body2" color="error">
             {keyword("archiving_error")}

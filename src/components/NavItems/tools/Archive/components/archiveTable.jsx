@@ -1,25 +1,25 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
-import {
-  IconButton,
-  Link,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Tooltip,
-} from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Tooltip from "@mui/material/Tooltip";
 
-import FileCopyIcon from "@mui/icons-material/FileCopy";
 import DoneIcon from "@mui/icons-material/Done";
-import { prettifyLargeString } from "../utils";
+import FileCopyIcon from "@mui/icons-material/FileCopy";
+
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
-import { useSelector } from "react-redux";
-import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
+
+import { prettifyLargeString } from "../utils";
 
 export const ArchiveTable = (props) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
@@ -39,8 +39,8 @@ export const ArchiveTable = (props) => {
 
   useTrackEvent(
     "submission",
-    "archiving",
-    "archiving",
+    "wacz_archiving",
+    "WACZ archiving",
     props.fileName,
     client_id,
     props.fileName,

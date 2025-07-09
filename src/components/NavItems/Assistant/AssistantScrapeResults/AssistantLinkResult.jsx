@@ -1,30 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { Trans } from "react-i18next";
 import { useSelector } from "react-redux";
 
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import {
-  Box,
-  Button,
-  CardHeader,
-  Chip,
-  Grid2,
-  Skeleton,
-  Stack,
-} from "@mui/material";
 import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Chip from "@mui/material/Chip";
 import Link from "@mui/material/Link";
-import LinkIcon from "@mui/icons-material/Link";
-import Typography from "@mui/material/Typography";
-import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
-import SentimentSatisfied from "@mui/icons-material/SentimentSatisfied";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import { TextCopy } from "../../../Shared/Utils/TextCopy";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import Typography from "@mui/material/Typography";
+
 import { CheckCircleOutline, TaskAltOutlined } from "@mui/icons-material";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+
+import { TextCopy } from "@Shared/Utils/TextCopy";
 import { DataGrid, getGridSingleSelectOperators } from "@mui/x-data-grid";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import ExtractedUrlDomainAnalysisResults from "../AssistantCheckResults/ExtractedUrlDomainAnalysisResults";
+import {
+  TransHtmlDoubleLineBreak,
+  TransSourceCredibilityTooltip,
+  TransUrlDomainAnalysisLink,
+} from "../TransComponents";
 
 // render status for extracted urls
 const Status = (params) => {
@@ -52,7 +54,7 @@ const Status = (params) => {
           size="small"
         />
       ) : null}
-      {params.done && params.urlResults.resolvedDomain == "" ? (
+      {params.done && params.urlResults.resolvedDomain === "" ? (
         <Chip
           label={keyword(params.sourceTypes.unlabelled)}
           color={params.trafficLightColors.unlabelled}
@@ -84,10 +86,12 @@ const Url = (params) => {
 const Details = (params) => {
   return (
     <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      flexDirection="row"
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
+      }}
     >
       {<TextCopy text={params.url} index={params.url} />}
       {params.done && params.domainOrAccount !== null && (
@@ -114,7 +118,7 @@ const sourceTypeListFilterOperators = getGridSingleSelectOperators()
   .filter((operator) => operator.value === "isAnyOf")
   .map((operator) => {
     const newOperator = { ...operator };
-    const newGetApplyFilterFn = (filterItem, column) => {
+    newOperator.getApplyFilterFn = (filterItem) => {
       return (params) => {
         let isOk = true;
         filterItem?.value?.forEach((fv) => {
@@ -123,7 +127,6 @@ const sourceTypeListFilterOperators = getGridSingleSelectOperators()
         return isOk;
       };
     };
-    newOperator.getApplyFilterFn = newGetApplyFilterFn;
     return newOperator;
   });
 
@@ -324,25 +327,21 @@ const AssistantLinkResult = () => {
   }
 
   return (
-    <Card>
+    <Card variant="outlined">
       <CardHeader
         className={classes.assistantCardHeader}
-        title={
-          <Typography variant={"h5"}>
-            {" "}
-            {keyword("extracted_urls_url_domain_analysis")}{" "}
-          </Typography>
-        }
+        title={keyword("extracted_urls_url_domain_analysis")}
         action={
           <Tooltip
             interactive={"true"}
             title={
-              <div
-                className={"content"}
-                dangerouslySetInnerHTML={{
-                  __html: keyword("extracted_urls_tooltip"),
-                }}
-              />
+              <>
+                <Trans t={keyword} i18nKey="extracted_urls_tooltip" />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
+                <TransSourceCredibilityTooltip keyword={keyword} />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
+                <TransUrlDomainAnalysisLink keyword={keyword} />
+              </>
             }
             classes={{ tooltip: classes.assistantTooltip }}
           >

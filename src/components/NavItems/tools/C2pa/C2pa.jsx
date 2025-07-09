@@ -1,22 +1,27 @@
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Alert,
-  Box,
-  Card,
-  FormControlLabel,
-  FormGroup,
-  LinearProgress,
-  Stack,
-  Switch,
-} from "@mui/material";
-import HeaderTool from "components/Shared/HeaderTool/HeaderTool";
-import useMyStyles from "components/Shared/MaterialUiStyles/useMyStyles";
-import StringFileUploadField from "components/Shared/StringFileUploadField";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import C2paResults from "./Results/C2paResults";
+
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CircularProgress from "@mui/material/CircularProgress";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormGroup from "@mui/material/FormGroup";
+import LinearProgress from "@mui/material/LinearProgress";
+import Stack from "@mui/material/Stack";
+import Switch from "@mui/material/Switch";
+import Typography from "@mui/material/Typography";
+
+import { ArrowDownward } from "@mui/icons-material";
+
+import { ROLES } from "@/constants/roles";
+import HeaderTool from "components/Shared/HeaderTool/HeaderTool";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import StringFileUploadField from "components/Shared/StringFileUploadField";
+import exifr from "exifr";
 import {
   c2paLoadingSet,
   resetC2paState,
@@ -25,15 +30,11 @@ import {
   setC2paThumbnailCaption,
   setHdImageC2paData,
 } from "redux/reducers/tools/c2paReducer";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
-import CircularProgress from "@mui/material/CircularProgress";
-import getC2paData, { getC2paDataHd } from "./Hooks/useGetC2paData";
-import exifr from "exifr";
-import { ArrowDownward } from "@mui/icons-material";
-import Typography from "@mui/material/Typography";
 import { v4 as uuidv4 } from "uuid";
-import { ROLES } from "../../../../constants/roles";
+
+import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
+import getC2paData, { getC2paDataHd } from "./Hooks/useGetC2paData";
+import C2paResults from "./Results/C2paResults";
 import AfpReverseSearchResults from "./components/AfpReverseSearchResults";
 import HdImageResults from "./components/HdImageResults";
 
@@ -59,8 +60,6 @@ const C2paData = () => {
   const [imageMetadata, setImageMetadata] = useState(null);
 
   const dispatch = useDispatch();
-
-  const classes = useMyStyles();
 
   const keyword = i18nLoadNamespace("components/NavItems/tools/C2pa");
 
@@ -113,6 +112,7 @@ const C2paData = () => {
     try {
       res = await authenticatedRequest(config);
     } catch (error) {
+      console.log(error);
       setErrorMessage(keyword("error_message_reverse_search_generic"));
       return;
     }
@@ -204,7 +204,7 @@ const C2paData = () => {
         method: "get",
         responseType: "blob",
         maxBodyLength: Infinity,
-        url: `https://plugin-archiving.afp.com/gateway/c2paafp/${urls.thumbnailUrl}`,
+        url: `${serverUrl}${urls.thumbnailUrl}`,
         headers: {
           "X-AFP-TRANSACTION-ID": getTransactionId(),
         },
@@ -238,7 +238,7 @@ const C2paData = () => {
         method: "get",
         responseType: "blob",
         maxBodyLength: Infinity,
-        url: `${serverUrl}/${urls.hdUrl}`,
+        url: `${serverUrl}${urls.hdUrl}`,
         headers: {
           "X-AFP-TRANSACTION-ID": getTransactionId(),
         },
@@ -276,7 +276,7 @@ const C2paData = () => {
     dispatch(c2paLoadingSet(false));
   };
 
-  const handleClose = () => {
+  const resetState = () => {
     setImageFile(undefined);
     setInput("");
     setErrorMessage(null);
@@ -312,7 +312,11 @@ const C2paData = () => {
         description={keyword("c2pa_description")}
       />
       <Card variant="outlined" sx={{ minWidth: 500 }}>
-        <Box p={4}>
+        <Box
+          sx={{
+            p: 4,
+          }}
+        >
           <form>
             <Stack direction="column" spacing={4}>
               <StringFileUploadField
@@ -326,8 +330,9 @@ const C2paData = () => {
                 setFileInput={setImageFile}
                 handleSubmit={handleSubmit}
                 fileInputTypesAccepted={"image/*, video/*"}
-                handleCloseSelectedFile={handleClose}
+                handleCloseSelectedFile={resetState}
                 isParentLoading={isLoading}
+                handleClearUrl={resetState}
               />
 
               {(role.includes(ROLES.AFP_C2PA_GOLD) ||
@@ -351,7 +356,11 @@ const C2paData = () => {
               )}
 
               {isLoading && (
-                <Box mt={3}>
+                <Box
+                  sx={{
+                    mt: 3,
+                  }}
+                >
                   <LinearProgress />
                 </Box>
               )}
@@ -359,9 +368,11 @@ const C2paData = () => {
           </form>
         </Box>
       </Card>
-
-      <Box m={4} />
-
+      <Box
+        sx={{
+          m: 4,
+        }}
+      />
       <Stack direction="column" spacing={4}>
         {loadingProgress && (
           <Alert icon={<CircularProgress size={20} />} severity="info">
@@ -441,7 +452,11 @@ const C2paData = () => {
           </Accordion>
         )}
 
-        <Box m={4} />
+        <Box
+          sx={{
+            m: 4,
+          }}
+        />
       </Stack>
     </Box>
   );

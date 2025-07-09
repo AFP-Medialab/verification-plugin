@@ -1,23 +1,28 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import Typography from "@mui/material/Typography";
+
 import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
-import { Grid2, IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
+import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+
+import CloseIcon from "@mui/icons-material/Close";
+
+import { submissionEvent } from "@Shared/GoogleAnalytics/GoogleAnalytics";
+import { ReverseSearchButtons } from "@Shared/ReverseSearch/ReverseSearchButtons";
+import { reverseImageSearch } from "@Shared/ReverseSearch/reverseSearchUtils";
 import axios from "axios";
-import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList";
-import { submissionEvent } from "../../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import _ from "lodash";
+
+import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
+import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import AnalysisComments from "./AnalysisComments";
-import { reverseImageSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
-import { ReverseSearchButtons } from "../../../../Shared/ReverseSearch/ReverseSearchButtons";
 
 const AFacebookResults = (props) => {
   const cleanAnalysisState = props.cleanAnalysisState;
@@ -85,8 +90,8 @@ const AFacebookResults = (props) => {
 
   return (
     <div>
-      {report !== null && (
-        <Card>
+      {report && (
+        <Card variant="outlined">
           <CardHeader
             title={keyword("cardheader_results")}
             className={classes.headerUploadedImage}
@@ -97,7 +102,7 @@ const AFacebookResults = (props) => {
                   dispatch(cleanAnalysisState());
                 }}
               >
-                <CloseIcon sx={{ color: "white" }} />
+                <CloseIcon />
               </IconButton>
             }
           />
@@ -118,7 +123,11 @@ const AFacebookResults = (props) => {
               className={classes.image}
               alt={"img"}
             />
-            <Box m={2} />
+            <Box
+              sx={{
+                m: 2,
+              }}
+            />
             <Button
               variant="contained"
               color="primary"
@@ -126,14 +135,26 @@ const AFacebookResults = (props) => {
             >
               {keyword("facebook_delete_result")}
             </Button>
-            <Box m={2} />
+            <Box
+              sx={{
+                m: 2,
+              }}
+            />
             <Divider />
-            <Box m={2} />
+            <Box
+              sx={{
+                m: 2,
+              }}
+            />
             <Typography variant={"h6"}>
               {report.video && keyword("video_description")}
               {report.image && keyword("image_description")}
             </Typography>
-            <Box m={2} />
+            <Box
+              sx={{
+                m: 2,
+              }}
+            />
             {props.children}
             {report["verification_comments"] && (
               <AnalysisComments
@@ -147,29 +168,49 @@ const AFacebookResults = (props) => {
                 setAnalysisVerifiedComments={setAnalysisVerifiedComments}
               />
             )}
-            <Box m={4} />
+            <Box
+              sx={{
+                m: 4,
+              }}
+            />
 
             {thumbnails !== null && (
               <div>
-                <Box m={4} />
+                <Box
+                  sx={{
+                    m: 4,
+                  }}
+                />
                 <Typography variant={"h6"}>
                   {keyword("navbar_thumbnails")}
                 </Typography>
-                <Box m={1} />
+                <Box
+                  sx={{
+                    m: 1,
+                  }}
+                />
                 <OnClickInfo keyword={"keyframes_tip"} />
-                <Box m={1} />
+                <Box
+                  sx={{
+                    m: 1,
+                  }}
+                />
                 <div className={classes.imagesRoot}>
                   <ImageUrlGridList
                     list={thumbnails}
                     cols={3}
-                    style={{ maxHeigth: "none", height: "auto" }}
+                    style={{ maxHeight: "none", height: "auto" }}
                   />
                 </div>
-                <Box m={2} />
+                <Box
+                  sx={{
+                    m: 2,
+                  }}
+                />
                 <ReverseSearchButtons reverseSearch={reverseSearch}>
                   {report["verification_cues"] &&
                     report["verification_cues"]["twitter_search_url"] && (
-                      <Grid2>
+                      <Grid>
                         <Button
                           className={classes.button}
                           variant="contained"
@@ -182,7 +223,7 @@ const AFacebookResults = (props) => {
                         >
                           {keyword("button_reverse_twitter")}
                         </Button>
-                      </Grid2>
+                      </Grid>
                     )}
                 </ReverseSearchButtons>
               </div>

@@ -1,62 +1,80 @@
 import React, { memo, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import LocalFile from "./LocalFile/LocalFile";
-import LinearProgress from "@mui/material/LinearProgress";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import KeyFramesResults from "./Results/KeyFramesResults";
-import { useKeyframeWrapper } from "./Hooks/useKeyframeWrapper";
-import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import "../../../Shared/GoogleAnalytics/MatomoAnalytics";
-import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import KeyframesIcon from "../../../NavBar/images/SVG/Video/Keyframes.svg";
-import { Grid2 } from "@mui/material";
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import CircularProgress from "@mui/material/CircularProgress";
+import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
+import Tab from "@mui/material/Tab";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import LinkIcon from "@mui/icons-material/Link";
-import FileIcon from "@mui/icons-material/InsertDriveFile";
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import ImageGrid from "@/components/NavItems/tools/Keyframes/components/ImageGrid";
+import { keyframes } from "@/constants/tools";
+import {
+  resetKeyframes,
+  setKeyframesFeatures,
+  setKeyframesResult,
+  setKeyframesUrl,
+} from "@/redux/reducers/tools/keyframesReducer";
+import "@Shared/GoogleAnalytics/MatomoAnalytics";
+import HeaderTool from "@Shared/HeaderTool/HeaderTool";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import { ClearIcon } from "@mui/x-date-pickers";
+
+import { useProcessKeyframes } from "./Hooks/useKeyframeWrapper";
+import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
+import LocalFile from "./LocalFile/LocalFile";
+import KeyFramesResults from "./Results/KeyFramesResults";
 
 const Keyframes = () => {
   const { url } = useParams();
 
-  const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Keyframes");
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
   );
 
-  // state used to toggle localFile view
-  const [localFile, setLocalFile] = useState(false);
-
-  /*
-          const toggleLocal = () => {
-              setLocalFile(!localFile);
-          };
-          */
+  const dispatch = useDispatch();
 
   const resultUrl = useSelector((state) => state.keyframes.url);
   const resultData = useSelector((state) => state.keyframes.result);
-  const isLoading = useSelector((state) => state.keyframes.loading);
+  const keyframesFeaturesData = useSelector(
+    (state) => state.keyframes.keyframesFeatures,
+  );
   const isLoadingSimilarity = useSelector(
     (state) => state.keyframes.similarityLoading,
   );
-  const video_id = useSelector((state) => state.keyframes.video_id);
+
+  const role = useSelector((state) => state.userSession.user.roles);
+
+  const similarityResults = useSelector((state) => state.keyframes.similarity);
 
   // State used to load images
   const [input, setInput] = useState(resultUrl ? resultUrl : "");
   const [submittedUrl, setSubmittedUrl] = useState(undefined);
-  //const [urlDetected, setUrlDetected] = useState(false)
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+
   useVideoSimilarity(submittedUrl, keyword);
-  useKeyframeWrapper(submittedUrl, keyword);
+
   useTrackEvent(
     "submission",
     "keyframe",
@@ -66,279 +84,374 @@ const Keyframes = () => {
     submittedUrl,
   );
 
-  //human right
-  const downloadShubshots = useSelector((state) => state.humanRightsCheckBox);
-  const keyframe_url = process.env.REACT_APP_KEYFRAME_API;
-  //download subshots results
-  const downloadAction = () => {
-    let downloadlink = keyframe_url + "/keyframes/" + video_id + "/Subshots";
-    fetch(downloadlink).then((response) => {
-      response.blob().then((blob) => {
-        let url = window.URL.createObjectURL(blob);
-        let a = document.createElement("a");
-        a.href = url;
-        a.click();
-      });
-    });
+  /**
+   * Returns a translation keyword to print a user-friendly error
+   * @param error {Error} The error object
+   * @returns {string} The translation keyword
+   */
+  const handleError = (error) => {
+    if (error.code === "ECONNABORTED" || error.response?.status === 504) {
+      return "error_timeout";
+    } else if (error.response?.status === 500) {
+      return "keyframes_error_unavailable";
+    } else {
+      return "keyframes_error_default";
+    }
   };
 
-  //const client_id = getclientId();
-  const submitUrl = () => {
-    /*trackEvent(
-                  "submission",
-                  "keyframe",
-                  "video key frame analysis",
-                  input.trim()
-                );*/
-    setSubmittedUrl(input);
+  /**
+   *
+   * @param url {?string} Optional URL to pass if it is external
+   * @returns {Promise<void>}
+   */
+  const submitUrl = async (url) => {
+    const finalUrl = url ?? input;
+
+    dispatch(resetKeyframes());
+    dispatch(setKeyframesUrl(finalUrl));
+    resetFetchingKeyframes();
+    try {
+      setSubmittedUrl(finalUrl);
+      setHasSubmitted(true);
+      const result = await executeProcess(finalUrl, role);
+      if (result?.fromCache) {
+        dispatch(setKeyframesResult(result.data));
+        dispatch(setKeyframesFeatures(result.featureData));
+        setHasSubmitted(false);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  /*useEffect(()=>{
-              console.log("detected");
-              if (urlDetected) {
-                  submitUrl()
-              }
-              // eslint-disable-next-line react-hooks/exhaustive-deps
-          }, [urlDetected])*/
+  const resetResults = () => {
+    setInput("");
+    dispatch(resetKeyframes());
+  };
 
   useEffect(() => {
-    if (url) {
-      if (url === KNOWN_LINKS.OWN) {
-        setLocalFile(true);
-      } else {
-        const uri = decodeURIComponent(url);
-        setInput(uri);
-      }
-      submitUrl();
-      //setUrlDetected(true)
-    }
+    if (!url) return;
+
+    const uri = decodeURIComponent(url);
+    setInput(uri);
   }, [url]);
 
   useEffect(() => {
     setSubmittedUrl(undefined);
   }, [submittedUrl]);
 
-  const [classButtonURL, setClassButtonURL] = useState(null);
-  const [classButtonLocal, setClassButtonLocal] = useState(null);
+  const processUrl = useSelector((state) => state.assistant.processUrl);
+  useEffect(() => {
+    if (processUrl) {
+      setInput(processUrl);
+      setSubmittedUrl(processUrl);
+      submitUrl(processUrl);
+    }
+  }, [processUrl]);
 
-  const [classIconURL, setClassIconURL] = useState(
-    classes.bigButtonIconSelectted,
-  );
-  const [classIconLocal, setClassIconLocal] = useState(classes.bigButtonIcon);
+  const [tabSelected, setTabSelected] = useState("url");
 
-  const [showURL, setShowURL] = useState(true);
-  const [showLocal, setShowLocal] = useState(false);
-
-  if (
-    showURL &&
-    !showLocal &&
-    classButtonURL !== classes.bigButtonDivSelectted &&
-    classButtonLocal !== classes.bigButtonDiv
-  ) {
-    setClassButtonURL(classes.bigButtonDivSelectted);
-    setClassButtonLocal(classes.bigButtonDiv);
-  }
-
-  const clickURL = () => {
-    setClassButtonURL(classes.bigButtonDivSelectted);
-    setClassIconURL(classes.bigButtonIconSelectted);
-
-    setClassButtonLocal(classes.bigButtonDiv);
-    setClassIconLocal(classes.bigButtonIcon);
-
-    setShowURL(true);
-    setShowLocal(false);
-
-    setLocalFile(false);
+  const handleTabSelectedChange = (event, newValue) => {
+    setTabSelected(newValue);
   };
 
-  const clickLocal = () => {
-    setClassButtonURL(classes.bigButtonDiv);
-    setClassIconURL(classes.bigButtonIcon);
+  const {
+    executeProcess,
+    resetFetchingKeyframes,
+    isPending,
+    status,
+    data,
+    error,
+    isFeatureDataPending,
+    featureData,
+    featureDataError,
+  } = useProcessKeyframes(input);
 
-    setClassButtonLocal(classes.bigButtonDivSelectted);
-    setClassIconLocal(classes.bigButtonIconSelectted);
-
-    setShowURL(false);
-    setShowLocal(true);
-
-    setLocalFile(true);
-  };
-
-  /**
-   * Resets input
-   */
-  const handleCloseResult = () => {
-    setInput("");
-  };
+  useEffect(() => {
+    if (featureData && data && hasSubmitted) {
+      dispatch(setKeyframesFeatures(featureData));
+      dispatch(setKeyframesResult(data));
+      setHasSubmitted(false);
+    }
+  }, [featureData, data, hasSubmitted]);
 
   return (
-    <div>
-      <HeaderTool
-        name={keywordAllTools("navbar_keyframes")}
-        description={keywordAllTools("navbar_keyframes_description")}
-        icon={
-          <KeyframesIcon
-            style={{ fill: "#00926c" }}
-            width="40px"
-            height="40px"
-          />
-        }
-      />
-
-      <Card>
-        <CardHeader
-          title={keyword("cardheader_source")}
-          className={classes.headerUploadedImage}
+    <Box>
+      <Stack direction="column" spacing={4}>
+        <HeaderTool
+          name={keywordAllTools("navbar_keyframes")}
+          description={keywordAllTools("navbar_keyframes_description")}
+          icon={
+            <keyframes.icon
+              sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+            />
+          }
         />
 
-        <Box p={3}>
-          <Grid2 container spacing={3} alignItems="center">
-            <Grid2 size={{ xs: 6 }}>
-              <Box p={3} className={classButtonURL} onClick={clickURL}>
-                <Grid2
-                  container
-                  direction="row"
-                  alignItems="center"
-                  className={classes.bigButtonResponsive}
-                >
-                  <Grid2>
-                    <Box ml={1} mr={2}>
-                      <LinkIcon className={classIconURL} />
-                    </Box>
-                  </Grid2>
-                  <Grid2>
-                    <Grid2
-                      container
-                      direction="column"
-                      justifyContent="flex-start"
-                      alignItems="flex-start"
-                    >
-                      <Grid2>
-                        <Typography variant="body1" style={{ fontWeight: 600 }}>
-                          {keyword("linkmode_title")}
-                        </Typography>
-                      </Grid2>
-
-                      <Box mt={1} />
-
-                      <Grid2>
-                        <Typography variant="body1">
-                          {keyword("linkmode_description")}
-                        </Typography>
-                      </Grid2>
-                    </Grid2>
-                  </Grid2>
-                </Grid2>
-              </Box>
-            </Grid2>
-            <Grid2 size={{ xs: 6 }}>
-              <Box p={3} className={classButtonLocal} onClick={clickLocal}>
-                <Grid2
-                  container
-                  direction="row"
-                  alignItems="center"
-                  className={classes.bigButtonResponsive}
-                >
-                  <Grid2>
-                    <Box ml={1} mr={2}>
-                      <FileIcon className={classIconLocal} />
-                    </Box>
-                  </Grid2>
-
-                  <Grid2>
-                    <Grid2
-                      container
-                      direction="column"
-                      justifyContent="flex-start"
-                      alignItems="flex-start"
-                    >
-                      <Grid2>
-                        <Typography variant="body1" style={{ fontWeight: 600 }}>
-                          {keyword("filemode_title")}
-                        </Typography>
-                      </Grid2>
-
-                      <Box mt={1} />
-
-                      <Grid2>
-                        <Typography variant="body1">
-                          {keyword("filemode_description")}
-                        </Typography>
-                      </Grid2>
-                    </Grid2>
-                  </Grid2>
-                </Grid2>
-              </Box>
-            </Grid2>
-          </Grid2>
-
-          <Box mt={4} mb={4}>
+        <TabContext value={tabSelected}>
+          <Box>
+            <TabList
+              onChange={handleTabSelectedChange}
+              aria-label="lab API tabs example"
+            >
+              <Tab
+                icon={<LinkIcon />}
+                iconPosition="start"
+                label={keyword("linkmode_title")}
+                value="url"
+                sx={{ minWidth: "inherit !important", textTransform: "none" }}
+              />
+              <Tab
+                icon={<UploadFileIcon />}
+                iconPosition="start"
+                label={keyword("filemode_title")}
+                value="file"
+                sx={{ minWidth: "inherit", textTransform: "none" }}
+              />
+            </TabList>
             <Divider />
           </Box>
 
-          <Box m={1} />
-          <Box display={localFile ? "none" : "block"}>
-            <form>
-              <Grid2 container direction="row" spacing={3} alignItems="center">
-                <Grid2 size="grow">
-                  <TextField
-                    id="standard-full-width"
-                    label={keyword("keyframes_input")}
-                    placeholder={keyword("keyframes_input_placeholder")}
-                    fullWidth
-                    disabled={isLoading || isLoadingSimilarity}
-                    value={input}
-                    variant="outlined"
-                    onChange={(e) => setInput(e.target.value)}
-                  />
-                </Grid2>
+          <Card variant="outlined">
+            <Box sx={{ width: "100%", typography: "body1" }}>
+              <TabPanel value="url">
+                <Box>
+                  <form>
+                    <Grid
+                      container
+                      direction="row"
+                      spacing={3}
+                      sx={{
+                        alignItems: "center",
+                      }}
+                    >
+                      <Grid size="grow">
+                        <TextField
+                          id="standard-full-width"
+                          label={keyword("keyframes_input")}
+                          fullWidth
+                          disabled={isPending || isLoadingSimilarity}
+                          value={input}
+                          variant="outlined"
+                          onChange={(e) => setInput(e.target.value)}
+                          slotProps={{
+                            input: {
+                              endAdornment: input ? (
+                                <IconButton
+                                  size="small"
+                                  onClick={() => resetResults()}
+                                  disabled={isPending || isLoadingSimilarity}
+                                  sx={{ p: 1 }}
+                                >
+                                  <ClearIcon />
+                                </IconButton>
+                              ) : undefined,
+                            },
+                          }}
+                        />
+                      </Grid>
 
-                <Grid2>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      submitUrl();
-                    }}
-                    disabled={isLoading || isLoadingSimilarity}
+                      <Grid>
+                        <Button
+                          type="submit"
+                          variant="contained"
+                          color="primary"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            submitUrl();
+                          }}
+                          disabled={!input}
+                          loading={isPending || isLoadingSimilarity}
+                        >
+                          {keyword("button_submit")}
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </form>
+                </Box>
+              </TabPanel>
+              <TabPanel value="file">
+                <Box>
+                  <LocalFile />
+                </Box>
+              </TabPanel>
+            </Box>
+          </Card>
+        </TabContext>
+
+        {similarityResults &&
+          !isLoadingSimilarity &&
+          similarityResults.length > 0 && (
+            <Card variant="outlined">
+              <Box>
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon sx={{ color: "primary" }} />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
                   >
-                    {keyword("button_submit")}
-                  </Button>
-                </Grid2>
-              </Grid2>
-            </form>
-            {isLoading && (
-              <>
-                <Box m={3} />
-                <LinearProgress />
-              </>
-            )}
-          </Box>
-          <Box display={!localFile ? "none" : "block"}>
-            <LocalFile />
-          </Box>
-        </Box>
-      </Card>
+                    <Box
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                      sx={{
+                        p: 1,
+                      }}
+                    >
+                      <ReportProblemOutlinedIcon
+                        sx={{ color: "primary", marginRight: "8px" }}
+                      />
+                      <Typography
+                        variant="h6"
+                        align="left"
+                        sx={{ color: "primary" }}
+                      >
+                        {keyword("found_dbkf")}
+                      </Typography>
+                    </Box>
+                  </AccordionSummary>
+                  <AccordionDetails style={{ flexDirection: "column" }}>
+                    <Box
+                      sx={{
+                        p: 1,
+                      }}
+                    >
+                      <Typography variant="body1" align="left">
+                        {keyword("dbkf_articles")}
+                      </Typography>
 
-      <Box m={3} />
-      {resultData && !localFile ? (
-        <KeyFramesResults closeResult={handleCloseResult} result={resultData} />
-      ) : (
-        <div />
-      )}
-      <div>
-        {resultData && downloadShubshots && !localFile ? (
-          <Button color="primary" onClick={downloadAction}>
-            {keyword("keyframes_download_subshots")}
-          </Button>
-        ) : (
-          <div />
+                      <Box
+                        sx={{
+                          m: 1,
+                        }}
+                      />
+
+                      {similarityResults.map((value, key) => {
+                        return (
+                          <Typography
+                            variant="body1"
+                            align="left"
+                            sx={{ color: "primary" }}
+                            key={key}
+                          >
+                            <Link
+                              target="_blank"
+                              href={value.externalLink}
+                              sx={{ color: "primary" }}
+                            >
+                              {value.externalLink}
+                            </Link>
+                          </Typography>
+                        );
+                      })}
+                    </Box>
+                  </AccordionDetails>
+                </Accordion>
+              </Box>
+            </Card>
+          )}
+
+        {status && isPending && (
+          <Alert icon={<CircularProgress size={20} />} severity="info">
+            {status}
+          </Alert>
         )}
-      </div>
-    </div>
+
+        {isPending && (
+          <Card variant="outlined">
+            <Stack
+              direction="column"
+              spacing={4}
+              sx={{
+                p: 2,
+              }}
+            >
+              <Skeleton variant="rounded" height={40} />
+              <Stack direction={{ md: "row", xs: "column" }} spacing={4}>
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
+              </Stack>
+            </Stack>
+          </Card>
+        )}
+
+        {error && <Alert severity="error">{keyword(handleError(error))}</Alert>}
+
+        {resultData && tabSelected === "url" && (
+          <KeyFramesResults result={resultData} handleClose={resetResults} />
+        )}
+
+        {isFeatureDataPending && (
+          <Card variant="outlined">
+            <Stack
+              direction="column"
+              spacing={4}
+              sx={{
+                p: 2,
+              }}
+            >
+              <Skeleton variant="rounded" height={40} />
+              <Stack direction={{ md: "row", xs: "column" }} spacing={4}>
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
+              </Stack>
+            </Stack>
+          </Card>
+        )}
+
+        {featureDataError && (
+          <Alert severity="error">{featureDataError.message}</Alert>
+        )}
+
+        {keyframesFeaturesData && tabSelected === "url" && (
+          <>
+            <Card variant="outlined">
+              <Box
+                sx={{
+                  pb: 4,
+                  pt: 2,
+                  pl: 4,
+                  pr: 4,
+                }}
+              >
+                <Stack direction="column" spacing={2}>
+                  <Typography variant="h6">
+                    {keyword("faces_detected_title")}
+                  </Typography>
+                  <ImageGrid
+                    images={keyframesFeaturesData.faces}
+                    alt={"extracted img with face"}
+                  />
+                </Stack>
+              </Box>
+            </Card>
+            <Card variant="outlined">
+              <Box
+                sx={{
+                  p: 4,
+                }}
+              >
+                <Stack direction="column" spacing={2}>
+                  <Typography variant="h6">
+                    {keyword("text_detected_title")}
+                  </Typography>
+                  <ImageGrid
+                    images={keyframesFeaturesData.texts}
+                    alt={"extracted img with text"}
+                  />
+                </Stack>
+              </Box>
+            </Card>
+          </>
+        )}
+      </Stack>
+    </Box>
   );
 };
 export default memo(Keyframes);

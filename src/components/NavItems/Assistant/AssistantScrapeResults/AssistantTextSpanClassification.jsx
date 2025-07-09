@@ -1,22 +1,26 @@
 import React, { useState } from "react";
 
+import { styled } from "@mui/material";
 import Card from "@mui/material/Card";
-import {
-  CardHeader,
-  Chip,
-  Grid2,
-  List,
-  ListItem,
-  ListItemText,
-} from "@mui/material";
 import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import Grid from "@mui/material/Grid";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import _ from "lodash";
+import { v4 as uuidv4 } from "uuid";
+
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
 import {
   interpRgb,
   mergeSpanIndices,
@@ -25,9 +29,6 @@ import {
   treeMapToElements,
   wrapPlainTextSpan,
 } from "./assistantUtils";
-import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
-import { styled } from "@mui/system";
-import { v4 as uuidv4 } from "uuid";
 
 // Had to create a custom styled span as the default style attribute does not support
 // :hover metaclass
@@ -39,46 +40,43 @@ export default function AssistantTextSpanClassification({
   text,
   classification,
   titleText = "Detected Class",
-  helpDescription = "",
+  categoriesTooltipContent = "",
   configs = {
     confidenceThresholdLow: 0.8,
     confidenceThresholdHigh: 1.0,
-    importanceThresholdLow: 0.0,
+    importanceThresholdLow: 0.8,
     importanceThresholdHigh: 1.0,
-    confidenceRgbLow: [175, 9, 193],
-    confidenceRgbHigh: [34, 0, 255],
-    importanceRgbLow: [221, 222, 7],
-    importanceRgbHigh: [228, 25, 25],
+    confidenceRgbLow: [32, 180, 172],
+    confidenceRgbHigh: [34, 41, 180],
+    importanceRgbLow: [252, 225, 28],
+    importanceRgbHigh: [252, 108, 28],
   },
   textHtmlMap = null,
 }) {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
-  const tooltipTextLowThreshold = keyword("low_confidence");
-  const tooltipTextHighThreshold = keyword("high_confidence");
 
-  // console.log("keyword(helpDescription)=", keyword(helpDescription));
-  // console.log("keyword(\"colour_scale\")=", keyword("colour_scale"));
-  // console.log("tooltipTextLowThreshold=", tooltipTextLowThreshold);
-  // console.log("tooltipTextHighThreshold=", tooltipTextHighThreshold);
-  // console.log("configs.confidenceRgbLow=", configs.confidenceRgbLow);
-  // console.log("configs.confidenceRgbHigh=", configs.confidenceRgbHigh);
+  // sub card header tooltip for categories
+  const colourScaleText = keyword("colour_scale");
+  const categoryTooltipText = keyword("confidence_tooltip_technique");
+  const categoryTextLow = keyword("low_confidence");
+  const categoryTextHigh = keyword("high_confidence");
+  const categoryRgbLow = configs.confidenceRgbLow;
+  const categoryRgbHigh = configs.confidenceRgbHigh;
 
-  const confidenceTooltipContent = (
+  // tooltip for hovering over categories
+  const categoryTooltipContent = (
     <ColourGradientTooltipContent
-      description={keyword(helpDescription)}
+      description={keyword("confidence_tooltip_category")}
       colourScaleText={keyword("colour_scale")}
-      textLow={tooltipTextLowThreshold}
-      textHigh={tooltipTextHighThreshold}
+      textLow={keyword("low_confidence")}
+      textHigh={keyword("high_confidence")}
       rgbLow={configs.confidenceRgbLow}
       rgbHigh={configs.confidenceRgbHigh}
     />
   );
 
   const [doHighlightSentence, setDoHighlightSentence] = useState(true);
-  const handleHighlightSentences = (event) => {
-    setDoHighlightSentence(event.target.checked);
-  };
 
   function filterLabelsWithMinThreshold(classification, minThreshold) {
     let filteredLabels = {};
@@ -137,10 +135,6 @@ export default function AssistantTextSpanClassification({
       const techniqueScore = spanInfo.techniques[persuasionTechnique];
 
       // collect category information for highlighted spans
-      // let span = {
-      //   indices: [spanStart, spandEnd],
-      //   score: techniqueScore,
-      // };
       if (categories[persuasionTechnique]) {
         categories[persuasionTechnique].push({
           indices: [spanStart, spandEnd],
@@ -177,20 +171,20 @@ export default function AssistantTextSpanClassification({
             cursor: "pointer",
           }}
         >
-          {persuasionTechnique.replaceAll("_", " ")}
+          {keyword(persuasionTechnique)}
         </div>,
       );
     }
-    techniqueContent.push(keyword("confidence_tooltip_technique"));
+    techniqueContent.push(categoryTooltipText);
 
     let techniquesTooltip = (
       <ColourGradientTooltipContent
         description={techniqueContent}
-        colourScaleText={keyword("colour_scale")}
-        textLow={tooltipTextLowThreshold}
-        textHigh={tooltipTextHighThreshold}
-        rgbLow={configs.confidenceRgbLow}
-        rgbHigh={configs.confidenceRgbHigh}
+        colourScaleText={colourScaleText}
+        textLow={categoryTextLow}
+        textHigh={categoryTextHigh}
+        rgbLow={categoryRgbLow}
+        rgbHigh={categoryRgbHigh}
       />
     );
 
@@ -242,6 +236,8 @@ export default function AssistantTextSpanClassification({
     } else if (textHtmlMap) {
       // Text formatted but not highlighted
       output = treeMapToElements(text, textHtmlMap);
+    } else {
+      output = text;
     }
 
     categoriesText[collection] = output;
@@ -263,15 +259,15 @@ export default function AssistantTextSpanClassification({
   }
 
   return (
-    <Grid2 container>
-      <Grid2 size={{ xs: 9 }} sx={{ paddingRight: "1em" }}>
+    <Grid container>
+      <Grid size={{ xs: 9 }} sx={{ paddingRight: "1em" }}>
         <MultiCategoryClassifiedText
           categoriesText={categoriesText}
           currentLabel={currentLabel}
           allCategoriesLabel={allCategoriesLabel}
         />
-      </Grid2>
-      <Grid2 size={{ xs: 3 }}>
+      </Grid>
+      <Grid size={{ xs: 3 }}>
         <Card>
           <CardHeader
             className={classes.assistantCardHeader}
@@ -280,7 +276,7 @@ export default function AssistantTextSpanClassification({
               <div style={{ display: "flex" }}>
                 <Tooltip
                   interactive={"true"}
-                  title={confidenceTooltipContent}
+                  title={categoriesTooltipContent}
                   classes={{ tooltip: classes.assistantTooltip }}
                 >
                   <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
@@ -291,24 +287,26 @@ export default function AssistantTextSpanClassification({
           <CardContent>
             <CategoriesListToggle
               categories={uniqueCategories}
+              tooltipContent={categoryTooltipContent}
               thresholdLow={configs.confidenceThresholdLow}
               thresholdHigh={configs.confidenceThresholdHigh}
               rgbLow={configs.confidenceRgbLow}
               rgbHigh={configs.confidenceRgbHigh}
-              noCategoriesText={keyword("no_detected_categories")}
+              noCategoriesText={keyword("no_detected_techniques")}
               allCategoriesLabel={allCategoriesLabel}
               onCategoryChange={handleCategorySelect}
               keyword={keyword}
             />
           </CardContent>
         </Card>
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   );
 }
 
 export function CategoriesListToggle({
   categories,
+  tooltipContent,
   thresholdLow,
   thresholdHigh,
   rgbLow,
@@ -318,7 +316,9 @@ export function CategoriesListToggle({
   onCategoryChange = () => {},
   keyword,
 }) {
-  if (categories.length < 1) return <p>{noCategoriesText}</p>;
+  if (_.isEmpty(categories)) {
+    return <p>{noCategoriesText}</p>;
+  }
 
   let output = [];
   let index = 0;
@@ -344,7 +344,7 @@ export function CategoriesListToggle({
 
   for (const category in categories) {
     // don't display overall category
-    if (category == allCategoriesLabel) {
+    if (category === allCategoriesLabel) {
       continue;
     }
 
@@ -402,12 +402,14 @@ export function CategoriesListToggle({
   }
 
   return (
-    <List>
-      <ListItem>
-        <Typography>{keyword("select_persuasion_technique")}</Typography>
-      </ListItem>
-      {output}
-    </List>
+    <Tooltip title={tooltipContent}>
+      <List>
+        <ListItem>
+          <Typography>{keyword("select_persuasion_technique")}</Typography>
+        </ListItem>
+        {output}
+      </List>
+    </Tooltip>
   );
 }
 

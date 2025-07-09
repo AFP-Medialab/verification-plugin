@@ -1,15 +1,11 @@
-import axios from "axios";
-import {
-  setDeepfakeLoadingImage,
-  setDeepfakeResultImage,
-} from "../../../../../redux/actions/tools/deepfakeImageActions";
+import { ROLES } from "@/constants/roles";
 import {
   setDeepfakeLoadingVideo,
   setDeepfakeResultVideo,
-} from "../../../../../redux/actions/tools/deepfakeVideoActions";
+} from "@/redux/actions/tools/deepfakeVideoActions";
+import { isValidUrl } from "@Shared/Utils/URLUtils";
+import axios from "axios";
 import { setError } from "redux/reducers/errorReducer";
-import { isValidUrl } from "../../../../Shared/Utils/URLUtils";
-import { ROLES } from "../../../../../constants/roles";
 
 async function UseGetDeepfake(
   keyword,
@@ -29,15 +25,12 @@ async function UseGetDeepfake(
   let modeURL = "";
   let services = "";
 
-  if (mode === "IMAGE") {
-    dispatch(setDeepfakeLoadingImage(true));
-    modeURL = "images/";
-    services = "faceswap_ens_mever";
-  } else if (mode === "VIDEO") {
+  if (mode === "VIDEO") {
     dispatch(setDeepfakeLoadingVideo(true));
     modeURL = "videos/";
     // services = "deepfake_video,ftcn,face_reenact";
     services = "deepfake_video";
+    if (role.includes(ROLES.EVALUATION)) services += ",faceswap_fsfm";
     if (role.includes(ROLES.EXTRA_FEATURE)) services += ",ftcn";
   }
 
@@ -51,9 +44,7 @@ async function UseGetDeepfake(
 
   const handleError = (e) => {
     dispatch(setError(keyword(e)));
-    if (mode === "IMAGE") {
-      dispatch(setDeepfakeLoadingImage(false));
-    } else if (mode === "VIDEO") {
+    if (mode === "VIDEO") {
       dispatch(setDeepfakeLoadingVideo(false));
     }
   };
@@ -97,14 +88,7 @@ async function UseGetDeepfake(
     }
 
     if (response.data != null) {
-      if (mode === "IMAGE") {
-        dispatch(
-          setDeepfakeResultImage({
-            url: mediaFile ? URL.createObjectURL(mediaFile) : url,
-            result: response.data,
-          }),
-        );
-      } else if (mode === "VIDEO") {
+      if (mode === "VIDEO") {
         dispatch(setDeepfakeResultVideo({ url: url, result: response.data }));
       }
     } else {

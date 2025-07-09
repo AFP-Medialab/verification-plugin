@@ -1,11 +1,11 @@
 import React from "react";
-import {
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Stack,
-  Typography,
-} from "@mui/material";
+
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 
 /**
@@ -31,7 +31,6 @@ const SideMenuElement = ({
 
   /**
    * Changes the color of the icon dynamically if the topMenuItem is selected
-   * @param tool {Tool}
    * @returns {{fontSize: string, fill: (string)}|{fontSize: string}}
    */
   const iconConditionalStyling = () => {
@@ -41,8 +40,12 @@ const SideMenuElement = ({
       };
 
     return {
-      fill: isElementSelected ? "#00926c" : "#4c4c4c",
-      color: isElementSelected ? "#00926c" : "#4c4c4c",
+      fill: isElementSelected
+        ? "var(--mui-palette-primary-main)"
+        : "var(--mui-palette-text-secondary)",
+      color: isElementSelected
+        ? "var(--mui-palette-primary-main)"
+        : "var(--mui-palette-text-secondary)",
       fontSize: "24px",
     };
   };

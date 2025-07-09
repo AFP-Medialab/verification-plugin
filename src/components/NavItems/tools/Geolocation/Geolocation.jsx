@@ -1,40 +1,43 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import LinearProgress from "@mui/material/LinearProgress";
-import Box from "@mui/material/Box";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import GeolocationIcon from "../../../NavBar/images/SVG/Image/Geolocation.svg";
-import { Grid2 } from "@mui/material";
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import useGeolocate from "./Hooks/useGeolocate";
-import GeolocationResults from "./Results/GeolocationResults";
 import Alert from "@mui/material/Alert";
-import { resetGeolocation } from "../../../../redux/reducers/tools/geolocationReducer";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import LinearProgress from "@mui/material/LinearProgress";
+import Stack from "@mui/material/Stack";
+
+import { imageGeolocation } from "@/constants/tools";
+import {
+  resetGeolocation,
+  setGeolocationLoading,
+  setGeolocationResult,
+} from "@/redux/reducers/tools/geolocationReducer";
+import StringFileUploadField from "@Shared/StringFileUploadField";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import {
+  geolocateLocalFile,
+  handleError,
+  useGeolocate,
+} from "./Hooks/useGeolocate";
+import GeolocationResults from "./Results/GeolocationResults";
+
 const Geolocation = () => {
-  const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Geolocalizer");
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
   );
   const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
   const dispatch = useDispatch();
-  const cleanup = () => {
-    dispatch(resetGeolocation());
-    setInput("");
-  };
 
   const result = useSelector((state) => state.geolocation.result);
   const urlImage = useSelector((state) => state.geolocation.urlImage);
   const isLoading = useSelector((state) => state.geolocation.loading);
   const [processUrl, setProcessUrl] = useState(false);
   const [input, setInput] = useState(urlImage ? urlImage : "");
+  const [imageFile, setImageFile] = useState(null);
 
   const submitUrl = () => {
     setProcessUrl(true);
@@ -42,76 +45,79 @@ const Geolocation = () => {
 
   useGeolocate(input, processUrl, keyword);
 
+  const handleSubmit = async () => {
+    dispatch(setGeolocationLoading(true));
+    if (input) {
+      submitUrl();
+    } else if (imageFile) {
+      try {
+        const prediction = (await geolocateLocalFile(imageFile)).predictions;
+        dispatch(
+          setGeolocationResult({
+            urlImage: URL.createObjectURL(imageFile),
+            result: prediction,
+            loading: false,
+          }),
+        );
+      } catch (error) {
+        handleError(error, keyword, dispatch);
+        dispatch(setGeolocationLoading(false));
+      }
+    }
+  };
+
+  const resetState = () => {
+    setImageFile(null);
+    dispatch(resetGeolocation());
+    setInput("");
+  };
+
   return (
-    <div>
-      <HeaderTool
-        name={keywordAllTools("navbar_geolocation")}
-        description={keywordAllTools("navbar_geolocation_description")}
-        icon={
-          <GeolocationIcon
-            style={{ fill: "#00926c", width: "40px", height: "40px" }}
-          />
-        }
-      />
-
-      <Alert severity="warning">{keywordWarning("warning_beta")}</Alert>
-
-      <Box m={3} />
-
-      <Card>
-        <CardHeader
-          title={keyword("geo_source")}
-          className={classes.headerUploadedImage}
+    <Box>
+      <Stack direction={"column"} spacing={4}>
+        <HeaderTool
+          name={keywordAllTools("navbar_geolocation")}
+          description={keywordAllTools("navbar_geolocation_description")}
+          icon={
+            <imageGeolocation.icon
+              sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+            />
+          }
         />
-        <form className={classes.root2}>
-          <Grid2 container direction="row" spacing={3} alignItems="center">
-            <Grid2 size="grow">
-              <TextField
-                id="standard-full-width"
-                label={keyword("geo_link")}
-                placeholder={keyword("geo_paste")}
-                fullWidth
-                disabled={isLoading}
-                value={input}
-                variant="outlined"
-                onChange={(e) => setInput(e.target.value)}
+        <Alert severity="warning">
+          {keywordWarning("warning_beta_geolocation")}
+        </Alert>
+        <Card variant="outlined">
+          <Box
+            sx={{
+              p: 4,
+            }}
+          >
+            <form>
+              <StringFileUploadField
+                labelKeyword={keyword("geo_link")}
+                placeholderKeyword={keyword("geo_paste")}
+                submitButtonKeyword={keyword("geo_submit")}
+                localFileKeyword={keyword("button_localfile")}
+                urlInput={input}
+                setUrlInput={setInput}
+                fileInput={imageFile}
+                setFileInput={setImageFile}
+                handleSubmit={handleSubmit}
+                fileInputTypesAccepted={"image/*"}
+                handleCloseSelectedFile={resetState}
+                isParentLoading={isLoading}
+                handleClearUrl={resetState}
               />
-            </Grid2>
-            <Grid2>
-              {!result ? (
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  disabled={isLoading}
-                  onClick={submitUrl}
-                >
-                  {keyword("geo_submit")}
-                </Button>
-              ) : (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    cleanup();
-                  }}
-                >
-                  {keyword("button_remove")}
-                </Button>
-              )}
-            </Grid2>
-            <Box m={1} />
-          </Grid2>
-        </form>
-        {isLoading && <LinearProgress />}
-      </Card>
-      <Box m={3} />
-
-      {result && !isLoading && (
-        <GeolocationResults result={result} urlImage={urlImage} />
-      )}
-    </div>
+            </form>
+          </Box>
+          {isLoading && <LinearProgress />}
+        </Card>
+        {result && !isLoading && (
+          <GeolocationResults result={result} urlImage={urlImage} />
+        )}
+      </Stack>
+    </Box>
   );
 };
 export default Geolocation;

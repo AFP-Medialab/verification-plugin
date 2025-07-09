@@ -54,6 +54,7 @@ The Verification plugin is a browser based plugin built with React and Redux.
    REACT_APP_DBKF_SEARCH_API=<dbkf_url>
    REACT_APP_DBKF_SIMILARITY_API=<dbkf_similarity_url>
    REACT_APP_BASEURL=<baseurl>
+   REACT_APP_WRAPPER=<wrapper_url>
    REACT_APP_CAA_FORENSICS_URL=<forensics_url>
    REACT_APP_CAA_ANALYSIS_URL=<analysis_url>
    REACT_APP_CAA_ENVISU4_UTILS_URL=<envisu4_url>
@@ -62,7 +63,6 @@ The Verification plugin is a browser based plugin built with React and Redux.
    REACT_APP_MATOMO_URL=<matomo_url>
    REACT_APP_MATOMO_DOMAIN=<matomo_domain>
    MATOMO_SITE=<matomo_site>
-   REACT_APP_VIDEORIGHT_API=<videoright_url>
    REACT_APP_LOCCUS_URL=<loccus_url>
    REACT_APP_AFP_REVERSE_SEARCH_URL=<reversesearch_url>
    REACT_APP_SEMANTIC_SEARCH_URL=<semanticsearch_url>
@@ -80,6 +80,38 @@ The Verification plugin is a browser based plugin built with React and Redux.
   ```
   npm run build 
   ```
+
+## Translations
+
+The plugin is translated into 8 languages: English, French, Spanish, Greek, Italian, Arabic, German and Japanese.
+
+InVID-Translations repository: https://github.com/AFP-Medialab/InVID-Translations
+
+- Update the relevant translations file using tabs to separate the translations
+- For quotation marks, use single quotation mark `'` as double quotation marks `"` are not allowed
+- Set `REACT_APP_TRANSLATION_URL` to the staging URL
+    - Register as a staging user to be granted access
+    - Prevents test and page visits being added to production analytics server
+    - Use when working on translations as this is a non-cached translation and a page refresh will show the changes
+- Set `REACT_APP_TRANSLATION_URL` to the production URL
+    - There is a caching mechanism meaning changes are shown once the cache is reset (~once a day)
+    - Set `REACT_APP_TRANSLATION_TAG` to the branch in the InVID translations currently being worked on
+
+### Offline Translations
+
+Scripts for creating the offline translations are in this
+repository: [verification-plugin-translation-scripts](https://github.com/AFP-Medialab/verification-plugin-translation-scripts)
+
+For offline translations, edit and
+run [this jupyter notebook](https://github.com/AFP-Medialab/verification-plugin-translation-scripts/blob/main/local-languages.ipynb)
+to generate the JSON files
+
+- Edit `invid_translation_project_path=<TRANSLATIONS-PATH>` to local folder for the InVID-Translations
+- Edit `TARGET_PROJECT_HOME=<FRONTEND-PATH>` to local Verification Plugin folder
+- If `write_to_file = True` then the `tsv` to `JSON` conversion will be done, otherwise it will just do a dry run
+- Generates English: `public/locales/en/components/NavItems/tools/Assistant.json`
+- Generates Arabic: `public/locales/ar/components/NavItems/tools/Assistant.json`
+- This script is run before deployment so it's not necessary to run everytime there is an update
 
 ## Load the extension on the browser
 

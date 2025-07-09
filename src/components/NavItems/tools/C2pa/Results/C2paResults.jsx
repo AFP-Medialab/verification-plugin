@@ -1,37 +1,41 @@
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Alert,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Divider,
-  Grid2,
-  Stack,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { MapContainer, Marker, TileLayer } from "react-leaflet";
+import { useDispatch, useSelector } from "react-redux";
+
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
 import {
   ExpandMore,
   KeyboardArrowLeft,
   KeyboardDoubleArrowLeft,
 } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import { c2paCurrentImageIdSet } from "redux/reducers/tools/c2paReducer";
-import moment from "moment";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { MapContainer, Marker, TileLayer } from "react-leaflet";
-import { Icon as GeoIcon } from "leaflet";
-import { useEffect, useState } from "react";
-import MapIcon from "@mui/icons-material/Map";
 import HelpIcon from "@mui/icons-material/Help";
+import MapIcon from "@mui/icons-material/Map";
+
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { Icon as GeoIcon } from "leaflet";
+import moment from "moment";
+import { c2paCurrentImageIdSet } from "redux/reducers/tools/c2paReducer";
 
 /**
  *
- * @param {Object} result  Object containing the parsed c2pa information for this image
+ * @param {Object} result  Object containing the parsed C2PA information for this image
  * @param {function} handleClose  Closes the result
  * @returns {React.JSX.Element}
  */
@@ -81,21 +85,31 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
 
   /**
    *
-   * @param {String} title the keywoed for the title
+   * @param {String} title the keyword for the title
    * @param {String} information the keyword for the title description
    * @returns {React.JSX.Element}
    */
   const title = (title, information) => {
     return (
-      <Grid2 container direction="row" alignItems="center">
-        <Grid2>
+      <Grid
+        container
+        direction="row"
+        sx={{
+          alignItems: "center",
+        }}
+      >
+        <Grid>
           <Typography variant="h6">{keyword(title)}</Typography>
-        </Grid2>
-        <Grid2 m={2} />
+        </Grid>
+        <Grid
+          sx={{
+            m: 2,
+          }}
+        />
         <Tooltip title={<h3>{keyword(information)}</h3>}>
           <HelpIcon />
         </Tooltip>
-      </Grid2>
+      </Grid>
     );
   };
 
@@ -108,9 +122,23 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
   };
 
   return (
-    <Grid2 container direction="row" spacing={3} p={4}>
-      <Grid2 container justifyContent="start" size={{ md: 12, lg: 6 }}>
-        <Grid2>
+    // </Card>
+    <Grid
+      container
+      direction="row"
+      spacing={3}
+      sx={{
+        p: 4,
+      }}
+    >
+      <Grid
+        container
+        size={{ md: 12, lg: 6 }}
+        sx={{
+          justifyContent: "start",
+        }}
+      >
+        <Grid>
           {isImage ? (
             <img
               src={url}
@@ -131,13 +159,17 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
               <source src={url} />
             </video>
           )}
-        </Grid2>
-      </Grid2>
-      <Grid2 size={{ md: 12, lg: 6 }}>
-        <Card p={1}>
+        </Grid>
+      </Grid>
+      <Grid size={{ md: 12, lg: 6 }}>
+        <Card p={1} variant="outlined">
           <CardContent>
             {!manifestData ? (
-              <Box m={1}>
+              <Box
+                sx={{
+                  m: 1,
+                }}
+              >
                 {depthExceeded ? (
                   <Alert>
                     {isImage
@@ -158,33 +190,61 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                     )}
                   </Stack>
                 )}
-                <Box m={1} />
+                <Box
+                  sx={{
+                    m: 1,
+                  }}
+                />
               </Box>
             ) : (
               <>
                 {validationIssues ? (
-                  <Box m={1}>
+                  <Box
+                    sx={{
+                      m: 1,
+                    }}
+                  >
                     <Alert severity="error" m={1}>
                       {validationMessage(validationIssues)}
                     </Alert>
-                    <Box m={2} />
+                    <Box
+                      sx={{
+                        m: 2,
+                      }}
+                    />
                   </Box>
                 ) : null}
                 <Typography variant="h5">
                   {keyword("c2pa_information")}
                 </Typography>
-                <Box m={1} />
+                <Box
+                  sx={{
+                    m: 1,
+                  }}
+                />
                 <Stack>
                   <Typography>{manifestData.title}</Typography>
-                  <Box m={1} />
-                  <Box p={1}>
+                  <Box
+                    sx={{
+                      m: 1,
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      p: 1,
+                    }}
+                  >
                     <Stack>
                       {title(
                         "content_credentials_title",
                         "content_credential_explanation",
                       )}
 
-                      <Box p={1}>
+                      <Box
+                        sx={{
+                          p: 1,
+                        }}
+                      >
                         <Typography>
                           {keyword("content_credentials_issuer") +
                             manifestData.signatureInfo.issuer}
@@ -197,14 +257,26 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                         </Typography>
                       </Box>
                     </Stack>
-                    <Box m={1} />
+                    <Box
+                      sx={{
+                        m: 1,
+                      }}
+                    />
                     <Divider m={1} />
                   </Box>
 
-                  <Box p={1}>
+                  <Box
+                    sx={{
+                      p: 1,
+                    }}
+                  >
                     <Stack>
                       {title("credit_title", "credit_explanation")}
-                      <Box p={1}>
+                      <Box
+                        sx={{
+                          p: 1,
+                        }}
+                      >
                         {manifestData.producer && (
                           <>
                             <Typography>
@@ -235,14 +307,26 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                         )}
                       </Box>
                     </Stack>
-                    <Box m={1} />
+                    <Box
+                      sx={{
+                        m: 1,
+                      }}
+                    />
                     <Divider m={1} />
                   </Box>
 
-                  <Box p={1}>
+                  <Box
+                    sx={{
+                      p: 1,
+                    }}
+                  >
                     <Stack>
                       {title("capture_info_title", "capture_info_explanation")}
-                      <Box p={1}>
+                      <Box
+                        sx={{
+                          p: 1,
+                        }}
+                      >
                         {manifestData.captureInfo && (
                           <>
                             {manifestData.captureInfo.make ? (
@@ -282,7 +366,11 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                               </>
                             ) : null}
                             {longitude && latitude ? (
-                              <Box p={3}>
+                              <Box
+                                sx={{
+                                  p: 3,
+                                }}
+                              >
                                 {!isNaN(longitude) && !isNaN(latitude) ? (
                                   <>
                                     <MapContainer
@@ -309,7 +397,11 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                                         }
                                       ></Marker>
                                     </MapContainer>
-                                    <Box m={1} />
+                                    <Box
+                                      sx={{
+                                        m: 1,
+                                      }}
+                                    />
                                   </>
                                 ) : null}
 
@@ -333,7 +425,11 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                               </Box>
                             ) : null}
                             {manifestData.captureInfo.allCaptureInfo ? (
-                              <Box p={1}>
+                              <Box
+                                sx={{
+                                  p: 1,
+                                }}
+                              >
                                 <Accordion>
                                   <AccordionSummary expandIcon={<ExpandMore />}>
                                     <Typography>
@@ -375,37 +471,107 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                         )}
                       </Box>
                     </Stack>
-                    <Box m={1} />
+                    <Box
+                      sx={{
+                        m: 1,
+                      }}
+                    />
                     <Divider />
                   </Box>
 
-                  <Box p={1}>
+                  <Box
+                    sx={{
+                      p: 1,
+                    }}
+                  >
                     {title("process_title", "process_explanation")}
-                    <Box p={1}>
+                    <Box
+                      sx={{
+                        p: 1,
+                      }}
+                    >
                       {manifestData.editsAndActivity ||
                       manifestData.children ? (
-                        <Stack>
+                        <Stack spacing={2}>
+                          {manifestData.generativeInfo &&
+                            manifestData.generativeInfo[0] && (
+                              <Stack direction="column">
+                                <Table aria-label="c2pa genAI metadata table">
+                                  <TableBody>
+                                    <TableRow>
+                                      <TableCell component="th" scope="row">
+                                        {keyword("app_device_used")}
+                                      </TableCell>
+                                      <TableCell>
+                                        {manifestData.generativeInfo[0]
+                                          ?.assertion?.data?.actions?.[1]
+                                          ?.softwareAgent?.name ||
+                                          manifestData.generativeInfo[0]
+                                            ?.softwareAgent?.name}
+                                      </TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                      <TableCell component="th" scope="row">
+                                        {keyword("ai_tool_used")}
+                                      </TableCell>
+                                      <TableCell>
+                                        {manifestData.generativeInfo[0]
+                                          ?.assertion?.data?.actions?.[0]
+                                          ?.softwareAgent?.name ||
+                                          manifestData.generativeInfo[0]
+                                            ?.softwareAgent?.name}
+                                      </TableCell>
+                                    </TableRow>
+                                  </TableBody>
+                                </Table>
+                              </Stack>
+                            )}
+
                           {manifestData.editsAndActivity ? (
                             <>
-                              <Typography fontSize={18}>
+                              <Typography
+                                sx={{
+                                  fontSize: 18,
+                                }}
+                              >
                                 {keyword("process_edits")}
                               </Typography>
-                              <Box m={1} />
-                              <Box paddingLeft={2}>
+                              <Box
+                                sx={{
+                                  m: 1,
+                                }}
+                              />
+                              <Box
+                                sx={{
+                                  paddingLeft: 2,
+                                }}
+                              >
                                 {manifestData.editsAndActivity.map(
                                   (obj, key) => {
                                     return (
                                       <Stack key={key}>
                                         <Stack direction="row">
                                           <img src={obj.icon} />
-                                          <Typography paddingLeft={1}>
+                                          <Typography
+                                            sx={{
+                                              paddingLeft: 1,
+                                            }}
+                                          >
                                             {obj.label + ":"}
                                           </Typography>
                                         </Stack>
-                                        <Typography paddingLeft={1}>
+                                        <Typography
+                                          sx={{
+                                            paddingLeft: 1,
+                                          }}
+                                        >
                                           {obj.description}
                                         </Typography>
-                                        <Box m={0.5} />
+                                        <Box
+                                          sx={{
+                                            m: 0.5,
+                                          }}
+                                        />
                                       </Stack>
                                     );
                                   },
@@ -416,11 +582,25 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
 
                           {manifestData.children ? (
                             <>
-                              <Typography fontSize={18}>
+                              <Typography
+                                sx={{
+                                  fontSize: 18,
+                                }}
+                              >
                                 {keyword("process_ingredients")}
                               </Typography>
-                              <Box m={1} />
-                              <Stack direction="row" spacing={1} p={1}>
+                              <Box
+                                sx={{
+                                  m: 1,
+                                }}
+                              />
+                              <Stack
+                                direction="row"
+                                spacing={1}
+                                sx={{
+                                  p: 1,
+                                }}
+                              >
                                 {manifestData.children.map((obj, key) => {
                                   return (
                                     <Box key={key}>
@@ -456,7 +636,12 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
               </>
             )}
             {parentId ? (
-              <Box maxWidth="fit-content" marginInline="auto">
+              <Box
+                sx={{
+                  maxWidth: "fit-content",
+                  marginInline: "auto",
+                }}
+              >
                 <Button
                   onClick={() => setImage(parentId)}
                   startIcon={<KeyboardArrowLeft />}
@@ -464,7 +649,11 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
                 >
                   {keyword("previous_image")}
                 </Button>
-                <Box m={0.5} />
+                <Box
+                  sx={{
+                    m: 0.5,
+                  }}
+                />
                 {parentId !== mainImageId ? (
                   <Button
                     onClick={() => setImage(mainImageId)}
@@ -478,9 +667,8 @@ const C2paResults = ({ result, hasSimilarAfpResult }) => {
             ) : null}
           </CardContent>
         </Card>
-      </Grid2>
-    </Grid2>
-    // </Card>
+      </Grid>
+    </Grid>
   );
 };
 

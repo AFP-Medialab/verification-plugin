@@ -1,9 +1,11 @@
 import React from "react";
-import ImageList from "@mui/material//ImageList";
-import ImageListItem from "@mui/material//ImageListItem";
+
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
 import Link from "@mui/material/Link";
-import LinkIcon from "@mui/icons-material/Link";
 import Typography from "@mui/material/Typography";
+
+import LinkIcon from "@mui/icons-material/Link";
 
 import useClasses from "../MaterialUiStyles/useClasses";
 
@@ -13,7 +15,7 @@ const styles = (theme) => ({
     display: "flex",
     flexWrap: "wrap",
     overflow: "hidden",
-    backgroundColor: theme.palette.background.paper,
+    // backgroundColor: theme.palette.background.paper,
   },
   imageList: {
     width: "100%",

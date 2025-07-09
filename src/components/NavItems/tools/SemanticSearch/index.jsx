@@ -1,42 +1,41 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import {
-  Alert,
-  Backdrop,
-  Box,
-  Button,
-  Card,
-  Collapse,
-  Fade,
-  IconButton,
-  Link,
-  Modal,
-  Skeleton,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+
+import Alert from "@mui/material/Alert";
+import Backdrop from "@mui/material/Backdrop";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import Collapse from "@mui/material/Collapse";
+import Fade from "@mui/material/Fade";
+import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
+import Modal from "@mui/material/Modal";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+
 import {
   Close,
   KeyboardArrowDown,
   KeyboardArrowUp,
   ManageSearch,
 } from "@mui/icons-material";
+
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import { getLanguageName } from "@Shared/Utils/languageUtils";
+import axios from "axios";
+import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
+import dayjs from "dayjs";
+import isEqual from "lodash/isEqual";
+
+import languageDictionary from "../../../../LocalDictionary/iso-639-1-languages";
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import SemanticSearchResults from "./SemanticSearchResults";
 import CheckboxesTags from "./components/CheckboxesTags";
-import { DatePicker } from "@mui/x-date-pickers";
 import SelectSmall from "./components/SelectSmall";
-import LoadingButton from "@mui/lab/LoadingButton";
-
-import axios from "axios";
-import isEqual from "lodash/isEqual";
-import dayjs from "dayjs";
-import { getLanguageName } from "../../../Shared/Utils/languageUtils";
-import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
-import languageDictionary from "../../../../LocalDictionary/iso-639-1-languages";
-import { useSelector } from "react-redux";
-import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
 
 const SemanticSearch = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/SemanticSearch");
@@ -226,7 +225,7 @@ const SemanticSearch = () => {
   useEffect(() => {
     //takes in text parameter from url
     if (url) {
-      const uri = url !== null ? decodeURIComponent(url) : undefined;
+      const uri = decodeURIComponent(url);
       if (uri === "assistantText" && text) {
         text = text.replaceAll("\n", " ");
         setSearchString(text);
@@ -358,8 +357,14 @@ const SemanticSearch = () => {
   const displaySearchResults = () => {
     if (isLoading)
       return (
-        <Card>
-          <Stack direction="column" spacing={4} p={4}>
+        <Card variant="outlined">
+          <Stack
+            direction="column"
+            spacing={4}
+            sx={{
+              p: 4,
+            }}
+          >
             <Skeleton variant="rounded" height={40} />
             <Skeleton variant="rounded" width={400} height={40} />
           </Stack>
@@ -390,19 +395,31 @@ const SemanticSearch = () => {
           name={keyword("semantic_search_title")}
           description={keyword("semantic_search_description")}
           icon={
-            <ManageSearch sx={{ fill: "#00926c", width: 40, height: 40 }} />
+            <ManageSearch
+              sx={{
+                fill: "var(--mui-palette-primary-main)",
+                width: 40,
+                height: 40,
+              }}
+            />
           }
         />
         <Alert severity="info">{keyword("semantic_search_tip")}</Alert>
-        <Card>
-          <Box p={3}>
+        <Card variant="outlined">
+          <Box
+            sx={{
+              p: 4,
+            }}
+          >
             <form>
               <Stack spacing={4}>
                 <Stack
                   direction="row"
                   spacing={2}
-                  justifyContent="flex-start"
-                  alignItems="center"
+                  sx={{
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
                 >
                   <TextField
                     fullWidth
@@ -421,7 +438,7 @@ const SemanticSearch = () => {
                       setSearchString(e.target.value);
                     }}
                   />
-                  <LoadingButton
+                  <Button
                     type="submit"
                     variant="contained"
                     disabled={isLoading || !searchString}
@@ -432,7 +449,7 @@ const SemanticSearch = () => {
                     }}
                   >
                     {keyword("semantic_search_form_submit_button")}
-                  </LoadingButton>
+                  </Button>
                 </Stack>
                 <Box>
                   <Stack direction="row" spacing={2}>
@@ -505,15 +522,17 @@ const SemanticSearch = () => {
                           <Box sx={searchEngineModalStyle}>
                             <Stack
                               direction="row"
-                              justifyContent="space-between"
-                              alignItems="center"
                               spacing={2}
+                              sx={{
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                              }}
                             >
                               <Typography
                                 id="transition-modal-title"
                                 variant="subtitle2"
-                                style={{
-                                  color: "#00926c",
+                                sx={{
+                                  color: "var(--mui-palette-primary-main)",
                                   fontSize: "24px",
                                 }}
                               >
@@ -533,7 +552,9 @@ const SemanticSearch = () => {
                               id="transition-modal-description"
                               direction="column"
                               spacing={2}
-                              mt={2}
+                              sx={{
+                                mt: 2,
+                              }}
                             >
                               {searchEngineModes.map((searchEngine, index) => {
                                 return (

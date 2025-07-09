@@ -1,30 +1,30 @@
-import { Box } from "@mui/material";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import { useInput } from "../../../../Hooks/useInput";
-import { createUrl } from "./createUrl";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Radio from "@mui/material/Radio";
-import FormControl from "@mui/material/FormControl";
-import useMyStyles, {
-  myCardStyles,
-} from "../../../Shared/MaterialUiStyles/useMyStyles";
-import {
-  //trackEvent,
-  getclientId,
-} from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
+
 import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import TwitterAdvancedSearchIcon from "../../../NavBar/images/SVG/Search/Twitter_search.svg";
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import TextField from "@mui/material/TextField";
+
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { useInput } from "@/Hooks/useInput";
+import { searchTwitter } from "@/constants/tools";
+import DateAndTimePicker from "@Shared/DateTimePicker/DateAndTimePicker";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import HeaderTool from "@Shared/HeaderTool/HeaderTool";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import useMyStyles, {
+  myCardStyles,
+} from "@Shared/MaterialUiStyles/useMyStyles";
 import dayjs from "dayjs";
+
+import { createUrl } from "./createUrl";
 
 const TwitterAdvancedSearch = () => {
   const classes = useMyStyles();
@@ -94,12 +94,6 @@ const TwitterAdvancedSearch = () => {
     setSelectedToDate(dayjs(date));
   };
 
-  const pastDate = (currentDate) => {
-    const itemDate = currentDate.toDate();
-    if (fromDate) return fromDate > itemDate;
-    return false;
-  };
-
   const session = useSelector((state) => state.userSession);
   const uid = session && session.user ? session.user.id : null;
   const client_id = getclientId();
@@ -131,13 +125,13 @@ const TwitterAdvancedSearch = () => {
       setEventUrl(url);
       window.open(url);
       /*trackEvent(
-      "submission",
-      "twitter_advance_search",
-      "search twitter request",
-      url,
-      client_id,
-      uid
-    );*/
+                                          "submission",
+                                          "twitter_advance_search",
+                                          "search twitter request",
+                                          url,
+                                          client_id,
+                                          uid
+                                        );*/
     }
   };
 
@@ -147,16 +141,18 @@ const TwitterAdvancedSearch = () => {
         name={keywordAllTools("navbar_twitter")}
         description={keywordAllTools("navbar_twitter_description")}
         icon={
-          <TwitterAdvancedSearchIcon
-            style={{ fill: "#00926c" }}
-            width="40px"
-            height="40px"
+          <searchTwitter.icon
+            sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
           />
         }
       />
       <Alert severity="warning">{keyword("warning_x_search")}</Alert>
-      <Box mt={3} />
-      <Card className={cardClasses.root}>
+      <Box
+        sx={{
+          mt: 3,
+        }}
+      />
+      <Card variant="outlined" className={cardClasses.root}>
         <CardHeader
           title={keyword("cardheader_parameters")}
           className={classes.headerUploadedImage}
@@ -210,7 +206,11 @@ const TwitterAdvancedSearch = () => {
               />
             </RadioGroup>
           </FormControl>
-          <Box m={2} />
+          <Box
+            sx={{
+              m: 2,
+            }}
+          />
           <Button variant="contained" color="primary" onClick={onSubmit}>
             {keyword("button_submit")}
           </Button>

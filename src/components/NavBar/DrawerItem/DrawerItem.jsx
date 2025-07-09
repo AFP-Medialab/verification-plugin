@@ -1,16 +1,17 @@
 import React, { useEffect } from "react";
-import { Container } from "@mui/material";
-import Fade from "@mui/material/Fade";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useLocation } from "react-router-dom";
-import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { getclientId } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
-import { useTrackPageView } from "../../../Hooks/useAnalytics";
-import { selectTopMenuItem } from "../../../redux/reducers/navReducer";
-import { TOP_MENU_ITEMS } from "../../../constants/topMenuItems";
-import { selectTool } from "../../../redux/reducers/tools/toolReducer";
-import { TOOL_GROUPS, toolsHome } from "../../../constants/tools";
+
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Fade from "@mui/material/Fade";
+
+import { useTrackPageView } from "@/Hooks/useAnalytics";
+import { TOOL_GROUPS, toolsHome } from "@/constants/tools";
+import { TOP_MENU_ITEMS } from "@/constants/topMenuItems";
+import { selectTopMenuItem } from "@/redux/reducers/navReducer";
+import { selectTool } from "@/redux/reducers/tools/toolReducer";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 
 /**
  *
@@ -52,51 +53,6 @@ const DrawerItem = ({ tools }) => {
 const DrawerItemContent = ({ tool }) => {
   const dispatch = useDispatch();
 
-  //Style elements
-  //============================================================================================
-
-  const theme = createTheme({
-    components: {
-      MuiCardHeader: {
-        styleOverrides: {
-          root: {
-            backgroundColor: "#00926c",
-          },
-          title: {
-            color: "white",
-            fontSize: 20,
-            fontweight: 500,
-          },
-        },
-      },
-      MuiTab: {
-        styleOverrides: {
-          wrapper: {
-            fontSize: 12,
-          },
-          root: {
-            minWidth: "15%!important",
-          },
-        },
-      },
-      MuiCard: {
-        styleOverrides: {
-          root: {
-            borderRadius: "10px!important",
-          },
-        },
-      },
-    },
-    palette: {
-      primary: {
-        light: "#00926c",
-        main: "#00926c",
-        dark: "#00926c",
-        contrastText: "#fff",
-      },
-    },
-  });
-  const classes = useMyStyles();
   const path = useLocation();
   const client_id = getclientId();
 
@@ -106,9 +62,6 @@ const DrawerItemContent = ({ tool }) => {
   const handleToolChange = (tool) => {
     if (tool.toolGroup === TOOL_GROUPS.VERIFICATION)
       dispatch(selectTopMenuItem(TOP_MENU_ITEMS[0].title));
-
-    if (tool.toolGroup === TOOL_GROUPS.MORE)
-      dispatch(selectTopMenuItem(TOP_MENU_ITEMS[5].title));
 
     dispatch(selectTool(tool.titleKeyword));
   };
@@ -120,18 +73,12 @@ const DrawerItemContent = ({ tool }) => {
   }, [tool]);
 
   return (
-    <Container
-      key={tool.titleKeyword}
-      className={classes.noMargin}
-      maxWidth={false}
-    >
+    <Container key={tool.titleKeyword} maxWidth={false}>
       <Fade in={true}>
-        <div>
-          <ThemeProvider theme={theme}>
-            {tool.content}
-            {tool.footer}
-          </ThemeProvider>
-        </div>
+        <Box>
+          {tool.content}
+          {tool.footer}
+        </Box>
       </Fade>
     </Container>
   );

@@ -1,41 +1,35 @@
 import React, { useState } from "react";
+import Iframe from "react-iframe";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-import {
-  Alert,
-  Box,
-  Button,
-  Card,
-  Dialog,
-  DialogContent,
-  Grid2,
-  Snackbar,
-  SvgIcon,
-  Tab,
-  Tabs,
-  Typography,
-} from "@mui/material";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import Grid from "@mui/material/Grid";
+import Snackbar from "@mui/material/Snackbar";
+import SvgIcon from "@mui/material/SvgIcon";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import Typography from "@mui/material/Typography";
 
+import { Audiotrack } from "@mui/icons-material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
-import Iframe from "react-iframe";
-import DialogActions from "@mui/material/DialogActions";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import ToolsMenuItem from "./ToolsMenuItem";
-import ImageIcon from "../../../NavBar/images/SVG/Image/Images.svg";
-import VideoIcon from "../../../NavBar/images/SVG/Video/Video.svg";
-import SearchIcon from "../../../NavBar/images/SVG/Search/Search.svg";
-import DataIcon from "../../../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
-import { useSelector } from "react-redux";
-
-import { useNavigate } from "react-router-dom";
+import { ROLES } from "@/constants/roles";
+import { TOOLS_CATEGORIES, canUserSeeTool, tools } from "@/constants/tools";
+import { selectToolTab } from "@/redux/reducers/toolTabSelectedReducer";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { Audiotrack } from "@mui/icons-material";
-import {
-  canUserSeeTool,
-  tools,
-  TOOLS_CATEGORIES,
-} from "../../../../constants/tools";
-import { ROLES } from "../../../../constants/roles";
+
+import DataIcon from "../../../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
+import ImageIcon from "../../../NavBar/images/SVG/Image/Images.svg";
+import SearchIcon from "../../../NavBar/images/SVG/Search/Search.svg";
+import VideoIcon from "../../../NavBar/images/SVG/Video/Video.svg";
+import ToolsMenuItem from "./ToolsMenuItem";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -64,18 +58,22 @@ function TabPanel(props) {
  */
 const ToolsMenu = () => {
   const navigate = useNavigate();
-  const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Alltools");
   const keywordNavbar = i18nLoadNamespace("components/NavBar");
   const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
 
   const [videoUrl, setVideoUrl] = useState(null);
 
+  const dispatch = useDispatch();
+
   const userAuthenticated = useSelector(
     (state) => state.userSession && state.userSession.userAuthenticated,
   );
 
   const role = useSelector((state) => state.userSession.user.roles);
+
+  const tabSelected = useSelector((state) => state.toolTabSelected);
+
   const betaTester = role.includes("BETA_TESTER");
 
   const [openAlert, setOpenAlert] = React.useState(false);
@@ -95,6 +93,8 @@ const ToolsMenu = () => {
   const handlePush = (path) => {
     if (path === "csvSna" || path === "factcheck" || path === "xnetwork") {
       window.open(process.env.REACT_APP_TSNA_SERVER + path, "_blank");
+    } else if (path === "disinfoDeck") {
+      window.open(process.env.REACT_APP_DISINFO_DECK_SERVER, "_blank");
     } else {
       navigate("/app/tools/" + path);
     }
@@ -147,7 +147,7 @@ const ToolsMenu = () => {
         <SvgIcon
           component={VideoIcon}
           sx={{
-            fontSize: "40px",
+            fontSize: "24px",
           }}
           inheritViewBox
         />
@@ -161,7 +161,7 @@ const ToolsMenu = () => {
         <SvgIcon
           component={ImageIcon}
           sx={{
-            fontSize: "40px",
+            fontSize: "24px",
           }}
           inheritViewBox
         />
@@ -171,7 +171,7 @@ const ToolsMenu = () => {
       type: TOOLS_CATEGORIES.AUDIO,
       name: keywordNavbar(TOOLS_CATEGORIES.AUDIO),
       value: toolsAudio,
-      icon: <Audiotrack width="40px" height="40px" />,
+      icon: <Audiotrack width="24px" height="24px" />,
     },
     {
       type: TOOLS_CATEGORIES.SEARCH,
@@ -181,7 +181,7 @@ const ToolsMenu = () => {
         <SvgIcon
           component={SearchIcon}
           sx={{
-            fontSize: "40px",
+            fontSize: "24px",
           }}
           inheritViewBox
         />
@@ -195,7 +195,7 @@ const ToolsMenu = () => {
         <SvgIcon
           component={DataIcon}
           sx={{
-            fontSize: "40px",
+            fontSize: "24px",
           }}
           inheritViewBox
         />
@@ -205,7 +205,7 @@ const ToolsMenu = () => {
       type: TOOLS_CATEGORIES.OTHER,
       name: keywordNavbar(TOOLS_CATEGORIES.OTHER),
       value: otherTools,
-      icon: <MoreHorizIcon width="40px" height="40px" />,
+      icon: <MoreHorizIcon width="24px" height="24px" />,
     },
   ];
 
@@ -260,10 +260,8 @@ const ToolsMenu = () => {
     setOpenAlert(false);
   };
 
-  const [value, setValue] = React.useState(0);
-
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    dispatch(selectToolTab(newValue));
   };
 
   const categoriesAllowedForUser = categories.filter(
@@ -285,13 +283,14 @@ const ToolsMenu = () => {
           {keywordWarning("warning_advanced_tools")}
         </Alert>
       </Snackbar>
-      <Card>
+      <Card variant="outlined">
         <Tabs
-          value={value}
+          value={tabSelected}
           onChange={handleChange}
           indicatorColor={"primary"}
           variant="scrollable"
           scrollButtons="auto"
+          allowScrollButtonsMobile
         >
           {categoriesAllowedForUser.map((category, index) => {
             //  if(category.value.length !==0){
@@ -302,7 +301,6 @@ const ToolsMenu = () => {
                 iconPosition="start"
                 label={
                   <Typography
-                    variant="h6"
                     style={{
                       textTransform: "capitalize",
                     }}
@@ -312,35 +310,42 @@ const ToolsMenu = () => {
                 }
               />
             );
-            // }
           })}
         </Tabs>
 
         <Box sx={{ m: 1 }} />
 
-        <div style={{ minHeight: "340px" }}>
+        <Box sx={{ minHeight: "55vh" }}>
           {categoriesAllowedForUser.map((category, index) => {
             const tools = category.value;
-            //if(tools.length !==0){
 
             return (
-              <TabPanel value={value} index={index} key={index}>
-                <Grid2
+              <TabPanel value={tabSelected} index={index} key={index}>
+                <Grid
                   container
-                  justifyContent="flex-start"
+                  sx={{
+                    justifyContent: "flex-start",
+                    alignItems: "stretch",
+                  }}
                   spacing={2}
-                  className={classes.toolCardsContainer}
                 >
                   {tools.map((tool, key) => {
                     const element = (
-                      <Grid2
-                        className={classes.toolCardStyle}
+                      <Grid
+                        size={{ xs: 4, lg: 3 }}
                         key={key}
-                        onClick={() => handleClick(tool.path, tool.rolesNeeded)}
-                        minWidth="250px"
+                        sx={{
+                          minWidth: "200px",
+                        }}
                       >
-                        <ToolsMenuItem tool={tool} />
-                      </Grid2>
+                        <ToolsMenuItem
+                          tool={tool}
+                          onClick={() =>
+                            handleClick(tool.path, tool.rolesNeeded)
+                          }
+                          key={key}
+                        />
+                      </Grid>
                     );
                     if (
                       tool.rolesNeeded &&
@@ -355,17 +360,14 @@ const ToolsMenu = () => {
                       return element;
                     }
                   })}
-                </Grid2>
+                </Grid>
               </TabPanel>
             );
           })}
-        </div>
+        </Box>
       </Card>
-
       <Box sx={{ m: 3 }} />
-
       <Box sx={{ m: 4 }} />
-
       <Dialog
         height={"400px"}
         fullWidth

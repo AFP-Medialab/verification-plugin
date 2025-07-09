@@ -1,24 +1,24 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Link,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import React, { useEffect, useState } from "react";
-import IconInternetArchive from "../../../../NavBar/images/SVG/Others/archive-icon.svg";
-import {
-  getclientId,
-  trackEvent,
-} from "../../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useSelector } from "react-redux";
-import { history } from "../../../../Shared/History/History";
-import { prettifyLargeString } from "../utils";
+
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Link from "@mui/material/Link";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { ROLES } from "@/constants/roles";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import { history } from "@Shared/History/History";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import IconInternetArchive from "../../../../NavBar/images/SVG/Others/archive-icon.svg";
 import CopyButton from "../../../../Shared/CopyButton";
 import { KNOWN_LINKS } from "../../../Assistant/AssistantRuleBook";
+import { prettifyLargeString } from "../utils";
 import DownloadWaczFile from "./downloadWaczFile";
 
 /**
@@ -37,6 +37,8 @@ const UrlArchive = ({ url, mediaUrl }) => {
   const session = useSelector((state) => state.userSession);
   const uid = session && session.user ? session.user.id : null;
 
+  const role = useSelector((state) => state.userSession.user.roles);
+
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
 
   useEffect(() => {
@@ -53,31 +55,43 @@ const UrlArchive = ({ url, mediaUrl }) => {
     }
   }, [url]);
 
+  if (url)
+    useTrackEvent(
+      "submission",
+      "archive",
+      "easy archiving link",
+      url,
+      client_id,
+      history,
+      uid,
+    );
+
+  const [clickedUrl, setClickedUrl] = useState(null);
+  // Track the clicked Save with SPN action
+  useTrackEvent(
+    "archive",
+    "archive_wbm_spn",
+    "Archive with WBM SPN",
+    clickedUrl,
+    client_id,
+    history,
+    uid,
+  );
+
   useEffect(() => {
     if (!platform) {
       setUrls(url);
       return;
     }
 
-    if (platform)
-      trackEvent(
-        "submission",
-        "archive",
-        "easy archiving link",
-        url,
-        client_id,
-        history,
-        uid,
-      );
-
     if (platform === KNOWN_LINKS.FACEBOOK) {
       const facebookUrls = [
-        `https://www.facebook.com/plugins/post.php?href=${encodeURIComponent(
+        `https://www.facebook.com/plugins/post.php?height=476&href=${encodeURIComponent(
           url,
-        )}&show_text=true&width=500`,
+        )}&show_text=true&width=1100`,
         `https://www.facebook.com/v16.0/plugins/post.php?app_id=&channel=https%3A%2F%2Fstaticxx.facebook.com%2Fx%2Fconnect%2Fxd_arbiter%2F%3Fversion%3D46%23cb%3Dfe3fbda33dec3%26domain%3Ddevelopers.facebook.com%26is_canvas%3Dfalse%26origin%3Dhttps%253A%252F%252Fdevelopers.facebook.com%252Ff8686a44c9f19%26relation%3Dparent.parent&container_width=734&href=${encodeURIComponent(
           url,
-        )}&set=a.462670379217792&locale=en_US&sdk=joey&show_text=true&width=500`,
+        )}&set=a.462670379217792&locale=en_US&sdk=joey&show_text=true&width=1100`,
         `https://mbasic.facebook.com/${url.replace(
           "https://www.facebook.com/",
           "",
@@ -88,11 +102,12 @@ const UrlArchive = ({ url, mediaUrl }) => {
       const youtubeUrls = [url.replace("/watch?v=", "/embed/")];
       setUrls(youtubeUrls);
     } else if (platform === KNOWN_LINKS.INSTAGRAM) {
-      const instagramUrls = [
-        url.substring(url.length - 1) === "/"
-          ? url + "embed/captioned"
-          : url + "/embed/captioned",
-      ];
+      const embedUrl = (() => {
+        const u = new URL(url);
+        return u.origin + u.pathname + "embed/captioned";
+      })();
+
+      const instagramUrls = [embedUrl];
       setUrls(instagramUrls);
     }
 
@@ -100,16 +115,6 @@ const UrlArchive = ({ url, mediaUrl }) => {
   }, [platform]);
 
   const saveToInternetArchive = (link) => {
-    trackEvent(
-      "archive",
-      "archive_wbm_spn",
-      "Archive with WBM SPN",
-      link,
-      client_id,
-      history,
-      uid,
-    );
-
     window.open("https://web.archive.org/save/" + link, "_blank");
   };
 
@@ -121,9 +126,11 @@ const UrlArchive = ({ url, mediaUrl }) => {
         <Stack direction="column" spacing={1}>
           <Stack
             direction="row"
-            justifyContent={"start"}
-            alignItems={"center"}
             spacing={1}
+            sx={{
+              justifyContent: "start",
+              alignItems: "center",
+            }}
           >
             <Typography>{keyword(link_type_keyword)}</Typography>
             <Link href={link} target="_blank">
@@ -139,14 +146,18 @@ const UrlArchive = ({ url, mediaUrl }) => {
           <Box>
             <Button
               variant="outlined"
-              onClick={() => saveToInternetArchive(link)}
+              onClick={() => {
+                setClickedUrl(link);
+                saveToInternetArchive(link);
+              }}
               startIcon={<IconInternetArchive />}
-              sx={{ textTransform: "none" }}
             >
               {keyword("internet_archive_button")}
             </Button>
           </Box>
-          <DownloadWaczFile url={link} />
+          {role.includes(ROLES.EXTRA_FEATURE) && (
+            <DownloadWaczFile url={link} />
+          )}
         </Stack>
       </Box>
     );
@@ -203,7 +214,13 @@ const UrlArchive = ({ url, mediaUrl }) => {
   return (
     <Card variant="outlined" m={2}>
       <CardContent>
-        <Typography variant="h6" component="div" pb={2}>
+        <Typography
+          variant="h6"
+          component="div"
+          sx={{
+            pb: 2,
+          }}
+        >
           {keyword("links_card_title")}
         </Typography>
         <Stack spacing={4}>{getArchiveLinksForPlatform(platform)}</Stack>

@@ -4,21 +4,31 @@ import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
+import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
-import FindInPageIcon from "@mui/icons-material/FindInPage";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Chip, Grid2, IconButton } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import FindInPageIcon from "@mui/icons-material/FindInPage";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import SentimentSatisfied from "@mui/icons-material/SentimentSatisfied";
 
-import { setAssuranceExpanded } from "../../../../redux/actions/tools/assistantActions";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import Tooltip from "@mui/material/Tooltip";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import { setAssuranceExpanded } from "@/redux/actions/tools/assistantActions";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import SourceCredibilityResult from "../AssistantCheckResults/SourceCredibilityResult";
 import { renderAccordion } from "../AssistantCheckResults/assistantUtils";
+import {
+  TransHtmlDoubleLineBreak,
+  TransSourceCredibilityTooltip,
+  TransUrlDomainAnalysisLink,
+} from "../TransComponents";
 
 const AssistantSCResults = () => {
   // central
@@ -68,57 +78,81 @@ const AssistantSCResults = () => {
       className={classes.sourceCredibilityBorder}
       height="400"
     >
-      <Grid2 container>
-        <Grid2 size={{ xs: 11 }} className={classes.displayFlex}>
+      <Grid container>
+        <Grid size={{ xs: 11 }} className={classes.displayFlex}>
           {/* icon */}
           <CardMedia>
-            <Box m={1}>
+            <Box
+              sx={{
+                m: 1,
+              }}
+            >
               <FindInPageIcon fontSize={"large"} color={"primary"} />
             </Box>
           </CardMedia>
 
           {/* spacing */}
-          <Box m={1} />
+          <Box
+            sx={{
+              m: 1,
+            }}
+          />
 
           {/* title */}
-          <Box mt={1.5}>
+          <Box
+            sx={{
+              mt: 1.5,
+            }}
+          >
             <Typography component={"span"} variant={"h6"}>
               {keyword("url_domain_analysis")}
             </Typography>
           </Box>
 
           {/* expand button */}
-          <IconButton
-            className={classes.assistantIconRight}
-            onClick={() => dispatch(setAssuranceExpanded(!assuranceExpanded))}
+          <Box
+            sx={{
+              pr: 1,
+              pt: 1,
+            }}
           >
-            <ExpandMoreIcon color={"primary"} />
-          </IconButton>
-        </Grid2>
+            <IconButton
+              className={classes.assistantIconRight}
+              onClick={() => dispatch(setAssuranceExpanded(!assuranceExpanded))}
+              sx={{ p: 1 }}
+            >
+              <ExpandMoreIcon color={"primary"} />
+            </IconButton>
+          </Box>
+        </Grid>
 
-        <Grid2 size={{ xs: 1 }}>
+        <Grid size={{ xs: 1 }}>
           {/* help tooltip */}
-          <Box mt={1.5} align="right">
+          <Box
+            align="right"
+            sx={{
+              mt: 1.5,
+            }}
+          >
             <Tooltip
               interactive={"true"}
               leaveDelay={50}
               style={{ display: "flex", marginLeft: "auto" }}
               title={
-                <div
-                  className={"content"}
-                  dangerouslySetInnerHTML={{
-                    __html: keyword("sc_tooltip"),
-                  }}
-                />
+                <>
+                  <TransSourceCredibilityTooltip keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
+                  <TransUrlDomainAnalysisLink keyword={keyword} />
+                </>
               }
               classes={{ tooltip: classes.assistantTooltip }}
             >
               <HelpOutlineOutlinedIcon color={"action"} />
             </Tooltip>
           </Box>
-        </Grid2>
+        </Grid>
 
-        <Grid2 size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <Collapse
             in={assuranceExpanded}
             className={classes.assistantBackground}
@@ -129,8 +163,8 @@ const AssistantSCResults = () => {
                 : null}
             </Box>
           </Collapse>
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     </Card>
   );
 };

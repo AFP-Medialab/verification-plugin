@@ -1,23 +1,32 @@
 import React, { useState } from "react";
+import { Trans } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Box, CardHeader, Grid2 } from "@mui/material";
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Grid from "@mui/material/Grid";
 import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import LinkIcon from "@mui/icons-material/Link";
-import Typography from "@mui/material/Typography";
 
-import AssistantIcon from "../../NavBar/images/navbar/assistant-icon-primary.svg";
 import {
   setImageVideoSelected,
   setUrlMode,
-} from "../../../redux/actions/tools/assistantActions";
+} from "@/redux/actions/tools/assistantActions";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
+
+import AssistantIcon from "../../NavBar/images/navbar/assistant-icon-primary.svg";
 import HeaderTool from "../../Shared/HeaderTool/HeaderTool";
+import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
+import {
+  TransHtmlDoubleLineBreak,
+  TransSupportedToolsLink,
+} from "./TransComponents";
 
 const AssistantIntroduction = (props) => {
   // styles, language, dispatch, params
@@ -39,7 +48,7 @@ const AssistantIntroduction = (props) => {
   if (
     !showURL &&
     !showLocal &&
-    classButtonURL !== classes.bigButtonDivSelectted &&
+    classButtonURL !== classes.bigButtonDivSelected &&
     classButtonLocal !== classes.bigButtonDiv &&
     firstRender
   ) {
@@ -54,15 +63,15 @@ const AssistantIntroduction = (props) => {
     (state) => state.assistant.imageVideoSelected,
   );
 
-  if (urlMode && classButtonURL !== classes.bigButtonDivSelectted) {
-    setClassButtonURL(classes.bigButtonDivSelectted);
-    setClassIconURL(classes.bigButtonIconSelectted);
+  if (urlMode && classButtonURL !== classes.bigButtonDivSelected) {
+    setClassButtonURL(classes.bigButtonDivSelected);
+    setClassIconURL(classes.bigButtonIconSelected);
   } else if (
     imageVideoSelected &&
-    classButtonLocal !== classes.bigButtonDivSelectted
+    classButtonLocal !== classes.bigButtonDivSelected
   ) {
-    setClassButtonLocal(classes.bigButtonDivSelectted);
-    setClassIconLocal(classes.bigButtonIconSelectted);
+    setClassButtonLocal(classes.bigButtonDivSelected);
+    setClassIconLocal(classes.bigButtonIconSelected);
   }
 
   const cleanAssistant = () => props.cleanAssistant();
@@ -80,7 +89,7 @@ const AssistantIntroduction = (props) => {
           />
         }
       />
-      <Card>
+      <Card variant="outlined">
         <CardHeader
           className={classes.assistantCardHeader}
           title={
@@ -92,17 +101,28 @@ const AssistantIntroduction = (props) => {
             <Tooltip
               interactive={"true"}
               title={
-                <div
-                  className={"content"}
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      keyword("assistant_help_title") +
-                      keyword("assistant_help_1") +
-                      keyword("assistant_help_2") +
-                      keyword("assistant_help_3") +
-                      keyword("assistant_help_4"),
-                  }}
-                />
+                <>
+                  <Trans
+                    t={keyword}
+                    i18nKey="assistant_help_title"
+                    components={{
+                      b: <b />,
+                    }}
+                  />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
+                  <Trans t={keyword} i18nKey="assistant_help_1" />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
+                  <Trans
+                    t={keyword}
+                    i18nKey="assistant_help_2"
+                    components={{
+                      b: <b />,
+                      ul: <ul />,
+                      li: <li />,
+                    }}
+                  />
+                  <TransSupportedToolsLink keyword={keyword} />
+                </>
               }
               classes={{ tooltip: classes.assistantTooltip }}
             >
@@ -112,12 +132,21 @@ const AssistantIntroduction = (props) => {
         />
 
         <CardContent>
-          <Box m={2}>
-            <Grid2 container spacing={3} alignItems="flex-start">
-              <Grid2 size={{ xs: 6 }}>
+          <Box
+            sx={{
+              m: 2,
+            }}
+          >
+            <Grid
+              container
+              spacing={3}
+              sx={{
+                alignItems: "flex-start",
+              }}
+            >
+              <Grid size={{ xs: 6 }}>
                 <Box
                   data-testid="assistant-webpage-link"
-                  p={3}
                   className={classButtonURL}
                   onClick={() => {
                     if (!urlMode) {
@@ -128,8 +157,8 @@ const AssistantIntroduction = (props) => {
                       });
                       cleanAssistant();
                       dispatch(setUrlMode(!urlMode));
-                      setClassButtonURL(classes.bigButtonDivSelectted);
-                      setClassIconURL(classes.bigButtonIconSelectted);
+                      setClassButtonURL(classes.bigButtonDivSelected);
+                      setClassIconURL(classes.bigButtonIconSelected);
 
                       setClassButtonLocal(classes.bigButtonDiv);
                       setClassIconLocal(classes.bigButtonIcon);
@@ -138,49 +167,64 @@ const AssistantIntroduction = (props) => {
                       setShowLocal(false);
                     }
                   }}
+                  sx={{
+                    p: 3,
+                  }}
                 >
-                  <Grid2
+                  <Grid
                     container
                     direction="row"
                     style={{ flexWrap: "nowrap" }}
                     spacing={2}
                   >
-                    <Grid2 size={{ xs: 1 }}>
+                    <Grid size={{ xs: 1 }}>
                       <LinkIcon className={classIconURL} />
-                    </Grid2>
-                    <Grid2>
-                      <Grid2
+                    </Grid>
+                    <Grid>
+                      <Grid
                         container
                         direction="column"
-                        justifyContent="flex-start"
-                        alignItems="flex-start"
+                        sx={{
+                          justifyContent: "flex-start",
+                          alignItems: "flex-start",
+                        }}
                       >
-                        <Grid2>
+                        <Grid>
                           <Typography
                             variant="body1"
                             style={{ fontWeight: 600 }}
-                            textAlign={"start"}
+                            sx={{
+                              textAlign: "start",
+                            }}
                           >
                             {keyword("assistant_webpage_header")}
                           </Typography>
-                        </Grid2>
+                        </Grid>
 
-                        <Box mt={1} />
+                        <Box
+                          sx={{
+                            mt: 1,
+                          }}
+                        />
 
-                        <Grid2>
-                          <Typography variant="body1" textAlign={"start"}>
+                        <Grid>
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              textAlign: "start",
+                            }}
+                          >
                             {keyword("assistant_webpage_text")}
                           </Typography>
-                        </Grid2>
-                      </Grid2>
-                    </Grid2>
-                  </Grid2>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
                 </Box>
-              </Grid2>
+              </Grid>
 
-              <Grid2 size={{ xs: 6 }}>
+              <Grid size={{ xs: 6 }}>
                 <Box
-                  p={3}
                   className={classButtonLocal}
                   onClick={() => {
                     if (!imageVideoSelected) {
@@ -197,52 +241,64 @@ const AssistantIntroduction = (props) => {
                       setClassButtonURL(classes.bigButtonDiv);
                       setClassIconURL(classes.bigButtonIcon);
 
-                      setClassButtonLocal(classes.bigButtonDivSelectted);
-                      setClassIconLocal(classes.bigButtonIconSelectted);
+                      setClassButtonLocal(classes.bigButtonDivSelected);
+                      setClassIconLocal(classes.bigButtonIconSelected);
 
                       setShowURL(false);
                       setShowLocal(true);
                     }
                   }}
+                  sx={{
+                    p: 3,
+                  }}
                 >
-                  <Grid2
+                  <Grid
                     container
                     direction="row"
                     style={{ flexWrap: "nowrap" }}
                     spacing={2}
                   >
-                    <Grid2 size={{ xs: 1 }}>
+                    <Grid size={{ xs: 1 }}>
                       <InsertDriveFileIcon className={classIconLocal} />
-                    </Grid2>
+                    </Grid>
 
-                    <Grid2>
-                      <Grid2
+                    <Grid>
+                      <Grid
                         container
                         direction="column"
-                        justifyContent="flex-start"
-                        alignItems="flex-start"
                         spacing={1}
+                        sx={{
+                          justifyContent: "flex-start",
+                          alignItems: "flex-start",
+                        }}
                       >
-                        <Grid2 size={{ xs: 12 }}>
+                        <Grid size={{ xs: 12 }}>
                           <Typography
                             variant="body1"
                             style={{ fontWeight: 600 }}
-                            textAlign={"start"}
+                            sx={{
+                              textAlign: "start",
+                            }}
                           >
                             {keyword("assistant_file_header")}
                           </Typography>
-                        </Grid2>
-                        <Grid2 size={{ xs: 12 }}>
-                          <Typography variant="body1" textAlign={"start"}>
+                        </Grid>
+                        <Grid size={{ xs: 12 }}>
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              textAlign: "start",
+                            }}
+                          >
                             {keyword("assistant_file_text")}
                           </Typography>
-                        </Grid2>
-                      </Grid2>
-                    </Grid2>
-                  </Grid2>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
                 </Box>
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
           </Box>
         </CardContent>
       </Card>

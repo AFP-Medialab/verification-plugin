@@ -9,7 +9,7 @@ const archiveSlice = createSlice({
     setArchiveUrl(state, action) {
       state.mainUrl = action.payload;
     },
-    archiveStateCleaned(state, action) {
+    archiveStateCleaned(state) {
       state.mainUrl = "";
     },
   },

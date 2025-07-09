@@ -1,39 +1,42 @@
 import React, { useEffect, useState } from "react";
-import TextField from "@mui/material/TextField";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
-import { useDispatch, useSelector } from "react-redux";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { Grid2, IconButton } from "@mui/material";
+import FormGroup from "@mui/material/FormGroup";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import LinearProgress from "@mui/material/LinearProgress";
+import TextField from "@mui/material/TextField";
+
 import CloseIcon from "@mui/icons-material/Close";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import { loadImageSize, useLoading } from "../../../../Hooks/useInput";
+
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { loadImageSize, useLoading } from "@/Hooks/useInput";
+import { thumbnails } from "@/constants/tools";
 import {
   cleanThumbnailsState,
   setThumbnailsLoading,
   setThumbnailsResult,
-} from "../../../../redux/reducers/tools/thumbnailsReducer";
-import { setError } from "redux/reducers/errorReducer";
-import Checkbox from "@mui/material/Checkbox";
-import FormGroup from "@mui/material/FormGroup";
-import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
-import { useParams } from "react-router-dom";
-
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import ThumbnailsIcon from "../../../NavBar/images/SVG/Video/Thumbnails.svg";
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import LinearProgress from "@mui/material/LinearProgress";
+} from "@/redux/reducers/tools/thumbnailsReducer";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import HeaderTool from "@Shared/HeaderTool/HeaderTool";
+import ImageGridList from "@Shared/ImageGridList/ImageGridList";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
+import OnClickInfo from "@Shared/OnClickInfo/OnClickInfo";
 import {
+  SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
   reverseImageSearchAll,
-  SEARCH_ENGINE_SETTINGS,
-} from "../../../Shared/ReverseSearch/reverseSearchUtils";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+} from "@Shared/ReverseSearch/reverseSearchUtils";
+import { setError } from "redux/reducers/errorReducer";
 
 const Thumbnails = () => {
   const { url } = useParams();
@@ -70,9 +73,8 @@ const Thumbnails = () => {
     let selectedList = {};
 
     for (const searchEngine of Object.values(SEARCH_ENGINE_SETTINGS)) {
-      if (searchEngine.NAME === SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME)
-        selectedList[searchEngine.NAME] = true;
-      else selectedList[searchEngine.NAME] = false;
+      selectedList[searchEngine.NAME] =
+        searchEngine.NAME === SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME;
     }
 
     selectedList["openTabs"] = true;
@@ -141,13 +143,13 @@ const Thumbnails = () => {
     if (url !== null && url !== "" && isYtUrl(url)) {
       setEventUrl(url);
       /*trackEvent(
-                          "submission",
-                          "thumbnails",
-                          "youtube thumbnail",
-                          url,
-                          client_id,
-                          uid
-                        );*/
+                                                                                                  "submission",
+                                                                                                  "thumbnails",
+                                                                                                  "youtube thumbnail",
+                                                                                                  url,
+                                                                                                  client_id,
+                                                                                                  uid
+                                                                                                );*/
       let images = get_images(url);
       dispatch(
         setThumbnailsResult({
@@ -158,7 +160,7 @@ const Thumbnails = () => {
         }),
       );
       if (selectedValue.openTabs) images.forEach((img) => imageClickUrl(img));
-    } else dispatch(setError("Please use a valid Youtube Url (add to tsv)"));
+    } else dispatch(setError(keyword("enter_valid_youtube_url")));
   };
 
   const imageClickUrl = (url) => {
@@ -216,7 +218,6 @@ const Thumbnails = () => {
     if (resultData) {
       getHeight();
     }
-    // eslint-disable-next-line
   }, [resultData]);
 
   useEffect(() => {
@@ -225,29 +226,41 @@ const Thumbnails = () => {
     }
   }, [showResult]);
 
+  const processUrl = useSelector((state) => state.assistant.processUrl);
+  useEffect(() => {
+    if (processUrl) {
+      setInput(processUrl);
+      setUrlDetected(true);
+    }
+  }, [processUrl]);
+
   return (
     <div>
       <HeaderTool
         name={keywordAllTools("navbar_thumbnails")}
         description={keywordAllTools("navbar_thumbnails_description")}
         icon={
-          <ThumbnailsIcon
-            style={{ fill: "#00926c" }}
-            width="40px"
-            height="40px"
+          <thumbnails.icon
+            sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
           />
         }
       />
-
-      <Card>
-        <CardHeader
-          title={keyword("cardheader_link")}
-          className={classes.headerUploadedImage}
-        />
-        <Box p={3}>
+      <Card variant="outlined">
+        <Box
+          sx={{
+            p: 4,
+          }}
+        >
           <form>
-            <Grid2 container direction="row" spacing={3} alignItems="center">
-              <Grid2 size="grow">
+            <Grid
+              container
+              direction="row"
+              spacing={3}
+              sx={{
+                alignItems: "center",
+              }}
+            >
+              <Grid size="grow">
                 <TextField
                   id="standard-full-width"
                   label={keyword("youtube_input")}
@@ -257,8 +270,8 @@ const Thumbnails = () => {
                   onChange={(e) => handleChangeValue(e)}
                   value={input}
                 />
-              </Grid2>
-              <Grid2>
+              </Grid>
+              <Grid>
                 {
                   <FormControlLabel
                     control={
@@ -273,8 +286,8 @@ const Thumbnails = () => {
                     labelPlacement="end"
                   />
                 }
-              </Grid2>
-              <Grid2>
+              </Grid>
+              <Grid>
                 <Button
                   type="submit"
                   variant="contained"
@@ -286,11 +299,15 @@ const Thumbnails = () => {
                 >
                   {keyword("button_submit")}
                 </Button>
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
           </form>
 
-          <Box m={2} />
+          <Box
+            sx={{
+              m: 2,
+            }}
+          />
           <FormControl component="fieldset">
             <FormGroup row>
               {Object.entries(SEARCH_ENGINE_SETTINGS).map(
@@ -316,17 +333,23 @@ const Thumbnails = () => {
           </FormControl>
           {isLoading && (
             <>
-              <Box m={3} />
+              <Box
+                sx={{
+                  m: 3,
+                }}
+              />
               <LinearProgress />
             </>
           )}
         </Box>
       </Card>
-
-      <Box m={3} />
-
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
       {resultData && resultData.length !== 0 && !isImgLoading && (
-        <Card>
+        <Card variant="outlined">
           <CardHeader
             title={keyword("cardheader_results")}
             className={classes.headerUploadedImage}
@@ -334,14 +357,19 @@ const Thumbnails = () => {
               <IconButton
                 aria-label="close"
                 onClick={() => dispatch(cleanThumbnailsState())}
+                sx={{ p: 1 }}
               >
-                <CloseIcon sx={{ color: "white" }} />
+                <CloseIcon />
               </IconButton>
             }
           />
           <div className={classes.root2}>
             <OnClickInfo keyword={"thumbnails_tip"} />
-            <Box m={2} />
+            <Box
+              sx={{
+                m: 2,
+              }}
+            />
 
             <ImageGridList
               list={resultData}

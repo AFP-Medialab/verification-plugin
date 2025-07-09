@@ -1,12 +1,19 @@
 import React, { useState } from "react";
-import { Box, Card, Pagination, Stack, Typography } from "@mui/material";
-import SelectSmall from "./components/SelectSmall";
-import ResultDisplayItem from "./components/ResultDisplayItem";
-import { getLanguageName } from "../../../Shared/Utils/languageUtils";
-import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
+
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import { getLanguageName } from "@Shared/Utils/languageUtils";
 import dayjs from "dayjs";
 import LocaleData from "dayjs/plugin/localeData";
 import localizedFormat from "dayjs/plugin/localizedFormat";
+
+import ResultDisplayItem from "./components/ResultDisplayItem";
+import SelectSmall from "./components/SelectSmall";
 
 const SemanticSearchResults = (searchResults) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/SemanticSearch");
@@ -74,20 +81,24 @@ const SemanticSearchResults = (searchResults) => {
 
   return (
     <Box id="SemanticSearchResults" sx={{ scrollMargin: "96px" }}>
-      <Card>
+      <Card variant="outlined">
         <Box>
           <Stack
             direction="column"
             spacing={2}
-            p={2}
-            justifyContent="flex-start"
-            alignItems="flex-start"
+            sx={{
+              p: 2,
+              justifyContent: "flex-start",
+              alignItems: "flex-start",
+            }}
           >
             <Stack
               direction="row-reverse"
               spacing={2}
-              justifyContent="flex-start"
-              alignItems="center"
+              sx={{
+                justifyContent: "flex-start",
+                alignItems: "center",
+              }}
             >
               <Typography>
                 {results.length} {keyword("semantic_search_nb_of_results")}
@@ -121,7 +132,10 @@ const SemanticSearchResults = (searchResults) => {
                     ) ?? null
                   }
                   website={resultItem.website}
-                  language={getLanguageName(resultItem.language)}
+                  language={getLanguageName(
+                    resultItem.language,
+                    resultItem.language,
+                  )}
                   similarityScore={resultItem.similarityScore}
                   articleUrl={resultItem.articleUrl}
                   domainUrl={resultItem.domainUrl}
@@ -130,7 +144,12 @@ const SemanticSearchResults = (searchResults) => {
               );
             })}
 
-            <Box alignSelf="center" pt={4}>
+            <Box
+              sx={{
+                alignSelf: "center",
+                pt: 4,
+              }}
+            >
               <Pagination
                 count={totalNumberOfPages}
                 color="primary"

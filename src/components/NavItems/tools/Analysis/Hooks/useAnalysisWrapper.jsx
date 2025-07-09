@@ -1,8 +1,9 @@
-import axios from "axios";
-import { useDispatch } from "react-redux";
-import { setError } from "redux/reducers/errorReducer";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+
+import axios from "axios";
 import _ from "lodash";
+import { setError } from "redux/reducers/errorReducer";
 
 export const useAnalysisWrapper = (
   setAnalysisLoading,
@@ -114,7 +115,6 @@ export const useAnalysisWrapper = (
     return () => {
       if (!_.isNull(timer)) clearTimeout(timer);
     };
-    // eslint-disable-next-line
   }, [isLoading, data, cpt]);
 
   useEffect(() => {
@@ -132,6 +132,5 @@ export const useAnalysisWrapper = (
           handleError("analysis_service_error");
         });
     }
-    // eslint-disable-next-line
   }, [apiUrl, processUrl]);
 };

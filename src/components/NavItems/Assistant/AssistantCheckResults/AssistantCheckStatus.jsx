@@ -1,18 +1,26 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { IconButton } from "@mui/material";
-import Typography from "@mui/material/Typography";
-import { setStateExpanded } from "../../../../redux/actions/tools/assistantActions";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import { Alert } from "@mui/material";
+import Typography from "@mui/material/Typography";
+
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
+import { setStateExpanded } from "@/redux/actions/tools/assistantActions";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import {
+  KNOWN_LINKS,
+  KNOWN_LINK_PATTERNS,
+  matchPattern,
+} from "../AssistantRuleBook";
 
 const AssistantCheckStatus = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -60,9 +68,20 @@ const AssistantCheckStatus = () => {
   );
 
   const machineGeneratedTextTitle = keyword("machine_generated_text_title");
-  const machineGeneratedTextFailState = useSelector(
-    (state) => state.assistant.machineGeneratedTextFail,
+  const machineGeneratedTextChunksFailState = useSelector(
+    (state) => state.assistant.machineGeneratedTextChunksFail,
   );
+  const machineGeneratedTextSentencesFailState = useSelector(
+    (state) => state.assistant.machineGeneratedTextSentencesFail,
+  );
+
+  const multilingualStanceTitle = keyword("multilingual_stance_title");
+  const multilingualStanceFailState = useSelector(
+    (state) => state.assistant.multilingualStanceFail,
+  );
+
+  const inputUrl = useSelector((state) => state.assistant.inputUrl);
+  const urlType = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
 
   const failStates = [
     { title: scTitle, failed: scFailState },
@@ -74,13 +93,30 @@ const AssistantCheckStatus = () => {
     { title: persuasionTitle, failed: persuasionFailState },
     { title: subjectivityTitle, failed: subjectivityFailState },
     { title: prevFactChecksTitle, failed: prevFactChecksFailState },
-    { title: machineGeneratedTextTitle, failed: machineGeneratedTextFailState },
+    {
+      title: machineGeneratedTextTitle,
+      failed:
+        machineGeneratedTextChunksFailState ||
+        machineGeneratedTextSentencesFailState,
+    },
+    {
+      title: multilingualStanceTitle,
+      failed:
+        multilingualStanceFailState &&
+        (urlType === KNOWN_LINKS.YOUTUBE ||
+          urlType === KNOWN_LINKS.YOUTUBESHORTS),
+    },
   ];
 
   return (
     <Alert severity="warning">
       <Typography component={"span"}>
-        <Box color={"orange"} fontStyle="italic">
+        <Box
+          sx={{
+            color: "orange",
+            fontStyle: "italic",
+          }}
+        >
           {keyword("status_subtitle")}
           <IconButton
             className={classes.assistantIconRight}
@@ -90,7 +126,6 @@ const AssistantCheckStatus = () => {
           </IconButton>
         </Box>
       </Typography>
-
       <Collapse in={stateExpanded} className={classes.assistantBackground}>
         <List disablePadding={true}>
           {failStates.map((value, key) =>

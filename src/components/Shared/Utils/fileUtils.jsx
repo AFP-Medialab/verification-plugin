@@ -2,8 +2,13 @@ import {
   MAX_AUDIO_FILE_SIZE,
   MAX_IMAGE_FILE_SIZE,
   MAX_VIDEO_FILE_SIZE,
-} from "../../../config";
-import { ROLES } from "../../../constants/roles";
+} from "@/config";
+import { ROLES } from "@/constants/roles";
+import {
+  fileTypeFromBlob,
+  fileTypeFromBuffer,
+  fileTypeFromStream,
+} from "file-type";
 
 export const FILE_TYPES = {
   image: "image",
@@ -12,19 +17,62 @@ export const FILE_TYPES = {
 };
 
 /**
+ * Returns the file type by fetching the remote content
+ * @param url {string} The URL string
+ * @returns {Promise<{readonly ext: string, readonly mime: string}|FileTypeResult|undefined|Error>}
+ */
+export const getFileTypeFromUrl = async (url) => {
+  try {
+    const response = await fetch(url);
+
+    return await fileTypeFromStream(response.body);
+  } catch (error) {
+    console.error(error);
+    throw new Error(`Could not get file type for ${url}`);
+  }
+};
+
+/**
+ * Returns the file type for a Blob, Buffer
+ * @param file {Blob | Buffer}
+ * @returns {Promise<{readonly ext: string, readonly mime: string}|FileTypeResult|undefined|Error>}
+ */
+export const getFileTypeFromFileObject = async (file) => {
+  try {
+    let fileType;
+
+    if (file instanceof Blob) fileType = await fileTypeFromBlob(file);
+    else if (file instanceof Buffer) fileType = fileTypeFromBuffer(file);
+    else
+      throw new Error(
+        `Error: the file type is not supported or file path is invalid ${file}`,
+      );
+
+    return fileType;
+  } catch (error) {
+    return new Error(`Error: could not get file type for ${file}: ${error}`);
+  }
+};
+
+/**
  * Helper function to check if the image file is too large to be processed.
  * @param imageFile {File} The image file to check
  * @param userRole The user role
+ * @param maxImageFileSize {number} The maximum image file size in bytes if not using the default size
  * @returns {boolean} True if the file is too large
  */
-export const isImageFileTooLarge = (imageFile, userRole) => {
+export const isImageFileTooLarge = (
+  imageFile,
+  userRole,
+  maxImageFileSize = MAX_IMAGE_FILE_SIZE,
+) => {
   if (!imageFile.type.includes("image")) {
     throw new Error("Invalid file type. This file is not an image.");
   }
 
   return (
     (!userRole || !userRole.includes(ROLES.EXTRA_FEATURE)) &&
-    imageFile.size >= MAX_IMAGE_FILE_SIZE
+    imageFile.size >= maxImageFileSize
   );
 };
 
@@ -69,6 +117,7 @@ export const isAudioFileTooLarge = (audioFile, userRole) => {
  * @param preprocessingFn {File | undefined | Error } Optional additional preprocessing that can return a new preprocessed file or handle additional errors
  * @param onSuccess {function} The function to run on preprocessing success
  * @param onError {function} The function to run in case of a preprocessing error
+ * @param maxImageFileSize {number} The maximum image file in bytes size if not using the default size
  * @returns {File | null | undefined} The processed file if the preprocessing succeeded
  */
 //TODO: Handle custom Error from preprocessingFn
@@ -78,10 +127,14 @@ export const preprocessFileUpload = (
   preprocessingFn,
   onSuccess,
   onError,
+  maxImageFileSize = MAX_IMAGE_FILE_SIZE,
 ) => {
   const fileType = file.type.split("/")[0];
 
-  if (fileType === FILE_TYPES.image && isImageFileTooLarge(file, role)) {
+  if (
+    fileType === FILE_TYPES.image &&
+    isImageFileTooLarge(file, role, maxImageFileSize)
+  ) {
     onError();
     return undefined;
   } else if (fileType === FILE_TYPES.audio && isAudioFileTooLarge(file, role)) {
@@ -116,4 +169,40 @@ export const preprocessFileUpload = (
     onSuccess(file);
     return file;
   }
+};
+
+let workerInstance;
+
+/**
+ * Resizes an image using a shared Web Worker
+ * @param {Blob | File} image - the image to resize
+ * @returns {Promise<Blob>} the resized image
+ */
+export const resizeImageWithWorker = (image) => {
+  if (!workerInstance) {
+    workerInstance = new Worker(
+      new URL("@workers/resizeImageWorker", import.meta.url),
+    );
+  }
+
+  return new Promise((resolve, reject) => {
+    const handleMessage = (event) => {
+      cleanup();
+      resolve(event.data);
+    };
+
+    const handleError = (event) => {
+      cleanup();
+      reject(event.error || new Error("Worker error"));
+    };
+
+    const cleanup = () => {
+      workerInstance.removeEventListener("message", handleMessage);
+      workerInstance.removeEventListener("error", handleError);
+    };
+
+    workerInstance.addEventListener("message", handleMessage);
+    workerInstance.addEventListener("error", handleError);
+    workerInstance.postMessage(image);
+  });
 };

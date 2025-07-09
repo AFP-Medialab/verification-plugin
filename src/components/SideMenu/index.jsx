@@ -1,20 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Box,
-  Button,
-  Collapse,
-  Divider,
-  Drawer,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  ListSubheader,
-  Stack,
-  Typography,
-} from "@mui/material";
-import clsx from "clsx";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Collapse from "@mui/material/Collapse";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import ListSubheader from "@mui/material/ListSubheader";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
 import {
   Audiotrack,
   ChevronLeft,
@@ -23,24 +23,26 @@ import {
   ExpandMore,
   MoreHoriz,
 } from "@mui/icons-material";
-import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
-import { i18nLoadNamespace } from "../Shared/Languages/i18nLoadNamespace";
-import { useDispatch, useSelector } from "react-redux";
-import VideoIcon from "../NavBar/images/SVG/Video/Video.svg";
-import ImageIcon from "../NavBar/images/SVG/Image/Images.svg";
-import SearchIcon from "../NavBar/images/SVG/Search/Search.svg";
-import DataIcon from "../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
+
+import { ROLES } from "@/constants/roles";
 import {
-  canUserSeeTool,
+  TOOLS_CATEGORIES,
   TOOL_GROUPS,
   TOOL_STATUS_ICON,
-  TOOLS_CATEGORIES,
+  canUserSeeTool,
   toolsHome,
-} from "../../constants/tools";
-import { ROLES } from "../../constants/roles";
-import { selectTopMenuItem } from "../../redux/reducers/navReducer";
-import { TOP_MENU_ITEMS } from "../../constants/topMenuItems";
-import { selectTool } from "../../redux/reducers/tools/toolReducer";
+} from "@/constants/tools";
+import { TOP_MENU_ITEMS } from "@/constants/topMenuItems";
+import { selectTopMenuItem } from "@/redux/reducers/navReducer";
+import { selectTool } from "@/redux/reducers/tools/toolReducer";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import clsx from "clsx";
+
+import DataIcon from "../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
+import ImageIcon from "../NavBar/images/SVG/Image/Images.svg";
+import SearchIcon from "../NavBar/images/SVG/Search/Search.svg";
+import VideoIcon from "../NavBar/images/SVG/Video/Video.svg";
+import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import SideMenuElement from "./sideMenuElement";
 
 const SideMenu = ({ tools, setOpenAlert }) => {
@@ -96,9 +98,6 @@ const SideMenu = ({ tools, setOpenAlert }) => {
   const handleToolChange = (tool) => {
     if (tool.toolGroup === TOOL_GROUPS.VERIFICATION)
       dispatch(selectTopMenuItem(TOP_MENU_ITEMS[0].title));
-
-    if (tool.toolGroup === TOOL_GROUPS.MORE)
-      dispatch(selectTopMenuItem(TOP_MENU_ITEMS[5].title));
 
     dispatch(selectTool(tool.titleKeyword));
   };
@@ -157,15 +156,18 @@ const SideMenu = ({ tools, setOpenAlert }) => {
       return;
     }
 
+    if (tool.path === "disinfoDeck") {
+      window.open(process.env.REACT_APP_DISINFO_DECK_SERVER, "_blank");
+      return;
+    }
+
     if (tool.category === TOOLS_CATEGORIES.OTHER) {
       navigate("/app/tools/" + tool.path);
       handleToolChange(tool);
       return;
     }
 
-    tool.toolGroup === TOOL_GROUPS.MORE
-      ? navigate("/app/" + tool.path)
-      : navigate("/app/tools/" + tool.path);
+    navigate("/app/tools/" + tool.path);
 
     handleToolChange(tool);
   };
@@ -255,7 +257,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
         <VideoIcon
           width="24px"
           height="24px"
-          style={{ fill: "#4c4c4c" }}
+          style={{ fill: "var(--mui-palette-text-secondary)" }}
           title={TOOLS_CATEGORIES.VIDEO}
         />
       ),
@@ -270,7 +272,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
         <ImageIcon
           width="24px"
           height="24px"
-          style={{ fill: "#4c4c4c" }}
+          style={{ fill: "var(--mui-palette-text-secondary)" }}
           title={TOOLS_CATEGORIES.IMAGE}
         />
       ),
@@ -285,7 +287,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
         <Audiotrack
           width="24px"
           height="24px"
-          style={{ fill: "#4c4c4c" }}
+          style={{ fill: "var(--mui-palette-text-secondary)" }}
           title={TOOLS_CATEGORIES.AUDIO}
         />
       ),
@@ -300,7 +302,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
         <SearchIcon
           width="24px"
           height="24px"
-          style={{ fill: "#4c4c4c" }}
+          style={{ fill: "var(--mui-palette-text-secondary)" }}
           title={TOOLS_CATEGORIES.SEARCH}
         />
       ),
@@ -315,7 +317,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
         <DataIcon
           width="24px"
           height="24px"
-          style={{ fill: "#4c4c4c" }}
+          style={{ fill: "var(--mui-palette-text-secondary)" }}
           title={TOOLS_CATEGORIES.DATA_ANALYSIS}
         />
       ),
@@ -326,7 +328,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
     },
     {
       titleKeyword: TOOLS_CATEGORIES.OTHER,
-      icon: <MoreHoriz style={{ fill: "#4c4c4c" }} />,
+      icon: <MoreHoriz style={{ fill: "var(--mui-palette-text-secondary)" }} />,
       list: drawerItemsOtherTools,
       variableOpen: openListOtherTools,
       setVariableOpen: setOpenListOtherTools,
@@ -380,8 +382,12 @@ const SideMenu = ({ tools, setOpenAlert }) => {
     }
 
     return {
-      fill: isSelected ? "#00926c" : "#4c4c4c",
-      color: isSelected ? "#00926c" : "#4c4c4c",
+      fill: isSelected
+        ? "var(--mui-palette-primary-main)"
+        : "var(--mui-palette-text-secondary)",
+      color: isSelected
+        ? "var(--mui-palette-primary-main)"
+        : "var(--mui-palette-text-secondary)",
       fontSize: "24px",
     };
   };
@@ -411,7 +417,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
           style={{
             paddingTop: "16px",
             paddingBottom: "16px",
-            backgroundColor: "#ffffff",
+            backgroundColor: "var(--mui-palette-background-paper)",
             textAlign: "start",
           }}
         >
@@ -585,7 +591,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
           alignItems: "stretch",
           position: "sticky",
           bottom: "0px",
-          backgroundColor: "#ffffff",
+          backgroundColor: "var(--mui-palette-background-paper)",
           zIndex: "9",
         }}
       >

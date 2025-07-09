@@ -1,33 +1,30 @@
 import React from "react";
+import { Trans } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
+import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import Divider from "@mui/material/Divider";
-import { KNOWN_LINKS } from "../AssistantRuleBook";
-
 import {
-  resetDeepfake as resetDeepfakeImage,
-  setDeepfakeUrlImage,
-} from "../../../../redux/actions/tools/deepfakeImageActions";
+  resetSyntheticImageDetectionImage,
+  setSyntheticImageDetectionUrl,
+} from "@/redux/actions/tools/syntheticImageDetectionActions";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import {
   resetDeepfake as resetDeepfakeVideo,
   setDeepfakeUrlVideo,
 } from "../../../../redux/actions/tools/deepfakeVideoActions";
-import {
-  resetSyntheticImageDetectionImage,
-  setSyntheticImageDetectionUrl,
-} from "../../../../redux/actions/tools/syntheticImageDetectionActions";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import { KNOWN_LINKS } from "../AssistantRuleBook";
 
 const AssistantProcessUrlActions = () => {
   const classes = useMyStyles();
@@ -46,10 +43,6 @@ const AssistantProcessUrlActions = () => {
     const resultUrl = action.useInputUrl ? inputUrl : processUrl;
 
     // deepfake and synthetic image detection set URL actions
-    if (action.path === "tools/deepfakeImage") {
-      dispatch(resetDeepfakeImage());
-      dispatch(setDeepfakeUrlImage({ url: resultUrl }));
-    }
     if (action.path === "tools/deepfakeVideo") {
       dispatch(resetDeepfakeVideo());
       dispatch(setDeepfakeUrlVideo({ url: resultUrl }));
@@ -66,7 +59,7 @@ const AssistantProcessUrlActions = () => {
       dl.setAttribute("download", "");
       dl.click();
     } else if (action.path === null) {
-      return; // Do nothing if path is null
+      // Do nothing if path is null
     } else if (resultUrl !== null) {
       navigate("/app/" + action.path + "/");
       //history.push("/app/" + action.path + "/" + encodeURIComponent(resultUrl) + "/" + contentType)
@@ -87,7 +80,13 @@ const AssistantProcessUrlActions = () => {
       <List>
         {processUrlActions.map((action, index) => {
           return (
-            <Box m={2} key={index} style={{ cursor: "pointer" }}>
+            <Box
+              key={index}
+              style={{ cursor: "pointer" }}
+              sx={{
+                m: 2,
+              }}
+            >
               <Card className={classes.assistantHover} variant={"outlined"}>
                 <ListItem onClick={() => handleClick(action)}>
                   <ListItemAvatar>
@@ -100,8 +99,10 @@ const AssistantProcessUrlActions = () => {
                     primary={
                       <Typography component={"span"}>
                         <Box
-                          fontWeight="fontWeightBold"
                           data-testid={action.title}
+                          sx={{
+                            fontWeight: "fontWeightBold",
+                          }}
                         >
                           {keyword(action.title)}
                         </Box>
@@ -109,12 +110,12 @@ const AssistantProcessUrlActions = () => {
                     }
                     secondary={
                       <Typography color={"textSecondary"} component={"span"}>
-                        <Box fontStyle="italic">
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html: keyword(action.text),
-                            }}
-                          ></div>
+                        <Box
+                          sx={{
+                            fontStyle: "italic",
+                          }}
+                        >
+                          <Trans t={keyword} i18nKey={action.text} />
                         </Box>
                       </Typography>
                     }

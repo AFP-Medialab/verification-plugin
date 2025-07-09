@@ -11,6 +11,7 @@ const defaultState = {
   linkList: [],
   urlText: null,
   urlTextHtmlMap: null,
+  collectedComments: null,
   textLang: null,
   processUrlActions: [],
   processUrlType: null,
@@ -69,10 +70,20 @@ const defaultState = {
   prevFactChecksDone: false,
   prevFactChecksFail: false,
 
-  machineGeneratedTextResult: null,
-  machineGeneratedTextLoading: false,
-  machineGeneratedTextDone: false,
-  machineGeneratedTextFail: false,
+  machineGeneratedTextChunksResult: null,
+  machineGeneratedTextChunksLoading: false,
+  machineGeneratedTextChunksDone: false,
+  machineGeneratedTextChunksFail: false,
+
+  machineGeneratedTextSentencesResult: null,
+  machineGeneratedTextSentencesLoading: false,
+  machineGeneratedTextSentencesDone: false,
+  machineGeneratedTextSentencesFail: false,
+
+  multilingualStanceResult: null,
+  multilingualStanceLoading: false,
+  multilingualStanceDone: false,
+  multilingualStanceFail: false,
 
   loading: false,
   warningExpanded: false,
@@ -100,8 +111,11 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_PERSUASION_DETAILS":
     case "SET_SUBJECTIVITY_DETAILS":
     case "SET_PREV_FACT_CHECKS_DETAILS":
-    case "SET_MACHINE_GENERATED_TEXT_DETAILS":
+    case "SET_MACHINE_GENERATED_TEXT_CHUNKS_DETAILS":
+    case "SET_MACHINE_GENERATED_TEXT_SENTENCES_DETAILS":
+    case "SET_MULTILINGUAL_STANCE_DETAILS":
     case "SET_LOADING":
+    case "SET_MISSING_MEDIA":
     case "SET_WARNING_EXPANDED":
     case "SET_ASSURANCE_EXPANDED":
     case "SET_STATE_EXPANDED":
@@ -122,6 +136,7 @@ const assistantReducer = (state = defaultState, action) => {
         linkList: [],
         urlText: null,
         urlTextHtmlMap: null,
+        collectedComments: null,
         textLang: null,
         processUrlActions: [],
         processUrlType: null,
@@ -180,10 +195,20 @@ const assistantReducer = (state = defaultState, action) => {
         prevFactChecksDone: false,
         prevFactChecksFail: false,
 
-        machineGeneratedTextResult: null,
-        machineGeneratedTextLoading: false,
-        machineGeneratedTextDone: false,
-        machineGeneratedTextFail: false,
+        machineGeneratedTextChunksResult: null,
+        machineGeneratedTextChunksLoading: false,
+        machineGeneratedTextChunksDone: false,
+        machineGeneratedTextChunksFail: false,
+
+        machineGeneratedTextSentencesResult: null,
+        machineGeneratedTextSentencesLoading: false,
+        machineGeneratedTextSentencesDone: false,
+        machineGeneratedTextSentencesFail: false,
+
+        multilingualStanceResult: null,
+        multilingualStanceLoading: false,
+        multilingualStanceDone: false,
+        multilingualStanceFail: false,
 
         loading: false,
         warningExpanded: false,

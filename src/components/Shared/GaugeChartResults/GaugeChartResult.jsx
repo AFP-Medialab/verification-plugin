@@ -1,22 +1,24 @@
-import { Download, ExpandMore } from "@mui/icons-material";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Alert,
-  Box,
-  Chip,
-  Divider,
-  IconButton,
-  Stack,
-  Tooltip,
-  Typography,
-} from "@mui/material";
 import React, { useRef, useState } from "react";
 import GaugeChart from "react-gauge-chart";
-import GaugeChartModalExplanation from "./GaugeChartModalExplanation";
+
+import { useColorScheme } from "@mui/material";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
+import { Download, ExpandMore } from "@mui/icons-material";
+
 import CustomAlertScore from "../CustomAlertScore";
 import { exportReactElementAsJpg } from "../Utils/htmlUtils";
+import GaugeChartModalExplanation from "./GaugeChartModalExplanation";
 
 /**
  *
@@ -24,6 +26,7 @@ import { exportReactElementAsJpg } from "../Utils/htmlUtils";
  * @param scores {Array<Object>} The results of the analysis
  * @param methodNames {Object} Objet containing the information on the different methods used
  * @param detectionThresholds {Object} Object containing the detection thresholds
+ * @param arcsLength {number[]} The array with the arcs lengths
  * @param resultsHaveErrors {boolean}
  * @param sanitizeDetectionPercentage {(arg: number) => number} Function
  * @param gaugeExplanation {Object} Object containing the explainations for the colors of the gauge
@@ -38,14 +41,17 @@ const GaugeChartResult = ({
   scores,
   methodNames,
   detectionThresholds,
+  arcsLength,
   resultsHaveErrors,
   sanitizeDetectionPercentage,
   gaugeExplanation,
   toolName,
   detectionType,
 }) => {
-  //const keyword = (word) => "hi";
   const gaugeChartRef = useRef(null);
+
+  const { mode, systemMode } = useColorScheme();
+  const resolvedMode = systemMode || mode;
 
   const previsionalScore = Math.max(
     ...scores.map((score) => score.predictionScore),
@@ -101,59 +107,77 @@ const GaugeChartResult = ({
     <>
       <Stack
         direction="column"
-        p={4}
-        justifyContent="flex-start"
-        alignItems="flex-start"
         spacing={4}
-        width="100%"
-        sx={{ boxSizing: "border-box" }}
-        position="relative"
+        sx={{
+          p: 4,
+          justifyContent: "flex-start",
+          alignItems: "flex-start",
+          width: "100%",
+          position: "relative",
+          boxSizing: "border-box",
+        }}
       >
         <Stack
           direction={{ sm: "column", md: "row" }}
-          alignItems={{ sm: "start", md: "center" }}
-          justifyContent="center"
-          width="100%"
+          sx={{
+            alignItems: { sm: "start", md: "center" },
+            justifyContent: "center",
+            width: "100%",
+          }}
         >
-          <Box m={2}></Box>
+          <Box
+            sx={{
+              m: 2,
+            }}
+          ></Box>
           <Stack
             direction="column"
-            justifyContent="center"
-            alignItems="center"
             spacing={2}
             ref={gaugeChartRef}
-            p={2}
+            sx={{
+              justifyContent: "center",
+              alignItems: "center",
+              p: 2,
+            }}
           >
             {maxScore > detectionThresholds.THRESHOLD_2 && (
               <Typography
                 variant="h5"
                 align="center"
-                alignSelf="center"
-                sx={{ color: "red" }}
+                sx={{
+                  alignSelf: "center",
+                  color: "red",
+                }}
               >
                 {keyword("gauge_generic_detection_text")}
               </Typography>
             )}
             <Stack
               direction="column"
-              justifyContent="center"
-              alignItems="center"
+              sx={{
+                justifyContent: "center",
+                alignItems: "center",
+              }}
             >
               <GaugeChart
                 id={"gauge-chart"}
                 animate={false}
                 nrOfLevels={4}
-                textColor={"black"}
-                arcsLength={[
-                  (100 - detectionThresholds.THRESHOLD_1) / 100,
-                  (detectionThresholds.THRESHOLD_2 -
-                    detectionThresholds.THRESHOLD_1) /
-                    100,
-                  (detectionThresholds.THRESHOLD_3 -
-                    detectionThresholds.THRESHOLD_2) /
-                    100,
-                  (100 - detectionThresholds.THRESHOLD_3) / 100,
-                ]}
+                textColor={resolvedMode === "dark" ? "white" : "black"}
+                arcsLength={
+                  arcsLength
+                    ? arcsLength
+                    : [
+                        (100 - detectionThresholds.THRESHOLD_1) / 100,
+                        (detectionThresholds.THRESHOLD_2 -
+                          detectionThresholds.THRESHOLD_1) /
+                          100,
+                        (detectionThresholds.THRESHOLD_3 -
+                          detectionThresholds.THRESHOLD_2) /
+                          100,
+                        (100 - detectionThresholds.THRESHOLD_3) / 100,
+                      ]
+                }
                 percent={scores ? maxScore / 100 : 0}
                 style={{
                   minWidth: "250px",
@@ -164,9 +188,11 @@ const GaugeChartResult = ({
 
               <Stack
                 direction="row"
-                justifyContent="center"
-                alignItems="center"
                 spacing={10}
+                sx={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
               >
                 <Typography variant="subtitle2">
                   {keyword("gauge_no_detection")}
@@ -177,7 +203,11 @@ const GaugeChartResult = ({
               </Stack>
             </Stack>
           </Stack>
-          <Box alignSelf={{ sm: "flex-start", md: "flex-end" }}>
+          <Box
+            sx={{
+              alignSelf: { sm: "flex-start", md: "flex-end" },
+            }}
+          >
             <Tooltip title={keyword("gauge_download_gauge_button")}>
               <IconButton
                 color="primary"
@@ -209,6 +239,7 @@ const GaugeChartResult = ({
         {resultsHaveErrors && (
           <Alert severity="error">{keyword("gauge_algorithms_errors")}</Alert>
         )}
+
         <Box sx={{ width: "100%" }}>
           <Accordion defaultExpanded onChange={handleDetailsChange}>
             <AccordionSummary expandIcon={<ExpandMore />}>
@@ -278,7 +309,14 @@ const GaugeChartResult = ({
                           </Box>
                         </Stack>
 
-                        <Box p={2} sx={{ backgroundColor: "#FAFAFA" }} mb={2}>
+                        <Box
+                          p={2}
+                          sx={{
+                            backgroundColor:
+                              "var(--mui-palette-background-main)",
+                          }}
+                          mb={2}
+                        >
                           <Typography>
                             {methodNames[item.methodName].description}
                           </Typography>

@@ -1,85 +1,64 @@
 import React, { memo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import ImageGridList from "../../../../Shared/ImageGridList/ImageGridList";
-import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
-import Button from "@mui/material/Button";
-import { useKeyframes } from "../Hooks/usekeyframes";
-//import { useLoading, loadImageSize } from "../../../../../Hooks/useInput"
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  CircularProgress,
-  Grid2,
-  IconButton,
-  Typography,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { cleanKeyframesState } from "../../../../../redux/actions/tools/keyframesActions";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Link from "@mui/material/Link";
+import { useSelector } from "react-redux";
 
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CircularProgress from "@mui/material/CircularProgress";
+import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
 import Popover from "@mui/material/Popover";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
+import CloseIcon from "@mui/icons-material/Close";
+import DownloadIcon from "@mui/icons-material/Download";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
-import DetailedIcon from "@mui/icons-material/ViewComfyRounded";
-import SimpleIcon from "@mui/icons-material/ViewStreamRounded";
-import {
-  reverseImageSearch,
-  SEARCH_ENGINE_SETTINGS,
-} from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 
-const KeyFramesResults = (props) => {
+import { ROLES } from "@/constants/roles";
+import {
+  SEARCH_ENGINE_SETTINGS,
+  reverseImageSearch,
+} from "@Shared/ReverseSearch/reverseSearchUtils";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import ImageGridList from "../../../../Shared/ImageGridList/ImageGridList";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
+
+/**
+ *
+ * @param result {KeyframesData}
+ * @returns {Element}
+ * @constructor
+ */
+const KeyFramesResults = ({ result, handleClose }) => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Keyframes");
   const keywordHelp = i18nLoadNamespace("components/Shared/OnClickInfo");
-  const dispatch = useDispatch();
+
+  const role = useSelector((state) => state.userSession.user.roles);
+
+  const jobId = useSelector((state) => state.keyframes.result.session);
 
   const [detailed, setDetailed] = useState(false);
-  const [simpleList, detailedList] = useKeyframes(props.result);
-  //const [findHeight, setFindHeight] = useState(false);
-  const [cols, setCols] = useState(3);
-  //const [height, setHeight] = useState(0);
-  const similarityResults = useSelector((state) => state.keyframes.similarity);
-  //const isLoading = useSelector(state => state.keyframes.loading);
-  const isLoadingSimilarity = useSelector(
-    (state) => state.keyframes.similarityLoading,
-  );
 
-  const theme = createTheme({
-    palette: {
-      primary: {
-        light: "#00926c",
-        main: "#00926c",
-        dark: "#00926c",
-        contrastText: "#fff",
-      },
-      secondary: {
-        main: "#ffaf33",
-      },
-      error: {
-        main: "rgb(198,57,59)",
-      },
-    },
-    components: {
-      MuiImageList: {
-        styleOverrides: {
-          root: {
-            maxHeight: "none!important",
-            height: "auto!important",
-          },
-        },
-      },
-    },
-  });
+  let simpleList = /** @type {string[]} */ [];
+  let detailedList = /** @type {string[]} */ [];
+
+  for (const keyframe of result.keyframes) {
+    simpleList.push(keyframe.keyframeUrl);
+    detailedList.push(keyframe.keyframeUrl);
+  }
+
+  for (const keyframe of result.keyframesXtra) {
+    detailedList.push(keyframe.keyframeUrl);
+  }
+
+  const [cols, setCols] = useState(4);
 
   const toggleDetail = () => {
     setDetailed(!detailed);
@@ -147,225 +126,198 @@ const KeyFramesResults = (props) => {
     setAnchorHelp(null);
   }
 
+  const [isZipDownloading, setIsZipDownloading] = useState(false);
+
+  const downloadAction = () => {
+    setIsZipDownloading(true);
+
+    let downloadUrl;
+
+    if (
+      !role.includes(ROLES.BETA_TESTER) &&
+      !role.includes(ROLES.EVALUATION) &&
+      !role.includes(ROLES.EXTRA_FEATURE)
+    ) {
+      downloadUrl =
+        process.env.REACT_APP_KEYFRAME_API +
+        "/keyframes/" +
+        jobId +
+        "/Subshots";
+    } else {
+      downloadUrl = result.zipFileUrl;
+    }
+
+    fetch(downloadUrl).then((response) => {
+      response.blob().then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        let a = document.createElement("a");
+        a.href = url;
+        a.click();
+        setIsZipDownloading(false);
+      });
+    });
+  };
+
   return (
-    <>
-      <Card>
-        {similarityResults &&
-          !isLoadingSimilarity &&
-          similarityResults.length > 0 && (
-            <Box>
-              <Accordion style={{ border: "2px solid #00926c" }}>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon style={{ color: "#17717e" }} />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Box
-                    p={1}
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <ReportProblemOutlinedIcon
-                      style={{ color: "#17717e", marginRight: "8px" }}
-                    />
-                    <Typography
-                      variant="h6"
-                      align="left"
-                      style={{ color: "#17717e" }}
-                    >
-                      {keyword("found_dbkf")}
-                    </Typography>
-                  </Box>
-                </AccordionSummary>
-                <AccordionDetails style={{ flexDirection: "column" }}>
-                  <Box p={2}>
-                    <Typography variant="body1" align="left">
-                      {keyword("dbkf_articles")}
-                    </Typography>
+    <Card variant="outlined">
+      <CardContent>
+        <Stack direction="column" spacing={4}>
+          <Stack
+            direction="row"
+            sx={{
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography variant="h6">
+              {keyword("cardheader_results")}
+            </Typography>
+            <Stack direction="row" spacing={2}>
+              <IconButton onClick={clickHelp} sx={{ p: 1 }}>
+                <HelpOutlineIcon />
+              </IconButton>
+              <IconButton
+                aria-label="close"
+                onClick={handleClose}
+                sx={{ p: 1 }}
+              >
+                <CloseIcon />
+              </IconButton>
+            </Stack>
 
-                    <Box m={1} />
-
-                    {similarityResults.map((value, key) => {
-                      return (
-                        <Typography
-                          variant="body1"
-                          align="left"
-                          style={{ color: "#17717e" }}
-                          key={key}
-                        >
-                          <Link
-                            target="_blank"
-                            href={value.externalLink}
-                            style={{ color: "#17717e" }}
-                          >
-                            {value.externalLink}
-                          </Link>
-                        </Typography>
-                      );
-                    })}
-                  </Box>
-                </AccordionDetails>
-              </Accordion>
-            </Box>
-          )}
-      </Card>
-      <Box m={3} />
-      <Card>
-        <CardHeader
-          title={
-            <Grid2
-              container
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
+            <Popover
+              id={help}
+              open={openHelp}
+              anchorEl={anchorHelp}
+              onClose={closeHelp}
+              slotProps={{
+                paper: {
+                  width: "300px",
+                },
+              }}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "center",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "center",
+              }}
             >
-              <span>{keyword("cardheader_results")}</span>
-              <HelpOutlineIcon
-                style={{ color: "#FFFFFF" }}
-                onClick={clickHelp}
-              />
-
-              <Popover
-                id={help}
-                open={openHelp}
-                anchorEl={anchorHelp}
-                onClose={closeHelp}
-                PaperProps={{
-                  style: {
-                    width: "300px",
-                    fontSize: 14,
-                  },
-                }}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "center",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "center",
+              <Box
+                sx={{
+                  p: 2,
                 }}
               >
-                <Box p={3}>
-                  <Grid2
-                    container
+                <Stack direction="column" spacing={2}>
+                  <Stack
                     direction="row"
-                    justifyContent="space-between"
-                    alignItems="stretch"
+                    sx={{
+                      justifyContent: "space-between",
+                      alignItems: "baseline",
+                    }}
                   >
                     <Typography variant="h6" gutterBottom>
                       {keywordHelp("title_tip")}
-                    </Typography>
-
-                    <CloseIcon onClick={closeHelp} />
-                  </Grid2>
-
-                  <Box m={1} />
+                    </Typography>{" "}
+                    <IconButton onClick={closeHelp} sx={{ p: 1 }}>
+                      <CloseIcon />
+                    </IconButton>
+                  </Stack>
                   <Typography variant="body2">
                     {keywordHelp("keyframes_tip")}
                   </Typography>
-                </Box>
-              </Popover>
-            </Grid2>
-          }
-          className={classes.headerUploadedImage}
-          action={
-            <IconButton
-              aria-label="close"
-              onClick={() => {
-                props.closeResult();
-                dispatch(cleanKeyframesState());
+                </Stack>
+              </Box>
+            </Popover>
+          </Stack>
+
+          <Stack direction="column">
+            <Grid
+              container
+              spacing={2}
+              sx={{
+                justifyContent: "space-between",
+                alignContent: "center",
               }}
             >
-              <CloseIcon sx={{ color: "white" }} />
-            </IconButton>
-          }
-        />
-
-        <div className={classes.root2}>
-          <Grid2
-            container
-            justifyContent="space-between"
-            spacing={2}
-            alignContent={"center"}
-          >
-            <Grid2>
-              {!detailed ? (
-                <Button
-                  color={"primary"}
-                  onClick={() => toggleDetail()}
-                  endIcon={<DetailedIcon />}
-                >
-                  {keyword("keyframe_title_get_detail")}
+              <Grid>
+                <Button onClick={() => toggleDetail()}>
+                  {!detailed
+                    ? keyword("keyframe_title_get_detail")
+                    : keyword("keyframe_title_get_simple")}
                 </Button>
-              ) : (
+              </Grid>
+
+              <Grid>
                 <Button
-                  color={"primary"}
-                  onClick={() => toggleDetail()}
-                  endIcon={<SimpleIcon />}
+                  color="primary"
+                  loadingPosition="start"
+                  loading={isZipDownloading}
+                  onClick={downloadAction}
+                  startIcon={<DownloadIcon />}
                 >
-                  {keyword("keyframe_title_get_simple")}
+                  {keyword("keyframes_download_subshots")}
                 </Button>
-              )}
-            </Grid2>
-            <Grid2 size="grow" style={{ textAlign: "end" }}>
-              <Button onClick={() => zoom(-1)} endIcon={<ZoomOutIcon />}>
-                {keyword("zoom_out")}
-              </Button>
-            </Grid2>
-            <Grid2>
-              <Button onClick={() => zoom(1)} endIcon={<ZoomInIcon />}>
-                {keyword("zoom_in")}
-              </Button>
-            </Grid2>
-          </Grid2>
-          <Box m={2} />
-          <Divider />
+              </Grid>
 
-          <Box m={4} />
-          <ThemeProvider theme={theme}>
-            {detailed && loadingDetailed && (
-              <Box m={4}>
-                <CircularProgress />
-              </Box>
-            )}
-            {detailed && (
-              //<ImageGridList list={detailedList} height={160} onClick={(url) => ImageReverseSearch("google", url)}/>
+              <Grid size="grow" style={{ textAlign: "end" }}>
+                <Button onClick={() => zoom(-1)} startIcon={<ZoomOutIcon />}>
+                  {keyword("zoom_out")}
+                </Button>
+              </Grid>
+              <Grid>
+                <Button onClick={() => zoom(1)} startIcon={<ZoomInIcon />}>
+                  {keyword("zoom_in")}
+                </Button>
+              </Grid>
+            </Grid>
+            <Divider />
+          </Stack>
 
-              <div className={classDetailed}>
-                <ImageGridList
-                  list={detailedList}
-                  cols={cols}
-                  handleClick={imageClick}
-                  style={{ maxHeigth: "none", height: "auto" }}
-                  setLoading={showElementsDetailed}
-                />
-              </div>
-            )}
+          {detailed && loadingDetailed && (
+            <Box
+              sx={{
+                m: 4,
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          )}
+          {detailed && (
+            <div className={classDetailed}>
+              <ImageGridList
+                list={detailedList}
+                cols={cols}
+                handleClick={imageClick}
+                style={{ maxHeight: "none", height: "auto" }}
+                setLoading={showElementsDetailed}
+              />
+            </div>
+          )}
 
-            {!detailed && loadingSimple && (
-              <Box m={4}>
-                <CircularProgress />
-              </Box>
-            )}
-            {!detailed && (
-              //<ImageGridList list={simpleList}  height={160} onClick={(url) => ImageReverseSearch("google", url)}/>
-              <div className={classSimple}>
-                <ImageGridList
-                  list={simpleList}
-                  cols={cols}
-                  handleClick={imageClick}
-                  style={{ maxHeigth: "none", height: "auto" }}
-                  setLoading={showElementsSimple}
-                />
-              </div>
-            )}
-          </ThemeProvider>
-        </div>
-      </Card>
-    </>
+          {!detailed && loadingSimple && (
+            <Box
+              sx={{
+                m: 4,
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          )}
+          {!detailed && (
+            <div className={classSimple}>
+              <ImageGridList
+                list={simpleList}
+                cols={cols}
+                handleClick={imageClick}
+                style={{ maxHeight: "none", height: "auto" }}
+                setLoading={showElementsSimple}
+              />
+            </div>
+          )}
+        </Stack>
+      </CardContent>
+    </Card>
   );
 };
 export default memo(KeyFramesResults);

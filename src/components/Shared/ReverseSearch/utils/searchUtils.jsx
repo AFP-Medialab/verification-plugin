@@ -30,6 +30,7 @@ class ImageObject {
     this.imageFormat = imageFormat;
   }
 }
+
 /**
  * Returns true if the string is in the base64 format, else false
  * @param {string} str
@@ -51,11 +52,7 @@ export const isBase64 = (str) => {
     return false;
   }
 
-  if (Buffer.from(b64Str, "base64").toString("base64") !== b64Str) {
-    return false;
-  }
-
-  return true;
+  return Buffer.from(b64Str, "base64").toString("base64") === b64Str;
 };
 
 /**
