@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
-import { useDispatch } from "react-redux";
 
 import {
   useCreateKeyframeJob,
@@ -15,11 +14,6 @@ export const useProcessKeyframes = (url) => {
   const urlToJobIdRef = useRef(new Map());
 
   const [status, setStatus] = useState(null);
-  const [featureStatus, setFeatureStatus] = useState(null);
-
-  const [jobId, setJobId] = useState(null);
-
-  const dispatch = useDispatch();
 
   const createKeyframeJob = useCreateKeyframeJob();
   const pollKeyframeJobStatus = usePollKeyframeJobStatus(setStatus);
@@ -107,8 +101,8 @@ export const useProcessKeyframes = (url) => {
       try {
         const jobId = await sendUrlMutation.mutateAsync({ url });
 
-        setJobId(jobId);
         urlToJobIdRef.current.set(url, jobId);
+
         await checkStatusMutation.mutateAsync(jobId);
 
         return {
@@ -127,8 +121,6 @@ export const useProcessKeyframes = (url) => {
   const resetFetchingKeyframes = () => {
     sendUrlMutation.reset();
     checkStatusMutation.reset();
-    // fetchKeyframesQuery.reset();
-
     setStatus(null);
   };
 
@@ -152,7 +144,6 @@ export const useProcessKeyframes = (url) => {
       checkStatusMutation.error ||
       fetchKeyframesQuery.error,
 
-    featureStatus,
     isFeatureDataPending: fetchKeyframeFeaturesQuery.isFetching,
     featureData: fetchKeyframeFeaturesQuery.data ?? cachedKeyframeFeatures,
     featureDataError: fetchKeyframeFeaturesQuery.error,

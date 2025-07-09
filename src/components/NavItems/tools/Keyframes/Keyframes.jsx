@@ -160,7 +160,6 @@ const Keyframes = () => {
     isFeatureDataPending,
     featureData,
     featureDataError,
-    featureStatus,
   } = useProcessKeyframes(input);
 
   useEffect(() => {
@@ -380,12 +379,6 @@ const Keyframes = () => {
 
         {resultData && tabSelected === "url" && (
           <KeyFramesResults result={resultData} />
-        )}
-
-        {featureStatus && isFeatureDataPending && (
-          <Alert icon={<CircularProgress size={20} />} severity="info">
-            {featureStatus}
-          </Alert>
         )}
 
         {isFeatureDataPending && (
