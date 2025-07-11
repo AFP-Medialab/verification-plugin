@@ -90,9 +90,9 @@ const ChatbotInterface = ({ tool, result }) => {
 
   return (
     <form>
-      <Stack>
+      <Stack sx={{ paddingLeft: "calc(2 * var(--mui-spacing))" }}>
         {/* Conversation */}
-        <Stack spacing={2}>
+        <Stack spacing={2} sx={{ maxHeight: "20em", overflowY: "scroll" }}>
           {chatbotMessages.map((msg) => (
             <Stack
               key={msg.id}
