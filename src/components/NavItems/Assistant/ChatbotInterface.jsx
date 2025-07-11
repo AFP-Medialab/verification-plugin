@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
@@ -45,6 +46,8 @@ const ChatbotInterface = ({ tool, result }) => {
   const userEmail = useSelector((state) => state.userSession.user.email);
   const [previousResult, setPreviousResult] = useState(null);
   const [sendResult, setSendResult] = useState(true);
+  const chatbotLoading = useSelector((state) => state.assistant.chatbotLoading);
+  const messageWindow = useRef(null);
 
   if (result != previousResult) {
     setPreviousResult(result);
@@ -88,11 +91,24 @@ const ChatbotInterface = ({ tool, result }) => {
     };
   });
 
+  useEffect(() => {
+    if (messageWindow.current) {
+      const lastChild = messageWindow.current.lastElementChild;
+      if (lastChild) {
+        lastChild.scrollIntoView({ behavior: "smooth", block: "end" });
+      }
+    }
+  }, [chatbotLoading]); // The empty dependency array means this effect runs once after the initial render
+
   return (
     <form>
       <Stack sx={{ paddingLeft: "calc(2 * var(--mui-spacing))" }}>
         {/* Conversation */}
-        <Stack spacing={2} sx={{ maxHeight: "20em", overflowY: "scroll" }}>
+        <Stack
+          spacing={2}
+          sx={{ maxHeight: "20em", overflowY: "scroll" }}
+          ref={messageWindow}
+        >
           {chatbotMessages.map((msg) => (
             <Stack
               key={msg.id}
@@ -109,6 +125,13 @@ const ChatbotInterface = ({ tool, result }) => {
               </MessageBubble>
             </Stack>
           ))}
+          {chatbotLoading ? (
+            <MessageBubble sent={0}>
+              <CircularProgress />
+            </MessageBubble>
+          ) : (
+            <br />
+          )}
         </Stack>
 
         {/* text box */}

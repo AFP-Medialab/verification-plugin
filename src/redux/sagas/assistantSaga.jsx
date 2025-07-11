@@ -754,6 +754,12 @@ function* handleAssistantChatbotCall(action) {
     yield put(setAssistantLoading(false));
   } catch (error) {
     console.log(error);
+    yield put(
+      addChatbotMessage(
+        "I'm sorry, something went wrong and I could not provide an answer. Please try again.",
+        0,
+      ),
+    );
     yield put(setAssistantLoading(false));
     yield put(setErrorKey(error.message));
   }

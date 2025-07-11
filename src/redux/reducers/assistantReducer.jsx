@@ -21,6 +21,7 @@ const defaultState = {
 
   chatbotMessages: [],
   chatbotSessionID: uuidv4(),
+  chatbotLoading: false,
 
   positiveSourceCred: null,
   cautionSourceCred: null,
@@ -130,6 +131,13 @@ const assistantReducer = (state = defaultState, action) => {
       return {
         ...state,
         chatbotMessages: [...state.chatbotMessages, message],
+        chatbotLoading: message.sent == 1,
+      };
+    }
+    case "SUBMIT_USER_CHATBOT_MESSAGE": {
+      return {
+        ...state,
+        chatbotLoading: true,
       };
     }
     case "CLEAR_CHATBOT_MESSAGES": {
@@ -148,6 +156,7 @@ const assistantReducer = (state = defaultState, action) => {
 
         chatbotMessages: [],
         chatbotSessionID: uuidv4(),
+        chatbotLoading: false,
 
         inputUrl: null,
         errorKey: null,
