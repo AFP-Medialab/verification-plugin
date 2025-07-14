@@ -16,7 +16,7 @@ import { DuoOutlined } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ImageIconOutlined from "@mui/icons-material/Image";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 
 const DbkfMediaResults = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");

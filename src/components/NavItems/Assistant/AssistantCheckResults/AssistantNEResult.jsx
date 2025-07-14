@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Trans } from "react-i18next";
 import { useSelector } from "react-redux";
-//import ReactWordcloud from "react-wordcloud";
 import { TagCloud } from "react-tagcloud";
 
 import Button from "@mui/material/Button";
@@ -16,11 +15,11 @@ import Tooltip from "@mui/material/Tooltip";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import "tippy.js/animations/scale.css";
 import "tippy.js/dist/tippy.css";
 
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
   TransHtmlDoubleLineBreak,
   TransNamedEntityRecogniserLink,

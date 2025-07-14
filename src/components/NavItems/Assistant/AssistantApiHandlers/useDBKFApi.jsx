@@ -19,7 +19,7 @@ export default function DBKFApi() {
     let finalUri =
       dbkfAPI +
       "/documents?&limit=5&orderBy=score&q=" +
-      encodeURIComponent(cleanQuery(query));
+      encodeURIComponent(cleanQuery(query.replace(/["\\/|]/g, " ")));
     let searchResult = await axios.get(finalUri);
     if (searchResult && searchResult.data) {
       return searchResult.data.documents;

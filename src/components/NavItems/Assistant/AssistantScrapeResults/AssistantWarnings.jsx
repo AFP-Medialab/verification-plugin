@@ -12,14 +12,13 @@ import Typography from "@mui/material/Typography";
 import { WarningAmber } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
+import DbkfMediaResults from "@/components/NavItems/Assistant/AssistantCheckResults/DbkfMediaResults";
+import DbkfTextResults from "@/components/NavItems/Assistant/AssistantCheckResults/DbkfTextResults";
+import PreviousFactCheckResults from "@/components/NavItems/Assistant/AssistantCheckResults/PreviousFactCheckResults";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
+import { ROLES } from "@/constants/roles";
 import { setWarningExpanded } from "@/redux/actions/tools/assistantActions";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { ROLES } from "constants/roles";
-
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import DbkfMediaResults from "../AssistantCheckResults/DbkfMediaResults";
-import DbkfTextResults from "../AssistantCheckResults/DbkfTextResults";
-import PreviousFactCheckResults from "../AssistantCheckResults/PreviousFactCheckResults";
 
 const AssistantWarnings = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");

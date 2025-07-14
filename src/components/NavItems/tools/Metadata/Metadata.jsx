@@ -10,11 +10,16 @@ import Fade from "@mui/material/Fade";
 import Stack from "@mui/material/Stack";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
+import C2paResults from "@/components/NavItems/tools/C2pa/Results/C2paResults";
+import { useC2paMetadataMutation } from "@/components/NavItems/tools/Metadata/hooks/useC2paMetadataMutation";
 import {
   cleanMetadataState,
+  setC2paMetadataResult,
+  setCurrentC2paImageId,
   setMetadataMediaType,
   setMetadataResult,
 } from "@/redux/reducers/tools/metadataReducer";
+import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequest";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import {
   getFileTypeFromFileObject,
@@ -48,6 +53,11 @@ const Metadata = () => {
   const resultUrl = useSelector((state) => state.metadata.url);
   const resultData = useSelector((state) => state.metadata.result);
   const resultIsImage = useSelector((state) => state.metadata.isImage);
+  const c2paResults = useSelector((state) => state.metadata.c2pa);
+  const currentC2paImageSelected = useSelector(
+    (state) => state.metadata.currentC2paImageId,
+  );
+
   const session = useSelector((state) => state.userSession);
   const uid = session && session.user ? session.user.id : null;
 
@@ -61,6 +71,8 @@ const Metadata = () => {
   const [imageMetadata, setImageMetadata] = useState(
     resultData ? resultData : null,
   );
+
+  const authenticatedRequest = useAuthenticatedRequest();
 
   const client_id = getclientId();
   useTrackEvent(
@@ -96,6 +108,18 @@ const Metadata = () => {
     },
   });
 
+  const getC2paMetadata = useC2paMetadataMutation({
+    onSuccess: (data) => {
+      dispatch(setCurrentC2paImageId(data.currentImageId));
+
+      dispatch(
+        setC2paMetadataResult({
+          c2pa: data instanceof Error ? null : data,
+        }),
+      );
+    },
+  });
+
   const resetMetadataState = () => {
     dispatch(cleanMetadataState());
     getVideoMetadata.reset();
@@ -120,12 +144,12 @@ const Metadata = () => {
       if (!fileType || fileType instanceof Error) {
         throw new Error("Unable to determine file type");
       }
-
       if (fileType.mime.includes("video")) {
         const video = input || URL.createObjectURL(fileInput);
 
         setVideoUrl(video);
         getVideoMetadata.mutate(video);
+        getC2paMetadata.mutate(video);
         return;
       }
 
@@ -140,6 +164,17 @@ const Metadata = () => {
           : await getImageMetadataFromFile(fileInput);
 
         setImageMetadata(metadata instanceof Error ? null : metadata);
+
+        const hdImageConfig = {
+          method: "get",
+          responseType: "blob",
+          maxBodyLength: Infinity,
+          url: input || URL.createObjectURL(fileInput),
+        };
+
+        const blob = (await authenticatedRequest(hdImageConfig)).data;
+
+        await getC2paMetadata.mutateAsync(URL.createObjectURL(blob));
 
         dispatch(
           setMetadataResult({
@@ -203,28 +238,24 @@ const Metadata = () => {
   };
 
   return (
-    <Box>
-      <HeaderTool
-        name={keywordAllTools("navbar_metadata")}
-        description={keywordAllTools("navbar_metadata_description")}
-        icon={
-          <imageMetadataTool.icon
-            sx={{
-              fill: "var(--mui-palette-primary-main)",
-              fontSize: "40px",
-            }}
-          />
-        }
-      />
+    <Stack direction="column" spacing={4}>
       <Stack direction={"column"} spacing={2}>
+        <HeaderTool
+          name={keywordAllTools("navbar_metadata")}
+          description={keywordAllTools("navbar_metadata_description")}
+          icon={
+            <imageMetadataTool.icon
+              sx={{
+                fill: "var(--mui-palette-primary-main)",
+                fontSize: "40px",
+              }}
+            />
+          }
+        />
         <Alert severity="info">{keyword("description_limitations")}</Alert>
         <Alert severity="info">{keywordTip("metadata_tip")}</Alert>
       </Stack>
-      <Box
-        sx={{
-          m: 4,
-        }}
-      />
+
       <Card variant="outlined">
         <form>
           <Box
@@ -249,11 +280,6 @@ const Metadata = () => {
           </Box>
         </form>
       </Card>
-      <Box
-        sx={{
-          m: 4,
-        }}
-      />
       {error && <Alert severity="error">{error}</Alert>}
       {getVideoMetadata.isPending && (
         <Fade in={getVideoMetadata.isPending} timeout={750}>
@@ -276,7 +302,19 @@ const Metadata = () => {
           imageSrc={resultUrl}
         />
       )}
-    </Box>
+      {c2paResults && c2paResults.result && (
+        <Card variant="outlined">
+          <C2paResults
+            result={c2paResults.result}
+            hasSimilarAfpResult={false}
+            currentImage={currentC2paImageSelected}
+            mainImage={c2paResults.mainImageId}
+            setCurrentImageId={setCurrentC2paImageId}
+            variant={"metadata"}
+          />
+        </Card>
+      )}
+    </Stack>
   );
 };
 export default Metadata;
