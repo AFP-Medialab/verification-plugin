@@ -94,7 +94,7 @@ export default function AssistantTextClassification({
   const resolvedMode = systemMode || mode;
 
   // define category for machine generated text overall score
-  const mgtOverallScoreLabel = "mgt_overall_score";
+  const fullTextScoreLabel = "full_text_score";
 
   // define category and sentence colours
   let categoryRgbLow, categoryRgbHigh;
@@ -222,7 +222,7 @@ export default function AssistantTextClassification({
               <GaugeCategoriesList
                 categories={sortedFilteredCategories}
                 keyword={keyword}
-                mgtOverallScoreLabel={mgtOverallScoreLabel}
+                fullTextScoreLabel={fullTextScoreLabel}
                 resolvedMode={resolvedMode}
                 colours={resolvedMode === "dark" ? mgtColoursDark : mgtColours}
                 orderedCategories={orderedCategories}
@@ -232,7 +232,7 @@ export default function AssistantTextClassification({
             ) : credibilitySignal === subjectivityTitle ? (
               <GaugeCategoriesList
                 keyword={keyword}
-                mgtOverallScoreLabel={mgtOverallScoreLabel}
+                fullTextScoreLabel={fullTextScoreLabel}
                 resolvedMode={resolvedMode}
                 colours={
                   resolvedMode === "dark"
@@ -273,7 +273,7 @@ export default function AssistantTextClassification({
 export function GaugeCategoriesList({
   categories,
   keyword,
-  mgtOverallScoreLabel,
+  fullTextScoreLabel,
   resolvedMode,
   colours,
   orderedCategories,
@@ -294,7 +294,7 @@ export function GaugeCategoriesList({
   const output = [];
   if (credibilitySignal === keyword("machine_generated_text_title")) {
     for (const category of orderedCategories) {
-      if (category != mgtOverallScoreLabel && category in categories) {
+      if (category != fullTextScoreLabel && category in categories) {
         output.push(
           <ListItem
             key={category}
@@ -320,7 +320,7 @@ export function GaugeCategoriesList({
       {credibilitySignal === keyword("subjectivity_title") ? (
         <>
           <Typography fontSize="small" sx={{ textAlign: "start" }}>
-            {keyword("threshold_slider_certainty")}
+            {keyword("threshold_slider_confidence")}
           </Typography>
           <ThresholdSlider
             credibilitySignal={credibilitySignal}
@@ -334,8 +334,8 @@ export function GaugeCategoriesList({
       {gaugeExplanation}
       {credibilitySignal === keyword("machine_generated_text_title") && (
         <>
-          <Divider key={`divider_${mgtOverallScoreLabel}`} sx={{ my: 2 }} />
-          <Typography sx={{ textAlign: "start" }}>
+          <Divider key={`divider_${fullTextScoreLabel}`} sx={{ my: 2 }} />
+          <Typography fontSize="small" sx={{ textAlign: "start" }}>
             {keyword("detected_classes")}
           </Typography>
           <List>{output}</List>
@@ -348,8 +348,8 @@ export function GaugeCategoriesList({
 // for news framing and news genre
 export function CategoriesList({
   categories,
-  rgbLow,
-  rgbHigh,
+  // rgbLow,
+  // rgbHigh,
   keyword,
   credibilitySignal,
   importantSentenceThreshold,
@@ -358,11 +358,13 @@ export function CategoriesList({
   summary,
 }) {
   if (_.isEmpty(categories)) {
+    // only news framing might be empty, a genre is always detected
     return (
-      <p>
-        {credibilitySignal === keyword("news_framing_title") &&
-          keyword("no_detected_topics")}
-      </p>
+      credibilitySignal === keyword("news_framing_title") && (
+        <Typography fontSize="small" sx={{ textAlign: "center" }}>
+          {keyword("no_detected_topics")}
+        </Typography>
+      )
     );
   }
 
@@ -385,8 +387,8 @@ export function CategoriesList({
             colourScaleText={keyword("colour_scale")}
             textLow={keyword("low_confidence")}
             textHigh={keyword("high_confidence")}
-            rgbLow={rgbLow}
-            rgbHigh={rgbHigh}
+            // rgbLow={rgbLow}
+            // rgbHigh={rgbHigh}
           />
         }
       >

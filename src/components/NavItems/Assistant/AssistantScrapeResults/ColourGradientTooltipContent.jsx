@@ -5,6 +5,10 @@ import Typography from "@mui/material/Typography";
 
 import { rgbListToGradient } from "./assistantUtils";
 
+// TODO
+// if all primary colours, this function won't be necessary anymore
+// remove whole file?
+
 export function ColourGradientScale({ textLow, textHigh, rgbList }) {
   return (
     <>

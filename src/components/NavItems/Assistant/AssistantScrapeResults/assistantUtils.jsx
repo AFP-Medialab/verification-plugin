@@ -367,7 +367,7 @@ export function createGaugeChart(
   return (
     <>
       {/* Gauge title */}
-      <Typography sx={{ textAlign: "start" }}>
+      <Typography fontSize="small" sx={{ textAlign: "start" }}>
         {keyword(mgtOverallScoreLabel)}
       </Typography>
 
@@ -389,10 +389,10 @@ export function createGaugeChart(
 
       {/* Gauge labels */}
       <Box sx={{ display: "flex", alignItems: "center" }}>
-        <Typography variant="subtitle2" align="left" sx={{ flex: 1 }}>
+        <Typography fontSize="small" align="left" sx={{ flex: 1 }}>
           {keyword(gaugeDetectionText[0])}
         </Typography>
-        <Typography variant="subtitle2" align="right">
+        <Typography fontSize="small" align="right">
           {keyword(gaugeDetectionText[1])}
         </Typography>
       </Box>

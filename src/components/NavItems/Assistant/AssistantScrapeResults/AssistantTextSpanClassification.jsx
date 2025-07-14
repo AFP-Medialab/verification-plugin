@@ -108,9 +108,9 @@ export default function AssistantTextSpanClassification({
     dispatch(setCurrentLabel(currentLabel));
   }
 
-  // defining persuasion technique category colours
-  const persuasionTechniqueCategoryColours =
-    getPersuasionCategoryColours(configs);
+  // // defining persuasion technique category colours
+  // const persuasionTechniqueCategoryColours =
+  //   getPersuasionCategoryColours(configs);
 
   // finding categories and their spans with scores, and the text for each category
   let categories = {};
@@ -175,17 +175,18 @@ export default function AssistantTextSpanClassification({
         keyword(persuasionTechniqueCategory) +
         ": " +
         keyword(persuasionTechnique);
-      let techniqueBackgroundRgb =
-        persuasionTechniqueCategoryColours[persuasionTechniqueCategory];
-      let bgLuminance = rgbToLuminance(techniqueBackgroundRgb);
-      let techniqueTextColour = "white";
-      if (bgLuminance > 0.7) techniqueTextColour = "black";
+      // let techniqueBackgroundRgb =
+      //   persuasionTechniqueCategoryColours[persuasionTechniqueCategory];
+      // let bgLuminance = rgbToLuminance(techniqueBackgroundRgb);
+      // let techniqueTextColour = "white";
+      // if (rgbToLuminance(primaryRgb) > 0.7) techniqueTextColour = "black";
       techniqueContent.push(
         <div
           key={divText}
           style={{
-            background: rgbToString(techniqueBackgroundRgb),
-            color: rgbToString(techniqueTextColour),
+            background: rgbToString(primaryRgb),
+            // color: rgbToString(techniqueTextColour),
+            color: rgbToLuminance(primaryRgb) > 0.7 ? "black" : "white",
             marginTop: "0.5em",
             marginBottom: "0.5em",
             padding: "0.5em",
@@ -308,7 +309,7 @@ export default function AssistantTextSpanClassification({
           <CardContent>
             <CategoriesListToggle
               categories={uniqueCategories}
-              colours={persuasionTechniqueCategoryColours}
+              // colours={persuasionTechniqueCategoryColours}
               noCategoriesText={keyword("no_detected_techniques")}
               allCategoriesLabel={allCategoriesLabel}
               currentLabel={currentLabel}
@@ -331,7 +332,7 @@ export default function AssistantTextSpanClassification({
 
 export function CategoriesListToggle({
   categories,
-  colours,
+  // colours,
   noCategoriesText,
   allCategoriesLabel,
   currentLabel,
@@ -381,10 +382,10 @@ export function CategoriesListToggle({
     // format of category is "persuasionTechniqueCategory__persuasionTechnique"
     const [persuasionTechniqueCategory, persuasionTechnique] =
       getPersuasionCategoryTechnique(category);
-    let backgroundRgb = colours[persuasionTechniqueCategory];
-    let bgLuminance = rgbToLuminance(backgroundRgb);
-    let textColour = "white";
-    if (bgLuminance > 0.7) textColour = "black";
+    // let backgroundRgb = colours[persuasionTechniqueCategory];
+    // let bgLuminance = rgbToLuminance(backgroundRgb);
+    // let textColour = "white";
+    // if (bgLuminance > 0.7) textColour = "black";
     const itemText =
       keyword(persuasionTechniqueCategory) +
       ": " +
@@ -394,7 +395,7 @@ export function CategoriesListToggle({
       <Chip
         label={new Set(categories[category].map((obj) => obj.score)).size}
         sx={{
-          color: rgbToString(backgroundRgb),
+          color: rgbToString(primaryRgb),
           backgroundColor: "white",
         }}
       />
@@ -406,12 +407,12 @@ export function CategoriesListToggle({
         sx={{
           background:
             category === currentCategory || currentCategory === null
-              ? rgbToString(backgroundRgb)
+              ? rgbToString(primaryRgb)
               : rgbToString([140, 140, 140]),
-          color: textColour,
+          color: rgbToLuminance(primaryRgb) > 0.7 ? "black" : "white",
           boxShadow: "0.15em 0.15em 0.15em gray",
           ":hover": {
-            background: rgbToString(backgroundRgb),
+            background: rgbToString(primaryRgb),
             boxShadow: "0.25em 0.25em 0.25em gray",
           },
           cursor: "pointer",
@@ -430,7 +431,7 @@ export function CategoriesListToggle({
   return (
     <>
       <Typography fontSize="small" sx={{ textAlign: "start" }}>
-        {keyword("threshold_slider_certainty")}
+        {keyword("threshold_slider_confidence")}
       </Typography>
       <ThresholdSlider
         credibilitySignal={credibilitySignal}
@@ -438,10 +439,15 @@ export function CategoriesListToggle({
         handleSliderChange={handleSliderChange}
         keyword={keyword}
       />
+      <Typography fontSize="small" sx={{ textAlign: "start" }}>
+        {keyword("select_persuasion_technique")}
+      </Typography>
       <List>
         {_.isEmpty(categoriesList) ? (
           <ListItem key={noCategoriesText}>
-            <Typography>{noCategoriesText}</Typography>
+            <Typography fontSize="small" sx={{ textAlign: "center" }}>
+              {noCategoriesText}
+            </Typography>
           </ListItem>
         ) : (
           categoriesList

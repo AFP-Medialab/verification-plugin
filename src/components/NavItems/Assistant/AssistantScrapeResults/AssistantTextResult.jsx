@@ -30,10 +30,10 @@ import TextFooter from "@/components/NavItems/Assistant/AssistantScrapeResults/T
 import {
   createGaugeChart,
   getMgtColours,
-  getPersuasionCategoryColours,
+  // getPersuasionCategoryColours,
   getPersuasionCategoryTechnique,
   getSubjectivityColours,
-  interpRgb,
+  // interpRgb,
   primaryRgb,
   rgbToLuminance,
   rgbToString,
@@ -216,10 +216,11 @@ const AssistantTextResult = () => {
           key,
           Math.max(...items.map((item) => parseFloat(item.score))),
         ])
-        .filter(([key, score]) => score >= 0.8)
-        .sort(([, a], [, b]) => b - a)
+        .filter(([key, score]) => score >= 0.8) // threshold
+        .sort(([, a], [, b]) => b - a) // highest score first
         .map(([key]) => key)
         .filter((key) => key != importantSentenceKey)
+        .slice(0, 3) // top 3
     : [];
   const newsFramingSummary = (
     <>
@@ -229,31 +230,8 @@ const AssistantTextResult = () => {
           <ListItem
             key={`${index}_ListItem`}
             sx={{
-              background: rgbToString(
-                newsFramingResult
-                  ? interpRgb(
-                      newsFramingResult.entities[topic][0].score,
-                      newsFramingResult.configs.confidenceThresholdLow,
-                      newsFramingResult.configs.confidenceThresholdHigh,
-                      newsFramingResult.configs.confidenceRgbLow,
-                      newsFramingResult.configs.confidenceRgbHigh,
-                    )
-                  : primaryRgb,
-              ),
-              color:
-                rgbToLuminance(
-                  newsFramingResult
-                    ? interpRgb(
-                        newsFramingResult.entities[topic][0].score,
-                        newsFramingResult.configs.confidenceThresholdLow,
-                        newsFramingResult.configs.confidenceThresholdHigh,
-                        newsFramingResult.configs.confidenceRgbLow,
-                        newsFramingResult.configs.confidenceRgbHigh,
-                      )
-                    : primaryRgb,
-                ) > 0.7
-                  ? "black"
-                  : "white",
+              background: rgbToString(primaryRgb),
+              color: rgbToLuminance(primaryRgb) > 0.7 ? "black" : "white",
             }}
           >
             <ListItemText primary={keyword(topic)} />
@@ -268,22 +246,13 @@ const AssistantTextResult = () => {
         (key) => key != importantSentenceKey,
       )[0]
     : null;
-  const backgroundRgb = newsGenreResult
-    ? interpRgb(
-        newsGenreResult.entities[newsGenreCategory][0].score,
-        newsGenreResult.configs.confidenceThresholdLow,
-        newsGenreResult.configs.confidenceThresholdHigh,
-        newsGenreResult.configs.confidenceRgbLow,
-        newsGenreResult.configs.confidenceRgbHigh,
-      )
-    : primaryRgb;
   const newsGenreSummary = (
     <>
       <ListItem
         key={`${newsGenreSummary}_ListItem`}
         sx={{
-          background: rgbToString(backgroundRgb),
-          color: rgbToLuminance(backgroundRgb) > 0.7 ? "black" : "white",
+          background: rgbToString(primaryRgb),
+          color: rgbToLuminance(primaryRgb) > 0.7 ? "black" : "white",
         }}
       >
         <ListItemText primary={keyword(newsGenreCategory)} />
@@ -299,22 +268,13 @@ const AssistantTextResult = () => {
         .sort(([, a], [, b]) => b.length - a.length)
         .map(([key]) => key)
     : [];
-  const persuasionTechniqueCategoryColours = persuasionResult
-    ? getPersuasionCategoryColours(persuasionResult.configs)
-    : null;
   const persuasionSummary = persuasionCategories.map((persuasion, index) => (
     <div key={`${index}_div`}>
       {index != "0" && <Divider key={`${index}_Divider`} />}
       <ListItem
         key={`${index}_ListItem`}
         sx={{
-          background: rgbToString(
-            persuasionResult
-              ? persuasionTechniqueCategoryColours[
-                  getPersuasionCategoryTechnique(persuasion)[0]
-                ]
-              : primaryRgb,
-          ),
+          background: rgbToString(primaryRgb),
           color: "white",
         }}
       >
@@ -330,14 +290,14 @@ const AssistantTextResult = () => {
     </div>
   ));
 
-  const mgtOverallScoreLabel = "mgt_overall_score";
+  const fullTextScoreLabel = "full_text_score";
 
   const [subjectivityColours, subjectivityColoursDark] = subjectivityResult
     ? getSubjectivityColours(subjectivityResult.configs)
     : [null, null];
   const subjectivitySummary = subjectivityResult
     ? createGaugeChart(
-        mgtOverallScoreLabel,
+        fullTextScoreLabel,
         subjectivityResult.entities["Subjective"]
           ? subjectivityResult.entities["Subjective"][0].score
           : null,
@@ -356,9 +316,9 @@ const AssistantTextResult = () => {
   const machineGeneratedTextSummary =
     machineGeneratedTextChunksResult && machineGeneratedTextSentencesResult
       ? createGaugeChart(
-          mgtOverallScoreLabel,
-          machineGeneratedTextChunksResult.entities[mgtOverallScoreLabel]
-            ? machineGeneratedTextChunksResult.entities[mgtOverallScoreLabel][0]
+          fullTextScoreLabel,
+          machineGeneratedTextChunksResult.entities[fullTextScoreLabel]
+            ? machineGeneratedTextChunksResult.entities[fullTextScoreLabel][0]
                 .score
             : null,
           resolvedMode,
