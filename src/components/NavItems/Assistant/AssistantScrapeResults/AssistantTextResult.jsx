@@ -16,10 +16,10 @@ import Typography from "@mui/material/Typography";
 import { WarningAmber } from "@mui/icons-material";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { setWarningExpanded } from "@/redux/actions/tools/assistantActions";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
   TransCredibilitySignalsLink,
   TransHtmlDoubleLineBreak,

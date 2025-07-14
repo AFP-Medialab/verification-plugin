@@ -15,12 +15,12 @@ import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
+import ExtractedSourceCredibilityResult from "@/components/NavItems/Assistant/AssistantCheckResults/ExtractedSourceCredibilityResult";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { TextCopy } from "@Shared/Utils/TextCopy";
 import { DataGrid, getGridSingleSelectOperators } from "@mui/x-data-grid";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import ExtractedSourceCredibilityResult from "../AssistantCheckResults/ExtractedSourceCredibilityResult";
 import {
   TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,

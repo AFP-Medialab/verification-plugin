@@ -17,9 +17,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
   TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,

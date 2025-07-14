@@ -1,6 +1,7 @@
 import {
   createC2pa,
   selectEditsAndActivity,
+  selectGenerativeInfo,
   selectProducer,
   selectSocialAccounts,
 } from "c2pa";
@@ -89,7 +90,11 @@ async function readManifest(manifest, parent, result, url, depth) {
     };
 
     const editsAndActivity = await selectEditsAndActivity(manifest);
+
     if (editsAndActivity) manifestData.editsAndActivity = editsAndActivity;
+
+    const generativeInfo = await selectGenerativeInfo(manifest);
+    if (generativeInfo) manifestData.generativeInfo = generativeInfo;
 
     const captureInfo = exifData(manifest.assertions.data);
     if (captureInfo) manifestData.captureInfo = captureInfo;
@@ -200,7 +205,7 @@ async function loadTrustResource(file) {
  *
  * @returns {Object} settings allowing the C2PA. Read function to determine if the source of the Content Credentials is on adobe's trusted list
  */
-async function getToolkitSettings() {
+export async function getToolkitSettings() {
   const [trustAnchors, allowedList, trustConfig] = await Promise.all(
     ["anchors.pem", "allowed.sha256.txt", "store.cfg"].map(loadTrustResource),
   );
@@ -299,9 +304,6 @@ export async function getC2paDataHd(url) {
     thumbnail: null,
   };
 
-  //dispatch(c2paLoadingSet(true));
-  // const url = URL.createObjectURL(image);
-
   try {
     const { manifestStore } = await c2pa.read(url, {
       settings: settings,
@@ -332,19 +334,15 @@ export async function getC2paDataHd(url) {
       // if there is no manifest store, the only data saved for an image is its url
       const data = {};
       data["id"] = { url: url };
-      // dispatch(c2paResultSet(data));
+
       c2paData.result = data;
       c2paData.currentImageId = "id";
       c2paData.mainImageId = "id";
-      // dispatch(setCurrentHdImageId("id"));
-      // dispatch(setMainHdImageId("id"));
     }
-    //dispatch(c2paLoadingSet(false));
 
     return c2paData;
   } catch (err) {
     console.error("Error reading image:", err);
-    //dispatch(c2paLoadingSet(false));
   }
   return c2paData;
 }
