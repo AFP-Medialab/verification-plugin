@@ -304,9 +304,6 @@ export async function getC2paDataHd(url) {
     thumbnail: null,
   };
 
-  //dispatch(c2paLoadingSet(true));
-  // const url = URL.createObjectURL(image);
-
   try {
     const { manifestStore } = await c2pa.read(url, {
       settings: settings,
@@ -337,19 +334,15 @@ export async function getC2paDataHd(url) {
       // if there is no manifest store, the only data saved for an image is its url
       const data = {};
       data["id"] = { url: url };
-      // dispatch(c2paResultSet(data));
+
       c2paData.result = data;
       c2paData.currentImageId = "id";
       c2paData.mainImageId = "id";
-      // dispatch(setCurrentHdImageId("id"));
-      // dispatch(setMainHdImageId("id"));
     }
-    //dispatch(c2paLoadingSet(false));
 
     return c2paData;
   } catch (err) {
     console.error("Error reading image:", err);
-    //dispatch(c2paLoadingSet(false));
   }
   return c2paData;
 }
