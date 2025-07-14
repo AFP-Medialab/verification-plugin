@@ -190,6 +190,7 @@ export default function assistantApiCalls() {
       async () => {
         const result = await axios.post(assistantEndpoint + "dw/subjectivity", {
           content: text,
+          frontendVersion: 0.87,
         });
         return result.data;
       },
