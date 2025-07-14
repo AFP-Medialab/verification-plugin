@@ -58,8 +58,6 @@ const Metadata = () => {
     (state) => state.metadata.currentC2paImageId,
   );
 
-  console.log(c2paResults);
-
   const session = useSelector((state) => state.userSession);
   const uid = session && session.user ? session.user.id : null;
 
@@ -112,8 +110,6 @@ const Metadata = () => {
 
   const getC2paMetadata = useC2paMetadataMutation({
     onSuccess: (data) => {
-      console.log(data);
-
       dispatch(setCurrentC2paImageId(data.currentImageId));
 
       dispatch(
