@@ -106,8 +106,7 @@ const MetadataList = ({ metadata }) => {
       {metadata ? (
         <Box
           sx={{
-            // width: "100%",
-
+            width: "100%",
             typography: "body1",
           }}
         >
