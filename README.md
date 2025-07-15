@@ -32,7 +32,7 @@ tort or otherwise, arising from, out of or in connection with the software or th
 
 ## Contributing
 
-We welcome contributions! Please read our [Contributing Guidelines](CONTRIBUTING.md) before starting.
+We welcome contributions! Please review our [Code of Conduct](CODE_OF_CONDUCT.md) and [Contributing Guidelines](CONTRIBUTING.md) before submitting a pull request.
 
 ## Getting Started
 
