@@ -7,6 +7,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
 import { DataGrid } from "@mui/x-data-grid";
+import dayjs from "dayjs";
 
 const style = {
   position: "relative",
@@ -25,8 +26,9 @@ const DetailModal = (props) => {
   let openDetailModal = props.openDetailModal;
   let setOpenDetailModal = props.setOpenDetailModal;
   let searchFilter = props.detailSearchFilter;
-  let setSearchFilter = props.detailSetSearchFilter;
-  let setDetailContent = props.setDetailContent;
+  let setSearchFilter = props.setDetailSearchFilter;
+  let keyword = props.keyword;
+
   const handleClose = () => {
     setOpenDetailModal(false);
     setSearchFilter("");
@@ -34,11 +36,22 @@ const DetailModal = (props) => {
 
   const columns =
     detailContent && detailContent.length > 0
-      ? Object.keys(detailContent[0]).map((x) => ({
-          field: x,
-          headerName: x,
-          width: 90,
-        }))
+      ? Object.keys(detailContent[0]).map((x) => {
+          let dateCheck = dayjs(detailContent[0][x]).isValid();
+          if (dateCheck) {
+            return {
+              field: x,
+              headerName: x,
+              width: 90,
+              sortComparator: (a, b) => dayjs(a).unix() - dayjs(b).unix(),
+            };
+          }
+          return {
+            field: x,
+            headerName: x,
+            width: 90,
+          };
+        })
       : [];
   detailContent.forEach((x, idx) => (x.id = idx));
   const rows =
@@ -53,7 +66,7 @@ const DetailModal = (props) => {
       <Modal open={openDetailModal} onClose={handleClose}>
         <Box sx={style}>
           <Stack direction="row" spacing={1} alignItems="center">
-            <Typography pl={1}> Search:</Typography>
+            <Typography pl={1}> {keyword("detailModal_search")}</Typography>
             <TextField
               variant="outlined"
               sx={{ width: "400px" }}
@@ -69,7 +82,7 @@ const DetailModal = (props) => {
             <DataGrid
               rows={rows}
               columns={columns}
-              getRowHeight={(params) => "auto"}
+              getRowHeight={() => "auto"}
             />
           </Box>
         </Box>

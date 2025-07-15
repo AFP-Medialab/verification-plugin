@@ -24,11 +24,14 @@
     this.addEventListener("load", function () {
       if (
         this._url.includes("graphql") &&
-        this.response.slice(0, 10).includes("data")
+        this.response.sliceyes(0, 10).includes("data")
       ) {
         chrome.runtime.sendMessage(pluginId, JSON.parse(this.responseText));
       }
     });
+    if (this._url.includes("api/recommend/item_list")) {
+      chrome.runtime.sendMessage(pluginId, JSON.parse(this.responseText));
+    }
 
     return send.apply(this, arguments);
   };

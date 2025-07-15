@@ -2,27 +2,22 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
-import Collapse from "@mui/material/Collapse";
 import Drawer from "@mui/material/Drawer";
-import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import IconButton from "@mui/material/IconButton";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowRight";
 import RemoveIcon from "@mui/icons-material/Remove";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import {
+  RecordingWindow,
+  getRecordingInfo,
+} from "components/NavItems/tools/SNA/components/Recording";
 
 import { toggleUnlockExplanationCheckBox } from "../../redux/actions";
 import {
@@ -33,16 +28,7 @@ import { MAX_FONT_SIZE, MIN_FONT_SIZE, getStoredFontSize } from "../../theme";
 import Languages from "../NavItems/languages/languages";
 import ColorModeSelect from "./ColorModeSelect";
 
-const SettingsDrawer = ({
-  isPanelOpen,
-  handleClosePanel,
-  recording,
-  setRecording,
-  collections,
-  setCollections,
-  selectedCollection,
-  setSelectedCollection,
-}) => {
+const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
   const keyword = i18nLoadNamespace("components/NavBar");
 
   const dispatch = useDispatch();
@@ -53,42 +39,18 @@ const SettingsDrawer = ({
   const cookiesUsage = useSelector((state) => state.cookies.active);
   const gaUsage = useSelector((state) => state.cookies.analytics);
 
+  //SNA Recording props
+  const [recording, setRecording] = useState(false);
   const [expanded, setExpanded] = useState(false);
-
+  const [collections, setCollections] = useState(["Default Collection"]);
+  const [selectedCollection, setSelectedCollection] =
+    useState("Default Collection");
   const [newCollectionName, setNewCollectionName] = useState("");
+  const [selectedSocialMedia, setSelectedSocialMedia] = useState([]);
 
-  const handleAddCollection = () => {
-    if (newCollectionName.trim() && !collections.includes(newCollectionName)) {
-      chrome.runtime.sendMessage({
-        prompt: "addCollection",
-        newCollectionName: newCollectionName,
-      });
-      setCollections([...collections, newCollectionName]);
-      setSelectedCollection(newCollectionName);
-      setNewCollectionName("");
-    }
-  };
-
-  const handleMainButtonClick = () => {
-    if (recording) {
-      // Stop recording and collapse
-      setRecording(false);
-      setExpanded(false);
-      chrome.runtime.sendMessage({ prompt: "stopRecording" });
-    } else {
-      // If already expanded, collapse without starting
-      setExpanded((prev) => !prev);
-    }
-  };
-
-  const handleStartRecording = () => {
-    chrome.runtime.sendMessage({
-      prompt: "startRecording",
-      currentCollectionName: selectedCollection,
-    });
-    setRecording(true);
-    setExpanded(false);
-  };
+  useEffect(() => {
+    getRecordingInfo(setCollections, setRecording, setSelectedCollection);
+  }, []);
 
   return (
     <Drawer
@@ -211,70 +173,22 @@ const SettingsDrawer = ({
             )}
           </Stack>
           <Stack direction="column" spacing={1}>
-            <Typography>Record X for SNA</Typography>
-            <Box display="flex" flexDirection="column">
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={handleMainButtonClick}
-                endIcon={
-                  !recording ? (
-                    expanded ? (
-                      <KeyboardArrowUpIcon />
-                    ) : (
-                      <KeyboardArrowDownIcon />
-                    )
-                  ) : null
-                }
-              >
-                {recording
-                  ? `Stop Recording:  ${selectedCollection}`
-                  : "Start recording"}
-              </Button>
-
-              <Collapse in={expanded}>
-                <Box mt={1} display="flex" flexDirection="column" gap={2}>
-                  <FormControl fullWidth>
-                    <InputLabel>Select Collection</InputLabel>
-                    <Select
-                      value={selectedCollection}
-                      onChange={(e) => setSelectedCollection(e.target.value)}
-                      label="Select Collection"
-                    >
-                      {collections.map((name) => (
-                        <MenuItem key={name} value={name}>
-                          {name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-
-                  <Box display="flex" gap={1}>
-                    <TextField
-                      label="New Collection"
-                      value={newCollectionName}
-                      onChange={(e) => setNewCollectionName(e.target.value)}
-                      fullWidth
-                    />
-                    <Button
-                      variant="outlined"
-                      onClick={handleAddCollection}
-                      color="primary"
-                    >
-                      Add
-                    </Button>
-                  </Box>
-
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleStartRecording}
-                  >
-                    Start
-                  </Button>
-                </Box>
-              </Collapse>
-            </Box>
+            <Typography>{keyword("snaRecord_settingsTitle")}</Typography>
+            {RecordingWindow(
+              recording,
+              setRecording,
+              expanded,
+              setExpanded,
+              selectedCollection,
+              keyword,
+              setSelectedCollection,
+              collections,
+              setCollections,
+              newCollectionName,
+              setNewCollectionName,
+              selectedSocialMedia,
+              setSelectedSocialMedia,
+            )}
           </Stack>
         </Stack>
       </Box>

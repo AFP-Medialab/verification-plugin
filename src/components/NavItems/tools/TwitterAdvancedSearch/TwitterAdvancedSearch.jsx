@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import Alert from "@mui/material/Alert";
@@ -24,6 +24,7 @@ import dayjs from "dayjs";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { useInput } from "../../../../Hooks/useInput";
 import { searchTwitter } from "../../../../constants/tools";
+import { RecordingWindow, getRecordingInfo } from "../SNA/components/Recording";
 import { createUrl } from "./createUrl";
 
 const TwitterAdvancedSearch = () => {
@@ -141,6 +142,19 @@ const TwitterAdvancedSearch = () => {
     }
   };
 
+  //SNA Recording props
+  const [recording, setRecording] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [collections, setCollections] = useState(["Default Collection"]);
+  const [selectedCollection, setSelectedCollection] =
+    useState("Default Collection");
+  const [newCollectionName, setNewCollectionName] = useState("");
+  const [selectedSocialMedia, setSelectedSocialMedia] = useState([]);
+
+  useEffect(() => {
+    getRecordingInfo(setCollections, setRecording, setSelectedCollection);
+  }, []);
+
   return (
     <div>
       <HeaderTool
@@ -155,7 +169,23 @@ const TwitterAdvancedSearch = () => {
           title={keyword("cardheader_parameters")}
           className={classes.headerUploadedImage}
         />
+
         <div className={classes.root2}>
+          {RecordingWindow(
+            recording,
+            setRecording,
+            expanded,
+            setExpanded,
+            selectedCollection,
+            keyword,
+            setSelectedCollection,
+            collections,
+            setCollections,
+            newCollectionName,
+            setNewCollectionName,
+            selectedSocialMedia,
+            setSelectedSocialMedia,
+          )}
           {largeInputList.map((value, key) => {
             return (
               <TextField
