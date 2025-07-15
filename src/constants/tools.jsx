@@ -36,7 +36,6 @@ import About from "../components/NavItems/About/About";
 import ToolsMenu from "../components/NavItems/tools/Alltools/ToolsMenu";
 import Analysis from "../components/NavItems/tools/Analysis/Analysis";
 import Archive from "../components/NavItems/tools/Archive";
-import DeepfakeImage from "../components/NavItems/tools/Deepfake/DeepfakeImage";
 import DeepfakeVideo from "../components/NavItems/tools/Deepfake/DeepfakeVideo";
 import Forensic from "../components/NavItems/tools/Forensic/Forensic";
 import Geolocation from "../components/NavItems/tools/Geolocation/Geolocation";
@@ -414,19 +413,6 @@ export const imageSyntheticDetection = new Tool(
   <Footer type={FOOTER_TYPES.ITI_UNINA} />,
 );
 
-export const imageDeepfake = new Tool(
-  "navbar_deepfake_image",
-  "navbar_deepfake_image_description",
-  deepfakeSvgIcon,
-  TOOLS_CATEGORIES.IMAGE,
-  [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.LOCK],
-  [ROLES.BETA_TESTER],
-  "deepfakeImage",
-  TOOL_GROUPS.VERIFICATION,
-  <DeepfakeImage />,
-  <Footer type={FOOTER_TYPES.ITI} />,
-);
-
 export const imageGeolocation = new Tool(
   "navbar_geolocation",
   "navbar_geolocation_description",
@@ -437,7 +423,7 @@ export const imageGeolocation = new Tool(
   "geolocation",
   TOOL_GROUPS.VERIFICATION,
   <Geolocation />,
-  <Footer type={FOOTER_TYPES.AFP} />,
+  <Footer type={FOOTER_TYPES.ITI} />,
 );
 
 /**
@@ -608,7 +594,7 @@ export const tools = Object.freeze([
   videoAnalysis,
   keyframes,
   thumbnails,
-  videoRights,
+  // videoRights,
   videoMetadata,
   videoDeepfake,
   imageMagnifier,
@@ -617,7 +603,6 @@ export const tools = Object.freeze([
   imageOcr,
   imageGif,
   imageSyntheticDetection,
-  imageDeepfake,
   imageGeolocation,
   audioLoccus,
   searchTwitter,

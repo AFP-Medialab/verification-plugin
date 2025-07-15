@@ -5,12 +5,12 @@ import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 const ResultDisplayItem = ({
   id,
@@ -39,29 +39,45 @@ const ResultDisplayItem = ({
   const [showOriginalTitle, setShowOriginalTitle] = useState(false);
 
   return (
-    <Box width="100%" key={id}>
-      <Grid2 container direction="row" p={2} justifyContent="space-between">
-        <Grid2
+    <Box
+      key={id}
+      sx={{
+        width: "100%",
+      }}
+    >
+      <Grid
+        container
+        direction="row"
+        sx={{
+          p: 2,
+          justifyContent: "space-between",
+        }}
+      >
+        <Grid
           container
           direction="row"
           size={{ xs: 10 }}
           spacing={2}
-          justifyContent="flex-start"
-          alignItems="flex-start"
+          sx={{
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+          }}
         >
-          <Grid2>
+          <Grid>
             <Avatar
               src={imageUrl}
               variant="rounded"
               sx={{ width: 80, height: 80 }}
             />
-          </Grid2>
-          <Grid2 size="grow">
+          </Grid>
+          <Grid size="grow">
             <Stack
               direction="column"
-              justifyContent="flex-start"
-              alignItems="flex-start"
               spacing={2}
+              sx={{
+                justifyContent: "flex-start",
+                alignItems: "flex-start",
+              }}
             >
               <Stack direction="column">
                 <Typography sx={{ textAlign: "start" }}>
@@ -116,9 +132,14 @@ const ResultDisplayItem = ({
               </Typography>
               <Typography variant="subtitle2">{date ?? ""}</Typography>
             </Stack>
-          </Grid2>
-        </Grid2>
-        <Grid2 size={{ xs: 2 }} pl={4}>
+          </Grid>
+        </Grid>
+        <Grid
+          size={{ xs: 2 }}
+          sx={{
+            pl: 4,
+          }}
+        >
           <Stack direction="column" spacing={2}>
             <Link
               href={`https://${domainUrl}`}
@@ -130,14 +151,16 @@ const ResultDisplayItem = ({
             </Link>
             <Chip label={language} sx={{ width: "fit-content" }} />
           </Stack>
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
       <Stack
         direction="row"
         spacing={2}
-        p={2}
-        justifyContent="flex-start"
-        alignItems="flex-start"
+        sx={{
+          p: 2,
+          justifyContent: "flex-start",
+          alignItems: "flex-start",
+        }}
       ></Stack>
       <Divider orientation="horizontal" flexItem />
     </Box>

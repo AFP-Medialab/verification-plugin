@@ -15,11 +15,11 @@ import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
+import { TextCopy } from "@Shared/Utils/TextCopy";
 import { DataGrid, getGridSingleSelectOperators } from "@mui/x-data-grid";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import { TextCopy } from "../../../Shared/Utils/TextCopy";
 import ExtractedSourceCredibilityResult from "../AssistantCheckResults/ExtractedSourceCredibilityResult";
 import {
   TransHtmlDoubleLineBreak,
@@ -53,7 +53,7 @@ const Status = (params) => {
           size="small"
         />
       ) : null}
-      {params.done && params.urlResults.resolvedDomain == "" ? (
+      {params.done && params.urlResults.resolvedDomain === "" ? (
         <Chip
           label={keyword(params.sourceTypes.unlabelled)}
           color={params.trafficLightColors.unlabelled}
@@ -85,10 +85,12 @@ const Url = (params) => {
 const Details = (params) => {
   return (
     <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      flexDirection="row"
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
+      }}
     >
       {<TextCopy text={params.url} index={params.url} />}
       {params.done && params.domainOrAccount !== null && (
@@ -114,7 +116,7 @@ const sourceTypeListFilterOperators = getGridSingleSelectOperators()
   .filter((operator) => operator.value === "isAnyOf")
   .map((operator) => {
     const newOperator = { ...operator };
-    const newGetApplyFilterFn = (filterItem, column) => {
+    newOperator.getApplyFilterFn = (filterItem) => {
       return (params) => {
         let isOk = true;
         filterItem?.value?.forEach((fv) => {
@@ -123,7 +125,6 @@ const sourceTypeListFilterOperators = getGridSingleSelectOperators()
         return isOk;
       };
     };
-    newOperator.getApplyFilterFn = newGetApplyFilterFn;
     return newOperator;
   });
 
@@ -323,12 +324,7 @@ const AssistantLinkResult = () => {
     <Card variant="outlined">
       <CardHeader
         className={classes.assistantCardHeader}
-        title={
-          <Typography variant={"h5"}>
-            {" "}
-            {keyword("extracted_urls_url_domain_analysis")}{" "}
-          </Typography>
-        }
+        title={keyword("extracted_urls_url_domain_analysis")}
         action={
           <Tooltip
             interactive={"true"}

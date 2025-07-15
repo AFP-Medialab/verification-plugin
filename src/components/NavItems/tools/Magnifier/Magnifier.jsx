@@ -6,18 +6,18 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import LinearProgress from "@mui/material/LinearProgress";
 
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { imageMagnifier } from "@/constants/tools";
+import {
+  resetMagnifierState,
+  setMagnifierLoading,
+  setMagnifierResult,
+} from "@/redux/actions/tools/magnifierActions";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { setError } from "redux/reducers/errorReducer";
 import "tui-image-editor/dist/tui-image-editor.css";
 
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { imageMagnifier } from "../../../../constants/tools";
-import {
-  resetMagnifierState,
-  setMagnifierLoading,
-  setMagnifierResult,
-} from "../../../../redux/actions/tools/magnifierActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
@@ -113,7 +113,7 @@ const Magnifier = () => {
     return file;
   };
 
-  const handleCloseSelectedFile = () => {
+  const resetState = () => {
     setImageFile(undefined);
     setInput("");
     dispatch(resetMagnifierState());
@@ -127,15 +127,18 @@ const Magnifier = () => {
         icon={
           <imageMagnifier.icon
             sx={{
-              fill: "#00926c",
+              fill: "var(--mui-palette-primary-main)",
               fontSize: "40px",
             }}
           />
         }
       />
-
       <Card variant="outlined">
-        <Box p={4}>
+        <Box
+          sx={{
+            p: 4,
+          }}
+        >
           <form>
             <StringFileUploadField
               labelKeyword={keyword("magnifier_urlbox")}
@@ -148,24 +151,29 @@ const Magnifier = () => {
               setFileInput={setImageFile}
               handleSubmit={submitUrl}
               fileInputTypesAccepted={"image/*"}
-              handleCloseSelectedFile={handleCloseSelectedFile}
+              handleCloseSelectedFile={resetState}
               preprocessLocalFile={preprocessImage}
+              handleClearUrl={resetState}
             />
           </form>
 
           {isLoading && (
-            <Box mt={3}>
+            <Box
+              sx={{
+                mt: 3,
+              }}
+            >
               <LinearProgress />
             </Box>
           )}
         </Box>
       </Card>
-
-      <Box m={3} />
-
-      {magnifierResult && (
-        <ImageResult handleCloseResults={handleCloseSelectedFile} />
-      )}
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
+      {magnifierResult && <ImageResult handleCloseResults={resetState} />}
     </div>
   );
 };

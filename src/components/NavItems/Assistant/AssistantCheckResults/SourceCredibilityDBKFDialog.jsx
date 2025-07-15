@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 
+import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import List from "@mui/material/List";
@@ -55,37 +56,55 @@ const SourceCredibilityDBKFDialog = (props) => {
       </Tooltip>
       <Dialog onClose={handleClose} maxWidth={"lg"} open={open}>
         <DialogTitle>
-          <Grid2 container>
-            <Grid2 size={{ xs: 11 }} direction="row">
+          <Grid container>
+            <Grid size={{ xs: 11 }}>
               <Typography variant="body1" component="div">
                 <Chip label={keyword(sourceType)} color={color} size="small" />{" "}
                 {keyword("source_cred_popup_header_domain")} {source}
               </Typography>
-            </Grid2>
-            <Grid2 size={{ xs: 1 }} display="flex" justifyContent="flex-end">
+            </Grid>
+            <Grid
+              size={{ xs: 1 }}
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
               {/* tooltip help */}
-              <Tooltip
-                interactive={"true"}
-                leaveDelay={50}
-                style={{ display: "flex", marginLeft: "auto" }}
-                title={
-                  <>
-                    <TransSourceCredibilityTooltip keyword={keyword} />
-                    <TransHtmlDoubleLineBreak keyword={keyword} />
-                    <TransUrlDomainAnalysisLink keyword={keyword} />
-                  </>
-                }
-                classes={{ tooltip: classes.assistantTooltip }}
+              <Box
+                sx={{
+                  pt: 0.75,
+                }}
               >
-                <HelpOutlineOutlinedIcon color={"action"} />
-              </Tooltip>
+                <Tooltip
+                  interactive={"true"}
+                  leaveDelay={50}
+                  style={{ display: "flex", marginLeft: "auto" }}
+                  title={
+                    <>
+                      <TransSourceCredibilityTooltip keyword={keyword} />
+                      <TransHtmlDoubleLineBreak keyword={keyword} />
+                      <TransUrlDomainAnalysisLink keyword={keyword} />
+                    </>
+                  }
+                  classes={{ tooltip: classes.assistantTooltip }}
+                >
+                  <HelpOutlineOutlinedIcon color={"action"} />
+                </Tooltip>
+              </Box>
 
               {/* close button */}
-              <IconButton onClick={handleClose}>
-                <CloseIcon />
-              </IconButton>
-            </Grid2>
-          </Grid2>
+              <Box
+                sx={{
+                  pr: 1,
+                }}
+              >
+                <IconButton onClick={handleClose}>
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+            </Grid>
+          </Grid>
         </DialogTitle>
 
         <DialogContent dividers>

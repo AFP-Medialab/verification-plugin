@@ -9,16 +9,12 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import TextField from "@mui/material/TextField";
 
-import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import _ from "lodash";
-
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { videoAnalysis } from "../../../../constants/tools";
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { videoAnalysis } from "@/constants/tools";
 import {
   cleanAnalysisState,
   setAnalysisComments,
@@ -26,7 +22,11 @@ import {
   setAnalysisLoading,
   setAnalysisResult,
   setAnalysisVerifiedComments,
-} from "../../../../redux/actions/tools/analysisActions";
+} from "@/redux/actions/tools/analysisActions";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import _ from "lodash";
+
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
@@ -88,12 +88,12 @@ const Analysis = () => {
   );
   const submitForm = () => {
     /*trackEvent(
-                                          "submission",
-                                          "analysis",
-                                          "video caa analysis",
-                                          input.trim(),
-                                          client_id
-                                        );*/
+                                                      "submission",
+                                                      "analysis",
+                                                      "video caa analysis",
+                                                      input.trim(),
+                                                      client_id
+                                                    );*/
     setSubmittedUrl(input.trim());
     dispatch(cleanAnalysisState());
   };
@@ -111,7 +111,6 @@ const Analysis = () => {
     if (urlDetected) {
       submitForm();
     }
-    // eslint-disable-next-line
   }, [urlDetected]);
 
   useEffect(() => {
@@ -136,12 +135,23 @@ const Analysis = () => {
       <HeaderTool
         name={keywordAllTools("navbar_analysis_video")}
         description={keywordAllTools("navbar_analysis_description")}
-        icon={<videoAnalysis.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
+        icon={
+          <videoAnalysis.icon
+            sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+          />
+        }
       />
       <Card variant="outlined">
         <form className={classes.root2}>
-          <Grid2 container direction="row" spacing={3} alignItems="center">
-            <Grid2 size="grow">
+          <Grid
+            container
+            direction="row"
+            spacing={3}
+            sx={{
+              alignItems: "center",
+            }}
+          >
+            <Grid size="grow">
               <TextField
                 id="standard-full-width"
                 data-testid="analysis_video_input"
@@ -165,8 +175,8 @@ const Analysis = () => {
                   }
                 }}
               />
-            </Grid2>
-            <Grid2>
+            </Grid>
+            <Grid>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -179,9 +189,9 @@ const Analysis = () => {
                 }
                 label={keyword("api_repro")}
               />
-            </Grid2>
+            </Grid>
 
-            <Grid2>
+            <Grid>
               <Button
                 type="submit"
                 data-testid="analysis_video_submit"
@@ -195,15 +205,27 @@ const Analysis = () => {
               >
                 {keyword("button_submit")}
               </Button>
-            </Grid2>
-            <Box m={1} />
-          </Grid2>
+            </Grid>
+            <Box
+              sx={{
+                m: 1,
+              }}
+            />
+          </Grid>
         </form>
         {isLoading ? <LinearProgress hidden={!isLoading} /> : null}
       </Card>
-      <Box m={3} />
+      <Box
+        sx={{
+          m: 3,
+        }}
+      />
       {showFacebookIframe && (
-        <Box m={4}>
+        <Box
+          sx={{
+            m: 4,
+          }}
+        >
           <Iframe
             frameBorder="0"
             url={"https://mever.iti.gr/plugin_login_fb"}

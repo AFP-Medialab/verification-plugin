@@ -1,14 +1,13 @@
-import { openTabs } from "components/Shared/ReverseSearch/utils/openTabUtils";
-import { getImgUrl } from "components/Shared/ReverseSearch/utils/searchUtils";
-import dayjs from "dayjs";
-import Dexie from "dexie";
-
-import { trackEvent } from "../components/Shared/GoogleAnalytics/MatomoAnalytics";
+import { trackEvent } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import {
   SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
   reverseImageSearchAll,
-} from "../components/Shared/ReverseSearch/reverseSearchUtils";
+} from "@Shared/ReverseSearch/reverseSearchUtils";
+import { openTabs } from "components/Shared/ReverseSearch/utils/openTabUtils";
+import { getImgUrl } from "components/Shared/ReverseSearch/utils/searchUtils";
+import dayjs from "dayjs";
+import Dexie from "dexie";
 
 const db = new Dexie("tweetTest");
 db.version(2).stores({

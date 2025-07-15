@@ -7,7 +7,7 @@ import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Popover from "@mui/material/Popover";
 import Stack from "@mui/material/Stack";
@@ -17,6 +17,7 @@ import Typography from "@mui/material/Typography";
 import { Download } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
+import { ROLES } from "@/constants/roles";
 import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { useTrackEvent } from "Hooks/useAnalytics";
@@ -38,7 +39,7 @@ const DeepfakeResultsVideo = (props) => {
     }
   }
 
-  const DeepfakeImageDetectionMethodNames = Object.freeze({
+  const DeepfakeVideoDetectionMethodNames = Object.freeze({
     deepfakeVideoReport: {
       name: keyword("deepfake_video_videoreport_name"),
       description: keyword("deepfake_video_videoreport_description"),
@@ -76,14 +77,24 @@ const DeepfakeResultsVideo = (props) => {
   const [xAxisData, setXAxisData] = React.useState([]);
   const [yAxisData, setYAxisData] = React.useState([]);
 
+  const role = useSelector((state) => state.userSession.user.roles);
+
+  /**
+   * Alternate between v1 and v2 based on user role
+   * @type {string}
+   */
+  const faceswapAlgorithm = role.includes(ROLES.EVALUATION)
+    ? "faceswap_fsfm_report"
+    : "deepfake_video_report";
+
   useEffect(() => {
     if (
       props.result &&
-      props.result.deepfake_video_report &&
-      props.result.deepfake_video_report.results &&
-      props.result.deepfake_video_report.results.length > 0
+      props.result[faceswapAlgorithm] &&
+      props.result[faceswapAlgorithm].results &&
+      props.result[faceswapAlgorithm].results.length > 0
     ) {
-      for (const shotPrediction of props.result.deepfake_video_report.results) {
+      for (const shotPrediction of props.result[faceswapAlgorithm].results) {
         // This needs an undefined check because the value can be 0
         if (
           shotPrediction.prediction !== undefined &&
@@ -140,29 +151,29 @@ const DeepfakeResultsVideo = (props) => {
   );
 
   useEffect(() => {
-    const prediction = results.deepfake_video_report.prediction;
+    const prediction = results[faceswapAlgorithm].prediction;
     let shot = -1;
 
     if (
       !results ||
-      !results.deepfake_video_report ||
-      !results.deepfake_video_report.results
+      !results[faceswapAlgorithm] ||
+      !results[faceswapAlgorithm].results
     ) {
       return;
     }
 
     for (
       let i = 0;
-      i < results.deepfake_video_report.results.length && shot === -1;
+      i < results[faceswapAlgorithm].results.length && shot === -1;
       i++
     ) {
-      if (results.deepfake_video_report.results[i].prediction === prediction) {
+      if (results[faceswapAlgorithm].results[i].prediction === prediction) {
         shot = i;
       }
     }
 
     if (shot !== -1) {
-      clickShot(results.deepfake_video_report.results[shot], shot);
+      clickShot(results[faceswapAlgorithm].results[shot], shot);
     }
   }, []);
 
@@ -175,14 +186,11 @@ const DeepfakeResultsVideo = (props) => {
 
     let res = [];
 
-    if (
-      results.deepfake_video_report &&
-      results.deepfake_video_report.prediction
-    ) {
+    if (results[faceswapAlgorithm] && results[faceswapAlgorithm].prediction) {
       res.push(
         new DeepfakeResult(
-          Object.keys(DeepfakeImageDetectionMethodNames)[0],
-          results.deepfake_video_report.prediction * 100,
+          Object.keys(DeepfakeVideoDetectionMethodNames)[0],
+          results[faceswapAlgorithm].prediction * 100,
         ),
       );
     }
@@ -190,7 +198,7 @@ const DeepfakeResultsVideo = (props) => {
     if (results.ftcn_report && results.ftcn_report.prediction) {
       res.push(
         new DeepfakeResult(
-          Object.keys(DeepfakeImageDetectionMethodNames)[1],
+          Object.keys(DeepfakeVideoDetectionMethodNames)[1],
           results.ftcn_report.prediction * 100,
         ),
       );
@@ -199,7 +207,7 @@ const DeepfakeResultsVideo = (props) => {
     if (results.face_reenact_report && results.face_reenact_report.prediction) {
       res.push(
         new DeepfakeResult(
-          Object.keys(DeepfakeImageDetectionMethodNames)[2],
+          Object.keys(DeepfakeVideoDetectionMethodNames)[2],
           results.face_reenact_report.prediction * 100,
         ),
       );
@@ -238,35 +246,46 @@ const DeepfakeResultsVideo = (props) => {
       />
       <CardContent>
         <Stack direction="column" spacing={4}>
-          <Grid2
+          <Grid
             container
             direction="row"
-            justifyContent="space-evenly"
-            alignItems="flex-start"
+            sx={{
+              justifyContent: "space-evenly",
+              alignItems: "flex-start",
+            }}
           >
-            <Grid2 size={{ xs: 6 }} container direction="column" spacing={2}>
-              <Grid2 width="100%" size={{ xs: 6 }} container direction="column">
+            <Grid size={{ xs: 6 }} container direction="column" spacing={2}>
+              <Grid
+                size={{ xs: 6 }}
+                container
+                direction="column"
+                sx={{
+                  width: "100%",
+                }}
+              >
                 <Stack direction="column" spacing={4}>
                   <video
                     width="100%"
                     height="auto"
                     controls
-                    key={results.deepfake_video_report.video_path}
+                    key={results[faceswapAlgorithm].video_path}
                     style={{
                       borderRadius: "10px",
                       maxHeight: "50vh",
                     }}
                   >
                     <source
-                      src={results.deepfake_video_report.video_path + "#t=2,4"}
+                      src={results[faceswapAlgorithm].video_path + "#t=2,4"}
                       type="video/mp4"
                     />
                     {keyword("deepfake_support")}
                   </video>
                   <Stack
                     direction="column"
-                    justifyContent="center"
                     ref={deepfakeChartRef}
+                    sx={{
+                      justifyContent: "center",
+                    }}
                   >
                     <LineChart
                       xAxis={[
@@ -308,9 +327,9 @@ const DeepfakeResultsVideo = (props) => {
                     </Box>
                   )}
                 </Stack>
-              </Grid2>
-            </Grid2>
-            <Grid2 size={{ xs: 6 }}>
+              </Grid>
+            </Grid>
+            <Grid size={{ xs: 6 }}>
               <Stack direction="column" spacing={4}>
                 {deepfakeScores && deepfakeScores.length === 0 && (
                   <Typography variant="h5" sx={{ color: "red" }}>
@@ -321,7 +340,7 @@ const DeepfakeResultsVideo = (props) => {
                   <GaugeChartResult
                     keyword={keyword}
                     scores={deepfakeScores}
-                    methodNames={DeepfakeImageDetectionMethodNames}
+                    methodNames={DeepfakeVideoDetectionMethodNames}
                     detectionThresholds={DETECTION_THRESHOLDS}
                     resultsHaveErrors={false}
                     sanitizeDetectionPercentage={(n) => Math.round(n)}
@@ -331,12 +350,12 @@ const DeepfakeResultsVideo = (props) => {
                   />
                 )}
               </Stack>
-            </Grid2>
-          </Grid2>
+            </Grid>
+          </Grid>
 
           <Divider />
 
-          <Grid2
+          <Grid
             container
             direction="row"
             sx={{
@@ -345,21 +364,31 @@ const DeepfakeResultsVideo = (props) => {
             }}
             spacing={2}
           >
-            <Grid2 size={7}>
-              {!!results.deepfake_video_report.results && (
+            <Grid size={7}>
+              {!!results[faceswapAlgorithm].results && (
                 <Box>
                   <Typography
                     variant="h6"
                     sx={{
-                      color: "#00926c",
+                      color: "var(--mui-palette-primary-main)",
                     }}
                   >
                     {keyword("deepfake_clips")}
                   </Typography>
-                  <Box m={1} />
+                  <Box
+                    sx={{
+                      m: 1,
+                    }}
+                  />
 
-                  <Grid2 container spacing={3} width="100%">
-                    {results.deepfake_video_report.results.map(
+                  <Grid
+                    container
+                    spacing={3}
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    {results[faceswapAlgorithm].results.map(
                       (valueShot, keyShot) => {
                         const shotStart = valueShot.shot_start;
                         const shotEnd = valueShot.shot_end;
@@ -374,14 +403,14 @@ const DeepfakeResultsVideo = (props) => {
                         const endSec = ("0" + (shotEnd % 60)).slice(-2);
 
                         return (
-                          <Grid2 size={{ md: 3, sm: 12 }} key={keyShot}>
+                          <Grid size={{ md: 3, sm: 12 }} key={keyShot}>
                             <Card
                               variant="outlined"
                               onClick={() => clickShot(valueShot, keyShot)}
                               sx={{
                                 backgroundColor:
                                   keyShot === shotSelectedKey
-                                    ? "#00926c"
+                                    ? "var(--mui-palette-primary-main)"
                                     : "var(--mui-palette-background-paper)",
                               }}
                             >
@@ -390,7 +419,9 @@ const DeepfakeResultsVideo = (props) => {
                                   <Stack
                                     direction="column"
                                     spacing={1}
-                                    alignItems="center"
+                                    sx={{
+                                      alignItems: "center",
+                                    }}
                                   >
                                     <img
                                       alt="shot"
@@ -410,18 +441,18 @@ const DeepfakeResultsVideo = (props) => {
                                 </CardContent>
                               </CardActionArea>
                             </Card>
-                          </Grid2>
+                          </Grid>
                         );
                       },
                     )}
-                  </Grid2>
+                  </Grid>
                 </Box>
               )}
-            </Grid2>
-            <Grid2 size={5}>
+            </Grid>
+            <Grid size={5}>
               {results &&
-                results.deepfake_video_report &&
-                results.deepfake_video_report.results && (
+                results[faceswapAlgorithm] &&
+                results[faceswapAlgorithm].results && (
                   <Card
                     variant="outlined"
                     style={{ overflow: "visible" }}
@@ -430,11 +461,13 @@ const DeepfakeResultsVideo = (props) => {
                     <CardHeader
                       style={{ borderRadius: "4px 4px 0px 0px" }}
                       title={
-                        <Grid2
+                        <Grid
                           container
                           direction="row"
-                          justifyContent="space-between"
-                          alignItems="center"
+                          sx={{
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
                         >
                           <span>{keyword("deepfake_results")}</span>
 
@@ -460,38 +493,58 @@ const DeepfakeResultsVideo = (props) => {
                               horizontal: "center",
                             }}
                           >
-                            <Box p={2}>
-                              <Grid2
+                            <Box
+                              sx={{
+                                p: 2,
+                              }}
+                            >
+                              <Grid
                                 container
                                 direction="row"
-                                justifyContent="space-between"
-                                alignItems="stretch"
+                                sx={{
+                                  justifyContent: "space-between",
+                                  alignItems: "stretch",
+                                }}
                               >
                                 <Typography variant="h6" gutterBottom>
                                   {keyword("deepfake_title_what")}
                                 </Typography>
 
                                 <CloseIcon onClick={closeHelp} />
-                              </Grid2>
-                              <Box m={1} />
+                              </Grid>
+                              <Box
+                                sx={{
+                                  m: 1,
+                                }}
+                              />
                               <Typography variant="body2">
                                 {keyword("deepfake_filters_explanation_video")}
                               </Typography>
                             </Box>
                           </Popover>
-                        </Grid2>
+                        </Grid>
                       }
                     />
-                    <Box p={2}>
+                    <Box
+                      sx={{
+                        p: 2,
+                      }}
+                    >
                       {shotSelectedValue === null ? (
-                        <Grid2
+                        <Grid
                           container
                           direction="column"
-                          justifyContent="center"
-                          alignItems="center"
                           style={{ height: "350px" }}
+                          sx={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
                         >
-                          <Box p={2}>
+                          <Box
+                            sx={{
+                              p: 2,
+                            }}
+                          >
                             <Typography
                               variant="h6"
                               style={{ color: "#C9C9C9" }}
@@ -500,10 +553,10 @@ const DeepfakeResultsVideo = (props) => {
                               {keyword("deepfake_select")}
                             </Typography>
                           </Box>
-                        </Grid2>
+                        </Grid>
                       ) : (
-                        <Grid2 container direction="row" spacing={2}>
-                          <Grid2
+                        <Grid container direction="row" spacing={2}>
+                          <Grid
                             container
                             direction="column"
                             size={{ md: 6, xs: 12 }}
@@ -514,7 +567,7 @@ const DeepfakeResultsVideo = (props) => {
                               height="auto"
                               controls
                               key={
-                                results.deepfake_video_report.video_path +
+                                results[faceswapAlgorithm].video_path +
                                 "#t=" +
                                 shotSelectedValue.shot_start +
                                 "," +
@@ -528,7 +581,7 @@ const DeepfakeResultsVideo = (props) => {
                             >
                               <source
                                 src={
-                                  results.deepfake_video_report.video_path +
+                                  results[faceswapAlgorithm].video_path +
                                   "#t=" +
                                   shotSelectedValue.shot_start +
                                   "," +
@@ -538,18 +591,18 @@ const DeepfakeResultsVideo = (props) => {
                               />
                               {keyword("deepfake_support")}
                             </video>
-                          </Grid2>
-                          <Grid2
+                          </Grid>
+                          <Grid
                             container
                             direction="column"
                             size={{ md: 6, xs: 12 }}
                           >
                             <Typography>{keyword("deepfake_faces")}</Typography>
-                            <Grid2 container direction="column" spacing={2}>
+                            <Grid container direction="column" spacing={2}>
                               {shotSelectedValue.face_image_paths.map(
                                 (valueFace, keyFace) => {
                                   return (
-                                    <Grid2 size={12} key={keyFace}>
+                                    <Grid size={12} key={keyFace}>
                                       <Stack direction="column" spacing={2}>
                                         <img
                                           alt="face"
@@ -570,19 +623,19 @@ const DeepfakeResultsVideo = (props) => {
                                           % {keyword("deepfake_name")}
                                         </Typography>
                                       </Stack>
-                                    </Grid2>
+                                    </Grid>
                                   );
                                 },
                               )}
-                            </Grid2>
-                          </Grid2>
-                        </Grid2>
+                            </Grid>
+                          </Grid>
+                        </Grid>
                       )}
                     </Box>
                   </Card>
                 )}
-            </Grid2>
-          </Grid2>
+            </Grid>
+          </Grid>
         </Stack>
       </CardContent>
     </Card>

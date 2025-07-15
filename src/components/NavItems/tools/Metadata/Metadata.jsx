@@ -9,6 +9,12 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Fade from "@mui/material/Fade";
 import Stack from "@mui/material/Stack";
 
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import {
+  cleanMetadataState,
+  setMetadataMediaType,
+  setMetadataResult,
+} from "@/redux/reducers/tools/metadataReducer";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import {
   getFileTypeFromFileObject,
@@ -17,13 +23,7 @@ import {
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
 
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { imageMetadata as imageMetadataTool } from "../../../../constants/tools";
-import {
-  cleanMetadataState,
-  setMetadataMediaType,
-  setMetadataResult,
-} from "../../../../redux/reducers/tools/metadataReducer";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import MetadataImageResult from "./Results/MetadataImageResult";
@@ -196,7 +196,8 @@ const Metadata = () => {
     setInput("");
   };
 
-  const handleCloseFile = () => {
+  const resetState = () => {
+    setInput("");
     setFileInput(null);
     resetMetadataState();
   };
@@ -209,7 +210,7 @@ const Metadata = () => {
         icon={
           <imageMetadataTool.icon
             sx={{
-              fill: "#00926c",
+              fill: "var(--mui-palette-primary-main)",
               fontSize: "40px",
             }}
           />
@@ -219,12 +220,18 @@ const Metadata = () => {
         <Alert severity="info">{keyword("description_limitations")}</Alert>
         <Alert severity="info">{keywordTip("metadata_tip")}</Alert>
       </Stack>
-
-      <Box m={4} />
-
+      <Box
+        sx={{
+          m: 4,
+        }}
+      />
       <Card variant="outlined">
         <form>
-          <Box p={4}>
+          <Box
+            sx={{
+              p: 4,
+            }}
+          >
             <StringFileUploadField
               labelKeyword={keyword("metadata_content_input")}
               placeholderKeyword={keyword("metadata_content_input_placeholder")}
@@ -236,15 +243,18 @@ const Metadata = () => {
               setFileInput={setFileInput}
               handleSubmit={submitUrl}
               fileInputTypesAccepted={"image/*, video/*"}
-              handleCloseSelectedFile={handleCloseFile}
+              handleCloseSelectedFile={resetState}
+              handleClearUrl={resetState}
             />
           </Box>
         </form>
       </Card>
-      <Box m={4} />
-
+      <Box
+        sx={{
+          m: 4,
+        }}
+      />
       {error && <Alert severity="error">{error}</Alert>}
-
       {getVideoMetadata.isPending && (
         <Fade in={getVideoMetadata.isPending} timeout={750}>
           <Alert icon={<CircularProgress size={20} />} severity="info">
@@ -252,15 +262,12 @@ const Metadata = () => {
           </Alert>
         </Fade>
       )}
-
       {getVideoMetadata.isError && (
         <Alert severity="error">{keyword("metadata_generic_error")}</Alert>
       )}
-
       {resultData && !resultIsImage && resultUrl && (
         <MetadataVideoResult metadata={resultData} videoSrc={resultUrl} />
       )}
-
       {resultData && resultIsImage && (
         <MetadataImageResult
           result={resultData}

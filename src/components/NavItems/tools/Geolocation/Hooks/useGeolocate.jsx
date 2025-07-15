@@ -1,13 +1,12 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import axios from "axios";
-import { setError } from "redux/reducers/errorReducer";
-
 import {
   setGeolocationLoading,
   setGeolocationResult,
-} from "../../../../../redux/reducers/tools/geolocationReducer";
+} from "@/redux/reducers/tools/geolocationReducer";
+import axios from "axios";
+import { setError } from "redux/reducers/errorReducer";
 
 const caa_localtion_base_url = process.env.REACT_APP_CAA_LOCATION_URL;
 
@@ -36,14 +35,17 @@ export const useGeolocate = (url, processURL, keyword) => {
               }),
             );
           } else {
-            handleError("geo_error_" + response.data.status, keyword, dispatch);
+            handleError(
+              "geo_error_" + response.data?.status,
+              keyword,
+              dispatch,
+            );
           }
         })
         .catch((error) => {
           handleError("geo_error_" + error.response.status, keyword, dispatch);
         });
     }
-    // eslint-disable-next-line
   }, [processURL, url]);
 };
 

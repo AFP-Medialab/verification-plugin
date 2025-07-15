@@ -7,19 +7,19 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Fade from "@mui/material/Fade";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Modal from "@mui/material/Modal";
 
 import CloseIcon from "@mui/icons-material/Close";
 
+import { setMagnifierResult } from "@/redux/actions/tools/magnifierActions";
+import { reverseImageSearch } from "@Shared/ReverseSearch/reverseSearchUtils";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { ReverseSearchButtons } from "components/Shared/ReverseSearch/ReverseSearchButtons";
 import "tui-image-editor/dist/tui-image-editor.css";
 
-import { setMagnifierResult } from "../../../../../redux/actions/tools/magnifierActions";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import { reverseImageSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 import ImageEditor from "../Utils/ImageEditor";
 import Loop from "./Loop";
 
@@ -120,7 +120,11 @@ const ImageResult = ({ handleCloseResults }) => {
 
   return (
     <Card variant="outlined">
-      <Box m={2}>
+      <Box
+        sx={{
+          m: 2,
+        }}
+      >
         <CardHeader
           title={keyword("cardheader_results")}
           className={classes.headerUploadedImage}
@@ -172,7 +176,11 @@ const ImageResult = ({ handleCloseResults }) => {
                   usageStatistics={false}
                   ref={imageEditor}
                 />
-                <Box m={1} />
+                <Box
+                  sx={{
+                    m: 1,
+                  }}
+                />
 
                 <div className={classes.modalButton}>
                   <Button
@@ -195,20 +203,26 @@ const ImageResult = ({ handleCloseResults }) => {
             </Fade>
           </Modal>
 
-          <Box m={1} />
-          <Grid2
+          <Box
+            sx={{
+              m: 1,
+            }}
+          />
+          <Grid
             container
             direction="row"
-            justifyContent="center"
-            alignItems="center"
             spacing={3}
+            sx={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-            <Grid2>
+            <Grid>
               <Button color="primary" variant="contained" onClick={handleOpen}>
                 {keyword("edit_image")}
               </Button>
-            </Grid2>
-            <Grid2>
+            </Grid>
+            <Grid>
               <a
                 style={{ textDecoration: "none" }}
                 href={resultImage}
@@ -218,11 +232,19 @@ const ImageResult = ({ handleCloseResults }) => {
                   {keyword("download")}
                 </Button>
               </a>
-            </Grid2>
-          </Grid2>
-          <Box m={2} />
+            </Grid>
+          </Grid>
+          <Box
+            sx={{
+              m: 2,
+            }}
+          />
           <Loop src={resultImage} />
-          <Box m={2} />
+          <Box
+            sx={{
+              m: 2,
+            }}
+          />
           <ReverseSearchButtons
             isimageUrl={isImageUrl}
             reverseSearch={reverseSearch}

@@ -28,7 +28,7 @@ const SourceCredibilityResult = (props) => {
             <ListItem key={key}>
               <ListItemText
                 primary={
-                  <div sx={{ ml: 2 }}>
+                  <Box>
                     <Typography
                       variant={"body1"}
                       component={"div"}
@@ -47,8 +47,12 @@ const SourceCredibilityResult = (props) => {
                         </Typography>
                       ) : null}
                     </Typography>
-                    <Box mb={0.5} />
-                  </div>
+                    <Box
+                      sx={{
+                        mb: 0.5,
+                      }}
+                    />
+                  </Box>
                 }
                 secondary={
                   <Typography
@@ -56,7 +60,8 @@ const SourceCredibilityResult = (props) => {
                     component={"div"}
                     color={"textSecondary"}
                   >
-                    {value.credibilityScope.includes("/") ? (
+                    {value.credibilityScope &&
+                    value.credibilityScope.includes("/") ? (
                       <Typography variant={"subtitle2"}>
                         {` ${" "} ${keyword("account_scope")} ${value.credibilityScope} `}
                       </Typography>

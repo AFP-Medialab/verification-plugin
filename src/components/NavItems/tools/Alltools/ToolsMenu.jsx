@@ -10,7 +10,7 @@ import Card from "@mui/material/Card";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Snackbar from "@mui/material/Snackbar";
 import SvgIcon from "@mui/material/SvgIcon";
 import Tab from "@mui/material/Tab";
@@ -20,14 +20,10 @@ import Typography from "@mui/material/Typography";
 import { Audiotrack } from "@mui/icons-material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
+import { ROLES } from "@/constants/roles";
+import { TOOLS_CATEGORIES, canUserSeeTool, tools } from "@/constants/tools";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import { ROLES } from "../../../../constants/roles";
-import {
-  TOOLS_CATEGORIES,
-  canUserSeeTool,
-  tools,
-} from "../../../../constants/tools";
 import DataIcon from "../../../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
 import ImageIcon from "../../../NavBar/images/SVG/Image/Images.svg";
 import SearchIcon from "../../../NavBar/images/SVG/Search/Search.svg";
@@ -319,7 +315,7 @@ const ToolsMenu = () => {
 
             return (
               <TabPanel value={value} index={index} key={index}>
-                <Grid2
+                <Grid
                   container
                   sx={{
                     justifyContent: "flex-start",
@@ -329,7 +325,13 @@ const ToolsMenu = () => {
                 >
                   {tools.map((tool, key) => {
                     const element = (
-                      <Grid2 size={{ xs: 4, lg: 3 }} key={key} minWidth="200px">
+                      <Grid
+                        size={{ xs: 4, lg: 3 }}
+                        key={key}
+                        sx={{
+                          minWidth: "200px",
+                        }}
+                      >
                         <ToolsMenuItem
                           tool={tool}
                           onClick={() =>
@@ -337,7 +339,7 @@ const ToolsMenu = () => {
                           }
                           key={key}
                         />
-                      </Grid2>
+                      </Grid>
                     );
                     if (
                       tool.rolesNeeded &&
@@ -352,17 +354,14 @@ const ToolsMenu = () => {
                       return element;
                     }
                   })}
-                </Grid2>
+                </Grid>
               </TabPanel>
             );
           })}
         </Box>
       </Card>
-
       <Box sx={{ m: 3 }} />
-
       <Box sx={{ m: 4 }} />
-
       <Dialog
         height={"400px"}
         fullWidth

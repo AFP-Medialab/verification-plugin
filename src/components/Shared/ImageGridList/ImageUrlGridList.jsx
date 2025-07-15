@@ -1,7 +1,7 @@
 import React from "react";
-//import ImageList from '@mui/material//ImageList';
-//import ImageListItem from '@mui/material//ImageListItem';
-import { Grid2 } from "@mui/material/";
+
+import Grid from "@mui/material/Grid";
+
 import useClasses from "../MaterialUiStyles/useClasses";
 
 const styles = (theme) => ({
@@ -25,10 +25,10 @@ const ImageUrlGridList = (props) => {
 
   return (
     <div className={classes.root}>
-      <Grid2 container spacing={1}>
+      <Grid container spacing={1}>
         {props.list.map((tile, index) => {
           return (
-            <Grid2 key={index} size={{ xs: 12 / props.cols }}>
+            <Grid key={index} size={{ xs: 12 / props.cols }}>
               {index === props.list.length - 1 && props.setLoading !== null ? (
                 <img
                   src={tile.url}
@@ -43,10 +43,10 @@ const ImageUrlGridList = (props) => {
                   style={{ width: "100%", height: "auto" }}
                 />
               )}
-            </Grid2>
+            </Grid>
           );
         })}
-      </Grid2>
+      </Grid>
     </div>
   );
 };

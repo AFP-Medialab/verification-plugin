@@ -8,15 +8,15 @@ import Card from "@mui/material/Card";
 import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { imageForensic } from "@/constants/tools";
+import { resetForensicState } from "@/redux/actions/tools/forensicActions";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import axios from "axios";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { setError } from "redux/reducers/errorReducer";
 
-import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { imageForensic } from "../../../../constants/tools";
-import { resetForensicState } from "../../../../redux/actions/tools/forensicActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import useGetImages from "./Hooks/useGetImages";
@@ -60,6 +60,8 @@ const Forensic = () => {
     uid,
   );
   const submitUrl = () => {
+    dispatch(resetForensicState());
+
     const fileUrl = imageFile ? URL.createObjectURL(imageFile) : input;
 
     setType("url");
@@ -114,6 +116,7 @@ const Forensic = () => {
   }, [processUrl]);
 
   const preprocessingSuccess = (file) => {
+    dispatch(resetForensicState());
     setImageFile(file);
     setType("local");
   };
@@ -139,7 +142,7 @@ const Forensic = () => {
     );
   };
 
-  const handleCloseSelectedFile = () => {
+  const resetToolState = () => {
     setImageFile(undefined);
     setInput("");
     dispatch(resetForensicState());
@@ -150,13 +153,19 @@ const Forensic = () => {
       <HeaderTool
         name={keywordAllTools("navbar_forensic")}
         description={keywordAllTools("navbar_forensic_description")}
-        icon={<imageForensic.icon sx={{ fill: "#00926c", fontSize: "40px" }} />}
+        icon={
+          <imageForensic.icon
+            sx={{ fill: "var(--mui-palette-primary-main)", fontSize: "40px" }}
+          />
+        }
       />
-
       <Alert severity="warning">{keywordWarning("warning_forensic")}</Alert>
-
       <Card variant="outlined">
-        <Box p={4}>
+        <Box
+          sx={{
+            p: 4,
+          }}
+        >
           <form>
             <StringFileUploadField
               labelKeyword={keyword("forensic_input")}
@@ -169,18 +178,19 @@ const Forensic = () => {
               setFileInput={setImageFile}
               handleSubmit={submitUrl}
               fileInputTypesAccepted={"image/*"}
-              handleCloseSelectedFile={handleCloseSelectedFile}
+              handleCloseSelectedFile={resetToolState}
               preprocessLocalFile={preprocessImage}
+              isParentLoading={loading}
+              handleClearUrl={resetToolState}
             />
           </form>
         </Box>
+        {loading && (
+          <div>
+            <LinearProgress />
+          </div>
+        )}
       </Card>
-
-      {loading && (
-        <div>
-          <LinearProgress />
-        </div>
-      )}
 
       {resultData && (
         <ForensicResults
@@ -191,7 +201,7 @@ const Forensic = () => {
           gifAnimation={gifAnimationState}
           resetImage={resetImage}
           masksData={masks}
-          onClose={handleCloseSelectedFile}
+          onClose={resetToolState}
         />
       )}
     </Stack>
