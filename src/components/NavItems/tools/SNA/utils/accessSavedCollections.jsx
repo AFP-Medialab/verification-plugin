@@ -141,8 +141,7 @@ export const getTextClusters = async (
 ) => {
   selectedContent.forEach((x, idx) => (x.id = idx));
 
-  let d3ltaUrl =
-    "https://integration.demo.verification-plugin.eu/vera/tsna/d3lta/cluster"; //process.env.d3ltaAPI
+  let d3ltaUrl = process.env.REACT_APP_D3LTA_URL; //
 
   const d3ltaInitRequestConfig = {
     method: "post",
