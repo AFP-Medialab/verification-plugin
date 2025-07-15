@@ -626,7 +626,6 @@ export const tools = Object.freeze([
   searchXnetwork,
   dataAnalysisSna,
   dataAnalysisCrowdtangle,
-  dataAnalysisSnaV2,
   newSna,
   archiving,
   about,
