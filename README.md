@@ -30,6 +30,10 @@ limited to the warranties of merchantability, fitness for a particular purpose a
 the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract,
 tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software.
 
+## Contributing
+
+We welcome contributions! Please read our [Contributing Guidelines](CONTRIBUTING.md) before starting.
+
 ## Getting Started
 
 The Verification plugin is a browser based plugin built with React and Redux.
