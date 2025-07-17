@@ -236,7 +236,7 @@ const AssistantMediaResult = () => {
           <CardContent style={{ wordBreak: "break-word" }}>
             {/* image list */}
             {filteredImageList.length > 0 ? (
-              <Accordion defaultExpanded>
+              <Accordion>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                   <Typography variant="h6">
                     {keyword("images_label")}
