@@ -30,7 +30,8 @@ const generateCohashtagGraphData = (selectedContent) => {
   };
 
   selectedContent.forEach((entry) => {
-    if (entry.hashtags.length === 0) return;
+    if (!entry.hashtags) return;
+    if (entry.hashtags?.length === 0) return;
     let hashtags = entry.hashtags.map((h) => h.toLowerCase());
 
     hashtags.forEach((hashtag) => {

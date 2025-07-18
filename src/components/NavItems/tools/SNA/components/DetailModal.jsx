@@ -66,7 +66,10 @@ const DetailModal = (props) => {
       <Modal open={openDetailModal} onClose={handleClose}>
         <Box sx={style}>
           <Stack direction="row" spacing={1} alignItems="center">
-            <Typography pl={1}> {keyword("detailModal_search")}</Typography>
+            <Typography sx={{ padding: 1 }}>
+              {" "}
+              {keyword("detailModal_search")}
+            </Typography>
             <TextField
               variant="outlined"
               sx={{ width: "400px" }}

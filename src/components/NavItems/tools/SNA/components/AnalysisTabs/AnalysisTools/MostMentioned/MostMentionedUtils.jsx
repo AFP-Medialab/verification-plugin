@@ -11,7 +11,8 @@ export const entryAggregatorByListValue = (
 ) => {
   let aggregator = {};
   selectedContent.forEach((entry) => {
-    if (!entry[listField].length > 0) return;
+    if (!entry[listField]) return;
+    if (!entry[listField]?.length > 0) return;
     entry[listField].forEach((listItemInitial) => {
       let listItem = listItemInitial.toLowerCase();
       if (aggregator[listItem]) {
@@ -35,6 +36,7 @@ export const entryAggregatorByListValue = (
 };
 
 export const generateMostMentionedData = (selectedContent) => {
+  if (!selectedContent[0].mentions) return [];
   return entryAggregatorByListValue(selectedContent, "mentions", "username");
 };
 

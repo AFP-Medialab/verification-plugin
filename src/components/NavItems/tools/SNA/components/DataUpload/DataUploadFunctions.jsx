@@ -14,10 +14,7 @@ const cleanCrowdTangleFbDataUpload = (uploadedData) => {
       ...rest,
       text,
       likes: parseInt(likes),
-      hashtags: text
-        ?.split(" ")
-        .filter((x) => x.length > 2 && x.includes("#"))
-        .join(","),
+      hashtags: text?.split(" ").filter((x) => x.length > 2 && x.includes("#")),
     }),
   );
 
