@@ -12,18 +12,17 @@ import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-import GaugeChartModalExplanation from "components/Shared/GaugeChartResults/GaugeChartModalExplanation";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import GaugeChartModalExplanation from "@/components/Shared/GaugeChartResults/GaugeChartModalExplanation";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
 import "./assistantTextResultStyle.css";
 import {
@@ -147,23 +146,19 @@ export default function AssistantTextClassification({
       // Filter sentences above importanceThresholdLow unless machine generated text
       const sentenceIndices = classification[label];
       for (let i = 0; i < sentenceIndices.length; i++) {
-        if (
-          credibilitySignal != keyword("machine_generated_text_title") &&
-          sentenceIndices[i].score >= configs.importanceThresholdLow
-        ) {
+        if (credibilitySignal === keyword("machine_generated_text_title")) {
           filteredSentences.push(sentenceIndices[i]);
-        } else {
+        } else if (sentenceIndices[i].score >= configs.importanceThresholdLow) {
           filteredSentences.push(sentenceIndices[i]);
         }
       }
     } else {
       //Filter categories above confidenceThreshold unless machine generated text
-      if (
-        credibilitySignal != keyword("machine_generated_text_title") &&
+      if (credibilitySignal === keyword("machine_generated_text_title")) {
+        filteredCategories[label] = classification[label];
+      } else if (
         classification[label][0].score >= configs.confidenceThresholdLow
       ) {
-        filteredCategories[label] = classification[label];
-      } else {
         filteredCategories[label] = classification[label];
       }
     }
@@ -171,6 +166,12 @@ export default function AssistantTextClassification({
 
   if (Object.keys(filteredCategories).length === 0) {
     filteredSentences = [];
+  }
+  if (
+    credibilitySignal === keyword("subjectivity_title") &&
+    Object.keys(filteredSentences).length === 0
+  ) {
+    filteredCategories = [];
   }
 
   return (

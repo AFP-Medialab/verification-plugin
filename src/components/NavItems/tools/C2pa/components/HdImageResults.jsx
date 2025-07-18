@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import Alert from "@mui/material/Alert";
@@ -16,6 +16,7 @@ import Typography from "@mui/material/Typography";
 import { ROLES } from "@/constants/roles";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { getBlob } from "@Shared/ReverseSearch/utils/searchUtils";
+import { resizeImageWithWorker } from "@Shared/Utils/fileUtils";
 import { deepClone } from "@mui/x-data-grid/internals";
 
 import C2paCard from "./c2paCard";
@@ -29,8 +30,6 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
   const [resizedHdImageUrl, setResizedHdImageUrl] = useState(null);
 
   const [selectedImage, setSelectedImage] = useState(resizedHdImageUrl);
-
-  const workerRef = useRef(null);
 
   const [processedC2paData, setProcessedC2paData] = useState(null);
 
@@ -71,16 +70,6 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
   }, [hdImageC2paData]);
 
   useEffect(() => {
-    workerRef.current = new Worker(
-      new URL("@workers/resizeImageWorker", import.meta.url),
-    );
-
-    return () => {
-      workerRef.current.terminate();
-    };
-  }, []);
-
-  useEffect(() => {
     if (!hdImage) return;
 
     getBlob(hdImage).then((blob) => {
@@ -89,27 +78,6 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
       });
     });
   }, [hdImage]);
-
-  /**
-   *
-   * @param image
-   */
-  const resizeImageWithWorker = (image) => {
-    return new Promise((resolve, reject) => {
-      const workerInstance = new Worker(
-        new URL("@workers/resizeImageWorker", import.meta.url),
-      );
-      workerInstance.postMessage(image);
-
-      workerInstance.onerror = function (e) {
-        reject(e.error);
-      };
-
-      workerInstance.onmessage = function (e) {
-        resolve(e.data);
-      };
-    });
-  };
 
   const handleImageCardClick = (image) => {
     if (image === hdImage) setSelectedImage(resizedHdImageUrl);

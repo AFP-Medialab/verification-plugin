@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Trans } from "react-i18next";
 import { useSelector } from "react-redux";
-//import ReactWordcloud from "react-wordcloud";
 import { TagCloud } from "react-tagcloud";
 
 import Button from "@mui/material/Button";
@@ -13,14 +12,15 @@ import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import Link from "@mui/material/Link";
 import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import "tippy.js/animations/scale.css";
 import "tippy.js/dist/tippy.css";
 
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
   TransHtmlDoubleLineBreak,
   TransNamedEntityRecogniserLink,
@@ -100,11 +100,22 @@ const AssistantNEResult = () => {
     }
 
     return (
-      <Tooltip key={tag.key || tag.value} title={tag.count} arrow>
+      <Tooltip
+        key={tag.key || tag.value}
+        title={
+          <>
+            <Typography variant="h5">
+              {tag.count} {keyword("named_entity_mentions")}
+            </Typography>
+            <Typography>{tag.abstract}</Typography>
+          </>
+        }
+        arrow
+      >
         <Link
           style={tagStyle}
           className={tagClassName}
-          href={"https://www.google.com/search?q=" + tag.value}
+          href={tag.link}
           rel="noopener noreferrer"
           target={"_blank"}
         >

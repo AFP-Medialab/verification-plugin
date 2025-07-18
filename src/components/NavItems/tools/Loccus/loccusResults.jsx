@@ -325,7 +325,11 @@ const LoccusResults = ({
             style={{ borderRadius: "4px 4p x 0px 0px" }}
             title={keyword("loccus_title")}
             action={
-              <IconButton aria-label="close" onClick={handleClose}>
+              <IconButton
+                aria-label="close"
+                onClick={handleClose}
+                sx={{ p: 1 }}
+              >
                 <CloseIcon />
               </IconButton>
             }

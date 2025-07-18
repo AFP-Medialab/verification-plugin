@@ -166,6 +166,7 @@ const StringFileUploadField = ({
                         if (handleClearUrl) handleClearUrl();
                       }}
                       disabled={isParentLoading}
+                      sx={{ p: 1 }}
                     >
                       <ClearIcon />
                     </IconButton>

@@ -193,6 +193,7 @@ const Feedback = () => {
                         key="close"
                         aria-label="close"
                         onClick={() => setDisplayCard(false)}
+                        sx={{ p: 1 }}
                       >
                         <CloseIcon />
                       </IconButton>

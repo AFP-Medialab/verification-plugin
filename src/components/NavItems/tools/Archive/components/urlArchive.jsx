@@ -66,6 +66,18 @@ const UrlArchive = ({ url, mediaUrl }) => {
       uid,
     );
 
+  const [clickedUrl, setClickedUrl] = useState(null);
+  // Track the clicked Save with SPN action
+  useTrackEvent(
+    "archive",
+    "archive_wbm_spn",
+    "Archive with WBM SPN",
+    clickedUrl,
+    client_id,
+    history,
+    uid,
+  );
+
   useEffect(() => {
     if (!platform) {
       setUrls(url);
@@ -103,16 +115,6 @@ const UrlArchive = ({ url, mediaUrl }) => {
   }, [platform]);
 
   const saveToInternetArchive = (link) => {
-    useTrackEvent(
-      "archive",
-      "archive_wbm_spn",
-      "Archive with WBM SPN",
-      link,
-      client_id,
-      history,
-      uid,
-    );
-
     window.open("https://web.archive.org/save/" + link, "_blank");
   };
 
@@ -144,7 +146,10 @@ const UrlArchive = ({ url, mediaUrl }) => {
           <Box>
             <Button
               variant="outlined"
-              onClick={() => saveToInternetArchive(link)}
+              onClick={() => {
+                setClickedUrl(link);
+                saveToInternetArchive(link);
+              }}
               startIcon={<IconInternetArchive />}
             >
               {keyword("internet_archive_button")}
