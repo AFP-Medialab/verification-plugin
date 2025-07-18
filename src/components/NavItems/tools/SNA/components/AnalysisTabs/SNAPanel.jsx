@@ -11,6 +11,7 @@ const SNAPanel = (snaPanelProps) => {
   let setSnaTab = snaPanelProps.setSnaTab;
   let keyword = snaPanelProps.keyword;
   let analysisToolsProps = snaPanelProps.analysisToolsProps;
+  let essentialProps = snaPanelProps.analysisToolsProps.essentialProps;
 
   const switchTabs = (event, newValue) => {
     setSnaTab(newValue);
@@ -36,11 +37,22 @@ const SNAPanel = (snaPanelProps) => {
             ))}
           </Tabs>
         </Box>
-        {Object.values(analysisTools).map((tool, idx) => (
-          <SNAPanelTab key={"snaPanel_" + idx} value={snaTab} index={idx}>
-            {tool.component(analysisToolsProps[tool.propKey])}
-          </SNAPanelTab>
-        ))}
+        {Object.values(analysisTools).map((tool, idx) => {
+          let toolDisplayProps =
+            analysisToolsProps[tool.propKey].toolDisplayProps;
+          let toolAnalysisProps =
+            analysisToolsProps[tool.propKey].toolAnalysisProps;
+
+          return (
+            <SNAPanelTab key={"snaPanel_" + idx} value={snaTab} index={idx}>
+              {tool.component(
+                essentialProps,
+                toolDisplayProps,
+                toolAnalysisProps,
+              )}
+            </SNAPanelTab>
+          );
+        })}
       </Box>
     </>
   );

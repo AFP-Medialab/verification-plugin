@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
 import FormControl from "@mui/material/FormControl";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -236,7 +236,7 @@ export const RecordingWindow = (
 ) => {
   return (
     <>
-      <Grid2 size={{ xs: 12 }}>
+      <Grid size={{ xs: 12 }}>
         <Box display="flex" flexDirection="column">
           <Button
             variant="outlined"
@@ -275,7 +275,7 @@ export const RecordingWindow = (
             )}
           </Collapse>
         </Box>
-      </Grid2>
+      </Grid>
     </>
   );
 };

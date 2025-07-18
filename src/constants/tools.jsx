@@ -535,7 +535,7 @@ export const newSna = new Tool(
   twitterSnaSvgIcon,
   TOOLS_CATEGORIES.DATA_ANALYSIS,
   [TOOL_STATUS_ICON.LOCK],
-  [ROLES.BETA_TESTER],
+  null,
   "Sna",
   TOOL_GROUPS.VERIFICATION,
   <SNA />,

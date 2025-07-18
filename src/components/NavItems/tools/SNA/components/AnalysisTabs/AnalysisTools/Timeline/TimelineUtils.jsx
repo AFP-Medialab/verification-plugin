@@ -1,6 +1,8 @@
 import ReactECharts from "echarts-for-react";
 import React from "react";
 
+import Box from "@mui/material/Box";
+
 const dayjs = require("dayjs");
 
 const DATE_FORMAT = "YYYY-MM-DDTHH";
@@ -128,29 +130,34 @@ export const generateTimelineData = (selectedData) => {
 };
 
 export const TimelineChart = (
-  timelineChartOptions,
-  setDetailContent,
-  setOpenDetailModal,
-  timelineChartData,
+  { keyword, setDetailContent, setOpenDetailModal },
   selectedData,
-) => (
-  <div
-    style={{
-      width: "100%",
-      height: "500px",
-    }}
-  >
-    <ReactECharts
-      option={timelineChartOptions}
-      onEvents={{
-        click: (params) =>
-          handleClick(
-            params,
-            setDetailContent,
-            setOpenDetailModal,
-            selectedData,
-          ),
+) => {
+  let timelineChartData = generateTimelineData(selectedData);
+  let timelineChartOptions = getTimelineChartOptions(
+    keyword,
+    timelineChartData,
+  );
+
+  return (
+    <Box
+      sx={{
+        width: "100%",
+        height: "500px",
       }}
-    />
-  </div>
-);
+    >
+      <ReactECharts
+        option={timelineChartOptions}
+        onEvents={{
+          click: (params) =>
+            handleClick(
+              params,
+              setDetailContent,
+              setOpenDetailModal,
+              selectedData,
+            ),
+        }}
+      />
+    </Box>
+  );
+};

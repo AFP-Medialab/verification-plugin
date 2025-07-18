@@ -1,8 +1,8 @@
-import React from "react";
+// import React from "react";
 
-const {
-  generateAccountActivityChart,
-} = require("../AccountActivity/AccountActivityUtils");
+// export const {
+//   generateAccountActivityChart,
+// } = require("../AccountActivity/AccountActivityUtils");
 
 export const entryAggregatorByListValue = (
   selectedContent,
@@ -34,39 +34,42 @@ export const entryAggregatorByListValue = (
   return aggregatorSorted;
 };
 
-const generateMostMentionedGraphData = (selectedContent) => {
+export const generateMostMentionedData = (selectedContent) => {
   return entryAggregatorByListValue(selectedContent, "mentions", "username");
 };
 
-const mostMentionedDetailDisplayHandler = (selectedContent, clickPayload) => {
+export const mostMentionedDetailDisplayHandler = (
+  selectedContent,
+  clickPayload,
+) => {
   return clickPayload.entries;
 };
 
-export const generateMostMentionedGraph = (
-  keyword,
-  selectedContent,
-  setMostMentionedGraph,
-  setDetailContent,
-  setOpenDetailModal,
-  selected,
-  dataSources,
-) => {
-  let mostMentionedGraphData = generateMostMentionedGraphData(selectedContent);
-  if (mostMentionedGraphData.length === 0) return <></>;
+// export const generateMostMentionedGraph = (
+//   keyword,
+//   selectedContent,
+//   setMostMentionedGraph,
+//   setDetailContent,
+//   setOpenDetailModal,
+//   selected,
+//   dataSources,
+// ) => {
+//   let mostMentionedGraphData = generateMostMentionedGraphData(selectedContent);
+//   if (mostMentionedGraphData.length === 0) return <></>;
 
-  let mostMentionedGraph = generateAccountActivityChart(
-    "username",
-    true,
-    mostMentionedGraphData,
-    keyword,
-    mostMentionedDetailDisplayHandler,
-    "Mentions",
-    setMostMentionedGraph,
-    setDetailContent,
-    setOpenDetailModal,
-    selectedContent,
-    selected,
-    dataSources,
-  );
-  return mostMentionedGraph;
-};
+//   let mostMentionedGraph = generateAccountActivityChart(
+//     "username",
+//     true,
+//     mostMentionedGraphData,
+//     keyword,
+//     mostMentionedDetailDisplayHandler,
+//     "Mentions",
+//     setMostMentionedGraph,
+//     setDetailContent,
+//     setOpenDetailModal,
+//     selectedContent,
+//     selected,
+//     dataSources,
+//   );
+//   return mostMentionedGraph;
+// };

@@ -7,7 +7,10 @@ import { generateAccountActivityChart } from "../AccountActivity/AccountActivity
 import { generateCoorNetworkGraph } from "../COOR/CoorUtils";
 import { entryAggregatorByListValue } from "../MostMentioned/MostMentionedUtils";
 
-const setDetailModalContent = (selectedContent, clickPayload) => {
+export const hashtagAnalysisDetailModalContent = (
+  selectedContent,
+  clickPayload,
+) => {
   return clickPayload.entries;
 };
 
@@ -62,41 +65,23 @@ const generateCohashtagGraphData = (selectedContent) => {
   };
 };
 
-export const generateHashtagAnalysisViz = (
-  selectedContent,
-  keyword,
-  setHashtagBarChart,
-  setDetailContent,
-  setOpenDetailModal,
-  selected,
-  dataSources,
-) => {
-  let hashtagAnalysisData = entryAggregatorByListValue(
-    selectedContent,
-    "hashtags",
-    "hashtag",
-  );
+export const generateHashtagAnalysisBarChartData = (selectedContent) => {
+  return entryAggregatorByListValue(selectedContent, "hashtags", "hashtag");
+};
+
+export const generateHashtagAnalysisViz = (vizArgs, toolResult) => {
+  let keyword = vizArgs.barChart.keyword;
+
   let hashtagAnalysisBarChart = generateAccountActivityChart(
-    "hashtag",
-    true,
-    hashtagAnalysisData,
-    keyword,
-    setDetailModalContent,
-    "Hashtags",
-    setHashtagBarChart,
-    setDetailContent,
-    setOpenDetailModal,
-    selectedContent,
-    selected,
-    dataSources,
+    vizArgs.barChart,
+    generateHashtagAnalysisBarChartData(toolResult),
   );
 
-  let cohashtagGraphData = generateCohashtagGraphData(selectedContent);
+  let cohashtagGraphData = generateCohashtagGraphData(toolResult);
 
   let cohashtagGraph = generateCoorNetworkGraph(
     cohashtagGraphData,
-    setDetailContent,
-    setOpenDetailModal,
+    vizArgs.networkGraph,
   );
 
   return (

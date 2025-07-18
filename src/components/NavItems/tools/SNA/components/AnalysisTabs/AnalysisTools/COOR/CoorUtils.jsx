@@ -42,22 +42,24 @@ const coorTextEntry = (
   textFieldVarSetter,
 ) => {
   return (
-    <div key={"coorEntry_" + textFieldVar}>
+    <Box key={"coorEntry_" + fieldDescription}>
       <Typography pl={0.5}>{keyword(fieldDescription)}</Typography>
       <Tooltip title={keyword(fieldHelpText)}>
         <IconButton>
           <HelpOutlineIcon fontSize="inherit" />
         </IconButton>
       </Tooltip>
-      <TextField
-        variant="outlined"
-        sx={{ width: "100px" }}
-        value={textFieldVar}
-        onChange={(e) => {
-          textFieldVarSetter(e.target.value);
-        }}
-      />
-    </div>
+      <FormControl>
+        <TextField
+          variant="outlined"
+          sx={{ width: "100px" }}
+          value={textFieldVar}
+          onChange={(e) => {
+            textFieldVarSetter(e.target.value);
+          }}
+        />
+      </FormControl>
+    </Box>
   );
 };
 
@@ -120,18 +122,21 @@ export const getObjectSelectOptions = (dataSources, selected) => {
   return coorObjectSelectOptions;
 };
 
-export const coorSettingsDisplay = (
+export const coorSettingsDisplay = ({
   keyword,
+  dataSources,
+  selected,
   coorTimeWindow,
   setCoorTimeWindow,
   coorEdgeThresh,
   setCoorEdgeThresh,
-  coorMinParticipants,
-  setCoorMinParticipants,
+  coorMinParticipation,
+  setCoorMinParticipation,
   coorObjectChoice,
   setCoorObjectChoice,
-  coorObjectSelectOptions,
-) => {
+}) => {
+  let coorObjectSelectOptions = getObjectSelectOptions(dataSources, selected);
+
   const coorSettingsFields = [
     {
       id: "timeWindow",
@@ -159,8 +164,8 @@ export const coorSettingsDisplay = (
         keyword,
         "snaTools_coorMinParticipantsLabel",
         "snaTools_coorMinParticipantsHelperText",
-        coorMinParticipants,
-        setCoorMinParticipants,
+        coorMinParticipation,
+        setCoorMinParticipation,
       ),
     },
     {
@@ -344,17 +349,22 @@ const getCosharersByObject = (coorResult) => {
 
 export const runCoorAnalysis = async (
   selectedContent,
-  coorTimeWindow,
-  coorEdgeThresh,
-  coorMinParticipation,
-  objectChoice,
-  authenticatedRequest,
+  {
+    coorTimeWindow,
+    coorEdgeThresh,
+    coorMinParticipation,
+    coorObjectChoice,
+    authenticatedRequest,
+  },
 ) => {
+  console.log(selectedContent);
+  console.log(coorObjectChoice);
   let readiedContent = await getCoorContent(
-    objectChoice,
+    coorObjectChoice,
     selectedContent,
     authenticatedRequest,
   );
+  console.log(readiedContent);
   let coorResult = detectCoor(
     coorTimeWindow,
     coorEdgeThresh,
@@ -397,11 +407,10 @@ export const generateCoorGraphData = (coorResult, dataSources, selected) => {
   return graphData;
 };
 
-export const generateCoorNetworkGraph = (
-  graphData,
-  setDetailContent,
-  setOpenDetailModal,
-) => {
+export const generateCoorNetworkGraph = (graphData, vizArgs) => {
+  let setDetailContent = vizArgs.setDetailContent;
+  let setOpenDetailModal = vizArgs.setOpenDetailModal;
+
   let graph = new MultiUndirectedGraph();
 
   graphData.nodes.forEach((node) => {
@@ -541,12 +550,8 @@ const coorExportButton = (keyword, coorResult) => {
 };
 
 export const generateCoorViz = (
+  { keyword, setDetailContent, setOpenDetailModal, dataSources, selected },
   coorResult,
-  keyword,
-  setDetailContent,
-  setOpenDetailModal,
-  dataSources,
-  selected,
 ) => {
   if (coorResult.length == 0)
     return (
@@ -555,13 +560,10 @@ export const generateCoorViz = (
 
   let coorGraphData = generateCoorGraphData(coorResult, dataSources, selected);
 
-  const coorNetworkGraph = generateCoorNetworkGraph(
-    coorGraphData,
+  const coorNetworkGraph = generateCoorNetworkGraph(coorGraphData, {
     setDetailContent,
     setOpenDetailModal,
-    dataSources,
-    selected,
-  );
+  });
   const coorTable = generateCoorTable(
     coorResult,
     keyword,

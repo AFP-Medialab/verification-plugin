@@ -1,10 +1,12 @@
 import React, { PureComponent } from "react";
 
+import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
+import { SNAButton } from "components/NavItems/tools/SNA/utils/SNAButton";
 import {
   getSelectedSourcesNameMaps,
   keepOnlyNumberFields,
@@ -32,18 +34,20 @@ export const accountActivityDetailDisplayHandler = (
   );
 };
 
-export const accountActivitySettings = (
-  keyword,
-  dataSources,
-  selected,
-  activitySelect,
-  setActivitySelect,
-) => {
+export const accountActivitySettings = (settingsArgs) => {
+  let keyword = settingsArgs.keyword;
+  let dataSources = settingsArgs.dataSources;
+  let selected = settingsArgs.selected;
+  let activitySelect = settingsArgs.activitySelect;
+  let setActivitySelect = settingsArgs.setActivitySelect;
+
   let selectedSources = dataSources.filter((source) =>
     selected.includes(source.id),
   );
 
   if (selectedSources.length === 0) return <> </>;
+
+  console.log("here");
 
   const numberFieldsinSources = selectedSources
     .map((source) => keepOnlyNumberFields(source.content[0]))
@@ -54,7 +58,7 @@ export const accountActivitySettings = (
   );
 
   return (
-    <>
+    <Box key="accountActivitySettings">
       <Stack direction="row" spacing={2} alignItems="center">
         <Typography>
           {keyword("snaTools_accountActivitySettingsDescription")}
@@ -74,7 +78,7 @@ export const accountActivitySettings = (
           ))}
         </Select>
       </Stack>
-    </>
+    </Box>
   );
 };
 
@@ -90,25 +94,24 @@ const genericDetailDisplayHandler = (
   setOpenDetailModal(true);
 };
 
-export const generateAccountActivityChart = (
-  groupingFactor,
-  onlyShowTop,
-  activityChartData,
-  keyword,
-  detailDisplayFilter,
-  activitySelect,
-  setActivityGraph,
-  setDetailContent,
-  setOpenDetailModal,
-  selectedContent,
-  selected,
-  dataSources,
-) => {
+export const generateAccountActivityChart = (globalArgs, activityChartData) => {
+  let onlyShowTop = globalArgs.onlyShowTop;
+  let keyword = globalArgs.keyword;
+  let setOnlyShowTop = globalArgs.setOnlyShowTop;
+  let setDetailContent = globalArgs.setDetailContent;
+  let setOpenDetailModal = globalArgs.setOpenDetailModal;
+  let selectedContent = globalArgs.selectedContent;
+  let detailDisplayFilter = globalArgs.detailDisplayFilter;
+  let dataSources = globalArgs.dataSources;
+  let selected = globalArgs.selected;
+  let groupingFactor = globalArgs.groupingFactor;
+  let activitySelect = globalArgs.activitySelect;
+
   let chartData = onlyShowTop
     ? activityChartData.slice(0, TOP_USER_COUNT)
     : activityChartData;
 
-  if (onlyShowTop)
+  if (onlyShowTop && activityChartData.length > TOP_USER_COUNT)
     chartData.push({
       username: keyword("snaTools_barChartOtherLabel"),
       count: activityChartData
@@ -118,22 +121,7 @@ export const generateAccountActivityChart = (
     });
   const handleBarClick = (clickPayload) => {
     clickPayload.isOther
-      ? setActivityGraph(
-          generateAccountActivityChart(
-            groupingFactor,
-            false,
-            activityChartData,
-            keyword,
-            detailDisplayFilter,
-            activitySelect,
-            setActivityGraph,
-            setDetailContent,
-            setOpenDetailModal,
-            selectedContent,
-            selected,
-            dataSources,
-          ),
-        )
+      ? setOnlyShowTop(false)
       : genericDetailDisplayHandler(
           clickPayload,
           setDetailContent,
@@ -144,35 +132,32 @@ export const generateAccountActivityChart = (
   };
   const nameMaps = getSelectedSourcesNameMaps(dataSources, selected);
 
-  class CustomizedAxisTick extends PureComponent {
-    render() {
-      const { x, y, payload } = this.props;
+  const CustomizedAxisTick = ({ x, y, payload }) => {
+    let tickLabel = nameMaps.has(payload.value)
+      ? nameMaps.get(payload.value)
+      : payload.value;
 
-      let tickLabel = nameMaps.has(payload.value)
-        ? nameMaps.get(payload.value)
-        : payload.value;
+    let slicedLabel =
+      tickLabel.length > MAX_TICK_LABEL_LENGTH
+        ? tickLabel.slice(0, MAX_TICK_LABEL_LENGTH) + "..."
+        : tickLabel;
 
-      let slicedLabel =
-        tickLabel.length > MAX_TICK_LABEL_LENGTH
-          ? tickLabel.slice(0, MAX_TICK_LABEL_LENGTH) + "..."
-          : tickLabel;
+    return (
+      <g transform={`translate(${x},${y})`}>
+        <text
+          x={0}
+          y={0}
+          dy={16}
+          textAnchor="end"
+          fill="#666"
+          transform="rotate(-35)"
+        >
+          {slicedLabel}
+        </text>
+      </g>
+    );
+  };
 
-      return (
-        <g transform={`translate(${x},${y})`}>
-          <text
-            x={0}
-            y={0}
-            dy={16}
-            textAnchor="end"
-            fill="#666"
-            transform="rotate(-35)"
-          >
-            {slicedLabel}
-          </text>
-        </g>
-      );
-    }
-  }
   const CustomizedToolTip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       let payloadLabel = label;
@@ -189,10 +174,18 @@ export const generateAccountActivityChart = (
   };
 
   return (
-    <div style={{ width: "100%", overflowX: "auto" }}>
+    <Box sx={{ width: "100%", overflowX: "auto" }}>
+      {onlyShowTop ? (
+        <></>
+      ) : (
+        SNAButton(
+          () => setOnlyShowTop(true),
+          keyword("snaTools_showLessBarChartButton"),
+        )
+      )}
       <BarChart
         data={chartData}
-        width={onlyShowTop ? 1200 : chartData.length * 60}
+        width={chartData.length * 60 > 1200 ? chartData.length * 60 : 1200}
         height={400}
         margin={{
           top: 20,
@@ -224,14 +217,14 @@ export const generateAccountActivityChart = (
         <Legend />
         <Bar dataKey={"count"} fill="#8884d8" name={activitySelect} />
       </BarChart>
-    </div>
+    </Box>
   );
 };
 
-export const generateAccountActivityData = (
-  selectedContent,
-  activitySelect,
-) => {
+export const generateAccountActivityData = (selectedContent, analysisArgs) => {
+  console.log(analysisArgs);
+  let activitySelect = analysisArgs.activitySelect;
+
   let contentGroupedByUser = Object.groupBy(
     selectedContent,
     ({ username }) => username,

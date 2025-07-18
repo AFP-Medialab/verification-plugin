@@ -1,26 +1,12 @@
 import React from "react";
-import ReactWordcloud from "react-wordcloud";
+
+import { getVisxWordcloud } from "./VisxWordcloud";
 
 const {
   entryAggregatorByListValue,
 } = require("../MostMentioned/MostMentionedUtils");
 
 const MAX_WORDS = 100;
-
-const wordCloudGraphOptions = {
-  enableTooltip: true,
-  deterministic: true,
-  fontFamily: "impact",
-  fontSizes: [15, 30],
-  fontStyle: "normal",
-  fontWeight: "normal",
-  padding: 1,
-  rotations: 3,
-  rotationAngles: [15, -15],
-  scale: "sqrt",
-  spiral: "rectangular",
-  transitionDuration: 1000,
-};
 
 const generateWordCloudGraphData = (selectedContent) => {
   selectedContent.forEach(
@@ -31,9 +17,8 @@ const generateWordCloudGraphData = (selectedContent) => {
 };
 
 export const generateWordCloud = (
+  { setDetailContent, setOpenDetailModal },
   selectedContent,
-  setDetailContent,
-  setOpenDetailModal,
 ) => {
   let wordCloudData = generateWordCloudGraphData(selectedContent);
 
@@ -41,19 +26,14 @@ export const generateWordCloud = (
 
   wordCloudDataCleaned.forEach((w) => (w.value = w.count));
 
-  const setDetailFromWord = {
-    onWordClick: (word) => {
-      setDetailContent(word.entries);
-      setOpenDetailModal(true);
-    },
+  const setDetailFromWord = (word) => {
+    setDetailContent(word.entries);
+    setOpenDetailModal(true);
   };
 
-  let wordCloudGraph = (
-    <ReactWordcloud
-      words={wordCloudDataCleaned}
-      options={wordCloudGraphOptions}
-      callbacks={setDetailFromWord}
-    />
+  let wordCloudGraph = getVisxWordcloud(
+    wordCloudDataCleaned,
+    setDetailFromWord,
   );
 
   return wordCloudGraph;

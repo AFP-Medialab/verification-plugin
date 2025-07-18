@@ -57,11 +57,9 @@ const textClustersTableBody = (
   );
 };
 
-const textClustersTable = (
+export const textClustersTable = (
+  { keyword, setDetailContent, setOpenDetailModal },
   textClusterData,
-  keyword,
-  setDetailContent,
-  setOpenDetailModal,
 ) => {
   return (
     <TableContainer component={Paper}>
@@ -77,12 +75,9 @@ const textClustersTable = (
   );
 };
 
-export const generateTextClusterGraph = async (
+export const generateTextClusterData = async (
   selectedContent,
-  authenticatedRequest,
-  keyword,
-  setDetailContent,
-  setOpenDetailModal,
+  { authenticatedRequest },
 ) => {
   let entriesWithTextClusters = await getTextClusters(
     selectedContent,
@@ -97,10 +92,5 @@ export const generateTextClusterGraph = async (
     ({ cluster }) => cluster,
   );
 
-  return textClustersTable(
-    entriesGroupedByCluster,
-    keyword,
-    setDetailContent,
-    setOpenDetailModal,
-  );
+  return entriesGroupedByCluster;
 };
