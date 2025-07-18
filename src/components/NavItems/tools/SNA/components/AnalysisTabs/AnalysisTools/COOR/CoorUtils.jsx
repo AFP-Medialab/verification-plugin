@@ -357,14 +357,11 @@ export const runCoorAnalysis = async (
     authenticatedRequest,
   },
 ) => {
-  console.log(selectedContent);
-  console.log(coorObjectChoice);
   let readiedContent = await getCoorContent(
     coorObjectChoice,
     selectedContent,
     authenticatedRequest,
   );
-  console.log(readiedContent);
   let coorResult = detectCoor(
     coorTimeWindow,
     coorEdgeThresh,
