@@ -1,0 +1,170 @@
+import React from "react";
+
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
+import { SNAButton } from "../../utils/SNAButton";
+import { getSelectedSourcesContent } from "../../utils/accessSavedCollections";
+
+export const SNAPanelTab = (props) => {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
+};
+
+export const snaPanelTabProps = (index) => {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+};
+
+export const analysisTools = {
+  timelineDistribution: {
+    keywordLabel: "snaTools_timelineDistribution",
+    propKey: "timelineDistribution",
+    component: (essentialProps, toolDisplayProps, toolAnalysisProps) =>
+      analysisDisplayTemplate(
+        essentialProps,
+        toolDisplayProps,
+        toolAnalysisProps,
+      ),
+  },
+  accountActivity: {
+    keywordLabel: "snaTools_accountActivity",
+    propKey: "accountActivity",
+    component: (essentialProps, toolDisplayProps, toolAnalysisProps) =>
+      analysisDisplayTemplate(
+        essentialProps,
+        toolDisplayProps,
+        toolAnalysisProps,
+      ),
+  },
+  coorDetection: {
+    keywordLabel: "snaTools_coorDetection",
+    propKey: "coor",
+    component: (essentialProps, toolDisplayProps, toolAnalysisProps) =>
+      analysisDisplayTemplate(
+        essentialProps,
+        toolDisplayProps,
+        toolAnalysisProps,
+      ),
+  },
+  mostMentioned: {
+    keywordLabel: "snaTools_mostMentioned",
+    propKey: "mostMentioned",
+    component: (essentialProps, toolDisplayProps, toolAnalysisProps) =>
+      analysisDisplayTemplate(
+        essentialProps,
+        toolDisplayProps,
+        toolAnalysisProps,
+      ),
+  },
+  hashtagAnalysis: {
+    keywordLabel: "snaTools_hashtagAnalysis",
+    propKey: "hashtagAnalysis",
+    component: (essentialProps, toolDisplayProps, toolAnalysisProps) =>
+      analysisDisplayTemplate(
+        essentialProps,
+        toolDisplayProps,
+        toolAnalysisProps,
+      ),
+  },
+  wordCloud: {
+    keywordLabel: "snaTools_wordCloud",
+    propKey: "wordCloud",
+    component: (essentialProps, toolDisplayProps, toolAnalysisProps) =>
+      analysisDisplayTemplate(
+        essentialProps,
+        toolDisplayProps,
+        toolAnalysisProps,
+      ),
+  },
+  textClusters: {
+    keywordLabel: "snaTools_textClusters",
+    propKey: "textClusters",
+    component: (essentialProps, toolDisplayProps, toolAnalysisProps) =>
+      analysisDisplayTemplate(
+        essentialProps,
+        toolDisplayProps,
+        toolAnalysisProps,
+      ),
+  },
+};
+
+export const analysisDisplayTemplate = (
+  essentialProps, //keyword, dataSources, selected
+  toolDisplayProps, //toolDescription, toolButtonText, toolSettings, toolLoading
+  toolAnalysisProps, //analysisFunction, analysisFunctionArgs, vizFunction, vizFunctionArgs, toolResult, setToolResult
+) => {
+  let keyword = essentialProps.keyword;
+  let dataSources = essentialProps.dataSources;
+  let selected = essentialProps.selected;
+
+  let toolDescription = toolDisplayProps.toolDescription;
+  let toolButtonText = toolDisplayProps.toolButtonText;
+  let toolLoading = toolDisplayProps.toolLoading;
+  let setToolLoading = toolDisplayProps.setToolLoading;
+
+  let analysisFunction = toolAnalysisProps.analysisFunction;
+  let analysisArgs = toolAnalysisProps.analysisArgs;
+  let vizFunction = toolAnalysisProps.vizFunction;
+  let vizArgs = toolAnalysisProps.vizArgs;
+  let toolResult = toolAnalysisProps.toolResult;
+  let setToolResult = toolAnalysisProps.setToolResult;
+
+  const generateResult = async () => {
+    console.log(toolDisplayProps);
+    setToolLoading(true);
+    let selectedContent = getSelectedSourcesContent(dataSources, selected);
+    console.log(analysisArgs);
+    let result = await analysisFunction(selectedContent, analysisArgs);
+    console.log(result);
+    setToolResult(result);
+
+    setToolLoading(false);
+  };
+
+  return (
+    <>
+      <Box>
+        <Box p={2}></Box>
+        <Stack direction="row" spacing={2} alignItems="center">
+          <Typography sx={{ padding: 2 }}>
+            {keyword(toolDescription)}
+          </Typography>
+          {SNAButton(() => generateResult(), keyword(toolButtonText))}
+        </Stack>
+        <Box p={2} />
+        {toolDisplayProps.toolSettings ? (
+          toolDisplayProps.toolSettings.display(
+            toolDisplayProps.toolSettings.args,
+          )
+        ) : (
+          <></>
+        )}
+        {toolLoading ? (
+          <Box alignItems="center" justifyContent="center">
+            <CircularProgress />
+          </Box>
+        ) : toolResult ? (
+          vizFunction(vizArgs, toolResult)
+        ) : (
+          <></>
+        )}
+      </Box>
+    </>
+  );
+};

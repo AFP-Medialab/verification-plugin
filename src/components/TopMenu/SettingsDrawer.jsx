@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
@@ -20,6 +20,10 @@ import {
 } from "@/redux/reducers/cookiesReducers";
 import { MAX_FONT_SIZE, MIN_FONT_SIZE, getStoredFontSize } from "@/theme";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import {
+  RecordingWindow,
+  getRecordingInfo,
+} from "components/NavItems/tools/SNA/components/Recording";
 
 import Languages from "../NavItems/languages/languages";
 import ColorModeSelect from "./ColorModeSelect";
@@ -34,6 +38,19 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
   );
   const cookiesUsage = useSelector((state) => state.cookies.active);
   const gaUsage = useSelector((state) => state.cookies.analytics);
+
+  //SNA Recording props
+  const [recording, setRecording] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [collections, setCollections] = useState(["Default Collection"]);
+  const [selectedCollection, setSelectedCollection] =
+    useState("Default Collection");
+  const [newCollectionName, setNewCollectionName] = useState("");
+  const [selectedSocialMedia, setSelectedSocialMedia] = useState([]);
+
+  useEffect(() => {
+    getRecordingInfo(setCollections, setRecording, setSelectedCollection);
+  }, []);
 
   return (
     <Drawer
@@ -188,6 +205,24 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
                 }
                 label={keyword("cookies_usage")}
               />
+            )}
+          </Stack>
+          <Stack direction="column" spacing={1}>
+            <Typography>{keyword("snaRecord_settingsTitle")}</Typography>
+            {RecordingWindow(
+              recording,
+              setRecording,
+              expanded,
+              setExpanded,
+              selectedCollection,
+              keyword,
+              setSelectedCollection,
+              collections,
+              setCollections,
+              newCollectionName,
+              setNewCollectionName,
+              selectedSocialMedia,
+              setSelectedSocialMedia,
             )}
           </Stack>
         </Stack>
