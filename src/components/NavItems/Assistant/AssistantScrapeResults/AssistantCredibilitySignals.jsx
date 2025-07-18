@@ -20,21 +20,21 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import Remove from "@mui/icons-material/Remove";
 
+import GaugeChartResult from "@/components/Shared/GaugeChartResults/GaugeChartResult.jsx";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
+import ResultDisplayItem from "@/components/tools/SemanticSearch/components/ResultDisplayItem.jsx";
 import { ROLES } from "@/constants/roles";
 import { getLanguageName } from "@Shared/Utils/languageUtils";
-import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult.jsx";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import dayjs from "dayjs";
 import LocaleData from "dayjs/plugin/localeData";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
   TransCredibilitySignalsLink,
   TransHtmlDoubleLineBreak,
   TransHtmlSingleLineBreak,
 } from "../TransComponents";
-import ResultDisplayItem from "./../../tools/SemanticSearch/components/ResultDisplayItem.jsx";
 import TextFooterPrevFactChecks from "./TextFooter.jsx";
 
 const getExpandIcon = (

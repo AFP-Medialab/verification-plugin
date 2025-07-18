@@ -20,6 +20,10 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
@@ -27,6 +31,7 @@ import { Download, ExpandMore } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { ROLES } from "@/constants/roles";
+import { JsonBlock } from "@Shared/JsonBlock";
 import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
@@ -132,6 +137,7 @@ class NddResult {
  * @param url
  * @param handleClose
  * @param nd
+ * @param c2paData
  * @param imageType {Blob.type}
  * @returns {Element}
  * @constructor
@@ -142,6 +148,7 @@ const SyntheticImageDetectionResults = ({
   handleClose,
   nd,
   imageType,
+  c2paData,
 }) => {
   const keyword = i18nLoadNamespace(
     "components/NavItems/tools/SyntheticImageDetection",
@@ -586,6 +593,22 @@ const SyntheticImageDetectionResults = ({
                           )}
                         </Typography>
                       )}
+
+                      {c2paData && (
+                        <Typography
+                          variant="h5"
+                          align="center"
+                          sx={{
+                            alignSelf: "center",
+                            color: "red",
+                          }}
+                        >
+                          {keyword(
+                            "synthetic_image_detection_c2pa_generic_detection_text",
+                          )}
+                        </Typography>
+                      )}
+
                       <Stack
                         direction="column"
                         sx={{
@@ -717,6 +740,77 @@ const SyntheticImageDetectionResults = ({
               )}
             </Grid>
             <Grid container size={{ xs: 12 }} spacing={4}>
+              {c2paData && (
+                <Grid
+                  sx={{
+                    width: "100%",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      pl: 4,
+                      pr: 4,
+                    }}
+                  >
+                    <Accordion defaultExpanded>
+                      <AccordionSummary expandIcon={<ExpandMore />}>
+                        <Typography>
+                          {keyword(
+                            "synthetic_image_detection_c2pa_accordion_summary",
+                          )}
+                        </Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Stack direction={"column"} spacing={4}>
+                          <Table aria-label="c2pa genAI metadata table">
+                            <TableBody>
+                              <TableRow>
+                                <TableCell component="th" scope="row">
+                                  {keyword(
+                                    "synthetic_image_detection_c2pa_app_device_used",
+                                  )}
+                                </TableCell>
+                                <TableCell>
+                                  {c2paData[0]?.assertion?.data?.actions?.[1]
+                                    ?.softwareAgent?.name ||
+                                    c2paData[0]?.softwareAgent?.name}
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell component="th" scope="row">
+                                  {keyword(
+                                    "synthetic_image_detection_c2pa_ai_tool_used",
+                                  )}
+                                </TableCell>
+                                <TableCell>
+                                  {c2paData[0]?.assertion?.data?.actions?.[0]
+                                    ?.softwareAgent?.name ||
+                                    c2paData[0]?.softwareAgent?.name}
+                                </TableCell>
+                              </TableRow>
+                            </TableBody>
+                          </Table>
+
+                          {role.includes(ROLES.EXTRA_FEATURE) && (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "flex-start",
+                              }}
+                            >
+                              <JsonBlock
+                                jsonString={JSON.stringify(c2paData, null, 2)}
+                              />
+                            </Box>
+                          )}
+                        </Stack>
+                      </AccordionDetails>
+                    </Accordion>
+                  </Box>
+                </Grid>
+              )}
+
               {filteredNddRows && filteredNddRows.length > 0 && (
                 <Grid
                   sx={{

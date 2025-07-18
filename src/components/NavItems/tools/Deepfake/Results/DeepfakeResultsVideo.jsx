@@ -30,6 +30,9 @@ const DeepfakeResultsVideo = (props) => {
     (state) => state.userSession && state.userSession.userAuthenticated,
   );
 
+  const currentLang = useSelector((state) => state.language);
+  const isCurrentLanguageLeftToRight = currentLang !== "ar";
+
   const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
 
   class DeepfakeResult {
@@ -239,7 +242,7 @@ const DeepfakeResultsVideo = (props) => {
       <CardHeader
         title={keyword("deepfake_video_title")}
         action={
-          <IconButton aria-label="close" onClick={handleClose}>
+          <IconButton aria-label="close" onClick={handleClose} sx={{ p: 1 }}>
             <CloseIcon />
           </IconButton>
         }
@@ -293,9 +296,21 @@ const DeepfakeResultsVideo = (props) => {
                           data: xAxisData,
                         },
                       ]}
+                      yAxis={[
+                        {
+                          valueFormatter: (value) =>
+                            isCurrentLanguageLeftToRight
+                              ? `${Math.round(value)}%`
+                              : `٪${Math.round(value)}`,
+                        },
+                      ]}
                       series={[
                         {
                           data: yAxisData,
+                          valueFormatter: (value) =>
+                            isCurrentLanguageLeftToRight
+                              ? `${Math.round(value)}%`
+                              : `٪${Math.round(value)}`,
                         },
                       ]}
                       height={300}

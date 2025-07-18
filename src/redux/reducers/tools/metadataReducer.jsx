@@ -7,6 +7,8 @@ const initialState = {
   url: "",
   result: null,
   mediaType: "nomedia",
+  c2pa: null,
+  currentC2paImageId: null,
 };
 
 const metadataSlice = createSlice({
@@ -14,7 +16,16 @@ const metadataSlice = createSlice({
   initialState,
   reducers: {
     setMetadataResult(state, action) {
-      return action.payload;
+      return {
+        ...state,
+        ...action.payload,
+      };
+    },
+    setC2paMetadataResult(state, action) {
+      state.c2pa = action.payload.c2pa;
+    },
+    setCurrentC2paImageId(state, action) {
+      state.currentC2paImageId = action.payload;
     },
     setMetadataLoading(state, action) {
       state.loading = action.payload;
@@ -32,6 +43,8 @@ const metadataSlice = createSlice({
 });
 export const {
   setMetadataResult,
+  setC2paMetadataResult,
+  setCurrentC2paImageId,
   setMetadataLoading,
   setMetadataIsImage,
   cleanMetadataState,

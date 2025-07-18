@@ -1,5 +1,4 @@
-import { test, expect } from './fixtures';
-
+import { expect, test } from "./fixtures";
 
 const MediaType = {
   video: "video",
@@ -20,7 +19,6 @@ const MediaServices = {
   thumbnails: "navbar_thumbnails",
   magnifier: "navbar_magnifier",
   metadata: "navbar_metadata",
-  videoRights: "navbar_rights",
   forensic: "navbar_forensic",
   ocr: "navbar_ocr",
   videoDownload: "assistant_video_download_action",
@@ -28,35 +26,42 @@ const MediaServices = {
   videoDownloadTiktok: "assistant_video_download_tiktok",
 };
 
-
-
 [
   // Twitter image post
   {
     url: "https://twitter.com/vesinfiltro/status/1253122594976468993/photo/1",
     mediaType: MediaType.image,
-    services: [MediaServices.analysisImage, MediaServices.magnifier, MediaServices.forensic, MediaServices.ocr]
+    services: [
+      MediaServices.analysisImage,
+      MediaServices.magnifier,
+      MediaServices.forensic,
+      MediaServices.ocr,
+    ],
   },
   // Twitter video post
   {
     url: "https://twitter.com/NatGeo/status/1334635273888514048/video/1",
     mediaType: MediaType.video,
     mediaStatus: MediaVideoStatus.noEmbed,
-    services: [MediaServices.metadata, MediaServices.videoDownload]
+    services: [MediaServices.metadata, MediaServices.videoDownload],
   },
   // Youtube video
   {
     url: "https://www.youtube.com/watch?v=UXrkN0iQmZQ",
     mediaType: MediaType.video,
     mediaStatus: MediaVideoStatus.iframe,
-    services: [MediaServices.analysisVideo, MediaServices.keyframes, MediaServices.thumbnails, MediaServices.videoRights]
+    services: [
+      MediaServices.analysisVideo,
+      MediaServices.keyframes,
+      MediaServices.thumbnails,
+    ],
   },
   // Youtube shorts
   {
     url: "https://www.youtube.com/shorts/RMGOds6SxF0",
     mediaType: MediaType.video,
     mediaStatus: MediaVideoStatus.noEmbed,
-    services: [MediaServices.videoDownloadGeneric]
+    services: [MediaServices.videoDownloadGeneric],
   },
   // Facebook post with video
   {
@@ -64,14 +69,19 @@ const MediaServices = {
     videoGridIndex: 0,
     mediaType: MediaType.video,
     mediaStatus: MediaVideoStatus.video,
-    services: [MediaServices.analysisVideo, MediaServices.keyframes, MediaServices.videoDownload, MediaServices.videoDownloadGeneric]
+    services: [
+      MediaServices.analysisVideo,
+      MediaServices.keyframes,
+      MediaServices.videoDownload,
+      MediaServices.videoDownloadGeneric,
+    ],
   },
   // Telegram post with video
   {
     url: "https://t.me/WeAreBREITBART/13745",
     mediaType: MediaType.video,
     mediaStatus: MediaVideoStatus.video,
-    services: [MediaServices.metadata, MediaServices.videoDownload]
+    services: [MediaServices.metadata, MediaServices.videoDownload],
   },
   // Telegram post with video - Fails, goes to the group page
   // {
@@ -84,69 +94,91 @@ const MediaServices = {
   {
     url: "https://www.instagram.com/p/CI2b-3usJoH/",
     mediaType: MediaType.image,
-    services: [MediaServices.magnifier, MediaServices.forensic, MediaServices.ocr]
+    services: [
+      MediaServices.magnifier,
+      MediaServices.forensic,
+      MediaServices.ocr,
+    ],
   },
   // Instagram post with a video reel
   {
     url: "https://www.instagram.com/p/C8JwcyOiFDD/",
     mediaType: MediaType.video,
     mediaStatus: MediaVideoStatus.noEmbed,
-    services: [MediaServices.videoDownloadGeneric]
+    services: [MediaServices.videoDownloadGeneric],
   },
   // TikTok video post
   {
     url: "https://www.tiktok.com/@deeptomcruise/video/7223086851236646149",
     mediaType: MediaType.video,
     mediaStatus: MediaVideoStatus.noEmbed,
-    services: [MediaServices.videoDownloadTiktok]
+    services: [MediaServices.videoDownloadTiktok],
   },
   // VK link with images
   {
     url: "https://vk.com/wall-57424472_432185",
     mediaType: MediaType.image,
     imageGridIndex: 0,
-    services: [MediaServices.magnifier, MediaServices.metadata, MediaServices.forensic, MediaServices.ocr]
+    services: [
+      MediaServices.magnifier,
+      MediaServices.metadata,
+      MediaServices.forensic,
+      MediaServices.ocr,
+    ],
   },
   // VK link with embedded video
   {
     url: "https://vk.com/video-221416054_456296074",
     mediaType: MediaType.video,
     mediaStatus: MediaVideoStatus.noEmbed,
-    services: [MediaServices.videoDownloadGeneric]
+    services: [MediaServices.videoDownloadGeneric],
   },
   // Vimeo video post
   {
     url: "https://vimeo.com/389685467",
     mediaType: MediaType.video,
     mediaStatus: MediaVideoStatus.iframe,
-    services: [MediaServices.videoDownloadGeneric]
+    services: [MediaServices.videoDownloadGeneric],
   },
   // Dailymotion video post
   {
     url: "https://www.dailymotion.com/video/x91gv4a",
     mediaType: MediaType.video,
     mediaStatus: MediaVideoStatus.iframe,
-    services: [MediaServices.videoDownloadGeneric]
+    services: [MediaServices.videoDownloadGeneric],
   },
   // Mastodon link with youtube video link
   {
     url: "https://mstdn.social/@BBC/105203076554056414",
     mediaType: MediaType.video,
     mediaStatus: MediaVideoStatus.video,
-    services: []
+    services: [],
   },
   // Mastodon link with embedded video
   {
     url: "https://mstdn.social/@dtnsshow/112728823075224415",
     mediaType: MediaType.video,
     mediaStatus: MediaVideoStatus.video,
-    services: [MediaServices.videoDownload, MediaServices.metadata]
+    services: [MediaServices.videoDownload, MediaServices.metadata],
   },
-].forEach(({url, videoGridIndex, imageGridIndex, mediaType, mediaStatus, services, hasScrapedText = true}) => {
-    test(`Test assistant media services for url: ${url}`, async ({ page, extensionId }) => {
-
+].forEach(
+  ({
+    url,
+    videoGridIndex,
+    imageGridIndex,
+    mediaType,
+    mediaStatus,
+    services,
+    hasScrapedText = true,
+  }) => {
+    test(`Test assistant media services for url: ${url}`, async ({
+      page,
+      extensionId,
+    }) => {
       // Navigate to the assistant page
-      await page.goto(`chrome-extension://${extensionId}/popup.html#/app/assistant/`);
+      await page.goto(
+        `chrome-extension://${extensionId}/popup.html#/app/assistant/`,
+      );
       // Accept local storage usage
       await page.getByText("Accept").click();
 
@@ -155,71 +187,82 @@ const MediaServices = {
 
       // Choose to enter url instead of uploading a file
       await page.getByTestId("assistant-webpage-link").click();
-      await page.locator("[data-testid='assistant-url-selected-input'] input").fill(url);
+      await page
+        .locator("[data-testid='assistant-url-selected-input'] input")
+        .fill(url);
       await page.getByTestId("assistant-url-selected-analyse-btn").click();
 
       // Expecting a media post with images or video
       await expect(page.getByTestId("url-media-results")).toBeVisible();
 
       // If multiple images/videos exist, click on the media grid first
-      if(Number.isInteger(videoGridIndex))
-        await page.getByTestId("assistant-media-grid-video-"+videoGridIndex).click();
+      if (Number.isInteger(videoGridIndex))
+        await page
+          .getByTestId("assistant-media-grid-video-" + videoGridIndex)
+          .click();
 
-      if(Number.isInteger(imageGridIndex))
-        await page.getByTestId("assistant-media-grid-image-"+imageGridIndex).click();
-
+      if (Number.isInteger(imageGridIndex))
+        await page
+          .getByTestId("assistant-media-grid-image-" + imageGridIndex)
+          .click();
 
       // Check that media exists for image and video posts and that all expected services are shown
-      switch(mediaType){
+      switch (mediaType) {
         case MediaType.image:
           await expect(page.getByTestId("assistant-media-image")).toBeVisible();
-          await checkMediaServices(page, services)
+          await checkMediaServices(page, services);
           break;
         case MediaType.video:
-          await expect(page.getByTestId("assistant-media-video-container")).toBeVisible();
-          if(mediaStatus !== null && mediaStatus !== undefined){
+          await expect(
+            page.getByTestId("assistant-media-video-container"),
+          ).toBeVisible();
+          if (mediaStatus !== null && mediaStatus !== undefined) {
             switch (mediaStatus) {
               case MediaVideoStatus.iframe:
-                await expect(page.getByTestId("assistant-media-video-iframe")).toBeVisible();
+                await expect(
+                  page.getByTestId("assistant-media-video-iframe"),
+                ).toBeVisible();
                 break;
               case MediaVideoStatus.video:
-                await expect(page.getByTestId("assistant-media-video-tag")).toBeVisible();
+                await expect(
+                  page.getByTestId("assistant-media-video-tag"),
+                ).toBeVisible();
                 break;
               case MediaVideoStatus.noEmbed:
-                await expect(page.getByTestId("assistant-media-video-noembed")).toBeVisible();
+                await expect(
+                  page.getByTestId("assistant-media-video-noembed"),
+                ).toBeVisible();
                 break;
-
             }
           }
-          await checkMediaServices(page, services)
+          await checkMediaServices(page, services);
           break;
         case MediaType.none:
-          await expect(page.getByTestId("assistant-media-video-container")).not.toBeVisible();
+          await expect(
+            page.getByTestId("assistant-media-video-container"),
+          ).not.toBeVisible();
           break;
       }
 
-      if(hasScrapedText){
-        await expect(page.getByTestId("assistant-text-scraped-text")).toBeVisible();
+      if (hasScrapedText) {
+        await expect(
+          page.getByTestId("assistant-text-scraped-text"),
+        ).toBeVisible();
       }
-
-
     });
-  }
+  },
 );
 
-async function checkMediaServices(page, availableServices){
+async function checkMediaServices(page, availableServices) {
   // Checks that expected services are shown
-  for( const serviceId of availableServices){
+  for (const serviceId of availableServices) {
     await expect(page.getByTestId(serviceId)).toBeVisible();
   }
 
   // Ensure disabled services are not showing
-  for( const serviceKey in MediaServices){
+  for (const serviceKey in MediaServices) {
     const serviceId = MediaServices[serviceKey];
-    if(!availableServices.includes(serviceId))
+    if (!availableServices.includes(serviceId))
       await expect(page.getByTestId(serviceId)).not.toBeVisible();
   }
-
 }
-
-

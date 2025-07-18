@@ -11,9 +11,9 @@ import Typography from "@mui/material/Typography";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import ResultDisplayItem from "components/NavItems/tools/SemanticSearch/components/ResultDisplayItem";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { getLanguageName } from "components/Shared/Utils/languageUtils";
+import ResultDisplayItem from "@/components/NavItems/tools/SemanticSearch/components/ResultDisplayItem";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import { getLanguageName } from "@/components/Shared/Utils/languageUtils";
 import dayjs from "dayjs";
 import LocaleData from "dayjs/plugin/localeData";
 import localizedFormat from "dayjs/plugin/localizedFormat";

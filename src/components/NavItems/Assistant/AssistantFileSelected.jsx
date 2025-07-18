@@ -13,9 +13,9 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 
-import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import {
   CONTENT_TYPE,
   KNOWN_LINKS,

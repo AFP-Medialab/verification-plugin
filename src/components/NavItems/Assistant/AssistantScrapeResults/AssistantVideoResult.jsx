@@ -14,9 +14,9 @@ import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import ImageIcon from "@mui/icons-material/Image";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { KNOWN_LINKS } from "../AssistantRuleBook";
 
 const AssistantVideoResult = () => {

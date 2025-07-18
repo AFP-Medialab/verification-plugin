@@ -12,10 +12,10 @@ import Typography from "@mui/material/Typography";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { setStateExpanded } from "@/redux/actions/tools/assistantActions";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
   KNOWN_LINKS,
   KNOWN_LINK_PATTERNS,

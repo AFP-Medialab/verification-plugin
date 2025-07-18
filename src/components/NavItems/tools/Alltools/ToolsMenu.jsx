@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Iframe from "react-iframe";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import Alert from "@mui/material/Alert";
@@ -22,6 +22,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 import { ROLES } from "@/constants/roles";
 import { TOOLS_CATEGORIES, canUserSeeTool, tools } from "@/constants/tools";
+import { selectToolTab } from "@/redux/reducers/toolTabSelectedReducer";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import DataIcon from "../../../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
@@ -63,11 +64,16 @@ const ToolsMenu = () => {
 
   const [videoUrl, setVideoUrl] = useState(null);
 
+  const dispatch = useDispatch();
+
   const userAuthenticated = useSelector(
     (state) => state.userSession && state.userSession.userAuthenticated,
   );
 
   const role = useSelector((state) => state.userSession.user.roles);
+
+  const tabSelected = useSelector((state) => state.toolTabSelected);
+
   const betaTester = role.includes("BETA_TESTER");
 
   const [openAlert, setOpenAlert] = React.useState(false);
@@ -87,6 +93,8 @@ const ToolsMenu = () => {
   const handlePush = (path) => {
     if (path === "csvSna" || path === "factcheck" || path === "xnetwork") {
       window.open(process.env.REACT_APP_TSNA_SERVER + path, "_blank");
+    } else if (path === "disinfoDeck") {
+      window.open(process.env.REACT_APP_DISINFO_DECK_SERVER, "_blank");
     } else {
       navigate("/app/tools/" + path);
     }
@@ -252,10 +260,8 @@ const ToolsMenu = () => {
     setOpenAlert(false);
   };
 
-  const [value, setValue] = React.useState(0);
-
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    dispatch(selectToolTab(newValue));
   };
 
   const categoriesAllowedForUser = categories.filter(
@@ -279,7 +285,7 @@ const ToolsMenu = () => {
       </Snackbar>
       <Card variant="outlined">
         <Tabs
-          value={value}
+          value={tabSelected}
           onChange={handleChange}
           indicatorColor={"primary"}
           variant="scrollable"
@@ -314,7 +320,7 @@ const ToolsMenu = () => {
             const tools = category.value;
 
             return (
-              <TabPanel value={value} index={index} key={index}>
+              <TabPanel value={tabSelected} index={index} key={index}>
                 <Grid
                   container
                   sx={{
