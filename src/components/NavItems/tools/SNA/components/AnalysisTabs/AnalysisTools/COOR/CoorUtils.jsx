@@ -22,15 +22,15 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import { SNAButton } from "components/NavItems/tools/SNA/utils/SNAButton";
+import {
+  getSelectedSourceSharedHeaders,
+  getSelectedSourcesNameMaps,
+  getTextClusters,
+  onlyUnique,
+} from "components/NavItems/tools/SNA/utils/accessSavedCollections";
 import { MultiUndirectedGraph } from "graphology";
 import louvain from "graphology-communities-louvain";
 
-const {
-  getTextClusters,
-  onlyUnique,
-  getSelectedSourceSharedHeaders,
-  getSelectedSourcesNameMaps,
-} = require("components/NavItems/tools/SNA/utils/accessSavedCollections");
 const dayjs = require("dayjs");
 const MAX_TABLE_TEXT_LENGTH = 45;
 
@@ -43,7 +43,7 @@ const coorTextEntry = (
 ) => {
   return (
     <Box key={"coorEntry_" + fieldDescription}>
-      <Typography pl={0.5}>{keyword(fieldDescription)}</Typography>
+      <Typography sx={{ padding: 0.5 }}>{keyword(fieldDescription)}</Typography>
       <Tooltip title={keyword(fieldHelpText)}>
         <IconButton>
           <HelpOutlineIcon fontSize="inherit" />
@@ -73,7 +73,7 @@ const coorFieldSelect = (
 ) => {
   return (
     <>
-      <Typography pl={0.5}>{fieldDescription}</Typography>
+      <Typography sx={{ padding: 0.5 }}>{fieldDescription}</Typography>
       <Tooltip title={keyword(fieldHelpText)}>
         <IconButton>
           <HelpOutlineIcon fontSize="inherit" />

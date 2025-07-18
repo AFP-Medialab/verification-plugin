@@ -10,9 +10,7 @@ import TableRow from "@mui/material/TableRow";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
-const {
-  getTextClusters,
-} = require("components/NavItems/tools/SNA/utils/accessSavedCollections");
+import { getTextClusters } from "components/NavItems/tools/SNA/utils/accessSavedCollections";
 
 const textClustersTableHeader = (keyword) => {
   return (

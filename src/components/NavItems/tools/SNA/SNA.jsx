@@ -22,7 +22,6 @@ import {
   runCoorAnalysis,
 } from "./components/AnalysisTabs/AnalysisTools/COOR/CoorUtils";
 import {
-  generateHashtagAnalysisData,
   generateHashtagAnalysisViz,
   hashtagAnalysisDetailModalContent,
 } from "./components/AnalysisTabs/AnalysisTools/HashtagAnalysis/HashtagAnalysisUtils";
@@ -32,13 +31,9 @@ import {
 } from "./components/AnalysisTabs/AnalysisTools/MostMentioned/MostMentionedUtils";
 import {
   generateTextClusterData,
-  generateTextClusterGraph,
   textClustersTable,
 } from "./components/AnalysisTabs/AnalysisTools/TextClusters/TextClustersUtils";
-import {
-  TimelineChart,
-  generateTimelineData,
-} from "./components/AnalysisTabs/AnalysisTools/Timeline/TimelineUtils";
+import { TimelineChart } from "./components/AnalysisTabs/AnalysisTools/Timeline/TimelineUtils";
 import { generateWordCloud } from "./components/AnalysisTabs/AnalysisTools/WordCloud/WordCloudUtils";
 import SNAPanel from "./components/AnalysisTabs/SNAPanel";
 import CollectionsTable from "./components/CollectionsTable";

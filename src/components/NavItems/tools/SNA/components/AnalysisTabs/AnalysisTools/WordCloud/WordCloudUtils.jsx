@@ -1,5 +1,3 @@
-import React from "react";
-
 import { getVisxWordcloud } from "./VisxWordcloud";
 
 const {
