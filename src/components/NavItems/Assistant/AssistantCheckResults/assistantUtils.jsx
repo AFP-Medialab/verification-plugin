@@ -163,12 +163,11 @@ export const renderUrlTitle = (
             leaveDelay={50}
             style={{ display: "flex", marginLeft: "auto" }}
             title={
-              <div
-                className={"content"}
-                dangerouslySetInnerHTML={{
-                  __html: keyword("sc_tooltip"),
-                }}
-              />
+              <>
+                <TransSourceCredibilityTooltip keyword={keyword} />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
+                <TransUrlDomainAnalysisLink keyword={keyword} />
+              </>
             }
             classes={{ tooltip: classes.assistantTooltip }}
           >
