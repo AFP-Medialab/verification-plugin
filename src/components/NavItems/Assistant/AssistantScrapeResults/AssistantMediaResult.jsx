@@ -21,16 +21,16 @@ import { WarningAmber } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
+import ImageGridList from "@/components/Shared/ImageGridList/ImageGridList";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
+import VideoGridList from "@/components/Shared/VideoGridList/VideoGridList";
 import {
   setProcessUrl,
   setStateExpanded,
   setWarningExpanded,
 } from "@/redux/actions/tools/assistantActions";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import VideoGridList from "../../../Shared/VideoGridList/VideoGridList";
 import { CONTENT_TYPE } from "../AssistantRuleBook";
 import {
   TransHtmlDoubleLineBreak,
@@ -269,6 +269,7 @@ const AssistantMediaResult = () => {
                     handleClick={(vidLink) => {
                       submitMediaToProcess(vidLink);
                     }}
+                    style={{ overflowY: "visible" }}
                   />
                 </AccordionDetails>
               </Accordion>

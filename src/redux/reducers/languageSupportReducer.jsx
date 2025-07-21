@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   languagesList: {},
   selectedLanguage: "en",
+  alreadyLoaded: false,
 };
 
 const languageSupportSlice = createSlice({
@@ -11,6 +12,7 @@ const languageSupportSlice = createSlice({
   reducers: {
     loadLanguages(state, action) {
       state.languagesList = action.payload;
+      state.alreadyLoaded = true;
     },
   },
 });

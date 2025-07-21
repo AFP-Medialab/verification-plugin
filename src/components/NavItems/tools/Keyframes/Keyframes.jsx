@@ -11,7 +11,6 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
-import Fade from "@mui/material/Fade";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
@@ -27,9 +26,12 @@ import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
+import ImageGrid from "@/components/NavItems/tools/Keyframes/components/ImageGrid";
 import { keyframes } from "@/constants/tools";
 import {
   resetKeyframes,
+  setKeyframesFeatures,
+  setKeyframesResult,
   setKeyframesUrl,
 } from "@/redux/reducers/tools/keyframesReducer";
 import "@Shared/GoogleAnalytics/MatomoAnalytics";
@@ -40,7 +42,6 @@ import { ClearIcon } from "@mui/x-date-pickers";
 
 import { useProcessKeyframes } from "./Hooks/useKeyframeWrapper";
 import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
-import { ImageWithFade } from "./ImageWithFade";
 import LocalFile from "./LocalFile/LocalFile";
 import KeyFramesResults from "./Results/KeyFramesResults";
 
@@ -70,6 +71,7 @@ const Keyframes = () => {
   // State used to load images
   const [input, setInput] = useState(resultUrl ? resultUrl : "");
   const [submittedUrl, setSubmittedUrl] = useState(undefined);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
 
   useVideoSimilarity(submittedUrl, keyword);
 
@@ -103,15 +105,28 @@ const Keyframes = () => {
    * @returns {Promise<void>}
    */
   const submitUrl = async (url) => {
+    const finalUrl = url ?? input;
+
     dispatch(resetKeyframes());
-    dispatch(setKeyframesUrl(url ?? input));
+    dispatch(setKeyframesUrl(finalUrl));
     resetFetchingKeyframes();
     try {
-      setSubmittedUrl(url ?? input);
-      await executeProcess(url ?? input, role);
+      setSubmittedUrl(finalUrl);
+      setHasSubmitted(true);
+      const result = await executeProcess(finalUrl, role);
+      if (result?.fromCache) {
+        dispatch(setKeyframesResult(result.data));
+        dispatch(setKeyframesFeatures(result.featureData));
+        setHasSubmitted(false);
+      }
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const resetResults = () => {
+    setInput("");
+    dispatch(resetKeyframes());
   };
 
   useEffect(() => {
@@ -145,11 +160,20 @@ const Keyframes = () => {
     resetFetchingKeyframes,
     isPending,
     status,
+    data,
     error,
     isFeatureDataPending,
+    featureData,
     featureDataError,
-    featureStatus,
-  } = useProcessKeyframes();
+  } = useProcessKeyframes(input);
+
+  useEffect(() => {
+    if (featureData && data && hasSubmitted) {
+      dispatch(setKeyframesFeatures(featureData));
+      dispatch(setKeyframesResult(data));
+      setHasSubmitted(false);
+    }
+  }, [featureData, data, hasSubmitted]);
 
   return (
     <Box>
@@ -205,7 +229,6 @@ const Keyframes = () => {
                         <TextField
                           id="standard-full-width"
                           label={keyword("keyframes_input")}
-                          // placeholder={keyword("keyframes_input_placeholder")}
                           fullWidth
                           disabled={isPending || isLoadingSimilarity}
                           value={input}
@@ -216,8 +239,9 @@ const Keyframes = () => {
                               endAdornment: input ? (
                                 <IconButton
                                   size="small"
-                                  onClick={() => setInput("")}
+                                  onClick={() => resetResults()}
                                   disabled={isPending || isLoadingSimilarity}
+                                  sx={{ p: 1 }}
                                 >
                                   <ClearIcon />
                                 </IconButton>
@@ -330,71 +354,55 @@ const Keyframes = () => {
           )}
 
         {status && isPending && (
-          <Fade in={isPending} timeout={750}>
-            <Alert icon={<CircularProgress size={20} />} severity="info">
-              {status}
-            </Alert>
-          </Fade>
+          <Alert icon={<CircularProgress size={20} />} severity="info">
+            {status}
+          </Alert>
         )}
 
         {isPending && (
-          <Fade in={isPending} timeout={1500}>
-            <Card variant="outlined">
-              <Stack
-                direction="column"
-                spacing={4}
-                sx={{
-                  p: 2,
-                }}
-              >
-                <Skeleton variant="rounded" height={40} />
-                <Stack direction={{ md: "row", xs: "column" }} spacing={4}>
-                  <Skeleton variant="rounded" width={80} height={80} />
-                  <Skeleton variant="rounded" width={80} height={80} />
-                  <Skeleton variant="rounded" width={80} height={80} />
-                  <Skeleton variant="rounded" width={80} height={80} />
-                </Stack>
+          <Card variant="outlined">
+            <Stack
+              direction="column"
+              spacing={4}
+              sx={{
+                p: 2,
+              }}
+            >
+              <Skeleton variant="rounded" height={40} />
+              <Stack direction={{ md: "row", xs: "column" }} spacing={4}>
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
               </Stack>
-            </Card>
-          </Fade>
+            </Stack>
+          </Card>
         )}
 
         {error && <Alert severity="error">{keyword(handleError(error))}</Alert>}
 
         {resultData && tabSelected === "url" && (
-          <Fade in={resultData && tabSelected === "url"} timeout={1500}>
-            <div>
-              <KeyFramesResults result={resultData} />
-            </div>
-          </Fade>
-        )}
-
-        {featureStatus && isFeatureDataPending && (
-          <Alert icon={<CircularProgress size={20} />} severity="info">
-            {featureStatus}
-          </Alert>
+          <KeyFramesResults result={resultData} handleClose={resetResults} />
         )}
 
         {isFeatureDataPending && (
-          <Fade in={isFeatureDataPending} timeout={1500}>
-            <Card variant="outlined">
-              <Stack
-                direction="column"
-                spacing={4}
-                sx={{
-                  p: 2,
-                }}
-              >
-                <Skeleton variant="rounded" height={40} />
-                <Stack direction={{ md: "row", xs: "column" }} spacing={4}>
-                  <Skeleton variant="rounded" width={80} height={80} />
-                  <Skeleton variant="rounded" width={80} height={80} />
-                  <Skeleton variant="rounded" width={80} height={80} />
-                  <Skeleton variant="rounded" width={80} height={80} />
-                </Stack>
+          <Card variant="outlined">
+            <Stack
+              direction="column"
+              spacing={4}
+              sx={{
+                p: 2,
+              }}
+            >
+              <Skeleton variant="rounded" height={40} />
+              <Stack direction={{ md: "row", xs: "column" }} spacing={4}>
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
+                <Skeleton variant="rounded" width={80} height={80} />
               </Stack>
-            </Card>
-          </Fade>
+            </Stack>
+          </Card>
         )}
 
         {featureDataError && (
@@ -403,59 +411,43 @@ const Keyframes = () => {
 
         {keyframesFeaturesData && tabSelected === "url" && (
           <>
-            <Fade in={keyframesFeaturesData} timeout={1500}>
-              <Card variant="outlined">
-                <Box
-                  sx={{
-                    pb: 4,
-                    pt: 2,
-                    pl: 4,
-                    pr: 4,
-                  }}
-                >
-                  <Stack direction="column" spacing={2}>
-                    <Typography variant="h6">
-                      {keyword("faces_detected_title")}
-                    </Typography>
-                    <Grid container direction="row" spacing={2}>
-                      {keyframesFeaturesData.faces.map((item, i) => (
-                        <Grid key={i} size={{ md: 3, lg: 1 }}>
-                          <ImageWithFade
-                            src={item.representative.imageUrl}
-                            alt={`extracted img with face #${i + 1}`}
-                          />
-                        </Grid>
-                      ))}
-                    </Grid>
-                  </Stack>
-                </Box>
-              </Card>
-            </Fade>
-            <Fade in={keyframesFeaturesData} timeout={1500}>
-              <Card variant="outlined">
-                <Box
-                  sx={{
-                    p: 4,
-                  }}
-                >
-                  <Stack direction="column" spacing={2}>
-                    <Typography variant="h6">
-                      {keyword("text_detected_title")}
-                    </Typography>
-                    <Grid container direction="row" spacing={2}>
-                      {keyframesFeaturesData.texts.map((item, i) => (
-                        <Grid key={i} size={{ md: 3, lg: 1 }}>
-                          <ImageWithFade
-                            src={item.representative.imageUrl}
-                            alt={`extracted img with text #${i + 1}`}
-                          />
-                        </Grid>
-                      ))}
-                    </Grid>
-                  </Stack>
-                </Box>
-              </Card>
-            </Fade>
+            <Card variant="outlined">
+              <Box
+                sx={{
+                  pb: 4,
+                  pt: 2,
+                  pl: 4,
+                  pr: 4,
+                }}
+              >
+                <Stack direction="column" spacing={2}>
+                  <Typography variant="h6">
+                    {keyword("faces_detected_title")}
+                  </Typography>
+                  <ImageGrid
+                    images={keyframesFeaturesData.faces}
+                    alt={"extracted img with face"}
+                  />
+                </Stack>
+              </Box>
+            </Card>
+            <Card variant="outlined">
+              <Box
+                sx={{
+                  p: 4,
+                }}
+              >
+                <Stack direction="column" spacing={2}>
+                  <Typography variant="h6">
+                    {keyword("text_detected_title")}
+                  </Typography>
+                  <ImageGrid
+                    images={keyframesFeaturesData.texts}
+                    alt={"extracted img with text"}
+                  />
+                </Stack>
+              </Box>
+            </Card>
           </>
         )}
       </Stack>

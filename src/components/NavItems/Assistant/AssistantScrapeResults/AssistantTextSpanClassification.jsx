@@ -20,7 +20,7 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import {
   SummaryReturnButton,
   ThresholdSlider,
-  getPersuasionCategoryColours,
+  //getPersuasionCategoryColours,
   getPersuasionCategoryTechnique,
   mergeSpanIndices,
   primaryRgb,
@@ -31,9 +31,11 @@ import {
 } from "@/components/NavItems/Assistant/AssistantScrapeResults/assistantUtils";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
-import { setImportantSentenceThreshold } from "@/redux/actions/tools/assistantActions";
+import {
+  setCurrentLabel,
+  setImportantSentenceThreshold,
+} from "@/redux/actions/tools/assistantActions";
 import _ from "lodash";
-import { setCurrentLabel } from "redux/actions/tools/assistantActions";
 import { v4 as uuidv4 } from "uuid";
 
 // Had to create a custom styled span as the default style attribute does not support

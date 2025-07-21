@@ -30,11 +30,14 @@ import {
   treeMapToElements,
   wrapPlainTextSpan,
 } from "@/components/NavItems/Assistant/AssistantScrapeResults/assistantUtils";
+import GaugeChartModalExplanation from "@/components/Shared/GaugeChartResults/GaugeChartModalExplanation";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { setImportantSentenceThreshold } from "@/redux/actions/tools/assistantActions";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
+
+import "./assistantTextResultStyle.css";
 
 export default function AssistantTextClassification({
   text,

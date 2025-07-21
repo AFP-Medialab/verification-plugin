@@ -11,11 +11,11 @@ import Typography from "@mui/material/Typography";
 
 import { ExpandLessOutlined, ExpandMoreOutlined } from "@mui/icons-material";
 
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 import { TextCopy } from "@Shared/Utils/TextCopy";
 import { Translate } from "@Shared/Utils/Translate";
 import { getLanguageName } from "@Shared/Utils/languageUtils";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import { scrollToElement } from "./assistantUtils";
 

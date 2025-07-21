@@ -45,15 +45,111 @@ export default function assistantApiCalls() {
   };
 
   const callNamedEntityService = async (text, lang) => {
-    const namedEntityResult = await axios.post(
-      assistantEndpoint + "gcloud/named-entity",
-      {
-        content: text,
-        lang: lang,
-      },
-    );
+    try {
+      const namedEntityResult = await axios.post(
+        assistantEndpoint + "gcloud/named-entity",
+        {
+          content: text,
+          lang: lang,
+        },
+      );
+      const concepts = new Set(
+        namedEntityResult.data.entities.Unclassified.map(
+          (e) => "wd:" + e.concept,
+        ),
+      );
+      const dbpedia = `http://${lang == "en" ? "" : "en."}dbpedia.org`;
+      const wdQuery = `
+      SELECT (REPLACE(STR(?concept), "http://www.wikidata.org/entity/", "") AS ?conceptID)
+      (REPLACE(STR(?article), "https://${lang}.wikipedia.org/wiki/", "${dbpedia}/page/") AS ?link)
+      (REPLACE(STR(?article), "https://${lang}.wikipedia.org/wiki/", "${dbpedia}/resource/") AS ?iri)
+      ?title
+      WHERE {
+        VALUES ?concept { ${[...concepts].join(" ")} }
+        ?article schema:about ?concept .
+        ?article schema:isPartOf <https://${lang}.wikipedia.org/> .
+        ?article schema:name ?title .
+      }`;
+      const mappingResult = await axios.get(
+        `https://query.wikidata.org/sparql?format=json&query=${encodeURIComponent(wdQuery)}`,
+      );
+      const mapping = {};
+      for (const entity of mappingResult.data.results.bindings) {
+        mapping["<" + entity.iri.value + ">"] = {
+          concept: entity.conceptID.value,
+          title: entity.title.value,
+          link: entity.link.value,
+        };
+      }
+      const dbQuery = `
+      SELECT ?iri ?abstract (GROUP_CONCAT(DISTINCT ?type; SEPARATOR = ",") AS ?schemaTypes)
+      WHERE {
+        VALUES ?iri { ${Object.keys(mapping).join(" ")} }
+        ?iri rdfs:comment ?abstract .
+        ?iri rdf:type ?type .
+        FILTER (lang(?abstract) = "${lang}")
+      }`;
+      const dbpediaResult = await axios.get(
+        `https://dbpedia.org/sparql?query=${encodeURIComponent(dbQuery)}&format=application%2Fsparql-results%2Bjson&timeout=30000&signal_void=on&signal_unconnected=on`,
+      );
+      for (const entity of dbpediaResult.data.results.bindings) {
+        mapping["<" + entity.iri.value + ">"]["abstract"] =
+          entity.abstract.value;
+        mapping["<" + entity.iri.value + ">"]["schemaTypes"] =
+          entity.schemaTypes.value.split(",");
+      }
 
-    return namedEntityResult.data;
+      const features = Object.values(mapping).reduce((acc, obj) => {
+        acc[obj.concept] = obj;
+        return acc;
+      }, {});
+
+      const entities = { Person: [], Location: [], Organization: [] };
+      for (const entity of namedEntityResult.data.entities.Unclassified) {
+        entity.features = {
+          ...entity.features,
+          ...features[entity.concept],
+        };
+        entity.features.originalText = entity.string;
+        entity.features.string = entity.features.title;
+        delete entity.features["title"];
+        if (
+          new Set(entity.features.schemaTypes).intersection(
+            new Set([
+              "http://schema.org/Person",
+              "http://dbpedia.org/ontology/Person",
+            ]),
+          ).size > 0
+        ) {
+          entities["Person"].push(entity);
+        }
+        if (
+          new Set(entity.features.schemaTypes).intersection(
+            new Set([
+              "http://schema.org/Location",
+              "http://dbpedia.org/ontology/Location",
+            ]),
+          ).size > 0
+        ) {
+          entities["Location"].push(entity);
+        }
+        if (
+          new Set(entity.features.schemaTypes).intersection(
+            new Set([
+              "http://schema.org/Organization",
+              "http://dbpedia.org/ontology/Organisation",
+            ]),
+          ).size > 0
+        ) {
+          entities["Organization"].push(entity);
+        }
+      }
+      namedEntityResult.data.entities = entities;
+
+      return namedEntityResult.data;
+    } catch (error) {
+      console.log("ERROR", error);
+    }
   };
 
   const callOcrService = async (data, script, mode) => {

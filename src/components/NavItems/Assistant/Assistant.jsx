@@ -14,15 +14,12 @@ import { Close } from "@mui/icons-material";
 
 import AssistantCheckStatus from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantCheckStatus";
 import AssistantNEResult from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantNEResult";
-import AssistantFileSelected from "@/components/NavItems/Assistant/AssistantFileSelected";
-import AssistantIntroduction from "@/components/NavItems/Assistant/AssistantIntroduction";
 import AssistantCommentResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantCommentResult";
 import AssistantLinkResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantLinkResult";
 import AssistantMediaResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantMediaResult";
 import AssistantSCResults from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantSCResults";
 import AssistantTextResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantTextResult";
 import AssistantWarnings from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantWarnings";
-import AssistantUrlSelected from "@/components/NavItems/Assistant/AssistantUrlSelected";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import {
@@ -31,6 +28,10 @@ import {
   submitInputUrl,
 } from "@/redux/actions/tools/assistantActions";
 import { setError } from "@/redux/reducers/errorReducer";
+
+import AssistantFileSelected from "./AssistantFileSelected";
+import AssistantIntroduction from "./AssistantIntroduction";
+import AssistantUrlSelected from "./AssistantUrlSelected";
 
 const Assistant = () => {
   // styles, language, dispatch, params
