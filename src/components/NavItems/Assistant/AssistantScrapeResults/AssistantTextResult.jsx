@@ -2,20 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Trans } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 
-import { useColorScheme } from "@mui/material";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
-import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import Skeleton from "@mui/material/Skeleton";
-import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Tooltip from "@mui/material/Tooltip";
@@ -28,15 +19,6 @@ import AssistantTextClassification from "@/components/NavItems/Assistant/Assista
 import AssistantTextSpanClassification from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantTextSpanClassification";
 import TextFooter from "@/components/NavItems/Assistant/AssistantScrapeResults/TextFooter";
 import {
-  createGaugeChart,
-  getMgtColours,
-  // getPersuasionCategoryColours,
-  getPersuasionCategoryTechnique,
-  getSubjectivityColours,
-  // interpRgb,
-  primaryRgb,
-  rgbToLuminance,
-  rgbToString,
   scrollToElement,
   treeMapToElements,
 } from "@/components/NavItems/Assistant/AssistantScrapeResults/assistantUtils";
@@ -53,7 +35,6 @@ import {
   setImportantSentenceThreshold,
   setWarningExpanded,
 } from "@/redux/actions/tools/assistantActions";
-import { v4 as uuidv4 } from "uuid";
 
 const AssistantTextResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -61,10 +42,6 @@ const AssistantTextResult = () => {
 
   const classes = useMyStyles();
   const dispatch = useDispatch();
-
-  // for dark mode
-  const { mode, systemMode } = useColorScheme();
-  const resolvedMode = systemMode || mode;
 
   // assistant media states
   const text = useSelector((state) => state.assistant.urlText);
@@ -87,9 +64,6 @@ const AssistantTextResult = () => {
   const newsFramingLoading = useSelector(
     (state) => state.assistant.newsFramingLoading,
   );
-  const newsFramingDone = useSelector(
-    (state) => state.assistant.newsFramingDone,
-  );
   const newsFramingFail = useSelector(
     (state) => state.assistant.newsFramingFail,
   );
@@ -102,7 +76,6 @@ const AssistantTextResult = () => {
   const newsGenreLoading = useSelector(
     (state) => state.assistant.newsGenreLoading,
   );
-  const newsGenreDone = useSelector((state) => state.assistant.newsGenreDone);
   const newsGenreFail = useSelector((state) => state.assistant.newsGenreFail);
 
   // persuasion techniques
@@ -113,7 +86,6 @@ const AssistantTextResult = () => {
   const persuasionLoading = useSelector(
     (state) => state.assistant.persuasionLoading,
   );
-  const persuasionDone = useSelector((state) => state.assistant.persuasionDone);
   const persuasionFail = useSelector((state) => state.assistant.persuasionFail);
 
   // subjectivity
@@ -123,9 +95,6 @@ const AssistantTextResult = () => {
   );
   const subjectivityLoading = useSelector(
     (state) => state.assistant.subjectivityLoading,
-  );
-  const subjectivityDone = useSelector(
-    (state) => state.assistant.subjectivityDone,
   );
   const subjectivityFail = useSelector(
     (state) => state.assistant.subjectivityFail,
@@ -139,9 +108,6 @@ const AssistantTextResult = () => {
   const machineGeneratedTextChunksLoading = useSelector(
     (state) => state.assistant.machineGeneratedTextChunksLoading,
   );
-  const machineGeneratedTextChunksDone = useSelector(
-    (state) => state.assistant.machineGeneratedTextChunksDone,
-  );
   const machineGeneratedTextChunksFail = useSelector(
     (state) => state.assistant.machineGeneratedTextChunksFail,
   );
@@ -150,9 +116,6 @@ const AssistantTextResult = () => {
   );
   const machineGeneratedTextSentencesLoading = useSelector(
     (state) => state.assistant.machineGeneratedTextSentencesLoading,
-  );
-  const machineGeneratedTextSentencesDone = useSelector(
-    (state) => state.assistant.machineGeneratedTextSentencesDone,
   );
   const machineGeneratedTextSentencesFail = useSelector(
     (state) => state.assistant.machineGeneratedTextSentencesFail,
@@ -205,165 +168,6 @@ const AssistantTextResult = () => {
       id: `simple-tab-${index}`,
       "aria-controls": `simple-tabpanel-${index}`,
     };
-  }
-
-  // Summaries
-  const importantSentenceKey = "Important_Sentence";
-
-  const newsFramingCategories = newsFramingResult
-    ? Object.entries(newsFramingResult.entities)
-        .map(([key, items]) => [
-          key,
-          Math.max(...items.map((item) => parseFloat(item.score))),
-        ])
-        .filter(([key, score]) => score >= 0.8) // threshold
-        .sort(([, a], [, b]) => b - a) // highest score first
-        .map(([key]) => key)
-        .filter((key) => key != importantSentenceKey)
-        .slice(0, 3) // top 3
-    : [];
-  const newsFramingSummary = (
-    <>
-      {newsFramingCategories.map((topic, index) => (
-        <div key={`${index}_div`}>
-          {index != "0" && <Divider key={`${index}_Divider`} />}
-          <ListItem
-            key={`${index}_ListItem`}
-            sx={{
-              background: rgbToString(primaryRgb),
-              color: rgbToLuminance(primaryRgb) > 0.7 ? "black" : "white",
-            }}
-          >
-            <ListItemText primary={keyword(topic)} />
-          </ListItem>
-        </div>
-      ))}
-    </>
-  );
-
-  const newsGenreCategory = newsGenreResult
-    ? Object.keys(newsGenreResult.entities).filter(
-        (key) => key != importantSentenceKey,
-      )[0]
-    : null;
-  const newsGenreSummary = (
-    <>
-      <ListItem
-        key={`${newsGenreSummary}_ListItem`}
-        sx={{
-          background: rgbToString(primaryRgb),
-          color: rgbToLuminance(primaryRgb) > 0.7 ? "black" : "white",
-        }}
-      >
-        <ListItemText primary={keyword(newsGenreCategory)} />
-      </ListItem>
-    </>
-  );
-
-  const persuasionCategories = persuasionResult
-    ? Object.entries(persuasionResult.entities)
-        .filter(([key, value]) =>
-          value.some((item) => parseFloat(item.score) > 0.8),
-        )
-        .sort(([, a], [, b]) => b.length - a.length)
-        .map(([key]) => key)
-    : [];
-  const persuasionSummary = persuasionCategories.map((persuasion, index) => (
-    <div key={`${index}_div`}>
-      {index != "0" && <Divider key={`${index}_Divider`} />}
-      <ListItem
-        key={`${index}_ListItem`}
-        sx={{
-          background: rgbToString(primaryRgb),
-          color: "white",
-        }}
-      >
-        <ListItemText
-          key={`${index}_ListItemText`}
-          primary={
-            keyword(getPersuasionCategoryTechnique(persuasion)[0]) +
-            ": " +
-            keyword(getPersuasionCategoryTechnique(persuasion)[1])
-          }
-        />
-      </ListItem>
-    </div>
-  ));
-
-  const fullTextScoreLabel = "full_text_score";
-
-  const [subjectivityColours, subjectivityColoursDark] = subjectivityResult
-    ? getSubjectivityColours(subjectivityResult.configs)
-    : [null, null];
-  const subjectivitySummary = subjectivityResult
-    ? createGaugeChart(
-        fullTextScoreLabel,
-        subjectivityResult.entities["Subjective"]
-          ? subjectivityResult.entities["Subjective"][0].score
-          : null,
-        resolvedMode,
-        resolvedMode === "dark" ? subjectivityColoursDark : subjectivityColours,
-        keyword,
-        ["gauge_no_detection_sub", "gauge_detection_sub"],
-        false,
-        [0.4, 0.25, 0.35],
-      )
-    : null;
-
-  const [mgtColours, mgtColoursDark] = machineGeneratedTextChunksResult
-    ? getMgtColours(machineGeneratedTextChunksResult.configs)
-    : [null, null];
-  const machineGeneratedTextSummary =
-    machineGeneratedTextChunksResult && machineGeneratedTextSentencesResult
-      ? createGaugeChart(
-          fullTextScoreLabel,
-          machineGeneratedTextChunksResult.entities[fullTextScoreLabel]
-            ? machineGeneratedTextChunksResult.entities[fullTextScoreLabel][0]
-                .score
-            : null,
-          resolvedMode,
-          resolvedMode === "dark" ? mgtColoursDark : mgtColours,
-          keyword,
-          ["gauge_no_detection", "gauge_detection"],
-          false,
-          [0.05, 0.45, 0.45, 0.05], // 5%, 50%, 95%
-        )
-      : null;
-
-  // summary loading
-  function summaryLoading(credibilitySignal) {
-    return (
-      <ListItem key={`${credibilitySignal}_summaryLoading`}>
-        <Skeleton width="100%" height={40} />
-      </ListItem>
-    );
-  }
-
-  // summary failed
-  function summaryFailed(credibilitySignal) {
-    return (
-      <ListItem key={`${credibilitySignal}_summaryFailed`}>
-        <Typography sx={{ textAlign: "start" }}>
-          {keyword("failed_to_load")}
-        </Typography>
-      </ListItem>
-    );
-  }
-
-  // summary empty
-  function summaryEmpty(credibilitySignal, keyword) {
-    return (
-      <ListItem key={`${credibilitySignal}_summaryEmpty`}>
-        <Typography sx={{ textAlign: "start" }}>
-          {credibilitySignal === newsFramingTitle &&
-            keyword("no_detected_topics")}
-          {credibilitySignal === subjectivityTitle &&
-            keyword("no_detected_subjective_sentences")}
-          {credibilitySignal === persuasionTitle &&
-            keyword("no_detected_techniques")}
-        </Typography>
-      </ListItem>
-    );
   }
 
   // tooltips
@@ -488,31 +292,56 @@ const AssistantTextResult = () => {
           aria-label="extracted text tabs"
           variant="scrollable"
         >
-          <Tab label={keyword("summary_title")} {...a11yProps(0)} />
-          <Tab label={keyword("raw_text")} {...a11yProps(1)} />
+          <Tab label={keyword("raw_text")} {...a11yProps(0)} />
           <Tab
-            label={<div>{newsFramingTitle}</div>}
-            {...a11yProps(2)}
+            label={
+              <div>
+                {newsFramingTitle}
+                {newsFramingLoading && <LinearProgress />}
+              </div>
+            }
+            {...a11yProps(1)}
             disabled={newsFramingFail || newsFramingLoading}
           />
           <Tab
-            label={<div>{newsGenreTitle}</div>}
-            {...a11yProps(3)}
+            label={
+              <div>
+                {newsGenreTitle}
+                {newsGenreLoading && <LinearProgress />}
+              </div>
+            }
+            {...a11yProps(2)}
             disabled={newsGenreFail || newsGenreLoading}
           />
           <Tab
-            label={<div>{persuasionTitle}</div>}
-            {...a11yProps(4)}
+            label={
+              <div>
+                {persuasionTitle}
+                {persuasionLoading && <LinearProgress />}
+              </div>
+            }
+            {...a11yProps(3)}
             disabled={persuasionFail || persuasionLoading}
           />
           <Tab
-            label={<div>{subjectivityTitle}</div>}
-            {...a11yProps(5)}
+            label={
+              <div>
+                {subjectivityTitle}
+                {subjectivityLoading && <LinearProgress />}
+              </div>
+            }
+            {...a11yProps(4)}
             disabled={subjectivityFail || subjectivityLoading}
           />
           <Tab
-            label={<div>{machineGeneratedTextTitle}</div>}
-            {...a11yProps(6)}
+            label={
+              <div>
+                {machineGeneratedTextTitle}
+                {(machineGeneratedTextChunksLoading ||
+                  machineGeneratedTextSentencesLoading) && <LinearProgress />}
+              </div>
+            }
+            {...a11yProps(5)}
             disabled={
               machineGeneratedTextChunksFail ||
               machineGeneratedTextChunksLoading ||
@@ -532,229 +361,15 @@ const AssistantTextResult = () => {
             paddingRight: expanded ? "15px" : "0px", // fallback for older browsers
           }}
         >
-          {/* summaries */}
-          <CustomTabPanel value={textTabIndex} index={0}>
-            <Grid container spacing={2}>
-              {/* column 1 */}
-              <Grid size={{ xs: 4 }}>
-                <Stack spacing={2}>
-                  {/* news framing summary */}
-                  <Card>
-                    <CardActionArea
-                      onClick={() =>
-                        newsFramingResult ? setTextTabIndex(2) : null
-                      }
-                    >
-                      <CardHeader
-                        className={classes.assistantCardHeader}
-                        title={newsFramingTitle}
-                        action={
-                          <div style={{ display: "flex" }}>
-                            <Tooltip
-                              interactive={"true"}
-                              title={newsFramingTooltip}
-                              classes={{ tooltip: classes.assistantTooltip }}
-                            >
-                              <HelpOutlineOutlinedIcon
-                                className={classes.toolTipIcon}
-                              />
-                            </Tooltip>
-                          </div>
-                        }
-                      />
-                      <CardContent>
-                        <List key="news_framing_list_summary">
-                          {newsFramingLoading &&
-                            summaryLoading(newsFramingTitle)}
-                          {newsFramingDone
-                            ? Object.keys(newsFramingResult.entities).length > 0
-                              ? newsFramingSummary
-                              : summaryEmpty(newsFramingTitle, keyword)
-                            : null}
-                          {newsFramingFail && summaryFailed(newsFramingTitle)}
-                        </List>
-                      </CardContent>
-                    </CardActionArea>
-                  </Card>
-
-                  {/* subjectivity summary */}
-                  <Card>
-                    <CardActionArea
-                      onClick={() =>
-                        subjectivityResult ? setTextTabIndex(5) : null
-                      }
-                    >
-                      <CardHeader
-                        className={classes.assistantCardHeader}
-                        title={subjectivityTitle}
-                        action={
-                          <div style={{ display: "flex" }}>
-                            <Tooltip
-                              interactive={"true"}
-                              title={subjectivityTooltip}
-                              classes={{ tooltip: classes.assistantTooltip }}
-                            >
-                              <HelpOutlineOutlinedIcon
-                                className={classes.toolTipIcon}
-                              />
-                            </Tooltip>
-                          </div>
-                        }
-                      />
-                      <CardContent>
-                        <List>
-                          {subjectivityLoading &&
-                            summaryLoading(subjectivityTitle)}
-                          {subjectivityDone
-                            ? Object.keys(subjectivityResult.entities).length >
-                              0
-                              ? subjectivitySummary
-                              : summaryEmpty(subjectivityTitle, keyword)
-                            : null}
-                          {subjectivityFail && summaryFailed(subjectivityTitle)}
-                        </List>
-                      </CardContent>
-                    </CardActionArea>
-                  </Card>
-                </Stack>
-              </Grid>
-
-              {/* column 2 */}
-              <Grid size={{ xs: 4 }}>
-                <Stack spacing={2}>
-                  {/* news genre summary */}
-                  <Card>
-                    <CardActionArea
-                      onClick={() =>
-                        newsGenreResult ? setTextTabIndex(3) : null
-                      }
-                    >
-                      <CardHeader
-                        className={classes.assistantCardHeader}
-                        title={newsGenreTitle}
-                        action={
-                          <div style={{ display: "flex" }}>
-                            <Tooltip
-                              interactive={"true"}
-                              title={newsGenreTooltip}
-                              classes={{ tooltip: classes.assistantTooltip }}
-                            >
-                              <HelpOutlineOutlinedIcon
-                                className={classes.toolTipIcon}
-                              />
-                            </Tooltip>
-                          </div>
-                        }
-                      />
-                      <CardContent>
-                        <List>
-                          {newsGenreLoading && summaryLoading(newsGenreTitle)}
-                          {newsGenreDone && newsGenreSummary}
-                          {newsGenreFail && summaryFailed(newsGenreTitle)}
-                        </List>
-                      </CardContent>
-                    </CardActionArea>
-                  </Card>
-
-                  {/* machine generated text summary */}
-                  <Card>
-                    <CardActionArea
-                      onClick={() =>
-                        machineGeneratedTextSentencesResult &&
-                        machineGeneratedTextChunksResult
-                          ? setTextTabIndex(6)
-                          : null
-                      }
-                    >
-                      <CardHeader
-                        className={classes.assistantCardHeader}
-                        title={machineGeneratedTextTitle}
-                        action={
-                          <div style={{ display: "flex" }}>
-                            <Tooltip
-                              interactive={"true"}
-                              title={machineGeneratedTextTooltip}
-                              classes={{ tooltip: classes.assistantTooltip }}
-                            >
-                              <HelpOutlineOutlinedIcon
-                                className={classes.toolTipIcon}
-                              />
-                            </Tooltip>
-                          </div>
-                        }
-                      />
-                      <CardContent>
-                        <List>
-                          {(machineGeneratedTextChunksLoading ||
-                            machineGeneratedTextSentencesLoading) &&
-                            !machineGeneratedTextChunksFail &&
-                            !machineGeneratedTextSentencesFail &&
-                            summaryLoading(machineGeneratedTextTitle)}
-                          {machineGeneratedTextChunksDone &&
-                            machineGeneratedTextSentencesDone &&
-                            machineGeneratedTextSummary}
-                          {(machineGeneratedTextChunksFail ||
-                            machineGeneratedTextSentencesFail) &&
-                            summaryFailed(machineGeneratedTextTitle)}
-                        </List>
-                      </CardContent>
-                    </CardActionArea>
-                  </Card>
-                </Stack>
-              </Grid>
-
-              {/* column 3 */}
-              {/* persuasion summary */}
-              <Grid size={{ xs: 4 }}>
-                <Card>
-                  <CardActionArea
-                    onClick={() =>
-                      persuasionResult ? setTextTabIndex(4) : null
-                    }
-                  >
-                    <CardHeader
-                      className={classes.assistantCardHeader}
-                      title={persuasionTitle}
-                      action={
-                        <div style={{ display: "flex" }}>
-                          <Tooltip
-                            interactive={"true"}
-                            title={persuasionTooltip}
-                            classes={{ tooltip: classes.assistantTooltip }}
-                          >
-                            <HelpOutlineOutlinedIcon
-                              className={classes.toolTipIcon}
-                            />
-                          </Tooltip>
-                        </div>
-                      }
-                    />
-                    <CardContent>
-                      <List key={uuidv4()}>
-                        {persuasionLoading && summaryLoading(persuasionTitle)}
-                        {persuasionDone
-                          ? Object.keys(persuasionResult.entities).length > 0
-                            ? persuasionSummary
-                            : summaryEmpty(persuasionTitle, keyword)
-                          : null}
-                        {persuasionFail && summaryFailed(persuasionTitle)}
-                      </List>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </Grid>
-            </Grid>
-          </CustomTabPanel>
-
           {/* extracted raw text */}
-          <CustomTabPanel value={textTabIndex} index={1}>
+          <CustomTabPanel value={textTabIndex} index={0}>
             <Typography component={"div"} sx={{ textAlign: "start" }}>
               {textHtmlOutput ?? text}
             </Typography>
           </CustomTabPanel>
 
           {/* news framing (topic) */}
-          <CustomTabPanel value={textTabIndex} index={2}>
+          <CustomTabPanel value={textTabIndex} index={1}>
             <AssistantTextClassification
               text={text}
               classification={newsFramingResult?.entities}
@@ -763,13 +378,11 @@ const AssistantTextResult = () => {
               categoriesTooltipContent={newsFramingTooltip}
               textHtmlMap={textHtmlMap}
               credibilitySignal={newsFramingTitle}
-              setTextTabIndex={setTextTabIndex}
-              summary={newsFramingSummary}
             />
           </CustomTabPanel>
 
           {/* news genre */}
-          <CustomTabPanel value={textTabIndex} index={3}>
+          <CustomTabPanel value={textTabIndex} index={2}>
             <AssistantTextClassification
               text={text}
               classification={newsGenreResult?.entities}
@@ -778,13 +391,11 @@ const AssistantTextResult = () => {
               categoriesTooltipContent={newsGenreTooltip}
               textHtmlMap={textHtmlMap}
               credibilitySignal={newsGenreTitle}
-              setTextTabIndex={setTextTabIndex}
-              summary={newsGenreSummary}
             />
           </CustomTabPanel>
 
           {/* persuasion */}
-          <CustomTabPanel value={textTabIndex} index={4}>
+          <CustomTabPanel value={textTabIndex} index={3}>
             <AssistantTextSpanClassification
               text={text}
               classification={persuasionResult?.entities}
@@ -792,12 +403,11 @@ const AssistantTextResult = () => {
               titleText={persuasionTitle}
               categoriesTooltipContent={persuasionTooltip}
               textHtmlMap={textHtmlMap}
-              setTextTabIndex={setTextTabIndex}
             />
           </CustomTabPanel>
 
           {/* subjectivity */}
-          <CustomTabPanel value={textTabIndex} index={5}>
+          <CustomTabPanel value={textTabIndex} index={4}>
             <AssistantTextClassification
               text={text}
               classification={subjectivityResult?.entities}
@@ -806,23 +416,20 @@ const AssistantTextResult = () => {
               categoriesTooltipContent={subjectivityTooltip}
               textHtmlMap={textHtmlMap}
               credibilitySignal={subjectivityTitle}
-              setTextTabIndex={setTextTabIndex}
-              summary={subjectivitySummary}
             />
           </CustomTabPanel>
 
           {/* machine generated text */}
-          <CustomTabPanel value={textTabIndex} index={6}>
+          <CustomTabPanel value={textTabIndex} index={5}>
             <AssistantTextClassification
               text={text}
               classification={machineGeneratedTextSentencesResult?.entities}
+              overallClassification={machineGeneratedTextChunksResult?.entities}
               configs={machineGeneratedTextSentencesResult?.configs}
               titleText={machineGeneratedTextTitle}
               categoriesTooltipContent={machineGeneratedTextTooltip}
               textHtmlMap={textHtmlMap}
               credibilitySignal={machineGeneratedTextTitle}
-              setTextTabIndex={setTextTabIndex}
-              summary={machineGeneratedTextSummary}
             />
           </CustomTabPanel>
         </Box>

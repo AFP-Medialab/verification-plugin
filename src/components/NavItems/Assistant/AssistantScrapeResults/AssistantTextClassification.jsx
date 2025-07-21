@@ -15,22 +15,18 @@ import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-import ColourGradientTooltipContent from "@/components/NavItems/Assistant/AssistantScrapeResults/ColourGradientTooltipContent";
 import "@/components/NavItems/Assistant/AssistantScrapeResults/assistantTextResultStyle.css";
 import {
-  SummaryReturnButton,
   ThresholdSlider,
   createGaugeExplanation,
   getMgtColours,
   getSubjectivityColours,
-  interpRgb,
   primaryRgb,
   rgbToLuminance,
   rgbToString,
   treeMapToElements,
   wrapPlainTextSpan,
 } from "@/components/NavItems/Assistant/AssistantScrapeResults/assistantUtils";
-import GaugeChartModalExplanation from "@/components/Shared/GaugeChartResults/GaugeChartModalExplanation";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { setImportantSentenceThreshold } from "@/redux/actions/tools/assistantActions";
@@ -38,19 +34,15 @@ import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
 import "./assistantTextResultStyle.css";
+import { createGaugeChart } from "./assistantUtils";
 
 export default function AssistantTextClassification({
   text,
   classification,
+  overallClassification,
   titleText = "",
-  importantSentenceKey = "Important_Sentence",
   categoriesTooltipContent = "",
   configs = {
-    // news framing and news genre
-    confidenceThresholdLow: 0.8,
-    confidenceThresholdHigh: 1.0,
-    confidenceRgbLow: [32, 180, 172],
-    confidenceRgbHigh: [34, 41, 180],
     // machine generated text and subjectivity
     greenRgb: [0, 255, 0],
     orangeRgb: [255, 170, 0],
@@ -70,8 +62,6 @@ export default function AssistantTextClassification({
   },
   textHtmlMap = null,
   credibilitySignal = "",
-  setTextTabIndex = 0,
-  summary,
 }) {
   const classes = useMyStyles();
   const dispatch = useDispatch();
@@ -96,19 +86,20 @@ export default function AssistantTextClassification({
   const { mode, systemMode } = useColorScheme();
   const resolvedMode = systemMode || mode;
 
-  // define category for machine generated text overall score
+  // predefined labels
   const fullTextScoreLabel = "full_text_score";
+  const importantSentenceKey = "Important_Sentence";
+  const mgtOverallScoreLabel = "mgt_overall_score";
 
-  // define category and sentence colours
-  let categoryRgbLow, categoryRgbHigh;
+  // define colours
   let mgtColours, mgtColoursDark, orderedCategories;
   let subjectivityColours, subjectivityColoursDark;
+  let confidenceThresholdLow;
   if (
     credibilitySignal === newsFramingTitle ||
     credibilitySignal === newsGenreTitle
   ) {
-    categoryRgbLow = configs.confidenceRgbLow;
-    categoryRgbHigh = configs.confidenceRgbHigh;
+    confidenceThresholdLow = configs.confidenceThresholdLow;
   } else if (credibilitySignal === machineGeneratedTextTitle) {
     // traffic light colours for machine generated text
     [mgtColours, mgtColoursDark] = getMgtColours(configs);
@@ -124,17 +115,14 @@ export default function AssistantTextClassification({
   const sentenceThresholdLow = importantSentenceThreshold / 100.0;
   const sentenceThresholdHigh = 99;
 
-  // filtering sentences for all credibility signals
+  // filtering for all credibility signals
   let filteredSentences = [];
-  // only filtering cetgories for machine generated text
-  // news framing and news genre previously created as summary
-  // subjectivity has no categories
   let filteredCategories = {};
 
   // Separate important sentences from categories, filter by threshold
   for (let label in classification) {
     if (label === importantSentenceKey) {
-      // Filter sentences above importanceThresholdLow unless machine generated text
+      // Filter sentences above slider importanceThresholdLow unless machine generated text
       const sentenceIndices = classification[label];
       for (let i = 0; i < sentenceIndices.length; i++) {
         if (credibilitySignal === machineGeneratedTextTitle) {
@@ -154,7 +142,8 @@ export default function AssistantTextClassification({
       ) {
         filteredCategories[label] = classification[label];
       } else if (
-        classification[label][0].score >= configs.confidenceThresholdLow
+        // news framing and news genre
+        classification[label][0].score >= confidenceThresholdLow
       ) {
         filteredCategories[label] = classification[label];
       }
@@ -226,45 +215,43 @@ export default function AssistantTextClassification({
                 categories={sortedFilteredCategories}
                 keyword={keyword}
                 fullTextScoreLabel={fullTextScoreLabel}
+                overallScore={
+                  overallClassification[mgtOverallScoreLabel][0].score
+                }
                 resolvedMode={resolvedMode}
                 colours={resolvedMode === "dark" ? mgtColoursDark : mgtColours}
+                arcsLength={[0.05, 0.45, 0.45, 0.05]}
+                gaugeLabels={["gauge_no_detection", "gauge_detection"]}
                 orderedCategories={orderedCategories}
                 credibilitySignal={credibilitySignal}
-                summary={summary}
               />
             ) : credibilitySignal === subjectivityTitle ? (
               <GaugeCategoriesList
                 keyword={keyword}
                 fullTextScoreLabel={fullTextScoreLabel}
+                overallScore={classification["Subjective"][0].score}
                 resolvedMode={resolvedMode}
                 colours={
                   resolvedMode === "dark"
                     ? subjectivityColoursDark
                     : subjectivityColours
                 }
+                arcsLength={[0.4, 0.25, 0.35]}
+                gaugeLabels={["gauge_no_detection_sub", "gauge_detection_sub"]}
                 credibilitySignal={credibilitySignal}
                 importantSentenceThreshold={importantSentenceThreshold}
                 handleSliderChange={handleSliderChange}
-                summary={summary}
               />
             ) : (
               <CategoriesList
                 categories={sortedFilteredCategories}
-                rgbLow={categoryRgbLow}
-                rgbHigh={categoryRgbHigh}
-                primaryColour={primaryRgb}
+                backgroundRgb={primaryRgb}
                 keyword={keyword}
                 credibilitySignal={credibilitySignal}
                 importantSentenceThreshold={importantSentenceThreshold}
                 handleSliderChange={handleSliderChange}
-                classes={classes}
-                summary={summary}
               />
             )}
-            <SummaryReturnButton
-              setTextTabIndex={setTextTabIndex}
-              text={keyword("summary_title")}
-            />
           </CardContent>
         </Card>
       </Grid>
@@ -277,23 +264,32 @@ export function GaugeCategoriesList({
   categories,
   keyword,
   fullTextScoreLabel,
+  overallScore,
   resolvedMode,
   colours,
+  arcsLength,
+  gaugeLabels,
   orderedCategories,
   credibilitySignal,
   importantSentenceThreshold,
   handleSliderChange,
-  summary,
 }) {
-  // gauage chart explanation
-  const gaugeExplanation = createGaugeExplanation(
-    keyword,
-    credibilitySignal === keyword("machine_generated_text_title")
-      ? [0.05, 0.45, 0.45, 0.05]
-      : [0.4, 0.25, 0.35],
+  // gauge chart
+  const gaugeChart = createGaugeChart(
+    fullTextScoreLabel,
+    overallScore,
+    resolvedMode,
     colours,
+    keyword,
+    gaugeLabels,
+    false,
+    arcsLength,
   );
 
+  // gauage chart explanation
+  const gaugeExplanation = createGaugeExplanation(keyword, arcsLength, colours);
+
+  // categories list
   const output = [];
   if (credibilitySignal === keyword("machine_generated_text_title")) {
     for (const category of orderedCategories) {
@@ -333,7 +329,7 @@ export function GaugeCategoriesList({
           />
         </>
       ) : null}
-      {summary}
+      {gaugeChart}
       {gaugeExplanation}
       {credibilitySignal === keyword("machine_generated_text_title") && (
         <>
@@ -348,17 +344,14 @@ export function GaugeCategoriesList({
   );
 }
 
-// for news framing and news genre
+// for News Framing and News Genre
 export function CategoriesList({
   categories,
-  // rgbLow,
-  // rgbHigh,
+  backgroundRgb,
   keyword,
   credibilitySignal,
   importantSentenceThreshold,
   handleSliderChange,
-  classes,
-  summary,
 }) {
   if (_.isEmpty(categories)) {
     // only news framing might be empty, a genre is always detected
@@ -369,6 +362,26 @@ export function CategoriesList({
         </Typography>
       )
     );
+  }
+
+  let output = [];
+  let index = 0;
+  for (const category in categories) {
+    if (index > 0) {
+      output.push(<Divider key={index} />);
+    }
+    output.push(
+      <ListItem
+        key={category}
+        sx={{
+          background: rgbToString(backgroundRgb),
+          color: "white",
+        }}
+      >
+        <ListItemText primary={keyword(category)} />
+      </ListItem>,
+    );
+    index++;
   }
 
   return (
@@ -382,35 +395,18 @@ export function CategoriesList({
         handleSliderChange={handleSliderChange}
         keyword={keyword}
       />
-      <Tooltip
-        classes={{ tooltip: classes.assistantTooltip }}
-        title={
-          <ColourGradientTooltipContent
-            description={keyword("confidence_tooltip_category")}
-            colourScaleText={keyword("colour_scale")}
-            textLow={keyword("low_confidence")}
-            textHigh={keyword("high_confidence")}
-            // rgbLow={rgbLow}
-            // rgbHigh={rgbHigh}
-          />
-        }
-      >
-        {summary}
-      </Tooltip>
+      <List>{output}</List>
     </>
   );
 }
 
 /*
-Takes input from topic classifier and convert them into html sentence highlighting
+Takes input from classifier and convert them into html sentence highlighting
  */
 export function ClassifiedText({
   text,
   spanIndices,
-  thresholdLow,
-  thresholdHigh,
-  rgbLow,
-  rgbHigh,
+  backgroundRgb,
   textHtmlMap = null,
   credibilitySignal,
   keyword,
@@ -419,21 +415,14 @@ export function ClassifiedText({
   let output = text; // Defaults to text output
 
   function wrapHighlightedText(spanText, spanInfo) {
-    const spanScore = spanInfo.score;
-    let backgroundRgb, bgLuminance;
+    let bgLuminance;
     let textColour = "black";
     if (credibilitySignal === keyword("machine_generated_text_title")) {
       backgroundRgb = resolvedMode === "dark" ? spanInfo.rgbDark : spanInfo.rgb;
       bgLuminance = rgbToLuminance(backgroundRgb);
       if (spanInfo.pred == "highly_likely_machine") textColour = "white";
     } else {
-      backgroundRgb = interpRgb(
-        spanScore,
-        thresholdLow,
-        thresholdHigh,
-        rgbLow,
-        rgbHigh,
-      );
+      backgroundRgb = primaryRgb;
       bgLuminance = rgbToLuminance(backgroundRgb);
       if (bgLuminance < 0.7) textColour = "white";
     }

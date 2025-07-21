@@ -18,9 +18,7 @@ import Typography from "@mui/material/Typography";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import {
-  SummaryReturnButton,
   ThresholdSlider,
-  //getPersuasionCategoryColours,
   getPersuasionCategoryTechnique,
   mergeSpanIndices,
   primaryRgb,
@@ -49,16 +47,7 @@ export default function AssistantTextSpanClassification({
   classification,
   titleText = "",
   categoriesTooltipContent = "",
-  configs = {
-    perCategoryJustificationRgb: [150, 0, 255],
-    perCategorySimplificationRgb: [0, 150, 255],
-    perCategoryDistractionRgb: [100, 0, 255],
-    perCategoryCallRgb: [0, 100, 255],
-    perCategoryManipulativeRgb: [220, 0, 255],
-    perCategoryAttackRgb: [0, 200, 255],
-  },
   textHtmlMap = null,
-  setTextTabIndex = 0,
 }) {
   const classes = useMyStyles();
   const dispatch = useDispatch();
@@ -109,10 +98,6 @@ export default function AssistantTextSpanClassification({
   function handleCategorySelect(currentLabel) {
     dispatch(setCurrentLabel(currentLabel));
   }
-
-  // // defining persuasion technique category colours
-  // const persuasionTechniqueCategoryColours =
-  //   getPersuasionCategoryColours(configs);
 
   // finding categories and their spans with scores, and the text for each category
   let categories = {};
@@ -177,18 +162,12 @@ export default function AssistantTextSpanClassification({
         keyword(persuasionTechniqueCategory) +
         ": " +
         keyword(persuasionTechnique);
-      // let techniqueBackgroundRgb =
-      //   persuasionTechniqueCategoryColours[persuasionTechniqueCategory];
-      // let bgLuminance = rgbToLuminance(techniqueBackgroundRgb);
-      // let techniqueTextColour = "white";
-      // if (rgbToLuminance(primaryRgb) > 0.7) techniqueTextColour = "black";
       techniqueContent.push(
         <div
           key={divText}
           style={{
-            background: rgbToString(primaryRgb),
-            // color: rgbToString(techniqueTextColour),
-            color: rgbToLuminance(primaryRgb) > 0.7 ? "black" : "white",
+            background: rgbToString(backgroundRgbHover),
+            color: rgbToLuminance(backgroundRgbHover) > 0.7 ? "black" : "white",
             marginTop: "0.5em",
             marginBottom: "0.5em",
             padding: "0.5em",
@@ -311,7 +290,6 @@ export default function AssistantTextSpanClassification({
           <CardContent>
             <CategoriesListToggle
               categories={uniqueCategories}
-              // colours={persuasionTechniqueCategoryColours}
               noCategoriesText={keyword("no_detected_techniques")}
               allCategoriesLabel={allCategoriesLabel}
               currentLabel={currentLabel}
@@ -320,10 +298,6 @@ export default function AssistantTextSpanClassification({
               importantSentenceThreshold={importantSentenceThreshold}
               handleSliderChange={handleSliderChange}
               credibilitySignal={persuasionTitle}
-            />
-            <SummaryReturnButton
-              setTextTabIndex={setTextTabIndex}
-              text={keyword("summary_title")}
             />
           </CardContent>
         </Card>
@@ -384,10 +358,6 @@ export function CategoriesListToggle({
     // format of category is "persuasionTechniqueCategory__persuasionTechnique"
     const [persuasionTechniqueCategory, persuasionTechnique] =
       getPersuasionCategoryTechnique(category);
-    // let backgroundRgb = colours[persuasionTechniqueCategory];
-    // let bgLuminance = rgbToLuminance(backgroundRgb);
-    // let textColour = "white";
-    // if (bgLuminance > 0.7) textColour = "black";
     const itemText =
       keyword(persuasionTechniqueCategory) +
       ": " +

@@ -164,66 +164,6 @@ export function TransPersuasionTechniquesTooltip({ keyword }) {
       components={{
         ul: <ul />,
         li: <li />,
-        strongJustification: (
-          <strong
-            style={{
-              background: "#9600ff",
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-        strongSimplification: (
-          <strong
-            style={{
-              background: "#0096ff",
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-        strongDistraction: (
-          <strong
-            style={{
-              background: "#6400ff",
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-        strongCall: (
-          <strong
-            style={{
-              background: "#0064ff",
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-        strongManipulativeWording: (
-          <strong
-            style={{
-              background: "#dc00ff",
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-        strongAttackOnReputation: (
-          <strong
-            style={{
-              background: "#00c8ff",
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
       }}
     />
   );

@@ -449,32 +449,6 @@ export function getSubjectivityColours(configs) {
 export const primaryRgb = [0, 146, 108];
 
 /**
- * Crediblity signal summary button
- * @param { setTextTabIndex, text }
- * @returns button to return to summary tab
- */
-export function SummaryReturnButton({ setTextTabIndex, text }) {
-  return (
-    <Stack
-      direction="row"
-      sx={{
-        justifyContent: "flex-start",
-        alignItems: "left",
-        paddingTop: 1,
-      }}
-    >
-      <Button
-        onClick={() => setTextTabIndex(0)}
-        startIcon={<ArrowBack />}
-        sx={{ cursor: "pointer" }}
-      >
-        {text}
-      </Button>
-    </Stack>
-  );
-}
-
-/**
  * Slider component utilised by news framing, news genre, persuasion techniques and subjectivity
  * @param { credibilitySignal, importantSentenceThreshold, handleSliderChange }
  * @returns slider component
