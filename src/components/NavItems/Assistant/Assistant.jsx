@@ -12,25 +12,25 @@ import Typography from "@mui/material/Typography";
 
 import { Close } from "@mui/icons-material";
 
+import AssistantCheckStatus from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantCheckStatus";
+import AssistantNEResult from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantNEResult";
+import AssistantCommentResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantCommentResult";
+import AssistantLinkResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantLinkResult";
+import AssistantMediaResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantMediaResult";
+import AssistantSCResults from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantSCResults";
+import AssistantTextResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantTextResult";
+import AssistantWarnings from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantWarnings";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import {
   cleanAssistantState,
   setUrlMode,
   submitInputUrl,
 } from "@/redux/actions/tools/assistantActions";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { setError } from "redux/reducers/errorReducer";
+import { setError } from "@/redux/reducers/errorReducer";
 
-import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
-import AssistantCheckStatus from "./AssistantCheckResults/AssistantCheckStatus";
-import AssistantNEResult from "./AssistantCheckResults/AssistantNEResult";
 import AssistantFileSelected from "./AssistantFileSelected";
 import AssistantIntroduction from "./AssistantIntroduction";
-import AssistantCommentResult from "./AssistantScrapeResults/AssistantCommentResult";
-import AssistantLinkResult from "./AssistantScrapeResults/AssistantLinkResult";
-import AssistantMediaResult from "./AssistantScrapeResults/AssistantMediaResult";
-import AssistantTextResult from "./AssistantScrapeResults/AssistantTextResult";
-import AssistantSCResults from "./AssistantScrapeResults/AssistantUrlDomainAnalysisResults";
-import AssistantWarnings from "./AssistantScrapeResults/AssistantWarnings";
 import AssistantUrlSelected from "./AssistantUrlSelected";
 
 const Assistant = () => {

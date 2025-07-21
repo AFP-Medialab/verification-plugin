@@ -26,12 +26,12 @@ import { SubdirectoryArrowRight } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { TextCopy } from "components/Shared/Utils/TextCopy";
-import { Translate } from "components/Shared/Utils/Translate";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
+import { TextCopy } from "@/components/Shared/Utils/TextCopy";
+import { Translate } from "@/components/Shared/Utils/Translate";
 import moment from "moment/moment";
 
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
   TransHtmlDoubleLineBreak,
   TransMultilingualStanceLink,

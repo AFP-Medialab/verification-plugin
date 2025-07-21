@@ -31,7 +31,6 @@ async function UseGetDeepfake(
     // services = "deepfake_video,ftcn,face_reenact";
     services = "deepfake_video";
     if (role.includes(ROLES.EVALUATION)) services += ",faceswap_fsfm";
-    if (role.includes(ROLES.EXTRA_FEATURE)) services += ",ftcn";
   }
 
   if (!modeURL) {

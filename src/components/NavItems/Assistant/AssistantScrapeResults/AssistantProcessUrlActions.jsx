@@ -14,16 +14,16 @@ import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 
 import {
+  resetDeepfake as resetDeepfakeVideo,
+  setDeepfakeUrlVideo,
+} from "@//redux/actions/tools/deepfakeVideoActions";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
+import {
   resetSyntheticImageDetectionImage,
   setSyntheticImageDetectionUrl,
 } from "@/redux/actions/tools/syntheticImageDetectionActions";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import {
-  resetDeepfake as resetDeepfakeVideo,
-  setDeepfakeUrlVideo,
-} from "../../../../redux/actions/tools/deepfakeVideoActions";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { KNOWN_LINKS } from "../AssistantRuleBook";
 
 const AssistantProcessUrlActions = () => {
