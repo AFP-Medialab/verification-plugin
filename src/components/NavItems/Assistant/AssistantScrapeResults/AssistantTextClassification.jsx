@@ -158,18 +158,24 @@ export default function AssistantTextClassification({
     filteredCategories = [];
   }
 
-  // order categories by highest score first
   const sortedFilteredCategories = {};
-  Object.keys(filteredCategories)
-    .sort(
-      (a, b) =>
-        parseFloat(filteredCategories[b][0].score) -
-        parseFloat(filteredCategories[a][0].score),
-    ) // sort by highest score first
-    .slice(0, 3) // take top 3 only
-    .forEach((key) => {
-      sortedFilteredCategories[key] = filteredCategories[key];
-    });
+  const top3SortedFilteredCategories = {};
+
+  const sortedKeys = Object.keys(filteredCategories).sort(
+    (a, b) =>
+      parseFloat(filteredCategories[b][0].score) -
+      parseFloat(filteredCategories[a][0].score),
+  ); // sort by highest score first
+
+  // for machine generated text
+  sortedKeys.forEach((key) => {
+    sortedFilteredCategories[key] = filteredCategories[key];
+  });
+
+  // for news framing and news genre
+  sortedKeys.slice(0, 3).forEach((key) => {
+    top3SortedFilteredCategories[key] = filteredCategories[key];
+  }); // top 3 objects
 
   return (
     <Grid container>
@@ -240,7 +246,7 @@ export default function AssistantTextClassification({
               />
             ) : (
               <CategoriesList
-                categories={sortedFilteredCategories}
+                categories={top3SortedFilteredCategories}
                 backgroundRgb={primaryRgb}
                 keyword={keyword}
                 credibilitySignal={credibilitySignal}
