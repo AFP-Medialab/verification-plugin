@@ -101,17 +101,14 @@ export default function AssistantTextClassification({
   ) {
     confidenceThresholdLow = configs.confidenceThresholdLow;
   } else if (credibilitySignal === machineGeneratedTextTitle) {
-    // traffic light colours for machine generated text
     [mgtColours, mgtColoursDark] = getMgtColours(configs);
     orderedCategories = configs.orderedCategories;
   } else if (credibilitySignal === subjectivityTitle) {
     [subjectivityColours, subjectivityColoursDark] =
       getSubjectivityColours(configs);
   }
-  const sentenceRgbLow = primaryRgb;
-  const sentenceRgbHigh = primaryRgb;
 
-  // define category and sentence thresholds
+  // define sentence slider thresholds
   const sentenceThresholdLow = importantSentenceThreshold / 100.0;
   const sentenceThresholdHigh = 99;
 
@@ -168,7 +165,8 @@ export default function AssistantTextClassification({
       (a, b) =>
         parseFloat(filteredCategories[b][0].score) -
         parseFloat(filteredCategories[a][0].score),
-    )
+    ) // sort by highest score first
+    .slice(0, 3) // take top 3 only
     .forEach((key) => {
       sortedFilteredCategories[key] = filteredCategories[key];
     });
@@ -182,8 +180,6 @@ export default function AssistantTextClassification({
           spanIndices={filteredSentences}
           thresholdLow={sentenceThresholdLow}
           thresholdHigh={sentenceThresholdHigh}
-          rgbLow={sentenceRgbLow}
-          rgbHigh={sentenceRgbHigh}
           textHtmlMap={textHtmlMap}
           credibilitySignal={credibilitySignal}
           keyword={keyword}
