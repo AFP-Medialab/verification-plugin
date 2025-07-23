@@ -16,8 +16,7 @@
     "webNavigation",
     "activeTab",
     "scripting",
-    "tabs",
-    "runtime"
+    "tabs"
   ],
   "host_permissions": [
     "<all_urls>"
