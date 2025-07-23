@@ -15,7 +15,6 @@ import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-import "@/components/NavItems/Assistant/AssistantScrapeResults/assistantTextResultStyle.css";
 import {
   ThresholdSlider,
   createGaugeExplanation,
@@ -33,7 +32,6 @@ import { setImportantSentenceThreshold } from "@/redux/actions/tools/assistantAc
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
-import "./assistantTextResultStyle.css";
 import { createGaugeChart } from "./assistantUtils";
 
 export default function AssistantTextClassification({
