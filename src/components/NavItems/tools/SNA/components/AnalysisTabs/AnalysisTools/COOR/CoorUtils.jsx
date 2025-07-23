@@ -28,10 +28,10 @@ import {
   getTextClusters,
   onlyUnique,
 } from "components/NavItems/tools/SNA/utils/accessSavedCollections";
+import { dayjs } from "dayjs";
 import { MultiUndirectedGraph } from "graphology";
 import louvain from "graphology-communities-louvain";
 
-const dayjs = require("dayjs");
 const MAX_TABLE_TEXT_LENGTH = 45;
 
 const coorTextEntry = (

@@ -1,9 +1,3 @@
-// import React from "react";
-
-// export const {
-//   generateAccountActivityChart,
-// } = require("../AccountActivity/AccountActivityUtils");
-
 export const entryAggregatorByListValue = (
   selectedContent,
   listField,

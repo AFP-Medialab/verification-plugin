@@ -126,12 +126,9 @@ export const analysisDisplayTemplate = (
   let setToolResult = toolAnalysisProps.setToolResult;
 
   const generateResult = async () => {
-    console.log(toolDisplayProps);
     setToolLoading(true);
     let selectedContent = getSelectedSourcesContent(dataSources, selected);
-    console.log(analysisArgs);
     let result = await analysisFunction(selectedContent, analysisArgs);
-    console.log(result);
     setToolResult(result);
 
     setToolLoading(false);

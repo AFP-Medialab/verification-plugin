@@ -1,8 +1,5 @@
+import { entryAggregatorByListValue } from "../MostMentioned/MostMentionedUtils";
 import { getVisxWordcloud } from "./VisxWordcloud";
-
-const {
-  entryAggregatorByListValue,
-} = require("../MostMentioned/MostMentionedUtils");
 
 const MAX_WORDS = 100;
 

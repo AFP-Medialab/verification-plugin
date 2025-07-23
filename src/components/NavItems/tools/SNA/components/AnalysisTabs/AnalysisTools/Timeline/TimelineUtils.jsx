@@ -3,7 +3,7 @@ import React from "react";
 
 import Box from "@mui/material/Box";
 
-const dayjs = require("dayjs");
+import { dayjs } from "dayjs";
 
 const DATE_FORMAT = "YYYY-MM-DDTHH";
 

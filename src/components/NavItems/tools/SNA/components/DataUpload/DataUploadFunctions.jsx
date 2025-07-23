@@ -1,5 +1,7 @@
 import { TIKTOK_PROPERTY_PATHS, TWEET_PROPERTY_PATHS } from "background";
 import dayjs from "dayjs";
+import jp from "jsonpath";
+import _ from "lodash";
 
 const cleanCrowdTangleFbDataUpload = (uploadedData) => {
   uploadedData.forEach((entry) => (entry.date = entry.date?.slice(0, -4)));
@@ -74,9 +76,6 @@ export const getAccountNameMap = (uploadedData, socialMediaSelected) => {
 };
 
 export const reformatZeeschuimerTweets = (uploadedTweets, uploadedFileName) => {
-  let _ = require("lodash");
-  const jp = require("jsonpath");
-
   const reformatedTweets = uploadedTweets.map((tweet) => {
     let tweetInfo = tweet.data;
     let reformatedTweet = {};
@@ -144,7 +143,6 @@ export const reformatZeeschuimerTweets = (uploadedTweets, uploadedFileName) => {
 export const reformatZeeschuimerTiktoks = (uploadedData, uploadedFileName) => {
   const reformatedTiktoks = uploadedData.map((tiktok) => {
     let rawTiktok = tiktok.data;
-    let _ = require("lodash");
     let reformatedTiktok = {};
     reformatedTiktok.id = rawTiktok.id;
     reformatedTiktok.collectionID = uploadedFileName;
