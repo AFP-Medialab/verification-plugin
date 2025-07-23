@@ -262,7 +262,10 @@ export default function assistantApiCalls() {
       async () => {
         const result = await axios.post(
           assistantEndpoint + "gcloud/persuasion-span-clfr",
-          { text: text },
+          {
+            text: text,
+            frontendVersion: 0.87,
+          },
         );
         return result.data;
       },
@@ -283,6 +286,7 @@ export default function assistantApiCalls() {
       async () => {
         const result = await axios.post(assistantEndpoint + "dw/subjectivity", {
           content: text,
+          frontendVersion: 0.87,
         });
         return result.data;
       },
