@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React from "react";
 
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
@@ -10,6 +10,7 @@ import { SNAButton } from "components/NavItems/tools/SNA/utils/SNAButton";
 import {
   getSelectedSourcesNameMaps,
   keepOnlyNumberFields,
+  onlyUnique,
 } from "components/NavItems/tools/SNA/utils/accessSavedCollections";
 import {
   Bar,
@@ -29,9 +30,7 @@ export const accountActivityDetailDisplayHandler = (
   selectedContent,
   clickPayload,
 ) => {
-  return selectedContent.filter(
-    (x) => String(x.username) === String(clickPayload.username),
-  );
+  return clickPayload.entries;
 };
 
 export const accountActivitySettings = (settingsArgs) => {
@@ -47,15 +46,15 @@ export const accountActivitySettings = (settingsArgs) => {
 
   if (selectedSources.length === 0) return <> </>;
 
-  console.log("here");
-
   const numberFieldsinSources = selectedSources
     .map((source) => keepOnlyNumberFields(source.content[0]))
     .flat();
 
-  const commonFields = numberFieldsinSources.filter((field) =>
-    selectedSources.every((source) => source.headers.includes(field)),
-  );
+  const commonFields = numberFieldsinSources
+    .filter((field) =>
+      selectedSources.every((source) => source.headers.includes(field)),
+    )
+    .filter(onlyUnique);
 
   return (
     <Box key="accountActivitySettings">
@@ -174,7 +173,7 @@ export const generateAccountActivityChart = (globalArgs, activityChartData) => {
   };
 
   return (
-    <Box sx={{ width: "100%", overflowX: "auto" }}>
+    <Box sx={{ width: "100%", overflowX: "auto", paddingLeft: "20px" }}>
       {onlyShowTop ? (
         <></>
       ) : (
@@ -184,13 +183,14 @@ export const generateAccountActivityChart = (globalArgs, activityChartData) => {
         )
       )}
       <BarChart
+        sx={{ paddingLeft: "20px" }}
         data={chartData}
         width={chartData.length * 60 > 1200 ? chartData.length * 60 : 1200}
         height={400}
         margin={{
           top: 20,
           right: 30,
-          left: 20,
+          left: 40,
           bottom: 100,
         }}
         onClick={({ activePayload }) => {
@@ -207,7 +207,11 @@ export const generateAccountActivityChart = (globalArgs, activityChartData) => {
           height={120}
           tick={<CustomizedAxisTick />}
         />
-        <YAxis />
+        <YAxis
+          tickFormatter={(value) =>
+            Intl.NumberFormat("en-US", { notation: "compact" }).format(value)
+          }
+        />
         <Tooltip
           content={CustomizedToolTip}
           cursor={{
@@ -222,7 +226,6 @@ export const generateAccountActivityChart = (globalArgs, activityChartData) => {
 };
 
 export const generateAccountActivityData = (selectedContent, analysisArgs) => {
-  console.log(analysisArgs);
   let activitySelect = analysisArgs.activitySelect;
 
   let contentGroupedByUser = Object.groupBy(
@@ -232,6 +235,7 @@ export const generateAccountActivityData = (selectedContent, analysisArgs) => {
   let countsByUser = Object.keys(contentGroupedByUser)
     .map((username) => ({
       username: username,
+      entries: contentGroupedByUser[username],
       count:
         activitySelect === ENTRIES_FIELD_LABEL
           ? contentGroupedByUser[username].length
