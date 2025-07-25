@@ -17,7 +17,6 @@ import { setMagnifierResult } from "@/redux/actions/tools/magnifierActions";
 import { reverseImageSearch } from "@Shared/ReverseSearch/reverseSearchUtils";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { ReverseSearchButtons } from "components/Shared/ReverseSearch/ReverseSearchButtons";
-import "tui-image-editor/dist/tui-image-editor.css";
 
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import ImageEditor from "../Utils/ImageEditor";
