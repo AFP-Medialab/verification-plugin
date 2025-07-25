@@ -173,7 +173,14 @@ export const generateAccountActivityChart = (globalArgs, activityChartData) => {
   };
 
   return (
-    <Box sx={{ width: "100%", overflowX: "auto", paddingLeft: "20px" }}>
+    <Box
+      sx={{
+        width: "100%",
+        overflowX: "auto",
+        paddingLeft: "20px",
+        overflowY: "hidden",
+      }}
+    >
       {onlyShowTop ? (
         <></>
       ) : (
@@ -186,7 +193,7 @@ export const generateAccountActivityChart = (globalArgs, activityChartData) => {
         sx={{ paddingLeft: "20px" }}
         data={chartData}
         width={chartData.length * 60 > 1200 ? chartData.length * 60 : 1200}
-        height={400}
+        height={600}
         margin={{
           top: 20,
           right: 30,
