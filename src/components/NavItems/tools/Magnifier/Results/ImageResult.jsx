@@ -44,7 +44,6 @@ const ImageResult = ({ handleCloseResults }) => {
   };
 
   const handleSaveImage = async (editedFile) => {
-    console.log(editedFile);
     setEditorImage(editedFile);
     const data = await fileToDataUrl(editedFile);
     dispatch(
@@ -99,8 +98,6 @@ const ImageResult = ({ handleCloseResults }) => {
     );
   };
 
-  console.log(editorImage);
-
   return (
     <Card variant="outlined">
       <Box
@@ -130,53 +127,6 @@ const ImageResult = ({ handleCloseResults }) => {
             }
             file={editorImage}
           />
-          {/* <Modal
-            aria-labelledby="transition-modal-title"
-            aria-describedby="transition-modal-description"
-            className={classes.modal}
-            open={open}
-            onClose={handleClose}
-            closeAfterTransition
-            slots={{
-              backdrop: Backdrop,
-            }}
-            slotProps={{
-              backdrop: {
-                timeout: 500,
-              },
-            }}
-          >
-            <Fade in={open}>
-              <div className={classes.paper}>
-                <ImageEditor
-                  image={resultImage}
-                />
-                <Box
-                  sx={{
-                    m: 1,
-                  }}
-                />
-
-                <div className={classes.modalButton}>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => setOpen(false)}
-                  >
-                    {keyword("quit")}
-                  </Button>
-                  <div className={classes.grow} />
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={handleClose}
-                  >
-                    {keyword("save")}
-                  </Button>
-                </div>
-              </div>
-            </Fade>
-          </Modal> */}
 
           <Box
             sx={{
