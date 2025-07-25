@@ -1,15 +1,13 @@
 import React, { createRef, useState } from "react";
+import { ReactPhotoEditor } from "react-photo-editor";
 import { useDispatch, useSelector } from "react-redux";
 
-import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import Fade from "@mui/material/Fade";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
-import Modal from "@mui/material/Modal";
 
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -19,43 +17,7 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import { ReverseSearchButtons } from "components/Shared/ReverseSearch/ReverseSearchButtons";
 
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import ImageEditor from "../Utils/ImageEditor";
 import Loop from "./Loop";
-
-const myTheme = {
-  "loadButton.backgroundColor": "#151515",
-  "loadButton.border": "0px",
-  "loadButton.color": "#151515",
-  "loadButton.fontFamily": "NotoSans, sans-serif",
-  "loadButton.fontSize": "0px",
-
-  "downloadButton.backgroundColor": "#151515",
-  "downloadButton.border": "0px",
-  "downloadButton.color": "#151515",
-  "downloadButton.fontFamily": "NotoSans, sans-serif",
-  "downloadButton.fontSize": "0px",
-
-  "menu.backgroundColor": "white",
-  "common.backgroundColor": "#151515",
-  //"menu.normalIcon.path": icond,
-  //"menu.activeIcon.path": iconb,
-  //"menu.disabledIcon.path": icona,
-  //"menu.hoverIcon.path": iconc,
-
-  // submenu icons
-  //'submenu.normalIcon.path': icona,
-  "submenu.normalIcon.name": "icon-a",
-  //'submenu.activeIcon.path': iconc,
-  "submenu.activeIcon.name": "icon-c",
-  "submenu.iconSize.width": "64px",
-  "submenu.iconSize.height": "64px",
-
-  // submenu labels
-  "submenu.normalLabel.color": "#fff",
-  "submenu.normalLabel.fontWeight": "bold",
-  "submenu.activeLabel.color": "var(--mui-palette-text-secondary)",
-  "submenu.activeLabel.fontWeight": "bold",
-};
 
 const ImageResult = ({ handleCloseResults }) => {
   const classes = useMyStyles();
@@ -85,15 +47,27 @@ const ImageResult = ({ handleCloseResults }) => {
     setIsImageUrl(false);
   };
 
+  function dataURLtoFile(dataUrl, filename) {
+    const arr = dataUrl.split(",");
+    const mimeMatch = arr[0].match(/:(.*?);/);
+    const mime = mimeMatch ? mimeMatch[1] : "";
+    const bstr = atob(arr[1]); // base64 decode
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+
+    return new File([u8arr], filename, { type: mime });
+  }
+
+  const [editorImage, setEditorImage] = useState(dataURLtoFile(resultImage));
+
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
-    if (imageEditor !== null && imageEditor.current !== null) {
-      const imageEditorInst = imageEditor.current;
-      imageEditorInst
-        .loadImageFromURL(resultImage, "image")
-        .catch((error) => console.error(error));
-    }
+    setEditorImage(dataURLtoFile(resultImage, "imageName"));
     setOpen(true);
   };
 
@@ -117,6 +91,8 @@ const ImageResult = ({ handleCloseResults }) => {
     );
   };
 
+  console.log(editorImage);
+
   return (
     <Card variant="outlined">
       <Box
@@ -138,7 +114,12 @@ const ImageResult = ({ handleCloseResults }) => {
           }
         />
         <div className={classes.root2}>
-          <Modal
+          <ReactPhotoEditor
+            open={open}
+            onClose={() => setOpen(false)}
+            file={editorImage}
+          />
+          {/* <Modal
             aria-labelledby="transition-modal-title"
             aria-describedby="transition-modal-description"
             className={classes.modal}
@@ -157,27 +138,7 @@ const ImageResult = ({ handleCloseResults }) => {
             <Fade in={open}>
               <div className={classes.paper}>
                 <ImageEditor
-                  includeUI={{
-                    loadImage: {
-                      path: resultImage,
-                      name: "SampleImage",
-                    },
-                    theme: myTheme,
-                    menu: ["crop", "flip", "rotate", "filter"],
-                    initMenu: "",
-                    uiSize: {
-                      height: `calc(100vh - 160px)`,
-                    },
-                    menuBarPosition: "bottom",
-                  }}
-                  cssMaxHeight={window.innerHeight * 0.8}
-                  cssMaxWidth={window.innerWidth * 0.8}
-                  selectionStyle={{
-                    cornerSize: 20,
-                    rotatingPointOffset: 70,
-                  }}
-                  usageStatistics={false}
-                  ref={imageEditor}
+                  image={resultImage}
                 />
                 <Box
                   sx={{
@@ -204,7 +165,7 @@ const ImageResult = ({ handleCloseResults }) => {
                 </div>
               </div>
             </Fade>
-          </Modal>
+          </Modal> */}
 
           <Box
             sx={{
