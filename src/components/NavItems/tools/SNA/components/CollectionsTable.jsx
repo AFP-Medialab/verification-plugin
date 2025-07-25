@@ -6,6 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -113,6 +114,7 @@ const CollectionActionsCell = (row, collectionActionsCellProps) => {
         }}
         rowkey={row.id}
         id={"uploadButton" + row.id}
+        sx={{ p: 1 }}
       >
         <UploadIcon />
         <input
@@ -204,6 +206,7 @@ const CollectionActionsCell = (row, collectionActionsCellProps) => {
           aria-haspopup="true"
           aria-expanded={open ? "true" : undefined}
           rowkey={row.id}
+          sx={{ p: 1 }}
         >
           <DownloadIcon />
         </IconButton>
@@ -245,6 +248,7 @@ const CollectionActionsCell = (row, collectionActionsCellProps) => {
         onClick={async () => await handleRemove(row.id)}
         aria-label="delete"
         color="error"
+        sx={{ p: 1 }}
       >
         <DeleteIcon />
       </IconButton>
@@ -252,16 +256,23 @@ const CollectionActionsCell = (row, collectionActionsCellProps) => {
   };
 
   return (
-    <TableCell align="right">
-      {rawUploadIconButton(row, fileInputRef)}
-      {downloadIconButton(row, dataSources, dlAnchorEl, setDlAnchorEl)}
-      {deleteIconButton(
-        row,
-        setSelected,
-        selected,
-        dataSources,
-        setDataSources,
-      )}
+    <TableCell>
+      <Stack
+        direction="row"
+        spacing={2}
+        justifyContent={"flex-end"}
+        sx={{ px: 0 }}
+      >
+        {rawUploadIconButton(row, fileInputRef)}
+        {downloadIconButton(row, dataSources, dlAnchorEl, setDlAnchorEl)}
+        {deleteIconButton(
+          row,
+          setSelected,
+          selected,
+          dataSources,
+          setDataSources,
+        )}
+      </Stack>
     </TableCell>
   );
 };
@@ -303,6 +314,7 @@ const CollectionsTableRow = (
             setDetailContent(row.content);
             setOpenDetailModal(true);
           }}
+          sx={{ p: 1 }}
         >
           <VisibilityIcon />
         </IconButton>
@@ -397,7 +409,7 @@ const CollectionsTable = (collectionsTableProps) => {
     <TableContainer
       component={Paper}
       sx={{
-        maxHeight: "400px",
+        maxHeight: "600px",
         overflox: "auto",
       }}
     >

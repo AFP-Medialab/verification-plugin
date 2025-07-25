@@ -159,10 +159,11 @@ export const getTextClusters = async (
 
     while (true) {
       let statusResp = await authenticatedRequest(d3ltaStatusRequestConfig);
+      console.log(statusResp);
       if (statusResp.data.status == "DONE") {
         return statusResp.data;
       }
-      if (statusResp.data.status == "ERROR") {
+      if (statusResp.data.status == "FAILED") {
         throw new Error("snaTools_d3ltaServerError");
       }
       await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -178,7 +179,7 @@ export const getTextClusters = async (
     let d3ltaResp = await waitUntilFinish(job_id);
     return d3ltaResp.result;
   } catch (error) {
-    error;
+    console.log(error);
     return { status: "error" };
   }
 };

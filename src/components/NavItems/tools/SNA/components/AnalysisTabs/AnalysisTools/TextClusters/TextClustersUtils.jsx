@@ -33,7 +33,7 @@ const textClustersTableBody = (
     <>
       {Object.keys(textClusterData)
         .sort((a, b) => {
-          textClusterData[b].length - textClusterData[b].length;
+          textClusterData[b].length - textClusterData[a].length;
         })
         .map((cluster) => (
           <TableRow key={"textClusterRow" + cluster}>
@@ -60,7 +60,13 @@ export const textClustersTable = (
   textClusterData,
 ) => {
   return (
-    <TableContainer component={Paper}>
+    <TableContainer
+      component={Paper}
+      sx={{
+        maxHeight: "600px",
+        overflow: "auto",
+      }}
+    >
       <Table>
         {textClustersTableHeader(keyword)}
         {textClustersTableBody(
@@ -81,6 +87,7 @@ export const generateTextClusterData = async (
     selectedContent,
     authenticatedRequest,
   );
+  console.log(entriesWithTextClusters);
   let entriesWithTextClustersFiltered = entriesWithTextClusters.filter(
     (entry) => entry.cluster != "nan",
   );
