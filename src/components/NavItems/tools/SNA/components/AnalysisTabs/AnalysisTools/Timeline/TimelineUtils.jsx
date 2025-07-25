@@ -3,7 +3,7 @@ import React from "react";
 
 import Box from "@mui/material/Box";
 
-import { dayjs } from "dayjs";
+import dayjs from "dayjs";
 
 const DATE_FORMAT = "YYYY-MM-DDTHH";
 
@@ -131,9 +131,8 @@ export const generateTimelineData = (selectedData) => {
 
 export const TimelineChart = (
   { keyword, setDetailContent, setOpenDetailModal },
-  selectedData,
+  timelineChartData,
 ) => {
-  let timelineChartData = generateTimelineData(selectedData);
   let timelineChartOptions = getTimelineChartOptions(
     keyword,
     timelineChartData,
@@ -154,7 +153,7 @@ export const TimelineChart = (
               params,
               setDetailContent,
               setOpenDetailModal,
-              selectedData,
+              timelineChartData,
             ),
         }}
       />

@@ -28,7 +28,7 @@ import {
   getTextClusters,
   onlyUnique,
 } from "components/NavItems/tools/SNA/utils/accessSavedCollections";
-import { dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { MultiUndirectedGraph } from "graphology";
 import louvain from "graphology-communities-louvain";
 

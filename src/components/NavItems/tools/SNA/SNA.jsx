@@ -22,6 +22,7 @@ import {
   runCoorAnalysis,
 } from "./components/AnalysisTabs/AnalysisTools/COOR/CoorUtils";
 import {
+  generateHashtagAnalysisData,
   generateHashtagAnalysisViz,
   hashtagAnalysisDetailModalContent,
 } from "./components/AnalysisTabs/AnalysisTools/HashtagAnalysis/HashtagAnalysisUtils";
@@ -33,8 +34,14 @@ import {
   generateTextClusterData,
   textClustersTable,
 } from "./components/AnalysisTabs/AnalysisTools/TextClusters/TextClustersUtils";
-import { TimelineChart } from "./components/AnalysisTabs/AnalysisTools/Timeline/TimelineUtils";
-import { generateWordCloud } from "./components/AnalysisTabs/AnalysisTools/WordCloud/WordCloudUtils";
+import {
+  TimelineChart,
+  generateTimelineData,
+} from "./components/AnalysisTabs/AnalysisTools/Timeline/TimelineUtils";
+import {
+  generateWordCloud,
+  generateWordCloudGraphData,
+} from "./components/AnalysisTabs/AnalysisTools/WordCloud/WordCloudUtils";
 import SNAPanel from "./components/AnalysisTabs/SNAPanel";
 import CollectionsTable from "./components/CollectionsTable";
 import DataUpload from "./components/DataUpload/DataUpload";
@@ -67,34 +74,47 @@ const SNA = () => {
   const [detailContent, setDetailContent] = useState([]);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [detailSearchFilter, setDetailSearchFilter] = useState("");
+
   //Collections table props
   const [selected, setSelected] = useState([]);
   const fileInputRef = useRef(null);
   const [dlAnchorEl, setDlAnchorEl] = useState(null);
+
   //Data upload props
   const dataUploadInputRef = useRef(null);
   const [uploadedData, setUploadedData] = useState([]);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [uploadedFileName, setUploadedFileName] = useState("");
+
   //Data upload modal props
   const [socialMediaSelected, setSocialMediaSelected] = useState("");
   const [customExpanded, setCustomExpanded] = useState(false);
+
   //Zeeschuimer data upload modal props
   const [showZeeschuimerUploadModal, setShowZeeschuimerUploadModal] =
     useState(false);
+
   //SNA Panel props
   const [snaTab, setSnaTab] = useState(0);
+
   //Timeline props
   const [timelineDistributionLoading, setTimelineDistributionLoading] =
     useState(false);
   const [timelineDistributionResult, setTimelineDistributionResult] =
     useState(null);
+  const [
+    timelineDistributionErrorMessage,
+    setTimelineDistributionErrorMessage,
+  ] = useState("");
+
   //Account activity props
   const [accountActivityResult, setAccountActivityResult] = useState(null);
   const [accountActivityOnlyShowTop, setAccountActivityOnlyShowTop] =
     useState(true);
   const [activitySelect, setActivitySelect] = useState("entries");
   const [accountActivityLoading, setAccountActivityLoading] = useState(false);
+  const [accountActivityErrorMessage, setAccountActivityErrorMessage] =
+    useState("");
   //Coor props
   const [coorTimeWindow, setCoorTimeWindow] = useState(60);
   const [coorEdgeThresh, setCoorEdgeThresh] = useState(0);
@@ -102,26 +122,33 @@ const SNA = () => {
   const [coorObjectChoice, setCoorObjectChoice] = useState("objects");
   const [coorLoading, setCoorLoading] = useState(false);
   const [coorResult, setCoorResult] = useState(false);
+  const [coorErrorMessage, setCoorErrorMessage] = useState("");
 
   //Most mentioned props
   const [mostMentionedLoading, setMostMentionedLoading] = useState(false);
   const [mostMentionedOnlyShowTop, setMostMentionedOnlyShowTop] =
     useState(true);
   const [mostMentionedResult, setMostMentionedResult] = useState(null);
+  const [mostMentionedErrorMessage, setMostMentionedErrorMessage] =
+    useState("");
 
   //Hashtag analysis props
   const [hashtagAnalysisResult, setHashtagAnalysisResult] = useState(null);
   const [hashtagAnalysisLoading, setHashtagAnalysisLoading] = useState(false);
   const [hashtagAnalysisOnlyShowTop, setHashtagAnalysisOnlyShowTop] =
     useState(true);
+  const [hashtagAnalysisErrorMessage, setHashtagAnalysisErrorMessage] =
+    useState("");
 
   //Word cloud props
   const [wordCloudLoading, setWordCloudLoading] = useState(false);
   const [wordCloudResult, setWordCloudResult] = useState(null);
+  const [wordCloudErrorMessage, setWordCloudErrorMessage] = useState("");
 
   //Text clusters props
   const [textClustersLoading, setTextClustersLoading] = useState(false);
   const [textClustersResult, setTextClustersResult] = useState(null);
+  const [textClustersErrorMessage, setTextClustersErrorMessage] = useState("");
 
   const authenticatedRequest = useAuthenticatedRequest();
 
@@ -190,11 +217,11 @@ const SNA = () => {
       toolButtonText: "snaTools_timelineDistributionButtonText",
       toolLoading: timelineDistributionLoading,
       setToolLoading: setTimelineDistributionLoading,
+      errorMessage: timelineDistributionErrorMessage,
+      setErrorMessage: setTimelineDistributionErrorMessage,
     },
     toolAnalysisProps: {
-      analysisFunction: (x) => {
-        return x;
-      },
+      analysisFunction: generateTimelineData,
       vizFunction: TimelineChart,
       vizArgs: {
         keyword,
@@ -212,6 +239,8 @@ const SNA = () => {
       toolButtonText: "snaTools_mostMentionedButtonText",
       toolLoading: mostMentionedLoading,
       setToolLoading: setMostMentionedLoading,
+      errorMessage: mostMentionedErrorMessage,
+      setErrorMessage: setMostMentionedErrorMessage,
     },
     toolAnalysisProps: {
       analysisFunction: generateMostMentionedData,
@@ -249,6 +278,8 @@ const SNA = () => {
       },
       toolLoading: accountActivityLoading,
       setToolLoading: setAccountActivityLoading,
+      errorMessage: accountActivityErrorMessage,
+      setErrorMessage: setAccountActivityErrorMessage,
     },
     toolAnalysisProps: {
       analysisFunction: generateAccountActivityData,
@@ -277,11 +308,11 @@ const SNA = () => {
       toolButtonText: "snaTools_hashtagAnalysisButtonText",
       toolLoading: hashtagAnalysisLoading,
       setToolLoading: setHashtagAnalysisLoading,
+      errorMessage: hashtagAnalysisErrorMessage,
+      setErrorMessage: setHashtagAnalysisErrorMessage,
     },
     toolAnalysisProps: {
-      analysisFunction: (x) => {
-        return x;
-      },
+      analysisFunction: generateHashtagAnalysisData,
       vizFunction: generateHashtagAnalysisViz,
       vizArgs: {
         barChart: {
@@ -328,6 +359,8 @@ const SNA = () => {
       },
       toolLoading: coorLoading,
       setToolLoading: setCoorLoading,
+      errorMessage: coorErrorMessage,
+      setErrorMessage: setCoorErrorMessage,
     },
     toolAnalysisProps: {
       analysisFunction: runCoorAnalysis,
@@ -357,11 +390,11 @@ const SNA = () => {
       toolButtonText: "snaTools_wordCloudButtonText",
       toolLoading: wordCloudLoading,
       setToolLoading: setWordCloudLoading,
+      errorMessage: wordCloudErrorMessage,
+      setErrorMessage: setWordCloudErrorMessage,
     },
     toolAnalysisProps: {
-      analysisFunction: (x) => {
-        return x;
-      },
+      analysisFunction: generateWordCloudGraphData,
       vizFunction: generateWordCloud,
       vizArgs: {
         setDetailContent,
@@ -378,6 +411,8 @@ const SNA = () => {
       toolButtonText: "snaTools_textClustersButtonText",
       toolLoading: textClustersLoading,
       setToolLoading: setTextClustersLoading,
+      errorMessage: textClustersErrorMessage,
+      setErrorMessage: setTextClustersErrorMessage,
     },
     toolAnalysisProps: {
       analysisFunction: generateTextClusterData,

@@ -70,20 +70,37 @@ export const generateHashtagAnalysisBarChartData = (selectedContent) => {
   return entryAggregatorByListValue(selectedContent, "hashtags", "hashtag");
 };
 
+export const generateHashtagAnalysisData = (selectedContent) => {
+  try {
+    let barchart = generateHashtagAnalysisBarChartData(selectedContent);
+    let graph = generateCohashtagGraphData(selectedContent);
+    if (barchart.length === 0) return [];
+    return {
+      barchart: barchart,
+      graph: graph,
+    };
+  } catch {
+    throw Error();
+  }
+};
+
 export const generateHashtagAnalysisViz = (vizArgs, toolResult) => {
   let keyword = vizArgs.barChart.keyword;
 
+  let barChartData = toolResult.barchart;
+  let cohashtagGraphData = toolResult.graph;
+
   let hashtagAnalysisBarChart = generateAccountActivityChart(
     vizArgs.barChart,
-    generateHashtagAnalysisBarChartData(toolResult),
+    barChartData,
   );
-
-  let cohashtagGraphData = generateCohashtagGraphData(toolResult);
 
   let cohashtagGraph = generateCoorNetworkGraph(
     cohashtagGraphData,
     vizArgs.networkGraph,
   );
+
+  console.log("test");
 
   return (
     <>

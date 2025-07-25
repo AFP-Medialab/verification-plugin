@@ -117,6 +117,8 @@ export const analysisDisplayTemplate = (
   let toolButtonText = toolDisplayProps.toolButtonText;
   let toolLoading = toolDisplayProps.toolLoading;
   let setToolLoading = toolDisplayProps.setToolLoading;
+  let errorMessage = toolDisplayProps.errorMessage;
+  let setErrorMessage = toolDisplayProps.setErrorMessage;
 
   let analysisFunction = toolAnalysisProps.analysisFunction;
   let analysisArgs = toolAnalysisProps.analysisArgs;
@@ -126,12 +128,22 @@ export const analysisDisplayTemplate = (
   let setToolResult = toolAnalysisProps.setToolResult;
 
   const generateResult = async () => {
+    setErrorMessage("");
     setToolLoading(true);
     let selectedContent = getSelectedSourcesContent(dataSources, selected);
-    let result = await analysisFunction(selectedContent, analysisArgs);
-    setToolResult(result);
-
-    setToolLoading(false);
+    try {
+      let result = await analysisFunction(selectedContent, analysisArgs);
+      console.log(result);
+      if (Array.isArray(result) && result.length == 0) {
+        setErrorMessage("snaTools_noResultMessage");
+      }
+      setToolResult(result);
+    } catch (err) {
+      setErrorMessage("snaTools_analysisErrorMessage");
+      console.log(err);
+    } finally {
+      setToolLoading(false);
+    }
   };
 
   return (
@@ -153,13 +165,18 @@ export const analysisDisplayTemplate = (
           <></>
         )}
         {toolLoading ? (
-          <Box alignItems="center" justifyContent="center">
+          <Box
+            sx={{
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <CircularProgress />
           </Box>
-        ) : toolResult ? (
+        ) : toolResult && errorMessage.length == 0 ? (
           vizFunction(vizArgs, toolResult)
         ) : (
-          <></>
+          <Typography>{keyword(errorMessage)}</Typography>
         )}
       </Box>
     </>
