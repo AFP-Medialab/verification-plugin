@@ -1,4 +1,4 @@
-import React, { createRef, useState } from "react";
+import React, { useState } from "react";
 import { ReactPhotoEditor } from "react-photo-editor";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -27,15 +27,26 @@ const ImageResult = ({ handleCloseResults }) => {
   const resultImage = useSelector((state) => state.magnifier.result);
 
   const dispatch = useDispatch();
-  const imageEditor = createRef();
 
   const [isImageUrl, setIsImageUrl] = useState(
     original.startsWith("http:") || original.startsWith("https:"),
   );
 
-  const updateImage = () => {
-    const imageEditorInst = imageEditor.current;
-    const data = imageEditorInst.toDataURL();
+  const fileToDataUrl = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = () => resolve(reader.result); // base64 data URL
+      reader.onerror = reject;
+
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleSaveImage = async (editedFile) => {
+    console.log(editedFile);
+    setEditorImage(editedFile);
+    const data = await fileToDataUrl(editedFile);
     dispatch(
       setMagnifierResult({
         url: original,
@@ -72,9 +83,6 @@ const ImageResult = ({ handleCloseResults }) => {
   };
 
   const handleClose = () => {
-    if (imageEditor !== undefined && imageEditor !== null) {
-      updateImage();
-    }
     setOpen(false);
   };
 
@@ -116,7 +124,10 @@ const ImageResult = ({ handleCloseResults }) => {
         <div className={classes.root2}>
           <ReactPhotoEditor
             open={open}
-            onClose={() => setOpen(false)}
+            onClose={handleClose}
+            onSaveImage={async (editedFile) =>
+              await handleSaveImage(editedFile)
+            }
             file={editorImage}
           />
           {/* <Modal
