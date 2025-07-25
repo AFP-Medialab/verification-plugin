@@ -52,13 +52,16 @@ const cleanCustomUpload = (uploadedData) => {
 };
 
 export const cleanDataUpload = (uploadedData, socialMediaSelected) => {
+  let ret;
   if (socialMediaSelected === "crowdTangleFb") {
-    return cleanCrowdTangleFbDataUpload(uploadedData);
+    ret = cleanCrowdTangleFbDataUpload(uploadedData);
   } else if (socialMediaSelected === "customUpload") {
-    return cleanCustomUpload(uploadedData);
+    ret = cleanCustomUpload(uploadedData);
   } else {
-    return uploadedData;
+    ret = uploadedData;
   }
+  let cleanedRet = ret.filter((entry) => entry.id != undefined);
+  return cleanedRet;
 };
 
 const makeCrowdTangleFbAccountNameMap = (uploadedData) => {

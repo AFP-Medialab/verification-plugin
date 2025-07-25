@@ -510,7 +510,13 @@ const generateCoorTable = (
   if (coorResult.length == 0) return <> </>;
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer
+      component={Paper}
+      sx={{
+        maxHeight: "600px",
+        overflow: "auto",
+      }}
+    >
       <Table>
         {coorTableHeader(keyword)}
         {coorTableBody(coorResult, setDetailContent, setOpenDetailModal)}

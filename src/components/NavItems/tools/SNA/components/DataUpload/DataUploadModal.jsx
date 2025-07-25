@@ -199,7 +199,6 @@ const DataUploadModal = (dataUploadModalProps) => {
       reformatedUploadEntries,
       socialMediaSelected,
     );
-
     let accountNameMap = getAccountNameMap(
       reformatedUploadEntries,
       socialMediaSelected,

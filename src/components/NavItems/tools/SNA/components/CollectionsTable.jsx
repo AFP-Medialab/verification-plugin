@@ -394,7 +394,13 @@ const CollectionsTable = (collectionsTableProps) => {
   };
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer
+      component={Paper}
+      sx={{
+        maxHeight: "400px",
+        overflox: "auto",
+      }}
+    >
       <Table>
         {CollectionTableHeader(collectionTableHeaderProps)}
         {CollectionsTableBody(
