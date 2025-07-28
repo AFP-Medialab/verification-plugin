@@ -100,8 +100,6 @@ export const generateHashtagAnalysisViz = (vizArgs, toolResult) => {
     vizArgs.networkGraph,
   );
 
-  console.log("test");
-
   return (
     <>
       {hashtagAnalysisBarChart}

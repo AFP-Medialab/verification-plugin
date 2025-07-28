@@ -133,14 +133,12 @@ export const analysisDisplayTemplate = (
     let selectedContent = getSelectedSourcesContent(dataSources, selected);
     try {
       let result = await analysisFunction(selectedContent, analysisArgs);
-      console.log(result);
       if (Array.isArray(result) && result.length == 0) {
         setErrorMessage("snaTools_noResultMessage");
       }
       setToolResult(result);
-    } catch (err) {
+    } catch {
       setErrorMessage("snaTools_analysisErrorMessage");
-      console.log(err);
     } finally {
       setToolLoading(false);
     }

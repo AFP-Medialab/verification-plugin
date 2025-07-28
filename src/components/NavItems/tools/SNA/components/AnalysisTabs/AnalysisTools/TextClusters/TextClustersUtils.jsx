@@ -87,7 +87,6 @@ export const generateTextClusterData = async (
     selectedContent,
     authenticatedRequest,
   );
-  console.log(entriesWithTextClusters);
   let entriesWithTextClustersFiltered = entriesWithTextClusters.filter(
     (entry) => entry.cluster != "nan",
   );

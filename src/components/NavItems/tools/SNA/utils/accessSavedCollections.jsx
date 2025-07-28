@@ -112,10 +112,6 @@ export const refreshPage = async (setLoading, dataSources) => {
     .map((x) => x.content)
     .flat().length;
 
-  console.log(newCollectedContentLength);
-
-  console.log(includedCollectionsLength);
-
   let noNewContentFound =
     includedCollectionsLength === newCollectedContentLength;
 
@@ -194,7 +190,6 @@ export const getTextClusters = async (
 
     while (true) {
       let statusResp = await authenticatedRequest(d3ltaStatusRequestConfig);
-      console.log(statusResp);
       if (statusResp.data.status == "DONE") {
         return statusResp.data;
       }
@@ -213,8 +208,7 @@ export const getTextClusters = async (
     job_id = resp.data.id;
     let d3ltaResp = await waitUntilFinish(job_id);
     return d3ltaResp.result;
-  } catch (error) {
-    console.log(error);
+  } catch {
     return { status: "error" };
   }
 };

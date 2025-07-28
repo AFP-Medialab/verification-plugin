@@ -4,7 +4,6 @@ import { getVisxWordcloud } from "./VisxWordcloud";
 const MAX_WORDS = 100;
 
 export const generateWordCloudGraphData = (selectedContent) => {
-  console.log(selectedContent);
   selectedContent.forEach(
     (entry) => (entry.splitText = entry.text.toLowerCase().split(" ")),
   );
