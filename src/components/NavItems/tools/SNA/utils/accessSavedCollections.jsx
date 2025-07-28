@@ -95,6 +95,41 @@ export const initializePage = async (setLoading, dataSources) => {
   setLoading(false);
 };
 
+export const refreshPage = async (setLoading, dataSources) => {
+  setLoading(true);
+  let includedCollections = dataSources.filter((x) => x.source != "fileUpload");
+  let uploadedCollections = dataSources.filter(
+    (x) => x.source === "fileUpload",
+  );
+  let savedTweets = await getSavedCollections("twitter");
+  let savedTiktoks = await getSavedCollections("tiktok");
+
+  let newCollectedContentLength =
+    savedTweets.map((x) => x.content).flat().length +
+    savedTiktoks.map((x) => x.content).flat().length;
+
+  let includedCollectionsLength = includedCollections
+    .map((x) => x.content)
+    .flat().length;
+
+  console.log(newCollectedContentLength);
+
+  console.log(includedCollectionsLength);
+
+  let noNewContentFound =
+    includedCollectionsLength === newCollectedContentLength;
+
+  if (noNewContentFound) {
+    setLoading(false);
+  } else {
+    dataSources.splice(0, dataSources.length);
+    savedTweets.forEach((collection) => dataSources.push(collection));
+    savedTiktoks.forEach((collection) => dataSources.push(collection));
+    uploadedCollections.forEach((collection) => dataSources.push(collection));
+    setLoading(false);
+  }
+};
+
 export const getSelectedSourcesContent = (dataSources, selected) => {
   let selectedSources = dataSources.filter((source) =>
     selected.includes(source.id),

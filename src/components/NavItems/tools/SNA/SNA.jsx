@@ -48,7 +48,7 @@ import DataUpload from "./components/DataUpload/DataUpload";
 import DataUploadModal from "./components/DataUpload/DataUploadModal";
 import ZeeschuimerUploadModal from "./components/DataUpload/ZeeschuimerUploadModal";
 import DetailModal from "./components/DetailModal";
-import { initializePage } from "./utils/accessSavedCollections";
+import { initializePage, refreshPage } from "./utils/accessSavedCollections";
 
 const SNA = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/NewSNA");
@@ -458,6 +458,18 @@ const SNA = () => {
    */
   useEffect(() => {
     initializePage(setInitLoading, dataSources);
+
+    const refreshOnReturnToTab = async () => {
+      if (document.visibilityState === "visible") {
+        await refreshPage(setInitLoading, dataSources);
+      }
+    };
+
+    document.addEventListener("visibilitychange", refreshOnReturnToTab);
+
+    return () => {
+      document.removeEventListener("visibilitychange", refreshOnReturnToTab);
+    };
   }, []);
 
   return (

@@ -481,8 +481,8 @@ const coorTableHeaderFields = [
   },
 ];
 
-// eslint-disable-next-line react/display-name
 const coorTableHeader = (keyword) => {
+  // eslint-disable-next-line react/display-name
   return () => {
     return (
       <TableRow>
