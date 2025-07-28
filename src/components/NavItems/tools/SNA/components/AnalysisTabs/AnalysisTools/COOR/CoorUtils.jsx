@@ -1,5 +1,6 @@
 import React from "react";
 import ForceGraph2D from "react-force-graph-2d";
+import { TableVirtuoso } from "react-virtuoso";
 
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
@@ -10,6 +11,7 @@ import Paper from "@mui/material/Paper";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
@@ -457,49 +459,103 @@ export const generateCoorNetworkGraph = (graphData, vizArgs) => {
   );
 };
 
+const coorTableHeaderFields = [
+  {
+    dataKey: "viewButton",
+    width: 30,
+  },
+  {
+    dataKey: "objectName",
+    text: "snaTools_coorTableObjectsHeader",
+    width: 200,
+  },
+  {
+    dataKey: "shareCount",
+    text: "snaTools_coorTableEntryCountHeader",
+    width: 150,
+  },
+  {
+    dataKey: "userCount",
+    text: "snaTools_coorTableUserCountHeader",
+    width: 150,
+  },
+];
+
+// eslint-disable-next-line react/display-name
 const coorTableHeader = (keyword) => {
-  return (
-    <TableHead>
+  return () => {
+    return (
       <TableRow>
-        <TableCell />
-        <TableCell>{keyword("snaTools_coorTableObjectsHeader")}</TableCell>
-        <TableCell>{keyword("snaTools_coorTableEntryCountHeader")}</TableCell>
-        <TableCell>{keyword("snaTools_coorTableUserCountHeader")}</TableCell>
+        {coorTableHeaderFields.map((headerField) => (
+          <TableCell
+            key={headerField.dataKey}
+            variant="head"
+            style={{ width: headerField.width }}
+            sx={{ backgroundColor: "background.paper" }}
+          >
+            {headerField.text ? keyword(headerField.text) : ""}
+          </TableCell>
+        ))}
       </TableRow>
-    </TableHead>
-  );
+    );
+  };
 };
 
-const coorTableBody = (coorResult, setDetailContent, setOpenDetailModal) => {
-  let coorByObject = getCosharersByObject(coorResult);
-  const showDetailModalWithObject = (detailContent) => {
-    setDetailContent(detailContent);
-    setOpenDetailModal(true);
-  };
-
-  const countUsersByObject = (objectEntries) => {
-    return objectEntries.map((entry) => entry.username).filter(onlyUnique)
-      .length;
-  };
-  return Object.keys(coorByObject).map((sharedObject) => (
-    <TableRow key={"coorTableRow-" + sharedObject}>
-      <TableCell>
-        <IconButton
-          onClick={() => showDetailModalWithObject(coorByObject[sharedObject])}
-        >
-          <VisibilityIcon />
-        </IconButton>
-      </TableCell>
-      <TableCell>
-        {String(sharedObject).length > MAX_TABLE_TEXT_LENGTH
-          ? String(sharedObject).slice(0, MAX_TABLE_TEXT_LENGTH) + "..."
-          : String(sharedObject)}
-      </TableCell>
-      <TableCell>{coorByObject[sharedObject].length}</TableCell>
-      <TableCell>{countUsersByObject(coorByObject[sharedObject])}</TableCell>
-    </TableRow>
-  ));
+const VirtuosoTableComponents = {
+  // eslint-disable-next-line react/display-name
+  Scroller: React.forwardRef((props, ref) => (
+    <TableContainer component={Paper} {...props} ref={ref} />
+  )),
+  Table: (props) => (
+    <Table
+      {...props}
+      sx={{ borderCollapse: "separate", tableLayout: "fixed" }}
+    />
+  ),
+  // eslint-disable-next-line react/display-name
+  TableHead: React.forwardRef((props, ref) => (
+    <TableHead {...props} ref={ref} />
+  )),
+  TableRow,
+  // eslint-disable-next-line react/display-name
+  TableBody: React.forwardRef((props, ref) => (
+    <TableBody {...props} ref={ref} />
+  )),
 };
+
+// const coorTableBody = (coorResult, setDetailContent, setOpenDetailModal) => {
+//   let coorByObject = getCosharersByObject(coorResult);
+//   const showDetailModalWithObject = (detailContent) => {
+//     setDetailContent(detailContent);
+//     setOpenDetailModal(true);
+//   };
+
+//   const countUsersByObject = (objectEntries) => {
+//     return objectEntries.map((entry) => entry.username).filter(onlyUnique)
+//       .length;
+//   };
+
+//   const tableContents =
+//     Object.keys(coorByObject).map(
+//       sharedObject=> {
+//           let sharingUsersCount = countUsersByObject(coorByObject[sharedObject])
+//           let numberOfShares = coorByObject[sharedObject].length
+//           let entries = coorByObject[sharedObject]
+//           return ({
+//             sharedObject:sharedObject,
+//             numberOfShares:numberOfShares,
+//             sharingUsersCount: sharingUsersCount,
+//             entries: entries,
+//           })
+//       }
+//     )
+
+//   return (
+//     <React.Fragment>
+
+//     </React.Fragment>
+//   )
+// };
 
 const generateCoorTable = (
   coorResult,
@@ -509,19 +565,64 @@ const generateCoorTable = (
 ) => {
   if (coorResult.length == 0) return <> </>;
 
+  let coorByObject = getCosharersByObject(coorResult);
+
+  const countUsersByObject = (objectEntries) => {
+    return objectEntries.map((entry) => entry.username).filter(onlyUnique)
+      .length;
+  };
+
+  const rows = Object.keys(coorByObject).map((sharedObject) => {
+    let sharingUsersCount = countUsersByObject(coorByObject[sharedObject]);
+    let numberOfShares = coorByObject[sharedObject].length;
+    let entries = coorByObject[sharedObject];
+    return {
+      sharedObject: sharedObject,
+      numberOfShares: numberOfShares,
+      sharingUsersCount: sharingUsersCount,
+      entries: entries,
+    };
+  });
+
+  const showDetailModalWithObject = (detailContent) => {
+    setDetailContent(detailContent);
+    setOpenDetailModal(true);
+  };
+
+  const rowContent = (_index, row) => {
+    let info = row;
+    let sharedObject = info.sharedObject;
+    let entries = info.entries;
+    let numberOfShares = info.numberOfShares;
+    let sharingUsersCount = info.sharingUsersCount;
+
+    return (
+      <React.Fragment>
+        <TableCell key={"viewButton"}>
+          <IconButton onClick={() => showDetailModalWithObject(entries)}>
+            <VisibilityIcon />
+          </IconButton>
+        </TableCell>
+        <TableCell key={"objectName"}>
+          {String(sharedObject).length > MAX_TABLE_TEXT_LENGTH
+            ? String(sharedObject).slice(0, MAX_TABLE_TEXT_LENGTH) + "..."
+            : String(sharedObject)}
+        </TableCell>
+        <TableCell key={"shareCount"}>{numberOfShares}</TableCell>
+        <TableCell key={"userCount"}>{sharingUsersCount}</TableCell>
+      </React.Fragment>
+    );
+  };
+
   return (
-    <TableContainer
-      component={Paper}
-      sx={{
-        maxHeight: "600px",
-        overflow: "auto",
-      }}
-    >
-      <Table>
-        {coorTableHeader(keyword)}
-        {coorTableBody(coorResult, setDetailContent, setOpenDetailModal)}
-      </Table>
-    </TableContainer>
+    <Paper style={{ height: 400, width: "100%" }}>
+      <TableVirtuoso
+        data={rows}
+        components={VirtuosoTableComponents}
+        fixedHeaderContent={coorTableHeader(keyword)}
+        itemContent={rowContent}
+      />
+    </Paper>
   );
 };
 
