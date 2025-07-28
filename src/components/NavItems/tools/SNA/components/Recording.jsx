@@ -196,6 +196,12 @@ const CollectionSelector = (
               )
             }
             color="primary"
+            sx={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              justifyContent: "flex-start",
+              textAlign: "left",
+            }}
           >
             {keyword("snaTools_addNewCollectionLabel")}
           </Button>
