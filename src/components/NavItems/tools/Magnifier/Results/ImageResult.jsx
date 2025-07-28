@@ -17,6 +17,7 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import { ReverseSearchButtons } from "components/Shared/ReverseSearch/ReverseSearchButtons";
 
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
+import ImageCropper from "../Utils/ImageCropper";
 import Loop from "./Loop";
 
 const ImageResult = ({ handleCloseResults }) => {
@@ -98,6 +99,8 @@ const ImageResult = ({ handleCloseResults }) => {
     );
   };
 
+  const [imageCropperOpen, setImageCropperOpen] = useState(false);
+
   return (
     <Card variant="outlined">
       <Box
@@ -127,6 +130,18 @@ const ImageResult = ({ handleCloseResults }) => {
             }
             file={editorImage}
           />
+          <ImageCropper
+            imageCropperOpen={imageCropperOpen}
+            setImageCropperOpen={setImageCropperOpen}
+            resultImage={resultImage}
+            keyword={keyword}
+            setEditorImage={setEditorImage}
+            fileToDataUrl={fileToDataUrl}
+            dispatch={dispatch}
+            setMagnifierResult={setMagnifierResult}
+            original={original}
+            setIsImageUrl={setIsImageUrl}
+          />
 
           <Box
             sx={{
@@ -145,6 +160,17 @@ const ImageResult = ({ handleCloseResults }) => {
             <Grid>
               <Button color="primary" variant="contained" onClick={handleOpen}>
                 {keyword("edit_image")}
+              </Button>
+            </Grid>
+            <Grid>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={() => {
+                  setImageCropperOpen(true);
+                }}
+              >
+                {keyword("crop_image")}
               </Button>
             </Grid>
             <Grid>

@@ -68,6 +68,7 @@
     "react-hook-form": "^7.53.0",
     "react-i18next": "^15.0.2",
     "react-iframe": "^1.8.5",
+    "react-image-crop": "^11.0.10",
     "react-konva": "^18.2.10",
     "react-leaflet": "^4.2.1",
     "react-linkify": "^1.0.0-alpha",
