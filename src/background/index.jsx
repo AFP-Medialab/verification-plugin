@@ -365,18 +365,14 @@ const getTweetsFromDB = async () => {
           .map((obj) => (obj.expanded_url ? obj.expanded_url : ""))
           .filter((obj) => obj.length > 1))
       : {};
-    (reformatedTweet.imageLink =
-      jp.query(
-        tweet,
-        "$.result.legacy.extended_entities..media_url_https",
-      )[0] || "None"),
-      (reformatedTweet.video =
-        jp
-          .query(
-            tweet,
-            "$.result.legacy.extended_entities..video_info.variants",
-          )[0]
-          ?.filter((x) => (x.content_type = "video/mp4"))[0].url || "None");
+    reformatedTweet.imageLink =
+      jp.query(tweetInfo, "$.legacy.extended_entities..media_url_https")[0] ||
+      "None";
+
+    reformatedTweet.video =
+      jp
+        .query(tweetInfo, "$.legacy.extended_entities..video_info.variants")[0]
+        ?.filter((x) => x.url.includes(".mp4"))[0].url || "None";
     reformatedTweet.tweetLink =
       "https://x.com/" +
       reformatedTweet.username +
