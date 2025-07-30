@@ -103,11 +103,21 @@ export const analysisTools = {
       ),
   },
 };
-
+/**
+ *
+ * @param {*} essentialProps includes keyword, dataSources, selected
+ * @param {*} toolDisplayProps includes toolDescription, toolButtonText, toolSettings, toolLoading
+ * @param {*} toolAnalysisProps includes analysisFunction, analysisFunctionArgs, vizFunction, vizFunctionArgs, toolResult, setToolResult
+ * @returns jsx fragment
+ *
+ * Fills a template with descrpition of an SNA tool
+ * the settings for the tool when applicable (such as which field to choose in COOR)
+ * and the result display
+ */
 export const analysisDisplayTemplate = (
-  essentialProps, //keyword, dataSources, selected
-  toolDisplayProps, //toolDescription, toolButtonText, toolSettings, toolLoading
-  toolAnalysisProps, //analysisFunction, analysisFunctionArgs, vizFunction, vizFunctionArgs, toolResult, setToolResult
+  essentialProps,
+  toolDisplayProps,
+  toolAnalysisProps,
 ) => {
   let keyword = essentialProps.keyword;
   let dataSources = essentialProps.dataSources;
@@ -146,15 +156,13 @@ export const analysisDisplayTemplate = (
 
   return (
     <>
-      <Box>
-        <Box p={2}></Box>
+      <Stack direction="column" spacing={2}>
         <Stack direction="row" spacing={2} alignItems="center">
           <Typography sx={{ padding: 2 }}>
             {keyword(toolDescription)}
           </Typography>
           {SNAButton(() => generateResult(), keyword(toolButtonText))}
         </Stack>
-        <Box p={2} />
         {toolDisplayProps.toolSettings ? (
           toolDisplayProps.toolSettings.display(
             toolDisplayProps.toolSettings.args,
@@ -176,7 +184,7 @@ export const analysisDisplayTemplate = (
         ) : (
           <Typography>{keyword(errorMessage)}</Typography>
         )}
-      </Box>
+      </Stack>
     </>
   );
 };

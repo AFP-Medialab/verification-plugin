@@ -40,8 +40,8 @@ const coorTextEntry = (
   keyword,
   fieldDescription,
   fieldHelpText,
-  textFieldVar,
-  textFieldVarSetter,
+  textField,
+  textFieldSetter,
 ) => {
   return (
     <Box key={"coorEntry_" + fieldDescription}>
@@ -55,9 +55,9 @@ const coorTextEntry = (
         <TextField
           variant="outlined"
           sx={{ width: "100px" }}
-          value={textFieldVar}
+          value={textField}
           onChange={(e) => {
-            textFieldVarSetter(e.target.value);
+            textFieldSetter(e.target.value);
           }}
         />
       </FormControl>
@@ -69,8 +69,8 @@ const coorFieldSelect = (
   keyword,
   fieldDescription,
   fieldHelpText,
-  selectVar,
-  setSelectVar,
+  selectedValue,
+  setSelectedValue,
   selectOptions,
 ) => {
   return (
@@ -84,9 +84,9 @@ const coorFieldSelect = (
       <FormControl>
         <InputLabel>{keyword(fieldDescription)}</InputLabel>
         <Select
-          value={selectVar}
+          value={selectedValue}
           onChange={(e) => {
-            setSelectVar(e.target.value);
+            setSelectedValue(e.target.value);
           }}
         >
           {selectOptions.map((option, idx) => (
@@ -184,19 +184,26 @@ export const coorSettingsDisplay = ({
   ];
 
   return (
-    <>
-      <Stack direction="row" spacing={1} alignItems="center">
-        {coorSettingsFields.map((option) => option.component)}
-      </Stack>
-    </>
+    <Stack direction="row" spacing={1} alignItems="center">
+      {coorSettingsFields.map((option) => option.component)}
+    </Stack>
   );
 };
 
+/**
+ *
+ * @param {string} objectChoice a string specifying the header field in the dataset which contains the objects possibly shared in coordination or "textSimilarity" to call d3lta server to check similarity
+ * @param {object[]} selectedContent array of objects included in the dataset
+ * @param {function} authenticatedRequest function call that uses user authentification to call d3lta server
+ * @returns
+ */
 const getCoorContent = async (
   objectChoice,
   selectedContent,
   authenticatedRequest,
 ) => {
+  if (typeof objectChoice != "string")
+    throw new Error("Improper object choice arg");
   if (!selectedContent.length > 0) return;
   if (objectChoice === "textSimilarity") {
     let resp = await getTextClusters(selectedContent, authenticatedRequest);
@@ -246,9 +253,9 @@ const getCoorContent = async (
  *      entries: Object[],
  * }]
  *
- * @param {int} timeWindow the timeWindow to detect cosharing separating two entries with the same object
- * @param {double} edgeThresh to retain users who coshared only in the edgeThresh [0-1] percentile
- * @param {int} minParticipation to retain users who authored dataset entries more than minParticipation
+ * @param {number} timeWindow the timeWindow to detect cosharing separating two entries with the same object
+ * @param {number} edgeThresh to retain users who coshared only in the edgeThresh [0-1] percentile
+ * @param {number} minParticipation to retain users who authored dataset entries more than minParticipation
  * @param {object[]} content the dataset, list of objects that has been pre-processed
  * @returns {object[]} list of cosharing user pairs, how often they posted the same object and their entries in the dataset
  */
@@ -523,40 +530,6 @@ const VirtuosoTableComponents = {
   )),
 };
 
-// const coorTableBody = (coorResult, setDetailContent, setOpenDetailModal) => {
-//   let coorByObject = getCosharersByObject(coorResult);
-//   const showDetailModalWithObject = (detailContent) => {
-//     setDetailContent(detailContent);
-//     setOpenDetailModal(true);
-//   };
-
-//   const countUsersByObject = (objectEntries) => {
-//     return objectEntries.map((entry) => entry.username).filter(onlyUnique)
-//       .length;
-//   };
-
-//   const tableContents =
-//     Object.keys(coorByObject).map(
-//       sharedObject=> {
-//           let sharingUsersCount = countUsersByObject(coorByObject[sharedObject])
-//           let numberOfShares = coorByObject[sharedObject].length
-//           let entries = coorByObject[sharedObject]
-//           return ({
-//             sharedObject:sharedObject,
-//             numberOfShares:numberOfShares,
-//             sharingUsersCount: sharingUsersCount,
-//             entries: entries,
-//           })
-//       }
-//     )
-
-//   return (
-//     <React.Fragment>
-
-//     </React.Fragment>
-//   )
-// };
-
 const generateCoorTable = (
   coorResult,
   keyword,
@@ -597,7 +570,7 @@ const generateCoorTable = (
     let sharingUsersCount = info.sharingUsersCount;
 
     return (
-      <React.Fragment>
+      <>
         <TableCell key={"viewButton"}>
           <IconButton onClick={() => showDetailModalWithObject(entries)}>
             <VisibilityIcon />
@@ -610,7 +583,7 @@ const generateCoorTable = (
         </TableCell>
         <TableCell key={"shareCount"}>{numberOfShares}</TableCell>
         <TableCell key={"userCount"}>{sharingUsersCount}</TableCell>
-      </React.Fragment>
+      </>
     );
   };
 

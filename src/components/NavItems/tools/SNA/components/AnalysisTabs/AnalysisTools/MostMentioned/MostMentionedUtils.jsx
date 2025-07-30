@@ -40,32 +40,3 @@ export const mostMentionedDetailDisplayHandler = (
 ) => {
   return clickPayload.entries;
 };
-
-// export const generateMostMentionedGraph = (
-//   keyword,
-//   selectedContent,
-//   setMostMentionedGraph,
-//   setDetailContent,
-//   setOpenDetailModal,
-//   selected,
-//   dataSources,
-// ) => {
-//   let mostMentionedGraphData = generateMostMentionedGraphData(selectedContent);
-//   if (mostMentionedGraphData.length === 0) return <></>;
-
-//   let mostMentionedGraph = generateAccountActivityChart(
-//     "username",
-//     true,
-//     mostMentionedGraphData,
-//     keyword,
-//     mostMentionedDetailDisplayHandler,
-//     "Mentions",
-//     setMostMentionedGraph,
-//     setDetailContent,
-//     setOpenDetailModal,
-//     selectedContent,
-//     selected,
-//     dataSources,
-//   );
-//   return mostMentionedGraph;
-// };

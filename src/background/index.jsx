@@ -8,6 +8,8 @@ import { openTabs } from "components/Shared/ReverseSearch/utils/openTabUtils";
 import { getImgUrl } from "components/Shared/ReverseSearch/utils/searchUtils";
 import dayjs from "dayjs";
 import Dexie from "dexie";
+import { JSONPath as jp } from "jsonpath-plus";
+import _ from "lodash";
 
 const db = new Dexie("tweetTest");
 db.version(2).stores({
@@ -279,7 +281,7 @@ chrome.webNavigation.onCommitted.addListener(async () => {
       target: { tabId: currentTab.id, allFrames: true },
       function: () => {
         let pluginId = chrome.runtime.id;
-        var s = document.createElement("script");
+        let s = document.createElement("script");
         s.dataset.params = pluginId;
         s.src = chrome.runtime.getURL("inject.js");
         (document.head || document.documentElement).appendChild(s);
@@ -322,17 +324,15 @@ export const TWEET_PROPERTY_PATHS = {
 };
 
 const getTweetsFromDB = async () => {
-  const jp = require("jsonpath");
   const dbTweetsRaw = await db.tweets.toArray();
   const dbTweetsResults = dbTweetsRaw.map((rawTweet) => ({
     collID: rawTweet.collectionID,
-    res: jp.query(rawTweet, "$..tweet_results")[0],
+    res: jp({ json: rawTweet, path: "$..tweet_results" })[0],
   }));
   const reformatedTweets = dbTweetsResults.map((tweet) => {
     let tweetInfo =
       tweet.res.result.tweet || tweet.res.result || tweet.res.tweet;
     let reformatedTweet = {};
-    let _ = require("lodash");
     reformatedTweet.collectionID = tweet.collID;
     Object.keys(TWEET_PROPERTY_PATHS).forEach(
       (k) =>
@@ -366,13 +366,16 @@ const getTweetsFromDB = async () => {
           .filter((obj) => obj.length > 1))
       : {};
     reformatedTweet.imageLink =
-      jp.query(tweetInfo, "$.legacy.extended_entities..media_url_https")[0] ||
-      "None";
+      jp({
+        json: tweetInfo,
+        path: "$.legacy.extended_entities..media_url_https",
+      })[0] || "None";
 
     reformatedTweet.video =
-      jp
-        .query(tweetInfo, "$.legacy.extended_entities..video_info.variants")[0]
-        ?.filter((x) => x.url.includes(".mp4"))[0].url || "None";
+      jp({
+        json: tweetInfo,
+        path: "$.legacy.extended_entities..video_info.variants",
+      })[0]?.filter((x) => x.url.includes(".mp4"))[0].url || "None";
     reformatedTweet.tweetLink =
       "https://x.com/" +
       reformatedTweet.username +
@@ -441,7 +444,6 @@ export const TIKTOK_PROPERTY_PATHS = {
 const getTikToksFromDB = async () => {
   const rawTiktoks = await db.tiktoks.toArray();
   const reformatedTiktoks = rawTiktoks.map((rawTiktok) => {
-    let _ = require("lodash");
     let reformatedTiktok = {};
     reformatedTiktok.id = rawTiktok.id;
     reformatedTiktok.collectionID = rawTiktok.collectionID;
@@ -580,8 +582,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 });
 
 chrome.runtime.onMessageExternal.addListener(async function (request) {
-  const jp = require("jsonpath");
-  const entryIds = jp.query(request, "$..entryId");
+  const entryIds = jp({ json: request, path: "$..entryId" });
   const session = await db.recording.toArray();
 
   const currentSession = session[0].state;
@@ -609,11 +610,16 @@ chrome.runtime.onMessageExternal.addListener(async function (request) {
     return;
   }
 
-  if (jp.query(request, "$..entryId").length > 0) {
+  if (jp({ json: request, path: "$..entryId" }).length > 0) {
     for (let entryId of entryIds) {
-      let current = jp.query(request, `$..entries[?(@.entryId=="${entryId}")]`);
-      jp.query(request, `$..entries[?(@.entryId=="${entryId}")]..tweet_results`)
-        .length > 0
+      let current = jp({
+        json: request,
+        path: `$..entries[?(@.entryId=="${entryId}")]`,
+      });
+      jp({
+        json: request,
+        path: `$..entries[?(@.entryId=="${entryId}")]..tweet_results`,
+      }).length > 0
         ? await db.tweets.put({
             id: entryId,
             collectionID: currentSession,

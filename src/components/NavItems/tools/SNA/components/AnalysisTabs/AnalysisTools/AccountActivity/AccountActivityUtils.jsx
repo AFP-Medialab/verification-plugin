@@ -157,17 +157,19 @@ export const generateAccountActivityChart = (globalArgs, activityChartData) => {
     );
   };
 
-  const CustomizedToolTip = ({ active, payload, label }) => {
+  const CustomizedToolTip = ({ active, payload, label }, nameMaps) => {
     if (active && payload && payload.length) {
       let payloadLabel = label;
       let barLabel = nameMaps.has(payloadLabel)
         ? nameMaps.get(payloadLabel)
         : payloadLabel;
       return (
-        <div className="custom-tooltip-activity-chart">
-          <p>{barLabel}</p>
-          <p>{`Value: ${payload[0].value}`}</p>
-        </div>
+        <Box>
+          <Stack direction="column" spacing={1}>
+            <Typography>{barLabel}</Typography>
+            <Typography>{`Value: ${payload[0].value}`}</Typography>
+          </Stack>
+        </Box>
       );
     }
   };
@@ -193,7 +195,7 @@ export const generateAccountActivityChart = (globalArgs, activityChartData) => {
         sx={{ paddingLeft: "20px" }}
         data={chartData}
         width={chartData.length * 60 > 1200 ? chartData.length * 60 : 1200}
-        height={600}
+        height={400}
         margin={{
           top: 20,
           right: 30,
@@ -220,7 +222,7 @@ export const generateAccountActivityChart = (globalArgs, activityChartData) => {
           }
         />
         <Tooltip
-          content={CustomizedToolTip}
+          content={CustomizedToolTip(nameMaps)}
           cursor={{
             fill: "white",
           }}

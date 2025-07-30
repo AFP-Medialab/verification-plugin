@@ -9,6 +9,8 @@ import Typography from "@mui/material/Typography";
 import { DataGrid } from "@mui/x-data-grid";
 import dayjs from "dayjs";
 
+import { SNAButton } from "../utils/SNAButton";
+
 const style = {
   position: "relative",
   top: "50%",
@@ -65,29 +67,38 @@ const DetailModal = (props) => {
     <>
       <Modal open={openDetailModal} onClose={handleClose}>
         <Box sx={style}>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Typography sx={{ padding: 1 }}>
-              {" "}
-              {keyword("detailModal_search")}
-            </Typography>
-            <TextField
-              variant="outlined"
-              sx={{ width: "400px" }}
-              value={searchFilter}
-              onChange={(e) => {
-                let searchTerm = e.target.value;
-                setSearchFilter(searchTerm);
-              }}
-            />
+          <Stack direction="column" spacing={2}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Typography sx={{ padding: 1 }}>
+                {" "}
+                {keyword("detailModal_search")}
+              </Typography>
+              <TextField
+                variant="outlined"
+                sx={{ width: "400px" }}
+                value={searchFilter}
+                onChange={(e) => {
+                  let searchTerm = e.target.value;
+                  setSearchFilter(searchTerm);
+                }}
+              />
+            </Stack>
+            <Box sx={{ height: 500 }}>
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                getRowHeight={() => "auto"}
+              />
+            </Box>
+            <Stack
+              direction="row"
+              spacing={1}
+              alignItems="center"
+              justifyContent={"flex-end"}
+            >
+              {SNAButton(handleClose, keyword("closeDetailModal_button_text"))}
+            </Stack>
           </Stack>
-          <Box p={2}></Box>
-          <Box sx={{ height: 500 }}>
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              getRowHeight={() => "auto"}
-            />
-          </Box>
         </Box>
       </Modal>
     </>

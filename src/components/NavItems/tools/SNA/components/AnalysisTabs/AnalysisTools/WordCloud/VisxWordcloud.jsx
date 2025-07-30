@@ -15,7 +15,12 @@ function getRotationDegree() {
 const colors = ["#143059", "#2F6B9A", "#82a6c2"];
 
 const fixedValueGenerator = () => 0.5;
-
+/**
+ *
+ * @param {object[]} words array of words containing the fields 'text' for the word, 'value' for the number of occurences, 'entries' for the dataset entries (posts) containing the word
+ * @param {function} wordClickFunction function on word click, retrieves entry field from word to show in detail modal
+ * @returns
+ */
 export function getVisxWordcloud(words, wordClickFunction) {
   const spiralType = "archimedean";
   const withRotation = true;
