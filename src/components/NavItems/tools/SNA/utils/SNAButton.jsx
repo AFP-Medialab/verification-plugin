@@ -14,6 +14,10 @@ export const SNAButton = (clickFunction, buttonText) => {
           backgroundColor: "rgba(0, 128, 0, 0.1)",
           borderColor: "darkgreen",
         },
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        justifyContent: "flex-start",
+        textAlign: "left",
       }}
       onClick={clickFunction}
     >

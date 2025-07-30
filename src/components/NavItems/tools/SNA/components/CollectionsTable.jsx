@@ -13,6 +13,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -76,6 +77,7 @@ const CollectionActionsCell = (row, collectionActionsCellProps) => {
   let setSelected = collectionActionsCellProps.setSelected;
   let selected = collectionActionsCellProps.selected;
   let setDataSources = collectionActionsCellProps.setDataSources;
+  let keyword = collectionActionsCellProps.keyword;
 
   const rawUploadIconButton = (row, fileInputRef) => {
     const handleRawFileChange = (event, rowID) => {
@@ -108,23 +110,25 @@ const CollectionActionsCell = (row, collectionActionsCellProps) => {
     };
 
     return (
-      <IconButton
-        onClick={() => {
-          document.getElementById("rawUpload_" + row.id).click();
-        }}
-        rowkey={row.id}
-        id={"uploadButton" + row.id}
-        sx={{ p: 1 }}
-      >
-        <UploadIcon />
-        <input
-          type="file"
-          id={"rawUpload_" + row.id}
-          ref={fileInputRef}
-          onChange={(event) => handleRawFileChange(event, row.id)}
-          style={{ display: "none" }}
-        />
-      </IconButton>
+      <Tooltip title={keyword("rawUploadIcon_hover_label")}>
+        <IconButton
+          onClick={() => {
+            document.getElementById("rawUpload_" + row.id).click();
+          }}
+          rowkey={row.id}
+          id={"uploadButton" + row.id}
+          sx={{ p: 1 }}
+        >
+          <UploadIcon />
+          <input
+            type="file"
+            id={"rawUpload_" + row.id}
+            ref={fileInputRef}
+            onChange={(event) => handleRawFileChange(event, row.id)}
+            style={{ display: "none" }}
+          />
+        </IconButton>
+      </Tooltip>
     );
   };
 
@@ -196,20 +200,22 @@ const CollectionActionsCell = (row, collectionActionsCellProps) => {
 
     return (
       <>
-        <IconButton
-          onClick={() => {
-            handleDownload(row.id);
-          }}
-          aria-label="download"
-          id={"dl_button" + row.id}
-          aria-controls={open ? "basic-menu" + row.id : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? "true" : undefined}
-          rowkey={row.id}
-          sx={{ p: 1 }}
-        >
-          <DownloadIcon />
-        </IconButton>
+        <Tooltip title={keyword("downloadIcon_hover_label")}>
+          <IconButton
+            onClick={() => {
+              handleDownload(row.id);
+            }}
+            aria-label="download"
+            id={"dl_button" + row.id}
+            aria-controls={open ? "basic-menu" + row.id : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+            rowkey={row.id}
+            sx={{ p: 1 }}
+          >
+            <DownloadIcon />
+          </IconButton>
+        </Tooltip>
         <Menu
           id={"basic-menu" + row.id}
           anchorEl={dlAnchorEl}
@@ -244,14 +250,16 @@ const CollectionActionsCell = (row, collectionActionsCellProps) => {
     };
 
     return (
-      <IconButton
-        onClick={async () => await handleRemove(row.id)}
-        aria-label="delete"
-        color="error"
-        sx={{ p: 1 }}
-      >
-        <DeleteIcon />
-      </IconButton>
+      <Tooltip title={keyword("deleteIcon_hover_label")}>
+        <IconButton
+          onClick={async () => await handleRemove(row.id)}
+          aria-label="delete"
+          color="error"
+          sx={{ p: 1 }}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </Tooltip>
     );
   };
 
@@ -403,6 +411,7 @@ const CollectionsTable = (collectionsTableProps) => {
     setSelected,
     selected,
     setDataSources,
+    keyword,
   };
 
   return (
