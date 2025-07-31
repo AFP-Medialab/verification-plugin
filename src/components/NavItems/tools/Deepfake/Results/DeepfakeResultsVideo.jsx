@@ -17,7 +17,6 @@ import Typography from "@mui/material/Typography";
 import { Download } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
-import { ROLES } from "@/constants/roles";
 import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { useTrackEvent } from "Hooks/useAnalytics";
@@ -77,18 +76,10 @@ const DeepfakeResultsVideo = (props) => {
   const results = props.result;
   const url = props.url;
 
-  const [xAxisData, setXAxisData] = React.useState([]);
-  const [yAxisData, setYAxisData] = React.useState([]);
+  const [xAxisData, setXAxisData] = useState([]);
+  const [yAxisData, setYAxisData] = useState([]);
 
-  const role = useSelector((state) => state.userSession.user.roles);
-
-  /**
-   * Alternate between v1 and v2 based on user role
-   * @type {string}
-   */
-  const faceswapAlgorithm = role.includes(ROLES.EVALUATION)
-    ? "faceswap_fsfm_report"
-    : "deepfake_video_report";
+  const faceswapAlgorithm = "faceswap_fsfm_report";
 
   useEffect(() => {
     if (
