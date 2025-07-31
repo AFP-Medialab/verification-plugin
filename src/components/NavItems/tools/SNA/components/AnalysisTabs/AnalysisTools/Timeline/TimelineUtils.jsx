@@ -95,12 +95,9 @@ const handleClick = (
   setOpenDetailModal,
   timelineChartData,
 ) => {
-  const clickedDate = dayjs(params.value[0]).format(DATE_FORMAT);
-
+  const clickedDate = dayjs(params.value[0]);
   setDetailContent(
-    timelineChartData.filter(
-      (x) => dayjs(x.date).format(DATE_FORMAT) === clickedDate,
-    ),
+    timelineChartData.filter((x) => dayjs(x[0]).isSame(clickedDate))[0][2],
   );
   setOpenDetailModal(true);
 };
@@ -113,16 +110,18 @@ export const generateTimelineData = (selectedData) => {
     const dateKey = dayjs(item.date).format(DATE_FORMAT);
 
     if (!countsByDate[dateKey]) {
-      countsByDate[dateKey] = { count: 0 };
+      countsByDate[dateKey] = { count: 0, entries: [item] };
     }
 
     countsByDate[dateKey].count += 1;
+    countsByDate[dateKey].entries.push(item);
   });
 
   const chartData = Object.entries(countsByDate)
     .map(([date, metrics]) => [
       dayjs(date).valueOf(), // Timestamp
       metrics.count,
+      metrics.entries,
     ])
     .sort((a, b) => a[0] - b[0]);
 

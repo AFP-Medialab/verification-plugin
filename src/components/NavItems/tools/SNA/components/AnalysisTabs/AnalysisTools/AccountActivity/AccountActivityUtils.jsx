@@ -224,7 +224,7 @@ export const generateAccountActivityChart = (globalArgs, activityChartData) => {
         <Tooltip
           content={CustomizedToolTip(nameMaps)}
           cursor={{
-            fill: "white",
+            fill: "rgba(128, 128, 128, 0.2)",
           }}
         />
         <Legend />

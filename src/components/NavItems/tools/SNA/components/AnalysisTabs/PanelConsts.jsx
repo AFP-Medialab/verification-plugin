@@ -145,8 +145,9 @@ export const analysisDisplayTemplate = (
       let result = await analysisFunction(selectedContent, analysisArgs);
       if (Array.isArray(result) && result.length == 0) {
         setErrorMessage("snaTools_noResultMessage");
+      } else {
+        setToolResult(result);
       }
-      setToolResult(result);
     } catch {
       setErrorMessage("snaTools_analysisErrorMessage");
     } finally {

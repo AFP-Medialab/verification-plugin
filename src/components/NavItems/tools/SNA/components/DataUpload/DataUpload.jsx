@@ -67,6 +67,7 @@ const DataUpload = (DataUploadProps) => {
             let extension = filename.split(".").pop();
             if (extension === "csv") parseUploadedCSV(event);
             if (extension === "ndjson") parseZeeschuimerUpload(event);
+            event.target.value = null;
           }}
         />
         <Typography variant="h6" align="left">

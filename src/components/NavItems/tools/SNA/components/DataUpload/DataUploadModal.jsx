@@ -9,8 +9,10 @@ import MenuItem from "@mui/material/MenuItem";
 import Modal from "@mui/material/Modal";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
+import CloseIcon from "@mui/icons-material/Close";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
@@ -46,6 +48,7 @@ export const socialMediaIconBox = (
   socialMediaIcon,
   socialMediaSelected,
   setSocialMediaSelected,
+  tooltipText,
 ) => {
   const toggleSocialMediaSelection = () => {
     socialMediaSelected === socialMediaId
@@ -54,28 +57,30 @@ export const socialMediaIconBox = (
   };
 
   return (
-    <Box
-      key={socialMediaId + "_ModalIconBox"}
-      onClick={toggleSocialMediaSelection}
-      sx={{
-        width: 50,
-        height: 50,
-        borderRadius: 2,
-        border:
-          socialMediaId === socialMediaSelected
-            ? "2px solid blue"
-            : "1px solid #ccc",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        cursor: "pointer",
-        "&:hover": {
-          backgroundColor: "#f5f5f5",
-        },
-      }}
-    >
-      {socialMediaIcon}
-    </Box>
+    <Tooltip title={tooltipText}>
+      <Box
+        key={socialMediaId + "_ModalIconBox"}
+        onClick={toggleSocialMediaSelection}
+        sx={{
+          width: 50,
+          height: 50,
+          borderRadius: 2,
+          border:
+            socialMediaId === socialMediaSelected
+              ? "2px solid blue"
+              : "1px solid #ccc",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+          "&:hover": {
+            backgroundColor: "#f5f5f5",
+          },
+        }}
+      >
+        {socialMediaIcon}
+      </Box>
+    </Tooltip>
   );
 };
 
@@ -117,7 +122,11 @@ const customUploadSection = (customUploadSectionProps) => {
           <Typography variant="subtitle1">
             {keyword("uploadModal_customTitle")}
           </Typography>
-          <IconButton onClick={handleCustomToggle} size="small">
+          <IconButton
+            onClick={handleCustomToggle}
+            size="small"
+            sx={{ padding: 1.5 }}
+          >
             {customExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </IconButton>
         </Box>
@@ -157,12 +166,23 @@ const DataUploadModal = (dataUploadModalProps) => {
   let uploadedFileName = dataUploadModalProps.uploadedFileName;
   let setUploadedFileName = dataUploadModalProps.setUploadedFileName;
 
+  let uploadModalError = dataUploadModalProps.uploadModalError;
+  let setUploadModalError = dataUploadModalProps.setUploadModalError;
+
   let customUploadSectionProps = {
     setCustomExpanded,
     customExpanded,
     uploadedData,
     keyword,
     setSocialMediaSelected,
+  };
+
+  const handleModalClose = () => {
+    setUploadModalError(false);
+    setSocialMediaSelected("");
+    setUploadedData([]);
+    setUploadedFileName("");
+    setShowUploadModal(false);
   };
 
   const addUploadToDataSources = (
@@ -213,49 +233,64 @@ const DataUploadModal = (dataUploadModalProps) => {
       accountNameMap: accountNameMap,
       source: "fileUpload",
     });
-    setShowUploadModal(false);
+    handleModalClose();
   };
 
   return (
     <>
-      <Modal
-        open={showUploadModal}
-        onClose={() => {
-          setUploadedData([]);
-          setUploadedFileName("");
-          setShowUploadModal(false);
-        }}
-      >
-        <Box
-          display="flex"
-          flexDirection="column"
-          gap={2}
-          sx={dataUploadModalStyle}
-        >
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            {keyword("uploadModal_modalTitle")}
-          </Typography>
-          <Stack direction={"row"} spacing={2} alignItems="center">
-            {Object.values(uploadTemplates).map((template) =>
-              socialMediaIconBox(
-                template.id,
-                template.icon,
-                socialMediaSelected,
-                setSocialMediaSelected,
-              ),
+      <Modal open={showUploadModal} onClose={handleModalClose}>
+        <Box gap={2} sx={dataUploadModalStyle}>
+          <Stack direction={"column"} spacing={2}>
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                {keyword("uploadModal_modalTitle")}
+              </Typography>
+              <IconButton
+                onClick={handleModalClose}
+                size="small"
+                sx={{ padding: 1.5 }}
+              >
+                <CloseIcon />
+              </IconButton>
+            </Box>
+
+            <Stack direction={"row"} spacing={2} alignItems="center">
+              {Object.values(uploadTemplates).map((template) =>
+                socialMediaIconBox(
+                  template.id,
+                  template.icon,
+                  socialMediaSelected,
+                  setSocialMediaSelected,
+                  keyword(template.tooltipText),
+                ),
+              )}
+            </Stack>
+            {customUploadSection(customUploadSectionProps)}
+            {SNAButton(() => {
+              setUploadModalError(false);
+              try {
+                addUploadToDataSources(
+                  dataSources,
+                  socialMediaSelected,
+                  uploadedData,
+                  uploadedFileName,
+                );
+              } catch {
+                setUploadModalError(true);
+              }
+            }, keyword("uploadModal_ConfirmButton"))}
+            {uploadModalError ? (
+              <Typography align="left" color="error">
+                {keyword("dataupload_error")}
+              </Typography>
+            ) : (
+              <></>
             )}
           </Stack>
-          {customUploadSection(customUploadSectionProps)}
-          {SNAButton(
-            () =>
-              addUploadToDataSources(
-                dataSources,
-                socialMediaSelected,
-                uploadedData,
-                uploadedFileName,
-              ),
-            keyword("uploadModal_ConfirmButton"),
-          )}
         </Box>
       </Modal>
     </>

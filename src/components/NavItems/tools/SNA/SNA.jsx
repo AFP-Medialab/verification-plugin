@@ -88,6 +88,7 @@ const SNA = () => {
   //Data upload modal props
   const [socialMediaSelected, setSocialMediaSelected] = useState("");
   const [customExpanded, setCustomExpanded] = useState(false);
+  const [uploadModalError, setUploadModalError] = useState(false);
 
   //Zeeschuimer data upload modal props
   const [showZeeschuimerUploadModal, setShowZeeschuimerUploadModal] =
@@ -291,6 +292,8 @@ const SNA = () => {
     uploadedData,
     uploadedFileName,
     setUploadedFileName,
+    uploadModalError,
+    setUploadModalError,
   };
 
   const zeeschuimerDataUploadModalProps = {

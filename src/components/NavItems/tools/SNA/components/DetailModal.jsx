@@ -16,8 +16,6 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  height: 700,
-  width: 1200,
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
@@ -67,29 +65,35 @@ const DetailModal = (props) => {
     <>
       <Modal open={openDetailModal} onClose={handleClose}>
         <Box sx={style}>
-          <Stack direction="column" spacing={2}>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Typography sx={{ padding: 1 }}>
-                {" "}
-                {keyword("detailModal_search")}
-              </Typography>
-              <TextField
-                variant="outlined"
-                sx={{ width: "400px" }}
-                value={searchFilter}
-                onChange={(e) => {
-                  let searchTerm = e.target.value;
-                  setSearchFilter(searchTerm);
-                }}
-              />
+          <Stack direction="column">
+            <Stack direction="column" spacing={2} sx={{ overflow: "auto" }}>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <Typography sx={{ padding: 1 }}>
+                  {" "}
+                  {keyword("detailModal_search")}
+                </Typography>
+                <TextField
+                  variant="outlined"
+                  sx={{ width: "400px" }}
+                  value={searchFilter}
+                  onChange={(e) => {
+                    let searchTerm = e.target.value;
+                    setSearchFilter(searchTerm);
+                  }}
+                />
+              </Stack>
+              <Box sx={{ overflow: "auto", maxHeight: 500 }}>
+                <DataGrid
+                  rows={rows}
+                  columns={columns}
+                  getRowHeight={() => "auto"}
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                  }}
+                />
+              </Box>
             </Stack>
-            <Box sx={{ height: 500 }}>
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                getRowHeight={() => "auto"}
-              />
-            </Box>
             <Stack
               direction="row"
               spacing={1}
