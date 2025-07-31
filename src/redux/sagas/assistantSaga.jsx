@@ -293,6 +293,7 @@ function* handleSourceCredibilityCall(action) {
         null,
         null,
         null,
+        null,
         true,
         false,
         false,
@@ -347,6 +348,13 @@ function* handleSourceCredibilityCall(action) {
       unlabelled: "inherit",
     };
 
+    const sourceTypes = {
+      positive: "fact_checker",
+      mixed: "mentions",
+      caution: "warning",
+      unlabelled: "unlabelled",
+    };
+
     const [
       positiveResults,
       mixedResults,
@@ -371,6 +379,7 @@ function* handleSourceCredibilityCall(action) {
         mixedResults,
         filteredExtractedResults,
         trafficLightColors,
+        sourceTypes,
         extractedLinks,
         false,
         true,
@@ -381,6 +390,7 @@ function* handleSourceCredibilityCall(action) {
     console.log(error);
     yield put(
       setInputSourceCredDetails(
+        null,
         null,
         null,
         null,
