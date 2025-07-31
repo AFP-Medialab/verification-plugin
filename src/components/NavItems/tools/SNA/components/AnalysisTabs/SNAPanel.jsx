@@ -6,12 +6,8 @@ import Tabs from "@mui/material/Tabs";
 
 import { SNAPanelTab, analysisTools, snaPanelTabProps } from "./PanelConsts";
 
-const SNAPanel = (snaPanelProps) => {
-  let snaTab = snaPanelProps.snaTab;
-  let setSnaTab = snaPanelProps.setSnaTab;
-  let keyword = snaPanelProps.keyword;
-  let analysisToolsProps = snaPanelProps.analysisToolsProps;
-  let essentialProps = snaPanelProps.analysisToolsProps.essentialProps;
+const SNAPanel = ({ snaTab, setSnaTab, keyword, analysisToolsProps }) => {
+  let essentialProps = analysisToolsProps.essentialProps;
 
   const switchTabs = (event, newValue) => {
     setSnaTab(newValue);

@@ -21,17 +21,17 @@ const style = {
   p: 4,
 };
 
-const DetailModal = (props) => {
-  let detailContent = props.detailContent;
-  let openDetailModal = props.openDetailModal;
-  let setOpenDetailModal = props.setOpenDetailModal;
-  let searchFilter = props.detailSearchFilter;
-  let setSearchFilter = props.setDetailSearchFilter;
-  let keyword = props.keyword;
-
+const DetailModal = ({
+  detailContent,
+  openDetailModal,
+  setOpenDetailModal,
+  detailSearchFilter,
+  setDetailSearchFilter,
+  keyword,
+}) => {
   const handleClose = () => {
     setOpenDetailModal(false);
-    setSearchFilter("");
+    setDetailSearchFilter("");
   };
 
   const columns =
@@ -55,9 +55,9 @@ const DetailModal = (props) => {
       : [];
   detailContent.forEach((x, idx) => (x.id = idx));
   const rows =
-    searchFilter.length > 0
+    detailSearchFilter.length > 0
       ? detailContent.filter((x) =>
-          Object.values(x).flat().toString().includes(searchFilter),
+          Object.values(x).flat().toString().includes(detailSearchFilter),
         )
       : detailContent;
 
@@ -75,10 +75,10 @@ const DetailModal = (props) => {
                 <TextField
                   variant="outlined"
                   sx={{ width: "400px" }}
-                  value={searchFilter}
+                  value={detailSearchFilter}
                   onChange={(e) => {
                     let searchTerm = e.target.value;
-                    setSearchFilter(searchTerm);
+                    setDetailSearchFilter(searchTerm);
                   }}
                 />
               </Stack>

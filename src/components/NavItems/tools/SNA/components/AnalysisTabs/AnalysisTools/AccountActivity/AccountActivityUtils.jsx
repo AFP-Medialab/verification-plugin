@@ -7,11 +7,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import { SNAButton } from "components/NavItems/tools/SNA/utils/SNAButton";
-import {
-  getSelectedSourcesNameMaps,
-  keepOnlyNumberFields,
-  onlyUnique,
-} from "components/NavItems/tools/SNA/utils/accessSavedCollections";
+import { getSelectedSourcesNameMaps } from "components/NavItems/tools/SNA/utils/accessSavedCollections";
 import {
   Bar,
   BarChart,
@@ -33,19 +29,13 @@ export const accountActivityDetailDisplayHandler = (
   return clickPayload.entries;
 };
 
-export const accountActivitySettings = (settingsArgs) => {
-  let keyword = settingsArgs.keyword;
-  let dataSources = settingsArgs.dataSources;
-  let selected = settingsArgs.selected;
-  let activitySelect = settingsArgs.activitySelect;
-  let setActivitySelect = settingsArgs.setActivitySelect;
-
-  let selectedSources = dataSources.filter((source) =>
-    selected.includes(source.id),
-  );
-
-  let commonNumberFields = settingsArgs.commonNumberFields;
-
+export const accountActivitySettings = ({
+  keyword,
+  activitySelect,
+  setActivitySelect,
+  commonNumberFields,
+  selectedSources,
+}) => {
   if (selectedSources.length === 0) return <> </>;
 
   return (
@@ -85,19 +75,22 @@ const genericDetailDisplayHandler = (
   setOpenDetailModal(true);
 };
 
-export const generateAccountActivityChart = (globalArgs, activityChartData) => {
-  let onlyShowTop = globalArgs.onlyShowTop;
-  let keyword = globalArgs.keyword;
-  let setOnlyShowTop = globalArgs.setOnlyShowTop;
-  let setDetailContent = globalArgs.setDetailContent;
-  let setOpenDetailModal = globalArgs.setOpenDetailModal;
-  let selectedContent = globalArgs.selectedContent;
-  let detailDisplayFilter = globalArgs.detailDisplayFilter;
-  let dataSources = globalArgs.dataSources;
-  let selected = globalArgs.selected;
-  let groupingFactor = globalArgs.groupingFactor;
-  let activitySelect = globalArgs.activitySelect;
-
+export const generateAccountActivityChart = (
+  {
+    onlyShowTop,
+    keyword,
+    setOnlyShowTop,
+    setDetailContent,
+    setOpenDetailModal,
+    selectedContent,
+    detailDisplayFilter,
+    dataSources,
+    selected,
+    groupingFactor,
+    activitySelect,
+  },
+  activityChartData,
+) => {
   let chartData = onlyShowTop
     ? activityChartData.slice(0, TOP_USER_COUNT)
     : activityChartData;
@@ -226,9 +219,10 @@ export const generateAccountActivityChart = (globalArgs, activityChartData) => {
   );
 };
 
-export const generateAccountActivityData = (selectedContent, analysisArgs) => {
-  let activitySelect = analysisArgs.activitySelect;
-
+export const generateAccountActivityData = (
+  selectedContent,
+  { activitySelect },
+) => {
   let contentGroupedByUser = Object.groupBy(
     selectedContent,
     ({ username }) => username,

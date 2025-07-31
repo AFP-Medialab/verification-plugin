@@ -69,16 +69,19 @@ const CollectionTableHeader = (collectionTableHeaderProps) => {
   );
 };
 
-const CollectionActionsCell = (row, collectionActionsCellProps) => {
-  let fileInputRef = collectionActionsCellProps.fileInputRef;
-  let dataSources = collectionActionsCellProps.dataSources;
-  let dlAnchorEl = collectionActionsCellProps.dlAnchorEl;
-  let setDlAnchorEl = collectionActionsCellProps.setDlAnchorEl;
-  let setSelected = collectionActionsCellProps.setSelected;
-  let selected = collectionActionsCellProps.selected;
-  let setDataSources = collectionActionsCellProps.setDataSources;
-  let keyword = collectionActionsCellProps.keyword;
-
+const CollectionActionsCell = (
+  row,
+  {
+    fileInputRef,
+    dataSources,
+    dlAnchorEl,
+    setDlAnchorEl,
+    setSelected,
+    selected,
+    setDataSources,
+    keyword,
+  },
+) => {
   const rawUploadIconButton = (row, fileInputRef) => {
     const handleRawFileChange = (event, rowID) => {
       let dataSource = dataSources.filter((ds) => ds.id === rowID)[0];
@@ -287,15 +290,10 @@ const CollectionActionsCell = (row, collectionActionsCellProps) => {
 
 const CollectionsTableRow = (
   row,
-  collectionRowProps,
+  { selected, setSelected, setDetailContent, setOpenDetailModal },
   collectionActionsCellProps,
   keyword,
 ) => {
-  let selected = collectionRowProps.selected;
-  let setSelected = collectionRowProps.setSelected;
-  let setDetailContent = collectionRowProps.setDetailContent;
-  let setOpenDetailModal = collectionRowProps.setOpenDetailModal;
-
   const handleSelectRow = (id) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
@@ -376,19 +374,18 @@ const CollectionsTableBody = (
   );
 };
 
-const CollectionsTable = (collectionsTableProps) => {
-  let keyword = collectionsTableProps.keyword;
-
-  let selected = collectionsTableProps.selected;
-  let setSelected = collectionsTableProps.setSelected;
-  let setDetailContent = collectionsTableProps.setDetailContent;
-  let setOpenDetailModal = collectionsTableProps.setOpenDetailModal;
-  let fileInputRef = collectionsTableProps.fileInputRef;
-  let dataSources = collectionsTableProps.dataSources;
-  let dlAnchorEl = collectionsTableProps.dlAnchorEl;
-  let setDlAnchorEl = collectionsTableProps.setDlAnchorEl;
-  let setDataSources = collectionsTableProps.setDataSources;
-
+const CollectionsTable = ({
+  keyword,
+  selected,
+  setSelected,
+  setDetailContent,
+  setOpenDetailModal,
+  fileInputRef,
+  dataSources,
+  dlAnchorEl,
+  setDlAnchorEl,
+  setDataSources,
+}) => {
   let collectionTableHeaderProps = {
     selected,
     setSelected,

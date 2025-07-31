@@ -15,21 +15,18 @@ import {
 import { handleZeeschuimerUpload } from "./DataUploadFunctions";
 import { socialMediaIconBox } from "./DataUploadModal";
 
-const ZeeschuimerUploadModal = (zeeschuimerUploadModalProps) => {
-  let showZeeschuimerUploadModal =
-    zeeschuimerUploadModalProps.showZeeschuimerUploadModal;
-  let setUploadedData = zeeschuimerUploadModalProps.setUploadedData;
-  let setUploadedFileName = zeeschuimerUploadModalProps.setUploadedFileName;
-  let setShowZeeschuimerUploadModal =
-    zeeschuimerUploadModalProps.setShowZeeschuimerUploadModal;
-  let keyword = zeeschuimerUploadModalProps.keyword;
-  let socialMediaSelected = zeeschuimerUploadModalProps.socialMediaSelected;
-  let setSocialMediaSelected =
-    zeeschuimerUploadModalProps.setSocialMediaSelected;
-  let dataSources = zeeschuimerUploadModalProps.dataSources;
-  let uploadedData = zeeschuimerUploadModalProps.uploadedData;
-  let uploadedFileName = zeeschuimerUploadModalProps.uploadedFileName;
-
+const ZeeschuimerUploadModal = ({
+  showZeeschuimerUploadModal,
+  setUploadedData,
+  setUploadedFileName,
+  setShowZeeschuimerUploadModal,
+  keyword,
+  socialMediaSelected,
+  setSocialMediaSelected,
+  dataSources,
+  uploadedData,
+  uploadedFileName,
+}) => {
   const addUploadToDataSources = (
     dataSources,
     socialMediaSelected,

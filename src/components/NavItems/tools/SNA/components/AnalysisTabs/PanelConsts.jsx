@@ -115,28 +115,26 @@ export const analysisTools = {
  * and the result display
  */
 export const analysisDisplayTemplate = (
-  essentialProps,
-  toolDisplayProps,
-  toolAnalysisProps,
+  { keyword, dataSources, selected },
+  {
+    toolSettings,
+    toolDescription,
+    toolButtonText,
+    toolLoading,
+    setToolLoading,
+    errorMessage,
+    setErrorMessage,
+  },
+  {
+    analysisFunction,
+    analysisArgs,
+    vizFunction,
+    vizArgs,
+    toolResult,
+    setToolResult,
+    toolVizResult,
+  },
 ) => {
-  let keyword = essentialProps.keyword;
-  let dataSources = essentialProps.dataSources;
-  let selected = essentialProps.selected;
-
-  let toolDescription = toolDisplayProps.toolDescription;
-  let toolButtonText = toolDisplayProps.toolButtonText;
-  let toolLoading = toolDisplayProps.toolLoading;
-  let setToolLoading = toolDisplayProps.setToolLoading;
-  let errorMessage = toolDisplayProps.errorMessage;
-  let setErrorMessage = toolDisplayProps.setErrorMessage;
-
-  let analysisFunction = toolAnalysisProps.analysisFunction;
-  let analysisArgs = toolAnalysisProps.analysisArgs;
-  let vizFunction = toolAnalysisProps.vizFunction;
-  let vizArgs = toolAnalysisProps.vizArgs;
-  let toolResult = toolAnalysisProps.toolResult;
-  let setToolResult = toolAnalysisProps.setToolResult;
-
   const generateResult = async () => {
     setErrorMessage("");
     setToolLoading(true);
@@ -164,13 +162,7 @@ export const analysisDisplayTemplate = (
           </Typography>
           {SNAButton(() => generateResult(), keyword(toolButtonText))}
         </Stack>
-        {toolDisplayProps.toolSettings ? (
-          toolDisplayProps.toolSettings.display(
-            toolDisplayProps.toolSettings.args,
-          )
-        ) : (
-          <></>
-        )}
+        {toolSettings ? toolSettings.display(toolSettings.args) : <></>}
         {toolLoading ? (
           <Box
             sx={{
@@ -181,8 +173,8 @@ export const analysisDisplayTemplate = (
             <CircularProgress />
           </Box>
         ) : toolResult && errorMessage.length == 0 ? (
-          toolAnalysisProps.toolVizResult ? (
-            toolAnalysisProps.toolVizResult
+          toolVizResult ? (
+            toolVizResult
           ) : (
             vizFunction(vizArgs, toolResult)
           )

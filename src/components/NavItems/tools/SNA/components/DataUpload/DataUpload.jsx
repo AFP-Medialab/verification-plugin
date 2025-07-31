@@ -7,15 +7,14 @@ import Papa from "papaparse";
 
 import { SNAButton } from "../../utils/SNAButton";
 
-const DataUpload = (DataUploadProps) => {
-  let keyword = DataUploadProps.keyword;
-  let dataUploadInputRef = DataUploadProps.dataUploadInputRef;
-  let setUploadedData = DataUploadProps.setUploadedData;
-  let setShowUploadModal = DataUploadProps.setShowUploadModal;
-  let setUploadedFileName = DataUploadProps.setUploadedFileName;
-  let setShowZeeschuimerUploadModal =
-    DataUploadProps.setShowZeeschuimerUploadModal;
-
+const DataUpload = ({
+  keyword,
+  dataUploadInputRef,
+  setUploadedData,
+  setShowUploadModal,
+  setUploadedFileName,
+  setShowZeeschuimerUploadModal,
+}) => {
   const openUploadPrompt = () => dataUploadInputRef.current?.click();
 
   const parseUploadedCSV = (event) => {
