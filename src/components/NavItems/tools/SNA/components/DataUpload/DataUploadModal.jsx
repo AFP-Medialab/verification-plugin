@@ -103,13 +103,13 @@ const customUploadField = (k, uploadedData) => {
   );
 };
 
-const customUploadSection = (customUploadSectionProps) => {
-  let setCustomExpanded = customUploadSectionProps.setCustomExpanded;
-  let customExpanded = customUploadSectionProps.customExpanded;
-  let keyword = customUploadSectionProps.keyword;
-  let uploadedData = customUploadSectionProps.uploadedData;
-  let setSocialMediaSelected = customUploadSectionProps.setSocialMediaSelected;
-
+const customUploadSection = ({
+  setCustomExpanded,
+  customExpanded,
+  keyword,
+  uploadedData,
+  setSocialMediaSelected,
+}) => {
   const handleCustomToggle = () => {
     setCustomExpanded((prev) => !prev);
     setSocialMediaSelected("customUpload");
@@ -150,25 +150,22 @@ const customUploadSection = (customUploadSectionProps) => {
   );
 };
 
-const DataUploadModal = (dataUploadModalProps) => {
-  let dataSources = dataUploadModalProps.dataSources;
-  let showUploadModal = dataUploadModalProps.showUploadModal;
-  let setUploadedData = dataUploadModalProps.setUploadedData;
-  let setShowUploadModal = dataUploadModalProps.setShowUploadModal;
-  let keyword = dataUploadModalProps.keyword;
-  let socialMediaSelected = dataUploadModalProps.socialMediaSelected;
-  let setSocialMediaSelected = dataUploadModalProps.setSocialMediaSelected;
-
-  let setCustomExpanded = dataUploadModalProps.setCustomExpanded;
-  let customExpanded = dataUploadModalProps.customExpanded;
-  let uploadedData = dataUploadModalProps.uploadedData;
-
-  let uploadedFileName = dataUploadModalProps.uploadedFileName;
-  let setUploadedFileName = dataUploadModalProps.setUploadedFileName;
-
-  let uploadModalError = dataUploadModalProps.uploadModalError;
-  let setUploadModalError = dataUploadModalProps.setUploadModalError;
-
+const DataUploadModal = ({
+  dataSources,
+  showUploadModal,
+  setUploadedData,
+  setShowUploadModal,
+  keyword,
+  socialMediaSelected,
+  setSocialMediaSelected,
+  setCustomExpanded,
+  customExpanded,
+  uploadedData,
+  uploadedFileName,
+  setUploadedFileName,
+  uploadModalError,
+  setUploadModalError,
+}) => {
   let customUploadSectionProps = {
     setCustomExpanded,
     customExpanded,

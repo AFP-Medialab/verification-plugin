@@ -170,6 +170,7 @@ export const getTextClusters = async (
   selectedContent,
   authenticatedRequest,
 ) => {
+  if (selectedContent.length === 0) return { status: "error" };
   selectedContent.forEach((x, idx) => (x.id = idx));
 
   let d3ltaUrl = process.env.REACT_APP_D3LTA_URL; //
