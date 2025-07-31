@@ -8,26 +8,24 @@ export const generateWordCloudGraphData = (selectedContent) => {
     (entry) => (entry.splitText = entry.text.toLowerCase().split(" ")),
   );
   let ret = entryAggregatorByListValue(selectedContent, "splitText", "text");
-  return ret;
+
+  let wordCloudDataCleaned = ret.slice(0, MAX_WORDS);
+
+  wordCloudDataCleaned.forEach((w) => (w.value = w.count));
+
+  return wordCloudDataCleaned;
 };
 
 export const generateWordCloud = (
   { setDetailContent, setOpenDetailModal },
   wordCloudData,
 ) => {
-  let wordCloudDataCleaned = wordCloudData.slice(0, MAX_WORDS);
-
-  wordCloudDataCleaned.forEach((w) => (w.value = w.count));
-
   const setDetailFromWord = (word) => {
     setDetailContent(word.entries);
     setOpenDetailModal(true);
   };
 
-  let wordCloudGraph = getVisxWordcloud(
-    wordCloudDataCleaned,
-    setDetailFromWord,
-  );
+  let wordCloudGraph = getVisxWordcloud(wordCloudData, setDetailFromWord);
 
   return wordCloudGraph;
 };

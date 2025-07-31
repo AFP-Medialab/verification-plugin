@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import { cardClasses } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -52,7 +52,6 @@ import { initializePage, refreshPage } from "./utils/accessSavedCollections";
 
 const SNA = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/NewSNA");
-
   /**
    * Holds the gathered and uploaded collections
    * as objects formatted as:
@@ -107,6 +106,18 @@ const SNA = () => {
     setTimelineDistributionErrorMessage,
   ] = useState("");
 
+  const timelineViz = useMemo(() => {
+    if (!timelineDistributionResult) return;
+    return TimelineChart(
+      {
+        keyword,
+        setDetailContent,
+        setOpenDetailModal,
+      },
+      timelineDistributionResult,
+    );
+  }, [timelineDistributionResult]);
+
   //Account activity props
   const [accountActivityResult, setAccountActivityResult] = useState(null);
   const [accountActivityOnlyShowTop, setAccountActivityOnlyShowTop] =
@@ -115,6 +126,26 @@ const SNA = () => {
   const [accountActivityLoading, setAccountActivityLoading] = useState(false);
   const [accountActivityErrorMessage, setAccountActivityErrorMessage] =
     useState("");
+
+  const accountActivityViz = useMemo(() => {
+    if (!accountActivityResult) return;
+    return generateAccountActivityChart(
+      {
+        groupingFactor: "username",
+        onlyShowTop: accountActivityOnlyShowTop,
+        setOnlyShowTop: setAccountActivityOnlyShowTop,
+        activitySelect,
+        setDetailContent,
+        setOpenDetailModal,
+        selected,
+        dataSources,
+        keyword,
+        detailDisplayFilter: accountActivityDetailDisplayHandler,
+      },
+      accountActivityResult,
+    );
+  }, [accountActivityResult]);
+
   //Coor props
   const [coorTimeWindow, setCoorTimeWindow] = useState(60);
   const [coorEdgeThresh, setCoorEdgeThresh] = useState(0);
@@ -124,6 +155,14 @@ const SNA = () => {
   const [coorResult, setCoorResult] = useState(false);
   const [coorErrorMessage, setCoorErrorMessage] = useState("");
 
+  const coorResultViz = useMemo(() => {
+    if (!coorResult) return;
+    return generateCoorViz(
+      { keyword, setDetailContent, setOpenDetailModal, dataSources, selected },
+      coorResult,
+    );
+  }, [coorResult]);
+
   //Most mentioned props
   const [mostMentionedLoading, setMostMentionedLoading] = useState(false);
   const [mostMentionedOnlyShowTop, setMostMentionedOnlyShowTop] =
@@ -132,6 +171,25 @@ const SNA = () => {
   const [mostMentionedErrorMessage, setMostMentionedErrorMessage] =
     useState("");
 
+  const mostMentionedViz = useMemo(() => {
+    if (!mostMentionedResult) return;
+    return generateAccountActivityChart(
+      {
+        groupingFactor: "username",
+        onlyShowTop: mostMentionedOnlyShowTop,
+        setOnlyShowTop: setMostMentionedOnlyShowTop,
+        activitySelect: "Mentions",
+        setDetailContent,
+        setOpenDetailModal,
+        selected,
+        dataSources,
+        keyword,
+        detailDisplayFilter: mostMentionedDetailDisplayHandler,
+      },
+      mostMentionedResult,
+    );
+  }, [mostMentionedResult]);
+
   //Hashtag analysis props
   const [hashtagAnalysisResult, setHashtagAnalysisResult] = useState(null);
   const [hashtagAnalysisLoading, setHashtagAnalysisLoading] = useState(false);
@@ -139,6 +197,31 @@ const SNA = () => {
     useState(true);
   const [hashtagAnalysisErrorMessage, setHashtagAnalysisErrorMessage] =
     useState("");
+
+  const hashtagAnalysisViz = useMemo(() => {
+    if (!hashtagAnalysisResult) return;
+    return generateHashtagAnalysisViz(
+      {
+        barChart: {
+          groupingFactor: "hashtag",
+          onlyShowTop: hashtagAnalysisOnlyShowTop,
+          setOnlyShowTop: setHashtagAnalysisOnlyShowTop,
+          activitySelect: "Hashtags",
+          setDetailContent,
+          setOpenDetailModal,
+          selected,
+          dataSources,
+          keyword,
+          detailDisplayFilter: hashtagAnalysisDetailModalContent,
+        },
+        networkGraph: {
+          setDetailContent,
+          setOpenDetailModal,
+        },
+      },
+      hashtagAnalysisResult,
+    );
+  }, [hashtagAnalysisResult]);
 
   //Word cloud props
   const [wordCloudLoading, setWordCloudLoading] = useState(false);
@@ -149,6 +232,18 @@ const SNA = () => {
   const [textClustersLoading, setTextClustersLoading] = useState(false);
   const [textClustersResult, setTextClustersResult] = useState(null);
   const [textClustersErrorMessage, setTextClustersErrorMessage] = useState("");
+
+  const textClustersViz = useMemo(() => {
+    if (!textClustersResult) return;
+    return textClustersTable(
+      {
+        keyword,
+        setDetailContent,
+        setOpenDetailModal,
+      },
+      textClustersResult,
+    );
+  }, [textClustersResult]);
 
   const authenticatedRequest = useAuthenticatedRequest();
 
@@ -222,14 +317,9 @@ const SNA = () => {
     },
     toolAnalysisProps: {
       analysisFunction: generateTimelineData,
-      vizFunction: TimelineChart,
-      vizArgs: {
-        keyword,
-        setDetailContent,
-        setOpenDetailModal,
-      },
       toolResult: timelineDistributionResult,
       setToolResult: setTimelineDistributionResult,
+      toolVizResult: timelineViz,
     },
   };
 
@@ -244,21 +334,9 @@ const SNA = () => {
     },
     toolAnalysisProps: {
       analysisFunction: generateMostMentionedData,
-      vizFunction: generateAccountActivityChart,
-      vizArgs: {
-        groupingFactor: "username",
-        onlyShowTop: mostMentionedOnlyShowTop,
-        setOnlyShowTop: setMostMentionedOnlyShowTop,
-        activitySelect: "Mentions",
-        setDetailContent,
-        setOpenDetailModal,
-        selected,
-        dataSources,
-        keyword,
-        detailDisplayFilter: mostMentionedDetailDisplayHandler,
-      },
       toolResult: mostMentionedResult,
       setToolResult: setMostMentionedResult,
+      toolVizResult: mostMentionedViz,
     },
   };
 
@@ -284,21 +362,9 @@ const SNA = () => {
     toolAnalysisProps: {
       analysisFunction: generateAccountActivityData,
       analysisArgs: { activitySelect },
-      vizFunction: generateAccountActivityChart,
-      vizArgs: {
-        groupingFactor: "username",
-        onlyShowTop: accountActivityOnlyShowTop,
-        setOnlyShowTop: setAccountActivityOnlyShowTop,
-        activitySelect,
-        setDetailContent,
-        setOpenDetailModal,
-        selected,
-        dataSources,
-        keyword,
-        detailDisplayFilter: accountActivityDetailDisplayHandler,
-      },
       toolResult: accountActivityResult,
       setToolResult: setAccountActivityResult,
+      toolVizResult: accountActivityViz,
     },
   };
 
@@ -313,27 +379,9 @@ const SNA = () => {
     },
     toolAnalysisProps: {
       analysisFunction: generateHashtagAnalysisData,
-      vizFunction: generateHashtagAnalysisViz,
-      vizArgs: {
-        barChart: {
-          groupingFactor: "hashtag",
-          onlyShowTop: hashtagAnalysisOnlyShowTop,
-          setOnlyShowTop: setHashtagAnalysisOnlyShowTop,
-          activitySelect: "Hashtags",
-          setDetailContent,
-          setOpenDetailModal,
-          selected,
-          dataSources,
-          keyword,
-          detailDisplayFilter: hashtagAnalysisDetailModalContent,
-        },
-        networkGraph: {
-          setDetailContent,
-          setOpenDetailModal,
-        },
-      },
       toolResult: hashtagAnalysisResult,
       setToolResult: setHashtagAnalysisResult,
+      toolVizResult: hashtagAnalysisViz,
     },
   };
 
@@ -370,17 +418,12 @@ const SNA = () => {
         coorMinParticipation,
         coorObjectChoice,
         authenticatedRequest,
-      },
-      vizFunction: generateCoorViz,
-      vizArgs: {
-        keyword,
-        setDetailContent,
-        setOpenDetailModal,
         dataSources,
         selected,
       },
       toolResult: coorResult,
       setToolResult: setCoorResult,
+      toolVizResult: coorResultViz,
     },
   };
 
@@ -419,14 +462,9 @@ const SNA = () => {
       analysisArgs: {
         authenticatedRequest,
       },
-      vizFunction: textClustersTable,
-      vizArgs: {
-        keyword,
-        setDetailContent,
-        setOpenDetailModal,
-      },
       toolResult: textClustersResult,
       setToolResult: setTextClustersResult,
+      toolVizResult: textClustersViz,
     },
   };
 

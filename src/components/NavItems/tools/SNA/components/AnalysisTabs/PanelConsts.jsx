@@ -180,7 +180,11 @@ export const analysisDisplayTemplate = (
             <CircularProgress />
           </Box>
         ) : toolResult && errorMessage.length == 0 ? (
-          vizFunction(vizArgs, toolResult)
+          toolAnalysisProps.toolVizResult ? (
+            toolAnalysisProps.toolVizResult
+          ) : (
+            vizFunction(vizArgs, toolResult)
+          )
         ) : (
           <Typography>{keyword(errorMessage)}</Typography>
         )}

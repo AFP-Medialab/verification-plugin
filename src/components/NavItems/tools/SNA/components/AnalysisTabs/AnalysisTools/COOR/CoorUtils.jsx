@@ -2,6 +2,7 @@ import React from "react";
 import ForceGraph2D from "react-force-graph-2d";
 import { TableVirtuoso } from "react-virtuoso";
 
+import { useColorScheme } from "@mui/material";
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import IconButton from "@mui/material/IconButton";
@@ -74,7 +75,7 @@ const coorFieldSelect = (
   selectOptions,
 ) => {
   return (
-    <>
+    <Box key={"coorSelect"}>
       <Typography sx={{ padding: 0.5 }}>{fieldDescription}</Typography>
       <Tooltip title={keyword(fieldHelpText)}>
         <IconButton>
@@ -96,7 +97,7 @@ const coorFieldSelect = (
           ))}
         </Select>
       </FormControl>
-    </>
+    </Box>
   );
 };
 
@@ -364,6 +365,8 @@ export const runCoorAnalysis = async (
     coorMinParticipation,
     coorObjectChoice,
     authenticatedRequest,
+    dataSources,
+    selected,
   },
 ) => {
   let readiedContent = await getCoorContent(
@@ -377,7 +380,10 @@ export const runCoorAnalysis = async (
     coorMinParticipation,
     readiedContent,
   );
-  return coorResult;
+
+  let coorGraphData = generateCoorGraphData(coorResult, dataSources, selected);
+
+  return { coorResult: coorResult, coorGraphData: coorGraphData };
 };
 
 export const generateCoorGraphData = (coorResult, dataSources, selected) => {
@@ -410,12 +416,6 @@ export const generateCoorGraphData = (coorResult, dataSources, selected) => {
     nodes: Object.values(nodes),
     links: edges,
   };
-  return graphData;
-};
-
-export const generateCoorNetworkGraph = (graphData, vizArgs) => {
-  let setDetailContent = vizArgs.setDetailContent;
-  let setOpenDetailModal = vizArgs.setOpenDetailModal;
 
   let graph = new MultiUndirectedGraph();
 
@@ -435,12 +435,26 @@ export const generateCoorNetworkGraph = (graphData, vizArgs) => {
   const communities = louvain(graph);
 
   graphData.nodes.forEach((node) => (node.community = communities[node.id]));
+  graphData.graph = graph;
 
+  return graphData;
+};
+
+export const generateCoorNetworkGraph = (
+  graphData,
+  { setDetailContent, setOpenDetailModal },
+) => {
   const handleNodeClick = (node) => {
-    let detailModalContent = graph.getNodeAttribute(node.id, "entries");
+    let detailModalContent = graphData.graph.getNodeAttribute(
+      node.id,
+      "entries",
+    );
     setDetailContent(detailModalContent);
     setOpenDetailModal(true);
   };
+
+  const { systemMode, mode } = useColorScheme();
+  const resolvedMode = systemMode || mode;
 
   return (
     <ForceGraph2D
@@ -448,7 +462,7 @@ export const generateCoorNetworkGraph = (graphData, vizArgs) => {
       warmupTicks={100}
       cooldownTicks={0}
       autoPauseRedraw={true}
-      nodeRelSize={6} // this + `val` determines size
+      nodeRelSize={6}
       nodeAutoColorBy="community"
       linkColor={() => "#aaa"}
       nodeLabel={"displayName"}
@@ -456,7 +470,7 @@ export const generateCoorNetworkGraph = (graphData, vizArgs) => {
       nodeCanvasObject={(node, ctx) => {
         const fontSize = 4;
         ctx.font = `${fontSize}px Sans-Serif`;
-        ctx.fillStyle = "black";
+        ctx.fillStyle = resolvedMode == "dark" ? "white" : "black";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText(node.displayName, node.x, node.y);
@@ -627,15 +641,13 @@ const coorExportButton = (keyword, coorResult) => {
 };
 
 export const generateCoorViz = (
-  { keyword, setDetailContent, setOpenDetailModal, dataSources, selected },
-  coorResult,
+  { keyword, setDetailContent, setOpenDetailModal },
+  { coorResult, coorGraphData },
 ) => {
   if (coorResult.length == 0)
     return (
       <Typography> {keyword("snaTools_noCoorDetectedMessage")} </Typography>
     );
-
-  let coorGraphData = generateCoorGraphData(coorResult, dataSources, selected);
 
   const coorNetworkGraph = generateCoorNetworkGraph(coorGraphData, {
     setDetailContent,
