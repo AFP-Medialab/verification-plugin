@@ -24,13 +24,13 @@ export const required_fields = [
 ];
 
 const metaLogoUrl =
-  "https://upload.wikimedia.org/wikipedia/commons/a/ab/Meta-Logo.png";
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Facebook_logo_%28square%29.png/960px-Facebook_logo_%28square%29.png";
 
 const tiktokLogoUrl =
-  "https://images.seeklogo.com/logo-png/42/2/tiktok-black-icon-logo-png_seeklogo-429281.png";
+  "https://www.citypng.com/public/uploads/preview/round-tiktok-icon-logo-transparent-background-701751695033010oraha4pc0r.png";
 
 const makeIcon = (imageUrl, altText) => {
-  return <img src={imageUrl} alt={altText} style={{ width: 38, height: 21 }} />;
+  return <img src={imageUrl} alt={altText} style={{ width: 38, height: 34 }} />;
 };
 
 const MetaIcon = makeIcon(metaLogoUrl, "meta");
