@@ -74,16 +74,19 @@ export const uploadTemplates = {
     icon: MetaIcon,
     defaultFieldsMap: metaDefaultFields,
     id: "crowdTangleFb",
+    tooltipText: "uploadModal_crowdtangleFB_tooltip",
   },
   snaTwitter: {
     icon: snaIcon,
     defaultFieldsMap: snaTwitterDefaultFields,
     id: "snaTwitter",
+    tooltipText: "uploadModal_snaTwitter_tooltip",
   },
   snaTikTok: {
     icon: tiktokIcon,
     defaultFieldsMap: snaTiktokDefaultFields,
     id: "snaTiktok",
+    tooltipText: "uploadModal_snaTiktok_tooltip",
   },
 };
 
@@ -92,10 +95,12 @@ export const zeeschuimerUploadTemplates = {
     icon: snaIcon,
     objectMappings: "",
     id: "zeeschuimerTwitter",
+    tooltipText: "uploadModalZS_twitter_tooltip",
   },
   tiktok: {
     icon: tiktokIcon,
     objectMappings: "",
     id: "zeeschuimerTiktok",
+    tooltipText: "uploadModalZS_tiktok_tooltip",
   },
 };

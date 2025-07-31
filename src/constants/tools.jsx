@@ -539,12 +539,12 @@ export const newSna = new Tool(
   twitterSnaSvgIcon,
   TOOLS_CATEGORIES.DATA_ANALYSIS,
   [TOOL_STATUS_ICON.LOCK],
-  [ROLES.BETA_TESTER],
+  [ROLES.BETA_TESTER, ROLES.EVALUATION],
   "Sna",
   TOOL_GROUPS.VERIFICATION,
   <SNA />,
   <Footer type={FOOTER_TYPES.USFD_AFP_EU_DISINFOLAB} />,
-)
+);
 
 const disinfoDeck = new Tool(
   "navbar_disinfo_deck",

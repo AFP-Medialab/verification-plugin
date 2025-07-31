@@ -4,6 +4,7 @@ import { cardClasses } from "@mui/material";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CircularProgress from "@mui/material/CircularProgress";
+import Stack from "@mui/material/Stack";
 
 import useAuthenticatedRequest from "components/Shared/Authentication/useAuthenticatedRequest";
 import HeaderTool from "components/Shared/HeaderTool/HeaderTool";
@@ -48,7 +49,12 @@ import DataUpload from "./components/DataUpload/DataUpload";
 import DataUploadModal from "./components/DataUpload/DataUploadModal";
 import ZeeschuimerUploadModal from "./components/DataUpload/ZeeschuimerUploadModal";
 import DetailModal from "./components/DetailModal";
-import { initializePage, refreshPage } from "./utils/accessSavedCollections";
+import {
+  initializePage,
+  keepOnlyNumberFields,
+  onlyUnique,
+  refreshPage,
+} from "./utils/accessSavedCollections";
 
 const SNA = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/NewSNA");
@@ -146,6 +152,32 @@ const SNA = () => {
       accountActivityResult,
     );
   }, [accountActivityResult]);
+
+  const selectedSources = useMemo(() => {
+    console.log(selected);
+    console.log(dataSources);
+    if (!selected || !dataSources) return [];
+    let selectedSources = dataSources.filter((source) =>
+      selected.includes(source.id),
+    );
+    return selectedSources;
+  }, [selected, dataSources]);
+
+  const numberFieldsinSources = useMemo(() => {
+    if (!selectedSources) return [];
+    return selectedSources
+      .map((source) => keepOnlyNumberFields(source.content[0]))
+      .flat();
+  }, [selectedSources]);
+
+  const commonNumberFields = useMemo(() => {
+    if (!numberFieldsinSources) return [];
+    return numberFieldsinSources
+      .filter((field) =>
+        selectedSources.every((source) => source.headers.includes(field)),
+      )
+      .filter(onlyUnique);
+  }, [numberFieldsinSources]);
 
   //Coor props
   const [coorTimeWindow, setCoorTimeWindow] = useState(60);
@@ -355,6 +387,8 @@ const SNA = () => {
           selected,
           activitySelect,
           setActivitySelect,
+          numberFieldsinSources,
+          commonNumberFields,
         },
       },
       toolLoading: accountActivityLoading,
@@ -531,13 +565,12 @@ const SNA = () => {
             <CircularProgress />
           </Box>
         ) : (
-          <>
+          <Stack direction={"column"} spacing={2}>
             {CollectionsTable(collectionsTableProps)}
-            <Box p={2} />
             {DataUpload(dataUploadProps)}
-            <Box p={2} />
+
             {SNAPanel(snaPanelProps)}
-          </>
+          </Stack>
         )}
       </Card>
     </>

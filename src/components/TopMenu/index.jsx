@@ -47,7 +47,6 @@ const TopMenu = ({ topMenuItems }) => {
     recInfo.recording[0].state != false
       ? setSelectedCollection(recInfo.recording[0].state)
       : {};
-    console.log(recInfo);
   };
 
   const classes = useMyStyles();

@@ -44,17 +44,9 @@ export const accountActivitySettings = (settingsArgs) => {
     selected.includes(source.id),
   );
 
+  let commonNumberFields = settingsArgs.commonNumberFields;
+
   if (selectedSources.length === 0) return <> </>;
-
-  const numberFieldsinSources = selectedSources
-    .map((source) => keepOnlyNumberFields(source.content[0]))
-    .flat();
-
-  const commonFields = numberFieldsinSources
-    .filter((field) =>
-      selectedSources.every((source) => source.headers.includes(field)),
-    )
-    .filter(onlyUnique);
 
   return (
     <Box key="accountActivitySettings">
@@ -70,7 +62,7 @@ export const accountActivitySettings = (settingsArgs) => {
           <MenuItem value={"entries"}>
             {keyword("snaTools_accountActivityEntriesSelect")}
           </MenuItem>
-          {commonFields.map((field) => (
+          {commonNumberFields.map((field) => (
             <MenuItem value={field} key={"activitySelect_" + field}>
               {field}
             </MenuItem>
