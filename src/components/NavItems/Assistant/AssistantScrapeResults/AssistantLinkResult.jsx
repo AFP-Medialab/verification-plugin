@@ -15,7 +15,7 @@ import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-import ExtractedSourceCredibilityResult from "@/components/NavItems/Assistant/AssistantCheckResults/ExtractedSourceCredibilityResult";
+import ExtractedUrlDomainAnalysisResults from "@/components/NavItems/Assistant/AssistantCheckResults/ExtractedUrlDomainAnalysisResults";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { TextCopy } from "@Shared/Utils/TextCopy";
@@ -94,12 +94,12 @@ const Details = (params) => {
     >
       {<TextCopy text={params.url} index={params.url} />}
       {params.done && params.domainOrAccount !== null && (
-        <ExtractedSourceCredibilityResult
+        <ExtractedUrlDomainAnalysisResults
           extractedSourceCredibilityResults={params.urlResults}
           url={params.urlResults.resolvedLink}
-          domainOrAccount={params.domainOrAccount}
           urlColor={params.urlColor}
           sourceTypes={params.sourceTypes}
+          trafficLightColors={params.trafficLightColors}
         />
       )}
       {params.loading && <Skeleton variant="rounded" height={20} width={20} />}
@@ -143,16 +143,10 @@ const AssistantLinkResult = () => {
   const trafficLightColors = useSelector(
     (state) => state.assistant.trafficLightColors,
   );
+  const sourceTypes = useSelector((state) => state.assistant.sourceTypes);
 
   const urls =
     inputSCDone && extractedLinks ? extractedLinks : linkList ? linkList : null;
-
-  const sourceTypes = {
-    positive: "fact_checker",
-    mixed: "mentions",
-    caution: "warning",
-    unlabelled: "unlabelled",
-  };
 
   // create a row for each url
   let rows = [];
@@ -168,7 +162,14 @@ const AssistantLinkResult = () => {
     };
     let sortByDetails = false;
     let domainOrAccount = null;
-    let sourceTypeList = [sourceTypes.unlabelled];
+    const unlabelled = "unlabelled";
+    let sourceTypeList = [
+      sourceTypes
+        ? sourceTypes.unlabelled
+          ? unlabelled
+          : unlabelled
+        : unlabelled,
+    ];
 
     if (extractedSourceCred) {
       urlResults = extractedSourceCred[url];
@@ -221,9 +222,11 @@ const AssistantLinkResult = () => {
         done: inputSCDone,
         fail: inputSCFail,
         urlResults: urlResults,
+        url: url,
         urlColor: urlColor,
-        sourceTypes: sourceTypes,
         domainOrAccount: domainOrAccount,
+        sourceTypes: sourceTypes,
+        trafficLightColors: trafficLightColors,
         sortByDetails: sortByDetails,
       },
     });
@@ -297,9 +300,10 @@ const AssistantLinkResult = () => {
             fail={params.value.fail}
             urlResults={params.value.urlResults}
             url={params.value.url}
-            domainOrAccount={params.value.domainOrAccount}
             urlColor={params.value.urlColor}
+            domainOrAccount={params.value.domainOrAccount}
             sourceTypes={params.value.sourceTypes}
+            trafficLightColors={params.value.trafficLightColors}
           />
         );
       },
