@@ -60,11 +60,9 @@ export const JsonBlock = ({ jsonString }) => {
     };
 
     const renderObject = (obj, indent = 2, parentPath = "") => {
-      const entries = Array.isArray(obj) ? obj : (Object.entries(obj) ?? []);
+      const entries = Array.isArray(obj) ? obj : Object.entries(obj);
       const isArray = Array.isArray(obj);
       const open = !collapsedKeys[parentPath];
-
-      let isUnique = new Set();
 
       return (
         <>
@@ -79,26 +77,13 @@ export const JsonBlock = ({ jsonString }) => {
             {entries.map((entry, idx) => {
               const key = isArray ? idx : entry[0];
               const val = isArray ? entry : entry[1];
-              const basePath = parentPath || "root";
-              const currentPath = `${basePath}${isArray ? `[${parentPath.split(".").slice(-1)[0] || "array"}-${key}]` : `.${key}`}`;
-              console.log(currentPath);
-
-              if (isUnique.has(currentPath)) {
-                console.log("DUPE");
-                console.log(currentPath);
-              } else {
-                isUnique.add(currentPath);
-              }
-
+              const currentPath = parentPath + "." + key;
               return (
-                <Box key={currentPath} style={{ marginLeft: indent * 8 }}>
+                <Box key={idx} style={{ marginLeft: indent * 8 }}>
                   {!isArray && (
                     <>
-                      <span
-                        key={currentPath}
-                        style={{ color: keyColor }}
-                      >{`"${key}"`}</span>
-                      <span key={currentPath}>: </span>
+                      <span style={{ color: keyColor }}>{`"${key}"`}</span>
+                      <span>: </span>
                     </>
                   )}
                   {renderValue(val, currentPath)}
