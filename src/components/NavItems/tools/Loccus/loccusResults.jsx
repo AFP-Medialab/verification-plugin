@@ -1,5 +1,5 @@
 import { useWavesurfer } from "@wavesurfer/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Chart } from "react-chartjs-2";
 import GaugeChart from "react-gauge-chart";
 import { useSelector } from "react-redux";
@@ -41,6 +41,8 @@ import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
+import RegionsPlugin from "wavesurfer.js/dist/plugins/regions";
+import ZoomPlugin from "wavesurfer.js/dist/plugins/zoom";
 
 import CustomAlertScore from "../../../Shared/CustomAlertScore";
 import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
@@ -286,8 +288,15 @@ const LoccusResults = ({
 
   const audioContainerRef = useRef();
 
+  // Initialize the Regions plugin
+  const regionsRef = useRef(null);
+
+  if (!regionsRef.current) {
+    regionsRef.current = RegionsPlugin.create();
+  }
+
   // Hook to get the audio waveform
-  useWavesurfer({
+  const { wavesurfer, isReady } = useWavesurfer({
     container: audioContainerRef,
     url: url,
     waveColor: "#00926c",
@@ -296,7 +305,47 @@ const LoccusResults = ({
     backend: "MediaElement",
     mediaControls: true,
     dragToSeek: true,
+    plugins: useMemo(
+      () => [
+        regionsRef.current,
+        ZoomPlugin.create({
+          scale: 0.5,
+          maxZoom: 100,
+        }),
+      ],
+      [],
+    ),
   });
+
+  const getPercentageColorCode = (n) => {
+    if (n >= DETECTION_THRESHOLDS.THRESHOLD_3) {
+      return "rgb(255, 0, 0, 0.5)";
+    } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_2) {
+      return "rgb(255, 170, 0, 0.5)";
+    } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_1) {
+      return "rgb(170, 255, 3, 0.5)";
+    } else {
+      return "rgb(0, 255, 0, 0.5)";
+    }
+  };
+
+  useEffect(() => {
+    if (wavesurfer && isReady && chunks) {
+      chunks.map((chunk) => {
+        if (chunk.subscores?.synthesis) {
+          regionsRef.current.addRegion({
+            start: dayjs.duration(chunk.startTime).asSeconds(),
+            end: dayjs.duration(chunk.endTime).asSeconds(),
+            color: getPercentageColorCode(
+              (1 - chunk.subscores.synthesis) * 100,
+            ),
+            resize: false,
+            drag: false,
+          });
+        }
+      });
+    }
+  }, [wavesurfer, isReady, chunks]);
 
   const keywords = [
     "loccus_scale_modal_explanation_rating_1",
