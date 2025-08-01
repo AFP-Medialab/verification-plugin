@@ -1,4 +1,3 @@
-import { ROLES } from "@/constants/roles";
 import {
   setDeepfakeLoadingVideo,
   setDeepfakeResultVideo,
@@ -28,9 +27,7 @@ async function UseGetDeepfake(
   if (mode === "VIDEO") {
     dispatch(setDeepfakeLoadingVideo(true));
     modeURL = "videos/";
-    // services = "deepfake_video,ftcn,face_reenact";
-    services = "deepfake_video";
-    if (role.includes(ROLES.EVALUATION)) services += ",faceswap_fsfm";
+    services = "faceswap_fsfm";
   }
 
   if (!modeURL) {
