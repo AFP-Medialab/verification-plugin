@@ -1,16 +1,19 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import Collapse from "@mui/material/Collapse";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 
-import { WarningAmber } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import WarningAmber from "@mui/icons-material/WarningAmber";
 
 import DbkfMediaResults from "@/components/NavItems/Assistant/AssistantCheckResults/DbkfMediaResults";
 import DbkfTextResults from "@/components/NavItems/Assistant/AssistantCheckResults/DbkfTextResults";
@@ -40,71 +43,24 @@ const AssistantWarnings = () => {
   );
 
   return (
-    <Card
-      variant="outlined"
-      className={classes.assistantWarningBorder}
-      id="warnings"
-    >
-      <Grid container>
-        <Grid size={{ xs: 12 }} style={{ display: "flex" }}>
-          <CardMedia>
-            <Box
-              sx={{
-                m: 1,
-              }}
-            >
-              <WarningAmber color={"warning"} fontSize={"large"} />
-            </Box>
-          </CardMedia>
-          <Box
-            sx={{
-              m: 1,
-            }}
-          />
-          <div>
-            <Typography component={"span"} variant={"h6"} color={"warning"}>
-              <Box
-                sx={{
-                  mt: 1.5,
-                  fontWeight: "fontWeightBold",
-                }}
-              >
-                {keyword("warning_title")}
-              </Box>
-            </Typography>
-          </div>
-          <Box
-            sx={{
-              pr: 1,
-              pt: 1,
-            }}
-          >
-            <IconButton
-              className={classes.assistantIconRight}
-              onClick={() => dispatch(setWarningExpanded(!warningExpanded))}
-              sx={{ p: 1 }}
-            >
-              <ExpandMoreIcon color={"warning"} />
-            </IconButton>
-          </Box>
-        </Grid>
-        <Grid size={{ xs: 12 }}>
-          <Collapse
-            in={warningExpanded}
-            className={classes.assistantBackground}
-          >
-            <Box m={1} />
+    <Card variant="outlined">
+      <CardHeader
+        className={classes.assistantCardHeader}
+        title={
+          <Alert severity="warning" sx={{ bgcolor: "background.paper" }}>
+            <Typography>Database of known fakes matches</Typography>
+          </Alert>
+        }
+      />
+      <CardContent>
+        {dbkfTextMatch && <DbkfTextResults />}
 
-            {dbkfTextMatch && <DbkfTextResults />}
+        {(dbkfImageMatch || dbkfVideoMatch) && <DbkfMediaResults />}
 
-            {(dbkfImageMatch || dbkfVideoMatch) && <DbkfMediaResults />}
-
-            {role.includes(ROLES.BETA_TESTER) && prevFactChecksResult && (
-              <PreviousFactCheckResults />
-            )}
-          </Collapse>
-        </Grid>
-      </Grid>
+        {role.includes(ROLES.BETA_TESTER) && prevFactChecksResult && (
+          <PreviousFactCheckResults />
+        )}
+      </CardContent>
     </Card>
   );
 };
