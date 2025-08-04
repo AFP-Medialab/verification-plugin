@@ -43,7 +43,7 @@ const PreviousFactCheckResults = () => {
   const navigate = useNavigate();
 
   return (
-    <Accordion>
+    <Accordion defaultExpanded>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Grid container spacing={1} wrap="wrap" width="100%">
           <Grid size={4} align="start">
