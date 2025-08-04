@@ -2,14 +2,10 @@ import React from "react";
 import GaugeChart from "react-gauge-chart";
 
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Slider from "@mui/material/Slider";
-import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-
-import { ArrowBack } from "@mui/icons-material";
 
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
@@ -442,11 +438,6 @@ export function getSubjectivityColours(configs) {
   ];
   return [colours, coloursDark];
 }
-
-/**
- * Primary colour code
- */
-export const primaryRgb = [0, 146, 108];
 
 /**
  * Slider component utilised by news framing, news genre, persuasion techniques and subjectivity

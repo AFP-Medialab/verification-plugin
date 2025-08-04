@@ -12,6 +12,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import { useTheme } from "@mui/material/styles";
+import { hexToRgb } from "@mui/material/styles";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
@@ -20,7 +22,6 @@ import {
   createGaugeExplanation,
   getMgtColours,
   getSubjectivityColours,
-  primaryRgb,
   rgbToLuminance,
   rgbToString,
   treeMapToElements,
@@ -83,6 +84,12 @@ export default function AssistantTextClassification({
   // for dark mode
   const { mode, systemMode } = useColorScheme();
   const resolvedMode = systemMode || mode;
+
+  // primary colour
+  const theme = useTheme();
+  const primaryRgb = hexToRgb(theme.palette.primary.main)
+    .match(/\d+/g)
+    .map(Number);
 
   // predefined labels
   const fullTextScoreLabel = "full_text_score";
@@ -182,6 +189,7 @@ export default function AssistantTextClassification({
         <ClassifiedText
           text={text}
           spanIndices={filteredSentences}
+          primaryRgb={primaryRgb}
           thresholdLow={sentenceThresholdLow}
           thresholdHigh={sentenceThresholdHigh}
           textHtmlMap={textHtmlMap}
@@ -407,6 +415,7 @@ export function ClassifiedText({
   text,
   spanIndices,
   backgroundRgb,
+  primaryRgb,
   textHtmlMap = null,
   credibilitySignal,
   keyword,

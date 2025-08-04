@@ -14,6 +14,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import { useTheme } from "@mui/material/styles";
+import { hexToRgb } from "@mui/material/styles";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
@@ -21,7 +23,6 @@ import {
   ThresholdSlider,
   getPersuasionCategoryTechnique,
   mergeSpanIndices,
-  primaryRgb,
   rgbToLuminance,
   rgbToString,
   treeMapToElements,
@@ -59,6 +60,12 @@ export default function AssistantTextSpanClassification({
   // for dark mode
   const { mode, systemMode } = useColorScheme();
   const resolvedMode = systemMode || mode;
+
+  // primary colour
+  const theme = useTheme();
+  const primaryRgb = hexToRgb(theme.palette.primary.main)
+    .match(/\d+/g)
+    .map(Number);
 
   // slider
   const importantSentenceThreshold = useSelector(
@@ -290,6 +297,7 @@ export default function AssistantTextSpanClassification({
           <CardContent>
             <CategoriesListToggle
               categories={uniqueCategories}
+              primaryRgb={primaryRgb}
               noCategoriesText={keyword("no_detected_techniques")}
               allCategoriesLabel={allCategoriesLabel}
               currentLabel={currentLabel}
@@ -308,7 +316,7 @@ export default function AssistantTextSpanClassification({
 
 export function CategoriesListToggle({
   categories,
-  // colours,
+  primaryRgb,
   noCategoriesText,
   allCategoriesLabel,
   currentLabel,
