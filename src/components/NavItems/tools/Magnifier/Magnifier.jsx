@@ -16,7 +16,6 @@ import {
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { setError } from "redux/reducers/errorReducer";
-import "tui-image-editor/dist/tui-image-editor.css";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
