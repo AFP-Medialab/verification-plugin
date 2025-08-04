@@ -1225,10 +1225,10 @@ const sortSourceCredibilityLinks = (
 
   let extractedLinks = [];
   extractedLinks = extractedLinks.concat(
-    cautionLinks,
-    mixedLinks,
-    positiveLinks,
-    unlabelledLinks,
+    cautionLinks.sort(),
+    mixedLinks.sort(),
+    positiveLinks.sort(),
+    unlabelledLinks.sort(),
   );
 
   return extractedLinks;
