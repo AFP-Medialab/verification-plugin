@@ -1,11 +1,8 @@
 import React from "react";
 
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
-import Link from "@mui/material/Link";
-import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
 
-import LinkIcon from "@mui/icons-material/Link";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 
 import useClasses from "../MaterialUiStyles/useClasses";
 
@@ -15,20 +12,6 @@ const styles = (theme) => ({
     display: "flex",
     flexWrap: "wrap",
     overflow: "hidden",
-    // backgroundColor: theme.palette.background.paper,
-  },
-  imageList: {
-    width: "100%",
-    maxHeight: "500px",
-    margin: 0,
-  },
-  icon: {
-    color: theme.palette.secondary.main,
-    position: "relative",
-    top: theme.spacing(1),
-    width: theme.typography.h5.fontSize,
-    height: theme.typography.h5.fontSize,
-    marginRight: 3,
   },
 });
 
@@ -37,31 +20,41 @@ const VideoImageList = (props) => {
 
   return (
     <div className={classes.root}>
-      <ImageList
-        rowHeight={"auto"}
-        className={classes.imageList}
-        cols={1}
-        style={props.style}
-      >
-        {props.list.map((tile, index) => (
-          <ImageListItem key={index} cols={1}>
-            <Typography>
-              <LinkIcon className={classes.icon} />
-              <Link
-                variant="body2"
-                onClick={() => {
-                  props.handleClick(tile);
+      <Grid container spacing={1}>
+        {props.list.map((tile, index) => {
+          return (
+            <Grid
+              key={index}
+              size={{ xs: 12 / props.cols }}
+              sx={{ position: "relative" }}
+            >
+              <PlayArrowIcon
+                sx={{
+                  background: "rgba(0, 0, 0, 0.8)",
+                  display: "block",
+                  margin: "auto",
+                  width: "50px",
+                  height: "50px",
+                  borderRadius: "50%",
+                  position: "absolute",
+                  left: "50%",
+                  top: "50%",
+                  transform: "translate(-50%, -50%)",
+                  color: "white",
                 }}
-                data-testid={"assistant-media-grid-video-" + index}
-                style={{ cursor: "pointer" }}
-              >
-                {tile}
-              </Link>
-            </Typography>
-          </ImageListItem>
-        ))}
-      </ImageList>
+              />
+              <video
+                style={{ width: "100%", height: "auto", cursor: "pointer" }}
+                onClick={() => props.handleClick(props.list[index])}
+                data-testid={"assistant-media-grid-image-" + index}
+                src={tile}
+              ></video>
+            </Grid>
+          );
+        })}
+      </Grid>
     </div>
   );
 };
+
 export default VideoImageList;
