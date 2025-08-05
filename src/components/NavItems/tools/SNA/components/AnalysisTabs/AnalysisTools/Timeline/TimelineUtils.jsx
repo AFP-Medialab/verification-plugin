@@ -71,6 +71,7 @@ const getSeriesConfig = (timelineChartData) => {
         color: "rgba(130,202,157,0.2)",
       },
       data: timelineChartData,
+      animation: false,
     },
   ];
 };

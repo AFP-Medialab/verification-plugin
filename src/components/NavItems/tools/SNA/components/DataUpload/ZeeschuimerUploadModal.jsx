@@ -2,9 +2,12 @@ import React from "react";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import Modal from "@mui/material/Modal";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+
+import CloseIcon from "@mui/icons-material/Close";
 
 import { v4 as uuidv4 } from "uuid";
 
@@ -53,61 +56,72 @@ const ZeeschuimerUploadModal = ({
     setShowZeeschuimerUploadModal(false);
   };
 
+  const handleClose = () => {
+    setUploadedData([]);
+    setUploadedFileName("");
+    setSocialMediaSelected("");
+    setShowZeeschuimerUploadModal(false);
+    setZeeschuimerUploadModalError(false);
+  };
+
   return (
     <>
-      <Modal
-        open={showZeeschuimerUploadModal}
-        onClose={() => {
-          setUploadedData([]);
-          setUploadedFileName("");
-          setSocialMediaSelected("");
-          setShowZeeschuimerUploadModal(false);
-        }}
-      >
-        <Box
-          display="flex"
-          flexDirection="column"
-          gap={2}
-          sx={dataUploadModalStyle}
-        >
-          <Typography id="modal-zs-title" variant="h6" component="h2">
-            {keyword("uploadModal_modalTitle")}
-          </Typography>
-          <Stack direction={"row"} spacing={2} alignItems="center">
-            {Object.values(zeeschuimerUploadTemplates).map((template) =>
-              socialMediaIconBox(
-                template.id,
-                template.icon,
-                socialMediaSelected,
-                setSocialMediaSelected,
-              ),
+      <Modal open={showZeeschuimerUploadModal} onClose={handleClose}>
+        <Box gap={2} sx={dataUploadModalStyle}>
+          <Stack direction={"column"} spacing={2}>
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Typography id="modal-zs-title" variant="h6" component="h2">
+                {keyword("uploadModal_modalTitle")}
+              </Typography>
+              <IconButton
+                onClick={handleClose}
+                size="small"
+                sx={{ padding: 1.5 }}
+              >
+                <CloseIcon />
+              </IconButton>
+            </Box>
+
+            <Stack direction={"row"} spacing={2} alignItems="center">
+              {Object.values(zeeschuimerUploadTemplates).map((template) =>
+                socialMediaIconBox(
+                  template.id,
+                  template.icon,
+                  socialMediaSelected,
+                  setSocialMediaSelected,
+                ),
+              )}
+            </Stack>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setZeeschuimerUploadModalError(false);
+                try {
+                  addUploadToDataSources(
+                    dataSources,
+                    socialMediaSelected,
+                    uploadedData,
+                    uploadedFileName,
+                  );
+                } catch {
+                  setZeeschuimerUploadModalError(true);
+                }
+              }}
+            >
+              {keyword("uploadModal_ConfirmButton")}
+            </Button>
+            {zeeschuimerUploadModalError ? (
+              <Typography align="left" color="error">
+                {keyword("dataupload_error")}
+              </Typography>
+            ) : (
+              <></>
             )}
           </Stack>
-          <Button
-            variant="outlined"
-            onClick={() => {
-              setZeeschuimerUploadModalError(false);
-              try {
-                addUploadToDataSources(
-                  dataSources,
-                  socialMediaSelected,
-                  uploadedData,
-                  uploadedFileName,
-                );
-              } catch {
-                setZeeschuimerUploadModalError(true);
-              }
-            }}
-          >
-            {keyword("uploadModal_ConfirmButton")}
-          </Button>
-          {zeeschuimerUploadModalError ? (
-            <Typography align="left" color="error">
-              {keyword("dataupload_error")}
-            </Typography>
-          ) : (
-            <></>
-          )}
         </Box>
       </Modal>
     </>
