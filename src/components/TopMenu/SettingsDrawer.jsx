@@ -25,8 +25,12 @@ import {
   getRecordingInfo,
 } from "components/NavItems/tools/SNA/components/Recording";
 
+import manifest from "../../../public/manifest.json";
 import Languages from "../NavItems/languages/languages";
 import ColorModeSelect from "./ColorModeSelect";
+
+const environment = process.env.REACT_APP_ENVIRONMENT;
+const isStaging = environment !== "production";
 
 const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
   const keyword = i18nLoadNamespace("components/NavBar");
@@ -52,6 +56,8 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
     getRecordingInfo(setCollections, setRecording, setSelectedCollection);
   }, []);
 
+  const version = manifest.version;
+
   return (
     <Drawer
       anchor="right"
@@ -67,15 +73,15 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
           boxSizing: "border-box",
           marginTop: "86px", // Add padding to the top to avoid overlap with the AppBar
           height: "-webkit-fill-available",
+          display: "flex",
+          flexDirection: "column",
         },
       }}
     >
       <Box
-        sx={{
-          p: 2,
-        }}
+        sx={{ p: 2, display: "flex", flexDirection: "column", height: "100%" }}
       >
-        <Stack direction="column" spacing={4}>
+        <Stack direction="column" spacing={4} sx={{ flexGrow: 1 }}>
           <Stack
             direction="row"
             sx={{
@@ -224,6 +230,16 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
               setSelectedSocialMedia,
             })}
           </Stack>
+        </Stack>
+        <Stack spacing={1} sx={{ alignItems: "center", mt: 2 }}>
+          {isStaging && (
+            <Typography variant="caption" color="warning.main" align="center">
+              STAGING
+            </Typography>
+          )}
+          <Typography variant="caption" color="textSecondary" align="center">
+            v{version}
+          </Typography>
         </Stack>
       </Box>
     </Drawer>
