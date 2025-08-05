@@ -222,13 +222,12 @@ const PopUp = () => {
           }}
         />
         <Grid size={{ xs: 12 }}>
-          {RecordingWindow(
+          {RecordingWindow({
             recording,
             setRecording,
             expanded,
             setExpanded,
             selectedCollection,
-            keyword,
             setSelectedCollection,
             collections,
             setCollections,
@@ -236,7 +235,7 @@ const PopUp = () => {
             setNewCollectionName,
             selectedSocialMedia,
             setSelectedSocialMedia,
-          )}
+          })}
         </Grid>
         <Box
           sx={{

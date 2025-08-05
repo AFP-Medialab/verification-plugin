@@ -1,11 +1,10 @@
 import React from "react";
 
+import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import Papa from "papaparse";
-
-import { SNAButton } from "../../utils/SNAButton";
 
 const DataUpload = ({
   keyword,
@@ -60,6 +59,7 @@ const DataUpload = ({
         <input
           type="file"
           hidden
+          accept=".csv,.ndjson"
           ref={dataUploadInputRef}
           onChange={(event) => {
             let filename = event.target.files[0].name;
@@ -72,7 +72,9 @@ const DataUpload = ({
         <Typography variant="h6" align="left">
           {keyword("dataupload_title")}
         </Typography>
-        {SNAButton(openUploadPrompt, keyword("uploadButton_text"))}
+        <Button variant="outlined" onClick={openUploadPrompt}>
+          {keyword("uploadButton_text")}
+        </Button>
       </Stack>
     </>
   );

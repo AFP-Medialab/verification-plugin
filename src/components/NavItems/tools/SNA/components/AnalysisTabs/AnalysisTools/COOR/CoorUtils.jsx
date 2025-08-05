@@ -4,9 +4,9 @@ import { TableVirtuoso } from "react-virtuoso";
 
 import { useColorScheme } from "@mui/material";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
 import IconButton from "@mui/material/IconButton";
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Paper from "@mui/material/Paper";
 import Select from "@mui/material/Select";
@@ -24,7 +24,6 @@ import Typography from "@mui/material/Typography";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
-import { SNAButton } from "components/NavItems/tools/SNA/utils/SNAButton";
 import {
   getSelectedSourceSharedHeaders,
   getSelectedSourcesNameMaps,
@@ -74,16 +73,18 @@ const coorFieldSelect = (
   setSelectedValue,
   selectOptions,
 ) => {
+  if (!selectOptions.map((x) => x.value).includes(selectedValue)) {
+    setSelectedValue(selectOptions[0].value);
+  }
   return (
     <Box key={"coorSelect"}>
-      <Typography sx={{ padding: 0.5 }}>{fieldDescription}</Typography>
+      <Typography sx={{ padding: 0.5 }}>{keyword(fieldDescription)}</Typography>
       <Tooltip title={keyword(fieldHelpText)}>
         <IconButton>
           <HelpOutlineIcon fontSize="inherit" />
         </IconButton>
       </Tooltip>
       <FormControl>
-        <InputLabel>{keyword(fieldDescription)}</InputLabel>
         <Select
           value={selectedValue}
           onChange={(e) => {
@@ -632,9 +633,9 @@ const coorExportButton = (keyword, coorResult) => {
     <>
       <Stack direction={"row"} spacing={1}>
         <Typography>{keyword("snaTools_coorExportDescription")}</Typography>
-        {SNAButton(() => {
-          exportCoorResult(coorResult);
-        }, keyword("snaTools_coorExportButton"))}
+        <Button variant="outlined" onClick={() => exportCoorResult(coorResult)}>
+          {keyword("snaTools_coorExportButton")}
+        </Button>
       </Stack>
     </>
   );

@@ -173,13 +173,12 @@ const TwitterAdvancedSearch = () => {
         />
 
         <div className={classes.root2}>
-          {RecordingWindow(
+          {RecordingWindow({
             recording,
             setRecording,
             expanded,
             setExpanded,
             selectedCollection,
-            keyword,
             setSelectedCollection,
             collections,
             setCollections,
@@ -187,7 +186,7 @@ const TwitterAdvancedSearch = () => {
             setNewCollectionName,
             selectedSocialMedia,
             setSelectedSocialMedia,
-          )}
+          })}
           {largeInputList.map((value, key) => {
             return (
               <TextField

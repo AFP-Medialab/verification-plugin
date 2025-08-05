@@ -15,6 +15,8 @@ import TextField from "@mui/material/TextField";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowRight";
 
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const SocialMediaSelectMenuProps = {
@@ -225,13 +227,12 @@ const CollectionSelector = (
   );
 };
 
-export const RecordingWindow = (
+export const RecordingWindow = ({
   recording,
   setRecording,
   expanded,
   setExpanded,
   selectedCollection,
-  keyword,
   setSelectedCollection,
   collections,
   setCollections,
@@ -239,7 +240,9 @@ export const RecordingWindow = (
   setNewCollectionName,
   selectedSocialMedia,
   setSelectedSocialMedia,
-) => {
+}) => {
+  const keyword = i18nLoadNamespace("components/NavItems/tools/NewSNA");
+
   return (
     <>
       <Grid size={{ xs: 12 }}>

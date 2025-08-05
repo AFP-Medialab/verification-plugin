@@ -1,6 +1,7 @@
 import React from "react";
 
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
@@ -8,8 +9,6 @@ import Typography from "@mui/material/Typography";
 
 import { DataGrid } from "@mui/x-data-grid";
 import dayjs from "dayjs";
-
-import { SNAButton } from "../utils/SNAButton";
 
 const style = {
   position: "relative",
@@ -45,15 +44,14 @@ const DetailModal = ({
               width: 90,
               sortComparator: (a, b) => dayjs(a).unix() - dayjs(b).unix(),
             };
-          }
-          return {
-            field: x,
-            headerName: x,
-            width: 90,
-          };
+          } else
+            return {
+              field: x,
+              headerName: x,
+              width: 90,
+            };
         })
       : [];
-  detailContent.forEach((x, idx) => (x.id = idx));
   const rows =
     detailSearchFilter.length > 0
       ? detailContent.filter((x) =>
@@ -100,7 +98,9 @@ const DetailModal = ({
               alignItems="center"
               justifyContent={"flex-end"}
             >
-              {SNAButton(handleClose, keyword("closeDetailModal_button_text"))}
+              <Button variant={"outlined"} onClick={handleClose}>
+                {keyword("closeDetailModal_button_text")}
+              </Button>
             </Stack>
           </Stack>
         </Box>

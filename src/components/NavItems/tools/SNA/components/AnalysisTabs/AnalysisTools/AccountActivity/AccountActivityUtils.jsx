@@ -1,12 +1,13 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { SNAButton } from "components/NavItems/tools/SNA/utils/SNAButton";
 import { getSelectedSourcesNameMaps } from "components/NavItems/tools/SNA/utils/accessSavedCollections";
 import {
   Bar,
@@ -95,6 +96,8 @@ export const generateAccountActivityChart = (
     ? activityChartData.slice(0, TOP_USER_COUNT)
     : activityChartData;
 
+  const currentLang = useSelector((state) => state.language);
+
   if (onlyShowTop && activityChartData.length > TOP_USER_COUNT)
     chartData.push({
       username: keyword("snaTools_barChartOtherLabel"),
@@ -126,6 +129,8 @@ export const generateAccountActivityChart = (
         ? tickLabel.slice(0, MAX_TICK_LABEL_LENGTH) + "..."
         : tickLabel;
 
+    const angle = currentLang !== "ar" ? "-35" : "20";
+
     return (
       <g transform={`translate(${x},${y})`}>
         <text
@@ -134,7 +139,7 @@ export const generateAccountActivityChart = (
           dy={16}
           textAnchor="end"
           fill="#666"
-          transform="rotate(-35)"
+          transform={`rotate(${angle})`}
         >
           {slicedLabel}
         </text>
@@ -171,10 +176,9 @@ export const generateAccountActivityChart = (
       {onlyShowTop ? (
         <></>
       ) : (
-        SNAButton(
-          () => setOnlyShowTop(true),
-          keyword("snaTools_showLessBarChartButton"),
-        )
+        <Button variant="outlined" onClick={() => setOnlyShowTop(true)}>
+          {keyword("snaTools_showLessBarChartButton")}
+        </Button>
       )}
       <BarChart
         sx={{ paddingLeft: "20px" }}
@@ -205,6 +209,7 @@ export const generateAccountActivityChart = (
           tickFormatter={(value) =>
             Intl.NumberFormat("en-US", { notation: "compact" }).format(value)
           }
+          tick={{ dx: currentLang !== "ar" ? 0 : -20 }}
         />
         <Tooltip
           content={CustomizedToolTip(nameMaps)}

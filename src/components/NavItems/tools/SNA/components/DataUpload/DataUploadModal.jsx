@@ -1,6 +1,7 @@
 import React from "react";
 
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Collapse from "@mui/material/Collapse";
 import FormControl from "@mui/material/FormControl";
 import IconButton from "@mui/material/IconButton";
@@ -18,7 +19,6 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { v4 as uuidv4 } from "uuid";
 
-import { SNAButton } from "../../utils/SNAButton";
 import {
   dataUploadModalStyle,
   required_fields,
@@ -57,7 +57,7 @@ export const socialMediaIconBox = (
   };
 
   return (
-    <Tooltip title={tooltipText}>
+    <Tooltip key={socialMediaId + "_toolTip"} title={tooltipText}>
       <Box
         key={socialMediaId + "_ModalIconBox"}
         onClick={toggleSocialMediaSelection}
@@ -85,6 +85,7 @@ export const socialMediaIconBox = (
 };
 
 const customUploadField = (k, uploadedData) => {
+  const keys = Object.keys(uploadedData[0]);
   return (
     <FormControl key={k + "uploadField"} fullWidth>
       <InputLabel>{k}</InputLabel>
@@ -92,6 +93,7 @@ const customUploadField = (k, uploadedData) => {
         onChange={(e) => {
           requiredFieldsLabels.set(k, e.target.value);
         }}
+        value={keys[0]}
       >
         {Object.keys(uploadedData[0]).map((x) => (
           <MenuItem key={x} value={x}>
@@ -267,19 +269,25 @@ const DataUploadModal = ({
               )}
             </Stack>
             {customUploadSection(customUploadSectionProps)}
-            {SNAButton(() => {
-              setUploadModalError(false);
-              try {
-                addUploadToDataSources(
-                  dataSources,
-                  socialMediaSelected,
-                  uploadedData,
-                  uploadedFileName,
-                );
-              } catch {
-                setUploadModalError(true);
-              }
-            }, keyword("uploadModal_ConfirmButton"))}
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setUploadModalError(false);
+                try {
+                  addUploadToDataSources(
+                    dataSources,
+                    socialMediaSelected,
+                    uploadedData,
+                    uploadedFileName,
+                  );
+                } catch {
+                  setUploadModalError(true);
+                }
+              }}
+            >
+              {keyword("uploadModal_ConfirmButton")}
+            </Button>
+
             {uploadModalError ? (
               <Typography align="left" color="error">
                 {keyword("dataupload_error")}

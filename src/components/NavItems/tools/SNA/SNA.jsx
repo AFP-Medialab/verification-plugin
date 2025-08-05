@@ -99,7 +99,8 @@ const SNA = () => {
   //Zeeschuimer data upload modal props
   const [showZeeschuimerUploadModal, setShowZeeschuimerUploadModal] =
     useState(false);
-
+  const [zeeschuimerUploadModalError, setZeeschuimerUploadModalError] =
+    useState(false);
   //SNA Panel props
   const [snaTab, setSnaTab] = useState(0);
 
@@ -113,17 +114,18 @@ const SNA = () => {
     setTimelineDistributionErrorMessage,
   ] = useState("");
 
-  const timelineViz = useMemo(() => {
-    if (!timelineDistributionResult) return;
+  // eslint-disable-next-line react/display-name
+  const timelineViz = ({ result }) => {
+    if (!result) return;
     return TimelineChart(
       {
         keyword,
         setDetailContent,
         setOpenDetailModal,
       },
-      timelineDistributionResult,
+      result,
     );
-  }, [timelineDistributionResult]);
+  };
 
   //Account activity props
   const [accountActivityResult, setAccountActivityResult] = useState(null);
@@ -134,8 +136,8 @@ const SNA = () => {
   const [accountActivityErrorMessage, setAccountActivityErrorMessage] =
     useState("");
 
-  const accountActivityViz = useMemo(() => {
-    if (!accountActivityResult) return;
+  const accountActivityViz = ({ result }) => {
+    if (!result) return;
     return generateAccountActivityChart(
       {
         groupingFactor: "username",
@@ -149,13 +151,11 @@ const SNA = () => {
         keyword,
         detailDisplayFilter: accountActivityDetailDisplayHandler,
       },
-      accountActivityResult,
+      result,
     );
-  }, [accountActivityResult]);
+  };
 
   const selectedSources = useMemo(() => {
-    console.log(selected);
-    console.log(dataSources);
     if (!selected || !dataSources) return [];
     let selectedSources = dataSources.filter((source) =>
       selected.includes(source.id),
@@ -188,13 +188,13 @@ const SNA = () => {
   const [coorResult, setCoorResult] = useState(false);
   const [coorErrorMessage, setCoorErrorMessage] = useState("");
 
-  const coorResultViz = useMemo(() => {
-    if (!coorResult) return;
+  const coorResultViz = ({ result }) => {
+    if (!result) return;
     return generateCoorViz(
       { keyword, setDetailContent, setOpenDetailModal, dataSources, selected },
-      coorResult,
+      result,
     );
-  }, [coorResult]);
+  };
 
   //Most mentioned props
   const [mostMentionedLoading, setMostMentionedLoading] = useState(false);
@@ -204,8 +204,8 @@ const SNA = () => {
   const [mostMentionedErrorMessage, setMostMentionedErrorMessage] =
     useState("");
 
-  const mostMentionedViz = useMemo(() => {
-    if (!mostMentionedResult) return;
+  const mostMentionedViz = ({ result }) => {
+    if (!result) return;
     return generateAccountActivityChart(
       {
         groupingFactor: "username",
@@ -219,9 +219,9 @@ const SNA = () => {
         keyword,
         detailDisplayFilter: mostMentionedDetailDisplayHandler,
       },
-      mostMentionedResult,
+      result,
     );
-  }, [mostMentionedResult]);
+  };
 
   //Hashtag analysis props
   const [hashtagAnalysisResult, setHashtagAnalysisResult] = useState(null);
@@ -231,8 +231,8 @@ const SNA = () => {
   const [hashtagAnalysisErrorMessage, setHashtagAnalysisErrorMessage] =
     useState("");
 
-  const hashtagAnalysisViz = useMemo(() => {
-    if (!hashtagAnalysisResult) return;
+  const hashtagAnalysisViz = ({ result }) => {
+    if (!result) return;
     return generateHashtagAnalysisViz(
       {
         barChart: {
@@ -252,31 +252,42 @@ const SNA = () => {
           setOpenDetailModal,
         },
       },
-      hashtagAnalysisResult,
+      result,
     );
-  }, [hashtagAnalysisResult]);
+  };
 
   //Word cloud props
   const [wordCloudLoading, setWordCloudLoading] = useState(false);
   const [wordCloudResult, setWordCloudResult] = useState(null);
   const [wordCloudErrorMessage, setWordCloudErrorMessage] = useState("");
 
+  const wordCloudViz = ({ result }) => {
+    if (!result) return;
+    return generateWordCloud(
+      {
+        setDetailContent,
+        setOpenDetailModal,
+      },
+      result,
+    );
+  };
+
   //Text clusters props
   const [textClustersLoading, setTextClustersLoading] = useState(false);
   const [textClustersResult, setTextClustersResult] = useState(null);
   const [textClustersErrorMessage, setTextClustersErrorMessage] = useState("");
 
-  const textClustersViz = useMemo(() => {
-    if (!textClustersResult) return;
+  const textClustersViz = ({ result }) => {
+    if (!result) return;
     return textClustersTable(
       {
         keyword,
         setDetailContent,
         setOpenDetailModal,
       },
-      textClustersResult,
+      result,
     );
-  }, [textClustersResult]);
+  };
 
   const authenticatedRequest = useAuthenticatedRequest();
 
@@ -339,12 +350,14 @@ const SNA = () => {
     uploadedData,
     uploadedFileName,
     setUploadedFileName,
+    zeeschuimerUploadModalError,
+    setZeeschuimerUploadModalError,
   };
 
   const timelineDistributionProps = {
     toolDisplayProps: {
       toolDescription: "snaTools_timelineDistributionDescription",
-      toolButtonText: "snaTools_timelineDistributionButtonText",
+      toolButtonText: "snaTools_timelineButton",
       toolLoading: timelineDistributionLoading,
       setToolLoading: setTimelineDistributionLoading,
       errorMessage: timelineDistributionErrorMessage,
@@ -482,6 +495,7 @@ const SNA = () => {
       },
       toolResult: wordCloudResult,
       setToolResult: setWordCloudResult,
+      toolVizResult: wordCloudViz,
     },
   };
 

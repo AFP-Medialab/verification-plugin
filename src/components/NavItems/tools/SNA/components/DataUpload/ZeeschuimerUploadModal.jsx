@@ -1,13 +1,13 @@
 import React from "react";
 
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import { v4 as uuidv4 } from "uuid";
 
-import { SNAButton } from "../../utils/SNAButton";
 import {
   dataUploadModalStyle,
   zeeschuimerUploadTemplates,
@@ -26,6 +26,8 @@ const ZeeschuimerUploadModal = ({
   dataSources,
   uploadedData,
   uploadedFileName,
+  setZeeschuimerUploadModalError,
+  zeeschuimerUploadModalError,
 }) => {
   const addUploadToDataSources = (
     dataSources,
@@ -81,15 +83,30 @@ const ZeeschuimerUploadModal = ({
               ),
             )}
           </Stack>
-          {SNAButton(
-            () =>
-              addUploadToDataSources(
-                dataSources,
-                socialMediaSelected,
-                uploadedData,
-                uploadedFileName,
-              ),
-            keyword("uploadModal_ConfirmButton"),
+          <Button
+            variant="outlined"
+            onClick={() => {
+              setZeeschuimerUploadModalError(false);
+              try {
+                addUploadToDataSources(
+                  dataSources,
+                  socialMediaSelected,
+                  uploadedData,
+                  uploadedFileName,
+                );
+              } catch {
+                setZeeschuimerUploadModalError(true);
+              }
+            }}
+          >
+            {keyword("uploadModal_ConfirmButton")}
+          </Button>
+          {zeeschuimerUploadModalError ? (
+            <Typography align="left" color="error">
+              {keyword("dataupload_error")}
+            </Typography>
+          ) : (
+            <></>
           )}
         </Box>
       </Modal>

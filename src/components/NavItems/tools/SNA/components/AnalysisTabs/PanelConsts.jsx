@@ -1,11 +1,11 @@
 import React from "react";
 
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { SNAButton } from "../../utils/SNAButton";
 import { getSelectedSourcesContent } from "../../utils/accessSavedCollections";
 
 export const SNAPanelTab = (props) => {
@@ -125,15 +125,7 @@ export const analysisDisplayTemplate = (
     errorMessage,
     setErrorMessage,
   },
-  {
-    analysisFunction,
-    analysisArgs,
-    vizFunction,
-    vizArgs,
-    toolResult,
-    setToolResult,
-    toolVizResult,
-  },
+  { analysisFunction, analysisArgs, toolResult, setToolResult, toolVizResult },
 ) => {
   const generateResult = async () => {
     setErrorMessage("");
@@ -153,14 +145,20 @@ export const analysisDisplayTemplate = (
     }
   };
 
+  const ToolVizResult = React.memo(function ToolVizResult({ result }) {
+    return toolVizResult({ result });
+  });
+
   return (
     <>
-      <Stack direction="column" spacing={2}>
+      <Stack direction="column" spacing={2} key={"toolTab_" + toolDescription}>
         <Stack direction="row" spacing={2} alignItems="center">
           <Typography sx={{ padding: 2 }}>
             {keyword(toolDescription)}
           </Typography>
-          {SNAButton(() => generateResult(), keyword(toolButtonText))}
+          <Button variant="outlined" onClick={() => generateResult()}>
+            {keyword(toolButtonText)}
+          </Button>
         </Stack>
         {toolSettings ? toolSettings.display(toolSettings.args) : <></>}
         {toolLoading ? (
@@ -173,11 +171,7 @@ export const analysisDisplayTemplate = (
             <CircularProgress />
           </Box>
         ) : toolResult && errorMessage.length == 0 ? (
-          toolVizResult ? (
-            toolVizResult
-          ) : (
-            vizFunction(vizArgs, toolResult)
-          )
+          <ToolVizResult result={toolResult} />
         ) : (
           <Typography>{keyword(errorMessage)}</Typography>
         )}

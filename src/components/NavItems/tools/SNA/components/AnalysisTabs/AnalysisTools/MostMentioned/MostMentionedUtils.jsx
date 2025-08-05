@@ -1,3 +1,5 @@
+import { onlyUnique } from "components/NavItems/tools/SNA/utils/accessSavedCollections";
+
 export const entryAggregatorByListValue = (
   selectedContent,
   listField,
@@ -7,19 +9,21 @@ export const entryAggregatorByListValue = (
   selectedContent.forEach((entry) => {
     if (!entry[listField]) return;
     if (!entry[listField]?.length > 0) return;
-    entry[listField].forEach((listItemInitial) => {
-      let listItem = listItemInitial.toLowerCase();
-      if (aggregator[listItem]) {
-        aggregator[listItem].count++;
-        aggregator[listItem].entries.push(entry);
-      } else {
-        aggregator[listItem] = {
-          count: 1,
-          entries: [entry],
-        };
-        aggregator[listItem][label] = listItem;
-      }
-    });
+    entry[listField]
+      .map((x) => x.toLowerCase())
+      .filter(onlyUnique)
+      .forEach((listItem) => {
+        if (aggregator[listItem]) {
+          aggregator[listItem].count++;
+          aggregator[listItem].entries.push(entry);
+        } else {
+          aggregator[listItem] = {
+            count: 1,
+            entries: [entry],
+          };
+          aggregator[listItem][label] = listItem;
+        }
+      });
   });
 
   let aggregatorSorted = Object.values(aggregator).sort(

@@ -96,9 +96,11 @@ const handleClick = (
   timelineChartData,
 ) => {
   const clickedDate = dayjs(params.value[0]);
-  setDetailContent(
-    timelineChartData.filter((x) => dayjs(x[0]).isSame(clickedDate))[0][2],
-  );
+  let entriesAtClickedDate = timelineChartData.filter((x) =>
+    dayjs(x[0]).isSame(clickedDate),
+  )[0][2];
+
+  setDetailContent(entriesAtClickedDate);
   setOpenDetailModal(true);
 };
 
@@ -110,11 +112,11 @@ export const generateTimelineData = (selectedData) => {
     const dateKey = dayjs(item.date).format(DATE_FORMAT);
 
     if (!countsByDate[dateKey]) {
-      countsByDate[dateKey] = { count: 0, entries: [item] };
+      countsByDate[dateKey] = { count: 1, entries: [item] };
+    } else {
+      countsByDate[dateKey].count += 1;
+      countsByDate[dateKey].entries.push(item);
     }
-
-    countsByDate[dateKey].count += 1;
-    countsByDate[dateKey].entries.push(item);
   });
 
   const chartData = Object.entries(countsByDate)

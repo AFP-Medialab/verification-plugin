@@ -203,11 +203,15 @@ const CollectionActionsCell = (
 
     return (
       <>
-        <Tooltip title={keyword("downloadIcon_hover_label")}>
+        <Tooltip
+          key={"downloadIcon_hover_label_" + row.id}
+          title={keyword("downloadIcon_hover_label")}
+        >
           <IconButton
             onClick={() => {
               handleDownload(row.id);
             }}
+            key={"downloadIconButton_hover_label_" + row.id}
             aria-label="download"
             id={"dl_button" + row.id}
             aria-controls={open ? "basic-menu" + row.id : undefined}
@@ -358,15 +362,11 @@ const CollectionsTableBody = (
     <TableBody>
       {dataSources?.length > 0
         ? dataSources.map((row) => {
-            return (
-              <>
-                {CollectionsTableRow(
-                  row,
-                  collectionRowProps,
-                  collectionActionsCellProps,
-                  keyword,
-                )}
-              </>
+            return CollectionsTableRow(
+              row,
+              collectionRowProps,
+              collectionActionsCellProps,
+              keyword,
             );
           })
         : EmptyTablePlaceholder(keyword)}
