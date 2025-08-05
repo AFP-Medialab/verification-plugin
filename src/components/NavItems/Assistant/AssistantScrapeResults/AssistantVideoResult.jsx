@@ -125,7 +125,7 @@ const AssistantVideoResult = () => {
             height="400"
             width="100%"
             data-testid="assistant-media-video-tag"
-          />
+          ></video>
         )}
         {!preprocessLinkForEmbed(processUrl) && (
           <div

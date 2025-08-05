@@ -266,6 +266,8 @@ const AssistantMediaResult = () => {
                 <AccordionDetails style={{ paddingTop: 0 }}>
                   <VideoGridList
                     list={videoList}
+                    height={60}
+                    cols={5}
                     handleClick={(vidLink) => {
                       submitMediaToProcess(vidLink);
                     }}
