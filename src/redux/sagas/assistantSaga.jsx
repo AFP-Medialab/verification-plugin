@@ -413,14 +413,21 @@ function* handleDbkfTextCall(action) {
     if (text) {
       let textToUse = text.length > 500 ? text.substring(0, 500) : text;
       /*
-                                                            let textRegex = /[\W]$/
-                                                            //Infinite loop for some url exemple: https://twitter.com/TheArchitect009/status/1427280578496303107
-                                                            while(textToUse.match(textRegex)){
-                                                                if(textToUse.length === 1) break
-                                                                textToUse = text.slice(0, -1)
-                                                            }*/
+        let textRegex = /[\W]$/
+        //Infinite loop for some url exemple: https://twitter.com/TheArchitect009/status/1427280578496303107
+        while(textToUse.match(textRegex)){
+          if(textToUse.length === 1) break
+          textToUse = text.slice(0, -1)
+        }
+      */
       let result = yield call(dbkfAPI.callTextSimilarityEndpoint, textToUse);
+
+      console.log("result=", result);
+
       let filteredResult = result.length ? result : null;
+      //let filteredResult = result.length ? filterDbkfTextResult(result) : null;
+
+      console.log("filteredResult=", filteredResult);
 
       yield put(setDbkfTextMatchDetails(filteredResult, false, true, false));
     }
@@ -1249,6 +1256,41 @@ const addToRelevantSourceCred = (sourceCredList, result) => {
     credibilityEvidence: resultEvidence,
     credibilityScope: result["credibility-scope"],
   });
+};
+
+const filterDbkfTextResult = (result) => {
+  let resultList = [];
+  let scores = [];
+
+  result.forEach((res) => {
+    scores.push(res.score);
+  });
+
+  let scaled = scaleNumbers(scores, 0, 100);
+
+  // to be reviewed. only really fixes some minor cases.
+  result.forEach((value, index) => {
+    if (value.score > 1000 && scaled[index] > 70) {
+      resultList.push({
+        text: value.text,
+        claimUrl: value.externalLink,
+        score: value.score,
+      });
+    }
+  });
+  return resultList.length ? resultList : null;
+};
+
+const scaleNumbers = (unscaledNums) => {
+  let scaled = [];
+  let maxRange = Math.max.apply(Math, unscaledNums);
+  let minRange = Math.min.apply(Math, unscaledNums);
+  for (let i = 0; i < unscaledNums.length; i++) {
+    let unscaled = unscaledNums[i];
+    let scaledNum = (100 * (unscaled - minRange)) / (maxRange - minRange);
+    scaled.push(scaledNum);
+  }
+  return scaled;
 };
 
 /**
