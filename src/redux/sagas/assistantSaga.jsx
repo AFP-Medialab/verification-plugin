@@ -425,9 +425,9 @@ function* handleDbkfTextCall(action) {
       console.log("result=", result);
 
       let filteredResult = result.length ? result : null;
-      //let filteredResult = result.length ? filterDbkfTextResult(result) : null;
+      //let filteredResult = filterDbkfTextResult(result);
 
-      console.log("filteredResult=", filteredResult);
+      console.log("filteredResult=", filterDbkfTextResult(result));
 
       yield put(setDbkfTextMatchDetails(filteredResult, false, true, false));
     }
@@ -1270,6 +1270,7 @@ const filterDbkfTextResult = (result) => {
 
   // to be reviewed. only really fixes some minor cases.
   result.forEach((value, index) => {
+    console.log(value.score, scaled[index]);
     if (value.score > 1000 && scaled[index] > 70) {
       resultList.push({
         text: value.text,
