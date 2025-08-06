@@ -160,8 +160,7 @@ const CollectionActionsCell = (
 
       const blob = new Blob([csvFile], { type: "text/csv;charset=utf-8;" });
       const a = document.createElement("a");
-      const blobUrl = URL.createObjectURL(blob);
-      a.href = blobUrl;
+      a.href = URL.createObjectURL(blob);
       a.download = `${selectedData.name}_export.csv`;
       a.click();
       setDlAnchorEl(null);
@@ -173,8 +172,7 @@ const CollectionActionsCell = (
       let dl = JSON.stringify(selectedData.content);
       const blob = new Blob([dl], { type: "application/json;charset=utf-8;" });
       const a = document.createElement("a");
-      const blobUrl = URL.createObjectURL(blob);
-      a.href = blobUrl;
+      a.href = URL.createObjectURL(blob);
       a.download = `${selectedData.name}_export.json`;
       a.click();
       setDlAnchorEl(null);
@@ -194,8 +192,7 @@ const CollectionActionsCell = (
       let dl = JSON.stringify(content.data);
       const blob = new Blob([dl], { type: "application/json;charset=utf-8;" });
       const a = document.createElement("a");
-      const blobUrl = URL.createObjectURL(blob);
-      a.href = blobUrl;
+      a.href = URL.createObjectURL(blob);
       a.download = `${selectedData.name}_export_raw.json`;
       a.click();
       setDlAnchorEl(null);
@@ -243,11 +240,11 @@ const CollectionActionsCell = (
   const deleteIconButton = (row, setSelected, selected, dataSources) => {
     const handleRemove = async (id) => {
       setSelected(selected.filter((item) => item !== id));
-      let dataSource = dataSources.filter((x) => x.id == id)[0];
+      let dataSource = dataSources.filter((x) => x.id === id)[0];
       let removeIndex = dataSources.indexOf(dataSource);
       dataSources.splice(removeIndex, 1);
 
-      if (dataSource.source != "fileUpload") {
+      if (dataSource.source !== "fileUpload") {
         await chrome.runtime.sendMessage({
           prompt: "deleteCollection",
           source: dataSource.source,
@@ -300,7 +297,7 @@ const CollectionsTableRow = (
 ) => {
   const handleSelectRow = (id) => {
     const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
+    let newSelected;
 
     if (selectedIndex === -1) {
       newSelected = [...selected, id];

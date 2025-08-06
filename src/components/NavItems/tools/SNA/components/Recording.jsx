@@ -92,8 +92,8 @@ export const getRecordingInfo = async (
     prompt: "getRecordingInfo",
   });
   setCollections(recInfo.collections.map((x) => x.id).flat());
-  setRecording(recInfo.recording[0].state != false);
-  recInfo.recording[0].state != false
+  setRecording(recInfo.recording[0].state !== false);
+  recInfo.recording[0].state !== false
     ? setSelectedCollection(recInfo.recording[0].state)
     : {};
 };

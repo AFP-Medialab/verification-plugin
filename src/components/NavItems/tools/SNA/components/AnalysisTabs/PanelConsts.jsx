@@ -110,7 +110,7 @@ export const analysisTools = {
  * @param {*} toolAnalysisProps includes analysisFunction, analysisFunctionArgs, vizFunction, vizFunctionArgs, toolResult, setToolResult
  * @returns jsx fragment
  *
- * Fills a template with descrpition of an SNA tool
+ * Fills a template with description of an SNA tool
  * the settings for the tool when applicable (such as which field to choose in COOR)
  * and the result display
  */
@@ -133,7 +133,7 @@ export const analysisDisplayTemplate = (
     let selectedContent = getSelectedSourcesContent(dataSources, selected);
     try {
       let result = await analysisFunction(selectedContent, analysisArgs);
-      if (Array.isArray(result) && result.length == 0) {
+      if (Array.isArray(result) && result.length === 0) {
         setErrorMessage("snaTools_noResultMessage");
       } else {
         setToolResult(result);
@@ -145,9 +145,9 @@ export const analysisDisplayTemplate = (
     }
   };
 
-  const ToolVizResult = React.memo(function ToolVizResult({ result }) {
+  const ToolVizResult = function ToolVizResult({ result }) {
     return toolVizResult({ result });
-  });
+  };
 
   return (
     <>
@@ -170,7 +170,7 @@ export const analysisDisplayTemplate = (
           >
             <CircularProgress />
           </Box>
-        ) : toolResult && errorMessage.length == 0 ? (
+        ) : toolResult && errorMessage.length === 0 ? (
           <ToolVizResult result={toolResult} />
         ) : (
           <Typography>{keyword(errorMessage)}</Typography>

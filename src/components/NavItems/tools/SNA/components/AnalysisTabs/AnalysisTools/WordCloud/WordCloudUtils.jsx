@@ -25,7 +25,5 @@ export const generateWordCloud = (
     setOpenDetailModal(true);
   };
 
-  let wordCloudGraph = getVisxWordcloud(wordCloudData, setDetailFromWord);
-
-  return wordCloudGraph;
+  return getVisxWordcloud(wordCloudData, setDetailFromWord);
 };

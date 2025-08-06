@@ -157,10 +157,7 @@ const SNA = () => {
 
   const selectedSources = useMemo(() => {
     if (!selected || !dataSources) return [];
-    let selectedSources = dataSources.filter((source) =>
-      selected.includes(source.id),
-    );
-    return selectedSources;
+    return dataSources.filter((source) => selected.includes(source.id));
   }, [selected, dataSources]);
 
   const numberFieldsinSources = useMemo(() => {
