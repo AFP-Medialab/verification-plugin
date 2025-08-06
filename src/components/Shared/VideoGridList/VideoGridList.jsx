@@ -13,6 +13,10 @@ const styles = (theme) => ({
     flexWrap: "wrap",
     overflow: "hidden",
   },
+  checkeredBG: {
+    background:
+      "repeating-conic-gradient(#eee 0% 25%, #fafafa 0% 50%) 50% / 20px 20px",
+  },
 });
 
 const VideoImageList = (props) => {
@@ -27,6 +31,7 @@ const VideoImageList = (props) => {
               key={index}
               size={{ xs: 12 / props.cols }}
               sx={{ position: "relative" }}
+              className={classes.checkeredBG}
             >
               <PlayArrowIcon
                 sx={{
@@ -44,7 +49,12 @@ const VideoImageList = (props) => {
                 }}
               />
               <video
-                style={{ width: "100%", height: "auto", cursor: "pointer" }}
+                style={{
+                  width: "auto",
+                  height: "120px",
+                  cursor: "pointer",
+                  margin: "0 auto",
+                }}
                 onClick={() => props.handleClick(props.list[index])}
                 data-testid={"assistant-media-grid-image-" + index}
                 src={tile}
