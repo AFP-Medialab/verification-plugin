@@ -584,10 +584,10 @@ const SNA = () => {
           <>
             {DataUpload(dataUploadProps)}
             <Card variant="outlined" className={cardClasses.root}>
-              {CollectionsTable(collectionsTableProps)}
+              <CollectionsTable {...collectionsTableProps} />
             </Card>
             <Card variant="outlined" className={cardClasses.root}>
-              {SNAPanel(snaPanelProps)}
+              <SNAPanel {...snaPanelProps} />
             </Card>
           </>
         )}
