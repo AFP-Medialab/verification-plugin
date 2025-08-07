@@ -84,9 +84,10 @@ const CollectionActionsCell = ({
   selected,
   setDataSources,
   keyword,
+  activeDownloadRow,
+  setActiveDownloadRow,
 }) => {
   const rowFileInputRef = useRef(null);
-  const [activeDownloadRow, setActiveDownloadRow] = useState(null);
 
   const rawUploadIconButton = (row) => {
     const handleRawFileChange = (event, rowID) => {
@@ -105,17 +106,22 @@ const CollectionActionsCell = ({
         };
         reader.readAsText(file);
       } else {
-        alert("Please upload a valid JSON file.");
+        console.error("Please upload a valid JSON file.");
+        // TODO: Replace with snackbar notification in the future
       }
     };
 
     const handleRawUpload = async (parsed, rowName) => {
-      await chrome.runtime.sendMessage({
-        prompt: "addToCollection",
-        data: parsed,
-        platform: row.source,
-        collectionId: rowName.split("~")[0],
-      });
+      try {
+        await chrome.runtime.sendMessage({
+          prompt: "addToCollection",
+          data: parsed,
+          platform: row.source,
+          collectionId: rowName.split("~")[0],
+        });
+      } catch (error) {
+        console.error("Error uploading raw collection:", error);
+      }
     };
 
     return (
@@ -187,22 +193,29 @@ const CollectionActionsCell = ({
       setActiveDownloadRow(null);
     };
 
-    const donwloadTweetsRaw = async () => {
+    const downloadTweetsRaw = async () => {
       const selectedData = activeDownloadRow;
       if (!selectedData) return;
 
-      let content = await chrome.runtime.sendMessage({
-        prompt: "getRawCollection",
-        platform: selectedData.source,
-        collectionId: selectedData.name.split("~")[0],
-      });
+      try {
+        let content = await chrome.runtime.sendMessage({
+          prompt: "getRawCollection",
+          platform: selectedData.source,
+          collectionId: selectedData.name.split("~")[0],
+        });
 
-      let dl = JSON.stringify(content.data);
-      const blob = new Blob([dl], { type: "application/json;charset=utf-8;" });
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = `${selectedData.name}_export_raw.json`;
-      a.click();
+        let dl = JSON.stringify(content.data);
+        const blob = new Blob([dl], {
+          type: "application/json;charset=utf-8;",
+        });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `${selectedData.name}_export_raw.json`;
+        a.click();
+      } catch (error) {
+        console.error("Error downloading raw collection:", error);
+      }
+
       setDlAnchorEl(null);
       setActiveDownloadRow(null);
     };
@@ -243,7 +256,7 @@ const CollectionActionsCell = ({
         >
           <MenuItem onClick={() => downloadTweetCSV()}>CSV</MenuItem>
           <MenuItem onClick={() => downloadTweetsJson()}>JSON</MenuItem>
-          <MenuItem onClick={() => donwloadTweetsRaw()}>Raw JSON</MenuItem>
+          <MenuItem onClick={() => downloadTweetsRaw()}>Raw JSON</MenuItem>
         </Menu>
       </>
     );
@@ -260,11 +273,15 @@ const CollectionActionsCell = ({
       }
 
       if (dataSource.source !== "fileUpload") {
-        await chrome.runtime.sendMessage({
-          prompt: "deleteCollection",
-          source: dataSource.source,
-          collectionId: dataSource.name.split("~")[0],
-        });
+        try {
+          await chrome.runtime.sendMessage({
+            prompt: "deleteCollection",
+            source: dataSource.source,
+            collectionId: dataSource.name.split("~")[0],
+          });
+        } catch (error) {
+          console.error("Error deleting collection:", error);
+        }
       }
     };
 
@@ -316,6 +333,8 @@ const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
     selected: selectedActions,
     setDataSources,
     keyword: keywordActions,
+    activeDownloadRow,
+    setActiveDownloadRow,
   } = actionsProps;
 
   const handleSelectRow = (id) => {
@@ -357,15 +376,23 @@ const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
       </TableCell>
       <TableCell>{row.name}</TableCell>
       <TableCell>
-        {row.metrics
-          ? row.metrics.map((metric) => (
-              <p key={"collectionstable-" + row.name + " " + metric.label}>
-                {keyword(metric.label) +
-                  ": " +
-                  Intl.NumberFormat().format(metric.value)}
-              </p>
-            ))
-          : keyword("collection_nbOfPosts") + ": " + row.content.length}
+        {row.metrics ? (
+          row.metrics.map((metric) => (
+            <Typography
+              variant="body2"
+              component="p"
+              key={"collectionstable-" + row.name + " " + metric.label}
+            >
+              {keyword(metric.label) +
+                ": " +
+                Intl.NumberFormat().format(metric.value)}
+            </Typography>
+          ))
+        ) : (
+          <Typography variant="body2" component="p">
+            {keyword("collection_nbOfPosts") + ": " + row.content.length}
+          </Typography>
+        )}
       </TableCell>
       <CollectionActionsCell
         row={row}
@@ -377,6 +404,8 @@ const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
         selected={selectedActions}
         setDataSources={setDataSources}
         keyword={keywordActions}
+        activeDownloadRow={activeDownloadRow}
+        setActiveDownloadRow={setActiveDownloadRow}
       />
     </TableRow>
   );
@@ -419,6 +448,8 @@ const CollectionsTable = ({
   setDlAnchorEl,
   setDataSources,
 }) => {
+  const [activeDownloadRow, setActiveDownloadRow] = useState(null);
+
   let collectionTableHeaderProps = {
     selected,
     setSelected,
@@ -442,6 +473,8 @@ const CollectionsTable = ({
     selected,
     setDataSources,
     keyword,
+    activeDownloadRow,
+    setActiveDownloadRow,
   };
 
   return (
