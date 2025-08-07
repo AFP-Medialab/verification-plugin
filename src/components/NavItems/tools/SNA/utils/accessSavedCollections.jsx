@@ -87,12 +87,10 @@ export const getSavedCollections = async (collectionSource) => {
   return collectionsAsDataSources;
 };
 
-export const initializePage = async (setLoading, dataSources) => {
+export const initializePage = async () => {
   let savedTweets = await getSavedCollections("twitter");
   let savedTiktoks = await getSavedCollections("tiktok");
-  savedTweets.forEach((collection) => dataSources.push(collection));
-  savedTiktoks.forEach((collection) => dataSources.push(collection));
-  setLoading(false);
+  return [...savedTweets, ...savedTiktoks];
 };
 
 export const refreshPage = async (setLoading, dataSources) => {
