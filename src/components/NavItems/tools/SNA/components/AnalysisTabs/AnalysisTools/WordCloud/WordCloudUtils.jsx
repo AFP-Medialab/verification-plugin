@@ -6,16 +6,19 @@ import { VisxWordcloud } from "./VisxWordcloud";
 const MAX_WORDS = 100;
 
 export const generateWordCloudGraphData = (selectedContent) => {
-  selectedContent.forEach(
-    (entry) => (entry.splitText = entry.text.toLowerCase().split(" ")),
-  );
-  let ret = entryAggregatorByListValue(selectedContent, "splitText", "text");
+  const normalizedContent = selectedContent.map((entry) => ({
+    ...entry,
+    splitText: entry.text.toLowerCase().split(" "),
+  }));
 
-  let wordCloudDataCleaned = ret.slice(0, MAX_WORDS);
+  let ret = entryAggregatorByListValue(normalizedContent, "splitText", "text");
+  ret.sort((a, b) => b.count - a.count);
 
-  wordCloudDataCleaned.forEach((w) => (w.value = w.count));
-
-  return wordCloudDataCleaned;
+  return ret.slice(0, MAX_WORDS).map((w) => ({
+    text: w.text,
+    value: w.count,
+    entries: w.entries,
+  }));
 };
 
 export const WordCloud = ({

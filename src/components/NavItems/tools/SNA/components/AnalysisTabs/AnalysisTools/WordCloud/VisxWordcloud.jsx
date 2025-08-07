@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import Box from "@mui/material/Box";
 
@@ -25,13 +25,15 @@ export const VisxWordcloud = ({ words, wordClickFunction }) => {
   const spiralType = "archimedean";
   const withRotation = true;
 
-  const fontScale = scaleLog({
-    domain: [
-      Math.min(...words.map((w) => w.value)),
-      Math.max(...words.map((w) => w.value)),
-    ],
-    range: [10, 100],
-  });
+  if (!words?.length) return null;
+
+  const fontScale = useMemo(() => {
+    const values = words.map((w) => w.value);
+    return scaleLog({
+      domain: [Math.min(...values), Math.max(...values)],
+      range: [10, 100],
+    });
+  }, [words]);
 
   const fontSizeSetter = (datum) => fontScale(datum.value);
 
