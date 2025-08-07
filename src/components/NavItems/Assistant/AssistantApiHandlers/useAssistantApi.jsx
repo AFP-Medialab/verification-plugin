@@ -94,8 +94,9 @@ export default function assistantApiCalls() {
             ?iri rdf:type ?type .
             FILTER (lang(?abstract) = "${lang}")
           }`;
+        const dbpediaEndpoint = process.env.REACT_APP_DBPEDIA_SPARQL_URL;
         const dbpediaResult = await axios.get(
-          `https://dbpedia.org/sparql?query=${encodeURIComponent(dbQuery)}&format=application%2Fsparql-results%2Bjson&timeout=30000&signal_void=on&signal_unconnected=on`,
+          `${dbpediaEndpoint}&query=${encodeURIComponent(dbQuery)}`,
         );
         dbpediaResultBindings = dbpediaResultBindings.concat(
           dbpediaResult.data.results.bindings,
