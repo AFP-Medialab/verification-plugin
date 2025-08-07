@@ -255,7 +255,7 @@ const CollectionActionsCell = (
     };
 
     return (
-      <Tooltip title={keyword("deleteIcon_hover_label")}>
+      <Tooltip title={keyword("deletedIcon_hover_label")}>
         <IconButton
           onClick={async () => await handleRemove(row.id)}
           aria-label="delete"
