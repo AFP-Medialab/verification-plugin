@@ -26,11 +26,7 @@ export const entryAggregatorByListValue = (
       });
   });
 
-  let aggregatorSorted = Object.values(aggregator).sort(
-    (a, b) => b.count - a.count,
-  );
-
-  return aggregatorSorted;
+  return Object.values(aggregator).sort((a, b) => b.count - a.count);
 };
 
 export const generateMostMentionedData = (selectedContent) => {

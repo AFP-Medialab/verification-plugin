@@ -340,11 +340,9 @@ const detectCoor = (timeWindow, edgeThresh, minParticipation, content) => {
   });
 
   if (edgeThresh > 0) {
-    let ret = Object.values(cosharingPairs)
+    return Object.values(cosharingPairs)
       .sort((a, b) => a.count - b.count)
       .slice(Math.floor(edgeThresh * Object.values(cosharingPairs).length));
-
-    return ret;
   } else {
     return Object.values(cosharingPairs);
   }

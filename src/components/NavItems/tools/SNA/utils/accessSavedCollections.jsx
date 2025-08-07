@@ -45,7 +45,7 @@ export const getCollectionMetrics = (collectionEntries) => {
 /**
  * Sends message to background to retrieve all collections
  * and return their entries formatted as dataSources object
- * @param collectionSource: string for saved collection type
+ * @param collectionSource {string} The saved collection type
  * @returns Object[] formatted as dataSource (cf. SNA.jsx)
  */
 export const getSavedCollections = async (collectionSource) => {
