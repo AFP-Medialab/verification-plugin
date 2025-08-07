@@ -35,88 +35,55 @@ export const analysisTools = {
   timelineDistribution: {
     keywordLabel: "snaTools_timelineDistribution",
     propKey: "timelineDistribution",
-    component: (essentialProps, toolDisplayProps, toolAnalysisProps) =>
-      analysisDisplayTemplate(
-        essentialProps,
-        toolDisplayProps,
-        toolAnalysisProps,
-      ),
+    component: (props) => <AnalysisDisplayTemplate {...props} />,
   },
   accountActivity: {
     keywordLabel: "snaTools_accountActivity",
     propKey: "accountActivity",
-    component: (essentialProps, toolDisplayProps, toolAnalysisProps) =>
-      analysisDisplayTemplate(
-        essentialProps,
-        toolDisplayProps,
-        toolAnalysisProps,
-      ),
+    component: (props) => <AnalysisDisplayTemplate {...props} />,
   },
   coorDetection: {
     keywordLabel: "snaTools_coorDetection",
     propKey: "coor",
-    component: (essentialProps, toolDisplayProps, toolAnalysisProps) =>
-      analysisDisplayTemplate(
-        essentialProps,
-        toolDisplayProps,
-        toolAnalysisProps,
-      ),
+    component: (props) => <AnalysisDisplayTemplate {...props} />,
   },
   mostMentioned: {
     keywordLabel: "snaTools_mostMentioned",
     propKey: "mostMentioned",
-    component: (essentialProps, toolDisplayProps, toolAnalysisProps) =>
-      analysisDisplayTemplate(
-        essentialProps,
-        toolDisplayProps,
-        toolAnalysisProps,
-      ),
+    component: (props) => <AnalysisDisplayTemplate {...props} />,
   },
   hashtagAnalysis: {
     keywordLabel: "snaTools_hashtagAnalysis",
     propKey: "hashtagAnalysis",
-    component: (essentialProps, toolDisplayProps, toolAnalysisProps) =>
-      analysisDisplayTemplate(
-        essentialProps,
-        toolDisplayProps,
-        toolAnalysisProps,
-      ),
+    component: (props) => <AnalysisDisplayTemplate {...props} />,
   },
   wordCloud: {
     keywordLabel: "snaTools_wordCloud",
     propKey: "wordCloud",
-    component: (essentialProps, toolDisplayProps, toolAnalysisProps) =>
-      analysisDisplayTemplate(
-        essentialProps,
-        toolDisplayProps,
-        toolAnalysisProps,
-      ),
+    component: (props) => <AnalysisDisplayTemplate {...props} />,
   },
   textClusters: {
     keywordLabel: "snaTools_textClusters",
     propKey: "textClusters",
-    component: (essentialProps, toolDisplayProps, toolAnalysisProps) =>
-      analysisDisplayTemplate(
-        essentialProps,
-        toolDisplayProps,
-        toolAnalysisProps,
-      ),
+    component: (props) => <AnalysisDisplayTemplate {...props} />,
   },
 };
 /**
  *
- * @param {*} essentialProps includes keyword, dataSources, selected
- * @param {*} toolDisplayProps includes toolDescription, toolButtonText, toolSettings, toolLoading
- * @param {*} toolAnalysisProps includes analysisFunction, analysisFunctionArgs, vizFunction, vizFunctionArgs, toolResult, setToolResult
+ * @param {*} props includes essentialProps, toolDisplayProps, toolAnalysisProps
  * @returns jsx fragment
  *
  * Fills a template with description of an SNA tool
  * the settings for the tool when applicable (such as which field to choose in COOR)
  * and the result display
  */
-export const analysisDisplayTemplate = (
-  { keyword, dataSources, selected },
-  {
+export const AnalysisDisplayTemplate = ({
+  essentialProps,
+  toolDisplayProps,
+  toolAnalysisProps,
+}) => {
+  const { keyword, dataSources, selected } = essentialProps;
+  const {
     toolSettings,
     toolDescription,
     toolButtonText,
@@ -124,9 +91,15 @@ export const analysisDisplayTemplate = (
     setToolLoading,
     errorMessage,
     setErrorMessage,
-  },
-  { analysisFunction, analysisArgs, toolResult, setToolResult, toolVizResult },
-) => {
+  } = toolDisplayProps;
+  const {
+    analysisFunction,
+    analysisArgs,
+    toolResult,
+    setToolResult,
+    toolVizResult,
+  } = toolAnalysisProps;
+
   const generateResult = async () => {
     setErrorMessage("");
     setToolLoading(true);
