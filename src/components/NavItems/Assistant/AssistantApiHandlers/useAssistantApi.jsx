@@ -96,7 +96,7 @@ export default function assistantApiCalls() {
           }`;
         const dbpediaEndpoint = process.env.REACT_APP_DBPEDIA_SPARQL_URL;
         const dbpediaResult = await axios.get(
-          `${dbpediaEndpoint}&query=${encodeURIComponent(dbQuery)}`,
+          `${dbpediaEndpoint}?query=${encodeURIComponent(dbQuery)}&format=application%2Fsparql-results%2Bjson&timeout=30000&signal_void=on&signal_unconnected=on`,
         );
         dbpediaResultBindings = dbpediaResultBindings.concat(
           dbpediaResult.data.results.bindings,
