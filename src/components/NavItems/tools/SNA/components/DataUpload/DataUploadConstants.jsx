@@ -29,14 +29,6 @@ const metaLogoUrl =
 const tiktokLogoUrl =
   "https://www.citypng.com/public/uploads/preview/round-tiktok-icon-logo-transparent-background-701751695033010oraha4pc0r.png";
 
-const makeIcon = (imageUrl, altText) => {
-  return <img src={imageUrl} alt={altText} style={{ width: 38, height: 34 }} />;
-};
-
-const MetaIcon = makeIcon(metaLogoUrl, "meta");
-
-const tiktokIcon = makeIcon(tiktokLogoUrl, "tiktok");
-
 const metaDefaultFields = new Map([
   ["Object", "Link"],
   ["User ID", "Facebook Id"],
@@ -71,7 +63,13 @@ const snaTiktokDefaultFields = new Map([
 
 export const uploadTemplates = {
   crowdTangleFb: {
-    icon: MetaIcon,
+    icon: (
+      <img
+        src={metaLogoUrl}
+        alt={"crowdtangleFB"}
+        style={{ width: 38, height: 34 }}
+      />
+    ),
     defaultFieldsMap: metaDefaultFields,
     id: "crowdTangleFb",
     tooltipText: "uploadModal_crowdtangleFB_tooltip",
@@ -83,7 +81,13 @@ export const uploadTemplates = {
     tooltipText: "uploadModal_snaTwitter_tooltip",
   },
   snaTikTok: {
-    icon: tiktokIcon,
+    icon: (
+      <img
+        src={tiktokLogoUrl}
+        alt={"tiktok"}
+        style={{ width: 38, height: 34 }}
+      />
+    ),
     defaultFieldsMap: snaTiktokDefaultFields,
     id: "snaTiktok",
     tooltipText: "uploadModal_snaTiktok_tooltip",
@@ -98,7 +102,13 @@ export const zeeschuimerUploadTemplates = {
     tooltipText: "uploadModalZS_twitter_tooltip",
   },
   tiktok: {
-    icon: tiktokIcon,
+    icon: (
+      <img
+        src={tiktokLogoUrl}
+        alt={"tiktok"}
+        style={{ width: 38, height: 34 }}
+      />
+    ),
     objectMappings: "",
     id: "zeeschuimerTiktok",
     tooltipText: "uploadModalZS_tiktok_tooltip",

@@ -12,19 +12,19 @@ import HeaderTool from "components/Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import {
+  AccountActivityChart,
   accountActivityDetailDisplayHandler,
   accountActivitySettings,
-  generateAccountActivityChart,
   generateAccountActivityData,
 } from "./components/AnalysisTabs/AnalysisTools/AccountActivity/AccountActivityUtils";
 import {
+  CoorViz,
   coorSettingsDisplay,
-  generateCoorViz,
   runCoorAnalysis,
 } from "./components/AnalysisTabs/AnalysisTools/COOR/CoorUtils";
 import {
+  HashtagAnalysisViz,
   generateHashtagAnalysisData,
-  generateHashtagAnalysisViz,
   hashtagAnalysisDetailModalContent,
 } from "./components/AnalysisTabs/AnalysisTools/HashtagAnalysis/HashtagAnalysisUtils";
 import {
@@ -32,15 +32,15 @@ import {
   mostMentionedDetailDisplayHandler,
 } from "./components/AnalysisTabs/AnalysisTools/MostMentioned/MostMentionedUtils";
 import {
+  TextClustersTable,
   generateTextClusterData,
-  textClustersTable,
 } from "./components/AnalysisTabs/AnalysisTools/TextClusters/TextClustersUtils";
 import {
   TimelineChart,
   generateTimelineData,
 } from "./components/AnalysisTabs/AnalysisTools/Timeline/TimelineUtils";
 import {
-  generateWordCloud,
+  WordCloud,
   generateWordCloudGraphData,
 } from "./components/AnalysisTabs/AnalysisTools/WordCloud/WordCloudUtils";
 import SNAPanel from "./components/AnalysisTabs/SNAPanel";
@@ -116,13 +116,13 @@ const SNA = () => {
 
   const timelineViz = ({ result }) => {
     if (!result) return;
-    return TimelineChart(
-      {
-        keyword,
-        setDetailContent,
-        setOpenDetailModal,
-      },
-      result,
+    return (
+      <TimelineChart
+        keyword={keyword}
+        setDetailContent={setDetailContent}
+        setOpenDetailModal={setOpenDetailModal}
+        timelineChartData={result}
+      />
     );
   };
 
@@ -137,20 +137,20 @@ const SNA = () => {
 
   const accountActivityViz = ({ result }) => {
     if (!result) return;
-    return generateAccountActivityChart(
-      {
-        groupingFactor: "username",
-        onlyShowTop: accountActivityOnlyShowTop,
-        setOnlyShowTop: setAccountActivityOnlyShowTop,
-        activitySelect,
-        setDetailContent,
-        setOpenDetailModal,
-        selected,
-        dataSources,
-        keyword,
-        detailDisplayFilter: accountActivityDetailDisplayHandler,
-      },
-      result,
+    return (
+      <AccountActivityChart
+        groupingFactor="username"
+        onlyShowTop={accountActivityOnlyShowTop}
+        setOnlyShowTop={setAccountActivityOnlyShowTop}
+        activitySelect={activitySelect}
+        setDetailContent={setDetailContent}
+        setOpenDetailModal={setOpenDetailModal}
+        selected={selected}
+        dataSources={dataSources}
+        keyword={keyword}
+        detailDisplayFilter={accountActivityDetailDisplayHandler}
+        activityChartData={result}
+      />
     );
   };
 
@@ -186,9 +186,16 @@ const SNA = () => {
 
   const coorResultViz = ({ result }) => {
     if (!result) return;
-    return generateCoorViz(
-      { keyword, setDetailContent, setOpenDetailModal, dataSources, selected },
-      result,
+    return (
+      <CoorViz
+        keyword={keyword}
+        setDetailContent={setDetailContent}
+        setOpenDetailModal={setOpenDetailModal}
+        dataSources={dataSources}
+        selected={selected}
+        coorResult={result.coorResult}
+        coorGraphData={result.coorGraphData}
+      />
     );
   };
 
@@ -202,20 +209,20 @@ const SNA = () => {
 
   const mostMentionedViz = ({ result }) => {
     if (!result) return;
-    return generateAccountActivityChart(
-      {
-        groupingFactor: "username",
-        onlyShowTop: mostMentionedOnlyShowTop,
-        setOnlyShowTop: setMostMentionedOnlyShowTop,
-        activitySelect: "Mentions",
-        setDetailContent,
-        setOpenDetailModal,
-        selected,
-        dataSources,
-        keyword,
-        detailDisplayFilter: mostMentionedDetailDisplayHandler,
-      },
-      result,
+    return (
+      <AccountActivityChart
+        groupingFactor={"username"}
+        onlyShowTop={mostMentionedOnlyShowTop}
+        setOnlyShowTop={setMostMentionedOnlyShowTop}
+        activitySelect={"Mentions"}
+        setDetailContent={setDetailContent}
+        setOpenDetailModal={setOpenDetailModal}
+        selected={selected}
+        dataSources={dataSources}
+        keyword={keyword}
+        detailDisplayFilter={mostMentionedDetailDisplayHandler}
+        activityChartData={result}
+      />
     );
   };
 
@@ -229,26 +236,20 @@ const SNA = () => {
 
   const hashtagAnalysisViz = ({ result }) => {
     if (!result) return;
-    return generateHashtagAnalysisViz(
-      {
-        barChart: {
-          groupingFactor: "hashtag",
-          onlyShowTop: hashtagAnalysisOnlyShowTop,
-          setOnlyShowTop: setHashtagAnalysisOnlyShowTop,
-          activitySelect: "Hashtags",
-          setDetailContent,
-          setOpenDetailModal,
-          selected,
-          dataSources,
-          keyword,
-          detailDisplayFilter: hashtagAnalysisDetailModalContent,
-        },
-        networkGraph: {
-          setDetailContent,
-          setOpenDetailModal,
-        },
-      },
-      result,
+    return (
+      <HashtagAnalysisViz
+        groupingFactor="hashtag"
+        onlyShowTop={hashtagAnalysisOnlyShowTop}
+        setOnlyShowTop={setHashtagAnalysisOnlyShowTop}
+        activitySelect="Hashtags"
+        setDetailContent={setDetailContent}
+        setOpenDetailModal={setOpenDetailModal}
+        selected={selected}
+        dataSources={dataSources}
+        keyword={keyword}
+        detailDisplayFilter={hashtagAnalysisDetailModalContent}
+        toolResult={result}
+      />
     );
   };
 
@@ -259,12 +260,12 @@ const SNA = () => {
 
   const wordCloudViz = ({ result }) => {
     if (!result) return;
-    return generateWordCloud(
-      {
-        setDetailContent,
-        setOpenDetailModal,
-      },
-      result,
+    return (
+      <WordCloud
+        setDetailContent={setDetailContent}
+        setOpenDetailModal={setOpenDetailModal}
+        wordCloudData={result}
+      />
     );
   };
 
@@ -275,13 +276,13 @@ const SNA = () => {
 
   const textClustersViz = ({ result }) => {
     if (!result) return;
-    return textClustersTable(
-      {
-        keyword,
-        setDetailContent,
-        setOpenDetailModal,
-      },
-      result,
+    return (
+      <TextClustersTable
+        keyword={keyword}
+        setDetailContent={setDetailContent}
+        setOpenDetailModal={setOpenDetailModal}
+        textClusterData={result}
+      />
     );
   };
 
@@ -363,7 +364,7 @@ const SNA = () => {
       analysisFunction: generateTimelineData,
       toolResult: timelineDistributionResult,
       setToolResult: setTimelineDistributionResult,
-      toolVizResult: timelineViz,
+      ToolVizResult: timelineViz,
     },
   };
 
@@ -380,7 +381,7 @@ const SNA = () => {
       analysisFunction: generateMostMentionedData,
       toolResult: mostMentionedResult,
       setToolResult: setMostMentionedResult,
-      toolVizResult: mostMentionedViz,
+      ToolVizResult: mostMentionedViz,
     },
   };
 
@@ -410,7 +411,7 @@ const SNA = () => {
       analysisArgs: { activitySelect },
       toolResult: accountActivityResult,
       setToolResult: setAccountActivityResult,
-      toolVizResult: accountActivityViz,
+      ToolVizResult: accountActivityViz,
     },
   };
 
@@ -427,7 +428,7 @@ const SNA = () => {
       analysisFunction: generateHashtagAnalysisData,
       toolResult: hashtagAnalysisResult,
       setToolResult: setHashtagAnalysisResult,
-      toolVizResult: hashtagAnalysisViz,
+      ToolVizResult: hashtagAnalysisViz,
     },
   };
 
@@ -469,7 +470,7 @@ const SNA = () => {
       },
       toolResult: coorResult,
       setToolResult: setCoorResult,
-      toolVizResult: coorResultViz,
+      ToolVizResult: coorResultViz,
     },
   };
 
@@ -484,14 +485,9 @@ const SNA = () => {
     },
     toolAnalysisProps: {
       analysisFunction: generateWordCloudGraphData,
-      vizFunction: generateWordCloud,
-      vizArgs: {
-        setDetailContent,
-        setOpenDetailModal,
-      },
       toolResult: wordCloudResult,
       setToolResult: setWordCloudResult,
-      toolVizResult: wordCloudViz,
+      ToolVizResult: wordCloudViz,
     },
   };
 
@@ -511,7 +507,7 @@ const SNA = () => {
       },
       toolResult: textClustersResult,
       setToolResult: setTextClustersResult,
-      toolVizResult: textClustersViz,
+      ToolVizResult: textClustersViz,
     },
   };
 
@@ -565,9 +561,9 @@ const SNA = () => {
 
   return (
     <>
-      {DetailModal(detailModalProps)}
-      {DataUploadModal(dataUploadModalProps)}
-      {ZeeschuimerUploadModal(zeeschuimerDataUploadModalProps)}
+      <DetailModal {...detailModalProps} />
+      <DataUploadModal {...dataUploadModalProps} />
+      <ZeeschuimerUploadModal {...zeeschuimerDataUploadModalProps} />
       <HeaderTool
         name={keyword("SNA_header_title")}
         description={keyword("SNA_header_description")}
@@ -582,7 +578,7 @@ const SNA = () => {
           </Box>
         ) : (
           <>
-            {DataUpload(dataUploadProps)}
+            <DataUpload {...dataUploadProps} />
             <Card variant="outlined" className={cardClasses.root}>
               <CollectionsTable {...collectionsTableProps} />
             </Card>

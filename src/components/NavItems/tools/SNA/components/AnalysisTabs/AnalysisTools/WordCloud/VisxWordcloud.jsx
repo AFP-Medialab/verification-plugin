@@ -21,7 +21,7 @@ const fixedValueGenerator = () => 0.5;
  * @param {function} wordClickFunction function on word click, retrieves entry field from word to show in detail modal
  * @returns
  */
-export function getVisxWordcloud(words, wordClickFunction) {
+export const VisxWordcloud = ({ words, wordClickFunction }) => {
   const spiralType = "archimedean";
   const withRotation = true;
 
@@ -66,4 +66,4 @@ export function getVisxWordcloud(words, wordClickFunction) {
       </Wordcloud>
     </Box>
   );
-}
+};

@@ -12,7 +12,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import { getTextClusters } from "components/NavItems/tools/SNA/utils/accessSavedCollections";
 
-const textClustersTableHeader = (keyword) => {
+const TextClustersTableHeader = ({ keyword }) => {
   return (
     <TableHead>
       <TableRow>
@@ -24,41 +24,39 @@ const textClustersTableHeader = (keyword) => {
   );
 };
 
-const textClustersTableBody = (
+const TextClustersTableBody = ({
   textClusterData,
   setDetailContent,
   setOpenDetailModal,
-) => {
+}) => {
   return (
     <>
-      {Object.keys(textClusterData)
-        .sort((a, b) => {
-          textClusterData[b].length - textClusterData[a].length;
-        })
-        .map((cluster) => (
-          <TableRow key={"textClusterRow" + cluster}>
-            <TableCell>
-              <IconButton
-                onClick={() => {
-                  setDetailContent(textClusterData[cluster]);
-                  setOpenDetailModal(true);
-                }}
-              >
-                <VisibilityIcon />
-              </IconButton>
-            </TableCell>
-            <TableCell>{"Cluster #" + cluster}</TableCell>
-            <TableCell>{textClusterData[cluster].length}</TableCell>
-          </TableRow>
-        ))}
+      {Object.keys(textClusterData).map((cluster) => (
+        <TableRow key={"textClusterRow" + cluster}>
+          <TableCell>
+            <IconButton
+              onClick={() => {
+                setDetailContent(textClusterData[cluster]);
+                setOpenDetailModal(true);
+              }}
+            >
+              <VisibilityIcon />
+            </IconButton>
+          </TableCell>
+          <TableCell>{"Cluster #" + cluster}</TableCell>
+          <TableCell>{textClusterData[cluster].length}</TableCell>
+        </TableRow>
+      ))}
     </>
   );
 };
 
-export const textClustersTable = (
-  { keyword, setDetailContent, setOpenDetailModal },
+export const TextClustersTable = ({
+  keyword,
+  setDetailContent,
+  setOpenDetailModal,
   textClusterData,
-) => {
+}) => {
   return (
     <TableContainer
       component={Paper}
@@ -68,12 +66,12 @@ export const textClustersTable = (
       }}
     >
       <Table>
-        {textClustersTableHeader(keyword)}
-        {textClustersTableBody(
-          textClusterData,
-          setDetailContent,
-          setOpenDetailModal,
-        )}
+        <TextClustersTableHeader keyword={keyword} />
+        <TextClustersTableBody
+          textClusterData={textClusterData}
+          setDetailContent={setDetailContent}
+          setOpenDetailModal={setOpenDetailModal}
+        />
       </Table>
     </TableContainer>
   );

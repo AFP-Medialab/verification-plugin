@@ -76,22 +76,20 @@ const genericDetailDisplayHandler = (
   setOpenDetailModal(true);
 };
 
-export const generateAccountActivityChart = (
-  {
-    onlyShowTop,
-    keyword,
-    setOnlyShowTop,
-    setDetailContent,
-    setOpenDetailModal,
-    selectedContent,
-    detailDisplayFilter,
-    dataSources,
-    selected,
-    groupingFactor,
-    activitySelect,
-  },
+export const AccountActivityChart = ({
+  onlyShowTop,
+  keyword,
+  setOnlyShowTop,
+  setDetailContent,
+  setOpenDetailModal,
+  selectedContent,
+  detailDisplayFilter,
+  dataSources,
+  selected,
+  groupingFactor,
+  activitySelect,
   activityChartData,
-) => {
+}) => {
   let chartData = onlyShowTop
     ? activityChartData.slice(0, TOP_USER_COUNT)
     : activityChartData;

@@ -434,10 +434,11 @@ export const generateCoorGraphData = (coorResult, dataSources, selected) => {
   return graphData;
 };
 
-export const generateCoorNetworkGraph = (
+export const CoorNetworkGraph = ({
   graphData,
-  { setDetailContent, setOpenDetailModal },
-) => {
+  setDetailContent,
+  setOpenDetailModal,
+}) => {
   const handleNodeClick = (node) => {
     let detailModalContent = graphData.graph.getNodeAttribute(
       node.id,
@@ -538,12 +539,12 @@ const VirtuosoTableComponents = {
   )),
 };
 
-const generateCoorTable = (
+const CoorTable = ({
   coorResult,
   keyword,
   setDetailContent,
   setOpenDetailModal,
-) => {
+}) => {
   if (coorResult.length === 0) return <></>;
 
   let coorByObject = getCosharersByObject(coorResult);
@@ -620,7 +621,7 @@ const exportCoorResult = (coorResult) => {
   a.click();
 };
 
-const coorExportButton = (keyword, coorResult) => {
+const CoorExportButton = ({ keyword, coorResult }) => {
   return (
     <>
       <Stack direction={"row"} spacing={1}>
@@ -633,33 +634,27 @@ const coorExportButton = (keyword, coorResult) => {
   );
 };
 
-export const generateCoorViz = (
-  { keyword, setDetailContent, setOpenDetailModal },
-  { coorResult, coorGraphData },
+export const CoorViz = (
+  keyword,
+  setDetailContent,
+  setOpenDetailModal,
+  coorResult,
+  coorGraphData,
 ) => {
   if (coorResult.length === 0)
     return (
       <Typography> {keyword("snaTools_noCoorDetectedMessage")} </Typography>
     );
 
-  const coorNetworkGraph = generateCoorNetworkGraph(coorGraphData, {
-    setDetailContent,
-    setOpenDetailModal,
-  });
-  const coorTable = generateCoorTable(
-    coorResult,
-    keyword,
-    setDetailContent,
-    setOpenDetailModal,
-  );
   return (
-    <>
-      <Box p={2} />
-      {coorExportButton(keyword, coorResult)}
-      <Box p={2} />
-      {coorNetworkGraph}
-      <Box p={2} />
-      {coorTable}
-    </>
+    <Stack direction="row" spacing={2}>
+      <CoorExportButton keyword coorResult />
+      <CoorNetworkGraph
+        graphData={coorGraphData}
+        setDetailContent
+        setOpenDetailModal
+      />
+      <CoorTable coorResult keyword setDetailContent setOpenDetailModal />
+    </Stack>
   );
 };

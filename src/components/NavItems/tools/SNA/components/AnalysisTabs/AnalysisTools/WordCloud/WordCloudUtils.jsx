@@ -1,5 +1,7 @@
+import React from "react";
+
 import { entryAggregatorByListValue } from "../MostMentioned/MostMentionedUtils";
-import { getVisxWordcloud } from "./VisxWordcloud";
+import { VisxWordcloud } from "./VisxWordcloud";
 
 const MAX_WORDS = 100;
 
@@ -16,14 +18,20 @@ export const generateWordCloudGraphData = (selectedContent) => {
   return wordCloudDataCleaned;
 };
 
-export const generateWordCloud = (
-  { setDetailContent, setOpenDetailModal },
+export const WordCloud = ({
+  setDetailContent,
+  setOpenDetailModal,
   wordCloudData,
-) => {
+}) => {
   const setDetailFromWord = (word) => {
     setDetailContent(word.entries);
     setOpenDetailModal(true);
   };
 
-  return getVisxWordcloud(wordCloudData, setDetailFromWord);
+  return (
+    <VisxWordcloud
+      words={wordCloudData}
+      wordClickFunction={setDetailFromWord}
+    />
+  );
 };

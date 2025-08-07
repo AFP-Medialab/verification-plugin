@@ -97,7 +97,7 @@ export const AnalysisDisplayTemplate = ({
     analysisArgs,
     toolResult,
     setToolResult,
-    toolVizResult,
+    ToolVizResult,
   } = toolAnalysisProps;
 
   const generateResult = async () => {
@@ -116,10 +116,6 @@ export const AnalysisDisplayTemplate = ({
     } finally {
       setToolLoading(false);
     }
-  };
-
-  const ToolVizResult = function ToolVizResult({ result }) {
-    return toolVizResult({ result });
   };
 
   return (

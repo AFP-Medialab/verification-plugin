@@ -16,7 +16,7 @@ import {
   zeeschuimerUploadTemplates,
 } from "./DataUploadConstants";
 import { handleZeeschuimerUpload } from "./DataUploadFunctions";
-import { socialMediaIconBox } from "./DataUploadModal";
+import { SocialMediaIconBox } from "./DataUploadModal";
 
 const ZeeschuimerUploadModal = ({
   showZeeschuimerUploadModal,
@@ -87,14 +87,15 @@ const ZeeschuimerUploadModal = ({
             </Box>
 
             <Stack direction={"row"} spacing={2} alignItems="center">
-              {Object.values(zeeschuimerUploadTemplates).map((template) =>
-                socialMediaIconBox(
-                  template.id,
-                  template.icon,
-                  socialMediaSelected,
-                  setSocialMediaSelected,
-                ),
-              )}
+              {Object.values(zeeschuimerUploadTemplates).map((template) => (
+                <SocialMediaIconBox
+                  key={template.id + "zeeSchuimerUpload"}
+                  socialMediaId={template.id}
+                  socialMediaIcon={template.icon}
+                  socialMediaSelected={socialMediaSelected}
+                  setSocialMediaSelected={setSocialMediaSelected}
+                />
+              ))}
             </Stack>
             <Button
               variant="outlined"

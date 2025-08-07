@@ -43,13 +43,13 @@ const requiredFieldsLabels = new Map();
  * @param {string useState} setSocialMediaSelected
  * @returns
  */
-export const socialMediaIconBox = (
+export const SocialMediaIconBox = ({
   socialMediaId,
   socialMediaIcon,
   socialMediaSelected,
   setSocialMediaSelected,
   tooltipText,
-) => {
+}) => {
   const toggleSocialMediaSelection = () => {
     socialMediaSelected === socialMediaId
       ? setSocialMediaSelected("")
@@ -57,7 +57,10 @@ export const socialMediaIconBox = (
   };
 
   return (
-    <Tooltip key={socialMediaId + "_toolTip"} title={tooltipText}>
+    <Tooltip
+      key={socialMediaId + "_toolTip"}
+      title={tooltipText ? tooltipText : ""}
+    >
       <Box
         key={socialMediaId + "_ModalIconBox"}
         onClick={toggleSocialMediaSelection}
@@ -84,7 +87,7 @@ export const socialMediaIconBox = (
   );
 };
 
-const customUploadField = (k, uploadedData) => {
+const CustomUploadField = ({ k, uploadedData }) => {
   const keys = Object.keys(uploadedData[0]);
   return (
     <FormControl key={k + "uploadField"} fullWidth>
@@ -105,7 +108,7 @@ const customUploadField = (k, uploadedData) => {
   );
 };
 
-const customUploadSection = ({
+const CustomUploadSection = ({
   setCustomExpanded,
   customExpanded,
   keyword,
@@ -142,7 +145,13 @@ const customUploadSection = ({
           mt={2}
         >
           {uploadedData.length > 0 ? (
-            required_fields.map((k) => customUploadField(k, uploadedData))
+            required_fields.map((k) => (
+              <CustomUploadField
+                key={"requiredField_label_uploadModal_" + k}
+                k={k}
+                uploadedData={uploadedData}
+              />
+            ))
           ) : (
             <></>
           )}
@@ -258,17 +267,20 @@ const DataUploadModal = ({
             </Box>
 
             <Stack direction={"row"} spacing={2} alignItems="center">
-              {Object.values(uploadTemplates).map((template) =>
-                socialMediaIconBox(
-                  template.id,
-                  template.icon,
-                  socialMediaSelected,
-                  setSocialMediaSelected,
-                  keyword(template.tooltipText),
-                ),
-              )}
+              {Object.values(uploadTemplates).map((template) => {
+                return (
+                  <SocialMediaIconBox
+                    key={template.id + "zeeSchuimerUpload"}
+                    socialMediaId={template.id}
+                    socialMediaIcon={template.icon}
+                    socialMediaSelected={socialMediaSelected}
+                    setSocialMediaSelected={setSocialMediaSelected}
+                    tooltipText={keyword(template.tooltipText)}
+                  />
+                );
+              })}
             </Stack>
-            {customUploadSection(customUploadSectionProps)}
+            <CustomUploadSection {...customUploadSectionProps} />
             <Button
               variant="outlined"
               onClick={() => {

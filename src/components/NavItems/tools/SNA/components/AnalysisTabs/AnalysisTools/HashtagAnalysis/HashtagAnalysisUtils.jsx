@@ -1,10 +1,10 @@
 import React from "react";
 
-import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { generateAccountActivityChart } from "../AccountActivity/AccountActivityUtils";
-import { generateCoorNetworkGraph } from "../COOR/CoorUtils";
+import { AccountActivityChart } from "../AccountActivity/AccountActivityUtils";
+import { CoorNetworkGraph } from "../COOR/CoorUtils";
 import { entryAggregatorByListValue } from "../MostMentioned/MostMentionedUtils";
 
 export const hashtagAnalysisDetailModalContent = (
@@ -84,29 +84,42 @@ export const generateHashtagAnalysisData = (selectedContent) => {
   }
 };
 
-export const generateHashtagAnalysisViz = (vizArgs, toolResult) => {
-  let keyword = vizArgs.barChart.keyword;
-
+export const HashtagAnalysisViz = ({
+  groupingFactor,
+  onlyShowTop,
+  setOnlyShowTop,
+  activitySelect,
+  setDetailContent,
+  setOpenDetailModal,
+  selected,
+  dataSources,
+  keyword,
+  detailDisplayFilter,
+  toolResult,
+}) => {
   let barChartData = toolResult.barchart;
   let cohashtagGraphData = toolResult.graph;
 
-  let hashtagAnalysisBarChart = generateAccountActivityChart(
-    vizArgs.barChart,
-    barChartData,
-  );
-
-  let cohashtagGraph = generateCoorNetworkGraph(
-    cohashtagGraphData,
-    vizArgs.networkGraph,
-  );
-
   return (
-    <>
-      {hashtagAnalysisBarChart}
-      <Box p={2} />
+    <Stack direction="row" spacing={2}>
+      <AccountActivityChart
+        groupingFactor={groupingFactor}
+        onlyShowTop={onlyShowTop}
+        setOnlyShowTop={setOnlyShowTop}
+        activitySelect={activitySelect}
+        setDetailContent={setDetailContent}
+        setOpenDetailModal={setOpenDetailModal}
+        selected={selected}
+        dataSources={dataSources}
+        detailDisplayFilter={detailDisplayFilter}
+        activityChartData={barChartData}
+      />
       <Typography>{keyword("snaTools_hashtagGraphLabel")}</Typography>
-      <Box p={2} />
-      {cohashtagGraph}
-    </>
+      <CoorNetworkGraph
+        graphData={cohashtagGraphData}
+        setDetailContent={setDetailContent}
+        setOpenDetailModal={setOpenDetailModal}
+      />
+    </Stack>
   );
 };

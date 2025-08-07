@@ -131,10 +131,12 @@ export const generateTimelineData = (selectedData) => {
   return chartData;
 };
 
-export const TimelineChart = (
-  { keyword, setDetailContent, setOpenDetailModal },
+export const TimelineChart = ({
+  keyword,
+  setDetailContent,
+  setOpenDetailModal,
   timelineChartData,
-) => {
+}) => {
   let timelineChartOptions = getTimelineChartOptions(
     keyword,
     timelineChartData,
