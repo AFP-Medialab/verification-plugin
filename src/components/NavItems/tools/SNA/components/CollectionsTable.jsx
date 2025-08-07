@@ -54,6 +54,7 @@ const CollectionTableHeader = (collectionTableHeaderProps) => {
         <TableCell />
         <TableCell padding="checkbox">
           <Checkbox
+            id="checkAll_CollectionTableCheckbox"
             indeterminate={selected.length > 0 && selected.length < rows.length}
             checked={rows.length > 0 && selected.length === rows.length}
             onChange={handleSelectAllClick}
@@ -331,6 +332,7 @@ const CollectionsTableRow = (
       </TableCell>
       <TableCell padding="checkbox">
         <Checkbox
+          key={row.id + "_collectionTableCheckbox"}
           checked={selected.indexOf(row.id) !== -1}
           onChange={() => handleSelectRow(row.id)}
         />

@@ -71,6 +71,7 @@ const DetailModal = ({
                   {keyword("detailModal_search")}
                 </Typography>
                 <TextField
+                  id="detailModalSearchField"
                   variant="outlined"
                   sx={{ width: "400px" }}
                   value={detailSearchFilter}
