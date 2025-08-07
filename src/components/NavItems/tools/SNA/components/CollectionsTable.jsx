@@ -39,12 +39,12 @@ const EmptyTablePlaceholder = ({ keyword }) => {
   );
 };
 
-const CollectionTableHeader = (collectionTableHeaderProps) => {
-  let selected = collectionTableHeaderProps.selected;
-  let setSelected = collectionTableHeaderProps.setSelected;
-  let rows = collectionTableHeaderProps.dataSources;
-  let keyword = collectionTableHeaderProps.keyword;
-
+const CollectionTableHeader = ({
+  selected,
+  setSelected,
+  dataSources: rows,
+  keyword,
+}) => {
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelected = rows.map((row) => row.id);
@@ -75,19 +75,17 @@ const CollectionTableHeader = (collectionTableHeaderProps) => {
   );
 };
 
-const CollectionActionsCell = (
+const CollectionActionsCell = ({
   row,
-  {
-    fileInputRef,
-    dataSources,
-    dlAnchorEl,
-    setDlAnchorEl,
-    setSelected,
-    selected,
-    setDataSources,
-    keyword,
-  },
-) => {
+  fileInputRef,
+  dataSources,
+  dlAnchorEl,
+  setDlAnchorEl,
+  setSelected,
+  selected,
+  setDataSources,
+  keyword,
+}) => {
   const rawUploadIconButton = (row, fileInputRef) => {
     const handleRawFileChange = (event, rowID) => {
       let dataSource = dataSources.filter((ds) => ds.id === rowID)[0];
@@ -295,12 +293,20 @@ const CollectionActionsCell = (
   );
 };
 
-const CollectionsTableRow = (
-  row,
-  { selected, setSelected, setDetailContent, setOpenDetailModal },
-  collectionActionsCellProps,
-  keyword,
-) => {
+const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
+  const { selected, setSelected, setDetailContent, setOpenDetailModal } =
+    rowProps;
+  const {
+    fileInputRef,
+    dataSources,
+    dlAnchorEl,
+    setDlAnchorEl,
+    setSelected: setSelectedActions,
+    selected: selectedActions,
+    setDataSources,
+    keyword: keywordActions,
+  } = actionsProps;
+
   const handleSelectRow = (id) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected;
@@ -350,28 +356,39 @@ const CollectionsTableRow = (
             ))
           : keyword("collection_nbOfPosts") + ": " + row.content.length}
       </TableCell>
-      {CollectionActionsCell(row, collectionActionsCellProps)}
+      <CollectionActionsCell
+        row={row}
+        fileInputRef={fileInputRef}
+        dataSources={dataSources}
+        dlAnchorEl={dlAnchorEl}
+        setDlAnchorEl={setDlAnchorEl}
+        setSelected={setSelectedActions}
+        selected={selectedActions}
+        setDataSources={setDataSources}
+        keyword={keywordActions}
+      />
     </TableRow>
   );
 };
 
-const CollectionsTableBody = (
+const CollectionsTableBody = ({
   dataSources,
-  collectionRowProps,
-  collectionActionsCellProps,
+  rowProps,
+  actionsProps,
   keyword,
-) => {
+}) => {
   return (
     <TableBody>
       {dataSources?.length > 0 ? (
-        dataSources.map((row) => {
-          return CollectionsTableRow(
-            row,
-            collectionRowProps,
-            collectionActionsCellProps,
-            keyword,
-          );
-        })
+        dataSources.map((row) => (
+          <CollectionsTableRow
+            key={"row_" + row.id}
+            row={row}
+            rowProps={rowProps}
+            actionsProps={actionsProps}
+            keyword={keyword}
+          />
+        ))
       ) : (
         <EmptyTablePlaceholder keyword={keyword} />
       )}
@@ -428,8 +445,8 @@ const CollectionsTable = ({
         <CollectionTableHeader {...collectionTableHeaderProps} />
         <CollectionsTableBody
           dataSources={dataSources}
-          collectionRowProps={collectionRowProps}
-          collectionActionsCellProps={collectionActionsCellProps}
+          rowProps={collectionRowProps}
+          actionsProps={collectionActionsCellProps}
           keyword={keyword}
         />
       </Table>
