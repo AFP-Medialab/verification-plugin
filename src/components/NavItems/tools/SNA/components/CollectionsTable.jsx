@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
@@ -77,7 +77,6 @@ const CollectionTableHeader = ({
 
 const CollectionActionsCell = ({
   row,
-  fileInputRef,
   dataSources,
   dlAnchorEl,
   setDlAnchorEl,
@@ -86,9 +85,12 @@ const CollectionActionsCell = ({
   setDataSources,
   keyword,
 }) => {
-  const rawUploadIconButton = (row, fileInputRef) => {
+  const rowFileInputRef = useRef(null);
+  const [activeDownloadRow, setActiveDownloadRow] = useState(null);
+
+  const rawUploadIconButton = (row) => {
     const handleRawFileChange = (event, rowID) => {
-      let dataSource = dataSources.filter((ds) => ds.id === rowID)[0];
+      let dataSource = dataSources.find((ds) => ds.id === rowID);
       let rowName = dataSource.name;
       const file = event.target.files[0];
       if (file && file.type === "application/json") {
@@ -120,7 +122,7 @@ const CollectionActionsCell = ({
       <Tooltip title={keyword("rawUploadIcon_hover_label")}>
         <IconButton
           onClick={() => {
-            document.getElementById("rawUpload_" + row.id).click();
+            rowFileInputRef.current?.click();
           }}
           rowkey={row.id}
           id={"uploadButton" + row.id}
@@ -130,7 +132,7 @@ const CollectionActionsCell = ({
           <input
             type="file"
             id={"rawUpload_" + row.id}
-            ref={fileInputRef}
+            ref={rowFileInputRef}
             onChange={(event) => handleRawFileChange(event, row.id)}
             style={{ display: "none" }}
           />
@@ -142,13 +144,14 @@ const CollectionActionsCell = ({
   const downloadIconButton = (row, dataSources, dlAnchorEl, setDlAnchorEl) => {
     const open = Boolean(dlAnchorEl);
 
-    const handleDownload = (rowId) => {
-      setDlAnchorEl(document.getElementById("dl_button" + rowId));
+    const handleDownload = (event, row) => {
+      setDlAnchorEl(event.currentTarget);
+      setActiveDownloadRow(row);
     };
 
     const downloadTweetCSV = () => {
-      let id = dlAnchorEl.getAttribute("rowkey");
-      let selectedData = dataSources.filter((source) => source.id === id)[0];
+      const selectedData = activeDownloadRow;
+      if (!selectedData) return;
       let headers = selectedData.headers.join(",");
       let csvData = selectedData.content
         .map((obj) =>
@@ -168,11 +171,12 @@ const CollectionActionsCell = ({
       a.download = `${selectedData.name}_export.csv`;
       a.click();
       setDlAnchorEl(null);
+      setActiveDownloadRow(null);
     };
 
     const downloadTweetsJson = () => {
-      let id = dlAnchorEl.getAttribute("rowkey");
-      let selectedData = dataSources.filter((source) => source.id === id)[0];
+      const selectedData = activeDownloadRow;
+      if (!selectedData) return;
       let dl = JSON.stringify(selectedData.content);
       const blob = new Blob([dl], { type: "application/json;charset=utf-8;" });
       const a = document.createElement("a");
@@ -180,12 +184,12 @@ const CollectionActionsCell = ({
       a.download = `${selectedData.name}_export.json`;
       a.click();
       setDlAnchorEl(null);
+      setActiveDownloadRow(null);
     };
 
     const donwloadTweetsRaw = async () => {
-      let id = dlAnchorEl.getAttribute("rowkey");
-
-      let selectedData = dataSources.filter((source) => source.id === id)[0];
+      const selectedData = activeDownloadRow;
+      if (!selectedData) return;
 
       let content = await chrome.runtime.sendMessage({
         prompt: "getRawCollection",
@@ -200,6 +204,7 @@ const CollectionActionsCell = ({
       a.download = `${selectedData.name}_export_raw.json`;
       a.click();
       setDlAnchorEl(null);
+      setActiveDownloadRow(null);
     };
 
     return (
@@ -209,8 +214,8 @@ const CollectionActionsCell = ({
           title={keyword("downloadIcon_hover_label")}
         >
           <IconButton
-            onClick={() => {
-              handleDownload(row.id);
+            onClick={(event) => {
+              handleDownload(event, row);
             }}
             key={"downloadIconButton_hover_label_" + row.id}
             aria-label="download"
@@ -228,7 +233,10 @@ const CollectionActionsCell = ({
           id={"basic-menu" + row.id}
           anchorEl={dlAnchorEl}
           open={open}
-          onClose={() => setDlAnchorEl(null)}
+          onClose={() => {
+            setDlAnchorEl(null);
+            setActiveDownloadRow(null);
+          }}
           MenuListProps={{
             "aria-labelledby": "basic-button",
           }}
@@ -244,9 +252,12 @@ const CollectionActionsCell = ({
   const deleteIconButton = (row, setSelected, selected, dataSources) => {
     const handleRemove = async (id) => {
       setSelected(selected.filter((item) => item !== id));
-      let dataSource = dataSources.filter((x) => x.id === id)[0];
+      let dataSource = dataSources.find((x) => x.id === id);
       let removeIndex = dataSources.indexOf(dataSource);
-      dataSources.splice(removeIndex, 1);
+      if (removeIndex !== -1) {
+        const newDataSources = dataSources.filter((_, i) => i !== removeIndex);
+        setDataSources(newDataSources);
+      }
 
       if (dataSource.source !== "fileUpload") {
         await chrome.runtime.sendMessage({
@@ -279,7 +290,7 @@ const CollectionActionsCell = ({
         justifyContent={"flex-end"}
         sx={{ px: 0 }}
       >
-        {rawUploadIconButton(row, fileInputRef)}
+        {rawUploadIconButton(row)}
         {downloadIconButton(row, dataSources, dlAnchorEl, setDlAnchorEl)}
         {deleteIconButton(
           row,
