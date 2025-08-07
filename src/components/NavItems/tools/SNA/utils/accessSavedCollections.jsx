@@ -95,7 +95,9 @@ export const initializePage = async () => {
 
 export const refreshPage = async (setLoading, dataSources) => {
   setLoading(true);
-  let includedCollections = dataSources.filter((x) => x.source != "fileUpload");
+  let includedCollections = dataSources.filter(
+    (x) => x.source !== "fileUpload",
+  );
   let uploadedCollections = dataSources.filter(
     (x) => x.source === "fileUpload",
   );
@@ -189,10 +191,10 @@ export const getTextClusters = async (
 
     while (true) {
       let statusResp = await authenticatedRequest(d3ltaStatusRequestConfig);
-      if (statusResp.data.status == "DONE") {
+      if (statusResp.data.status === "DONE") {
         return statusResp.data;
       }
-      if (statusResp.data.status == "FAILED") {
+      if (statusResp.data.status === "FAILED") {
         throw new Error("snaTools_d3ltaServerError");
       }
       await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -218,6 +220,6 @@ export const onlyUnique = (value, index, array) => {
 
 export const samePair = (p1, p2) => {
   return (
-    (p1[0] == p2[0] && p1[1] == p2[1]) || (p1[1] == p2[0] && p1[0] == p2[1])
+    (p1[0] === p2[0] && p1[1] === p2[1]) || (p1[1] === p2[0] && p1[0] === p2[1])
   );
 };
