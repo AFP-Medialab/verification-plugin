@@ -222,20 +222,20 @@ const PopUp = () => {
           }}
         />
         <Grid size={{ xs: 12 }}>
-          {RecordingWindow({
-            recording,
-            setRecording,
-            expanded,
-            setExpanded,
-            selectedCollection,
-            setSelectedCollection,
-            collections,
-            setCollections,
-            newCollectionName,
-            setNewCollectionName,
-            selectedSocialMedia,
-            setSelectedSocialMedia,
-          })}
+          <RecordingWindow
+            recording={recording}
+            setRecording={setRecording}
+            expanded={expanded}
+            setExpanded={setExpanded}
+            selectedCollection={selectedCollection}
+            setSelectedCollection={setSelectedCollection}
+            collections={collections}
+            setCollections={setCollections}
+            newCollectionName={newCollectionName}
+            setNewCollectionName={setNewCollectionName}
+            selectedSocialMedia={selectedSocialMedia}
+            setSelectedSocialMedia={setSelectedSocialMedia}
+          />
         </Grid>
         <Box
           sx={{

@@ -36,13 +36,13 @@ import louvain from "graphology-communities-louvain";
 
 const MAX_TABLE_TEXT_LENGTH = 45;
 
-const coorTextEntry = (
+const CoorTextEntry = ({
   keyword,
   fieldDescription,
   fieldHelpText,
   textField,
   textFieldSetter,
-) => {
+}) => {
   return (
     <Box key={"coorEntry_" + fieldDescription}>
       <Typography sx={{ padding: 0.5 }}>{keyword(fieldDescription)}</Typography>
@@ -65,17 +65,14 @@ const coorTextEntry = (
   );
 };
 
-const coorFieldSelect = (
+const CoorFieldSelect = ({
   keyword,
   fieldDescription,
   fieldHelpText,
   selectedValue,
   setSelectedValue,
   selectOptions,
-) => {
-  if (!selectOptions.map((x) => x.value).includes(selectedValue)) {
-    setSelectedValue(selectOptions[0].value);
-  }
+}) => {
   return (
     <Box key={"coorSelect"}>
       <Typography sx={{ padding: 0.5 }}>{keyword(fieldDescription)}</Typography>
@@ -125,8 +122,6 @@ export const getObjectSelectOptions = (dataSources, selected) => {
 
 export const coorSettingsDisplay = ({
   keyword,
-  dataSources,
-  selected,
   coorTimeWindow,
   setCoorTimeWindow,
   coorEdgeThresh,
@@ -135,49 +130,60 @@ export const coorSettingsDisplay = ({
   setCoorMinParticipation,
   coorObjectChoice,
   setCoorObjectChoice,
+  coorObjectSelectOptions,
 }) => {
-  let coorObjectSelectOptions = getObjectSelectOptions(dataSources, selected);
-
   const coorSettingsFields = [
     {
       id: "timeWindow",
-      component: coorTextEntry(
-        keyword,
-        "snaTools_coorTimeWindowLabel",
-        "snaTools_coorTimeWindowHelperText",
-        coorTimeWindow,
-        setCoorTimeWindow,
+      component: (
+        <CoorTextEntry
+          key="coorTimeWindowEntry"
+          keyword={keyword}
+          fieldDescription="snaTools_coorTimeWindowLabel"
+          fieldHelpText="snaTools_coorTimeWindowHelperText"
+          textField={coorTimeWindow}
+          textFieldSetter={setCoorTimeWindow}
+        />
       ),
     },
     {
       id: "edgeThresh",
-      component: coorTextEntry(
-        keyword,
-        "snaTools_coorEdgeThreshLabel",
-        "snaTools_coorEdgeThreshHelperText",
-        coorEdgeThresh,
-        setCoorEdgeThresh,
+      component: (
+        <CoorTextEntry
+          key="coorEdgeThreshEntry"
+          keyword={keyword}
+          fieldDescription="snaTools_coorEdgeThreshLabel"
+          fieldHelpText="snaTools_coorEdgeThreshHelperText"
+          textField={coorEdgeThresh}
+          textFieldSetter={setCoorEdgeThresh}
+        />
       ),
     },
     {
       id: "minParticipants",
-      component: coorTextEntry(
-        keyword,
-        "snaTools_coorMinParticipantsLabel",
-        "snaTools_coorMinParticipantsHelperText",
-        coorMinParticipation,
-        setCoorMinParticipation,
+      component: (
+        <CoorTextEntry
+          key="coorMinParticipationhEntry"
+          keyword={keyword}
+          fieldDescription="snaTools_coorMinParticipantsLabel"
+          fieldHelpText="snaTools_coorMinParticipantsHelperText"
+          textField={coorMinParticipation}
+          textFieldSetter={setCoorMinParticipation}
+        />
       ),
     },
     {
       id: "objectChoice",
-      component: coorFieldSelect(
-        keyword,
-        "snaTools_coorObjectChoiceLabel",
-        "snaTools_coorObjectChoiceHelperText",
-        coorObjectChoice,
-        setCoorObjectChoice,
-        coorObjectSelectOptions,
+      component: (
+        <CoorFieldSelect
+          key="coorObjectSelect"
+          keyword={keyword}
+          fieldDescription="snaTools_coorObjectChoiceLabel"
+          fieldHelpText="snaTools_coorObjectChoiceHelperText"
+          selectedValue={coorObjectChoice}
+          setSelectedValue={setCoorObjectChoice}
+          selectOptions={coorObjectSelectOptions}
+        />
       ),
     },
   ];
@@ -634,27 +640,32 @@ const CoorExportButton = ({ keyword, coorResult }) => {
   );
 };
 
-export const CoorViz = (
+export const CoorViz = ({
   keyword,
   setDetailContent,
   setOpenDetailModal,
   coorResult,
   coorGraphData,
-) => {
+}) => {
   if (coorResult.length === 0)
     return (
       <Typography> {keyword("snaTools_noCoorDetectedMessage")} </Typography>
     );
 
   return (
-    <Stack direction="row" spacing={2}>
-      <CoorExportButton keyword coorResult />
+    <Stack direction="column" spacing={2}>
+      <CoorExportButton keyword={keyword} coorResult={coorResult} />
       <CoorNetworkGraph
         graphData={coorGraphData}
-        setDetailContent
-        setOpenDetailModal
+        setDetailContent={setDetailContent}
+        setOpenDetailModal={setOpenDetailModal}
       />
-      <CoorTable coorResult keyword setDetailContent setOpenDetailModal />
+      <CoorTable
+        coorResult={coorResult}
+        keyword={keyword}
+        setDetailContent={setDetailContent}
+        setOpenDetailModal={setOpenDetailModal}
+      />
     </Stack>
   );
 };

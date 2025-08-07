@@ -215,20 +215,20 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
           </Stack>
           <Stack direction="column" spacing={1}>
             <Typography>{keyword("snaRecord_settingsTitle")}</Typography>
-            {RecordingWindow({
-              recording,
-              setRecording,
-              expanded,
-              setExpanded,
-              selectedCollection,
-              setSelectedCollection,
-              collections,
-              setCollections,
-              newCollectionName,
-              setNewCollectionName,
-              selectedSocialMedia,
-              setSelectedSocialMedia,
-            })}
+            <RecordingWindow
+              recording={recording}
+              setRecording={setRecording}
+              expanded={expanded}
+              setExpanded={setExpanded}
+              selectedCollection={selectedCollection}
+              setSelectedCollection={setSelectedCollection}
+              collections={collections}
+              setCollections={setCollections}
+              newCollectionName={newCollectionName}
+              setNewCollectionName={setNewCollectionName}
+              selectedSocialMedia={selectedSocialMedia}
+              setSelectedSocialMedia={setSelectedSocialMedia}
+            />
           </Stack>
         </Stack>
         <Stack spacing={1} sx={{ alignItems: "center", mt: 2 }}>

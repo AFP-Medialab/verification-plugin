@@ -101,7 +101,7 @@ export const HashtagAnalysisViz = ({
   let cohashtagGraphData = toolResult.graph;
 
   return (
-    <Stack direction="row" spacing={2}>
+    <Stack direction="column" spacing={2}>
       <AccountActivityChart
         groupingFactor={groupingFactor}
         onlyShowTop={onlyShowTop}
@@ -110,6 +110,7 @@ export const HashtagAnalysisViz = ({
         setDetailContent={setDetailContent}
         setOpenDetailModal={setOpenDetailModal}
         selected={selected}
+        keyword={keyword}
         dataSources={dataSources}
         detailDisplayFilter={detailDisplayFilter}
         activityChartData={barChartData}

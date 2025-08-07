@@ -141,7 +141,7 @@ const handleStartRecording = (
   setExpanded(false);
 };
 
-const CollectionSelector = (
+const CollectionSelector = ({
   keyword,
   selectedCollection,
   setSelectedCollection,
@@ -153,7 +153,7 @@ const CollectionSelector = (
   setExpanded,
   selectedSocialMedia,
   setSelectedSocialMedia,
-) => {
+}) => {
   return (
     <>
       <Box mt={1} display="flex" flexDirection="column" gap={2}>
@@ -269,19 +269,19 @@ export const RecordingWindow = ({
           </Button>
 
           <Collapse in={expanded}>
-            {CollectionSelector(
-              keyword,
-              selectedCollection,
-              setSelectedCollection,
-              collections,
-              setCollections,
-              newCollectionName,
-              setNewCollectionName,
-              setRecording,
-              setExpanded,
-              selectedSocialMedia,
-              setSelectedSocialMedia,
-            )}
+            <CollectionSelector
+              keyword={keyword}
+              selectedCollection={selectedCollection}
+              setSelectedCollection={setSelectedCollection}
+              collections={collections}
+              setCollections={setCollections}
+              newCollectionName={newCollectionName}
+              setNewCollectionName={setNewCollectionName}
+              setRecording={setRecording}
+              setExpanded={setExpanded}
+              selectedSocialMedia={selectedSocialMedia}
+              setSelectedSocialMedia={setSelectedSocialMedia}
+            />
           </Collapse>
         </Box>
       </Grid>

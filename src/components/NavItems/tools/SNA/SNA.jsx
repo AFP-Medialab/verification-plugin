@@ -20,6 +20,7 @@ import {
 import {
   CoorViz,
   coorSettingsDisplay,
+  getObjectSelectOptions,
   runCoorAnalysis,
 } from "./components/AnalysisTabs/AnalysisTools/COOR/CoorUtils";
 import {
@@ -184,8 +185,23 @@ const SNA = () => {
   const [coorResult, setCoorResult] = useState(false);
   const [coorErrorMessage, setCoorErrorMessage] = useState("");
 
+  const coorObjectSelectOptions = useMemo(() => {
+    return getObjectSelectOptions(dataSources, selected);
+  }, [selected]);
+
+  useEffect(() => {
+    if (
+      !coorObjectSelectOptions.map((x) => x.value).includes(coorObjectChoice)
+    ) {
+      setCoorObjectChoice(coorObjectSelectOptions[0].value);
+    }
+  });
+
   const coorResultViz = ({ result }) => {
     if (!result) return;
+    let coorResult = result.coorResult;
+    let coorGraphData = result.coorGraphData;
+
     return (
       <CoorViz
         keyword={keyword}
@@ -193,8 +209,8 @@ const SNA = () => {
         setOpenDetailModal={setOpenDetailModal}
         dataSources={dataSources}
         selected={selected}
-        coorResult={result.coorResult}
-        coorGraphData={result.coorGraphData}
+        coorResult={coorResult}
+        coorGraphData={coorGraphData}
       />
     );
   };
@@ -450,6 +466,7 @@ const SNA = () => {
           setCoorMinParticipation,
           coorObjectChoice,
           setCoorObjectChoice,
+          coorObjectSelectOptions,
         },
       },
       toolLoading: coorLoading,
