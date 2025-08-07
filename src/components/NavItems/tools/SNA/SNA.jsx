@@ -542,7 +542,13 @@ const SNA = () => {
    * to add gathered collections to dataSources
    */
   useEffect(() => {
-    initializePage(setInitLoading, dataSources);
+    const loadData = async () => {
+      const loadedCollections = await initializePage();
+      setDataSources(loadedCollections);
+      setInitLoading(false);
+    };
+
+    loadData();
 
     const refreshOnReturnToTab = async () => {
       if (document.visibilityState === "visible") {
@@ -569,20 +575,23 @@ const SNA = () => {
           <dataAnalysisSna.icon sx={{ fill: "#00926c", fontSize: "40px" }} />
         }
       />
-      <Card variant="outlined" className={cardClasses.root}>
+      <Stack direction={"column"} spacing={4}>
         {initLoading ? (
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <CircularProgress />
           </Box>
         ) : (
-          <Stack direction={"column"} spacing={2}>
-            {CollectionsTable(collectionsTableProps)}
+          <>
             {DataUpload(dataUploadProps)}
-
-            {SNAPanel(snaPanelProps)}
-          </Stack>
+            <Card variant="outlined" className={cardClasses.root}>
+              <CollectionsTable {...collectionsTableProps} />
+            </Card>
+            <Card variant="outlined" className={cardClasses.root}>
+              <SNAPanel {...snaPanelProps} />
+            </Card>
+          </>
         )}
-      </Card>
+      </Stack>
     </>
   );
 };

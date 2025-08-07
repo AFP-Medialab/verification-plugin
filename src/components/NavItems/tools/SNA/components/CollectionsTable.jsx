@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
@@ -21,24 +21,30 @@ import DownloadIcon from "@mui/icons-material/Download";
 import UploadIcon from "@mui/icons-material/Upload";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
-const EmptyTablePlaceholder = (keyword) => {
+const EmptyTablePlaceholder = ({ keyword }) => {
   return (
-    <TableRow key="emptyRowPlaceholder">
-      <TableCell colSpan={5} sx={{ p: 0, border: 0 }}>
-        <Box sx={{ margin: 2 }}>
-          <Typography>{keyword("collections_table_placeholder")}</Typography>
-        </Box>
-      </TableCell>
-    </TableRow>
+    <>
+      {keyword && (
+        <TableRow key="emptyRowPlaceholder">
+          <TableCell colSpan={5} sx={{ p: 0, border: 0 }}>
+            <Box sx={{ margin: 2 }}>
+              <Typography>
+                {keyword("collections_table_placeholder")}
+              </Typography>
+            </Box>
+          </TableCell>
+        </TableRow>
+      )}
+    </>
   );
 };
 
-const CollectionTableHeader = (collectionTableHeaderProps) => {
-  let selected = collectionTableHeaderProps.selected;
-  let setSelected = collectionTableHeaderProps.setSelected;
-  let rows = collectionTableHeaderProps.dataSources;
-  let keyword = collectionTableHeaderProps.keyword;
-
+const CollectionTableHeader = ({
+  selected,
+  setSelected,
+  dataSources: rows,
+  keyword,
+}) => {
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelected = rows.map((row) => row.id);
@@ -70,22 +76,23 @@ const CollectionTableHeader = (collectionTableHeaderProps) => {
   );
 };
 
-const CollectionActionsCell = (
+const CollectionActionsCell = ({
   row,
-  {
-    fileInputRef,
-    dataSources,
-    dlAnchorEl,
-    setDlAnchorEl,
-    setSelected,
-    selected,
-    setDataSources,
-    keyword,
-  },
-) => {
-  const rawUploadIconButton = (row, fileInputRef) => {
+  dataSources,
+  dlAnchorEl,
+  setDlAnchorEl,
+  setSelected,
+  selected,
+  setDataSources,
+  keyword,
+  activeDownloadRow,
+  setActiveDownloadRow,
+}) => {
+  const rowFileInputRef = useRef(null);
+
+  const rawUploadIconButton = (row) => {
     const handleRawFileChange = (event, rowID) => {
-      let dataSource = dataSources.filter((ds) => ds.id === rowID)[0];
+      let dataSource = dataSources.find((ds) => ds.id === rowID);
       let rowName = dataSource.name;
       const file = event.target.files[0];
       if (file && file.type === "application/json") {
@@ -100,24 +107,29 @@ const CollectionActionsCell = (
         };
         reader.readAsText(file);
       } else {
-        alert("Please upload a valid JSON file.");
+        console.error("Please upload a valid JSON file.");
+        // TODO: Replace with snackbar notification in the future
       }
     };
 
     const handleRawUpload = async (parsed, rowName) => {
-      await chrome.runtime.sendMessage({
-        prompt: "addToCollection",
-        data: parsed,
-        platform: row.source,
-        collectionId: rowName.split("~")[0],
-      });
+      try {
+        await chrome.runtime.sendMessage({
+          prompt: "addToCollection",
+          data: parsed,
+          platform: row.source,
+          collectionId: rowName.split("~")[0],
+        });
+      } catch (error) {
+        console.error("Error uploading raw collection:", error);
+      }
     };
 
     return (
       <Tooltip title={keyword("rawUploadIcon_hover_label")}>
         <IconButton
           onClick={() => {
-            document.getElementById("rawUpload_" + row.id).click();
+            rowFileInputRef.current?.click();
           }}
           rowkey={row.id}
           id={"uploadButton" + row.id}
@@ -127,7 +139,7 @@ const CollectionActionsCell = (
           <input
             type="file"
             id={"rawUpload_" + row.id}
-            ref={fileInputRef}
+            ref={rowFileInputRef}
             onChange={(event) => handleRawFileChange(event, row.id)}
             style={{ display: "none" }}
           />
@@ -139,13 +151,14 @@ const CollectionActionsCell = (
   const downloadIconButton = (row, dataSources, dlAnchorEl, setDlAnchorEl) => {
     const open = Boolean(dlAnchorEl);
 
-    const handleDownload = (rowId) => {
-      setDlAnchorEl(document.getElementById("dl_button" + rowId));
+    const handleDownload = (event, row) => {
+      setDlAnchorEl(event.currentTarget);
+      setActiveDownloadRow(row);
     };
 
     const downloadTweetCSV = () => {
-      let id = dlAnchorEl.getAttribute("rowkey");
-      let selectedData = dataSources.filter((source) => source.id === id)[0];
+      const selectedData = activeDownloadRow;
+      if (!selectedData) return;
       let headers = selectedData.headers.join(",");
       let csvData = selectedData.content
         .map((obj) =>
@@ -165,11 +178,12 @@ const CollectionActionsCell = (
       a.download = `${selectedData.name}_export.csv`;
       a.click();
       setDlAnchorEl(null);
+      setActiveDownloadRow(null);
     };
 
     const downloadTweetsJson = () => {
-      let id = dlAnchorEl.getAttribute("rowkey");
-      let selectedData = dataSources.filter((source) => source.id === id)[0];
+      const selectedData = activeDownloadRow;
+      if (!selectedData) return;
       let dl = JSON.stringify(selectedData.content);
       const blob = new Blob([dl], { type: "application/json;charset=utf-8;" });
       const a = document.createElement("a");
@@ -177,26 +191,34 @@ const CollectionActionsCell = (
       a.download = `${selectedData.name}_export.json`;
       a.click();
       setDlAnchorEl(null);
+      setActiveDownloadRow(null);
     };
 
-    const donwloadTweetsRaw = async () => {
-      let id = dlAnchorEl.getAttribute("rowkey");
+    const downloadTweetsRaw = async () => {
+      const selectedData = activeDownloadRow;
+      if (!selectedData) return;
 
-      let selectedData = dataSources.filter((source) => source.id === id)[0];
+      try {
+        let content = await chrome.runtime.sendMessage({
+          prompt: "getRawCollection",
+          platform: selectedData.source,
+          collectionId: selectedData.name.split("~")[0],
+        });
 
-      let content = await chrome.runtime.sendMessage({
-        prompt: "getRawCollection",
-        platform: selectedData.source,
-        collectionId: selectedData.name.split("~")[0],
-      });
+        let dl = JSON.stringify(content.data);
+        const blob = new Blob([dl], {
+          type: "application/json;charset=utf-8;",
+        });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `${selectedData.name}_export_raw.json`;
+        a.click();
+      } catch (error) {
+        console.error("Error downloading raw collection:", error);
+      }
 
-      let dl = JSON.stringify(content.data);
-      const blob = new Blob([dl], { type: "application/json;charset=utf-8;" });
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = `${selectedData.name}_export_raw.json`;
-      a.click();
       setDlAnchorEl(null);
+      setActiveDownloadRow(null);
     };
 
     return (
@@ -206,8 +228,8 @@ const CollectionActionsCell = (
           title={keyword("downloadIcon_hover_label")}
         >
           <IconButton
-            onClick={() => {
-              handleDownload(row.id);
+            onClick={(event) => {
+              handleDownload(event, row);
             }}
             key={"downloadIconButton_hover_label_" + row.id}
             aria-label="download"
@@ -225,14 +247,17 @@ const CollectionActionsCell = (
           id={"basic-menu" + row.id}
           anchorEl={dlAnchorEl}
           open={open}
-          onClose={() => setDlAnchorEl(null)}
+          onClose={() => {
+            setDlAnchorEl(null);
+            setActiveDownloadRow(null);
+          }}
           MenuListProps={{
             "aria-labelledby": "basic-button",
           }}
         >
           <MenuItem onClick={() => downloadTweetCSV()}>CSV</MenuItem>
           <MenuItem onClick={() => downloadTweetsJson()}>JSON</MenuItem>
-          <MenuItem onClick={() => donwloadTweetsRaw()}>Raw JSON</MenuItem>
+          <MenuItem onClick={() => downloadTweetsRaw()}>Raw JSON</MenuItem>
         </Menu>
       </>
     );
@@ -241,16 +266,23 @@ const CollectionActionsCell = (
   const deleteIconButton = (row, setSelected, selected, dataSources) => {
     const handleRemove = async (id) => {
       setSelected(selected.filter((item) => item !== id));
-      let dataSource = dataSources.filter((x) => x.id === id)[0];
+      let dataSource = dataSources.find((x) => x.id === id);
       let removeIndex = dataSources.indexOf(dataSource);
-      dataSources.splice(removeIndex, 1);
+      if (removeIndex !== -1) {
+        const newDataSources = dataSources.filter((_, i) => i !== removeIndex);
+        setDataSources(newDataSources);
+      }
 
       if (dataSource.source !== "fileUpload") {
-        await chrome.runtime.sendMessage({
-          prompt: "deleteCollection",
-          source: dataSource.source,
-          collectionId: dataSource.name.split("~")[0],
-        });
+        try {
+          await chrome.runtime.sendMessage({
+            prompt: "deleteCollection",
+            source: dataSource.source,
+            collectionId: dataSource.name.split("~")[0],
+          });
+        } catch (error) {
+          console.error("Error deleting collection:", error);
+        }
       }
     };
 
@@ -276,7 +308,7 @@ const CollectionActionsCell = (
         justifyContent={"flex-end"}
         sx={{ px: 0 }}
       >
-        {rawUploadIconButton(row, fileInputRef)}
+        {rawUploadIconButton(row)}
         {downloadIconButton(row, dataSources, dlAnchorEl, setDlAnchorEl)}
         {deleteIconButton(
           row,
@@ -290,12 +322,22 @@ const CollectionActionsCell = (
   );
 };
 
-const CollectionsTableRow = (
-  row,
-  { selected, setSelected, setDetailContent, setOpenDetailModal },
-  collectionActionsCellProps,
-  keyword,
-) => {
+const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
+  const { selected, setSelected, setDetailContent, setOpenDetailModal } =
+    rowProps;
+  const {
+    fileInputRef,
+    dataSources,
+    dlAnchorEl,
+    setDlAnchorEl,
+    setSelected: setSelectedActions,
+    selected: selectedActions,
+    setDataSources,
+    keyword: keywordActions,
+    activeDownloadRow,
+    setActiveDownloadRow,
+  } = actionsProps;
+
   const handleSelectRow = (id) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected;
@@ -336,39 +378,62 @@ const CollectionsTableRow = (
       </TableCell>
       <TableCell>{row.name}</TableCell>
       <TableCell>
-        {row.metrics
-          ? row.metrics.map((metric) => (
-              <p key={"collectionstable-" + row.name + " " + metric.label}>
-                {keyword(metric.label) +
-                  ": " +
-                  Intl.NumberFormat().format(metric.value)}
-              </p>
-            ))
-          : keyword("collection_nbOfPosts") + ": " + row.content.length}
+        {row.metrics ? (
+          row.metrics.map((metric) => (
+            <Typography
+              variant="body2"
+              component="p"
+              key={"collectionstable-" + row.name + " " + metric.label}
+            >
+              {keyword(metric.label) +
+                ": " +
+                Intl.NumberFormat().format(metric.value)}
+            </Typography>
+          ))
+        ) : (
+          <Typography variant="body2" component="p">
+            {keyword("collection_nbOfPosts") + ": " + row.content.length}
+          </Typography>
+        )}
       </TableCell>
-      {CollectionActionsCell(row, collectionActionsCellProps)}
+      <CollectionActionsCell
+        row={row}
+        fileInputRef={fileInputRef}
+        dataSources={dataSources}
+        dlAnchorEl={dlAnchorEl}
+        setDlAnchorEl={setDlAnchorEl}
+        setSelected={setSelectedActions}
+        selected={selectedActions}
+        setDataSources={setDataSources}
+        keyword={keywordActions}
+        activeDownloadRow={activeDownloadRow}
+        setActiveDownloadRow={setActiveDownloadRow}
+      />
     </TableRow>
   );
 };
 
-const CollectionsTableBody = (
+const CollectionsTableBody = ({
   dataSources,
-  collectionRowProps,
-  collectionActionsCellProps,
+  rowProps,
+  actionsProps,
   keyword,
-) => {
+}) => {
   return (
     <TableBody>
-      {dataSources?.length > 0
-        ? dataSources.map((row) => {
-            return CollectionsTableRow(
-              row,
-              collectionRowProps,
-              collectionActionsCellProps,
-              keyword,
-            );
-          })
-        : EmptyTablePlaceholder(keyword)}
+      {dataSources?.length > 0 ? (
+        dataSources.map((row) => (
+          <CollectionsTableRow
+            key={"row_" + row.id}
+            row={row}
+            rowProps={rowProps}
+            actionsProps={actionsProps}
+            keyword={keyword}
+          />
+        ))
+      ) : (
+        <EmptyTablePlaceholder keyword={keyword} />
+      )}
     </TableBody>
   );
 };
@@ -385,6 +450,8 @@ const CollectionsTable = ({
   setDlAnchorEl,
   setDataSources,
 }) => {
+  const [activeDownloadRow, setActiveDownloadRow] = useState(null);
+
   let collectionTableHeaderProps = {
     selected,
     setSelected,
@@ -408,6 +475,8 @@ const CollectionsTable = ({
     selected,
     setDataSources,
     keyword,
+    activeDownloadRow,
+    setActiveDownloadRow,
   };
 
   return (
@@ -415,17 +484,17 @@ const CollectionsTable = ({
       component={Paper}
       sx={{
         maxHeight: "600px",
-        overflox: "auto",
+        overflow: "auto",
       }}
     >
       <Table>
-        {CollectionTableHeader(collectionTableHeaderProps)}
-        {CollectionsTableBody(
-          dataSources,
-          collectionRowProps,
-          collectionActionsCellProps,
-          keyword,
-        )}
+        <CollectionTableHeader {...collectionTableHeaderProps} />
+        <CollectionsTableBody
+          dataSources={dataSources}
+          rowProps={collectionRowProps}
+          actionsProps={collectionActionsCellProps}
+          keyword={keyword}
+        />
       </Table>
     </TableContainer>
   );
