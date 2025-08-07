@@ -217,9 +217,3 @@ export const getTextClusters = async (
 export const onlyUnique = (value, index, array) => {
   return array.indexOf(value) === index;
 };
-
-export const samePair = (p1, p2) => {
-  return (
-    (p1[0] === p2[0] && p1[1] === p2[1]) || (p1[1] === p2[0] && p1[0] === p2[1])
-  );
-};
