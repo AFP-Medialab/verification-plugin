@@ -6,11 +6,11 @@ import Card from "@mui/material/Card";
 import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack";
 
+import { dataAnalysisSna } from "@/constants/tools";
 import useAuthenticatedRequest from "components/Shared/Authentication/useAuthenticatedRequest";
 import HeaderTool from "components/Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import { dataAnalysisSna } from "../../../../constants/tools";
 import {
   accountActivityDetailDisplayHandler,
   accountActivitySettings,
@@ -114,7 +114,6 @@ const SNA = () => {
     setTimelineDistributionErrorMessage,
   ] = useState("");
 
-  // eslint-disable-next-line react/display-name
   const timelineViz = ({ result }) => {
     if (!result) return;
     return TimelineChart(
@@ -157,10 +156,7 @@ const SNA = () => {
 
   const selectedSources = useMemo(() => {
     if (!selected || !dataSources) return [];
-    let selectedSources = dataSources.filter((source) =>
-      selected.includes(source.id),
-    );
-    return selectedSources;
+    return dataSources.filter((source) => selected.includes(source.id));
   }, [selected, dataSources]);
 
   const numberFieldsinSources = useMemo(() => {

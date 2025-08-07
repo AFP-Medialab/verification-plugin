@@ -19,7 +19,7 @@ const generateCohashtagGraphData = (selectedContent) => {
 
   const updateCohashtags = (hashtags, hashtag) => {
     hashtags
-      .filter((h) => h != hashtag)
+      .filter((h) => h !== hashtag)
       .forEach((otherHashtag) => {
         if (nodes[hashtag].cohashtags[otherHashtag]) {
           nodes[hashtag].cohashtags[otherHashtag]++;

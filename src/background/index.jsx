@@ -248,11 +248,13 @@ chrome.runtime.onInstalled.addListener(() => {
     contexts: ["image"],
   });
 });
+
 async function getCurrentTab() {
   let queryOptions = { active: true, lastFocusedWindow: true };
   let [tab] = await chrome.tabs.query(queryOptions);
   return tab;
 }
+
 chrome.contextMenus.onClicked.addListener(contextClick);
 
 const PLATFORM_URLS = {
@@ -260,14 +262,21 @@ const PLATFORM_URLS = {
   Twitter: [".x.com", "/x.com"],
 };
 
-chrome.webNavigation.onCommitted.addListener(async () => {
-  let recordingState = await db.recording.toArray();
-  let recordingSession = recordingState[0].state;
+chrome.webNavigation.onCommitted.addListener(async (details) => {
+  if (details.frameId !== 0) return; //Skip subframes
+
+  const recordingState = await db.recording.get("main");
+
+  if (!recordingState) {
+    return;
+  }
+
+  let recordingSession = recordingState.state;
   let currentTab = await getCurrentTab();
   if (recordingSession === false) {
     return;
   }
-  let platforms = recordingState[0].platforms.split(",");
+  let platforms = recordingState.platforms.split(",");
   let url_test = [];
   platforms.forEach((platform) => url_test.push(PLATFORM_URLS[platform]));
   if (
@@ -277,7 +286,7 @@ chrome.webNavigation.onCommitted.addListener(async () => {
     return;
   }
   try {
-    chrome.scripting.executeScript({
+    await chrome.scripting.executeScript({
       target: { tabId: currentTab.id, allFrames: true },
       function: () => {
         let pluginId = chrome.runtime.id;

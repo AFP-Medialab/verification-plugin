@@ -120,10 +120,7 @@ export const getObjectSelectOptions = (dataSources, selected) => {
     isKeyword: false,
   }));
 
-  let coorObjectSelectOptions = textSimilarityObjectSelect.concat(
-    sharedHeadersObjectSelect,
-  );
-  return coorObjectSelectOptions;
+  return textSimilarityObjectSelect.concat(sharedHeadersObjectSelect);
 };
 
 export const coorSettingsDisplay = ({
@@ -217,7 +214,7 @@ const getCoorContent = async (
       })
       .filter(
         (x) =>
-          x.objects?.length > 0 && x.objects != "NaN" && x.objects != "nan",
+          x.objects?.length > 0 && x.objects !== "NaN" && x.objects !== "nan",
       );
     return filteredResp;
   }
@@ -295,7 +292,7 @@ const detectCoor = (timeWindow, edgeThresh, minParticipation, content) => {
         user.cosharers = entryList
           .filter(
             (other) =>
-              other.username != user.username &&
+              other.username !== user.username &&
               Math.abs(user.ts - other.ts) <= timeWindow,
           )
           .map((other) => other.username);
@@ -351,11 +348,7 @@ const getCosharersByObject = (coorResult) => {
   let cosharedEntries = coorResult
     .map((sharingPair) => sharingPair.entries)
     .flat();
-  let cosharingByObjects = Object.groupBy(
-    cosharedEntries,
-    ({ objects }) => objects,
-  );
-  return cosharingByObjects;
+  return Object.groupBy(cosharedEntries, ({ objects }) => objects);
 };
 
 export const runCoorAnalysis = async (
@@ -471,7 +464,7 @@ export const generateCoorNetworkGraph = (
       nodeCanvasObject={(node, ctx) => {
         const fontSize = 4;
         ctx.font = `${fontSize}px Sans-Serif`;
-        ctx.fillStyle = resolvedMode == "dark" ? "white" : "black";
+        ctx.fillStyle = resolvedMode === "dark" ? "white" : "black";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText(node.displayName, node.x, node.y);
@@ -551,7 +544,7 @@ const generateCoorTable = (
   setDetailContent,
   setOpenDetailModal,
 ) => {
-  if (coorResult.length == 0) return <> </>;
+  if (coorResult.length === 0) return <></>;
 
   let coorByObject = getCosharersByObject(coorResult);
 
@@ -622,8 +615,7 @@ const exportCoorResult = (coorResult) => {
   let dl = JSON.stringify(res);
   const blob = new Blob([dl], { type: "application/json;charset=utf-8;" });
   const a = document.createElement("a");
-  const blobUrl = URL.createObjectURL(blob);
-  a.href = blobUrl;
+  a.href = URL.createObjectURL(blob);
   a.download = `COOR_export.json`;
   a.click();
 };
@@ -645,7 +637,7 @@ export const generateCoorViz = (
   { keyword, setDetailContent, setOpenDetailModal },
   { coorResult, coorGraphData },
 ) => {
-  if (coorResult.length == 0)
+  if (coorResult.length === 0)
     return (
       <Typography> {keyword("snaTools_noCoorDetectedMessage")} </Typography>
     );
