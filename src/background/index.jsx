@@ -267,12 +267,16 @@ chrome.webNavigation.onCommitted.addListener(async (details) => {
 
   const recordingState = await db.recording.get("main");
 
-  let recordingSession = recordingState[0].state;
+  if (!recordingState) {
+    return;
+  }
+
+  let recordingSession = recordingState.state;
   let currentTab = await getCurrentTab();
   if (recordingSession === false) {
     return;
   }
-  let platforms = recordingState[0].platforms.split(",");
+  let platforms = recordingState.platforms.split(",");
   let url_test = [];
   platforms.forEach((platform) => url_test.push(PLATFORM_URLS[platform]));
   if (
