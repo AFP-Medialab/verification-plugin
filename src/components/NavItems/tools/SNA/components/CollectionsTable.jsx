@@ -21,15 +21,21 @@ import DownloadIcon from "@mui/icons-material/Download";
 import UploadIcon from "@mui/icons-material/Upload";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
-const EmptyTablePlaceholder = (keyword) => {
+const EmptyTablePlaceholder = ({ keyword }) => {
   return (
-    <TableRow key="emptyRowPlaceholder">
-      <TableCell colSpan={5} sx={{ p: 0, border: 0 }}>
-        <Box sx={{ margin: 2 }}>
-          <Typography>{keyword("collections_table_placeholder")}</Typography>
-        </Box>
-      </TableCell>
-    </TableRow>
+    <>
+      {keyword && (
+        <TableRow key="emptyRowPlaceholder">
+          <TableCell colSpan={5} sx={{ p: 0, border: 0 }}>
+            <Box sx={{ margin: 2 }}>
+              <Typography>
+                {keyword("collections_table_placeholder")}
+              </Typography>
+            </Box>
+          </TableCell>
+        </TableRow>
+      )}
+    </>
   );
 };
 
@@ -357,16 +363,18 @@ const CollectionsTableBody = (
 ) => {
   return (
     <TableBody>
-      {dataSources?.length > 0
-        ? dataSources.map((row) => {
-            return CollectionsTableRow(
-              row,
-              collectionRowProps,
-              collectionActionsCellProps,
-              keyword,
-            );
-          })
-        : EmptyTablePlaceholder(keyword)}
+      {dataSources?.length > 0 ? (
+        dataSources.map((row) => {
+          return CollectionsTableRow(
+            row,
+            collectionRowProps,
+            collectionActionsCellProps,
+            keyword,
+          );
+        })
+      ) : (
+        <EmptyTablePlaceholder keyword={keyword} />
+      )}
     </TableBody>
   );
 };
@@ -413,17 +421,17 @@ const CollectionsTable = ({
       component={Paper}
       sx={{
         maxHeight: "600px",
-        overflox: "auto",
+        overflow: "auto",
       }}
     >
       <Table>
-        {CollectionTableHeader(collectionTableHeaderProps)}
-        {CollectionsTableBody(
-          dataSources,
-          collectionRowProps,
-          collectionActionsCellProps,
-          keyword,
-        )}
+        <CollectionTableHeader {...collectionTableHeaderProps} />
+        <CollectionsTableBody
+          dataSources={dataSources}
+          collectionRowProps={collectionRowProps}
+          collectionActionsCellProps={collectionActionsCellProps}
+          keyword={keyword}
+        />
       </Table>
     </TableContainer>
   );
