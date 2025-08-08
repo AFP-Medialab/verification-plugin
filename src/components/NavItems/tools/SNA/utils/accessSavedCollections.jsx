@@ -53,8 +53,10 @@ export const getSavedCollections = async (collectionSource) => {
     prompt: collectionAccessors[collectionSource].prompt,
   });
 
+  const filteredEntries = allCollectionEntries.filter((x) => x != undefined);
+
   const entriesGroupedByCollection = Object.groupBy(
-    allCollectionEntries,
+    filteredEntries,
     ({ collectionID }) => collectionID,
   );
 
@@ -93,7 +95,7 @@ export const initializePage = async () => {
   return [...savedTweets, ...savedTiktoks];
 };
 
-export const refreshPage = async (setLoading, dataSources) => {
+export const refreshPage = async (setLoading, dataSources, setDataSources) => {
   setLoading(true);
   let includedCollections = dataSources.filter(
     (x) => x.source !== "fileUpload",
@@ -118,10 +120,8 @@ export const refreshPage = async (setLoading, dataSources) => {
   if (noNewContentFound) {
     setLoading(false);
   } else {
-    dataSources.splice(0, dataSources.length);
-    savedTweets.forEach((collection) => dataSources.push(collection));
-    savedTiktoks.forEach((collection) => dataSources.push(collection));
-    uploadedCollections.forEach((collection) => dataSources.push(collection));
+    let updatedDS = [...savedTweets, ...savedTiktoks, ...uploadedCollections];
+    setDataSources(updatedDS);
     setLoading(false);
   }
 };

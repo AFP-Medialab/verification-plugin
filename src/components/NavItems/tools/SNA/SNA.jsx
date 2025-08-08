@@ -565,7 +565,7 @@ const SNA = () => {
 
     const refreshOnReturnToTab = async () => {
       if (document.visibilityState === "visible") {
-        await refreshPage(setInitLoading, dataSources);
+        await refreshPage(setInitLoading, dataSources, setDataSources);
       }
     };
 
