@@ -3,6 +3,9 @@ import React from "react";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
+import { MultiUndirectedGraph } from "graphology";
+import louvain from "graphology-communities-louvain";
+
 import { AccountActivityChart } from "../AccountActivity/AccountActivityUtils";
 import { CoorNetworkGraph } from "../COOR/CoorUtils";
 import { entryAggregatorByListValue } from "../MostMentioned/MostMentionedUtils";
@@ -60,10 +63,32 @@ const generateCohashtagGraphData = (selectedContent) => {
     )
     .flat();
 
-  return {
+  let graphData = {
     nodes: Object.values(nodes),
     links: edges,
   };
+
+  let graph = new MultiUndirectedGraph();
+
+  graphData.nodes.forEach((node) => {
+    if (!graph.hasNode(node.id)) graph.addNode(node.id, node);
+  });
+  graphData.links.forEach((edge) => {
+    if (
+      graph.hasNode(edge.source) &&
+      graph.hasNode(edge.target) &&
+      !graph.hasUndirectedEdge(edge.source, edge.target)
+    ) {
+      graph.addUndirectedEdge(edge.source, edge.target);
+    }
+  });
+
+  const communities = louvain(graph);
+
+  graphData.nodes.forEach((node) => (node.community = communities[node.id]));
+  graphData.graph = graph;
+
+  return graphData;
 };
 
 export const generateHashtagAnalysisBarChartData = (selectedContent) => {

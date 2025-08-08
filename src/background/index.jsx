@@ -339,6 +339,7 @@ const getTweetsFromDB = async () => {
     res: jp({ json: rawTweet, path: "$..tweet_results" })[0],
   }));
   const reformatedTweets = dbTweetsResults.map((tweet) => {
+    if (!tweet.res || _.isEmpty(tweet.res)) return;
     let tweetInfo =
       tweet.res.result.tweet || tweet.res.result || tweet.res.tweet;
     let reformatedTweet = {};
