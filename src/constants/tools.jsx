@@ -12,6 +12,7 @@ import {
 
 import { FOOTER_TYPES, Footer } from "@Shared/Footer/Footer";
 import C2paData from "components/NavItems/tools/C2pa/C2pa";
+import SNA from "components/NavItems/tools/SNA/SNA";
 
 import CsvSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/CSV_SNA.svg";
 import TwitterSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/Twitter_sna.svg";
@@ -512,7 +513,7 @@ export const dataAnalysisSna = new Tool(
   twitterSnaSvgIcon,
   TOOLS_CATEGORIES.DATA_ANALYSIS,
   [TOOL_STATUS_ICON.LOCK],
-  [ROLES.REGISTERED_USER],
+  null,
   "twitterSna",
   TOOL_GROUPS.VERIFICATION,
   <TwitterSna />,
@@ -530,6 +531,19 @@ const dataAnalysisCrowdtangle = new Tool(
   TOOL_GROUPS.VERIFICATION,
   null,
   null,
+);
+
+export const newSna = new Tool(
+  "navbar_sna",
+  "navbar_sna_description",
+  twitterSnaSvgIcon,
+  TOOLS_CATEGORIES.DATA_ANALYSIS,
+  [TOOL_STATUS_ICON.LOCK],
+  null,
+  "Sna",
+  TOOL_GROUPS.VERIFICATION,
+  <SNA />,
+  <Footer type={FOOTER_TYPES.USFD_AFP_EU_DISINFOLAB} />,
 );
 
 const disinfoDeck = new Tool(
@@ -619,6 +633,7 @@ export const tools = Object.freeze([
   machineGeneratedText,
   dataAnalysisSna,
   dataAnalysisCrowdtangle,
+  newSna,
   disinfoDeck,
   archiving,
   about,
