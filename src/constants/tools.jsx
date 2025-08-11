@@ -114,6 +114,7 @@ export class Tool {
    * @param toolGroup {ToolGroups} The group to which the topMenuItem belongs
    * @param content The React Element to display for the topMenuItem
    * @param footer The React element to display at the bottom of the topMenuItem React Element
+   * @param assistantProps Additional properties used by the assistant to determine whether to recommend a tool
    */
   constructor(
     titleKeyword,
@@ -126,6 +127,7 @@ export class Tool {
     toolGroup,
     content,
     footer,
+    assistantProps = {},
   ) {
     this.titleKeyword = titleKeyword;
     this.descriptionKeyword = descriptionKeyword;
@@ -137,8 +139,28 @@ export class Tool {
     this.toolGroup = toolGroup;
     this.content = content;
     this.footer = footer;
+    this.assistantProps = assistantProps;
   }
 }
+
+const KNOWN_LINKS = {
+  TWITTER: "twitter",
+  INSTAGRAM: "instagram",
+  SNAPCHAT: "snapchat",
+  FACEBOOK: "facebook",
+  TIKTOK: "tiktok",
+  TELEGRAM: "telegram",
+  YOUTUBE: "youtube",
+  YOUTUBESHORTS: "youtubeshorts",
+  DAILYMOTION: "dailymotion",
+  LIVELEAK: "liveleak",
+  VIMEO: "vimeo",
+  MASTODON: "mastodon",
+  OWN: "own",
+  VK: "vk",
+  BLUESKY: "bsky",
+  MISC: "general",
+};
 
 const ToolsSvgIcon = (props) => {
   return <SvgIcon component={ToolsIcon} inheritViewBox {...props} />;
@@ -268,6 +290,16 @@ export const videoAnalysis = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <Analysis />,
   <Footer type={FOOTER_TYPES.ITI} />,
+  {
+    linksAccepted: [
+      KNOWN_LINKS.YOUTUBE,
+      KNOWN_LINKS.FACEBOOK,
+      KNOWN_LINKS.SNAPCHAT,
+    ],
+    exceptions: [],
+    useInputUrl: true,
+    text: "video_analysis_text",
+  },
 );
 
 export const keyframes = new Tool(
@@ -281,6 +313,20 @@ export const keyframes = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <Keyframes />,
   <Footer type={FOOTER_TYPES.ITI} />,
+  {
+    linksAccepted: [
+      KNOWN_LINKS.YOUTUBE,
+      KNOWN_LINKS.FACEBOOK,
+      KNOWN_LINKS.YOUTUBE,
+      KNOWN_LINKS.YOUTUBESHORTS,
+      KNOWN_LINKS.LIVELEAK,
+      KNOWN_LINKS.SNAPCHAT,
+      KNOWN_LINKS.OWN,
+    ],
+    exceptions: [],
+    useInputUrl: true,
+    text: "keyframes_text",
+  },
 );
 
 export const thumbnails = new Tool(
@@ -294,6 +340,12 @@ export const thumbnails = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <Thumbnails />,
   <Footer type={FOOTER_TYPES.AFP} />,
+  {
+    linksAccepted: [KNOWN_LINKS.YOUTUBE],
+    exceptions: [],
+    useInputUrl: true,
+    text: "thumbnails_text",
+  },
 );
 
 const videoMetadata = new Tool(
@@ -307,6 +359,14 @@ const videoMetadata = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <Metadata />,
   <Footer type={FOOTER_TYPES.AFP} />,
+  {
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    exceptions: [
+      /(pbs.twimg.com)|(youtu.be|youtube)|(instagram)|(fbcdn.net)|(vimeo)|(snapchat)|(tiktok.com)/,
+    ],
+    useInputUrl: false,
+    text: "metadata_text",
+  },
 );
 
 export const videoDeepfake = new Tool(
@@ -320,6 +380,27 @@ export const videoDeepfake = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <DeepfakeVideo />,
   <Footer type={FOOTER_TYPES.ITI} />,
+  {
+    processLinksAccepted: [
+      KNOWN_LINKS.YOUTUBE,
+      KNOWN_LINKS.TWITTER,
+      // KNOWN_LINKS.INSTAGRAM, // assistant fails to load video (even if logged in); deepfakevideo tool directly works
+      // KNOWN_LINKS.FACEBOOK, // assistant fails to load video; deepfakevideo has no face detected, video doesn't load properly
+      // KNOWN_LINKS.TIKTOK, // assistant fails to load video; deepfakevideo has no face detected, video doesn't load properly
+      KNOWN_LINKS.TELEGRAM,
+      KNOWN_LINKS.YOUTUBESHORTS,
+      KNOWN_LINKS.DAILYMOTION,
+      // KNOWN_LINKS.LIVELEAK, // doesn't exist anymore; assistant works; deepfakevideo has no face detected, video doesn't load properly
+      // KNOWN_LINKS.VIMEO, // assistant works; deepfakevideo has no face detected, video doesn't load properly
+      // KNOWN_LINKS.MASTODON, // assistant fails to load video; deepfakevideo has no face detected, video doesn't load properly
+      // KNOWN_LINKS.VK, // assistant fails to load; deepfakevideo works
+      KNOWN_LINKS.MISC,
+      KNOWN_LINKS.OWN,
+    ],
+    exceptions: [],
+    useInputUrl: false,
+    text: "deepfake_video_text",
+  },
 );
 
 /**
@@ -337,6 +418,12 @@ export const imageMagnifier = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <Magnifier />,
   <Footer type={FOOTER_TYPES.AFP} />,
+  {
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    exceptions: [],
+    useInputUrl: false,
+    text: "magnifier_text",
+  },
 );
 
 export const imageMetadata = new Tool(
@@ -350,6 +437,14 @@ export const imageMetadata = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <Metadata />,
   <Footer type={FOOTER_TYPES.AFP} />,
+  {
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    exceptions: [
+      /(pbs.twimg.com)|(youtu.be|youtube)|(instagram)|(fbcdn.net)|(vimeo)|(snapchat)|(tiktok.com)/,
+    ],
+    useInputUrl: false,
+    text: "metadata_text",
+  },
 );
 
 export const imageForensic = new Tool(
@@ -363,6 +458,12 @@ export const imageForensic = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <Forensic />,
   <Footer type={FOOTER_TYPES.ITI_BORELLI_AFP} />,
+  {
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    exceptions: [],
+    useInputUrl: false,
+    text: "forensic_text",
+  },
 );
 
 export const imageOcr = new Tool(
@@ -376,6 +477,12 @@ export const imageOcr = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <OCR />,
   <Footer type={FOOTER_TYPES.USFD} />,
+  {
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    exceptions: [],
+    useInputUrl: false,
+    text: "ocr_text",
+  },
 );
 
 export const imageGif = new Tool(
@@ -389,6 +496,12 @@ export const imageGif = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <CheckGif />,
   <Footer type={FOOTER_TYPES.BORELLI_AFP} />,
+  {
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    exceptions: [],
+    useInputUrl: false,
+    text: "gif_text",
+  },
 );
 
 export const imageSyntheticDetection = new Tool(
@@ -402,6 +515,12 @@ export const imageSyntheticDetection = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <SyntheticImageDetection />,
   <Footer type={FOOTER_TYPES.ITI_UNINA} />,
+  {
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    exceptions: [],
+    useInputUrl: false,
+    text: "synthetic_image_detection_text",
+  },
 );
 
 export const imageGeolocation = new Tool(
@@ -415,6 +534,12 @@ export const imageGeolocation = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <Geolocation />,
   <Footer type={FOOTER_TYPES.ITI} />,
+  {
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    exceptions: [],
+    useInputUrl: false,
+    text: "geolocation_text",
+  },
 );
 
 /**
@@ -609,6 +734,12 @@ const c2paData = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <C2paData />,
   <Footer type={FOOTER_TYPES.AFP} />,
+  {
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    exceptions: [],
+    useInputUrl: false,
+    text: "forensic_text",
+  },
 );
 
 export const tools = Object.freeze([

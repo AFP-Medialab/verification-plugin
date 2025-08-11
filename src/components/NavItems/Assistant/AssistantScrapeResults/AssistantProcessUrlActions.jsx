@@ -23,6 +23,11 @@ import {
   resetSyntheticImageDetectionImage,
   setSyntheticImageDetectionUrl,
 } from "@/redux/actions/tools/syntheticImageDetectionActions";
+import { c2paUrlSet, resetC2paState } from "@/redux/reducers/tools/c2paReducer";
+import {
+  resetGeolocation as resetGeolocationImage,
+  setGeolocationUrl,
+} from "@/redux/reducers/tools/geolocationReducer";
 
 import { KNOWN_LINKS } from "../AssistantRuleBook";
 
@@ -50,6 +55,14 @@ const AssistantProcessUrlActions = () => {
     if (action.path === "tools/syntheticImageDetection") {
       dispatch(resetSyntheticImageDetectionImage());
       dispatch(setSyntheticImageDetectionUrl({ url: resultUrl }));
+    }
+    if (action.path === "tools/geolocation") {
+      dispatch(resetGeolocationImage());
+      dispatch(setGeolocationUrl(resultUrl));
+    }
+    if (action.path === "tools/c2pa") {
+      dispatch(resetC2paState());
+      dispatch(c2paUrlSet(resultUrl));
     }
 
     if (action.download) {
