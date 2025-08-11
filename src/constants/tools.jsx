@@ -757,7 +757,7 @@ const c2paData = new Tool(
     processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     exceptions: [],
     useInputUrl: false,
-    text: "forensic_text",
+    text: "c2pa_text",
     resetUrl: resetC2paState,
     setUrl: c2paUrlSet,
   },
