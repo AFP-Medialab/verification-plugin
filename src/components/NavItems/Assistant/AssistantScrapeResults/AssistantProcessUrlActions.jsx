@@ -13,17 +13,8 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 
-import {
-  resetDeepfake as resetDeepfakeVideo,
-  setDeepfakeUrlVideo,
-} from "@//redux/actions/tools/deepfakeVideoActions";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
-import {
-  resetSyntheticImageDetectionImage,
-  setSyntheticImageDetectionUrl,
-} from "@/redux/actions/tools/syntheticImageDetectionActions";
-import { c2paUrlSet, resetC2paState } from "@/redux/reducers/tools/c2paReducer";
 import {
   resetGeolocation as resetGeolocationImage,
   setGeolocationUrl,
@@ -47,22 +38,11 @@ const AssistantProcessUrlActions = () => {
   const handleClick = (action) => {
     const resultUrl = action.useInputUrl ? inputUrl : processUrl;
 
-    // deepfake and synthetic image detection set URL actions
-    if (action.path === "tools/deepfakeVideo") {
-      dispatch(resetDeepfakeVideo());
-      dispatch(setDeepfakeUrlVideo({ url: resultUrl }));
+    if (action.resetUrl) {
+      dispatch(action.resetUrl());
     }
-    if (action.path === "tools/syntheticImageDetection") {
-      dispatch(resetSyntheticImageDetectionImage());
-      dispatch(setSyntheticImageDetectionUrl({ url: resultUrl }));
-    }
-    if (action.path === "tools/geolocation") {
-      dispatch(resetGeolocationImage());
-      dispatch(setGeolocationUrl(resultUrl));
-    }
-    if (action.path === "tools/c2pa") {
-      dispatch(resetC2paState());
-      dispatch(c2paUrlSet(resultUrl));
+    if (action.setUrl) {
+      dispatch(action.setUrl(resultUrl));
     }
 
     if (action.download) {

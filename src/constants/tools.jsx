@@ -10,6 +10,19 @@ import {
   ManageSearch,
 } from "@mui/icons-material";
 
+import {
+  resetDeepfake,
+  setDeepfakeUrlVideo,
+} from "@//redux/actions/tools/deepfakeVideoActions";
+import {
+  resetSyntheticImageDetectionImage,
+  setSyntheticImageDetectionUrl,
+} from "@/redux/actions/tools/syntheticImageDetectionActions";
+import { c2paUrlSet, resetC2paState } from "@/redux/reducers/tools/c2paReducer";
+import {
+  resetGeolocation as resetGeolocationImage,
+  setGeolocationUrl,
+} from "@/redux/reducers/tools/geolocationReducer";
 import { FOOTER_TYPES, Footer } from "@Shared/Footer/Footer";
 import C2paData from "components/NavItems/tools/C2pa/C2pa";
 import SNA from "components/NavItems/tools/SNA/SNA";
@@ -400,6 +413,8 @@ export const videoDeepfake = new Tool(
     exceptions: [],
     useInputUrl: false,
     text: "deepfake_video_text",
+    resetUrl: resetDeepfake,
+    setUrl: (resultUrl) => setDeepfakeUrlVideo({ url: resultUrl }),
   },
 );
 
@@ -520,6 +535,8 @@ export const imageSyntheticDetection = new Tool(
     exceptions: [],
     useInputUrl: false,
     text: "synthetic_image_detection_text",
+    resetUrl: resetSyntheticImageDetectionImage,
+    setUrl: (resultUrl) => setSyntheticImageDetectionUrl({ url: resultUrl }),
   },
 );
 
@@ -539,6 +556,8 @@ export const imageGeolocation = new Tool(
     exceptions: [],
     useInputUrl: false,
     text: "geolocation_text",
+    resetUrl: resetGeolocationImage,
+    setUrl: setGeolocationUrl,
   },
 );
 
@@ -739,6 +758,8 @@ const c2paData = new Tool(
     exceptions: [],
     useInputUrl: false,
     text: "forensic_text",
+    resetUrl: resetC2paState,
+    setUrl: c2paUrlSet,
   },
 );
 
