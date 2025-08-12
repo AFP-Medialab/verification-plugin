@@ -30,15 +30,12 @@ const ImageGridList = (props) => {
       <Grid container spacing={1}>
         {props.list.map((tile, index) => {
           return (
-            <Grid
-              key={index}
-              size={{ xs: 12 / props.cols }}
-              className={classes.checkeredBG}
-            >
+            <Grid key={index} size={{ xs: 12 / props.cols }}>
               {index === props.list.length - 1 && props.setLoading !== null ? (
                 <img
                   src={tile}
                   alt={tile}
+                  className={classes.checkeredBG}
                   onClick={() => props.handleClick(props.list[index])}
                   onLoad={props.setLoading}
                   style={{
@@ -53,6 +50,7 @@ const ImageGridList = (props) => {
                 <img
                   src={tile}
                   alt={tile}
+                  className={classes.checkeredBG}
                   onClick={() => props.handleClick(props.list[index])}
                   style={{
                     width: "auto",

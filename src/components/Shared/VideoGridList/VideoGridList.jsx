@@ -31,7 +31,6 @@ const VideoImageList = (props) => {
               key={index}
               size={{ xs: 12 / props.cols }}
               sx={{ position: "relative" }}
-              className={classes.checkeredBG}
             >
               <PlayArrowIcon
                 sx={{
@@ -49,6 +48,7 @@ const VideoImageList = (props) => {
                 }}
               />
               <video
+                className={classes.checkeredBG}
                 style={{
                   width: "auto",
                   height: "120px",
