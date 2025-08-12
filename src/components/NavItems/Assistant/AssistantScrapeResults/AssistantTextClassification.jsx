@@ -235,6 +235,7 @@ export default function AssistantTextClassification({
               />
             ) : credibilitySignal === subjectivityTitle ? (
               <GaugeCategoriesList
+                categories={filteredCategories}
                 keyword={keyword}
                 fullTextScoreLabel={fullTextScoreLabel}
                 overallScore={classification["Subjective"][0].score}
