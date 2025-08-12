@@ -282,6 +282,17 @@ export function GaugeCategoriesList({
   importantSentenceThreshold,
   handleSliderChange,
 }) {
+  if (_.isEmpty(categories)) {
+    // only subjectivity might be empty, machine generated text is always detected
+    return (
+      credibilitySignal === keyword("subjectivity_title") && (
+        <Typography fontSize="small" sx={{ textAlign: "center" }}>
+          {keyword("no_detected_subjective_sentences")}
+        </Typography>
+      )
+    );
+  }
+
   // gauge chart
   const gaugeChart = createGaugeChart(
     fullTextScoreLabel,

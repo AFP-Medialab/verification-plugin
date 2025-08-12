@@ -9,20 +9,6 @@ import {
   selectCorrectActions,
 } from "@/components/NavItems/Assistant/AssistantRuleBook";
 import { TOOLS_CATEGORIES } from "@/constants/tools";
-import isEqual from "lodash/isEqual";
-import uniqWith from "lodash/uniqWith";
-import {
-  all,
-  call,
-  fork,
-  put,
-  select,
-  take,
-  takeLatest,
-} from "redux-saga/effects";
-
-import assistantApiCalls from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
-import DBKFApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
 import {
   cleanAssistantState,
   setAssistantLoading,
