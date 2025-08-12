@@ -156,7 +156,7 @@ export class Tool {
   }
 }
 
-const KNOWN_LINKS = {
+export const KNOWN_LINKS = {
   TWITTER: "twitter",
   INSTAGRAM: "instagram",
   SNAPCHAT: "snapchat",

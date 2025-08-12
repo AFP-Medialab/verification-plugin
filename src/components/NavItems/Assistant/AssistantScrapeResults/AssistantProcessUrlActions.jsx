@@ -15,12 +15,11 @@ import Typography from "@mui/material/Typography";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
+import { KNOWN_LINKS } from "@/constants/tools";
 import {
   resetGeolocation as resetGeolocationImage,
   setGeolocationUrl,
 } from "@/redux/reducers/tools/geolocationReducer";
-
-import { KNOWN_LINKS } from "../AssistantRuleBook";
 
 const AssistantProcessUrlActions = () => {
   const classes = useMyStyles();
