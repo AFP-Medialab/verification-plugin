@@ -5,18 +5,11 @@ import DownloadIcon from "@mui/icons-material/Download";
 import { ROLES } from "@/constants/roles";
 import {
   TOOLS_CATEGORIES,
+  TOOL_GROUPS,
+  Tool,
   canUserSeeTool,
-  imageForensic,
   imageGif,
-  imageMagnifier,
-  imageMetadata,
-  imageOcr,
-  imageSyntheticDetection,
-  keyframes,
-  thumbnails,
   tools,
-  videoAnalysis,
-  videoDeepfake,
 } from "@/constants/tools";
 
 export const NE_SUPPORTED_LANGS = ["en", "pt", "fr", "de", "el", "es", "it"];
@@ -133,6 +126,86 @@ export const KNOWN_LINK_PATTERNS = [
   },
 ];
 
+const DisabledDownloadIcon = (props) => {
+  return <DownloadIcon color="disabled" {...props} />;
+};
+
+const downloadActions = [
+  new Tool(
+    "assistant_video_download_action",
+    "assistant_video_download_action_description",
+    DisabledDownloadIcon,
+    TOOLS_CATEGORIES.VIDEO,
+    null,
+    null,
+    null,
+    TOOL_GROUPS.MORE,
+    null,
+    null,
+    {
+      linksAccepted: [
+        KNOWN_LINKS.TELEGRAM,
+        KNOWN_LINKS.FACEBOOK,
+        KNOWN_LINKS.TWITTER,
+        KNOWN_LINKS.MASTODON,
+        KNOWN_LINKS.SNAPCHAT,
+      ],
+      exceptions: [],
+      useInputUrl: false,
+      text: "assistant_video_download_action_description",
+      tsvPrefix: "assistant_video",
+      download: true,
+    },
+  ),
+  new Tool(
+    "assistant_video_download_generic",
+    "assistant_video_download_generic_description",
+    DisabledDownloadIcon,
+    TOOLS_CATEGORIES.VIDEO,
+    null,
+    null,
+    null,
+    TOOL_GROUPS.MORE,
+    null,
+    null,
+    {
+      linksAccepted: [
+        KNOWN_LINKS.YOUTUBE,
+        KNOWN_LINKS.YOUTUBESHORTS,
+        KNOWN_LINKS.INSTAGRAM,
+        KNOWN_LINKS.VK,
+        KNOWN_LINKS.VIMEO,
+        KNOWN_LINKS.LIVELEAK,
+        KNOWN_LINKS.DAILYMOTION,
+        KNOWN_LINKS.BLUESKY,
+      ],
+      exceptions: [],
+      useInputUrl: false,
+      text: "assistant_video_download_generic_description",
+      tsvPrefix: "assistant_video",
+    },
+  ),
+  new Tool(
+    "assistant_video_download_tiktok",
+    "assistant_video_download_tiktok_description",
+    DisabledDownloadIcon,
+    TOOLS_CATEGORIES.VIDEO,
+    null,
+    null,
+    null,
+    TOOL_GROUPS.MORE,
+    null,
+    null,
+    {
+      linksAccepted: [KNOWN_LINKS.TIKTOK],
+      exceptions: [],
+      useInputUrl: false,
+      text: "assistant_video_download_tiktok_description",
+      tsvPrefix: "assistant_video",
+    },
+  ),
+];
+
 export const selectCorrectActions = (
   contentType,
   inputUrlType,
@@ -142,6 +215,7 @@ export const selectCorrectActions = (
   isUserAuthenticated,
 ) => {
   let newPossibleActions = tools
+    .concat(downloadActions)
     .filter(
       (tool) =>
         canUserSeeTool(tool, role, isUserAuthenticated) &&
