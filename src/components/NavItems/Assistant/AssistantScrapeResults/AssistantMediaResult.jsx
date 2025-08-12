@@ -98,7 +98,7 @@ const AssistantMediaResult = () => {
         image.onload = () => {
           resolve({
             url: imageUrl,
-            include: image.width > 2 || image.height > 2,
+            include: image.width > 40 && image.height > 40,
           });
         };
         image.onerror = () => {
