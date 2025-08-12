@@ -8,6 +8,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
 import { imageMagnifier } from "@/constants/tools";
+import { KNOWN_LINKS } from "@/constants/tools";
 import {
   resetMagnifierState,
   setMagnifierLoading,
@@ -19,7 +20,6 @@ import { setError } from "redux/reducers/errorReducer";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
-import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import ImageResult from "./Results/ImageResult";
 
 const Magnifier = () => {
