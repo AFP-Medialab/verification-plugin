@@ -411,7 +411,7 @@ function* handleDbkfTextCall(action) {
   try {
     const text = yield select((state) => state.assistant.urlText);
     if (text) {
-      let textToUse = text.length > 500 ? text.substring(0, 500) : text;
+      let textToUse = text.length > 100 ? text.substring(0, 100) : text;
       /*
         let textRegex = /[\W]$/
         //Infinite loop for some url exemple: https://twitter.com/TheArchitect009/status/1427280578496303107
@@ -424,7 +424,10 @@ function* handleDbkfTextCall(action) {
 
       console.log("result=", result);
 
-      let filteredResult = result.length ? result : null;
+      let filteredResult = result.length
+        ? result.filter((res) => res.score >= 50)
+        : [];
+      filteredResult = filteredResult.length ? filteredResult : null;
       //let filteredResult = filterDbkfTextResult(result);
 
       console.log("filteredResult=", filterDbkfTextResult(result));
