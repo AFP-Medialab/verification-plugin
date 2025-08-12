@@ -13,7 +13,10 @@
   },
   "permissions": [
     "contextMenus",
-    "activeTab"
+    "webNavigation",
+    "activeTab",
+    "scripting",
+    "tabs"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -29,11 +32,15 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "toolkit_bg.wasm"
+        "toolkit_bg.wasm",
+        "inject.js"
       ],
       "matches": [
         "<all_urls>"
       ]
     }
-  ]
+  ],
+  "externally_connectable": {
+    "matches": ["<all_urls>"]
+  }
 }

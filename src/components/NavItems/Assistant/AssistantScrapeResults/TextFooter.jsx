@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -30,6 +31,7 @@ export default function TextFooter({
   expanded,
 }) {
   const keyword = i18nLoadNamespace("components/Shared/utils");
+  const locale = useSelector((state) => state.language);
   return (
     <Box>
       <Divider />
@@ -49,7 +51,7 @@ export default function TextFooter({
               display: "inline",
             }}
           >
-            {getLanguageName(textLang, textLang) ?? textLang}
+            {getLanguageName(textLang, locale) ?? textLang}
           </Typography>
         </Grid>
 

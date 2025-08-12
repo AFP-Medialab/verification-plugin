@@ -15,12 +15,9 @@ import Typography from "@mui/material/Typography";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
+import { TOOLS_CATEGORIES } from "@/constants/tools";
 
-import {
-  CONTENT_TYPE,
-  KNOWN_LINKS,
-  selectCorrectActions,
-} from "./AssistantRuleBook";
+import { KNOWN_LINKS, selectCorrectActions } from "./AssistantRuleBook";
 
 const AssistantFileSelected = () => {
   const classes = useMyStyles();
@@ -30,11 +27,21 @@ const AssistantFileSelected = () => {
   const getActionList = (contentType) => {
     let known_link = KNOWN_LINKS.OWN;
     const role = useSelector((state) => state.userSession.user.roles);
-    return selectCorrectActions(contentType, known_link, known_link, "", role);
+    const userAuthenticated = useSelector(
+      (state) => state.userSession.userAuthenticated,
+    );
+    return selectCorrectActions(
+      contentType,
+      known_link,
+      known_link,
+      "",
+      role,
+      userAuthenticated,
+    );
   };
 
-  const imageActions = getActionList(CONTENT_TYPE.IMAGE);
-  const videoActions = getActionList(CONTENT_TYPE.VIDEO);
+  const imageActions = getActionList(TOOLS_CATEGORIES.IMAGE);
+  const videoActions = getActionList(TOOLS_CATEGORIES.VIDEO);
 
   const handleClick = (path, cType) => {
     //history.push("/app/" + path + "/" + KNOWN_LINKS.OWN + "/" + cType)
@@ -136,14 +143,14 @@ const AssistantFileSelected = () => {
           <Grid size={{ xs: 6 }}>
             {generateList(
               keyword("upload_image"),
-              CONTENT_TYPE.IMAGE,
+              TOOLS_CATEGORIES.IMAGE,
               imageActions,
             )}
           </Grid>
           <Grid size={{ xs: 6 }}>
             {generateList(
               keyword("upload_video"),
-              CONTENT_TYPE.VIDEO,
+              TOOLS_CATEGORIES.VIDEO,
               videoActions,
             )}
           </Grid>

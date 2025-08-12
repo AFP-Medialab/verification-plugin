@@ -31,6 +31,24 @@ import AdvancedTools from "../NavItems/tools/Alltools/AdvancedTools/AdvancedTool
 import SettingsDrawer from "./SettingsDrawer";
 
 const TopMenu = ({ topMenuItems }) => {
+  const [selectedCollection, setSelectedCollection] =
+    useState("Default Collection");
+
+  const [recording, setRecording] = useState(false);
+
+  const [collections, setCollections] = useState(["Default Collection"]);
+
+  const getRecordingInfo = async () => {
+    let recInfo = await chrome.runtime.sendMessage({
+      prompt: "getRecordingInfo",
+    });
+    setCollections(recInfo.collections.map((x) => x.id).flat());
+    setRecording(recInfo.recording[0].state != false);
+    recInfo.recording[0].state != false
+      ? setSelectedCollection(recInfo.recording[0].state)
+      : {};
+  };
+
   const classes = useMyStyles();
 
   const keyword = i18nLoadNamespace("components/NavBar");
@@ -68,6 +86,7 @@ const TopMenu = ({ topMenuItems }) => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const handleMenuClick = () => {
+    getRecordingInfo();
     setIsPanelOpen(!isPanelOpen);
   };
 
@@ -270,6 +289,12 @@ const TopMenu = ({ topMenuItems }) => {
       <SettingsDrawer
         isPanelOpen={isPanelOpen}
         handleClosePanel={handleClosePanel}
+        recording={recording}
+        setRecording={setRecording}
+        collections={collections}
+        setCollections={setCollections}
+        selectedCollection={selectedCollection}
+        setSelectedCollection={setSelectedCollection}
       />
     </AppBar>
   );

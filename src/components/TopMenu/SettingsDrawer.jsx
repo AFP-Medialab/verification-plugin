@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
@@ -20,9 +20,17 @@ import {
 } from "@/redux/reducers/cookiesReducers";
 import { MAX_FONT_SIZE, MIN_FONT_SIZE, getStoredFontSize } from "@/theme";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import {
+  RecordingWindow,
+  getRecordingInfo,
+} from "components/NavItems/tools/SNA/components/Recording";
 
+import manifest from "../../../public/manifest.json";
 import Languages from "../NavItems/languages/languages";
 import ColorModeSelect from "./ColorModeSelect";
+
+const environment = process.env.REACT_APP_ENVIRONMENT;
+const isStaging = environment !== "production";
 
 const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
   const keyword = i18nLoadNamespace("components/NavBar");
@@ -34,6 +42,21 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
   );
   const cookiesUsage = useSelector((state) => state.cookies.active);
   const gaUsage = useSelector((state) => state.cookies.analytics);
+
+  //SNA Recording props
+  const [recording, setRecording] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [collections, setCollections] = useState(["Default Collection"]);
+  const [selectedCollection, setSelectedCollection] =
+    useState("Default Collection");
+  const [newCollectionName, setNewCollectionName] = useState("");
+  const [selectedSocialMedia, setSelectedSocialMedia] = useState([]);
+
+  useEffect(() => {
+    getRecordingInfo(setCollections, setRecording, setSelectedCollection);
+  }, []);
+
+  const version = manifest.version;
 
   return (
     <Drawer
@@ -50,15 +73,15 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
           boxSizing: "border-box",
           marginTop: "86px", // Add padding to the top to avoid overlap with the AppBar
           height: "-webkit-fill-available",
+          display: "flex",
+          flexDirection: "column",
         },
       }}
     >
       <Box
-        sx={{
-          p: 2,
-        }}
+        sx={{ p: 2, display: "flex", flexDirection: "column", height: "100%" }}
       >
-        <Stack direction="column" spacing={4}>
+        <Stack direction="column" spacing={4} sx={{ flexGrow: 1 }}>
           <Stack
             direction="row"
             sx={{
@@ -190,6 +213,33 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
               />
             )}
           </Stack>
+          <Stack direction="column" spacing={1}>
+            <Typography>{keyword("snaRecord_settingsTitle")}</Typography>
+            <RecordingWindow
+              recording={recording}
+              setRecording={setRecording}
+              expanded={expanded}
+              setExpanded={setExpanded}
+              selectedCollection={selectedCollection}
+              setSelectedCollection={setSelectedCollection}
+              collections={collections}
+              setCollections={setCollections}
+              newCollectionName={newCollectionName}
+              setNewCollectionName={setNewCollectionName}
+              selectedSocialMedia={selectedSocialMedia}
+              setSelectedSocialMedia={setSelectedSocialMedia}
+            />
+          </Stack>
+        </Stack>
+        <Stack spacing={1} sx={{ alignItems: "center", mt: 2 }}>
+          {isStaging && (
+            <Typography variant="caption" color="warning.main" align="center">
+              STAGING
+            </Typography>
+          )}
+          <Typography variant="caption" color="textSecondary" align="center">
+            v{version}
+          </Typography>
         </Stack>
       </Box>
     </Drawer>

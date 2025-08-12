@@ -1,7 +1,6 @@
 import assistantApiCalls from "@/components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
 import DBKFApi from "@/components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
 import {
-  CONTENT_TYPE,
   KNOWN_LINKS,
   KNOWN_LINK_PATTERNS,
   NE_SUPPORTED_LANGS,
@@ -9,6 +8,21 @@ import {
   matchPattern,
   selectCorrectActions,
 } from "@/components/NavItems/Assistant/AssistantRuleBook";
+import { TOOLS_CATEGORIES } from "@/constants/tools";
+import isEqual from "lodash/isEqual";
+import uniqWith from "lodash/uniqWith";
+import {
+  all,
+  call,
+  fork,
+  put,
+  select,
+  take,
+  takeLatest,
+} from "redux-saga/effects";
+
+import assistantApiCalls from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
+import DBKFApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
 import {
   cleanAssistantState,
   setAssistantLoading,
@@ -149,10 +163,10 @@ function* handleMediaLists() {
   const videoList = yield select((state) => state.assistant.videoList);
 
   if (imageList.length === 1 && videoList.length === 0) {
-    yield put(setProcessUrl(imageList[0], CONTENT_TYPE.IMAGE));
+    yield put(setProcessUrl(imageList[0], TOOLS_CATEGORIES.IMAGE));
     yield put(setSingleMediaPresent(true));
   } else if (videoList.length === 1 && imageList.length === 0) {
-    yield put(setProcessUrl(videoList[0], CONTENT_TYPE.VIDEO));
+    yield put(setProcessUrl(videoList[0], TOOLS_CATEGORIES.VIDEO));
     yield put(setSingleMediaPresent(true));
   }
 }
@@ -162,7 +176,9 @@ function* handleMediaActionList() {
   const processUrl = yield select((state) => state.assistant.processUrl);
   const contentType = yield select((state) => state.assistant.processUrlType);
   const role = yield select((state) => state.userSession.user.roles);
-
+  const userAuthenticated = select(
+    (state) => state.userSession.userAuthenticated,
+  );
   if (processUrl !== null) {
     let knownInputLink = yield call(
       matchPattern,
@@ -181,6 +197,7 @@ function* handleMediaActionList() {
       knownProcessLink,
       processUrl,
       role,
+      userAuthenticated,
     );
 
     yield put(setProcessUrlActions(contentType, actions));
@@ -191,12 +208,16 @@ function* handleSubmitUpload(action) {
   let contentType = action.payload.contentType;
   let known_link = KNOWN_LINKS.OWN;
   const role = yield select((state) => state.userSession.user.roles);
+  const userAuthenticated = yield select(
+    (state) => state.userSession.userAuthenticated,
+  );
   let actions = selectCorrectActions(
     contentType,
     known_link,
     known_link,
     "",
     role,
+    userAuthenticated,
   );
   yield put(setProcessUrlActions(contentType, actions));
   yield put(setImageVideoSelected(true));
@@ -218,7 +239,7 @@ function* handleMediaSimilarityCall(action) {
     KNOWN_LINKS.DAILYMOTION,
   ];
 
-  if (contentType === CONTENT_TYPE.IMAGE) {
+  if (contentType === TOOLS_CATEGORIES.IMAGE) {
     yield call(
       similaritySearch,
       () => dbkfAPI.callImageSimilarityEndpoint(processUrl),
@@ -226,7 +247,7 @@ function* handleMediaSimilarityCall(action) {
         setDbkfImageMatchDetails(result, loading, done, fail),
     );
   } else if (
-    contentType === CONTENT_TYPE.VIDEO &&
+    contentType === TOOLS_CATEGORIES.VIDEO &&
     !unprocessbleTypes.includes(inputUrlType)
   ) {
     yield call(
@@ -292,6 +313,7 @@ function* handleSourceCredibilityCall(action) {
         null,
         null,
         null,
+        null,
         true,
         false,
         false,
@@ -346,6 +368,13 @@ function* handleSourceCredibilityCall(action) {
       unlabelled: "inherit",
     };
 
+    const sourceTypes = {
+      positive: "fact_checker",
+      mixed: "mentions",
+      caution: "warning",
+      unlabelled: "unlabelled",
+    };
+
     const [
       positiveResults,
       mixedResults,
@@ -370,6 +399,7 @@ function* handleSourceCredibilityCall(action) {
         mixedResults,
         filteredExtractedResults,
         trafficLightColors,
+        sourceTypes,
         extractedLinks,
         false,
         true,
@@ -380,6 +410,7 @@ function* handleSourceCredibilityCall(action) {
     console.log(error);
     yield put(
       setInputSourceCredDetails(
+        null,
         null,
         null,
         null,
@@ -1072,7 +1103,7 @@ const filterAssistantResults = (
       break;
     case KNOWN_LINKS.MISC:
       if (contentType) {
-        contentType === CONTENT_TYPE.IMAGE
+        contentType === TOOLS_CATEGORIES.IMAGE
           ? (imageList = [userInput])
           : (videoList = [userInput]);
       } else {
@@ -1225,10 +1256,10 @@ const sortSourceCredibilityLinks = (
 
   let extractedLinks = [];
   extractedLinks = extractedLinks.concat(
-    cautionLinks,
-    mixedLinks,
-    positiveLinks,
-    unlabelledLinks,
+    cautionLinks.sort(),
+    mixedLinks.sort(),
+    positiveLinks.sort(),
+    unlabelledLinks.sort(),
   );
 
   return extractedLinks;

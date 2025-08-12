@@ -1,8 +1,11 @@
 import React from "react";
-import useMyStyles from "../MaterialUiStyles/useMyStyles";
+
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
+
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import useMyStyles from "../MaterialUiStyles/useMyStyles";
 
 export const FOOTER_TYPES = {
   ITI: "iti",
@@ -15,6 +18,7 @@ export const FOOTER_TYPES = {
   LOCCUS: "loccus",
   KINIT: "kinit",
   AFP: "afp",
+  AFP_URBINO_VIGINUM: "afp-urbino-viginum",
 };
 
 export const Footer = (props) => {
@@ -69,6 +73,20 @@ export const Footer = (props) => {
         keyword("afp_link_label"),
         ", " + keyword("usfd_link_label"),
         " " + keyword("and") + " " + keyword("eudisinfolab_link_label"),
+      ];
+      contactUs = keyword("afp_part_2");
+      break;
+    case FOOTER_TYPES.AFP_URBINO_VIGINUM:
+      provideBy = keyword("afp_part_1");
+      link = [
+        keyword("afp_link"),
+        keyword("urbino_link"),
+        keyword("viginum_link"),
+      ];
+      linkLabel = [
+        keyword("afp_link_label"),
+        ", " + keyword("urbino_link_label"),
+        " " + keyword("and") + " " + keyword("viginum_link_label"),
       ];
       contactUs = keyword("afp_part_2");
       break;

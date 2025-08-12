@@ -23,7 +23,7 @@ const DbkfTextResults = () => {
   const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
 
   return (
-    <Accordion>
+    <Accordion defaultExpanded>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Grid container spacing={1} wrap="wrap" width="100%">
           <Grid size={{ xs: 4 }} align="start">
