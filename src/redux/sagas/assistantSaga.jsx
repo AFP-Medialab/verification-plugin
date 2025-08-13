@@ -422,14 +422,10 @@ function* handleDbkfTextCall(action) {
       */
       let result = yield call(dbkfAPI.callTextSimilarityEndpoint, textToUse);
 
-      console.log("result=", result);
-
       let filteredResult = result?.length
         ? result.filter((res) => res.score >= 40)
         : [];
       filteredResult = filteredResult?.length ? filteredResult : null;
-
-      console.log("filteredResult=", filterDbkfTextResult(result));
 
       yield put(setDbkfTextMatchDetails(filteredResult, false, true, false));
     }
@@ -1258,42 +1254,6 @@ const addToRelevantSourceCred = (sourceCredList, result) => {
     credibilityEvidence: resultEvidence,
     credibilityScope: result["credibility-scope"],
   });
-};
-
-const filterDbkfTextResult = (result) => {
-  let resultList = [];
-  let scores = [];
-
-  result.forEach((res) => {
-    scores.push(res.score);
-  });
-
-  let scaled = scaleNumbers(scores, 0, 100);
-
-  // to be reviewed. only really fixes some minor cases.
-  result.forEach((value, index) => {
-    console.log(value.score, scaled[index]);
-    if (value.score > 1000 && scaled[index] > 70) {
-      resultList.push({
-        text: value.text,
-        claimUrl: value.externalLink,
-        score: value.score,
-      });
-    }
-  });
-  return resultList.length ? resultList : null;
-};
-
-const scaleNumbers = (unscaledNums) => {
-  let scaled = [];
-  let maxRange = Math.max.apply(Math, unscaledNums);
-  let minRange = Math.min.apply(Math, unscaledNums);
-  for (let i = 0; i < unscaledNums.length; i++) {
-    let unscaled = unscaledNums[i];
-    let scaledNum = (100 * (unscaled - minRange)) / (maxRange - minRange);
-    scaled.push(scaledNum);
-  }
-  return scaled;
 };
 
 /**
