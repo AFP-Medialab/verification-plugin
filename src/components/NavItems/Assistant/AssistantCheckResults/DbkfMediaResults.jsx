@@ -28,9 +28,6 @@ const DbkfMediaResults = () => {
   dbkfImageMatch ? (numResultsDetected += dbkfImageMatch.length) : null;
   dbkfVideoMatch ? (numResultsDetected += dbkfVideoMatch.length) : null;
 
-  console.log("dbkfImageMatch=", dbkfImageMatch);
-  console.log("dbkfVideoMatch=", dbkfVideoMatch);
-
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
