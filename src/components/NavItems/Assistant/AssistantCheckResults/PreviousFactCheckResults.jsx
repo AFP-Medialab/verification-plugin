@@ -42,8 +42,6 @@ const PreviousFactCheckResults = () => {
   // for navigating to Semantic Search with text
   const navigate = useNavigate();
 
-  console.log("prevFactChecksResult", prevFactChecksResult);
-
   return (
     <Accordion defaultExpanded>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
