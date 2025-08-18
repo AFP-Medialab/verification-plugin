@@ -65,35 +65,32 @@ const PreviousFactCheckResults = () => {
       <AccordionDetails>
         {prevFactChecksDone && prevFactChecksResult.length > 0 && (
           <div>
-            <Collapse in={expanded}>
-              {prevFactChecksResult.map((resultItem) => {
-                // date in correct format
-                const date = resultItem.published_at.slice(0, 10);
+            {prevFactChecksResult.map((resultItem) => {
+              // date in correct format
+              const date = resultItem.published_at.slice(0, 10);
 
-                return (
-                  <ResultDisplayItem
-                    key={resultItem.id}
-                    id={resultItem.id}
-                    claim={resultItem.claim_en}
-                    title={resultItem.title_en}
-                    claimOriginalLanguage={resultItem.claim}
-                    titleOriginalLanguage={resultItem.title}
-                    rating={resultItem.rating}
-                    date={
-                      dayjs(date).format(
-                        globalLocaleData.longDateFormat("LL"),
-                      ) ?? null
-                    }
-                    website={resultItem.website}
-                    language={getLanguageName(resultItem.source_language)}
-                    similarityScore={resultItem.score}
-                    articleUrl={resultItem.url}
-                    domainUrl={resultItem.source_name}
-                    imageUrl={resultItem.image_url}
-                  />
-                );
-              })}
-            </Collapse>
+              return (
+                <ResultDisplayItem
+                  key={resultItem.id}
+                  id={resultItem.id}
+                  claim={resultItem.claim_en}
+                  title={resultItem.title_en}
+                  claimOriginalLanguage={resultItem.claim}
+                  titleOriginalLanguage={resultItem.title}
+                  rating={resultItem.rating}
+                  date={
+                    dayjs(date).format(globalLocaleData.longDateFormat("LL")) ??
+                    null
+                  }
+                  website={resultItem.website}
+                  language={getLanguageName(resultItem.source_language)}
+                  similarityScore={resultItem.score}
+                  articleUrl={resultItem.url}
+                  domainUrl={resultItem.source_name}
+                  imageUrl={resultItem.image_url}
+                />
+              );
+            })}
 
             <TextFooterPrevFactChecks
               navigate={navigate}
