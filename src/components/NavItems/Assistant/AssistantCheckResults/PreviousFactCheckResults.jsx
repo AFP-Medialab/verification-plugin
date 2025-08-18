@@ -42,6 +42,8 @@ const PreviousFactCheckResults = () => {
   // for navigating to Semantic Search with text
   const navigate = useNavigate();
 
+  console.log("prevFactChecksResult", prevFactChecksResult);
+
   return (
     <Accordion defaultExpanded>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -65,7 +67,7 @@ const PreviousFactCheckResults = () => {
       <AccordionDetails>
         {prevFactChecksDone && prevFactChecksResult.length > 0 && (
           <div>
-            <Collapse in={expanded} collapsedSize={500}>
+            <Collapse in={expanded}>
               {prevFactChecksResult.map((resultItem) => {
                 // date in correct format
                 const date = resultItem.published_at.slice(0, 10);
