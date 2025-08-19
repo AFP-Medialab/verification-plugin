@@ -802,16 +802,17 @@ function* handleMultilingualStanceCall(action) {
   try {
     const inputUrl = yield select((state) => state.assistant.inputUrl); //action.payload.inputUrl;
     const urlType = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
+    const collectedComments = yield select(
+      (state) => state.assistant.collectedComments,
+    );
 
-    // only run stance classifier for youtube
+    // only run stance classifier for youtube if comments exist
     if (
-      urlType === KNOWN_LINKS.YOUTUBE ||
-      urlType === KNOWN_LINKS.YOUTUBESHORTS
+      (urlType === KNOWN_LINKS.YOUTUBE ||
+        urlType === KNOWN_LINKS.YOUTUBESHORTS) &&
+      collectedComments.length > 0
     ) {
       yield put(setMultilingualStanceDetails(null, true, false, false));
-      const collectedComments = yield select(
-        (state) => state.assistant.collectedComments,
-      );
 
       function createCommentArray(
         comments,
