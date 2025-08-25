@@ -1,3 +1,5 @@
+import assistantApiCalls from "@/components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
+import DBKFApi from "@/components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
 import {
   KNOWN_LINKS,
   KNOWN_LINK_PATTERNS,
@@ -7,20 +9,6 @@ import {
   selectCorrectActions,
 } from "@/components/NavItems/Assistant/AssistantRuleBook";
 import { TOOLS_CATEGORIES } from "@/constants/tools";
-import isEqual from "lodash/isEqual";
-import uniqWith from "lodash/uniqWith";
-import {
-  all,
-  call,
-  fork,
-  put,
-  select,
-  take,
-  takeLatest,
-} from "redux-saga/effects";
-
-import assistantApiCalls from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
-import DBKFApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
 import {
   cleanAssistantState,
   setAssistantLoading,
@@ -46,7 +34,18 @@ import {
   setSingleMediaPresent,
   setSubjectivityDetails,
   setUrlMode,
-} from "../actions/tools/assistantActions";
+} from "@/redux/actions/tools/assistantActions";
+import isEqual from "lodash/isEqual";
+import uniqWith from "lodash/uniqWith";
+import {
+  all,
+  call,
+  fork,
+  put,
+  select,
+  take,
+  takeLatest,
+} from "redux-saga/effects";
 
 /**
  * APIs
@@ -539,6 +538,8 @@ function* handleSubjectivityCall(action) {
         // merge results
         if (i === 0) {
           result = textChunkResult;
+          result.entities.Subjective[0].score =
+            result.entities.Subjective[0].score * textChunks[i].length;
         } else {
           // add step to sentences indices and Important_Sentence indices
           step = i * SERVER_TIMEOUT_LIMIT;
@@ -576,7 +577,6 @@ function* handleSubjectivityCall(action) {
               sentence: sentence.sentence,
             });
           }
-
           // update results
           result = {
             text: result.text + textChunkResult.text,
@@ -585,12 +585,22 @@ function* handleSubjectivityCall(action) {
               Important_Sentence: result.entities.Important_Sentence.concat(
                 stepImportantSentences,
               ),
-              Subjective: result.entities.Subjective,
+              Subjective: [
+                {
+                  score:
+                    result.entities.Subjective[0].score +
+                    textChunkResult.entities.Subjective[0].score *
+                      textChunks[i].length,
+                },
+              ],
             },
             sentences: result.sentences.concat(stepSentences),
           };
         }
       }
+      // update overall subjectivity score to be weighted
+      result.entities.Subjective[0].score =
+        result.entities.Subjective[0].score / text.length;
 
       yield put(setSubjectivityDetails(result, false, true, false));
     }

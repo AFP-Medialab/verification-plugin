@@ -380,3 +380,17 @@ export const cleanAssistantState = () => {
     type: "CLEAN_STATE",
   };
 };
+
+export const setImportantSentenceThreshold = (threshold) => {
+  return {
+    type: "SET_IMPORTANT_SENTENCE_THRESHOLD",
+    payload: threshold,
+  };
+};
+
+export const setCurrentLabel = (currentLabel) => {
+  return {
+    type: "SET_CURRENT_LABEL",
+    payload: currentLabel,
+  };
+};
