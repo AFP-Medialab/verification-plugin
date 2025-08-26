@@ -60,6 +60,7 @@ const KeyframesResults = ({
       const a = document.createElement("a");
       a.href = url;
       a.click();
+      window.URL.revokeObjectURL(url);
     } finally {
       setIsZipDownloading(false);
     }
