@@ -126,24 +126,13 @@ export default function assistantApiCalls() {
         if (
           new Set(entity.features.schemaTypes).intersection(
             new Set([
-              "http://schema.org/Person",
-              "http://dbpedia.org/ontology/Person",
-            ]),
-          ).size > 0
-        ) {
-          entities["Person"].push(entity);
-        }
-        if (
-          new Set(entity.features.schemaTypes).intersection(
-            new Set([
               "http://schema.org/Location",
               "http://dbpedia.org/ontology/Location",
             ]),
           ).size > 0
         ) {
           entities["Location"].push(entity);
-        }
-        if (
+        } else if (
           new Set(entity.features.schemaTypes).intersection(
             new Set([
               "http://schema.org/Organization",
@@ -152,6 +141,15 @@ export default function assistantApiCalls() {
           ).size > 0
         ) {
           entities["Organization"].push(entity);
+        } else if (
+          new Set(entity.features.schemaTypes).intersection(
+            new Set([
+              "http://schema.org/Person",
+              "http://dbpedia.org/ontology/Person",
+            ]),
+          ).size > 0
+        ) {
+          entities["Person"].push(entity);
         }
       }
       namedEntityResult.data.entities = entities;

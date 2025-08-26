@@ -14,15 +14,15 @@ import {
   resetDeepfake,
   setDeepfakeUrlVideo,
 } from "@//redux/actions/tools/deepfakeVideoActions";
-import {
-  resetSyntheticImageDetectionImage,
-  setSyntheticImageDetectionUrl,
-} from "@/redux/actions/tools/syntheticImageDetectionActions";
 import { c2paUrlSet, resetC2paState } from "@/redux/reducers/tools/c2paReducer";
 import {
   resetGeolocation as resetGeolocationImage,
   setGeolocationUrl,
 } from "@/redux/reducers/tools/geolocationReducer";
+import {
+  resetSyntheticImageDetectionImage,
+  setSyntheticImageDetectionUrl,
+} from "@/redux/reducers/tools/syntheticImageDetectionReducer";
 import { FOOTER_TYPES, Footer } from "@Shared/Footer/Footer";
 import C2paData from "components/NavItems/tools/C2pa/C2pa";
 import SNA from "components/NavItems/tools/SNA/SNA";
