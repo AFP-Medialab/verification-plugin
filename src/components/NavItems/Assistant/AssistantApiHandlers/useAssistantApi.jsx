@@ -309,11 +309,11 @@ export default function assistantApiCalls() {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
       async () => {
-        const result = await axios.get(
-          assistantEndpoint +
-            "kinit/prev-fact-checks" +
-            "?text=" +
-            encodeURIComponent(text), // max URL length is 2048 characters
+        const result = await axios.post(
+          assistantEndpoint + "kinit/prev-fact-checks",
+          {
+            content: text,
+          },
         );
         return result.data;
       },
