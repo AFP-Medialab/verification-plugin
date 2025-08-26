@@ -1,11 +1,11 @@
 import React from "react";
 
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 
-import { LoadingButton } from "@mui/lab";
 import { ClearIcon } from "@mui/x-date-pickers";
 
 const KeyframesInput = ({
@@ -44,7 +44,7 @@ const KeyframesInput = ({
         />
       </Grid>
       <Grid>
-        <LoadingButton
+        <Button
           type="submit"
           variant="contained"
           color="primary"
@@ -52,7 +52,7 @@ const KeyframesInput = ({
           loading={isDisabled}
         >
           {keyword("button_submit")}
-        </LoadingButton>
+        </Button>
       </Grid>
     </Grid>
   </Box>

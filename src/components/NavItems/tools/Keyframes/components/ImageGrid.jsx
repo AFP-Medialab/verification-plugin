@@ -15,8 +15,6 @@ import { ImageWithFade } from "@/components/NavItems/tools/Keyframes/components/
  * @constructor
  */
 const ImageGrid = ({ images, alt, getImageUrl, nbOfCols }) => {
-  const colSize = nbOfCols ? Math.floor(12 / nbOfCols) : null;
-
   return (
     <Grid container direction="row" spacing={2}>
       {images.map((item, i) => (
@@ -25,11 +23,11 @@ const ImageGrid = ({ images, alt, getImageUrl, nbOfCols }) => {
           size={
             nbOfCols
               ? {
-                  xs: colSize,
-                  sm: colSize,
-                  md: colSize,
-                  lg: colSize,
-                  xl: colSize,
+                  xs: nbOfCols,
+                  sm: nbOfCols,
+                  md: nbOfCols,
+                  lg: nbOfCols,
+                  xl: nbOfCols,
                 }
               : { md: 3, lg: 1 }
           }

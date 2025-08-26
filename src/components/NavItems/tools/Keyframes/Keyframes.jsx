@@ -11,7 +11,6 @@ import Stack from "@mui/material/Stack";
 import { useTrackEvent } from "@/Hooks/useAnalytics";
 import KeyframesHeader from "@/components/NavItems/tools/Keyframes/components/KeyframesHeader";
 import KeyframesInput from "@/components/NavItems/tools/Keyframes/components/KeyframesInput";
-import KeyframesLoadingState from "@/components/NavItems/tools/Keyframes/components/KeyframesLoadingState";
 import KeyframesResults from "@/components/NavItems/tools/Keyframes/components/KeyframesResults";
 import KeyframesTabs from "@/components/NavItems/tools/Keyframes/components/KeyframesTabs";
 import SimilarityResults from "@/components/NavItems/tools/Keyframes/components/SimilarityResults";
@@ -138,6 +137,7 @@ const Keyframes = () => {
   const resetResults = useCallback(() => {
     setInput("");
     dispatch(resetKeyframes());
+    resetFetchingKeyframes();
   }, [dispatch]);
 
   const handleTabSelectedChange = useCallback((event, newValue) => {
@@ -214,7 +214,7 @@ const Keyframes = () => {
             </Alert>
           )}
 
-          {isPending && <KeyframesLoadingState />}
+          {/*{isPending && <KeyframesLoadingState />}*/}
 
           {error && (
             <Alert severity="error">{keyword(mapErrorToKey(error))}</Alert>
@@ -224,9 +224,12 @@ const Keyframes = () => {
             data={resultData}
             features={keyframesFeaturesData}
             tabSelected={tabSelected}
+            handleClose={resetResults}
+            isPending={isPending}
+            isFeatureDataPending={isFeatureDataPending}
           />
 
-          {isFeatureDataPending && <KeyframesLoadingState />}
+          {/*{isFeatureDataPending && <KeyframesLoadingState />}*/}
 
           {featureDataError && (
             <Alert severity="error">{featureDataError.message}</Alert>
