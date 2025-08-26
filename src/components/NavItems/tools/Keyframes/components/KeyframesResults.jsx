@@ -20,6 +20,7 @@ import { KeyframeInputType as TAB_VALUES } from "@/components/NavItems/tools/Key
 import ImageGrid from "@/components/NavItems/tools/Keyframes/components/ImageGrid";
 import KeyframesLoadingState from "@/components/NavItems/tools/Keyframes/components/KeyframesLoadingState";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import { downloadFile } from "@Shared/Utils/fileUtils";
 
 const KeyframesResults = ({
   data,
@@ -31,15 +32,6 @@ const KeyframesResults = ({
 }) => {
   if (tabSelected !== TAB_VALUES.URL) return null;
 
-  if (!data && (isPending || isFeatureDataPending)) {
-    return (
-      <>
-        {isPending && <KeyframesLoadingState />}
-        {isFeatureDataPending && <KeyframesLoadingState />}
-      </>
-    );
-  }
-
   const keyword = i18nLoadNamespace("components/NavItems/tools/Keyframes");
   const keywordHelp = i18nLoadNamespace("components/Shared/OnClickInfo");
 
@@ -48,19 +40,15 @@ const KeyframesResults = ({
   const [detailed, setDetailed] = useState(false);
 
   const ALLOWED_COLS = [1, 2, 3, 4, 6, 12];
-  const [cols, setCols] = useState(3);
+  const [cols, setCols] = useState(2);
 
-  const downloadAction = async () => {
+  const handleDownload = async () => {
+    setIsZipDownloading(true);
+
     try {
-      setIsZipDownloading(true);
-      const response = await fetch(data.zipFileUrl);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.click();
-      window.URL.revokeObjectURL(url);
+      await downloadFile(data.zipFileUrl, "keyframes.zip");
+    } catch (e) {
+      console.error("Download failed:", e);
     } finally {
       setIsZipDownloading(false);
     }
@@ -145,127 +133,136 @@ const KeyframesResults = ({
   };
 
   return (
-    <Box sx={{ display: data ? "block" : "none" }}>
-      {data && (
-        <Stack direction="column" spacing={4}>
-          <Card variant="outlined">
-            <Box sx={{ pb: 4, pt: 2, px: 4 }}>
-              <Stack direction="column" spacing={2}>
-                <Stack
-                  direction="row"
-                  sx={{
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Typography variant="h6">
-                    {keyword("cardheader_results")}
-                  </Typography>
-                  <Stack direction="row" spacing={2}>
-                    <IconButton onClick={clickHelp} sx={{ p: 1 }}>
-                      <HelpOutlineIcon />
-                    </IconButton>
-                    <IconButton
-                      aria-label="close"
-                      onClick={handleClose}
-                      sx={{ p: 1 }}
+    <>
+      {!data && (isPending || isFeatureDataPending) ? (
+        <>
+          {isPending && <KeyframesLoadingState />}
+          {isFeatureDataPending && <KeyframesLoadingState />}
+        </>
+      ) : (
+        <>
+          {data && (
+            <Stack direction="column" spacing={4}>
+              <Card variant="outlined">
+                <Box sx={{ pb: 4, pt: 2, px: 4 }}>
+                  <Stack direction="column" spacing={2}>
+                    <Stack
+                      direction="row"
+                      sx={{
+                        justifyContent: "space-between",
+                      }}
                     >
-                      <CloseIcon />
-                    </IconButton>
+                      <Typography variant="h6">
+                        {keyword("cardheader_results")}
+                      </Typography>
+                      <Stack direction="row" spacing={2}>
+                        <IconButton onClick={clickHelp} sx={{ p: 1 }}>
+                          <HelpOutlineIcon />
+                        </IconButton>
+                        <IconButton
+                          aria-label="close"
+                          onClick={handleClose}
+                          sx={{ p: 1 }}
+                        >
+                          <CloseIcon />
+                        </IconButton>
+                      </Stack>
+                      <HelpPopover
+                        anchorEl={anchorHelp}
+                        onClose={() => setAnchorHelp(null)}
+                        keywordHelp={keywordHelp}
+                      />
+                    </Stack>
+                    <Stack direction="column">
+                      <Grid
+                        container
+                        spacing={2}
+                        sx={{
+                          justifyContent: "space-between",
+                          alignContent: "center",
+                        }}
+                      >
+                        <Grid>
+                          <Button onClick={toggleDetail}>
+                            {!detailed
+                              ? keyword("keyframe_title_get_detail")
+                              : keyword("keyframe_title_get_simple")}
+                          </Button>
+                        </Grid>
+
+                        <Grid>
+                          <Button
+                            color="primary"
+                            loading={isZipDownloading}
+                            loadingPosition="start"
+                            onClick={handleDownload}
+                            startIcon={<DownloadIcon />}
+                          >
+                            {keyword("keyframes_download_subshots")}
+                          </Button>
+                        </Grid>
+
+                        <Grid sx={{ flexGrow: 1, textAlign: "end" }}>
+                          <Button
+                            onClick={zoomOut}
+                            startIcon={<ZoomOutIcon />}
+                            disabled={cols === ALLOWED_COLS[0]}
+                          >
+                            {keyword("zoom_out")}
+                          </Button>
+                        </Grid>
+                        <Grid>
+                          <Button
+                            onClick={zoomIn}
+                            startIcon={<ZoomInIcon />}
+                            disabled={
+                              cols === ALLOWED_COLS[ALLOWED_COLS.length - 1]
+                            }
+                          >
+                            {keyword("zoom_in")}
+                          </Button>
+                        </Grid>
+                      </Grid>
+                      <Divider />
+                    </Stack>
+                    <ImageGrid
+                      images={
+                        detailed
+                          ? [...data.keyframes, ...data.keyframesXtra]
+                          : data.keyframes
+                      }
+                      alt="extracted img with text"
+                      getImageUrl={(img) => img.keyframeUrl}
+                      nbOfCols={cols}
+                    />
                   </Stack>
-                  <HelpPopover
-                    anchorEl={anchorHelp}
-                    onClose={() => setAnchorHelp(null)}
-                    keywordHelp={keywordHelp}
-                  />
-                </Stack>
-                <Stack direction="column">
-                  <Grid
-                    container
-                    spacing={2}
-                    sx={{
-                      justifyContent: "space-between",
-                      alignContent: "center",
-                    }}
-                  >
-                    <Grid>
-                      <Button onClick={toggleDetail}>
-                        {!detailed
-                          ? keyword("keyframe_title_get_detail")
-                          : keyword("keyframe_title_get_simple")}
-                      </Button>
-                    </Grid>
-
-                    <Grid>
-                      <Button
-                        color="primary"
-                        loading={isZipDownloading}
-                        loadingPosition="start"
-                        onClick={downloadAction}
-                        startIcon={<DownloadIcon />}
-                      >
-                        {keyword("keyframes_download_subshots")}
-                      </Button>
-                    </Grid>
-
-                    <Grid sx={{ flexGrow: 1, textAlign: "end" }}>
-                      <Button
-                        onClick={zoomOut}
-                        startIcon={<ZoomOutIcon />}
-                        disabled={cols === ALLOWED_COLS[0]}
-                      >
-                        {keyword("zoom_out")}
-                      </Button>
-                    </Grid>
-                    <Grid>
-                      <Button
-                        onClick={zoomIn}
-                        startIcon={<ZoomInIcon />}
-                        disabled={
-                          cols === ALLOWED_COLS[ALLOWED_COLS.length - 1]
-                        }
-                      >
-                        {keyword("zoom_in")}
-                      </Button>
-                    </Grid>
-                  </Grid>
-                  <Divider />
-                </Stack>
-                <ImageGrid
-                  images={
-                    detailed
-                      ? [...data.keyframes, ...data.keyframesXtra]
-                      : data.keyframes
-                  }
-                  alt="extracted img with text"
-                  getImageUrl={(img) => img.keyframeUrl}
-                  nbOfCols={cols}
-                />
-              </Stack>
-            </Box>
-          </Card>
-          {features && (
-            <>
-              <ResultsCard>
-                <Typography variant="h6">Faces Detected</Typography>
-                <ImageGrid
-                  images={features.faces}
-                  alt="extracted img with face"
-                  getImageUrl={(img) => img.representative.imageUrl}
-                />
-              </ResultsCard>
-              <ResultsCard>
-                <Typography variant="h6">Text Detected</Typography>
-                <ImageGrid
-                  images={features.texts}
-                  alt="extracted img with text"
-                  getImageUrl={(img) => img.representative.imageUrl}
-                />
-              </ResultsCard>
-            </>
+                </Box>
+              </Card>
+              {features && (
+                <>
+                  <ResultsCard>
+                    <Typography variant="h6">Faces Detected</Typography>
+                    <ImageGrid
+                      images={features.faces}
+                      alt="extracted img with face"
+                      getImageUrl={(img) => img.representative.imageUrl}
+                    />
+                  </ResultsCard>
+                  <ResultsCard>
+                    <Typography variant="h6">Text Detected</Typography>
+                    <ImageGrid
+                      images={features.texts}
+                      alt="extracted img with text"
+                      getImageUrl={(img) => img.representative.imageUrl}
+                    />
+                  </ResultsCard>
+                </>
+              )}
+            </Stack>
           )}
-        </Stack>
+        </>
       )}
-    </Box>
+    </>
   );
 };
 

@@ -214,8 +214,6 @@ const Keyframes = () => {
             </Alert>
           )}
 
-          {/*{isPending && <KeyframesLoadingState />}*/}
-
           {error && (
             <Alert severity="error">{keyword(mapErrorToKey(error))}</Alert>
           )}
@@ -228,8 +226,6 @@ const Keyframes = () => {
             isPending={isPending}
             isFeatureDataPending={isFeatureDataPending}
           />
-
-          {/*{isFeatureDataPending && <KeyframesLoadingState />}*/}
 
           {featureDataError && (
             <Alert severity="error">{featureDataError.message}</Alert>
