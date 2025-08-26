@@ -140,11 +140,12 @@ export default function AssistantTextClassification({
       // Filter categories above confidenceThreshold unless machine generated text or subjectivity
       if (
         credibilitySignal === machineGeneratedTextTitle ||
-        credibilitySignal === subjectivityTitle
+        credibilitySignal === subjectivityTitle ||
+        credibilitySignal === newsGenreTitle
       ) {
         filteredCategories[label] = classification[label];
       } else if (
-        // news framing and news genre
+        // news framing
         classification[label][0].score >= confidenceThresholdLow
       ) {
         filteredCategories[label] = classification[label];
