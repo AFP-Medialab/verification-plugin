@@ -1,11 +1,15 @@
 import React from "react";
+import { Trans } from "react-i18next";
 import { useSelector } from "react-redux";
 
 import Alert from "@mui/material/Alert";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import DbkfMediaResults from "@/components/NavItems/Assistant/AssistantCheckResults/DbkfMediaResults";
 import DbkfTextResults from "@/components/NavItems/Assistant/AssistantCheckResults/DbkfTextResults";
@@ -13,6 +17,8 @@ import PreviousFactCheckResults from "@/components/NavItems/Assistant/AssistantC
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { ROLES } from "@/constants/roles";
+
+import { TransHtmlDoubleLineBreak } from "../TransComponents";
 
 const AssistantWarnings = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -30,13 +36,28 @@ const AssistantWarnings = () => {
   );
 
   return (
-    <Card variant="outlined">
+    <Card variant="outlined" id="warnings">
       <CardHeader
         className={classes.assistantCardHeader}
         title={
           <Alert severity="warning" sx={{ bgcolor: "background.paper" }}>
             <Typography>{keyword("dbkf_title")}</Typography>
           </Alert>
+        }
+        action={
+          <Tooltip
+            interactive={"true"}
+            title={
+              <>
+                <Trans t={keyword} i18nKey="dbkf_tooltip" />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
+                <Trans t={keyword} i18nKey="previous_fact_checks_tooltip" />
+              </>
+            }
+            classes={{ tooltip: classes.assistantTooltip }}
+          >
+            <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+          </Tooltip>
         }
       />
       <CardContent>
