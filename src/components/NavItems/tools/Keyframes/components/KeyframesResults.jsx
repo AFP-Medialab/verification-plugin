@@ -20,6 +20,10 @@ import { KeyframeInputType as TAB_VALUES } from "@/components/NavItems/tools/Key
 import ImageGrid from "@/components/NavItems/tools/Keyframes/components/ImageGrid";
 import KeyframesLoadingState from "@/components/NavItems/tools/Keyframes/components/KeyframesLoadingState";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import {
+  SEARCH_ENGINE_SETTINGS,
+  reverseImageSearch,
+} from "@Shared/ReverseSearch/reverseSearchUtils";
 import { downloadFile } from "@Shared/Utils/fileUtils";
 
 const KeyframesResults = ({
@@ -76,6 +80,15 @@ const KeyframesResults = ({
       }
       return prev;
     });
+  };
+
+  const imageClickReverseSearch = (imgUrl) => {
+    if (imgUrl !== "")
+      reverseImageSearch(
+        imgUrl,
+        SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME,
+        false,
+      );
   };
 
   //Help
@@ -234,6 +247,7 @@ const KeyframesResults = ({
                       alt="extracted img with text"
                       getImageUrl={(img) => img.keyframeUrl}
                       nbOfCols={cols}
+                      onClick={(imgUrl) => imageClickReverseSearch(imgUrl)}
                     />
                   </Stack>
                 </Box>
