@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
@@ -10,7 +10,6 @@ import Stack from "@mui/material/Stack";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
 import KeyframesHeader from "@/components/NavItems/tools/Keyframes/components/KeyframesHeader";
-import KeyframesInput from "@/components/NavItems/tools/Keyframes/components/KeyframesInput";
 import KeyframesResults from "@/components/NavItems/tools/Keyframes/components/KeyframesResults";
 import KeyframesTabs from "@/components/NavItems/tools/Keyframes/components/KeyframesTabs";
 import SimilarityResults from "@/components/NavItems/tools/Keyframes/components/SimilarityResults";
@@ -22,6 +21,7 @@ import {
 } from "@/redux/reducers/tools/keyframesReducer";
 import "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import StringFileUploadField from "@Shared/StringFileUploadField";
 import { TabContext, TabPanel } from "@mui/lab";
 
 import { useProcessKeyframes } from "./Hooks/useKeyframeWrapper";
@@ -81,6 +81,7 @@ const Keyframes = () => {
   } = useKeyframesState();
 
   const [input, setInput] = useState(resultUrl || "");
+  const [videoFile, setVideoFile] = useState(null);
   const [submittedUrl, setSubmittedUrl] = useState(undefined);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [tabSelected, setTabSelected] = useState(TAB_VALUES.URL);
@@ -109,16 +110,21 @@ const Keyframes = () => {
 
   const isBusy = isPending || isLoadingSimilarity;
 
-  const submitUrl = useCallback(
-    async (maybeUrl) => {
-      const finalUrl = (maybeUrl ?? input)?.trim();
-      if (!finalUrl) return;
+  const submitUrl = async (maybeUrl, maybeFile) => {
+    const finalUrl = maybeUrl?.trim();
+    const file = maybeFile;
 
-      dispatch(resetKeyframes());
-      dispatch(setKeyframesUrl(finalUrl));
-      resetFetchingKeyframes();
+    if (!finalUrl && !file) return;
 
-      try {
+    dispatch(resetKeyframes());
+    resetFetchingKeyframes();
+
+    try {
+      if (file) {
+        setHasSubmitted(true);
+        await executeProcess(file, role);
+      } else if (finalUrl) {
+        dispatch(setKeyframesUrl(finalUrl));
         setSubmittedUrl(finalUrl);
         setHasSubmitted(true);
         const result = await executeProcess(finalUrl, role);
@@ -127,30 +133,25 @@ const Keyframes = () => {
           dispatch(setKeyframesFeatures(result.featureData));
           setHasSubmitted(false);
         }
-      } catch (err) {
-        console.error(err);
       }
-    },
-    [dispatch, executeProcess, input, resetFetchingKeyframes, role],
-  );
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-  const resetResults = useCallback(() => {
+  function resetResults() {
     setInput("");
     dispatch(resetKeyframes());
     resetFetchingKeyframes();
-  }, [dispatch]);
+  }
 
-  const handleTabSelectedChange = useCallback((event, newValue) => {
+  function handleTabSelectedChange(event, newValue) {
     setTabSelected(newValue);
-  }, []);
+  }
 
-  const onSubmitForm = useCallback(
-    (e) => {
-      e.preventDefault();
-      submitUrl();
-    },
-    [submitUrl],
-  );
+  function onSubmitForm() {
+    submitUrl(input, videoFile);
+  }
 
   useEffect(() => {
     if (!urlParam) return;
@@ -162,7 +163,7 @@ const Keyframes = () => {
     if (!processUrl) return;
     setInput(processUrl);
     submitUrl(processUrl);
-  }, [processUrl, submitUrl]);
+  }, [processUrl]);
 
   useEffect(() => {
     if (featureData && data && hasSubmitted) {
@@ -185,21 +186,29 @@ const Keyframes = () => {
           />
 
           <Card variant="outlined">
-            <Box sx={{ width: "100%", typography: "body1" }}>
-              <TabPanel value={TAB_VALUES.URL}>
-                <KeyframesInput
-                  input={input}
-                  onInputChange={setInput}
-                  onSubmit={onSubmitForm}
-                  onReset={resetResults}
-                  isDisabled={isBusy}
-                  keyword={keyword}
+            <TabPanel value={TAB_VALUES.URL}>
+              <form>
+                <StringFileUploadField
+                  labelKeyword={keyword("keyframes_input")}
+                  placeholderKeyword={keyword("keyframes_input")}
+                  submitButtonKeyword={keyword("button_submit")}
+                  localFileKeyword={keyword("button_localfile")}
+                  urlInput={input}
+                  setUrlInput={setInput}
+                  fileInput={videoFile}
+                  setFileInput={setVideoFile}
+                  handleSubmit={onSubmitForm}
+                  fileInputTypesAccepted={"video/*"}
+                  handleCloseSelectedFile={resetResults}
+                  // preprocessLocalFile={}
+                  isParentLoading={isBusy}
+                  handleClearUrl={resetResults}
                 />
-              </TabPanel>
-              <TabPanel value={TAB_VALUES.FILE}>
-                <LocalFile />
-              </TabPanel>
-            </Box>
+              </form>
+            </TabPanel>
+            <TabPanel value={TAB_VALUES.FILE}>
+              <LocalFile />
+            </TabPanel>
           </Card>
 
           <SimilarityResults
