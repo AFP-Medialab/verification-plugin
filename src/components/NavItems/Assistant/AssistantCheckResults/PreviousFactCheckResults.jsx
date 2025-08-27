@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
+import Chip from "@mui/material/Chip";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
@@ -16,6 +17,7 @@ import { getLanguageName } from "@/components/Shared/Utils/languageUtils";
 import dayjs from "dayjs";
 import LocaleData from "dayjs/plugin/localeData";
 import localizedFormat from "dayjs/plugin/localizedFormat";
+import { result } from "lodash";
 
 import { TextFooterPrevFactChecks } from "../AssistantScrapeResults/TextFooter";
 
@@ -38,61 +40,104 @@ const PreviousFactCheckResults = () => {
   // for navigating to Semantic Search with text
   const navigate = useNavigate();
 
+  // <Accordion defaultExpanded>
+  //   <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+  //     <Grid container spacing={1} wrap="wrap" width="100%">
+  //       <Grid size={4} align="start">
+  //         <Typography display="inline" sx={{ align: "start" }}>
+  //           {prevFactChecksTitle}
+  //         </Typography>
+  //       </Grid>
+
+  //       <Grid size={8} align="start">
+  //         {prevFactChecksDone && prevFactChecksResult.length > 0 && (
+  //           <Typography sx={{ color: "text.secondary", align: "start" }}>
+  //             {keyword("previous_fact_checks_found")}
+  //           </Typography>
+  //         )}
+  //       </Grid>
+  //     </Grid>
+  //   </AccordionSummary>
+  //
+  //   <AccordionDetails>
+  //     {prevFactChecksDone && prevFactChecksResult.length > 0 && (
+  //       <>
+  //         {prevFactChecksResult.map((resultItem) => {
+  //           // date in correct format
+  //           const date = resultItem.published_at.slice(0, 10);
+
+  //           console.log(resultItem, resultItem.website)
+  //           return (
+  //             <ResultDisplayItem
+  //               key={resultItem.id}
+  //               id={resultItem.id}
+  //               claim={resultItem.claim_en}
+  //               title={resultItem.title_en}
+  //               claimOriginalLanguage={resultItem.claim}
+  //               titleOriginalLanguage={resultItem.title}
+  //               rating={resultItem.rating}
+  //               date={
+  //                 dayjs(date).format(globalLocaleData.longDateFormat("LL")) ??
+  //                 null
+  //               }
+  //               website={resultItem.website || resultItem.source_name}
+  //               language={getLanguageName(resultItem.source_language)}
+  //               similarityScore={resultItem.score}
+  //               articleUrl={resultItem.url}
+  //               domainUrl={resultItem.source_name}
+  //               imageUrl={resultItem.image_url}
+  //             />
+  //           );
+  //         })}
+
+  //         <TextFooterPrevFactChecks navigate={navigate} keyword={keyword} />
+  //       </>
+  //     )}
+  //   </AccordionDetails>
+  // </Accordion>
+  // );
+
   return (
-    <Accordion defaultExpanded>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Grid container spacing={1} wrap="wrap" width="100%">
-          <Grid size={4} align="start">
-            <Typography display="inline" sx={{ align: "start" }}>
-              {prevFactChecksTitle}
-            </Typography>
-          </Grid>
+    <>
+      {/* <Typography display="inline" sx={{ align: "center" }}>
+               {prevFactChecksTitle}
+             </Typography> */}
+      <Chip color="primary" label={prevFactChecksTitle} />
 
-          <Grid size={8} align="start">
-            {prevFactChecksDone && prevFactChecksResult.length > 0 && (
-              <Typography sx={{ color: "text.secondary", align: "start" }}>
-                {keyword("previous_fact_checks_found")}
-              </Typography>
-            )}
-          </Grid>
-        </Grid>
-      </AccordionSummary>
+      {prevFactChecksDone && prevFactChecksResult.length > 0 && (
+        <>
+          {prevFactChecksResult.map((resultItem) => {
+            // date in correct format
+            const date = resultItem.published_at.slice(0, 10);
 
-      <AccordionDetails>
-        {prevFactChecksDone && prevFactChecksResult.length > 0 && (
-          <>
-            {prevFactChecksResult.map((resultItem) => {
-              // date in correct format
-              const date = resultItem.published_at.slice(0, 10);
+            console.log(resultItem, resultItem.website);
+            return (
+              <ResultDisplayItem
+                key={resultItem.id}
+                id={resultItem.id}
+                claim={resultItem.claim_en}
+                title={resultItem.title_en}
+                claimOriginalLanguage={resultItem.claim}
+                titleOriginalLanguage={resultItem.title}
+                rating={resultItem.rating}
+                date={
+                  dayjs(date).format(globalLocaleData.longDateFormat("LL")) ??
+                  null
+                }
+                website={resultItem.website || resultItem.source_name}
+                language={getLanguageName(resultItem.source_language)}
+                similarityScore={resultItem.score}
+                articleUrl={resultItem.url}
+                domainUrl={resultItem.source_name}
+                imageUrl={resultItem.image_url}
+              />
+            );
+          })}
+        </>
+      )}
 
-              return (
-                <ResultDisplayItem
-                  key={resultItem.id}
-                  id={resultItem.id}
-                  claim={resultItem.claim_en}
-                  title={resultItem.title_en}
-                  claimOriginalLanguage={resultItem.claim}
-                  titleOriginalLanguage={resultItem.title}
-                  rating={resultItem.rating}
-                  date={
-                    dayjs(date).format(globalLocaleData.longDateFormat("LL")) ??
-                    null
-                  }
-                  website={resultItem.website}
-                  language={getLanguageName(resultItem.source_language)}
-                  similarityScore={resultItem.score}
-                  articleUrl={resultItem.url}
-                  domainUrl={resultItem.source_name}
-                  imageUrl={resultItem.image_url}
-                />
-              );
-            })}
-
-            <TextFooterPrevFactChecks navigate={navigate} keyword={keyword} />
-          </>
-        )}
-      </AccordionDetails>
-    </Accordion>
+      <TextFooterPrevFactChecks navigate={navigate} keyword={keyword} />
+    </>
   );
 };
 
