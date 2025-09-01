@@ -1,26 +1,56 @@
 import React from "react";
 
+import Card from "@mui/material/Card";
+import CardActionArea from "@mui/material/CardActionArea";
 import Grid from "@mui/material/Grid";
 
 import { ImageWithFade } from "@/components/NavItems/tools/Keyframes/components/ImageWithFade";
 
 /**
- * Displays a grid of images with fade effect using Material UI Grid.
+ * Image grid with fade-in effect using MUI Grid and Card.
  *
- * @param images {ImagesFeature[]} Array of image feature objects
- * @param alt {string} Base alt text for images; the index is appended automatically.
- * @returns {Element}
- * @constructor
+ * @param {Array<ImagesFeature|Keyframe>} images - List of image items.
+ * @param {string} alt - Base alt text; the index is appended automatically.
+ * @param {(item: ImagesFeature|Keyframe) => string} getImageUrl - Function that returns the image URL.
+ * @param {?number} nbOfCols - Optional fixed number of columns.
+ * @param {?function(string): void} onClick - Optional click handler; receives the image src URL as a string.
+ * @returns {JSX.Element}
  */
-const ImageGrid = ({ images, alt }) => {
+const ImageGrid = ({ images, alt, getImageUrl, nbOfCols, onClick }) => {
   return (
     <Grid container direction="row" spacing={2}>
       {images.map((item, i) => (
-        <Grid key={i} size={{ md: 3, lg: 1 }}>
-          <ImageWithFade
-            src={item.representative.imageUrl}
-            alt={`${alt} #${i + 1}`}
-          />
+        <Grid
+          key={i}
+          size={
+            nbOfCols
+              ? {
+                  xs: nbOfCols,
+                  sm: nbOfCols,
+                  md: nbOfCols,
+                  lg: nbOfCols,
+                  xl: nbOfCols,
+                }
+              : { md: 3, lg: 1 }
+          }
+        >
+          <Card
+            elevation={0}
+            sx={{
+              borderRadius: "0px !important",
+            }}
+          >
+            {onClick ? (
+              <CardActionArea onClick={() => onClick(getImageUrl(item))}>
+                <ImageWithFade
+                  src={getImageUrl(item)}
+                  alt={`${alt} #${i + 1}`}
+                />
+              </CardActionArea>
+            ) : (
+              <ImageWithFade src={getImageUrl(item)} alt={`${alt} #${i + 1}`} />
+            )}
+          </Card>
         </Grid>
       ))}
     </Grid>

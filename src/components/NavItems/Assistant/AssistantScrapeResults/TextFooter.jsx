@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -12,7 +13,6 @@ import Typography from "@mui/material/Typography";
 import { ExpandLessOutlined, ExpandMoreOutlined } from "@mui/icons-material";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 import { TextCopy } from "@Shared/Utils/TextCopy";
 import { Translate } from "@Shared/Utils/Translate";
 import { getLanguageName } from "@Shared/Utils/languageUtils";
@@ -28,6 +28,7 @@ export default function TextFooter({
   expanded,
 }) {
   const keyword = i18nLoadNamespace("components/Shared/utils");
+  const locale = useSelector((state) => state.language);
   return (
     <Box>
       <Divider />
@@ -47,7 +48,7 @@ export default function TextFooter({
               display: "inline",
             }}
           >
-            {getLanguageName(textLang, textLang) ?? textLang}
+            {getLanguageName(textLang, locale) ?? textLang}
           </Typography>
         </Grid>
 
@@ -104,56 +105,30 @@ export default function TextFooter({
   );
 }
 
-export function TextFooterPrevFactChecks({
-  navigate,
-  keyword,
-  setExpanded,
-  expanded,
-}) {
+export function TextFooterPrevFactChecks({ navigate, keyword }) {
   const handleClick = (path) => {
     // instead need to set parameter then load text in SemanticSearch/index.jsx
     navigate("/app/" + path + "/assistantText");
   };
-  const classes = useMyStyles();
-  const expandMinimiseText = keyword("expand_minimise_text");
 
   return (
-    <Box>
-      <Divider />
-      <Grid container>
-        {/* empty */}
-        <Grid size={{ xs: 1 }} align={"start"}>
-          <></>
-        </Grid>
-
-        {/* see more details */}
-        <Grid size={{ xs: 10 }} align={"center"}>
-          <Typography
-            component={"div"}
-            sx={{ color: "text.secondary", align: "start" }}
-          >
-            <p></p>
-            {keyword("more_details")}{" "}
-            <Link
-              sx={{ cursor: "pointer" }}
-              onClick={() => handleClick("tools/semanticSearch")}
-            >
-              {keyword("semantic_search_title")}
-            </Link>
-          </Typography>
-        </Grid>
-
-        {/* expand/minimise text */}
-        <Grid size={1} align={"left"}>
-          <ExpandMinimise
-            classes={classes}
-            expandMinimiseText={expandMinimiseText}
-            setExpanded={setExpanded}
-            expanded={expanded}
-          />
-        </Grid>
+    <Grid container spacing={1} wrap="wrap" width="100%" sx={{ pt: 2 }}>
+      <Grid size={4} align="start">
+        <></>
       </Grid>
-    </Box>
+
+      <Grid size={7} align="start">
+        <Typography sx={{ color: "text.secondary", align: "start" }}>
+          {keyword("more_details")}{" "}
+          <Link
+            sx={{ cursor: "pointer" }}
+            onClick={() => handleClick("tools/semanticSearch")}
+          >
+            {keyword("semantic_search_title")}
+          </Link>
+        </Typography>
+      </Grid>
+    </Grid>
   );
 }
 

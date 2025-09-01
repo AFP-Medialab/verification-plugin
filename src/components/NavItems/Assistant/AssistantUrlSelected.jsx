@@ -21,12 +21,12 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { useTrackEvent } from "@/Hooks/useAnalytics";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
+import { KNOWN_LINKS } from "@/constants/tools";
 import {
   cleanAssistantState,
   submitInputUrl,
 } from "@/redux/actions/tools/assistantActions";
 
-import { KNOWN_LINKS } from "./AssistantRuleBook";
 import {
   TransHtmlDoubleLineBreak,
   TransSupportedUrlsLink,

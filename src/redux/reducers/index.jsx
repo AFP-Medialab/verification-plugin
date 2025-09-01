@@ -1,5 +1,5 @@
-import syntheticImageDetectionActions from "@/redux/actions/tools/syntheticImageDetectionActions";
 import toolTabSelected from "@/redux/reducers/toolTabSelectedReducer";
+import syntheticImageDetectionActions from "@/redux/reducers/tools/syntheticImageDetectionReducer";
 import { combineReducers } from "redux";
 
 import assistantReducer from "./assistantReducer";

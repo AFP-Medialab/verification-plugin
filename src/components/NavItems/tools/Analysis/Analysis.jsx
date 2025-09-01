@@ -15,6 +15,7 @@ import TextField from "@mui/material/TextField";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
 import { videoAnalysis } from "@/constants/tools";
+import { KNOWN_LINKS } from "@/constants/tools";
 import {
   cleanAnalysisState,
   setAnalysisComments,
@@ -29,7 +30,6 @@ import _ from "lodash";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import { useAnalysisWrapper } from "./Hooks/useAnalysisWrapper";
 import useGenerateApiUrl from "./Hooks/useGenerateApiUrl";
 import AFacebookResults from "./Results/AFacebookResults";
