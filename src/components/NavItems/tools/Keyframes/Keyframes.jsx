@@ -6,7 +6,12 @@ import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CircularProgress from "@mui/material/CircularProgress";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
 import KeyframesHeader from "@/components/NavItems/tools/Keyframes/components/KeyframesHeader";
@@ -19,6 +24,7 @@ import {
   setKeyframesResult,
   setKeyframesUrl,
 } from "@/redux/reducers/tools/keyframesReducer";
+import AdvancedSettingsContainer from "@Shared/AdvancedSettingsContainer";
 import "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "@Shared/StringFileUploadField";
@@ -32,6 +38,18 @@ import LocalFile from "./LocalFile/LocalFile";
 const TAB_VALUES = {
   URL: "url",
   FILE: "file",
+};
+const PROCESS_LEVEL_OPTIONS = [1, 2, 3];
+const AUDIO_OPTIONS = [0, 1];
+const SENSITIVITY_DEFAULT = 0.4;
+const DOWNLOAD_MAX_HEIGHT_DEFAULT = 1080;
+const DOWNLOAD_MAX_HEIGHT_OPTIONS = [480, 720, 1080, 1440, 2160];
+const PROCESS_LEVEL_DEFAULT = 3;
+const AUDIO_DEFAULT = 0;
+const PROCESS_LEVEL_DESCRIPTIONS = {
+  1: "Temporal segmentation only - faster",
+  2: "Segmentation + key element detection",
+  3: "Full pipeline (segmentation + detection + enhancement) - slower",
 };
 
 // Utility functions
@@ -85,6 +103,22 @@ const Keyframes = () => {
   const [submittedUrl, setSubmittedUrl] = useState(undefined);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [tabSelected, setTabSelected] = useState(TAB_VALUES.URL);
+
+  const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
+  const [showResetAdvancedSettings, setShowResetAdvancedSettings] =
+    useState(false);
+
+  // Controlled state hooks for advanced settings
+  const [downloadMaxHeight, setDownloadMaxHeight] = useState(
+    DOWNLOAD_MAX_HEIGHT_DEFAULT,
+  );
+  const [processLevel, setProcessLevel] = useState(PROCESS_LEVEL_DEFAULT);
+  const [audioEnabled, setAudioEnabled] = useState(AUDIO_DEFAULT);
+  const [sensitivity, setSensitivity] = useState(SENSITIVITY_DEFAULT);
+
+  const resetSearchSettings = () => {
+    setShowResetAdvancedSettings(false);
+  };
 
   const {
     executeProcess,
@@ -188,22 +222,113 @@ const Keyframes = () => {
           <Card variant="outlined">
             <TabPanel value={TAB_VALUES.URL}>
               <form>
-                <StringFileUploadField
-                  labelKeyword={keyword("keyframes_input")}
-                  placeholderKeyword={keyword("keyframes_input")}
-                  submitButtonKeyword={keyword("button_submit")}
-                  localFileKeyword={keyword("button_localfile")}
-                  urlInput={input}
-                  setUrlInput={setInput}
-                  fileInput={videoFile}
-                  setFileInput={setVideoFile}
-                  handleSubmit={onSubmitForm}
-                  fileInputTypesAccepted={"video/*"}
-                  handleCloseSelectedFile={resetResults}
-                  // preprocessLocalFile={}
-                  isParentLoading={isBusy}
-                  handleClearUrl={resetResults}
-                />
+                <Stack direction="column" spacing={2}>
+                  <StringFileUploadField
+                    labelKeyword={keyword("keyframes_input")}
+                    placeholderKeyword={keyword("keyframes_input")}
+                    submitButtonKeyword={keyword("button_submit")}
+                    localFileKeyword={keyword("button_localfile")}
+                    urlInput={input}
+                    setUrlInput={setInput}
+                    fileInput={videoFile}
+                    setFileInput={setVideoFile}
+                    handleSubmit={onSubmitForm}
+                    fileInputTypesAccepted={"video/*"}
+                    handleCloseSelectedFile={resetResults}
+                    // preprocessLocalFile={}
+                    isParentLoading={isBusy}
+                    handleClearUrl={resetResults}
+                  />
+
+                  <AdvancedSettingsContainer
+                    showAdvancedSettings={showAdvancedSettings}
+                    setShowAdvancedSettings={setShowAdvancedSettings}
+                    showResetAdvancedSettings={showResetAdvancedSettings}
+                    resetSearchSettings={resetSearchSettings}
+                    keywordFn={keyword}
+                    keywordShow={"keyframes_advanced_settings_show"}
+                    keywordHide={"keyframes_advanced_settings_hide"}
+                    keywordReset={"keyframes_advanced_settings_reset"}
+                  >
+                    <Box display="flex" gap={2} flexWrap="wrap" sx={{ p: 2 }}>
+                      <FormControl sx={{ minWidth: 120 }}>
+                        <InputLabel id="download-max-height-label">
+                          {keyword("download_max_height")}
+                        </InputLabel>
+                        <Select
+                          variant="outlined"
+                          labelId="download-max-height-label"
+                          id="download-max-height-select"
+                          value={downloadMaxHeight}
+                          label={keyword("download_max_height")}
+                          onChange={(e) =>
+                            setDownloadMaxHeight(Number(e.target.value))
+                          }
+                        >
+                          {DOWNLOAD_MAX_HEIGHT_OPTIONS.map((val) => (
+                            <MenuItem key={val} value={val}>
+                              {val}p
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+
+                      <FormControl sx={{ minWidth: 120 }}>
+                        <InputLabel id="process-level-label">
+                          {keyword("process_level")}
+                        </InputLabel>
+                        <Select
+                          variant="outlined"
+                          labelId="process-level-label"
+                          id="process-level-select"
+                          value={processLevel}
+                          label={keyword("process_level")}
+                          onChange={(e) =>
+                            setProcessLevel(Number(e.target.value))
+                          }
+                        >
+                          {PROCESS_LEVEL_OPTIONS.map((val) => (
+                            <MenuItem key={val} value={val}>
+                              {PROCESS_LEVEL_DESCRIPTIONS[val]}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+
+                      <FormControl sx={{ minWidth: 120 }}>
+                        <InputLabel id="audio-enabled-label">
+                          {keyword("enable_audio_processing")}
+                        </InputLabel>
+                        <Select
+                          variant="outlined"
+                          labelId="audio-enabled-label"
+                          id="audio-enabled-select"
+                          value={audioEnabled}
+                          label={keyword("audio")}
+                          onChange={(e) =>
+                            setAudioEnabled(Number(e.target.value))
+                          }
+                        >
+                          {AUDIO_OPTIONS.map((val) => (
+                            <MenuItem key={val} value={val}>
+                              {val === 0 ? "False" : "True"}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+
+                      <TextField
+                        variant="outlined"
+                        label={keyword("sensitivity")}
+                        type="number"
+                        inputProps={{ min: 0.01, max: 0.6, step: 0.01 }}
+                        value={sensitivity}
+                        onChange={(e) => setSensitivity(Number(e.target.value))}
+                        sx={{ minWidth: 120 }}
+                      />
+                    </Box>
+                  </AdvancedSettingsContainer>
+                </Stack>
               </form>
             </TabPanel>
             <TabPanel value={TAB_VALUES.FILE}>
