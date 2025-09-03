@@ -641,3 +641,14 @@ chrome.runtime.onMessageExternal.addListener(async function (request) {
 });
 
 chrome.runtime.onStartup.addListener();
+
+if (process.env.REACT_APP_ENVIRONMENT !== "production") {
+  chrome.action.setIcon({
+    path: {
+      16: "img/icon-staging.png",
+      32: "img/icon-staging.png",
+      48: "img/icon-staging.png",
+      128: "img/icon-staging.png",
+    },
+  });
+}
