@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useLocation } from "react-router-dom";
 
+import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Fade from "@mui/material/Fade";
 
@@ -98,12 +99,28 @@ const ContentContainer = ({ topMenuItems, index }) => {
   }, []);
 
   return (
-    <Container key={index}>
-      <Fade in={true}>
-        <div>
-          {topMenuItems[index].content}
-          {topMenuItems[index].footer}
-        </div>
+    <Container
+      key={index}
+      sx={{
+        minHeight: "calc(100vh - 110px)",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <Fade
+        in={true}
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <Box>
+          <Box sx={{ flex: 1 }}>{topMenuItems[index].content}</Box>
+          <Box component="footer" sx={{ mt: "auto" }}>
+            {topMenuItems[index].footer}
+          </Box>
+        </Box>
       </Fade>
     </Container>
   );

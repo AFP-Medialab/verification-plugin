@@ -165,7 +165,7 @@ const styles = (theme) => ({
   },
 
   footer: {
-    padding: theme.spacing(10, 5),
+    padding: theme.spacing(10, 0, 3, 0),
     textAlign: "center",
     bottom: 0,
   },
