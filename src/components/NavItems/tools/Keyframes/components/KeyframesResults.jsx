@@ -255,18 +255,18 @@ const KeyframesResults = ({
               {features && (
                 <>
                   <ResultsCard>
-                    <Typography variant="h6">Faces Detected</Typography>
-                    <ImageGrid
-                      images={features.faces}
-                      alt="extracted img with face"
-                      getImageUrl={(img) => img.representative.imageUrl}
-                    />
-                  </ResultsCard>
-                  <ResultsCard>
                     <Typography variant="h6">Text Detected</Typography>
                     <ImageGrid
                       images={features.texts}
                       alt="extracted img with text"
+                      getImageUrl={(img) => img.representative.imageUrl}
+                    />
+                  </ResultsCard>
+                  <ResultsCard>
+                    <Typography variant="h6">Faces Detected</Typography>
+                    <ImageGrid
+                      images={features.faces}
+                      alt="extracted img with face"
                       getImageUrl={(img) => img.representative.imageUrl}
                     />
                   </ResultsCard>
