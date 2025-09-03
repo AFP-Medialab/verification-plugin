@@ -69,5 +69,5 @@ const App = () => {
     </HashRouter>
   );
 };
-
+ 
 export default App;
