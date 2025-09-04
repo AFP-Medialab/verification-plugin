@@ -120,6 +120,8 @@ const Keyframes = () => {
     setShowResetAdvancedSettings(false);
   };
 
+  const source = videoFile || input;
+
   const {
     executeProcess,
     resetFetchingKeyframes,
@@ -130,7 +132,7 @@ const Keyframes = () => {
     isFeatureDataPending,
     featureData,
     featureDataError,
-  } = useProcessKeyframes(input);
+  } = useProcessKeyframes(source);
 
   useVideoSimilarity(submittedUrl, keyword);
   useTrackEvent(

@@ -44,12 +44,12 @@ export const createKeyframeJobApi = async (
     config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: `${process.env.REACT_APP_KEYFRAME_API_2}/start`,
+      url: process.env.REACT_APP_KEYFRAME_API_FILE,
       headers: {
         "Content-Type": "multipart/form-data",
       },
       data: formData,
-      timeout: 10000, // 10s timeout
+      // timeout: 30000, // 30s timeout
     };
   } else {
     // URL mode: Prepare the request payload with the video URL.
@@ -66,7 +66,7 @@ export const createKeyframeJobApi = async (
         "Content-Type": "application/json",
       },
       data: d,
-      timeout: 10000, // Set a timeout of 10 seconds for the request.
+      timeout: 30000, // Set a timeout of 30 seconds for the request.
     };
   }
 
