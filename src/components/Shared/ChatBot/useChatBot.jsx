@@ -25,6 +25,105 @@ const useChatBot = (
   // Pre-defined requests from configuration
   const [preRequests] = useState(PRE_REQUESTS_CONFIG);
 
+  // Handle streaming response chunks
+  const handleStreamingResponse = useCallback(
+    async (response, options = {}) => {
+      if (!response.body) {
+        throw new Error("Response body is not available for streaming");
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let fullContent = "";
+      let messageData = {
+        id: null,
+        model: null,
+        usage: null,
+      };
+
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+
+          if (done) {
+            break;
+          }
+
+          const chunk = decoder.decode(value, { stream: true });
+          const lines = chunk.split("\n");
+
+          for (const line of lines) {
+            const trimmedLine = line.trim();
+
+            if (trimmedLine === "" || trimmedLine === "data: [DONE]") {
+              continue;
+            }
+
+            if (trimmedLine.startsWith("data: ")) {
+              try {
+                const jsonData = JSON.parse(trimmedLine.slice(6)); // Remove 'data: ' prefix
+
+                // Store metadata from first chunk
+                if (!messageData.id && jsonData.id) {
+                  messageData.id = jsonData.id;
+                  messageData.model = jsonData.model;
+                }
+
+                // Check for completion
+                if (jsonData.choices && jsonData.choices[0]) {
+                  const choice = jsonData.choices[0];
+
+                  if (choice.finish_reason === "stop") {
+                    // Stream is complete
+                    if (jsonData.usage) {
+                      messageData.usage = jsonData.usage;
+                    }
+                    break;
+                  }
+
+                  // Accumulate content from delta
+                  if (choice.delta && choice.delta.content) {
+                    fullContent += choice.delta.content;
+
+                    // Call onChunk callback if provided
+                    if (options.onChunk) {
+                      options.onChunk({
+                        content: choice.delta.content,
+                        fullContent: fullContent,
+                        isComplete: false,
+                      });
+                    }
+                  }
+                }
+              } catch (e) {
+                console.warn(
+                  "Failed to parse streaming chunk:",
+                  trimmedLine,
+                  e,
+                );
+              }
+            }
+          }
+        }
+
+        return {
+          id: messageData.id || Date.now().toString(),
+          text: fullContent,
+          sender: "bot",
+          timestamp: new Date().toLocaleTimeString(),
+          model: messageData.model,
+          usage: messageData.usage,
+        };
+      } catch (err) {
+        console.error("Error reading streaming response:", err);
+        throw err;
+      } finally {
+        reader.releaseLock();
+      }
+    },
+    [],
+  );
+
   // Fetch available models from GET /v1/models
   const fetchModels = useCallback(async () => {
     setIsModelsLoading(true);
@@ -78,7 +177,7 @@ const useChatBot = (
           })),
           temperature: options.temperature || 0.7,
           max_tokens: options.maxTokens || 1000,
-          stream: false,
+          stream: options.stream !== false, // Default to streaming unless explicitly disabled
           ...options,
         };
 
@@ -97,6 +196,12 @@ const useChatBot = (
           );
         }
 
+        // Handle streaming response
+        if (requestBody.stream) {
+          return await handleStreamingResponse(response, options);
+        }
+
+        // Handle non-streaming response (fallback)
         const data = await response.json();
 
         if (!data.choices || data.choices.length === 0) {
@@ -165,7 +270,7 @@ const useChatBot = (
           messages: processedMessages,
           temperature: options.temperature || 0.7,
           max_tokens: options.maxTokens || 1000,
-          stream: false,
+          stream: options.stream !== false, // Default to streaming unless explicitly disabled
           ...options,
         };
 
@@ -184,6 +289,16 @@ const useChatBot = (
           );
         }
 
+        // Handle streaming response
+        if (requestBody.stream) {
+          const result = await handleStreamingResponse(response, options);
+          return {
+            ...result,
+            preRequestUsed: preRequest.name,
+          };
+        }
+
+        // Handle non-streaming response (fallback)
         const data = await response.json();
 
         if (!data.choices || data.choices.length === 0) {

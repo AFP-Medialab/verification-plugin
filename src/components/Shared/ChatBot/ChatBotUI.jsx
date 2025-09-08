@@ -26,6 +26,7 @@ import useChatBot from "./useChatBot";
 const ChatBotUI = () => {
   const [userInput, setUserInput] = useState("");
   const [messages, setMessages] = useState([]);
+  const [streamingMessage, setStreamingMessage] = useState(null);
 
   const {
     models,
@@ -52,6 +53,7 @@ const ChatBotUI = () => {
     setMessages([]);
     setUserInput("");
     setSelectedPreRequest("");
+    setStreamingMessage(null);
     clearError();
   };
 
@@ -81,12 +83,43 @@ const ChatBotUI = () => {
         setMessages((prev) => [...prev, userMessage]);
       }
 
-      const botResponse = await executePreRequest(preRequestId, {}, content);
-      setMessages((prev) => [...prev, { ...botResponse, id: Date.now() + 1 }]);
+      // Create a streaming message placeholder
+      const streamingId = Date.now() + 1;
+      setStreamingMessage({
+        id: streamingId,
+        text: "",
+        sender: "bot",
+        timestamp: new Date().toLocaleTimeString(),
+        isStreaming: true,
+      });
+
+      const botResponse = await executePreRequest(
+        preRequestId,
+        {
+          onChunk: (chunk) => {
+            setStreamingMessage((prev) =>
+              prev
+                ? {
+                    ...prev,
+                    text: chunk.fullContent,
+                    isStreaming: !chunk.isComplete,
+                  }
+                : null,
+            );
+          },
+        },
+        content,
+      );
+
+      // Move streaming message to final messages
+      setMessages((prev) => [...prev, { ...botResponse, id: streamingId }]);
+      setStreamingMessage(null);
+
       // Reset pre-request selection after execution
       setSelectedPreRequest("");
     } catch (err) {
       console.error("Failed to execute pre-request:", err);
+      setStreamingMessage(null);
     }
   };
 
@@ -127,11 +160,37 @@ const ChatBotUI = () => {
     clearError();
 
     try {
-      const botResponse = await sendTextMessage(userInput, messages);
-      setMessages((prev) => [...prev, { ...botResponse, id: Date.now() + 1 }]);
+      // Create a streaming message placeholder
+      const streamingId = Date.now() + 1;
+      setStreamingMessage({
+        id: streamingId,
+        text: "",
+        sender: "bot",
+        timestamp: new Date().toLocaleTimeString(),
+        isStreaming: true,
+      });
+
+      const botResponse = await sendTextMessage(userInput, messages, {
+        onChunk: (chunk) => {
+          setStreamingMessage((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  text: chunk.fullContent,
+                  isStreaming: !chunk.isComplete,
+                }
+              : null,
+          );
+        },
+      });
+
+      // Move streaming message to final messages
+      setMessages((prev) => [...prev, { ...botResponse, id: streamingId }]);
+      setStreamingMessage(null);
     } catch (err) {
       // Error is already handled by the hook, just show it in UI
       console.error("Failed to send message:", err);
+      setStreamingMessage(null);
     }
   };
 
@@ -265,41 +324,92 @@ const ChatBotUI = () => {
               Start a conversation with the chatbot...
             </Typography>
           ) : (
-            messages.map((message) => (
-              <Box
-                key={message.id}
-                sx={{
-                  display: "flex",
-                  justifyContent:
-                    message.sender === "user" ? "flex-end" : "flex-start",
-                  mb: 2,
-                }}
-              >
-                <Paper
-                  elevation={2}
+            <>
+              {messages.map((message) => (
+                <Box
+                  key={message.id}
                   sx={{
-                    p: 2,
-                    maxWidth: "70%",
-                    backgroundColor:
-                      message.sender === "user" ? "#1976d2" : "#fff",
-                    color: message.sender === "user" ? "#fff" : "#000",
+                    display: "flex",
+                    justifyContent:
+                      message.sender === "user" ? "flex-end" : "flex-start",
+                    mb: 2,
                   }}
                 >
-                  <Box sx={{ mb: 0.5 }}>
-                    <MessageContent
-                      content={message.text}
-                      sender={message.sender}
-                    />
-                  </Box>
-                  <Typography variant="caption" sx={{ opacity: 0.7 }}>
-                    {message.timestamp}
-                  </Typography>
-                </Paper>
-              </Box>
-            ))
+                  <Paper
+                    elevation={2}
+                    sx={{
+                      p: 2,
+                      maxWidth: "70%",
+                      backgroundColor:
+                        message.sender === "user" ? "#1976d2" : "#fff",
+                      color: message.sender === "user" ? "#fff" : "#000",
+                    }}
+                  >
+                    <Box sx={{ mb: 0.5 }}>
+                      <MessageContent
+                        content={message.text}
+                        sender={message.sender}
+                      />
+                    </Box>
+                    <Typography variant="caption" sx={{ opacity: 0.7 }}>
+                      {message.timestamp}
+                    </Typography>
+                  </Paper>
+                </Box>
+              ))}
+
+              {/* Display streaming message */}
+              {streamingMessage && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    mb: 2,
+                  }}
+                >
+                  <Paper
+                    elevation={2}
+                    sx={{
+                      p: 2,
+                      maxWidth: "70%",
+                      backgroundColor: "#fff",
+                      color: "#000",
+                      position: "relative",
+                    }}
+                  >
+                    <Box sx={{ mb: 0.5 }}>
+                      <MessageContent
+                        content={streamingMessage.text || ""}
+                        sender={streamingMessage.sender}
+                      />
+                      {streamingMessage.isStreaming && (
+                        <Box
+                          component="span"
+                          sx={{
+                            display: "inline-block",
+                            width: "8px",
+                            height: "20px",
+                            backgroundColor: "#1976d2",
+                            marginLeft: "2px",
+                            animation: "blink 1s infinite",
+                            "@keyframes blink": {
+                              "0%, 50%": { opacity: 1 },
+                              "51%, 100%": { opacity: 0 },
+                            },
+                          }}
+                        />
+                      )}
+                    </Box>
+                    <Typography variant="caption" sx={{ opacity: 0.7 }}>
+                      {streamingMessage.timestamp}
+                    </Typography>
+                  </Paper>
+                </Box>
+              )}
+            </>
           )}
 
-          {isLoading && (
+          {isLoading && !streamingMessage && (
             <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 2 }}>
               <Paper elevation={2} sx={{ p: 2, backgroundColor: "#fff" }}>
                 <Typography variant="body2" sx={{ fontStyle: "italic" }}>
