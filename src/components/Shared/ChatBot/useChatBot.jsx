@@ -1,4 +1,5 @@
-import { useCallback, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useCallback, useEffect, useState } from "react";
 
 import { PRE_REQUESTS_CONFIG } from "./preRequestsConfig";
 
@@ -15,121 +16,22 @@ import { PRE_REQUESTS_CONFIG } from "./preRequestsConfig";
 const useChatBot = (
   apiBaseUrl = process.env.REACT_APP_CHATBOT_API_URL || "http://localhost:8000",
 ) => {
-  const [models, setModels] = useState([]);
   const [selectedModel, setSelectedModel] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isModelsLoading, setIsModelsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedPreRequest, setSelectedPreRequest] = useState("");
 
   // Pre-defined requests from configuration
   const [preRequests] = useState(PRE_REQUESTS_CONFIG);
 
-  // Handle streaming response chunks
-  const handleStreamingResponse = useCallback(
-    async (response, options = {}) => {
-      if (!response.body) {
-        throw new Error("Response body is not available for streaming");
-      }
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let fullContent = "";
-      let messageData = {
-        id: null,
-        model: null,
-        usage: null,
-      };
-
-      try {
-        while (true) {
-          const { done, value } = await reader.read();
-
-          if (done) {
-            break;
-          }
-
-          const chunk = decoder.decode(value, { stream: true });
-          const lines = chunk.split("\n");
-
-          for (const line of lines) {
-            const trimmedLine = line.trim();
-
-            if (trimmedLine === "" || trimmedLine === "data: [DONE]") {
-              continue;
-            }
-
-            if (trimmedLine.startsWith("data: ")) {
-              try {
-                const jsonData = JSON.parse(trimmedLine.slice(6)); // Remove 'data: ' prefix
-
-                // Store metadata from first chunk
-                if (!messageData.id && jsonData.id) {
-                  messageData.id = jsonData.id;
-                  messageData.model = jsonData.model;
-                }
-
-                // Check for completion
-                if (jsonData.choices && jsonData.choices[0]) {
-                  const choice = jsonData.choices[0];
-
-                  if (choice.finish_reason === "stop") {
-                    // Stream is complete
-                    if (jsonData.usage) {
-                      messageData.usage = jsonData.usage;
-                    }
-                    break;
-                  }
-
-                  // Accumulate content from delta
-                  if (choice.delta && choice.delta.content) {
-                    fullContent += choice.delta.content;
-
-                    // Call onChunk callback if provided
-                    if (options.onChunk) {
-                      options.onChunk({
-                        content: choice.delta.content,
-                        fullContent: fullContent,
-                        isComplete: false,
-                      });
-                    }
-                  }
-                }
-              } catch (e) {
-                console.warn(
-                  "Failed to parse streaming chunk:",
-                  trimmedLine,
-                  e,
-                );
-              }
-            }
-          }
-        }
-
-        return {
-          id: messageData.id || Date.now().toString(),
-          text: fullContent,
-          sender: "bot",
-          timestamp: new Date().toLocaleTimeString(),
-          model: messageData.model,
-          usage: messageData.usage,
-        };
-      } catch (err) {
-        console.error("Error reading streaming response:", err);
-        throw err;
-      } finally {
-        reader.releaseLock();
-      }
-    },
-    [],
-  );
-
-  // Fetch available models from GET /v1/models
-  const fetchModels = useCallback(async () => {
-    setIsModelsLoading(true);
-    setError(null);
-
-    try {
+  // Fetch available models using React Query
+  const {
+    data: modelsData,
+    isLoading: isModelsLoading,
+    error: modelsError,
+    refetch: fetchModels,
+  } = useQuery({
+    queryKey: ["models", apiBaseUrl],
+    queryFn: async () => {
       const response = await fetch(`${apiBaseUrl}/v1/models`, {
         method: "GET",
         headers: {
@@ -144,71 +46,123 @@ const useChatBot = (
       }
 
       const data = await response.json();
-      setModels(data.data || []);
+      return data.data || [];
+    },
+    staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
+    cacheTime: 10 * 60 * 1000, // Keep in cache for 10 minutes
+  });
 
-      // Auto-select first model if none selected
-      if (data.data && data.data.length > 0 && !selectedModel) {
-        setSelectedModel(data.data[0].id);
-      }
-    } catch (err) {
-      setError(err.message);
-      console.error("Error fetching models:", err);
-    } finally {
-      setIsModelsLoading(false);
+  const models = modelsData || [];
+
+  // Auto-select first model if none selected
+  useEffect(() => {
+    if (models.length > 0 && !selectedModel) {
+      setSelectedModel(models[0].id);
     }
-  }, [apiBaseUrl, selectedModel]);
+  }, [models, selectedModel]);
 
-  // Send chat completion request to POST /v1/chat/completions
-  const sendMessage = useCallback(
-    async (messages, options = {}) => {
-      if (!selectedModel) {
-        throw new Error("No model selected");
-      }
+  // Handle streaming response chunks
+  const handleStreamingResponse = useCallback(
+    async (response, options = {}) => {
+      if (!response.body)
+        throw new Error("Response body is not available for streaming");
 
-      setIsLoading(true);
-      setError(null);
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let fullContent = "";
+      let messageData = { id: null, model: null, usage: null };
 
       try {
-        const requestBody = {
-          model: selectedModel,
-          messages: messages.map((msg) => ({
-            role: msg.sender === "user" ? "user" : "assistant",
-            content: msg.text,
-          })),
-          temperature: options.temperature || 0.7,
-          max_tokens: options.maxTokens || 1000,
-          stream: options.stream !== false, // Default to streaming unless explicitly disabled
-          ...options,
-        };
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
 
-        const response = await fetch(`${apiBaseUrl}/v1/chat/completions`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(options.headers || {}),
-          },
-          body: JSON.stringify(requestBody),
-        });
+          const lines = decoder.decode(value, { stream: true }).split("\n");
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed || trimmed === "data: [DONE]") continue;
 
-        if (!response.ok) {
-          throw new Error(
-            `Chat completion failed: ${response.status} ${response.statusText}`,
-          );
-        }
+            if (trimmed.startsWith("data: ")) {
+              try {
+                const data = JSON.parse(trimmed.slice(6));
+                if (!messageData.id && data.id) {
+                  messageData.id = data.id;
+                  messageData.model = data.model;
+                }
 
-        // Handle streaming response
-        if (requestBody.stream) {
-          return await handleStreamingResponse(response, options);
-        }
+                const choice = data.choices?.[0];
+                if (choice?.finish_reason === "stop") {
+                  if (data.usage) messageData.usage = data.usage;
+                  break;
+                }
 
-        // Handle non-streaming response (fallback)
-        const data = await response.json();
-
-        if (!data.choices || data.choices.length === 0) {
-          throw new Error("No response generated");
+                if (choice?.delta?.content) {
+                  fullContent += choice.delta.content;
+                  options.onChunk?.({
+                    content: choice.delta.content,
+                    fullContent,
+                    isComplete: false,
+                  });
+                }
+              } catch (e) {
+                console.warn("Failed to parse streaming chunk:", trimmed, e);
+              }
+            }
+          }
         }
 
         return {
+          id: messageData.id || Date.now().toString(),
+          text: fullContent,
+          sender: "bot",
+          timestamp: new Date().toLocaleTimeString(),
+          model: messageData.model,
+          usage: messageData.usage,
+        };
+      } finally {
+        reader.releaseLock();
+      }
+    },
+    [],
+  );
+
+  // Generic chat completion function
+  const performChatCompletion = useCallback(
+    async ({ messages, options = {}, preRequestName = null }) => {
+      if (!selectedModel) throw new Error("No model selected");
+
+      const requestBody = {
+        model: selectedModel,
+        messages,
+        temperature: options.temperature || 0.7,
+        max_tokens: options.maxTokens || 1000,
+        stream: options.stream !== false,
+        ...options,
+      };
+
+      const response = await fetch(`${apiBaseUrl}/v1/chat/completions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(options.headers || {}),
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Chat completion failed: ${response.status} ${response.statusText}`,
+        );
+      }
+
+      let result;
+      if (requestBody.stream) {
+        result = await handleStreamingResponse(response, options);
+      } else {
+        const data = await response.json();
+        if (!data.choices?.length) throw new Error("No response generated");
+
+        result = {
           id: data.id,
           text: data.choices[0].message.content,
           sender: "bot",
@@ -216,18 +170,37 @@ const useChatBot = (
           model: data.model,
           usage: data.usage,
         };
-      } catch (err) {
-        setError(err.message);
-        console.error("Error sending message:", err);
-        throw err;
-      } finally {
-        setIsLoading(false);
       }
+
+      return preRequestName
+        ? { ...result, preRequestUsed: preRequestName }
+        : result;
     },
-    [apiBaseUrl, selectedModel],
+    [apiBaseUrl, selectedModel, handleStreamingResponse],
   );
 
-  // Send a simple text message (helper function)
+  // Unified mutation for all chat operations
+  const chatMutation = useMutation({
+    mutationFn: performChatCompletion,
+    onError: (error) => {
+      setError(error.message);
+      console.error("Chat operation failed:", error);
+    },
+    onSuccess: () => setError(null),
+  });
+
+  // Public API functions
+  const sendMessage = useCallback(
+    async (messages, options = {}) => {
+      const formattedMessages = messages.map((msg) => ({
+        role: msg.sender === "user" ? "user" : "assistant",
+        content: msg.text,
+      }));
+      return chatMutation.mutateAsync({ messages: formattedMessages, options });
+    },
+    [chatMutation],
+  );
+
   const sendTextMessage = useCallback(
     async (userMessage, conversationHistory = [], options = {}) => {
       const messages = [
@@ -238,100 +211,41 @@ const useChatBot = (
           timestamp: new Date().toLocaleTimeString(),
         },
       ];
-
-      return await sendMessage(messages, options);
+      return sendMessage(messages, options);
     },
     [sendMessage],
   );
 
-  // Execute a pre-defined request
   const executePreRequest = useCallback(
     async (preRequestId, options = {}, content = null) => {
       const preRequest = preRequests.find((req) => req.id === preRequestId);
-      if (!preRequest || !preRequest.messages) {
+      if (!preRequest?.messages)
         throw new Error("Invalid pre-request selected");
+
+      let messages = preRequest.messages;
+      if (content && preRequest.requiresContent) {
+        messages = messages.map((msg) => ({
+          ...msg,
+          content: msg.content.replace("CONTENT_TO_PROCESS", content),
+        }));
       }
 
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        // Process messages and replace CONTENT_TO_PROCESS placeholder if content is provided
-        let processedMessages = preRequest.messages;
-        if (content && preRequest.requiresContent) {
-          processedMessages = preRequest.messages.map((msg) => ({
-            ...msg,
-            content: msg.content.replace("CONTENT_TO_PROCESS", content),
-          }));
-        }
-
-        const requestBody = {
-          model: selectedModel,
-          messages: processedMessages,
-          temperature: options.temperature || 0.7,
-          max_tokens: options.maxTokens || 1000,
-          stream: options.stream !== false, // Default to streaming unless explicitly disabled
-          ...options,
-        };
-
-        const response = await fetch(`${apiBaseUrl}/v1/chat/completions`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(options.headers || {}),
-          },
-          body: JSON.stringify(requestBody),
-        });
-
-        if (!response.ok) {
-          throw new Error(
-            `Pre-request failed: ${response.status} ${response.statusText}`,
-          );
-        }
-
-        // Handle streaming response
-        if (requestBody.stream) {
-          const result = await handleStreamingResponse(response, options);
-          return {
-            ...result,
-            preRequestUsed: preRequest.name,
-          };
-        }
-
-        // Handle non-streaming response (fallback)
-        const data = await response.json();
-
-        if (!data.choices || data.choices.length === 0) {
-          throw new Error("No response generated for pre-request");
-        }
-
-        return {
-          id: data.id,
-          text: data.choices[0].message.content,
-          sender: "bot",
-          timestamp: new Date().toLocaleTimeString(),
-          model: data.model,
-          usage: data.usage,
-          preRequestUsed: preRequest.name,
-        };
-      } catch (err) {
-        setError(err.message);
-        console.error("Error executing pre-request:", err);
-        throw err;
-      } finally {
-        setIsLoading(false);
-      }
+      return chatMutation.mutateAsync({
+        messages,
+        options,
+        preRequestName: preRequest.name,
+      });
     },
-    [apiBaseUrl, selectedModel, preRequests],
+    [chatMutation, preRequests],
   );
 
   return {
     // State
     models,
     selectedModel,
-    isLoading,
+    isLoading: chatMutation.isPending,
     isModelsLoading,
-    error,
+    error: error || modelsError?.message || chatMutation.error?.message,
     preRequests,
     selectedPreRequest,
 
@@ -344,8 +258,14 @@ const useChatBot = (
     setSelectedPreRequest,
 
     // Utils
-    clearError: () => setError(null),
+    clearError: () => {
+      setError(null);
+      chatMutation.reset();
+    },
     isReady: models.length > 0 && selectedModel && !isModelsLoading,
+
+    // React Query specific states (optional, for advanced usage)
+    mutation: chatMutation,
   };
 };
 
