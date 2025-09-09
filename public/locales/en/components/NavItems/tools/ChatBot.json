@@ -1,0 +1,14 @@
+{
+  "chatbot_title": "ChatBot Assistant",
+  "chatbot_description": "AI-powered assistant for content analysis and verification tasks. Select a pre-defined request to get started with analyzing text, images, or other content.",
+  "chatbot_intro": "Use the ChatBot to analyze content for verification purposes. Choose from pre-defined analysis types or have a general conversation about verification techniques.",
+  "chatbot_models_loading": "Loading available models...",
+  "chatbot_select_model": "Select Model",
+  "chatbot_clear_chat": "Clear chat and reset session",
+  "chatbot_typing": "ChatBot is typing...",
+  "chatbot_start_conversation": "Start a conversation with the chatbot...",
+  "chatbot_input_placeholder": "Type your message here...",
+  "chatbot_paste_tooltip": "Paste from clipboard",
+  "chatbot_clear_input_tooltip": "Clear input",
+  "chatbot_send_message": "Send message"
+}

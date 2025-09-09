@@ -33,6 +33,7 @@ import {
   setUserInput,
   updateStreamingMessage,
 } from "@/redux/reducers/chatBotReducer";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import MessageContent from "./MessageContent";
 import useChatBot from "./useChatBot";
@@ -40,6 +41,7 @@ import useChatBot from "./useChatBot";
 const ChatBotUI = () => {
   const dispatch = useDispatch();
   const messagesEndRef = useRef(null);
+  const keyword = i18nLoadNamespace("components/NavItems/tools/ChatBot");
 
   // Redux state selectors
   const {
@@ -248,16 +250,16 @@ const ChatBotUI = () => {
       <CardHeader
         title={
           <Typography style={{ fontWeight: "bold", fontSize: 20 }}>
-            Chat Bot Assistant
+            {keyword("chatbot_title")}
           </Typography>
         }
         action={
           <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
             <FormControl size="small" sx={{ minWidth: 150 }}>
-              <InputLabel>Model</InputLabel>
+              <InputLabel>{keyword("models_label")}</InputLabel>
               <Select
                 value={selectedModel}
-                label="Model"
+                label={keyword("models_label")}
                 onChange={(e) => setSelectedModel(e.target.value)}
                 disabled={isModelsLoading}
               >
@@ -268,7 +270,7 @@ const ChatBotUI = () => {
                 ))}
               </Select>
             </FormControl>
-            <Tooltip title="Clear chat and reset session">
+            <Tooltip title={keyword("clear_session")}>
               <IconButton
                 onClick={clearChat}
                 disabled={
@@ -293,7 +295,7 @@ const ChatBotUI = () => {
         {/* Loading Models */}
         {isModelsLoading && (
           <Alert severity="info" sx={{ mb: 2 }}>
-            Loading available models...
+            {keyword("load_models")}
           </Alert>
         )}
 
@@ -304,7 +306,7 @@ const ChatBotUI = () => {
               <InputLabel>Pre-defined Requests</InputLabel>
               <Select
                 value={selectedPreRequest}
-                label="Pre-defined Requests"
+                label={keyword("preprompt_label")}
                 onChange={handlePreRequestChange}
                 disabled={
                   isLoading ||
@@ -331,9 +333,9 @@ const ChatBotUI = () => {
                 <strong>Selected: {activePreRequest.name}</strong>
                 {messages.length === 0
                   ? activePreRequest.requiresContent
-                    ? " - Type your content in the chat box below to get started. You can still change the pre-request above."
-                    : " - Pre-request will be executed automatically. You can still change the selection above."
-                  : " - Session active. Use the clear button to change pre-request."}
+                    ? keyword("active_prompt1")
+                    : keyword("active_prompt2")
+                  : keyword("active_prompt3")}
               </Alert>
             )}
 
@@ -341,8 +343,8 @@ const ChatBotUI = () => {
             {messages.length === 0 &&
               (!selectedPreRequest || selectedPreRequest === "") && (
                 <Alert severity="info" sx={{ mt: 1 }}>
-                  <strong>Pre-request Required:</strong> Please select a
-                  pre-defined request above to start using the chatbot.
+                  <strong>{keyword("prompt_required_1")}</strong>{" "}
+                  {keyword("prompt_required_2")}
                 </Alert>
               )}
           </Box>
@@ -479,28 +481,28 @@ const ChatBotUI = () => {
             onKeyPress={handleKeyPress}
             placeholder={
               messages.length === 0 && !activePreRequest
-                ? "Please select a pre-defined request above to start..."
+                ? keyword("chatbot_start")
                 : activePreRequest?.requiresContent && messages.length === 0
                   ? activePreRequest.contentPlaceholder ||
-                    "Enter content for analysis..."
-                  : "Type your message here..."
+                    keyword("content_analysis")
+                  : keyword("chatbot_type_here")
             }
             variant="outlined"
             disabled={isLoading || (messages.length === 0 && !activePreRequest)}
             helperText={
               messages.length === 0 && !activePreRequest
-                ? "Chat is disabled until you select a pre-defined request"
+                ? keyword("chatbot_disable")
                 : activePreRequest?.requiresContent && messages.length === 0
-                  ? `${activePreRequest.name}: Enter content for analysis`
+                  ? `${activePreRequest.name}: ${keyword("content_analysis")}`
                   : activePreRequest
-                    ? `Active session: ${activePreRequest.name}`
+                    ? `${keyword("active_session")} ${activePreRequest.name}`
                     : ""
             }
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
                   {userInput && (
-                    <Tooltip title="Clear input">
+                    <Tooltip title={keyword("clear_input")}>
                       <IconButton
                         onClick={handleClearInput}
                         edge="end"
@@ -511,7 +513,7 @@ const ChatBotUI = () => {
                       </IconButton>
                     </Tooltip>
                   )}
-                  <Tooltip title="Paste from clipboard">
+                  <Tooltip title={keyword("paste_from_clipboard")}>
                     <IconButton
                       onClick={handlePaste}
                       edge="end"

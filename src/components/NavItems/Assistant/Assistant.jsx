@@ -20,7 +20,6 @@ import AssistantMediaResult from "@/components/NavItems/Assistant/AssistantScrap
 import AssistantTextResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantTextResult";
 import AssistantSCResults from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantUrlDomainAnalysisResults";
 import AssistantWarnings from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantWarnings";
-import ChatBotUI from "@/components/Shared/ChatBot/ChatBotUI";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import {
@@ -174,15 +173,6 @@ const Assistant = () => {
         }}
       >
         <AssistantIntroduction cleanAssistant={cleanAssistant} />
-      </Grid>
-      {/* chat bot UI */}
-      <Grid
-        size="grow"
-        sx={{
-          width: "100%",
-        }}
-      >
-        <ChatBotUI />
       </Grid>
       {/* url entry field */}
       {urlMode ? (

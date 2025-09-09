@@ -8,11 +8,10 @@
  * - messages: array of OpenAI-format messages to send to the API
  * - disabled: optional boolean to disable the option
  */
-
 export const PRE_REQUESTS_CONFIG = [
   {
     id: "",
-    name: "Select a pre-request...",
+    name: "prompt_select_label",
     disabled: true,
   },
   {
