@@ -303,7 +303,7 @@ const ChatBotUI = () => {
         {preRequests.length > 1 && (
           <Box sx={{ mb: 2 }}>
             <FormControl fullWidth size="small">
-              <InputLabel>Pre-defined Requests</InputLabel>
+              <InputLabel>{keyword("preprompt_label")}</InputLabel>
               <Select
                 value={selectedPreRequest}
                 label={keyword("preprompt_label")}
@@ -321,7 +321,7 @@ const ChatBotUI = () => {
                     value={preReq.id}
                     disabled={preReq.disabled}
                   >
-                    {preReq.name}
+                    {keyword(preReq.name)}
                   </MenuItem>
                 ))}
               </Select>
@@ -483,7 +483,7 @@ const ChatBotUI = () => {
               messages.length === 0 && !activePreRequest
                 ? keyword("chatbot_start")
                 : activePreRequest?.requiresContent && messages.length === 0
-                  ? activePreRequest.contentPlaceholder ||
+                  ? keyword("prompt_content_placeholder") ||
                     keyword("content_analysis")
                   : keyword("chatbot_type_here")
             }

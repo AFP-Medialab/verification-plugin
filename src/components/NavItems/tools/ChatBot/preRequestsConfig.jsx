@@ -15,11 +15,10 @@ export const PRE_REQUESTS_CONFIG = [
     disabled: true,
   },
   {
-    id: "fact-check-analysis",
+    id: "fact-check-analysis_en",
     name: "Fact-Check Article Analysis",
     description: "Analyze an article for bias, one-sidedness, and propaganda",
     requiresContent: true,
-    contentPlaceholder: "Paste the article content you want to analyze...",
     messages: [
       {
         role: "system",
@@ -43,13 +42,11 @@ export const PRE_REQUESTS_CONFIG = [
     ],
   },
   {
-    id: "rhetorical-analysis",
+    id: "rhetorical-analysis_en",
     name: "Rhetorical & Linguistic Analysis",
     description:
       "Deep analysis of rhetorical processes, linguistic construction, and propaganda techniques",
     requiresContent: true,
-    contentPlaceholder:
-      "Paste the text/article you want to analyze rhetorically...",
     messages: [
       {
         role: "system",
@@ -65,6 +62,34 @@ export const PRE_REQUESTS_CONFIG = [
         role: "assistant",
         content:
           "Ok I will do it, what is the article you want me to analyse ?",
+      },
+      {
+        role: "user",
+        content: "CONTENT_TO_PROCESS",
+      },
+    ],
+  },
+  {
+    id: "rhetorical-analysis_fr",
+    name: "Analyse rhétorique et linguistique",
+    description:
+      "Analyse approfondie des processus rhétoriques, de la construction linguistique et des techniques de propagande",
+    requiresContent: true,
+    messages: [
+      {
+        role: "system",
+        content:
+          "Vous êtes un journaliste FactChecker travaillant dans une agence de presse internationale. Votre langage est le français",
+      },
+      {
+        role: "user",
+        content:
+          "Analysez la relation entre la source et le destinataire du texte. Comment cette relation est-elle construite linguistiquement ? Est-elle factuelle ou unilatérale, voire biaisée ? Identifiez les processus rhétoriques utilisés pour persuader ou convaincre l'auditoire. Comment ces processus sont-ils mis en œuvre ? Quels sont les champs lexicaux dominants ? Y a-t-il des conjectures, des répétitions, des connotations, des logiques fallacieuses, des métaphores particulières ? Quels mots ou arguments sont les plus répétés ? Comment ces signes récurrents influencent-ils l'interprétation du texte ? S'agit-il de propagande ? Justifiez en citant des phrases de l'article.",
+      },
+      {
+        role: "assistant",
+        content:
+          "Très bien je vais le faire. Quel article voulez-vous que j'analyse ?",
       },
       {
         role: "user",
