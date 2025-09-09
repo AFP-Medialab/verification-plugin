@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Alert from "@mui/material/Alert";
@@ -9,6 +9,7 @@ import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import FormControl from "@mui/material/FormControl";
 import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Paper from "@mui/material/Paper";
@@ -18,15 +19,37 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import ClearIcon from "@mui/icons-material/Clear";
+import ContentPasteIcon from "@mui/icons-material/ContentPaste";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import SendIcon from "@mui/icons-material/Send";
+
+import {
+  addMessage,
+  clearSession,
+  clearStreamingMessage,
+  setActivePreRequest,
+  setSelectedPreRequest,
+  setStreamingMessage,
+  setUserInput,
+  updateStreamingMessage,
+} from "@/redux/reducers/chatBotReducer";
 
 import MessageContent from "./MessageContent";
 import useChatBot from "./useChatBot";
 
 const ChatBotUI = () => {
-  const [userInput, setUserInput] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [streamingMessage, setStreamingMessage] = useState(null);
+  const dispatch = useDispatch();
+  const messagesEndRef = useRef(null);
+
+  // Redux state selectors
+  const {
+    userInput,
+    messages,
+    streamingMessage,
+    selectedPreRequest,
+    activePreRequest,
+    isSessionActive,
+  } = useSelector((state) => state.chatBot);
 
   const {
     models,
@@ -35,35 +58,56 @@ const ChatBotUI = () => {
     isModelsLoading,
     error,
     preRequests,
-    selectedPreRequest,
     fetchModels,
     setSelectedModel,
     sendTextMessage,
     executePreRequest,
-    setSelectedPreRequest,
     clearError,
     isReady,
   } = useChatBot();
 
+  // Auto-scroll to bottom function
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // Auto-scroll when messages or streaming message changes
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, streamingMessage]);
+
   const handleInputChange = (event) => {
-    setUserInput(event.target.value);
+    dispatch(setUserInput(event.target.value));
+  };
+
+  const handlePaste = async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      dispatch(setUserInput(userInput + text));
+    } catch (err) {
+      console.error("Failed to read clipboard contents: ", err);
+    }
+  };
+
+  const handleClearInput = () => {
+    dispatch(setUserInput(""));
   };
 
   const clearChat = () => {
-    setMessages([]);
-    setUserInput("");
-    setSelectedPreRequest("");
-    setStreamingMessage(null);
+    dispatch(clearSession());
     clearError();
   };
 
   const handlePreRequestChange = (event) => {
     const preRequestId = event.target.value;
-    setSelectedPreRequest(preRequestId);
+    dispatch(setSelectedPreRequest(preRequestId));
 
-    // If it's a pre-request that doesn't require content, execute immediately
+    // Store the active pre-request for persistent display
     if (preRequestId && preRequestId !== "") {
       const selectedPreReq = preRequests.find((req) => req.id === preRequestId);
+      dispatch(setActivePreRequest({ preRequest: selectedPreReq }));
+
+      // If it's a pre-request that doesn't require content, execute immediately
       if (selectedPreReq && !selectedPreReq.requiresContent) {
         executeSelectedPreRequest(preRequestId);
       }
@@ -80,31 +124,32 @@ const ChatBotUI = () => {
           sender: "user",
           timestamp: new Date().toLocaleTimeString(),
         };
-        setMessages((prev) => [...prev, userMessage]);
+        dispatch(addMessage(userMessage));
+        // Clear input after adding user message
+        dispatch(setUserInput(""));
       }
 
       // Create a streaming message placeholder
       const streamingId = Date.now() + 1;
-      setStreamingMessage({
-        id: streamingId,
-        text: "",
-        sender: "bot",
-        timestamp: new Date().toLocaleTimeString(),
-        isStreaming: true,
-      });
+      dispatch(
+        setStreamingMessage({
+          id: streamingId,
+          text: "",
+          sender: "bot",
+          timestamp: new Date().toLocaleTimeString(),
+          isStreaming: true,
+        }),
+      );
 
       const botResponse = await executePreRequest(
         preRequestId,
         {
           onChunk: (chunk) => {
-            setStreamingMessage((prev) =>
-              prev
-                ? {
-                    ...prev,
-                    text: chunk.fullContent,
-                    isStreaming: !chunk.isComplete,
-                  }
-                : null,
+            dispatch(
+              updateStreamingMessage({
+                text: chunk.fullContent,
+                isStreaming: !chunk.isComplete,
+              }),
             );
           },
         },
@@ -112,14 +157,13 @@ const ChatBotUI = () => {
       );
 
       // Move streaming message to final messages
-      setMessages((prev) => [...prev, { ...botResponse, id: streamingId }]);
-      setStreamingMessage(null);
+      dispatch(addMessage({ ...botResponse, id: streamingId }));
+      dispatch(clearStreamingMessage());
 
-      // Reset pre-request selection after execution
-      setSelectedPreRequest("");
+      // Don't reset pre-request selection - keep it visible for the session
     } catch (err) {
       console.error("Failed to execute pre-request:", err);
-      setStreamingMessage(null);
+      dispatch(clearStreamingMessage());
     }
   };
 
@@ -154,43 +198,41 @@ const ChatBotUI = () => {
       timestamp: new Date().toLocaleTimeString(),
     };
 
-    const updatedMessages = [...messages, newUserMessage];
-    setMessages(updatedMessages);
-    setUserInput("");
+    dispatch(addMessage(newUserMessage));
+    dispatch(setUserInput(""));
     clearError();
 
     try {
       // Create a streaming message placeholder
       const streamingId = Date.now() + 1;
-      setStreamingMessage({
-        id: streamingId,
-        text: "",
-        sender: "bot",
-        timestamp: new Date().toLocaleTimeString(),
-        isStreaming: true,
-      });
+      dispatch(
+        setStreamingMessage({
+          id: streamingId,
+          text: "",
+          sender: "bot",
+          timestamp: new Date().toLocaleTimeString(),
+          isStreaming: true,
+        }),
+      );
 
       const botResponse = await sendTextMessage(userInput, messages, {
         onChunk: (chunk) => {
-          setStreamingMessage((prev) =>
-            prev
-              ? {
-                  ...prev,
-                  text: chunk.fullContent,
-                  isStreaming: !chunk.isComplete,
-                }
-              : null,
+          dispatch(
+            updateStreamingMessage({
+              text: chunk.fullContent,
+              isStreaming: !chunk.isComplete,
+            }),
           );
         },
       });
 
       // Move streaming message to final messages
-      setMessages((prev) => [...prev, { ...botResponse, id: streamingId }]);
-      setStreamingMessage(null);
+      dispatch(addMessage({ ...botResponse, id: streamingId }));
+      dispatch(clearStreamingMessage());
     } catch (err) {
       // Error is already handled by the hook, just show it in UI
       console.error("Failed to send message:", err);
-      setStreamingMessage(null);
+      dispatch(clearStreamingMessage());
     }
   };
 
@@ -226,13 +268,15 @@ const ChatBotUI = () => {
                 ))}
               </Select>
             </FormControl>
-            <Tooltip title="Clear chat">
+            <Tooltip title="Clear chat and reset session">
               <IconButton
                 onClick={clearChat}
-                disabled={messages.length === 0 && !userInput}
+                disabled={
+                  messages.length === 0 && !userInput && !isSessionActive
+                }
                 size="small"
               >
-                <ClearIcon />
+                <RestartAltIcon />
               </IconButton>
             </Tooltip>
           </Box>
@@ -262,7 +306,12 @@ const ChatBotUI = () => {
                 value={selectedPreRequest}
                 label="Pre-defined Requests"
                 onChange={handlePreRequestChange}
-                disabled={messages.length > 0 || isLoading || !isReady}
+                disabled={
+                  isLoading ||
+                  !isReady ||
+                  messages.length > 0 ||
+                  streamingMessage
+                }
               >
                 {preRequests.map((preReq) => (
                   <MenuItem
@@ -276,20 +325,15 @@ const ChatBotUI = () => {
               </Select>
             </FormControl>
 
-            {/* Show selected pre-request status */}
-            {selectedPreRequest && selectedPreRequest !== "" && (
-              <Alert severity="warning" sx={{ mt: 1 }}>
-                <strong>
-                  {
-                    preRequests.find((req) => req.id === selectedPreRequest)
-                      ?.name
-                  }
-                </strong>{" "}
-                selected.
-                {preRequests.find((req) => req.id === selectedPreRequest)
-                  ?.requiresContent
-                  ? " Regular chat is disabled. Type your content in the chat box below and send it, or clear the chat to cancel."
-                  : " Pre-request executed."}
+            {/* Show active pre-request status - persistent throughout session */}
+            {activePreRequest && (
+              <Alert severity="info" sx={{ mt: 1 }}>
+                <strong>Selected: {activePreRequest.name}</strong>
+                {messages.length === 0
+                  ? activePreRequest.requiresContent
+                    ? " - Type your content in the chat box below to get started. You can still change the pre-request above."
+                    : " - Pre-request will be executed automatically. You can still change the selection above."
+                  : " - Session active. Use the clear button to change pre-request."}
               </Alert>
             )}
 
@@ -418,6 +462,9 @@ const ChatBotUI = () => {
               </Paper>
             </Box>
           )}
+
+          {/* Scroll target for auto-scroll functionality */}
+          <div ref={messagesEndRef} />
         </Paper>
 
         {/* Input Area */}
@@ -431,34 +478,52 @@ const ChatBotUI = () => {
             onChange={handleInputChange}
             onKeyPress={handleKeyPress}
             placeholder={
-              messages.length === 0 &&
-              (!selectedPreRequest || selectedPreRequest === "")
+              messages.length === 0 && !activePreRequest
                 ? "Please select a pre-defined request above to start..."
-                : selectedPreRequest &&
-                    selectedPreRequest !== "" &&
-                    preRequests.find((req) => req.id === selectedPreRequest)
-                      ?.requiresContent
-                  ? preRequests.find((req) => req.id === selectedPreRequest)
-                      ?.contentPlaceholder || "Enter content for analysis..."
+                : activePreRequest?.requiresContent && messages.length === 0
+                  ? activePreRequest.contentPlaceholder ||
+                    "Enter content for analysis..."
                   : "Type your message here..."
             }
             variant="outlined"
-            disabled={
-              isLoading ||
-              (messages.length === 0 &&
-                (!selectedPreRequest || selectedPreRequest === ""))
-            }
+            disabled={isLoading || (messages.length === 0 && !activePreRequest)}
             helperText={
-              messages.length === 0 &&
-              (!selectedPreRequest || selectedPreRequest === "")
+              messages.length === 0 && !activePreRequest
                 ? "Chat is disabled until you select a pre-defined request"
-                : selectedPreRequest &&
-                    selectedPreRequest !== "" &&
-                    preRequests.find((req) => req.id === selectedPreRequest)
-                      ?.requiresContent
-                  ? "Pre-request mode: Only content for analysis will be processed"
-                  : ""
+                : activePreRequest?.requiresContent && messages.length === 0
+                  ? `${activePreRequest.name}: Enter content for analysis`
+                  : activePreRequest
+                    ? `Active session: ${activePreRequest.name}`
+                    : ""
             }
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  {userInput && (
+                    <Tooltip title="Clear input">
+                      <IconButton
+                        onClick={handleClearInput}
+                        edge="end"
+                        size="small"
+                        disabled={isLoading}
+                      >
+                        <ClearIcon />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                  <Tooltip title="Paste from clipboard">
+                    <IconButton
+                      onClick={handlePaste}
+                      edge="end"
+                      size="small"
+                      disabled={isLoading}
+                    >
+                      <ContentPasteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </InputAdornment>
+              ),
+            }}
           />
           <Button
             variant="contained"
@@ -467,12 +532,7 @@ const ChatBotUI = () => {
               !userInput.trim() ||
               isLoading ||
               !isReady ||
-              (messages.length === 0 &&
-                (!selectedPreRequest || selectedPreRequest === "")) ||
-              (selectedPreRequest &&
-                selectedPreRequest !== "" &&
-                !preRequests.find((req) => req.id === selectedPreRequest)
-                  ?.requiresContent)
+              (messages.length === 0 && !activePreRequest)
             }
             sx={{ minWidth: 56, height: 56 }}
           >
