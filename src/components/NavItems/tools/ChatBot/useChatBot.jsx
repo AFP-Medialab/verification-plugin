@@ -40,9 +40,11 @@ const useChatBot = (
       });
 
       if (!response.ok) {
-        throw new Error(
+        const error = new Error(
           `Failed to fetch models: ${response.status} ${response.statusText}`,
         );
+        error.status = response.status;
+        throw error;
       }
 
       const data = await response.json();
@@ -74,6 +76,7 @@ const useChatBot = (
       const requestBody = {
         model: selectedModel,
         prompt: filteredPrompt,
+        temperature: options.temperature || 0.7,
         stream: true,
       };
 
@@ -87,9 +90,11 @@ const useChatBot = (
       });
 
       if (!response.ok) {
-        throw new Error(
+        const error = new Error(
           `Completions endpoint failed: ${response.status} ${response.statusText}`,
         );
+        error.status = response.status;
+        throw error;
       }
 
       if (requestBody.stream) {
@@ -284,9 +289,11 @@ const useChatBot = (
       });
 
       if (!response.ok) {
-        throw new Error(
+        const error = new Error(
           `Chat completion failed: ${response.status} ${response.statusText}`,
         );
+        error.status = response.status;
+        throw error;
       }
 
       let result;

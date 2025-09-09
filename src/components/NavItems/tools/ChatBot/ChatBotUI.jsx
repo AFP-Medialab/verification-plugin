@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Alert from "@mui/material/Alert";
@@ -42,6 +42,7 @@ const ChatBotUI = () => {
   const dispatch = useDispatch();
   const messagesEndRef = useRef(null);
   const keyword = i18nLoadNamespace("components/NavItems/tools/ChatBot");
+  const [temperature, setTemperature] = useState(0.7);
 
   // Redux state selectors
   const {
@@ -82,6 +83,13 @@ const ChatBotUI = () => {
     dispatch(setUserInput(event.target.value));
   };
 
+  const handleTemperatureChange = (event) => {
+    const value = parseFloat(event.target.value);
+    if (!isNaN(value) && value >= 0 && value <= 1) {
+      setTemperature(value);
+    }
+  };
+
   const handlePaste = async () => {
     try {
       const text = await navigator.clipboard.readText();
@@ -117,6 +125,9 @@ const ChatBotUI = () => {
   };
 
   const executeSelectedPreRequest = async (preRequestId, content = null) => {
+    // Store the current content for potential restoration on 404
+    const previousContent = content;
+
     try {
       // If content is provided, show it as a user message first
       if (content) {
@@ -154,6 +165,7 @@ const ChatBotUI = () => {
               }),
             );
           },
+          temperature,
         },
         content,
       );
@@ -164,8 +176,16 @@ const ChatBotUI = () => {
 
       // Don't reset pre-request selection - keep it visible for the session
     } catch (err) {
+      // Check if it's a 404 error and restore the previous content
+      if (err.status === 404 && previousContent) {
+        dispatch(setUserInput(previousContent));
+      }
+
       console.error("Failed to execute pre-request:", err);
       dispatch(clearStreamingMessage());
+
+      // Re-throw the error so the calling function can handle it as well
+      throw err;
     }
   };
 
@@ -177,6 +197,9 @@ const ChatBotUI = () => {
   const handleSendMessage = async () => {
     if (!userInput.trim() || !isReady) return;
 
+    // Store the current user input before clearing it (for potential restoration on 404)
+    const previousUserInput = userInput;
+
     // If a pre-request is selected, only allow pre-request content
     if (selectedPreRequest && selectedPreRequest !== "") {
       const selectedPreReq = preRequests.find(
@@ -184,8 +207,15 @@ const ChatBotUI = () => {
       );
       if (selectedPreReq && selectedPreReq.requiresContent) {
         // Execute pre-request with the user input as content
-        executeSelectedPreRequest(selectedPreRequest, userInput);
-        setUserInput("");
+        try {
+          await executeSelectedPreRequest(selectedPreRequest, userInput);
+          dispatch(setUserInput(""));
+        } catch (err) {
+          // Check if it's a 404 error and restore content
+          if (err.status === 404) {
+            dispatch(setUserInput(previousUserInput));
+          }
+        }
         return;
       }
       // If pre-request doesn't require content, it should have been executed already
@@ -226,12 +256,18 @@ const ChatBotUI = () => {
             }),
           );
         },
+        temperature,
       });
 
       // Move streaming message to final messages
       dispatch(addMessage({ ...botResponse, id: streamingId }));
       dispatch(clearStreamingMessage());
     } catch (err) {
+      // Check if it's a 404 error and restore the previous user input
+      if (err.status === 404) {
+        dispatch(setUserInput(previousUserInput));
+      }
+
       // Error is already handled by the hook, just show it in UI
       console.error("Failed to send message:", err);
       dispatch(clearStreamingMessage());
@@ -270,6 +306,20 @@ const ChatBotUI = () => {
                 ))}
               </Select>
             </FormControl>
+            <TextField
+              size="small"
+              label="Temperature"
+              type="number"
+              value={temperature}
+              onChange={handleTemperatureChange}
+              inputProps={{
+                min: 0,
+                max: 1,
+                step: 0.1,
+              }}
+              sx={{ width: 100 }}
+              variant="outlined"
+            />
             <Tooltip title={keyword("clear_session")}>
               <IconButton
                 onClick={clearChat}
