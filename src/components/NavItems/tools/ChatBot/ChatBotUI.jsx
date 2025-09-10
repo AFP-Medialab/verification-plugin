@@ -361,11 +361,6 @@ const ChatBotUI = () => {
   return (
     <Card variant="outlined">
       <CardHeader
-        title={
-          <Typography style={{ fontWeight: "bold", fontSize: 20 }}>
-            {keyword("chatbot_title")}
-          </Typography>
-        }
         action={
           <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
             <FormControl size="small" sx={{ minWidth: 150 }}>
