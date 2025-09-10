@@ -1,6 +1,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
+import {
+  createChatBotApi,
+  fetchModels,
+  formatMessagesForAPI,
+} from "./chatBotApiService";
 import { PRE_REQUESTS_CONFIG } from "./preRequestsConfig";
 
 /**
@@ -28,30 +33,12 @@ const useChatBot = (
     data: modelsData,
     isLoading: isModelsLoading,
     error: modelsError,
-    refetch: fetchModels,
+    refetch: refetchModels,
   } = useQuery({
     queryKey: ["models", apiBaseUrl],
-    queryFn: async () => {
-      const response = await fetch(`${apiBaseUrl}/v1/models`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        const error = new Error(
-          `Failed to fetch models: ${response.status} ${response.statusText}`,
-        );
-        error.status = response.status;
-        throw error;
-      }
-
-      const data = await response.json();
-      return data.data || [];
-    },
-    staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
-    cacheTime: 10 * 60 * 1000, // Keep in cache for 10 minutes
+    queryFn: () => fetchModels(apiBaseUrl),
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 10 * 60 * 1000,
   });
 
   const models = modelsData || [];
@@ -63,266 +50,15 @@ const useChatBot = (
     }
   }, [models, selectedModel]);
 
-  // Call completions endpoint for continued generation
-  const callCompletionsEndpoint = useCallback(
-    async (currentContent, originalMessages, options = {}) => {
-      if (!selectedModel) throw new Error("No model selected");
-
-      // Filter out content between <think></think> tags
-      const filteredPrompt = currentContent
-        .replace(/<think>[\s\S]*?<\/think>/g, "")
-        .trim();
-
-      const requestBody = {
-        model: selectedModel,
-        prompt: filteredPrompt,
-        temperature: options.temperature || 0.7,
-        stream: true,
-      };
-
-      const response = await fetch(`${apiBaseUrl}/v1/completions`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(options.headers || {}),
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      if (!response.ok) {
-        const error = new Error(
-          `Completions endpoint failed: ${response.status} ${response.statusText}`,
-        );
-        error.status = response.status;
-        throw error;
-      }
-
-      if (requestBody.stream) {
-        return await handleStreamingCompletionsResponse(
-          response,
-          options,
-          currentContent,
-        );
-      } else {
-        const data = await response.json();
-        if (!data.choices?.length) throw new Error("No response generated");
-
-        return {
-          id: data.id,
-          text: currentContent + data.choices[0].text,
-          sender: "bot",
-          timestamp: new Date().toLocaleTimeString(),
-          model: data.model,
-          usage: data.usage,
-        };
-      }
-    },
+  // Create API instance with current dependencies
+  const api = useMemo(
+    () => createChatBotApi(apiBaseUrl, selectedModel),
     [apiBaseUrl, selectedModel],
-  );
-
-  // Handle streaming response from completions endpoint
-  const handleStreamingCompletionsResponse = useCallback(
-    async (response, options = {}, initialContent = "") => {
-      if (!response.body)
-        throw new Error("Response body is not available for streaming");
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let fullContent = initialContent;
-      let messageData = { id: null, model: null, usage: null };
-
-      try {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-
-          const lines = decoder.decode(value, { stream: true }).split("\n");
-          for (const line of lines) {
-            const trimmed = line.trim();
-            if (!trimmed || trimmed === "data: [DONE]") continue;
-
-            if (trimmed.startsWith("data: ")) {
-              try {
-                const data = JSON.parse(trimmed.slice(6));
-                if (!messageData.id && data.id) {
-                  messageData.id = data.id;
-                  messageData.model = data.model;
-                }
-
-                const choice = data.choices?.[0];
-                if (choice?.finish_reason === "stop") {
-                  if (data.usage) messageData.usage = data.usage;
-                  break;
-                }
-
-                if (choice?.text) {
-                  fullContent += choice.text;
-                  options.onChunk?.({
-                    content: choice.text,
-                    fullContent,
-                    isComplete: false,
-                  });
-                }
-              } catch (e) {
-                console.warn(
-                  "Failed to parse completions streaming chunk:",
-                  trimmed,
-                  e,
-                );
-              }
-            }
-          }
-        }
-
-        return {
-          id: messageData.id || Date.now().toString(),
-          text: fullContent,
-          sender: "bot",
-          timestamp: new Date().toLocaleTimeString(),
-          model: messageData.model,
-          usage: messageData.usage,
-        };
-      } finally {
-        reader.releaseLock();
-      }
-    },
-    [],
-  );
-
-  // Handle streaming response chunks
-  const handleStreamingResponse = useCallback(
-    async (response, options = {}, originalMessages = []) => {
-      if (!response.body)
-        throw new Error("Response body is not available for streaming");
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let fullContent = "";
-      let messageData = { id: null, model: null, usage: null };
-
-      try {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-
-          const lines = decoder.decode(value, { stream: true }).split("\n");
-          for (const line of lines) {
-            const trimmed = line.trim();
-            if (!trimmed || trimmed === "data: [DONE]") continue;
-
-            if (trimmed.startsWith("data: ")) {
-              try {
-                const data = JSON.parse(trimmed.slice(6));
-                if (!messageData.id && data.id) {
-                  messageData.id = data.id;
-                  messageData.model = data.model;
-                }
-
-                const choice = data.choices?.[0];
-                if (choice?.finish_reason === "stop") {
-                  if (data.usage) messageData.usage = data.usage;
-                  break;
-                }
-
-                if (choice?.finish_reason === "length") {
-                  if (data.usage) messageData.usage = data.usage;
-                  // Continue with completions endpoint
-                  const continuedResponse = await callCompletionsEndpoint(
-                    fullContent,
-                    originalMessages,
-                    options,
-                  );
-                  return continuedResponse;
-                }
-
-                if (choice?.delta?.content) {
-                  fullContent += choice.delta.content;
-                  options.onChunk?.({
-                    content: choice.delta.content,
-                    fullContent,
-                    isComplete: false,
-                  });
-                }
-              } catch (e) {
-                console.warn("Failed to parse streaming chunk:", trimmed, e);
-              }
-            }
-          }
-        }
-
-        return {
-          id: messageData.id || Date.now().toString(),
-          text: fullContent,
-          sender: "bot",
-          timestamp: new Date().toLocaleTimeString(),
-          model: messageData.model,
-          usage: messageData.usage,
-        };
-      } finally {
-        reader.releaseLock();
-      }
-    },
-    [callCompletionsEndpoint],
-  );
-
-  // Generic chat completion function
-  const performChatCompletion = useCallback(
-    async ({ messages, options = {}, preRequestName = null }) => {
-      if (!selectedModel) throw new Error("No model selected");
-
-      const requestBody = {
-        model: selectedModel,
-        messages,
-        temperature: options.temperature || 0.7,
-        max_tokens: options.maxTokens || 1000,
-        stream: options.stream !== false,
-        ...options,
-      };
-
-      const response = await fetch(`${apiBaseUrl}/v1/chat/completions`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(options.headers || {}),
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      if (!response.ok) {
-        const error = new Error(
-          `Chat completion failed: ${response.status} ${response.statusText}`,
-        );
-        error.status = response.status;
-        throw error;
-      }
-
-      let result;
-      if (requestBody.stream) {
-        result = await handleStreamingResponse(response, options, messages);
-      } else {
-        const data = await response.json();
-        if (!data.choices?.length) throw new Error("No response generated");
-
-        result = {
-          id: data.id,
-          text: data.choices[0].message.content,
-          sender: "bot",
-          timestamp: new Date().toLocaleTimeString(),
-          model: data.model,
-          usage: data.usage,
-        };
-      }
-
-      return preRequestName
-        ? { ...result, preRequestUsed: preRequestName }
-        : result;
-    },
-    [apiBaseUrl, selectedModel, handleStreamingResponse],
   );
 
   // Unified mutation for all chat operations
   const chatMutation = useMutation({
-    mutationFn: performChatCompletion,
+    mutationFn: api.performChatCompletion,
     onError: (error) => {
       setError(error.message);
       console.error("Chat operation failed:", error);
@@ -332,47 +68,102 @@ const useChatBot = (
 
   // Public API functions
   const sendMessage = useCallback(
-    async (messages, options = {}) => {
-      const formattedMessages = messages.map((msg) => ({
-        role: msg.sender === "user" ? "user" : "assistant",
-        content: msg.text,
-      }));
-      return chatMutation.mutateAsync({ messages: formattedMessages, options });
-    },
+    async (messages, options = {}) =>
+      chatMutation.mutateAsync({
+        messages: formatMessagesForAPI(messages),
+        options,
+      }),
     [chatMutation],
   );
 
   const sendTextMessage = useCallback(
     async (userMessage, conversationHistory = [], options = {}) => {
-      const messages = [
-        ...conversationHistory,
-        {
-          text: userMessage,
-          sender: "user",
-          timestamp: new Date().toLocaleTimeString(),
-        },
-      ];
+      // If conversationHistory already includes the current user message, use it as is
+      // Otherwise, add the current user message to the history
+      const lastMessage = conversationHistory[conversationHistory.length - 1];
+      const messages =
+        lastMessage &&
+        lastMessage.text === userMessage &&
+        lastMessage.sender === "user"
+          ? conversationHistory
+          : [
+              ...conversationHistory,
+              {
+                text: userMessage,
+                sender: "user",
+                timestamp: new Date().toLocaleTimeString(),
+              },
+            ];
       return sendMessage(messages, options);
     },
     [sendMessage],
   );
 
   const executePreRequest = useCallback(
-    async (preRequestId, options = {}, content = null) => {
+    async (
+      preRequestId,
+      options = {},
+      content = null,
+      conversationHistory = [],
+    ) => {
       const preRequest = preRequests.find((req) => req.id === preRequestId);
       if (!preRequest?.messages)
         throw new Error("Invalid pre-request selected");
 
-      let messages = preRequest.messages;
-      if (content && preRequest.requiresContent) {
-        messages = messages.map((msg) => ({
-          ...msg,
-          content: msg.content.replace("CONTENT_TO_PROCESS", content),
-        }));
+      let messages = [...preRequest.messages];
+
+      // Build messages in chronological order
+      let fullMessages = [];
+
+      if (conversationHistory.length > 0) {
+        // For pre-requests with conversation history, we need to maintain proper order:
+        // 1. Pre-request template (system message, initial prompts)
+        // 2. Conversation history in chronological order
+        // 3. Final user message with new content
+
+        if (content && preRequest.requiresContent) {
+          // Find the last message in pre-request template (usually contains CONTENT_TO_PROCESS)
+          const lastPreRequestIndex = messages.length - 1;
+          const lastPreRequestMessage = messages[lastPreRequestIndex];
+
+          // Add pre-request messages except the last one
+          fullMessages = messages.slice(0, lastPreRequestIndex);
+
+          // Add conversation history in chronological order
+          fullMessages = [
+            ...fullMessages,
+            ...formatMessagesForAPI(conversationHistory),
+          ];
+
+          // Add the final user message with content
+          fullMessages.push({
+            ...lastPreRequestMessage,
+            content: lastPreRequestMessage.content.replace(
+              "CONTENT_TO_PROCESS",
+              content,
+            ),
+          });
+        } else {
+          // No content replacement needed, just add history before pre-request messages
+          fullMessages = [
+            ...formatMessagesForAPI(conversationHistory),
+            ...messages,
+          ];
+        }
+      } else {
+        // No conversation history, just process the pre-request messages
+        if (content && preRequest.requiresContent) {
+          fullMessages = messages.map((msg) => ({
+            ...msg,
+            content: msg.content.replace("CONTENT_TO_PROCESS", content),
+          }));
+        } else {
+          fullMessages = messages;
+        }
       }
 
       return chatMutation.mutateAsync({
-        messages,
+        messages: fullMessages,
         options,
         preRequestName: preRequest.name,
       });
@@ -391,7 +182,7 @@ const useChatBot = (
     selectedPreRequest,
 
     // Actions
-    fetchModels,
+    fetchModels: refetchModels,
     setSelectedModel,
     sendMessage,
     sendTextMessage,

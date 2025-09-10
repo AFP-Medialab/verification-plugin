@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Alert from "@mui/material/Alert";
@@ -40,9 +40,51 @@ import useChatBot from "./useChatBot";
 
 const ChatBotUI = () => {
   const dispatch = useDispatch();
-  const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
   const keyword = i18nLoadNamespace("components/NavItems/tools/ChatBot");
   const [temperature, setTemperature] = useState(0.7);
+
+  // Helper functions to reduce code duplication
+  const createMessage = (text, sender = "user") => ({
+    id: Date.now(),
+    text,
+    sender,
+    timestamp: new Date().toLocaleTimeString(),
+  });
+
+  const createStreamingMessage = () => {
+    const streamingId = Date.now() + 1;
+    const message = {
+      id: streamingId,
+      text: "",
+      sender: "bot",
+      timestamp: new Date().toLocaleTimeString(),
+      isStreaming: true,
+    };
+    dispatch(setStreamingMessage(message));
+    return streamingId;
+  };
+
+  const createChunkHandler = () => (chunk) => {
+    dispatch(
+      updateStreamingMessage({
+        text: chunk.fullContent,
+        isStreaming: !chunk.isComplete,
+      }),
+    );
+  };
+
+  const handle404Error = (err, previousInput) => {
+    if (err.status === 404 && previousInput) {
+      dispatch(setUserInput(previousInput));
+    }
+  };
+
+  const finalizeStreaming = (botResponse, streamingId, userMessage = null) => {
+    if (userMessage) dispatch(addMessage(userMessage));
+    dispatch(addMessage({ ...botResponse, id: streamingId }));
+    dispatch(clearStreamingMessage());
+  };
 
   // Redux state selectors
   const {
@@ -69,15 +111,27 @@ const ChatBotUI = () => {
     isReady,
   } = useChatBot();
 
-  // Auto-scroll to bottom function
+  // Auto-scroll to bottom function - only scrolls the message container
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop =
+        messagesContainerRef.current.scrollHeight;
+    }
   };
 
-  // Auto-scroll when messages or streaming message changes
+  // Track only bot messages for auto-scroll
+  const lastBotMessage = useMemo(() => {
+    // Find the last message from bot/assistant
+    const botMessages = messages.filter(
+      (msg) => msg.sender === "bot" || msg.sender === "assistant",
+    );
+    return botMessages[botMessages.length - 1];
+  }, [messages]);
+
+  // Auto-scroll only when bot messages or streaming message changes
   useEffect(() => {
     scrollToBottom();
-  }, [messages, streamingMessage]);
+  }, [lastBotMessage, streamingMessage]);
 
   const handleInputChange = (event) => {
     dispatch(setUserInput(event.target.value));
@@ -125,66 +179,25 @@ const ChatBotUI = () => {
   };
 
   const executeSelectedPreRequest = async (preRequestId, content = null) => {
-    // Store the current content for potential restoration on 404
-    const previousContent = content;
-
     try {
-      // If content is provided, show it as a user message first
       if (content) {
-        const userMessage = {
-          id: Date.now(),
-          text: content,
-          sender: "user",
-          timestamp: new Date().toLocaleTimeString(),
-        };
-        dispatch(addMessage(userMessage));
-        // Clear input after adding user message
+        dispatch(addMessage(createMessage(content)));
         dispatch(setUserInput(""));
       }
 
-      // Create a streaming message placeholder
-      const streamingId = Date.now() + 1;
-      dispatch(
-        setStreamingMessage({
-          id: streamingId,
-          text: "",
-          sender: "bot",
-          timestamp: new Date().toLocaleTimeString(),
-          isStreaming: true,
-        }),
-      );
-
+      const streamingId = createStreamingMessage();
       const botResponse = await executePreRequest(
         preRequestId,
-        {
-          onChunk: (chunk) => {
-            dispatch(
-              updateStreamingMessage({
-                text: chunk.fullContent,
-                isStreaming: !chunk.isComplete,
-              }),
-            );
-          },
-          temperature,
-        },
+        { onChunk: createChunkHandler(), temperature },
         content,
+        messages,
       );
 
-      // Move streaming message to final messages
-      dispatch(addMessage({ ...botResponse, id: streamingId }));
-      dispatch(clearStreamingMessage());
-
-      // Don't reset pre-request selection - keep it visible for the session
+      finalizeStreaming(botResponse, streamingId);
     } catch (err) {
-      // Check if it's a 404 error and restore the previous content
-      if (err.status === 404 && previousContent) {
-        dispatch(setUserInput(previousContent));
-      }
-
+      handle404Error(err, content);
       console.error("Failed to execute pre-request:", err);
       dispatch(clearStreamingMessage());
-
-      // Re-throw the error so the calling function can handle it as well
       throw err;
     }
   };
@@ -197,78 +210,45 @@ const ChatBotUI = () => {
   const handleSendMessage = async () => {
     if (!userInput.trim() || !isReady) return;
 
-    // Store the current user input before clearing it (for potential restoration on 404)
     const previousUserInput = userInput;
 
-    // If a pre-request is selected, only allow pre-request content
+    // Handle pre-request flow
     if (selectedPreRequest && selectedPreRequest !== "") {
       const selectedPreReq = preRequests.find(
         (req) => req.id === selectedPreRequest,
       );
-      if (selectedPreReq && selectedPreReq.requiresContent) {
-        // Execute pre-request with the user input as content
+      if (selectedPreReq?.requiresContent) {
         try {
           await executeSelectedPreRequest(selectedPreRequest, userInput);
           dispatch(setUserInput(""));
         } catch (err) {
-          // Check if it's a 404 error and restore content
-          if (err.status === 404) {
-            dispatch(setUserInput(previousUserInput));
-          }
+          handle404Error(err, previousUserInput);
         }
-        return;
       }
-      // If pre-request doesn't require content, it should have been executed already
       return;
     }
 
-    // Regular chat message flow (only if no pre-request is selected)
-    const newUserMessage = {
-      id: Date.now(),
-      text: userInput,
-      sender: "user",
-      timestamp: new Date().toLocaleTimeString(),
-    };
-
-    dispatch(addMessage(newUserMessage));
+    // Regular chat flow
+    const newUserMessage = createMessage(userInput);
     dispatch(setUserInput(""));
     clearError();
 
     try {
-      // Create a streaming message placeholder
-      const streamingId = Date.now() + 1;
-      dispatch(
-        setStreamingMessage({
-          id: streamingId,
-          text: "",
-          sender: "bot",
-          timestamp: new Date().toLocaleTimeString(),
-          isStreaming: true,
-        }),
+      const streamingId = createStreamingMessage();
+      const fullConversationHistory = [...messages, newUserMessage];
+
+      const botResponse = await sendTextMessage(
+        userInput,
+        fullConversationHistory,
+        {
+          onChunk: createChunkHandler(),
+          temperature,
+        },
       );
 
-      const botResponse = await sendTextMessage(userInput, messages, {
-        onChunk: (chunk) => {
-          dispatch(
-            updateStreamingMessage({
-              text: chunk.fullContent,
-              isStreaming: !chunk.isComplete,
-            }),
-          );
-        },
-        temperature,
-      });
-
-      // Move streaming message to final messages
-      dispatch(addMessage({ ...botResponse, id: streamingId }));
-      dispatch(clearStreamingMessage());
+      finalizeStreaming(botResponse, streamingId, newUserMessage);
     } catch (err) {
-      // Check if it's a 404 error and restore the previous user input
-      if (err.status === 404) {
-        dispatch(setUserInput(previousUserInput));
-      }
-
-      // Error is already handled by the hook, just show it in UI
+      handle404Error(err, previousUserInput);
       console.error("Failed to send message:", err);
       dispatch(clearStreamingMessage());
     }
@@ -402,6 +382,7 @@ const ChatBotUI = () => {
 
         {/* Chat Messages Area */}
         <Paper
+          ref={messagesContainerRef}
           elevation={1}
           sx={{
             height: 400,
@@ -514,9 +495,6 @@ const ChatBotUI = () => {
               </Paper>
             </Box>
           )}
-
-          {/* Scroll target for auto-scroll functionality */}
-          <div ref={messagesEndRef} />
         </Paper>
 
         {/* Input Area */}
