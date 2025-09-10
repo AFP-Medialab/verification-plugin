@@ -9,8 +9,6 @@ import { ExpandLess, ExpandMore, Psychology } from "@mui/icons-material";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-const keyword = i18nLoadNamespace("components/NavItems/tools/ChatBot");
-
 /**
  * Parse message content to extract <think> tags and regular content
  * @param {string} content - Raw message content
@@ -97,7 +95,7 @@ const formatMarkdownLike = (text) => {
  */
 const ThinkSection = ({ thinkContent }) => {
   const [expanded, setExpanded] = useState(false);
-
+  const keyword = i18nLoadNamespace("components/NavItems/tools/ChatBot");
   const handleToggle = () => {
     setExpanded(!expanded);
   };
