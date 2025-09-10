@@ -7,6 +7,10 @@ import Typography from "@mui/material/Typography";
 
 import { ExpandLess, ExpandMore, Psychology } from "@mui/icons-material";
 
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+const keyword = i18nLoadNamespace("components/NavItems/tools/ChatBot");
+
 /**
  * Parse message content to extract <think> tags and regular content
  * @param {string} content - Raw message content
@@ -91,7 +95,7 @@ const formatMarkdownLike = (text) => {
 /**
  * Expandable think section component
  */
-const ThinkSection = ({ thinkContent, sectionId }) => {
+const ThinkSection = ({ thinkContent }) => {
   const [expanded, setExpanded] = useState(false);
 
   const handleToggle = () => {
@@ -102,7 +106,7 @@ const ThinkSection = ({ thinkContent, sectionId }) => {
     <Box sx={{ my: 1 }}>
       <Chip
         icon={<Psychology />}
-        label={expanded ? "Hide thinking" : "Show thinking"}
+        label={expanded ? keyword("thinking_hide") : keyword("thinking_show")}
         onClick={handleToggle}
         variant="outlined"
         size="small"

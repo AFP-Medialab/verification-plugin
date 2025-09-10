@@ -19,6 +19,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import ClearIcon from "@mui/icons-material/Clear";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import SendIcon from "@mui/icons-material/Send";
@@ -33,6 +34,7 @@ import {
   setUserInput,
   updateStreamingMessage,
 } from "@/redux/reducers/chatBotReducer";
+import { styled } from "@mui/system";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import MessageContent from "./MessageContent";
@@ -54,29 +56,43 @@ const ChatBotUI = () => {
 
   const createStreamingMessage = () => {
     const streamingId = Date.now() + 1;
-    const message = {
-      id: streamingId,
-      text: "",
-      sender: "bot",
-      timestamp: new Date().toLocaleTimeString(),
-      isStreaming: true,
-    };
-    dispatch(setStreamingMessage(message));
+    dispatch(
+      setStreamingMessage({
+        id: streamingId,
+        text: "",
+        sender: "bot",
+        timestamp: new Date().toLocaleTimeString(),
+        isStreaming: true,
+      }),
+    );
     return streamingId;
   };
 
-  const createChunkHandler = () => (chunk) => {
+  const createChunkHandler = () => (chunk) =>
     dispatch(
       updateStreamingMessage({
         text: chunk.fullContent,
         isStreaming: !chunk.isComplete,
       }),
     );
-  };
 
   const handle404Error = (err, previousInput) => {
-    if (err.status === 404 && previousInput) {
+    if (err.status === 404 && previousInput)
       dispatch(setUserInput(previousInput));
+  };
+
+  const handleCopyMessage = async (messageText) => {
+    try {
+      await navigator.clipboard.writeText(messageText);
+      console.log("Message copied to clipboard");
+    } catch (err) {
+      console.error("Failed to copy message: ", err);
+      const textArea = document.createElement("textarea");
+      textArea.value = messageText;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
     }
   };
 
@@ -84,6 +100,87 @@ const ChatBotUI = () => {
     if (userMessage) dispatch(addMessage(userMessage));
     dispatch(addMessage({ ...botResponse, id: streamingId }));
     dispatch(clearStreamingMessage());
+  };
+
+  // Styled message bubble component
+  const MessageBubble = styled(Box)(({ sent }) => ({
+    maxWidth: "70%",
+    padding: "10px 15px",
+    borderRadius: sent ? "15px 15px 0 15px" : "15px 15px 15px 0",
+    backgroundColor: sent ? "#00926c" : "#fff",
+    color: sent ? "#fff" : "#000",
+    marginBottom: "10px",
+    alignSelf: sent ? "flex-end" : "flex-start",
+    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+    transition: "transform 0.2s ease",
+  }));
+
+  // Reusable message footer component
+  const MessageFooter = ({ timestamp, messageText, showCopy = false }) => (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
+    >
+      <Typography variant="caption" sx={{ opacity: 0.7 }}>
+        {timestamp}
+      </Typography>
+      {showCopy && messageText && (
+        <Tooltip title="Copy message">
+          <IconButton
+            onClick={() => handleCopyMessage(messageText)}
+            size="small"
+            sx={{
+              padding: "2px",
+              ml: 1,
+              backgroundColor: "rgba(0,0,0,0.1)",
+              "&:hover": { backgroundColor: "rgba(0,0,0,0.2)" },
+            }}
+          >
+            <ContentCopyIcon sx={{ fontSize: 12 }} />
+          </IconButton>
+        </Tooltip>
+      )}
+    </Box>
+  );
+
+  // Reusable message content renderer
+  const MessageRenderer = ({ message, isStreaming = false }) => {
+    const isUser = message.sender === "user";
+    return (
+      <MessageBubble sent={isUser}>
+        <Box sx={{ mb: 0.5 }}>
+          <MessageContent
+            content={message.text || ""}
+            sender={message.sender}
+          />
+          {isStreaming && message.isStreaming && (
+            <Box
+              component="span"
+              sx={{
+                display: "inline-block",
+                width: "8px",
+                height: "20px",
+                backgroundColor: "#00926c",
+                marginLeft: "2px",
+                animation: "blink 1s infinite",
+                "@keyframes blink": {
+                  "0%, 50%": { opacity: 1 },
+                  "51%, 100%": { opacity: 0 },
+                },
+              }}
+            />
+          )}
+        </Box>
+        <MessageFooter
+          timestamp={message.timestamp}
+          messageText={message.text}
+          showCopy={!isUser}
+        />
+      </MessageBubble>
+    );
   };
 
   // Redux state selectors
@@ -300,17 +397,6 @@ const ChatBotUI = () => {
               sx={{ width: 100 }}
               variant="outlined"
             />
-            <Tooltip title={keyword("clear_session")}>
-              <IconButton
-                onClick={clearChat}
-                disabled={
-                  messages.length === 0 && !userInput && !isSessionActive
-                }
-                size="small"
-              >
-                <RestartAltIcon />
-              </IconButton>
-            </Tooltip>
           </Box>
         }
       />
@@ -360,7 +446,9 @@ const ChatBotUI = () => {
             {/* Show active pre-request status - persistent throughout session */}
             {activePreRequest && (
               <Alert severity="info" sx={{ mt: 1 }}>
-                <strong>Selected: {activePreRequest.name}</strong>
+                <strong>
+                  {keyword("prompt_selected")} {activePreRequest.name}&nbsp;
+                </strong>
                 {messages.length === 0
                   ? activePreRequest.requiresContent
                     ? keyword("active_prompt1")
@@ -401,104 +489,51 @@ const ChatBotUI = () => {
               Start a conversation with the chatbot...
             </Typography>
           ) : (
-            <>
+            <Box sx={{ display: "flex", flexDirection: "column" }}>
               {messages.map((message) => (
-                <Box
-                  key={message.id}
-                  sx={{
-                    display: "flex",
-                    justifyContent:
-                      message.sender === "user" ? "flex-end" : "flex-start",
-                    mb: 2,
-                  }}
-                >
-                  <Paper
-                    elevation={2}
-                    sx={{
-                      p: 2,
-                      maxWidth: "70%",
-                      backgroundColor:
-                        message.sender === "user" ? "#1976d2" : "#fff",
-                      color: message.sender === "user" ? "#fff" : "#000",
-                    }}
-                  >
-                    <Box sx={{ mb: 0.5 }}>
-                      <MessageContent
-                        content={message.text}
-                        sender={message.sender}
-                      />
-                    </Box>
-                    <Typography variant="caption" sx={{ opacity: 0.7 }}>
-                      {message.timestamp}
-                    </Typography>
-                  </Paper>
-                </Box>
+                <MessageRenderer key={message.id} message={message} />
               ))}
-
-              {/* Display streaming message */}
               {streamingMessage && (
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "flex-start",
-                    mb: 2,
-                  }}
-                >
-                  <Paper
-                    elevation={2}
-                    sx={{
-                      p: 2,
-                      maxWidth: "70%",
-                      backgroundColor: "#fff",
-                      color: "#000",
-                      position: "relative",
-                    }}
-                  >
-                    <Box sx={{ mb: 0.5 }}>
-                      <MessageContent
-                        content={streamingMessage.text || ""}
-                        sender={streamingMessage.sender}
-                      />
-                      {streamingMessage.isStreaming && (
-                        <Box
-                          component="span"
-                          sx={{
-                            display: "inline-block",
-                            width: "8px",
-                            height: "20px",
-                            backgroundColor: "#1976d2",
-                            marginLeft: "2px",
-                            animation: "blink 1s infinite",
-                            "@keyframes blink": {
-                              "0%, 50%": { opacity: 1 },
-                              "51%, 100%": { opacity: 0 },
-                            },
-                          }}
-                        />
-                      )}
-                    </Box>
-                    <Typography variant="caption" sx={{ opacity: 0.7 }}>
-                      {streamingMessage.timestamp}
-                    </Typography>
-                  </Paper>
-                </Box>
+                <MessageRenderer message={streamingMessage} isStreaming />
               )}
-            </>
+            </Box>
           )}
 
           {isLoading && !streamingMessage && (
-            <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 2 }}>
-              <Paper elevation={2} sx={{ p: 2, backgroundColor: "#fff" }}>
-                <Typography variant="body2" sx={{ fontStyle: "italic" }}>
-                  Chatbot is typing...
-                </Typography>
-              </Paper>
-            </Box>
+            <MessageRenderer
+              message={{
+                text: keyword("chatbot_typing"),
+                sender: "bot",
+                timestamp: new Date().toLocaleTimeString(),
+              }}
+            />
           )}
         </Paper>
 
         {/* Input Area */}
-        <Box sx={{ display: "flex", gap: 1 }}>
+        <Box sx={{ display: "flex", gap: 1, alignItems: "stretch" }}>
+          <Tooltip title={keyword("clear_session")}>
+            <IconButton
+              onClick={clearChat}
+              disabled={messages.length === 0 && !userInput && !isSessionActive}
+              sx={{
+                width: 56,
+                height: 56,
+                borderRadius: 1,
+                backgroundColor: "#7b1fa2",
+                color: "white",
+                "&:hover": {
+                  backgroundColor: "#6a1b9a",
+                },
+                "&:disabled": {
+                  backgroundColor: "#e0e0e0",
+                  color: "#9e9e9e",
+                },
+              }}
+            >
+              <RestartAltIcon />
+            </IconButton>
+          </Tooltip>
           <TextField
             fullWidth
             multiline
