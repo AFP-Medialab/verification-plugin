@@ -737,7 +737,7 @@ export const chatBot = new Tool(
   chatBotSvgIcon,
   TOOLS_CATEGORIES.OTHER,
   [TOOL_STATUS_ICON.NEW],
-  null,
+  [ROLES.EXTRA_FEATURE],
   "chatbot",
   TOOL_GROUPS.VERIFICATION,
   <ChatBot />,
