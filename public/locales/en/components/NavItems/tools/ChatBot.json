@@ -1,14 +1,1 @@
-{
-  "chatbot_title": "ChatBot Assistant",
-  "chatbot_description": "AI-powered assistant for content analysis and verification tasks. Select a pre-defined request to get started with analyzing text, images, or other content.",
-  "chatbot_intro": "Use the ChatBot to analyze content for verification purposes. Choose from pre-defined analysis types or have a general conversation about verification techniques.",
-  "chatbot_models_loading": "Loading available models...",
-  "chatbot_select_model": "Select Model",
-  "chatbot_clear_chat": "Clear chat and reset session",
-  "chatbot_typing": "ChatBot is typing...",
-  "chatbot_start_conversation": "Start a conversation with the chatbot...",
-  "chatbot_input_placeholder": "Type your message here...",
-  "chatbot_paste_tooltip": "Paste from clipboard",
-  "chatbot_clear_input_tooltip": "Clear input",
-  "chatbot_send_message": "Send message"
-}
+{"clear_session": "Clear chat and reset session", "preprompt_label": "Predefined prompts", "active_prompt1": "- Type your content in the chat box below to get started. You can still change the pre-request above.", "active_prompt2": "- Pre-request will be executed automatically. You can still change the selection above.", "active_prompt3": "- Session active. Use the clear button to change pre-request.", "chatbot_start": "Please select a predefined prompt above to start...", "content_analysis": "Enter content for analysis...", "chatbot_type_here": "Type your message here...", "chatbot_disable": "ChatBot is disabled until you select a predefined prompt", "active_session": "Active session:", "clear_input": "Clear input", "paste_from_clipboard": "Paste from clipboard", "prompt_required_1": "Prompt Required:", "prompt_required_2": "Please select a prompt above to start using the chatbot.", "load_models": "Loading available models...", "chatbot_title": "Chat Bot Assistant", "models_label": "Models", "prompt_select_label": "Select a prompt...", "prompt_content_placeholder": "Paste the text/article you want to analyze rhetorically...", "chatbot_typing": "Chatbot is typing...", "prompt_selected": "Selected:", "thinking_hide": "Hide thinking", "thinking_show": "Show thinking", "chatbot_description": "This chatbot is working with local LM Studio server. It aim is to anaylyse content using pre-defined prompts.", "chatbot_settings_alert": "Chatbot is configured to use local LM Studio running with this url: http://127.0.0.1:1234. Be sure that your local LM Studio is running. More details see <a href=\"https://lmstudio.ai/docs/app/api\" \"target=\"_blank\">https://lmstudio.ai/docs/app/api</a>"}
