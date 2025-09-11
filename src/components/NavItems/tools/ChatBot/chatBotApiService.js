@@ -141,6 +141,8 @@ export const createChatBotApi = (apiBaseUrl, selectedModel) => {
       model: selectedModel,
       prompt: filteredPrompt,
       temperature: options.temperature || 0.7,
+      repeatPenalty: options.repeatPenalty || 1.5,
+      max_tokens: options.maxTokens || 500,
       stream: true,
     };
 
@@ -249,7 +251,7 @@ export const createChatBotApi = (apiBaseUrl, selectedModel) => {
   const performChatCompletion = async ({
     messages,
     options = {},
-    preRequestName = null,
+    promptName = null,
   }) => {
     if (!selectedModel) throw new Error("No model selected");
 
@@ -283,9 +285,7 @@ export const createChatBotApi = (apiBaseUrl, selectedModel) => {
           };
         })();
 
-    return preRequestName
-      ? { ...result, preRequestUsed: preRequestName }
-      : result;
+    return promptName ? { ...result, promptUsed: promptName } : result;
   };
 
   return {

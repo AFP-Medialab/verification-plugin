@@ -3,8 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   // Session Configuration
   selectedModel: "",
-  selectedPreRequest: "",
-  activePreRequest: null,
+  selectedPrompt: "",
+  activePrompt: null,
 
   // Chat History
   messages: [],
@@ -43,12 +43,12 @@ const chatBotSlice = createSlice({
       state.selectedModel = action.payload;
     },
 
-    setSelectedPreRequest: (state, action) => {
-      state.selectedPreRequest = action.payload;
+    setSelectedPrompt: (state, action) => {
+      state.selectedPrompt = action.payload;
     },
 
-    setActivePreRequest: (state, action) => {
-      state.activePreRequest = action.payload.preRequest;
+    setActivePrompt: (state, action) => {
+      state.activePrompt = action.payload.prompt;
       state.isSessionActive = true;
       state.sessionId = action.payload.sessionId || Date.now().toString();
       state.sessionStartTime =
@@ -103,8 +103,8 @@ const chatBotSlice = createSlice({
 
     clearSession: (state) => {
       // Keep models and loading states, reset session data
-      state.selectedPreRequest = "";
-      state.activePreRequest = null;
+      state.selectedPrompt = "";
+      state.activePrompt = null;
       state.messages = [];
       state.streamingMessage = null;
       state.userInput = "";
@@ -129,8 +129,8 @@ export const {
   setModels,
   setModelsLoading,
   setSelectedModel,
-  setSelectedPreRequest,
-  setActivePreRequest,
+  setSelectedPrompt,
+  setActivePrompt,
   setUserInput,
   addMessage,
   updateMessages,

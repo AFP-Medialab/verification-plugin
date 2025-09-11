@@ -28,8 +28,8 @@ import {
   addMessage,
   clearSession,
   clearStreamingMessage,
-  setActivePreRequest,
-  setSelectedPreRequest,
+  setActivePrompt,
+  setSelectedPrompt,
   setStreamingMessage,
   setUserInput,
   updateStreamingMessage,
@@ -103,7 +103,9 @@ const ChatBotUI = () => {
   };
 
   // Styled message bubble component
-  const MessageBubble = styled(Box)(({ sent }) => ({
+  const MessageBubble = styled(Box, {
+    shouldForwardProp: (prop) => prop !== "sent",
+  })(({ sent }) => ({
     maxWidth: "70%",
     padding: "10px 15px",
     borderRadius: sent ? "15px 15px 0 15px" : "15px 15px 15px 0",
@@ -188,8 +190,8 @@ const ChatBotUI = () => {
     userInput,
     messages,
     streamingMessage,
-    selectedPreRequest,
-    activePreRequest,
+    selectedPrompt,
+    activePrompt,
     isSessionActive,
   } = useSelector((state) => state.chatBot);
 
@@ -199,11 +201,11 @@ const ChatBotUI = () => {
     isLoading,
     isModelsLoading,
     error,
-    preRequests,
+    prompts,
     fetchModels,
     setSelectedModel,
     sendTextMessage,
-    executePreRequest,
+    executePrompt,
     clearError,
     isReady,
   } = useChatBot();
@@ -259,23 +261,23 @@ const ChatBotUI = () => {
     clearError();
   };
 
-  const handlePreRequestChange = (event) => {
-    const preRequestId = event.target.value;
-    dispatch(setSelectedPreRequest(preRequestId));
+  const handlePromptChange = (event) => {
+    const promptId = event.target.value;
+    dispatch(setSelectedPrompt(promptId));
 
-    // Store the active pre-request for persistent display
-    if (preRequestId && preRequestId !== "") {
-      const selectedPreReq = preRequests.find((req) => req.id === preRequestId);
-      dispatch(setActivePreRequest({ preRequest: selectedPreReq }));
+    // Store the active prompt for persistent display
+    if (promptId && promptId !== "") {
+      const selectedPromptObj = prompts.find((req) => req.id === promptId);
+      dispatch(setActivePrompt({ prompt: selectedPromptObj }));
 
-      // If it's a pre-request that doesn't require content, execute immediately
-      if (selectedPreReq && !selectedPreReq.requiresContent) {
-        executeSelectedPreRequest(preRequestId);
+      // If it's a prompt that doesn't require content, execute immediately
+      if (selectedPromptObj && !selectedPromptObj.requiresContent) {
+        executeSelectedPrompt(promptId);
       }
     }
   };
 
-  const executeSelectedPreRequest = async (preRequestId, content = null) => {
+  const executeSelectedPrompt = async (promptId, content = null) => {
     try {
       if (content) {
         dispatch(addMessage(createMessage(content)));
@@ -283,8 +285,8 @@ const ChatBotUI = () => {
       }
 
       const streamingId = createStreamingMessage();
-      const botResponse = await executePreRequest(
-        preRequestId,
+      const botResponse = await executePrompt(
+        promptId,
         { onChunk: createChunkHandler(), temperature },
         content,
         messages,
@@ -293,7 +295,7 @@ const ChatBotUI = () => {
       finalizeStreaming(botResponse, streamingId);
     } catch (err) {
       handle404Error(err, content);
-      console.error("Failed to execute pre-request:", err);
+      console.error("Failed to execute prompt:", err);
       dispatch(clearStreamingMessage());
       throw err;
     }
@@ -309,14 +311,14 @@ const ChatBotUI = () => {
 
     const previousUserInput = userInput;
 
-    // Handle pre-request flow
-    if (selectedPreRequest && selectedPreRequest !== "") {
-      const selectedPreReq = preRequests.find(
-        (req) => req.id === selectedPreRequest,
+    // Handle prompt flow
+    if (selectedPrompt && selectedPrompt !== "") {
+      const selectedPromptObj = prompts.find(
+        (req) => req.id === selectedPrompt,
       );
-      if (selectedPreReq?.requiresContent) {
+      if (selectedPromptObj?.requiresContent) {
         try {
-          await executeSelectedPreRequest(selectedPreRequest, userInput);
+          await executeSelectedPrompt(selectedPrompt, userInput);
           dispatch(setUserInput(""));
         } catch (err) {
           handle404Error(err, previousUserInput);
@@ -410,15 +412,15 @@ const ChatBotUI = () => {
           </Alert>
         )}
 
-        {/* Pre-request Selection */}
-        {preRequests.length > 1 && (
+        {/* Prompt Selection */}
+        {prompts.length > 1 && (
           <Box sx={{ mb: 2 }}>
             <FormControl fullWidth size="small">
               <InputLabel>{keyword("preprompt_label")}</InputLabel>
               <Select
-                value={selectedPreRequest}
+                value={selectedPrompt}
                 label={keyword("preprompt_label")}
-                onChange={handlePreRequestChange}
+                onChange={handlePromptChange}
                 disabled={
                   isLoading ||
                   !isReady ||
@@ -426,35 +428,35 @@ const ChatBotUI = () => {
                   streamingMessage
                 }
               >
-                {preRequests.map((preReq) => (
+                {prompts.map((prompt) => (
                   <MenuItem
-                    key={preReq.id}
-                    value={preReq.id}
-                    disabled={preReq.disabled}
+                    key={prompt.id}
+                    value={prompt.id}
+                    disabled={prompt.disabled}
                   >
-                    {keyword(preReq.name)}
+                    {keyword(prompt.name)}
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
 
-            {/* Show active pre-request status - persistent throughout session */}
-            {activePreRequest && (
+            {/* Show active prompt status - persistent throughout session */}
+            {activePrompt && (
               <Alert severity="info" sx={{ mt: 1 }}>
                 <strong>
-                  {keyword("prompt_selected")} {activePreRequest.name}&nbsp;
+                  {keyword("prompt_selected")} {activePrompt.name}&nbsp;
                 </strong>
                 {messages.length === 0
-                  ? activePreRequest.requiresContent
+                  ? activePrompt.requiresContent
                     ? keyword("active_prompt1")
                     : keyword("active_prompt2")
                   : keyword("active_prompt3")}
               </Alert>
             )}
 
-            {/* Show pre-request required message */}
+            {/* Show prompt required message */}
             {messages.length === 0 &&
-              (!selectedPreRequest || selectedPreRequest === "") && (
+              (!selectedPrompt || selectedPrompt === "") && (
                 <Alert severity="info" sx={{ mt: 1 }}>
                   <strong>{keyword("prompt_required_1")}</strong>{" "}
                   {keyword("prompt_required_2")}
@@ -508,26 +510,30 @@ const ChatBotUI = () => {
         {/* Input Area */}
         <Box sx={{ display: "flex", gap: 1, alignItems: "stretch" }}>
           <Tooltip title={keyword("clear_session")}>
-            <IconButton
-              onClick={clearChat}
-              disabled={messages.length === 0 && !userInput && !isSessionActive}
-              sx={{
-                width: 56,
-                height: 56,
-                borderRadius: 1,
-                backgroundColor: "#7b1fa2",
-                color: "white",
-                "&:hover": {
-                  backgroundColor: "#6a1b9a",
-                },
-                "&:disabled": {
-                  backgroundColor: "#e0e0e0",
-                  color: "#9e9e9e",
-                },
-              }}
-            >
-              <RestartAltIcon />
-            </IconButton>
+            <span>
+              <IconButton
+                onClick={clearChat}
+                disabled={
+                  messages.length === 0 && !userInput && !isSessionActive
+                }
+                sx={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: 1,
+                  backgroundColor: "#7b1fa2",
+                  color: "white",
+                  "&:hover": {
+                    backgroundColor: "#6a1b9a",
+                  },
+                  "&:disabled": {
+                    backgroundColor: "#e0e0e0",
+                    color: "#9e9e9e",
+                  },
+                }}
+              >
+                <RestartAltIcon />
+              </IconButton>
+            </span>
           </Tooltip>
           <TextField
             fullWidth
@@ -538,22 +544,22 @@ const ChatBotUI = () => {
             onChange={handleInputChange}
             onKeyPress={handleKeyPress}
             placeholder={
-              messages.length === 0 && !activePreRequest
+              messages.length === 0 && !activePrompt
                 ? keyword("chatbot_start")
-                : activePreRequest?.requiresContent && messages.length === 0
+                : activePrompt?.requiresContent && messages.length === 0
                   ? keyword("prompt_content_placeholder") ||
                     keyword("content_analysis")
                   : keyword("chatbot_type_here")
             }
             variant="outlined"
-            disabled={isLoading || (messages.length === 0 && !activePreRequest)}
+            disabled={isLoading || (messages.length === 0 && !activePrompt)}
             helperText={
-              messages.length === 0 && !activePreRequest
+              messages.length === 0 && !activePrompt
                 ? keyword("chatbot_disable")
-                : activePreRequest?.requiresContent && messages.length === 0
-                  ? `${activePreRequest.name}: ${keyword("content_analysis")}`
-                  : activePreRequest
-                    ? `${keyword("active_session")} ${activePreRequest.name}`
+                : activePrompt?.requiresContent && messages.length === 0
+                  ? `${activePrompt.name}: ${keyword("content_analysis")}`
+                  : activePrompt
+                    ? `${keyword("active_session")} ${activePrompt.name}`
                     : ""
             }
             InputProps={{
@@ -592,7 +598,7 @@ const ChatBotUI = () => {
               !userInput.trim() ||
               isLoading ||
               !isReady ||
-              (messages.length === 0 && !activePreRequest)
+              (messages.length === 0 && !activePrompt)
             }
             sx={{ minWidth: 56, height: 56 }}
           >

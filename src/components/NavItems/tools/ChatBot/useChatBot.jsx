@@ -6,7 +6,7 @@ import {
   fetchModels,
   formatMessagesForAPI,
 } from "./chatBotApiService";
-import { PRE_REQUESTS_CONFIG } from "./preRequestsConfig";
+import { PROMPTS_CONFIG } from "./promptConfig";
 
 /**
  * Custom hook for interacting with OpenAI-like chat completion API
@@ -23,10 +23,10 @@ const useChatBot = (
 ) => {
   const [selectedModel, setSelectedModel] = useState("");
   const [error, setError] = useState(null);
-  const [selectedPreRequest, setSelectedPreRequest] = useState("");
+  const [selectedPrompt, setSelectedPrompt] = useState("");
 
-  // Pre-defined requests from configuration
-  const [preRequests] = useState(PRE_REQUESTS_CONFIG);
+  // Pre-defined prompts from configuration
+  const [prompts] = useState(PROMPTS_CONFIG);
 
   // Fetch available models using React Query
   const {
@@ -99,18 +99,17 @@ const useChatBot = (
     [sendMessage],
   );
 
-  const executePreRequest = useCallback(
+  const executePrompt = useCallback(
     async (
-      preRequestId,
+      promptId,
       options = {},
       content = null,
       conversationHistory = [],
     ) => {
-      const preRequest = preRequests.find((req) => req.id === preRequestId);
-      if (!preRequest?.messages)
-        throw new Error("Invalid pre-request selected");
+      const prompt = prompts.find((req) => req.id === promptId);
+      if (!prompt?.messages) throw new Error("Invalid prompt selected");
 
-      let messages = [...preRequest.messages];
+      let messages = [...prompt.messages];
 
       // Build messages in chronological order
       let fullMessages = [];
@@ -121,13 +120,13 @@ const useChatBot = (
         // 2. Conversation history in chronological order
         // 3. Final user message with new content
 
-        if (content && preRequest.requiresContent) {
-          // Find the last message in pre-request template (usually contains CONTENT_TO_PROCESS)
-          const lastPreRequestIndex = messages.length - 1;
-          const lastPreRequestMessage = messages[lastPreRequestIndex];
+        if (content && prompt.requiresContent) {
+          // Find the last message in prompt template (usually contains CONTENT_TO_PROCESS)
+          const lastPromptIndex = messages.length - 1;
+          const lastPromptMessage = messages[lastPromptIndex];
 
-          // Add pre-request messages except the last one
-          fullMessages = messages.slice(0, lastPreRequestIndex);
+          // Add prompt messages except the last one
+          fullMessages = messages.slice(0, lastPromptIndex);
 
           // Add conversation history in chronological order
           fullMessages = [
@@ -137,22 +136,22 @@ const useChatBot = (
 
           // Add the final user message with content
           fullMessages.push({
-            ...lastPreRequestMessage,
-            content: lastPreRequestMessage.content.replace(
+            ...lastPromptMessage,
+            content: lastPromptMessage.content.replace(
               "CONTENT_TO_PROCESS",
               content,
             ),
           });
         } else {
-          // No content replacement needed, just add history before pre-request messages
+          // No content replacement needed, just add history before prompt messages
           fullMessages = [
             ...formatMessagesForAPI(conversationHistory),
             ...messages,
           ];
         }
       } else {
-        // No conversation history, just process the pre-request messages
-        if (content && preRequest.requiresContent) {
+        // No conversation history, just process the prompt messages
+        if (content && prompt.requiresContent) {
           fullMessages = messages.map((msg) => ({
             ...msg,
             content: msg.content.replace("CONTENT_TO_PROCESS", content),
@@ -165,10 +164,10 @@ const useChatBot = (
       return chatMutation.mutateAsync({
         messages: fullMessages,
         options,
-        preRequestName: preRequest.name,
+        promptName: prompt.name,
       });
     },
-    [chatMutation, preRequests],
+    [chatMutation, prompts],
   );
 
   return {
@@ -178,16 +177,16 @@ const useChatBot = (
     isLoading: chatMutation.isPending,
     isModelsLoading,
     error: error || modelsError?.message || chatMutation.error?.message,
-    preRequests,
-    selectedPreRequest,
+    prompts,
+    selectedPrompt,
 
     // Actions
     fetchModels: refetchModels,
     setSelectedModel,
     sendMessage,
     sendTextMessage,
-    executePreRequest,
-    setSelectedPreRequest,
+    executePrompt,
+    setSelectedPrompt,
 
     // Utils
     clearError: () => {

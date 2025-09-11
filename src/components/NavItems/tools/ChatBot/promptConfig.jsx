@@ -1,14 +1,14 @@
 /**
- * Pre-defined chat requests configuration
+ * Pre-defined chat prompts configuration
  *
- * Each pre-request should have:
+ * Each prompt should have:
  * - id: unique identifier
  * - name: display name for the select box
  * - description: optional description
  * - messages: array of OpenAI-format messages to send to the API
  * - disabled: optional boolean to disable the option
  */
-export const PRE_REQUESTS_CONFIG = [
+export const PROMPTS_CONFIG = [
   {
     id: "",
     name: "prompt_select_label",
@@ -100,26 +100,26 @@ export const PRE_REQUESTS_CONFIG = [
 ];
 
 /**
- * Helper function to add a new pre-request
- * @param {Object} preRequest - The pre-request configuration object
+ * Helper function to add a new prompt
+ * @param {Object} prompt - The prompt configuration object
  */
-export const addPreRequest = (preRequest) => {
-  PRE_REQUESTS_CONFIG.push(preRequest);
+export const addPrompt = (prompt) => {
+  PROMPTS_CONFIG.push(prompt);
 };
 
 /**
- * Helper function to get a pre-request by ID
- * @param {string} id - The pre-request ID
- * @returns {Object|undefined} The pre-request object or undefined if not found
+ * Helper function to get a prompt by ID
+ * @param {string} id - The prompt ID
+ * @returns {Object|undefined} The prompt object or undefined if not found
  */
-export const getPreRequestById = (id) => {
-  return PRE_REQUESTS_CONFIG.find((req) => req.id === id);
+export const getPromptById = (id) => {
+  return PROMPTS_CONFIG.find((req) => req.id === id);
 };
 
 /**
- * Helper function to get all available pre-requests (excluding disabled ones)
- * @returns {Array} Array of enabled pre-requests
+ * Helper function to get all available prompts (excluding disabled ones)
+ * @returns {Array} Array of enabled prompts
  */
-export const getAvailablePreRequests = () => {
-  return PRE_REQUESTS_CONFIG.filter((req) => !req.disabled);
+export const getAvailablePrompts = () => {
+  return PROMPTS_CONFIG.filter((req) => !req.disabled);
 };
