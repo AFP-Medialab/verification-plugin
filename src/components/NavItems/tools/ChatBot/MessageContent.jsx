@@ -63,6 +63,10 @@ const formatMarkdownLike = (text) => {
 
       // Handle different markdown-like elements
       let formattedText = paragraph
+        // Headers h3 ###
+        .replace(/^### (.+)$/gm, "<h3>$1</h3>")
+        // Headers h2 ##
+        .replace(/^## (.+)$/gm, "<h2>$1</h2>")
         // Bold text **text**
         .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
         // Italic text *text*
