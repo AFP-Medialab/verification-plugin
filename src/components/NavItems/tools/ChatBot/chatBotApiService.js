@@ -142,7 +142,7 @@ export const createChatBotApi = (apiBaseUrl, selectedModel) => {
       prompt: filteredPrompt,
       temperature: options.temperature || 0.7,
       repeatPenalty: options.repeatPenalty || 1.5,
-      max_tokens: options.maxTokens || 500,
+      max_tokens: options.maxTokens || -1,
       stream: true,
     };
 
@@ -259,7 +259,7 @@ export const createChatBotApi = (apiBaseUrl, selectedModel) => {
       model: selectedModel,
       messages,
       temperature: options.temperature || 0.7,
-      max_tokens: options.maxTokens || 1000,
+      max_tokens: options.maxTokens || -1,
       stream: options.stream !== false,
       ...options,
     };

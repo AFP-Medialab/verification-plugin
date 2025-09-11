@@ -1,9 +1,9 @@
 import React, { useState } from "react";
+import ReactMarkdown from "react-markdown";
 
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
-import Typography from "@mui/material/Typography";
 
 import { ExpandLess, ExpandMore, Psychology } from "@mui/icons-material";
 
@@ -47,54 +47,6 @@ const parseMessageContent = (content) => {
 };
 
 /**
- * Simple markdown-like formatter
- * @param {string} text - Text to format
- * @returns {JSX.Element} - Formatted content
- */
-const formatMarkdownLike = (text) => {
-  if (!text) return null;
-
-  // Split by paragraphs
-  const paragraphs = text.split(/\n\s*\n/);
-
-  return paragraphs
-    .map((paragraph, index) => {
-      if (!paragraph.trim()) return null;
-
-      // Handle different markdown-like elements
-      let formattedText = paragraph
-        // Headers h3 ###
-        .replace(/^### (.+)$/gm, "<h3>$1</h3>")
-        // Headers h2 ##
-        .replace(/^## (.+)$/gm, "<h2>$1</h2>")
-        // Bold text **text**
-        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-        // Italic text *text*
-        .replace(/\*(.*?)\*/g, "<em>$1</em>")
-        // Code blocks `code`
-        .replace(
-          /`(.*?)`/g,
-          '<code style="background-color: #f5f5f5; padding: 2px 4px; border-radius: 3px; font-family: monospace;">$1</code>',
-        )
-        // Line breaks
-        .replace(/\n/g, "<br />");
-
-      return (
-        <Typography
-          key={index}
-          variant="body1"
-          sx={{
-            mb: paragraph.includes("\n") ? 1 : 0.5,
-            textAlign: "left",
-          }}
-          dangerouslySetInnerHTML={{ __html: formattedText }}
-        />
-      );
-    })
-    .filter(Boolean);
-};
-
-/**
  * Expandable think section component
  */
 const ThinkSection = ({ thinkContent }) => {
@@ -135,7 +87,7 @@ const ThinkSection = ({ thinkContent }) => {
             textAlign: "left",
           }}
         >
-          {formatMarkdownLike(thinkContent)}
+          <ReactMarkdown>{thinkContent}</ReactMarkdown>
         </Box>
       </Collapse>
     </Box>
@@ -153,7 +105,7 @@ const MessageContent = ({ content, sender }) => {
       {/* Regular content with markdown formatting */}
       {regularContent && (
         <Box sx={{ mb: thinkSections.length > 0 ? 1 : 0 }}>
-          {formatMarkdownLike(regularContent)}
+          <ReactMarkdown>{regularContent}</ReactMarkdown>
         </Box>
       )}
 
