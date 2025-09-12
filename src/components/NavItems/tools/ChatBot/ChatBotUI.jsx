@@ -418,7 +418,7 @@ const ChatBotUI = () => {
             <FormControl fullWidth size="small">
               <InputLabel>{keyword("preprompt_label")}</InputLabel>
               <Select
-                value={selectedPrompt}
+                value={selectedPrompt || ""}
                 label={keyword("preprompt_label")}
                 onChange={handlePromptChange}
                 disabled={
@@ -434,7 +434,22 @@ const ChatBotUI = () => {
                     value={prompt.id}
                     disabled={prompt.disabled}
                   >
-                    {keyword(prompt.name)}
+                    <Tooltip
+                      title={
+                        prompt.messages && prompt.messages[1]
+                          ? prompt.messages[1].content
+                          : ""
+                      }
+                      arrow
+                      placement="right"
+                      enterDelay={500}
+                    >
+                      <span>
+                        {prompt.id === "none"
+                          ? keyword(prompt.name)
+                          : prompt.name}
+                      </span>
+                    </Tooltip>
                   </MenuItem>
                 ))}
               </Select>

@@ -10,7 +10,7 @@
  */
 export const PROMPTS_CONFIG = [
   {
-    id: "",
+    id: "none",
     name: "prompt_select_label",
     disabled: true,
   },
@@ -23,7 +23,7 @@ export const PROMPTS_CONFIG = [
       {
         role: "system",
         content:
-          "You are a factchecker working in an international news agency",
+          "You are a fact-checker working in an international news agency",
       },
       {
         role: "user",
@@ -32,8 +32,7 @@ export const PROMPTS_CONFIG = [
       },
       {
         role: "assistant",
-        content:
-          "Ok I will do it, what is the article you want me to analyse ?",
+        content: "Very welll, what is the article you want me to analyse ?",
       },
       {
         role: "user",
@@ -51,7 +50,7 @@ export const PROMPTS_CONFIG = [
       {
         role: "system",
         content:
-          "You are a factchecker working in an international news agency",
+          "You are a fact-checker working in an international news agency",
       },
       {
         role: "user",
@@ -62,6 +61,32 @@ export const PROMPTS_CONFIG = [
         role: "assistant",
         content:
           "Ok I will do it, what is the article you want me to analyse ?",
+      },
+      {
+        role: "user",
+        content: "CONTENT_TO_PROCESS",
+      },
+    ],
+  },
+  {
+    id: "claim_to_check_en",
+    name: "Claim extractor",
+    description: "Extract claims to check from an article",
+    requiresContent: true,
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are a fact-checker working in an international news agency",
+      },
+      {
+        role: "user",
+        content:
+          "Extract up to 3 potentially biased claims that can be fact-checked in this article.",
+      },
+      {
+        role: "assistant",
+        content: "Very welll, what is the article you want me to process ?",
       },
       {
         role: "user",
