@@ -47,37 +47,58 @@ const AssistantWarnings = () => {
   // wait for previous fact checks results to compare with DBKFText before showing to users
   // combine results if necessary
   // only happens if beta user logged in
+  const DBKF = keyword("dbkf_acronym");
+  const FCSS = keyword("fact_check_finder");
   const updatedPrevFactCheckResult = [];
   const separateDbkfTextMatch = [];
   let uniqueSeparateDbkfTextMatch = [];
-  if (
-    role.includes(ROLES.BETA_TESTER) &&
-    prevFactChecksResult &&
-    dbkfTextMatch
-  ) {
-    prevFactChecksResult.forEach((pfcResult) => {
-      dbkfTextMatch.forEach((dbkfResult) => {
-        if (pfcResult.url === dbkfResult.externalLink) {
-          updatedPrevFactCheckResult.push({
-            ...pfcResult,
-            factCheckServices: ["FCSS", "DBKF"],
-          });
-        } else {
-          updatedPrevFactCheckResult.push({
-            ...pfcResult,
-            factCheckServices: ["FCSS"],
-          });
-          separateDbkfTextMatch.push({
-            ...dbkfResult,
-            factCheckServices: ["DBKF"],
-          });
-        }
+  if (role.includes(ROLES.BETA_TESTER)) {
+    if (prevFactChecksResult && dbkfTextMatch) {
+      // pfc and dbkf results
+      prevFactChecksResult.forEach((pfcResult) => {
+        dbkfTextMatch.forEach((dbkfResult) => {
+          if (pfcResult.url === dbkfResult.externalLink) {
+            updatedPrevFactCheckResult.push({
+              ...pfcResult,
+              factCheckServices: [FCSS, DBKF],
+            });
+          } else {
+            updatedPrevFactCheckResult.push({
+              ...pfcResult,
+              factCheckServices: [FCSS],
+            });
+            separateDbkfTextMatch.push({
+              ...dbkfResult,
+              factCheckServices: [DBKF],
+            });
+          }
+        });
       });
-    });
-    uniqueSeparateDbkfTextMatch = separateDbkfTextMatch.filter(
-      (obj, index, self) =>
-        index === self.findIndex((item) => item.id === obj.id),
-    );
+      uniqueSeparateDbkfTextMatch = separateDbkfTextMatch.filter(
+        (obj, index, self) =>
+          index === self.findIndex((item) => item.id === obj.id),
+      );
+    } else if (prevFactChecksResult && !dbkfTextMatch) {
+      // pfc but no dbkf results
+      prevFactChecksResult.forEach((pfcResult) => {
+        updatedPrevFactCheckResult.push({
+          ...pfcResult,
+          factCheckServices: [FCSS],
+        });
+      });
+    } else if (!prevFactChecksResult && dbkfTextMatch) {
+      // dbkf but no pfc results
+      dbkfTextMatch.forEach((dbkfResult) => {
+        separateDbkfTextMatch.push({
+          ...dbkfResult,
+          factCheckServices: [DBKF],
+        });
+      });
+      uniqueSeparateDbkfTextMatch = separateDbkfTextMatch.filter(
+        (obj, index, self) =>
+          index === self.findIndex((item) => item.id === obj.id),
+      );
+    }
   }
 
   return (
