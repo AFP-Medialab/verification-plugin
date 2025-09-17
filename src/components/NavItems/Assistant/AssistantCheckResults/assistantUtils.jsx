@@ -320,6 +320,11 @@ const renderDialog = (keyword, value, trafficLightColor, sourceType) => {
 
         <DialogContent dividers>
           <List sx={{ listStyle: "decimal", ml: 4 }}>
+            {value.credibilityLabels === "present in GDI reports" && (
+              <Typography align="start">
+                {keyword("gdi_reports_warning")}
+              </Typography>
+            )}
             {value.credibilityEvidence.map((result, index) => (
               <ListItem key={index} sx={{ display: "list-item" }}>
                 <Typography>
