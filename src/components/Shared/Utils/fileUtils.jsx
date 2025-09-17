@@ -206,3 +206,49 @@ export const resizeImageWithWorker = (image) => {
     workerInstance.postMessage(image);
   });
 };
+
+/**
+ * Downloads a file from a URL or Blob.
+ * @param {string|Blob} source - Either a URL string or a Blob object.
+ * @param {string} [filename] - Optional filename for the download. If omitted, browser decides.
+ */
+export const downloadFile = async (source, filename) => {
+  let objectUrl;
+
+  try {
+    // Determine blob
+    let blob;
+    if (source instanceof Blob) {
+      blob = source;
+    } else if (typeof source === "string") {
+      const response = await fetch(source);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch file: ${response.statusText}`);
+      }
+      blob = await response.blob();
+    } else {
+      throw new Error("Source must be a URL string or a Blob");
+    }
+
+    // Create object URL
+    objectUrl = URL.createObjectURL(blob);
+
+    // Create temporary anchor
+    const a = document.createElement("a");
+    a.href = objectUrl;
+
+    if (filename) {
+      a.download = filename;
+    }
+
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    // Revoke after a short delay to ensure download starts
+    setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+  } catch (err) {
+    console.error("Download failed:", err);
+    throw err;
+  }
+};
