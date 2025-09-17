@@ -26,6 +26,7 @@ const ResultDisplayItem = ({
   articleUrl,
   domainUrl,
   imageUrl,
+  factCheckServices,
 }) => {
   const path = useLocation();
   let keyword;
@@ -150,6 +151,15 @@ const ResultDisplayItem = ({
               {website}
             </Link>
             <Chip label={language} sx={{ width: "fit-content" }} />
+            {factCheckServices?.map((value, key) => (
+              <Chip
+                key={key}
+                label={value}
+                color="warning"
+                sx={{ width: "fit-content" }}
+                size="small"
+              />
+            ))}
           </Stack>
         </Grid>
       </Grid>

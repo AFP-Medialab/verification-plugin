@@ -2,26 +2,20 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import Avatar from "@mui/material/Avatar";
-import Box from "@mui/material/Box";
-import Chip from "@mui/material/Chip";
 import Link from "@mui/material/Link";
-import ListItem from "@mui/material/ListItem";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import ListItemText from "@mui/material/ListItemText";
-import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import ResultDisplayItem from "components/NavItems/tools/SemanticSearch/components/ResultDisplayItem";
+import { getLanguageName } from "components/Shared/Utils/languageUtils";
 import dayjs from "dayjs";
 import LocaleData from "dayjs/plugin/localeData";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 
-const PreviousFactCheckResults = () => {
+const PreviousFactCheckResults = ({ results }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   // previous fact checks
-  const prevFactChecksTitle = keyword("previous_fact_checks_title");
   const prevFactChecksResult = useSelector(
     (state) => state.assistant.prevFactChecksResult,
   );
@@ -43,78 +37,33 @@ const PreviousFactCheckResults = () => {
 
   return (
     <>
-      <Chip color="warning" label={prevFactChecksTitle} />
-
       {prevFactChecksDone && prevFactChecksResult.length > 0 && (
         <>
-          {prevFactChecksResult.map((resultItem, key) => {
+          {results.map((resultItem) => {
             // date in correct format
             const date = resultItem.published_at.slice(0, 10);
 
             return (
-              <ListItem key={key}>
-                <ListItemAvatar>
-                  <Avatar src={resultItem.image_url} variant="rounded" />
-                </ListItemAvatar>
-                <ListItemText
-                  primary={
-                    <div>
-                      <Typography
-                        variant={"body1"}
-                        color={"textPrimary"}
-                        component={"div"}
-                        align={"left"}
-                      >
-                        {keyword("semantic_search_result_claim")}{" "}
-                        {resultItem.claim_en}
-                      </Typography>
-                      <Box
-                        sx={{
-                          mb: 0.5,
-                        }}
-                      />
-                    </div>
-                  }
-                  secondary={
-                    <div>
-                      <Stack direction="column">
-                        <Typography
-                          variant={"caption"}
-                          component={"div"}
-                          color={"textSecondary"}
-                        >
-                          {keyword("semantic_search_result_title")}{" "}
-                          <Link
-                            href={resultItem.externalLink}
-                            key={key}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {resultItem.title_en}
-                          </Link>
-                        </Typography>
-                        <Typography
-                          variant={"caption"}
-                          component={"div"}
-                          color={"textSecondary"}
-                        >
-                          {keyword("semantic_search_rating")}{" "}
-                          {resultItem.rating}
-                        </Typography>
-                        <Typography
-                          variant={"caption"}
-                          component={"div"}
-                          color={"textSecondary"}
-                        >
-                          {dayjs(date).format(
-                            globalLocaleData.longDateFormat("LL"),
-                          ) ?? ""}
-                        </Typography>
-                      </Stack>
-                    </div>
-                  }
-                />
-              </ListItem>
+              <ResultDisplayItem
+                key={resultItem.id}
+                id={resultItem.id}
+                claim={resultItem.claim_en}
+                title={resultItem.title_en}
+                claimOriginalLanguage={resultItem.claim}
+                titleOriginalLanguage={resultItem.title}
+                rating={resultItem.rating}
+                date={
+                  dayjs(date).format(globalLocaleData.longDateFormat("LL")) ??
+                  null
+                }
+                website={resultItem.website ?? resultItem.source_name}
+                language={getLanguageName(resultItem.source_language)}
+                similarityScore={resultItem.score}
+                articleUrl={resultItem.url}
+                domainUrl={resultItem.source_name}
+                imageUrl={resultItem.image_url}
+                factCheckServices={resultItem.factCheckServices}
+              />
             );
           })}
         </>
@@ -126,15 +75,17 @@ const PreviousFactCheckResults = () => {
         fontSize="small"
         sx={{
           align: "center",
+          mt: 2,
         }}
       >
-        {keyword("more_details")}{" "}
+        {keyword("For more details see the ")}{" "}
         <Link
           sx={{ cursor: "pointer" }}
           onClick={() => handleClick("tools/semanticSearch")}
         >
           {keyword("semantic_search_title")}
-        </Link>
+        </Link>{" "}
+        {keyword("(FCSS) tool")}
       </Typography>
     </>
   );

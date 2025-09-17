@@ -6,6 +6,8 @@ import Alert from "@mui/material/Alert";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
@@ -18,7 +20,11 @@ import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespa
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { ROLES } from "@/constants/roles";
 
-import { TransHtmlDoubleLineBreak } from "../TransComponents";
+import {
+  TransDbkfLink,
+  TransHtmlDoubleLineBreak,
+  TransPrevFactChecksLink,
+} from "../TransComponents";
 
 const AssistantWarnings = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -31,9 +37,48 @@ const AssistantWarnings = () => {
   const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
   const dbkfImageMatch = useSelector((state) => state.assistant.dbkfImageMatch);
   const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
+  const prevFactChecksLoading = useSelector(
+    (state) => state.assistant.prevFactChecksLoading,
+  );
   const prevFactChecksResult = useSelector(
     (state) => state.assistant.prevFactChecksResult,
   );
+
+  // wait for previous fact checks results to compare with DBKFText before showing to users
+  // combine results if necessary
+  // only happens if beta user logged in
+  const updatedPrevFactCheckResult = [];
+  const separateDbkfTextMatch = [];
+  let uniqueSeparateDbkfTextMatch = [];
+  if (
+    role.includes(ROLES.BETA_TESTER) &&
+    prevFactChecksResult &&
+    dbkfTextMatch
+  ) {
+    prevFactChecksResult.forEach((pfcResult) => {
+      dbkfTextMatch.forEach((dbkfResult) => {
+        if (pfcResult.url === dbkfResult.externalLink) {
+          updatedPrevFactCheckResult.push({
+            ...pfcResult,
+            factCheckServices: ["FCSS", "DBKF"],
+          });
+        } else {
+          updatedPrevFactCheckResult.push({
+            ...pfcResult,
+            factCheckServices: ["FCSS"],
+          });
+          separateDbkfTextMatch.push({
+            ...dbkfResult,
+            factCheckServices: ["DBKF"],
+          });
+        }
+      });
+    });
+    uniqueSeparateDbkfTextMatch = separateDbkfTextMatch.filter(
+      (obj, index, self) =>
+        index === self.findIndex((item) => item.id === obj.id),
+    );
+  }
 
   return (
     <Card variant="outlined" id="warnings">
@@ -41,7 +86,7 @@ const AssistantWarnings = () => {
         className={classes.assistantCardHeader}
         title={
           <Alert severity="warning" sx={{ bgcolor: "background.paper" }}>
-            <Typography>{keyword("dbkf_title")}</Typography>
+            <Typography>{keyword("warnings_title")}</Typography>
           </Alert>
         }
         action={
@@ -51,7 +96,11 @@ const AssistantWarnings = () => {
               <>
                 <Trans t={keyword} i18nKey="dbkf_tooltip" />
                 <TransHtmlDoubleLineBreak keyword={keyword} />
+                <TransDbkfLink keyword={keyword} />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
                 <Trans t={keyword} i18nKey="previous_fact_checks_tooltip" />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
+                <TransPrevFactChecksLink keyword={keyword} />
               </>
             }
             classes={{ tooltip: classes.assistantTooltip }}
@@ -61,12 +110,31 @@ const AssistantWarnings = () => {
         }
       />
       <CardContent>
-        {dbkfTextMatch && <DbkfTextResults />}
-
         {(dbkfImageMatch || dbkfVideoMatch) && <DbkfMediaResults />}
 
-        {role.includes(ROLES.BETA_TESTER) && prevFactChecksResult && (
-          <PreviousFactCheckResults />
+        {!role.includes(ROLES.BETA_TESTER) && dbkfTextMatch && (
+          <DbkfTextResults results={dbkfTextMatch} />
+        )}
+
+        {role.includes(ROLES.BETA_TESTER) &&
+          updatedPrevFactCheckResult.length > 0 && (
+            <>
+              <DbkfTextResults results={uniqueSeparateDbkfTextMatch} />
+              <PreviousFactCheckResults results={updatedPrevFactCheckResult} />
+            </>
+          )}
+
+        {role.includes(ROLES.BETA_TESTER) && prevFactChecksLoading && (
+          <Stack
+            direction="column"
+            spacing={4}
+            sx={{
+              p: 4,
+            }}
+          >
+            <Skeleton variant="rounded" height={40} />
+            <Skeleton variant="rounded" width={400} height={40} />
+          </Stack>
         )}
       </CardContent>
     </Card>

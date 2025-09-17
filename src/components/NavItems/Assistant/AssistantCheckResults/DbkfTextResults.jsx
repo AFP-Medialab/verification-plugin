@@ -1,71 +1,104 @@
 import React from "react";
-import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
+import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import ListItemText from "@mui/material/ListItemText";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 
-const DbkfTextResults = () => {
+const DbkfTextResults = ({ results }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
-  const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
 
   return (
     <>
-      <Chip color="warning" label={keyword("dbkf_text_title")} />
-
-      <List disablePadding={true}>
-        {dbkfTextMatch.map((value, key) => (
-          <ListItem key={key}>
-            <ListItemAvatar>
-              <TextFieldsIcon fontSize={"large"} />
-            </ListItemAvatar>
-            <ListItemText
-              primary={
-                <div>
-                  <Typography
-                    variant={"body1"}
-                    color={"textPrimary"}
-                    component={"div"}
-                    align={"left"}
-                  >
-                    {keyword("dbkf_text_warning")}
-                  </Typography>
-                  <Box
-                    sx={{
-                      mb: 0.5,
-                    }}
+      {/* This code mimics ResultDisplayItem.jsx from SemanticSearch to match output */}
+      {results.map((value, key) => {
+        return (
+          <Box
+            key={key}
+            sx={{
+              width: "100%",
+            }}
+          >
+            <Grid
+              container
+              direction="row"
+              sx={{
+                p: 2,
+                justifyContent: "space-between",
+              }}
+            >
+              <Grid
+                container
+                direction="row"
+                size={{ xs: 10 }}
+                spacing={2}
+                sx={{
+                  justifyContent: "flex-start",
+                  alignItems: "flex-start",
+                }}
+              >
+                <Grid>
+                  <TextFieldsIcon
+                    fontSize={"large"}
+                    sx={{ width: 80, height: 80 }}
                   />
-                </div>
-              }
-              secondary={
-                <Typography
-                  variant={"caption"}
-                  component={"div"}
-                  color={"textSecondary"}
-                >
-                  <Link
-                    href={value.externalLink}
-                    key={key}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                </Grid>
+                <Grid size="grow">
+                  <Stack
+                    direction="column"
+                    spacing={2}
+                    sx={{
+                      justifyContent: "flex-start",
+                      alignItems: "flex-start",
+                    }}
                   >
-                    {value.text}
-                  </Link>
-                </Typography>
-              }
-            />
-          </ListItem>
-        ))}
-      </List>
+                    <Stack direction="column">
+                      <Typography sx={{ textAlign: "start" }}>
+                        {keyword("dbkf_text_warning")}
+                      </Typography>
+                    </Stack>
+                    <Stack direction="column">
+                      <Typography color={"textSecondary"}>
+                        <Link
+                          href={value.externalLink}
+                          key={key}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {value.text}
+                        </Link>
+                      </Typography>
+                    </Stack>
+                  </Stack>
+                </Grid>
+              </Grid>
+              <Grid
+                size={{ xs: 2 }}
+                sx={{
+                  pl: 4,
+                }}
+              >
+                <Stack direction="column" spacing={2}>
+                  <Chip
+                    label={value.factCheckServices}
+                    sx={{ width: "fit-content" }}
+                    size="small"
+                    color="warning"
+                  />
+                </Stack>
+              </Grid>
+            </Grid>
+            <Divider orientation="horizontal" flexItem />
+          </Box>
+        );
+      })}
     </>
   );
 };
