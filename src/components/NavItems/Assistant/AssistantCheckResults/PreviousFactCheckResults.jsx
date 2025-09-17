@@ -78,14 +78,14 @@ const PreviousFactCheckResults = ({ results }) => {
           mt: 2,
         }}
       >
-        {keyword("For more details see the ")}{" "}
+        {keyword("more_details")}{" "}
         <Link
           sx={{ cursor: "pointer" }}
           onClick={() => handleClick("tools/semanticSearch")}
         >
           {keyword("semantic_search_title")}
         </Link>{" "}
-        {keyword("(FCSS) tool")}
+        {keyword("fcss_tool")}
       </Typography>
     </>
   );
