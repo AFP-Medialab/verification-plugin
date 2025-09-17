@@ -10,7 +10,7 @@ import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequ
 export async function fetchKeyframeFeaturesApi(authenticatedRequest, jobId) {
   const config = {
     method: "get",
-    url: `${process.env.REACT_APP_KEYFRAME_API_2}/keyframes_enhance/${jobId}`,
+    url: `${process.env.REACT_APP_KEYFRAME_API}/keyframes_enhance/${jobId}`,
   };
 
   const response = await authenticatedRequest(config);
