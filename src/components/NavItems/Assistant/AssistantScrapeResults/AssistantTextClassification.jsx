@@ -153,8 +153,11 @@ export default function AssistantTextClassification({
         }
       }
     } else {
-      //Filter categories above confidenceThreshold unless machine generated text
-      if (credibilitySignal === keyword("machine_generated_text_title")) {
+      //Filter categories above confidenceThreshold unless machine generated text or news genre
+      if (
+        credibilitySignal === keyword("machine_generated_text_title") ||
+        credibilitySignal === keyword("news_genre_title")
+      ) {
         filteredCategories[label] = classification[label];
       } else if (
         classification[label][0].score >= configs.confidenceThresholdLow

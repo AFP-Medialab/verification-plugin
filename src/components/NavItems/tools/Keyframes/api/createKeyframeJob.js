@@ -38,7 +38,19 @@ export const createKeyframeJobApi = async (
   let config;
 
   if (type === KeyframeInputType.FILE) {
-    // TODO: Implement file upload mode for keyframe extraction.
+    const formData = new FormData();
+    formData.append("file", value);
+
+    config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: process.env.REACT_APP_KEYFRAME_API_FILE,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: formData,
+      // timeout: 30000, // 30s timeout
+    };
   } else {
     // URL mode: Prepare the request payload with the video URL.
     const d = JSON.stringify({
@@ -54,7 +66,7 @@ export const createKeyframeJobApi = async (
         "Content-Type": "application/json",
       },
       data: d,
-      timeout: 10000, // Set a timeout of 10 seconds for the request.
+      timeout: 30000, // Set a timeout of 30 seconds for the request.
     };
   }
 

@@ -8,6 +8,7 @@ import {
   Dashboard,
   Gradient,
   ManageSearch,
+  SmartToy,
 } from "@mui/icons-material";
 
 import {
@@ -50,6 +51,7 @@ import MachineGeneratedText from "../components/NavItems/MachineGeneratedText";
 import ToolsMenu from "../components/NavItems/tools/Alltools/ToolsMenu";
 import Analysis from "../components/NavItems/tools/Analysis/Analysis";
 import Archive from "../components/NavItems/tools/Archive";
+import ChatBot from "../components/NavItems/tools/ChatBot/ChatBot";
 import DeepfakeVideo from "../components/NavItems/tools/Deepfake/DeepfakeVideo";
 import Forensic from "../components/NavItems/tools/Forensic/Forensic";
 import Geolocation from "../components/NavItems/tools/Geolocation/Geolocation";
@@ -269,6 +271,10 @@ const c2paSvgIcon = (props) => {
 
 const disinfoDeckIcon = (props) => {
   return <Dashboard {...props} />;
+};
+
+const chatBotSvgIcon = (props) => {
+  return <SmartToy {...props} />;
 };
 
 /**
@@ -725,6 +731,19 @@ export const archiving = new Tool(
   <Footer type={FOOTER_TYPES.AFP} />,
 );
 
+export const chatBot = new Tool(
+  "navbar_chatbot",
+  "navbar_chatbot_description",
+  chatBotSvgIcon,
+  TOOLS_CATEGORIES.OTHER,
+  [TOOL_STATUS_ICON.NEW],
+  [ROLES.EXTRA_FEATURE],
+  "chatbot",
+  TOOL_GROUPS.VERIFICATION,
+  <ChatBot />,
+  <Footer type={FOOTER_TYPES.AFP} />,
+);
+
 /**
  *
  * Other Group tools
@@ -788,6 +807,7 @@ export const tools = Object.freeze([
   newSna,
   disinfoDeck,
   archiving,
+  chatBot,
   about,
   c2paData,
 ]);
