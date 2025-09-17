@@ -119,13 +119,6 @@ export const renderEvidence = (keyword, labels, evidence, source, scope) => {
         </Typography>
       </ListItem>
       <ListItem>
-        {labels === "present in GDI reports" && (
-          <Typography variant={"subtitle2"} align="start">
-            {keyword("gdi_reports_warning")}
-          </Typography>
-        )}
-      </ListItem>
-      <ListItem>
         <List sx={{ listStyle: "decimal", ml: 4 }}>
           {evidence?.map((result, index) => (
             <ListItem key={index} sx={{ display: "list-item" }}>
@@ -137,6 +130,13 @@ export const renderEvidence = (keyword, labels, evidence, source, scope) => {
             </ListItem>
           ))}
         </List>
+      </ListItem>
+      <ListItem>
+        {labels === "present in GDI reports" && (
+          <Typography variant={"subtitle2"} align="start">
+            {keyword("gdi_reports_warning")}
+          </Typography>
+        )}
       </ListItem>
     </List>
   );
@@ -327,11 +327,6 @@ const renderDialog = (keyword, value, trafficLightColor, sourceType) => {
 
         <DialogContent dividers>
           <List sx={{ listStyle: "decimal", ml: 4 }}>
-            {value.credibilityLabels === "present in GDI reports" && (
-              <Typography variant={"subtitle2"} align="start">
-                {keyword("gdi_reports_warning")}
-              </Typography>
-            )}
             {value.credibilityEvidence.map((result, index) => (
               <ListItem key={index} sx={{ display: "list-item" }}>
                 <Typography>
@@ -342,6 +337,11 @@ const renderDialog = (keyword, value, trafficLightColor, sourceType) => {
               </ListItem>
             ))}
           </List>
+          {value.credibilityLabels === "present in GDI reports" && (
+            <Typography variant={"subtitle2"} align="start">
+              {keyword("gdi_reports_warning")}
+            </Typography>
+          )}
         </DialogContent>
       </Dialog>
     </ListItemSecondaryAction>
