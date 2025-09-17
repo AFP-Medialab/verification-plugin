@@ -107,7 +107,7 @@ export const renderDescription = (keyword, description) => {
   );
 };
 
-export const renderEvidence = (keyword, evidence, source, scope) => {
+export const renderEvidence = (keyword, labels, evidence, source, scope) => {
   return (
     <List>
       <ListItem>
@@ -117,6 +117,13 @@ export const renderEvidence = (keyword, evidence, source, scope) => {
             : keyword("source_cred_popup_header_domain")}{" "}
           {source}
         </Typography>
+      </ListItem>
+      <ListItem>
+        {labels === "present in GDI reports" && (
+          <Typography variant={"subtitle2"} align="start">
+            {keyword("gdi_reports_warning")}
+          </Typography>
+        )}
       </ListItem>
       <ListItem>
         <List sx={{ listStyle: "decimal", ml: 4 }}>
@@ -321,7 +328,7 @@ const renderDialog = (keyword, value, trafficLightColor, sourceType) => {
         <DialogContent dividers>
           <List sx={{ listStyle: "decimal", ml: 4 }}>
             {value.credibilityLabels === "present in GDI reports" && (
-              <Typography align="start">
+              <Typography variant={"subtitle2"} align="start">
                 {keyword("gdi_reports_warning")}
               </Typography>
             )}
