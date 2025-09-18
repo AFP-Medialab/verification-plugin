@@ -188,7 +188,7 @@ const Loccus = () => {
       // Second, we perform the Loccus authenticity verification
 
       const detectionRequestData = JSON.stringify({
-        model: "default",
+        model: "digital",
         sample: uploadResponse.data.handle,
       });
 

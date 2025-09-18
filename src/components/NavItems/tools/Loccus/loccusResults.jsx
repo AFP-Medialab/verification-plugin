@@ -215,8 +215,8 @@ const LoccusResults = ({
       labels.push(dayjs.duration(chunk.startTime));
       labels.push(dayjs.duration(chunk.endTime));
 
-      datasetData.push((1 - chunk.subscores.synthesis) * 100);
-      datasetData.push((1 - chunk.subscores.synthesis) * 100);
+      datasetData.push((1 - chunk.scores.synthesis) * 100);
+      datasetData.push((1 - chunk.scores.synthesis) * 100);
     }
 
     return {
@@ -247,27 +247,27 @@ const LoccusResults = ({
     }
 
     if (
-      !result.subscores ||
-      !result.subscores.synthetic ||
-      typeof result.subscores.synthetic !== "number"
+      !result.scores ||
+      !result.scores.synthetic ||
+      typeof result.scores.synthetic !== "number"
     ) {
       //   TODO: Error handling
     }
 
     if (
-      !result.subscores ||
-      !result.subscores.replay ||
-      typeof result.subscores.replay !== "number"
+      !result.scores ||
+      !result.scores.replay ||
+      typeof result.scores.replay !== "number"
     ) {
       //   TODO: Error handling
     }
 
-    const newVoiceCloningScore = (1 - result.subscores.synthesis) * 100;
+    const newVoiceCloningScore = (1 - result.scores.synthesis) * 100;
 
     if (voiceCloningScore !== newVoiceCloningScore)
       setVoiceCloningScore(newVoiceCloningScore);
 
-    const newVoiceRecordingScore = (1 - result.subscores.replay) * 100;
+    const newVoiceRecordingScore = (1 - result.scores.replay) * 100;
     if (voiceRecordingScore !== newVoiceRecordingScore)
       setVoiceRecordingScore(newVoiceRecordingScore);
   }, [result]);
@@ -332,13 +332,11 @@ const LoccusResults = ({
   useEffect(() => {
     if (wavesurfer && isReady && chunks) {
       chunks.map((chunk) => {
-        if (chunk.subscores?.synthesis) {
+        if (chunk.scores?.synthesis) {
           regionsRef.current.addRegion({
             start: dayjs.duration(chunk.startTime).asSeconds(),
             end: dayjs.duration(chunk.endTime).asSeconds(),
-            color: getPercentageColorCode(
-              (1 - chunk.subscores.synthesis) * 100,
-            ),
+            color: getPercentageColorCode((1 - chunk.scores.synthesis) * 100),
             resize: false,
             drag: false,
           });
