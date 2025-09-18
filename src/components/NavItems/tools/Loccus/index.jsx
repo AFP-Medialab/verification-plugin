@@ -27,6 +27,11 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import LoccusResults from "./loccusResults";
 
+/**
+ * Loccus Component - Audio authenticity verification tool
+ * Provides functionality to analyze audio files for synthetic/cloned voice detection
+ * @returns {JSX.Element} The Loccus tool interface
+ */
 const Loccus = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Loccus");
   const keywordAllTools = i18nLoadNamespace(
@@ -53,30 +58,48 @@ const Loccus = () => {
   const dispatch = useDispatch();
 
   /**
-   * Returns true iff more than 50% of the chunks' results are null in the array, else returns false
+   * Determines if the analysis result is inconclusive based on null chunk scores
+   * @param {Array} analysisResults - Array of analysis result chunks
+   * @returns {boolean|Error} true if more than 50% of chunks have null scores, false otherwise, or Error if invalid input
    */
-  const isResultInconclusive = (result) => {
-    if (!result || result.length === 0)
+  const isResultInconclusive = (analysisResults) => {
+    if (!analysisResults || analysisResults.length === 0)
       return new Error(
-        `[isResultInconclusive] Error: the result object is not defined.`,
+        `[isResultInconclusive] Error: the analysis results are not defined.`,
       );
 
-    let nullChunks = 0;
+    let nullResultCount = 0;
 
-    const chunks = result.length;
+    const totalChunks = analysisResults.length;
 
-    for (const resultChunk of result) {
-      if (resultChunk.score === null) nullChunks++;
+    for (const resultChunk of analysisResults) {
+      if (resultChunk.score === null) nullResultCount++;
     }
 
-    return nullChunks / chunks >= 0.5;
+    return nullResultCount / totalChunks >= 0.5;
   };
 
-  const useGetVoiceCloningScore = async (url, processURL, dispatch) => {
-    if (!processURL && !url && !audioFile) {
+  /**
+   * Analyzes audio for voice cloning/synthetic audio detection
+   * @param {string} audioUrl - URL of the audio file to analyze
+   * @param {boolean} shouldProcessUrl - Whether to process the URL
+   * @param {Function} dispatchAction - Redux dispatch function
+   * @throws {Error} When no URL or audio file is provided, or when API calls fail
+   */
+  const useGetVoiceCloningScore = async (
+    audioUrl,
+    shouldProcessUrl,
+    dispatchAction,
+  ) => {
+    if (!shouldProcessUrl && !audioUrl && !audioFile) {
       throw new Error("No URL or audio file");
     }
 
+    /**
+     * Converts a Blob to a data URL
+     * @param {Blob} blob - The blob to convert
+     * @returns {Promise<string>} Promise that resolves to data URL
+     */
     const blobToDataUrl = (blob) =>
       new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -85,42 +108,52 @@ const Loccus = () => {
         reader.readAsDataURL(blob);
       });
 
+    /**
+     * Converts a Blob to base64 string (without data URL prefix)
+     * @param {Blob} blob - The blob to convert
+     * @returns {Promise<string>} Promise that resolves to base64 string
+     */
     const blobToBase64 = async (blob) => {
-      const text = await blobToDataUrl(blob);
-      return text.slice(text.indexOf(",") + 1);
+      const dataUrl = await blobToDataUrl(blob);
+      return dataUrl.slice(dataUrl.indexOf(",") + 1);
     };
 
-    let blob;
+    let audioBlob;
 
-    if (isValidUrl(url) && !audioFile) {
+    if (isValidUrl(audioUrl) && !audioFile) {
       try {
-        blob = (await axios.get(url, { responseType: "blob" })).data ?? null;
-      } catch (e) {
-        console.error(e);
-        throw new Error(e);
+        audioBlob =
+          (await axios.get(audioUrl, { responseType: "blob" })).data ?? null;
+      } catch (error) {
+        console.error(error);
+        throw new Error(error.message || error);
       }
     }
 
-    const b64InputFile = blob
-      ? decodeURIComponent(await blobToBase64(blob))
+    const base64EncodedFile = audioBlob
+      ? decodeURIComponent(await blobToBase64(audioBlob))
       : await blobToBase64(audioFile);
 
-    const handleError = (e) => {
-      dispatch(setError(e));
-      dispatch(setLoccusLoading(false));
+    /**
+     * Handles errors during the analysis process
+     * @param {Error|string} error - The error to handle
+     */
+    const handleError = (error) => {
+      dispatchAction(setError(error));
+      dispatchAction(setLoccusLoading(false));
     };
 
-    let res;
+    let uploadResponse;
 
     try {
       // TODO: provide a view on previous file uploads by the user
 
-      let data = JSON.stringify({
-        file: b64InputFile,
+      const uploadRequestData = JSON.stringify({
+        file: base64EncodedFile,
         alias: uuidv4(),
       });
 
-      let config = {
+      const uploadRequestConfig = {
         method: "post",
         maxBodyLength: Infinity,
         //samples
@@ -129,30 +162,37 @@ const Loccus = () => {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        data: data,
+        data: uploadRequestData,
         timeout: 60000,
         signal: AbortSignal.timeout(60000),
       };
 
       // First, we upload the file to Loccus
-      res = await authenticatedRequest(config);
+      uploadResponse = await authenticatedRequest(uploadRequestConfig);
 
-      if (!res || !res.data || res.data.message) {
+      if (
+        !uploadResponse ||
+        !uploadResponse.data ||
+        uploadResponse.data.message
+      ) {
         throw new Error("No data");
       }
 
-      if (!res.data.state || res.data.state !== "available") {
+      if (
+        !uploadResponse.data.state ||
+        uploadResponse.data.state !== "available"
+      ) {
         throw new Error("The file is not available.");
       }
 
       // Second, we perform the Loccus authenticity verification
 
-      const data2 = JSON.stringify({
+      const detectionRequestData = JSON.stringify({
         model: "default",
-        sample: res.data.handle,
+        sample: uploadResponse.data.handle,
       });
 
-      const config2 = {
+      const detectionRequestConfig = {
         method: "post",
         maxBodyLength: Infinity,
         ///verifications/authenticity
@@ -161,44 +201,49 @@ const Loccus = () => {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        data: data2,
+        data: detectionRequestData,
         timeout: 180000,
         signal: AbortSignal.timeout(180000),
       };
 
-      const res2 = await authenticatedRequest(config2);
+      const detectionResponse = await authenticatedRequest(
+        detectionRequestConfig,
+      );
 
-      if (!res2 || !res2.data || res2.data.message) {
-        //   TODO: handle error
+      if (
+        !detectionResponse ||
+        !detectionResponse.data ||
+        detectionResponse.data.message
+      ) {
+        // TODO: handle error
         return;
       }
 
-      const config3 = {
+      const chunksRequestConfig = {
         method: "get",
         maxBodyLength: Infinity,
-        ///verifications/authenticity
         url:
           process.env.REACT_APP_LOCCUS_URL +
-          `/detection/${res2.data.handle}/chunks?page-size=1000`,
+          `/detection/${detectionResponse.data.handle}/chunks?page-size=1000`,
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        data: data2,
+        data: detectionRequestData,
         timeout: 180000,
         signal: AbortSignal.timeout(180000),
       };
 
-      const res3 = await authenticatedRequest(config3);
+      const chunksResponse = await authenticatedRequest(chunksRequestConfig);
 
-      const isInconclusive = isResultInconclusive(res3.data);
+      const isAnalysisInconclusive = isResultInconclusive(chunksResponse.data);
 
-      dispatch(
+      dispatchAction(
         setLoccusResult({
-          url: audioFile ? URL.createObjectURL(audioFile) : url,
-          result: res2.data,
-          chunks: res3.data,
-          isInconclusive: isInconclusive,
+          url: audioFile ? URL.createObjectURL(audioFile) : audioUrl,
+          result: detectionResponse.data,
+          chunks: chunksResponse.data,
+          isInconclusive: isAnalysisInconclusive,
         }),
       );
     } catch (error) {
@@ -213,6 +258,9 @@ const Loccus = () => {
     }
   };
 
+  /**
+   * Resets the component state to default values
+   */
   const resetState = () => {
     getAnalysisResultsForAudio.reset();
     setInput("");
@@ -220,6 +268,11 @@ const Loccus = () => {
     dispatch(resetLoccusAudio());
   };
 
+  /**
+   * Preprocesses and validates an audio file before upload to Hiya
+   * @param {File} file - The audio file to validate
+   * @returns {File|Error} The validated file or an error
+   */
   const preprocessLoccusUpload = async (file) => {
     if (!(file instanceof File)) {
       dispatch(setError(keyword("error_invalid_file")));
@@ -261,18 +314,18 @@ const Loccus = () => {
 
         audioContext.decodeAudioData(
           fileReader.result,
-          (buffer) => {
-            resolve(buffer);
+          (decodedBuffer) => {
+            resolve(decodedBuffer);
           },
-          (error) => {
-            reject(error);
+          (decodeError) => {
+            reject(decodeError);
           },
         );
       };
     }).catch((error) => {
       console.log(error);
       dispatch(setError(keyword("loccus_error_unable_to_read_file")));
-      return Error(error);
+      return new Error(error);
     });
 
     if (!(audioBuffer instanceof AudioBuffer)) {
