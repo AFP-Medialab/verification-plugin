@@ -1,0 +1,81 @@
+/**
+ * Performs audio authenticity detection using the Loccus service
+ *
+ * @param {string} fileHandle - The file handle returned from the upload endpoint
+ * @param {Function} authenticatedRequest - The authenticated request function from useAuthenticatedRequest hook
+ * @param {string} [model="digital"] - The detection model to use for analysis
+ * @returns {Promise<Object>} Promise that resolves to the detection response containing analysis results
+ * @throws {Error} When detection fails, no data is returned, or request times out
+ *
+ * @example
+ * ```javascript
+ * import { detectAudioAuthenticity } from './detectHiyaAudio';
+ * import useAuthenticatedRequest from 'components/Shared/Authentication/useAuthenticatedRequest';
+ *
+ * const authenticatedRequest = useAuthenticatedRequest();
+ * const fileHandle = 'your-file-handle-from-upload';
+ *
+ * try {
+ *   const detectionResult = await detectAudioAuthenticity(fileHandle, authenticatedRequest);
+ *   console.log('Detection handle:', detectionResult.data.handle);
+ *   console.log('Analysis complete');
+ * } catch (error) {
+ *   console.error('Detection failed:', error.message);
+ * }
+ * ```
+ */
+export const detectAudioAuthenticity = async (
+  fileHandle,
+  authenticatedRequest,
+  model = "digital",
+) => {
+  if (!fileHandle) {
+    throw new Error("File handle is required");
+  }
+
+  if (!authenticatedRequest) {
+    throw new Error("Authenticated request function is required");
+  }
+
+  const detectionRequestData = JSON.stringify({
+    model: model,
+    sample: fileHandle,
+  });
+
+  const detectionRequestConfig = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: process.env.REACT_APP_LOCCUS_URL + "/detection",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    data: detectionRequestData,
+    timeout: 180000,
+    signal: AbortSignal.timeout(180000),
+  };
+
+  try {
+    const detectionResponse = await authenticatedRequest(
+      detectionRequestConfig,
+    );
+
+    if (
+      !detectionResponse ||
+      !detectionResponse.data ||
+      detectionResponse.data.message
+    ) {
+      throw new Error("No data received from detection endpoint");
+    }
+
+    return detectionResponse;
+  } catch (error) {
+    if (
+      error.message.includes("canceled") ||
+      error.message.includes("timeout")
+    ) {
+      throw new Error("Detection request timed out");
+    }
+    throw new Error(error.response?.data?.message || error.message);
+  }
+};
