@@ -13,7 +13,7 @@ import { AudioFile } from "@mui/icons-material";
 import {
   detectAudioAuthenticity,
   getDetectionChunks,
-  uploadAudioToLoccus,
+  uploadHiyaAudio,
 } from "@/components/NavItems/tools/Loccus/api";
 import {
   resetLoccusAudio,
@@ -125,7 +125,7 @@ const Loccus = () => {
     };
 
     try {
-      const uploadResponse = await uploadAudioToLoccus(
+      const uploadResponse = await uploadHiyaAudio(
         base64EncodedFile,
         authenticatedRequest,
       );

@@ -11,24 +11,24 @@ import { v4 as uuidv4 } from "uuid";
  *
  * @example
  * ```javascript
- * import { uploadAudioToLoccus } from './uploadHiyaAudio';
+ * import { uploadHiyaAudio } from './uploadHiyaAudio';
  * import useAuthenticatedRequest from 'components/Shared/Authentication/useAuthenticatedRequest';
  *
  * const authenticatedRequest = useAuthenticatedRequest();
  * const base64Audio = await blobToBase64(audioFile);
  *
  * try {
- *   const uploadResult = await uploadAudioToLoccus(base64Audio, authenticatedRequest);
+ *   const uploadResult = await uploadHiyaAudio(base64Audio, authenticatedRequest);
  *   console.log('File handle:', uploadResult.data.handle);
  * } catch (error) {
  *   console.error('Upload failed:', error.message);
  * }
  * ```
  */
-export const uploadAudioToLoccus = async (
+export const uploadHiyaAudio = async (
   base64EncodedFile,
   authenticatedRequest,
-  alias = null,
+  alias,
 ) => {
   if (!base64EncodedFile) {
     throw new Error("Base64 encoded file is required");
@@ -56,32 +56,30 @@ export const uploadAudioToLoccus = async (
     signal: AbortSignal.timeout(60000),
   };
 
+  let uploadResponse;
+
   try {
-    const uploadResponse = await authenticatedRequest(uploadRequestConfig);
-
-    if (
-      !uploadResponse ||
-      !uploadResponse.data ||
-      uploadResponse.data.message
-    ) {
-      throw new Error("No data received from upload endpoint");
-    }
-
-    if (
-      !uploadResponse.data.state ||
-      uploadResponse.data.state !== "available"
-    ) {
-      throw new Error("The file is not available after upload");
-    }
-
-    return uploadResponse;
+    uploadResponse = await authenticatedRequest(uploadRequestConfig);
   } catch (error) {
+    // Only catch network/request errors here
     if (
       error.message.includes("canceled") ||
       error.message.includes("timeout")
     ) {
+      console.log("Upload request timed out, rethrowing...");
       throw new Error("Upload request timed out");
     }
-    throw new Error(error.response?.data?.message || error.message);
+
+    throw error;
   }
+
+  if (!uploadResponse || !uploadResponse.data || uploadResponse.data.message) {
+    throw new Error("No data received from upload endpoint");
+  }
+
+  if (!uploadResponse.data.state || uploadResponse.data.state !== "available") {
+    throw new Error("The file is not available after upload");
+  }
+
+  return uploadResponse;
 };
