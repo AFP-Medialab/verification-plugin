@@ -55,27 +55,30 @@ export const detectHiyaAudioAuthenticity = async (
     signal: AbortSignal.timeout(180000),
   };
 
+  let detectionResponse;
+
   try {
-    const detectionResponse = await authenticatedRequest(
-      detectionRequestConfig,
-    );
-
-    if (
-      !detectionResponse ||
-      !detectionResponse.data ||
-      detectionResponse.data.message
-    ) {
-      throw new Error("No data received from detection endpoint");
-    }
-
-    return detectionResponse;
+    detectionResponse = await authenticatedRequest(detectionRequestConfig);
   } catch (error) {
+    // Only catch network/request errors here
     if (
       error.message.includes("canceled") ||
       error.message.includes("timeout")
     ) {
+      console.log("Detection request timed out, rethrowing...");
       throw new Error("Detection request timed out");
     }
-    throw new Error(error.response?.data?.message || error.message);
+
+    throw error;
   }
+
+  if (
+    !detectionResponse ||
+    !detectionResponse.data ||
+    detectionResponse.data.message
+  ) {
+    throw new Error("No data received from detection endpoint");
+  }
+
+  return detectionResponse;
 };

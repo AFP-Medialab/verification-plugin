@@ -51,21 +51,26 @@ export const getHiyaDetectionChunks = async (
     signal: AbortSignal.timeout(180000),
   };
 
+  let chunksResponse;
+
   try {
-    const chunksResponse = await authenticatedRequest(chunksRequestConfig);
-
-    if (!chunksResponse || !chunksResponse.data) {
-      throw new Error("No data received from chunks endpoint");
-    }
-
-    return chunksResponse;
+    chunksResponse = await authenticatedRequest(chunksRequestConfig);
   } catch (error) {
+    // Only catch network/request errors here
     if (
       error.message.includes("canceled") ||
       error.message.includes("timeout")
     ) {
+      console.log("Chunks request timed out, rethrowing...");
       throw new Error("Chunks request timed out");
     }
-    throw new Error(error.response?.data?.message || error.message);
+
+    throw error;
   }
+
+  if (!chunksResponse || !chunksResponse.data) {
+    throw new Error("No data received from chunks endpoint");
+  }
+
+  return chunksResponse;
 };
