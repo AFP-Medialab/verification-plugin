@@ -41,6 +41,22 @@ import duration from "dayjs/plugin/duration";
 import RegionsPlugin from "wavesurfer.js/dist/plugins/regions";
 import ZoomPlugin from "wavesurfer.js/dist/plugins/zoom";
 
+import {
+  DETECTION_COLORS,
+  DETECTION_EXPLANATION_KEYWORDS,
+  DETECTION_THRESHOLDS,
+  DETECTION_TYPES,
+  WAVESURFER_CONFIG,
+  WAVESURFER_ZOOM_CONFIG,
+} from "../constants";
+import {
+  createChartConfig,
+  getChartDataFromChunks,
+  getChartGradient,
+  getPercentageColorCode,
+  printDurationInMinutesWithoutModulo,
+} from "../utils";
+
 const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
   dayjs.extend(duration);
 
@@ -54,30 +70,8 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
   const gaugeChartRef = useRef(null);
   const chunksChartRef = useRef(null);
 
-  const DETECTION_TYPES = {
-    VOICE_CLONING: "synthesis",
-  };
-
-  const DETECTION_THRESHOLDS = {
-    THRESHOLD_1: 10,
-    THRESHOLD_2: 30,
-    THRESHOLD_3: 60,
-  };
-
   const { systemMode, mode } = useColorScheme();
   const resolvedMode = systemMode || mode;
-
-  /**
-   * Reformats a duration to prevent modulo operations done by dayjs when formatting duration values
-   * i.e. print 61 minutes instead of 1 hour 61 minutes
-   * @param duration {number} The duration in milliseconds
-   */
-  const printDurationInMinutesWithoutModulo = (duration) => {
-    const minutes = Math.floor(duration / 60000).toString();
-    const seconds = Math.floor((duration - minutes * 60000) / 1000).toString();
-
-    return `${minutes}m ${seconds}s`;
-  };
 
   ChartJS.register(
     CategoryScale,
@@ -91,140 +85,16 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
     TimeSeriesScale,
   );
 
-  const chartConfig = {
-    type: "line",
-    responsive: true,
-    maintainAspectRatio: false,
+  // Create chart configuration using imported utility
+  const chartConfig = createChartConfig(
+    resolvedMode,
+    isCurrentLanguageLeftToRight,
+    keyword,
+    printDurationInMinutesWithoutModulo,
+  );
 
-    interaction: {
-      intersect: false,
-      axis: "x",
-    },
-
-    plugins: {
-      legend: {
-        position: "bottom",
-        display: false,
-      },
-      title: {
-        display: true,
-        text: keyword("hiya_chart_title"),
-      },
-      tooltip: {
-        callbacks: {
-          label: function (context) {
-            return context.formattedValue + "%";
-          },
-          title: function (context) {
-            return printDurationInMinutesWithoutModulo(context[0].parsed.x);
-          },
-        },
-      },
-    },
-    scales: {
-      x: {
-        type: "time",
-        time: {
-          unit: "second",
-        },
-        grid: {
-          color:
-            resolvedMode === "dark"
-              ? "rgba(200, 200, 200, 0.1)"
-              : "rgba(0, 0, 0, 0.1)",
-        },
-
-        ticks: {
-          callback: function (val) {
-            return printDurationInMinutesWithoutModulo(val);
-          },
-        },
-        reverse: !isCurrentLanguageLeftToRight,
-      },
-      y: {
-        beginAtZero: true,
-        min: 0,
-        max: 100,
-        ticks: {
-          callback: function (value) {
-            return value + "%";
-          },
-        },
-        position: isCurrentLanguageLeftToRight ? "left" : "right",
-        grid: {
-          color:
-            resolvedMode === "dark"
-              ? "rgba(200, 200, 200, 0.1)"
-              : "rgba(0, 0, 0, 0.1)",
-        },
-      },
-    },
-  };
-
-  let width, height, gradient;
-
-  /**
-   * Returns a CanvasGradient to stylize the chart with the given scale
-   * @param {CanvasRenderingContext2D} ctx
-   * @param chartArea
-   * @returns {CanvasGradient}
-   */
-  const getChartGradient = (ctx, chartArea) => {
-    const chartWidth = chartArea.right - chartArea.left;
-    const chartHeight = chartArea.bottom - chartArea.top;
-    if (!gradient || width !== chartWidth || height !== chartHeight) {
-      // Create the gradient because this is either the first render
-      // or the size of the chart has changed
-      width = chartWidth;
-      height = chartHeight;
-      gradient = ctx.createLinearGradient(
-        0,
-        chartArea.bottom,
-        0,
-        chartArea.top,
-      );
-      gradient.addColorStop(0, "#00FF00");
-      gradient.addColorStop(DETECTION_THRESHOLDS.THRESHOLD_1 / 100, "#82FF82");
-      gradient.addColorStop(DETECTION_THRESHOLDS.THRESHOLD_2 / 100, "#FFB800");
-      gradient.addColorStop(DETECTION_THRESHOLDS.THRESHOLD_3 / 100, "#FF0000");
-    }
-
-    return gradient;
-  };
-
-  const getChartDataFromChunks = (chunks) => {
-    let labels = [];
-    const datasetData = [];
-
-    for (const chunk of chunks) {
-      labels.push(dayjs.duration(chunk.startTime));
-      labels.push(dayjs.duration(chunk.endTime));
-
-      datasetData.push((1 - chunk.scores.synthesis) * 100);
-      datasetData.push((1 - chunk.scores.synthesis) * 100);
-    }
-
-    return {
-      labels: labels,
-      datasets: [
-        {
-          data: datasetData,
-          fill: false,
-          borderColor: (context) => {
-            const chart = context.chart;
-            const { ctx, chartArea } = chart;
-
-            // Initial chart load
-            if (!chartArea) return;
-
-            return getChartGradient(ctx, chartArea);
-          },
-          stepped: true,
-          tension: 0,
-        },
-      ],
-    };
-  };
+  // Cache for chart gradient to improve performance
+  const gradientCache = useRef({});
 
   useEffect(() => {
     if (!result) {
@@ -267,39 +137,16 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
     regionsRef.current = RegionsPlugin.create();
   }
 
-  // Hook to get the audio waveform
+  // Hook to get the audio waveform using imported constants
   const { wavesurfer, isReady } = useWavesurfer({
     container: audioContainerRef,
     url: url,
-    waveColor: "#00926c",
-    progressColor: "#005941",
-    height: 100,
-    backend: "MediaElement",
-    mediaControls: true,
-    dragToSeek: true,
+    ...WAVESURFER_CONFIG,
     plugins: useMemo(
-      () => [
-        regionsRef.current,
-        ZoomPlugin.create({
-          scale: 0.5,
-          maxZoom: 100,
-        }),
-      ],
+      () => [regionsRef.current, ZoomPlugin.create(WAVESURFER_ZOOM_CONFIG)],
       [],
     ),
   });
-
-  const getPercentageColorCode = (n) => {
-    if (n >= DETECTION_THRESHOLDS.THRESHOLD_3) {
-      return "rgb(255, 0, 0, 0.5)";
-    } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_2) {
-      return "rgb(255, 170, 0, 0.5)";
-    } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_1) {
-      return "rgb(170, 255, 3, 0.5)";
-    } else {
-      return "rgb(0, 255, 0, 0.5)";
-    }
-  };
 
   useEffect(() => {
     if (wavesurfer && isReady && chunks) {
@@ -316,14 +163,6 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
       });
     }
   }, [wavesurfer, isReady, chunks]);
-
-  const keywords = [
-    "hiya_scale_modal_explanation_rating_1",
-    "hiya_scale_modal_explanation_rating_2",
-    "hiya_scale_modal_explanation_rating_3",
-    "hiya_scale_modal_explanation_rating_4",
-  ];
-  const colors = ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"];
 
   return (
     <Stack
@@ -396,7 +235,24 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
                   >
                     <Chart
                       type={"line"}
-                      data={getChartDataFromChunks(chunks)}
+                      data={{
+                        ...getChartDataFromChunks(chunks),
+                        datasets: getChartDataFromChunks(chunks).datasets.map(
+                          (dataset) => ({
+                            ...dataset,
+                            borderColor: (context) => {
+                              const chart = context.chart;
+                              const { ctx, chartArea } = chart;
+                              if (!chartArea) return;
+                              return getChartGradient(
+                                ctx,
+                                chartArea,
+                                gradientCache.current,
+                              );
+                            },
+                          }),
+                        ),
+                      }}
                       options={chartConfig}
                     />
                   </Grid>
@@ -511,10 +367,10 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
                   {!isInconclusive && (
                     <GaugeChartModalExplanation
                       keyword={keyword}
-                      keywordsArr={keywords}
+                      keywordsArr={DETECTION_EXPLANATION_KEYWORDS}
                       keywordLink={"hiya_scale_explanation_link"}
                       keywordModalTitle={"hiya_scale_modal_explanation_title"}
-                      colors={colors}
+                      colors={DETECTION_COLORS}
                     />
                   )}
 
