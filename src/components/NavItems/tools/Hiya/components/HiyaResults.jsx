@@ -5,17 +5,16 @@ import GaugeChart from "react-gauge-chart";
 import { useSelector } from "react-redux";
 
 import { useColorScheme } from "@mui/material";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { ExpandMore } from "@mui/icons-material";
+import { Download } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
@@ -23,6 +22,7 @@ import CustomAlertScore from "@Shared/CustomAlertScore";
 import GaugeChartModalExplanation from "@Shared/GaugeChartResults/GaugeChartModalExplanation";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -49,18 +49,15 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
   const currentLang = useSelector((state) => state.language);
   const isCurrentLanguageLeftToRight = currentLang !== "ar";
 
-  const role = useSelector((state) => state.userSession.user.roles);
-
   const [voiceCloningScore, setVoiceCloningScore] = useState(null);
-  const [voiceRecordingScore, setVoiceRecordingScore] = useState(null);
 
   const gaugeChartRef = useRef(null);
   const chunksChartRef = useRef(null);
 
   const DETECTION_TYPES = {
-    VOICE_CLONING: "synthetic",
-    VOICE_RECORDING: "replay",
+    VOICE_CLONING: "synthesis",
   };
+
   const DETECTION_THRESHOLDS = {
     THRESHOLD_1: 10,
     THRESHOLD_2: 30,
@@ -236,28 +233,15 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
 
     if (
       !result.scores ||
-      !result.scores.synthetic ||
-      typeof result.scores.synthetic !== "number"
-    ) {
-      //   TODO: Error handling
-    }
-
-    if (
-      !result.scores ||
-      !result.scores.replay ||
-      typeof result.scores.replay !== "number"
+      !result.scores.synthesis ||
+      typeof result.scores.synthesis !== "number"
     ) {
       //   TODO: Error handling
     }
 
     const newVoiceCloningScore = (1 - result.scores.synthesis) * 100;
-
     if (voiceCloningScore !== newVoiceCloningScore)
       setVoiceCloningScore(newVoiceCloningScore);
-
-    const newVoiceRecordingScore = (1 - result.scores.replay) * 100;
-    if (voiceRecordingScore !== newVoiceRecordingScore)
-      setVoiceRecordingScore(newVoiceRecordingScore);
   }, [result]);
 
   const client_id = getclientId();
@@ -548,70 +532,6 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
                     </Typography>
                   )}
                 </Stack>
-
-                {role.includes(ROLES.EXTRA_FEATURE) && (
-                  <>
-                    <Divider />
-                    <Box
-                      sx={{
-                        pb: 4,
-                        pr: 4,
-                      }}
-                    >
-                      <Accordion>
-                        <AccordionSummary
-                          expandIcon={<ExpandMore />}
-                          aria-controls="panel-additional-results-content"
-                          id="panel-additional-results"
-                        >
-                          <Typography>
-                            {keyword("hiya_additional_results")}
-                          </Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                          <Stack direction="column" spacing={2}>
-                            <Typography variant="h5">
-                              {keyword("hiya_voice_recording_detection_title")}
-                            </Typography>
-                            <Stack
-                              direction="column"
-                              spacing={0}
-                              sx={{
-                                justifyContent: "center",
-                                alignItems: "center",
-                              }}
-                            >
-                              <GaugeChart
-                                id={"gauge-chart-2"}
-                                animate={false}
-                                nrOfLevels={4}
-                                arcsLength={[0.1, 0.2, 0.3, 0.4]}
-                                percent={voiceRecordingScore / 100}
-                                style={{ width: 250 }}
-                              />
-
-                              <Stack
-                                direction="row"
-                                spacing={10}
-                                sx={{
-                                  justifyContent: "center",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <Typography variant="subtitle2">
-                                  {keyword("hiya_gauge_no_detection")}
-                                </Typography>
-                                <Typography variant="subtitle2">
-                                  {keyword("hiya_gauge_detection")}
-                                </Typography>
-                              </Stack>
-                            </Stack>
-                          </Stack>
-                        </AccordionDetails>
-                      </Accordion>
-                    </Box>
-                  </>
-                )}
               </Stack>
             </Grid>
           </Grid>

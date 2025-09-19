@@ -32,8 +32,7 @@ const CustomAlertScore = ({
   };
 
   const DETECTION_TYPES = {
-    VOICE_CLONING: "synthetic",
-    VOICE_RECORDING: "replay",
+    VOICE_CLONING: "synthesis",
     IMAGE: "image",
     VIDEO: "video",
     MACHINE_GENERATED_TEXT: "machine_generated_text",
@@ -63,8 +62,6 @@ const CustomAlertScore = ({
       else {
         if (detectionType === DETECTION_TYPES.VOICE_CLONING) {
           return "_voice_cloning_detection";
-        } else if (detectionType === DETECTION_TYPES.VOICE_RECORDING) {
-          return "_voice_recording_detection";
         } else if (detectionType === DETECTION_TYPES.IMAGE) {
           return "_image";
         } else if (detectionType === DETECTION_TYPES.VIDEO) {
