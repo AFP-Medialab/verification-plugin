@@ -1,5 +1,5 @@
 /**
- * Performs audio authenticity detection using the Loccus service
+ * Performs audio authenticity detection using the Hiya service
  *
  * @param {string} fileHandle - The file handle returned from the upload endpoint
  * @param {Function} authenticatedRequest - The authenticated request function from useAuthenticatedRequest hook

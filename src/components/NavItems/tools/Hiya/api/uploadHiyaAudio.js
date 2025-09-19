@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
 /**
- * Uploads an audio file to the Loccus service for processing
+ * Uploads an audio file to the Hiya service for processing
  *
  * @param {string} base64EncodedFile - The base64 encoded audio file data
  * @param {Function} authenticatedRequest - The authenticated request function from useAuthenticatedRequest hook

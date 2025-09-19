@@ -1,5 +1,5 @@
 /**
- * Retrieves detection chunks from the Loccus service for a completed analysis
+ * Retrieves detection chunks from the Hiya service for a completed analysis
  *
  * @param {string} detectionHandle - The detection handle returned from the detection endpoint
  * @param {Function} authenticatedRequest - The authenticated request function from useAuthenticatedRequest hook

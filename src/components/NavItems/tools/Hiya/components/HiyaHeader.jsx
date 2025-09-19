@@ -10,7 +10,7 @@ import HeaderTool from "@Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 const HiyaHeader = () => {
-  const keyword = i18nLoadNamespace("components/NavItems/tools/Loccus");
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Hiya");
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
   );
@@ -19,8 +19,8 @@ const HiyaHeader = () => {
   return (
     <Box>
       <HeaderTool
-        name={keywordAllTools("navbar_loccus")}
-        description={keywordAllTools("navbar_loccus_description")}
+        name={keywordAllTools("navbar_hiya")}
+        description={keywordAllTools("navbar_hiya_description")}
         icon={
           <AudioFile
             style={{
@@ -32,10 +32,8 @@ const HiyaHeader = () => {
         }
       />
       <Stack direction={"column"} spacing={2}>
-        <Alert severity="warning">
-          {keywordWarning("warning_beta_loccus")}
-        </Alert>
-        <Alert severity="info">{keyword("loccus_tip")}</Alert>
+        <Alert severity="warning">{keywordWarning("warning_beta_hoya")}</Alert>
+        <Alert severity="info">{keyword("hiya_tip")}</Alert>
       </Stack>
     </Box>
   );

@@ -6,28 +6,23 @@ import { useSelector } from "react-redux";
 
 import { useColorScheme } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
-import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { Download, ExpandMore } from "@mui/icons-material";
+import { ExpandMore } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
-import { ROLES } from "@/constants/roles";
 import CustomAlertScore from "@Shared/CustomAlertScore";
 import GaugeChartModalExplanation from "@Shared/GaugeChartResults/GaugeChartModalExplanation";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -46,16 +41,10 @@ import duration from "dayjs/plugin/duration";
 import RegionsPlugin from "wavesurfer.js/dist/plugins/regions";
 import ZoomPlugin from "wavesurfer.js/dist/plugins/zoom";
 
-const LoccusResults = ({
-  result,
-  isInconclusive,
-  url,
-  handleClose,
-  chunks,
-}) => {
+const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
   dayjs.extend(duration);
 
-  const keyword = i18nLoadNamespace("components/NavItems/tools/Loccus");
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Hiya");
 
   const currentLang = useSelector((state) => state.language);
   const isCurrentLanguageLeftToRight = currentLang !== "ar";
@@ -122,7 +111,7 @@ const LoccusResults = ({
       },
       title: {
         display: true,
-        text: keyword("loccus_chart_title"),
+        text: keyword("hiya_chart_title"),
       },
       tooltip: {
         callbacks: {
@@ -278,7 +267,7 @@ const LoccusResults = ({
   useTrackEvent(
     "submission",
     "loccus_detection",
-    "Loccus audio processing",
+    "Hiya audio processing",
     url,
     client_id,
     url,
@@ -345,10 +334,10 @@ const LoccusResults = ({
   }, [wavesurfer, isReady, chunks]);
 
   const keywords = [
-    "loccus_scale_modal_explanation_rating_1",
-    "loccus_scale_modal_explanation_rating_2",
-    "loccus_scale_modal_explanation_rating_3",
-    "loccus_scale_modal_explanation_rating_4",
+    "hiya_scale_modal_explanation_rating_1",
+    "hiya_scale_modal_explanation_rating_2",
+    "hiya_scale_modal_explanation_rating_3",
+    "hiya_scale_modal_explanation_rating_4",
   ];
   const colors = ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"];
 
@@ -369,7 +358,7 @@ const LoccusResults = ({
         >
           <CardHeader
             style={{ borderRadius: "4px 4p x 0px 0px" }}
-            title={keyword("loccus_title")}
+            title={keyword("hiya_title")}
             action={
               <IconButton
                 aria-label="close"
@@ -429,7 +418,7 @@ const LoccusResults = ({
                   </Grid>
                   <Grid>
                     <Tooltip
-                      title={keyword("loccus_download_chunks_chart_button")}
+                      title={keyword("hiya_download_chunks_chart_button")}
                     >
                       <IconButton
                         color="primary"
@@ -437,7 +426,7 @@ const LoccusResults = ({
                         onClick={async () =>
                           await exportReactElementAsJpg(
                             chunksChartRef,
-                            "loccus_detection_chart",
+                            "hiya_detection_chart",
                           )
                         }
                       >
@@ -463,7 +452,7 @@ const LoccusResults = ({
                   }}
                 >
                   <Typography variant="h5">
-                    {keyword("loccus_voice_cloning_detection_title")}
+                    {keyword("hiya_voice_cloning_detection_title")}
                   </Typography>
 
                   {!isInconclusive && (
@@ -505,10 +494,10 @@ const LoccusResults = ({
                           }}
                         >
                           <Typography variant="subtitle2">
-                            {keyword("loccus_gauge_no_detection")}
+                            {keyword("hiya_gauge_no_detection")}
                           </Typography>
                           <Typography variant="subtitle2">
-                            {keyword("loccus_gauge_detection")}
+                            {keyword("hiya_gauge_detection")}
                           </Typography>
                         </Stack>
                       </Stack>
@@ -517,9 +506,7 @@ const LoccusResults = ({
                           alignSelf: { sm: "flex-start", md: "flex-end" },
                         }}
                       >
-                        <Tooltip
-                          title={keyword("loccus_download_gauge_button")}
-                        >
+                        <Tooltip title={keyword("hiya_download_gauge_button")}>
                           <IconButton
                             color="primary"
                             aria-label="download chart"
@@ -541,8 +528,8 @@ const LoccusResults = ({
                     <GaugeChartModalExplanation
                       keyword={keyword}
                       keywordsArr={keywords}
-                      keywordLink={"loccus_scale_explanation_link"}
-                      keywordModalTitle={"loccus_scale_modal_explanation_title"}
+                      keywordLink={"hiya_scale_explanation_link"}
+                      keywordModalTitle={"hiya_scale_modal_explanation_title"}
                       colors={colors}
                     />
                   )}
@@ -550,14 +537,14 @@ const LoccusResults = ({
                   <CustomAlertScore
                     score={voiceCloningScore}
                     detectionType={DETECTION_TYPES.VOICE_CLONING}
-                    toolName={"Loccus"}
+                    toolName={"Hiya"}
                     thresholds={DETECTION_THRESHOLDS}
                     isInconclusive={isInconclusive}
                   />
 
                   {!isInconclusive && (
                     <Typography>
-                      {keyword("loccus_cloning_additional_explanation_text")}
+                      {keyword("hiya_cloning_additional_explanation_text")}
                     </Typography>
                   )}
                 </Stack>
@@ -578,15 +565,13 @@ const LoccusResults = ({
                           id="panel-additional-results"
                         >
                           <Typography>
-                            {keyword("loccus_additional_results")}
+                            {keyword("hiya_additional_results")}
                           </Typography>
                         </AccordionSummary>
                         <AccordionDetails>
                           <Stack direction="column" spacing={2}>
                             <Typography variant="h5">
-                              {keyword(
-                                "loccus_voice_recording_detection_title",
-                              )}
+                              {keyword("hiya_voice_recording_detection_title")}
                             </Typography>
                             <Stack
                               direction="column"
@@ -614,10 +599,10 @@ const LoccusResults = ({
                                 }}
                               >
                                 <Typography variant="subtitle2">
-                                  {keyword("loccus_gauge_no_detection")}
+                                  {keyword("hiya_gauge_no_detection")}
                                 </Typography>
                                 <Typography variant="subtitle2">
-                                  {keyword("loccus_gauge_detection")}
+                                  {keyword("hiya_gauge_detection")}
                                 </Typography>
                               </Stack>
                             </Stack>
@@ -635,5 +620,4 @@ const LoccusResults = ({
     </Stack>
   );
 };
-
-export default LoccusResults;
+export default HiyaResults;

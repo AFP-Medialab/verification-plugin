@@ -12,13 +12,13 @@ import {
   detectHiyaAudioAuthenticity,
   getHiyaDetectionChunks,
   uploadHiyaAudio,
-} from "@/components/NavItems/tools/Loccus/api";
-import HiyaHeader from "@/components/NavItems/tools/Loccus/components/HiyaHeader";
+} from "@/components/NavItems/tools/Hiya/api";
+import HiyaHeader from "@/components/NavItems/tools/Hiya/components/HiyaHeader";
 import {
-  resetLoccusAudio,
-  setLoccusLoading,
-  setLoccusResult,
-} from "@/redux/actions/tools/loccusActions";
+  resetHiyaAudio,
+  setHiyaLoading,
+  setHiyaResult,
+} from "@/redux/actions/tools/hiyaActions";
 import { isValidUrl } from "@Shared/Utils/URLUtils";
 import { blobToBase64, preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import axios from "axios";
@@ -27,15 +27,15 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import { setError } from "redux/reducers/errorReducer";
 
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
-import LoccusResults from "./components/loccusResults";
+import HiyaResults from "./components/HiyaResults";
 
 /**
- * Loccus Component - Audio authenticity verification tool
+ * Hiya Component - Audio authenticity verification tool
  * Provides functionality to analyze audio files for synthetic/cloned voice detection
- * @returns {JSX.Element} The Loccus tool interface
+ * @returns {JSX.Element} The Hiya tool interface
  */
-const Loccus = () => {
-  const keyword = i18nLoadNamespace("components/NavItems/tools/Loccus");
+const Hiya = () => {
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Hiya");
 
   const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
 
@@ -117,7 +117,7 @@ const Loccus = () => {
      */
     const handleError = (error) => {
       dispatchAction(setError(error));
-      dispatchAction(setLoccusLoading(false));
+      dispatchAction(setHiyaLoading(false));
     };
 
     try {
@@ -126,7 +126,7 @@ const Loccus = () => {
         authenticatedRequest,
       );
 
-      // Second, we perform the Loccus authenticity verification
+      // Second, we perform the Hiya authenticity verification
 
       const detectionResponse = await detectHiyaAudioAuthenticity(
         uploadResponse.data.handle,
@@ -141,7 +141,7 @@ const Loccus = () => {
       const isAnalysisInconclusive = isResultInconclusive(chunks.data);
 
       dispatchAction(
-        setLoccusResult({
+        setHiyaResult({
           url: audioFile ? URL.createObjectURL(audioFile) : audioUrl,
           result: detectionResponse.data,
           chunks: chunks.data,
@@ -151,8 +151,8 @@ const Loccus = () => {
     } catch (error) {
       console.log(error);
       if (error.message.includes("canceled")) {
-        handleError(keyword("loccus_error_timeout"));
-        throw new Error(keyword("loccus_error_timeout"));
+        handleError(keyword("hiya_error_timeout"));
+        throw new Error(keyword("hiya_error_timeout"));
       } else {
         handleError(error.response?.data?.message ?? error.message);
         throw new Error(error.response?.data?.message ?? error.message);
@@ -167,7 +167,7 @@ const Loccus = () => {
     getAnalysisResultsForAudio.reset();
     setInput("");
     setAudioFile(AUDIO_FILE_DEFAULT_STATE);
-    dispatch(resetLoccusAudio());
+    dispatch(resetHiyaAudio());
   };
 
   /**
@@ -175,7 +175,7 @@ const Loccus = () => {
    * @param {File} file - The audio file to validate
    * @returns {File|Error} The validated file or an error
    */
-  const preprocessLoccusUpload = async (file) => {
+  const preprocessHiyaUpload = async (file) => {
     if (!(file instanceof File)) {
       dispatch(setError(keyword("error_invalid_file")));
       return new Error(keyword("error_invalid_file"));
@@ -226,7 +226,7 @@ const Loccus = () => {
       };
     }).catch((error) => {
       console.log(error);
-      dispatch(setError(keyword("loccus_error_unable_to_read_file")));
+      dispatch(setError(keyword("hiya_error_unable_to_read_file")));
       return new Error(error);
     });
 
@@ -237,11 +237,11 @@ const Loccus = () => {
     const durationInSeconds = audioBuffer.duration;
 
     if (durationInSeconds >= 300) {
-      dispatch(setError(keyword("loccus_tip")));
-      return Error(keyword("loccus_tip"));
+      dispatch(setError(keyword("hiya_tip")));
+      return Error(keyword("hiya_tip"));
     } else if (durationInSeconds <= 2) {
-      dispatch(setError(keyword("loccus_tip")));
-      return Error(keyword("loccus_tip"));
+      dispatch(setError(keyword("hiya_tip")));
+      return Error(keyword("hiya_tip"));
     } else {
       return file;
     }
@@ -259,7 +259,7 @@ const Loccus = () => {
     return preprocessFileUpload(
       fileSelected,
       role,
-      await preprocessLoccusUpload(fileSelected),
+      await preprocessHiyaUpload(fileSelected),
       preprocessSuccess,
       preprocessError,
     );
@@ -272,7 +272,7 @@ const Loccus = () => {
   });
 
   const handleSubmit = async () => {
-    dispatch(resetLoccusAudio());
+    dispatch(resetHiyaAudio());
 
     await getAnalysisResultsForAudio.mutate();
   };
@@ -284,9 +284,9 @@ const Loccus = () => {
         <Card variant="outlined" sx={{ p: 4 }}>
           <form>
             <StringFileUploadField
-              labelKeyword={keyword("loccus_link")}
-              placeholderKeyword={keyword("loccus_placeholder")}
-              submitButtonKeyword={keyword("loccus_submit_button")}
+              labelKeyword={keyword("hiya_link")}
+              placeholderKeyword={keyword("hiya_placeholder")}
+              submitButtonKeyword={keyword("hiya_submit_button")}
               localFileKeyword={keyword("button_localfile")}
               urlInput={input}
               setUrlInput={setInput}
@@ -319,10 +319,10 @@ const Loccus = () => {
         </Card>
 
         {getAnalysisResultsForAudio.isError && (
-          <Alert severity="error">{keyword("loccus_generic_error")}</Alert>
+          <Alert severity="error">{keyword("hiya_generic_error")}</Alert>
         )}
         {result && (
-          <LoccusResults
+          <HiyaResults
             result={result}
             isInconclusive={isInconclusive}
             url={url}
@@ -334,5 +334,4 @@ const Loccus = () => {
     </Box>
   );
 };
-
-export default Loccus;
+export default Hiya;

@@ -15,7 +15,7 @@ export const FOOTER_TYPES = {
   GRIHO: "GRIHO",
   USFD: "usfd",
   USFD_AFP_EU_DISINFOLAB: "afp-usfd-eu-disinfolab",
-  LOCCUS: "loccus",
+  HIYA: "hiya",
   KINIT: "kinit",
   AFP: "afp",
   AFP_URBINO_VIGINUM: "afp-urbino-viginum",
@@ -115,8 +115,8 @@ export const Footer = (props) => {
       break;
     case FOOTER_TYPES.LOCCUS:
       provideBy = keyword("afp_part_1");
-      link = keyword("loccus_link");
-      linkLabel = keyword("loccus_link_label");
+      link = keyword("hiya_link");
+      linkLabel = keyword("hiya_link_label");
       contactUs = keyword("afp_part_2");
       break;
     case FOOTER_TYPES.KINIT:
@@ -152,7 +152,7 @@ export const Footer = (props) => {
         )}
       </Typography>
 
-      <Typography variant={"body2"}>{contactUs}</Typography>
+      <Typography variant="body2">{contactUs}</Typography>
     </div>
   );
 };
