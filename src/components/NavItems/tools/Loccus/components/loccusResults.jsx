@@ -21,9 +21,13 @@ import Typography from "@mui/material/Typography";
 import { Download, ExpandMore } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
+import { useTrackEvent } from "@/Hooks/useAnalytics";
 import { ROLES } from "@/constants/roles";
+import CustomAlertScore from "@Shared/CustomAlertScore";
+import GaugeChartModalExplanation from "@Shared/GaugeChartResults/GaugeChartModalExplanation";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
-import { useTrackEvent } from "Hooks/useAnalytics";
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -37,15 +41,10 @@ import {
   Title,
 } from "chart.js";
 import "chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm";
-import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import RegionsPlugin from "wavesurfer.js/dist/plugins/regions";
 import ZoomPlugin from "wavesurfer.js/dist/plugins/zoom";
-
-import CustomAlertScore from "../../../Shared/CustomAlertScore";
-import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
 
 const LoccusResults = ({
   result,

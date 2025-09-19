@@ -8,13 +8,12 @@ import Card from "@mui/material/Card";
 import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 
-import { AudioFile } from "@mui/icons-material";
-
 import {
   detectHiyaAudioAuthenticity,
   getHiyaDetectionChunks,
   uploadHiyaAudio,
 } from "@/components/NavItems/tools/Loccus/api";
+import HiyaHeader from "@/components/NavItems/tools/Loccus/components/HiyaHeader";
 import {
   resetLoccusAudio,
   setLoccusLoading,
@@ -27,9 +26,8 @@ import useAuthenticatedRequest from "components/Shared/Authentication/useAuthent
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { setError } from "redux/reducers/errorReducer";
 
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
-import LoccusResults from "./loccusResults";
+import LoccusResults from "./components/loccusResults";
 
 /**
  * Loccus Component - Audio authenticity verification tool
@@ -38,9 +36,7 @@ import LoccusResults from "./loccusResults";
  */
 const Loccus = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Loccus");
-  const keywordAllTools = i18nLoadNamespace(
-    "components/NavItems/tools/Alltools",
-  );
+
   const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
 
   const AUDIO_FILE_DEFAULT_STATE = undefined;
@@ -282,37 +278,10 @@ const Loccus = () => {
   };
 
   return (
-    <div>
-      <HeaderTool
-        name={keywordAllTools("navbar_loccus")}
-        description={keywordAllTools("navbar_loccus_description")}
-        icon={
-          <AudioFile
-            style={{
-              fill: "var(--mui-palette-primary-main)",
-              height: "40px",
-              width: "auto",
-            }}
-          />
-        }
-      />
-      <Stack direction={"column"} spacing={2}>
-        <Alert severity="warning">
-          {keywordWarning("warning_beta_loccus")}
-        </Alert>
-        <Alert severity="info">{keyword("loccus_tip")}</Alert>
-      </Stack>
-      <Box
-        sx={{
-          m: 3,
-        }}
-      />
-      <Card variant="outlined">
-        <Box
-          sx={{
-            p: 4,
-          }}
-        >
+    <Box>
+      <Stack direction="column" spacing={4}>
+        <HiyaHeader />
+        <Card variant="outlined" sx={{ p: 4 }}>
           <form>
             <StringFileUploadField
               labelKeyword={keyword("loccus_link")}
@@ -331,42 +300,38 @@ const Loccus = () => {
               handleClearUrl={resetState}
             />
           </form>
-        </Box>
-        {getAnalysisResultsForAudio.isPending && (
-          <>
-            <Box
-              sx={{
-                m: 2,
-              }}
-            />
-            <Box
-              sx={{
-                mt: 3,
-              }}
-            >
-              <LinearProgress />
-            </Box>
-          </>
+          {getAnalysisResultsForAudio.isPending && (
+            <>
+              <Box
+                sx={{
+                  m: 2,
+                }}
+              />
+              <Box
+                sx={{
+                  mt: 3,
+                }}
+              >
+                <LinearProgress />
+              </Box>
+            </>
+          )}
+        </Card>
+
+        {getAnalysisResultsForAudio.isError && (
+          <Alert severity="error">{keyword("loccus_generic_error")}</Alert>
         )}
-      </Card>
-      <Box
-        sx={{
-          m: 3,
-        }}
-      />
-      {getAnalysisResultsForAudio.isError && (
-        <Alert severity="error">{keyword("loccus_generic_error")}</Alert>
-      )}
-      {result && (
-        <LoccusResults
-          result={result}
-          isInconclusive={isInconclusive}
-          url={url}
-          handleClose={resetState}
-          chunks={chunks}
-        />
-      )}
-    </div>
+        {result && (
+          <LoccusResults
+            result={result}
+            isInconclusive={isInconclusive}
+            url={url}
+            handleClose={resetState}
+            chunks={chunks}
+          />
+        )}
+      </Stack>
+    </Box>
   );
 };
 
