@@ -10,7 +10,7 @@ import {
 import { KeyframeInputType } from "@/components/NavItems/tools/Keyframes/api/createKeyframeJob";
 import { isValidUrl } from "@Shared/Utils/URLUtils";
 
-export const useProcessKeyframes = (url) => {
+export const useProcessKeyframes = (input) => {
   const urlToJobIdRef = useRef(new Map());
 
   const [status, setStatus] = useState(null);
@@ -21,6 +21,22 @@ export const useProcessKeyframes = (url) => {
   const fetchKeyframes = useFetchKeyframes();
 
   const queryClient = useQueryClient();
+
+  const getInputKey = (source) => {
+    if (typeof source === "string") {
+      return source;
+    } else if (source instanceof File) {
+      const sanitizedFileName = source.name
+        .trim()
+        .replace(/[^a-zA-Z0-9.-]/g, "_")
+        .toLowerCase();
+      return `${sanitizedFileName}-${source.size}-${source.lastModified}`;
+    } else {
+      throw new Error("Invalid input type");
+    }
+  };
+
+  const key = getInputKey(input);
 
   // Step 1: Send URL
   const sendUrlMutation = useMutation({
@@ -36,6 +52,17 @@ export const useProcessKeyframes = (url) => {
     },
   });
 
+  // Step 1: Send File
+  const sendFileMutation = useMutation({
+    mutationFn: async ({ file }) => {
+      if (!file) throw new Error("No file provided");
+
+      setStatus("Uploading file...");
+
+      return await createKeyframeJob(KeyframeInputType.FILE, file);
+    },
+  });
+
   // Step 2: Polling for status
   const checkStatusMutation = useMutation({
     mutationFn: async (jobId) => {
@@ -45,10 +72,10 @@ export const useProcessKeyframes = (url) => {
 
   // Step 3: Get Keyframes
   const fetchKeyframeFeaturesQuery = useQuery({
-    queryKey: ["keyframeFeatures", url],
+    queryKey: ["keyframeFeatures", key],
     queryFn: async ({ queryKey }) => {
-      const [, url] = queryKey;
-      const jobId = urlToJobIdRef.current.get(url);
+      const [, key] = queryKey;
+      const jobId = urlToJobIdRef.current.get(key);
       if (!jobId) throw new Error("No jobId available for url");
 
       setStatus("Retrieving features...");
@@ -61,10 +88,10 @@ export const useProcessKeyframes = (url) => {
   });
 
   const fetchKeyframesQuery = useQuery({
-    queryKey: ["keyframes", url],
+    queryKey: ["keyframes", key],
     queryFn: async ({ queryKey }) => {
-      const [, url] = queryKey;
-      const jobId = urlToJobIdRef.current.get(url);
+      const [, key] = queryKey;
+      const jobId = urlToJobIdRef.current.get(key);
       if (!jobId) throw new Error("No jobId available for url");
 
       const kf = await fetchKeyframes(jobId);
@@ -78,18 +105,23 @@ export const useProcessKeyframes = (url) => {
   });
 
   // Execute the whole process
-  const executeProcess = async (url) => {
+  const executeProcess = async (input) => {
+    const currentKey = getInputKey(input);
+
     // Snapshot the previous value
-    const previousKeyframes = queryClient.getQueryData(["keyframes", url]);
+    const previousKeyframes = queryClient.getQueryData([
+      "keyframes",
+      currentKey,
+    ]);
     const previousKeyframeFeatures = queryClient.getQueryData([
       "keyframeFeatures",
-      url,
+      key,
     ]);
 
-    if (url && previousKeyframes && previousKeyframeFeatures) {
-      queryClient.setQueryData(["keyframes", url], previousKeyframes);
+    if (input && previousKeyframes && previousKeyframeFeatures) {
+      queryClient.setQueryData(["keyframes", currentKey], previousKeyframes);
       queryClient.setQueryData(
-        ["keyframeFeatures", url],
+        ["keyframeFeatures", currentKey],
         previousKeyframeFeatures,
       );
       return {
@@ -99,9 +131,16 @@ export const useProcessKeyframes = (url) => {
       };
     } else {
       try {
-        const jobId = await sendUrlMutation.mutateAsync({ url });
+        let jobId;
+        if (typeof input === "string") {
+          jobId = await sendUrlMutation.mutateAsync({ url: input });
+        } else if (input instanceof File) {
+          jobId = await sendFileMutation.mutateAsync({ file: input });
+        } else {
+          throw new Error("Invalid input type");
+        }
 
-        urlToJobIdRef.current.set(url, jobId);
+        urlToJobIdRef.current.set(currentKey, jobId);
 
         await checkStatusMutation.mutateAsync(jobId);
 
@@ -120,14 +159,15 @@ export const useProcessKeyframes = (url) => {
 
   const resetFetchingKeyframes = () => {
     sendUrlMutation.reset();
+    sendFileMutation.reset();
     checkStatusMutation.reset();
     setStatus(null);
   };
 
-  const cachedKeyframes = queryClient.getQueryData(["keyframes", url]);
+  const cachedKeyframes = queryClient.getQueryData(["keyframes", key]);
   const cachedKeyframeFeatures = queryClient.getQueryData([
     "keyframeFeatures",
-    url,
+    key,
   ]);
 
   return {
@@ -136,11 +176,13 @@ export const useProcessKeyframes = (url) => {
     status, //Keyframes status
     isPending:
       sendUrlMutation.isPending ||
+      sendFileMutation.isPending ||
       checkStatusMutation.isPending ||
       fetchKeyframesQuery.isFetching,
     data: fetchKeyframesQuery.data ?? cachedKeyframes,
     error:
       sendUrlMutation.error ||
+      sendFileMutation.error ||
       checkStatusMutation.error ||
       fetchKeyframesQuery.error,
 

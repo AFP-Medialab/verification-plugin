@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Accordion from "@mui/material/Accordion";
@@ -54,7 +54,9 @@ const C2paData = () => {
 
   const hdImageC2paData = useSelector((state) => state.c2pa.hdImageC2paData);
 
-  const [input, setInput] = useState("");
+  const urlImage = useSelector((state) => state.c2pa.url);
+
+  const [input, setInput] = useState(urlImage ? urlImage : "");
   const [imageFile, setImageFile] = useState(undefined);
 
   const [imageMetadata, setImageMetadata] = useState(null);
@@ -275,6 +277,12 @@ const C2paData = () => {
 
     dispatch(c2paLoadingSet(false));
   };
+
+  useEffect(() => {
+    if (urlImage && input && !result) {
+      handleSubmit();
+    }
+  }, [urlImage, input, result]);
 
   const resetState = () => {
     setImageFile(undefined);

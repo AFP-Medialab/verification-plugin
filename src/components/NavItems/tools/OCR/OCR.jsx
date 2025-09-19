@@ -7,6 +7,7 @@ import Card from "@mui/material/Card";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
 import { imageOcr } from "@/constants/tools";
+import { KNOWN_LINKS } from "@/constants/tools";
 import {
   resetOcrState,
   setOcrBinaryImage,
@@ -22,7 +23,6 @@ import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import { setError } from "redux/reducers/errorReducer";
 
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
-import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import OcrResult from "./Results/OcrResult";
 
 const OCR = () => {

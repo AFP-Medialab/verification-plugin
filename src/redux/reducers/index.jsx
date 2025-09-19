@@ -1,9 +1,10 @@
-import syntheticImageDetectionActions from "@/redux/actions/tools/syntheticImageDetectionActions";
 import toolTabSelected from "@/redux/reducers/toolTabSelectedReducer";
+import syntheticImageDetectionActions from "@/redux/reducers/tools/syntheticImageDetectionReducer";
 import { combineReducers } from "redux";
 
 import assistantReducer from "./assistantReducer";
 import authenticationReducer from "./authenticationReducer";
+import chatBotReducer from "./chatBotReducer";
 import cookiesReducer from "./cookiesReducers";
 import defaultLanguageReducer from "./defaultLanguageReducer";
 import dictionaryReducer from "./dictionaryReducer";
@@ -59,6 +60,7 @@ const allReducers = combineReducers({
   thumbnails: thumbnailsReducer,
   twitterSna: twitterSnaReducer,
   assistant: assistantReducer,
+  chatBot: chatBotReducer,
   ocr: ocrReducer,
   gif: gifReducer,
   syntheticImageDetection: syntheticImageDetectionActions,

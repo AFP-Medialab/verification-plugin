@@ -9,6 +9,10 @@ import Grid from "@mui/material/Grid";
 import { changeLanguage } from "@/redux/reducers/languageReducer";
 import { getSupportedBrowserLanguage } from "@Shared/Languages/getSupportedBrowserLanguage";
 import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
+import {
+  RecordingWindow,
+  getRecordingInfo,
+} from "components/NavItems/tools/SNA/components/Recording";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { ROLES } from "constants/roles";
 
@@ -27,8 +31,20 @@ const PopUp = () => {
   const currentLang = useSelector((state) => state.language);
   const defaultLanguage = useSelector((state) => state.defaultLanguage);
   const LOGO_EU = process.env.REACT_APP_LOGO_EU;
-
   const [pageUrl, setPageUrl] = useState(null);
+
+  //SNA Recording props
+  const [recording, setRecording] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [collections, setCollections] = useState(["Default Collection"]);
+  const [selectedCollection, setSelectedCollection] =
+    useState("Default Collection");
+  const [newCollectionName, setNewCollectionName] = useState("");
+  const [selectedSocialMedia, setSelectedSocialMedia] = useState([]);
+
+  useEffect(() => {
+    getRecordingInfo(setCollections, setRecording, setSelectedCollection);
+  }, []);
 
   const urlOpenAssistant = () => {
     window.open("/popup.html#/app/assistant/" + encodeURIComponent(pageUrl));
@@ -61,17 +77,6 @@ const PopUp = () => {
         }
       },
     );
-  };
-
-  const loadData = () => {
-    //get url of window
-    navigator.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
-      let url = tabs[0].url;
-      setPageUrl(url);
-      if (url && url.includes("instagram")) {
-        getInstagramUrls();
-      }
-    });
   };
 
   useEffect(() => {
@@ -190,7 +195,7 @@ const PopUp = () => {
             variant="outlined"
             color="primary"
             fullWidth={true}
-            onMouseOver={() => loadData()}
+            // onMouseOver={() => loadData()} //TODO: loadData() is not defined?
             onClick={() => urlOpenAssistant()}
           >
             {keyword("open_assistant_on_page")}
@@ -216,6 +221,27 @@ const PopUp = () => {
             m: 1,
           }}
         />
+        <Grid size={{ xs: 12 }}>
+          <RecordingWindow
+            recording={recording}
+            setRecording={setRecording}
+            expanded={expanded}
+            setExpanded={setExpanded}
+            selectedCollection={selectedCollection}
+            setSelectedCollection={setSelectedCollection}
+            collections={collections}
+            setCollections={setCollections}
+            newCollectionName={newCollectionName}
+            setNewCollectionName={setNewCollectionName}
+            selectedSocialMedia={selectedSocialMedia}
+            setSelectedSocialMedia={setSelectedSocialMedia}
+          />
+        </Grid>
+        <Box
+          sx={{
+            m: 1,
+          }}
+        />
         {userRoles.includes(ROLES.ARCHIVE) ? (
           <Grid size={{ xs: 12 }}>
             <Button
@@ -234,12 +260,6 @@ const PopUp = () => {
           </Grid>
         ) : null}
       </Grid>
-
-      <Box
-        sx={{
-          m: 1,
-        }}
-      />
     </div>
   );
 };

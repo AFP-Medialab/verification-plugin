@@ -269,7 +269,7 @@ const Assistant = () => {
               ) : null}
 
               {/* YouTube comments if video */}
-              {collectedComments ? (
+              {collectedComments && collectedComments.length > 0 ? (
                 <Grid size={12}>
                   <AssistantCommentResult
                     collectedComments={collectedComments}

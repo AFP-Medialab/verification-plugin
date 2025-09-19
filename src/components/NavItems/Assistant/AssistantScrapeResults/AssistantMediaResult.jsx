@@ -25,13 +25,13 @@ import ImageGridList from "@/components/Shared/ImageGridList/ImageGridList";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "@/components/Shared/VideoGridList/VideoGridList";
+import { TOOLS_CATEGORIES } from "@/constants/tools";
 import {
   setProcessUrl,
   setStateExpanded,
   setWarningExpanded,
 } from "@/redux/actions/tools/assistantActions";
 
-import { CONTENT_TYPE } from "../AssistantRuleBook";
 import {
   TransHtmlDoubleLineBreak,
   TransSupportedToolsLink,
@@ -69,7 +69,7 @@ const AssistantMediaResult = () => {
   const warningExpanded = useSelector(
     (state) => state.assistant.warningExpanded,
   );
-  const resultIsImage = resultProcessType === CONTENT_TYPE.IMAGE;
+  const resultIsImage = resultProcessType === TOOLS_CATEGORIES.IMAGE;
 
   // local control state
   // const [expandMedia, setExpandMedia] = useState(
@@ -81,9 +81,9 @@ const AssistantMediaResult = () => {
     //setExpandMedia(false);
     let cType = null;
     if (imageList.includes(url)) {
-      cType = CONTENT_TYPE.IMAGE;
+      cType = TOOLS_CATEGORIES.IMAGE;
     } else if (videoList.includes(url)) {
-      cType = CONTENT_TYPE.VIDEO;
+      cType = TOOLS_CATEGORIES.VIDEO;
     }
     dispatch(setProcessUrl(url, cType));
   };
@@ -98,7 +98,7 @@ const AssistantMediaResult = () => {
         image.onload = () => {
           resolve({
             url: imageUrl,
-            include: image.width > 2 || image.height > 2,
+            include: image.width > 40 && image.height > 40,
           });
         };
         image.onerror = () => {
@@ -266,6 +266,8 @@ const AssistantMediaResult = () => {
                 <AccordionDetails style={{ paddingTop: 0 }}>
                   <VideoGridList
                     list={videoList}
+                    height={60}
+                    cols={5}
                     handleClick={(vidLink) => {
                       submitMediaToProcess(vidLink);
                     }}

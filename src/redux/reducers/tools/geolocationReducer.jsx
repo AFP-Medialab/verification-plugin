@@ -16,21 +16,28 @@ const geolocalisationSlice = createSlice({
     setGeolocationLoading(state, action) {
       state.loading = action.payload;
     },
+    setGeolocationUrl(state, action) {
+      state.urlImage = action.payload;
+    },
     setGeolocationResult(state, action) {
       return action.payload;
     },
   },
 });
 
-export const { resetGeolocation, setGeolocationLoading, setGeolocationResult } =
-  geolocalisationSlice.actions;
+export const {
+  resetGeolocation,
+  setGeolocationLoading,
+  setGeolocationResult,
+  setGeolocationUrl,
+} = geolocalisationSlice.actions;
 const geolocationReducer = geolocalisationSlice.reducer;
 
 /*const geolocationReducer = (state = initialState, action) => {
     switch (action.type) {
         case "GEOLOCATION_RESET":
             return {
-                ...state, 
+                ...state,
                 urlImage: "",
                 result: null,
                 loading: false,
