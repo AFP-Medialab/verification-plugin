@@ -32,7 +32,7 @@ const HiyaHeader = () => {
         }
       />
       <Stack direction={"column"} spacing={2}>
-        <Alert severity="warning">{keywordWarning("warning_beta_hoya")}</Alert>
+        <Alert severity="warning">{keywordWarning("warning_beta_hiya")}</Alert>
         <Alert severity="info">{keyword("hiya_tip")}</Alert>
       </Stack>
     </Box>
