@@ -9,14 +9,14 @@
  *
  * @example
  * ```javascript
- * import { detectAudioAuthenticity } from './detectHiyaAudio';
+ * import { detectHiyaAudioAuthenticity } from './detectHiyaAudio';
  * import useAuthenticatedRequest from 'components/Shared/Authentication/useAuthenticatedRequest';
  *
  * const authenticatedRequest = useAuthenticatedRequest();
  * const fileHandle = 'your-file-handle-from-upload';
  *
  * try {
- *   const detectionResult = await detectAudioAuthenticity(fileHandle, authenticatedRequest);
+ *   const detectionResult = await detectHiyaAudioAuthenticity(fileHandle, authenticatedRequest);
  *   console.log('Detection handle:', detectionResult.data.handle);
  *   console.log('Analysis complete');
  * } catch (error) {
@@ -24,7 +24,7 @@
  * }
  * ```
  */
-export const detectAudioAuthenticity = async (
+export const detectHiyaAudioAuthenticity = async (
   fileHandle,
   authenticatedRequest,
   model = "digital",

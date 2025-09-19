@@ -11,8 +11,8 @@ import Stack from "@mui/material/Stack";
 import { AudioFile } from "@mui/icons-material";
 
 import {
-  detectAudioAuthenticity,
-  getDetectionChunks,
+  detectHiyaAudioAuthenticity,
+  getHiyaDetectionChunks,
   uploadHiyaAudio,
 } from "@/components/NavItems/tools/Loccus/api";
 import {
@@ -132,12 +132,12 @@ const Loccus = () => {
 
       // Second, we perform the Loccus authenticity verification
 
-      const detectionResponse = await detectAudioAuthenticity(
+      const detectionResponse = await detectHiyaAudioAuthenticity(
         uploadResponse.data.handle,
         authenticatedRequest,
       );
 
-      const chunks = await getDetectionChunks(
+      const chunks = await getHiyaDetectionChunks(
         detectionResponse.data.handle,
         authenticatedRequest,
       );

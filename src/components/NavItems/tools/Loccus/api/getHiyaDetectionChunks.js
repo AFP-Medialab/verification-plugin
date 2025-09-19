@@ -9,14 +9,14 @@
  *
  * @example
  * ```javascript
- * import { getDetectionChunks } from './getHiyaDetectionChunks';
+ * import { getHiyaDetectionChunks } from './getHiyaDetectionChunks';
  * import useAuthenticatedRequest from 'components/Shared/Authentication/useAuthenticatedRequest';
  *
  * const authenticatedRequest = useAuthenticatedRequest();
  * const detectionHandle = 'your-detection-handle';
  *
  * try {
- *   const chunksResult = await getDetectionChunks(detectionHandle, authenticatedRequest);
+ *   const chunksResult = await getHiyaDetectionChunks(detectionHandle, authenticatedRequest);
  *   console.log('Chunks data:', chunksResult.data);
  *   console.log('Number of chunks:', chunksResult.data.length);
  * } catch (error) {
@@ -24,7 +24,7 @@
  * }
  * ```
  */
-export const getDetectionChunks = async (
+export const getHiyaDetectionChunks = async (
   detectionHandle,
   authenticatedRequest,
   pageSize = 1000,
