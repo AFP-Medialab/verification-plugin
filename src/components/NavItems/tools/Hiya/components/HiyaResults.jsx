@@ -101,7 +101,7 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
   const audioContainerRef = useRef();
 
   // Get a stable regions plugin instance
-  const { regionsRef } = useWavesurferRegions();
+  const { regionsPlugin } = useWavesurferRegions();
 
   // Hook to get the audio waveform using imported constants
   const { wavesurfer, isReady } = useWavesurfer({
@@ -109,13 +109,13 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
     url: url,
     ...WAVESURFER_CONFIG,
     plugins: useMemo(
-      () => [regionsRef, ZoomPlugin.create(WAVESURFER_ZOOM_CONFIG)],
-      [regionsRef],
+      () => [regionsPlugin, ZoomPlugin.create(WAVESURFER_ZOOM_CONFIG)],
+      [regionsPlugin],
     ),
   });
 
   // Update regions when wavesurfer is ready and chunks change
-  useRegionsUpdater(wavesurfer, isReady, chunks, regionsRef);
+  useRegionsUpdater(wavesurfer, isReady, chunks, regionsPlugin);
 
   return (
     <Stack
