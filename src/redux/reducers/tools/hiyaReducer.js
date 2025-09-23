@@ -4,12 +4,13 @@ const initialState = {
   url: "",
   file: null, // { name: "example.mp3", url: "blob://..." }
   result: null,
+  resultUrl: "", // URL used for the displayed result (separate from input URL)
   chunks: [],
   isInconclusive: false,
   loading: false,
 };
 
-const hiyaSlice = createSlice({
+const hiyaReducer = createSlice({
   name: "hiya",
   initialState,
   reducers: {
@@ -17,6 +18,7 @@ const hiyaSlice = createSlice({
       state.url = "";
       state.file = null;
       state.result = null;
+      state.resultUrl = "";
       state.chunks = [];
       state.isInconclusive = false;
       state.loading = false;
@@ -29,11 +31,17 @@ const hiyaSlice = createSlice({
         name: action.payload.name,
         url: action.payload.url,
       };
-      // Clear URL when file is selected
-      state.url = "";
+      // Only set URL if there's no file name (i.e., it's a URL input, not a file)
+      if (!action.payload.name) {
+        state.url = action.payload.displayUrl || action.payload.url || "";
+      } else {
+        // Clear URL when file is selected so input field stays empty
+        state.url = "";
+      }
     },
     setHiyaResult: (state, action) => {
-      state.url = action.payload.url;
+      // Don't overwrite input URL, store result URL separately
+      state.resultUrl = action.payload.url;
       state.result = action.payload.result;
       state.chunks = action.payload.chunks;
       state.isInconclusive = action.payload.isInconclusive;
@@ -43,5 +51,6 @@ const hiyaSlice = createSlice({
 });
 
 export const { resetHiyaAudio, setHiyaLoading, setHiyaFile, setHiyaResult } =
-  hiyaSlice.actions;
-export default hiyaSlice.reducer;
+  hiyaReducer.actions;
+
+export default hiyaReducer.reducer;

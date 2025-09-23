@@ -10,7 +10,6 @@ import {
 import {
   resetHiyaAudio,
   setHiyaFile,
-  setHiyaLoading,
   setHiyaResult,
 } from "@/redux/reducers/tools/hiyaReducer";
 import { isValidUrl } from "@Shared/Utils/URLUtils";
@@ -169,7 +168,6 @@ export const useHiyaAudioAnalysis = () => {
      */
     const handleError = (error) => {
       dispatchAction(setError(error));
-      dispatchAction(setHiyaLoading(false));
     };
 
     try {
@@ -305,6 +303,11 @@ export const useHiyaAudioAnalysis = () => {
    * Clears input, file selection, and Redux state
    */
   const resetState = () => {
+    // Clean up blob URL before resetting
+    if (file?.url && file.url.startsWith("blob:")) {
+      URL.revokeObjectURL(file.url);
+    }
+
     getAnalysisResultsForAudio.reset();
     setInput("");
     setAudioFile(AUDIO_FILE_DEFAULT_STATE);
@@ -325,15 +328,20 @@ export const useHiyaAudioAnalysis = () => {
    *
    * @param {File} file - The successfully validated audio file
    */
-  const preprocessSuccess = (file) => {
-    setAudioFile(file);
+  const preprocessSuccess = (newFile) => {
+    setAudioFile(newFile);
     setInput(""); // Clear input field when file is selected
 
+    // Revoke previous blob URL if it exists
+    if (file?.url && file.url.startsWith("blob:")) {
+      URL.revokeObjectURL(file.url);
+    }
+
     // Create object URL for the file and store in Redux
-    const fileUrl = URL.createObjectURL(file);
+    const fileUrl = URL.createObjectURL(newFile);
     dispatch(
       setHiyaFile({
-        name: file.name,
+        name: newFile.name,
         url: fileUrl,
       }),
     );
@@ -367,6 +375,11 @@ export const useHiyaAudioAnalysis = () => {
 
     // If user is typing a URL, clear the selected file and update Redux
     if (newInput) {
+      // Clean up blob URL before clearing file
+      if (file?.url && file.url.startsWith("blob:")) {
+        URL.revokeObjectURL(file.url);
+      }
+
       setAudioFile(AUDIO_FILE_DEFAULT_STATE);
       dispatch(setHiyaFile({ name: null, url: null }));
       // Note: We don't set the URL in Redux here because it will be handled by form submission
@@ -378,21 +391,27 @@ export const useHiyaAudioAnalysis = () => {
    * Clears previous results (but keeps file) and triggers new analysis
    */
   const handleSubmit = async () => {
-    // Store current file info before clearing results
-    const currentFile = file;
-
-    // Clear previous results
-    dispatch(resetHiyaAudio());
-
-    // Restore file if it existed
-    if (currentFile?.name && currentFile?.url) {
+    // Store current input URL in Redux if it's a URL (not a file)
+    if (input && !file?.name) {
+      // Store the input URL for persistence across navigation
       dispatch(
         setHiyaFile({
-          name: currentFile.name,
-          url: currentFile.url,
+          name: null,
+          url: null,
+          displayUrl: input,
         }),
       );
     }
+
+    // Clear only results, preserve file and loading state
+    dispatch(
+      setHiyaResult({
+        url: "", // Clear result URL when starting new analysis
+        result: null,
+        chunks: [],
+        isInconclusive: false,
+      }),
+    );
 
     await getAnalysisResultsForAudio.mutate();
   };
@@ -403,11 +422,8 @@ export const useHiyaAudioAnalysis = () => {
     resetState,
     preprocessLocalFile,
     input,
-    setInput,
     handleInputChange,
     audioFile,
     setAudioFile,
-    preprocessSuccess,
-    preprocessError,
   };
 };
