@@ -73,11 +73,24 @@ const DrawerItemContent = ({ tool }) => {
   }, [tool]);
 
   return (
-    <Container key={tool.titleKeyword} maxWidth={false}>
-      <Fade in={true}>
+    <Container
+      key={tool.titleKeyword}
+      maxWidth={false}
+      sx={{
+        minHeight: "calc(100vh - 110px)",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <Fade
+        in={true}
+        style={{ flex: 1, display: "flex", flexDirection: "column" }}
+      >
         <Box>
-          {tool.content}
-          {tool.footer}
+          <Box sx={{ flex: 1 }}>{tool.content}</Box>
+          <Box component="footer" sx={{ mt: "auto" }}>
+            {tool.footer}
+          </Box>
         </Box>
       </Fade>
     </Container>

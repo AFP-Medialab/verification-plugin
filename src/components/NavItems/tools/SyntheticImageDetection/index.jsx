@@ -8,7 +8,7 @@ import { Gradient } from "@mui/icons-material";
 
 import SyntheticImageDetectionForm from "@/components/NavItems/tools/SyntheticImageDetection/SyntheticImageDetectionForm";
 import { useSyntheticImageDetection } from "@/components/NavItems/tools/SyntheticImageDetection/useSyntheticImageDetection";
-import { resetSyntheticImageDetectionImage } from "@/redux/actions/tools/syntheticImageDetectionActions";
+import { resetSyntheticImageDetectionImage } from "@/redux/reducers/tools/syntheticImageDetectionReducer";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";

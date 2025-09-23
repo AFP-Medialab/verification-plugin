@@ -206,3 +206,72 @@ export const resizeImageWithWorker = (image) => {
     workerInstance.postMessage(image);
   });
 };
+
+/**
+ * Downloads a file from a URL or Blob.
+ * @param {string|Blob} source - Either a URL string or a Blob object.
+ * @param {string} [filename] - Optional filename for the download. If omitted, browser decides.
+ */
+export const downloadFile = async (source, filename) => {
+  let objectUrl;
+
+  try {
+    // Determine blob
+    let blob;
+    if (source instanceof Blob) {
+      blob = source;
+    } else if (typeof source === "string") {
+      const response = await fetch(source);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch file: ${response.statusText}`);
+      }
+      blob = await response.blob();
+    } else {
+      throw new Error("Source must be a URL string or a Blob");
+    }
+
+    // Create object URL
+    objectUrl = URL.createObjectURL(blob);
+
+    // Create temporary anchor
+    const a = document.createElement("a");
+    a.href = objectUrl;
+
+    if (filename) {
+      a.download = filename;
+    }
+
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    // Revoke after a short delay to ensure download starts
+    setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+  } catch (err) {
+    console.error("Download failed:", err);
+    throw err;
+  }
+};
+
+/**
+ * Converts a Blob to a data URL
+ * @param {Blob} blob - The blob to convert
+ * @returns {Promise<string>} Promise that resolves to data URL
+ */
+export const blobToDataUrl = (blob) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+
+/**
+ * Converts a Blob to base64 string (without data URL prefix)
+ * @param {Blob} blob - The blob to convert
+ * @returns {Promise<string>} Promise that resolves to base64 string
+ */
+export const blobToBase64 = async (blob) => {
+  const dataUrl = await blobToDataUrl(blob);
+  return dataUrl.slice(dataUrl.indexOf(",") + 1);
+};
