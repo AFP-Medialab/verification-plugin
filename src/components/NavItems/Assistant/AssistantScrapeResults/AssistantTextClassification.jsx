@@ -283,17 +283,6 @@ export function GaugeCategoriesList({
   importantSentenceThreshold,
   handleSliderChange,
 }) {
-  if (_.isEmpty(categories)) {
-    // only subjectivity might be empty, machine generated text is always detected
-    return (
-      credibilitySignal === keyword("subjectivity_title") && (
-        <Typography fontSize="small" sx={{ textAlign: "center" }}>
-          {keyword("no_detected_subjective_sentences")}
-        </Typography>
-      )
-    );
-  }
-
   // gauge chart
   const gaugeChart = createGaugeChart(
     fullTextScoreLabel,
@@ -337,17 +326,26 @@ export function GaugeCategoriesList({
   return (
     <>
       {credibilitySignal === keyword("subjectivity_title") ? (
-        <>
-          <Typography fontSize="small" sx={{ textAlign: "start" }}>
-            {keyword("threshold_slider_confidence")}
-          </Typography>
-          <ThresholdSlider
-            credibilitySignal={credibilitySignal}
-            importantSentenceThreshold={importantSentenceThreshold}
-            handleSliderChange={handleSliderChange}
-            keyword={keyword}
-          />
-        </>
+        _.isEmpty(categories) && overallScore === 0 ? (
+          <>
+            <Typography fontSize="small" sx={{ textAlign: "center" }}>
+              {keyword("no_detected_subjective_sentences")}
+            </Typography>
+            <Divider key={`divider_${fullTextScoreLabel}`} sx={{ my: 2 }} />
+          </>
+        ) : (
+          <>
+            <Typography fontSize="small" sx={{ textAlign: "start" }}>
+              {keyword("threshold_slider_confidence")}
+            </Typography>
+            <ThresholdSlider
+              credibilitySignal={credibilitySignal}
+              importantSentenceThreshold={importantSentenceThreshold}
+              handleSliderChange={handleSliderChange}
+              keyword={keyword}
+            />
+          </>
+        )
       ) : null}
       {gaugeChart}
       {gaugeExplanation}
