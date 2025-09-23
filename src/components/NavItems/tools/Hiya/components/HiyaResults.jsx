@@ -1,5 +1,5 @@
 import { useWavesurfer } from "@wavesurfer/react";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef } from "react";
 import { Chart } from "react-chartjs-2";
 import GaugeChart from "react-gauge-chart";
 import { useSelector } from "react-redux";
@@ -17,10 +17,8 @@ import Typography from "@mui/material/Typography";
 import { Download } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
-import { useTrackEvent } from "@/Hooks/useAnalytics";
 import CustomAlertScore from "@Shared/CustomAlertScore";
 import GaugeChartModalExplanation from "@Shared/GaugeChartResults/GaugeChartModalExplanation";
-import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
 import {
@@ -49,11 +47,14 @@ import {
   WAVESURFER_CONFIG,
   WAVESURFER_ZOOM_CONFIG,
 } from "../constants";
+import { useHiyaAnalytics } from "../hooks/useHiyaAnalytics";
+import { useRegionsUpdater } from "../hooks/useRegionsUpdater";
+import { useScoreCalculation } from "../hooks/useScoreCalculation";
+import { useWavesurferRegions } from "../hooks/useWavesurferRegions";
 import {
   createChartConfig,
   getChartDataFromChunks,
   getChartGradient,
-  getPercentageColorCode,
   printDurationInMinutesWithoutModulo,
 } from "../utils";
 
@@ -65,13 +66,15 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
   const currentLang = useSelector((state) => state.language);
   const isCurrentLanguageLeftToRight = currentLang !== "ar";
 
-  const [voiceCloningScore, setVoiceCloningScore] = useState(null);
-
   const gaugeChartRef = useRef(null);
   const chunksChartRef = useRef(null);
 
   const { systemMode, mode } = useColorScheme();
   const resolvedMode = systemMode || mode;
+
+  // Use extracted hooks
+  useHiyaAnalytics(url);
+  const voiceCloningScore = useScoreCalculation(result);
 
   ChartJS.register(
     CategoryScale,
@@ -96,46 +99,10 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
   // Cache for chart gradient to improve performance
   const gradientCache = useRef({});
 
-  useEffect(() => {
-    if (!result) {
-      return;
-    }
-
-    if (
-      !result.scores ||
-      !result.scores.synthesis ||
-      typeof result.scores.synthesis !== "number"
-    ) {
-      //   TODO: Error handling
-    }
-
-    const newVoiceCloningScore = (1 - result.scores.synthesis) * 100;
-    if (voiceCloningScore !== newVoiceCloningScore)
-      setVoiceCloningScore(newVoiceCloningScore);
-  }, [result]);
-
-  const client_id = getclientId();
-  const session = useSelector((state) => state.userSession);
-  const uid = session && session.user ? session.user.id : null;
-
-  useTrackEvent(
-    "submission",
-    "loccus_detection",
-    "Hiya audio processing",
-    url,
-    client_id,
-    url,
-    uid,
-  );
-
   const audioContainerRef = useRef();
 
-  // Initialize the Regions plugin
-  const regionsRef = useRef(null);
-
-  if (!regionsRef.current) {
-    regionsRef.current = RegionsPlugin.create();
-  }
+  // Get a stable regions plugin instance
+  const { regionsRef } = useWavesurferRegions();
 
   // Hook to get the audio waveform using imported constants
   const { wavesurfer, isReady } = useWavesurfer({
@@ -143,26 +110,13 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
     url: url,
     ...WAVESURFER_CONFIG,
     plugins: useMemo(
-      () => [regionsRef.current, ZoomPlugin.create(WAVESURFER_ZOOM_CONFIG)],
-      [],
+      () => [regionsRef, ZoomPlugin.create(WAVESURFER_ZOOM_CONFIG)],
+      [regionsRef],
     ),
   });
 
-  useEffect(() => {
-    if (wavesurfer && isReady && chunks) {
-      chunks.map((chunk) => {
-        if (chunk.scores?.synthesis) {
-          regionsRef.current.addRegion({
-            start: dayjs.duration(chunk.startTime).asSeconds(),
-            end: dayjs.duration(chunk.endTime).asSeconds(),
-            color: getPercentageColorCode((1 - chunk.scores.synthesis) * 100),
-            resize: false,
-            drag: false,
-          });
-        }
-      });
-    }
-  }, [wavesurfer, isReady, chunks]);
+  // Update regions when wavesurfer is ready and chunks change
+  useRegionsUpdater(wavesurfer, isReady, chunks, regionsRef);
 
   return (
     <Stack
