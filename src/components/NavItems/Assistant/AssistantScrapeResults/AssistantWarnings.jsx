@@ -47,8 +47,14 @@ const AssistantWarnings = () => {
   // wait for previous fact checks results to compare with DBKFText before showing to users
   // combine results if necessary
   // only happens if beta user logged in
-  const DBKF = keyword("dbkf_acronym");
-  const FCSS = keyword("fact_check_finder");
+  const DBKF = [
+    keyword("dbkf_acronym"),
+    keyword("database_of_known_fakes_explanation"),
+  ];
+  const FCSS = [
+    keyword("fcss_acronym"),
+    keyword("fact_check_semantic_search_explanation"),
+  ];
   const updatedPrevFactCheckResult = [];
   const separateDbkfTextMatch = [];
   let uniqueSeparateDbkfTextMatch = [];

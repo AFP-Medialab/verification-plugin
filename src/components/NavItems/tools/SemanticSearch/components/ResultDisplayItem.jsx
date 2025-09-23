@@ -8,6 +8,7 @@ import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
@@ -151,14 +152,16 @@ const ResultDisplayItem = ({
               {website}
             </Link>
             <Chip label={language} sx={{ width: "fit-content" }} />
-            {factCheckServices?.map((value, key) => (
-              <Chip
-                key={key}
-                label={value}
-                color="warning"
-                sx={{ width: "fit-content" }}
-                size="small"
-              />
+            {factCheckServices?.map(([acronym, explanation], key) => (
+              <Tooltip key={key + "_tooltip"} title={explanation}>
+                <Chip
+                  key={key + "_chip"}
+                  label={acronym}
+                  color="warning"
+                  sx={{ width: "fit-content" }}
+                  size="small"
+                />
+              </Tooltip>
             ))}
           </Stack>
         </Grid>
