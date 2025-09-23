@@ -11,7 +11,7 @@ import { getPercentageColorCode } from "../utils";
  * @param {Object|null} wavesurfer - Wavesurfer instance
  * @param {boolean} isReady - Whether wavesurfer is ready for interaction
  * @param {Array} chunks - Array of analysis chunks with time ranges and scores
- * @param {RegionsPlugin} regionsPlugin - The regions plugin instance
+ * @param {Object} regionsPlugin - The wavesurfer regions plugin instance
  * @returns {void} This hook has no return value, it only triggers side effects
  *
  * @example
