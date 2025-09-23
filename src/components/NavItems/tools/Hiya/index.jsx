@@ -27,7 +27,9 @@ const Hiya = () => {
   const isInconclusive = useSelector(
     (state) => state.syntheticAudioDetection.isInconclusive,
   );
-  const url = useSelector((state) => state.syntheticAudioDetection.url);
+  const resultUrl = useSelector(
+    (state) => state.syntheticAudioDetection.resultUrl,
+  );
   const chunks = useSelector((state) => state.syntheticAudioDetection.chunks);
 
   // Use the custom hook for all audio analysis logic
@@ -37,7 +39,7 @@ const Hiya = () => {
     resetState,
     preprocessLocalFile,
     input,
-    setInput,
+    handleInputChange,
     audioFile,
     setAudioFile,
   } = useHiyaAudioAnalysis();
@@ -54,7 +56,7 @@ const Hiya = () => {
               submitButtonKeyword={keyword("hiya_submit_button")}
               localFileKeyword={keyword("button_localfile")}
               urlInput={input}
-              setUrlInput={setInput}
+              setUrlInput={handleInputChange}
               fileInput={audioFile}
               setFileInput={setAudioFile}
               handleSubmit={handleSubmit}
@@ -90,7 +92,7 @@ const Hiya = () => {
           <HiyaResults
             result={result}
             isInconclusive={isInconclusive}
-            url={url}
+            url={resultUrl}
             handleClose={resetState}
             chunks={chunks}
           />

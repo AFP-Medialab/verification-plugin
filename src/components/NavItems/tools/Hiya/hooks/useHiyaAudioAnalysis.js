@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -9,9 +9,9 @@ import {
 } from "@/components/NavItems/tools/Hiya/api";
 import {
   resetHiyaAudio,
-  setHiyaLoading,
+  setHiyaFile,
   setHiyaResult,
-} from "@/redux/actions/tools/hiyaActions";
+} from "@/redux/reducers/tools/hiyaReducer";
 import { isValidUrl } from "@Shared/Utils/URLUtils";
 import { blobToBase64, preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import axios from "axios";
@@ -59,12 +59,50 @@ export const useHiyaAudioAnalysis = () => {
 
   const role = useSelector((state) => state.userSession.user.roles);
   const url = useSelector((state) => state.syntheticAudioDetection.url);
+  const file = useSelector((state) => state.syntheticAudioDetection.file);
   const authenticatedRequest = useAuthenticatedRequest();
 
-  const [input, setInput] = useState(url ? url : "");
+  // Initialize input: empty if there's a file, otherwise use URL
+  const [input, setInput] = useState(file?.name ? "" : url || "");
   const [audioFile, setAudioFile] = useState(AUDIO_FILE_DEFAULT_STATE);
 
   const dispatch = useDispatch();
+
+  // Restore audioFile state from Redux when navigating back to the page
+  useEffect(() => {
+    // Only restore if we have file info in Redux but no audioFile in local state
+    if (file?.url && file?.name && !audioFile) {
+      // Create a File object from the stored blob URL for UI display
+      fetch(file.url)
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`Failed to fetch blob: ${res.status}`);
+          }
+          return res.blob();
+        })
+        .then((blob) => {
+          // Try to determine the correct MIME type
+          const mimeType = blob.type || "audio/mpeg"; // fallback to mp3
+          const restoredFile = new File([blob], file.name, { type: mimeType });
+          setAudioFile(restoredFile);
+        })
+        .catch((error) => {
+          console.error("Failed to restore file from blob URL:", error);
+        });
+    } else if (!file?.name && audioFile) {
+      // Clear audioFile if no file in Redux (user cleared it elsewhere)
+      setAudioFile(AUDIO_FILE_DEFAULT_STATE);
+    }
+  }, [file, audioFile]);
+
+  // Only manage input when file state changes, don't interfere with user typing
+  useEffect(() => {
+    if (file?.name) {
+      // If there's a file, keep input empty
+      setInput("");
+    }
+    // Don't automatically sync URL to input - let user control input field
+  }, [file]);
 
   /**
    * Determines if the analysis result is inconclusive based on null chunk scores
@@ -101,16 +139,19 @@ export const useHiyaAudioAnalysis = () => {
     shouldProcessUrl,
     dispatchAction,
   ) => {
-    if (!shouldProcessUrl && !audioUrl && !audioFile) {
+    // Use the actual file URL if a local file is selected, otherwise use the provided audioUrl
+    const actualUrl = file?.url || audioUrl;
+
+    if (!shouldProcessUrl && !actualUrl && !audioFile) {
       throw new Error("No URL or audio file");
     }
 
     let audioBlob;
 
-    if (isValidUrl(audioUrl) && !audioFile) {
+    if (isValidUrl(actualUrl) && !audioFile) {
       try {
         audioBlob =
-          (await axios.get(audioUrl, { responseType: "blob" })).data ?? null;
+          (await axios.get(actualUrl, { responseType: "blob" })).data ?? null;
       } catch (error) {
         console.error(error);
         throw new Error(error.message || error);
@@ -127,7 +168,6 @@ export const useHiyaAudioAnalysis = () => {
      */
     const handleError = (error) => {
       dispatchAction(setError(error));
-      dispatchAction(setHiyaLoading(false));
     };
 
     try {
@@ -148,9 +188,12 @@ export const useHiyaAudioAnalysis = () => {
 
       const isAnalysisInconclusive = isResultInconclusive(chunks.data);
 
+      // For results, use the actual URL (blob or regular URL)
+      const resultUrl = audioFile ? URL.createObjectURL(audioFile) : actualUrl;
+
       dispatchAction(
         setHiyaResult({
-          url: audioFile ? URL.createObjectURL(audioFile) : audioUrl,
+          url: resultUrl,
           result: detectionResponse.data,
           chunks: chunks.data,
           isInconclusive: isAnalysisInconclusive,
@@ -260,6 +303,11 @@ export const useHiyaAudioAnalysis = () => {
    * Clears input, file selection, and Redux state
    */
   const resetState = () => {
+    // Clean up blob URL before resetting
+    if (file?.url && file.url.startsWith("blob:")) {
+      URL.revokeObjectURL(file.url);
+    }
+
     getAnalysisResultsForAudio.reset();
     setInput("");
     setAudioFile(AUDIO_FILE_DEFAULT_STATE);
@@ -276,12 +324,27 @@ export const useHiyaAudioAnalysis = () => {
 
   /**
    * Success callback for file preprocessing
-   * Sets the validated audio file in state
+   * Sets the validated audio file in state and Redux
    *
    * @param {File} file - The successfully validated audio file
    */
-  const preprocessSuccess = (file) => {
-    setAudioFile(file);
+  const preprocessSuccess = (newFile) => {
+    setAudioFile(newFile);
+    setInput(""); // Clear input field when file is selected
+
+    // Revoke previous blob URL if it exists
+    if (file?.url && file.url.startsWith("blob:")) {
+      URL.revokeObjectURL(file.url);
+    }
+
+    // Create object URL for the file and store in Redux
+    const fileUrl = URL.createObjectURL(newFile);
+    dispatch(
+      setHiyaFile({
+        name: newFile.name,
+        url: fileUrl,
+      }),
+    );
   };
 
   /**
@@ -302,11 +365,54 @@ export const useHiyaAudioAnalysis = () => {
   };
 
   /**
+   * Handles URL input changes
+   * Clears file selection when user types a URL directly
+   *
+   * @param {string} newInput - The new input value
+   */
+  const handleInputChange = (newInput) => {
+    setInput(newInput);
+
+    // If user is typing a URL, clear the selected file and update Redux
+    if (newInput) {
+      // Clean up blob URL before clearing file
+      if (file?.url && file.url.startsWith("blob:")) {
+        URL.revokeObjectURL(file.url);
+      }
+
+      setAudioFile(AUDIO_FILE_DEFAULT_STATE);
+      dispatch(setHiyaFile({ name: null, url: null }));
+      // Note: We don't set the URL in Redux here because it will be handled by form submission
+    }
+  };
+
+  /**
    * Handles form submission for audio analysis
-   * Resets previous results and triggers new analysis
+   * Clears previous results (but keeps file) and triggers new analysis
    */
   const handleSubmit = async () => {
-    dispatch(resetHiyaAudio());
+    // Store current input URL in Redux if it's a URL (not a file)
+    if (input && !file?.name) {
+      // Store the input URL for persistence across navigation
+      dispatch(
+        setHiyaFile({
+          name: null,
+          url: null,
+          displayUrl: input,
+        }),
+      );
+    }
+
+    // Clear only results, preserve file and loading state
+    dispatch(
+      setHiyaResult({
+        url: "", // Clear result URL when starting new analysis
+        result: null,
+        chunks: [],
+        isInconclusive: false,
+      }),
+    );
+
     await getAnalysisResultsForAudio.mutate();
   };
 
@@ -316,10 +422,8 @@ export const useHiyaAudioAnalysis = () => {
     resetState,
     preprocessLocalFile,
     input,
-    setInput,
+    handleInputChange,
     audioFile,
     setAudioFile,
-    preprocessSuccess,
-    preprocessError,
   };
 };
