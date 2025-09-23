@@ -22,7 +22,7 @@ import CloseIcon from "@mui/icons-material/Close";
  * @returns {Element}
  * @constructor
  */
-const GaugeChartModalExplanation = ({
+export const GaugeChartModalExplanation = ({
   keyword,
   keywordsArr,
   keywordLink,
