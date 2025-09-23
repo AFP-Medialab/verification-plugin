@@ -293,19 +293,6 @@ export function getPersuasionCategoryTechnique(category) {
   return category.split("__");
 }
 
-// persuasion techniques: defining persuasion technique category colours
-export function getPersuasionCategoryColours(configs) {
-  const categoryColours = {
-    Justification: configs.perCategoryJustificationRgb,
-    Simplification: configs.perCategorySimplificationRgb,
-    Distraction: configs.perCategoryDistractionRgb,
-    Call: configs.perCategoryCallRgb,
-    Manipulative_Wording: configs.perCategoryManipulativeRgb,
-    Attack_on_Reputation: configs.perCategoryAttackRgb,
-  };
-  return categoryColours;
-}
-
 // machine generated text and subjectivity: gauge chart explanation
 export function createGaugeExplanation(keyword, arcsLength, colours) {
   let keywordsArr;
