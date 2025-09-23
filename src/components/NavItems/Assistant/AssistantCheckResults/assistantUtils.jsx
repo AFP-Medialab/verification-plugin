@@ -107,7 +107,7 @@ export const renderDescription = (keyword, description) => {
   );
 };
 
-export const renderEvidence = (keyword, evidence, source, scope) => {
+export const renderEvidence = (keyword, labels, evidence, source, scope) => {
   return (
     <List>
       <ListItem>
@@ -130,6 +130,15 @@ export const renderEvidence = (keyword, evidence, source, scope) => {
             </ListItem>
           ))}
         </List>
+      </ListItem>
+      <ListItem>
+        {labels === "present in GDI reports" && (
+          <Typography variant={"subtitle2"} sx={{ align: "start" }}>
+            <Box sx={{ fontStyle: "italic", m: 1 }}>
+              {keyword("gdi_reports_warning")}
+            </Box>
+          </Typography>
+        )}
       </ListItem>
     </List>
   );
@@ -330,6 +339,13 @@ const renderDialog = (keyword, value, trafficLightColor, sourceType) => {
               </ListItem>
             ))}
           </List>
+          {value.credibilityLabels === "present in GDI reports" && (
+            <Typography variant={"subtitle2"} sx={{ align: "start" }}>
+              <Box sx={{ fontStyle: "italic", m: 1 }}>
+                {keyword("gdi_reports_warning")}
+              </Box>
+            </Typography>
+          )}
         </DialogContent>
       </Dialog>
     </ListItemSecondaryAction>
