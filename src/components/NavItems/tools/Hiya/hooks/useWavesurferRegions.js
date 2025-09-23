@@ -7,7 +7,7 @@ import RegionsPlugin from "wavesurfer.js/dist/plugins/regions";
  * Returns a stable regions plugin instance that can be used in wavesurfer config
  *
  * @returns {Object} Object containing the regions plugin instance
- * @property {RegionsPlugin} regionsPlugin - The actual regions plugin instance (NOT a React ref)
+ * @property {Object} regionsPlugin - The actual wavesurfer regions plugin instance (NOT a React ref)
  *
  * @example
  * ```javascript
