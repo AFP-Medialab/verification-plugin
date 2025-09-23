@@ -36,7 +36,6 @@ import {
 import "chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
-import RegionsPlugin from "wavesurfer.js/dist/plugins/regions";
 import ZoomPlugin from "wavesurfer.js/dist/plugins/zoom";
 
 import {
