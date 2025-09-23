@@ -140,12 +140,11 @@ export default function AssistantTextClassification({
       // Filter categories above confidenceThreshold unless machine generated text or subjectivity
       if (
         credibilitySignal === machineGeneratedTextTitle ||
-        credibilitySignal === subjectivityTitle ||
-        credibilitySignal === newsGenreTitle
+        credibilitySignal === subjectivityTitle
       ) {
         filteredCategories[label] = classification[label];
       } else if (
-        // news framing
+        // news framing and news genre
         classification[label][0].score >= confidenceThresholdLow
       ) {
         filteredCategories[label] = classification[label];
@@ -375,13 +374,19 @@ export function CategoriesList({
   handleSliderChange,
 }) {
   if (_.isEmpty(categories)) {
-    // only news framing might be empty, a genre is always detected
     return (
-      credibilitySignal === keyword("news_framing_title") && (
-        <Typography fontSize="small" sx={{ textAlign: "center" }}>
-          {keyword("no_detected_topics")}
-        </Typography>
-      )
+      <>
+        {credibilitySignal === keyword("news_framing_title") && (
+          <Typography fontSize="small" sx={{ textAlign: "center" }}>
+            {keyword("no_detected_topics")}
+          </Typography>
+        )}
+        {credibilitySignal === keyword("news_genre_title") && (
+          <Typography fontSize="small" sx={{ textAlign: "center" }}>
+            {keyword("no_detected_genre")}
+          </Typography>
+        )}
+      </>
     );
   }
 
