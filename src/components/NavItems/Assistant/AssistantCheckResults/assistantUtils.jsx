@@ -133,7 +133,7 @@ export const renderEvidence = (keyword, labels, evidence, source, scope) => {
       </ListItem>
       <ListItem>
         {labels === "present in GDI reports" && (
-          <Typography variant={"subtitle2"} align="start">
+          <Typography variant={"subtitle2"} sx={{ align: "start" }}>
             {keyword("gdi_reports_warning")}
           </Typography>
         )}
@@ -338,7 +338,7 @@ const renderDialog = (keyword, value, trafficLightColor, sourceType) => {
             ))}
           </List>
           {value.credibilityLabels === "present in GDI reports" && (
-            <Typography variant={"subtitle2"} align="start">
+            <Typography variant={"subtitle2"} sx={{ align: "start" }}>
               {keyword("gdi_reports_warning")}
             </Typography>
           )}
