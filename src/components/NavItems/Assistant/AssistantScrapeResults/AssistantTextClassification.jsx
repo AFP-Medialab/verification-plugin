@@ -326,26 +326,28 @@ export function GaugeCategoriesList({
   return (
     <>
       {credibilitySignal === keyword("subjectivity_title") ? (
-        _.isEmpty(categories) && overallScore === 0 ? (
-          <>
-            <Typography fontSize="small" sx={{ textAlign: "center" }}>
-              {keyword("no_detected_subjective_sentences")}
-            </Typography>
-            <Divider key={`divider_${fullTextScoreLabel}`} sx={{ my: 2 }} />
-          </>
-        ) : (
-          <>
-            <Typography fontSize="small" sx={{ textAlign: "start" }}>
-              {keyword("threshold_slider_confidence")}
-            </Typography>
-            <ThresholdSlider
-              credibilitySignal={credibilitySignal}
-              importantSentenceThreshold={importantSentenceThreshold}
-              handleSliderChange={handleSliderChange}
-              keyword={keyword}
-            />
-          </>
-        )
+        <>
+          {_.isEmpty(categories) && overallScore === 0 ? (
+            <>
+              <Typography fontSize="small" sx={{ textAlign: "center" }}>
+                {keyword("no_detected_subjective_sentences")}
+              </Typography>
+            </>
+          ) : (
+            <>
+              <Typography fontSize="small" sx={{ textAlign: "start" }}>
+                {keyword("threshold_slider_confidence")}
+              </Typography>
+              <ThresholdSlider
+                credibilitySignal={credibilitySignal}
+                importantSentenceThreshold={importantSentenceThreshold}
+                handleSliderChange={handleSliderChange}
+                keyword={keyword}
+              />
+            </>
+          )}
+          <Divider key={`divider_${fullTextScoreLabel}`} sx={{ my: 2 }} />
+        </>
       ) : null}
       {gaugeChart}
       {gaugeExplanation}
