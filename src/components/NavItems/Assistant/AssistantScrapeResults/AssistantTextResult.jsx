@@ -252,28 +252,30 @@ const AssistantTextResult = () => {
                 />
               </Tooltip>
             </div>
-            <Tooltip
-              interactive={"true"}
-              title={
-                <>
-                  <Trans
-                    t={keyword}
-                    i18nKey="text_tooltip"
-                    components={{
-                      b: <b />,
-                      ul: <ul />,
-                      li: <li />,
-                    }}
-                  />
-                  <TransSupportedToolsLink keyword={keyword} />
-                  <TransHtmlDoubleLineBreak keyword={keyword} />
-                  <TransCredibilitySignalsLink keyword={keyword} />
-                </>
-              }
-              classes={{ tooltip: classes.assistantTooltip }}
-            >
-              <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
-            </Tooltip>
+            <div>
+              <Tooltip
+                interactive={"true"}
+                title={
+                  <>
+                    <Trans
+                      t={keyword}
+                      i18nKey="text_tooltip"
+                      components={{
+                        b: <b />,
+                        ul: <ul />,
+                        li: <li />,
+                      }}
+                    />
+                    <TransSupportedToolsLink keyword={keyword} />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
+                    <TransCredibilitySignalsLink keyword={keyword} />
+                  </>
+                }
+                classes={{ tooltip: classes.assistantTooltip }}
+              >
+                <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+              </Tooltip>
+            </div>
           </div>
         }
       />

@@ -417,16 +417,21 @@ function* handleDbkfTextCall(action) {
   try {
     const text = yield select((state) => state.assistant.urlText);
     if (text) {
-      let textToUse = text.length > 500 ? text.substring(0, 500) : text;
+      let textToUse = text.length > 100 ? text.substring(0, 100) : text;
       /*
-                                                            let textRegex = /[\W]$/
-                                                            //Infinite loop for some url exemple: https://twitter.com/TheArchitect009/status/1427280578496303107
-                                                            while(textToUse.match(textRegex)){
-                                                                if(textToUse.length === 1) break
-                                                                textToUse = text.slice(0, -1)
-                                                            }*/
+        let textRegex = /[\W]$/
+        //Infinite loop for some url example: https://twitter.com/TheArchitect009/status/1427280578496303107
+        while(textToUse.match(textRegex)){
+          if(textToUse.length === 1) break
+          textToUse = text.slice(0, -1)
+        }
+      */
       let result = yield call(dbkfAPI.callTextSimilarityEndpoint, textToUse);
-      let filteredResult = result.length ? result : null;
+
+      let filteredResult = result?.length
+        ? result.filter((res) => res.score >= 40)
+        : [];
+      filteredResult = filteredResult?.length ? filteredResult : null;
 
       yield put(setDbkfTextMatchDetails(filteredResult, false, true, false));
     }
@@ -812,16 +817,17 @@ function* handleMultilingualStanceCall(action) {
   try {
     const inputUrl = yield select((state) => state.assistant.inputUrl); //action.payload.inputUrl;
     const urlType = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
+    const collectedComments = yield select(
+      (state) => state.assistant.collectedComments,
+    );
 
-    // only run stance classifier for youtube
+    // only run stance classifier for youtube if comments exist
     if (
-      urlType === KNOWN_LINKS.YOUTUBE ||
-      urlType === KNOWN_LINKS.YOUTUBESHORTS
+      (urlType === KNOWN_LINKS.YOUTUBE ||
+        urlType === KNOWN_LINKS.YOUTUBESHORTS) &&
+      collectedComments.length > 0
     ) {
       yield put(setMultilingualStanceDetails(null, true, false, false));
-      const collectedComments = yield select(
-        (state) => state.assistant.collectedComments,
-      );
 
       function createCommentArray(
         comments,

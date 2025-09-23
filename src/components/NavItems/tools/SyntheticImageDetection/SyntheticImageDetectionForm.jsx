@@ -11,11 +11,11 @@ import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
 
 import { ROLES } from "@/constants/roles";
+import { setError } from "@/redux/reducers/errorReducer";
 import {
   resetSyntheticImageDetectionImage,
   setSyntheticImageDetectionLoading,
-} from "@/redux/actions/tools/syntheticImageDetectionActions";
-import { setError } from "@/redux/reducers/errorReducer";
+} from "@/redux/reducers/tools/syntheticImageDetectionReducer";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "@Shared/StringFileUploadField";
 import {

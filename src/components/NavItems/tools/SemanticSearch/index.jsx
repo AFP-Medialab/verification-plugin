@@ -7,7 +7,6 @@ import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import Collapse from "@mui/material/Collapse";
 import Fade from "@mui/material/Fade";
 import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
@@ -17,13 +16,9 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
-import {
-  Close,
-  KeyboardArrowDown,
-  KeyboardArrowUp,
-  ManageSearch,
-} from "@mui/icons-material";
+import { Close, ManageSearch } from "@mui/icons-material";
 
+import AdvancedSettingsContainer from "@Shared/AdvancedSettingsContainer";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { getLanguageName } from "@Shared/Utils/languageUtils";
 import axios from "axios";
@@ -451,39 +446,16 @@ const SemanticSearch = () => {
                     {keyword("semantic_search_form_submit_button")}
                   </Button>
                 </Stack>
-                <Box>
-                  <Stack direction="row" spacing={2}>
-                    <Button
-                      variant="outlined"
-                      endIcon={
-                        showAdvancedSettings ? (
-                          <KeyboardArrowUp />
-                        ) : (
-                          <KeyboardArrowDown />
-                        )
-                      }
-                      onClick={() =>
-                        setShowAdvancedSettings((prevState) => !prevState)
-                      }
-                    >
-                      {showAdvancedSettings
-                        ? keyword(
-                            "semantic_search_hide_advanced_settings_button",
-                          )
-                        : keyword(
-                            "semantic_search_show_advanced_settings_button",
-                          )}
-                    </Button>
-                    {showResetAdvancedSettings && (
-                      <Button variant="text" onClick={resetSearchSettings}>
-                        {keyword(
-                          "semantic_search_reset_search_settings_button",
-                        )}
-                      </Button>
-                    )}
-                  </Stack>
-                </Box>
-                <Collapse in={showAdvancedSettings} mountOnEnter unmountOnExit>
+                <AdvancedSettingsContainer
+                  showAdvancedSettings={showAdvancedSettings}
+                  setShowAdvancedSettings={setShowAdvancedSettings}
+                  showResetAdvancedSettings={showResetAdvancedSettings}
+                  resetSearchSettings={resetSearchSettings}
+                  keywordFn={keyword}
+                  keywordShow={"semantic_search_show_advanced_settings_button"}
+                  keywordHide={"semantic_search_hide_advanced_settings_button"}
+                  keywordReset={"semantic_search_reset_search_settings_button"}
+                >
                   <Stack direction="row" spacing={1}>
                     <Stack direction="column" spacing={1}>
                       <SelectSmall
@@ -606,7 +578,7 @@ const SemanticSearch = () => {
                       disabled={isLoading}
                     />
                   </Stack>
-                </Collapse>
+                </AdvancedSettingsContainer>
               </Stack>
             </form>
           </Box>

@@ -6,9 +6,9 @@ const defaultState = {
   loading: false,
 };
 
-const loccusReducer = (state = defaultState, action) => {
+const hiyaReducer = (state = defaultState, action) => {
   switch (action.type) {
-    case "LOCCUS_RESET":
+    case "HIYA_RESET":
       return {
         ...state,
         url: "",
@@ -17,12 +17,12 @@ const loccusReducer = (state = defaultState, action) => {
         isInconclusive: false,
         loading: false,
       };
-    case "SET_LOCCUS_LOADING":
+    case "SET_HIYA_LOADING":
       return {
         ...state,
         loading: action.payload,
       };
-    case "SET_LOCCUS_RESULT":
+    case "SET_HIYA_RESULT":
       return {
         ...state,
         url: action.payload.url,
@@ -35,4 +35,4 @@ const loccusReducer = (state = defaultState, action) => {
       return state;
   }
 };
-export default loccusReducer;
+export default hiyaReducer;

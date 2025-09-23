@@ -6,7 +6,7 @@ import {
   setSyntheticImageDetectionLoading,
   setSyntheticImageDetectionNearDuplicates,
   setSyntheticImageDetectionResult,
-} from "@/redux/actions/tools/syntheticImageDetectionActions";
+} from "@/redux/reducers/tools/syntheticImageDetectionReducer";
 import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequest";
 import axios from "axios";
 import { createC2pa, selectGenerativeInfo } from "c2pa";
