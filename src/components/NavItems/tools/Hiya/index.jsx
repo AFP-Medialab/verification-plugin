@@ -38,6 +38,7 @@ const Hiya = () => {
     preprocessLocalFile,
     input,
     setInput,
+    handleInputChange,
     audioFile,
     setAudioFile,
   } = useHiyaAudioAnalysis();
@@ -54,7 +55,7 @@ const Hiya = () => {
               submitButtonKeyword={keyword("hiya_submit_button")}
               localFileKeyword={keyword("button_localfile")}
               urlInput={input}
-              setUrlInput={setInput}
+              setUrlInput={handleInputChange}
               fileInput={audioFile}
               setFileInput={setAudioFile}
               handleSubmit={handleSubmit}
