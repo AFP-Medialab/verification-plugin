@@ -113,7 +113,7 @@ export const Footer = (props) => {
       ];
       contactUs = keyword("afp_part_2");
       break;
-    case FOOTER_TYPES.LOCCUS:
+    case FOOTER_TYPES.HIYA:
       provideBy = keyword("afp_part_1");
       link = keyword("hiya_link");
       linkLabel = keyword("hiya_link_label");
