@@ -13,7 +13,7 @@ import TextFieldsIcon from "@mui/icons-material/TextFields";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 
-const DbkfTextResults = ({ results }) => {
+const DbkfTextResults = ({ results, prevFactChecksExist }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   return (
@@ -110,7 +110,13 @@ const DbkfTextResults = ({ results }) => {
                 </Stack>
               </Grid>
             </Grid>
-            <Divider orientation="horizontal" flexItem />
+            {results.length === key + 1 ? (
+              prevFactChecksExist ? (
+                <Divider orientation="horizontal" flexItem />
+              ) : null
+            ) : (
+              <Divider orientation="horizontal" flexItem />
+            )}
           </Box>
         );
       })}

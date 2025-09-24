@@ -37,6 +37,9 @@ const AssistantWarnings = () => {
   const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
   const dbkfImageMatch = useSelector((state) => state.assistant.dbkfImageMatch);
   const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
+  const prevFactChecksDone = useSelector(
+    (state) => state.assistant.prevFactChecksDone,
+  );
   const prevFactChecksLoading = useSelector(
     (state) => state.assistant.prevFactChecksLoading,
   );
@@ -139,17 +142,28 @@ const AssistantWarnings = () => {
       <CardContent>
         {(dbkfImageMatch || dbkfVideoMatch) && <DbkfMediaResults />}
 
+        {/* not logged in as beta tester, DBKF only */}
         {!role.includes(ROLES.BETA_TESTER) && dbkfTextMatch && (
-          <DbkfTextResults results={dbkfTextMatch} />
+          <DbkfTextResults
+            results={dbkfTextMatch}
+            prevFactChecksExist={false}
+          />
         )}
 
+        {/* logged in as beta tester, DBKF and FCSS/prevFactChecks */}
         {role.includes(ROLES.BETA_TESTER) &&
-          updatedPrevFactCheckResult.length > 0 && (
+          prevFactChecksDone &&
+          (updatedPrevFactCheckResult.length > 0 ? (
             <>
-              <DbkfTextResults results={uniqueSeparateDbkfTextMatch} />
+              <DbkfTextResults
+                results={uniqueSeparateDbkfTextMatch}
+                prevFactChecksExist={true}
+              />
               <PreviousFactCheckResults results={updatedPrevFactCheckResult} />
             </>
-          )}
+          ) : (
+            <DbkfTextResults results={dbkfTextMatch} />
+          ))}
 
         {role.includes(ROLES.BETA_TESTER) && prevFactChecksLoading && (
           <Stack
