@@ -131,12 +131,12 @@ export const createKeyframeJobApi = async (
  * React hook to get a function for creating keyframe extraction jobs.
  * Uses the authenticated request hook internally.
  *
- * @returns {(type: string, value: string | File) => Promise<string>}
- * A function that creates a keyframe job given the type and value.
+ * @returns {(type: string, value: string | File, options?: Object) => Promise<string>}
+ * A function that creates a keyframe job given the type, value, and optional parameters.
  */
 export const useCreateKeyframeJob = () => {
   const authenticatedRequest = useAuthenticatedRequest();
 
-  return (type, value) =>
-    createKeyframeJobApi(authenticatedRequest, type, value);
+  return (type, value, options = {}) =>
+    createKeyframeJobApi(authenticatedRequest, type, value, options);
 };

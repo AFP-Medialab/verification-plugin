@@ -40,7 +40,7 @@ export const useProcessKeyframes = (input) => {
 
   // Step 1: Send URL
   const sendUrlMutation = useMutation({
-    mutationFn: async ({ url }) => {
+    mutationFn: async ({ url, options = {} }) => {
       // Perform url validation
       if (!url || url === "" || !isValidUrl(url)) {
         throw new Error("Invalid URL");
@@ -48,18 +48,18 @@ export const useProcessKeyframes = (input) => {
 
       setStatus("Sending URL...");
 
-      return await createKeyframeJob(KeyframeInputType.URL, url);
+      return await createKeyframeJob(KeyframeInputType.URL, url, options);
     },
   });
 
   // Step 1: Send File
   const sendFileMutation = useMutation({
-    mutationFn: async ({ file }) => {
+    mutationFn: async ({ file, options = {} }) => {
       if (!file) throw new Error("No file provided");
 
       setStatus("Uploading file...");
 
-      return await createKeyframeJob(KeyframeInputType.FILE, file);
+      return await createKeyframeJob(KeyframeInputType.FILE, file, options);
     },
   });
 
@@ -105,7 +105,7 @@ export const useProcessKeyframes = (input) => {
   });
 
   // Execute the whole process
-  const executeProcess = async (input) => {
+  const executeProcess = async (input, options = {}) => {
     const currentKey = getInputKey(input);
 
     // Snapshot the previous value
@@ -133,9 +133,9 @@ export const useProcessKeyframes = (input) => {
       try {
         let jobId;
         if (typeof input === "string") {
-          jobId = await sendUrlMutation.mutateAsync({ url: input });
+          jobId = await sendUrlMutation.mutateAsync({ url: input, options });
         } else if (input instanceof File) {
-          jobId = await sendFileMutation.mutateAsync({ file: input });
+          jobId = await sendFileMutation.mutateAsync({ file: input, options });
         } else {
           throw new Error("Invalid input type");
         }

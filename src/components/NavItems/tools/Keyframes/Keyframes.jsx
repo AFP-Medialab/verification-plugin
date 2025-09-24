@@ -95,7 +95,6 @@ const Keyframes = () => {
     isLoadingSimilarity,
     similarityResults,
     processUrl,
-    role,
   } = useKeyframesState();
 
   const [input, setInput] = useState(resultUrl || "");
@@ -155,15 +154,22 @@ const Keyframes = () => {
     dispatch(resetKeyframes());
     resetFetchingKeyframes();
 
+    const options = {
+      download_max_height: downloadMaxHeight,
+      process_level: processLevel,
+      audio: audioEnabled,
+      sensitivity: sensitivity,
+    };
+
     try {
       if (file) {
         setHasSubmitted(true);
-        await executeProcess(file, role);
+        await executeProcess(file, options);
       } else if (finalUrl) {
         dispatch(setKeyframesUrl(finalUrl));
         setSubmittedUrl(finalUrl);
         setHasSubmitted(true);
-        const result = await executeProcess(finalUrl, role);
+        const result = await executeProcess(finalUrl, options);
         if (result?.fromCache) {
           dispatch(setKeyframesResult(result.data));
           dispatch(setKeyframesFeatures(result.featureData));
