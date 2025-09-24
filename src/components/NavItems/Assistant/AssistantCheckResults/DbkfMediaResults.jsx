@@ -130,7 +130,7 @@ const DbkfMediaResults = () => {
                     >
                       <Tooltip
                         key={key + "_tooltip"}
-                        title={keyword("dbkf_explanation")}
+                        title={keyword("database_of_known_fakes_explanation")}
                       >
                         <Chip
                           key={key + "_chip"}
