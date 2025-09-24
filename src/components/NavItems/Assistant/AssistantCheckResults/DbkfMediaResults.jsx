@@ -40,8 +40,6 @@ const DbkfMediaResults = () => {
       ])
     : null;
 
-  console.log(dbkfImageMatch, dbkfVideoMatch, combinedDbkfMediaResults);
-
   {
     /* This code mimics ResultDisplayItem.jsx from SemanticSearch to match output */
   }
