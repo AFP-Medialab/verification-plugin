@@ -323,7 +323,18 @@ const Keyframes = () => {
                         variant="outlined"
                         label={keyword("sensitivity")}
                         type="number"
-                        inputProps={{ min: 0.01, max: 0.6, step: 0.01 }}
+                        slotProps={{
+                          input: {
+                            min: 0.01,
+                            max: 0.6,
+                            step: 0.01,
+                          },
+                          htmlInput: {
+                            min: 0.01,
+                            max: 0.6,
+                            step: 0.01,
+                          },
+                        }}
                         value={sensitivity}
                         onChange={(e) => setSensitivity(Number(e.target.value))}
                         sx={{ minWidth: 120 }}
