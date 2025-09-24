@@ -22,7 +22,9 @@ import { setWarningExpanded } from "@/redux/actions/tools/assistantActions";
 
 import {
   TransCredibilitySignalsLink,
+  TransDeutscheWelleAuthor,
   TransHtmlDoubleLineBreak,
+  TransKinitAuthor,
   TransMachineGeneratedTextTooltip,
   TransSupportedToolsLink,
 } from "../TransComponents";
@@ -415,6 +417,8 @@ const AssistantTextResult = () => {
                   <>
                     <Trans t={keyword} i18nKey="subjectivity_tooltip" />
                     <TransHtmlDoubleLineBreak keyword={keyword} />
+                    <TransDeutscheWelleAuthor keyword={keyword} />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
                     <TransCredibilitySignalsLink keyword={keyword} />
                   </>
                 }
@@ -439,6 +443,8 @@ const AssistantTextResult = () => {
                   categoriesTooltipContent={
                     <>
                       <TransMachineGeneratedTextTooltip keyword={keyword} />
+                      <TransKinitAuthor keyword={keyword} />
+                      <TransCredibilitySignalsLink keyword={keyword} />
                       <TransCredibilitySignalsLink keyword={keyword} />
                     </>
                   }

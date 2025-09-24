@@ -111,6 +111,62 @@ export function TransMultilingualStanceLink({ keyword }) {
   );
 }
 
+// Service acknowledgements
+
+export function TransDeutscheWelleAuthor({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="deutsche_welle_author"
+      components={{
+        deutscheWelleLink: (
+          <a
+            href="https://www.dw.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          />
+        ),
+      }}
+    />
+  );
+}
+
+export function TransKinitAuthor({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="kinit_author"
+      components={{
+        kinitLink: (
+          <a
+            href="https://kinit.sk/"
+            target="_blank"
+            rel="noopener noreferrer"
+          />
+        ),
+      }}
+    />
+  );
+}
+
+export function TransOntotextAuthor({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="ontotext_author"
+      components={{
+        ontotextLink: (
+          <a
+            href="https://www.ontotext.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          />
+        ),
+      }}
+    />
+  );
+}
+
 // Tooltips
 
 export function TransSourceCredibilityTooltip({ keyword }) {
