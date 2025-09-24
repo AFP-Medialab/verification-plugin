@@ -142,7 +142,14 @@ const ResultDisplayItem = ({
             pl: 4,
           }}
         >
-          <Stack direction="column" spacing={2}>
+          <Stack
+            direction="column"
+            spacing={2}
+            sx={{
+              justifyContent: "center",
+              alignItems: "flex-start",
+            }}
+          >
             <Link
               href={`https://${domainUrl}`}
               variant="body1"

@@ -6,6 +6,7 @@ import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import TextFieldsIcon from "@mui/icons-material/TextFields";
@@ -85,13 +86,27 @@ const DbkfTextResults = ({ results }) => {
                   pl: 4,
                 }}
               >
-                <Stack direction="column" spacing={2}>
-                  <Chip
-                    label={value.factCheckServices}
-                    sx={{ width: "fit-content" }}
-                    size="small"
-                    color="warning"
-                  />
+                <Stack
+                  direction="column"
+                  spacing={2}
+                  sx={{
+                    justifyContent: "center",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  {value.factCheckServices?.map(
+                    ([acronym, explanation], key) => (
+                      <Tooltip key={key + "_tooltip"} title={explanation}>
+                        <Chip
+                          key={key + "_chip"}
+                          label={acronym}
+                          color="warning"
+                          sx={{ width: "fit-content" }}
+                          size="small"
+                        />
+                      </Tooltip>
+                    ),
+                  )}
                 </Stack>
               </Grid>
             </Grid>
