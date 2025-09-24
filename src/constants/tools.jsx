@@ -8,6 +8,7 @@ import {
   Dashboard,
   Gradient,
   ManageSearch,
+  SmartToy,
 } from "@mui/icons-material";
 
 import {
@@ -50,12 +51,13 @@ import MachineGeneratedText from "../components/NavItems/MachineGeneratedText";
 import ToolsMenu from "../components/NavItems/tools/Alltools/ToolsMenu";
 import Analysis from "../components/NavItems/tools/Analysis/Analysis";
 import Archive from "../components/NavItems/tools/Archive";
+import ChatBot from "../components/NavItems/tools/ChatBot/ChatBot";
 import DeepfakeVideo from "../components/NavItems/tools/Deepfake/DeepfakeVideo";
 import Forensic from "../components/NavItems/tools/Forensic/Forensic";
 import Geolocation from "../components/NavItems/tools/Geolocation/Geolocation";
 import CheckGif from "../components/NavItems/tools/Gif/CheckGif";
+import Hiya from "../components/NavItems/tools/Hiya";
 import Keyframes from "../components/NavItems/tools/Keyframes/Keyframes";
-import Loccus from "../components/NavItems/tools/Loccus";
 import Magnifier from "../components/NavItems/tools/Magnifier/Magnifier";
 import Metadata from "../components/NavItems/tools/Metadata/Metadata";
 import OCR from "../components/NavItems/tools/OCR/OCR";
@@ -269,6 +271,10 @@ const c2paSvgIcon = (props) => {
 
 const disinfoDeckIcon = (props) => {
   return <Dashboard {...props} />;
+};
+
+const chatBotSvgIcon = (props) => {
+  return <SmartToy {...props} />;
 };
 
 /**
@@ -565,17 +571,17 @@ export const imageGeolocation = new Tool(
  * Audio tools
  **/
 
-const audioLoccus = new Tool(
-  "navbar_loccus",
-  "navbar_loccus_description",
+const audioHiya = new Tool(
+  "navbar_hiya",
+  "navbar_hiya_description",
   audioFileSvgIcon,
   TOOLS_CATEGORIES.AUDIO,
   [TOOL_STATUS_ICON.NEW, TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.LOCK],
   [ROLES.BETA_TESTER],
-  "loccus",
+  "hiya",
   TOOL_GROUPS.VERIFICATION,
-  <Loccus />,
-  <Footer type={FOOTER_TYPES.LOCCUS} />,
+  <Hiya />,
+  <Footer type={FOOTER_TYPES.HIYA} />,
 );
 
 /**
@@ -725,6 +731,19 @@ export const archiving = new Tool(
   <Footer type={FOOTER_TYPES.AFP} />,
 );
 
+export const chatBot = new Tool(
+  "navbar_chatbot",
+  "navbar_chatbot_description",
+  chatBotSvgIcon,
+  TOOLS_CATEGORIES.OTHER,
+  [TOOL_STATUS_ICON.NEW],
+  [ROLES.EXTRA_FEATURE],
+  "chatbot",
+  TOOL_GROUPS.VERIFICATION,
+  <ChatBot />,
+  <Footer type={FOOTER_TYPES.AFP} />,
+);
+
 /**
  *
  * Other Group tools
@@ -777,7 +796,7 @@ export const tools = Object.freeze([
   imageGif,
   imageSyntheticDetection,
   imageGeolocation,
-  audioLoccus,
+  audioHiya,
   searchTwitter,
   searchSemantic,
   searchCovid,
@@ -788,6 +807,7 @@ export const tools = Object.freeze([
   newSna,
   disinfoDeck,
   archiving,
+  chatBot,
   about,
   c2paData,
 ]);

@@ -264,6 +264,7 @@ const styles = (theme) => ({
   InteractiveMedia: {
     maxWidth: "80%",
     maxHeight: window.innerHeight / 2,
+    display: "inline-block",
   },
 
   customTitle: {

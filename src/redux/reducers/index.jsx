@@ -4,6 +4,7 @@ import { combineReducers } from "redux";
 
 import assistantReducer from "./assistantReducer";
 import authenticationReducer from "./authenticationReducer";
+import chatBotReducer from "./chatBotReducer";
 import cookiesReducer from "./cookiesReducers";
 import defaultLanguageReducer from "./defaultLanguageReducer";
 import dictionaryReducer from "./dictionaryReducer";
@@ -20,8 +21,8 @@ import deepfakeReducerVideo from "./tools/deepfakeVideoReducer";
 import forensicReducer from "./tools/forensicReducer";
 import geolocationReducer from "./tools/geolocationReducer";
 import gifReducer from "./tools/gifReducer";
+import hiyaReducer from "./tools/hiyaReducer";
 import keyframesReducer from "./tools/keyframesReducer";
-import loccusReducer from "./tools/loccusReducer";
 import magnifierReducer from "./tools/magnifierReducer";
 import metadataReducer from "./tools/metadataReducer";
 import ocrReducer from "./tools/ocrReducer";
@@ -59,10 +60,11 @@ const allReducers = combineReducers({
   thumbnails: thumbnailsReducer,
   twitterSna: twitterSnaReducer,
   assistant: assistantReducer,
+  chatBot: chatBotReducer,
   ocr: ocrReducer,
   gif: gifReducer,
   syntheticImageDetection: syntheticImageDetectionActions,
-  syntheticAudioDetection: loccusReducer,
+  syntheticAudioDetection: hiyaReducer,
   deepfakeVideo: deepfakeReducerVideo,
   geolocation: geolocationReducer,
   c2pa: c2paReducer,
