@@ -12,6 +12,7 @@ import { isValidUrl } from "@Shared/Utils/URLUtils";
 
 export const useProcessKeyframes = (input) => {
   const urlToJobIdRef = useRef(new Map());
+  const [currentOptions, setCurrentOptions] = useState({});
 
   const [status, setStatus] = useState(null);
 
@@ -72,10 +73,11 @@ export const useProcessKeyframes = (input) => {
 
   // Step 3: Get Keyframes
   const fetchKeyframeFeaturesQuery = useQuery({
-    queryKey: ["keyframeFeatures", key],
+    queryKey: ["keyframeFeatures", key, currentOptions],
     queryFn: async ({ queryKey }) => {
-      const [, key] = queryKey;
-      const jobId = urlToJobIdRef.current.get(key);
+      const [, key, options] = queryKey;
+      const cacheKey = JSON.stringify([key, options]);
+      const jobId = urlToJobIdRef.current.get(cacheKey);
       if (!jobId) throw new Error("No jobId available for url");
 
       setStatus("Retrieving features...");
@@ -88,10 +90,11 @@ export const useProcessKeyframes = (input) => {
   });
 
   const fetchKeyframesQuery = useQuery({
-    queryKey: ["keyframes", key],
+    queryKey: ["keyframes", key, currentOptions],
     queryFn: async ({ queryKey }) => {
-      const [, key] = queryKey;
-      const jobId = urlToJobIdRef.current.get(key);
+      const [, key, options] = queryKey;
+      const cacheKey = JSON.stringify([key, options]);
+      const jobId = urlToJobIdRef.current.get(cacheKey);
       if (!jobId) throw new Error("No jobId available for url");
 
       const kf = await fetchKeyframes(jobId);
@@ -108,20 +111,28 @@ export const useProcessKeyframes = (input) => {
   const executeProcess = async (input, options = {}) => {
     const currentKey = getInputKey(input);
 
-    // Snapshot the previous value
+    // Update current options for the queries to use
+    setCurrentOptions(options);
+
+    // Snapshot the previous value using the new query key format
     const previousKeyframes = queryClient.getQueryData([
       "keyframes",
       currentKey,
+      options,
     ]);
     const previousKeyframeFeatures = queryClient.getQueryData([
       "keyframeFeatures",
-      key,
+      currentKey,
+      options,
     ]);
 
     if (input && previousKeyframes && previousKeyframeFeatures) {
-      queryClient.setQueryData(["keyframes", currentKey], previousKeyframes);
       queryClient.setQueryData(
-        ["keyframeFeatures", currentKey],
+        ["keyframes", currentKey, options],
+        previousKeyframes,
+      );
+      queryClient.setQueryData(
+        ["keyframeFeatures", currentKey, options],
         previousKeyframeFeatures,
       );
       return {
@@ -140,7 +151,9 @@ export const useProcessKeyframes = (input) => {
           throw new Error("Invalid input type");
         }
 
-        urlToJobIdRef.current.set(currentKey, jobId);
+        // Use a consistent cache key for the jobId mapping
+        const cacheKey = JSON.stringify([currentKey, options]);
+        urlToJobIdRef.current.set(cacheKey, jobId);
 
         await checkStatusMutation.mutateAsync(jobId);
 
@@ -164,10 +177,15 @@ export const useProcessKeyframes = (input) => {
     setStatus(null);
   };
 
-  const cachedKeyframes = queryClient.getQueryData(["keyframes", key]);
+  const cachedKeyframes = queryClient.getQueryData([
+    "keyframes",
+    key,
+    currentOptions,
+  ]);
   const cachedKeyframeFeatures = queryClient.getQueryData([
     "keyframeFeatures",
     key,
+    currentOptions,
   ]);
 
   return {
