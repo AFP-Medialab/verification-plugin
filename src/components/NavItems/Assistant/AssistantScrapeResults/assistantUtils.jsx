@@ -7,11 +7,11 @@ import ListItem from "@mui/material/ListItem";
 import Slider from "@mui/material/Slider";
 import Typography from "@mui/material/Typography";
 
+import GaugeChartModalExplanation from "@Shared/GaugeChartResults/GaugeChartModalExplanation";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
-// import GaugeChartModalExplanation from "@Shared/GaugeChartResults/GaugeChartModalExplanation";
-import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
+// import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
 
 /**
  * Interpolate RGB between an arbitrary range
