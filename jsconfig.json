@@ -2,9 +2,7 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "paths": {
-      "@/*": ["src/*"],
-      "@Shared/*": ["components/Shared/*"],
-      "@workers/*": ["workers/*"],
+      "@/*": ["src/*"]
     },
     "checkJs": false,
     "jsx": "react"
