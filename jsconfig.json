@@ -3,8 +3,9 @@
     "baseUrl": "./src",
     "paths": {
       "@/*": [
-        "src/*"
-      ]
+        "src/*"],
+      "@Shared/*": ["components/Shared/*"],
+      "@workers/*": ["workers/*"],
     },
     "checkJs": false,
     "jsx": "react"
