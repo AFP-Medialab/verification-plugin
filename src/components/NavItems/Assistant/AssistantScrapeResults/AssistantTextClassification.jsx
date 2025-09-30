@@ -20,7 +20,8 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import {
   ThresholdSlider,
-  createGaugeExplanation,
+  // createGaugeExplanation,
+  createGaugeChart,
   getMgtColours,
   getSubjectivityColours,
   rgbToLuminance,
@@ -31,11 +32,10 @@ import {
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { setImportantSentenceThreshold } from "@/redux/actions/tools/assistantActions";
-import GaugeChartModalExplanation from "@Shared/GaugeChartResults/GaugeChartModalExplanation";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
-import { createGaugeChart } from "./assistantUtils";
+// import GaugeChartModalExplanation from "@Shared/GaugeChartResults/GaugeChartModalExplanation";
 
 export default function AssistantTextClassification({
   text,
@@ -293,7 +293,6 @@ export function GaugeCategoriesList({
     colours,
     keyword,
     gaugeLabels,
-    false,
     arcsLength,
   );
 
@@ -325,17 +324,17 @@ export function GaugeCategoriesList({
     }
   }
 
-  const DETECTION_EXPLANATION_KEYWORDS_SUB = [
-    "gauge_scale_modal_explanation_rating_1_sub",
-    "gauge_scale_modal_explanation_rating_2_sub",
-    "gauge_scale_modal_explanation_rating_3_sub",
-  ];
-  const DETECTION_EXPLANATION_KEYWORDS_MGT = [
-    "gauge_scale_modal_explanation_rating_1_mgt",
-    "gauge_scale_modal_explanation_rating_2_mgt",
-    "gauge_scale_modal_explanation_rating_3_mgt",
-    "gauge_scale_modal_explanation_rating_4_mgt",
-  ];
+  // const DETECTION_EXPLANATION_KEYWORDS_SUB = [
+  //   "gauge_scale_modal_explanation_rating_1_sub",
+  //   "gauge_scale_modal_explanation_rating_2_sub",
+  //   "gauge_scale_modal_explanation_rating_3_sub",
+  // ];
+  // const DETECTION_EXPLANATION_KEYWORDS_MGT = [
+  //   "gauge_scale_modal_explanation_rating_1_mgt",
+  //   "gauge_scale_modal_explanation_rating_2_mgt",
+  //   "gauge_scale_modal_explanation_rating_3_mgt",
+  //   "gauge_scale_modal_explanation_rating_4_mgt",
+  // ];
 
   return (
     <>
@@ -364,7 +363,7 @@ export function GaugeCategoriesList({
         </>
       ) : null}
       {gaugeChart}
-      <Box sx={{ textAlign: "start", mt: 2 }}>
+      {/* <Box sx={{ textAlign: "start", mt: 2 }}>
         <GaugeChartModalExplanation
           keyword={keyword}
           keywordsArr={
@@ -376,7 +375,7 @@ export function GaugeCategoriesList({
           keywordModalTitle={"gauge_scale_modal_explanation_title"}
           colors={colours}
         />
-      </Box>
+      </Box> */}
       {credibilitySignal === keyword("machine_generated_text_title") && (
         <>
           <Divider key={`divider_${fullTextScoreLabel}`} sx={{ my: 2 }} />

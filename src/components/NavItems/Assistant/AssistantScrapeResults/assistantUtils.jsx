@@ -7,7 +7,7 @@ import ListItem from "@mui/material/ListItem";
 import Slider from "@mui/material/Slider";
 import Typography from "@mui/material/Typography";
 
-// import GaugeChartModalExplanation from "@Shared/GaugeChartResults/GaugeChartModalExplanation";
+import GaugeChartModalExplanation from "@Shared/GaugeChartResults/GaugeChartModalExplanation";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
@@ -295,35 +295,35 @@ export function getPersuasionCategoryTechnique(category) {
   return category.split("__");
 }
 
-// // machine generated text and subjectivity: gauge chart explanation
-// export function createGaugeExplanation(keyword, arcsLength, colours) {
-//   let keywordsArr;
-//   if (arcsLength.length === 3) {
-//     keywordsArr = [
-//       "gauge_scale_modal_explanation_rating_1_sub",
-//       "gauge_scale_modal_explanation_rating_2_sub",
-//       "gauge_scale_modal_explanation_rating_3_sub",
-//     ];
-//   } else if (arcsLength.length === 4) {
-//     keywordsArr = [
-//       "gauge_scale_modal_explanation_rating_1_mgt",
-//       "gauge_scale_modal_explanation_rating_2_mgt",
-//       "gauge_scale_modal_explanation_rating_3_mgt",
-//       "gauge_scale_modal_explanation_rating_4_mgt",
-//     ];
-//   }
-//   return (
-//     <Box sx={{ textAlign: "start", mt: 2 }}>
-//       <GaugeChartModalExplanation
-//         keyword={keyword}
-//         keywordsArr={keywordsArr}
-//         keywordLink={"gauge_scale_explanation_link"}
-//         keywordModalTitle={"gauge_scale_modal_explanation_title"}
-//         colors={colours}
-//       />
-//     </Box>
-//   );
-// }
+// machine generated text and subjectivity: gauge chart explanation
+export function createGaugeExplanation(keyword, arcsLength, colours) {
+  let keywordsArr;
+  if (arcsLength.length === 3) {
+    keywordsArr = [
+      "gauge_scale_modal_explanation_rating_1_sub",
+      "gauge_scale_modal_explanation_rating_2_sub",
+      "gauge_scale_modal_explanation_rating_3_sub",
+    ];
+  } else if (arcsLength.length === 4) {
+    keywordsArr = [
+      "gauge_scale_modal_explanation_rating_1_mgt",
+      "gauge_scale_modal_explanation_rating_2_mgt",
+      "gauge_scale_modal_explanation_rating_3_mgt",
+      "gauge_scale_modal_explanation_rating_4_mgt",
+    ];
+  }
+  return (
+    <Box sx={{ textAlign: "start", mt: 2 }}>
+      <GaugeChartModalExplanation
+        keyword={keyword}
+        keywordsArr={keywordsArr}
+        keywordLink={"gauge_scale_explanation_link"}
+        keywordModalTitle={"gauge_scale_modal_explanation_title"}
+        colors={colours}
+      />
+    </Box>
+  );
+}
 
 /**
  * Creates a GaugeChart required by machine generated text and subjectivity
@@ -333,7 +333,6 @@ export function getPersuasionCategoryTechnique(category) {
  * @param colours
  * @param keyword
  * @param gaugeDetectionText
- * @param explanation
  * @param arcsLength
  * @returns GaugeChart
  */
@@ -344,7 +343,6 @@ export function createGaugeChart(
   colours,
   keyword,
   gaugeDetectionText,
-  explanation,
   arcsLength,
 ) {
   const percentScore = Math.round(Number(overallClassificationScore) * 100.0);
@@ -382,7 +380,7 @@ export function createGaugeChart(
       </Box>
 
       {/* Gauge explanation */}
-      {/* {explanation && createGaugeExplanation(keyword, arcsLength, colours)} */}
+      {createGaugeExplanation(keyword, arcsLength, colours)}
     </>
   );
 }
