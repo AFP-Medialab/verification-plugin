@@ -17,6 +17,8 @@ import { TextCopy } from "@Shared/Utils/TextCopy";
 import { Translate } from "@Shared/Utils/Translate";
 import { getLanguageName } from "@Shared/Utils/languageUtils";
 
+import { scrollToElement } from "./assistantUtils";
+
 export default function TextFooter({
   classes,
   setDisplayOrigLang,
@@ -120,6 +122,7 @@ export function ExpandMinimise({
       fullWidth
       onClick={() => {
         setExpanded(!expanded);
+        expanded ? scrollToElement("credibility-signals", 100) : null;
       }}
     >
       {expanded ? (
@@ -139,7 +142,10 @@ export function ExpandMinimise({
     </Button>
   ) : (
     <IconButton
-      onClick={() => setExpanded(!expanded)}
+      onClick={() => {
+        setExpanded(!expanded);
+        expanded ? scrollToElement("credibility-signals", 100) : null;
+      }}
       sx={{
         "&:hover": {
           backgroundColor: "inherit",

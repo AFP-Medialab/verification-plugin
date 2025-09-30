@@ -192,6 +192,19 @@ export function TransSourceCredibilityTooltip({ keyword }) {
   );
 }
 
+export function TransPersuasionTechniquesTooltip({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="persuasion_techniques_tooltip"
+      components={{
+        ul: <ul />,
+        li: <li />,
+      }}
+    />
+  );
+}
+
 export function TransMachineGeneratedTextTooltip({ keyword }) {
   return (
     <Trans
