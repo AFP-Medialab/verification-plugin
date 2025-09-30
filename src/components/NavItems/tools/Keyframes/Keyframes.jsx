@@ -11,7 +11,6 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
 import KeyframesHeader from "@/components/NavItems/tools/Keyframes/components/KeyframesHeader";
@@ -41,7 +40,6 @@ const TAB_VALUES = {
 };
 const PROCESS_LEVEL_OPTIONS = [1, 2, 3];
 const AUDIO_OPTIONS = [0, 1];
-const SENSITIVITY_DEFAULT = 0.4;
 const DOWNLOAD_MAX_HEIGHT_DEFAULT = 1080;
 const DOWNLOAD_MAX_HEIGHT_OPTIONS = [480, 720, 1080, 1440, 2160];
 const PROCESS_LEVEL_DEFAULT = 3;
@@ -113,7 +111,6 @@ const Keyframes = () => {
   );
   const [processLevel, setProcessLevel] = useState(PROCESS_LEVEL_DEFAULT);
   const [audioEnabled, setAudioEnabled] = useState(AUDIO_DEFAULT);
-  const [sensitivity, setSensitivity] = useState(SENSITIVITY_DEFAULT);
 
   const resetSearchSettings = () => {
     setShowResetAdvancedSettings(false);
@@ -158,7 +155,6 @@ const Keyframes = () => {
       download_max_height: downloadMaxHeight,
       process_level: processLevel,
       audio: audioEnabled,
-      sensitivity: sensitivity,
     };
 
     try {
@@ -324,27 +320,6 @@ const Keyframes = () => {
                           ))}
                         </Select>
                       </FormControl>
-
-                      <TextField
-                        variant="outlined"
-                        label={keyword("sensitivity")}
-                        type="number"
-                        slotProps={{
-                          input: {
-                            min: 0.01,
-                            max: 0.6,
-                            step: 0.01,
-                          },
-                          htmlInput: {
-                            min: 0.01,
-                            max: 0.6,
-                            step: 0.01,
-                          },
-                        }}
-                        value={sensitivity}
-                        onChange={(e) => setSensitivity(Number(e.target.value))}
-                        sx={{ minWidth: 120 }}
-                      />
                     </Box>
                   </AdvancedSettingsContainer>
                 </Stack>
