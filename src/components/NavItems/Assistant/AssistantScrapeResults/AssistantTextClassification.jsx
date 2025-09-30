@@ -58,6 +58,10 @@ export default function AssistantTextClassification({
       "likely_machine",
       "highly_likely_machine",
     ],
+    // news framing
+    newsFramingConfidenceThreshold: 0.8,
+    // news genre
+    newsGenreConfidenceThresholdLow: 0.7,
   },
   textHtmlMap = null,
   credibilitySignal = "",
@@ -97,14 +101,13 @@ export default function AssistantTextClassification({
   const mgtOverallScoreLabel = "mgt_overall_score";
 
   // define colours
+  let newsFramingConfidenceThreshold, newsGenreConfidenceThreshold;
   let mgtColours, mgtColoursDark, orderedCategories;
   let subjectivityColours, subjectivityColoursDark;
-  let confidenceThresholdLow;
-  if (
-    credibilitySignal === newsFramingTitle ||
-    credibilitySignal === newsGenreTitle
-  ) {
-    confidenceThresholdLow = configs.confidenceThresholdLow;
+  if (credibilitySignal === newsFramingTitle) {
+    newsFramingConfidenceThreshold = configs.newsFramingConfidenceThreshold;
+  } else if (credibilitySignal === newsGenreTitle) {
+    newsGenreConfidenceThreshold = configs.newsGenreConfidenceThreshold;
   } else if (credibilitySignal === machineGeneratedTextTitle) {
     [mgtColours, mgtColoursDark] = getMgtColours(configs);
     orderedCategories = configs.orderedCategories;
@@ -149,12 +152,14 @@ export default function AssistantTextClassification({
         // set default news genre value if category below threshold
         label === REPORTING_LABEL
           ? (filteredCategories[label] = classification[label])
-          : classification[label][0].score >= confidenceThresholdLow
+          : classification[label][0].score >= newsGenreConfidenceThreshold
             ? (filteredCategories[label] = classification[label])
             : (filteredCategories[REPORTING_LABEL] = [
-                { indices: [0, -1], score: confidenceThresholdLow },
+                { indices: [0, -1], score: newsGenreConfidenceThreshold },
               ]);
-      } else if (classification[label][0].score >= confidenceThresholdLow) {
+      } else if (
+        classification[label][0].score >= newsFramingConfidenceThreshold
+      ) {
         // filter news framing categories above threshold
         filteredCategories[label] = classification[label];
       }
