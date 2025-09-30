@@ -439,6 +439,7 @@ const AssistantTextResult = () => {
                   categoriesTooltipContent={
                     <>
                       <TransMachineGeneratedTextTooltip keyword={keyword} />
+                      <TransHtmlDoubleLineBreak keyword={keyword} />
                       <TransCredibilitySignalsLink keyword={keyword} />
                     </>
                   }
