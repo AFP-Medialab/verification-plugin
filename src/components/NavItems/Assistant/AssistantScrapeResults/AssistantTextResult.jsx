@@ -197,7 +197,15 @@ const AssistantTextResult = () => {
             <div
               hidden={dbkfTextMatch === null && prevFactChecksResult === null}
             >
-              <Tooltip title={keyword("text_warning")}>
+              <Tooltip
+                title={
+                  <Trans
+                    t={keyword}
+                    i18nKey="text_warning"
+                    components={{ b: <b /> }}
+                  />
+                }
+              >
                 <WarningAmber
                   color={"warning"}
                   className={classes.toolTipWarning}
