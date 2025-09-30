@@ -121,6 +121,8 @@ export default function AssistantTextClassification({
   let filteredSentences = [];
   let filteredCategories = {};
 
+  const REPORTING_LABEL = "Reporting";
+
   // Separate important sentences from categories, filter by threshold
   for (let label in classification) {
     if (label === importantSentenceKey) {
@@ -137,16 +139,23 @@ export default function AssistantTextClassification({
         }
       }
     } else {
-      // Filter categories above confidenceThreshold unless machine generated text or subjectivity
+      // machine generated text and subjectivity
       if (
         credibilitySignal === machineGeneratedTextTitle ||
         credibilitySignal === subjectivityTitle
       ) {
         filteredCategories[label] = classification[label];
-      } else if (
-        // news framing and news genre
-        classification[label][0].score >= confidenceThresholdLow
-      ) {
+      } else if (credibilitySignal === keyword("news_genre_title")) {
+        // set default news genre value if category below threshold
+        label === REPORTING_LABEL
+          ? (filteredCategories[label] = classification[label])
+          : classification[label][0].score >= confidenceThresholdLow
+            ? (filteredCategories[label] = classification[label])
+            : (filteredCategories[REPORTING_LABEL] = [
+                { indices: [0, -1], score: confidenceThresholdLow },
+              ]);
+      } else if (classification[label][0].score >= confidenceThresholdLow) {
+        // filter news framing categories above threshold
         filteredCategories[label] = classification[label];
       }
     }
