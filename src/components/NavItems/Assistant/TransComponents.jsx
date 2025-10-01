@@ -3,8 +3,8 @@ import { Trans } from "react-i18next";
 
 // CSS STYLES
 
-export const UL_STYLE = { paddingLeft: "20px", margin: "8px 0" };
-export const LI_STYLE = { display: "list-item", listStyleType: "disc" };
+const UL_STYLE = { paddingLeft: "20px", margin: "8px 0" };
+const LI_STYLE = { display: "list-item", listStyleType: "disc" };
 const A_STYLE = { color: "blue", textDecoration: "underline" };
 
 // Links
@@ -163,6 +163,34 @@ export function TransMultilingualStanceLink({ keyword }) {
 
 // Tooltips
 
+export function TransAssistantHelpTwoTooltip({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="assistant_help_2"
+      components={{
+        b: <b />,
+        ul: <ul style={UL_STYLE} />,
+        li: <li style={LI_STYLE} />,
+      }}
+    />
+  );
+}
+
+export function TransAssistantHelpThreeTooltip({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="assistant_help_3"
+      components={{
+        b: <b />,
+        ul: <ul style={UL_STYLE} />,
+        li: <li style={LI_STYLE} />,
+      }}
+    />
+  );
+}
+
 export function TransSourceCredibilityTooltip({ keyword }) {
   return (
     <Trans
@@ -201,6 +229,46 @@ export function TransSourceCredibilityTooltip({ keyword }) {
             }}
           />
         ),
+      }}
+    />
+  );
+}
+
+export function TransExtractedTextTooltip({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="text_tooltip"
+      components={{
+        b: <b />,
+        ul: <ul style={UL_STYLE} />,
+        li: <li style={LI_STYLE} />,
+      }}
+    />
+  );
+}
+
+export function TransNewsFramingTooltip({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="news_framing_tooltip"
+      components={{
+        ul: <ul style={UL_STYLE} />,
+        li: <li style={LI_STYLE} />,
+      }}
+    />
+  );
+}
+
+export function TransNewsGenreTooltip({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="news_genre_tooltip"
+      components={{
+        ul: <ul style={UL_STYLE} />,
+        li: <li style={LI_STYLE} />,
       }}
     />
   );

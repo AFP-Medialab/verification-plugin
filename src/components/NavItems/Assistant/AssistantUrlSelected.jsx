@@ -28,10 +28,9 @@ import {
 } from "@/redux/actions/tools/assistantActions";
 
 import {
-  LI_STYLE,
+  TransAssistantHelpThreeTooltip,
   TransHtmlDoubleLineBreak,
   TransSupportedUrlsLink,
-  UL_STYLE,
 } from "./TransComponents";
 
 const AssistantUrlSelected = (props) => {
@@ -106,15 +105,7 @@ const AssistantUrlSelected = (props) => {
               interactive={"true"}
               title={
                 <>
-                  <Trans
-                    t={keyword}
-                    i18nKey="assistant_help_3" // update this for bluesky and vk and others?
-                    components={{
-                      b: <b />,
-                      ul: <ul style={UL_STYLE} />,
-                      li: <li style={LI_STYLE} />,
-                    }}
-                  />
+                  <TransAssistantHelpThreeTooltip keyword={keyword} />
                   <TransHtmlDoubleLineBreak keyword={keyword} />
                   <TransSupportedUrlsLink keyword={keyword} />
                 </>
