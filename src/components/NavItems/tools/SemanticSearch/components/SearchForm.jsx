@@ -3,6 +3,7 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
+import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 
@@ -89,55 +90,69 @@ const SearchForm = ({
               keywordHide={"semantic_search_hide_advanced_settings_button"}
               keywordReset={"semantic_search_reset_search_settings_button"}
             >
-              <Stack direction="row" spacing={1}>
-                <Stack direction="column" spacing={1}>
-                  <SelectSmall
+              <Grid container spacing={1}>
+                <Grid size={{ xs: 12, md: 4 }}>
+                  <Stack direction="column" spacing={1}>
+                    <SelectSmall
+                      label={keyword(
+                        "semantic_search_form_search_engine_placeholder",
+                      )}
+                      items={searchEngineModes}
+                      value={searchEngineMode}
+                      key={searchEngineMode}
+                      setValue={setSearchEngineMode}
+                      disabled={isPending}
+                      // minWidth={275}
+                    />
+                    <SearchEngineModal
+                      searchEngineModes={searchEngineModes}
+                      keyword={keyword}
+                    />
+                  </Stack>
+                </Grid>
+                <Grid size={{ xs: 12, md: 4 }}>
+                  <Stack
+                    direction={{ xs: "column", md: "row" }}
+                    spacing={1}
+                    sx={{ width: "100%" }}
+                  >
+                    <DateAndTimePicker
+                      time={false}
+                      disabled={isPending}
+                      keywordFromDate={keyword(
+                        "semantic_search_form_date_from_placeholder",
+                      )}
+                      keywordUntilDate={keyword(
+                        "semantic_search_form_date_to_placeholder",
+                      )}
+                      fromValue={dateFrom}
+                      untilValue={dateTo}
+                      handleSinceChange={(newDate) =>
+                        setDateFrom(dayjs(newDate))
+                      }
+                      handleUntilChange={(newDate) => setDateTo(dayjs(newDate))}
+                    />
+                  </Stack>
+                </Grid>
+                <Grid size={{ xs: 12, md: 4 }}>
+                  <CheckboxesTags
                     label={keyword(
-                      "semantic_search_form_search_engine_placeholder",
+                      "semantic_search_form_language_filter_placeholder",
                     )}
-                    items={searchEngineModes}
-                    value={searchEngineMode}
-                    key={searchEngineMode}
-                    setValue={setSearchEngineMode}
+                    placeholder={
+                      languageFilter.length > 0
+                        ? ""
+                        : keyword(
+                            "semantic_search_form_language_filter_placeholder",
+                          )
+                    }
+                    value={languageFilter}
+                    setValue={setLanguageFilter}
+                    options={languagesList}
                     disabled={isPending}
-                    minWidth={275}
                   />
-                  <SearchEngineModal
-                    searchEngineModes={searchEngineModes}
-                    keyword={keyword}
-                  />
-                </Stack>
-                <DateAndTimePicker
-                  time={false}
-                  disabled={isPending}
-                  keywordFromDate={keyword(
-                    "semantic_search_form_date_from_placeholder",
-                  )}
-                  keywordUntilDate={keyword(
-                    "semantic_search_form_date_to_placeholder",
-                  )}
-                  fromValue={dateFrom}
-                  untilValue={dateTo}
-                  handleSinceChange={(newDate) => setDateFrom(dayjs(newDate))}
-                  handleUntilChange={(newDate) => setDateTo(dayjs(newDate))}
-                />
-                <CheckboxesTags
-                  label={keyword(
-                    "semantic_search_form_language_filter_placeholder",
-                  )}
-                  placeholder={
-                    languageFilter.length > 0
-                      ? ""
-                      : keyword(
-                          "semantic_search_form_language_filter_placeholder",
-                        )
-                  }
-                  value={languageFilter}
-                  setValue={setLanguageFilter}
-                  options={languagesList}
-                  disabled={isPending}
-                />
-              </Stack>
+                </Grid>
+              </Grid>
             </AdvancedSettingsContainer>
           </Stack>
         </form>
