@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useMemo, useState } from "react";
 import { shallowEqual, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
@@ -114,14 +114,22 @@ const SemanticSearch = () => {
 
   const { currentLang, assistantText } = useSemanticSearchState();
 
-  const supportedLanguages = Object.keys(languageDictionary);
-  const languagesList = computeLanguageList(supportedLanguages, currentLang);
+  const supportedLanguages = useMemo(() => Object.keys(languageDictionary), []);
 
-  const searchEngineModes = SEARCH_ENGINE_MODES.map((mode) => ({
-    name: keyword(mode.nameKey),
-    description: keyword(mode.descriptionKey),
-    key: mode.key,
-  }));
+  const languagesList = useMemo(
+    () => computeLanguageList(supportedLanguages, currentLang),
+    [supportedLanguages, currentLang],
+  );
+
+  const searchEngineModes = useMemo(
+    () =>
+      SEARCH_ENGINE_MODES.map((mode) => ({
+        name: keyword(mode.nameKey),
+        description: keyword(mode.descriptionKey),
+        key: mode.key,
+      })),
+    [keyword],
+  );
 
   const [searchString, setSearchString] = useState("");
 
