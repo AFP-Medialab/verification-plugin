@@ -36,6 +36,8 @@ import {
   setWarningExpanded,
 } from "@/redux/actions/tools/assistantActions";
 
+import { LI_STYLE, UL_STYLE } from "../TransComponents";
+
 const AssistantTextResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const expandMinimiseText = keyword("expand_minimise_text");
@@ -177,8 +179,8 @@ const AssistantTextResult = () => {
         t={keyword}
         i18nKey="news_framing_tooltip"
         components={{
-          ul: <ul />,
-          li: <li />,
+          ul: <ul style={UL_STYLE} />,
+          li: <li style={LI_STYLE} />,
         }}
       />
       <TransCredibilitySignalsLink keyword={keyword} />
@@ -191,8 +193,8 @@ const AssistantTextResult = () => {
         t={keyword}
         i18nKey="news_genre_tooltip"
         components={{
-          ul: <ul />,
-          li: <li />,
+          ul: <ul style={UL_STYLE} />,
+          li: <li style={LI_STYLE} />,
         }}
       />
       <TransCredibilitySignalsLink keyword={keyword} />
@@ -262,8 +264,8 @@ const AssistantTextResult = () => {
                       i18nKey="text_tooltip"
                       components={{
                         b: <b />,
-                        ul: <ul />,
-                        li: <li />,
+                        ul: <ul style={UL_STYLE} />,
+                        li: <li style={LI_STYLE} />,
                       }}
                     />
                     <TransSupportedToolsLink keyword={keyword} />
