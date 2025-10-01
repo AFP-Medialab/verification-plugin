@@ -263,6 +263,7 @@ const Keyframes = () => {
                           variant="outlined"
                           labelId="download-max-height-label"
                           id="download-max-height-select"
+                          disabled={isBusy}
                           value={downloadMaxHeight}
                           label={keyword("download_max_height")}
                           onChange={(e) =>
@@ -285,6 +286,7 @@ const Keyframes = () => {
                           variant="outlined"
                           labelId="process-level-label"
                           id="process-level-select"
+                          disabled={isBusy}
                           value={processLevel}
                           label={keyword("process_level")}
                           onChange={(e) =>
@@ -309,6 +311,7 @@ const Keyframes = () => {
                           id="audio-enabled-select"
                           value={audioEnabled}
                           label={keyword("audio")}
+                          disabled={isBusy}
                           onChange={(e) =>
                             setAudioEnabled(Number(e.target.value))
                           }
