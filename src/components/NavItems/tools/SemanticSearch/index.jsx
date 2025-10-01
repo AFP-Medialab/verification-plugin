@@ -1,133 +1,127 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import React, { memo, useEffect, useState } from "react";
+import { shallowEqual, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import Alert from "@mui/material/Alert";
-import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import Fade from "@mui/material/Fade";
-import IconButton from "@mui/material/IconButton";
-import Link from "@mui/material/Link";
-import Modal from "@mui/material/Modal";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
 
-import { Close, ManageSearch } from "@mui/icons-material";
+import { ManageSearch } from "@mui/icons-material";
 
-import AdvancedSettingsContainer from "@Shared/AdvancedSettingsContainer";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { getLanguageName } from "@Shared/Utils/languageUtils";
-import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
-import dayjs from "dayjs";
 import isEqual from "lodash/isEqual";
 
 import languageDictionary from "../../../../LocalDictionary/iso-639-1-languages";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import SemanticSearchResults from "./SemanticSearchResults";
 import { useRetrieveFactChecks } from "./api";
-import CheckboxesTags from "./components/CheckboxesTags";
-import SelectSmall from "./components/SelectSmall";
+import SearchForm from "./components/SearchForm";
 
+// Constants
+const DEFAULT_SEARCH_ENGINE_MODE = "auto";
+const DEFAULT_DATE_FROM = null;
+const DEFAULT_DATE_TO = null;
+const DEFAULT_LANGUAGE_FILTER = [];
+
+const SEARCH_ENGINE_MODES = [
+  {
+    nameKey: "semantic_search_search_engine_1_name",
+    descriptionKey: "semantic_search_search_engine_1_description",
+    key: "auto",
+  },
+  {
+    nameKey: "semantic_search_search_engine_2_name",
+    descriptionKey: "semantic_search_search_engine_2_description",
+    key: "english",
+  },
+  {
+    nameKey: "semantic_search_search_engine_3_name",
+    descriptionKey: "semantic_search_search_engine_3_description",
+    key: "multilingual",
+  },
+  {
+    nameKey: "semantic_search_search_engine_4_name",
+    descriptionKey: "semantic_search_search_engine_4_description",
+    key: "keyword_search",
+  },
+];
+
+// Utility functions
+const mapErrorToKey = (error) => {
+  if (error?.code === "ECONNABORTED" || error?.response?.status === 504) {
+    return "semantic_search_error_timeout";
+  }
+  if (error?.response?.status === 500) {
+    return "semantic_search_error_unavailable";
+  }
+  return "semantic_search_error_default";
+};
+
+/**
+ * Helper function to return a list of language keys supported if the localized language is in duplicate keys
+ * @param {string} localizedLanguageName - the localized language to search keys for
+ * @param {string} locale - the language used
+ * @param {Object} languageDictionary - the dictionary of language keys - localized language names
+ * @returns {string[]} the array of duplicate language keys
+ */
+const getAllLanguageKeysForLocalizedLanguage = (
+  localizedLanguageName,
+  locale,
+  languageDictionary,
+) => {
+  return Object.keys(languageDictionary).filter(
+    (key) => languageDictionary[key][locale] === localizedLanguageName,
+  );
+};
+
+const computeLanguageList = (supportedLanguages, currentLang) => {
+  let uniqueLanguages = new Set();
+  let uniqueTitles = new Set();
+  for (const lg of supportedLanguages) {
+    const localizedLanguageName = getLanguageName(lg, currentLang);
+
+    //skip duplicate localized language name entries
+    if (uniqueTitles.has(localizedLanguageName)) {
+      continue;
+    }
+    uniqueTitles.add(localizedLanguageName);
+    uniqueLanguages.add({ title: localizedLanguageName, code: lg });
+  }
+
+  // order the list from A to Z
+  return [...uniqueLanguages].sort((a, b) => a.title.localeCompare(b.title));
+};
+
+// Custom hooks
+const useSemanticSearchState = () => {
+  return useSelector(
+    (state) => ({
+      currentLang: state.language,
+      assistantText: state.assistant.urlText,
+    }),
+    shallowEqual,
+  );
+};
+
+// Main component
 const SemanticSearch = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/SemanticSearch");
-
-  const supportedLanguages = Object.keys(languageDictionary);
-
-  const currentLang = useSelector((state) => state.language);
-
-  let text = useSelector((state) => state.assistant.urlText);
-
   const { url } = useParams();
 
-  /**
-   * Helper function to return a list of language keys supported if the localized language is in duplicate keys
-   * @param localizedLanguageName {string} the localized language to search keys for
-   * @param locale {string} the language used
-   * @param languageDictionary the dictionary of language keys - localized language names
-   * @returns {string[]} the array of duplicate language keys
-   */
-  const getAllLanguageKeysForLocalizedLanguage = (
-    localizedLanguageName,
-    locale,
-    languageDictionary,
-  ) => {
-    console.log(
-      Object.keys(languageDictionary).filter(
-        (key) => languageDictionary[key][locale] === localizedLanguageName,
-      ),
-    );
+  const { currentLang, assistantText } = useSemanticSearchState();
 
-    return Object.keys(languageDictionary).filter(
-      (key) => languageDictionary[key][locale] === localizedLanguageName,
-    );
-  };
+  const supportedLanguages = Object.keys(languageDictionary);
+  const languagesList = computeLanguageList(supportedLanguages, currentLang);
 
-  const computeLanguageList = () => {
-    let uniqueLanguages = new Set();
-    let uniqueTitles = new Set();
-    for (const lg of supportedLanguages) {
-      const localizedLanguageName = getLanguageName(lg, currentLang);
-
-      //skip duplicate localized language name entries
-      if (uniqueTitles.has(localizedLanguageName)) {
-        continue;
-      }
-      uniqueTitles.add(localizedLanguageName);
-      uniqueLanguages.add({ title: localizedLanguageName, code: lg });
-    }
-
-    // order the list from A to Z
-    return [...uniqueLanguages].sort((a, b) => a.title.localeCompare(b.title));
-  };
-  //TODO: change title to localizedName
-  const languagesList = computeLanguageList();
-
-  const searchEngineModes = [
-    {
-      name: keyword("semantic_search_search_engine_1_name"),
-      description: keyword("semantic_search_search_engine_1_description"),
-      key: "auto",
-    },
-    {
-      name: keyword("semantic_search_search_engine_2_name"),
-      description: keyword("semantic_search_search_engine_2_description"),
-      key: "english",
-    },
-    {
-      name: keyword("semantic_search_search_engine_3_name"),
-      description: keyword("semantic_search_search_engine_3_description"),
-      key: "multilingual",
-    },
-    {
-      name: keyword("semantic_search_search_engine_4_name"),
-      description: keyword("semantic_search_search_engine_4_description"),
-      key: "keyword_search",
-    },
-  ];
-  const searchEngineModalStyle = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    minWidth: "400px",
-    width: "50vw",
-    backgroundColor: "background.paper",
-    outline: "unset",
-    borderRadius: "10px",
-    boxShadow: 24,
-    p: 4,
-    maxHeight: "60vh",
-    overflow: "auto",
-  };
-
-  const DEFAULT_SEARCH_ENGINE_MODE = "auto";
-  const DEFAULT_DATE_FROM = null;
-  const DEFAULT_DATE_TO = null;
-  const DEFAULT_LANGUAGE_FILTER = [];
+  const searchEngineModes = SEARCH_ENGINE_MODES.map((mode) => ({
+    name: keyword(mode.nameKey),
+    description: keyword(mode.descriptionKey),
+    key: mode.key,
+  }));
 
   const [searchString, setSearchString] = useState("");
 
@@ -175,13 +169,13 @@ const SemanticSearch = () => {
     //takes in text parameter from url
     if (url) {
       const uri = decodeURIComponent(url);
-      if (uri === "assistantText" && text) {
-        text = text.replaceAll("\n", " ");
-        setSearchString(text);
-        handleSubmit(text);
+      if (uri === "assistantText" && assistantText) {
+        const cleanedText = assistantText.replaceAll("\n", " ");
+        setSearchString(cleanedText);
+        handleSubmit(cleanedText);
       }
     }
-  }, [url, text]);
+  }, [url, assistantText]);
 
   const handleSubmit = async (text) => {
     setHasUserSubmittedForm(true);
@@ -204,8 +198,7 @@ const SemanticSearch = () => {
       });
       setSearchResults(searchResults);
     } catch (e) {
-      //   TODO: Handle Error
-      setErrorMessage(e.message);
+      setErrorMessage(keyword(mapErrorToKey(e)));
     }
   };
 
@@ -216,15 +209,6 @@ const SemanticSearch = () => {
     setLanguageFilter(DEFAULT_LANGUAGE_FILTER);
     setShowResetAdvancedSettings(false);
   };
-
-  const [openSearchEngineModal, setOpenSearchEngineModal] =
-    React.useState(false);
-
-  const handleOpenSearchEngineModal = () => {
-    setOpenSearchEngineModal(true);
-  };
-
-  const handleCloseSearchEngineModal = () => setOpenSearchEngineModal(false);
 
   const displaySearchResults = () => {
     if (retrieveFactChecksMutation.isPending)
@@ -244,7 +228,10 @@ const SemanticSearch = () => {
       );
     else if (errorMessage || retrieveFactChecksMutation.error)
       return (
-        <Alert severity="error">{"An error happened. Please try again."}</Alert>
+        <Alert severity="error">
+          {errorMessage ||
+            keyword(mapErrorToKey(retrieveFactChecksMutation.error))}
+        </Alert>
       );
     else if (
       hasUserSubmittedForm &&
@@ -277,191 +264,28 @@ const SemanticSearch = () => {
           }
         />
         <Alert severity="info">{keyword("semantic_search_tip")}</Alert>
-        <Card variant="outlined">
-          <Box
-            sx={{
-              p: 4,
-            }}
-          >
-            <form>
-              <Stack spacing={4}>
-                <Stack
-                  direction="row"
-                  spacing={2}
-                  sx={{
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                  }}
-                >
-                  <TextField
-                    fullWidth
-                    value={searchString}
-                    label={keyword(
-                      "semantic_search_form_textfield_placeholder",
-                    )}
-                    placeholder={keyword(
-                      "semantic_search_form_textfield_placeholder",
-                    )}
-                    multiline
-                    minRows={2}
-                    variant="outlined"
-                    disabled={retrieveFactChecksMutation.isPending}
-                    onChange={(e) => {
-                      setSearchString(e.target.value);
-                    }}
-                  />
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    disabled={
-                      retrieveFactChecksMutation.isPending || !searchString
-                    }
-                    loading={retrieveFactChecksMutation.isPending}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleSubmit();
-                    }}
-                  >
-                    {keyword("semantic_search_form_submit_button")}
-                  </Button>
-                </Stack>
-                <AdvancedSettingsContainer
-                  showAdvancedSettings={showAdvancedSettings}
-                  setShowAdvancedSettings={setShowAdvancedSettings}
-                  showResetAdvancedSettings={showResetAdvancedSettings}
-                  resetSearchSettings={resetSearchSettings}
-                  keywordFn={keyword}
-                  keywordShow={"semantic_search_show_advanced_settings_button"}
-                  keywordHide={"semantic_search_hide_advanced_settings_button"}
-                  keywordReset={"semantic_search_reset_search_settings_button"}
-                >
-                  <Stack direction="row" spacing={1}>
-                    <Stack direction="column" spacing={1}>
-                      <SelectSmall
-                        label={keyword(
-                          "semantic_search_form_search_engine_placeholder",
-                        )}
-                        items={searchEngineModes}
-                        value={searchEngineMode}
-                        key={searchEngineMode}
-                        setValue={setSearchEngineMode}
-                        disabled={retrieveFactChecksMutation.isPending}
-                        minWidth={275}
-                      />
-                      <Link
-                        onClick={handleOpenSearchEngineModal}
-                        sx={{ cursor: "pointer" }}
-                      >
-                        {keyword(
-                          "semantic_search_search_engine_tip_link_placeholder",
-                        )}
-                      </Link>
-                      <Modal
-                        aria-labelledby="transition-modal-title"
-                        aria-describedby="transition-modal-description"
-                        open={openSearchEngineModal}
-                        onClose={handleCloseSearchEngineModal}
-                        closeAfterTransition
-                        slots={{ backdrop: Backdrop }}
-                        slotProps={{
-                          backdrop: {
-                            timeout: 500,
-                          },
-                        }}
-                      >
-                        <Fade in={openSearchEngineModal}>
-                          <Box sx={searchEngineModalStyle}>
-                            <Stack
-                              direction="row"
-                              spacing={2}
-                              sx={{
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                              }}
-                            >
-                              <Typography
-                                id="transition-modal-title"
-                                variant="subtitle2"
-                                sx={{
-                                  color: "var(--mui-palette-primary-main)",
-                                  fontSize: "24px",
-                                }}
-                              >
-                                {keyword(
-                                  "semantic_search_search_engine_tip_title",
-                                )}
-                              </Typography>
-                              <IconButton
-                                variant="outlined"
-                                aria-label="close popup"
-                                onClick={handleCloseSearchEngineModal}
-                              >
-                                <Close />
-                              </IconButton>
-                            </Stack>
-                            <Stack
-                              id="transition-modal-description"
-                              direction="column"
-                              spacing={2}
-                              sx={{
-                                mt: 2,
-                              }}
-                            >
-                              {searchEngineModes.map((searchEngine, index) => {
-                                return (
-                                  <Stack direction="column" key={index}>
-                                    <Typography variant="subtitle1">
-                                      {searchEngine.name}
-                                    </Typography>
-                                    <Alert severity="info" icon={false}>
-                                      {searchEngine.description}
-                                    </Alert>
-                                  </Stack>
-                                );
-                              })}
-                            </Stack>
-                          </Box>
-                        </Fade>
-                      </Modal>
-                    </Stack>
-                    <DateAndTimePicker
-                      time={false}
-                      disabled={retrieveFactChecksMutation.isPending}
-                      keywordFromDate={keyword(
-                        "semantic_search_form_date_from_placeholder",
-                      )}
-                      keywordUntilDate={keyword(
-                        "semantic_search_form_date_to_placeholder",
-                      )}
-                      fromValue={dateFrom}
-                      untilValue={dateTo}
-                      handleSinceChange={(newDate) =>
-                        setDateFrom(dayjs(newDate))
-                      }
-                      handleUntilChange={(newDate) => setDateTo(dayjs(newDate))}
-                    />
-                    <CheckboxesTags
-                      label={keyword(
-                        "semantic_search_form_language_filter_placeholder",
-                      )}
-                      placeholder={
-                        languageFilter.length > 0
-                          ? ""
-                          : keyword(
-                              "semantic_search_form_language_filter_placeholder",
-                            )
-                      }
-                      value={languageFilter}
-                      setValue={setLanguageFilter}
-                      options={languagesList}
-                      disabled={retrieveFactChecksMutation.isPending}
-                    />
-                  </Stack>
-                </AdvancedSettingsContainer>
-              </Stack>
-            </form>
-          </Box>
-        </Card>
+
+        <SearchForm
+          searchString={searchString}
+          setSearchString={setSearchString}
+          searchEngineMode={searchEngineMode}
+          setSearchEngineMode={setSearchEngineMode}
+          searchEngineModes={searchEngineModes}
+          dateFrom={dateFrom}
+          setDateFrom={setDateFrom}
+          dateTo={dateTo}
+          setDateTo={setDateTo}
+          languageFilter={languageFilter}
+          setLanguageFilter={setLanguageFilter}
+          languagesList={languagesList}
+          showAdvancedSettings={showAdvancedSettings}
+          setShowAdvancedSettings={setShowAdvancedSettings}
+          showResetAdvancedSettings={showResetAdvancedSettings}
+          resetSearchSettings={resetSearchSettings}
+          handleSubmit={handleSubmit}
+          isPending={retrieveFactChecksMutation.isPending}
+          keyword={keyword}
+        />
 
         {(errorMessage || retrieveFactChecksMutation.error) && (
           <Box>
@@ -470,7 +294,8 @@ const SemanticSearch = () => {
               timeout={750}
             >
               <Alert severity="error">
-                {errorMessage || retrieveFactChecksMutation.error?.message}
+                {errorMessage ||
+                  keyword(mapErrorToKey(retrieveFactChecksMutation.error))}
               </Alert>
             </Fade>
           </Box>
@@ -481,4 +306,4 @@ const SemanticSearch = () => {
   );
 };
 
-export default SemanticSearch;
+export default memo(SemanticSearch);
