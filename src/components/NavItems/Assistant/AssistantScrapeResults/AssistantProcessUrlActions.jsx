@@ -69,7 +69,12 @@ const AssistantProcessUrlActions = () => {
         {keyword("recommended_tools")}
       </Typography>
       <Divider />
-      <List>
+      <List
+        sx={{
+          overflowY: "auto",
+          height: "500px",
+        }}
+      >
         {processUrlActions.map((action, index) => {
           return (
             <Box

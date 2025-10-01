@@ -369,6 +369,7 @@ const styles = (theme) => ({
   ocrImageCanvas: {
     position: "absolute",
     left: 0,
+    top: 0,
   },
   ocrImage: {
     objectFit: "contain",

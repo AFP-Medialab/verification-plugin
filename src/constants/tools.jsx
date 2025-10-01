@@ -56,8 +56,8 @@ import DeepfakeVideo from "../components/NavItems/tools/Deepfake/DeepfakeVideo";
 import Forensic from "../components/NavItems/tools/Forensic/Forensic";
 import Geolocation from "../components/NavItems/tools/Geolocation/Geolocation";
 import CheckGif from "../components/NavItems/tools/Gif/CheckGif";
+import Hiya from "../components/NavItems/tools/Hiya";
 import Keyframes from "../components/NavItems/tools/Keyframes/Keyframes";
-import Loccus from "../components/NavItems/tools/Loccus";
 import Magnifier from "../components/NavItems/tools/Magnifier/Magnifier";
 import Metadata from "../components/NavItems/tools/Metadata/Metadata";
 import OCR from "../components/NavItems/tools/OCR/OCR";
@@ -571,17 +571,17 @@ export const imageGeolocation = new Tool(
  * Audio tools
  **/
 
-const audioLoccus = new Tool(
-  "navbar_loccus",
-  "navbar_loccus_description",
+const audioHiya = new Tool(
+  "navbar_hiya",
+  "navbar_hiya_description",
   audioFileSvgIcon,
   TOOLS_CATEGORIES.AUDIO,
   [TOOL_STATUS_ICON.NEW, TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.LOCK],
   [ROLES.BETA_TESTER],
-  "loccus",
+  "hiya",
   TOOL_GROUPS.VERIFICATION,
-  <Loccus />,
-  <Footer type={FOOTER_TYPES.LOCCUS} />,
+  <Hiya />,
+  <Footer type={FOOTER_TYPES.HIYA} />,
 );
 
 /**
@@ -796,7 +796,7 @@ export const tools = Object.freeze([
   imageGif,
   imageSyntheticDetection,
   imageGeolocation,
-  audioLoccus,
+  audioHiya,
   searchTwitter,
   searchSemantic,
   searchCovid,

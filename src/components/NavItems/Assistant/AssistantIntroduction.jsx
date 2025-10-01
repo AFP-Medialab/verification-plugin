@@ -24,8 +24,10 @@ import {
 } from "@/redux/actions/tools/assistantActions";
 
 import {
+  LI_STYLE,
   TransHtmlDoubleLineBreak,
   TransSupportedToolsLink,
+  UL_STYLE,
 } from "./TransComponents";
 
 const AssistantIntroduction = (props) => {
@@ -117,8 +119,8 @@ const AssistantIntroduction = (props) => {
                     i18nKey="assistant_help_2"
                     components={{
                       b: <b />,
-                      ul: <ul />,
-                      li: <li />,
+                      ul: <ul style={UL_STYLE} />,
+                      li: <li style={LI_STYLE} />,
                     }}
                   />
                   <TransSupportedToolsLink keyword={keyword} />
