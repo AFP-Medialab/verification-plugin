@@ -11,12 +11,12 @@ import Stack from "@mui/material/Stack";
 
 import { ManageSearch } from "@mui/icons-material";
 
+import languageDictionary from "@/LocalDictionary/iso-639-1-languages";
+import HeaderTool from "@Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { getLanguageName } from "@Shared/Utils/languageUtils";
 import isEqual from "lodash/isEqual";
 
-import languageDictionary from "../../../../LocalDictionary/iso-639-1-languages";
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import SemanticSearchResults from "./SemanticSearchResults";
 import { useRetrieveFactChecks } from "./api";
 import SearchForm from "./components/SearchForm";
