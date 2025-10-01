@@ -148,7 +148,7 @@ export default function AssistantTextClassification({
         credibilitySignal === subjectivityTitle
       ) {
         filteredCategories[label] = classification[label];
-      } else if (credibilitySignal === keyword("news_genre_title")) {
+      } else if (credibilitySignal === newsGenreTitle) {
         // set default news genre value if category below threshold
         label === REPORTING_LABEL
           ? (filteredCategories[label] = classification[label])
