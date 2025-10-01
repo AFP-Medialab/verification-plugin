@@ -21,7 +21,6 @@ import { Close, ManageSearch } from "@mui/icons-material";
 import AdvancedSettingsContainer from "@Shared/AdvancedSettingsContainer";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { getLanguageName } from "@Shared/Utils/languageUtils";
-import axios from "axios";
 import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
 import dayjs from "dayjs";
 import isEqual from "lodash/isEqual";
@@ -29,6 +28,7 @@ import isEqual from "lodash/isEqual";
 import languageDictionary from "../../../../LocalDictionary/iso-639-1-languages";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import SemanticSearchResults from "./SemanticSearchResults";
+import { useRetrieveFactChecks } from "./api";
 import CheckboxesTags from "./components/CheckboxesTags";
 import SelectSmall from "./components/SelectSmall";
 
@@ -86,52 +86,6 @@ const SemanticSearch = () => {
   //TODO: change title to localizedName
   const languagesList = computeLanguageList();
 
-  class SemanticSearchResult {
-    id;
-    claimTranslated;
-    titleTranslated;
-    claimOriginalLanguage;
-    titleOriginalLanguage;
-    rating;
-    date;
-    website;
-    language;
-    similarityScore;
-    articleUrl;
-    domainUrl;
-    imageUrl;
-
-    constructor(
-      id,
-      claimTranslated,
-      titleTranslated,
-      claimOriginalLanguage,
-      titleOriginalLanguage,
-      rating,
-      date,
-      website,
-      language,
-      similarityScore,
-      articleUrl,
-      domainUrl,
-      imageUrl,
-    ) {
-      this.id = id;
-      this.claimTranslated = claimTranslated;
-      this.titleTranslated = titleTranslated;
-      this.claimOriginalLanguage = claimOriginalLanguage;
-      this.titleOriginalLanguage = titleOriginalLanguage;
-      this.rating = rating;
-      this.date = date;
-      this.website = website;
-      this.language = language;
-      this.similarityScore = similarityScore;
-      this.articleUrl = articleUrl;
-      this.domainUrl = domainUrl;
-      this.imageUrl = imageUrl;
-    }
-  }
-
   const searchEngineModes = [
     {
       name: keyword("semantic_search_search_engine_1_name"),
@@ -188,9 +142,9 @@ const SemanticSearch = () => {
   const [dateTo, setDateTo] = useState(DEFAULT_DATE_TO);
   const [languageFilter, setLanguageFilter] = useState(DEFAULT_LANGUAGE_FILTER);
 
-  const [isLoading, setIsLoading] = useState(false);
-
   const [errorMessage, setErrorMessage] = useState("");
+
+  const retrieveFactChecksMutation = useRetrieveFactChecks();
 
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
   const [showResetAdvancedSettings, setShowResetAdvancedSettings] =
@@ -230,106 +184,29 @@ const SemanticSearch = () => {
   }, [url, text]);
 
   const handleSubmit = async (text) => {
-    setIsLoading(true);
     setHasUserSubmittedForm(true);
     setErrorMessage("");
 
     const urlText = searchString ? searchString : text;
 
-    let searchResults;
     try {
-      searchResults = await getFactChecks(urlText, searchEngineMode);
+      const searchResults = await retrieveFactChecksMutation.mutateAsync({
+        searchString: urlText,
+        searchMethod: searchEngineMode,
+        options: {
+          languageFilter,
+          dateFrom,
+          dateTo,
+          currentLang,
+          languageDictionary,
+          getAllLanguageKeysForLocalizedLanguage,
+        },
+      });
+      setSearchResults(searchResults);
     } catch (e) {
       //   TODO: Handle Error
       setErrorMessage(e.message);
     }
-
-    setSearchResults(searchResults);
-
-    setIsLoading(false);
-    // setTimeout(() => {
-    //   setIsLoading(false);
-    //   setErrorMessage("This is a test error message");
-    // }, 5000);
-  };
-
-  /**
-   * Retrieves the first 1000 fact checks for the chosen query string and parameters
-   * @returns {Promise<SemanticSearchResult[] | Error>}
-   */
-  const getFactChecks = async (searchString, searchMethod) => {
-    if (typeof searchString !== "string") {
-      throw new Error(
-        "[getFactCheck] Error: Invalid type for parameter searchString",
-      );
-    }
-
-    if (typeof searchMethod !== "string") {
-      throw new Error(
-        "[getFactCheck] Error: Invalid type for parameter searchMethod",
-      );
-    }
-
-    const baseUrl = process.env.REACT_APP_SEMANTIC_SEARCH_URL;
-
-    const params = new URLSearchParams();
-
-    params.append("text", searchString);
-    params.append("search_method", searchMethod);
-    params.append("time_decay", "true");
-    params.append("limit", "100");
-
-    for (const language of languageFilter) {
-      const duplicateLanguageKeys = getAllLanguageKeysForLocalizedLanguage(
-        language.title,
-        currentLang,
-        languageDictionary,
-      );
-
-      for (const key of duplicateLanguageKeys) {
-        params.append("language", key);
-      }
-    }
-
-    dateFrom &&
-      dayjs(dateFrom).isValid() &&
-      params.append(
-        "published_date_from",
-        dayjs(dateFrom).format("YYYY-MM-DD"),
-      );
-
-    dateTo &&
-      dayjs(dateTo).isValid() &&
-      params.append("published_date_to", dayjs(dateTo).format("YYYY-MM-DD"));
-
-    const response = await axios.get(baseUrl, { params: params });
-
-    if (!response.data || !response.data.fact_checks) {
-      //TODO: Error handling
-      return;
-    }
-
-    const resArr = [];
-    for (const searchResult of response.data.fact_checks) {
-      const semanticSearchResult = new SemanticSearchResult(
-        searchResult.id,
-        searchResult.claim_en,
-        searchResult.title_en,
-        searchResult.claim,
-        searchResult.title,
-        searchResult.rating,
-        searchResult.published_at,
-        searchResult.source_name,
-        searchResult.source_language,
-        searchResult.score,
-        searchResult.url,
-        searchResult.source_name,
-        searchResult.image_url,
-      );
-      resArr.push(semanticSearchResult);
-    }
-
-    return resArr;
   };
 
   const resetSearchSettings = () => {
@@ -350,7 +227,7 @@ const SemanticSearch = () => {
   const handleCloseSearchEngineModal = () => setOpenSearchEngineModal(false);
 
   const displaySearchResults = () => {
-    if (isLoading)
+    if (retrieveFactChecksMutation.isPending)
       return (
         <Card variant="outlined">
           <Stack
@@ -365,7 +242,7 @@ const SemanticSearch = () => {
           </Stack>
         </Card>
       );
-    else if (errorMessage)
+    else if (errorMessage || retrieveFactChecksMutation.error)
       return (
         <Alert severity="error">{"An error happened. Please try again."}</Alert>
       );
@@ -428,7 +305,7 @@ const SemanticSearch = () => {
                     multiline
                     minRows={2}
                     variant="outlined"
-                    disabled={isLoading}
+                    disabled={retrieveFactChecksMutation.isPending}
                     onChange={(e) => {
                       setSearchString(e.target.value);
                     }}
@@ -436,8 +313,10 @@ const SemanticSearch = () => {
                   <Button
                     type="submit"
                     variant="contained"
-                    disabled={isLoading || !searchString}
-                    loading={isLoading}
+                    disabled={
+                      retrieveFactChecksMutation.isPending || !searchString
+                    }
+                    loading={retrieveFactChecksMutation.isPending}
                     onClick={(e) => {
                       e.preventDefault();
                       handleSubmit();
@@ -466,7 +345,7 @@ const SemanticSearch = () => {
                         value={searchEngineMode}
                         key={searchEngineMode}
                         setValue={setSearchEngineMode}
-                        disabled={isLoading}
+                        disabled={retrieveFactChecksMutation.isPending}
                         minWidth={275}
                       />
                       <Link
@@ -547,7 +426,7 @@ const SemanticSearch = () => {
                     </Stack>
                     <DateAndTimePicker
                       time={false}
-                      disabled={isLoading}
+                      disabled={retrieveFactChecksMutation.isPending}
                       keywordFromDate={keyword(
                         "semantic_search_form_date_from_placeholder",
                       )}
@@ -575,7 +454,7 @@ const SemanticSearch = () => {
                       value={languageFilter}
                       setValue={setLanguageFilter}
                       options={languagesList}
-                      disabled={isLoading}
+                      disabled={retrieveFactChecksMutation.isPending}
                     />
                   </Stack>
                 </AdvancedSettingsContainer>
@@ -584,10 +463,15 @@ const SemanticSearch = () => {
           </Box>
         </Card>
 
-        {errorMessage && (
+        {(errorMessage || retrieveFactChecksMutation.error) && (
           <Box>
-            <Fade in={!!errorMessage} timeout={750}>
-              <Alert severity="error">{errorMessage}</Alert>
+            <Fade
+              in={!!(errorMessage || retrieveFactChecksMutation.error)}
+              timeout={750}
+            >
+              <Alert severity="error">
+                {errorMessage || retrieveFactChecksMutation.error?.message}
+              </Alert>
             </Fade>
           </Box>
         )}
