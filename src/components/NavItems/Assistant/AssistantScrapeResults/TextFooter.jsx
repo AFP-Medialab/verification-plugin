@@ -7,6 +7,8 @@ import Grid from "@mui/material/Grid";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
+import SupportAgentIcon from "@mui/icons-material/SupportAgentOutlined";
+
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { TextCopy } from "@Shared/Utils/TextCopy";
 import { Translate } from "@Shared/Utils/Translate";
@@ -27,7 +29,7 @@ export default function TextFooter({
       <Grid container spacing={2}>
         {/* language detected */}
         <Grid
-          size={10}
+          size={9}
           align={"left"}
           sx={{
             pt: 1,
@@ -72,6 +74,24 @@ export default function TextFooter({
           <Tooltip title={keyword("translate")}>
             <div>
               <Translate text={text} />
+            </div>
+          </Tooltip>
+        </Grid>
+
+        {/* send text to local LLM chatbot */}
+        <Grid
+          size={{ xs: 1 }}
+          align={"right"}
+          sx={{
+            display: "flex",
+            pt: 2,
+          }}
+        >
+          <Tooltip title={keyword("extracted_text_chatbot")}>
+            <div>
+              <SupportAgentIcon
+                sx={{ color: "var(--mui-palette-primary-main)" }}
+              />
             </div>
           </Tooltip>
         </Grid>
