@@ -25,6 +25,7 @@ import {
   TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
+  TransUsfdAuthor,
 } from "../TransComponents";
 
 // render status for extracted urls
@@ -335,6 +336,8 @@ const AssistantLinkResult = () => {
             title={
               <>
                 <Trans t={keyword} i18nKey="extracted_urls_tooltip" />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
+                <TransUsfdAuthor keyword={keyword} />
                 <TransHtmlDoubleLineBreak keyword={keyword} />
                 <TransSourceCredibilityTooltip keyword={keyword} />
                 <TransHtmlDoubleLineBreak keyword={keyword} />

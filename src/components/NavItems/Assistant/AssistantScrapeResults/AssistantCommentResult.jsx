@@ -36,6 +36,7 @@ import {
   TransHtmlDoubleLineBreak,
   TransMultilingualStanceLink,
   TransMultilingualStanceTooltip,
+  TransUsfdAuthor,
 } from "../TransComponents";
 
 const AssistantCommentResult = ({ collectedComments }) => {
@@ -227,6 +228,8 @@ const AssistantCommentResult = ({ collectedComments }) => {
                 title={
                   <>
                     <TransMultilingualStanceTooltip keyword={keyword} />
+                    <TransUsfdAuthor keyword={keyword} />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
                     <TransMultilingualStanceLink keyword={keyword} />
                   </>
                 }
@@ -360,6 +363,8 @@ const AssistantCommentResult = ({ collectedComments }) => {
                 <Trans t={keyword} i18nKey="collected_comments_tooltip" />
                 <TransHtmlDoubleLineBreak keyword={keyword} />
                 <TransMultilingualStanceTooltip keyword={keyword} />
+                <TransUsfdAuthor keyword={keyword} />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
                 <TransMultilingualStanceLink keyword={keyword} />
               </>
             }

@@ -25,6 +25,7 @@ import {
   TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
+  TransUsfdAuthor,
 } from "..//TransComponents";
 
 function capitaliseFirstLetter(string) {
@@ -166,6 +167,8 @@ export const renderUrlTitle = (
               <>
                 <TransSourceCredibilityTooltip keyword={keyword} />
                 <TransHtmlDoubleLineBreak keyword={keyword} />
+                <TransUsfdAuthor keyword={keyword} />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
                 <TransUrlDomainAnalysisLink keyword={keyword} />
               </>
             }
@@ -294,6 +297,8 @@ const renderDialog = (keyword, value, trafficLightColor, sourceType) => {
                   title={
                     <>
                       <TransSourceCredibilityTooltip keyword={keyword} />
+                      <TransHtmlDoubleLineBreak keyword={keyword} />
+                      <TransUsfdAuthor keyword={keyword} />
                       <TransHtmlDoubleLineBreak keyword={keyword} />
                       <TransUrlDomainAnalysisLink keyword={keyword} />
                     </>

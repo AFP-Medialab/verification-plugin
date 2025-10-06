@@ -113,6 +113,24 @@ export function TransMultilingualStanceLink({ keyword }) {
 
 // Service acknowledgements
 
+export function TransUsfdAuthor({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="usfd_author"
+      components={{
+        usfdLink: (
+          <a
+            href="https://www.gate.ac.uk/"
+            target="_blank"
+            rel="noopener noreferrer"
+          />
+        ),
+      }}
+    />
+  );
+}
+
 export function TransDeutscheWelleAuthor({ keyword }) {
   return (
     <Trans

@@ -27,6 +27,7 @@ import {
   TransKinitAuthor,
   TransMachineGeneratedTextTooltip,
   TransSupportedToolsLink,
+  TransUsfdAuthor,
 } from "../TransComponents";
 import AssistantTextClassification from "./AssistantTextClassification";
 import AssistantTextSpanClassification from "./AssistantTextSpanClassification";
@@ -340,6 +341,8 @@ const AssistantTextResult = () => {
                         li: <li />,
                       }}
                     />
+                    <TransUsfdAuthor keyword={keyword} />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
                     <TransCredibilitySignalsLink keyword={keyword} />
                     <TransHtmlDoubleLineBreak keyword={keyword} />
                   </>
@@ -368,6 +371,8 @@ const AssistantTextResult = () => {
                         li: <li />,
                       }}
                     />
+                    <TransUsfdAuthor keyword={keyword} />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
                     <TransCredibilitySignalsLink keyword={keyword} />
                     <TransHtmlDoubleLineBreak keyword={keyword} />
                   </>
@@ -396,6 +401,8 @@ const AssistantTextResult = () => {
                         li: <li />,
                       }}
                     />
+                    <TransUsfdAuthor keyword={keyword} />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
                     <TransCredibilitySignalsLink keyword={keyword} />
                     <TransHtmlDoubleLineBreak keyword={keyword} />
                   </>
