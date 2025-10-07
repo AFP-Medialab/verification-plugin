@@ -7,12 +7,13 @@ import Grid from "@mui/material/Grid";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import SupportAgentIcon from "@mui/icons-material/SupportAgentOutlined";
+import SmartToyIcon from "@mui/icons-material/SmartToy";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { TextCopy } from "@Shared/Utils/TextCopy";
 import { Translate } from "@Shared/Utils/Translate";
 import { getLanguageName } from "@Shared/Utils/languageUtils";
+import ChatBot from "components/NavItems/tools/ChatBot/ChatBot";
 
 export default function TextFooter({
   classes,
@@ -89,13 +90,13 @@ export default function TextFooter({
         >
           <Tooltip title={keyword("extracted_text_chatbot")}>
             <div>
-              <SupportAgentIcon
-                sx={{ color: "var(--mui-palette-primary-main)" }}
-              />
+              <SmartToyIcon sx={{ color: "var(--mui-palette-primary-main)" }} />
             </div>
           </Tooltip>
         </Grid>
       </Grid>
+
+      {/* <ChatBot /> */}
     </Box>
   );
 }
