@@ -1,6 +1,12 @@
 import React from "react";
 import { Trans } from "react-i18next";
 
+// CSS STYLES
+
+const UL_STYLE = { paddingLeft: "20px", margin: "8px 0" };
+const LI_STYLE = { display: "list-item", listStyleType: "disc" };
+const A_STYLE = { color: "blue", textDecoration: "underline" };
+
 // Links
 
 export function TransSupportedToolsLink({ keyword }) {
@@ -14,6 +20,7 @@ export function TransSupportedToolsLink({ keyword }) {
             href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools"
             target="_blank"
             rel="noopener noreferrer"
+            style={A_STYLE}
           />
         ),
       }}
@@ -32,6 +39,7 @@ export function TransSupportedUrlsLink({ keyword }) {
             href="https://gatenlp.github.io/we-verify-app-assistant/supported-urls"
             target="_blank"
             rel="noopener noreferrer"
+            style={A_STYLE}
           />
         ),
       }}
@@ -50,6 +58,7 @@ export function TransUrlDomainAnalysisLink({ keyword }) {
             href="https://gatenlp.github.io/domain-analysis-lists/"
             target="_blank"
             rel="noopener noreferrer"
+            style={A_STYLE}
           />
         ),
       }}
@@ -68,6 +77,7 @@ export function TransNamedEntityRecogniserLink({ keyword }) {
             href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#named-entity-recogniser"
             target="_blank"
             rel="noopener noreferrer"
+            style={A_STYLE}
           />
         ),
       }}
@@ -86,6 +96,7 @@ export function TransCredibilitySignalsLink({ keyword }) {
             href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#credibility-signals"
             target="_blank"
             rel="noopener noreferrer"
+            style={A_STYLE}
           />
         ),
       }}
@@ -104,6 +115,7 @@ export function TransPrevFactChecksLink({ keyword }) {
             href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#previous-fact-checks"
             target="_blank"
             rel="noopener noreferrer"
+            style={A_STYLE}
           />
         ),
       }}
@@ -122,6 +134,7 @@ export function TransDbkfLink({ keyword }) {
             href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#database-of-known-fakes"
             target="_blank"
             rel="noopener noreferrer"
+            style={A_STYLE}
           />
         ),
       }}
@@ -140,6 +153,7 @@ export function TransMultilingualStanceLink({ keyword }) {
             href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#stance-classifier"
             target="_blank"
             rel="noopener noreferrer"
+            style={A_STYLE}
           />
         ),
       }}
@@ -223,14 +237,42 @@ export function TransOntotextAuthor({ keyword }) {
 
 // Tooltips
 
+export function TransAssistantHelpTwoTooltip({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="assistant_help_2"
+      components={{
+        b: <b />,
+        ul: <ul style={UL_STYLE} />,
+        li: <li style={LI_STYLE} />,
+      }}
+    />
+  );
+}
+
+export function TransAssistantHelpThreeTooltip({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="assistant_help_3"
+      components={{
+        b: <b />,
+        ul: <ul style={UL_STYLE} />,
+        li: <li style={LI_STYLE} />,
+      }}
+    />
+  );
+}
+
 export function TransSourceCredibilityTooltip({ keyword }) {
   return (
     <Trans
       t={keyword}
       i18nKey="sc_tooltip"
       components={{
-        ul: <ul />,
-        li: <li />,
+        ul: <ul style={UL_STYLE} />,
+        li: <li style={LI_STYLE} />,
         strongWarning: (
           <strong
             style={{
@@ -266,14 +308,54 @@ export function TransSourceCredibilityTooltip({ keyword }) {
   );
 }
 
+export function TransExtractedTextTooltip({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="text_tooltip"
+      components={{
+        b: <b />,
+        ul: <ul style={UL_STYLE} />,
+        li: <li style={LI_STYLE} />,
+      }}
+    />
+  );
+}
+
+export function TransNewsFramingTooltip({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="news_framing_tooltip"
+      components={{
+        ul: <ul style={UL_STYLE} />,
+        li: <li style={LI_STYLE} />,
+      }}
+    />
+  );
+}
+
+export function TransNewsGenreTooltip({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="news_genre_tooltip"
+      components={{
+        ul: <ul style={UL_STYLE} />,
+        li: <li style={LI_STYLE} />,
+      }}
+    />
+  );
+}
+
 export function TransPersuasionTechniquesTooltip({ keyword }) {
   return (
     <Trans
       t={keyword}
       i18nKey="persuasion_techniques_tooltip"
       components={{
-        ul: <ul />,
-        li: <li />,
+        ul: <ul style={UL_STYLE} />,
+        li: <li style={LI_STYLE} />,
       }}
     />
   );
@@ -285,8 +367,8 @@ export function TransMachineGeneratedTextTooltip({ keyword }) {
       t={keyword}
       i18nKey="machine_generated_text_tooltip"
       components={{
-        ul: <ul />,
-        li: <li />,
+        ul: <ul style={UL_STYLE} />,
+        li: <li style={LI_STYLE} />,
         highlyLikelyHuman: (
           <strong
             style={{
@@ -346,8 +428,8 @@ export function TransMultilingualStanceTooltip({ keyword }) {
       t={keyword}
       i18nKey="multilingual_stance_tooltip"
       components={{
-        ul: <ul />,
-        li: <li />,
+        ul: <ul style={UL_STYLE} />,
+        li: <li style={LI_STYLE} />,
         strongSupport: (
           <strong
             style={{

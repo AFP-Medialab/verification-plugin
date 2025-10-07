@@ -32,9 +32,12 @@ import {
 import {
   TransCredibilitySignalsLink,
   TransDeutscheWelleAuthor,
+  TransExtractedTextTooltip,
   TransHtmlDoubleLineBreak,
   TransKinitAuthor,
   TransMachineGeneratedTextTooltip,
+  TransNewsFramingTooltip,
+  TransNewsGenreTooltip,
   TransPersuasionTechniquesTooltip,
   TransSupportedToolsLink,
   TransUsfdAuthor,

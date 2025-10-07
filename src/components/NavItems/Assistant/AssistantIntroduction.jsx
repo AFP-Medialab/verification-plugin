@@ -24,6 +24,7 @@ import {
 } from "@/redux/actions/tools/assistantActions";
 
 import {
+  TransAssistantHelpTwoTooltip,
   TransHtmlDoubleLineBreak,
   TransSupportedToolsLink,
 } from "./TransComponents";
@@ -112,15 +113,7 @@ const AssistantIntroduction = (props) => {
                   <TransHtmlDoubleLineBreak keyword={keyword} />
                   <Trans t={keyword} i18nKey="assistant_help_1" />
                   <TransHtmlDoubleLineBreak keyword={keyword} />
-                  <Trans
-                    t={keyword}
-                    i18nKey="assistant_help_2"
-                    components={{
-                      b: <b />,
-                      ul: <ul />,
-                      li: <li />,
-                    }}
-                  />
+                  <TransAssistantHelpTwoTooltip keyword={keyword} />
                   <TransSupportedToolsLink keyword={keyword} />
                 </>
               }
