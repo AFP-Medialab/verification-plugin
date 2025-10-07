@@ -337,9 +337,9 @@ const AssistantLinkResult = () => {
               <>
                 <Trans t={keyword} i18nKey="extracted_urls_tooltip" />
                 <TransHtmlDoubleLineBreak keyword={keyword} />
-                <TransUsfdAuthor keyword={keyword} />
-                <TransHtmlDoubleLineBreak keyword={keyword} />
                 <TransSourceCredibilityTooltip keyword={keyword} />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
+                <TransUsfdAuthor keyword={keyword} />
                 <TransHtmlDoubleLineBreak keyword={keyword} />
                 <TransUrlDomainAnalysisLink keyword={keyword} />
               </>

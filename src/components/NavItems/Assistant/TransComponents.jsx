@@ -174,6 +174,7 @@ export function TransUsfdAuthor({ keyword }) {
             href="https://www.gate.ac.uk/"
             target="_blank"
             rel="noopener noreferrer"
+            style={A_STYLE}
           />
         ),
       }}
@@ -192,6 +193,7 @@ export function TransDeutscheWelleAuthor({ keyword }) {
             href="https://www.dw.com/"
             target="_blank"
             rel="noopener noreferrer"
+            style={A_STYLE}
           />
         ),
       }}
@@ -210,6 +212,7 @@ export function TransKinitAuthor({ keyword }) {
             href="https://kinit.sk/"
             target="_blank"
             rel="noopener noreferrer"
+            style={A_STYLE}
           />
         ),
       }}
@@ -228,6 +231,7 @@ export function TransOntotextAuthor({ keyword }) {
             href="https://www.ontotext.com/"
             target="_blank"
             rel="noopener noreferrer"
+            style={A_STYLE}
           />
         ),
       }}
