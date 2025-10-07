@@ -171,7 +171,7 @@ export function TransUsfdAuthor({ keyword }) {
       components={{
         usfdLink: (
           <a
-            href="https://cloud.gate.ac.uk/shopfron"
+            href="https://cloud.gate.ac.uk/shopfront"
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
