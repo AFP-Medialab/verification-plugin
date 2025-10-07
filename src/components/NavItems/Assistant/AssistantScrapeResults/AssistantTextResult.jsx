@@ -36,6 +36,12 @@ import {
   setWarningExpanded,
 } from "@/redux/actions/tools/assistantActions";
 
+import {
+  TransExtractedTextTooltip,
+  TransNewsFramingTooltip,
+  TransNewsGenreTooltip,
+} from "../TransComponents";
+
 const AssistantTextResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const expandMinimiseText = keyword("expand_minimise_text");
@@ -173,28 +179,14 @@ const AssistantTextResult = () => {
   // tooltips
   const newsFramingTooltip = (
     <>
-      <Trans
-        t={keyword}
-        i18nKey="news_framing_tooltip"
-        components={{
-          ul: <ul />,
-          li: <li />,
-        }}
-      />
+      <TransNewsFramingTooltip keyword={keyword} />
       <TransCredibilitySignalsLink keyword={keyword} />
     </>
   );
 
   const newsGenreTooltip = (
     <>
-      <Trans
-        t={keyword}
-        i18nKey="news_genre_tooltip"
-        components={{
-          ul: <ul />,
-          li: <li />,
-        }}
-      />
+      <TransNewsGenreTooltip keyword={keyword} />
       <TransCredibilitySignalsLink keyword={keyword} />
     </>
   );
@@ -240,7 +232,15 @@ const AssistantTextResult = () => {
             <div
               hidden={dbkfTextMatch === null && prevFactChecksResult === null}
             >
-              <Tooltip title={keyword("text_warning")}>
+              <Tooltip
+                title={
+                  <Trans
+                    t={keyword}
+                    i18nKey="text_warning"
+                    components={{ b: <b /> }}
+                  />
+                }
+              >
                 <WarningAmber
                   color={"warning"}
                   className={classes.toolTipWarning}
@@ -257,15 +257,7 @@ const AssistantTextResult = () => {
                 interactive={"true"}
                 title={
                   <>
-                    <Trans
-                      t={keyword}
-                      i18nKey="text_tooltip"
-                      components={{
-                        b: <b />,
-                        ul: <ul />,
-                        li: <li />,
-                      }}
-                    />
+                    <TransExtractedTextTooltip keyword={keyword} />
                     <TransSupportedToolsLink keyword={keyword} />
                     <TransHtmlDoubleLineBreak keyword={keyword} />
                     <TransCredibilitySignalsLink keyword={keyword} />
