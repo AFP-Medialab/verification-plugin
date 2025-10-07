@@ -17,6 +17,8 @@ import { TextCopy } from "@Shared/Utils/TextCopy";
 import { Translate } from "@Shared/Utils/Translate";
 import { getLanguageName } from "@Shared/Utils/languageUtils";
 
+import { scrollToElement } from "./assistantUtils";
+
 export default function TextFooter({
   classes,
   setDisplayOrigLang,
@@ -105,33 +107,6 @@ export default function TextFooter({
   );
 }
 
-export function TextFooterPrevFactChecks({ navigate, keyword }) {
-  const handleClick = (path) => {
-    // instead need to set parameter then load text in SemanticSearch/index.jsx
-    navigate("/app/" + path + "/assistantText");
-  };
-
-  return (
-    <Grid container spacing={1} wrap="wrap" width="100%" sx={{ pt: 2 }}>
-      <Grid size={4} align="start">
-        <></>
-      </Grid>
-
-      <Grid size={7} align="start">
-        <Typography sx={{ color: "text.secondary", align: "start" }}>
-          {keyword("more_details")}{" "}
-          <Link
-            sx={{ cursor: "pointer" }}
-            onClick={() => handleClick("tools/semanticSearch")}
-          >
-            {keyword("semantic_search_title")}
-          </Link>
-        </Typography>
-      </Grid>
-    </Grid>
-  );
-}
-
 export function ExpandMinimise({
   classes,
   expandMinimiseText,
@@ -147,6 +122,7 @@ export function ExpandMinimise({
       fullWidth
       onClick={() => {
         setExpanded(!expanded);
+        expanded ? scrollToElement("credibility-signals", 100) : null;
       }}
     >
       {expanded ? (
@@ -166,7 +142,10 @@ export function ExpandMinimise({
     </Button>
   ) : (
     <IconButton
-      onClick={() => setExpanded(!expanded)}
+      onClick={() => {
+        setExpanded(!expanded);
+        expanded ? scrollToElement("credibility-signals", 100) : null;
+      }}
       sx={{
         "&:hover": {
           backgroundColor: "inherit",

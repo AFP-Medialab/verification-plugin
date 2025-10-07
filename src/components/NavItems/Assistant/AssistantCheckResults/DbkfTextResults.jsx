@@ -1,91 +1,126 @@
 import React from "react";
-import { useSelector } from "react-redux";
 
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
 import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
+import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import ListItemText from "@mui/material/ListItemText";
+import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 
-const DbkfTextResults = () => {
+const DbkfTextResults = ({ results, prevFactChecksExist }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
-  const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
 
   return (
-    <Accordion defaultExpanded>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Grid container spacing={1} wrap="wrap" width="100%">
-          <Grid size={{ xs: 4 }} align="start">
-            <Typography display="inline" sx={{ flexShrink: 0, align: "start" }}>
-              {keyword("dbkf_text_title")}
-            </Typography>
-          </Grid>
-          <Grid size={{ xs: 8 }} align="start">
-            <Typography sx={{ color: "text.secondary", align: "start" }}>
-              {dbkfTextMatch.length} {keyword("results_detected")}
-            </Typography>
-          </Grid>
-        </Grid>
-      </AccordionSummary>
-
-      <AccordionDetails>
-        <List disablePadding={true}>
-          {dbkfTextMatch.map((value, key) => (
-            <ListItem key={key}>
-              <ListItemAvatar>
-                <TextFieldsIcon fontSize={"large"} />
-              </ListItemAvatar>
-              <ListItemText
-                primary={
-                  <div>
-                    <Typography
-                      variant={"body1"}
-                      color={"textPrimary"}
-                      component={"div"}
-                      align={"left"}
-                    >
-                      {keyword("dbkf_text_warning")}
-                    </Typography>
-                    <Box
-                      sx={{
-                        mb: 0.5,
-                      }}
-                    />
-                  </div>
-                }
-                secondary={
-                  <Typography
-                    variant={"caption"}
-                    component={"div"}
-                    color={"textSecondary"}
+    <>
+      {/* This code mimics ResultDisplayItem.jsx from SemanticSearch to match output */}
+      {results.map((value, key) => {
+        return (
+          <Box
+            key={key}
+            sx={{
+              width: "100%",
+            }}
+          >
+            <Grid
+              container
+              direction="row"
+              sx={{
+                p: 2,
+                justifyContent: "space-between",
+              }}
+            >
+              <Grid
+                container
+                direction="row"
+                size={{ xs: 10 }}
+                spacing={2}
+                sx={{
+                  justifyContent: "flex-start",
+                  alignItems: "flex-start",
+                }}
+              >
+                <Grid>
+                  <TextFieldsIcon
+                    fontSize={"large"}
+                    sx={{ width: 80, height: 80 }}
+                  />
+                </Grid>
+                <Grid size="grow">
+                  <Stack
+                    direction="column"
+                    spacing={2}
+                    sx={{
+                      justifyContent: "flex-start",
+                      alignItems: "flex-start",
+                    }}
                   >
-                    <Link
-                      href={value.externalLink}
-                      key={key}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {value.text}
-                    </Link>
-                  </Typography>
-                }
-              />
-            </ListItem>
-          ))}
-        </List>
-      </AccordionDetails>
-    </Accordion>
+                    <Stack direction="column">
+                      <Typography sx={{ textAlign: "start" }}>
+                        {keyword("dbkf_text_warning")}
+                      </Typography>
+                    </Stack>
+                    <Stack direction="column">
+                      <Typography color={"textSecondary"}>
+                        <Link
+                          href={value.externalLink}
+                          key={key}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {value.text}
+                        </Link>
+                      </Typography>
+                    </Stack>
+                  </Stack>
+                </Grid>
+              </Grid>
+              <Grid
+                size={{ xs: 2 }}
+                sx={{
+                  pl: 4,
+                }}
+              >
+                <Stack
+                  direction="column"
+                  spacing={2}
+                  sx={{
+                    justifyContent: "center",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  {value.factCheckServices?.map(
+                    ([acronym, explanation], key) => (
+                      <Tooltip key={key + "_tooltip"} title={explanation}>
+                        <Chip
+                          key={key + "_chip"}
+                          label={acronym}
+                          color="warning"
+                          sx={{ width: "fit-content" }}
+                          size="small"
+                        />
+                      </Tooltip>
+                    ),
+                  )}
+                </Stack>
+              </Grid>
+            </Grid>
+            {results.length === key + 1 ? (
+              prevFactChecksExist ? (
+                <Divider orientation="horizontal" flexItem />
+              ) : null
+            ) : (
+              <Divider orientation="horizontal" flexItem />
+            )}
+          </Box>
+        );
+      })}
+    </>
   );
 };
 export default DbkfTextResults;

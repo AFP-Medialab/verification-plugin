@@ -93,6 +93,42 @@ export function TransCredibilitySignalsLink({ keyword }) {
   );
 }
 
+export function TransPrevFactChecksLink({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="previous_fact_checks_link"
+      components={{
+        previousFactChecksLink: (
+          <a
+            href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#previous-fact-checks"
+            target="_blank"
+            rel="noopener noreferrer"
+          />
+        ),
+      }}
+    />
+  );
+}
+
+export function TransDbkfLink({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="dbkf_link"
+      components={{
+        dbkfLink: (
+          <a
+            href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#database-of-known-fakes"
+            target="_blank"
+            rel="noopener noreferrer"
+          />
+        ),
+      }}
+    />
+  );
+}
+
 export function TransMultilingualStanceLink({ keyword }) {
   return (
     <Trans
@@ -225,6 +261,19 @@ export function TransSourceCredibilityTooltip({ keyword }) {
             }}
           />
         ),
+      }}
+    />
+  );
+}
+
+export function TransPersuasionTechniquesTooltip({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="persuasion_techniques_tooltip"
+      components={{
+        ul: <ul />,
+        li: <li />,
       }}
     />
   );

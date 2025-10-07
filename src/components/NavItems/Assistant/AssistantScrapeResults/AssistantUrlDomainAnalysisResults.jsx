@@ -53,13 +53,6 @@ const AssistantSCResults = () => {
   );
   const sourceTypes = useSelector((state) => state.assistant.sourceTypes);
 
-  // passing through correct colours for details here
-  const sourceCredibility = [
-    [cautionSourceCred, trafficLightColors.caution, sourceTypes.caution],
-    [mixedSourceCred, trafficLightColors.mixed, sourceTypes.mixed],
-    [positiveSourceCred, trafficLightColors.positive, sourceTypes.positive],
-  ];
-
   return (
     <Card
       variant={"outlined"}
