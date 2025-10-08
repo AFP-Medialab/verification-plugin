@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
@@ -306,13 +307,83 @@ const ChatBotUI = () => {
     fetchModels();
   }, [fetchModels]);
 
-  const handleSendMessage = async () => {
-    if (!userInput.trim() || !isReady) return;
+  // check if directed from assistant
+  let text = useSelector((state) => state.assistant.urlText);
+  const { url } = useParams();
+  useEffect(() => {
+    //takes in text parameter from url
+    if (url) {
+      const uri = decodeURIComponent(url);
+      if (uri === "assistantText" && text) {
+        text = text.replaceAll("\n", " ");
 
+        // set model (defaults to first in list)
+        // wait for models to load up
+        const apiBaseUrl =
+          process.env.REACT_APP_CHATBOT_API_URL || "http://localhost:8000";
+        let models = null;
+        const loadModels = async () => {
+          models = await fetchModels(apiBaseUrl);
+        };
+        loadModels();
+        console.log("models=", models);
+        //dispatch(setSelectedModel(models[0].id));
+        console.log("selectedModel=", selectedModel);
+
+        // set temperature (defaults to 0.7)
+        console.log("temperature=", temperature);
+
+        // set predefined prompt
+        const promptId = "rhetorical-analysis_en";
+        dispatch(setSelectedPrompt(promptId));
+        console.log("selectedPrompt=", selectedPrompt);
+        const selectedPromptObj = prompts.find((req) => req.id === promptId);
+        dispatch(setActivePrompt({ prompt: selectedPromptObj }));
+        console.log("activePrompt=", activePrompt);
+
+        // set text to analyse
+        dispatch(setUserInput(text));
+        console.log("text=", text);
+        console.log("userInput=", userInput);
+
+        // ready
+        console.log("isReady=", isReady), console.log("models=", models);
+        console.log("isModelsLoading=", isModelsLoading);
+
+        // send message
+        handleSendMessage();
+      }
+    }
+  }, [url, text]);
+
+  // // models
+  // console.log("models=", models);
+  // console.log("selectedModel=", selectedModel);
+  // // set temperature (defaults to 0.7)
+  // console.log("temperature=", temperature);
+  // // set predefined prompt
+  // console.log("selectedPrompt=", selectedPrompt)
+  // console.log("activePrompt=", activePrompt)
+  // // set text to analyse
+  // console.log("userInput=", userInput)
+  // // ready
+  // console.log("isReady=", isReady),
+  // console.log("models=", models);
+  // console.log("isModelsLoading=", isModelsLoading);
+
+  const handleSendMessage = async () => {
+    console.log("here1");
+    if (!userInput.trim() || !isReady) {
+      console.log("here1a");
+      return;
+    }
+
+    console.log("here2");
     const previousUserInput = userInput;
 
     // Handle prompt flow
     if (selectedPrompt && selectedPrompt !== "") {
+      console.log("here");
       const selectedPromptObj = prompts.find(
         (req) => req.id === selectedPrompt,
       );
