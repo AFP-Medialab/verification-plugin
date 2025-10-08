@@ -167,26 +167,38 @@ export const renderUrlTitle = (
       {handleClose != null ? (
         <Grid size={{ xs: 1 }} display="flex" justifyContent="flex-end">
           {/* tooltip help */}
-          <Tooltip
-            interactive={"true"}
-            leaveDelay={50}
-            style={{ display: "flex", marginLeft: "auto" }}
-            title={
-              <>
-                <TransSourceCredibilityTooltip keyword={keyword} />
-                <TransHtmlDoubleLineBreak keyword={keyword} />
-                <TransUrlDomainAnalysisLink keyword={keyword} />
-              </>
-            }
-            classes={{ tooltip: classes.assistantTooltip }}
+          <Box
+            sx={{
+              pt: 0.75,
+            }}
           >
-            <HelpOutlineOutlinedIcon color={"action"} />
-          </Tooltip>
+            <Tooltip
+              interactive={"true"}
+              leaveDelay={50}
+              style={{ display: "flex", marginLeft: "auto" }}
+              title={
+                <>
+                  <TransSourceCredibilityTooltip keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
+                  <TransUrlDomainAnalysisLink keyword={keyword} />
+                </>
+              }
+              classes={{ tooltip: classes.assistantTooltip }}
+            >
+              <HelpOutlineOutlinedIcon color={"action"} />
+            </Tooltip>
+          </Box>
 
           {/* close button */}
-          <IconButton onClick={handleClose}>
-            <CloseIcon />
-          </IconButton>
+          <Box
+            sx={{
+              pr: 1,
+            }}
+          >
+            <IconButton onClick={handleClose}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
         </Grid>
       ) : null}
     </Grid>
