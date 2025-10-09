@@ -110,7 +110,7 @@ const SearchForm = ({
                     />
                   </Stack>
                 </Grid>
-                <Grid size={{ xs: 12, md: 4 }}>
+                <Grid size="auto">
                   <Stack
                     direction={{ xs: "column", md: "row" }}
                     spacing={1}
