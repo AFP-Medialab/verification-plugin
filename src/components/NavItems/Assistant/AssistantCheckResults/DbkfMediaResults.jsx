@@ -1,19 +1,15 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
 import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
 import Grid from "@mui/material/Grid";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import ListItemText from "@mui/material/ListItemText";
+import Link from "@mui/material/Link";
+import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { DuoOutlined } from "@mui/icons-material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import DuoOutlined from "@mui/icons-material/Duo";
 import ImageIconOutlined from "@mui/icons-material/Image";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
@@ -28,122 +24,130 @@ const DbkfMediaResults = () => {
   dbkfImageMatch ? (numResultsDetected += dbkfImageMatch.length) : null;
   dbkfVideoMatch ? (numResultsDetected += dbkfVideoMatch.length) : null;
 
-  return (
-    <Accordion>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Grid container spacing={1} wrap="wrap" width="100%">
-          <Grid size={{ xs: 4 }} align="start">
-            <Typography display="inline" sx={{ flexShrink: 0, align: "start" }}>
-              {keyword("dbkf_media_title")}
-            </Typography>
-          </Grid>
-          <Grid size={{ xs: 8 }} align="start">
-            <Typography sx={{ color: "text.secondary", align: "start" }}>
-              {numResultsDetected} {keyword("results_detected")}
-            </Typography>
-          </Grid>
-        </Grid>
-      </AccordionSummary>
+  const combinedDbkfMediaResults = [];
+  dbkfImageMatch
+    ? combinedDbkfMediaResults.push([
+        dbkfImageMatch,
+        ImageIconOutlined,
+        keyword("dbkf_image_warning"),
+      ])
+    : null;
+  dbkfVideoMatch
+    ? combinedDbkfMediaResults.push([
+        dbkfVideoMatch,
+        DuoOutlined,
+        keyword("dbkf_video_warning"),
+      ])
+    : null;
 
-      <AccordionDetails>
-        <List disablePadding={true}>
-          {dbkfImageMatch
-            ? dbkfImageMatch
-                .filter(
-                  (obj1, i, arr) =>
-                    arr.findIndex((obj2) => obj2.id === obj1.id) === i,
-                )
-                .map((value, key) => (
-                  <ListItem key={key}>
-                    <ListItemAvatar>
-                      <ImageIconOutlined fontSize={"large"} />
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={
-                        <div>
-                          <Typography
-                            variant={"body1"}
-                            color={"textPrimary"}
-                            component={"div"}
-                            align={"left"}
-                          >
-                            {keyword("dbkf_image_warning") +
-                              parseFloat(value.similarity).toFixed(2)}
-                          </Typography>
-                          <Box mb={0.5} />
-                        </div>
-                      }
-                      secondary={
-                        <Typography
-                          variant={"caption"}
-                          component={"div"}
-                          color={"textSecondary"}
-                        >
-                          <a
-                            href={value.claimUrl}
-                            key={key}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {value.claimUrl}
-                          </a>
-                        </Typography>
-                      }
-                    />
-                  </ListItem>
-                ))
-            : null}
-
-          {dbkfVideoMatch
-            ? dbkfVideoMatch
-                .filter(
-                  (obj1, i, arr) =>
-                    arr.findIndex((obj2) => obj2.id === obj1.id) === i,
-                )
-                .map((value, key) => (
-                  <ListItem key={key}>
-                    <ListItemAvatar>
-                      <DuoOutlined fontSize={"large"} />
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={
-                        <div>
-                          <Typography
-                            variant={"body1"}
-                            color={"textPrimary"}
-                            component={"div"}
-                            align={"left"}
-                          >
-                            {keyword("dbkf_video_warning") +
+  {
+    /* This code mimics ResultDisplayItem.jsx from SemanticSearch to match output */
+  }
+  return combinedDbkfMediaResults.map(
+    ([results, DbkfMediaIcon, dbkfMediaWarning], index) => (
+      <div key={index}>
+        {results
+          .filter(
+            (obj1, i, arr) =>
+              arr.findIndex((obj2) => obj2.id === obj1.id) === i,
+          )
+          .map((value, key) => {
+            return (
+              <Box
+                key={key}
+                sx={{
+                  width: "100%",
+                }}
+              >
+                <Grid
+                  container
+                  direction="row"
+                  sx={{
+                    p: 2,
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Grid
+                    container
+                    direction="row"
+                    size={{ xs: 10 }}
+                    spacing={2}
+                    sx={{
+                      justifyContent: "flex-start",
+                      alignItems: "flex-start",
+                    }}
+                  >
+                    <Grid>
+                      <DbkfMediaIcon
+                        fontSize={"large"}
+                        sx={{ width: 80, height: 80 }}
+                      />
+                    </Grid>
+                    <Grid size="grow">
+                      <Stack
+                        direction="column"
+                        spacing={2}
+                        sx={{
+                          justifyContent: "flex-start",
+                          alignItems: "flex-start",
+                        }}
+                      >
+                        <Stack direction="column">
+                          <Typography sx={{ textAlign: "start" }}>
+                            {dbkfMediaWarning +
                               " " +
                               parseFloat(value.similarity).toFixed(2)}
                           </Typography>
-                          <Box mb={0.5} />
-                        </div>
-                      }
-                      secondary={
-                        <Typography
-                          variant={"caption"}
-                          component={"div"}
-                          color={"textSecondary"}
-                        >
-                          <a
-                            href={value.claimUrl}
-                            key={key}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {value.claimUrl}
-                          </a>
-                        </Typography>
-                      }
-                    />
-                  </ListItem>
-                ))
-            : null}
-        </List>
-      </AccordionDetails>
-    </Accordion>
+                        </Stack>
+                        <Stack direction="column">
+                          <Typography color={"textSecondary"}>
+                            <Link
+                              href={value.claimUrl}
+                              key={key}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {value.claimUrl}
+                            </Link>
+                          </Typography>
+                        </Stack>
+                      </Stack>
+                    </Grid>
+                  </Grid>
+                  <Grid
+                    size={{ xs: 2 }}
+                    sx={{
+                      pl: 4,
+                    }}
+                  >
+                    <Stack
+                      direction="column"
+                      spacing={2}
+                      sx={{
+                        justifyContent: "center",
+                        alignItems: "flex-start",
+                      }}
+                    >
+                      <Tooltip
+                        key={key + "_tooltip"}
+                        title={keyword("database_of_known_fakes_explanation")}
+                      >
+                        <Chip
+                          key={key + "_chip"}
+                          label={keyword("dbkf_acronym")}
+                          color="warning"
+                          sx={{ width: "fit-content" }}
+                          size="small"
+                        />
+                      </Tooltip>
+                    </Stack>
+                  </Grid>
+                </Grid>
+              </Box>
+            );
+          })}
+      </div>
+    ),
   );
 };
 
