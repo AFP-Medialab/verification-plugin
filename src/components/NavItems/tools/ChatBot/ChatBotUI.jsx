@@ -355,18 +355,14 @@ const ChatBotUI = () => {
   }, [url, text]);
 
   const handleSendMessage = async () => {
-    console.log("here1");
     if (!userInput.trim() || !isReady) {
-      console.log("here1a");
       return;
     }
 
-    console.log("here2");
     const previousUserInput = userInput;
 
     // Handle prompt flow
     if (selectedPrompt && selectedPrompt !== "") {
-      console.log("here");
       const selectedPromptObj = prompts.find(
         (req) => req.id === selectedPrompt,
       );
