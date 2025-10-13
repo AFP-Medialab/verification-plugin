@@ -315,17 +315,15 @@ const ChatBotUI = () => {
     if (url) {
       const uri = decodeURIComponent(url);
       if (uri === "assistantText" && text) {
-        text = text.replaceAll("\n", " ");
-
         // set model (defaults to first in list)
-        // wait for models to load up
-        const apiBaseUrl =
-          process.env.REACT_APP_CHATBOT_API_URL || "http://localhost:8000";
-        let models = null;
-        const loadModels = async () => {
-          models = await fetchModels(apiBaseUrl);
-        };
-        loadModels();
+        // wait for models to load up?
+        // const apiBaseUrl =
+        //   process.env.REACT_APP_CHATBOT_API_URL || "http://localhost:8000";
+        // let models = null;
+        // const loadModels = async () => {
+        //   models = await fetchModels(apiBaseUrl);
+        // };
+        // loadModels();
         console.log("models=", models);
         //dispatch(setSelectedModel(models[0].id));
         console.log("selectedModel=", selectedModel);
@@ -342,8 +340,8 @@ const ChatBotUI = () => {
         console.log("activePrompt=", activePrompt);
 
         // set text to analyse
-        dispatch(setUserInput(text));
-        console.log("text=", text);
+        dispatch(setUserInput(text.trim()));
+        console.log("text=", text.trim());
         console.log("userInput=", userInput);
 
         // ready
@@ -355,21 +353,6 @@ const ChatBotUI = () => {
       }
     }
   }, [url, text]);
-
-  // // models
-  // console.log("models=", models);
-  // console.log("selectedModel=", selectedModel);
-  // // set temperature (defaults to 0.7)
-  // console.log("temperature=", temperature);
-  // // set predefined prompt
-  // console.log("selectedPrompt=", selectedPrompt)
-  // console.log("activePrompt=", activePrompt)
-  // // set text to analyse
-  // console.log("userInput=", userInput)
-  // // ready
-  // console.log("isReady=", isReady),
-  // console.log("models=", models);
-  // console.log("isModelsLoading=", isModelsLoading);
 
   const handleSendMessage = async () => {
     console.log("here1");
