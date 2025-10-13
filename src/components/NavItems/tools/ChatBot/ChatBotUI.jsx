@@ -316,43 +316,23 @@ const ChatBotUI = () => {
       const uri = decodeURIComponent(url);
       if (uri === "assistantText" && text) {
         // set model (defaults to first in list)
-        // wait for models to load up?
-        // const apiBaseUrl =
-        //   process.env.REACT_APP_CHATBOT_API_URL || "http://localhost:8000";
-        // let models = null;
-        // const loadModels = async () => {
-        //   models = await fetchModels(apiBaseUrl);
-        // };
-        // loadModels();
-        console.log("models=", models);
-        //dispatch(setSelectedModel(models[0].id));
-        console.log("selectedModel=", selectedModel);
 
         // set temperature (defaults to 0.7)
-        console.log("temperature=", temperature);
 
         // set predefined prompt
         const promptId = "rhetorical-analysis_en";
         dispatch(setSelectedPrompt(promptId));
-        console.log("selectedPrompt=", selectedPrompt);
         const selectedPromptObj = prompts.find((req) => req.id === promptId);
         dispatch(setActivePrompt({ prompt: selectedPromptObj }));
-        console.log("activePrompt=", activePrompt);
 
         // set text to analyse
         dispatch(setUserInput(text.trim()));
-        console.log("text=", text.trim());
-        console.log("userInput=", userInput);
-
-        // ready
-        console.log("isReady=", isReady), console.log("models=", models);
-        console.log("isModelsLoading=", isModelsLoading);
 
         // send message
         handleSendMessage();
       }
     }
-  }, [url, text]);
+  }, [dispatch, url, text, isReady]);
 
   const handleSendMessage = async () => {
     if (!userInput.trim() || !isReady) {
