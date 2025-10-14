@@ -289,7 +289,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
                     <col style={{ width: repliesColumnWidth }} />
                     {/* dynamic col width */}
                     {colWidths.map((width, index) => (
-                      <col key={index} style={{ width }} />
+                      <col key={index} style={{ width: width }} />
                     ))}
                   </colgroup>
 
