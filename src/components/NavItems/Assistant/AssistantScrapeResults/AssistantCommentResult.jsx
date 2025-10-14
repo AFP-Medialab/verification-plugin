@@ -47,8 +47,6 @@ import {
 
 const AssistantCommentResult = ({ collectedComments }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
-  //const sharedKeyword = i18nLoadNamespace("components/Shared/utils");
-
   const classes = useMyStyles();
 
   // multilingual stance classifier
@@ -64,6 +62,11 @@ const AssistantCommentResult = ({ collectedComments }) => {
   const multilingualStanceFail = useSelector(
     (state) => state.assistant.multilingualStanceFail,
   );
+
+  // define colours
+  const { mode, systemMode } = useColorScheme();
+  const resolvedMode = systemMode || mode;
+
   const stanceColours = {
     support: "success",
     deny: "error",
@@ -71,16 +74,10 @@ const AssistantCommentResult = ({ collectedComments }) => {
     comment: "inherit",
   };
 
-  const repliesColumnWidth = 70;
-  const optionsColumnWidth = 90;
-
   // read in verification keywords from TSV file in public/ folder
   const [caaVerificationKeywordsTsv, setCaaVerificationKeywordsTsv] = useState(
     [],
   );
-
-  const { mode, systemMode } = useColorScheme();
-  const resolvedMode = systemMode || mode;
 
   useEffect(() => {
     fetch("/caaVerificationKeywords.tsv")
@@ -128,6 +125,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
     stance === "deny" ? denyComments.push(collectedComments[i]) : null;
   }
 
+  // create the row data from each top level comment
   function createData(
     id,
     commentNum,
@@ -148,6 +146,11 @@ const AssistantCommentResult = ({ collectedComments }) => {
     };
   }
 
+  // fixed column widths
+  const repliesColumnWidth = 70;
+  const optionsColumnWidth = 90;
+
+  // create top level comment rows with collapsible reply rows if exist
   function Row(props) {
     const { row } = props;
     const [open, setOpen] = React.useState(false);
@@ -409,6 +412,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
     );
   }
 
+  // define Row object
   Row.propTypes = {
     row: PropTypes.shape({
       commentNum: PropTypes.number.isRequired,
@@ -429,6 +433,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
     }).isRequired,
   };
 
+  // define collapsible tablle component
   function CollapsibleTable({ comments }) {
     const rows = comments.map((comment) =>
       createData(
