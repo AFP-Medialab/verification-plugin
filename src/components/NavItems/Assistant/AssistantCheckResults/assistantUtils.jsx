@@ -54,13 +54,13 @@ export const renderThisDomainOrAccount = (keyword, scope, source) => {
     <>
       {scope.includes("/") ? (
         <Typography>
-          {` ${keyword("this")}`}
+          {` ${keyword("this")} `}
           {getUrlTypeFromCredScope(scope)}
-          {` ${keyword("source_credibility_warning_account")} ${" "}${source}`}
+          {` ${keyword("source_credibility_warning_account")} ${source}`}
         </Typography>
       ) : (
         <Typography>
-          {` ${keyword("source_credibility_warning_domain")} ${source} `}
+          {` ${keyword("source_credibility_warning_domain")} ${source}`}
         </Typography>
       )}
     </>
@@ -72,11 +72,11 @@ export const renderScope = (keyword, scope) => {
     <>
       {scope?.includes("/") ? (
         <Typography variant={"subtitle2"}>
-          {` ${keyword("account_scope")} ${scope} `}
+          {` ${keyword("account_scope")} ${scope}`}
         </Typography>
       ) : scope ? (
         <Typography variant={"subtitle2"}>
-          {` ${keyword("domain_scope")} ${scope} `}
+          {` ${keyword("domain_scope")} ${scope}`}
         </Typography>
       ) : null}
     </>
