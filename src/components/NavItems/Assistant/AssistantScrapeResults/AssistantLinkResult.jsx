@@ -145,6 +145,8 @@ const AssistantLinkResult = () => {
   );
   const sourceTypes = useSelector((state) => state.assistant.sourceTypes);
 
+  // this is a list of lists
+  // urls = [[domain1, urlsOfDomain1], [domain2, urlsOfDomain2], [account1, urlsOfAccount1], [null, unlablledUrl1], [null, unlablledUrl2], ...]
   const urls =
     inputSCDone && extractedLinks ? extractedLinks : linkList ? linkList : null;
 
@@ -172,8 +174,12 @@ const AssistantLinkResult = () => {
     ];
 
     if (extractedSourceCred) {
+      // look for domain if exists otherwise ulr is unlabelled so use the single url in urlList
       urlResults = extractedSourceCred[url];
       sortByDetails = true;
+
+      // console.log("urlResults=", urlResults);
+
       // these are in order in case of multiple types of source credibility results
       if (urlResults.positive) {
         urlColor = trafficLightColors.positive;
@@ -212,6 +218,10 @@ const AssistantLinkResult = () => {
         trafficLightColors: trafficLightColors,
         sourceTypes: sourceTypes,
         sourceTypeList: sourceTypeList,
+      },
+      domain: {
+        resolvedDomain: domainOrAccount,
+        urlColor: urlColor,
       },
       url: {
         url: url,
@@ -272,10 +282,26 @@ const AssistantLinkResult = () => {
       filterOperators: sourceTypeListFilterOperators,
     },
     {
+      field: "domain",
+      headerName: keyword("assistant_domainbox"),
+      minWidth: 200,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <Url
+            url={params.value.resolvedDomain}
+            urlColor={params.value.urlColor}
+          />
+        );
+      },
+      sortComparator: (v1, v2) => v1.url.localeCompare(v2.url),
+    },
+    {
       field: "url",
       headerName: keyword("assistant_urlbox"),
       minWidth: 400,
       flex: 1,
+      // change to either list of URLs for the domain or single URL if no domain/unlabelled status
       renderCell: (params) => {
         return <Url url={params.value.url} urlColor={params.value.urlColor} />;
       },

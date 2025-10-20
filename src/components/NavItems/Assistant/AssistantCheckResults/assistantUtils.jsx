@@ -25,7 +25,7 @@ import {
   TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
-} from "..//TransComponents";
+} from "../TransComponents";
 
 function capitaliseFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);

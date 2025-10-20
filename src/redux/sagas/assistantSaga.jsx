@@ -310,42 +310,51 @@ function* handleSourceCredibilityCall(action) {
     const linkList = yield select((state) => state.assistant.linkList);
     const inputUrlLinkList = [inputUrl].concat(linkList);
 
-    let result = [];
-    let links = [];
-    const batchSize = 20; // batches of links as UDA service has hard limit of 30 seconds
-    const parallelCalls = 2; // parallel calls to service, max two at a time
-    for (let i = 0; i < inputUrlLinkList.length; i += batchSize) {
-      const batchLinks = inputUrlLinkList.slice(i, i + batchSize);
-      const batchLinksString = batchLinks.join(" ");
-      links.push(batchLinksString);
+    // let result = [];
+    // let links = [];
+    // const batchSize = 20; // batches of links as UDA service has hard limit of 30 seconds
+    // const parallelCalls = 2; // parallel calls to service, max two at a time
+    // for (let i = 0; i < inputUrlLinkList.length; i += batchSize) {
+    //   const batchLinks = inputUrlLinkList.slice(i, i + batchSize);
+    //   const batchLinksString = batchLinks.join(" ");
+    //   links.push(batchLinksString);
 
-      if (links.length === parallelCalls) {
-        const [batchResult1, batchResult2] = yield all([
-          call(assistantApi.callSourceCredibilityService, [links[0]]),
-          call(assistantApi.callSourceCredibilityService, [links[1]]),
-        ]);
-        links = [];
+    //   if (links.length === parallelCalls) {
+    //     const [batchResult1, batchResult2] = yield all([
+    //       call(assistantApi.callSourceCredibilityService, [links[0]]),
+    //       call(assistantApi.callSourceCredibilityService, [links[1]]),
+    //     ]);
+    //     links = [];
 
-        if (batchResult1.entities.SourceCredibility) {
-          result = result.concat(batchResult1.entities.SourceCredibility);
-        }
-        if (batchResult2.entities.SourceCredibility) {
-          result = result.concat(batchResult2.entities.SourceCredibility);
-        }
-      }
-    }
-    if (links.length) {
-      const batchResult = yield call(
-        assistantApi.callSourceCredibilityService,
-        [links[0]],
-      );
-      if (batchResult.entities.SourceCredibility) {
-        result = result.concat(batchResult.entities.SourceCredibility);
-      }
-    }
-    if (!result.length) {
-      result = null;
-    }
+    //     if (batchResult1.entities.SourceCredibility) {
+    //       result = result.concat(batchResult1.entities.SourceCredibility);
+    //     }
+    //     if (batchResult2.entities.SourceCredibility) {
+    //       result = result.concat(batchResult2.entities.SourceCredibility);
+    //     }
+    //   }
+    // }
+    // if (links.length) {
+    //   const batchResult = yield call(
+    //     assistantApi.callSourceCredibilityService,
+    //     [links[0]],
+    //   );
+    //   if (batchResult.entities.SourceCredibility) {
+    //     result = result.concat(batchResult.entities.SourceCredibility);
+    //   }
+    // }
+    // if (!result.length) {
+    //   result = null;
+    // }
+
+    // send all urls and do batches on backend
+    console.log("inputUrlLinkList.length=", inputUrlLinkList.length);
+    const result = yield call(
+      assistantApi.callSourceCredibilityService,
+      inputUrlLinkList,
+    );
+
+    console.log("backend source cred =", result);
 
     const trafficLightColors = {
       positive: "success", //"#008000", // green
@@ -367,7 +376,7 @@ function* handleSourceCredibilityCall(action) {
       cautionResults,
       filteredExtractedResults,
     ] = filterSourceCredibilityResults(
-      result,
+      result.entities.SourceCredibility,
       inputUrl,
       linkList,
       trafficLightColors,
@@ -1145,6 +1154,8 @@ const filterSourceCredibilityResults = (
     return [null, null, null, null];
   }
   let sourceCredibility = originalResult;
+
+  console.log("unfiltered source cred =", sourceCredibility);
 
   sourceCredibility.forEach((dc) => {
     delete dc["indices"];
