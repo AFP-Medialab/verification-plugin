@@ -370,32 +370,26 @@ function* handleSourceCredibilityCall(action) {
       unlabelled: "unlabelled",
     };
 
-    const [
-      positiveResults,
-      mixedResults,
-      cautionResults,
-      filteredExtractedResults,
-    ] = filterSourceCredibilityResults(
-      result.entities.SourceCredibility,
-      inputUrl,
-      linkList,
-      trafficLightColors,
-    );
+    // organise links into caution, mixed, positive, unlabelled order
+    // let positiveLinks = [];
+    // let mixedLinks = [];
+    // let cautionLinks = [];
+    // let unlabelledLinks = [];
+    // for (let link in linkList) {
 
-    const extractedLinks = sortSourceCredibilityLinks(
-      filteredExtractedResults,
-      trafficLightColors,
-    );
+    // }
 
+    console.log(result.inputURL.resolvedDomain);
+    console.log(result[result.inputURL.resolvedDomain]);
     yield put(
       setInputSourceCredDetails(
-        positiveResults,
-        cautionResults,
-        mixedResults,
-        filteredExtractedResults,
+        result[result.inputURL.resolvedDomain].positive, // input url positive
+        result[result.inputURL.resolvedDomain].caution, // input url caution
+        result[result.inputURL.resolvedDomain].mixed, // input url mixed
+        result, // all the rest results
         trafficLightColors,
         sourceTypes,
-        extractedLinks,
+        result.URL.ordered, // extractedLinks?
         false,
         true,
         false,
@@ -1126,6 +1120,7 @@ const filterAssistantResults = (
     linkList = scrapeResult.links
       .sort()
       .filter((value, index, array) => array.indexOf(value) === index);
+    console.log(linkList); // remove duplicates due to "/" at end
     urlTextHtmlMap = scrapeResult.text_html_mapping;
 
     if ("collected_comments" in scrapeResult) {
@@ -1144,146 +1139,68 @@ const filterAssistantResults = (
   };
 };
 
-const filterSourceCredibilityResults = (
-  originalResult,
-  inputUrl,
-  linkList,
-  trafficLightColors,
-) => {
-  if (!originalResult) {
-    return [null, null, null, null];
-  }
-  let sourceCredibility = originalResult;
+// const sortSourceCredibilityLinks = (
+//   sourceCredibilityDict,
+//   trafficLightColors,
+// ) => {
+//   if (!sourceCredibilityDict) {
+//     return null;
+//   }
 
-  console.log("unfiltered source cred =", sourceCredibility);
+//   let positiveLinks = [];
+//   let mixedLinks = [];
+//   let cautionLinks = [];
+//   let unlabelledLinks = [];
 
-  sourceCredibility.forEach((dc) => {
-    delete dc["indices"];
-  });
-  sourceCredibility = uniqWith(sourceCredibility, isEqual);
+//   for (let link in sourceCredibilityDict) {
+//     let result = sourceCredibilityDict[link];
 
-  let sourceCredibilityDict = {};
+//     result.positive = result.positive.length ? result.positive : null;
+//     result.mixed = result.mixed.length ? result.mixed : null;
+//     result.caution = result.caution.length ? result.caution : null;
 
-  // collecting results for each link in extracted linkList
-  sourceCredibility.forEach((result) => {
-    const link = result["string"];
+//     if (result.caution) {
+//       result.urlColor = trafficLightColors.caution;
+//       cautionLinks.push(link);
+//     } else if (result.mixed) {
+//       result.urlColor = trafficLightColors.mixed;
+//       mixedLinks.push(link);
+//     } else if (result.positive) {
+//       result.urlColor = trafficLightColors.positive;
+//       positiveLinks.push(link);
+//     } else {
+//       result.urlColor = trafficLightColors.unlabelled;
+//       unlabelledLinks.push(link);
+//     }
+//   }
 
-    if (!(link in sourceCredibilityDict)) {
-      sourceCredibilityDict[link] = {
-        link: link,
-        resolvedLink: result["resolved-url"],
-        resolvedDomain: result["resolved-domain"],
-        urlColor: trafficLightColors.unlabelled,
-        positive: [],
-        mixed: [],
-        caution: [],
-      };
-    }
+//   let extractedLinks = [];
+//   extractedLinks = extractedLinks.concat(
+//     cautionLinks.sort(),
+//     mixedLinks.sort(),
+//     positiveLinks.sort(),
+//     unlabelledLinks.sort(),
+//   );
 
-    if (result["source-type"] === "positive") {
-      addToRelevantSourceCred(sourceCredibilityDict[link].positive, result);
-    } else if (
-      result["source-type"] === "mixed" &&
-      result["source"] !== "GDI-MMR"
-    ) {
-      addToRelevantSourceCred(sourceCredibilityDict[link].mixed, result);
-    } else if (result["source-type"] === "caution") {
-      addToRelevantSourceCred(sourceCredibilityDict[link].caution, result);
-    }
-  });
+//   return extractedLinks;
+// };
 
-  // catching the missing links without source credibility results
-  for (let link of linkList) {
-    if (!sourceCredibilityDict[link]) {
-      sourceCredibilityDict[link] = {
-        link: link,
-        resolvedLink: link,
-        resolvedDomain: "",
-        urlColor: trafficLightColors.unlabelled,
-        positive: [],
-        mixed: [],
-        caution: [],
-      };
-    }
-  }
+// const addToRelevantSourceCred = (sourceCredList, result) => {
+//   let resultEvidence = result["evidence"] ? result["evidence"] : [];
+//   if (resultEvidence.length) {
+//     resultEvidence = resultEvidence.toString();
+//     resultEvidence = resultEvidence.split(",");
+//   }
 
-  // collecting results for the inputUrl
-  const positiveResults = sourceCredibilityDict[inputUrl]
-    ? sourceCredibilityDict[inputUrl].positive
-    : null;
-  const mixedResults = sourceCredibilityDict[inputUrl]
-    ? sourceCredibilityDict[inputUrl].mixed
-    : null;
-  const cautionResults = sourceCredibilityDict[inputUrl]
-    ? sourceCredibilityDict[inputUrl].caution
-    : null;
-  delete sourceCredibilityDict[inputUrl];
-
-  return [positiveResults, mixedResults, cautionResults, sourceCredibilityDict];
-};
-
-const sortSourceCredibilityLinks = (
-  sourceCredibilityDict,
-  trafficLightColors,
-) => {
-  if (!sourceCredibilityDict) {
-    return null;
-  }
-
-  let positiveLinks = [];
-  let mixedLinks = [];
-  let cautionLinks = [];
-  let unlabelledLinks = [];
-
-  for (let link in sourceCredibilityDict) {
-    let result = sourceCredibilityDict[link];
-
-    result.positive = result.positive.length ? result.positive : null;
-    result.mixed = result.mixed.length ? result.mixed : null;
-    result.caution = result.caution.length ? result.caution : null;
-
-    if (result.caution) {
-      result.urlColor = trafficLightColors.caution;
-      cautionLinks.push(link);
-    } else if (result.mixed) {
-      result.urlColor = trafficLightColors.mixed;
-      mixedLinks.push(link);
-    } else if (result.positive) {
-      result.urlColor = trafficLightColors.positive;
-      positiveLinks.push(link);
-    } else {
-      result.urlColor = trafficLightColors.unlabelled;
-      unlabelledLinks.push(link);
-    }
-  }
-
-  let extractedLinks = [];
-  extractedLinks = extractedLinks.concat(
-    cautionLinks.sort(),
-    mixedLinks.sort(),
-    positiveLinks.sort(),
-    unlabelledLinks.sort(),
-  );
-
-  return extractedLinks;
-};
-
-const addToRelevantSourceCred = (sourceCredList, result) => {
-  let resultEvidence = result["evidence"] ? result["evidence"] : [];
-  if (resultEvidence.length) {
-    resultEvidence = resultEvidence.toString();
-    resultEvidence = resultEvidence.split(",");
-  }
-
-  sourceCredList.push({
-    credibilityUrl: result["string"],
-    credibilitySource: result["source"],
-    credibilityLabels: result["labels"],
-    credibilityDescription: result["description"],
-    credibilityEvidence: resultEvidence,
-    credibilityScope: result["credibility-scope"],
-  });
-};
+//   sourceCredList.push({
+//     credibilityUrl: result["string"],
+//     credibilitySource: result["source"],
+//     credibilityLabels: result["labels"],
+//     credibilityDescription: result["description"],
+//     credibilityEvidence: resultEvidence,
+//     credibilityScope: result["credibility-scope"],
+//   });
+// };
 
 /**
  * EXPORT
