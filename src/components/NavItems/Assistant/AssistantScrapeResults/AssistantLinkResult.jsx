@@ -83,6 +83,7 @@ const Url = (params) => {
 
 // render details
 const Details = (params) => {
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   return (
     <Box
       sx={{
@@ -92,7 +93,13 @@ const Details = (params) => {
         flexDirection: "row",
       }}
     >
-      {<TextCopy text={params.url} index={params.url} />}
+      {
+        <Tooltip title={keyword("copy_to_clipboard")}>
+          <div>
+            <TextCopy text={params.url} index={params.url} />
+          </div>
+        </Tooltip>
+      }
       {params.done && params.domainOrAccount !== null && (
         <ExtractedUrlDomainAnalysisResults
           extractedSourceCredibilityResults={params.urlResults}
@@ -146,50 +153,49 @@ const AssistantLinkResult = () => {
   const sourceTypes = useSelector((state) => state.assistant.sourceTypes);
 
   // this is a list of lists
-  // urls = [[domain1, urlsOfDomain1], [domain2, urlsOfDomain2], [account1, urlsOfAccount1], [null, unlablledUrl1], [null, unlablledUrl2], ...]
-  const urls =
-    inputSCDone && extractedLinks ? extractedLinks : linkList ? linkList : null;
+  const urls = inputSCDone
+    ? extractedLinks || linkList || null
+    : linkList || null;
+  // TODO check this is still correct
 
-  // create a row for each url
+  // situations
+  // source cred loading
+  //    linkList
+  // source cred failed
+  //    linkList
+  // source cred success
+  //    domains, unlabelled
+
+  console.log(extractedSourceCred);
+  // create a row for each domain followed by row for each url without source credibility
   let rows = [];
-  for (let i = 0; i < urls.length; i++) {
-    let url = urls[i];
 
-    // define extracted source credibility
-    let urlColor = "inherit"; //trafficLightColors.unlabelled;
-    let urlResults = {
-      caution: null,
-      mixed: null,
-      positive: null,
-    };
-    let sortByDetails = false;
-    let domainOrAccount = null;
+  // source credibility done with results
+  if (extractedSourceCred) {
+    // domain rows
     const unlabelled = "unlabelled";
-    let sourceTypeList = [
-      sourceTypes
-        ? sourceTypes.unlabelled
-          ? unlabelled
-          : unlabelled
-        : unlabelled,
-    ];
+    for (const domainResults of Object.values(extractedSourceCred.domain)) {
+      let urlColor = "inherit"; //trafficLightColors.unlabelled;
 
-    if (extractedSourceCred) {
-      // look for domain if exists otherwise ulr is unlabelled so use the single url in urlList
-      urlResults = extractedSourceCred[url];
-      sortByDetails = true;
+      let sourceTypeList = [
+        sourceTypes
+          ? sourceTypes.unlabelled
+            ? unlabelled
+            : unlabelled
+          : unlabelled,
+      ];
 
-      // console.log("urlResults=", urlResults);
+      console.log(sourceTypeList);
 
-      // these are in order in case of multiple types of source credibility results
-      if (urlResults.positive) {
+      if (domainResults.positive) {
         urlColor = trafficLightColors.positive;
         sourceTypeList.push(keyword(sourceTypes.positive));
       }
-      if (urlResults.mixed) {
+      if (domainResults.mixed) {
         urlColor = trafficLightColors.mixed;
         sourceTypeList.push(keyword(sourceTypes.mixed));
       }
-      if (urlResults.caution) {
+      if (domainResults.caution) {
         urlColor = trafficLightColors.caution;
         sourceTypeList.push(keyword(sourceTypes.caution));
       }
@@ -198,48 +204,130 @@ const AssistantLinkResult = () => {
         sourceTypeList.length > 1
           ? sourceTypeList.splice(1, sourceTypeList.length)
           : sourceTypeList;
-      // detect domain or account address
-      domainOrAccount = urlResults.resolvedDomain
-        ? urlResults.resolvedDomain.startsWith("https://")
-          ? urlResults.resolvedDomain
-          : "https://" + urlResults.resolvedDomain
+      // detect resolved domain address
+      const resolvedDomain = domainResults.resolvedDomain
+        ? domainResults.resolvedDomain.startsWith("https://")
+          ? domainResults.resolvedDomain
+          : "https://" + domainResults.resolvedDomain
         : null;
+
+      console.log(sourceTypeList);
+
+      // add row for domain with list of URLs
+      rows.push({
+        id: rows.length + 1,
+        status: {
+          loading: inputSCLoading,
+          done: inputSCDone,
+          fail: inputSCFail,
+          urlResults: domainResults,
+          url: domainResults.URL, // url list
+          trafficLightColors: trafficLightColors,
+          sourceTypes: sourceTypes,
+          sourceTypeList: sourceTypeList,
+        },
+        domain: {
+          resolvedDomain: resolvedDomain,
+          urlColor: urlColor,
+        },
+        url: {
+          url: domainResults.URL,
+          urlColor: urlColor,
+        },
+        details: {
+          loading: inputSCLoading,
+          done: inputSCDone,
+          fail: inputSCFail,
+          urlResults: [],
+          url: domainResults.URL,
+          urlColor: urlColor,
+          domainOrAccount: resolvedDomain, // TODO wrong name
+          sourceTypes: sourceTypes,
+          trafficLightColors: trafficLightColors,
+          sortByDetails: true,
+        },
+      });
     }
 
-    // add row
-    rows.push({
-      id: i + 1,
-      status: {
-        loading: inputSCLoading,
-        done: inputSCDone,
-        fail: inputSCFail,
-        urlResults: urlResults,
-        url: url,
-        trafficLightColors: trafficLightColors,
-        sourceTypes: sourceTypes,
-        sourceTypeList: sourceTypeList,
-      },
-      domain: {
-        resolvedDomain: domainOrAccount,
-        urlColor: urlColor,
-      },
-      url: {
-        url: url,
-        urlColor: urlColor,
-      },
-      details: {
-        loading: inputSCLoading,
-        done: inputSCDone,
-        fail: inputSCFail,
-        urlResults: urlResults,
-        url: url,
-        urlColor: urlColor,
-        domainOrAccount: domainOrAccount,
-        sourceTypes: sourceTypes,
-        trafficLightColors: trafficLightColors,
-        sortByDetails: sortByDetails,
-      },
-    });
+    // unlabelled rows
+    for (let i = 0; i < extractedSourceCred.URL.unlabelled.length; i++) {
+      const url = extractedSourceCred.URL.unlabelled[i];
+
+      rows.push({
+        id: rows.length + 1,
+        status: {
+          loading: inputSCLoading,
+          done: inputSCDone,
+          fail: inputSCFail,
+          urlResults: [],
+          url: url,
+          trafficLightColors: trafficLightColors,
+          sourceTypes: sourceTypes,
+          sourceTypeList: [unlabelled],
+        },
+        domain: {
+          resolvedDomain: "",
+          urlColor: "inherit",
+        },
+        url: {
+          url: [url],
+          urlColor: "inherit",
+        },
+        details: {
+          loading: inputSCLoading,
+          done: inputSCDone,
+          fail: inputSCFail,
+          urlResults: [],
+          url: url,
+          urlColor: "inherit",
+          domainOrAccount: null, // TODO wrong name
+          sourceTypes: sourceTypes,
+          trafficLightColors: trafficLightColors,
+          sortByDetails: true,
+        },
+      });
+    }
+  }
+
+  // source credibility failed or loading
+  if (inputSCLoading || inputSCFail) {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+
+      rows.push({
+        id: rows.length + 1,
+        status: {
+          loading: inputSCLoading,
+          done: inputSCDone,
+          fail: inputSCFail,
+          urlResults: [],
+          url: url,
+          trafficLightColors: trafficLightColors,
+          sourceTypes: sourceTypes,
+          sourceTypeList: [],
+        },
+        domain: {
+          resolvedDomain: "",
+          urlColor: "inherit",
+        },
+        url: {
+          url: [url],
+          urlColor: "inherit",
+        },
+        details: {
+          loading: inputSCLoading,
+          done: inputSCDone,
+          fail: inputSCFail,
+          urlResults: [],
+          url: url,
+          urlColor: "inherit",
+          domainOrAccount: null, // TODO wrong name
+          sourceTypes: sourceTypes,
+          trafficLightColors: trafficLightColors,
+          sortByDetails: false,
+        },
+      });
+    }
   }
 
   // columns
@@ -283,7 +371,7 @@ const AssistantLinkResult = () => {
     },
     {
       field: "domain",
-      headerName: keyword("assistant_domainbox"),
+      headerName: keyword("extracted_urls_domain"),
       minWidth: 200,
       flex: 1,
       renderCell: (params) => {
@@ -294,18 +382,21 @@ const AssistantLinkResult = () => {
           />
         );
       },
-      sortComparator: (v1, v2) => v1.url.localeCompare(v2.url),
+      sortComparator: (v1, v2) =>
+        v1.resolvedDomain.localeCompare(v2.resolvedDomain),
     },
     {
       field: "url",
       headerName: keyword("assistant_urlbox"),
       minWidth: 400,
       flex: 1,
-      // change to either list of URLs for the domain or single URL if no domain/unlabelled status
+      // TODO change to either list of URLs for the domain or single URL if no domain/unlabelled status
       renderCell: (params) => {
-        return <Url url={params.value.url} urlColor={params.value.urlColor} />;
+        return (
+          <Url url={params.value.url[0]} urlColor={params.value.urlColor} />
+        );
       },
-      sortComparator: (v1, v2) => v1.url.localeCompare(v2.url),
+      sortComparator: (v1, v2) => v1.url[0].localeCompare(v2.url[0]), // TODO by alphabetically order of urls? but what about lists?
     },
     {
       field: "details",
