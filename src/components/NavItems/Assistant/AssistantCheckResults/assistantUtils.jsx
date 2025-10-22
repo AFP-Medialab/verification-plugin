@@ -226,7 +226,7 @@ export const renderDomainAnalysisResults = (
                   {renderThisDomainOrAccount(
                     keyword,
                     value.credibilityScope,
-                    value.credibilitySource,
+                    value.source,
                   )}
                 </Typography>
                 <Box
@@ -243,9 +243,9 @@ export const renderDomainAnalysisResults = (
                 color={"textSecondary"}
               >
                 {renderScope(keyword, value.credibilityScope)}
-                {renderLabels(keyword, value.credibilityLabels)}
-                {renderDescription(keyword, value.credibilityDescription)}
-                {value.credibilityEvidence.length > 0
+                {renderLabels(keyword, value.labels)}
+                {renderDescription(keyword, value.description)}
+                {value.evidence?.length > 0
                   ? renderDialog(keyword, value, trafficLightColor, sourceType)
                   : null}
               </Typography>
@@ -291,8 +291,7 @@ const renderDialog = (keyword, value, trafficLightColor, sourceType) => {
                   color={trafficLightColor}
                   size="small"
                 />{" "}
-                {keyword("source_cred_popup_header_domain")}{" "}
-                {value.credibilitySource}
+                {keyword("source_cred_popup_header_domain")} {value.source}
               </Typography>
             </Grid>
             <Grid
@@ -341,7 +340,7 @@ const renderDialog = (keyword, value, trafficLightColor, sourceType) => {
 
         <DialogContent dividers>
           <List sx={{ listStyle: "decimal", ml: 4 }}>
-            {value.credibilityEvidence.map((result, index) => (
+            {value.evidence.map((result, index) => (
               <ListItem key={index} sx={{ display: "list-item" }}>
                 <Typography>
                   <Link target="_blank" href={result} color="inherit">
@@ -351,7 +350,7 @@ const renderDialog = (keyword, value, trafficLightColor, sourceType) => {
               </ListItem>
             ))}
           </List>
-          {value.credibilityLabels === "present in GDI reports" && (
+          {value.labels === "present in GDI reports" && (
             <Typography variant={"subtitle2"} sx={{ align: "start" }}>
               <Box sx={{ fontStyle: "italic", m: 1 }}>
                 {keyword("gdi_reports_warning")}
