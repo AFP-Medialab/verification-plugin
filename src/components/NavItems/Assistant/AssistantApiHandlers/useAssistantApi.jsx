@@ -207,7 +207,7 @@ export default function assistantApiCalls() {
           assistantEndpoint + "gcloud/source-credibility",
           {
             urls: urlList,
-            frontendVersion: "0.89",
+            frontendVersion: "0.88",
           },
         );
         return result.data;
