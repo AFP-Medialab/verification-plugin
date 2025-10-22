@@ -310,51 +310,11 @@ function* handleSourceCredibilityCall(action) {
     const linkList = yield select((state) => state.assistant.linkList);
     const inputUrlLinkList = [inputUrl].concat(linkList);
 
-    // let result = [];
-    // let links = [];
-    // const batchSize = 20; // batches of links as UDA service has hard limit of 30 seconds
-    // const parallelCalls = 2; // parallel calls to service, max two at a time
-    // for (let i = 0; i < inputUrlLinkList.length; i += batchSize) {
-    //   const batchLinks = inputUrlLinkList.slice(i, i + batchSize);
-    //   const batchLinksString = batchLinks.join(" ");
-    //   links.push(batchLinksString);
-
-    //   if (links.length === parallelCalls) {
-    //     const [batchResult1, batchResult2] = yield all([
-    //       call(assistantApi.callSourceCredibilityService, [links[0]]),
-    //       call(assistantApi.callSourceCredibilityService, [links[1]]),
-    //     ]);
-    //     links = [];
-
-    //     if (batchResult1.entities.SourceCredibility) {
-    //       result = result.concat(batchResult1.entities.SourceCredibility);
-    //     }
-    //     if (batchResult2.entities.SourceCredibility) {
-    //       result = result.concat(batchResult2.entities.SourceCredibility);
-    //     }
-    //   }
-    // }
-    // if (links.length) {
-    //   const batchResult = yield call(
-    //     assistantApi.callSourceCredibilityService,
-    //     [links[0]],
-    //   );
-    //   if (batchResult.entities.SourceCredibility) {
-    //     result = result.concat(batchResult.entities.SourceCredibility);
-    //   }
-    // }
-    // if (!result.length) {
-    //   result = null;
-    // }
-
     // send all urls and do batches on backend
-    console.log("inputUrlLinkList.length=", inputUrlLinkList.length);
     const result = yield call(
       assistantApi.callSourceCredibilityService,
       inputUrlLinkList,
     );
-
-    console.log("backend source cred =", result);
 
     const trafficLightColors = {
       positive: "success", //"#008000", // green
@@ -370,26 +330,17 @@ function* handleSourceCredibilityCall(action) {
       unlabelled: "unlabelled",
     };
 
-    // organise links into caution, mixed, positive, unlabelled order
-    // let positiveLinks = [];
-    // let mixedLinks = [];
-    // let cautionLinks = [];
-    // let unlabelledLinks = [];
-    // for (let link in linkList) {
+    console.log(result);
 
-    // }
-
-    console.log(result.inputURL.resolvedDomain);
-    console.log(result[result.inputURL.resolvedDomain]);
     yield put(
       setInputSourceCredDetails(
-        result[result.inputURL.resolvedDomain].positive, // input url positive
-        result[result.inputURL.resolvedDomain].caution, // input url caution
-        result[result.inputURL.resolvedDomain].mixed, // input url mixed
+        result.domain[result.URL.inputURL[0].resolvedDomain].positive, // input url positive
+        result.domain[result.URL.inputURL[0].resolvedDomain].caution, // input url caution
+        result.domain[result.URL.inputURL[0].resolvedDomain].mixed, // input url mixed
         result, // all the rest results
-        trafficLightColors,
-        sourceTypes,
-        result.URL.ordered, // extractedLinks?
+        trafficLightColors, // necessary?
+        sourceTypes, // TODO necessary?
+        result.URL.ordered.map((obj) => obj.string), // extractedLinks in order: caution, mixed, positive, unlabelled
         false,
         true,
         false,
@@ -1120,7 +1071,6 @@ const filterAssistantResults = (
     linkList = scrapeResult.links
       .sort()
       .filter((value, index, array) => array.indexOf(value) === index);
-    console.log(linkList); // remove duplicates due to "/" at end
     urlTextHtmlMap = scrapeResult.text_html_mapping;
 
     if ("collected_comments" in scrapeResult) {
@@ -1138,69 +1088,6 @@ const filterAssistantResults = (
     collectedComments: collectedComments,
   };
 };
-
-// const sortSourceCredibilityLinks = (
-//   sourceCredibilityDict,
-//   trafficLightColors,
-// ) => {
-//   if (!sourceCredibilityDict) {
-//     return null;
-//   }
-
-//   let positiveLinks = [];
-//   let mixedLinks = [];
-//   let cautionLinks = [];
-//   let unlabelledLinks = [];
-
-//   for (let link in sourceCredibilityDict) {
-//     let result = sourceCredibilityDict[link];
-
-//     result.positive = result.positive.length ? result.positive : null;
-//     result.mixed = result.mixed.length ? result.mixed : null;
-//     result.caution = result.caution.length ? result.caution : null;
-
-//     if (result.caution) {
-//       result.urlColor = trafficLightColors.caution;
-//       cautionLinks.push(link);
-//     } else if (result.mixed) {
-//       result.urlColor = trafficLightColors.mixed;
-//       mixedLinks.push(link);
-//     } else if (result.positive) {
-//       result.urlColor = trafficLightColors.positive;
-//       positiveLinks.push(link);
-//     } else {
-//       result.urlColor = trafficLightColors.unlabelled;
-//       unlabelledLinks.push(link);
-//     }
-//   }
-
-//   let extractedLinks = [];
-//   extractedLinks = extractedLinks.concat(
-//     cautionLinks.sort(),
-//     mixedLinks.sort(),
-//     positiveLinks.sort(),
-//     unlabelledLinks.sort(),
-//   );
-
-//   return extractedLinks;
-// };
-
-// const addToRelevantSourceCred = (sourceCredList, result) => {
-//   let resultEvidence = result["evidence"] ? result["evidence"] : [];
-//   if (resultEvidence.length) {
-//     resultEvidence = resultEvidence.toString();
-//     resultEvidence = resultEvidence.split(",");
-//   }
-
-//   sourceCredList.push({
-//     credibilityUrl: result["string"],
-//     credibilitySource: result["source"],
-//     credibilityLabels: result["labels"],
-//     credibilityDescription: result["description"],
-//     credibilityEvidence: resultEvidence,
-//     credibilityScope: result["credibility-scope"],
-//   });
-// };
 
 /**
  * EXPORT
