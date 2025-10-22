@@ -205,7 +205,10 @@ export default function assistantApiCalls() {
 
         const result = await axios.post(
           assistantEndpoint + "gcloud/source-credibility",
-          { urls: urlList },
+          {
+            urls: urlList,
+            frontendVersion: "0.89",
+          },
         );
         return result.data;
       },
