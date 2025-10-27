@@ -15,6 +15,7 @@ import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import LinearProgress from "@mui/material/LinearProgress";
+import Pagination from "@mui/material/Pagination";
 import Paper from "@mui/material/Paper";
 import Skeleton from "@mui/material/Skeleton";
 import Table from "@mui/material/Table";
@@ -49,6 +50,15 @@ import {
 const AssistantCommentResult = ({ collectedComments }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const classes = useMyStyles();
+
+  // pagination
+  const pageSize = 5;
+  const [currentAllPage, setCurrentAllPage] = useState(1);
+  const [currentLinkPage, setCurrentLinkPage] = useState(1);
+  const [currentVerificationPage, setCurrentVerificationPage] = useState(1);
+  const [currentSupportPage, setCurrentSupportPage] = useState(1);
+  const [currentQueryPage, setCurrentQueryPage] = useState(1);
+  const [currentDenyPage, setCurrentDenyPage] = useState(1);
 
   // multilingual stance classifier
   const multilingualStanceResult = useSelector(
@@ -437,58 +447,121 @@ const AssistantCommentResult = ({ collectedComments }) => {
   };
 
   // define collapsible tablle component
-  function CollapsibleTable({ comments }) {
-    const rows = comments.map((comment) =>
-      createData(
-        comment.id,
-        comment.commentNum,
-        comment.authorChannelUrl,
-        comment.authorDisplayName,
-        comment.publishedAt,
-        comment.textOriginal,
-        comment.replies || null,
-      ),
-    );
+  function CollapsibleTable({
+    comments,
+    pageChangeHandler,
+    currentPage,
+    numPages,
+  }) {
+    const offset = (currentPage - 1) * pageSize;
+    let lastIndex = comments.length;
+    if (offset + pageSize < lastIndex) {
+      lastIndex = offset + pageSize;
+    }
+
+    const rows = comments
+      .slice(offset, lastIndex)
+      .map((comment) =>
+        createData(
+          comment.id,
+          comment.commentNum,
+          comment.authorChannelUrl,
+          comment.authorDisplayName,
+          comment.publishedAt,
+          comment.textOriginal,
+          comment.replies || null,
+        ),
+      );
+
     return (
-      <TableContainer component={Paper}>
-        <Table size="small" aria-label="collapsible table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center" width={repliesColumnWidth}>
-                <Typography>
-                  {keyword("youtube_comments_replies_title")}
-                </Typography>
-              </TableCell>
-              <TableCell align="center">
-                <Typography>#</Typography>
-              </TableCell>
-              <TableCell align={"center"}>
-                <Typography>{keyword("user")}</Typography>
-              </TableCell>
-              <TableCell align={"center"}>
-                <Typography>
-                  {keyword("youtube_comments_published_title")}
-                </Typography>
-              </TableCell>
-              <TableCell align="center">
-                <Typography>{keyword("comment")}</Typography>
-              </TableCell>
-              <TableCell align="center">
-                <Typography>{keyword("stance_title")}</Typography>
-              </TableCell>
-              <TableCell align="center" width={optionsColumnWidth}>
-                <Typography>{keyword("options")}</Typography>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <Row key={row.id} row={row} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <>
+        {comments.length > 5 ? (
+          <Box sx={{ mb: 1 }}>
+            <Pagination
+              count={numPages}
+              variant="outlined"
+              onChange={pageChangeHandler}
+              page={currentPage}
+            />
+          </Box>
+        ) : null}
+
+        <TableContainer component={Paper}>
+          <Table size="small" aria-label="collapsible table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="center" width={repliesColumnWidth}>
+                  <Typography>
+                    {keyword("youtube_comments_replies_title")}
+                  </Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography>#</Typography>
+                </TableCell>
+                <TableCell align={"center"}>
+                  <Typography>{keyword("user")}</Typography>
+                </TableCell>
+                <TableCell align={"center"}>
+                  <Typography>
+                    {keyword("youtube_comments_published_title")}
+                  </Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography>{keyword("comment")}</Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography>{keyword("stance_title")}</Typography>
+                </TableCell>
+                <TableCell align="center" width={optionsColumnWidth}>
+                  <Typography>{keyword("options")}</Typography>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <Row key={row.id} row={row} />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        {comments.length > 5 ? (
+          <Box sx={{ mt: 1 }}>
+            <Pagination
+              count={numPages}
+              variant="outlined"
+              onChange={pageChangeHandler}
+              page={currentPage}
+            />
+          </Box>
+        ) : null}
+      </>
     );
+  }
+
+  // pagination for sorted comments
+  function allPageChangeHandler(event, page) {
+    setCurrentAllPage(page);
+  }
+
+  function linkPageChangeHandler(event, page) {
+    setCurrentLinkPage(page);
+  }
+
+  function verificationPageChangeHandler(event, page) {
+    setCurrentVerificationPage(page);
+  }
+
+  function supportPageChangeHandler(event, page) {
+    setCurrentSupportPage(page);
+  }
+
+  function queryPageChangeHandler(event, page) {
+    setCurrentQueryPage(page);
+  }
+
+  function denyPageChangeHandler(event, page) {
+    setCurrentDenyPage(page);
   }
 
   return (
@@ -532,7 +605,12 @@ const AssistantCommentResult = ({ collectedComments }) => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <CollapsibleTable comments={collectedComments} />
+            <CollapsibleTable
+              comments={collectedComments}
+              pageChangeHandler={allPageChangeHandler}
+              currentPage={currentAllPage}
+              numPages={Math.ceil(collectedComments.length / pageSize)}
+            />
           </AccordionDetails>
         </Accordion>
 
@@ -544,7 +622,12 @@ const AssistantCommentResult = ({ collectedComments }) => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <CollapsibleTable comments={linkComments} />
+            <CollapsibleTable
+              comments={linkComments}
+              pageChangeHandler={linkPageChangeHandler}
+              currentPage={currentLinkPage}
+              numPages={Math.ceil(linkComments.length / pageSize)}
+            />
           </AccordionDetails>
         </Accordion>
 
@@ -559,7 +642,12 @@ const AssistantCommentResult = ({ collectedComments }) => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <CollapsibleTable comments={verificationComments} />
+            <CollapsibleTable
+              comments={verificationComments}
+              pageChangeHandler={verificationPageChangeHandler}
+              currentPage={currentVerificationPage}
+              numPages={Math.ceil(verificationComments.length / pageSize)}
+            />
           </AccordionDetails>
         </Accordion>
 
@@ -578,7 +666,12 @@ const AssistantCommentResult = ({ collectedComments }) => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <CollapsibleTable comments={supportComments} />
+            <CollapsibleTable
+              comments={supportComments}
+              pageChangeHandler={supportPageChangeHandler}
+              currentPage={currentSupportPage}
+              numPages={Math.ceil(supportComments.length / pageSize)}
+            />
           </AccordionDetails>
         </Accordion>
 
@@ -597,7 +690,12 @@ const AssistantCommentResult = ({ collectedComments }) => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <CollapsibleTable comments={queryComments} />
+            <CollapsibleTable
+              comments={queryComments}
+              pageChangeHandler={queryPageChangeHandler}
+              currentPage={currentQueryPage}
+              numPages={Math.ceil(queryComments.length / pageSize)}
+            />
           </AccordionDetails>
         </Accordion>
 
@@ -616,7 +714,12 @@ const AssistantCommentResult = ({ collectedComments }) => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <CollapsibleTable comments={denyComments} />
+            <CollapsibleTable
+              comments={denyComments}
+              pageChangeHandler={denyPageChangeHandler}
+              currentPage={currentDenyPage}
+              numPages={Math.ceil(denyComments.length / pageSize)}
+            />
           </AccordionDetails>
         </Accordion>
       </CardContent>
