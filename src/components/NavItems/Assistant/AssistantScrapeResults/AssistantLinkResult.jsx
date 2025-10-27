@@ -53,7 +53,7 @@ const Status = (params) => {
           size="small"
         />
       ) : null}
-      {params.done && params.urlResults.resolvedDomain === "" ? (
+      {params.done && params.urlResults.length < 1 ? (
         <Chip
           label={keyword(params.sourceTypes.unlabelled)}
           color={params.trafficLightColors.unlabelled}
