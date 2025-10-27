@@ -30,6 +30,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
@@ -303,7 +304,9 @@ const AssistantCommentResult = ({ collectedComments }) => {
                         ></TableCell>
 
                         {/* comment num or empty if reply comment*/}
-                        <TableCell></TableCell>
+                        <TableCell>
+                          <ReplyOutlinedIcon color="action" />
+                        </TableCell>
 
                         {/* username */}
                         <TableCell sx={{ textAlign: "start" }}>
