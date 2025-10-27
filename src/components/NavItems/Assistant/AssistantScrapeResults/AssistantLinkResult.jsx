@@ -67,8 +67,18 @@ const Status = (params) => {
 
 // render URL in correct colour
 const Url = (params) => {
-  return (
+  // returns a list of URLs
+  // single URL in list if no domain results
+  // domain also uses this component and is passed through as [domain]
+
+  return params.url?.length > 1 ? (
+    <Typography variant="p" title={params.url} color={params.urlColor}>
+      {/* list of URLs on hover */}
+      {params.url.length} {"urls_found_with_domain"}
+    </Typography>
+  ) : (
     <Tooltip title={params.url}>
+      {/* single URL or domain */}
       <Link
         style={{ cursor: "pointer" }}
         target="_blank"
@@ -388,11 +398,8 @@ const AssistantLinkResult = () => {
       headerName: keyword("assistant_urlbox"),
       minWidth: 400,
       flex: 1,
-      // TODO change to either list of URLs for the domain or single URL if no domain/unlabelled status
       renderCell: (params) => {
-        return (
-          <Url url={params.value.url[0]} urlColor={params.value.urlColor} />
-        );
+        return <Url url={params.value.url} urlColor={params.value.urlColor} />;
       },
       sortComparator: (v1, v2) => v1.url[0].localeCompare(v2.url[0]), // TODO by alphabetically order of urls? but what about lists?
     },
