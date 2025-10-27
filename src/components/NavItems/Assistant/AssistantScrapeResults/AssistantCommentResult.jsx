@@ -322,7 +322,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
                         </TableCell>
 
                         {/* date published */}
-                        <TableCell>
+                        <TableCell align="center">
                           {moment(repliesRow.publishedAt).format("l") +
                             " " +
                             moment(repliesRow.publishedAt).format("LT")}
