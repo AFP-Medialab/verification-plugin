@@ -199,7 +199,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
           }}
         >
           {/* replies collapse */}
-          <TableCell width={repliesColumnWidth}>
+          <TableCell width={repliesColumnWidth} align="center">
             {row.replies ? (
               <IconButton
                 aria-label="expand row"
