@@ -246,8 +246,16 @@ const AssistantCommentResult = ({ collectedComments }) => {
 
           {/* options */}
           <TableCell>
-            <TextCopy text={text} index={key} />
-            <Translate text={text} />
+            <Tooltip title={keyword("copy_to_clipboard")}>
+              <div>
+                <TextCopy text={text} index={key} />
+              </div>
+            </Tooltip>
+            <Tooltip title={keyword("translate")}>
+              <div>
+                <Translate text={text} />
+              </div>
+            </Tooltip>
           </TableCell>
         </TableRow>,
       );
