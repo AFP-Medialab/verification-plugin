@@ -110,7 +110,7 @@ const Details = (params) => {
           </div>
         </Tooltip>
       }
-      {params.done && params.domainOrAccount !== null && (
+      {params.done && params.resolvedDomain !== null && (
         <ExtractedUrlDomainAnalysisResults
           extractedSourceCredibilityResults={params.urlResults}
           url={params.urlResults.resolvedLink}
@@ -249,7 +249,7 @@ const AssistantLinkResult = () => {
           urlResults: [],
           url: domainResults.URL,
           urlColor: urlColor,
-          domainOrAccount: resolvedDomain, // TODO wrong name
+          resolvedDomain: resolvedDomain, // TODO wrong name
           sourceTypes: sourceTypes,
           trafficLightColors: trafficLightColors,
           sortByDetails: true,
@@ -288,7 +288,7 @@ const AssistantLinkResult = () => {
           urlResults: [],
           url: url,
           urlColor: "inherit",
-          domainOrAccount: null, // TODO wrong name
+          resolvedDomain: null,
           sourceTypes: sourceTypes,
           trafficLightColors: trafficLightColors,
           sortByDetails: true,
@@ -329,7 +329,7 @@ const AssistantLinkResult = () => {
           urlResults: [],
           url: url,
           urlColor: "inherit",
-          domainOrAccount: null, // TODO wrong name
+          resolvedDomain: null,
           sourceTypes: sourceTypes,
           trafficLightColors: trafficLightColors,
           sortByDetails: false,
@@ -385,7 +385,7 @@ const AssistantLinkResult = () => {
       renderCell: (params) => {
         return (
           <Url
-            url={params.value.resolvedDomain}
+            url={[params.value.resolvedDomain]}
             urlColor={params.value.urlColor}
           />
         );
@@ -423,7 +423,7 @@ const AssistantLinkResult = () => {
             urlResults={params.value.urlResults}
             url={params.value.url}
             urlColor={params.value.urlColor}
-            domainOrAccount={params.value.domainOrAccount}
+            resolvedDomain={params.value.resolvedDomain}
             sourceTypes={params.value.sourceTypes}
             trafficLightColors={params.value.trafficLightColors}
           />
