@@ -32,21 +32,21 @@ const Status = (params) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   return (
     <Stack direction="column" spacing={0.5}>
-      {params.done && params.urlResults.caution !== null ? (
+      {params.done && params.urlResults.caution?.length > 0 ? (
         <Chip
           label={keyword(params.sourceTypes.caution)}
           color={params.trafficLightColors.caution}
           size="small"
         />
       ) : null}
-      {params.done && params.urlResults.mixed !== null ? (
+      {params.done && params.urlResults.mixed?.length > 0 ? (
         <Chip
           label={keyword(params.sourceTypes.mixed)}
           color={params.trafficLightColors.mixed}
           size="small"
         />
       ) : null}
-      {params.done && params.urlResults.positive != null ? (
+      {params.done && params.urlResults.positive?.length > 0 ? (
         <Chip
           label={keyword(params.sourceTypes.positive)}
           color={params.trafficLightColors.positive}
@@ -185,33 +185,31 @@ const AssistantLinkResult = () => {
           : unlabelled,
       ];
 
-      console.log(sourceTypeList);
-
-      if (domainResults.positive) {
+      if (domainResults.positive.length > 0) {
         urlColor = trafficLightColors.positive;
         sourceTypeList.push(keyword(sourceTypes.positive));
       }
-      if (domainResults.mixed) {
+      if (domainResults.mixed.length > 0) {
         urlColor = trafficLightColors.mixed;
         sourceTypeList.push(keyword(sourceTypes.mixed));
       }
-      if (domainResults.caution) {
+      if (domainResults.caution.length > 0) {
         urlColor = trafficLightColors.caution;
         sourceTypeList.push(keyword(sourceTypes.caution));
       }
+
       // if positive, mixed or caution then remove unlabelled
       sourceTypeList =
         sourceTypeList.length > 1
           ? sourceTypeList.splice(1, sourceTypeList.length)
           : sourceTypeList;
+
       // detect resolved domain address
       const resolvedDomain = domainResults.resolvedDomain
         ? domainResults.resolvedDomain.startsWith("https://")
           ? domainResults.resolvedDomain
           : "https://" + domainResults.resolvedDomain
         : null;
-
-      console.log(sourceTypeList);
 
       // add row for domain with list of URLs
       rows.push({
