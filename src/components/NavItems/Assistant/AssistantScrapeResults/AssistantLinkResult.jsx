@@ -83,6 +83,7 @@ const Url = (params) => {
 
 // render details
 const Details = (params) => {
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   return (
     <Box
       sx={{
@@ -92,7 +93,11 @@ const Details = (params) => {
         flexDirection: "row",
       }}
     >
-      {<TextCopy text={params.url} index={params.url} />}
+      <Tooltip title={keyword("copy_to_clipboard")}>
+        <div>
+          <TextCopy text={params.url} index={params.url} />
+        </div>
+      </Tooltip>
       {params.done && params.domainOrAccount !== null && (
         <ExtractedUrlDomainAnalysisResults
           extractedSourceCredibilityResults={params.urlResults}
