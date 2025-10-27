@@ -448,7 +448,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
     );
     return (
       <TableContainer component={Paper}>
-        <Table aria-label="collapsible table">
+        <Table size="small" aria-label="collapsible table">
           <TableHead>
             <TableRow>
               <TableCell align="center" width={repliesColumnWidth}>
