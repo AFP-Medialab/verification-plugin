@@ -35,8 +35,6 @@ import {
   setSubjectivityDetails,
   setUrlMode,
 } from "@/redux/actions/tools/assistantActions";
-import isEqual from "lodash/isEqual";
-import uniqWith from "lodash/uniqWith";
 import {
   all,
   call,
