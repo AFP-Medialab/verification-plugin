@@ -328,8 +328,6 @@ function* handleSourceCredibilityCall(action) {
       unlabelled: "unlabelled",
     };
 
-    console.log(result);
-
     yield put(
       setInputSourceCredDetails(
         result.domain[result.URL.inputURL[0].resolvedDomain].positive, // input url positive

@@ -27,6 +27,24 @@ import {
   TransUrlDomainAnalysisLink,
 } from "../TransComponents";
 
+// functions for AssistantUrlDomainAnalysis and ExtractedUrlDomainAnalysis
+
+export const renderSourceTypeChip = (
+  keyword,
+  trafficLightColor,
+  sourceType,
+) => {
+  return (
+    <Chip label={keyword(sourceType)} color={trafficLightColor} size="small" />
+  );
+};
+
+// functions for ExtractedUrlDomainAnalysis
+
+export function prependHttps(url) {
+  return url ? (url.startsWith("http://") ? url : "https://" + url) : null;
+}
+
 function capitaliseFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -39,23 +57,17 @@ export const getUrlTypeFromCredScope = (string) => {
   return capitaliseFirstLetter(urlType);
 };
 
-export const renderSourceTypeChip = (
+export const renderThisDomainOrAccount = (
   keyword,
-  trafficLightColor,
-  sourceType,
+  credibilityScope,
+  source,
 ) => {
   return (
-    <Chip label={keyword(sourceType)} color={trafficLightColor} size="small" />
-  );
-};
-
-export const renderThisDomainOrAccount = (keyword, scope, source) => {
-  return (
     <>
-      {scope.includes("/") ? (
+      {credibilityScope.includes("/") ? (
         <Typography>
           {` ${keyword("this")} `}
-          {getUrlTypeFromCredScope(scope)}
+          {getUrlTypeFromCredScope(credibilityScope)}
           {` ${keyword("source_credibility_warning_account")} ${source}`}
         </Typography>
       ) : (
@@ -67,16 +79,16 @@ export const renderThisDomainOrAccount = (keyword, scope, source) => {
   );
 };
 
-export const renderScope = (keyword, scope) => {
+export const renderScope = (keyword, credibilityScope) => {
   return (
     <>
-      {scope?.includes("/") ? (
+      {credibilityScope?.includes("/") ? (
         <Typography variant={"subtitle2"}>
-          {` ${keyword("account_scope")} ${scope}`}
+          {` ${keyword("account_scope")} ${credibilityScope}`}
         </Typography>
-      ) : scope ? (
+      ) : credibilityScope ? (
         <Typography variant={"subtitle2"}>
-          {` ${keyword("domain_scope")} ${scope}`}
+          {` ${keyword("domain_scope")} ${credibilityScope}`}
         </Typography>
       ) : null}
     </>
@@ -107,12 +119,18 @@ export const renderDescription = (keyword, description) => {
   );
 };
 
-export const renderEvidence = (keyword, labels, evidence, source, scope) => {
+export const renderEvidence = (
+  keyword,
+  labels,
+  evidence,
+  source,
+  credibilityScope,
+) => {
   return (
     <List>
       <ListItem>
         <Typography variant={"subtitle2"}>
-          {scope?.includes("/")
+          {credibilityScope?.includes("/")
             ? keyword("source_cred_popup_header_account")
             : keyword("source_cred_popup_header_domain")}{" "}
           {source}
@@ -123,7 +141,12 @@ export const renderEvidence = (keyword, labels, evidence, source, scope) => {
           {evidence?.map((result, index) => (
             <ListItem key={index} sx={{ display: "list-item" }}>
               <Typography variant="subtitle2">
-                <Link target="_blank" href={result} color="inherit">
+                <Link
+                  style={{ cursor: "pointer" }}
+                  target="_blank"
+                  href={result}
+                  color="inherit"
+                >
                   {result}
                 </Link>
               </Typography>
@@ -144,23 +167,31 @@ export const renderEvidence = (keyword, labels, evidence, source, scope) => {
   );
 };
 
-export const renderUrlTitle = (
+export const renderDomainTitle = (
   keyword,
   classes,
-  url,
+  credibilityScope,
   urlColor,
   handleClose,
 ) => {
   return (
     <Grid container>
-      {/* url */}
+      {/* domain or account */}
       <Grid size={handleClose != null ? { xs: 11 } : { xs: 12 }}>
         <Typography sx={{ wordWrap: "break-word", align: "start" }}>
-          {keyword("assistant_urlbox")}
-          {": "}
-          <Link color={urlColor} href={url}>
-            {url}
-          </Link>
+          {credibilityScope.includes("/")
+            ? keyword("account_scope")
+            : keyword("domain_scope")}{" "}
+          <Tooltip title={prependHttps(credibilityScope)}>
+            <Link
+              style={{ cursor: "pointer" }}
+              target="_blank"
+              href={prependHttps(credibilityScope)}
+              color={urlColor}
+            >
+              {credibilityScope}
+            </Link>
+          </Tooltip>
         </Typography>
       </Grid>
 
@@ -205,6 +236,8 @@ export const renderUrlTitle = (
   );
 };
 
+// functions for AssistantUrlDomainAnalysis
+
 export const renderDomainAnalysisResults = (
   keyword,
   sourceCredibiltyResults,
@@ -245,7 +278,7 @@ export const renderDomainAnalysisResults = (
                 {renderScope(keyword, value.credibilityScope)}
                 {renderLabels(keyword, value.labels)}
                 {renderDescription(keyword, value.description)}
-                {value.evidence?.length > 0
+                {value.evidence
                   ? renderDialog(keyword, value, trafficLightColor, sourceType)
                   : null}
               </Typography>

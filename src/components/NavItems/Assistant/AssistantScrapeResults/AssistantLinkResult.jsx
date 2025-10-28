@@ -21,6 +21,7 @@ import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { TextCopy } from "@Shared/Utils/TextCopy";
 import { DataGrid, getGridSingleSelectOperators } from "@mui/x-data-grid";
 
+import { prependHttps } from "../AssistantCheckResults/assistantUtils";
 import {
   TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,
@@ -32,28 +33,28 @@ const Status = (params) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   return (
     <Stack direction="column" spacing={0.5}>
-      {params.done && params.urlResults.caution?.length > 0 ? (
+      {params.done && params.domainResults?.caution.length > 0 ? (
         <Chip
           label={keyword(params.sourceTypes.caution)}
           color={params.trafficLightColors.caution}
           size="small"
         />
       ) : null}
-      {params.done && params.urlResults.mixed?.length > 0 ? (
+      {params.done && params.domainResults?.mixed.length > 0 ? (
         <Chip
           label={keyword(params.sourceTypes.mixed)}
           color={params.trafficLightColors.mixed}
           size="small"
         />
       ) : null}
-      {params.done && params.urlResults.positive?.length > 0 ? (
+      {params.done && params.domainResults?.positive.length > 0 ? (
         <Chip
           label={keyword(params.sourceTypes.positive)}
           color={params.trafficLightColors.positive}
           size="small"
         />
       ) : null}
-      {params.done && params.urlResults.length < 1 ? (
+      {params.done && params.domainResults?.length < 1 ? (
         <Chip
           label={keyword(params.sourceTypes.unlabelled)}
           color={params.trafficLightColors.unlabelled}
@@ -65,27 +66,51 @@ const Status = (params) => {
   );
 };
 
-// render URL in correct colour
-const Url = (params) => {
-  // returns a list of URLs
-  // single URL in list if no domain results
-  // domain also uses this component and is passed through as [domain]
-
-  return params.url?.length > 1 ? (
-    <Typography variant="p" title={params.url} color={params.urlColor}>
-      {/* list of URLs on hover */}
-      {params.url.length} {"urls_found_with_domain"}
-    </Typography>
-  ) : (
-    <Tooltip title={params.url}>
-      {/* single URL or domain */}
+// render Domain or Account in correct colour
+const Domain = (params) => {
+  // Domain or Account column
+  const credibilityScopeHttps = prependHttps(params.credibilityScope);
+  return params.credibilityScope ? (
+    <Tooltip title={credibilityScopeHttps}>
       <Link
         style={{ cursor: "pointer" }}
         target="_blank"
-        href={params.url}
+        href={credibilityScopeHttps}
         color={params.urlColor}
       >
-        {params.url}
+        {params.credibilityScope}
+      </Link>
+    </Tooltip>
+  ) : null;
+};
+
+// render URL in correct colour
+const Url = (params) => {
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
+  return params.url.length > 1 ? (
+    <Typography variant="p" title={params.url} color={params.urlColor}>
+      {/* list of URLs from domain results on hover */}
+      {params.url.length} {keyword("urls_found_with_domain")}
+    </Typography>
+  ) : params.credibilityScope?.includes("/") ? (
+    <Typography variant="p" title={params.url} color={params.urlColor}>
+      {/* account detected with single URL  */}
+      {keyword("social_media_account_detected")}
+    </Typography>
+  ) : (
+    <Tooltip title={params.url}>
+      {/* single unlabelled URL */}
+      <Link
+        style={{ cursor: "pointer" }}
+        target="_blank"
+        href={
+          params.credibilityScope
+            ? prependHttps(params.credibilityScope)
+            : params.url
+        }
+        color={params.urlColor}
+      >
+        {params.credibilityScope || params.url}
       </Link>
     </Tooltip>
   );
@@ -110,10 +135,11 @@ const Details = (params) => {
           </div>
         </Tooltip>
       }
-      {params.done && params.resolvedDomain !== null && (
+      {params.done && params.credibilityScope && (
         <ExtractedUrlDomainAnalysisResults
-          extractedSourceCredibilityResults={params.urlResults}
-          url={params.urlResults.resolvedLink}
+          domainResults={params.domainResults}
+          credibilityScope={params.credibilityScope}
+          credibilityScopeHttps={params.credibilityScopeHttps}
           urlColor={params.urlColor}
           sourceTypes={params.sourceTypes}
           trafficLightColors={params.trafficLightColors}
@@ -168,15 +194,6 @@ const AssistantLinkResult = () => {
     : linkList || null;
   // TODO check this is still correct
 
-  // situations
-  // source cred loading
-  //    linkList
-  // source cred failed
-  //    linkList
-  // source cred success
-  //    domains, unlabelled
-
-  console.log(extractedSourceCred);
   // create a row for each domain followed by row for each url without source credibility
   let rows = [];
 
@@ -187,6 +204,7 @@ const AssistantLinkResult = () => {
     for (const domainResults of Object.values(extractedSourceCred.domain)) {
       let urlColor = "inherit"; //trafficLightColors.unlabelled;
 
+      // find correct source type label
       let sourceTypeList = [
         sourceTypes
           ? sourceTypes.unlabelled
@@ -194,7 +212,6 @@ const AssistantLinkResult = () => {
             : unlabelled
           : unlabelled,
       ];
-
       if (domainResults.positive.length > 0) {
         urlColor = trafficLightColors.positive;
         sourceTypeList.push(keyword(sourceTypes.positive));
@@ -214,13 +231,6 @@ const AssistantLinkResult = () => {
           ? sourceTypeList.splice(1, sourceTypeList.length)
           : sourceTypeList;
 
-      // detect resolved domain address
-      const resolvedDomain = domainResults.resolvedDomain
-        ? domainResults.resolvedDomain.startsWith("https://")
-          ? domainResults.resolvedDomain
-          : "https://" + domainResults.resolvedDomain
-        : null;
-
       // add row for domain with list of URLs
       rows.push({
         id: rows.length + 1,
@@ -228,17 +238,18 @@ const AssistantLinkResult = () => {
           loading: inputSCLoading,
           done: inputSCDone,
           fail: inputSCFail,
-          urlResults: domainResults,
+          domainResults: domainResults,
           url: domainResults.URL, // url list
           trafficLightColors: trafficLightColors,
           sourceTypes: sourceTypes,
           sourceTypeList: sourceTypeList,
         },
         domain: {
-          resolvedDomain: resolvedDomain,
+          credibilityScope: domainResults.credibilityScope,
           urlColor: urlColor,
         },
         url: {
+          credibilityScope: domainResults.credibilityScope,
           url: domainResults.URL,
           urlColor: urlColor,
         },
@@ -246,10 +257,10 @@ const AssistantLinkResult = () => {
           loading: inputSCLoading,
           done: inputSCDone,
           fail: inputSCFail,
-          urlResults: [],
+          domainResults: domainResults,
           url: domainResults.URL,
           urlColor: urlColor,
-          resolvedDomain: resolvedDomain, // TODO wrong name
+          credibilityScope: domainResults.credibilityScope,
           sourceTypes: sourceTypes,
           trafficLightColors: trafficLightColors,
           sortByDetails: true,
@@ -267,17 +278,18 @@ const AssistantLinkResult = () => {
           loading: inputSCLoading,
           done: inputSCDone,
           fail: inputSCFail,
-          urlResults: [],
+          domainResults: null,
           url: url,
           trafficLightColors: trafficLightColors,
           sourceTypes: sourceTypes,
           sourceTypeList: [unlabelled],
         },
         domain: {
-          resolvedDomain: "",
+          credibilityScope: null,
           urlColor: "inherit",
         },
         url: {
+          credibilityScope: null,
           url: [url],
           urlColor: "inherit",
         },
@@ -285,10 +297,9 @@ const AssistantLinkResult = () => {
           loading: inputSCLoading,
           done: inputSCDone,
           fail: inputSCFail,
-          urlResults: [],
-          url: url,
+          domainResults: null,
           urlColor: "inherit",
-          resolvedDomain: null,
+          credibilityScope: null,
           sourceTypes: sourceTypes,
           trafficLightColors: trafficLightColors,
           sortByDetails: true,
@@ -308,14 +319,14 @@ const AssistantLinkResult = () => {
           loading: inputSCLoading,
           done: inputSCDone,
           fail: inputSCFail,
-          urlResults: [],
+          domainResults: null,
           url: url,
           trafficLightColors: trafficLightColors,
           sourceTypes: sourceTypes,
           sourceTypeList: [],
         },
         domain: {
-          resolvedDomain: "",
+          credibilityScope: null,
           urlColor: "inherit",
         },
         url: {
@@ -326,10 +337,9 @@ const AssistantLinkResult = () => {
           loading: inputSCLoading,
           done: inputSCDone,
           fail: inputSCFail,
-          urlResults: [],
-          url: url,
+          domainResults: null,
           urlColor: "inherit",
-          resolvedDomain: null,
+          credibilityScope: null,
           sourceTypes: sourceTypes,
           trafficLightColors: trafficLightColors,
           sortByDetails: false,
@@ -367,7 +377,7 @@ const AssistantLinkResult = () => {
             loading={params.value.loading}
             done={params.value.done}
             fail={params.value.fail}
-            urlResults={params.value.urlResults}
+            domainResults={params.value.domainResults}
             trafficLightColors={params.value.trafficLightColors}
             sourceTypes={params.value.sourceTypes}
           />
@@ -379,19 +389,19 @@ const AssistantLinkResult = () => {
     },
     {
       field: "domain",
-      headerName: keyword("extracted_urls_domain"),
+      headerName: keyword("extracted_urls_domain_account"),
       minWidth: 200,
       flex: 1,
       renderCell: (params) => {
         return (
-          <Url
-            url={[params.value.resolvedDomain]}
+          <Domain
+            credibilityScope={params.value.credibilityScope}
             urlColor={params.value.urlColor}
           />
         );
       },
       sortComparator: (v1, v2) =>
-        v1.resolvedDomain.localeCompare(v2.resolvedDomain),
+        (v1.credibilityScope ?? "").localeCompare(v2.credibilityScope ?? ""),
     },
     {
       field: "url",
@@ -399,9 +409,15 @@ const AssistantLinkResult = () => {
       minWidth: 400,
       flex: 1,
       renderCell: (params) => {
-        return <Url url={params.value.url} urlColor={params.value.urlColor} />;
+        return (
+          <Url
+            credibilityScope={params.value.credibilityScope}
+            url={params.value.url}
+            urlColor={params.value.urlColor}
+          />
+        );
       },
-      sortComparator: (v1, v2) => v1.url[0].localeCompare(v2.url[0]), // TODO by alphabetically order of urls? but what about lists?
+      sortComparator: (v1, v2) => v1.url[0].localeCompare(v2.url[0]),
     },
     {
       field: "details",
@@ -420,10 +436,10 @@ const AssistantLinkResult = () => {
             loading={params.value.loading}
             done={params.value.done}
             fail={params.value.fail}
-            urlResults={params.value.urlResults}
-            url={params.value.url}
+            domainResults={params.value.domainResults}
+            // url={params.value.url} // TODO pass through to details for list of URLs above source cred results?
             urlColor={params.value.urlColor}
-            resolvedDomain={params.value.resolvedDomain}
+            credibilityScope={params.value.credibilityScope}
             sourceTypes={params.value.sourceTypes}
             trafficLightColors={params.value.trafficLightColors}
           />
