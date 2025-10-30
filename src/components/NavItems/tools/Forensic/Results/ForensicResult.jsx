@@ -43,6 +43,7 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import { theme as defaultTheme } from "../../../../../theme";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import AnimatedGif from "../../Gif/AnimatedGif";
+import { buildFilterProps } from "../ForensicAlgorithms";
 import ImageCanvas from "../components/imageCanvas/imageCanvas";
 
 function TabPanel(props) {
@@ -108,86 +109,8 @@ const ForensicResults = (props) => {
   const role = useSelector((state) => state.userSession.user.roles);
   const [openAlert, setOpenAlert] = React.useState(false);
 
-  const defaultFilterProps = {
-    filtersIDs: [
-      //COMPRESSION
-      "zero_report", //0
-      "ghost_report", //1
-      "cagi_report", //2
-      "adq1_report", //3
-      "dct_report", //4
-      "blk_report", //5
-
-      //NOISE
-      "splicebuster_report", //6
-      "wavelet_report", //7
-      "cfa_report", //8
-
-      //DEEP LEARNING
-      "mantranet_report", //9
-      "fusion_report", //10
-
-      //CLONING
-      "cmfd_report", //11
-      "rcmfd_report", //12
-
-      //LENSES
-
-      "ela_report", //13
-      "laplacian_report", //14
-      "median_report", //15
-    ],
-    idStartCompression: 0,
-    idStartNoise: 6,
-    idStartDeepLearning: 9,
-    idStartCloning: 11,
-    idStartLenses: 13,
-  };
-
-  const extraFeaturesFilterProps = {
-    filtersIDs: [
-      //COMPRESSION
-      "zero_report", //0
-      "ghost_report", //1
-      "cagi_report", //2
-      "adq1_report", //3
-      "dct_report", //4
-      "blk_report", //5
-
-      //NOISE
-      "splicebuster_report", //6
-      "wavelet_report", //7
-      "cfa_report", //8
-
-      //DEEP LEARNING
-      "mantranet_report", //9
-      "fusion_report", //10
-      "mmfusion_report", //11
-      "trufor_report", //12
-      "omgfuser_report", //13
-
-      //CLONING
-      "cmfd_report", //14
-      "rcmfd_report", //15
-
-      //LENSES
-
-      "ela_report", //16
-      "laplacian_report", //17
-      "median_report", //18
-    ],
-    idStartCompression: 0,
-    idStartNoise: 6,
-    idStartDeepLearning: 9,
-    idStartCloning: 14,
-    idStartLenses: 16,
-  };
-
-  //SHOULD BE REWRITE
-  const filtersProp =
-    role.includes(ROLES.EXTRA_FEATURE) || role.includes(ROLES.EVALUATION)
-      ? extraFeaturesFilterProps
-      : defaultFilterProps;
+  // Build filter properties dynamically based on user roles
+  const filtersProp = buildFilterProps(role);
 
   const filters = useRef(
     filtersProp.filtersIDs.map((value) => {
