@@ -243,7 +243,7 @@ export const getAlgorithmsGroupedByTab = (userRoles) => {
  */
 export const buildFilterProps = (userRoles) => {
   const algorithms = getForensicAlgorithmsForUser(userRoles);
-  const tabAlgorithms = algorithms.filter((alg) => typeof alg.tab === "number");
+
   const lensesAlgorithms = algorithms.filter(
     (alg) => alg.tab === FORENSIC_TABS.LENSES,
   );

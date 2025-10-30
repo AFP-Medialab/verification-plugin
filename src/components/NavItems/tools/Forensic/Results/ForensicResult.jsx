@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Alert from "@mui/material/Alert";
@@ -31,7 +31,6 @@ import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import WarningIcon from "@mui/icons-material/Warning";
 
-import { ROLES } from "@/constants/roles";
 import { setForensicImageRatio } from "@/redux/actions/tools/forensicActions";
 import {
   setStateBackResults,
@@ -110,7 +109,7 @@ const ForensicResults = (props) => {
   const [openAlert, setOpenAlert] = React.useState(false);
 
   // Build filter properties dynamically based on user roles
-  const filtersProp = buildFilterProps(role);
+  const filtersProp = useMemo(() => buildFilterProps(role), [role]);
 
   const filters = useRef(
     filtersProp.filtersIDs.map((value) => {
