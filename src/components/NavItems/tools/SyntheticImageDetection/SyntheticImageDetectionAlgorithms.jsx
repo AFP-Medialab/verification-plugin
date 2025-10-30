@@ -82,14 +82,14 @@ export const itwRineMever = new SyntheticImageDetectionAlgorithm(
   "itw_rine_mever",
   "synthetic_image_detection_itw_rine_mever_name",
   "synthetic_image_detection_itw_rine_mever_description",
-  [ROLES.EVALUATION, ROLES.EXTRA_FEATURE],
+  [ROLES.BETA_TESTER],
 );
 
 export const itwSpaiMever = new SyntheticImageDetectionAlgorithm(
   "itw_spai_mever",
   "synthetic_image_detection_itw_spai_mever_name",
   "synthetic_image_detection_itw_spai_mever_description",
-  [ROLES.EVALUATION, ROLES.EXTRA_FEATURE],
+  [ROLES.BETA_TESTER],
 );
 
 export const sd21BfreeDino2reg4Grip = new SyntheticImageDetectionAlgorithm(
@@ -103,7 +103,7 @@ export const multiBfreeDino2reg4Grip = new SyntheticImageDetectionAlgorithm(
   "multi_bfree-dino2reg4_grip",
   "synthetic_image_detection_multi_bfree-dino2reg4_grip_name",
   "synthetic_image_detection_multi_bfree-dino2reg4_grip_description",
-  [ROLES.EVALUATION, ROLES.EXTRA_FEATURE],
+  [ROLES.BETA_TESTER],
 );
 
 export const sd21BfreeSiglipGrip = new SyntheticImageDetectionAlgorithm(
