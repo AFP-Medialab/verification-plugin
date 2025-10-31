@@ -8,6 +8,11 @@ const initialState = {
   chunks: [],
   isInconclusive: false,
   loading: false,
+  hasError: false, // True when ALL chunks have error labels (no results)
+  errorMessage: null, // User-friendly error message for full errors
+  hasPartialWarning: false, // True when SOME chunks have error labels (show results + warning)
+  warningMessage: null, // User-friendly warning message for partial errors
+  errorLabels: [], // Array of error labels found
 };
 
 const hiyaReducer = createSlice({
@@ -22,6 +27,11 @@ const hiyaReducer = createSlice({
       state.chunks = [];
       state.isInconclusive = false;
       state.loading = false;
+      state.hasError = false;
+      state.errorMessage = null;
+      state.hasPartialWarning = false;
+      state.warningMessage = null;
+      state.errorLabels = [];
     },
     setHiyaLoading: (state, action) => {
       state.loading = action.payload;
@@ -46,11 +56,52 @@ const hiyaReducer = createSlice({
       state.chunks = action.payload.chunks;
       state.isInconclusive = action.payload.isInconclusive;
       state.loading = false;
+      // Clear any previous error/warning state when setting successful results
+      state.hasError = false;
+      state.errorMessage = null;
+      state.hasPartialWarning = false;
+      state.warningMessage = null;
+      state.errorLabels = [];
+    },
+    setHiyaResultWithWarning: (state, action) => {
+      // Set result data with partial warnings
+      state.resultUrl = action.payload.url;
+      state.result = action.payload.result;
+      state.chunks = action.payload.chunks;
+      state.isInconclusive = action.payload.isInconclusive;
+      state.loading = false;
+      // Set partial warning state
+      state.hasPartialWarning = true;
+      state.warningMessage = action.payload.warningMessage;
+      state.errorLabels = action.payload.errorLabels;
+      // Clear full error state
+      state.hasError = false;
+      state.errorMessage = null;
+    },
+    setHiyaError: (state, action) => {
+      state.hasError = true;
+      state.errorMessage = action.payload.errorMessage;
+      state.errorLabels = action.payload.errorLabels;
+      state.resultUrl = action.payload.url; // Set the URL for error display
+      state.loading = false;
+      // Clear result data when there's a full error
+      state.result = null;
+      state.chunks = [];
+      state.isInconclusive = false;
+      // Clear partial warning state
+      state.hasPartialWarning = false;
+      state.warningMessage = null;
     },
   },
 });
 
-export const { resetHiyaAudio, setHiyaLoading, setHiyaFile, setHiyaResult } =
-  hiyaReducer.actions;
+export const {
+  resetHiyaAudio,
+  setHiyaLoading,
+  setHiyaFile,
+  setHiyaResult,
+  setHiyaResultWithWarning,
+  setHiyaError,
+} = hiyaReducer.actions;
 
 export default hiyaReducer.reducer;

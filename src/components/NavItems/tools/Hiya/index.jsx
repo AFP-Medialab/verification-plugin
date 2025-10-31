@@ -31,6 +31,18 @@ const Hiya = () => {
     (state) => state.syntheticAudioDetection.resultUrl,
   );
   const chunks = useSelector((state) => state.syntheticAudioDetection.chunks);
+  const hasError = useSelector(
+    (state) => state.syntheticAudioDetection.hasError,
+  );
+  const errorMessage = useSelector(
+    (state) => state.syntheticAudioDetection.errorMessage,
+  );
+  const hasPartialWarning = useSelector(
+    (state) => state.syntheticAudioDetection.hasPartialWarning,
+  );
+  const warningMessage = useSelector(
+    (state) => state.syntheticAudioDetection.warningMessage,
+  );
 
   // Use the custom hook for all audio analysis logic
   const {
@@ -88,7 +100,17 @@ const Hiya = () => {
         {getAnalysisResultsForAudio.isError && (
           <Alert severity="error">{keyword("hiya_generic_error")}</Alert>
         )}
-        {result && (
+        {hasError && (
+          <Alert severity="error" sx={{ whiteSpace: "pre-line" }}>
+            {errorMessage}
+          </Alert>
+        )}
+        {hasPartialWarning && (
+          <Alert severity="warning" sx={{ whiteSpace: "pre-line" }}>
+            {warningMessage}
+          </Alert>
+        )}
+        {result && !hasError && (
           <HiyaResults
             result={result}
             isInconclusive={isInconclusive}

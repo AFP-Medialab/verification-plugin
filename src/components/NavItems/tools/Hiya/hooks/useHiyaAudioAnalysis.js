@@ -9,8 +9,10 @@ import {
 } from "@/components/NavItems/tools/Hiya/api";
 import {
   resetHiyaAudio,
+  setHiyaError,
   setHiyaFile,
   setHiyaResult,
+  setHiyaResultWithWarning,
 } from "@/redux/reducers/tools/hiyaReducer";
 import { isValidUrl } from "@Shared/Utils/URLUtils";
 import { blobToBase64, preprocessFileUpload } from "@Shared/Utils/fileUtils";
@@ -18,6 +20,12 @@ import axios from "axios";
 import useAuthenticatedRequest from "components/Shared/Authentication/useAuthenticatedRequest";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { setError } from "redux/reducers/errorReducer";
+
+import {
+  API_RESPONSE_LABELS,
+  ERROR_MESSAGES,
+  GENERAL_ERROR_MESSAGES,
+} from "../constants/detectionConstants";
 
 /**
  * Custom hook for Hiya audio analysis functionality
@@ -126,6 +134,73 @@ export const useHiyaAudioAnalysis = () => {
   };
 
   /**
+   * Analyzes chunks for error labels and determines the appropriate response
+   * @param {Array} chunks - Array of chunk data from the API
+   * @returns {Object|null} Error information object or null if no errors
+   * @returns {string} errorType - 'none', 'partial', or 'all'
+   * @returns {Array} errorLabels - Array of unique error labels found
+   * @returns {string} errorMessage - Generalized error message
+   */
+  const checkForErrorLabel = (chunks) => {
+    if (!chunks || chunks.length === 0) {
+      return null;
+    }
+
+    const totalChunks = chunks.length;
+
+    // Find chunks with error labels
+    const errorChunks = chunks.filter(
+      (chunk) => chunk.label && chunk.label !== API_RESPONSE_LABELS.VALID_VOICE,
+    );
+
+    // Case 1: No errors - show results only
+    if (errorChunks.length === 0) {
+      return null;
+    }
+
+    // Get unique error labels
+    const uniqueErrorLabels = [
+      ...new Set(errorChunks.map((chunk) => chunk.label)),
+    ];
+
+    // Case 2: All chunks have errors - show warning only, no results
+    if (errorChunks.length === totalChunks) {
+      const suggestions = uniqueErrorLabels
+        .map((label) => GENERAL_ERROR_MESSAGES.SUGGESTIONS[label])
+        .filter(Boolean);
+
+      const errorMessage = `${GENERAL_ERROR_MESSAGES.ALL_ERRORS}\n${suggestions.join("\n")}`;
+
+      console.log(
+        `${errorChunks.length}/${totalChunks} chunks have error labels (100%) - showing error only`,
+      );
+
+      return {
+        errorType: "all",
+        errorLabels: uniqueErrorLabels,
+        errorMessage: errorMessage,
+      };
+    }
+
+    // Case 3: Some chunks have errors - show results AND warnings
+    const suggestions = uniqueErrorLabels
+      .map((label) => GENERAL_ERROR_MESSAGES.SUGGESTIONS[label])
+      .filter(Boolean);
+
+    const warningMessage = `${GENERAL_ERROR_MESSAGES.PARTIAL_ERRORS}\n${suggestions.join("\n")}`;
+
+    console.log(
+      `${errorChunks.length}/${totalChunks} chunks have error labels (${Math.round((errorChunks.length / totalChunks) * 100)}%) - showing results with warnings`,
+    );
+
+    return {
+      errorType: "partial",
+      errorLabels: uniqueErrorLabels,
+      errorMessage: warningMessage,
+    };
+  };
+
+  /**
    * Analyzes audio for voice cloning/synthetic audio detection
    * Handles the complete workflow: URL fetching, upload, detection, and chunk analysis
    *
@@ -186,10 +261,41 @@ export const useHiyaAudioAnalysis = () => {
         authenticatedRequest,
       );
 
-      const isAnalysisInconclusive = isResultInconclusive(chunks.data);
-
-      // For results, use the actual URL (blob or regular URL)
+      // Check for error labels in the chunks
+      const errorInfo = checkForErrorLabel(chunks.data);
       const resultUrl = audioFile ? URL.createObjectURL(audioFile) : actualUrl;
+
+      if (errorInfo) {
+        if (errorInfo.errorType === "all") {
+          // Case: All chunks have errors - show error only, no results
+          dispatchAction(
+            setHiyaError({
+              url: resultUrl,
+              errorLabels: errorInfo.errorLabels,
+              errorMessage: errorInfo.errorMessage,
+            }),
+          );
+          return; // Don't proceed with result processing
+        } else if (errorInfo.errorType === "partial") {
+          // Case: Some chunks have errors - show results WITH warnings
+          const isAnalysisInconclusive = isResultInconclusive(chunks.data);
+
+          dispatchAction(
+            setHiyaResultWithWarning({
+              url: resultUrl,
+              result: detectionResponse.data,
+              chunks: chunks.data,
+              isInconclusive: isAnalysisInconclusive,
+              warningMessage: errorInfo.errorMessage,
+              errorLabels: errorInfo.errorLabels,
+            }),
+          );
+          return;
+        }
+      }
+
+      // Case: No errors - show results only
+      const isAnalysisInconclusive = isResultInconclusive(chunks.data);
 
       dispatchAction(
         setHiyaResult({
