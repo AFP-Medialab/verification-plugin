@@ -282,13 +282,13 @@ const AssistantCommentResult = ({ collectedComments }) => {
           <TableCell align="center" width={optionsColumnWidth}>
             <Stack direction="row" alignItems="center">
               <CopyButton
-                strToCopy={text}
+                strToCopy={row.textOriginal}
                 labelBeforeCopy={keyword("copy_to_clipboard")}
                 labelAfterCopy={keyword("copied_to_clipboard")}
               />
               <Tooltip title={keyword("translate")}>
                 <div>
-                  <Translate text={text} />
+                  <Translate text={row.textOriginal} />
                 </div>
               </Tooltip>
             </Stack>
@@ -418,11 +418,18 @@ const AssistantCommentResult = ({ collectedComments }) => {
 
                         {/* options */}
                         <TableCell align="center" width={optionsColumnWidth}>
-                          <TextCopy
-                            text={repliesRow.textOriginal}
-                            index={repliesRow.id}
-                          />
-                          <Translate text={repliesRow.textOriginal} />
+                          <Stack direction="row" alignItems="center">
+                            <CopyButton
+                              strToCopy={repliesRow.textOriginal}
+                              labelBeforeCopy={keyword("copy_to_clipboard")}
+                              labelAfterCopy={keyword("copied_to_clipboard")}
+                            />
+                            <Tooltip title={keyword("translate")}>
+                              <div>
+                                <Translate text={repliesRow.textOriginal} />
+                              </div>
+                            </Tooltip>
+                          </Stack>
                         </TableCell>
                       </TableRow>
                     ))}
