@@ -44,19 +44,6 @@ export const API_RESPONSE_LABELS = {
 };
 
 /**
- * Hardcoded warning messages for different error labels
- * TODO: Move to translation system later
- */
-export const ERROR_MESSAGES = {
-  [API_RESPONSE_LABELS.EXCESSIVE_MUSIC]:
-    "The audio contains too much background music. For accurate voice cloning detection, please use an audio file with clearer voice content and minimal background music.",
-  [API_RESPONSE_LABELS.EXCESSIVE_NOISE]:
-    "The audio contains too much noise. For accurate voice cloning detection, please use a cleaner audio file with less background noise and clearer voice content.",
-  [API_RESPONSE_LABELS.INSUFFICIENT_VOICE]:
-    "The audio does not contain enough voice content. For accurate voice cloning detection, please use an audio file with more prominent voice content.",
-};
-
-/**
  * Translation keys for generalized warning messages
  */
 export const ERROR_MESSAGE_KEYS = {
