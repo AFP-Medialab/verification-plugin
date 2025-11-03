@@ -18,8 +18,8 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import ExtractedUrlDomainAnalysisResults from "@/components/NavItems/Assistant/AssistantCheckResults/ExtractedUrlDomainAnalysisResults";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
-import { TextCopy } from "@Shared/Utils/TextCopy";
 import { DataGrid, getGridSingleSelectOperators } from "@mui/x-data-grid";
+import CopyButton from "components/Shared/CopyButton";
 
 import {
   TransHtmlDoubleLineBreak,
@@ -93,11 +93,11 @@ const Details = (params) => {
         flexDirection: "row",
       }}
     >
-      <Tooltip title={keyword("copy_to_clipboard")}>
-        <div>
-          <TextCopy text={params.url} index={params.url} />
-        </div>
-      </Tooltip>
+      <CopyButton
+        strToCopy={params.url}
+        labelBeforeCopy={keyword("copy_to_clipboard")}
+        labelAfterCopy={keyword("copied_to_clipboard")}
+      />
       {params.done && params.domainOrAccount !== null && (
         <ExtractedUrlDomainAnalysisResults
           extractedSourceCredibilityResults={params.urlResults}
