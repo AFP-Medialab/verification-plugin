@@ -64,7 +64,7 @@ const AssistantTextResult = () => {
   );
 
   // news framing (topic)
-  const newsFramingTitle = keyword("news_framing_title");
+  const newsFramingTitle = "news_framing_title";
   const newsFramingResult = useSelector(
     (state) => state.assistant.newsFramingResult,
   );
@@ -76,7 +76,7 @@ const AssistantTextResult = () => {
   );
 
   // news genre
-  const newsGenreTitle = keyword("news_genre_title");
+  const newsGenreTitle = "news_genre_title";
   const newsGenreResult = useSelector(
     (state) => state.assistant.newsGenreResult,
   );
@@ -86,7 +86,7 @@ const AssistantTextResult = () => {
   const newsGenreFail = useSelector((state) => state.assistant.newsGenreFail);
 
   // persuasion techniques
-  const persuasionTitle = keyword("persuasion_techniques_title");
+  const persuasionTitle = "persuasion_techniques_title";
   const persuasionResult = useSelector(
     (state) => state.assistant.persuasionResult,
   );
@@ -96,7 +96,7 @@ const AssistantTextResult = () => {
   const persuasionFail = useSelector((state) => state.assistant.persuasionFail);
 
   // subjectivity
-  const subjectivityTitle = keyword("subjectivity_title");
+  const subjectivityTitle = "subjectivity_title";
   const subjectivityResult = useSelector(
     (state) => state.assistant.subjectivityResult,
   );
@@ -108,7 +108,7 @@ const AssistantTextResult = () => {
   );
 
   // machine generated text
-  const machineGeneratedTextTitle = keyword("machine_generated_text_title");
+  const machineGeneratedTextTitle = "machine_generated_text_title";
   const machineGeneratedTextChunksResult = useSelector(
     (state) => state.assistant.machineGeneratedTextChunksResult,
   );
@@ -301,7 +301,7 @@ const AssistantTextResult = () => {
           <Tab
             label={
               <div>
-                {newsFramingTitle}
+                {keyword(newsFramingTitle)}
                 {newsFramingLoading && <LinearProgress />}
               </div>
             }
@@ -311,7 +311,7 @@ const AssistantTextResult = () => {
           <Tab
             label={
               <div>
-                {newsGenreTitle}
+                {keyword(newsGenreTitle)}
                 {newsGenreLoading && <LinearProgress />}
               </div>
             }
@@ -321,7 +321,7 @@ const AssistantTextResult = () => {
           <Tab
             label={
               <div>
-                {persuasionTitle}
+                {keyword(persuasionTitle)}
                 {persuasionLoading && <LinearProgress />}
               </div>
             }
@@ -331,7 +331,7 @@ const AssistantTextResult = () => {
           <Tab
             label={
               <div>
-                {subjectivityTitle}
+                {keyword(subjectivityTitle)}
                 {subjectivityLoading && <LinearProgress />}
               </div>
             }
@@ -341,7 +341,7 @@ const AssistantTextResult = () => {
           <Tab
             label={
               <div>
-                {machineGeneratedTextTitle}
+                {keyword(machineGeneratedTextTitle)}
                 {(machineGeneratedTextChunksLoading ||
                   machineGeneratedTextSentencesLoading) && <LinearProgress />}
               </div>
@@ -379,7 +379,6 @@ const AssistantTextResult = () => {
               text={text}
               classification={newsFramingResult?.entities}
               configs={newsFramingResult?.configs}
-              titleText={newsFramingTitle}
               categoriesTooltipContent={newsFramingTooltip}
               textHtmlMap={textHtmlMap}
               credibilitySignal={newsFramingTitle}
@@ -392,7 +391,6 @@ const AssistantTextResult = () => {
               text={text}
               classification={newsGenreResult?.entities}
               configs={newsGenreResult?.configs}
-              titleText={newsGenreTitle}
               categoriesTooltipContent={newsGenreTooltip}
               textHtmlMap={textHtmlMap}
               credibilitySignal={newsGenreTitle}
@@ -405,9 +403,9 @@ const AssistantTextResult = () => {
               text={text}
               classification={persuasionResult?.entities}
               configs={persuasionResult?.configs}
-              titleText={persuasionTitle}
               categoriesTooltipContent={persuasionTooltip}
               textHtmlMap={textHtmlMap}
+              credibilitySignal={persuasionTitle}
             />
           </CustomTabPanel>
 
@@ -417,7 +415,6 @@ const AssistantTextResult = () => {
               text={text}
               classification={subjectivityResult?.entities}
               configs={subjectivityResult?.configs}
-              titleText={subjectivityTitle}
               categoriesTooltipContent={subjectivityTooltip}
               textHtmlMap={textHtmlMap}
               credibilitySignal={subjectivityTitle}
@@ -431,7 +428,6 @@ const AssistantTextResult = () => {
               classification={machineGeneratedTextSentencesResult?.entities}
               overallClassification={machineGeneratedTextChunksResult?.entities}
               configs={machineGeneratedTextSentencesResult?.configs}
-              titleText={machineGeneratedTextTitle}
               categoriesTooltipContent={machineGeneratedTextTooltip}
               textHtmlMap={textHtmlMap}
               credibilitySignal={machineGeneratedTextTitle}

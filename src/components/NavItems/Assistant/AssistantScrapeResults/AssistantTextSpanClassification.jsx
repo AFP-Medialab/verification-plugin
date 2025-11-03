@@ -46,9 +46,9 @@ const StyledSpan = styled("span")(({ theme }) => ({
 export default function AssistantTextSpanClassification({
   text,
   classification,
-  titleText = "",
   categoriesTooltipContent = "",
   textHtmlMap = null,
+  credibilitySignal = "",
 }) {
   const classes = useMyStyles();
   const dispatch = useDispatch();
@@ -281,7 +281,7 @@ export default function AssistantTextSpanClassification({
         <Card>
           <CardHeader
             className={classes.assistantCardHeader}
-            title={titleText}
+            title={keyword(credibilitySignal)}
             action={
               <div style={{ display: "flex" }}>
                 <Tooltip

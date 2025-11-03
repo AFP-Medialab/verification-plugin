@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Trans } from "react-i18next";
 import Linkify from "react-linkify";
 import { useSelector } from "react-redux";
@@ -7,32 +7,41 @@ import { useColorScheme } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Chip from "@mui/material/Chip";
+import Collapse from "@mui/material/Collapse";
+import IconButton from "@mui/material/IconButton";
 import LinearProgress from "@mui/material/LinearProgress";
 import Pagination from "@mui/material/Pagination";
+import Paper from "@mui/material/Paper";
 import Skeleton from "@mui/material/Skeleton";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { SubdirectoryArrowRight } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { TextCopy } from "@/components/Shared/Utils/TextCopy";
 import { Translate } from "@/components/Shared/Utils/Translate";
 import moment from "moment/moment";
+import PropTypes from "prop-types";
 
 import {
+  A_STYLE,
   TransHtmlDoubleLineBreak,
   TransMultilingualStanceLink,
   TransMultilingualStanceTooltip,
@@ -41,12 +50,10 @@ import {
 
 const AssistantCommentResult = ({ collectedComments }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
-  //const sharedKeyword = i18nLoadNamespace("components/Shared/utils");
-
   const classes = useMyStyles();
 
+  // pagination
   const pageSize = 5;
-  //const numPages = Math.ceil(collectedComments.length / pageSize);
   const [currentAllPage, setCurrentAllPage] = useState(1);
   const [currentLinkPage, setCurrentLinkPage] = useState(1);
   const [currentVerificationPage, setCurrentVerificationPage] = useState(1);
@@ -67,6 +74,11 @@ const AssistantCommentResult = ({ collectedComments }) => {
   const multilingualStanceFail = useSelector(
     (state) => state.assistant.multilingualStanceFail,
   );
+
+  // define colours
+  const { mode, systemMode } = useColorScheme();
+  const resolvedMode = systemMode || mode;
+
   const stanceColours = {
     support: "success",
     deny: "error",
@@ -78,11 +90,6 @@ const AssistantCommentResult = ({ collectedComments }) => {
   const [caaVerificationKeywordsTsv, setCaaVerificationKeywordsTsv] = useState(
     [],
   );
-
-  const { mode, systemMode } = useColorScheme();
-  const resolvedMode = systemMode || mode;
-
-  const backgroundColor = resolvedMode === "dark" ? "#0c0d0d" : "#e0f2f1";
 
   useEffect(() => {
     fetch("/caaVerificationKeywords.tsv")
@@ -130,96 +137,122 @@ const AssistantCommentResult = ({ collectedComments }) => {
     stance === "deny" ? denyComments.push(collectedComments[i]) : null;
   }
 
-  // for collectedComments
-  function renderCommentList(
-    commentList,
-    stanceColours,
-    commentReplies = true,
-    offset = null,
-    pageSize = null,
+  // create the row data from each top level comment
+  function createData(
+    id,
+    commentNum,
+    authorChannelUrl,
+    authorDisplayName,
+    publishedAt,
+    textOriginal,
+    replies,
   ) {
-    let renderedComments = [];
-    if (offset === null) {
-      offset = 0;
-      pageSize = 99999;
-    }
+    return {
+      id,
+      commentNum,
+      authorChannelUrl,
+      authorDisplayName,
+      publishedAt,
+      textOriginal,
+      replies,
+    };
+  }
 
-    let lastIndex = commentList.length;
-    if (offset + pageSize < lastIndex) {
-      lastIndex = offset + pageSize;
-    }
-    for (let i = offset; i < lastIndex; i++) {
-      const comment = commentList[i];
-      const commentId = comment.id;
-      const commentNum = comment.commentNum;
-      const key = commentId;
-      const text = comment.textOriginal;
-      const replies = comment.replies;
-      const authorName = comment.authorDisplayName;
-      const authorChannelUrl = comment.authorChannelUrl;
-      const publishedDate =
-        moment(comment.publishedAt).format("l") +
-        " " +
-        moment(comment.publishedAt).format("LT");
+  // fixed column widths
+  const repliesColumnWidth = 70;
+  const optionsColumnWidth = 90;
 
-      let renderedReplies = [];
-      if ("replies" in comment) {
-        renderedReplies = renderCommentList(replies, stanceColours, true);
+  // create top level comment rows with collapsible reply rows if exist
+  function Row(props) {
+    const { row } = props;
+    const [open, setOpen] = React.useState(false);
+
+    const parentRowRef = useRef(null);
+    const [colWidths, setColWidths] = useState([]);
+
+    // resize replies columns to match top level comment columns
+    useEffect(() => {
+      const updateColumnWidths = () => {
+        if (parentRowRef.current) {
+          const cells = parentRowRef.current.querySelectorAll("td");
+          const widths = Array.from(cells)
+            .slice(1)
+            .map((cell) => cell.getBoundingClientRect().width);
+          setColWidths(widths);
+        }
+      };
+
+      const observer = new ResizeObserver(() => {
+        updateColumnWidths();
+      });
+
+      if (parentRowRef.current) {
+        observer.observe(parentRowRef.current);
+        window.addEventListener("resize", updateColumnWidths);
       }
 
-      renderedComments.push(
+      // init
+      updateColumnWidths();
+
+      return () => {
+        observer.disconnect();
+        window.removeEventListener("resize", updateColumnWidths);
+      };
+    }, []);
+
+    return (
+      <React.Fragment>
+        {/* top level comments */}
         <TableRow
-          key={key}
-          sx={commentReplies ? null : { backgroundColor: backgroundColor }}
+          ref={parentRowRef}
+          sx={{
+            "& > *": { borderBottom: "unset" },
+            backgroundColor: resolvedMode === "dark" ? "#0c0d0d" : "#e0f2f1",
+          }}
         >
-          {/* hash */}
-          <TableCell align="center">
-            <Typography variant="p">
-              {commentReplies ? (
-                <SubdirectoryArrowRight sx={{ color: "grey" }} />
-              ) : (
-                <Typography>{commentNum}</Typography>
-              )}
-            </Typography>
+          {/* replies collapse */}
+          <TableCell width={repliesColumnWidth} align="center">
+            {row.replies ? (
+              <IconButton
+                aria-label="expand row"
+                size="small"
+                onClick={() => setOpen(!open)}
+              >
+                {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+              </IconButton>
+            ) : null}
           </TableCell>
 
-          {/* user */}
-          <TableCell component="th" scope="row">
+          {/* comment number */}
+          <TableCell align="center">{row.commentNum}</TableCell>
+
+          {/* username */}
+          <TableCell sx={{ textAlign: "start" }}>
             <Typography variant="p">
               <Linkify>
                 <a
-                  href={authorChannelUrl}
+                  href={row.authorChannelUrl}
                   rel="noopener noreferrer"
                   target="_blank"
+                  style={A_STYLE}
                 >
-                  {authorName}
+                  {row.authorDisplayName}
                 </a>
               </Linkify>
             </Typography>
           </TableCell>
 
-          {/* created date */}
+          {/* date published */}
           <TableCell align="center">
-            {/* 2024-11-15, 20:51:54 UTC */}
-            <Typography variant="p">{publishedDate}</Typography>
+            {moment(row.publishedAt).format("l") +
+              " " +
+              moment(row.publishedAt).format("LT")}
           </TableCell>
 
-          {/* description/comment */}
-          <TableCell align="left">
-            <Typography variant="p">
-              <Linkify
-                componentDecorator={(decoratedHref, decoratedText, key) => (
-                  <a target="blank" href={decoratedHref} key={key}>
-                    {decoratedText}
-                  </a>
-                )}
-              >
-                {text}
-              </Linkify>
-            </Typography>
-          </TableCell>
+          {/* comment text */}
+          <TableCell sx={{ textAlign: "start" }}>{row.textOriginal}</TableCell>
 
-          {/* stance multilingual */}
+          {/* stance */}
           <TableCell align="center">
             {multilingualStanceLoading && <Skeleton variant="rounded" />}
             {multilingualStanceDone && multilingualStanceResult != null && (
@@ -236,96 +269,280 @@ const AssistantCommentResult = ({ collectedComments }) => {
                 classes={{ tooltip: classes.assistantTooltip }}
               >
                 <Chip
-                  label={keyword(multilingualStanceResult[commentId].stance)}
-                  color={
-                    stanceColours[multilingualStanceResult[commentId].stance]
-                  }
+                  label={keyword(multilingualStanceResult[row.id].stance)}
+                  color={stanceColours[multilingualStanceResult[row.id].stance]}
                   size="small"
                 />
               </Tooltip>
             )}
-            {multilingualStanceFail && <Chip label="Service failed" />}
+            {multilingualStanceFail && (
+              <Chip label={keyword("stance_service_failed")} />
+            )}
           </TableCell>
 
           {/* options */}
-          <TableCell>
-            <TextCopy text={text} index={key} />
-            <Translate text={text} />
+          <TableCell align="center" width={optionsColumnWidth}>
+            <TextCopy text={row.textOriginal} index={row.id} />
+            <Translate text={row.textOriginal} />
           </TableCell>
-        </TableRow>,
-      );
+        </TableRow>
 
-      replies ? renderedComments.push(renderedReplies) : null;
-    }
+        {/* replies */}
+        <TableRow>
+          <TableCell
+            sx={{ padding: 0, border: 0 }}
+            width={repliesColumnWidth}
+            colSpan={7}
+          >
+            <Collapse in={open} timeout="auto" unmountOnExit>
+              <Box>
+                {/*  colgroup  */}
+                <Table size="small" aria-label="replies">
+                  {/* column group */}
+                  <colgroup>
+                    <col style={{ width: repliesColumnWidth }} />
+                    {/* dynamic col width */}
+                    {colWidths.map((width, index) => (
+                      <col key={index} style={{ width: width }} />
+                    ))}
+                  </colgroup>
 
-    return renderedComments;
+                  <TableBody>
+                    {row.replies?.map((repliesRow) => (
+                      <TableRow key={repliesRow.id}>
+                        {/* replies minimise/expand or empty if reply comment */}
+                        <TableCell
+                          width={repliesColumnWidth}
+                          sx={{ border: 0 }}
+                        ></TableCell>
+
+                        {/* comment num or empty if reply comment*/}
+                        <TableCell>
+                          <ReplyOutlinedIcon color="action" />
+                        </TableCell>
+
+                        {/* username */}
+                        <TableCell sx={{ textAlign: "start" }}>
+                          <Typography variant="p">
+                            <Linkify>
+                              <a
+                                href={repliesRow.authorChannelUrl}
+                                rel="noopener noreferrer"
+                                target="_blank"
+                                style={A_STYLE}
+                              >
+                                {repliesRow.authorDisplayName}
+                              </a>
+                            </Linkify>
+                          </Typography>
+                        </TableCell>
+
+                        {/* date published */}
+                        <TableCell align="center">
+                          {moment(repliesRow.publishedAt).format("l") +
+                            " " +
+                            moment(repliesRow.publishedAt).format("LT")}
+                        </TableCell>
+
+                        {/* comment text */}
+                        <TableCell sx={{ textAlign: "start" }}>
+                          <Typography variant="p">
+                            <Linkify
+                              componentDecorator={(
+                                decoratedHref,
+                                decoratedText,
+                                key,
+                              ) => (
+                                <a
+                                  target="blank"
+                                  href={decoratedHref}
+                                  key={key}
+                                >
+                                  {decoratedText}
+                                </a>
+                              )}
+                            >
+                              {repliesRow.textOriginal}
+                            </Linkify>
+                          </Typography>
+                        </TableCell>
+
+                        {/* stance */}
+                        <TableCell align="center">
+                          {multilingualStanceLoading && (
+                            <Skeleton variant="rounded" />
+                          )}
+                          {multilingualStanceDone &&
+                            multilingualStanceResult != null && (
+                              <Tooltip
+                                interactive={"true"}
+                                title={
+                                  <>
+                                    <TransMultilingualStanceTooltip
+                                      keyword={keyword}
+                                    />
+                                    <TransMultilingualStanceLink
+                                      keyword={keyword}
+                                    />
+                                  </>
+                                }
+                                classes={{ tooltip: classes.assistantTooltip }}
+                              >
+                                <Chip
+                                  label={keyword(
+                                    multilingualStanceResult[repliesRow.id]
+                                      .stance,
+                                  )}
+                                  color={
+                                    stanceColours[
+                                      multilingualStanceResult[repliesRow.id]
+                                        .stance
+                                    ]
+                                  }
+                                  size="small"
+                                />
+                              </Tooltip>
+                            )}
+                          {multilingualStanceFail && (
+                            <Chip label={keyword("stance_service_failed")} />
+                          )}
+                        </TableCell>
+
+                        {/* options */}
+                        <TableCell align="center" width={optionsColumnWidth}>
+                          <TextCopy
+                            text={repliesRow.textOriginal}
+                            index={repliesRow.id}
+                          />
+                          <Translate text={repliesRow.textOriginal} />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </Box>
+            </Collapse>
+          </TableCell>
+        </TableRow>
+      </React.Fragment>
+    );
   }
 
-  // for collectedComments
-  function renderComments(comments, pageChangeHandler, currentPage, numPages) {
+  // define Row object
+  Row.propTypes = {
+    row: PropTypes.shape({
+      commentNum: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired,
+      authorChannelUrl: PropTypes.string.isRequired,
+      authorDisplayName: PropTypes.string.isRequired,
+      publishedAt: PropTypes.string.isRequired,
+      textOriginal: PropTypes.string.isRequired,
+      replies: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.string.isRequired,
+          authorChannelUrl: PropTypes.string.isRequired,
+          authorDisplayName: PropTypes.string.isRequired,
+          publishedAt: PropTypes.string.isRequired,
+          textOriginal: PropTypes.string.isRequired,
+        }),
+      ),
+    }).isRequired,
+  };
+
+  // define collapsible tablle component
+  function CollapsibleTable({
+    comments,
+    pageChangeHandler,
+    currentPage,
+    numPages,
+  }) {
     const offset = (currentPage - 1) * pageSize;
+    let lastIndex = comments.length;
+    if (offset + pageSize < lastIndex) {
+      lastIndex = offset + pageSize;
+    }
+
+    const rows = comments
+      .slice(offset, lastIndex)
+      .map((comment) =>
+        createData(
+          comment.id,
+          comment.commentNum,
+          comment.authorChannelUrl,
+          comment.authorDisplayName,
+          comment.publishedAt,
+          comment.textOriginal,
+          comment.replies || null,
+        ),
+      );
+
     return (
       <>
         {comments.length > 5 ? (
-          <Pagination
-            count={numPages}
-            variant="outlined"
-            onChange={pageChangeHandler}
-            page={currentPage}
-          />
+          <Box sx={{ mb: 1 }}>
+            <Pagination
+              count={numPages}
+              variant="outlined"
+              onChange={pageChangeHandler}
+              page={currentPage}
+            />
+          </Box>
         ) : null}
 
-        <Table
-          className={classes.table}
-          size="small"
-          aria-label="a dense table"
-        >
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">
-                <Typography>#</Typography>
-              </TableCell>
-              <TableCell align="center">
-                <Typography>{keyword("user")}</Typography>
-              </TableCell>
-              <TableCell align="center">
-                <Typography>{keyword("twitter_user_name_13")}</Typography>
-              </TableCell>
-              <TableCell align="center">
-                <Typography>{keyword("twitter_user_name_5")}</Typography>
-              </TableCell>
-              <TableCell align="center">
-                <Typography>{keyword("stance_title")}</Typography>
-              </TableCell>
-              <TableCell align="center">
-                <Typography>{keyword("options")}</Typography>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {renderCommentList(
-              comments,
-              stanceColours,
-              false,
-              offset,
-              pageSize,
-            )}
-          </TableBody>
-        </Table>
+        <TableContainer component={Paper}>
+          <Table size="small" aria-label="collapsible table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="center" width={repliesColumnWidth}>
+                  <Typography>
+                    {keyword("youtube_comments_replies_title")}
+                  </Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography>#</Typography>
+                </TableCell>
+                <TableCell align={"center"}>
+                  <Typography>{keyword("user")}</Typography>
+                </TableCell>
+                <TableCell align={"center"}>
+                  <Typography>
+                    {keyword("youtube_comments_published_title")}
+                  </Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography>{keyword("comment")}</Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography>{keyword("stance_title")}</Typography>
+                </TableCell>
+                <TableCell align="center" width={optionsColumnWidth}>
+                  <Typography>{keyword("options")}</Typography>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <Row key={row.id} row={row} />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
         {comments.length > 5 ? (
-          <Pagination
-            count={numPages}
-            variant="outlined"
-            onChange={pageChangeHandler}
-            page={currentPage}
-          />
+          <Box sx={{ mt: 1 }}>
+            <Pagination
+              count={numPages}
+              variant="outlined"
+              onChange={pageChangeHandler}
+              page={currentPage}
+            />
+          </Box>
         ) : null}
       </>
     );
   }
 
-  // pagination for collectedComments
+  // pagination for sorted comments
   function allPageChangeHandler(event, page) {
     setCurrentAllPage(page);
   }
@@ -393,13 +610,12 @@ const AssistantCommentResult = ({ collectedComments }) => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            {renderComments(
-              collectedComments,
-              allPageChangeHandler,
-              currentAllPage,
-              Math.ceil(collectedComments.length / pageSize),
-              true,
-            )}
+            <CollapsibleTable
+              comments={collectedComments}
+              pageChangeHandler={allPageChangeHandler}
+              currentPage={currentAllPage}
+              numPages={Math.ceil(collectedComments.length / pageSize)}
+            />
           </AccordionDetails>
         </Accordion>
 
@@ -411,12 +627,12 @@ const AssistantCommentResult = ({ collectedComments }) => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            {renderComments(
-              linkComments,
-              linkPageChangeHandler,
-              currentLinkPage,
-              Math.ceil(linkComments.length / pageSize),
-            )}
+            <CollapsibleTable
+              comments={linkComments}
+              pageChangeHandler={linkPageChangeHandler}
+              currentPage={currentLinkPage}
+              numPages={Math.ceil(linkComments.length / pageSize)}
+            />
           </AccordionDetails>
         </Accordion>
 
@@ -431,12 +647,12 @@ const AssistantCommentResult = ({ collectedComments }) => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            {renderComments(
-              verificationComments,
-              verificationPageChangeHandler,
-              currentVerificationPage,
-              Math.ceil(verificationComments.length / pageSize),
-            )}
+            <CollapsibleTable
+              comments={verificationComments}
+              pageChangeHandler={verificationPageChangeHandler}
+              currentPage={currentVerificationPage}
+              numPages={Math.ceil(verificationComments.length / pageSize)}
+            />
           </AccordionDetails>
         </Accordion>
 
@@ -455,12 +671,12 @@ const AssistantCommentResult = ({ collectedComments }) => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            {renderComments(
-              supportComments,
-              supportPageChangeHandler,
-              currentSupportPage,
-              Math.ceil(supportComments.length / pageSize),
-            )}
+            <CollapsibleTable
+              comments={supportComments}
+              pageChangeHandler={supportPageChangeHandler}
+              currentPage={currentSupportPage}
+              numPages={Math.ceil(supportComments.length / pageSize)}
+            />
           </AccordionDetails>
         </Accordion>
 
@@ -479,12 +695,12 @@ const AssistantCommentResult = ({ collectedComments }) => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            {renderComments(
-              queryComments,
-              queryPageChangeHandler,
-              currentQueryPage,
-              Math.ceil(queryComments.length / pageSize),
-            )}
+            <CollapsibleTable
+              comments={queryComments}
+              pageChangeHandler={queryPageChangeHandler}
+              currentPage={currentQueryPage}
+              numPages={Math.ceil(queryComments.length / pageSize)}
+            />
           </AccordionDetails>
         </Accordion>
 
@@ -503,12 +719,12 @@ const AssistantCommentResult = ({ collectedComments }) => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            {renderComments(
-              denyComments,
-              denyPageChangeHandler,
-              currentDenyPage,
-              Math.ceil(denyComments.length / pageSize),
-            )}
+            <CollapsibleTable
+              comments={denyComments}
+              pageChangeHandler={denyPageChangeHandler}
+              currentPage={currentDenyPage}
+              numPages={Math.ceil(denyComments.length / pageSize)}
+            />
           </AccordionDetails>
         </Accordion>
       </CardContent>

@@ -39,7 +39,6 @@ export default function AssistantTextClassification({
   text,
   classification,
   overallClassification,
-  titleText = "",
   categoriesTooltipContent = "",
   configs = {
     // machine generated text and subjectivity
@@ -71,10 +70,10 @@ export default function AssistantTextClassification({
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   // titles
-  const newsFramingTitle = keyword("news_framing_title");
-  const newsGenreTitle = keyword("news_genre_title");
-  const subjectivityTitle = keyword("subjectivity_title");
-  const machineGeneratedTextTitle = keyword("machine_generated_text_title");
+  const newsFramingTitle = "news_framing_title";
+  const newsGenreTitle = "news_genre_title";
+  const subjectivityTitle = "subjectivity_title";
+  const machineGeneratedTextTitle = "machine_generated_text_title";
 
   // slider
   const importantSentenceThreshold = useSelector(
@@ -210,6 +209,7 @@ export default function AssistantTextClassification({
           credibilitySignal={credibilitySignal}
           keyword={keyword}
           resolvedMode={resolvedMode}
+          machineGeneratedTextTitle={machineGeneratedTextTitle}
         />
       </Grid>
 
@@ -218,7 +218,7 @@ export default function AssistantTextClassification({
         <Card>
           <CardHeader
             className={classes.assistantCardHeader}
-            title={titleText}
+            title={keyword(credibilitySignal)}
             action={
               <div style={{ display: "flex" }}>
                 <Tooltip
@@ -246,6 +246,8 @@ export default function AssistantTextClassification({
                 gaugeLabels={["gauge_no_detection", "gauge_detection"]}
                 orderedCategories={orderedCategories}
                 credibilitySignal={credibilitySignal}
+                machineGeneratedTextTitle={machineGeneratedTextTitle}
+                subjectivityTitle={subjectivityTitle}
               />
             ) : credibilitySignal === subjectivityTitle ? (
               <GaugeCategoriesList
@@ -264,6 +266,8 @@ export default function AssistantTextClassification({
                 credibilitySignal={credibilitySignal}
                 importantSentenceThreshold={importantSentenceThreshold}
                 handleSliderChange={handleSliderChange}
+                machineGeneratedTextTitle={machineGeneratedTextTitle}
+                subjectivityTitle={subjectivityTitle}
               />
             ) : (
               <CategoriesList
@@ -273,6 +277,8 @@ export default function AssistantTextClassification({
                 credibilitySignal={credibilitySignal}
                 importantSentenceThreshold={importantSentenceThreshold}
                 handleSliderChange={handleSliderChange}
+                newsFramingTitle={newsFramingTitle}
+                newsGenreTitle={newsGenreTitle}
               />
             )}
           </CardContent>
@@ -296,6 +302,8 @@ export function GaugeCategoriesList({
   credibilitySignal,
   importantSentenceThreshold,
   handleSliderChange,
+  machineGeneratedTextTitle,
+  subjectivityTitle,
 }) {
   // gauge chart
   const gaugeChart = createGaugeChart(
@@ -310,7 +318,7 @@ export function GaugeCategoriesList({
 
   // categories list
   const output = [];
-  if (credibilitySignal === keyword("machine_generated_text_title")) {
+  if (credibilitySignal === machineGeneratedTextTitle) {
     for (const category of orderedCategories) {
       if (category != fullTextScoreLabel && category in categories) {
         output.push(
@@ -347,7 +355,7 @@ export function GaugeCategoriesList({
 
   return (
     <>
-      {credibilitySignal === keyword("subjectivity_title") ? (
+      {credibilitySignal === subjectivityTitle ? (
         <>
           {_.isEmpty(categories) && overallScore === 0 ? (
             <>
@@ -376,7 +384,7 @@ export function GaugeCategoriesList({
         <GaugeChartModalExplanation
           keyword={keyword}
           keywordsArr={
-            credibilitySignal === keyword("machine_generated_text_title")
+            credibilitySignal === machineGeneratedTextTitle
               ? DETECTION_EXPLANATION_KEYWORDS_MGT
               : DETECTION_EXPLANATION_KEYWORDS_SUB
           }
@@ -385,7 +393,7 @@ export function GaugeCategoriesList({
           colors={colours}
         />
       </Box>
-      {credibilitySignal === keyword("machine_generated_text_title") && (
+      {credibilitySignal === machineGeneratedTextTitle && (
         <>
           <Divider key={`divider_${fullTextScoreLabel}`} sx={{ my: 2 }} />
           <Typography fontSize="small" sx={{ textAlign: "start" }}>
@@ -406,16 +414,18 @@ export function CategoriesList({
   credibilitySignal,
   importantSentenceThreshold,
   handleSliderChange,
+  newsFramingTitle,
+  newsGenreTitle,
 }) {
   if (_.isEmpty(categories)) {
     return (
       <>
-        {credibilitySignal === keyword("news_framing_title") && (
+        {credibilitySignal === newsFramingTitle && (
           <Typography fontSize="small" sx={{ textAlign: "center" }}>
             {keyword("no_detected_topics")}
           </Typography>
         )}
-        {credibilitySignal === keyword("news_genre_title") && (
+        {credibilitySignal === newsGenreTitle && (
           <Typography fontSize="small" sx={{ textAlign: "center" }}>
             {keyword("no_detected_genre")}
           </Typography>
@@ -470,15 +480,15 @@ export function ClassifiedText({
   primaryRgb,
   textHtmlMap = null,
   credibilitySignal,
-  keyword,
   resolvedMode,
+  machineGeneratedTextTitle,
 }) {
   let output = text; // Defaults to text output
 
   function wrapHighlightedText(spanText, spanInfo) {
     let bgLuminance;
     let textColour = "black";
-    if (credibilitySignal === keyword("machine_generated_text_title")) {
+    if (credibilitySignal === machineGeneratedTextTitle) {
       backgroundRgb = resolvedMode === "dark" ? spanInfo.rgbDark : spanInfo.rgb;
       bgLuminance = rgbToLuminance(backgroundRgb);
       if (spanInfo.pred == "highly_likely_machine") textColour = "white";

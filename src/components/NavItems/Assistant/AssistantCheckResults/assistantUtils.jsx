@@ -193,9 +193,15 @@ export const renderUrlTitle = (
           </Box>
 
           {/* close button */}
-          <IconButton onClick={handleClose}>
-            <CloseIcon />
-          </IconButton>
+          <Box
+            sx={{
+              pr: 1,
+            }}
+          >
+            <IconButton onClick={handleClose}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
         </Grid>
       ) : null}
     </Grid>
