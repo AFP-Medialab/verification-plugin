@@ -147,7 +147,7 @@ const Hiya = () => {
                     <ListItem key={index} sx={{ py: 0, px: 0 }}>
                       <ListItemText
                         primary={keyword(suggestionKey)}
-                        primaryTypographyProps={{ variant: "body2" }}
+                        slotProps={{ primary: { variant: "body2" } }}
                       />
                     </ListItem>
                   ),
@@ -168,7 +168,7 @@ const Hiya = () => {
                     <ListItem key={index} sx={{ py: 0, px: 0 }}>
                       <ListItemText
                         primary={keyword(suggestionKey)}
-                        primaryTypographyProps={{ variant: "body2" }}
+                        slotProps={{ primary: { variant: "body2" } }}
                       />
                     </ListItem>
                   ),

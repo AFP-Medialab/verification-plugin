@@ -406,7 +406,7 @@ export const useHiyaAudioAnalysis = () => {
    * Success callback for file preprocessing
    * Sets the validated audio file in state and Redux
    *
-   * @param {File} file - The successfully validated audio file
+   * @param {File} newFile - The successfully validated audio file
    */
   const preprocessSuccess = (newFile) => {
     setAudioFile(newFile);
