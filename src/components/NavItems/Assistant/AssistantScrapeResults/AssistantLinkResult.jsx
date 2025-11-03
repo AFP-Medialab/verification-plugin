@@ -66,36 +66,45 @@ const Status = (params) => {
   );
 };
 
-// render Domain or Account in correct colour
-const Domain = (params) => {
-  // Domain or Account column
-  const credibilityScopeHttps = prependHttps(params.credibilityScope);
-  return params.credibilityScope ? (
-    <Tooltip title={credibilityScopeHttps}>
-      <Link
-        style={{ cursor: "pointer" }}
-        target="_blank"
-        href={credibilityScopeHttps}
-        color={params.urlColor}
-      >
-        {params.credibilityScope}
-      </Link>
-    </Tooltip>
-  ) : null;
-};
+// // render Domain or Account in correct colour
+// const Domain = (params) => {
+//   // Domain or Account column
+//   // const credibilityScopeHttps = prependHttps(params.credibilityScope);
+//   return params.credibilityScope ? (
+//     params.credibilityScope.includes("/") ? "account_" : "domain_"
+//     // <Tooltip title={credibilityScopeHttps}>
+//     //   <Link
+//     //     style={{ cursor: "pointer" }}
+//     //     target="_blank"
+//     //     href={credibilityScopeHttps}
+//     //     color={params.urlColor}
+//     //   >
+//     //     {params.credibilityScope}
+//     //   </Link>
+//     // </Tooltip>
+//   ) : null;
+// };
 
 // render URL in correct colour
 const Url = (params) => {
-  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
+  // const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   return params.url.length > 1 ? (
     <Typography variant="p" title={params.url} color={params.urlColor}>
       {/* list of URLs from domain results on hover */}
-      {params.url.length} {keyword("urls_found_with_domain")}
-    </Typography>
-  ) : params.credibilityScope?.includes("/") ? (
-    <Typography variant="p" title={params.url} color={params.urlColor}>
-      {/* account detected with single URL  */}
-      {keyword("social_media_account_detected")}
+      {"("}
+      {params.url.length}
+      {")"}
+      {params.url.map((key, url) => (
+        <Link
+          key={key}
+          style={{ cursor: "pointer" }}
+          target="_blank"
+          href={url}
+          color={params.urlColor}
+        >
+          {params.credibilityScope || params.url}
+        </Link>
+      ))}
     </Typography>
   ) : (
     <Tooltip title={params.url}>
@@ -115,6 +124,38 @@ const Url = (params) => {
     </Tooltip>
   );
 };
+
+// // render URL in correct colour
+// const Url = (params) => {
+//   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
+//   return params.url.length > 1 ? (
+//     <Typography variant="p" title={params.url} color={params.urlColor}>
+//       {/* list of URLs from domain results on hover */}
+//       {params.url.length} {keyword("urls_found_with_domain")}
+//     </Typography>
+//   ) : params.credibilityScope?.includes("/") ? (
+//     <Typography variant="p" title={params.url} color={params.urlColor}>
+//       {/* account detected with single URL  */}
+//       {keyword("social_media_account_detected")}
+//     </Typography>
+//   ) : (
+//     <Tooltip title={params.url}>
+//       {/* single unlabelled URL */}
+//       <Link
+//         style={{ cursor: "pointer" }}
+//         target="_blank"
+//         href={
+//           params.credibilityScope
+//             ? prependHttps(params.credibilityScope)
+//             : params.url
+//         }
+//         color={params.urlColor}
+//       >
+//         {params.credibilityScope || params.url}
+//       </Link>
+//     </Tooltip>
+//   );
+// };
 
 // render details
 const Details = (params) => {
@@ -394,10 +435,15 @@ const AssistantLinkResult = () => {
       flex: 1,
       renderCell: (params) => {
         return (
-          <Domain
-            credibilityScope={params.value.credibilityScope}
-            urlColor={params.value.urlColor}
-          />
+          // <Domain
+          //   credibilityScope={params.value.credibilityScope}
+          //   urlColor={params.value.urlColor}
+          // />
+          params.value.credibilityScope
+            ? params.value.credibilityScope.includes("/")
+              ? "account_"
+              : "domain_"
+            : null
         );
       },
       sortComparator: (v1, v2) =>
@@ -498,6 +544,7 @@ const AssistantLinkResult = () => {
             columns={columns}
             rowHeight={60}
             disableRowSelectionOnClick
+            rowSpanning={true}
             initialState={{
               sorting: {
                 sortModel: [{ field: "status", sort: "desc" }],
