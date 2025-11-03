@@ -14,6 +14,7 @@ import Chip from "@mui/material/Chip";
 import LinearProgress from "@mui/material/LinearProgress";
 import Pagination from "@mui/material/Pagination";
 import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -28,8 +29,8 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
-import { TextCopy } from "@/components/Shared/Utils/TextCopy";
 import { Translate } from "@/components/Shared/Utils/Translate";
+import CopyButton from "components/Shared/CopyButton";
 import moment from "moment/moment";
 
 import {
@@ -246,16 +247,18 @@ const AssistantCommentResult = ({ collectedComments }) => {
 
           {/* options */}
           <TableCell>
-            <Tooltip title={keyword("copy_to_clipboard")}>
-              <div>
-                <TextCopy text={text} index={key} />
-              </div>
-            </Tooltip>
-            <Tooltip title={keyword("translate")}>
-              <div>
-                <Translate text={text} />
-              </div>
-            </Tooltip>
+            <Stack direction="row" alignItems="center">
+              <CopyButton
+                strToCopy={text}
+                labelBeforeCopy={keyword("copy_to_clipboard")}
+                labelAfterCopy={keyword("copied_to_clipboard")}
+              />
+              <Tooltip title={keyword("translate")}>
+                <div>
+                  <Translate text={text} />
+                </div>
+              </Tooltip>
+            </Stack>
           </TableCell>
         </TableRow>,
       );
