@@ -54,7 +54,7 @@ const Status = (params) => {
           size="small"
         />
       ) : null}
-      {params.done && params.domainResults?.length < 1 ? (
+      {params.done && !params.domainResults ? (
         <Chip
           label={keyword(params.sourceTypes.unlabelled)}
           color={params.trafficLightColors.unlabelled}
