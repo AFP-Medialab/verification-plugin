@@ -9,9 +9,9 @@ const initialState = {
   isInconclusive: false,
   loading: false,
   hasError: false, // True when ALL chunks have error labels (no results)
-  errorData: null, // { mainMessage: string, suggestions: string[] } for full errors
+  errorData: null, // { errorType: string, errorLabels: string[] } for full errors
   hasPartialWarning: false, // True when SOME chunks have error labels (show results + warning)
-  warningData: null, // { mainMessage: string, suggestions: string[] } for partial errors
+  warningData: null, // { errorType: string, errorLabels: string[] } for partial errors
   errorLabels: [], // Array of error labels found
 };
 
@@ -73,8 +73,8 @@ const hiyaReducer = createSlice({
       // Set partial warning state
       state.hasPartialWarning = true;
       state.warningData = {
-        mainMessage: action.payload.mainMessage,
-        suggestions: action.payload.suggestions,
+        errorType: action.payload.errorType,
+        errorLabels: action.payload.errorLabels,
       };
       state.errorLabels = action.payload.errorLabels;
       // Clear full error state
@@ -84,8 +84,8 @@ const hiyaReducer = createSlice({
     setHiyaError: (state, action) => {
       state.hasError = true;
       state.errorData = {
-        mainMessage: action.payload.mainMessage,
-        suggestions: action.payload.suggestions,
+        errorType: action.payload.errorType,
+        errorLabels: action.payload.errorLabels,
       };
       state.errorLabels = action.payload.errorLabels;
       state.resultUrl = action.payload.url; // Set the URL for error display

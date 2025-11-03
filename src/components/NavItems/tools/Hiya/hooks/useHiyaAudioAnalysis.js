@@ -164,11 +164,6 @@ export const useHiyaAudioAnalysis = () => {
 
     // Case 2: All chunks have errors - show warning only, no results
     if (errorChunks.length === totalChunks) {
-      const suggestions = uniqueErrorLabels
-        .map((label) => ERROR_MESSAGE_KEYS.SUGGESTIONS[label])
-        .filter(Boolean)
-        .map((suggestionKey) => keyword(suggestionKey));
-
       console.log(
         `${errorChunks.length}/${totalChunks} chunks have error labels (100%) - showing error only`,
       );
@@ -176,17 +171,10 @@ export const useHiyaAudioAnalysis = () => {
       return {
         errorType: "all",
         errorLabels: uniqueErrorLabels,
-        mainMessage: keyword(ERROR_MESSAGE_KEYS.ALL_ERRORS),
-        suggestions: suggestions,
       };
     }
 
     // Case 3: Some chunks have errors - show results AND warnings
-    const suggestions = uniqueErrorLabels
-      .map((label) => ERROR_MESSAGE_KEYS.SUGGESTIONS[label])
-      .filter(Boolean)
-      .map((suggestionKey) => keyword(suggestionKey));
-
     console.log(
       `${errorChunks.length}/${totalChunks} chunks have error labels (${Math.round((errorChunks.length / totalChunks) * 100)}%) - showing results with warnings`,
     );
@@ -194,8 +182,6 @@ export const useHiyaAudioAnalysis = () => {
     return {
       errorType: "partial",
       errorLabels: uniqueErrorLabels,
-      mainMessage: keyword(ERROR_MESSAGE_KEYS.PARTIAL_ERRORS),
-      suggestions: suggestions,
     };
   };
 
@@ -270,9 +256,8 @@ export const useHiyaAudioAnalysis = () => {
           dispatchAction(
             setHiyaError({
               url: resultUrl,
+              errorType: errorInfo.errorType,
               errorLabels: errorInfo.errorLabels,
-              mainMessage: errorInfo.mainMessage,
-              suggestions: errorInfo.suggestions,
             }),
           );
           return; // Don't proceed with result processing
@@ -286,8 +271,7 @@ export const useHiyaAudioAnalysis = () => {
               result: detectionResponse.data,
               chunks: chunks.data,
               isInconclusive: isAnalysisInconclusive,
-              mainMessage: errorInfo.mainMessage,
-              suggestions: errorInfo.suggestions,
+              errorType: errorInfo.errorType,
               errorLabels: errorInfo.errorLabels,
             }),
           );

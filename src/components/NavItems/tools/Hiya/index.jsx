@@ -16,7 +16,38 @@ import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespa
 import StringFileUploadField from "@Shared/StringFileUploadField";
 
 import HiyaResults from "./components/HiyaResults";
+import { ERROR_MESSAGE_KEYS } from "./constants/detectionConstants";
 import { useHiyaAudioAnalysis } from "./hooks/useHiyaAudioAnalysis";
+
+// Utility functions
+/**
+ * Maps error data to the appropriate main message translation key
+ * @param {Object} errorData - Error data from Redux state
+ * @returns {string} Translation key for the main error message
+ */
+const getMainMessageKey = (errorData) => {
+  if (errorData.errorType === "all") {
+    return ERROR_MESSAGE_KEYS.ALL_ERRORS;
+  } else if (errorData.errorType === "partial") {
+    return ERROR_MESSAGE_KEYS.PARTIAL_ERRORS;
+  }
+  return "hiya_generic_error"; // fallback
+};
+
+/**
+ * Maps error labels to suggestion translation keys
+ * @param {string[]} errorLabels - Array of error labels from API
+ * @returns {string[]} Array of translation keys for suggestions
+ */
+const getSuggestionKeys = (errorLabels) => {
+  if (!errorLabels || errorLabels.length === 0) {
+    return [];
+  }
+
+  return errorLabels
+    .map((label) => ERROR_MESSAGE_KEYS.SUGGESTIONS[label])
+    .filter(Boolean); // Remove any undefined values
+};
 
 /**
  * Hiya Component - Audio authenticity verification tool
@@ -107,18 +138,20 @@ const Hiya = () => {
         {hasError && errorData && (
           <Alert severity="error">
             <Typography variant="body2" gutterBottom>
-              {errorData.mainMessage}
+              {keyword(getMainMessageKey(errorData))}
             </Typography>
-            {errorData.suggestions && errorData.suggestions.length > 0 && (
+            {getSuggestionKeys(errorData.errorLabels).length > 0 && (
               <List dense sx={{ mt: 1, pl: 2 }}>
-                {errorData.suggestions.map((suggestion, index) => (
-                  <ListItem key={index} sx={{ py: 0, px: 0 }}>
-                    <ListItemText
-                      primary={suggestion}
-                      primaryTypographyProps={{ variant: "body2" }}
-                    />
-                  </ListItem>
-                ))}
+                {getSuggestionKeys(errorData.errorLabels).map(
+                  (suggestionKey, index) => (
+                    <ListItem key={index} sx={{ py: 0, px: 0 }}>
+                      <ListItemText
+                        primary={keyword(suggestionKey)}
+                        primaryTypographyProps={{ variant: "body2" }}
+                      />
+                    </ListItem>
+                  ),
+                )}
               </List>
             )}
           </Alert>
@@ -126,18 +159,20 @@ const Hiya = () => {
         {hasPartialWarning && warningData && (
           <Alert severity="warning">
             <Typography variant="body2" gutterBottom>
-              {warningData.mainMessage}
+              {keyword(getMainMessageKey(warningData))}
             </Typography>
-            {warningData.suggestions && warningData.suggestions.length > 0 && (
+            {getSuggestionKeys(warningData.errorLabels).length > 0 && (
               <List dense sx={{ mt: 1, pl: 2 }}>
-                {warningData.suggestions.map((suggestion, index) => (
-                  <ListItem key={index} sx={{ py: 0, px: 0 }}>
-                    <ListItemText
-                      primary={suggestion}
-                      primaryTypographyProps={{ variant: "body2" }}
-                    />
-                  </ListItem>
-                ))}
+                {getSuggestionKeys(warningData.errorLabels).map(
+                  (suggestionKey, index) => (
+                    <ListItem key={index} sx={{ py: 0, px: 0 }}>
+                      <ListItemText
+                        primary={keyword(suggestionKey)}
+                        primaryTypographyProps={{ variant: "body2" }}
+                      />
+                    </ListItem>
+                  ),
+                )}
               </List>
             )}
           </Alert>
