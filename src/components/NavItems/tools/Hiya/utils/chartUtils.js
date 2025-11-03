@@ -109,10 +109,20 @@ export const getChartDataFromChunks = (chunks) => {
     labels.push(dayjs.duration(chunk.startTime));
     labels.push(dayjs.duration(chunk.endTime));
 
-    // Convert synthesis score to percentage (1 - score means higher percentage = more likely synthetic)
-    const detectionPercentage = (1 - chunk.scores.synthesis) * 100;
-    datasetData.push(detectionPercentage);
-    datasetData.push(detectionPercentage);
+    // Check if we have a valid synthesis score
+    if (
+      chunk.scores?.synthesis === null ||
+      chunk.scores?.synthesis === undefined
+    ) {
+      // Add null values for missing data - this creates gaps in the chart
+      datasetData.push(null);
+      datasetData.push(null);
+    } else {
+      // Convert synthesis score to percentage (1 - score means higher percentage = more likely synthetic)
+      const detectionPercentage = (1 - chunk.scores.synthesis) * 100;
+      datasetData.push(detectionPercentage);
+      datasetData.push(detectionPercentage);
+    }
   }
 
   return {
@@ -123,6 +133,16 @@ export const getChartDataFromChunks = (chunks) => {
         fill: false,
         stepped: true,
         tension: 0,
+        spanGaps: false, // Don't connect across null values - ensures gaps are visible
+        segment: {
+          // Make segments transparent when connecting to/from null values
+          borderColor: (ctx) => {
+            const p0 = ctx.p0.parsed.y;
+            const p1 = ctx.p1.parsed.y;
+            // If either point is null, make segment transparent
+            return p0 === null || p1 === null ? "transparent" : undefined;
+          },
+        },
         // Note: borderColor should be set dynamically using getChartGradient
       },
     ],
