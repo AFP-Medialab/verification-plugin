@@ -21,10 +21,7 @@ import useAuthenticatedRequest from "components/Shared/Authentication/useAuthent
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { setError } from "redux/reducers/errorReducer";
 
-import {
-  API_RESPONSE_LABELS,
-  ERROR_MESSAGE_KEYS,
-} from "../constants/detectionConstants";
+import { API_RESPONSE_LABELS } from "../constants/detectionConstants";
 
 /**
  * Custom hook for Hiya audio analysis functionality
@@ -164,10 +161,6 @@ export const useHiyaAudioAnalysis = () => {
 
     // Case 2: All chunks have errors - show warning only, no results
     if (errorChunks.length === totalChunks) {
-      console.log(
-        `${errorChunks.length}/${totalChunks} chunks have error labels (100%) - showing error only`,
-      );
-
       return {
         errorType: "all",
         errorLabels: uniqueErrorLabels,
@@ -175,10 +168,6 @@ export const useHiyaAudioAnalysis = () => {
     }
 
     // Case 3: Some chunks have errors - show results AND warnings
-    console.log(
-      `${errorChunks.length}/${totalChunks} chunks have error labels (${Math.round((errorChunks.length / totalChunks) * 100)}%) - showing results with warnings`,
-    );
-
     return {
       errorType: "partial",
       errorLabels: uniqueErrorLabels,
