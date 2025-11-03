@@ -355,12 +355,11 @@ const AssistantLinkResult = () => {
       <CardContent
         style={{
           wordBreak: "break-word",
-          overflowY: "auto",
-          overflowX: "hidden",
+          overflow: "hidden",
+          height: 450,
         }}
       >
-        {/* issue with resize related to parent not having a fixed/determined size? */}
-        <div style={{ height: 400, width: "100%", minWidth: 0 }}>
+        <Box sx={{ height: "100%", width: "100%" }}>
           <DataGrid
             rows={rows}
             columns={columns}
@@ -372,7 +371,7 @@ const AssistantLinkResult = () => {
               },
             }}
           />
-        </div>
+        </Box>
       </CardContent>
     </Card>
   );
