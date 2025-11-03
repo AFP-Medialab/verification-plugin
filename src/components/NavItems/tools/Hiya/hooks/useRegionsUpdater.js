@@ -44,7 +44,10 @@ export const useRegionsUpdater = (
 
     // Add regions for each chunk with synthesis scores
     chunks.forEach((chunk) => {
-      if (chunk.scores?.synthesis !== undefined) {
+      if (
+        chunk.scores?.synthesis !== null &&
+        chunk.scores?.synthesis !== undefined
+      ) {
         const detectionPercentage = (1 - chunk.scores.synthesis) * 100;
 
         try {
