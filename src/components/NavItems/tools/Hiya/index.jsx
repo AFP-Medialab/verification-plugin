@@ -5,7 +5,11 @@ import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import LinearProgress from "@mui/material/LinearProgress";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 
 import HiyaHeader from "@/components/NavItems/tools/Hiya/components/HiyaHeader";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
@@ -34,14 +38,14 @@ const Hiya = () => {
   const hasError = useSelector(
     (state) => state.syntheticAudioDetection.hasError,
   );
-  const errorMessage = useSelector(
-    (state) => state.syntheticAudioDetection.errorMessage,
+  const errorData = useSelector(
+    (state) => state.syntheticAudioDetection.errorData,
   );
   const hasPartialWarning = useSelector(
     (state) => state.syntheticAudioDetection.hasPartialWarning,
   );
-  const warningMessage = useSelector(
-    (state) => state.syntheticAudioDetection.warningMessage,
+  const warningData = useSelector(
+    (state) => state.syntheticAudioDetection.warningData,
   );
 
   // Use the custom hook for all audio analysis logic
@@ -100,14 +104,42 @@ const Hiya = () => {
         {getAnalysisResultsForAudio.isError && (
           <Alert severity="error">{keyword("hiya_generic_error")}</Alert>
         )}
-        {hasError && (
-          <Alert severity="error" sx={{ whiteSpace: "pre-line" }}>
-            {errorMessage}
+        {hasError && errorData && (
+          <Alert severity="error">
+            <Typography variant="body2" gutterBottom>
+              {errorData.mainMessage}
+            </Typography>
+            {errorData.suggestions && errorData.suggestions.length > 0 && (
+              <List dense sx={{ mt: 1, pl: 2 }}>
+                {errorData.suggestions.map((suggestion, index) => (
+                  <ListItem key={index} sx={{ py: 0, px: 0 }}>
+                    <ListItemText
+                      primary={suggestion}
+                      primaryTypographyProps={{ variant: "body2" }}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            )}
           </Alert>
         )}
-        {hasPartialWarning && (
-          <Alert severity="warning" sx={{ whiteSpace: "pre-line" }}>
-            {warningMessage}
+        {hasPartialWarning && warningData && (
+          <Alert severity="warning">
+            <Typography variant="body2" gutterBottom>
+              {warningData.mainMessage}
+            </Typography>
+            {warningData.suggestions && warningData.suggestions.length > 0 && (
+              <List dense sx={{ mt: 1, pl: 2 }}>
+                {warningData.suggestions.map((suggestion, index) => (
+                  <ListItem key={index} sx={{ py: 0, px: 0 }}>
+                    <ListItemText
+                      primary={suggestion}
+                      primaryTypographyProps={{ variant: "body2" }}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            )}
           </Alert>
         )}
         {result && !hasError && (

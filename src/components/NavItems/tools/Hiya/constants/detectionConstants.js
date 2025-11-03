@@ -57,17 +57,15 @@ export const ERROR_MESSAGES = {
 };
 
 /**
- * Generalized warning messages for different error scenarios
+ * Translation keys for generalized warning messages
  */
-export const GENERAL_ERROR_MESSAGES = {
-  ALL_ERRORS:
-    "The audio analysis could not be completed due to audio quality issues. Please try with a different audio file that has:",
-  PARTIAL_ERRORS:
-    "Some parts of the audio had quality issues that may affect accuracy. For better results, use audio with:",
+export const ERROR_MESSAGE_KEYS = {
+  ALL_ERRORS: "hiya_error_all_chunks_failed",
+  PARTIAL_ERRORS: "hiya_warning_partial_chunks_failed",
   SUGGESTIONS: {
-    [API_RESPONSE_LABELS.EXCESSIVE_MUSIC]: "• Less background music",
-    [API_RESPONSE_LABELS.EXCESSIVE_NOISE]: "• Reduced background noise",
-    [API_RESPONSE_LABELS.INSUFFICIENT_VOICE]: "• More prominent voice content",
+    [API_RESPONSE_LABELS.EXCESSIVE_MUSIC]: "hiya_suggestion_less_music",
+    [API_RESPONSE_LABELS.EXCESSIVE_NOISE]: "hiya_suggestion_less_noise",
+    [API_RESPONSE_LABELS.INSUFFICIENT_VOICE]: "hiya_suggestion_more_voice",
   },
 };
 

@@ -23,8 +23,7 @@ import { setError } from "redux/reducers/errorReducer";
 
 import {
   API_RESPONSE_LABELS,
-  ERROR_MESSAGES,
-  GENERAL_ERROR_MESSAGES,
+  ERROR_MESSAGE_KEYS,
 } from "../constants/detectionConstants";
 
 /**
@@ -166,10 +165,9 @@ export const useHiyaAudioAnalysis = () => {
     // Case 2: All chunks have errors - show warning only, no results
     if (errorChunks.length === totalChunks) {
       const suggestions = uniqueErrorLabels
-        .map((label) => GENERAL_ERROR_MESSAGES.SUGGESTIONS[label])
-        .filter(Boolean);
-
-      const errorMessage = `${GENERAL_ERROR_MESSAGES.ALL_ERRORS}\n${suggestions.join("\n")}`;
+        .map((label) => ERROR_MESSAGE_KEYS.SUGGESTIONS[label])
+        .filter(Boolean)
+        .map((suggestionKey) => keyword(suggestionKey));
 
       console.log(
         `${errorChunks.length}/${totalChunks} chunks have error labels (100%) - showing error only`,
@@ -178,16 +176,16 @@ export const useHiyaAudioAnalysis = () => {
       return {
         errorType: "all",
         errorLabels: uniqueErrorLabels,
-        errorMessage: errorMessage,
+        mainMessage: keyword(ERROR_MESSAGE_KEYS.ALL_ERRORS),
+        suggestions: suggestions,
       };
     }
 
     // Case 3: Some chunks have errors - show results AND warnings
     const suggestions = uniqueErrorLabels
-      .map((label) => GENERAL_ERROR_MESSAGES.SUGGESTIONS[label])
-      .filter(Boolean);
-
-    const warningMessage = `${GENERAL_ERROR_MESSAGES.PARTIAL_ERRORS}\n${suggestions.join("\n")}`;
+      .map((label) => ERROR_MESSAGE_KEYS.SUGGESTIONS[label])
+      .filter(Boolean)
+      .map((suggestionKey) => keyword(suggestionKey));
 
     console.log(
       `${errorChunks.length}/${totalChunks} chunks have error labels (${Math.round((errorChunks.length / totalChunks) * 100)}%) - showing results with warnings`,
@@ -196,7 +194,8 @@ export const useHiyaAudioAnalysis = () => {
     return {
       errorType: "partial",
       errorLabels: uniqueErrorLabels,
-      errorMessage: warningMessage,
+      mainMessage: keyword(ERROR_MESSAGE_KEYS.PARTIAL_ERRORS),
+      suggestions: suggestions,
     };
   };
 
@@ -272,7 +271,8 @@ export const useHiyaAudioAnalysis = () => {
             setHiyaError({
               url: resultUrl,
               errorLabels: errorInfo.errorLabels,
-              errorMessage: errorInfo.errorMessage,
+              mainMessage: errorInfo.mainMessage,
+              suggestions: errorInfo.suggestions,
             }),
           );
           return; // Don't proceed with result processing
@@ -286,7 +286,8 @@ export const useHiyaAudioAnalysis = () => {
               result: detectionResponse.data,
               chunks: chunks.data,
               isInconclusive: isAnalysisInconclusive,
-              warningMessage: errorInfo.errorMessage,
+              mainMessage: errorInfo.mainMessage,
+              suggestions: errorInfo.suggestions,
               errorLabels: errorInfo.errorLabels,
             }),
           );
