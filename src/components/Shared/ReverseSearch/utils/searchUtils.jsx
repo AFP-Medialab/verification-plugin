@@ -75,7 +75,7 @@ export const getBlob = async (info) => {
 
   if (
     typeof info === "string" &&
-    (info.startsWith("http") || info.startsWith("blob"))
+    (info.startsWith("http") || info.startsWith("data"))
   ) {
     imgBlob = await fetchImage(info);
   } else if (isImgUrl && !isb64) {
