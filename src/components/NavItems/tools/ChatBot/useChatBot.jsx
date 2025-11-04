@@ -1,12 +1,14 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 import {
   createChatBotApi,
   fetchModels,
   formatMessagesForAPI,
 } from "./chatBotApiService";
-import { PROMPTS_CONFIG } from "./promptConfig";
+import { PROMPTS_CONFIG_I_18_N } from "./promptConfigI18n";
 
 /**
  * Custom hook for interacting with OpenAI-like chat completion API
@@ -25,8 +27,47 @@ const useChatBot = (
   const [error, setError] = useState(null);
   const [selectedPrompt, setSelectedPrompt] = useState("");
 
-  // Pre-defined prompts from configuration
-  const [prompts] = useState(PROMPTS_CONFIG);
+  // Load translations for ChatBot namespace
+  const t = i18nLoadNamespace("components/NavItems/tools/ChatBot");
+
+  // Pre-defined prompts from i18n configuration
+  const [prompts] = useState(PROMPTS_CONFIG_I_18_N);
+
+  // Create translated prompts for UI display
+  const translatedPrompts = useMemo(() => {
+    return prompts.map((prompt) => ({
+      ...prompt,
+      name: prompt.id === "none" ? prompt.name : t(prompt.name) || prompt.name, // Keep "none" as is for special handling
+      description: prompt.description
+        ? t(prompt.description) || prompt.description
+        : undefined,
+    }));
+  }, [prompts, t]);
+
+  // Helper function to translate prompt content
+  const translatePromptContent = useCallback(
+    (prompt) => {
+      if (!prompt?.messages) return prompt;
+
+      const translatedMessages = prompt.messages.map((message) => ({
+        ...message,
+        content:
+          message.content === "CONTENT_TO_PROCESS"
+            ? "CONTENT_TO_PROCESS" // Keep placeholder as is
+            : t(message.content) || message.content, // Translate content or fallback to original
+      }));
+
+      return {
+        ...prompt,
+        name: t(prompt.name) || prompt.name, // Translate name
+        description: prompt.description
+          ? t(prompt.description) || prompt.description
+          : undefined, // Translate description if exists
+        messages: translatedMessages,
+      };
+    },
+    [t],
+  );
 
   // Fetch available models using React Query
   const {
@@ -109,7 +150,9 @@ const useChatBot = (
       const prompt = prompts.find((req) => req.id === promptId);
       if (!prompt?.messages) throw new Error("Invalid prompt selected");
 
-      let messages = [...prompt.messages];
+      // Translate the prompt content before processing
+      const translatedPrompt = translatePromptContent(prompt);
+      let messages = [...translatedPrompt.messages];
 
       // Build messages in chronological order
       let fullMessages = [];
@@ -120,7 +163,7 @@ const useChatBot = (
         // 2. Conversation history in chronological order
         // 3. Final user message with new content
 
-        if (content && prompt.requiresContent) {
+        if (content && translatedPrompt.requiresContent) {
           // Find the last message in prompt template (usually contains CONTENT_TO_PROCESS)
           const lastPromptIndex = messages.length - 1;
           const lastPromptMessage = messages[lastPromptIndex];
@@ -151,7 +194,7 @@ const useChatBot = (
         }
       } else {
         // No conversation history, just process the prompt messages
-        if (content && prompt.requiresContent) {
+        if (content && translatedPrompt.requiresContent) {
           fullMessages = messages.map((msg) => ({
             ...msg,
             content: msg.content.replace("CONTENT_TO_PROCESS", content),
@@ -164,10 +207,10 @@ const useChatBot = (
       return chatMutation.mutateAsync({
         messages: fullMessages,
         options,
-        promptName: prompt.name,
+        promptName: translatedPrompt.name,
       });
     },
-    [chatMutation, prompts],
+    [chatMutation, prompts, translatePromptContent],
   );
 
   return {
@@ -177,7 +220,7 @@ const useChatBot = (
     isLoading: chatMutation.isPending,
     isModelsLoading,
     error: error || modelsError?.message || chatMutation.error?.message,
-    prompts,
+    prompts: translatedPrompts,
     selectedPrompt,
 
     // Actions

@@ -8,6 +8,7 @@ import Collapse from "@mui/material/Collapse";
 import { ExpandLess, ExpandMore, Psychology } from "@mui/icons-material";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import remarkGfm from "remark-gfm";
 
 /**
  * Parse message content to extract <think> tags and regular content
@@ -87,7 +88,9 @@ const ThinkSection = ({ thinkContent }) => {
             textAlign: "left",
           }}
         >
-          <ReactMarkdown>{thinkContent}</ReactMarkdown>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {thinkContent}
+          </ReactMarkdown>
         </Box>
       </Collapse>
     </Box>
@@ -105,7 +108,9 @@ const MessageContent = ({ content, sender }) => {
       {/* Regular content with markdown formatting */}
       {regularContent && (
         <Box sx={{ mb: thinkSections.length > 0 ? 1 : 0 }}>
-          <ReactMarkdown>{regularContent}</ReactMarkdown>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {regularContent}
+          </ReactMarkdown>
         </Box>
       )}
 

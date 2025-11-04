@@ -437,7 +437,7 @@ const ChatBotUI = () => {
                     <Tooltip
                       title={
                         prompt.messages && prompt.messages[1]
-                          ? prompt.messages[1].content
+                          ? keyword(prompt.messages[1].content)
                           : ""
                       }
                       arrow

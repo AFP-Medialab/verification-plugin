@@ -96,6 +96,7 @@
     "recharts": "^2.15.3",
     "redux": "^4.2.1",
     "redux-saga": "^1.2.3",
+    "remark-gfm": "^4.0.1",
     "remove": "^0.1.5",
     "stopword": "^3.1.4",
     "stream": "^0.0.3",
