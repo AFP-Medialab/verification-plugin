@@ -101,6 +101,23 @@ export const getPercentageColorCode = (percentage) => {
  * // Returns: { labels: [...], datasets: [...] }
  * ```
  */
+
+/**
+ * Calculates the time range for audio timeline
+ * @param {number} [audioDurationMs] - Audio duration in milliseconds from wavesurfer
+ * @returns {Object} Object with minTime and maxTime values as milliseconds for Chart.js
+ */
+export const getAudioTimeRange = (audioDurationMs) => {
+  // If we don't have the actual audio duration, let Chart.js auto-scale
+  if (!audioDurationMs) {
+    return { minTime: undefined, maxTime: undefined };
+  }
+
+  // Always start from 0 (all audio starts at 0)
+  // Use actual audio duration from wavesurfer (not chunks, which can be incomplete)
+  return { minTime: 0, maxTime: audioDurationMs };
+};
+
 export const getChartDataFromChunks = (chunks) => {
   const labels = [];
   const datasetData = [];
@@ -156,6 +173,8 @@ export const getChartDataFromChunks = (chunks) => {
  * @param {boolean} isCurrentLanguageLeftToRight - Language direction flag
  * @param {Function} keyword - i18n function for translations
  * @param {Function} printDurationInMinutesWithoutModulo - Time formatting function
+ * @param {number} [minTime] - Minimum time value for x-axis (optional)
+ * @param {number} [maxTime] - Maximum time value for x-axis (optional)
  * @returns {Object} Complete chart configuration object
  */
 export const createChartConfig = (
@@ -163,6 +182,8 @@ export const createChartConfig = (
   isCurrentLanguageLeftToRight,
   keyword,
   printDurationInMinutesWithoutModulo,
+  minTime,
+  maxTime,
 ) => {
   const gridColor =
     resolvedMode === "dark" ? "rgba(200, 200, 200, 0.1)" : "rgba(0, 0, 0, 0.1)";
@@ -201,6 +222,9 @@ export const createChartConfig = (
         time: {
           unit: "second",
         },
+        // Explicitly set min/max to ensure the full timeline is always shown
+        ...(minTime !== undefined && { min: minTime }),
+        ...(maxTime !== undefined && { max: maxTime }),
         grid: {
           color: gridColor,
         },
