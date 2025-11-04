@@ -66,46 +66,30 @@ const Status = (params) => {
   );
 };
 
-// // render Domain or Account in correct colour
-// const Domain = (params) => {
-//   // Domain or Account column
-//   // const credibilityScopeHttps = prependHttps(params.credibilityScope);
-//   return params.credibilityScope ? (
-//     params.credibilityScope.includes("/") ? "account_" : "domain_"
-//     // <Tooltip title={credibilityScopeHttps}>
-//     //   <Link
-//     //     style={{ cursor: "pointer" }}
-//     //     target="_blank"
-//     //     href={credibilityScopeHttps}
-//     //     color={params.urlColor}
-//     //   >
-//     //     {params.credibilityScope}
-//     //   </Link>
-//     // </Tooltip>
-//   ) : null;
-// };
-
 // render URL in correct colour
 const Url = (params) => {
-  // const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   return params.url.length > 1 ? (
-    <Typography variant="p" title={params.url} color={params.urlColor}>
+    <>
       {/* list of URLs from domain results on hover */}
-      {"("}
-      {params.url.length}
-      {")"}
-      {params.url.map((key, url) => (
-        <Link
-          key={key}
-          style={{ cursor: "pointer" }}
-          target="_blank"
-          href={url}
+      {params.url.map((url, index) => (
+        <Typography
+          key={index + "_typography"}
+          variant="p"
+          title={url}
           color={params.urlColor}
         >
-          {params.credibilityScope || params.url}
-        </Link>
+          <Link
+            key={index + "_link"}
+            style={{ cursor: "pointer" }}
+            target="_blank"
+            href={url}
+            color={params.urlColor}
+          >
+            {url}
+          </Link>{" "}
+        </Typography>
       ))}
-    </Typography>
+    </>
   ) : (
     <Tooltip title={params.url}>
       {/* single unlabelled URL */}
@@ -125,38 +109,6 @@ const Url = (params) => {
   );
 };
 
-// // render URL in correct colour
-// const Url = (params) => {
-//   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
-//   return params.url.length > 1 ? (
-//     <Typography variant="p" title={params.url} color={params.urlColor}>
-//       {/* list of URLs from domain results on hover */}
-//       {params.url.length} {keyword("urls_found_with_domain")}
-//     </Typography>
-//   ) : params.credibilityScope?.includes("/") ? (
-//     <Typography variant="p" title={params.url} color={params.urlColor}>
-//       {/* account detected with single URL  */}
-//       {keyword("social_media_account_detected")}
-//     </Typography>
-//   ) : (
-//     <Tooltip title={params.url}>
-//       {/* single unlabelled URL */}
-//       <Link
-//         style={{ cursor: "pointer" }}
-//         target="_blank"
-//         href={
-//           params.credibilityScope
-//             ? prependHttps(params.credibilityScope)
-//             : params.url
-//         }
-//         color={params.urlColor}
-//       >
-//         {params.credibilityScope || params.url}
-//       </Link>
-//     </Tooltip>
-//   );
-// };
-
 // render details
 const Details = (params) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -172,7 +124,7 @@ const Details = (params) => {
       {
         <Tooltip title={keyword("copy_to_clipboard")}>
           <div>
-            <TextCopy text={params.url} index={params.url} />
+            <TextCopy text={params.url.join(" ")} index={params.url} />
           </div>
         </Tooltip>
       }
@@ -229,7 +181,6 @@ const AssistantLinkResult = () => {
   );
   const sourceTypes = useSelector((state) => state.assistant.sourceTypes);
 
-  // this is a list of lists
   const urls = inputSCDone
     ? extractedLinks || linkList || null
     : linkList || null;
@@ -287,6 +238,7 @@ const AssistantLinkResult = () => {
         },
         domain: {
           credibilityScope: domainResults.credibilityScope,
+          url: domainResults.URL,
           urlColor: urlColor,
         },
         url: {
@@ -327,6 +279,7 @@ const AssistantLinkResult = () => {
         },
         domain: {
           credibilityScope: null,
+          url: url,
           urlColor: "inherit",
         },
         url: {
@@ -339,6 +292,7 @@ const AssistantLinkResult = () => {
           done: inputSCDone,
           fail: inputSCFail,
           domainResults: null,
+          url: [url],
           urlColor: "inherit",
           credibilityScope: null,
           sourceTypes: sourceTypes,
@@ -368,6 +322,7 @@ const AssistantLinkResult = () => {
         },
         domain: {
           credibilityScope: null,
+          url: url,
           urlColor: "inherit",
         },
         url: {
@@ -379,6 +334,7 @@ const AssistantLinkResult = () => {
           done: inputSCDone,
           fail: inputSCFail,
           domainResults: null,
+          url: [url],
           urlColor: "inherit",
           credibilityScope: null,
           sourceTypes: sourceTypes,
@@ -434,17 +390,11 @@ const AssistantLinkResult = () => {
       minWidth: 200,
       flex: 1,
       renderCell: (params) => {
-        return (
-          // <Domain
-          //   credibilityScope={params.value.credibilityScope}
-          //   urlColor={params.value.urlColor}
-          // />
-          params.value.credibilityScope
-            ? params.value.credibilityScope.includes("/")
-              ? "account_"
-              : "domain_"
-            : null
-        );
+        return params.value.credibilityScope
+          ? params.value.credibilityScope.includes("/")
+            ? keyword("social_media_account")
+            : `${keyword("domain_scope")} ${params.value.url.length} ${keyword("extracted_urls_urls")}`
+          : null;
       },
       sortComparator: (v1, v2) =>
         (v1.credibilityScope ?? "").localeCompare(v2.credibilityScope ?? ""),
@@ -483,7 +433,7 @@ const AssistantLinkResult = () => {
             done={params.value.done}
             fail={params.value.fail}
             domainResults={params.value.domainResults}
-            // url={params.value.url} // TODO pass through to details for list of URLs above source cred results?
+            url={params.value.url}
             urlColor={params.value.urlColor}
             credibilityScope={params.value.credibilityScope}
             sourceTypes={params.value.sourceTypes}
