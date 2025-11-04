@@ -330,9 +330,15 @@ function* handleSourceCredibilityCall(action) {
 
     yield put(
       setInputSourceCredDetails(
-        result.domain[result.URL.inputURL[0].resolvedDomain].positive, // input url positive
-        result.domain[result.URL.inputURL[0].resolvedDomain].caution, // input url caution
-        result.domain[result.URL.inputURL[0].resolvedDomain].mixed, // input url mixed
+        result.URL.inputURL[0]
+          ? result.domain[result.URL.inputURL[0].resolvedDomain].positive
+          : null, // input url positive
+        result.URL.inputURL[0]
+          ? result.domain[result.URL.inputURL[0].resolvedDomain].caution
+          : null, // input url caution
+        result.URL.inputURL[0]
+          ? result.domain[result.URL.inputURL[0].resolvedDomain].mixed
+          : null, // input url mixed
         result, // all the rest results
         trafficLightColors, // necessary?
         sourceTypes, // TODO necessary?
