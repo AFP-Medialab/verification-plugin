@@ -28,7 +28,7 @@ const useChatBot = (
   const [selectedPrompt, setSelectedPrompt] = useState("");
 
   // Load translations for ChatBot namespace
-  const t = i18nLoadNamespace("components/NavItems/tools/ChatBot");
+  const keyword = i18nLoadNamespace("components/NavItems/tools/ChatBot");
 
   // Pre-defined prompts from i18n configuration
   const [prompts] = useState(PROMPTS_CONFIG_I_18_N);
@@ -37,12 +37,15 @@ const useChatBot = (
   const translatedPrompts = useMemo(() => {
     return prompts.map((prompt) => ({
       ...prompt,
-      name: prompt.id === "none" ? prompt.name : t(prompt.name) || prompt.name, // Keep "none" as is for special handling
+      name:
+        prompt.id === "none"
+          ? prompt.name
+          : keyword(prompt.name) || prompt.name, // Keep "none" as is for special handling
       description: prompt.description
-        ? t(prompt.description) || prompt.description
+        ? keyword(prompt.description) || prompt.description
         : undefined,
     }));
-  }, [prompts, t]);
+  }, [prompts, keyword]);
 
   // Helper function to translate prompt content
   const translatePromptContent = useCallback(
@@ -54,19 +57,19 @@ const useChatBot = (
         content:
           message.content === "CONTENT_TO_PROCESS"
             ? "CONTENT_TO_PROCESS" // Keep placeholder as is
-            : t(message.content) || message.content, // Translate content or fallback to original
+            : keyword(message.content) || message.content, // Translate content or fallback to original
       }));
 
       return {
         ...prompt,
-        name: t(prompt.name) || prompt.name, // Translate name
+        name: keyword(prompt.name) || prompt.name, // Translate name
         description: prompt.description
-          ? t(prompt.description) || prompt.description
+          ? keyword(prompt.description) || prompt.description
           : undefined, // Translate description if exists
         messages: translatedMessages,
       };
     },
-    [t],
+    [keyword],
   );
 
   // Fetch available models using React Query
@@ -213,13 +216,30 @@ const useChatBot = (
     [chatMutation, prompts, translatePromptContent],
   );
 
+  // Create custom error message for model fetching failures
+  const getErrorMessage = () => {
+    if (modelsError) {
+      return (
+        keyword("models_error") ||
+        "Failed to fetch available models. Please check your connection and try again."
+      );
+    }
+    if (error) {
+      return error;
+    }
+    if (chatMutation.error?.message) {
+      return chatMutation.error.message;
+    }
+    return null;
+  };
+
   return {
     // State
     models,
     selectedModel,
     isLoading: chatMutation.isPending,
     isModelsLoading,
-    error: error || modelsError?.message || chatMutation.error?.message,
+    error: getErrorMessage(),
     prompts: translatedPrompts,
     selectedPrompt,
 

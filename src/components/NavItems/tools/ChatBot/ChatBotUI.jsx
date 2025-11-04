@@ -19,7 +19,6 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import ClearIcon from "@mui/icons-material/Clear";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import SendIcon from "@mui/icons-material/Send";
@@ -35,6 +34,7 @@ import {
   updateStreamingMessage,
 } from "@/redux/reducers/chatBotReducer";
 import { styled } from "@mui/system";
+import CopyButton from "components/Shared/CopyButton";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import MessageContent from "./MessageContent";
@@ -81,21 +81,6 @@ const ChatBotUI = () => {
       dispatch(setUserInput(previousInput));
   };
 
-  const handleCopyMessage = async (messageText) => {
-    try {
-      await navigator.clipboard.writeText(messageText);
-      console.log("Message copied to clipboard");
-    } catch (err) {
-      console.error("Failed to copy message: ", err);
-      const textArea = document.createElement("textarea");
-      textArea.value = messageText;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textArea);
-    }
-  };
-
   const finalizeStreaming = (botResponse, streamingId, userMessage = null) => {
     if (userMessage) dispatch(addMessage(userMessage));
     dispatch(addMessage({ ...botResponse, id: streamingId }));
@@ -130,20 +115,11 @@ const ChatBotUI = () => {
         {timestamp}
       </Typography>
       {showCopy && messageText && (
-        <Tooltip title="Copy message">
-          <IconButton
-            onClick={() => handleCopyMessage(messageText)}
-            size="small"
-            sx={{
-              padding: "2px",
-              ml: 1,
-              backgroundColor: "rgba(0,0,0,0.1)",
-              "&:hover": { backgroundColor: "rgba(0,0,0,0.2)" },
-            }}
-          >
-            <ContentCopyIcon sx={{ fontSize: 12 }} />
-          </IconButton>
-        </Tooltip>
+        <CopyButton
+          strToCopy={messageText}
+          labelBeforeCopy={keyword("copy_to_clipboard")}
+          labelAfterCopy={keyword("copied_to_clipboard")}
+        />
       )}
     </Box>
   );
@@ -461,11 +437,11 @@ const ChatBotUI = () => {
                 <strong>
                   {keyword("prompt_selected")} {activePrompt.name}&nbsp;
                 </strong>
-                {messages.length === 0
+                {/*messages.length === 0
                   ? activePrompt.requiresContent
                     ? keyword("active_prompt1")
                     : keyword("active_prompt2")
-                  : keyword("active_prompt3")}
+                  : keyword("active_prompt3")*/}
               </Alert>
             )}
 
@@ -498,7 +474,7 @@ const ChatBotUI = () => {
               color="textSecondary"
               sx={{ textAlign: "center", mt: 2 }}
             >
-              Start a conversation with the chatbot...
+              {keyword("chat_bot_start")}
             </Typography>
           ) : (
             <Box sx={{ display: "flex", flexDirection: "column" }}>
