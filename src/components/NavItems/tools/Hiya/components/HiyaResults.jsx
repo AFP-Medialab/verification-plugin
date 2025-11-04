@@ -52,6 +52,7 @@ import { useScoreCalculation } from "../hooks/useScoreCalculation";
 import { useWavesurferRegions } from "../hooks/useWavesurferRegions";
 import {
   createChartConfig,
+  getAudioTimeRange,
   getChartDataFromChunks,
   getChartGradient,
   printDurationInMinutesWithoutModulo,
@@ -87,14 +88,6 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
     TimeSeriesScale,
   );
 
-  // Create chart configuration using imported utility
-  const chartConfig = createChartConfig(
-    resolvedMode,
-    isCurrentLanguageLeftToRight,
-    keyword,
-    printDurationInMinutesWithoutModulo,
-  );
-
   // Cache for chart gradient to improve performance
   const gradientCache = useRef({});
 
@@ -116,6 +109,34 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
 
   // Update regions when wavesurfer is ready and chunks change
   useRegionsUpdater(wavesurfer, isReady, chunks, regionsPlugin);
+
+  // Get audio duration from audio to ensure full timeline is shown
+  const audioDurationMs = useMemo(() => {
+    return wavesurfer && isReady ? wavesurfer.getDuration() * 1000 : undefined;
+  }, [wavesurfer, isReady]);
+
+  const { minTime, maxTime } = useMemo(() => {
+    return getAudioTimeRange(audioDurationMs);
+  }, [audioDurationMs]);
+
+  // Create chart configuration using imported utility
+  const chartConfig = useMemo(() => {
+    return createChartConfig(
+      resolvedMode,
+      isCurrentLanguageLeftToRight,
+      keyword,
+      printDurationInMinutesWithoutModulo,
+      minTime,
+      maxTime,
+    );
+  }, [
+    resolvedMode,
+    isCurrentLanguageLeftToRight,
+    keyword,
+    printDurationInMinutesWithoutModulo,
+    minTime,
+    maxTime,
+  ]);
 
   return (
     <Stack
