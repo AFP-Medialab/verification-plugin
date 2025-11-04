@@ -149,9 +149,9 @@ function contextClick(info) {
     case SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.CONTEXT_MENU_ID:
       reverseImageSearch(info, SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME);
       break;
-    case SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.CONTEXT_MENU_ID:
+    /*case SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.CONTEXT_MENU_ID:
       reverseImageSearch(info, SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME);
-      break;
+      break;*/
     case SEARCH_ENGINE_SETTINGS.GOOGLE_FACT_CHECK.CONTEXT_MENU_ID:
       reverseImageSearch(info, SEARCH_ENGINE_SETTINGS.GOOGLE_FACT_CHECK.NAME);
       break;
@@ -237,11 +237,11 @@ chrome.runtime.onInstalled.addListener(() => {
     contexts: ["image"],
     targetUrlPatterns: ["http://*:*/*", "https://*:*/*"],
   });
-  chrome.contextMenus.create({
+  /*chrome.contextMenus.create({
     id: SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.CONTEXT_MENU_ID,
     title: SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.CONTEXT_MENU_TITLE,
     contexts: ["image"],
-  });
+  });*/
   chrome.contextMenus.create({
     id: SEARCH_ENGINE_SETTINGS.GOOGLE_FACT_CHECK.CONTEXT_MENU_ID,
     title: SEARCH_ENGINE_SETTINGS.GOOGLE_FACT_CHECK.CONTEXT_MENU_TITLE,

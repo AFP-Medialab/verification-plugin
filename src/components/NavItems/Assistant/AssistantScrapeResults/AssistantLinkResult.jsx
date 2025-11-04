@@ -18,8 +18,8 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import ExtractedUrlDomainAnalysisResults from "@/components/NavItems/Assistant/AssistantCheckResults/ExtractedUrlDomainAnalysisResults";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
-import { TextCopy } from "@Shared/Utils/TextCopy";
 import { DataGrid, getGridSingleSelectOperators } from "@mui/x-data-grid";
+import CopyButton from "components/Shared/CopyButton";
 
 import {
   TransHtmlDoubleLineBreak,
@@ -83,6 +83,7 @@ const Url = (params) => {
 
 // render details
 const Details = (params) => {
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   return (
     <Box
       sx={{
@@ -92,7 +93,11 @@ const Details = (params) => {
         flexDirection: "row",
       }}
     >
-      {<TextCopy text={params.url} index={params.url} />}
+      <CopyButton
+        strToCopy={params.url}
+        labelBeforeCopy={keyword("copy_to_clipboard")}
+        labelAfterCopy={keyword("copied_to_clipboard")}
+      />
       {params.done && params.domainOrAccount !== null && (
         <ExtractedUrlDomainAnalysisResults
           extractedSourceCredibilityResults={params.urlResults}
@@ -350,12 +355,11 @@ const AssistantLinkResult = () => {
       <CardContent
         style={{
           wordBreak: "break-word",
-          overflowY: "auto",
-          overflowX: "hidden",
+          overflow: "hidden",
+          height: 450,
         }}
       >
-        {/* issue with resize related to parent not having a fixed/determined size? */}
-        <div style={{ height: 400, width: "100%", minWidth: 0 }}>
+        <Box sx={{ height: "100%", width: "100%" }}>
           <DataGrid
             rows={rows}
             columns={columns}
@@ -367,7 +371,7 @@ const AssistantLinkResult = () => {
               },
             }}
           />
-        </div>
+        </Box>
       </CardContent>
     </Card>
   );

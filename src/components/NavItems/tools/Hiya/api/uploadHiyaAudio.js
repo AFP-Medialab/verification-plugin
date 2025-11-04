@@ -52,7 +52,7 @@ export const uploadHiyaAudio = async (
       Accept: "application/json",
     },
     data: uploadRequestData,
-    // timeout: 100000,
+    // timeout: 60000,
     // signal: AbortSignal.timeout(60000),
   };
 
