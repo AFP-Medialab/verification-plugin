@@ -26,6 +26,7 @@ const useChatBot = (
   const [selectedModel, setSelectedModel] = useState("");
   const [error, setError] = useState(null);
   const [selectedPrompt, setSelectedPrompt] = useState("");
+  const [errorDismissed, setErrorDismissed] = useState(false);
 
   // Load translations for ChatBot namespace
   const keyword = i18nLoadNamespace("components/NavItems/tools/ChatBot");
@@ -218,6 +219,11 @@ const useChatBot = (
 
   // Create custom error message for model fetching failures
   const getErrorMessage = () => {
+    // If error was dismissed, don't show it
+    if (errorDismissed) {
+      return null;
+    }
+
     if (modelsError) {
       return (
         keyword("models_error") ||
@@ -232,6 +238,13 @@ const useChatBot = (
     }
     return null;
   };
+
+  // Reset error dismissed state when there are new errors
+  useEffect(() => {
+    if (modelsError || error || chatMutation.error) {
+      setErrorDismissed(false);
+    }
+  }, [modelsError, error, chatMutation.error]);
 
   return {
     // State
@@ -255,6 +268,7 @@ const useChatBot = (
     clearError: () => {
       setError(null);
       chatMutation.reset();
+      setErrorDismissed(true);
     },
     isReady: models.length > 0 && selectedModel && !isModelsLoading,
 
