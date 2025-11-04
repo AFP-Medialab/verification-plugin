@@ -8,7 +8,6 @@ import {
   usePollKeyframeJobStatus,
 } from "@/components/NavItems/tools/Keyframes/api";
 import { KeyframeInputType } from "@/components/NavItems/tools/Keyframes/api/createKeyframeJob";
-import { useFetchKeyframeAudio } from "@/components/NavItems/tools/Keyframes/api/fetchKeyframeAudio";
 import { isValidUrl } from "@Shared/Utils/URLUtils";
 
 export const useProcessKeyframes = (input) => {
@@ -20,7 +19,6 @@ export const useProcessKeyframes = (input) => {
   const createKeyframeJob = useCreateKeyframeJob();
   const pollKeyframeJobStatus = usePollKeyframeJobStatus(setStatus);
   const fetchKeyframeFeatures = useFetchKeyframeFeatures();
-  const fetchKeyframeAudio = useFetchKeyframeAudio();
   const fetchKeyframes = useFetchKeyframes();
 
   const queryClient = useQueryClient();
@@ -83,8 +81,6 @@ export const useProcessKeyframes = (input) => {
       if (!jobId) throw new Error("No jobId available for url");
 
       setStatus("Retrieving features...");
-
-      console.log(await fetchKeyframeAudio(jobId));
 
       return await fetchKeyframeFeatures(jobId);
     },
