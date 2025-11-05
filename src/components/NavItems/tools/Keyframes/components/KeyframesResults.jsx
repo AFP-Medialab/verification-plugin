@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -46,7 +45,6 @@ const KeyframesResults = ({
 
   const ALLOWED_COLS = [1, 2, 3, 4, 6, 12];
   const [cols, setCols] = useState(2);
-  const navigate = useNavigate();
 
   const handleDownload = async () => {
     setIsZipDownloading(true);
