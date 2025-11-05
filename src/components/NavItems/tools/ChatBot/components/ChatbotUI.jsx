@@ -24,6 +24,7 @@ import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import SendIcon from "@mui/icons-material/Send";
 
+import CopyButton from "@/components/Shared/CopyButton";
 import {
   addMessage,
   clearSession,
@@ -33,18 +34,18 @@ import {
   setStreamingMessage,
   setUserInput,
   updateStreamingMessage,
-} from "@/redux/reducers/chatBotReducer";
-import CopyButton from "components/Shared/CopyButton";
+} from "@/redux/reducers/chatbotReducer";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
+import { DEFAULT_TEMPERATURE } from "../config/constants";
+import useChatbot from "../hooks/useChatbot";
 import MessageContent from "./MessageContent";
-import useChatBot from "./useChatBot";
 
-const ChatBotUI = () => {
+const ChatbotUI = () => {
   const dispatch = useDispatch();
   const messagesContainerRef = useRef(null);
-  const keyword = i18nLoadNamespace("components/NavItems/tools/ChatBot");
-  const [temperature, setTemperature] = useState(0.7);
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Chatbot");
+  const [temperature, setTemperature] = useState(DEFAULT_TEMPERATURE);
 
   // Helper functions to reduce code duplication
   const createMessage = (text, sender = "user") => ({
@@ -169,7 +170,7 @@ const ChatBotUI = () => {
     selectedPrompt,
     activePrompt,
     isSessionActive,
-  } = useSelector((state) => state.chatBot);
+  } = useSelector((state) => state.chatbot);
 
   const {
     models,
@@ -184,7 +185,7 @@ const ChatBotUI = () => {
     executePrompt,
     clearError,
     isReady,
-  } = useChatBot();
+  } = useChatbot();
 
   // Auto-scroll to bottom function - only scrolls the message container
   const scrollToBottom = () => {
@@ -607,4 +608,4 @@ const ChatBotUI = () => {
   );
 };
 
-export default ChatBotUI;
+export default ChatbotUI;

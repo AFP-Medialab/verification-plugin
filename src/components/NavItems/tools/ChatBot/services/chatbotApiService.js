@@ -1,7 +1,7 @@
 /**
- * ChatBot API Service
+ * Chatbot API Service
  *
- * Handles all API calls and responses for the ChatBot functionality.
+ * Handles all API calls and responses for the Chatbot functionality.
  * Separated from the main hook for better maintainability and testing.
  */
 
@@ -57,7 +57,7 @@ export const fetchModels = async (apiBaseUrl) => {
 };
 
 // Factory function to create API functions with dependencies
-export const createChatBotApi = (apiBaseUrl, selectedModel) => {
+export const createChatbotApi = (apiBaseUrl, selectedModel) => {
   const handleStreamingCompletionsResponse = async (
     response,
     options = {},

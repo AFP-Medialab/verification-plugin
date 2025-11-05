@@ -1,12 +1,23 @@
 /**
- * Pre-defined chat prompts configuration
- *
- * Each prompt should have:
- * - id: unique identifier
- * - name: display name for the select box
- * - description: optional description
- * - messages: array of OpenAI-format messages to send to the API
- * - disabled: optional boolean to disable the option
+ * @typedef {Object} ChatMessage
+ * @property {'system'|'user'|'assistant'} role - The role of the message sender
+ * @property {string} content - The content of the message
+ */
+
+/**
+ * @typedef {Object} PromptConfig
+ * @property {string} id - Unique identifier for the prompt
+ * @property {string} name - Display name for the select box
+ * @property {string} [description] - Optional description
+ * @property {boolean} [disabled] - Optional flag to disable the option
+ * @property {boolean} [requiresContent] - Whether the prompt requires content to process
+ * @property {ChatMessage[]} [messages] - Array of OpenAI-format messages to send to the API
+ */
+
+/**
+ * Pre-defined chat prompts configuration (English - Static)
+ * These prompts use hardcoded English text for when i18n is not needed
+ * @type {PromptConfig[]}
  */
 export const PROMPTS_CONFIG = [
   {
@@ -125,26 +136,141 @@ export const PROMPTS_CONFIG = [
 ];
 
 /**
- * Helper function to add a new prompt
- * @param {Object} prompt - The prompt configuration object
+ * Pre-defined chat prompts configuration (i18n - Dynamic)
+ * These prompts use i18n keys that will be translated at runtime
+ * @type {PromptConfig[]}
+ */
+export const PROMPTS_CONFIG_I18N = [
+  {
+    id: "none",
+    name: "prompt_select_label",
+    disabled: true,
+  },
+  {
+    id: "fact-check-analysis",
+    name: "fact_check_analysis_title",
+    description: "fact_check_analysis_description",
+    requiresContent: true,
+    messages: [
+      {
+        role: "system",
+        content: "fact_checker_system",
+      },
+      {
+        role: "user",
+        content: "fact_check_analysis_user",
+      },
+      {
+        role: "assistant",
+        content: "fact_checker_assistant",
+      },
+      {
+        role: "user",
+        content: "CONTENT_TO_PROCESS",
+      },
+    ],
+  },
+  {
+    id: "rhetorical_analysis",
+    name: "rhetorical_analysis_title",
+    description: "rhetorical_analysis_description",
+    requiresContent: true,
+    messages: [
+      {
+        role: "system",
+        content: "fact_checker_system",
+      },
+      {
+        role: "user",
+        content: "rhetorical_analysis_user",
+      },
+      {
+        role: "assistant",
+        content: "fact_checker_assistant",
+      },
+      {
+        role: "user",
+        content: "CONTENT_TO_PROCESS",
+      },
+    ],
+  },
+  {
+    id: "claim_to_check",
+    name: "claim_to_check_title",
+    description: "claim_to_check_description",
+    requiresContent: true,
+    messages: [
+      {
+        role: "system",
+        content: "fact_checker_system",
+      },
+      {
+        role: "user",
+        content: "claim_to_check_user",
+      },
+      {
+        role: "assistant",
+        content: "fact_checker_assistant",
+      },
+      {
+        role: "user",
+        content: "CONTENT_TO_PROCESS",
+      },
+    ],
+  },
+];
+
+/**
+ * Helper function to add a new prompt to the static config
+ * @param {PromptConfig} prompt - The prompt configuration object
+ * @returns {void}
  */
 export const addPrompt = (prompt) => {
   PROMPTS_CONFIG.push(prompt);
 };
 
 /**
- * Helper function to get a prompt by ID
+ * Helper function to add a new prompt to the i18n config
+ * @param {PromptConfig} prompt - The prompt configuration object
+ * @returns {void}
+ */
+export const addI18nPrompt = (prompt) => {
+  PROMPTS_CONFIG_I18N.push(prompt);
+};
+
+/**
+ * Helper function to get a prompt by ID from static config
  * @param {string} id - The prompt ID
- * @returns {Object|undefined} The prompt object or undefined if not found
+ * @returns {PromptConfig|undefined} The prompt object or undefined if not found
  */
 export const getPromptById = (id) => {
   return PROMPTS_CONFIG.find((req) => req.id === id);
 };
 
 /**
- * Helper function to get all available prompts (excluding disabled ones)
- * @returns {Array} Array of enabled prompts
+ * Helper function to get a prompt by ID from i18n config
+ * @param {string} id - The prompt ID
+ * @returns {PromptConfig|undefined} The prompt object or undefined if not found
+ */
+export const getI18nPromptById = (id) => {
+  return PROMPTS_CONFIG_I18N.find((req) => req.id === id);
+};
+
+/**
+ * Helper function to get all available prompts from static config (excluding disabled ones)
+ * @returns {PromptConfig[]} Array of enabled prompts
  */
 export const getAvailablePrompts = () => {
   return PROMPTS_CONFIG.filter((req) => !req.disabled);
 };
+
+/**
+ * Helper function to get all available prompts from i18n config (excluding disabled ones)
+ * @returns {PromptConfig[]} Array of enabled prompts
+ */
+export const getAvailableI18nPrompts = () => {
+  return PROMPTS_CONFIG_I18N.filter((req) => !req.disabled);
+};
+
+// Legacy exports for backward compatibility
+export { PROMPTS_CONFIG_I18N as PROMPTS_CONFIG_I_18_N };

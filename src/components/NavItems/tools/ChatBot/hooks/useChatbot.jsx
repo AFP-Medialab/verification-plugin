@@ -3,12 +3,12 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
+import { PROMPTS_CONFIG_I18N } from "../config/prompts";
 import {
-  createChatBotApi,
+  createChatbotApi,
   fetchModels,
   formatMessagesForAPI,
-} from "./chatBotApiService";
-import { PROMPTS_CONFIG_I_18_N } from "./promptConfigI18n";
+} from "../services/chatbotApiService";
 
 /**
  * Custom hook for interacting with OpenAI-like chat completion API
@@ -20,7 +20,7 @@ import { PROMPTS_CONFIG_I_18_N } from "./promptConfigI18n";
  * @param {string} apiBaseUrl - Base URL for the API (defaults to env var or localhost:8000)
  * @returns {Object} Hook state and methods
  */
-const useChatBot = (
+const useChatbot = (
   apiBaseUrl = process.env.REACT_APP_CHATBOT_API_URL || "http://localhost:8000",
 ) => {
   const [selectedModel, setSelectedModel] = useState("");
@@ -28,11 +28,11 @@ const useChatBot = (
   const [selectedPrompt, setSelectedPrompt] = useState("");
   const [errorDismissed, setErrorDismissed] = useState(false);
 
-  // Load translations for ChatBot namespace
-  const keyword = i18nLoadNamespace("components/NavItems/tools/ChatBot");
+  // Load translations for Chatbot namespace
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Chatbot");
 
   // Pre-defined prompts from i18n configuration
-  const [prompts] = useState(PROMPTS_CONFIG_I_18_N);
+  const [prompts] = useState(PROMPTS_CONFIG_I18N);
 
   // Create translated prompts for UI display
   const translatedPrompts = useMemo(() => {
@@ -97,7 +97,7 @@ const useChatBot = (
 
   // Create API instance with current dependencies
   const api = useMemo(
-    () => createChatBotApi(apiBaseUrl, selectedModel),
+    () => createChatbotApi(apiBaseUrl, selectedModel),
     [apiBaseUrl, selectedModel],
   );
 
@@ -277,4 +277,4 @@ const useChatBot = (
   };
 };
 
-export default useChatBot;
+export default useChatbot;

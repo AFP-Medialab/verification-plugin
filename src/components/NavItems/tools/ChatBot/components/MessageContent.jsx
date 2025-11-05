@@ -52,7 +52,7 @@ const parseMessageContent = (content) => {
  */
 const ThinkSection = ({ thinkContent }) => {
   const [expanded, setExpanded] = useState(false);
-  const keyword = i18nLoadNamespace("components/NavItems/tools/ChatBot");
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Chatbot");
   const handleToggle = () => {
     setExpanded(!expanded);
   };

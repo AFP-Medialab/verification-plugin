@@ -8,10 +8,10 @@ import { SmartToy } from "@mui/icons-material";
 import HeaderTool from "components/Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-import ChatBotUI from "./ChatBotUI";
+import ChatbotUI from "./components/ChatbotUI";
 
-const ChatBot = () => {
-  const keyword = i18nLoadNamespace("components/NavItems/tools/ChatBot");
+const Chatbot = () => {
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Chatbot");
   return (
     <div>
       <HeaderTool
@@ -36,10 +36,10 @@ const ChatBot = () => {
             }}
           ></div>
         </Alert>
-        <ChatBotUI />
+        <ChatbotUI />
       </Stack>
     </div>
   );
 };
 
-export default ChatBot;
+export default Chatbot;

@@ -4,7 +4,7 @@ import { combineReducers } from "redux";
 
 import assistantReducer from "./assistantReducer";
 import authenticationReducer from "./authenticationReducer";
-import chatBotReducer from "./chatBotReducer";
+import chatbotReducer from "./chatbotReducer";
 import cookiesReducer from "./cookiesReducers";
 import defaultLanguageReducer from "./defaultLanguageReducer";
 import dictionaryReducer from "./dictionaryReducer";
@@ -60,7 +60,7 @@ const allReducers = combineReducers({
   thumbnails: thumbnailsReducer,
   twitterSna: twitterSnaReducer,
   assistant: assistantReducer,
-  chatBot: chatBotReducer,
+  chatbot: chatbotReducer,
   ocr: ocrReducer,
   gif: gifReducer,
   syntheticImageDetection: syntheticImageDetectionActions,
