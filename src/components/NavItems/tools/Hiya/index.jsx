@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
@@ -56,6 +57,8 @@ const getSuggestionKeys = (errorLabels) => {
  */
 const Hiya = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Hiya");
+  const { url } = useParams();
+  const hasAutoSubmittedRef = useRef(false);
 
   // Redux selectors for UI state
   const result = useSelector((state) => state.syntheticAudioDetection.result);
@@ -90,6 +93,19 @@ const Hiya = () => {
     audioFile,
     setAudioFile,
   } = useHiyaAudioAnalysis();
+
+  // Auto-start analysis if URL parameter is provided
+  useEffect(() => {
+    if (url && !hasAutoSubmittedRef.current) {
+      hasAutoSubmittedRef.current = true;
+      const decodedUrl = decodeURIComponent(url);
+      handleInputChange(decodedUrl);
+      // Small delay to ensure input is set before submitting
+      setTimeout(() => {
+        handleSubmit(new Event("submit"));
+      }, 100);
+    }
+  }, [url]); // Only depend on url parameter
 
   return (
     <Box>

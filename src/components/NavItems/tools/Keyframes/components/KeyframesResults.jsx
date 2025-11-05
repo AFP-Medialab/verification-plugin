@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -45,6 +46,7 @@ const KeyframesResults = ({
 
   const ALLOWED_COLS = [1, 2, 3, 4, 6, 12];
   const [cols, setCols] = useState(2);
+  const navigate = useNavigate();
 
   const handleDownload = async () => {
     setIsZipDownloading(true);
@@ -142,6 +144,16 @@ const KeyframesResults = ({
           </Stack>
         </Box>
       </Popover>
+    );
+  };
+
+  const openAudioAnalysisInHiya = (jobId) => {
+    const hiyaUrl = `${process.env.REACT_APP_KEYFRAME_API}/audio/${jobId}`;
+    const encodedUrl = encodeURIComponent(hiyaUrl);
+    window.open(
+      `/popup.html#/app/tools/hiya/${encodedUrl}`,
+      "_blank",
+      "noopener,noreferrer",
     );
   };
 
@@ -252,6 +264,27 @@ const KeyframesResults = ({
                   </Stack>
                 </Box>
               </Card>
+
+              <Card variant="outlined">
+                <Box sx={{ pb: 4, pt: 2, px: 4 }}>
+                  <Stack direction="column" spacing={2}>
+                    <Stack
+                      direction="row"
+                      sx={{
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography variant="h6">{"Audio"}</Typography>
+                    </Stack>
+                    <Button
+                      onClick={() => openAudioAnalysisInHiya(data.session)}
+                    >
+                      {"Open Voice Cloning analysis in Hiya"}
+                    </Button>
+                  </Stack>
+                </Box>
+              </Card>
+
               {features && (
                 <>
                   <ResultsCard>
