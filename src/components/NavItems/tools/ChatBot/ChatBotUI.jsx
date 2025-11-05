@@ -344,6 +344,7 @@ const ChatBotUI = () => {
             <FormControl size="small" sx={{ minWidth: 150 }}>
               <InputLabel>{keyword("models_label")}</InputLabel>
               <Select
+                variant="outlined"
                 value={selectedModel}
                 label={keyword("models_label")}
                 onChange={(e) => setSelectedModel(e.target.value)}
@@ -362,10 +363,12 @@ const ChatBotUI = () => {
               type="number"
               value={temperature}
               onChange={handleTemperatureChange}
-              inputProps={{
-                min: 0,
-                max: 1,
-                step: 0.1,
+              slotProps={{
+                htmlInput: {
+                  min: 0,
+                  max: 1,
+                  step: 0.1,
+                },
               }}
               sx={{ width: 100 }}
               variant="outlined"
@@ -394,6 +397,7 @@ const ChatBotUI = () => {
             <FormControl fullWidth size="small">
               <InputLabel>{keyword("preprompt_label")}</InputLabel>
               <Select
+                variant="outlined"
                 value={selectedPrompt || ""}
                 label={keyword("preprompt_label")}
                 onChange={handlePromptChange}
@@ -533,7 +537,7 @@ const ChatBotUI = () => {
             maxRows={4}
             value={userInput}
             onChange={handleInputChange}
-            onKeyPress={handleKeyPress}
+            onKeyDown={handleKeyPress}
             placeholder={
               messages.length === 0 && !activePrompt
                 ? keyword("chatbot_start")
@@ -553,33 +557,35 @@ const ChatBotUI = () => {
                     ? `${keyword("active_session")} ${activePrompt.name}`
                     : ""
             }
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  {userInput && (
-                    <Tooltip title={keyword("clear_input")}>
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {userInput && (
+                      <Tooltip title={keyword("clear_input")}>
+                        <IconButton
+                          onClick={handleClearInput}
+                          edge="end"
+                          size="small"
+                          disabled={isLoading}
+                        >
+                          <ClearIcon />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                    <Tooltip title={keyword("paste_from_clipboard")}>
                       <IconButton
-                        onClick={handleClearInput}
+                        onClick={handlePaste}
                         edge="end"
                         size="small"
                         disabled={isLoading}
                       >
-                        <ClearIcon />
+                        <ContentPasteIcon />
                       </IconButton>
                     </Tooltip>
-                  )}
-                  <Tooltip title={keyword("paste_from_clipboard")}>
-                    <IconButton
-                      onClick={handlePaste}
-                      edge="end"
-                      size="small"
-                      disabled={isLoading}
-                    >
-                      <ContentPasteIcon />
-                    </IconButton>
-                  </Tooltip>
-                </InputAdornment>
-              ),
+                  </InputAdornment>
+                ),
+              },
             }}
           />
           <Button
