@@ -1,12 +1,21 @@
 /**
+ * @typedef {Object} ChatMessage
+ * @property {'system'|'user'|'assistant'} role - The role of the message sender
+ * @property {string} content - The content of the message
+ */
+
+/**
+ * @typedef {Object} PromptConfig
+ * @property {string} id - Unique identifier for the prompt
+ * @property {string} name - Display name for the select box (i18n key)
+ * @property {string} [description] - Optional description (i18n key)
+ * @property {boolean} [disabled] - Optional flag to disable the option
+ * @property {boolean} [requiresContent] - Whether the prompt requires content to process
+ * @property {ChatMessage[]} [messages] - Array of OpenAI-format messages to send to the API
+ */
+/**
  * Pre-defined chat prompts configuration
- *
- * Each prompt should have:
- * - id: unique identifier
- * - name: display name for the select box
- * - description: optional description
- * - messages: array of OpenAI-format messages to send to the API
- * - disabled: optional boolean to disable the option
+ * @type {PromptConfig[]}
  */
 export const PROMPTS_CONFIG_I_18_N = [
   {
@@ -90,7 +99,8 @@ export const PROMPTS_CONFIG_I_18_N = [
 
 /**
  * Helper function to add a new prompt
- * @param {Object} prompt - The prompt configuration object
+ * @param {PromptConfig} prompt - The prompt configuration object
+ * @returns {void}
  */
 export const addPrompt = (prompt) => {
   PROMPTS_CONFIG_I_18_N.push(prompt);
@@ -99,7 +109,7 @@ export const addPrompt = (prompt) => {
 /**
  * Helper function to get a prompt by ID
  * @param {string} id - The prompt ID
- * @returns {Object|undefined} The prompt object or undefined if not found
+ * @returns {PromptConfig|undefined} The prompt object or undefined if not found
  */
 export const getPromptById = (id) => {
   return PROMPTS_CONFIG_I_18_N.find((req) => req.id === id);
@@ -107,7 +117,7 @@ export const getPromptById = (id) => {
 
 /**
  * Helper function to get all available prompts (excluding disabled ones)
- * @returns {Array} Array of enabled prompts
+ * @returns {PromptConfig[]} Array of enabled prompts
  */
 export const getAvailablePrompts = () => {
   return PROMPTS_CONFIG_I_18_N.filter((req) => !req.disabled);
