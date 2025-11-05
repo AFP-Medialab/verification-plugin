@@ -33,21 +33,21 @@ const Status = (params) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   return (
     <Stack direction="column" spacing={0.5}>
-      {params.done && params.domainResults?.caution.length > 0 ? (
+      {params.done && params.domainResults?.caution ? (
         <Chip
           label={keyword(params.sourceTypes.caution)}
           color={params.trafficLightColors.caution}
           size="small"
         />
       ) : null}
-      {params.done && params.domainResults?.mixed.length > 0 ? (
+      {params.done && params.domainResults?.mixed ? (
         <Chip
           label={keyword(params.sourceTypes.mixed)}
           color={params.trafficLightColors.mixed}
           size="small"
         />
       ) : null}
-      {params.done && params.domainResults?.positive.length > 0 ? (
+      {params.done && params.domainResults?.positive ? (
         <Chip
           label={keyword(params.sourceTypes.positive)}
           color={params.trafficLightColors.positive}
@@ -204,15 +204,15 @@ const AssistantLinkResult = () => {
             : unlabelled
           : unlabelled,
       ];
-      if (domainResults.positive.length > 0) {
+      if (domainResults.positive) {
         urlColor = trafficLightColors.positive;
         sourceTypeList.push(keyword(sourceTypes.positive));
       }
-      if (domainResults.mixed.length > 0) {
+      if (domainResults.mixed) {
         urlColor = trafficLightColors.mixed;
         sourceTypeList.push(keyword(sourceTypes.mixed));
       }
-      if (domainResults.caution.length > 0) {
+      if (domainResults.caution) {
         urlColor = trafficLightColors.caution;
         sourceTypeList.push(keyword(sourceTypes.caution));
       }
@@ -231,19 +231,19 @@ const AssistantLinkResult = () => {
           done: inputSCDone,
           fail: inputSCFail,
           domainResults: domainResults,
-          url: domainResults.URL, // url list
+          url: domainResults.url, // url list
           trafficLightColors: trafficLightColors,
           sourceTypes: sourceTypes,
           sourceTypeList: sourceTypeList,
         },
         domain: {
           credibilityScope: domainResults.credibilityScope,
-          url: domainResults.URL,
+          url: domainResults.url,
           urlColor: urlColor,
         },
         url: {
           credibilityScope: domainResults.credibilityScope,
-          url: domainResults.URL,
+          url: domainResults.url,
           urlColor: urlColor,
         },
         details: {
@@ -251,7 +251,7 @@ const AssistantLinkResult = () => {
           done: inputSCDone,
           fail: inputSCFail,
           domainResults: domainResults,
-          url: domainResults.URL,
+          url: domainResults.url,
           urlColor: urlColor,
           credibilityScope: domainResults.credibilityScope,
           sourceTypes: sourceTypes,
@@ -262,8 +262,8 @@ const AssistantLinkResult = () => {
     }
 
     // unlabelled rows
-    for (let i = 0; i < extractedSourceCred.URL.unlabelled.length; i++) {
-      const url = extractedSourceCred.URL.unlabelled[i];
+    for (let i = 0; i < extractedSourceCred.url.unlabelled.length; i++) {
+      const url = extractedSourceCred.url.unlabelled[i].string;
 
       rows.push({
         id: rows.length + 1,
