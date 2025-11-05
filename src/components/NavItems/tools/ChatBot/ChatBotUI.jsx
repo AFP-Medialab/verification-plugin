@@ -17,6 +17,7 @@ import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import { styled } from "@mui/material/styles";
 
 import ClearIcon from "@mui/icons-material/Clear";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
@@ -33,7 +34,6 @@ import {
   setUserInput,
   updateStreamingMessage,
 } from "@/redux/reducers/chatBotReducer";
-import { styled } from "@mui/system";
 import CopyButton from "components/Shared/CopyButton";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
