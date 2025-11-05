@@ -24,6 +24,7 @@ import {
   SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
 } from "@Shared/ReverseSearch/reverseSearchUtils";
+import { openNewTabWithUrl } from "@Shared/ReverseSearch/utils/openTabUtils";
 import { downloadFile } from "@Shared/Utils/fileUtils";
 
 const KeyframesResults = ({
@@ -145,13 +146,13 @@ const KeyframesResults = ({
     );
   };
 
-  const openAudioAnalysisInHiya = (jobId) => {
+  const openAudioAnalysisInHiya = async (jobId) => {
     const hiyaUrl = `${process.env.REACT_APP_KEYFRAME_API}/audio/${jobId}`;
     const encodedUrl = encodeURIComponent(hiyaUrl);
-    window.open(
-      `/popup.html#/app/tools/hiya/${encodedUrl}`,
-      "_blank",
-      "noopener,noreferrer",
+
+    await openNewTabWithUrl(
+      { url: `/popup.html#/app/tools/hiya/${encodedUrl}` },
+      false,
     );
   };
 
