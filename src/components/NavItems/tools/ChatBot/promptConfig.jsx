@@ -32,7 +32,7 @@ export const PROMPTS_CONFIG = [
       },
       {
         role: "assistant",
-        content: "Very welll, what is the article you want me to analyse ?",
+        content: "Very well, what is the article you want me to analyse ?",
       },
       {
         role: "user",
@@ -86,7 +86,7 @@ export const PROMPTS_CONFIG = [
       },
       {
         role: "assistant",
-        content: "Very welll, what is the article you want me to process ?",
+        content: "Very well, what is the article you want me to process ?",
       },
       {
         role: "user",

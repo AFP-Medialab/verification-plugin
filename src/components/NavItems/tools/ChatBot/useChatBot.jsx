@@ -159,7 +159,7 @@ const useChatBot = (
       let messages = [...translatedPrompt.messages];
 
       // Build messages in chronological order
-      let fullMessages = [];
+      let fullMessages;
 
       if (conversationHistory.length > 0) {
         // For pre-requests with conversation history, we need to maintain proper order:
