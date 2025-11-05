@@ -481,111 +481,126 @@ const getTikToksFromDB = async () => {
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   (async (request) => {
-    if (request.prompt === "getTweets") {
-      const tweetResponse = await getTweetsFromDB();
-      sendResponse(tweetResponse);
-    } else if (request.prompt === "getTiktoks") {
-      const tiktokResp = await getTikToksFromDB();
-      sendResponse(tiktokResp);
-    } else if (request.prompt === "deleteAll") {
-      db.delete().then(() => db.open());
-    } else if (request.prompt === "deleteCollection") {
-      if (request.source === "twitter") {
-        await db.tweets
-          .where("[collectionID+id]")
-          .between(
-            [request.collectionId, Dexie.minKey],
-            [request.collectionId, Dexie.maxKey],
-            true,
-            true,
-          )
-          .delete();
-      } else if (request.source === "tiktok") {
-        await db.tiktoks
-          .where("[collectionID+id]")
-          .between(
-            [request.collectionId, Dexie.minKey],
-            [request.collectionId, Dexie.maxKey],
-            true,
-            true,
-          )
-          .delete();
-      }
-    } else if (request.prompt === "getRecordingInfo") {
-      const currentCollections = await db.collections.toArray();
-      if (!currentCollections.includes("Default Collection")) {
-        await db.collections.put({ id: "Default Collection" });
-      }
-      const updatedCollections = await db.collections.toArray();
+    try {
+      if (request.prompt === "getTweets") {
+        const tweetResponse = await getTweetsFromDB();
+        sendResponse(tweetResponse);
+      } else if (request.prompt === "getTiktoks") {
+        const tiktokResp = await getTikToksFromDB();
+        sendResponse(tiktokResp);
+      } else if (request.prompt === "deleteAll") {
+        await db.delete().then(() => db.open());
+        sendResponse({ success: true });
+      } else if (request.prompt === "deleteCollection") {
+        if (request.source === "twitter") {
+          await db.tweets
+            .where("[collectionID+id]")
+            .between(
+              [request.collectionId, Dexie.minKey],
+              [request.collectionId, Dexie.maxKey],
+              true,
+              true,
+            )
+            .delete();
+        } else if (request.source === "tiktok") {
+          await db.tiktoks
+            .where("[collectionID+id]")
+            .between(
+              [request.collectionId, Dexie.minKey],
+              [request.collectionId, Dexie.maxKey],
+              true,
+              true,
+            )
+            .delete();
+        }
+        sendResponse({ success: true });
+      } else if (request.prompt === "getRecordingInfo") {
+        const currentCollections = await db.collections.toArray();
+        if (!currentCollections.includes("Default Collection")) {
+          await db.collections.put({ id: "Default Collection" });
+        }
+        const updatedCollections = await db.collections.toArray();
 
-      const currentStatus = await db.recording.toArray();
+        const currentStatus = await db.recording.toArray();
 
-      if (currentStatus.length === 0) {
-        await db.recording.put({ id: "main", state: false });
-      }
+        if (currentStatus.length === 0) {
+          await db.recording.put({ id: "main", state: false });
+        }
 
-      const updatedStatus = await db.recording.toArray();
+        const updatedStatus = await db.recording.toArray();
 
-      sendResponse({
-        recording: updatedStatus,
-        collections: updatedCollections,
-      });
-    } else if (request.prompt === "addCollection") {
-      await db.collections.put({ id: request.newCollectionName });
-    } else if (request.prompt === "stopRecording") {
-      await db.recording.put({ id: "main", state: false, platforms: "" });
-    } else if (request.prompt === "startRecording") {
-      await db.recording.put({
-        id: "main",
-        state: request.currentCollectionName,
-        platforms: request.platforms.join(","),
-      });
-    } else if (request.prompt === "getRawCollection") {
-      if (request.platform === "twitter") {
-        const x = await db.tweets
-          .where("[collectionID+id]")
-          .between(
-            [request.collectionId, Dexie.minKey],
-            [request.collectionId, Dexie.maxKey],
-            true,
-            true,
-          )
-          .toArray();
-        sendResponse({ data: x });
-      } else if (request.platform === "tiktok") {
-        const x = await db.tiktoks
-          .where("[collectionID+id]")
-          .between(
-            [request.collectionId, Dexie.minKey],
-            [request.collectionId, Dexie.maxKey],
-            true,
-            true,
-          )
-          .toArray();
-        sendResponse({ data: x });
+        sendResponse({
+          recording: updatedStatus,
+          collections: updatedCollections,
+        });
+      } else if (request.prompt === "addCollection") {
+        await db.collections.put({ id: request.newCollectionName });
+        sendResponse({ success: true });
+      } else if (request.prompt === "stopRecording") {
+        await db.recording.put({ id: "main", state: false, platforms: "" });
+        sendResponse({ success: true });
+      } else if (request.prompt === "startRecording") {
+        await db.recording.put({
+          id: "main",
+          state: request.currentCollectionName,
+          platforms: request.platforms.join(","),
+        });
+        sendResponse({ success: true });
+      } else if (request.prompt === "getRawCollection") {
+        if (request.platform === "twitter") {
+          const x = await db.tweets
+            .where("[collectionID+id]")
+            .between(
+              [request.collectionId, Dexie.minKey],
+              [request.collectionId, Dexie.maxKey],
+              true,
+              true,
+            )
+            .toArray();
+          sendResponse({ data: x });
+        } else if (request.platform === "tiktok") {
+          const x = await db.tiktoks
+            .where("[collectionID+id]")
+            .between(
+              [request.collectionId, Dexie.minKey],
+              [request.collectionId, Dexie.maxKey],
+              true,
+              true,
+            )
+            .toArray();
+          sendResponse({ data: x });
+        }
+      } else if (request.prompt === "addToCollection") {
+        const data = request.data;
+        if (request.platform === "twitter") {
+          await Promise.all(
+            data.map(async (t) =>
+              db.tweets.add({
+                id: t.id,
+                collectionID: request.collectionId,
+                tweet: t.tweet,
+              }),
+            ),
+          );
+        } else if (request.platform === "tiktok") {
+          await Promise.all(
+            data.map(async (t) =>
+              db.tiktoks.add({
+                id: t.id,
+                collectionID: request.collectionId,
+                tiktok: t.tiktok,
+              }),
+            ),
+          );
+        }
+        sendResponse({ done: "ok" });
+      } else {
+        // Handle unknown prompts
+        sendResponse({ error: "Unknown prompt" });
       }
-    } else if (request.prompt === "addToCollection") {
-      const data = request.data;
-      if (request.platform === "twitter") {
-        data.forEach(
-          async (t) =>
-            await db.tweets.add({
-              id: t.id,
-              collectionID: request.collectionId,
-              tweet: t.tweet,
-            }),
-        );
-      } else if (request.platform === "tiktok") {
-        data.forEach(
-          async (t) =>
-            await db.tiktoks.add({
-              id: t.id,
-              collectionID: request.collectionId,
-              tiktok: t.tiktok,
-            }),
-        );
-      }
-      sendResponse({ done: "ok" });
+    } catch (error) {
+      console.error("Error in message listener:", error);
+      sendResponse({ error: error.message });
     }
   })(request);
   return true;
