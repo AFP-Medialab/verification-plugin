@@ -571,7 +571,7 @@ export const imageGeolocation = new Tool(
  * Audio tools
  **/
 
-const audioHiya = new Tool(
+export const audioHiya = new Tool(
   "navbar_hiya",
   "navbar_hiya_description",
   audioFileSvgIcon,

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -10,6 +11,7 @@ import Popover from "@mui/material/Popover";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
+import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import CloseIcon from "@mui/icons-material/Close";
 import DownloadIcon from "@mui/icons-material/Download";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
@@ -19,6 +21,7 @@ import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import { KeyframeInputType as TAB_VALUES } from "@/components/NavItems/tools/Keyframes/api/createKeyframeJob";
 import ImageGrid from "@/components/NavItems/tools/Keyframes/components/ImageGrid";
 import KeyframesLoadingState from "@/components/NavItems/tools/Keyframes/components/KeyframesLoadingState";
+import { audioHiya, canUserSeeTool } from "@/constants/tools";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import {
   SEARCH_ENGINE_SETTINGS,
@@ -37,25 +40,32 @@ const KeyframesResults = ({
 }) => {
   if (tabSelected !== TAB_VALUES.URL) return null;
 
+  const role = useSelector((state) => state.userSession.user.roles);
+  const userAuthenticated = useSelector(
+    (state) => state.userSession && state.userSession.userAuthenticated,
+  );
+
   const keyword = i18nLoadNamespace("components/NavItems/tools/Keyframes");
   const keywordHelp = i18nLoadNamespace("components/Shared/OnClickInfo");
 
   const [isZipDownloading, setIsZipDownloading] = useState(false);
+
+  const [isAudioDownloading, setIsAudioDownloading] = useState(false);
 
   const [detailed, setDetailed] = useState(false);
 
   const ALLOWED_COLS = [1, 2, 3, 4, 6, 12];
   const [cols, setCols] = useState(2);
 
-  const handleDownload = async () => {
-    setIsZipDownloading(true);
+  const handleDownload = async (fileUrl, fileName, setIsDownloading) => {
+    setIsDownloading(true);
 
     try {
-      await downloadFile(data.zipFileUrl, "keyframes.zip");
+      await downloadFile(fileUrl, fileName);
     } catch (e) {
       console.error("Download failed:", e);
     } finally {
-      setIsZipDownloading(false);
+      setIsDownloading(false);
     }
   };
 
@@ -219,7 +229,13 @@ const KeyframesResults = ({
                             color="primary"
                             loading={isZipDownloading}
                             loadingPosition="start"
-                            onClick={handleDownload}
+                            onClick={() =>
+                              handleDownload(
+                                data.zipFileUrl,
+                                "keyframes.zip",
+                                setIsZipDownloading,
+                              )
+                            }
                             startIcon={<DownloadIcon />}
                           >
                             {keyword("keyframes_download_subshots")}
@@ -275,11 +291,40 @@ const KeyframesResults = ({
                     >
                       <Typography variant="h6">{"Audio"}</Typography>
                     </Stack>
-                    <Button
-                      onClick={() => openAudioAnalysisInHiya(data.session)}
-                    >
-                      {"Open Voice Cloning analysis in Hiya"}
-                    </Button>
+
+                    <Stack direction="column" spacing={2}>
+                      <Box>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          loading={isAudioDownloading}
+                          loadingPosition="start"
+                          startIcon={<DownloadIcon />}
+                          onClick={() =>
+                            handleDownload(
+                              `${process.env.REACT_APP_KEYFRAME_API}/audio/${data.session}`,
+                              "extracted_audio",
+                              setIsAudioDownloading,
+                            )
+                          }
+                        >
+                          {"Download extracted audio file"}
+                        </Button>
+                      </Box>
+                      {canUserSeeTool(audioHiya, role, userAuthenticated) && (
+                        <Box>
+                          <Button
+                            variant="outlined"
+                            startIcon={<ArrowOutwardIcon />}
+                            onClick={() =>
+                              openAudioAnalysisInHiya(data.session)
+                            }
+                          >
+                            {"Open Voice Cloning analysis in Hiya"}
+                          </Button>
+                        </Box>
+                      )}
+                    </Stack>
                   </Stack>
                 </Box>
               </Card>
