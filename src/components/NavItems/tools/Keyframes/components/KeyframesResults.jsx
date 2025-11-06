@@ -272,7 +272,9 @@ const KeyframesResults = ({
                           : data.keyframes
                       }
                       alt="extracted img with text"
-                      getImageUrl={(img) => img.keyframeUrl}
+                      getImageUrl={(img) => {
+                        return img.keyframeUrl;
+                      }}
                       nbOfCols={cols}
                       onClick={(imgUrl) => imageClickReverseSearch(imgUrl)}
                     />
@@ -292,39 +294,41 @@ const KeyframesResults = ({
                       <Typography variant="h6">{"Audio"}</Typography>
                     </Stack>
 
-                    <Stack direction="column" spacing={2}>
-                      <Box>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          loading={isAudioDownloading}
-                          loadingPosition="start"
-                          startIcon={<DownloadIcon />}
-                          onClick={() =>
-                            handleDownload(
-                              `${process.env.REACT_APP_KEYFRAME_API}/audio/${data.session}`,
-                              "extracted_audio",
-                              setIsAudioDownloading,
-                            )
-                          }
-                        >
-                          {"Download extracted audio file"}
-                        </Button>
-                      </Box>
-                      {canUserSeeTool(audioHiya, role, userAuthenticated) && (
+                    {data.session && (
+                      <Stack direction="column" spacing={2}>
                         <Box>
                           <Button
-                            variant="outlined"
-                            startIcon={<ArrowOutwardIcon />}
+                            variant="contained"
+                            color="primary"
+                            loading={isAudioDownloading}
+                            loadingPosition="start"
+                            startIcon={<DownloadIcon />}
                             onClick={() =>
-                              openAudioAnalysisInHiya(data.session)
+                              handleDownload(
+                                `${process.env.REACT_APP_KEYFRAME_API}/audio/${data.session}`,
+                                "extracted_audio",
+                                setIsAudioDownloading,
+                              )
                             }
                           >
-                            {"Open Voice Cloning analysis in Hiya"}
+                            {"Download extracted audio file"}
                           </Button>
                         </Box>
-                      )}
-                    </Stack>
+                        {canUserSeeTool(audioHiya, role, userAuthenticated) && (
+                          <Box>
+                            <Button
+                              variant="outlined"
+                              startIcon={<ArrowOutwardIcon />}
+                              onClick={() =>
+                                openAudioAnalysisInHiya(data.session)
+                              }
+                            >
+                              {"Open Voice Cloning analysis in Hiya"}
+                            </Button>
+                          </Box>
+                        )}
+                      </Stack>
+                    )}
                   </Stack>
                 </Box>
               </Card>
@@ -336,7 +340,13 @@ const KeyframesResults = ({
                     <ImageGrid
                       images={features.texts}
                       alt="extracted img with text"
-                      getImageUrl={(img) => img.representative.imageUrl}
+                      getImageUrl={(img) => {
+                        // Fallback to first item if representative image is missing
+                        return (
+                          img.representative?.imageUrl ||
+                          (img.items && img.items[0]?.imageUrl)
+                        );
+                      }}
                     />
                   </ResultsCard>
                   <ResultsCard>
@@ -344,7 +354,13 @@ const KeyframesResults = ({
                     <ImageGrid
                       images={features.faces}
                       alt="extracted img with face"
-                      getImageUrl={(img) => img.representative.imageUrl}
+                      getImageUrl={(img) => {
+                        // Fallback to first item if representative image is missing
+                        return (
+                          img.representative?.imageUrl ||
+                          (img.items && img.items[0]?.imageUrl)
+                        );
+                      }}
                     />
                   </ResultsCard>
                 </>

@@ -29,8 +29,8 @@ export async function fetchKeyframeFeaturesApi(authenticatedRequest, jobId) {
     }
 
     const representative = /** @type {ImageRepresentative} */ {
-      index: imageFeature.representative.item_index,
-      imageUrl: imageFeature.representative.enhanced_url,
+      index: imageFeature.representative?.item_index || 0,
+      imageUrl: imageFeature.representative?.enhanced_url || items[0]?.imageUrl,
     };
 
     faces.push({
@@ -51,8 +51,8 @@ export async function fetchKeyframeFeaturesApi(authenticatedRequest, jobId) {
     }
 
     const representative = /** @type {ImageRepresentative} */ {
-      index: imageFeature.representative.item_index,
-      imageUrl: imageFeature.representative.enhanced_url,
+      index: imageFeature.representative?.item_index || 0,
+      imageUrl: imageFeature.representative?.enhanced_url || items[0]?.imageUrl,
     };
 
     texts.push({

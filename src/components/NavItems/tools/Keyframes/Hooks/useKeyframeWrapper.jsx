@@ -71,6 +71,19 @@ export const useProcessKeyframes = (input) => {
     },
   });
 
+  // Check if we have cached data to prevent unnecessary API calls
+  const cachedKeyframes = queryClient.getQueryData([
+    "keyframes",
+    key,
+    currentOptions,
+  ]);
+  const cachedKeyframeFeatures = queryClient.getQueryData([
+    "keyframeFeatures",
+    key,
+    currentOptions,
+  ]);
+  const hasCachedData = cachedKeyframes && cachedKeyframeFeatures;
+
   // Step 3: Get Keyframes
   const fetchKeyframeFeaturesQuery = useQuery({
     queryKey: ["keyframeFeatures", key, currentOptions],
@@ -84,7 +97,7 @@ export const useProcessKeyframes = (input) => {
 
       return await fetchKeyframeFeatures(jobId);
     },
-    enabled: status === "Processing... completed 100%",
+    enabled: status === "Processing... completed 100%" && !hasCachedData,
     refetchOnWindowFocus: false,
     gcTime: 1000 * 60 * 60,
     staleTime: 1000 * 60 * 60,
@@ -102,7 +115,7 @@ export const useProcessKeyframes = (input) => {
       setStatus("Completed");
       return kf;
     },
-    enabled: status === "Processing... completed 100%",
+    enabled: status === "Processing... completed 100%" && !hasCachedData,
     refetchOnWindowFocus: false,
     gcTime: 1000 * 60 * 60,
     staleTime: 1000 * 60 * 60,
@@ -177,17 +190,6 @@ export const useProcessKeyframes = (input) => {
     checkStatusMutation.reset();
     setStatus(null);
   };
-
-  const cachedKeyframes = queryClient.getQueryData([
-    "keyframes",
-    key,
-    currentOptions,
-  ]);
-  const cachedKeyframeFeatures = queryClient.getQueryData([
-    "keyframeFeatures",
-    key,
-    currentOptions,
-  ]);
 
   return {
     executeProcess,
