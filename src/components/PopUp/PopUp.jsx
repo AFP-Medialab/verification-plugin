@@ -221,22 +221,24 @@ const PopUp = () => {
             m: 1,
           }}
         />
-        <Grid size={{ xs: 12 }}>
-          <RecordingWindow
-            recording={recording}
-            setRecording={setRecording}
-            expanded={expanded}
-            setExpanded={setExpanded}
-            selectedCollection={selectedCollection}
-            setSelectedCollection={setSelectedCollection}
-            collections={collections}
-            setCollections={setCollections}
-            newCollectionName={newCollectionName}
-            setNewCollectionName={setNewCollectionName}
-            selectedSocialMedia={selectedSocialMedia}
-            setSelectedSocialMedia={setSelectedSocialMedia}
-          />
-        </Grid>
+        {userRoles.includes(ROLES.EVALUATION) ? (
+          <Grid size={{ xs: 12 }}>
+            <RecordingWindow
+              recording={recording}
+              setRecording={setRecording}
+              expanded={expanded}
+              setExpanded={setExpanded}
+              selectedCollection={selectedCollection}
+              setSelectedCollection={setSelectedCollection}
+              collections={collections}
+              setCollections={setCollections}
+              newCollectionName={newCollectionName}
+              setNewCollectionName={setNewCollectionName}
+              selectedSocialMedia={selectedSocialMedia}
+              setSelectedSocialMedia={setSelectedSocialMedia}
+            />
+          </Grid>
+        ) : null}
         <Box
           sx={{
             m: 1,
