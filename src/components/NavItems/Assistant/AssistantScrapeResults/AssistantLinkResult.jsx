@@ -393,7 +393,7 @@ const AssistantLinkResult = () => {
         return params.value.credibilityScope
           ? params.value.credibilityScope.includes("/")
             ? keyword("social_media_account")
-            : `${keyword("domain_scope")} ${params.value.url.length} ${keyword("extracted_urls_urls")}`
+            : `${keyword("domain_scope")} ${params.value.url.length} ${params.value.url.length > 1 ? keyword("extracted_urls_urls") : keyword("assistant_urlbox")}`
           : null;
       },
       sortComparator: (v1, v2) =>
