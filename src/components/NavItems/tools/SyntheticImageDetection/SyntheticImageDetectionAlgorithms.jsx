@@ -22,12 +22,14 @@ export class SyntheticImageDetectionAlgorithm {
    * @param name {string} The algorithm name key
    * @param description {string} The algorithm description key
    * @param rolesNeeded {?[Roles]} Role needed to get the detection results for the algorithm. If more than one role specified, either roles are authorized.
+   * @param warning {?string} Optional warning message to display to the user.
    */
-  constructor(apiServiceName, name, description, rolesNeeded) {
+  constructor(apiServiceName, name, description, rolesNeeded, warning) {
     this.apiServiceName = apiServiceName;
     this.name = name;
     this.description = description;
     this.rolesNeeded = rolesNeeded;
+    this.warning = warning;
   }
 }
 
@@ -83,6 +85,7 @@ export const itwRineMever = new SyntheticImageDetectionAlgorithm(
   "synthetic_image_detection_itw_rine_mever_name",
   "synthetic_image_detection_itw_rine_mever_description",
   [ROLES.BETA_TESTER],
+  "synthetic_image_detection_itw_rine_mever_warning",
 );
 
 export const itwSpaiMever = new SyntheticImageDetectionAlgorithm(
@@ -90,6 +93,7 @@ export const itwSpaiMever = new SyntheticImageDetectionAlgorithm(
   "synthetic_image_detection_itw_spai_mever_name",
   "synthetic_image_detection_itw_spai_mever_description",
   [ROLES.BETA_TESTER],
+  "synthetic_image_detection_itw_spai_mever_warning",
 );
 
 export const sd21BfreeDino2reg4Grip = new SyntheticImageDetectionAlgorithm(
@@ -104,6 +108,7 @@ export const multiBfreeDino2reg4Grip = new SyntheticImageDetectionAlgorithm(
   "synthetic_image_detection_multi_bfree-dino2reg4_grip_name",
   "synthetic_image_detection_multi_bfree-dino2reg4_grip_description",
   [ROLES.BETA_TESTER],
+  "synthetic_image_detection_multi_bfree-dino2reg4_grip_warning",
 );
 
 export const sd21BfreeSiglipGrip = new SyntheticImageDetectionAlgorithm(

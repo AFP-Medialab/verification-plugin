@@ -175,6 +175,7 @@ const SyntheticImageDetectionResults = ({
         syntheticImageDetectionAlgorithm.name,
         syntheticImageDetectionAlgorithm.description,
         syntheticImageDetectionAlgorithm.rolesNeeded,
+        syntheticImageDetectionAlgorithm.warning,
       );
       this.predictionScore = predictionScore;
       this.isError = isError;
@@ -959,9 +960,16 @@ const SyntheticImageDetectionResults = ({
                                       "var(--mui-palette-background-paper)",
                                   }}
                                 >
-                                  <Typography>
-                                    {keyword(item.description)}
-                                  </Typography>
+                                  <Stack direction="column" spacing={2}>
+                                    <Typography>
+                                      {keyword(item.description)}
+                                    </Typography>
+                                    {item.warning && (
+                                      <Alert severity="warning">
+                                        {keyword(item.warning)}
+                                      </Alert>
+                                    )}
+                                  </Stack>
                                 </Box>
                               </Stack>
                               {syntheticImageScores.length > key + 1 && (
