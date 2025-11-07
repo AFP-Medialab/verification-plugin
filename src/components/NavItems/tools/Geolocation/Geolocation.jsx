@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Alert from "@mui/material/Alert";
@@ -65,6 +65,12 @@ const Geolocation = () => {
       }
     }
   };
+
+  useEffect(() => {
+    if (urlImage && input && !result) {
+      handleSubmit();
+    }
+  }, [urlImage, input, result]);
 
   const resetState = () => {
     setImageFile(null);

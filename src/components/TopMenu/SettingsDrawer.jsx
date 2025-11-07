@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
@@ -20,6 +20,11 @@ import {
 } from "@/redux/reducers/cookiesReducers";
 import { MAX_FONT_SIZE, MIN_FONT_SIZE, getStoredFontSize } from "@/theme";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import {
+  RecordingWindow,
+  getRecordingInfo,
+} from "components/NavItems/tools/SNA/components/Recording";
+import { ROLES } from "constants/roles";
 
 import manifest from "../../../public/manifest.json";
 import Languages from "../NavItems/languages/languages";
@@ -38,6 +43,20 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
   );
   const cookiesUsage = useSelector((state) => state.cookies.active);
   const gaUsage = useSelector((state) => state.cookies.analytics);
+  const userRoles = useSelector((state) => state.userSession.user.roles);
+
+  //SNA Recording props
+  const [recording, setRecording] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [collections, setCollections] = useState(["Default Collection"]);
+  const [selectedCollection, setSelectedCollection] =
+    useState("Default Collection");
+  const [newCollectionName, setNewCollectionName] = useState("");
+  const [selectedSocialMedia, setSelectedSocialMedia] = useState([]);
+
+  useEffect(() => {
+    getRecordingInfo(setCollections, setRecording, setSelectedCollection);
+  }, []);
 
   const version = manifest.version;
 
@@ -196,6 +215,25 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
               />
             )}
           </Stack>
+          {userRoles.includes(ROLES.EVALUATION) ? (
+            <Stack direction="column" spacing={1}>
+              <Typography>{keyword("snaRecord_settingsTitle")}</Typography>
+              <RecordingWindow
+                recording={recording}
+                setRecording={setRecording}
+                expanded={expanded}
+                setExpanded={setExpanded}
+                selectedCollection={selectedCollection}
+                setSelectedCollection={setSelectedCollection}
+                collections={collections}
+                setCollections={setCollections}
+                newCollectionName={newCollectionName}
+                setNewCollectionName={setNewCollectionName}
+                selectedSocialMedia={selectedSocialMedia}
+                setSelectedSocialMedia={setSelectedSocialMedia}
+              />
+            </Stack>
+          ) : null}
         </Stack>
         <Stack spacing={1} sx={{ alignItems: "center", mt: 2 }}>
           {isStaging && (

@@ -1,5 +1,6 @@
+import assistantApiCalls from "@/components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
+import DBKFApi from "@/components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
 import {
-  CONTENT_TYPE,
   KNOWN_LINKS,
   KNOWN_LINK_PATTERNS,
   NE_SUPPORTED_LANGS,
@@ -7,20 +8,7 @@ import {
   matchPattern,
   selectCorrectActions,
 } from "@/components/NavItems/Assistant/AssistantRuleBook";
-import isEqual from "lodash/isEqual";
-import uniqWith from "lodash/uniqWith";
-import {
-  all,
-  call,
-  fork,
-  put,
-  select,
-  take,
-  takeLatest,
-} from "redux-saga/effects";
-
-import assistantApiCalls from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
-import DBKFApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
+import { TOOLS_CATEGORIES } from "@/constants/tools";
 import {
   cleanAssistantState,
   setAssistantLoading,
@@ -46,7 +34,18 @@ import {
   setSingleMediaPresent,
   setSubjectivityDetails,
   setUrlMode,
-} from "../actions/tools/assistantActions";
+} from "@/redux/actions/tools/assistantActions";
+import isEqual from "lodash/isEqual";
+import uniqWith from "lodash/uniqWith";
+import {
+  all,
+  call,
+  fork,
+  put,
+  select,
+  take,
+  takeLatest,
+} from "redux-saga/effects";
 
 /**
  * APIs
@@ -150,10 +149,10 @@ function* handleMediaLists() {
   const videoList = yield select((state) => state.assistant.videoList);
 
   if (imageList.length === 1 && videoList.length === 0) {
-    yield put(setProcessUrl(imageList[0], CONTENT_TYPE.IMAGE));
+    yield put(setProcessUrl(imageList[0], TOOLS_CATEGORIES.IMAGE));
     yield put(setSingleMediaPresent(true));
   } else if (videoList.length === 1 && imageList.length === 0) {
-    yield put(setProcessUrl(videoList[0], CONTENT_TYPE.VIDEO));
+    yield put(setProcessUrl(videoList[0], TOOLS_CATEGORIES.VIDEO));
     yield put(setSingleMediaPresent(true));
   }
 }
@@ -163,7 +162,9 @@ function* handleMediaActionList() {
   const processUrl = yield select((state) => state.assistant.processUrl);
   const contentType = yield select((state) => state.assistant.processUrlType);
   const role = yield select((state) => state.userSession.user.roles);
-
+  const userAuthenticated = select(
+    (state) => state.userSession.userAuthenticated,
+  );
   if (processUrl !== null) {
     let knownInputLink = yield call(
       matchPattern,
@@ -182,6 +183,7 @@ function* handleMediaActionList() {
       knownProcessLink,
       processUrl,
       role,
+      userAuthenticated,
     );
 
     yield put(setProcessUrlActions(contentType, actions));
@@ -192,12 +194,16 @@ function* handleSubmitUpload(action) {
   let contentType = action.payload.contentType;
   let known_link = KNOWN_LINKS.OWN;
   const role = yield select((state) => state.userSession.user.roles);
+  const userAuthenticated = yield select(
+    (state) => state.userSession.userAuthenticated,
+  );
   let actions = selectCorrectActions(
     contentType,
     known_link,
     known_link,
     "",
     role,
+    userAuthenticated,
   );
   yield put(setProcessUrlActions(contentType, actions));
   yield put(setImageVideoSelected(true));
@@ -219,7 +225,7 @@ function* handleMediaSimilarityCall(action) {
     KNOWN_LINKS.DAILYMOTION,
   ];
 
-  if (contentType === CONTENT_TYPE.IMAGE) {
+  if (contentType === TOOLS_CATEGORIES.IMAGE) {
     yield call(
       similaritySearch,
       () => dbkfAPI.callImageSimilarityEndpoint(processUrl),
@@ -227,7 +233,7 @@ function* handleMediaSimilarityCall(action) {
         setDbkfImageMatchDetails(result, loading, done, fail),
     );
   } else if (
-    contentType === CONTENT_TYPE.VIDEO &&
+    contentType === TOOLS_CATEGORIES.VIDEO &&
     !unprocessbleTypes.includes(inputUrlType)
   ) {
     yield call(
@@ -411,16 +417,21 @@ function* handleDbkfTextCall(action) {
   try {
     const text = yield select((state) => state.assistant.urlText);
     if (text) {
-      let textToUse = text.length > 500 ? text.substring(0, 500) : text;
+      let textToUse = text.length > 100 ? text.substring(0, 100) : text;
       /*
-                                                            let textRegex = /[\W]$/
-                                                            //Infinite loop for some url exemple: https://twitter.com/TheArchitect009/status/1427280578496303107
-                                                            while(textToUse.match(textRegex)){
-                                                                if(textToUse.length === 1) break
-                                                                textToUse = text.slice(0, -1)
-                                                            }*/
+        let textRegex = /[\W]$/
+        //Infinite loop for some url example: https://twitter.com/TheArchitect009/status/1427280578496303107
+        while(textToUse.match(textRegex)){
+          if(textToUse.length === 1) break
+          textToUse = text.slice(0, -1)
+        }
+      */
       let result = yield call(dbkfAPI.callTextSimilarityEndpoint, textToUse);
-      let filteredResult = result.length ? result : null;
+
+      let filteredResult = result?.length
+        ? result.filter((res) => res.score >= 40)
+        : [];
+      filteredResult = filteredResult?.length ? filteredResult : null;
 
       yield put(setDbkfTextMatchDetails(filteredResult, false, true, false));
     }
@@ -527,6 +538,8 @@ function* handleSubjectivityCall(action) {
         // merge results
         if (i === 0) {
           result = textChunkResult;
+          result.entities.Subjective[0].score =
+            result.entities.Subjective[0].score * textChunks[i].length;
         } else {
           // add step to sentences indices and Important_Sentence indices
           step = i * SERVER_TIMEOUT_LIMIT;
@@ -564,7 +577,6 @@ function* handleSubjectivityCall(action) {
               sentence: sentence.sentence,
             });
           }
-
           // update results
           result = {
             text: result.text + textChunkResult.text,
@@ -573,12 +585,22 @@ function* handleSubjectivityCall(action) {
               Important_Sentence: result.entities.Important_Sentence.concat(
                 stepImportantSentences,
               ),
-              Subjective: result.entities.Subjective,
+              Subjective: [
+                {
+                  score:
+                    result.entities.Subjective[0].score +
+                    textChunkResult.entities.Subjective[0].score *
+                      textChunks[i].length,
+                },
+              ],
             },
             sentences: result.sentences.concat(stepSentences),
           };
         }
       }
+      // update overall subjectivity score to be weighted
+      result.entities.Subjective[0].score =
+        result.entities.Subjective[0].score / text.length;
 
       yield put(setSubjectivityDetails(result, false, true, false));
     }
@@ -795,16 +817,17 @@ function* handleMultilingualStanceCall(action) {
   try {
     const inputUrl = yield select((state) => state.assistant.inputUrl); //action.payload.inputUrl;
     const urlType = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
+    const collectedComments = yield select(
+      (state) => state.assistant.collectedComments,
+    );
 
-    // only run stance classifier for youtube
+    // only run stance classifier for youtube if comments exist
     if (
-      urlType === KNOWN_LINKS.YOUTUBE ||
-      urlType === KNOWN_LINKS.YOUTUBESHORTS
+      (urlType === KNOWN_LINKS.YOUTUBE ||
+        urlType === KNOWN_LINKS.YOUTUBESHORTS) &&
+      collectedComments.length > 0
     ) {
       yield put(setMultilingualStanceDetails(null, true, false, false));
-      const collectedComments = yield select(
-        (state) => state.assistant.collectedComments,
-      );
 
       function createCommentArray(
         comments,
@@ -1072,7 +1095,7 @@ const filterAssistantResults = (
       break;
     case KNOWN_LINKS.MISC:
       if (contentType) {
-        contentType === CONTENT_TYPE.IMAGE
+        contentType === TOOLS_CATEGORIES.IMAGE
           ? (imageList = [userInput])
           : (videoList = [userInput]);
       } else {
@@ -1225,10 +1248,10 @@ const sortSourceCredibilityLinks = (
 
   let extractedLinks = [];
   extractedLinks = extractedLinks.concat(
-    cautionLinks,
-    mixedLinks,
-    positiveLinks,
-    unlabelledLinks,
+    cautionLinks.sort(),
+    mixedLinks.sort(),
+    positiveLinks.sort(),
+    unlabelledLinks.sort(),
   );
 
   return extractedLinks;

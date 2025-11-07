@@ -107,7 +107,7 @@ export const renderDescription = (keyword, description) => {
   );
 };
 
-export const renderEvidence = (keyword, evidence, source, scope) => {
+export const renderEvidence = (keyword, labels, evidence, source, scope) => {
   return (
     <List>
       <ListItem>
@@ -130,6 +130,15 @@ export const renderEvidence = (keyword, evidence, source, scope) => {
             </ListItem>
           ))}
         </List>
+      </ListItem>
+      <ListItem>
+        {labels === "present in GDI reports" && (
+          <Typography variant={"subtitle2"} sx={{ align: "start" }}>
+            <Box sx={{ fontStyle: "italic", m: 1 }}>
+              {keyword("gdi_reports_warning")}
+            </Box>
+          </Typography>
+        )}
       </ListItem>
     </List>
   );
@@ -158,26 +167,38 @@ export const renderUrlTitle = (
       {handleClose != null ? (
         <Grid size={{ xs: 1 }} display="flex" justifyContent="flex-end">
           {/* tooltip help */}
-          <Tooltip
-            interactive={"true"}
-            leaveDelay={50}
-            style={{ display: "flex", marginLeft: "auto" }}
-            title={
-              <>
-                <TransSourceCredibilityTooltip keyword={keyword} />
-                <TransHtmlDoubleLineBreak keyword={keyword} />
-                <TransUrlDomainAnalysisLink keyword={keyword} />
-              </>
-            }
-            classes={{ tooltip: classes.assistantTooltip }}
+          <Box
+            sx={{
+              pt: 0.75,
+            }}
           >
-            <HelpOutlineOutlinedIcon color={"action"} />
-          </Tooltip>
+            <Tooltip
+              interactive={"true"}
+              leaveDelay={50}
+              style={{ display: "flex", marginLeft: "auto" }}
+              title={
+                <>
+                  <TransSourceCredibilityTooltip keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
+                  <TransUrlDomainAnalysisLink keyword={keyword} />
+                </>
+              }
+              classes={{ tooltip: classes.assistantTooltip }}
+            >
+              <HelpOutlineOutlinedIcon color={"action"} />
+            </Tooltip>
+          </Box>
 
           {/* close button */}
-          <IconButton onClick={handleClose}>
-            <CloseIcon />
-          </IconButton>
+          <Box
+            sx={{
+              pr: 1,
+            }}
+          >
+            <IconButton onClick={handleClose}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
         </Grid>
       ) : null}
     </Grid>
@@ -330,6 +351,13 @@ const renderDialog = (keyword, value, trafficLightColor, sourceType) => {
               </ListItem>
             ))}
           </List>
+          {value.credibilityLabels === "present in GDI reports" && (
+            <Typography variant={"subtitle2"} sx={{ align: "start" }}>
+              <Box sx={{ fontStyle: "italic", m: 1 }}>
+                {keyword("gdi_reports_warning")}
+              </Box>
+            </Typography>
+          )}
         </DialogContent>
       </Dialog>
     </ListItemSecondaryAction>

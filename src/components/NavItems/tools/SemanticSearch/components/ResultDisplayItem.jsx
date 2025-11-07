@@ -8,6 +8,7 @@ import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
@@ -26,6 +27,7 @@ const ResultDisplayItem = ({
   articleUrl,
   domainUrl,
   imageUrl,
+  factCheckServices,
 }) => {
   const path = useLocation();
   let keyword;
@@ -47,7 +49,7 @@ const ResultDisplayItem = ({
     >
       <Grid
         container
-        direction="row"
+        direction={{ sm: "column", md: "row" }}
         sx={{
           p: 2,
           justifyContent: "space-between",
@@ -56,7 +58,7 @@ const ResultDisplayItem = ({
         <Grid
           container
           direction="row"
-          size={{ xs: 10 }}
+          size={{ sm: 12, md: 10 }}
           spacing={2}
           sx={{
             justifyContent: "flex-start",
@@ -135,12 +137,21 @@ const ResultDisplayItem = ({
           </Grid>
         </Grid>
         <Grid
-          size={{ xs: 2 }}
+          size={{ sm: 12, md: 2 }}
           sx={{
-            pl: 4,
+            pl: { sm: 0, md: 4 },
+            pt: { sm: 2, md: 0 },
           }}
         >
-          <Stack direction="column" spacing={2}>
+          <Stack
+            direction={{ sm: "row", md: "column" }}
+            spacing={2}
+            sx={{
+              justifyContent: { sm: "flex-start", md: "center" },
+              alignItems: { sm: "center", md: "flex-start" },
+              flexWrap: "wrap",
+            }}
+          >
             <Link
               href={`https://${domainUrl}`}
               variant="body1"
@@ -150,6 +161,17 @@ const ResultDisplayItem = ({
               {website}
             </Link>
             <Chip label={language} sx={{ width: "fit-content" }} />
+            {factCheckServices?.map(([acronym, explanation], key) => (
+              <Tooltip key={key + "_tooltip"} title={explanation}>
+                <Chip
+                  key={key + "_chip"}
+                  label={acronym}
+                  color="warning"
+                  sx={{ width: "fit-content" }}
+                  size="small"
+                />
+              </Tooltip>
+            ))}
           </Stack>
         </Grid>
       </Grid>

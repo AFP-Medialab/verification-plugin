@@ -12,6 +12,7 @@ import Stack from "@mui/material/Stack";
 import { useTrackEvent } from "@/Hooks/useAnalytics";
 import C2paResults from "@/components/NavItems/tools/C2pa/Results/C2paResults";
 import { useC2paMetadataMutation } from "@/components/NavItems/tools/Metadata/hooks/useC2paMetadataMutation";
+import { KNOWN_LINKS } from "@/constants/tools";
 import {
   cleanMetadataState,
   setC2paMetadataResult,
@@ -30,7 +31,6 @@ import StringFileUploadField from "components/Shared/StringFileUploadField";
 
 import { imageMetadata as imageMetadataTool } from "../../../../constants/tools";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import MetadataImageResult from "./Results/MetadataImageResult";
 import MetadataVideoResult from "./Results/MetadataVideoResult";
 import {

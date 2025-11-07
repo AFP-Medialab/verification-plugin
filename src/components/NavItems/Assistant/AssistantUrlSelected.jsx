@@ -21,13 +21,14 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { useTrackEvent } from "@/Hooks/useAnalytics";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
+import { KNOWN_LINKS } from "@/constants/tools";
 import {
   cleanAssistantState,
   submitInputUrl,
 } from "@/redux/actions/tools/assistantActions";
 
-import { KNOWN_LINKS } from "./AssistantRuleBook";
 import {
+  TransAssistantHelpThreeTooltip,
   TransHtmlDoubleLineBreak,
   TransSupportedUrlsLink,
 } from "./TransComponents";
@@ -104,15 +105,7 @@ const AssistantUrlSelected = (props) => {
               interactive={"true"}
               title={
                 <>
-                  <Trans
-                    t={keyword}
-                    i18nKey="assistant_help_3" // update this for bluesky and vk and others?
-                    components={{
-                      b: <b />,
-                      ul: <ul />,
-                      li: <li />,
-                    }}
-                  />
+                  <TransAssistantHelpThreeTooltip keyword={keyword} />
                   <TransHtmlDoubleLineBreak keyword={keyword} />
                   <TransSupportedUrlsLink keyword={keyword} />
                 </>

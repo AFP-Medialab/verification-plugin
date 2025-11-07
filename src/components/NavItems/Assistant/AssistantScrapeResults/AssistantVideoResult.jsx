@@ -16,8 +16,7 @@ import ImageIcon from "@mui/icons-material/Image";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
-
-import { KNOWN_LINKS } from "../AssistantRuleBook";
+import { KNOWN_LINKS } from "@/constants/tools";
 
 const AssistantVideoResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -125,7 +124,7 @@ const AssistantVideoResult = () => {
             height="400"
             width="100%"
             data-testid="assistant-media-video-tag"
-          />
+          ></video>
         )}
         {!preprocessLinkForEmbed(processUrl) && (
           <div

@@ -1,8 +1,11 @@
 import React from "react";
-import useMyStyles from "../MaterialUiStyles/useMyStyles";
+
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
+
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import useMyStyles from "../MaterialUiStyles/useMyStyles";
 
 export const FOOTER_TYPES = {
   ITI: "iti",
@@ -12,9 +15,10 @@ export const FOOTER_TYPES = {
   GRIHO: "GRIHO",
   USFD: "usfd",
   USFD_AFP_EU_DISINFOLAB: "afp-usfd-eu-disinfolab",
-  LOCCUS: "loccus",
+  HIYA: "hiya",
   KINIT: "kinit",
   AFP: "afp",
+  AFP_URBINO_VIGINUM: "afp-urbino-viginum",
 };
 
 export const Footer = (props) => {
@@ -72,6 +76,20 @@ export const Footer = (props) => {
       ];
       contactUs = keyword("afp_part_2");
       break;
+    case FOOTER_TYPES.AFP_URBINO_VIGINUM:
+      provideBy = keyword("afp_part_1");
+      link = [
+        keyword("afp_link"),
+        keyword("urbino_link"),
+        keyword("viginum_link"),
+      ];
+      linkLabel = [
+        keyword("afp_link_label"),
+        ", " + keyword("urbino_link_label"),
+        " " + keyword("and") + " " + keyword("viginum_link_label"),
+      ];
+      contactUs = keyword("afp_part_2");
+      break;
     case FOOTER_TYPES.ITI_BORELLI_AFP:
       provideBy = keyword("iti_part_1");
       link = [
@@ -95,10 +113,10 @@ export const Footer = (props) => {
       ];
       contactUs = keyword("afp_part_2");
       break;
-    case FOOTER_TYPES.LOCCUS:
+    case FOOTER_TYPES.HIYA:
       provideBy = keyword("afp_part_1");
-      link = keyword("loccus_link");
-      linkLabel = keyword("loccus_link_label");
+      link = keyword("hiya_link");
+      linkLabel = keyword("hiya_link_label");
       contactUs = keyword("afp_part_2");
       break;
     case FOOTER_TYPES.KINIT:
@@ -134,7 +152,7 @@ export const Footer = (props) => {
         )}
       </Typography>
 
-      <Typography variant={"body2"}>{contactUs}</Typography>
+      <Typography variant="body2">{contactUs}</Typography>
     </div>
   );
 };

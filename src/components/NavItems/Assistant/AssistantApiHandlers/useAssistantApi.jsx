@@ -81,18 +81,28 @@ export default function assistantApiCalls() {
           link: entity.link.value,
         };
       }
-      const dbQuery = `
-      SELECT ?iri ?abstract (GROUP_CONCAT(DISTINCT ?type; SEPARATOR = ",") AS ?schemaTypes)
-      WHERE {
-        VALUES ?iri { ${Object.keys(mapping).join(" ")} }
-        ?iri rdfs:comment ?abstract .
-        ?iri rdf:type ?type .
-        FILTER (lang(?abstract) = "${lang}")
-      }`;
-      const dbpediaResult = await axios.get(
-        `https://dbpedia.org/sparql?query=${encodeURIComponent(dbQuery)}&format=application%2Fsparql-results%2Bjson&timeout=30000&signal_void=on&signal_unconnected=on`,
-      );
-      for (const entity of dbpediaResult.data.results.bindings) {
+      const iris = Object.keys(mapping);
+      let dbpediaResultBindings = [];
+      const chunkSize = 25;
+      for (let i = 0; i < iris.length; i += chunkSize) {
+        const chunk = iris.slice(i, i + chunkSize);
+        const dbQuery = `
+          SELECT ?iri ?abstract (GROUP_CONCAT(DISTINCT ?type; SEPARATOR = ",") AS ?schemaTypes)
+          WHERE {
+            VALUES ?iri { ${chunk.join(" ")} }
+            ?iri rdfs:comment ?abstract .
+            ?iri rdf:type ?type .
+            FILTER (lang(?abstract) = "${lang}")
+          }`;
+        const dbpediaEndpoint = process.env.REACT_APP_DBPEDIA_SPARQL_URL;
+        const dbpediaResult = await axios.get(
+          `${dbpediaEndpoint}?query=${encodeURIComponent(dbQuery)}&format=application%2Fsparql-results%2Bjson&timeout=30000&signal_void=on&signal_unconnected=on`,
+        );
+        dbpediaResultBindings = dbpediaResultBindings.concat(
+          dbpediaResult.data.results.bindings,
+        );
+      }
+      for (const entity of dbpediaResultBindings) {
         mapping["<" + entity.iri.value + ">"]["abstract"] =
           entity.abstract.value;
         mapping["<" + entity.iri.value + ">"]["schemaTypes"] =
@@ -116,24 +126,13 @@ export default function assistantApiCalls() {
         if (
           new Set(entity.features.schemaTypes).intersection(
             new Set([
-              "http://schema.org/Person",
-              "http://dbpedia.org/ontology/Person",
-            ]),
-          ).size > 0
-        ) {
-          entities["Person"].push(entity);
-        }
-        if (
-          new Set(entity.features.schemaTypes).intersection(
-            new Set([
               "http://schema.org/Location",
               "http://dbpedia.org/ontology/Location",
             ]),
           ).size > 0
         ) {
           entities["Location"].push(entity);
-        }
-        if (
+        } else if (
           new Set(entity.features.schemaTypes).intersection(
             new Set([
               "http://schema.org/Organization",
@@ -142,6 +141,15 @@ export default function assistantApiCalls() {
           ).size > 0
         ) {
           entities["Organization"].push(entity);
+        } else if (
+          new Set(entity.features.schemaTypes).intersection(
+            new Set([
+              "http://schema.org/Person",
+              "http://dbpedia.org/ontology/Person",
+            ]),
+          ).size > 0
+        ) {
+          entities["Person"].push(entity);
         }
       }
       namedEntityResult.data.entities = entities;
@@ -262,7 +270,10 @@ export default function assistantApiCalls() {
       async () => {
         const result = await axios.post(
           assistantEndpoint + "gcloud/persuasion-span-clfr",
-          { text: text },
+          {
+            text: text,
+            frontendVersion: 0.88,
+          },
         );
         return result.data;
       },
@@ -283,6 +294,7 @@ export default function assistantApiCalls() {
       async () => {
         const result = await axios.post(assistantEndpoint + "dw/subjectivity", {
           content: text,
+          frontendVersion: 0.88,
         });
         return result.data;
       },
@@ -301,11 +313,11 @@ export default function assistantApiCalls() {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
       async () => {
-        const result = await axios.get(
-          assistantEndpoint +
-            "kinit/prev-fact-checks" +
-            "?text=" +
-            encodeURIComponent(text), // max URL length is 2048 characters
+        const result = await axios.post(
+          assistantEndpoint + "kinit/prev-fact-checks",
+          {
+            content: text,
+          },
         );
         return result.data;
       },
