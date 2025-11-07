@@ -51,7 +51,7 @@ import MachineGeneratedText from "../components/NavItems/MachineGeneratedText";
 import ToolsMenu from "../components/NavItems/tools/Alltools/ToolsMenu";
 import Analysis from "../components/NavItems/tools/Analysis/Analysis";
 import Archive from "../components/NavItems/tools/Archive";
-import Chatbot from "../components/NavItems/tools/Chatbot";
+import ChatBot from "../components/NavItems/tools/ChatBot";
 import DeepfakeVideo from "../components/NavItems/tools/Deepfake/DeepfakeVideo";
 import Forensic from "../components/NavItems/tools/Forensic/Forensic";
 import Geolocation from "../components/NavItems/tools/Geolocation/Geolocation";
@@ -740,7 +740,7 @@ export const chatbot = new Tool(
   [ROLES.EXTRA_FEATURE],
   "chatbot",
   TOOL_GROUPS.VERIFICATION,
-  <Chatbot />,
+  <ChatBot />,
   <Footer type={FOOTER_TYPES.AFP} />,
 );
 
