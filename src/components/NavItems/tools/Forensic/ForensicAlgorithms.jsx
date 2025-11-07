@@ -20,12 +20,14 @@ export class ForensicAlgorithm {
    * @param {string} nameKey - The i18n key for the algorithm name
    * @param {number|string} tab - The tab this algorithm belongs to (use FORENSIC_TABS constants)
    * @param {Array<string>} rolesNeeded - Array of roles needed to access this algorithm (empty = available to all)
+   * @param {?string} warning - Optional warning message to display to the user.
    */
-  constructor(id, nameKey, tab, rolesNeeded = []) {
+  constructor(id, nameKey, tab, rolesNeeded = [], warning) {
     this.id = id;
     this.nameKey = nameKey;
     this.tab = tab;
     this.rolesNeeded = rolesNeeded;
+    this.warning = warning;
   }
 }
 
@@ -103,6 +105,7 @@ export const mmfusionReport = new ForensicAlgorithm(
   "forensic_title_mmfusion_report",
   FORENSIC_TABS.DEEP_LEARNING,
   [ROLES.EXTRA_FEATURE, ROLES.EVALUATION, ROLES.BETA_TESTER],
+  "forensic_warning_mmfusion_report",
 );
 
 export const truforReport = new ForensicAlgorithm(
@@ -110,6 +113,7 @@ export const truforReport = new ForensicAlgorithm(
   "forensic_title_trufor_report",
   FORENSIC_TABS.DEEP_LEARNING,
   [ROLES.EXTRA_FEATURE, ROLES.EVALUATION, ROLES.BETA_TESTER],
+  "forensic_warning_trufor_report",
 );
 
 export const omgfuserReport = new ForensicAlgorithm(

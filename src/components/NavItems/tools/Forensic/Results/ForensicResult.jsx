@@ -14,6 +14,7 @@ import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Popover from "@mui/material/Popover";
 import Snackbar from "@mui/material/Snackbar";
+import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
@@ -42,7 +43,7 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import { theme as defaultTheme } from "../../../../../theme";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import AnimatedGif from "../../Gif/AnimatedGif";
-import { buildFilterProps } from "../ForensicAlgorithms";
+import { allForensicAlgorithms, buildFilterProps } from "../ForensicAlgorithms";
 import ImageCanvas from "../components/imageCanvas/imageCanvas";
 
 function TabPanel(props) {
@@ -457,6 +458,28 @@ const ForensicResults = (props) => {
 
   const idExpl = openFilterExplanation ? "simple-popover" : undefined;
 
+  // Helper function to get algorithm warning by filter ID
+  const getAlgorithmWarning = (filterId) => {
+    const algorithm = allForensicAlgorithms.find((alg) => alg.id === filterId);
+    return algorithm?.warning || null;
+  };
+
+  // Warning popover state
+  const [anchorWarningPopover, setAnchorWarningPopover] = React.useState(false);
+  const openWarningPopover = Boolean(anchorWarningPopover);
+  const [warningFilterId, setWarningFilterId] = React.useState(null);
+  const idWarning = openWarningPopover ? "warning-popover" : undefined;
+
+  const handleOpenWarningPopover = (event, filterId) => {
+    setAnchorWarningPopover(event.currentTarget);
+    setWarningFilterId(filterId);
+  };
+
+  const handleCloseWarningPopover = () => {
+    setAnchorWarningPopover(null);
+    setWarningFilterId(null);
+  };
+
   const handleCloseAlert = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -741,15 +764,38 @@ const ForensicResults = (props) => {
                                   }}
                                 >
                                   {keyword("forensic_title_" + value.id)}
-                                  <IconButton
-                                    className={classes.margin}
-                                    size="small"
-                                    onClick={(e) =>
-                                      handleOpenFilterExplanation(e, value.id)
-                                    }
+                                  <Stack
+                                    direction="row"
+                                    spacing={1}
+                                    sx={{
+                                      display: "inline-flex",
+                                      alignItems: "center",
+                                    }}
                                   >
-                                    <HelpOutlineIcon fontSize="inherit" />
-                                  </IconButton>
+                                    <IconButton
+                                      className={classes.margin}
+                                      size="small"
+                                      onClick={(e) =>
+                                        handleOpenFilterExplanation(e, value.id)
+                                      }
+                                    >
+                                      <HelpOutlineIcon fontSize="inherit" />
+                                    </IconButton>
+                                    {getAlgorithmWarning(value.id) && (
+                                      <IconButton
+                                        className={classes.margin}
+                                        size="small"
+                                        onClick={(e) =>
+                                          handleOpenWarningPopover(e, value.id)
+                                        }
+                                      >
+                                        <WarningIcon
+                                          fontSize="inherit"
+                                          style={{ color: "#ff9800" }}
+                                        />
+                                      </IconButton>
+                                    )}
+                                  </Stack>
 
                                   <Popover
                                     id={idExpl}
@@ -1134,18 +1180,46 @@ const ForensicResults = (props) => {
                                           }}
                                         >
                                           {value.name[value.currentDisplayed]}
-                                          <IconButton
-                                            className={classes.margin}
-                                            size="small"
-                                            onClick={(e) =>
-                                              handleOpenFilterExplanation(
-                                                e,
-                                                "cagi",
-                                              )
-                                            }
+                                          <Stack
+                                            direction="row"
+                                            spacing={1}
+                                            sx={{
+                                              display: "inline-flex",
+                                              alignItems: "center",
+                                            }}
                                           >
-                                            <HelpOutlineIcon fontSize="inherit" />
-                                          </IconButton>
+                                            <IconButton
+                                              className={classes.margin}
+                                              size="small"
+                                              onClick={(e) =>
+                                                handleOpenFilterExplanation(
+                                                  e,
+                                                  "cagi",
+                                                )
+                                              }
+                                            >
+                                              <HelpOutlineIcon fontSize="inherit" />
+                                            </IconButton>
+                                            {getAlgorithmWarning(
+                                              "cagi_report",
+                                            ) && (
+                                              <IconButton
+                                                className={classes.margin}
+                                                size="small"
+                                                onClick={(e) =>
+                                                  handleOpenWarningPopover(
+                                                    e,
+                                                    "cagi_report",
+                                                  )
+                                                }
+                                              >
+                                                <WarningIcon
+                                                  fontSize="inherit"
+                                                  style={{ color: "#ff9800" }}
+                                                />
+                                              </IconButton>
+                                            )}
+                                          </Stack>
                                         </Box>
                                       ) : (
                                         <Box
@@ -1158,18 +1232,44 @@ const ForensicResults = (props) => {
                                           {keyword(
                                             "forensic_title_" + value.id,
                                           )}
-                                          <IconButton
-                                            className={classes.margin}
-                                            size="small"
-                                            onClick={(e) =>
-                                              handleOpenFilterExplanation(
-                                                e,
-                                                value.id,
-                                              )
-                                            }
+                                          <Stack
+                                            direction="row"
+                                            spacing={1}
+                                            sx={{
+                                              display: "inline-flex",
+                                              alignItems: "center",
+                                            }}
                                           >
-                                            <HelpOutlineIcon fontSize="inherit" />
-                                          </IconButton>
+                                            <IconButton
+                                              className={classes.margin}
+                                              size="small"
+                                              onClick={(e) =>
+                                                handleOpenFilterExplanation(
+                                                  e,
+                                                  value.id,
+                                                )
+                                              }
+                                            >
+                                              <HelpOutlineIcon fontSize="inherit" />
+                                            </IconButton>
+                                            {getAlgorithmWarning(value.id) && (
+                                              <IconButton
+                                                className={classes.margin}
+                                                size="small"
+                                                onClick={(e) =>
+                                                  handleOpenWarningPopover(
+                                                    e,
+                                                    value.id,
+                                                  )
+                                                }
+                                              >
+                                                <WarningIcon
+                                                  fontSize="inherit"
+                                                  style={{ color: "#ff9800" }}
+                                                />
+                                              </IconButton>
+                                            )}
+                                          </Stack>
                                         </Box>
                                       )}
                                     </div>
@@ -1395,6 +1495,70 @@ const ForensicResults = (props) => {
                   isGrayscaleInverted={isHoveredFilterInverted}
                   applyColorScale={applyColorScale}
                 />
+              </Box>
+            </Popover>
+
+            {/* Warning Popover */}
+            <Popover
+              id={idWarning}
+              open={openWarningPopover}
+              anchorEl={anchorWarningPopover}
+              onClose={handleCloseWarningPopover}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "center",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "center",
+              }}
+              slotProps={{
+                paper: {
+                  style: {
+                    width: "300px",
+                    fontSize: 14,
+                  },
+                },
+              }}
+            >
+              <Box
+                sx={{
+                  p: 3,
+                }}
+              >
+                <Grid
+                  container
+                  direction="row"
+                  sx={{
+                    justifyContent: "space-between",
+                    alignItems: "stretch",
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    sx={{ display: "flex", alignItems: "center" }}
+                  >
+                    <WarningIcon
+                      style={{ color: "#ff9800", marginRight: "8px" }}
+                    />
+                    {warningFilterId &&
+                      keyword("forensic_title_" + warningFilterId)}
+                  </Typography>
+
+                  <CloseIcon onClick={handleCloseWarningPopover} />
+                </Grid>
+
+                <Box
+                  sx={{
+                    m: 1,
+                  }}
+                />
+                {warningFilterId && getAlgorithmWarning(warningFilterId) && (
+                  <Typography variant="body2">
+                    {keyword(getAlgorithmWarning(warningFilterId))}
+                  </Typography>
+                )}
               </Box>
             </Popover>
           </Box>
