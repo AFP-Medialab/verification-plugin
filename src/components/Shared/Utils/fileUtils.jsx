@@ -252,3 +252,26 @@ export const downloadFile = async (source, filename) => {
     throw err;
   }
 };
+
+/**
+ * Converts a Blob to a data URL
+ * @param {Blob} blob - The blob to convert
+ * @returns {Promise<string>} Promise that resolves to data URL
+ */
+export const blobToDataUrl = (blob) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+
+/**
+ * Converts a Blob to base64 string (without data URL prefix)
+ * @param {Blob} blob - The blob to convert
+ * @returns {Promise<string>} Promise that resolves to base64 string
+ */
+export const blobToBase64 = async (blob) => {
+  const dataUrl = await blobToDataUrl(blob);
+  return dataUrl.slice(dataUrl.indexOf(",") + 1);
+};

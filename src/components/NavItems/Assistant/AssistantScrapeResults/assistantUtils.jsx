@@ -1,4 +1,11 @@
 import React from "react";
+import GaugeChart from "react-gauge-chart";
+
+import Box from "@mui/material/Box";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import Slider from "@mui/material/Slider";
+import Typography from "@mui/material/Typography";
 
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
@@ -75,6 +82,14 @@ export const rgbListToGradient = (rgbList) => {
   return output;
 };
 
+/**
+ * Recursively takes tree map and returns highlighted spans
+ * @param text
+ * @param treeElem
+ * @param spanHighlightIndices
+ * @param wrapFunc function(spanText, spanInfo)
+ * @returns Array of plaintext or components directly renderable by react
+ */
 function treeMapToElementsRecursive(
   text,
   treeElem,
@@ -93,8 +108,8 @@ function treeMapToElementsRecursive(
       // If text span matches with indices for highlighting
       // then try to wrap them in wrapFunc()
       let currentIndex = span.start;
-      for (let i = 0; i < spanHighlightIndices.length; i++) {
-        const hSpan = spanHighlightIndices[i];
+      for (let groupId = 0; groupId < spanHighlightIndices.length; groupId++) {
+        const hSpan = spanHighlightIndices[groupId];
         const hSpanStart = hSpan.indices[0];
         // Sometimes the end index is negative so we have to check this
         let hSpanEnd = hSpan.indices[1] > -1 ? hSpan.indices[1] : textLength;
@@ -119,6 +134,7 @@ function treeMapToElementsRecursive(
                 hSpan,
                 boundedStart,
                 boundedEnd,
+                groupId,
               ),
             );
           } else {
@@ -158,7 +174,7 @@ function treeMapToElementsRecursive(
 }
 
 /**
- *
+ * Converts tree map to React components
  * @param text
  * @param mapping
  * @param spanHighlightIndices
@@ -186,7 +202,7 @@ export const treeMapToElements = (
 };
 
 /**
- *
+ * Function for wrapping hightlighted spans
  * @param text
  * @param spanHighlightIndices
  * @param wrapFunc
@@ -228,8 +244,8 @@ export const wrapPlainTextSpan = (text, spanHighlightIndices, wrapFunc) => {
 };
 
 /**
- *   Classification variable is a map of categories where each one has a list of classified spans, we
- *   have to invert that so that we have a list of spans that contains all categories in that span
+ * Classification variable is a map of categories where each one has a list of classified spans, we
+ * have to invert that so that we have a list of spans that contains all categories in that span
  * @param filteredClassification
  * @returns {*[]}
  */
@@ -270,3 +286,173 @@ export const mergeSpanIndices = (filteredClassification) => {
 
   return mergedSpanIndices;
 };
+
+// persuasion techniques: split text for category and technique
+export function getPersuasionCategoryTechnique(category) {
+  return category.split("__");
+}
+
+/**
+ * Creates a GaugeChart required by machine generated text and subjectivity
+ * @param mgtOverallScoreLabel
+ * @param overallClassificationScore
+ * @param resolvedMode
+ * @param colours
+ * @param keyword
+ * @param gaugeDetectionText
+ * @param arcsLength
+ * @returns GaugeChart
+ */
+export function createGaugeChart(
+  mgtOverallScoreLabel,
+  overallClassificationScore,
+  resolvedMode,
+  colours,
+  keyword,
+  gaugeDetectionText,
+  arcsLength,
+) {
+  const percentScore = Math.round(Number(overallClassificationScore) * 100.0);
+  return (
+    <>
+      {/* Gauge title */}
+      <Typography fontSize="small" sx={{ textAlign: "start" }}>
+        {keyword(mgtOverallScoreLabel)}
+      </Typography>
+
+      {/* Gauge chart */}
+      <GaugeChart
+        id={"gauge-chart"}
+        animate={false}
+        nrOfLevels={4}
+        textColor={resolvedMode === "dark" ? "white" : "black"}
+        needleColor={resolvedMode === "dark" ? "#5A5A5A" : "#D3D3D3"}
+        needleBaseColor={resolvedMode === "dark" ? "#5A5A5A" : "#D3D3D3"}
+        arcsLength={arcsLength}
+        percent={overallClassificationScore ? percentScore / 100.0 : null}
+        style={{
+          width: "100%",
+        }}
+        colors={colours}
+      />
+
+      {/* Gauge labels */}
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Typography fontSize="small" align="left" sx={{ flex: 1 }}>
+          {keyword(gaugeDetectionText[0])}
+        </Typography>
+        <Typography fontSize="small" align="right">
+          {keyword(gaugeDetectionText[1])}
+        </Typography>
+      </Box>
+    </>
+  );
+}
+
+/**
+ * Defines the colours required by machine generated text
+ * @param configs
+ * @returns colours for light and dark mode
+ */
+export function getMgtColours(configs) {
+  const colours = [
+    rgbToString(configs.greenRgb),
+    rgbToString(configs.lightGreenRgb),
+    rgbToString(configs.orangeRgb),
+    rgbToString(configs.redRgb),
+  ];
+  const coloursDark = [
+    rgbToString(configs.greenRgbDark),
+    rgbToString(configs.lightGreenRgbDark),
+    rgbToString(configs.orangeRgbDark),
+    rgbToString(configs.redRgbDark),
+  ];
+  return [colours, coloursDark];
+}
+
+/**
+ * Defines the colours required by subjectivity
+ * @param configs
+ * @returns colours for light and dark mode
+ */
+export function getSubjectivityColours(configs) {
+  const colours = [
+    rgbToString(configs.greenRgb),
+    rgbToString(configs.orangeRgb),
+    rgbToString(configs.redRgb),
+  ];
+  const coloursDark = [
+    rgbToString(configs.greenRgbDark),
+    rgbToString(configs.orangeRgbDark),
+    rgbToString(configs.redRgbDark),
+  ];
+  return [colours, coloursDark];
+}
+
+/**
+ * Slider component utilised by news framing, news genre, persuasion techniques and subjectivity
+ * @param { credibilitySignal, importantSentenceThreshold, handleSliderChange }
+ * @returns slider component
+ */
+export function ThresholdSlider({
+  credibilitySignal,
+  importantSentenceThreshold,
+  handleSliderChange,
+  keyword,
+}) {
+  const marks = [
+    {
+      value: 0,
+      label: keyword("threshold_slider_low"),
+    },
+    {
+      value: 99,
+      label: keyword("threshold_slider_high"),
+    },
+  ];
+
+  /**
+   * Scales slider threshold to change from range 0 to 100 to 0 to 1
+   * @param value
+   * @returns number between 0 and 1
+   */
+  const scaleValue = (value) => {
+    return value / 100;
+  };
+
+  return (
+    <List>
+      <ListItem key={`${credibilitySignal}_thresholdSlider`}>
+        <Slider
+          aria-label="important sentence threshold slider"
+          marks={marks}
+          step={1}
+          min={0}
+          max={99}
+          scale={scaleValue}
+          value={importantSentenceThreshold}
+          onChange={handleSliderChange}
+          sx={{
+            "& .MuiSlider-markLabel": {
+              fontSize: "small",
+            },
+          }}
+        />
+      </ListItem>
+    </List>
+  );
+}
+
+/**
+ * Function to take user direct to a specific element on the page
+ * @param id
+ * @param padding
+ */
+export function scrollToElement(id, padding = 0) {
+  const element = document.getElementById(id);
+  if (element) {
+    const targetPosition =
+      element.getBoundingClientRect().top + window.scrollY - padding;
+    window.scrollTo({ top: targetPosition, behavior: "smooth" });
+  }
+}

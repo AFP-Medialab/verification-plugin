@@ -219,6 +219,7 @@ const CollectionSelector = ({
               selectedSocialMedia,
             )
           }
+          disabled={selectedSocialMedia.length === 0}
         >
           {keyword("snaRecording_startRecordingButton")}
         </Button>

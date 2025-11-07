@@ -188,6 +188,7 @@ const ExtractedUrlDomainAnalysisResults = ({
                                   {value.credibilityEvidence.length > 0
                                     ? renderEvidence(
                                         keyword,
+                                        value.credibilityLabels,
                                         value.credibilityEvidence,
                                         value.credibilitySource,
                                         value.credibilityScope,

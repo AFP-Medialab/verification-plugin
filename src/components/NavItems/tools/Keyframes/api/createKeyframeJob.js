@@ -17,12 +17,38 @@ export const KeyframeInputType = {
 export const validKeyframeTypes = new Set(Object.values(KeyframeInputType));
 
 /**
+ * Helper function to apply options by invoking a callback for each defined option value.
+ * @param {Object} options - The options object.
+ * @param {function} callback - The callback to invoke with key and value.
+ */
+const applyOptions = (options, callback) => {
+  Object.entries(options).forEach(([key, value]) => {
+    if (value !== undefined) {
+      callback(key, value);
+    }
+  });
+};
+
+/**
+ * API URLs for each keyframe input type.
+ */
+const API_URLS = {
+  [KeyframeInputType.FILE]: process.env.REACT_APP_KEYFRAME_API_FILE,
+  [KeyframeInputType.URL]: process.env.REACT_APP_KEYFRAME_API,
+};
+
+/**
  * Creates a keyframe extraction job by sending a request to the keyframe API.
  * Supports input via URL or file (file mode to be implemented).
  *
  * @param {function} authenticatedRequest - The authenticated request function to send API requests.
  * @param {string} type - The type of keyframe input must be one of KeyframeInputType.
  * @param {string | File} value - The URL or the File to process.
+ * @param {Object} [options={}] - Optional parameters for the keyframe job.
+ * @param {number} [options.download_max_height] - Maximum height for download.
+ * @param {number} [options.process_level] - Processing level.
+ * @param {boolean} [options.audio] - Whether to include audio.
+ * @param {number} [options.sensitivity] - Sensitivity setting.
  * @returns {Promise<string>} The session ID of the created keyframe job.
  * @throws {Error} Will throw an error if the input type is invalid or if the API response does not contain a valid session ID.
  */
@@ -30,31 +56,57 @@ export const createKeyframeJobApi = async (
   authenticatedRequest,
   type,
   value,
+  options = {},
 ) => {
   if (!validKeyframeTypes.has(type)) {
     throw new Error(`Invalid keyframe type ${type}`);
   }
 
+  const defaultConfig = {
+    maxBodyLength: Infinity,
+  };
+
   let config;
 
   if (type === KeyframeInputType.FILE) {
-    // TODO: Implement file upload mode for keyframe extraction.
-  } else {
-    // URL mode: Prepare the request payload with the video URL.
-    const d = JSON.stringify({
-      video: value,
+    const formData = new FormData();
+    formData.append("file", value);
+
+    applyOptions(options, (key, val) => {
+      formData.append(key, val);
     });
+
+    config = {
+      method: "post",
+      url: API_URLS[KeyframeInputType.FILE],
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: formData,
+      ...defaultConfig,
+    };
+  } else {
+    // URL mode: Prepare the request payload with the video URL and optional parameters.
+    const payload = {
+      video: value,
+    };
+
+    applyOptions(options, (key, val) => {
+      payload[key] = val;
+    });
+
+    const d = JSON.stringify(payload);
 
     // Configure the POST request to the keyframe API endpoint.
     config = {
       method: "post",
-      maxBodyLength: Infinity,
-      url: process.env.REACT_APP_KEYFRAME_API_2,
+      url: API_URLS[KeyframeInputType.URL],
       headers: {
         "Content-Type": "application/json",
       },
       data: d,
-      timeout: 10000, // Set a timeout of 10 seconds for the request.
+      ...defaultConfig,
+      timeout: 30000,
     };
   }
 
@@ -79,12 +131,12 @@ export const createKeyframeJobApi = async (
  * React hook to get a function for creating keyframe extraction jobs.
  * Uses the authenticated request hook internally.
  *
- * @returns {(type: string, value: string | File) => Promise<string>}
- * A function that creates a keyframe job given the type and value.
+ * @returns {(type: string, value: string | File, options?: Object) => Promise<string>}
+ * A function that creates a keyframe job given the type, value, and optional parameters.
  */
 export const useCreateKeyframeJob = () => {
   const authenticatedRequest = useAuthenticatedRequest();
 
-  return (type, value) =>
-    createKeyframeJobApi(authenticatedRequest, type, value);
+  return (type, value, options = {}) =>
+    createKeyframeJobApi(authenticatedRequest, type, value, options);
 };

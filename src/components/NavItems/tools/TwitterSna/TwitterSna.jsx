@@ -70,11 +70,9 @@ const TwitterSna = () => {
 
       MuiTab: {
         styleOverrides: {
-          wrapper: {
-            fontSize: 12,
-          },
           root: {
             minWidth: "25%!important",
+            fontSize: 12,
           },
         },
       },
