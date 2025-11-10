@@ -21,6 +21,7 @@ import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { DataGrid, getGridSingleSelectOperators } from "@mui/x-data-grid";
 import CopyButton from "components/Shared/CopyButton";
 
+import { prependHttps } from "../AssistantCheckResults/assistantUtils";
 import {
   TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,
@@ -32,28 +33,28 @@ const Status = (params) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   return (
     <Stack direction="column" spacing={0.5}>
-      {params.done && params.urlResults.caution !== null ? (
+      {params.done && params.domainResults?.caution ? (
         <Chip
           label={keyword(params.sourceTypes.caution)}
           color={params.trafficLightColors.caution}
           size="small"
         />
       ) : null}
-      {params.done && params.urlResults.mixed !== null ? (
+      {params.done && params.domainResults?.mixed ? (
         <Chip
           label={keyword(params.sourceTypes.mixed)}
           color={params.trafficLightColors.mixed}
           size="small"
         />
       ) : null}
-      {params.done && params.urlResults.positive != null ? (
+      {params.done && params.domainResults?.positive ? (
         <Chip
           label={keyword(params.sourceTypes.positive)}
           color={params.trafficLightColors.positive}
           size="small"
         />
       ) : null}
-      {params.done && params.urlResults.resolvedDomain === "" ? (
+      {params.done && !params.domainResults ? (
         <Chip
           label={keyword(params.sourceTypes.unlabelled)}
           color={params.trafficLightColors.unlabelled}
@@ -67,15 +68,42 @@ const Status = (params) => {
 
 // render URL in correct colour
 const Url = (params) => {
-  return (
+  return params.url.length > 1 ? (
+    <>
+      {/* list of URLs from domain results on hover */}
+      {params.url.map((url, index) => (
+        <Typography
+          key={index + "_typography"}
+          variant="p"
+          title={url}
+          color={params.urlColor}
+        >
+          <Link
+            key={index + "_link"}
+            style={{ cursor: "pointer" }}
+            target="_blank"
+            href={url}
+            color={params.urlColor}
+          >
+            {url}
+          </Link>{" "}
+        </Typography>
+      ))}
+    </>
+  ) : (
     <Tooltip title={params.url}>
+      {/* single unlabelled URL */}
       <Link
         style={{ cursor: "pointer" }}
         target="_blank"
-        href={params.url}
+        href={
+          params.credibilityScope
+            ? prependHttps(params.credibilityScope)
+            : params.url
+        }
         color={params.urlColor}
       >
-        {params.url}
+        {params.credibilityScope || params.url}
       </Link>
     </Tooltip>
   );
@@ -94,14 +122,15 @@ const Details = (params) => {
       }}
     >
       <CopyButton
-        strToCopy={params.url}
+        strToCopy={params.url.join(" ")}
         labelBeforeCopy={keyword("copy_to_clipboard")}
         labelAfterCopy={keyword("copied_to_clipboard")}
       />
-      {params.done && params.domainOrAccount !== null && (
+      {params.done && params.credibilityScope && (
         <ExtractedUrlDomainAnalysisResults
-          extractedSourceCredibilityResults={params.urlResults}
-          url={params.urlResults.resolvedLink}
+          domainResults={params.domainResults}
+          credibilityScope={params.credibilityScope}
+          credibilityScopeHttps={params.credibilityScopeHttps}
           urlColor={params.urlColor}
           sourceTypes={params.sourceTypes}
           trafficLightColors={params.trafficLightColors}
@@ -150,91 +179,168 @@ const AssistantLinkResult = () => {
   );
   const sourceTypes = useSelector((state) => state.assistant.sourceTypes);
 
-  const urls =
-    inputSCDone && extractedLinks ? extractedLinks : linkList ? linkList : null;
+  const urls = inputSCDone
+    ? extractedLinks || linkList || null
+    : linkList || null;
+  // TODO check this is still correct
 
-  // create a row for each url
+  // create a row for each domain followed by row for each url without source credibility
   let rows = [];
-  for (let i = 0; i < urls.length; i++) {
-    let url = urls[i];
 
-    // define extracted source credibility
-    let urlColor = "inherit"; //trafficLightColors.unlabelled;
-    let urlResults = {
-      caution: null,
-      mixed: null,
-      positive: null,
-    };
-    let sortByDetails = false;
-    let domainOrAccount = null;
+  // source credibility done with results
+  if (extractedSourceCred) {
+    // domain rows
     const unlabelled = "unlabelled";
-    let sourceTypeList = [
-      sourceTypes
-        ? sourceTypes.unlabelled
-          ? unlabelled
-          : unlabelled
-        : unlabelled,
-    ];
+    for (const domainResults of Object.values(extractedSourceCred.domain)) {
+      let urlColor = "inherit"; //trafficLightColors.unlabelled;
 
-    if (extractedSourceCred) {
-      urlResults = extractedSourceCred[url];
-      sortByDetails = true;
-      // these are in order in case of multiple types of source credibility results
-      if (urlResults.positive) {
+      // find correct source type label
+      let sourceTypeList = [
+        sourceTypes
+          ? sourceTypes.unlabelled
+            ? unlabelled
+            : unlabelled
+          : unlabelled,
+      ];
+      if (domainResults.positive) {
         urlColor = trafficLightColors.positive;
         sourceTypeList.push(keyword(sourceTypes.positive));
       }
-      if (urlResults.mixed) {
+      if (domainResults.mixed) {
         urlColor = trafficLightColors.mixed;
         sourceTypeList.push(keyword(sourceTypes.mixed));
       }
-      if (urlResults.caution) {
+      if (domainResults.caution) {
         urlColor = trafficLightColors.caution;
         sourceTypeList.push(keyword(sourceTypes.caution));
       }
+
       // if positive, mixed or caution then remove unlabelled
       sourceTypeList =
         sourceTypeList.length > 1
           ? sourceTypeList.splice(1, sourceTypeList.length)
           : sourceTypeList;
-      // detect domain or account address
-      domainOrAccount = urlResults.resolvedDomain
-        ? urlResults.resolvedDomain.startsWith("https://")
-          ? urlResults.resolvedDomain
-          : "https://" + urlResults.resolvedDomain
-        : null;
+
+      // add row for domain with list of URLs
+      rows.push({
+        id: rows.length + 1,
+        status: {
+          loading: inputSCLoading,
+          done: inputSCDone,
+          fail: inputSCFail,
+          domainResults: domainResults,
+          url: domainResults.url, // url list
+          trafficLightColors: trafficLightColors,
+          sourceTypes: sourceTypes,
+          sourceTypeList: sourceTypeList,
+        },
+        domain: {
+          credibilityScope: domainResults.credibilityScope,
+          url: domainResults.url,
+          urlColor: urlColor,
+        },
+        url: {
+          credibilityScope: domainResults.credibilityScope,
+          url: domainResults.url,
+          urlColor: urlColor,
+        },
+        details: {
+          loading: inputSCLoading,
+          done: inputSCDone,
+          fail: inputSCFail,
+          domainResults: domainResults,
+          url: domainResults.url,
+          urlColor: urlColor,
+          credibilityScope: domainResults.credibilityScope,
+          sourceTypes: sourceTypes,
+          trafficLightColors: trafficLightColors,
+          sortByDetails: true,
+        },
+      });
     }
 
-    // add row
-    rows.push({
-      id: i + 1,
-      status: {
-        loading: inputSCLoading,
-        done: inputSCDone,
-        fail: inputSCFail,
-        urlResults: urlResults,
-        url: url,
-        trafficLightColors: trafficLightColors,
-        sourceTypes: sourceTypes,
-        sourceTypeList: sourceTypeList,
-      },
-      url: {
-        url: url,
-        urlColor: urlColor,
-      },
-      details: {
-        loading: inputSCLoading,
-        done: inputSCDone,
-        fail: inputSCFail,
-        urlResults: urlResults,
-        url: url,
-        urlColor: urlColor,
-        domainOrAccount: domainOrAccount,
-        sourceTypes: sourceTypes,
-        trafficLightColors: trafficLightColors,
-        sortByDetails: sortByDetails,
-      },
-    });
+    // unlabelled rows
+    for (let i = 0; i < extractedSourceCred.url.unlabelled.length; i++) {
+      const url = extractedSourceCred.url.unlabelled[i].string;
+
+      rows.push({
+        id: rows.length + 1,
+        status: {
+          loading: inputSCLoading,
+          done: inputSCDone,
+          fail: inputSCFail,
+          domainResults: null,
+          url: url,
+          trafficLightColors: trafficLightColors,
+          sourceTypes: sourceTypes,
+          sourceTypeList: [unlabelled],
+        },
+        domain: {
+          credibilityScope: null,
+          url: url,
+          urlColor: "inherit",
+        },
+        url: {
+          credibilityScope: null,
+          url: [url],
+          urlColor: "inherit",
+        },
+        details: {
+          loading: inputSCLoading,
+          done: inputSCDone,
+          fail: inputSCFail,
+          domainResults: null,
+          url: [url],
+          urlColor: "inherit",
+          credibilityScope: null,
+          sourceTypes: sourceTypes,
+          trafficLightColors: trafficLightColors,
+          sortByDetails: true,
+        },
+      });
+    }
+  }
+
+  // source credibility failed or loading
+  if (inputSCLoading || inputSCFail) {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+
+      rows.push({
+        id: rows.length + 1,
+        status: {
+          loading: inputSCLoading,
+          done: inputSCDone,
+          fail: inputSCFail,
+          domainResults: null,
+          url: url,
+          trafficLightColors: trafficLightColors,
+          sourceTypes: sourceTypes,
+          sourceTypeList: [],
+        },
+        domain: {
+          credibilityScope: null,
+          url: url,
+          urlColor: "inherit",
+        },
+        url: {
+          url: [url],
+          urlColor: "inherit",
+        },
+        details: {
+          loading: inputSCLoading,
+          done: inputSCDone,
+          fail: inputSCFail,
+          domainResults: null,
+          url: [url],
+          urlColor: "inherit",
+          credibilityScope: null,
+          sourceTypes: sourceTypes,
+          trafficLightColors: trafficLightColors,
+          sortByDetails: false,
+        },
+      });
+    }
   }
 
   // columns
@@ -266,7 +372,7 @@ const AssistantLinkResult = () => {
             loading={params.value.loading}
             done={params.value.done}
             fail={params.value.fail}
-            urlResults={params.value.urlResults}
+            domainResults={params.value.domainResults}
             trafficLightColors={params.value.trafficLightColors}
             sourceTypes={params.value.sourceTypes}
           />
@@ -277,14 +383,35 @@ const AssistantLinkResult = () => {
       filterOperators: sourceTypeListFilterOperators,
     },
     {
+      field: "domain",
+      headerName: keyword("extracted_urls_domain_account"),
+      minWidth: 200,
+      flex: 1,
+      renderCell: (params) => {
+        return params.value.credibilityScope
+          ? params.value.credibilityScope.includes("/")
+            ? keyword("social_media_account")
+            : `${keyword("domain_scope")} ${params.value.url.length} ${params.value.url.length > 1 ? keyword("extracted_urls_urls") : keyword("assistant_urlbox")}`
+          : null;
+      },
+      sortComparator: (v1, v2) =>
+        (v1.credibilityScope ?? "").localeCompare(v2.credibilityScope ?? ""),
+    },
+    {
       field: "url",
       headerName: keyword("assistant_urlbox"),
       minWidth: 400,
       flex: 1,
       renderCell: (params) => {
-        return <Url url={params.value.url} urlColor={params.value.urlColor} />;
+        return (
+          <Url
+            credibilityScope={params.value.credibilityScope}
+            url={params.value.url}
+            urlColor={params.value.urlColor}
+          />
+        );
       },
-      sortComparator: (v1, v2) => v1.url.localeCompare(v2.url),
+      sortComparator: (v1, v2) => v1.url[0].localeCompare(v2.url[0]),
     },
     {
       field: "details",
@@ -303,10 +430,10 @@ const AssistantLinkResult = () => {
             loading={params.value.loading}
             done={params.value.done}
             fail={params.value.fail}
-            urlResults={params.value.urlResults}
+            domainResults={params.value.domainResults}
             url={params.value.url}
             urlColor={params.value.urlColor}
-            domainOrAccount={params.value.domainOrAccount}
+            credibilityScope={params.value.credibilityScope}
             sourceTypes={params.value.sourceTypes}
             trafficLightColors={params.value.trafficLightColors}
           />
@@ -365,6 +492,7 @@ const AssistantLinkResult = () => {
             columns={columns}
             rowHeight={60}
             disableRowSelectionOnClick
+            rowSpanning={true}
             initialState={{
               sorting: {
                 sortModel: [{ field: "status", sort: "desc" }],
