@@ -122,7 +122,7 @@ const Details = (params) => {
       }}
     >
       <CopyButton
-        strToCopy={params.url}
+        strToCopy={params.url.join(" ")}
         labelBeforeCopy={keyword("copy_to_clipboard")}
         labelAfterCopy={keyword("copied_to_clipboard")}
       />
