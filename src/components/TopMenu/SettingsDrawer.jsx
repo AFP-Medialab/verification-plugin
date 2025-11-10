@@ -35,6 +35,7 @@ const isStaging = environment !== "production";
 
 const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
   const keyword = i18nLoadNamespace("components/NavBar");
+  const keywordNewSna = i18nLoadNamespace("components/NavItems/tools/NewSNA");
 
   const dispatch = useDispatch();
 
@@ -231,6 +232,7 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
                 setNewCollectionName={setNewCollectionName}
                 selectedSocialMedia={selectedSocialMedia}
                 setSelectedSocialMedia={setSelectedSocialMedia}
+                keyword={keywordNewSna}
               />
             </Stack>
           ) : null}
