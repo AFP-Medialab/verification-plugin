@@ -14,7 +14,7 @@ import TextField from "@mui/material/TextField";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
 import { useInput } from "@/Hooks/useInput";
-import { searchTwitter } from "@/constants/tools";
+import { canUserSeeTool, newSna, searchTwitter } from "@/constants/tools";
 import DateAndTimePicker from "@Shared/DateTimePicker/DateAndTimePicker";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import HeaderTool from "@Shared/HeaderTool/HeaderTool";
@@ -22,7 +22,6 @@ import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import useMyStyles, {
   myCardStyles,
 } from "@Shared/MaterialUiStyles/useMyStyles";
-import { ROLES } from "constants/roles";
 import dayjs from "dayjs";
 
 import { RecordingWindow, getRecordingInfo } from "../SNA/components/Recording";
@@ -37,6 +36,7 @@ const TwitterAdvancedSearch = () => {
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
   );
+  const keywordNewSna = i18nLoadNamespace("components/NavItems/tools/NewSNA");
 
   const term = useInput("");
   const account = useInput("");
@@ -146,8 +146,15 @@ const TwitterAdvancedSearch = () => {
   const [newCollectionName, setNewCollectionName] = useState("");
   const [selectedSocialMedia, setSelectedSocialMedia] = useState([]);
   const userRoles = useSelector((state) => state.userSession.user.roles);
+  const isUserAuthenticated = useSelector(
+    (state) => state.userSession.userAuthenticated,
+  );
 
   useEffect(() => {
+    if (!canUserSeeTool(newSna, userRoles, isUserAuthenticated)) {
+      return;
+    }
+
     getRecordingInfo(setCollections, setRecording, setSelectedCollection);
   }, []);
 
@@ -175,7 +182,7 @@ const TwitterAdvancedSearch = () => {
         />
 
         <div className={classes.root2}>
-          {userRoles.includes(ROLES.EVALUATION) ? (
+          {canUserSeeTool(newSna, userRoles, isUserAuthenticated) && (
             <RecordingWindow
               recording={recording}
               setRecording={setRecording}
@@ -189,8 +196,9 @@ const TwitterAdvancedSearch = () => {
               setNewCollectionName={setNewCollectionName}
               selectedSocialMedia={selectedSocialMedia}
               setSelectedSocialMedia={setSelectedSocialMedia}
+              keyword={keywordNewSna}
             />
-          ) : null}
+          )}
           {largeInputList.map((value, key) => {
             return (
               <TextField

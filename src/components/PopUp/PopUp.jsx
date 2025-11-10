@@ -28,6 +28,8 @@ const PopUp = () => {
   const classes = useMyStyles();
   const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/PopUp");
+  const keywordNewSna = i18nLoadNamespace("components/NavItems/tools/NewSNA");
+
   const currentLang = useSelector((state) => state.language);
   const defaultLanguage = useSelector((state) => state.defaultLanguage);
   const LOGO_EU = process.env.REACT_APP_LOGO_EU;
@@ -236,6 +238,7 @@ const PopUp = () => {
               setNewCollectionName={setNewCollectionName}
               selectedSocialMedia={selectedSocialMedia}
               setSelectedSocialMedia={setSelectedSocialMedia}
+              keyword={keywordNewSna}
             />
           </Grid>
         ) : null}
