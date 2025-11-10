@@ -361,7 +361,7 @@ export const thumbnails = new Tool(
   <Thumbnails />,
   <Footer type={FOOTER_TYPES.AFP} />,
   {
-    linksAccepted: [KNOWN_LINKS.YOUTUBE],
+    linksAccepted: [KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.OWN],
     exceptions: [],
     useInputUrl: true,
     text: "thumbnails_text",
