@@ -314,6 +314,7 @@ export const videoAnalysis = new Tool(
       KNOWN_LINKS.YOUTUBE,
       KNOWN_LINKS.FACEBOOK,
       KNOWN_LINKS.SNAPCHAT,
+      KNOWN_LINKS.OWN,
     ],
     exceptions: [],
     useInputUrl: true,
