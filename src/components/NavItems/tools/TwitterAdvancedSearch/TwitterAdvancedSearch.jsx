@@ -22,6 +22,7 @@ import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import useMyStyles, {
   myCardStyles,
 } from "@Shared/MaterialUiStyles/useMyStyles";
+import { ROLES } from "constants/roles";
 import dayjs from "dayjs";
 
 import { RecordingWindow, getRecordingInfo } from "../SNA/components/Recording";
@@ -79,7 +80,7 @@ const TwitterAdvancedSearch = () => {
 
   const [fromDate, setSelectedFromDate] = useState(null);
   const [fromDateError, setSelectedFromDateError] = useState(false);
-  ``;
+
   const [toDate, setSelectedToDate] = useState(null);
   const [toDateError, setSelectedToDateError] = useState(false);
 
@@ -144,6 +145,7 @@ const TwitterAdvancedSearch = () => {
     useState("Default Collection");
   const [newCollectionName, setNewCollectionName] = useState("");
   const [selectedSocialMedia, setSelectedSocialMedia] = useState([]);
+  const userRoles = useSelector((state) => state.userSession.user.roles);
 
   useEffect(() => {
     getRecordingInfo(setCollections, setRecording, setSelectedCollection);
@@ -173,20 +175,22 @@ const TwitterAdvancedSearch = () => {
         />
 
         <div className={classes.root2}>
-          <RecordingWindow
-            recording={recording}
-            setRecording={setRecording}
-            expanded={expanded}
-            setExpanded={setExpanded}
-            selectedCollection={selectedCollection}
-            setSelectedCollection={setSelectedCollection}
-            collections={collections}
-            setCollections={setCollections}
-            newCollectionName={newCollectionName}
-            setNewCollectionName={setNewCollectionName}
-            selectedSocialMedia={selectedSocialMedia}
-            setSelectedSocialMedia={setSelectedSocialMedia}
-          />
+          {userRoles.includes(ROLES.EVALUATION) ? (
+            <RecordingWindow
+              recording={recording}
+              setRecording={setRecording}
+              expanded={expanded}
+              setExpanded={setExpanded}
+              selectedCollection={selectedCollection}
+              setSelectedCollection={setSelectedCollection}
+              collections={collections}
+              setCollections={setCollections}
+              newCollectionName={newCollectionName}
+              setNewCollectionName={setNewCollectionName}
+              selectedSocialMedia={selectedSocialMedia}
+              setSelectedSocialMedia={setSelectedSocialMedia}
+            />
+          ) : null}
           {largeInputList.map((value, key) => {
             return (
               <TextField

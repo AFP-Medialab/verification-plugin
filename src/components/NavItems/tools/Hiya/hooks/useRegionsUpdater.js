@@ -42,22 +42,32 @@ export const useRegionsUpdater = (
       console.warn("Could not clear existing regions:", error);
     }
 
-    // Add regions for each chunk with synthesis scores
+    // Add regions for each chunk
     chunks.forEach((chunk) => {
-      if (chunk.scores?.synthesis !== undefined) {
-        const detectionPercentage = (1 - chunk.scores.synthesis) * 100;
+      let regionColor;
 
-        try {
-          regionsPlugin.addRegion({
-            start: dayjs.duration(chunk.startTime).asSeconds(),
-            end: dayjs.duration(chunk.endTime).asSeconds(),
-            color: getPercentageColorCode(detectionPercentage),
-            resize: false,
-            drag: false,
-          });
-        } catch (error) {
-          console.error("Failed to add region for chunk:", chunk, error);
-        }
+      if (
+        chunk.scores?.synthesis !== null &&
+        chunk.scores?.synthesis !== undefined
+      ) {
+        // Use existing color logic for valid synthesis scores
+        const detectionPercentage = (1 - chunk.scores.synthesis) * 100;
+        regionColor = getPercentageColorCode(detectionPercentage);
+      } else {
+        // Use gray color with same opacity for null/missing values
+        regionColor = "rgb(128, 128, 128, 0.5)";
+      }
+
+      try {
+        regionsPlugin.addRegion({
+          start: dayjs.duration(chunk.startTime).asSeconds(),
+          end: dayjs.duration(chunk.endTime).asSeconds(),
+          color: regionColor,
+          resize: false,
+          drag: false,
+        });
+      } catch (error) {
+        console.error("Failed to add region for chunk:", chunk, error);
       }
     });
 

@@ -26,8 +26,8 @@ const initialState = {
   lastMessageTime: null,
 };
 
-const chatBotSlice = createSlice({
-  name: "chatBot",
+const chatbotSlice = createSlice({
+  name: "chatbot",
   initialState,
   reducers: {
     setModels: (state, action) => {
@@ -144,6 +144,6 @@ export const {
   clearSession,
   restoreSession,
   resetAll,
-} = chatBotSlice.actions;
+} = chatbotSlice.actions;
 
-export default chatBotSlice.reducer;
+export default chatbotSlice.reducer;

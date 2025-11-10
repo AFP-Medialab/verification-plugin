@@ -1,18 +1,54 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import LinearProgress from "@mui/material/LinearProgress";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 
 import HiyaHeader from "@/components/NavItems/tools/Hiya/components/HiyaHeader";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "@Shared/StringFileUploadField";
 
 import HiyaResults from "./components/HiyaResults";
+import { ERROR_MESSAGE_KEYS } from "./constants/detectionConstants";
 import { useHiyaAudioAnalysis } from "./hooks/useHiyaAudioAnalysis";
+
+// Utility functions
+/**
+ * Maps error data to the appropriate main message translation key
+ * @param {Object} errorData - Error data from Redux state
+ * @returns {string} Translation key for the main error message
+ */
+const getMainMessageKey = (errorData) => {
+  if (errorData.errorType === "all") {
+    return ERROR_MESSAGE_KEYS.ALL_ERRORS;
+  } else if (errorData.errorType === "partial") {
+    return ERROR_MESSAGE_KEYS.PARTIAL_ERRORS;
+  }
+  return "hiya_generic_error"; // fallback
+};
+
+/**
+ * Maps error labels to suggestion translation keys
+ * @param {string[]} errorLabels - Array of error labels from API
+ * @returns {string[]} Array of translation keys for suggestions
+ */
+const getSuggestionKeys = (errorLabels) => {
+  if (!errorLabels || errorLabels.length === 0) {
+    return [];
+  }
+
+  return errorLabels
+    .map((label) => ERROR_MESSAGE_KEYS.SUGGESTIONS[label])
+    .filter(Boolean); // Remove any undefined values
+};
 
 /**
  * Hiya Component - Audio authenticity verification tool
@@ -21,6 +57,8 @@ import { useHiyaAudioAnalysis } from "./hooks/useHiyaAudioAnalysis";
  */
 const Hiya = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Hiya");
+  const { url } = useParams();
+  const hasAutoSubmittedRef = useRef(false);
 
   // Redux selectors for UI state
   const result = useSelector((state) => state.syntheticAudioDetection.result);
@@ -31,6 +69,18 @@ const Hiya = () => {
     (state) => state.syntheticAudioDetection.resultUrl,
   );
   const chunks = useSelector((state) => state.syntheticAudioDetection.chunks);
+  const hasError = useSelector(
+    (state) => state.syntheticAudioDetection.hasError,
+  );
+  const errorData = useSelector(
+    (state) => state.syntheticAudioDetection.errorData,
+  );
+  const hasPartialWarning = useSelector(
+    (state) => state.syntheticAudioDetection.hasPartialWarning,
+  );
+  const warningData = useSelector(
+    (state) => state.syntheticAudioDetection.warningData,
+  );
 
   // Use the custom hook for all audio analysis logic
   const {
@@ -43,6 +93,19 @@ const Hiya = () => {
     audioFile,
     setAudioFile,
   } = useHiyaAudioAnalysis();
+
+  // Auto-start analysis if URL parameter is provided
+  useEffect(() => {
+    if (url && !hasAutoSubmittedRef.current) {
+      hasAutoSubmittedRef.current = true;
+      const decodedUrl = decodeURIComponent(url);
+      handleInputChange(decodedUrl);
+      // Small delay to ensure input is set before submitting
+      setTimeout(() => {
+        handleSubmit(new Event("submit"));
+      }, 100);
+    }
+  }, [url]); // Only depend on url parameter
 
   return (
     <Box>
@@ -88,7 +151,49 @@ const Hiya = () => {
         {getAnalysisResultsForAudio.isError && (
           <Alert severity="error">{keyword("hiya_generic_error")}</Alert>
         )}
-        {result && (
+        {hasError && errorData && (
+          <Alert severity="error">
+            <Typography variant="body2" gutterBottom>
+              {keyword(getMainMessageKey(errorData))}
+            </Typography>
+            {getSuggestionKeys(errorData.errorLabels).length > 0 && (
+              <List dense sx={{ mt: 1, pl: 2 }}>
+                {getSuggestionKeys(errorData.errorLabels).map(
+                  (suggestionKey, index) => (
+                    <ListItem key={index} sx={{ py: 0, px: 0 }}>
+                      <ListItemText
+                        primary={keyword(suggestionKey)}
+                        slotProps={{ primary: { variant: "body2" } }}
+                      />
+                    </ListItem>
+                  ),
+                )}
+              </List>
+            )}
+          </Alert>
+        )}
+        {hasPartialWarning && warningData && (
+          <Alert severity="warning">
+            <Typography variant="body2" gutterBottom>
+              {keyword(getMainMessageKey(warningData))}
+            </Typography>
+            {getSuggestionKeys(warningData.errorLabels).length > 0 && (
+              <List dense sx={{ mt: 1, pl: 2 }}>
+                {getSuggestionKeys(warningData.errorLabels).map(
+                  (suggestionKey, index) => (
+                    <ListItem key={index} sx={{ py: 0, px: 0 }}>
+                      <ListItemText
+                        primary={keyword(suggestionKey)}
+                        slotProps={{ primary: { variant: "body2" } }}
+                      />
+                    </ListItem>
+                  ),
+                )}
+              </List>
+            )}
+          </Alert>
+        )}
+        {result && !hasError && (
           <HiyaResults
             result={result}
             isInconclusive={isInconclusive}

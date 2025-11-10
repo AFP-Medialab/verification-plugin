@@ -5,7 +5,7 @@ import { Trans } from "react-i18next";
 
 const UL_STYLE = { paddingLeft: "20px", margin: "8px 0" };
 const LI_STYLE = { display: "list-item", listStyleType: "disc" };
-const A_STYLE = { color: "blue", textDecoration: "underline" };
+export const A_STYLE = { color: "blue", textDecoration: "underline" };
 
 // Links
 

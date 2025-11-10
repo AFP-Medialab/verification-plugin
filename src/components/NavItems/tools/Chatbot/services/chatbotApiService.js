@@ -1,7 +1,7 @@
 /**
- * ChatBot API Service
+ * Chatbot API Service
  *
- * Handles all API calls and responses for the ChatBot functionality.
+ * Handles all API calls and responses for the Chatbot functionality.
  * Separated from the main hook for better maintainability and testing.
  */
 
@@ -57,7 +57,7 @@ export const fetchModels = async (apiBaseUrl) => {
 };
 
 // Factory function to create API functions with dependencies
-export const createChatBotApi = (apiBaseUrl, selectedModel) => {
+export const createChatbotApi = (apiBaseUrl, selectedModel) => {
   const handleStreamingCompletionsResponse = async (
     response,
     options = {},
@@ -212,12 +212,12 @@ export const createChatBotApi = (apiBaseUrl, selectedModel) => {
               if (choice?.finish_reason === "length") {
                 if (data.usage) messageData.usage = data.usage;
                 // Continue with completions endpoint
-                const continuedResponse = await callCompletionsEndpoint(
+
+                return await callCompletionsEndpoint(
                   fullContent,
                   originalMessages,
                   options,
                 );
-                return continuedResponse;
               }
 
               if (choice?.delta?.content) {
@@ -272,7 +272,7 @@ export const createChatBotApi = (apiBaseUrl, selectedModel) => {
 
     const result = requestBody.stream
       ? await handleStreamingResponse(response, options, messages)
-      : (async () => {
+      : await (async () => {
           const data = await response.json();
           if (!data.choices?.length) throw new Error("No response generated");
           return {

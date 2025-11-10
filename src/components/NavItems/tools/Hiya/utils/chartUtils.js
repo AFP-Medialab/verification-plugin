@@ -101,6 +101,23 @@ export const getPercentageColorCode = (percentage) => {
  * // Returns: { labels: [...], datasets: [...] }
  * ```
  */
+
+/**
+ * Calculates the time range for audio timeline
+ * @param {number} [audioDurationMs] - Audio duration in milliseconds from wavesurfer
+ * @returns {Object} Object with minTime and maxTime values as milliseconds for Chart.js
+ */
+export const getAudioTimeRange = (audioDurationMs) => {
+  // If we don't have the actual audio duration, let Chart.js auto-scale
+  if (!audioDurationMs) {
+    return { minTime: undefined, maxTime: undefined };
+  }
+
+  // Always start from 0 (all audio starts at 0)
+  // Use actual audio duration from wavesurfer (not chunks, which can be incomplete)
+  return { minTime: 0, maxTime: audioDurationMs };
+};
+
 export const getChartDataFromChunks = (chunks) => {
   const labels = [];
   const datasetData = [];
@@ -109,10 +126,20 @@ export const getChartDataFromChunks = (chunks) => {
     labels.push(dayjs.duration(chunk.startTime));
     labels.push(dayjs.duration(chunk.endTime));
 
-    // Convert synthesis score to percentage (1 - score means higher percentage = more likely synthetic)
-    const detectionPercentage = (1 - chunk.scores.synthesis) * 100;
-    datasetData.push(detectionPercentage);
-    datasetData.push(detectionPercentage);
+    // Check if we have a valid synthesis score
+    if (
+      chunk.scores?.synthesis === null ||
+      chunk.scores?.synthesis === undefined
+    ) {
+      // Add null values for missing data - this creates gaps in the chart
+      datasetData.push(null);
+      datasetData.push(null);
+    } else {
+      // Convert synthesis score to percentage (1 - score means higher percentage = more likely synthetic)
+      const detectionPercentage = (1 - chunk.scores.synthesis) * 100;
+      datasetData.push(detectionPercentage);
+      datasetData.push(detectionPercentage);
+    }
   }
 
   return {
@@ -123,6 +150,16 @@ export const getChartDataFromChunks = (chunks) => {
         fill: false,
         stepped: true,
         tension: 0,
+        spanGaps: false, // Don't connect across null values - ensures gaps are visible
+        segment: {
+          // Make segments transparent when connecting to/from null values
+          borderColor: (ctx) => {
+            const p0 = ctx.p0.parsed.y;
+            const p1 = ctx.p1.parsed.y;
+            // If either point is null, make segment transparent
+            return p0 === null || p1 === null ? "transparent" : undefined;
+          },
+        },
         // Note: borderColor should be set dynamically using getChartGradient
       },
     ],
@@ -136,6 +173,8 @@ export const getChartDataFromChunks = (chunks) => {
  * @param {boolean} isCurrentLanguageLeftToRight - Language direction flag
  * @param {Function} keyword - i18n function for translations
  * @param {Function} printDurationInMinutesWithoutModulo - Time formatting function
+ * @param {number} [minTime] - Minimum time value for x-axis (optional)
+ * @param {number} [maxTime] - Maximum time value for x-axis (optional)
  * @returns {Object} Complete chart configuration object
  */
 export const createChartConfig = (
@@ -143,6 +182,8 @@ export const createChartConfig = (
   isCurrentLanguageLeftToRight,
   keyword,
   printDurationInMinutesWithoutModulo,
+  minTime,
+  maxTime,
 ) => {
   const gridColor =
     resolvedMode === "dark" ? "rgba(200, 200, 200, 0.1)" : "rgba(0, 0, 0, 0.1)";
@@ -181,6 +222,9 @@ export const createChartConfig = (
         time: {
           unit: "second",
         },
+        // Explicitly set min/max to ensure the full timeline is always shown
+        ...(minTime !== undefined && { min: minTime }),
+        ...(maxTime !== undefined && { max: maxTime }),
         grid: {
           color: gridColor,
         },

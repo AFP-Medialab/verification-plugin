@@ -1,12 +1,14 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
+import { PROMPTS_CONFIG_I18N } from "../config/prompts";
 import {
-  createChatBotApi,
+  createChatbotApi,
   fetchModels,
   formatMessagesForAPI,
-} from "./chatBotApiService";
-import { PROMPTS_CONFIG } from "./promptConfig";
+} from "../services/chatbotApiService";
 
 /**
  * Custom hook for interacting with OpenAI-like chat completion API
@@ -18,15 +20,58 @@ import { PROMPTS_CONFIG } from "./promptConfig";
  * @param {string} apiBaseUrl - Base URL for the API (defaults to env var or localhost:8000)
  * @returns {Object} Hook state and methods
  */
-const useChatBot = (
+const useChatbot = (
   apiBaseUrl = process.env.REACT_APP_CHATBOT_API_URL || "http://localhost:8000",
 ) => {
   const [selectedModel, setSelectedModel] = useState("");
   const [error, setError] = useState(null);
   const [selectedPrompt, setSelectedPrompt] = useState("");
+  const [errorDismissed, setErrorDismissed] = useState(false);
 
-  // Pre-defined prompts from configuration
-  const [prompts] = useState(PROMPTS_CONFIG);
+  // Load translations for Chatbot namespace
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Chatbot");
+
+  // Pre-defined prompts from i18n configuration
+  const [prompts] = useState(PROMPTS_CONFIG_I18N);
+
+  // Create translated prompts for UI display
+  const translatedPrompts = useMemo(() => {
+    return prompts.map((prompt) => ({
+      ...prompt,
+      name:
+        prompt.id === "none"
+          ? prompt.name
+          : keyword(prompt.name) || prompt.name, // Keep "none" as is for special handling
+      description: prompt.description
+        ? keyword(prompt.description) || prompt.description
+        : undefined,
+    }));
+  }, [prompts, keyword]);
+
+  // Helper function to translate prompt content
+  const translatePromptContent = useCallback(
+    (prompt) => {
+      if (!prompt?.messages) return prompt;
+
+      const translatedMessages = prompt.messages.map((message) => ({
+        ...message,
+        content:
+          message.content === "CONTENT_TO_PROCESS"
+            ? "CONTENT_TO_PROCESS" // Keep placeholder as is
+            : keyword(message.content) || message.content, // Translate content or fallback to original
+      }));
+
+      return {
+        ...prompt,
+        name: keyword(prompt.name) || prompt.name, // Translate name
+        description: prompt.description
+          ? keyword(prompt.description) || prompt.description
+          : undefined, // Translate description if exists
+        messages: translatedMessages,
+      };
+    },
+    [keyword],
+  );
 
   // Fetch available models using React Query
   const {
@@ -52,7 +97,7 @@ const useChatBot = (
 
   // Create API instance with current dependencies
   const api = useMemo(
-    () => createChatBotApi(apiBaseUrl, selectedModel),
+    () => createChatbotApi(apiBaseUrl, selectedModel),
     [apiBaseUrl, selectedModel],
   );
 
@@ -109,10 +154,12 @@ const useChatBot = (
       const prompt = prompts.find((req) => req.id === promptId);
       if (!prompt?.messages) throw new Error("Invalid prompt selected");
 
-      let messages = [...prompt.messages];
+      // Translate the prompt content before processing
+      const translatedPrompt = translatePromptContent(prompt);
+      let messages = [...translatedPrompt.messages];
 
       // Build messages in chronological order
-      let fullMessages = [];
+      let fullMessages;
 
       if (conversationHistory.length > 0) {
         // For pre-requests with conversation history, we need to maintain proper order:
@@ -120,7 +167,7 @@ const useChatBot = (
         // 2. Conversation history in chronological order
         // 3. Final user message with new content
 
-        if (content && prompt.requiresContent) {
+        if (content && translatedPrompt.requiresContent) {
           // Find the last message in prompt template (usually contains CONTENT_TO_PROCESS)
           const lastPromptIndex = messages.length - 1;
           const lastPromptMessage = messages[lastPromptIndex];
@@ -151,7 +198,7 @@ const useChatBot = (
         }
       } else {
         // No conversation history, just process the prompt messages
-        if (content && prompt.requiresContent) {
+        if (content && translatedPrompt.requiresContent) {
           fullMessages = messages.map((msg) => ({
             ...msg,
             content: msg.content.replace("CONTENT_TO_PROCESS", content),
@@ -164,11 +211,40 @@ const useChatBot = (
       return chatMutation.mutateAsync({
         messages: fullMessages,
         options,
-        promptName: prompt.name,
+        promptName: translatedPrompt.name,
       });
     },
-    [chatMutation, prompts],
+    [chatMutation, prompts, translatePromptContent],
   );
+
+  // Create custom error message for model fetching failures
+  const getErrorMessage = () => {
+    // If error was dismissed, don't show it
+    if (errorDismissed) {
+      return null;
+    }
+
+    if (modelsError) {
+      return (
+        keyword("models_error") ||
+        "Failed to fetch available models. Please check your connection and try again."
+      );
+    }
+    if (error) {
+      return error;
+    }
+    if (chatMutation.error?.message) {
+      return chatMutation.error.message;
+    }
+    return null;
+  };
+
+  // Reset error dismissed state when there are new errors
+  useEffect(() => {
+    if (modelsError || error || chatMutation.error) {
+      setErrorDismissed(false);
+    }
+  }, [modelsError, error, chatMutation.error]);
 
   return {
     // State
@@ -176,8 +252,8 @@ const useChatBot = (
     selectedModel,
     isLoading: chatMutation.isPending,
     isModelsLoading,
-    error: error || modelsError?.message || chatMutation.error?.message,
-    prompts,
+    error: getErrorMessage(),
+    prompts: translatedPrompts,
     selectedPrompt,
 
     // Actions
@@ -192,6 +268,7 @@ const useChatBot = (
     clearError: () => {
       setError(null);
       chatMutation.reset();
+      setErrorDismissed(true);
     },
     isReady: models.length > 0 && selectedModel && !isModelsLoading,
 
@@ -200,4 +277,4 @@ const useChatBot = (
   };
 };
 
-export default useChatBot;
+export default useChatbot;

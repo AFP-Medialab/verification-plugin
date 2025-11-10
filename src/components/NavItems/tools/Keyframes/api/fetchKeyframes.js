@@ -10,7 +10,7 @@ import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequ
 export async function fetchKeyframesApi(authenticatedRequest, jobId) {
   const config = {
     method: "get",
-    url: `${process.env.REACT_APP_KEYFRAME_API_2}/result/${jobId}`,
+    url: `${process.env.REACT_APP_KEYFRAME_API}/json/seg/${jobId}`,
   };
 
   const response = await authenticatedRequest(config);
