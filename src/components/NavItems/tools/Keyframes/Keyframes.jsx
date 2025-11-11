@@ -87,6 +87,7 @@ const Keyframes = () => {
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
   );
+  const { url } = useParams();
 
   const {
     resultUrl,
@@ -209,20 +210,13 @@ const Keyframes = () => {
     setInput(uri);
   }, [urlParam]);
 
-  // useEffect(() => {
-  //   if (!processUrl) return;
-  //   setInput(processUrl);
-  //   submitUrl(processUrl);
-  // }, [processUrl]);
-
   useEffect(() => {
-    console.log("keyframes useEffect");
-    console.log(location.state?.autoRun, location.state?.processUrl);
-    if (location.state?.autoRun && location.state?.processUrl) {
-      setInput(location.state.processUrl);
-      submitUrl(location.state.processUrl);
+    if (processUrl && url?.includes("autoRun")) {
+      setInput(processUrl);
+      submitUrl(processUrl);
+      // TODO remove from textfield ?
     }
-  }, [location.state]);
+  }, [processUrl, url]);
 
   useEffect(() => {
     if (featureData && data && hasSubmitted) {

@@ -220,12 +220,12 @@ const Metadata = () => {
   const processUrl = useSelector((state) => state.assistant.processUrl);
   const processUrlType = useSelector((state) => state.assistant.processUrlType);
   useEffect(() => {
-    if (processUrl) {
+    if (processUrl && url?.includes("autoRun")) {
       setInput(processUrl);
       dispatch(setMetadataMediaType(processUrlType));
       setUrlDetected(true);
     }
-  }, [processUrl]);
+  }, [processUrl, url]);
 
   const handleCloseResult = () => {
     setInput("");
