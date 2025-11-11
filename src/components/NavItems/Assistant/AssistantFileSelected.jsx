@@ -306,11 +306,7 @@ const AssistantFileSelected = () => {
                     alignItems: "center",
                   }}
                 >
-                  <Grid
-                    sx={{
-                      mt: 2,
-                    }}
-                  >
+                  <Grid>
                     <ButtonGroup
                       variant="outlined"
                       // disabled={isParentLoading || urlInput !== ""}
