@@ -219,7 +219,7 @@ export const selectCorrectActions = (
       (tool) =>
         canUserSeeTool(tool, role, isUserAuthenticated) &&
         tool.category === contentType &&
-        tool != imageGif &&
+        tool != imageGif && // ignored here as tool requires two resources not just one image
         (!tool.assistantProps.linksAccepted ||
           tool.assistantProps.linksAccepted.includes(inputUrlType)) &&
         (!tool.assistantProps.processLinksAccepted ||
