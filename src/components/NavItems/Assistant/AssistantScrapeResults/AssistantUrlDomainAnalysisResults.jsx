@@ -26,6 +26,7 @@ import {
   TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
+  TransUsfdAuthor,
 } from "../TransComponents";
 
 const AssistantSCResults = () => {
@@ -121,6 +122,8 @@ const AssistantSCResults = () => {
               title={
                 <>
                   <TransSourceCredibilityTooltip keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
+                  <TransUsfdAuthor keyword={keyword} />
                   <TransHtmlDoubleLineBreak keyword={keyword} />
                   <TransUrlDomainAnalysisLink keyword={keyword} />
                 </>

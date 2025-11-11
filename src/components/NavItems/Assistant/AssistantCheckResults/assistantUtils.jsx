@@ -25,6 +25,7 @@ import {
   TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
+  TransUsfdAuthor,
 } from "../TransComponents";
 
 // functions for AssistantUrlDomainAnalysis and ExtractedUrlDomainAnalysis
@@ -211,6 +212,8 @@ export const renderDomainTitle = (
                 <>
                   <TransSourceCredibilityTooltip keyword={keyword} />
                   <TransHtmlDoubleLineBreak keyword={keyword} />
+                  <TransUsfdAuthor keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
                   <TransUrlDomainAnalysisLink keyword={keyword} />
                 </>
               }
@@ -347,6 +350,8 @@ const renderDialog = (keyword, value, trafficLightColor, sourceType) => {
                   title={
                     <>
                       <TransSourceCredibilityTooltip keyword={keyword} />
+                      <TransHtmlDoubleLineBreak keyword={keyword} />
+                      <TransUsfdAuthor keyword={keyword} />
                       <TransHtmlDoubleLineBreak keyword={keyword} />
                       <TransUrlDomainAnalysisLink keyword={keyword} />
                     </>
