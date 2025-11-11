@@ -22,13 +22,6 @@ import {
   scrollToElement,
   treeMapToElements,
 } from "@/components/NavItems/Assistant/AssistantScrapeResults/assistantUtils";
-import {
-  TransCredibilitySignalsLink,
-  TransHtmlDoubleLineBreak,
-  TransMachineGeneratedTextTooltip,
-  TransPersuasionTechniquesTooltip,
-  TransSupportedToolsLink,
-} from "@/components/NavItems/Assistant/TransComponents";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import {
@@ -37,9 +30,17 @@ import {
 } from "@/redux/actions/tools/assistantActions";
 
 import {
+  TransCredibilitySignalsLink,
+  TransDeutscheWelleAuthor,
   TransExtractedTextTooltip,
+  TransHtmlDoubleLineBreak,
+  TransKinitAuthor,
+  TransMachineGeneratedTextTooltip,
   TransNewsFramingTooltip,
   TransNewsGenreTooltip,
+  TransPersuasionTechniquesTooltip,
+  TransSupportedToolsLink,
+  TransUsfdAuthor,
 } from "../TransComponents";
 
 const AssistantTextResult = () => {
@@ -180,6 +181,8 @@ const AssistantTextResult = () => {
   const newsFramingTooltip = (
     <>
       <TransNewsFramingTooltip keyword={keyword} />
+      <TransUsfdAuthor keyword={keyword} />
+      <TransHtmlDoubleLineBreak keyword={keyword} />
       <TransCredibilitySignalsLink keyword={keyword} />
     </>
   );
@@ -187,6 +190,8 @@ const AssistantTextResult = () => {
   const newsGenreTooltip = (
     <>
       <TransNewsGenreTooltip keyword={keyword} />
+      <TransUsfdAuthor keyword={keyword} />
+      <TransHtmlDoubleLineBreak keyword={keyword} />
       <TransCredibilitySignalsLink keyword={keyword} />
     </>
   );
@@ -194,6 +199,8 @@ const AssistantTextResult = () => {
   const persuasionTooltip = (
     <>
       <TransPersuasionTechniquesTooltip keyword={keyword} />
+      <TransUsfdAuthor keyword={keyword} />
+      <TransHtmlDoubleLineBreak keyword={keyword} />
       <TransCredibilitySignalsLink keyword={keyword} />
     </>
   );
@@ -202,6 +209,8 @@ const AssistantTextResult = () => {
     <>
       <Trans t={keyword} i18nKey="subjectivity_tooltip" />
       <TransHtmlDoubleLineBreak keyword={keyword} />
+      <TransDeutscheWelleAuthor keyword={keyword} />
+      <TransHtmlDoubleLineBreak keyword={keyword} />
       <TransCredibilitySignalsLink keyword={keyword} />
     </>
   );
@@ -209,6 +218,8 @@ const AssistantTextResult = () => {
   const machineGeneratedTextTooltip = (
     <>
       <TransMachineGeneratedTextTooltip keyword={keyword} />
+      <TransHtmlDoubleLineBreak keyword={keyword} />
+      <TransKinitAuthor keyword={keyword} />
       <TransHtmlDoubleLineBreak keyword={keyword} />
       <TransCredibilitySignalsLink keyword={keyword} />
     </>
