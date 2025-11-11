@@ -209,11 +209,20 @@ const Keyframes = () => {
     setInput(uri);
   }, [urlParam]);
 
+  // useEffect(() => {
+  //   if (!processUrl) return;
+  //   setInput(processUrl);
+  //   submitUrl(processUrl);
+  // }, [processUrl]);
+
   useEffect(() => {
-    if (!processUrl) return;
-    setInput(processUrl);
-    submitUrl(processUrl);
-  }, [processUrl]);
+    console.log("keyframes useEffect");
+    console.log(location.state?.autoRun, location.state?.processUrl);
+    if (location.state?.autoRun && location.state?.processUrl) {
+      setInput(location.state.processUrl);
+      submitUrl(location.state.processUrl);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     if (featureData && data && hasSubmitted) {

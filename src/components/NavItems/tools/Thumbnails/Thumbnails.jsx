@@ -226,13 +226,20 @@ const Thumbnails = () => {
     }
   }, [showResult]);
 
-  const processUrl = useSelector((state) => state.assistant.processUrl);
   useEffect(() => {
-    if (processUrl) {
-      setInput(processUrl);
+    console.log("thumbnails useEffect");
+    if (location.state?.autoRun && location.state?.processUrl) {
+      setInput(location.state.processUrl);
       setUrlDetected(true);
     }
-  }, [processUrl]);
+  }, [location.state]);
+  // const processUrl = useSelector((state) => state.assistant.processUrl);
+  // useEffect(() => {
+  //   if (processUrl) {
+  //     setInput(processUrl);
+  //     setUrlDetected(true);
+  //   }
+  // }, [processUrl]);
 
   return (
     <div>
