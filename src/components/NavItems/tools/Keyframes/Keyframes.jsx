@@ -214,7 +214,6 @@ const Keyframes = () => {
     if (processUrl && url?.includes("autoRun")) {
       setInput(processUrl);
       submitUrl(processUrl);
-      // TODO remove from textfield ?
     }
   }, [processUrl, url]);
 
