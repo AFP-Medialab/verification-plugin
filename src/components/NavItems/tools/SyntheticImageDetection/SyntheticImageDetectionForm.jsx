@@ -86,14 +86,22 @@ const SyntheticImageDetectionForm = ({
    * @param {File} file
    * @returns {File|null|undefined}
    */
-  const preprocessImage = (file) => {
+  const preprocessImage = async (file) => {
     return preprocessFileUpload(
       file,
       role,
-      undefined,
+      await preprocessImageTypeFilter(file),
       preprocessingSuccess,
       preprocessingError,
     );
+  };
+  const EXT_EXCLUSION = ["image/heic", "image/heif"];
+  const preprocessImageTypeFilter = async (file) => {
+    if (EXT_EXCLUSION.includes(file.type)) {
+      dispatch(setError(keywordWarning("warning_file_format_not_supported")));
+      return Error(keywordWarning("warning_file_format_not_supported"));
+    }
+    return file;
   };
 
   /**

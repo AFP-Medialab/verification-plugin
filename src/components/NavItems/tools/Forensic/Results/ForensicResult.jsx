@@ -14,6 +14,7 @@ import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Popover from "@mui/material/Popover";
 import Snackbar from "@mui/material/Snackbar";
+import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
@@ -42,7 +43,7 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import { theme as defaultTheme } from "../../../../../theme";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import AnimatedGif from "../../Gif/AnimatedGif";
-import { buildFilterProps } from "../ForensicAlgorithms";
+import { allForensicAlgorithms, buildFilterProps } from "../ForensicAlgorithms";
 import ImageCanvas from "../components/imageCanvas/imageCanvas";
 
 function TabPanel(props) {
@@ -86,11 +87,9 @@ const ForensicResults = (props) => {
 
       MuiTab: {
         styleOverrides: {
-          wrapper: {
-            fontSize: 12,
-          },
           root: {
             minWidth: "25%!important",
+            fontSize: 12,
           },
         },
       },
@@ -459,6 +458,28 @@ const ForensicResults = (props) => {
 
   const idExpl = openFilterExplanation ? "simple-popover" : undefined;
 
+  // Helper function to get algorithm warning by filter ID
+  const getAlgorithmWarning = (filterId) => {
+    const algorithm = allForensicAlgorithms.find((alg) => alg.id === filterId);
+    return algorithm?.warning || null;
+  };
+
+  // Warning popover state
+  const [anchorWarningPopover, setAnchorWarningPopover] = React.useState(false);
+  const openWarningPopover = Boolean(anchorWarningPopover);
+  const [warningFilterId, setWarningFilterId] = React.useState(null);
+  const idWarning = openWarningPopover ? "warning-popover" : undefined;
+
+  const handleOpenWarningPopover = (event, filterId) => {
+    setAnchorWarningPopover(event.currentTarget);
+    setWarningFilterId(filterId);
+  };
+
+  const handleCloseWarningPopover = () => {
+    setAnchorWarningPopover(null);
+    setWarningFilterId(null);
+  };
+
   const handleCloseAlert = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -717,101 +738,131 @@ const ForensicResults = (props) => {
                       {filters.current
                         .slice(filtersProp.idStartLenses)
                         .map((value, key) => {
-                          return (
-                            <Grid key={key} size={{ xs: 4 }}>
-                              <ImageCanvas
-                                className={classes.imageFilter}
-                                imgSrc={value.map}
-                                isGrayscaleInverted={false}
-                                applyColorScale={false}
-                                threshold={0}
-                                onMouseOver={() => {
-                                  displayFilterHover(value.map);
-                                  setFilterSelected(value);
-                                }}
-                                onMouseLeave={() => {
-                                  hideFilterHover();
-                                  // setFilterSelected(null);
-                                }}
-                              />
-                              <Box
-                                align="center"
-                                className={classes.lensesTitles}
-                                sx={{
-                                  width: "100%",
-                                }}
-                              >
-                                {keyword("forensic_title_" + value.id)}
-                                <IconButton
-                                  className={classes.margin}
-                                  size="small"
-                                  onClick={(e) =>
-                                    handleOpenFilterExplanation(e, value.id)
-                                  }
-                                >
-                                  <HelpOutlineIcon fontSize="inherit" />
-                                </IconButton>
-                                <Popover
-                                  id={idExpl}
-                                  open={
-                                    value.popover !== undefined
-                                      ? value.popover
-                                      : false
-                                  }
-                                  anchorEl={anchorFilterExplanation}
-                                  onClose={handleCloseFilterExplanation}
-                                  anchorOrigin={{
-                                    vertical: "bottom",
-                                    horizontal: "center",
+                          if (value.id !== "")
+                            return (
+                              <Grid key={key} size={{ xs: 4 }}>
+                                <ImageCanvas
+                                  className={classes.imageFilter}
+                                  imgSrc={value.map}
+                                  isGrayscaleInverted={false}
+                                  applyColorScale={false}
+                                  threshold={0}
+                                  onMouseOver={() => {
+                                    displayFilterHover(value.map);
+                                    setFilterSelected(value);
                                   }}
-                                  transformOrigin={{
-                                    vertical: "top",
-                                    horizontal: "center",
+                                  onMouseLeave={() => {
+                                    hideFilterHover();
+                                    // setFilterSelected(null);
                                   }}
-                                  slotProps={{
-                                    paper: {
-                                      style: {
-                                        width: "300px",
-                                        fontSize: 14,
-                                      },
-                                    },
+                                />
+                                <Box
+                                  align="center"
+                                  className={classes.lensesTitles}
+                                  sx={{
+                                    width: "100%",
                                   }}
                                 >
-                                  <Box
+                                  {keyword("forensic_title_" + value.id)}
+                                  <Stack
+                                    direction="row"
+                                    spacing={1}
                                     sx={{
-                                      p: 3,
+                                      display: "inline-flex",
+                                      alignItems: "center",
                                     }}
                                   >
-                                    <Grid
-                                      container
-                                      direction="row"
-                                      sx={{
-                                        justifyContent: "space-between",
-                                        alignItems: "stretch",
-                                      }}
+                                    <IconButton
+                                      className={classes.margin}
+                                      size="small"
+                                      onClick={(e) =>
+                                        handleOpenFilterExplanation(e, value.id)
+                                      }
                                     >
-                                      <Typography variant="body1">
-                                        {keyword("forensic_title_" + value.id)}
-                                      </Typography>
+                                      <HelpOutlineIcon fontSize="inherit" />
+                                    </IconButton>
+                                    {getAlgorithmWarning(value.id) && (
+                                      <IconButton
+                                        className={classes.margin}
+                                        size="small"
+                                        onClick={(e) =>
+                                          handleOpenWarningPopover(e, value.id)
+                                        }
+                                      >
+                                        <WarningIcon
+                                          fontSize="inherit"
+                                          style={{ color: "#ff9800" }}
+                                        />
+                                      </IconButton>
+                                    )}
+                                  </Stack>
 
-                                      <CloseIcon
-                                        onClick={handleCloseFilterExplanation}
-                                      />
-                                    </Grid>
+                                  <Popover
+                                    id={idExpl}
+                                    open={
+                                      value.popover !== undefined
+                                        ? value.popover
+                                        : false
+                                    }
+                                    anchorEl={anchorFilterExplanation}
+                                    onClose={handleCloseFilterExplanation}
+                                    anchorOrigin={{
+                                      vertical: "bottom",
+                                      horizontal: "center",
+                                    }}
+                                    transformOrigin={{
+                                      vertical: "top",
+                                      horizontal: "center",
+                                    }}
+                                    slotProps={{
+                                      paper: {
+                                        style: {
+                                          width: "300px",
+                                          fontSize: 14,
+                                        },
+                                      },
+                                    }}
+                                  >
                                     <Box
                                       sx={{
-                                        m: 1,
+                                        p: 3,
                                       }}
-                                    />
+                                    >
+                                      <Grid
+                                        container
+                                        direction="row"
+                                        sx={{
+                                          justifyContent: "space-between",
+                                          alignItems: "stretch",
+                                        }}
+                                      >
+                                        <Typography variant="body1">
+                                          {keyword(
+                                            "forensic_title_" + value.id,
+                                          )}
+                                        </Typography>
 
-                                    <Typography variant="body2" align="justify">
-                                      {keyword("forensic_card_" + value.id)}
-                                    </Typography>
-                                  </Box>
-                                </Popover>
-                              </Box>
-                            </Grid>
-                          );
+                                        <CloseIcon
+                                          onClick={handleCloseFilterExplanation}
+                                        />
+                                      </Grid>
+                                      <Box
+                                        sx={{
+                                          m: 1,
+                                        }}
+                                      />
+
+                                      <Typography
+                                        variant="body2"
+                                        align="justify"
+                                      >
+                                        {keyword("forensic_card_" + value.id)}
+                                      </Typography>
+                                    </Box>
+                                  </Popover>
+                                </Box>
+                              </Grid>
+                            );
                         })}
                     </Grid>
                   </Box>
@@ -1119,128 +1170,190 @@ const ForensicResults = (props) => {
                                   )
                                 )}
                                 {value.id !== "" && (
-                                  <div>
-                                    {value.id === "cagi_report" ? (
-                                      <Box
-                                        align="center"
-                                        sx={{
-                                          width: "100%",
-                                        }}
-                                      >
-                                        {value.name[value.currentDisplayed]}
-                                        <IconButton
-                                          className={classes.margin}
-                                          size="small"
-                                          onClick={(e) =>
-                                            handleOpenFilterExplanation(
-                                              e,
-                                              "cagi",
-                                            )
-                                          }
-                                        >
-                                          <HelpOutlineIcon fontSize="inherit" />
-                                        </IconButton>
-                                      </Box>
-                                    ) : (
-                                      <Box
-                                        align="center"
-                                        sx={{
-                                          width: "100%",
-                                          pl: 1,
-                                        }}
-                                      >
-                                        {keyword("forensic_title_" + value.id)}
-                                        <IconButton
-                                          className={classes.margin}
-                                          size="small"
-                                          onClick={(e) =>
-                                            handleOpenFilterExplanation(
-                                              e,
-                                              value.id,
-                                            )
-                                          }
-                                        >
-                                          <HelpOutlineIcon fontSize="inherit" />
-                                        </IconButton>
-                                      </Box>
-                                    )}
-                                  </div>
-                                )}
-                                <Popover
-                                  id={idExpl}
-                                  open={
-                                    value.popover !== undefined
-                                      ? value.popover
-                                      : false
-                                  }
-                                  anchorEl={anchorFilterExplanation}
-                                  onClose={handleCloseFilterExplanation}
-                                  anchorOrigin={{
-                                    vertical: "bottom",
-                                    horizontal: "center",
-                                  }}
-                                  transformOrigin={{
-                                    vertical: "top",
-                                    horizontal: "center",
-                                  }}
-                                  slotProps={{
-                                    paper: {
-                                      style: {
-                                        width: "300px",
-                                        fontSize: 14,
-                                      },
-                                    },
-                                  }}
-                                >
-                                  <Box
-                                    sx={{
-                                      p: 3,
-                                    }}
-                                  >
-                                    <Grid
-                                      container
-                                      direction="row"
-                                      sx={{
-                                        justifyContent: "space-between",
-                                        alignItems: "stretch",
-                                      }}
-                                    >
+                                  <>
+                                    <div>
                                       {value.id === "cagi_report" ? (
-                                        <Typography variant="body1">
-                                          {titleCagiPopover}
-                                        </Typography>
+                                        <Box
+                                          align="center"
+                                          sx={{
+                                            width: "100%",
+                                          }}
+                                        >
+                                          {value.name[value.currentDisplayed]}
+                                          <Stack
+                                            direction="row"
+                                            spacing={1}
+                                            sx={{
+                                              display: "inline-flex",
+                                              alignItems: "center",
+                                            }}
+                                          >
+                                            <IconButton
+                                              className={classes.margin}
+                                              size="small"
+                                              onClick={(e) =>
+                                                handleOpenFilterExplanation(
+                                                  e,
+                                                  "cagi",
+                                                )
+                                              }
+                                            >
+                                              <HelpOutlineIcon fontSize="inherit" />
+                                            </IconButton>
+                                            {getAlgorithmWarning(
+                                              "cagi_report",
+                                            ) && (
+                                              <IconButton
+                                                className={classes.margin}
+                                                size="small"
+                                                onClick={(e) =>
+                                                  handleOpenWarningPopover(
+                                                    e,
+                                                    "cagi_report",
+                                                  )
+                                                }
+                                              >
+                                                <WarningIcon
+                                                  fontSize="inherit"
+                                                  style={{ color: "#ff9800" }}
+                                                />
+                                              </IconButton>
+                                            )}
+                                          </Stack>
+                                        </Box>
                                       ) : (
-                                        <Typography variant="body1">
+                                        <Box
+                                          align="center"
+                                          sx={{
+                                            width: "100%",
+                                            pl: 1,
+                                          }}
+                                        >
                                           {keyword(
                                             "forensic_title_" + value.id,
                                           )}
-                                        </Typography>
+                                          <Stack
+                                            direction="row"
+                                            spacing={1}
+                                            sx={{
+                                              display: "inline-flex",
+                                              alignItems: "center",
+                                            }}
+                                          >
+                                            <IconButton
+                                              className={classes.margin}
+                                              size="small"
+                                              onClick={(e) =>
+                                                handleOpenFilterExplanation(
+                                                  e,
+                                                  value.id,
+                                                )
+                                              }
+                                            >
+                                              <HelpOutlineIcon fontSize="inherit" />
+                                            </IconButton>
+                                            {getAlgorithmWarning(value.id) && (
+                                              <IconButton
+                                                className={classes.margin}
+                                                size="small"
+                                                onClick={(e) =>
+                                                  handleOpenWarningPopover(
+                                                    e,
+                                                    value.id,
+                                                  )
+                                                }
+                                              >
+                                                <WarningIcon
+                                                  fontSize="inherit"
+                                                  style={{ color: "#ff9800" }}
+                                                />
+                                              </IconButton>
+                                            )}
+                                          </Stack>
+                                        </Box>
                                       )}
-
-                                      <CloseIcon
-                                        onClick={handleCloseFilterExplanation}
-                                      />
-                                    </Grid>
-                                    <Box
-                                      sx={{
-                                        m: 1,
+                                    </div>
+                                    <Popover
+                                      id={idExpl}
+                                      open={
+                                        value.popover !== undefined
+                                          ? value.popover
+                                          : false
+                                      }
+                                      anchorEl={anchorFilterExplanation}
+                                      onClose={handleCloseFilterExplanation}
+                                      anchorOrigin={{
+                                        vertical: "bottom",
+                                        horizontal: "center",
                                       }}
-                                    />
-
-                                    {value.id === "cagi_report" ? (
-                                      <Typography variant="body2">
-                                        {textCagiPopover}
-                                      </Typography>
-                                    ) : (
-                                      <Typography
-                                        variant="body2"
-                                        align="justify"
+                                      transformOrigin={{
+                                        vertical: "top",
+                                        horizontal: "center",
+                                      }}
+                                      slotProps={{
+                                        paper: {
+                                          style: {
+                                            width: "300px",
+                                            fontSize: 14,
+                                          },
+                                        },
+                                      }}
+                                    >
+                                      <Box
+                                        sx={{
+                                          p: 3,
+                                        }}
                                       >
-                                        {keyword("forensic_card_" + value.id)}
-                                      </Typography>
-                                    )}
-                                  </Box>
-                                </Popover>
+                                        <Grid
+                                          container
+                                          direction="row"
+                                          sx={{
+                                            justifyContent: "space-between",
+                                            alignItems: "stretch",
+                                          }}
+                                        >
+                                          {value.id === "cagi_report" ? (
+                                            <Typography variant="body1">
+                                              {titleCagiPopover}
+                                            </Typography>
+                                          ) : (
+                                            <Typography variant="body1">
+                                              {keyword(
+                                                "forensic_title_" + value.id,
+                                              )}
+                                            </Typography>
+                                          )}
+
+                                          <CloseIcon
+                                            onClick={
+                                              handleCloseFilterExplanation
+                                            }
+                                          />
+                                        </Grid>
+                                        <Box
+                                          sx={{
+                                            m: 1,
+                                          }}
+                                        />
+
+                                        {value.id === "cagi_report" ? (
+                                          <Typography variant="body2">
+                                            {textCagiPopover}
+                                          </Typography>
+                                        ) : (
+                                          <Typography
+                                            variant="body2"
+                                            align="justify"
+                                          >
+                                            {keyword(
+                                              "forensic_card_" + value.id,
+                                            )}
+                                          </Typography>
+                                        )}
+                                      </Box>
+                                    </Popover>
+                                  </>
+                                )}
                               </Grid>
                             );
                           })}
@@ -1382,6 +1495,70 @@ const ForensicResults = (props) => {
                   isGrayscaleInverted={isHoveredFilterInverted}
                   applyColorScale={applyColorScale}
                 />
+              </Box>
+            </Popover>
+
+            {/* Warning Popover */}
+            <Popover
+              id={idWarning}
+              open={openWarningPopover}
+              anchorEl={anchorWarningPopover}
+              onClose={handleCloseWarningPopover}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "center",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "center",
+              }}
+              slotProps={{
+                paper: {
+                  style: {
+                    width: "300px",
+                    fontSize: 14,
+                  },
+                },
+              }}
+            >
+              <Box
+                sx={{
+                  p: 3,
+                }}
+              >
+                <Grid
+                  container
+                  direction="row"
+                  sx={{
+                    justifyContent: "space-between",
+                    alignItems: "stretch",
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    sx={{ display: "flex", alignItems: "center" }}
+                  >
+                    <WarningIcon
+                      style={{ color: "#ff9800", marginRight: "8px" }}
+                    />
+                    {warningFilterId &&
+                      keyword("forensic_title_" + warningFilterId)}
+                  </Typography>
+
+                  <CloseIcon onClick={handleCloseWarningPopover} />
+                </Grid>
+
+                <Box
+                  sx={{
+                    m: 1,
+                  }}
+                />
+                {warningFilterId && getAlgorithmWarning(warningFilterId) && (
+                  <Typography variant="body2">
+                    {keyword(getAlgorithmWarning(warningFilterId))}
+                  </Typography>
+                )}
               </Box>
             </Popover>
           </Box>

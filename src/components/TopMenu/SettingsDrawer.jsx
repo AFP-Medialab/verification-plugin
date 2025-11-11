@@ -24,6 +24,7 @@ import {
   RecordingWindow,
   getRecordingInfo,
 } from "components/NavItems/tools/SNA/components/Recording";
+import { ROLES } from "constants/roles";
 
 import manifest from "../../../public/manifest.json";
 import Languages from "../NavItems/languages/languages";
@@ -34,6 +35,7 @@ const isStaging = environment !== "production";
 
 const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
   const keyword = i18nLoadNamespace("components/NavBar");
+  const keywordNewSna = i18nLoadNamespace("components/NavItems/tools/NewSNA");
 
   const dispatch = useDispatch();
 
@@ -42,6 +44,7 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
   );
   const cookiesUsage = useSelector((state) => state.cookies.active);
   const gaUsage = useSelector((state) => state.cookies.analytics);
+  const userRoles = useSelector((state) => state.userSession.user.roles);
 
   //SNA Recording props
   const [recording, setRecording] = useState(false);
@@ -213,23 +216,26 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
               />
             )}
           </Stack>
-          <Stack direction="column" spacing={1}>
-            <Typography>{keyword("snaRecord_settingsTitle")}</Typography>
-            <RecordingWindow
-              recording={recording}
-              setRecording={setRecording}
-              expanded={expanded}
-              setExpanded={setExpanded}
-              selectedCollection={selectedCollection}
-              setSelectedCollection={setSelectedCollection}
-              collections={collections}
-              setCollections={setCollections}
-              newCollectionName={newCollectionName}
-              setNewCollectionName={setNewCollectionName}
-              selectedSocialMedia={selectedSocialMedia}
-              setSelectedSocialMedia={setSelectedSocialMedia}
-            />
-          </Stack>
+          {userRoles.includes(ROLES.EVALUATION) ? (
+            <Stack direction="column" spacing={1}>
+              <Typography>{keyword("snaRecord_settingsTitle")}</Typography>
+              <RecordingWindow
+                recording={recording}
+                setRecording={setRecording}
+                expanded={expanded}
+                setExpanded={setExpanded}
+                selectedCollection={selectedCollection}
+                setSelectedCollection={setSelectedCollection}
+                collections={collections}
+                setCollections={setCollections}
+                newCollectionName={newCollectionName}
+                setNewCollectionName={setNewCollectionName}
+                selectedSocialMedia={selectedSocialMedia}
+                setSelectedSocialMedia={setSelectedSocialMedia}
+                keyword={keywordNewSna}
+              />
+            </Stack>
+          ) : null}
         </Stack>
         <Stack spacing={1} sx={{ alignItems: "center", mt: 2 }}>
           {isStaging && (

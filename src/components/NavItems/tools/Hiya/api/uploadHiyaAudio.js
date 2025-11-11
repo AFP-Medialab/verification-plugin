@@ -52,8 +52,8 @@ export const uploadHiyaAudio = async (
       Accept: "application/json",
     },
     data: uploadRequestData,
-    timeout: 60000,
-    signal: AbortSignal.timeout(60000),
+    // timeout: 60000,
+    // signal: AbortSignal.timeout(60000),
   };
 
   let uploadResponse;

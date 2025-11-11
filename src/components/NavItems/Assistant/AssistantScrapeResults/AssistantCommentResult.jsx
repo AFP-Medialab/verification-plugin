@@ -18,6 +18,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Pagination from "@mui/material/Pagination";
 import Paper from "@mui/material/Paper";
 import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -35,8 +36,8 @@ import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
-import { TextCopy } from "@/components/Shared/Utils/TextCopy";
 import { Translate } from "@/components/Shared/Utils/Translate";
+import CopyButton from "components/Shared/CopyButton";
 import moment from "moment/moment";
 import PropTypes from "prop-types";
 
@@ -282,8 +283,18 @@ const AssistantCommentResult = ({ collectedComments }) => {
 
           {/* options */}
           <TableCell align="center" width={optionsColumnWidth}>
-            <TextCopy text={row.textOriginal} index={row.id} />
-            <Translate text={row.textOriginal} />
+            <Stack direction="row" alignItems="center">
+              <CopyButton
+                strToCopy={row.textOriginal}
+                labelBeforeCopy={keyword("copy_to_clipboard")}
+                labelAfterCopy={keyword("copied_to_clipboard")}
+              />
+              <Tooltip title={keyword("translate")}>
+                <div>
+                  <Translate text={row.textOriginal} />
+                </div>
+              </Tooltip>
+            </Stack>
           </TableCell>
         </TableRow>
 
@@ -410,11 +421,18 @@ const AssistantCommentResult = ({ collectedComments }) => {
 
                         {/* options */}
                         <TableCell align="center" width={optionsColumnWidth}>
-                          <TextCopy
-                            text={repliesRow.textOriginal}
-                            index={repliesRow.id}
-                          />
-                          <Translate text={repliesRow.textOriginal} />
+                          <Stack direction="row" alignItems="center">
+                            <CopyButton
+                              strToCopy={repliesRow.textOriginal}
+                              labelBeforeCopy={keyword("copy_to_clipboard")}
+                              labelAfterCopy={keyword("copied_to_clipboard")}
+                            />
+                            <Tooltip title={keyword("translate")}>
+                              <div>
+                                <Translate text={repliesRow.textOriginal} />
+                              </div>
+                            </Tooltip>
+                          </Stack>
                         </TableCell>
                       </TableRow>
                     ))}

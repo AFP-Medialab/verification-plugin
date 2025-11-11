@@ -28,6 +28,8 @@ const PopUp = () => {
   const classes = useMyStyles();
   const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/PopUp");
+  const keywordNewSna = i18nLoadNamespace("components/NavItems/tools/NewSNA");
+
   const currentLang = useSelector((state) => state.language);
   const defaultLanguage = useSelector((state) => state.defaultLanguage);
   const LOGO_EU = process.env.REACT_APP_LOGO_EU;
@@ -221,22 +223,25 @@ const PopUp = () => {
             m: 1,
           }}
         />
-        <Grid size={{ xs: 12 }}>
-          <RecordingWindow
-            recording={recording}
-            setRecording={setRecording}
-            expanded={expanded}
-            setExpanded={setExpanded}
-            selectedCollection={selectedCollection}
-            setSelectedCollection={setSelectedCollection}
-            collections={collections}
-            setCollections={setCollections}
-            newCollectionName={newCollectionName}
-            setNewCollectionName={setNewCollectionName}
-            selectedSocialMedia={selectedSocialMedia}
-            setSelectedSocialMedia={setSelectedSocialMedia}
-          />
-        </Grid>
+        {userRoles.includes(ROLES.EVALUATION) ? (
+          <Grid size={{ xs: 12 }}>
+            <RecordingWindow
+              recording={recording}
+              setRecording={setRecording}
+              expanded={expanded}
+              setExpanded={setExpanded}
+              selectedCollection={selectedCollection}
+              setSelectedCollection={setSelectedCollection}
+              collections={collections}
+              setCollections={setCollections}
+              newCollectionName={newCollectionName}
+              setNewCollectionName={setNewCollectionName}
+              selectedSocialMedia={selectedSocialMedia}
+              setSelectedSocialMedia={setSelectedSocialMedia}
+              keyword={keywordNewSna}
+            />
+          </Grid>
+        ) : null}
         <Box
           sx={{
             m: 1,

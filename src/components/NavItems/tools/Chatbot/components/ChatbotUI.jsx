@@ -17,13 +17,14 @@ import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import { styled } from "@mui/material/styles";
 
 import ClearIcon from "@mui/icons-material/Clear";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import SendIcon from "@mui/icons-material/Send";
 
+import CopyButton from "@/components/Shared/CopyButton";
 import {
   addMessage,
   clearSession,
@@ -33,18 +34,18 @@ import {
   setStreamingMessage,
   setUserInput,
   updateStreamingMessage,
-} from "@/redux/reducers/chatBotReducer";
-import { styled } from "@mui/system";
+} from "@/redux/reducers/chatbotReducer";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
+import { DEFAULT_TEMPERATURE } from "../config/constants";
+import useChatbot from "../hooks/useChatbot";
 import MessageContent from "./MessageContent";
-import useChatBot from "./useChatBot";
 
-const ChatBotUI = () => {
+const ChatbotUI = () => {
   const dispatch = useDispatch();
   const messagesContainerRef = useRef(null);
-  const keyword = i18nLoadNamespace("components/NavItems/tools/ChatBot");
-  const [temperature, setTemperature] = useState(0.7);
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Chatbot");
+  const [temperature, setTemperature] = useState(DEFAULT_TEMPERATURE);
 
   // Helper functions to reduce code duplication
   const createMessage = (text, sender = "user") => ({
@@ -81,21 +82,6 @@ const ChatBotUI = () => {
       dispatch(setUserInput(previousInput));
   };
 
-  const handleCopyMessage = async (messageText) => {
-    try {
-      await navigator.clipboard.writeText(messageText);
-      console.log("Message copied to clipboard");
-    } catch (err) {
-      console.error("Failed to copy message: ", err);
-      const textArea = document.createElement("textarea");
-      textArea.value = messageText;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textArea);
-    }
-  };
-
   const finalizeStreaming = (botResponse, streamingId, userMessage = null) => {
     if (userMessage) dispatch(addMessage(userMessage));
     dispatch(addMessage({ ...botResponse, id: streamingId }));
@@ -130,20 +116,11 @@ const ChatBotUI = () => {
         {timestamp}
       </Typography>
       {showCopy && messageText && (
-        <Tooltip title="Copy message">
-          <IconButton
-            onClick={() => handleCopyMessage(messageText)}
-            size="small"
-            sx={{
-              padding: "2px",
-              ml: 1,
-              backgroundColor: "rgba(0,0,0,0.1)",
-              "&:hover": { backgroundColor: "rgba(0,0,0,0.2)" },
-            }}
-          >
-            <ContentCopyIcon sx={{ fontSize: 12 }} />
-          </IconButton>
-        </Tooltip>
+        <CopyButton
+          strToCopy={messageText}
+          labelBeforeCopy={keyword("copy_to_clipboard")}
+          labelAfterCopy={keyword("copied_to_clipboard")}
+        />
       )}
     </Box>
   );
@@ -193,7 +170,7 @@ const ChatBotUI = () => {
     selectedPrompt,
     activePrompt,
     isSessionActive,
-  } = useSelector((state) => state.chatBot);
+  } = useSelector((state) => state.chatbot);
 
   const {
     models,
@@ -208,7 +185,7 @@ const ChatBotUI = () => {
     executePrompt,
     clearError,
     isReady,
-  } = useChatBot();
+  } = useChatbot();
 
   // Auto-scroll to bottom function - only scrolls the message container
   const scrollToBottom = () => {
@@ -368,6 +345,7 @@ const ChatBotUI = () => {
             <FormControl size="small" sx={{ minWidth: 150 }}>
               <InputLabel>{keyword("models_label")}</InputLabel>
               <Select
+                variant="outlined"
                 value={selectedModel}
                 label={keyword("models_label")}
                 onChange={(e) => setSelectedModel(e.target.value)}
@@ -386,10 +364,12 @@ const ChatBotUI = () => {
               type="number"
               value={temperature}
               onChange={handleTemperatureChange}
-              inputProps={{
-                min: 0,
-                max: 1,
-                step: 0.1,
+              slotProps={{
+                htmlInput: {
+                  min: 0,
+                  max: 1,
+                  step: 0.1,
+                },
               }}
               sx={{ width: 100 }}
               variant="outlined"
@@ -418,6 +398,7 @@ const ChatBotUI = () => {
             <FormControl fullWidth size="small">
               <InputLabel>{keyword("preprompt_label")}</InputLabel>
               <Select
+                variant="outlined"
                 value={selectedPrompt || ""}
                 label={keyword("preprompt_label")}
                 onChange={handlePromptChange}
@@ -437,7 +418,7 @@ const ChatBotUI = () => {
                     <Tooltip
                       title={
                         prompt.messages && prompt.messages[1]
-                          ? prompt.messages[1].content
+                          ? keyword(prompt.messages[1].content)
                           : ""
                       }
                       arrow
@@ -461,11 +442,11 @@ const ChatBotUI = () => {
                 <strong>
                   {keyword("prompt_selected")} {activePrompt.name}&nbsp;
                 </strong>
-                {messages.length === 0
+                {/*messages.length === 0
                   ? activePrompt.requiresContent
                     ? keyword("active_prompt1")
                     : keyword("active_prompt2")
-                  : keyword("active_prompt3")}
+                  : keyword("active_prompt3")*/}
               </Alert>
             )}
 
@@ -498,7 +479,7 @@ const ChatBotUI = () => {
               color="textSecondary"
               sx={{ textAlign: "center", mt: 2 }}
             >
-              Start a conversation with the chatbot...
+              {keyword("chat_bot_start")}
             </Typography>
           ) : (
             <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -557,7 +538,7 @@ const ChatBotUI = () => {
             maxRows={4}
             value={userInput}
             onChange={handleInputChange}
-            onKeyPress={handleKeyPress}
+            onKeyDown={handleKeyPress}
             placeholder={
               messages.length === 0 && !activePrompt
                 ? keyword("chatbot_start")
@@ -577,33 +558,35 @@ const ChatBotUI = () => {
                     ? `${keyword("active_session")} ${activePrompt.name}`
                     : ""
             }
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  {userInput && (
-                    <Tooltip title={keyword("clear_input")}>
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {userInput && (
+                      <Tooltip title={keyword("clear_input")}>
+                        <IconButton
+                          onClick={handleClearInput}
+                          edge="end"
+                          size="small"
+                          disabled={isLoading}
+                        >
+                          <ClearIcon />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                    <Tooltip title={keyword("paste_from_clipboard")}>
                       <IconButton
-                        onClick={handleClearInput}
+                        onClick={handlePaste}
                         edge="end"
                         size="small"
                         disabled={isLoading}
                       >
-                        <ClearIcon />
+                        <ContentPasteIcon />
                       </IconButton>
                     </Tooltip>
-                  )}
-                  <Tooltip title={keyword("paste_from_clipboard")}>
-                    <IconButton
-                      onClick={handlePaste}
-                      edge="end"
-                      size="small"
-                      disabled={isLoading}
-                    >
-                      <ContentPasteIcon />
-                    </IconButton>
-                  </Tooltip>
-                </InputAdornment>
-              ),
+                  </InputAdornment>
+                ),
+              },
             }}
           />
           <Button
@@ -625,4 +608,4 @@ const ChatBotUI = () => {
   );
 };
 
-export default ChatBotUI;
+export default ChatbotUI;
