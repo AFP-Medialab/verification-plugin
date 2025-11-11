@@ -50,7 +50,7 @@ const AssistantFileSelected = () => {
 
   const generateList = (title, cType, actionList) => {
     return (
-      <Grid size={{ xs: 6 }}>
+      <>
         <Box
           sx={{
             mx: 2,
@@ -124,7 +124,7 @@ const AssistantFileSelected = () => {
             );
           })}
         </List>
-      </Grid>
+      </>
     );
   };
 
