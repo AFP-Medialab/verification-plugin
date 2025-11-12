@@ -77,7 +77,7 @@ const AssistantFileSelected = () => {
         dispatch(submitUpload(TOOLS_CATEGORIES.VIDEO));
         dispatch(setInputUrl(videoUrl, KNOWN_LINKS.OWN));
         dispatch(setScrapedData(null, null, null, [], [videoUrl], null, null));
-        dispatch(submitUpload(TOOLS_CATEGORIES.VIDEO)); // TODO working correctly?
+        dispatch(submitUpload(TOOLS_CATEGORIES.VIDEO)); // TODO doing this twice?
         setVideoUploaded(true);
 
         const thumbnailBlob = await getVideoThumbnail(videoUrl);
@@ -93,7 +93,7 @@ const AssistantFileSelected = () => {
         dispatch(submitUpload(TOOLS_CATEGORIES.IMAGE));
         dispatch(setInputUrl(imageUrl, KNOWN_LINKS.OWN));
         dispatch(setScrapedData(null, null, null, [imageUrl], [], null, null));
-        dispatch(submitUpload(TOOLS_CATEGORIES.IMAGE)); // TODO working correctly?
+        dispatch(submitUpload(TOOLS_CATEGORIES.IMAGE)); // TODO doing this twice?
         setImageUploaded(true);
         return;
       }
