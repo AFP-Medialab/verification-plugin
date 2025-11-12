@@ -16,6 +16,7 @@ import {
   setInputUrl,
   setScrapedData,
   setSingleMediaPresent,
+  setVideoThumbnailUrl,
   submitUpload,
 } from "redux/actions/tools/assistantActions";
 
@@ -35,6 +36,21 @@ const AssistantFileSelected = () => {
 
   const [videoUploaded, setVideoUploaded] = useState(false);
   const [imageUploaded, setImageUploaded] = useState(false);
+
+  const getVideoThumbnail = (blobUrl) => {
+    return new Promise((resolve) => {
+      const video = document.createElement("video");
+      video.src = blobUrl;
+      video.currentTime = 1;
+      video.onloadeddata = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext("2d").drawImage(video, 0, 0);
+        canvas.toBlob(resolve);
+      };
+    });
+  };
 
   const submitUrl = async () => {
     cleanAssistantState();
@@ -58,12 +74,14 @@ const AssistantFileSelected = () => {
         // set the video URL
         const videoUrl = URL.createObjectURL(fileInput);
 
-        // dispatch(setProcessUrl(videoUrl, TOOLS_CATEGORIES.VIDEO));
         dispatch(submitUpload(TOOLS_CATEGORIES.VIDEO));
         dispatch(setInputUrl(videoUrl, KNOWN_LINKS.OWN));
         dispatch(setScrapedData(null, null, null, [], [videoUrl], null, null));
         dispatch(submitUpload(TOOLS_CATEGORIES.VIDEO)); // TODO working correctly?
         setVideoUploaded(true);
+
+        const thumbnailBlob = await getVideoThumbnail(videoUrl);
+        dispatch(setVideoThumbnailUrl(URL.createObjectURL(thumbnailBlob)));
 
         return;
       }
@@ -72,13 +90,11 @@ const AssistantFileSelected = () => {
         // Set the image URL
         const imageUrl = URL.createObjectURL(fileInput);
 
-        // dispatch(setProcessUrl(imageUrl, TOOLS_CATEGORIES.IMAGE));
         dispatch(submitUpload(TOOLS_CATEGORIES.IMAGE));
         dispatch(setInputUrl(imageUrl, KNOWN_LINKS.OWN));
         dispatch(setScrapedData(null, null, null, [imageUrl], [], null, null));
         dispatch(submitUpload(TOOLS_CATEGORIES.IMAGE)); // TODO working correctly?
         setImageUploaded(true);
-
         return;
       }
 
