@@ -314,6 +314,7 @@ export const videoAnalysis = new Tool(
       KNOWN_LINKS.YOUTUBE,
       KNOWN_LINKS.FACEBOOK,
       KNOWN_LINKS.SNAPCHAT,
+      KNOWN_LINKS.OWN,
     ],
     exceptions: [],
     useInputUrl: true,
@@ -334,6 +335,7 @@ export const keyframes = new Tool(
   <Footer type={FOOTER_TYPES.ITI} />,
   {
     linksAccepted: [
+      KNOWN_LINKS.TWITTER,
       KNOWN_LINKS.YOUTUBE,
       KNOWN_LINKS.FACEBOOK,
       KNOWN_LINKS.YOUTUBE,
@@ -360,7 +362,7 @@ export const thumbnails = new Tool(
   <Thumbnails />,
   <Footer type={FOOTER_TYPES.AFP} />,
   {
-    linksAccepted: [KNOWN_LINKS.YOUTUBE],
+    linksAccepted: [KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.OWN],
     exceptions: [],
     useInputUrl: true,
     text: "thumbnails_text",
