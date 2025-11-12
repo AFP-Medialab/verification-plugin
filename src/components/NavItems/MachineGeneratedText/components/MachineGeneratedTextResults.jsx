@@ -32,11 +32,6 @@ const MachineGeneratedTextResults = ({
     "components/NavItems/tools/MachineGeneratedText",
   );
 
-  // Testing the UI for now, to remove when the standalone tool will not be for testing purposes anymore
-  const assistantKeyword = i18nLoadNamespace(
-    "components/NavItems/tools/Assistant",
-  );
-
   const [activeTab, setActiveTab] = useState("sentences");
 
   const DETECTION_THRESHOLDS = {
@@ -99,7 +94,7 @@ const MachineGeneratedTextResults = ({
 
               {mutationChunks.data.entities.mgt_overall_score && (
                 <GaugeChartResult
-                  keyword={assistantKeyword}
+                  keyword={keyword}
                   scores={[MachineGeneratedTextMethodNamesResults]}
                   methodNames={MachineGeneratedTextMethodNames}
                   detectionThresholds={DETECTION_THRESHOLDS}
@@ -107,7 +102,7 @@ const MachineGeneratedTextResults = ({
                   resultsHaveErrors={false}
                   sanitizeDetectionPercentage={(n) => Math.round(n)}
                   gaugeExplanation={{ colors: colors, keywords: keywords }}
-                  toolName="Assistant" // this points to the correct translations .tsv file
+                  toolName="MachineGeneratedText"
                   detectionType={"machine_generated_text"}
                 />
               )}
