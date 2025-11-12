@@ -66,8 +66,6 @@ const CustomAlertScore = ({
           return "_image";
         } else if (detectionType === DETECTION_TYPES.VIDEO) {
           return "_video";
-        } else if (detectionType === DETECTION_TYPES.MACHINE_GENERATED_TEXT) {
-          return "_machine_generated_text";
         } else return "";
       }
     };
