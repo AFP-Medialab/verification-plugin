@@ -23,6 +23,8 @@ import { ROLES } from "@/constants/roles";
 import {
   TransDbkfLink,
   TransHtmlDoubleLineBreak,
+  TransKinitAuthor,
+  TransOntotextAuthor,
   TransPrevFactChecksLink,
 } from "../TransComponents";
 
@@ -126,9 +128,13 @@ const AssistantWarnings = () => {
               <>
                 <Trans t={keyword} i18nKey="dbkf_tooltip" />
                 <TransHtmlDoubleLineBreak keyword={keyword} />
+                <TransOntotextAuthor keyword={keyword} />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
                 <TransDbkfLink keyword={keyword} />
                 <TransHtmlDoubleLineBreak keyword={keyword} />
                 <Trans t={keyword} i18nKey="previous_fact_checks_tooltip" />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
+                <TransKinitAuthor keyword={keyword} />
                 <TransHtmlDoubleLineBreak keyword={keyword} />
                 <TransPrevFactChecksLink keyword={keyword} />
               </>

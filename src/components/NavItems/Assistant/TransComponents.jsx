@@ -161,6 +161,84 @@ export function TransMultilingualStanceLink({ keyword }) {
   );
 }
 
+// Service acknowledgements
+
+export function TransUsfdAuthor({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="usfd_author"
+      components={{
+        usfdLink: (
+          <a
+            href="https://cloud.gate.ac.uk/shopfront"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={A_STYLE}
+          />
+        ),
+      }}
+    />
+  );
+}
+
+export function TransDeutscheWelleAuthor({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="deutsche_welle_author"
+      components={{
+        deutscheWelleLink: (
+          <a
+            href="https://www.dw.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={A_STYLE}
+          />
+        ),
+      }}
+    />
+  );
+}
+
+export function TransKinitAuthor({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="kinit_author"
+      components={{
+        kinitLink: (
+          <a
+            href="https://kinit.sk/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={A_STYLE}
+          />
+        ),
+      }}
+    />
+  );
+}
+
+export function TransOntotextAuthor({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="ontotext_author"
+      components={{
+        ontotextLink: (
+          <a
+            href="https://www.ontotext.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={A_STYLE}
+          />
+        ),
+      }}
+    />
+  );
+}
+
 // Tooltips
 
 export function TransAssistantHelpTwoTooltip({ keyword }) {

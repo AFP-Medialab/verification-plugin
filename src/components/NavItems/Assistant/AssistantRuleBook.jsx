@@ -2,7 +2,6 @@ import React from "react";
 
 import DownloadIcon from "@mui/icons-material/Download";
 
-import { ROLES } from "@/constants/roles";
 import {
   TOOLS_CATEGORIES,
   TOOL_GROUPS,
@@ -220,7 +219,7 @@ export const selectCorrectActions = (
       (tool) =>
         canUserSeeTool(tool, role, isUserAuthenticated) &&
         tool.category === contentType &&
-        tool != imageGif &&
+        tool != imageGif && // ignored here as tool requires two resources not just one image
         (!tool.assistantProps.linksAccepted ||
           tool.assistantProps.linksAccepted.includes(inputUrlType)) &&
         (!tool.assistantProps.processLinksAccepted ||

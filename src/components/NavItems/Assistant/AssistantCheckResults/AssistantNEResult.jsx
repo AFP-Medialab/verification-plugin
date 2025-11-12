@@ -24,6 +24,7 @@ import "tippy.js/dist/tippy.css";
 import {
   TransHtmlDoubleLineBreak,
   TransNamedEntityRecogniserLink,
+  TransUsfdAuthor,
 } from "../TransComponents";
 
 const AssistantNEResult = () => {
@@ -137,6 +138,8 @@ const AssistantNEResult = () => {
               title={
                 <>
                   <Trans t={keyword} i18nKey="named_entity_tooltip" />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
+                  <TransUsfdAuthor keyword={keyword} />
                   <TransHtmlDoubleLineBreak keyword={keyword} />
                   <TransNamedEntityRecogniserLink keyword={keyword} />
                 </>
