@@ -105,7 +105,7 @@ const AssistantFileSelected = () => {
           <form>
             <Box
               sx={{
-                p: 4,
+                p: 2,
                 textAlign: "left",
               }}
             >
