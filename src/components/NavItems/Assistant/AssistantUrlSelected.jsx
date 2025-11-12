@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Trans } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -34,6 +33,8 @@ import {
 } from "./TransComponents";
 
 const AssistantUrlSelected = (props) => {
+  cleanAssistantState();
+
   // styles, language, dispatch, params
   const navigate = useNavigate();
   const classes = useMyStyles();

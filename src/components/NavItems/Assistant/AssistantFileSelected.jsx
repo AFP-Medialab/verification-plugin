@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { useColorScheme } from "@mui/material";
@@ -27,6 +27,12 @@ import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { TOOLS_CATEGORIES } from "@/constants/tools";
 import { getFileTypeFromFileObject } from "@Shared/Utils/fileUtils";
 import accept from "attr-accept";
+import {
+  cleanAssistantState,
+  setImageVideoSelected,
+  setInputUrl,
+  setProcessUrl,
+} from "redux/actions/tools/assistantActions";
 
 import { prettifyLargeString } from "../tools/Archive/utils";
 import { KNOWN_LINKS, selectCorrectActions } from "./AssistantRuleBook";
@@ -35,6 +41,7 @@ import AssistantMediaResult from "./AssistantScrapeResults/AssistantMediaResult"
 const AssistantFileSelected = () => {
   const classes = useMyStyles();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   // uploading an image/video
@@ -58,7 +65,18 @@ const AssistantFileSelected = () => {
   const fileInputTypesAccepted = ["image/*, video/*"];
   const isParentLoading = false;
 
-  // find tool lsit
+  // const [imageUrlSelected, setImageUrlSelected] = useState(false);
+  // const [videoUrlSelected, setVideoUrlSelected] = useState(false);
+
+  const processUrl = useSelector((state) => state.assistant.processUrl);
+  const imageVideoSelected = useSelector(
+    (state) => state.assistant.imageVideoSelected,
+  );
+  // const singleMediaPresent = useSelector(
+  //   (state) => state.assistant.singleMediaPresent,
+  // );
+
+  // find tool list
   const getActionList = (contentType) => {
     let known_link = KNOWN_LINKS.OWN; // this is the uploaded link
     const role = useSelector((state) => state.userSession.user.roles);
@@ -83,16 +101,8 @@ const AssistantFileSelected = () => {
     navigate("/app/" + path + "/" + KNOWN_LINKS.OWN + "/" + cType);
   };
 
-  // const resetFileSelectedState = () => {
-  //   // dispatch(cleanMetadataState());
-  //   // getVideoMetadata.reset();
-  //   // setImageMetadata(null);
-  //   setError(false);
-  //   // setImageUrl(null);
-  // };
-
   const submitUrl = async () => {
-    resetState();
+    cleanAssistantState();
     setDisableToolList(true);
 
     try {
@@ -108,18 +118,28 @@ const AssistantFileSelected = () => {
       }
       if (fileType.mime.includes("video")) {
         // set the video URL
-        const video = URL.createObjectURL(fileInput);
+        const videoUrl = URL.createObjectURL(fileInput);
+
+        dispatch(setProcessUrl(videoUrl, TOOLS_CATEGORIES.VIDEO));
+
+        console.log("videoUrl=", videoUrl);
 
         // TODO show recommended tools
-        return <AssistantMediaResult />;
+        return;
       }
 
       if (fileType.mime.includes("image")) {
         // Set the image URL
         const imageUrl = URL.createObjectURL(fileInput);
 
+        dispatch(setProcessUrl(imageUrl, TOOLS_CATEGORIES.IMAGE));
+        dispatch(setInputUrl(imageUrl));
+        dispatch(setImageVideoSelected(true));
+
+        console.log("imageUrl=", imageUrl);
+
         // TODO show recommended tools
-        return <AssistantMediaResult />;
+        return;
       }
 
       throw new Error("Unsupported file type");
@@ -127,13 +147,6 @@ const AssistantFileSelected = () => {
       console.error("Error in submitUrl:", error.message);
       setError(error.message);
     }
-  };
-
-  const resetState = () => {
-    // setInput("");
-    setFileInput(null);
-    setError(false);
-    setDisableToolList(false);
   };
 
   const generateList = (title, cType, actionList) => {
@@ -268,7 +281,7 @@ const AssistantFileSelected = () => {
         <CardContent>
           <form>
             <Box
-              onDragOver={onDragOver}
+              onDragOver={onDragOver} // TODO this looks messy
               onDragLeave={onDragLeave}
               onDrop={onDrop}
               sx={{
@@ -347,7 +360,7 @@ const AssistantFileSelected = () => {
                           aria-label="remove selected file"
                           onClick={(e) => {
                             e.preventDefault();
-                            resetState();
+                            cleanAssistantState();
                             fileRef.current.value = null;
                             setFileInput(null);
                           }}
@@ -399,6 +412,15 @@ const AssistantFileSelected = () => {
           </form>
         </CardContent>
       </Card>
+
+      {console.log("processUrl=", processUrl)}
+      {/* media results */}
+      {imageVideoSelected ? (
+        <Grid size={{ xs: 12 }}>
+          <AssistantMediaResult />
+        </Grid>
+      ) : null}
+
       <Card variant="outlined" sx={{ mt: 4 }} disabled={disableToolList}>
         <CardHeader
           className={classes.assistantCardHeader}
