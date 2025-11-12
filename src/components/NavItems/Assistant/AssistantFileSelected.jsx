@@ -1,19 +1,10 @@
 import React, { useState } from "react";
-import {
-  useDispatch,
-  // useSelector,
-} from "react-redux";
-
-// import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
-// import List from "@mui/material/List";
-// import ListItem from "@mui/material/ListItem";
-// import ListItemAvatar from "@mui/material/ListItemAvatar";
-// import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
@@ -22,25 +13,18 @@ import { TOOLS_CATEGORIES } from "@/constants/tools";
 import { getFileTypeFromFileObject } from "@Shared/Utils/fileUtils";
 import {
   cleanAssistantState,
-  // setImageVideoSelected,
   setInputUrl,
   setScrapedData,
   setSingleMediaPresent,
   submitUpload,
 } from "redux/actions/tools/assistantActions";
 
-import {
-  KNOWN_LINKS,
-  // selectCorrectActions,
-} from "./AssistantRuleBook";
+import { KNOWN_LINKS } from "./AssistantRuleBook";
 import AssistantMediaResult from "./AssistantScrapeResults/AssistantMediaResult";
 import FileUploadField from "./FileUploadField";
 
 const AssistantFileSelected = () => {
-  // resetFileSelectedState();
-
   const classes = useMyStyles();
-  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
@@ -49,36 +33,8 @@ const AssistantFileSelected = () => {
 
   const [error, setError] = useState(false);
 
-  // const imageVideoSelected = useSelector(
-  //   (state) => state.assistant.imageVideoSelected,
-  // );
   const [videoUploaded, setVideoUploaded] = useState(false);
   const [imageUploaded, setImageUploaded] = useState(false);
-
-  // // find tool list
-  // const getActionList = (contentType) => {
-  //   let known_link = KNOWN_LINKS.OWN; // this is the uploaded link
-  //   const role = useSelector((state) => state.userSession.user.roles);
-  //   const userAuthenticated = useSelector(
-  //     (state) => state.userSession.userAuthenticated,
-  //   );
-  //   return selectCorrectActions(
-  //     contentType,
-  //     known_link,
-  //     known_link,
-  //     "",
-  //     role,
-  //     userAuthenticated,
-  //   );
-  // };
-
-  // const imageActions = getActionList(TOOLS_CATEGORIES.IMAGE);
-  // const videoActions = getActionList(TOOLS_CATEGORIES.VIDEO);
-
-  // const handleClick = (path, cType) => {
-  //   //history.push("/app/" + path + "/" + KNOWN_LINKS.OWN + "/" + cType)
-  //   navigate("/app/" + path + "/" + KNOWN_LINKS.OWN + "/" + cType);
-  // };
 
   const submitUrl = async () => {
     cleanAssistantState();
@@ -132,86 +88,6 @@ const AssistantFileSelected = () => {
       setError(error.message);
     }
   };
-
-  // const generateList = (title, cType, actionList) => {
-  //   return (
-  //     <>
-  //       <Box
-  //         sx={{
-  //           mx: 2,
-  //           my: 0.5,
-  //         }}
-  //       >
-  //         <Typography
-  //           variant={"h6"}
-  //           style={{ fontWeight: "bold" }}
-  //           sx={{
-  //             textAlign: "start",
-  //           }}
-  //         >
-  //           {title}
-  //         </Typography>
-  //       </Box>
-  //       <List>
-  //         {actionList.map((action, index) => {
-  //           return (
-  //             <Box
-  //               key={index}
-  //               sx={{
-  //                 m: 2,
-  //               }}
-  //             >
-  //               <Card className={classes.assistantHover} variant="outlined">
-  //                 <ListItem
-  //                   onClick={() => {
-  //                     handleClick(action.path, cType);
-  //                   }}
-  //                 >
-  //                   <ListItemAvatar>{action.icon}</ListItemAvatar>
-  //                   <ListItemText
-  //                     primary={
-  //                       <Typography
-  //                         component={"span"}
-  //                         sx={{
-  //                           textAlign: "start",
-  //                         }}
-  //                       >
-  //                         <Box
-  //                           sx={{
-  //                             fontWeight: "fontWeightBold",
-  //                           }}
-  //                         >
-  //                           {keyword(action.title)}
-  //                         </Box>
-  //                       </Typography>
-  //                     }
-  //                     secondary={
-  //                       <Typography
-  //                         color={"textSecondary"}
-  //                         component={"span"}
-  //                         sx={{
-  //                           textAlign: "start",
-  //                         }}
-  //                       >
-  //                         <Box
-  //                           sx={{
-  //                             fontStyle: "italic",
-  //                           }}
-  //                         >
-  //                           {keyword(action.text)}
-  //                         </Box>
-  //                       </Typography>
-  //                     }
-  //                   />
-  //                 </ListItem>
-  //               </Card>
-  //             </Box>
-  //           );
-  //         })}
-  //       </List>
-  //     </>
-  //   );
-  // };
 
   return (
     <>
