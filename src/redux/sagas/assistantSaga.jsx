@@ -165,9 +165,6 @@ function* handleMediaActionList() {
   const userAuthenticated = select(
     (state) => state.userSession.userAuthenticated,
   );
-
-  console.log(inputUrl, processUrl, contentType, role, userAuthenticated);
-
   if (processUrl !== null) {
     let knownInputLink = yield call(
       matchPattern,
