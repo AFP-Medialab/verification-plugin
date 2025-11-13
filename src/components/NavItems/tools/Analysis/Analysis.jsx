@@ -124,11 +124,12 @@ const Analysis = () => {
 
   const processUrl = useSelector((state) => state.assistant.processUrl);
   useEffect(() => {
-    if (processUrl) {
+    console.log(url);
+    if (processUrl && url?.includes("autoRun")) {
       setInput(processUrl);
       setSubmittedUrl(processUrl);
     }
-  }, [processUrl]);
+  }, [processUrl, url]);
 
   return (
     <div>

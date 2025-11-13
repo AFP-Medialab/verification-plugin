@@ -87,6 +87,7 @@ const Keyframes = () => {
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
   );
+  const { url } = useParams();
 
   const {
     resultUrl,
@@ -210,10 +211,11 @@ const Keyframes = () => {
   }, [urlParam]);
 
   useEffect(() => {
-    if (!processUrl) return;
-    setInput(processUrl);
-    submitUrl(processUrl);
-  }, [processUrl]);
+    if (processUrl && url?.includes("autoRun")) {
+      setInput(processUrl);
+      submitUrl(processUrl);
+    }
+  }, [processUrl, url]);
 
   useEffect(() => {
     if (featureData && data && hasSubmitted) {
