@@ -201,18 +201,19 @@ const Assistant = () => {
         </Grid>
       ) : null}
       {/* assistant status */}
-      {scFailState ||
-      dbkfTextFailState ||
-      dbkfMediaFailState ||
-      neFailState ||
-      newsFramingFailState ||
-      newsGenreFailState ||
-      persuasionFailState ||
-      subjectivityFailState ||
-      prevFactChecksFailState ||
-      machineGeneratedTextChunksFailState ||
-      machineGeneratedTextSentencesFailState ||
-      multilingualStanceFailState ? (
+      {urlMode &&
+      (scFailState ||
+        dbkfTextFailState ||
+        dbkfMediaFailState ||
+        neFailState ||
+        newsFramingFailState ||
+        newsGenreFailState ||
+        persuasionFailState ||
+        subjectivityFailState ||
+        prevFactChecksFailState ||
+        machineGeneratedTextChunksFailState ||
+        machineGeneratedTextSentencesFailState ||
+        multilingualStanceFailState) ? (
         <Grid size={{ xs: 12 }}>
           <AssistantCheckStatus />
         </Grid>

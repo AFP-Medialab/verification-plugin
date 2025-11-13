@@ -24,6 +24,9 @@ const AssistantVideoResult = () => {
 
   const processUrl = useSelector((state) => state.assistant.processUrl);
   const input_url_type = useSelector((state) => state.assistant.inputUrlType);
+  const videoThumbnailUrl = useSelector(
+    (state) => state.assistant.videoThumbnailUrl,
+  );
 
   const useIframe = () => {
     switch (input_url_type) {
@@ -126,7 +129,10 @@ const AssistantVideoResult = () => {
             data-testid="assistant-media-video-tag"
           ></video>
         )}
-        {!preprocessLinkForEmbed(processUrl) && (
+        {!preprocessLinkForEmbed(processUrl) && videoThumbnailUrl && (
+          <img src={videoThumbnailUrl} alt="thumbnail" />
+        )}
+        {!preprocessLinkForEmbed(processUrl) && !videoThumbnailUrl && (
           <div
             style={{
               width: "100%",
