@@ -85,6 +85,14 @@ const Deepfake = () => {
     dispatch(resetDeepfake());
   };
 
+  const processUrl = useSelector((state) => state.assistant.processUrl);
+  useEffect(() => {
+    if (processUrl && url?.includes("autoRun")) {
+      setInput(processUrl);
+      handleSubmit(processUrl);
+    }
+  }, [processUrl, url]);
+
   return (
     <Box>
       <Stack direction="column" spacing={4}>

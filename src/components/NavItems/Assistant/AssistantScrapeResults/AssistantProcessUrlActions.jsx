@@ -53,11 +53,17 @@ const AssistantProcessUrlActions = () => {
     } else if (action.path === null) {
       // Do nothing if path is null
     } else if (resultUrl !== null) {
-      navigate("/app/" + action.path + "/");
+      navigate("/app/" + action.path + "/autoRun");
       //history.push("/app/" + action.path + "/" + encodeURIComponent(resultUrl) + "/" + contentType)
     } else {
       navigate(
-        "/app/" + action.path + "/" + KNOWN_LINKS.OWN + "/" + contentType,
+        "/app/" +
+          action.path +
+          "/" +
+          KNOWN_LINKS.OWN +
+          "/" +
+          contentType +
+          "/autoRun",
       );
       //history.push("/app/" + action.path + "/" + KNOWN_LINKS.OWN + "/" + contentType)
     }
