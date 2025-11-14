@@ -107,7 +107,6 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
             direction="row"
             sx={{
               justifyContent: "space-between",
-              alignItems: "center",
             }}
           >
             <Typography variant="h6">
@@ -135,7 +134,7 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
               Appearance
             </Typography>
 
-            <Stack spacing={2}>
+            <Stack spacing={2} sx={{ alignItems: "flex-start" }}>
               {/* Language */}
               <Box sx={{ pl: 1 }}>
                 <Typography variant="body2" sx={{ mb: 1, fontWeight: 500 }}>
