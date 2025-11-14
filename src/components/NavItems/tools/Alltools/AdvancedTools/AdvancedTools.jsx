@@ -21,7 +21,6 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import LockIcon from "@mui/icons-material/Lock";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import LoginIcon from "@mui/icons-material/Login";
-import LogoutIcon from "@mui/icons-material/Logout";
 
 import { theme } from "@/theme";
 import { ERR_AUTH_UNKNOWN_ERROR } from "@Shared/Authentication/authenticationErrors";
@@ -106,12 +105,9 @@ const AdvancedTools = () => {
   }, [userAuthenticated]);
 
   const handleClickOpen = () => {
-    if (dialogState === 0) {
+    // Only open login dialog when not authenticated
+    if (!userAuthenticated) {
       setOpen(true);
-    } else {
-      logoutOnClick();
-
-      setNotAuthenticatedData();
     }
   };
 
@@ -181,12 +177,6 @@ const AdvancedTools = () => {
       });
   };
 
-  const logoutOnClick = () => {
-    authenticationAPI.logout().catch((error) => {
-      handleError(error.error ? error.error.code : ERR_AUTH_UNKNOWN_ERROR);
-    });
-  };
-
   // User Registration form
   const registrationForm = useForm({
     mode: "onBlur",
@@ -230,63 +220,55 @@ const AdvancedTools = () => {
 
   return (
     <Box>
-      {isDisplayMobile ? (
-        <Tooltip
-          title={
-            userAuthenticated
-              ? messageI18NResolver("LOGUSER_LOGOUT_LABEL")
-              : messageI18NResolver("LOGINFORM_SUBMIT_LABEL")
-          }
-        >
-          <IconButton
-            onClick={handleClickOpen}
-            sx={{
-              p: 1,
-            }}
-          >
-            {userAuthenticated ? (
-              <LogoutIcon color={colorButton} />
-            ) : (
-              <LoginIcon color={colorButton} />
-            )}
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Stack
-          direction="column"
-          spacing={{ xs: 1 }}
-          sx={{
-            justifyContent: "flex-start",
-            alignItems: "center",
-          }}
-        >
-          <Button
-            variant="outlined"
-            color={colorButton}
-            onClick={handleClickOpen}
-          >
-            {userAuthenticated
-              ? messageI18NResolver("LOGUSER_LOGOUT_LABEL")
-              : messageI18NResolver("LOGINFORM_SUBMIT_LABEL")}
-          </Button>
-          <Stack
-            direction="column"
-            sx={{
-              justifyContent: "center",
-              alignItems: "flex-start",
-            }}
-          >
+      {!userAuthenticated && (
+        <>
+          {isDisplayMobile ? (
+            <Tooltip title={messageI18NResolver("LOGINFORM_SUBMIT_LABEL")}>
+              <IconButton
+                onClick={handleClickOpen}
+                sx={{
+                  p: 1,
+                }}
+              >
+                <LoginIcon color={colorButton} />
+              </IconButton>
+            </Tooltip>
+          ) : (
             <Stack
-              direction={"row"}
+              direction="column"
+              spacing={{ xs: 1 }}
               sx={{
-                color: "var(--mui-palette-text-primary)",
+                justifyContent: "flex-start",
+                alignItems: "center",
               }}
             >
-              {iconState}
-              <Typography variant="caption">{keyword("title")}</Typography>
+              <Button
+                variant="outlined"
+                color={colorButton}
+                onClick={handleClickOpen}
+              >
+                {messageI18NResolver("LOGINFORM_SUBMIT_LABEL")}
+              </Button>
+              <Stack
+                direction="column"
+                sx={{
+                  justifyContent: "center",
+                  alignItems: "flex-start",
+                }}
+              >
+                <Stack
+                  direction={"row"}
+                  sx={{
+                    color: "var(--mui-palette-text-primary)",
+                  }}
+                >
+                  {iconState}
+                  <Typography variant="caption">{keyword("title")}</Typography>
+                </Stack>
+              </Stack>
             </Stack>
-          </Stack>
-        </Stack>
+          )}
+        </>
       )}
       <Dialog
         fullWidth

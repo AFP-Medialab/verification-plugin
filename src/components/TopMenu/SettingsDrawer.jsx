@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import Drawer from "@mui/material/Drawer";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -11,6 +12,7 @@ import Typography from "@mui/material/Typography";
 
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
+import LogoutIcon from "@mui/icons-material/Logout";
 import RemoveIcon from "@mui/icons-material/Remove";
 
 import { toggleUnlockExplanationCheckBox } from "@/redux/actions";
@@ -28,6 +30,7 @@ import { ROLES } from "constants/roles";
 
 import manifest from "../../../public/manifest.json";
 import Languages from "../NavItems/languages/languages";
+import useAuthenticationAPI from "../Shared/Authentication/useAuthenticationAPI";
 import ColorModeSelect from "./ColorModeSelect";
 
 const environment = process.env.REACT_APP_ENVIRONMENT;
@@ -36,6 +39,7 @@ const isStaging = environment !== "production";
 const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
   const keyword = i18nLoadNamespace("components/NavBar");
   const keywordNewSna = i18nLoadNamespace("components/NavItems/tools/NewSNA");
+  const authKeyword = i18nLoadNamespace("components/Shared/Authentication");
 
   const dispatch = useDispatch();
 
@@ -45,6 +49,9 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
   const cookiesUsage = useSelector((state) => state.cookies.active);
   const gaUsage = useSelector((state) => state.cookies.analytics);
   const userRoles = useSelector((state) => state.userSession.user.roles);
+  const userAuthenticated = useSelector(
+    (state) => state.userSession && state.userSession.userAuthenticated,
+  );
 
   //SNA Recording props
   const [recording, setRecording] = useState(false);
@@ -54,6 +61,15 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
     useState("Default Collection");
   const [newCollectionName, setNewCollectionName] = useState("");
   const [selectedSocialMedia, setSelectedSocialMedia] = useState([]);
+
+  // Authentication API
+  const authenticationAPI = useAuthenticationAPI();
+
+  const handleLogout = () => {
+    authenticationAPI.logout().catch((error) => {
+      console.error("Logout error:", error);
+    });
+  };
 
   useEffect(() => {
     getRecordingInfo(setCollections, setRecording, setSelectedCollection);
@@ -95,11 +111,7 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
             <Typography variant="h6">
               {keyword("drawer_settings_title")}
             </Typography>
-            <Box
-              sx={{
-                pr: 1,
-              }}
-            >
+            <Box>
               <IconButton sx={{ p: 1 }} onClick={handleClosePanel}>
                 <CloseIcon />
               </IconButton>
@@ -236,6 +248,29 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
               />
             </Stack>
           ) : null}
+          {userAuthenticated && (
+            <Stack
+              direction="column"
+              spacing={1}
+              sx={{
+                alignItems: "start",
+                pt: 2,
+                borderTop: "1px solid",
+                borderColor: "divider",
+              }}
+            >
+              <Typography>Account</Typography>
+              <Button
+                variant="outlined"
+                color="secondary"
+                startIcon={<LogoutIcon />}
+                onClick={handleLogout}
+                sx={{ alignSelf: "flex-start" }}
+              >
+                {authKeyword("LOGUSER_LOGOUT_LABEL")}
+              </Button>
+            </Stack>
+          )}
         </Stack>
         <Stack spacing={1} sx={{ alignItems: "center", mt: 2 }}>
           {isStaging && (
