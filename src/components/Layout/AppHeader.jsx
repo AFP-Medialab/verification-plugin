@@ -30,7 +30,7 @@ import LogoVeraWhite from "../NavBar/images/SVG/Navbar/vera-logo_white.svg";
 import AdvancedTools from "../NavItems/tools/Alltools/AdvancedTools/AdvancedTools";
 import SettingsDrawer from "./SettingsDrawer";
 
-const TopMenu = ({ topMenuItems }) => {
+const AppHeader = ({ topMenuItems }) => {
   const [selectedCollection, setSelectedCollection] =
     useState("Default Collection");
 
@@ -300,4 +300,4 @@ const TopMenu = ({ topMenuItems }) => {
   );
 };
 
-export default TopMenu;
+export default AppHeader;

@@ -8,7 +8,7 @@ import {
   setErrorNetwork,
 } from "redux/reducers/errorReducer";
 
-import ApplicationLayout from "./components/ApplicationLayout";
+import AppLayout from "./components/Layout/AppLayout";
 import PopUp from "./components/PopUp/PopUp";
 import useAuthenticationAPI from "./components/Shared/Authentication/useAuthenticationAPI";
 
@@ -64,7 +64,7 @@ const App = () => {
     >
       <Routes>
         <Route index path="/" element={<PopUp />} />
-        <Route path={"/app/*"} element={<ApplicationLayout />} />
+        <Route path={"/app/*"} element={<AppLayout />} />
       </Routes>
     </HashRouter>
   );
