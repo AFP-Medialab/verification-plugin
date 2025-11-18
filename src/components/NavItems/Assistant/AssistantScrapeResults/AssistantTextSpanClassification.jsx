@@ -39,9 +39,7 @@ import { v4 as uuidv4 } from "uuid";
 
 // Had to create a custom styled span as the default style attribute does not support
 // :hover metaclass
-const StyledSpan = styled("span")(({ theme }) => ({
-  ...theme,
-}));
+const StyledSpan = styled("span")();
 
 export default function AssistantTextSpanClassification({
   text,
