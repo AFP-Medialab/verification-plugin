@@ -1,6 +1,6 @@
 {
   "name": "weverify-plugin",
-  "version": "0.88",
+  "version": "0.88.1",
   "description": "",
   "main": "index.js",
   "scripts": {
