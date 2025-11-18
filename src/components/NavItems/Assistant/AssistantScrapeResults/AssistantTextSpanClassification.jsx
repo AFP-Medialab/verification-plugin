@@ -201,7 +201,7 @@ export default function AssistantTextSpanClassification({
                 ? "black"
                 : "white"
               : "black",
-            ":hover": {
+            "&:hover": {
               background: rgbToString(backgroundRgbHover),
               color: resolvedMode === "dark" ? "black" : "white",
             },
@@ -391,7 +391,7 @@ export function CategoriesListToggle({
               : rgbToString([140, 140, 140]),
           color: rgbToLuminance(primaryRgb) > 0.7 ? "black" : "white",
           boxShadow: "0.15em 0.15em 0.15em gray",
-          ":hover": {
+          "&:hover": {
             background: rgbToString(primaryRgb),
             boxShadow: "0.25em 0.25em 0.25em gray",
           },
