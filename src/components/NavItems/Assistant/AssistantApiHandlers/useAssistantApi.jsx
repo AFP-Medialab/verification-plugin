@@ -87,7 +87,7 @@ export default function assistantApiCalls() {
       for (let i = 0; i < iris.length; i += chunkSize) {
         const chunk = iris.slice(i, i + chunkSize);
         const dbQuery = `
-          SELECT ?iri ?abstract (GROUP_CONCAT(DISTINCT ?type; SEPARATOR = ",") AS ?schemaTypes)
+          SELECT ?iri (GROUP_CONCAT(DISTINCT ?type; SEPARATOR = ",") AS ?schemaTypes)
           WHERE {
             VALUES ?iri { ${chunk.join(" ")} }
             ?iri rdf:type ?type .
