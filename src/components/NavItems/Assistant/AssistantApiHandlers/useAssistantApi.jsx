@@ -90,9 +90,7 @@ export default function assistantApiCalls() {
           SELECT ?iri ?abstract (GROUP_CONCAT(DISTINCT ?type; SEPARATOR = ",") AS ?schemaTypes)
           WHERE {
             VALUES ?iri { ${chunk.join(" ")} }
-            ?iri rdfs:comment ?abstract .
             ?iri rdf:type ?type .
-            FILTER (lang(?abstract) = "${lang}")
           }`;
         const dbpediaEndpoint = process.env.REACT_APP_DBPEDIA_SPARQL_URL;
         const dbpediaResult = await axios.get(
@@ -104,7 +102,7 @@ export default function assistantApiCalls() {
       }
       for (const entity of dbpediaResultBindings) {
         mapping["<" + entity.iri.value + ">"]["abstract"] =
-          entity.abstract.value;
+          entity.abstract?.value || "";
         mapping["<" + entity.iri.value + ">"]["schemaTypes"] =
           entity.schemaTypes.value.split(",");
       }
