@@ -669,7 +669,7 @@ function* handleNamedEntityCall(action) {
             entities.push({
               word: instance.features.string,
               link: instance.features.link,
-              abstract: instance.features.abstract,
+              abstract: instance.features.abstract ?? "",
               category: entity[0],
             });
           }

@@ -108,7 +108,7 @@ const AssistantNEResult = () => {
             <Typography variant="h5">
               {tag.count} {keyword("named_entity_mentions")}
             </Typography>
-            <Typography>{tag.abstract}</Typography>
+            {!!tag.abstract && <Typography>{tag.abstract}</Typography>}
           </>
         }
         arrow
