@@ -223,7 +223,7 @@ const PopUp = () => {
             m: 1,
           }}
         />
-        {userRoles.includes(ROLES.EVALUATION) ? (
+        {userRoles.includes(ROLES.BETA_TESTER) ? (
           <Grid size={{ xs: 12 }}>
             <RecordingWindow
               recording={recording}
