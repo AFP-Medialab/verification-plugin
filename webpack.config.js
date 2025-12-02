@@ -8,7 +8,7 @@ const webpack = require("webpack");
 module.exports = {
   entry: {
     popup: "./src/index.jsx",
-    inject:"./src/background/inject.js",
+    inject: "./src/background/inject.js",
     background: "./src/background/index.jsx",
   },
   output: {

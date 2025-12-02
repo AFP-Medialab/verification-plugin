@@ -216,7 +216,7 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
               />
             )}
           </Stack>
-          {userRoles.includes(ROLES.EVALUATION) ? (
+          {userRoles.includes(ROLES.BETA_TESTER) ? (
             <Stack direction="column" spacing={1}>
               <Typography>{keyword("snaRecord_settingsTitle")}</Typography>
               <RecordingWindow
