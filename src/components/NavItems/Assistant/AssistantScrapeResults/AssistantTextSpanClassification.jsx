@@ -179,7 +179,7 @@ export default function AssistantTextSpanClassification({
             cursor: "pointer",
           }}
         >
-          {keyword(divText)}
+          {divText}
         </div>,
       );
     }
