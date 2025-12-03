@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -22,12 +22,19 @@ import {
 
 import { KNOWN_LINKS } from "./AssistantRuleBook";
 import AssistantMediaResult from "./AssistantScrapeResults/AssistantMediaResult";
+import AssistantWarnings from "./AssistantScrapeResults/AssistantWarnings";
 import FileUploadField from "./FileUploadField";
 
 const AssistantFileSelected = () => {
   const classes = useMyStyles();
   const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
+
+  // dbkf similar images results
+  const dbkfImageResult = useSelector(
+    (state) => state.assistant.dbkfImageMatch,
+  );
+  const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
 
   // uploading an image/video
   const [fileInput, setFileInput] = useState(null);
@@ -52,7 +59,15 @@ const AssistantFileSelected = () => {
     });
   };
 
-  const submitUrl = async () => {
+  // const convertToDataUrl = (file) => {
+  //   return new Promise((resolve) => {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => resolve(reader.result);
+  //     reader.readAsDataURL(file); // Pass the File object, not the blob URL
+  //   });
+  // };
+
+  const submitLocalFile = async () => {
     cleanAssistantState();
 
     try {
@@ -67,17 +82,23 @@ const AssistantFileSelected = () => {
         throw new Error("Unable to determine file type");
       }
 
+      // convert file object to data url - error 414 from dbkf, url too long!
+      // const dataUrl = await convertToDataUrl(fileInput); // file object
+      // host temporarily on backend to get a real url?
+
       // set single media present
       dispatch(setSingleMediaPresent(true));
 
       if (fileType.mime.includes("video")) {
         // set the video URL
         const videoUrl = URL.createObjectURL(fileInput);
+        const ctype = TOOLS_CATEGORIES.VIDEO;
 
-        dispatch(submitUpload(TOOLS_CATEGORIES.VIDEO));
         dispatch(setInputUrl(videoUrl, KNOWN_LINKS.OWN));
         dispatch(setScrapedData(null, null, null, [], [videoUrl], null, null));
-        dispatch(submitUpload(TOOLS_CATEGORIES.VIDEO)); // TODO doing this twice?
+
+        // dispatch(submitUpload(dataUrl, ctype));
+        dispatch(submitUpload(videoUrl, ctype));
         setVideoUploaded(true);
 
         const thumbnailBlob = await getVideoThumbnail(videoUrl);
@@ -89,12 +110,15 @@ const AssistantFileSelected = () => {
       if (fileType.mime.includes("image")) {
         // Set the image URL
         const imageUrl = URL.createObjectURL(fileInput);
+        const ctype = TOOLS_CATEGORIES.IMAGE;
 
-        dispatch(submitUpload(TOOLS_CATEGORIES.IMAGE));
-        dispatch(setInputUrl(imageUrl, KNOWN_LINKS.OWN));
+        dispatch(setInputUrl(imageUrl, KNOWN_LINKS.OWN)); // kicks off getSourceCredSaga
         dispatch(setScrapedData(null, null, null, [imageUrl], [], null, null));
-        dispatch(submitUpload(TOOLS_CATEGORIES.IMAGE)); // TODO doing this twice?
+
+        // dispatch(submitUpload(dataUrl, ctype));
+        dispatch(submitUpload(imageUrl, ctype));
         setImageUploaded(true);
+
         return;
       }
 
@@ -130,7 +154,7 @@ const AssistantFileSelected = () => {
                 localFileKeyword={keyword("button_localfile")}
                 fileInput={fileInput}
                 setFileInput={setFileInput}
-                handleSubmit={submitUrl}
+                handleSubmit={submitLocalFile}
                 fileInputTypesAccepted={"image/*, video/*"}
                 handleCloseSelectedFile={cleanAssistantState}
               />
@@ -138,6 +162,13 @@ const AssistantFileSelected = () => {
           </form>
         </CardContent>
       </Card>
+
+      {/* display warnings if any exist */}
+      {dbkfImageResult || dbkfVideoMatch ? (
+        <Box sx={{ mt: 4 }}>
+          <AssistantWarnings />
+        </Box>
+      ) : null}
 
       {/* display image or video with recommended tools list */}
       <Box sx={{ mt: 4 }}>
