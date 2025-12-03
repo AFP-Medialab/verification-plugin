@@ -1,4 +1,7 @@
-import { TIKTOK_PROPERTY_PATHS, TWEET_PROPERTY_PATHS } from "background";
+import {
+  TIKTOK_PROPERTY_PATHS,
+  TWEET_PROPERTY_PATHS,
+} from "@/utils/messageHandler";
 import dayjs from "dayjs";
 import jp from "jsonpath";
 import _ from "lodash";
