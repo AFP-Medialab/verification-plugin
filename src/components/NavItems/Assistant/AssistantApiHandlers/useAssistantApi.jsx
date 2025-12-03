@@ -271,7 +271,6 @@ export default function assistantApiCalls() {
           assistantEndpoint + "gcloud/persuasion-span-clfr",
           {
             text: text,
-            frontendVersion: 0.88,
           },
         );
         return result.data;
@@ -293,7 +292,6 @@ export default function assistantApiCalls() {
       async () => {
         const result = await axios.post(assistantEndpoint + "dw/subjectivity", {
           content: text,
-          frontendVersion: 0.88,
         });
         return result.data;
       },
