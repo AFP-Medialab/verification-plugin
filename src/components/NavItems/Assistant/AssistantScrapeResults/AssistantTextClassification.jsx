@@ -149,13 +149,12 @@ export default function AssistantTextClassification({
         filteredCategories[label] = classification[label];
       } else if (credibilitySignal === newsGenreTitle) {
         // set default news genre value if category below threshold
-        label === REPORTING_LABEL
+        label === REPORTING_LABEL ||
+        classification[label][0].score >= newsGenreConfidenceThreshold
           ? (filteredCategories[label] = classification[label])
-          : classification[label][0].score >= newsGenreConfidenceThreshold
-            ? (filteredCategories[label] = classification[label])
-            : (filteredCategories[REPORTING_LABEL] = [
-                { indices: [0, -1], score: newsGenreConfidenceThreshold },
-              ]);
+          : (filteredCategories[REPORTING_LABEL] = [
+              { indices: [0, -1], score: newsGenreConfidenceThreshold },
+            ]);
       } else if (
         classification[label][0].score >= newsFramingConfidenceThreshold
       ) {
