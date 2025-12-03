@@ -60,7 +60,7 @@ export default function AssistantTextClassification({
     // news framing
     newsFramingConfidenceThreshold: 0.8,
     // news genre
-    newsGenreConfidenceThresholdLow: 0.7,
+    newsGenreConfidenceThreshold: 0.7,
   },
   textHtmlMap = null,
   credibilitySignal = "",
