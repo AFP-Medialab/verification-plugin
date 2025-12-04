@@ -20,11 +20,11 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import {
   SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
 } from "@Shared/ReverseSearch/reverseSearchUtils";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";

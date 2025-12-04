@@ -11,11 +11,11 @@ import Stack from "@mui/material/Stack";
 import { useTrackEvent } from "@/Hooks/useAnalytics";
 import { imageForensic } from "@/constants/tools";
 import { resetForensicState } from "@/redux/actions/tools/forensicActions";
+import { setError } from "@/redux/reducers/errorReducer";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import axios from "axios";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { setError } from "redux/reducers/errorReducer";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";

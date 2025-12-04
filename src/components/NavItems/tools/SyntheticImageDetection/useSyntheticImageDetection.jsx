@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
 import { getToolkitSettings } from "@/components/NavItems/tools/C2pa/Hooks/useGetC2paData";
+import { setError } from "@/redux/reducers/errorReducer";
 import {
   setSyntheticImageDetectionLoading,
   setSyntheticImageDetectionNearDuplicates,
@@ -10,7 +11,6 @@ import {
 import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequest";
 import axios from "axios";
 import { createC2pa, selectGenerativeInfo } from "c2pa";
-import { setError } from "redux/reducers/errorReducer";
 
 import { syntheticImageDetectionAlgorithms } from "./SyntheticImageDetectionAlgorithms";
 
@@ -70,7 +70,7 @@ export const useSyntheticImageDetection = ({ dispatch }) => {
     if (!url && !imageFile) throw new Error("Missing URL or image");
 
     const modeURL = "images/";
-    const baseURL = process.env.REACT_APP_CAA_DEEPFAKE_URL;
+    const baseURL = import.meta.env.VITE_CAA_DEEPFAKE_URL;
     const services = syntheticImageDetectionAlgorithms
       .map((algorithm) => algorithm.apiServiceName)
       .join(",");
@@ -118,7 +118,7 @@ export const useSyntheticImageDetection = ({ dispatch }) => {
    */
   const fetchJobStatusAndReport = async (jobId) => {
     const modeURL = "images/";
-    const baseURL = process.env.REACT_APP_CAA_DEEPFAKE_URL;
+    const baseURL = import.meta.env.VITE_CAA_DEEPFAKE_URL;
 
     const statusRes = await axios.get(baseURL + modeURL + "jobs/" + jobId);
     const status = statusRes.data?.status;

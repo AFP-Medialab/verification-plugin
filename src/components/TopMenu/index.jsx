@@ -57,7 +57,7 @@ const TopMenu = ({ topMenuItems }) => {
 
   const navigate = useNavigate();
 
-  const LOGO_EU = process.env.REACT_APP_LOGO_EU;
+  const LOGO_EU = import.meta.env.VITE_LOGO_EU;
 
   const topMenuItemSelected = useSelector((state) => state.nav);
 

@@ -32,15 +32,15 @@ import SearchIcon from "@mui/icons-material/Search";
 import TranslateIcon from "@mui/icons-material/Translate";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
+import DateAndTimePicker from "@/components/Shared/DateTimePicker/DateAndTimePicker";
 import { dataAnalysisSna } from "@/constants/tools";
+import { setError } from "@/redux/reducers/errorReducer";
 import { convertMomentToGMT } from "@Shared/DateTimePicker/convertToGMT";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
-import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import dateFormat from "dateformat";
 import dayjs from "dayjs";
 import _ from "lodash";
-import { setError } from "redux/reducers/errorReducer";
 
 import { theme as defaultTheme } from "../../../../theme";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";

@@ -9,7 +9,7 @@ import { Gradient } from "@mui/icons-material";
 import SyntheticImageDetectionForm from "@/components/NavItems/tools/SyntheticImageDetection/SyntheticImageDetectionForm";
 import { useSyntheticImageDetection } from "@/components/NavItems/tools/SyntheticImageDetection/useSyntheticImageDetection";
 import { resetSyntheticImageDetectionImage } from "@/redux/reducers/tools/syntheticImageDetectionReducer";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
@@ -60,6 +60,10 @@ const SyntheticImageDetection = () => {
 
       <Alert severity="warning">
         {keywordWarning("warning_beta_synthetic_image_detection")}
+      </Alert>
+
+      <Alert severity="warning">
+        {keywordWarning("warning_c2pa_synthetic_image_detection")}
       </Alert>
 
       <Alert severity="warning">

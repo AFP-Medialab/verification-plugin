@@ -4,8 +4,8 @@ import {
   reverseImageSearch,
   reverseImageSearchAll,
 } from "@Shared/ReverseSearch/reverseSearchUtils";
-import { openTabs } from "components/Shared/ReverseSearch/utils/openTabUtils";
-import { getImgUrl } from "components/Shared/ReverseSearch/utils/searchUtils";
+import { openTabs } from "@Shared/ReverseSearch/utils/openTabUtils";
+import { getImgUrl } from "@Shared/ReverseSearch/utils/searchUtils";
 import dayjs from "dayjs";
 import Dexie from "dexie";
 import { JSONPath as jp } from "jsonpath-plus";
@@ -160,7 +160,13 @@ function contextClick(info) {
   }
 }
 
-chrome.runtime.onInstalled.addListener(() => {
+// Track if context menu listeners have been initialized
+let contextMenuInitialized = false;
+
+chrome.runtime.onInstalled.addListener(async () => {
+  // Clear all existing context menus to prevent duplicates
+  await chrome.contextMenus.removeAll();
+
   chrome.contextMenus.create({
     id: "assistant",
     title: "Open with assistant",
@@ -247,6 +253,12 @@ chrome.runtime.onInstalled.addListener(() => {
     title: SEARCH_ENGINE_SETTINGS.GOOGLE_FACT_CHECK.CONTEXT_MENU_TITLE,
     contexts: ["image"],
   });
+
+  // Only register the click listener once per installation
+  if (!contextMenuInitialized) {
+    chrome.contextMenus.onClicked.addListener(contextClick);
+    contextMenuInitialized = true;
+  }
 });
 
 async function getCurrentTab() {
@@ -254,8 +266,6 @@ async function getCurrentTab() {
   let [tab] = await chrome.tabs.query(queryOptions);
   return tab;
 }
-
-chrome.contextMenus.onClicked.addListener(contextClick);
 
 const PLATFORM_URLS = {
   Tiktok: [".tiktok.com", "/tiktok.com"],
@@ -657,7 +667,7 @@ chrome.runtime.onMessageExternal.addListener(async function (request) {
 
 chrome.runtime.onStartup.addListener();
 
-if (process.env.REACT_APP_ENVIRONMENT !== "production") {
+if (import.meta.env.VITE_ENVIRONMENT !== "production") {
   chrome.action.setIcon({
     path: {
       16: "img/icon-staging.png",

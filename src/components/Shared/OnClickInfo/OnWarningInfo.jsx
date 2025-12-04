@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
-import useMyStyles from "../MaterialUiStyles/useMyStyles";
-import Typography from "@mui/material/Typography";
-import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import Linkify from "react-linkify";
+
+import Typography from "@mui/material/Typography";
+
+import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
+
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+
+import useMyStyles from "../MaterialUiStyles/useMyStyles";
 
 const OnWarningInfo = (props) => {
   const classes = useMyStyles();

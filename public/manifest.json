@@ -29,7 +29,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["toolkit_bg.wasm", "inject.js"],
+      "resources": ["c2paAssets/toolkit_bg.wasm", "inject.js"],
       "matches": ["<all_urls>"]
     }
   ],

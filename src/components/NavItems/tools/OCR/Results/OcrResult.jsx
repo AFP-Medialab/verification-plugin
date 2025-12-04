@@ -22,14 +22,14 @@ import {
   setReprocessOpen,
   setSelectedScript,
 } from "@/redux/actions/tools/ocrActions";
+import { setError } from "@/redux/reducers/errorReducer";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import {
   SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
 } from "@Shared/ReverseSearch/reverseSearchUtils";
 import { TextCopy } from "@Shared/Utils/TextCopy";
 import { Translate } from "@Shared/Utils/Translate";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { setError } from "redux/reducers/errorReducer";
 
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 

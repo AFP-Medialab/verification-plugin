@@ -28,10 +28,10 @@ import {
 import HelpIcon from "@mui/icons-material/Help";
 import MapIcon from "@mui/icons-material/Map";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { c2paCurrentImageIdSet } from "@/redux/reducers/tools/c2paReducer";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { Icon as GeoIcon } from "leaflet";
 import moment from "moment";
-import { c2paCurrentImageIdSet } from "redux/reducers/tools/c2paReducer";
 
 /**
  *

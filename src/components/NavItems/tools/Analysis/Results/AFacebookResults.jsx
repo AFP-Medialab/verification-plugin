@@ -13,10 +13,10 @@ import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { submissionEvent } from "@Shared/GoogleAnalytics/GoogleAnalytics";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { ReverseSearchButtons } from "@Shared/ReverseSearch/ReverseSearchButtons";
 import { reverseImageSearch } from "@Shared/ReverseSearch/reverseSearchUtils";
 import axios from "axios";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import _ from "lodash";
 
 import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList";

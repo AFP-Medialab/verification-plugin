@@ -6,15 +6,15 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 
-import { changeLanguage } from "@/redux/reducers/languageReducer";
-import { getSupportedBrowserLanguage } from "@Shared/Languages/getSupportedBrowserLanguage";
-import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 import {
   RecordingWindow,
   getRecordingInfo,
-} from "components/NavItems/tools/SNA/components/Recording";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { ROLES } from "constants/roles";
+} from "@/components/NavItems/tools/SNA/components/Recording";
+import { ROLES } from "@/constants/roles";
+import { changeLanguage } from "@/redux/reducers/languageReducer";
+import { getSupportedBrowserLanguage } from "@Shared/Languages/getSupportedBrowserLanguage";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 
 import LogoEuComWhite from "../NavBar/images/SVG/Navbar/ep-logo-white.svg?url";
 import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg?url";
@@ -32,7 +32,7 @@ const PopUp = () => {
 
   const currentLang = useSelector((state) => state.language);
   const defaultLanguage = useSelector((state) => state.defaultLanguage);
-  const LOGO_EU = process.env.REACT_APP_LOGO_EU;
+  const LOGO_EU = import.meta.env.VITE_LOGO_EU;
   const [pageUrl, setPageUrl] = useState(null);
 
   //SNA Recording props

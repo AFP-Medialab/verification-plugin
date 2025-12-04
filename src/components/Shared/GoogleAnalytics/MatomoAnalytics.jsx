@@ -159,7 +159,7 @@ function matomoCall(actions) {
   if (innerWidth && innerHeight)
     url_params.append("res", innerWidth + "x" + innerHeight);
 
-  const url = process.env.REACT_APP_MATOMO_URL;
+  const url = import.meta.env.VITE_MATOMO_URL;
 
   fetch(url, {
     method: "POST",

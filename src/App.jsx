@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { HashRouter, Route, Routes } from "react-router-dom";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import {
   cleanErrorNetwork,
   setErrorNetwork,
-} from "redux/reducers/errorReducer";
+} from "@/redux/reducers/errorReducer";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 import ApplicationLayout from "./components/ApplicationLayout";
 import PopUp from "./components/PopUp/PopUp";

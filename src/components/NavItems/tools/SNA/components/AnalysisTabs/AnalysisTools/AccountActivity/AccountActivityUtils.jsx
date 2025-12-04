@@ -8,7 +8,7 @@ import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { getSelectedSourcesNameMaps } from "components/NavItems/tools/SNA/utils/accessSavedCollections";
+import { getSelectedSourcesNameMaps } from "@/components/NavItems/tools/SNA/utils/accessSavedCollections";
 import {
   Bar,
   BarChart,

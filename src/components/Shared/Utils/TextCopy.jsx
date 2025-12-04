@@ -6,7 +6,7 @@ import Tooltip from "@mui/material/Tooltip";
 
 import FileCopyOutlined from "@mui/icons-material/FileCopy";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 export const TextCopy = ({ text, index, type }) => {
   const keyword = i18nLoadNamespace("components/Shared/utils");
