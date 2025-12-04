@@ -1,9 +1,9 @@
 import {
-  handleChromeMessage,
   handleRecordedMessage,
   handleRecorderOnCommit,
+  handleSNARecorderChromeMessage,
   initializeMessageHandler,
-} from "@/utils/messageHandler";
+} from "@/utils/snaRecorderMessageHandler";
 import { trackEvent } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import {
   SEARCH_ENGINE_SETTINGS,
@@ -53,7 +53,7 @@ const thumbnailsSearch = (info) => {
 
 const videoReversesearchDBKF = (info) => {
   let search_url =
-    "https://weverify-demo.ontotext.com/#!/similaritySearchResults&type=Videos&params=";
+    "https://dbkf.ontotext.com/#!/similaritySearchResults&type=Videos&params=";
   let urlvideo = info.linkUrl;
   if (urlvideo !== "" && urlvideo.startsWith("http")) {
     let url = search_url + encodeURIComponent(urlvideo);
@@ -254,7 +254,7 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 });
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  handleChromeMessage(request, sender, sendResponse);
+  handleSNARecorderChromeMessage(request, sender, sendResponse);
   return true;
 });
 

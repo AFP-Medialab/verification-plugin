@@ -278,20 +278,131 @@ class DBStorage {
       throw error;
     }
   }
-  async deleteByIndex(storeName, indexName, value) {
+  /**
+   * Delete records by key path property value
+   * @param {string} storeName - Name of the object store
+   * @param {string} keyPathProperty - Property name in the key path to match against
+   * @param {*} value - Value to match for deletion
+   * @returns {Promise<number>} Number of records deleted
+   */
+  async deleteByKeyPath(storeName, keyPathProperty, value) {
     await this._ensureInitialized();
-    const tx = this.db.transaction(storeName);
+    let deletedCount = 0;
+
     try {
-      const index = tx.store.index(indexName);
-      for await (const cursor of index.iterate(value)) {
-        cursor.delete();
+      const tx = this.db.transaction(storeName, "readwrite");
+      const store = tx.objectStore(storeName);
+
+      // Get the store's key path to understand the structure
+      const storeConfig = this.schema[storeName];
+      const keyPath = storeConfig?.keyPath;
+
+      // If the key path property is the same as the key path, use direct deletion
+      if (keyPath === keyPathProperty) {
+        await store.delete(value);
+        deletedCount = 1;
+      } else {
+        // Otherwise, iterate through records to find matches
+        for await (const cursor of store) {
+          const record = cursor.value;
+
+          // Handle nested key path properties (e.g., 'user.id')
+          const propertyValue = this._getNestedProperty(
+            record,
+            keyPathProperty,
+          );
+
+          if (propertyValue === value) {
+            cursor.delete();
+            deletedCount++;
+          }
+        }
       }
-    } catch (error) {
-      this._handleError(`Failed to delete record from ${storeName}`, error);
-      throw error;
-    } finally {
+
       await tx.done;
+      return deletedCount;
+    } catch (error) {
+      this._handleError(
+        `Failed to delete records by key path ${keyPathProperty} in ${storeName}`,
+        error,
+      );
+      throw error;
     }
+  }
+
+  /**
+   * Delete multiple records by key path property values
+   * @param {string} storeName - Name of the object store
+   * @param {string} keyPathProperty - Property name in the key path to match against
+   * @param {Array<*>} values - Array of values to match for deletion
+   * @returns {Promise<number>} Number of records deleted
+   */
+  async deleteMultipleByKeyPath(storeName, keyPathProperty, values) {
+    await this._ensureInitialized();
+    let deletedCount = 0;
+
+    if (!Array.isArray(values) || values.length === 0) {
+      return deletedCount;
+    }
+
+    try {
+      const tx = this.db.transaction(storeName, "readwrite");
+      const store = tx.objectStore(storeName);
+      const storeConfig = this.schema[storeName];
+      const keyPath = storeConfig?.keyPath;
+
+      // If the key path property is the same as the key path, use direct deletion
+      if (keyPath === keyPathProperty) {
+        for (const value of values) {
+          try {
+            await store.delete(value);
+            deletedCount++;
+          } catch (error) {
+            // Continue with other deletions even if one fails
+            console.warn(`Failed to delete record with key ${value}:`, error);
+          }
+        }
+      } else {
+        // Create a Set for faster lookups
+        const valueSet = new Set(values);
+
+        // Iterate through records to find matches
+        for await (const cursor of store) {
+          const record = cursor.value;
+          const propertyValue = this._getNestedProperty(
+            record,
+            keyPathProperty,
+          );
+
+          if (valueSet.has(propertyValue)) {
+            cursor.delete();
+            deletedCount++;
+          }
+        }
+      }
+
+      await tx.done;
+      return deletedCount;
+    } catch (error) {
+      this._handleError(
+        `Failed to delete multiple records by key path ${keyPathProperty} in ${storeName}`,
+        error,
+      );
+      throw error;
+    }
+  }
+
+  /**
+   * Helper method to get nested property value from an object
+   * @private
+   * @param {Object} obj - The object to get property from
+   * @param {string} propertyPath - The property path (e.g., 'user.id' or 'id')
+   * @returns {*} The property value or undefined
+   */
+  _getNestedProperty(obj, propertyPath) {
+    return propertyPath.split(".").reduce((current, key) => {
+      return current && current[key] !== undefined ? current[key] : undefined;
+    }, obj);
   }
 
   /**
@@ -309,19 +420,6 @@ class DBStorage {
     }
   }
 
-  /**
-   * Delete DB
-   *  @returns {Promise<void>}
-   */
-  async deleteDB() {
-    await this._ensureInitialized();
-    try {
-      return await this.db.deleteDB(this.name);
-    } catch (error) {
-      this._handleError(`Failed to delete db ${this.name}`, error);
-      throw error;
-    }
-  }
   /**
    * Count records in a store
    * @param {string} storeName - Name of the object store
@@ -772,7 +870,45 @@ export default DBStorage;
  *   return true; // Continue iteration
  * });
  *
- * // 7. CUSTOM RECORD TYPES FOR YOUR APP
+ * // 7. DELETE OPERATIONS WITH KEY PATHS
+ * // Delete a user by their ID (key path property)
+ * const deletedCount = await userDB.deleteByKeyPath('users', 'id', 'user_123');
+ * console.log(`Deleted ${deletedCount} users`);
+ *
+ * // Delete multiple users by email domain
+ * await userDB.iterateCursor('users', async (cursor) => {
+ *   const user = cursor.value;
+ *   if (user.email.endsWith('@example.com')) {
+ *     cursor.delete();
+ *   }
+ *   return true;
+ * });
+ *
+ * // Delete multiple users by IDs at once
+ * const userIdsToDelete = ['user_456', 'user_789', 'user_101'];
+ * const multiDeleteCount = await userDB.deleteMultipleByKeyPath('users', 'id', userIdsToDelete);
+ * console.log(`Deleted ${multiDeleteCount} users`);
+ *
+ * // Delete records with nested key path properties
+ * const nestedDB = new DBStorage('NestedData', 1, {
+ *   profiles: {
+ *     keyPath: 'id',
+ *     autoIncrement: true
+ *   }
+ * });
+ *
+ * // Add records with nested structure
+ * await nestedDB.add('profiles', {
+ *   name: 'John Doe',
+ *   account: { provider: 'google', providerId: 'google_123' },
+ *   settings: { theme: 'dark' }
+ * });
+ *
+ * // Delete by nested property
+ * await nestedDB.deleteByKeyPath('profiles', 'account.provider', 'google');
+ * await nestedDB.deleteByKeyPath('profiles', 'settings.theme', 'dark');
+ *
+ * // 8. CUSTOM RECORD TYPES FOR YOUR APP
  * /** @typedef {Object} ArticleRecord
  *  * @property {number} [id] - Auto-generated ID
  *  * @property {string} title - Article title
@@ -807,7 +943,7 @@ export default DBStorage;
  *
  * await articleDB.add('articles', article);
  *
- * // 8. SIMPLE KEY-VALUE USAGE
+ * // 9. SIMPLE KEY-VALUE USAGE
  * import { keyValueDB } from '@/utils/dbstorage';
  *
  * // Store user preferences

@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import Dexie from "dexie";
 import { JSONPath as jp } from "jsonpath-plus";
 import _ from "lodash";
 
@@ -220,7 +219,11 @@ const getTikToksFromDB = async () => {
 };
 
 // Main message handler function
-export const handleChromeMessage = async (request, sender, sendResponse) => {
+export const handleSNARecorderChromeMessage = async (
+  request,
+  sender,
+  sendResponse,
+) => {
   try {
     if (request.prompt === "getTweets") {
       const tweetResponse = await getTweetsFromDB();
@@ -230,7 +233,7 @@ export const handleChromeMessage = async (request, sender, sendResponse) => {
       sendResponse(tiktokResp);
     } else if (request.prompt === "deleteAll") {
       //await db.delete().then(() => db.open());
-      await snaDB.deleteDB().then(() => snaDB.init());
+      await snaDB.deleteDatabase().then(() => snaDB.init());
       sendResponse({ success: true });
     } else if (request.prompt === "deleteCollection") {
       if (request.source === "twitter") {
@@ -243,9 +246,9 @@ export const handleChromeMessage = async (request, sender, sendResponse) => {
             true,
           )
           .delete();*/
-        await snaDB.deleteByIndex(
+        await snaDB.deleteByKeyPath(
           "tweets",
-          "by-collectionID",
+          "collectionID",
           request.collectionId,
         );
       } else if (request.source === "tiktok") {
@@ -258,9 +261,9 @@ export const handleChromeMessage = async (request, sender, sendResponse) => {
             true,
           )
           .delete();*/
-        await snaDB.deleteByIndex(
-          "tiktoks",
-          "by-collectionID",
+        await snaDB.deleteByKeyPath(
+          "tweets",
+          "collectionID",
           request.collectionId,
         );
       }
