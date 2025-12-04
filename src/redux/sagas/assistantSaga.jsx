@@ -189,7 +189,10 @@ function* handleMediaActionList() {
 }
 
 function* handleSubmitUpload(action) {
+  let uploadFileUrl = action.payload.uploadFileUrl;
   let contentType = action.payload.contentType;
+  yield put(setProcessUrl(uploadFileUrl, contentType)); // kicks off getMediaSimilaritySaga()
+
   let known_link = KNOWN_LINKS.OWN;
   const role = yield select((state) => state.userSession.user.roles);
   const userAuthenticated = yield select(

@@ -366,11 +366,21 @@ export const submitInputUrl = (inputUrl) => {
   };
 };
 
-export const submitUpload = (contentType) => {
+export const submitUpload = (uploadFileUrl, contentType) => {
   return {
     type: "SUBMIT_UPLOAD",
     payload: {
+      uploadFileUrl: uploadFileUrl,
       contentType: contentType,
+    },
+  };
+};
+
+export const setVideoThumbnailUrl = (videoThumbnailUrl) => {
+  return {
+    type: "SET_VIDEO_THUMBNAIL_URL",
+    payload: {
+      videoThumbnailUrl: videoThumbnailUrl,
     },
   };
 };
