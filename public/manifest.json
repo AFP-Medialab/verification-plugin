@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "Fake news debunker by InVID & WeVerify",
+  "name": "Fake news debunker by InVID, WeVerify & VeraAI",
   "version": "0.88.2",
-  "description": "InVID WeVerify extension",
+  "description": "InVID WeVerify VeraAI extension",
   "short_name": "Verification Plugin",
   "action": {
-    "default_title": "InVID WeVerify",
+    "default_title": "InVID WeVerify VeraAI",
     "default_popup": "popup.html"
   },
   "background": {
