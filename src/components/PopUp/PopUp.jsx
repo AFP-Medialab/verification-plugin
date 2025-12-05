@@ -82,7 +82,7 @@ const PopUp = () => {
   };
 
   useEffect(() => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    browser.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const currentTab = tabs[0];
       setPageUrl(currentTab.url);
     });

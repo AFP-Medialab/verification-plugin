@@ -309,13 +309,8 @@ export const useHiyaAudioAnalysis = () => {
       return new Error(keyword("error_invalid_media_file"));
     }
 
-    const isChromium = !!window.chrome;
-
     // TODO: Use ffmpeg to convert the m4a files if possible
-    if (
-      isChromium &&
-      (file.type.includes("basic") || file.type.includes("aiff"))
-    ) {
+    if (file.type.includes("basic") || file.type.includes("aiff")) {
       dispatch(setError(keyword("error_invalid_audio_file")));
       resetState();
       return Error(keyword("error_invalid_audio_file"));

@@ -74,7 +74,7 @@ const C2paData = () => {
   const authenticatedRequest = useAuthenticatedRequest();
 
   const getTransactionId = () => {
-    return `verificationplugin-${chrome.runtime.getManifest().version}-${uuidv4()}`;
+    return `verificationplugin-${browser.runtime.getManifest().version}-${uuidv4()}`;
   };
 
   const getAfpReverseSearch = async () => {

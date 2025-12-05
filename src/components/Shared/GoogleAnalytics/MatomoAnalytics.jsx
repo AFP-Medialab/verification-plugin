@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-const matomo_site = process.env.MATOMO_SITE;
+const matomo_site = import.meta.env.MATOMO_SITE;
 
 export const getclientId = () => {
   const cookies = useSelector((state) => state.cookies);

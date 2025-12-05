@@ -11,6 +11,8 @@
 # production
 /build
 /dist
+.output
+.wxt
 
 # misc
 .DS_Store

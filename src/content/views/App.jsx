@@ -8,9 +8,9 @@ import {
 } from "@/redux/reducers/errorReducer";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
-import ApplicationLayout from "./components/ApplicationLayout";
-import PopUp from "./components/PopUp/PopUp";
-import useAuthenticationAPI from "./components/Shared/Authentication/useAuthenticationAPI";
+import ApplicationLayout from "../../components/ApplicationLayout";
+import PopUp from "../../components/PopUp/PopUp";
+import useAuthenticationAPI from "../../components/Shared/Authentication/useAuthenticationAPI";
 
 const App = () => {
   const keyword = i18nLoadNamespace("components/Shared/utils");

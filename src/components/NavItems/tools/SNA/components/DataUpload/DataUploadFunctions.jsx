@@ -1,7 +1,7 @@
 import {
   TIKTOK_PROPERTY_PATHS,
   TWEET_PROPERTY_PATHS,
-} from "@/background/index.jsx";
+} from "@/background/main.jsx";
 import dayjs from "dayjs";
 import jp from "jsonpath";
 import _ from "lodash";

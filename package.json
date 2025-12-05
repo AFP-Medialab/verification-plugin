@@ -1,14 +1,14 @@
 {
   "name": "weverify-plugin",
-  "version": "0.88.2",
+  "version": "0.88.3",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "srv_dev": "vite build --watch",
-    "dev": "vite build --watch",
-    "dev:hot": "vite --mode development",
-    "build": "vite build",
+    "dev": "wxt",
+    "build": "wxt build",
     "prepare": "husky",
+    "postinstall": "wxt prepare",
+    "zip": "wxt zip",
     "test": "npm run test-cu && npm run test-e2e",
     "test-cu": "rm -rf playwright/.cache && playwright test -c playwright-ct.config.js",
     "test-e2e": "playwright test",
@@ -109,7 +109,6 @@
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.4",
     "@babel/preset-react": "^7.24.7",
-    "@crxjs/vite-plugin": "^2.2.1",
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^9.11.1",
     "@playwright/experimental-ct-react": "^1.47.2",
@@ -119,6 +118,7 @@
     "@trivago/prettier-plugin-sort-imports": "^5.2.1",
     "@types/node": "^22.7.2",
     "@vitejs/plugin-react": "^5.1.1",
+    "@wxt-dev/module-react": "^1.1.5",
     "concurrently": "^9.0.1",
     "eslint": "^9.11.1",
     "eslint-plugin-react": "^7.36.1",
@@ -127,7 +127,8 @@
     "lint-staged": "^15.2.10",
     "prettier": "3.3.3",
     "vite": "^7.2.6",
-    "vite-plugin-svgr": "^4.5.0"
+    "vite-plugin-svgr": "^4.5.0",
+    "wxt": "^0.20.11"
   },
   "lint-staged": {
     "src/**/*.{js,css,md}": [

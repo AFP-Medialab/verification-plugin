@@ -1,18 +1,18 @@
-import React from "react";
+import { CacheProvider } from "@emotion/react";
+import React, { Suspense } from "react";
+import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+
+import createCache from "@emotion/cache";
 import { configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
-import allReducers from "./redux/reducers";
-import "./index.css";
-import rootSaga from "./redux/sagas";
-import { Provider } from "react-redux";
-import { createRoot } from "react-dom/client";
-import createCache from "@emotion/cache";
-import { CacheProvider } from "@emotion/react";
-import { Suspense } from "react";
 
-import App from "./App";
-import AppWrapper from "./AppWrapper";
-import "./i18n";
+import AppWrapper from "../../AppWrapper";
+import App from "../../content/views/App";
+import "../../i18n";
+import "../../index.css";
+import allReducers from "../../redux/reducers";
+import rootSaga from "../../redux/sagas";
 
 function saveToLocalStorage(state) {
   try {
