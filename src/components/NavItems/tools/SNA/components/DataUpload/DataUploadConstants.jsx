@@ -74,13 +74,13 @@ export const uploadTemplates = {
     id: "crowdTangleFb",
     tooltipText: "uploadModal_crowdtangleFB_tooltip",
   },
-  snaTwitter: {
+  twitter: {
     icon: snaIcon,
     defaultFieldsMap: snaTwitterDefaultFields,
-    id: "snaTwitter",
+    id: "twitter",
     tooltipText: "uploadModal_snaTwitter_tooltip",
   },
-  snaTikTok: {
+  tikTok: {
     icon: (
       <img
         src={tiktokLogoUrl}
@@ -89,7 +89,7 @@ export const uploadTemplates = {
       />
     ),
     defaultFieldsMap: snaTiktokDefaultFields,
-    id: "snaTiktok",
+    id: "tiktok",
     tooltipText: "uploadModal_snaTiktok_tooltip",
   },
 };

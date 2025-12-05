@@ -335,6 +335,10 @@ const SNA = () => {
     setShowZeeschuimerUploadModal,
   };
 
+  const handleRefreshCollections = async () => {
+    await refreshPage(setInitLoading, dataSources, setDataSources);
+  };
+
   const dataUploadModalProps = {
     dataSources,
     showUploadModal,
@@ -350,6 +354,7 @@ const SNA = () => {
     setUploadedFileName,
     uploadModalError,
     setUploadModalError,
+    onUploadComplete: handleRefreshCollections,
   };
 
   const zeeschuimerDataUploadModalProps = {

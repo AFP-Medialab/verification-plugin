@@ -1,10 +1,11 @@
-import {
-  TIKTOK_PROPERTY_PATHS,
-  TWEET_PROPERTY_PATHS,
-} from "@/utils/snaRecorderMessageHandler";
-import dayjs from "dayjs";
 import jp from "jsonpath";
-import _ from "lodash";
+
+import {
+  extractTweetProperties,
+  generateTweetLink,
+  transformTiktok,
+  transformTweetArrayProperties,
+} from "../../utils/snaDataTransformers";
 
 const cleanCrowdTangleFbDataUpload = (uploadedData) => {
   uploadedData.forEach((entry) => (entry.date = entry.date?.slice(0, -4)));
@@ -53,17 +54,57 @@ const cleanCustomUpload = (uploadedData) => {
 
   return uploadedData;
 };
+/**
+ * Tokenize a comma-separated string into an array of trimmed values
+ * @param {string|null|undefined} value - String to tokenize
+ * @returns {Array<string>} Array of trimmed tokens, or empty array if value is null/undefined
+ */
+const tokenizeString = (value) => {
+  if (!value) return [];
+  return value
+    .split(",")
+    .map((token) => token.trim())
+    .filter((token) => token.length > 0);
+};
 
-export const cleanDataUpload = (uploadedData, socialMediaSelected) => {
+/**
+ * Clean Twitter upload data by tokenizing comma-separated string fields
+ * @param {Array} uploadedData - Raw uploaded data
+ * @returns {Array} Cleaned data with tokenized fields
+ */
+const cleanTwitterUpload = (uploadedData) => {
+  const processHeaders = ["hashtags", "links", "mentions"];
+  uploadedData.forEach((entry) => {
+    processHeaders.forEach((header) => {
+      entry[header] = tokenizeString(entry[header]);
+    });
+  });
+  return uploadedData;
+};
+
+export const cleanDataUpload = (
+  uploadedData,
+  socialMediaSelected,
+  selectedCollection,
+) => {
   let ret;
+  //console.log("socialMediaSelected ", socialMediaSelected)
   if (socialMediaSelected === "crowdTangleFb") {
     ret = cleanCrowdTangleFbDataUpload(uploadedData);
   } else if (socialMediaSelected === "customUpload") {
     ret = cleanCustomUpload(uploadedData);
+  } else if (socialMediaSelected === "twitter") {
+    ret = cleanTwitterUpload(uploadedData);
   } else {
     ret = uploadedData;
   }
   let cleanedRet = ret.filter((entry) => entry.id != undefined);
+
+  // Add  collectionID key from selected Collection
+  cleanedRet.forEach((entry) => {
+    entry.collectionID = selectedCollection;
+  });
+
   return cleanedRet;
 };
 
@@ -83,64 +124,50 @@ export const getAccountNameMap = (uploadedData, socialMediaSelected) => {
 
 export const reformatZeeschuimerTweets = (uploadedTweets, uploadedFileName) => {
   const reformatedTweets = uploadedTweets.map((tweet) => {
-    let tweetInfo = tweet.data;
-    let reformatedTweet = {};
+    const tweetInfo = tweet.data;
 
+    // Extract all properties
+    let reformatedTweet = extractTweetProperties(tweetInfo);
     reformatedTweet.collectionID = uploadedFileName;
 
-    let fields = Object.keys(TWEET_PROPERTY_PATHS);
-
-    fields.forEach(
-      (k) =>
-        (reformatedTweet[k] = _.get(
-          tweetInfo,
-          TWEET_PROPERTY_PATHS[k].path,
-          TWEET_PROPERTY_PATHS[k].default,
-        )),
-    );
-
+    // Fallback for username if not found
     if (reformatedTweet.username.length === 0) {
       reformatedTweet.username =
         jp.query(tweetInfo.core.user_results.result, "$..screen_name")[0] || "";
     }
 
-    reformatedTweet.mentions.length >= 1
-      ? (reformatedTweet.mentions = reformatedTweet.mentions
-          .flat(1)
-          .map((obj) => (obj.screen_name ? obj.screen_name : ""))
-          .filter((obj) => obj.length > 1))
-      : {};
+    // Parse views as integer
+    reformatedTweet.views = parseInt(reformatedTweet.views);
 
-    reformatedTweet.hashtags.length >= 1
-      ? (reformatedTweet.hashtags = reformatedTweet.hashtags
-          .flat(1)
-          .map((obj) => (obj.text ? obj.text : ""))
-          .filter((obj) => obj.length > 1))
-      : {};
+    // Transform array properties
+    reformatedTweet = transformTweetArrayProperties(reformatedTweet);
 
-    reformatedTweet.links.length >= 1
-      ? (reformatedTweet.links = reformatedTweet.links
-          .flat(1)
-          .map((obj) => (obj.expanded_url ? obj.expanded_url : ""))
-          .filter((obj) => obj.length > 1))
-      : {};
-    (reformatedTweet.imageLink =
+    // Extract media from the original tweet object
+    const imageLink =
       jp.query(
         tweet,
         "$.result.legacy.extended_entities..media_url_https",
-      )[0] || "None"),
-      (reformatedTweet.video =
-        jp
-          .query(
-            tweet,
-            "$.result.legacy.extended_entities..video_info.variants",
-          )[0]
-          ?.filter((x) => (x.content_type = "video/mp4"))[0].url || "None");
-    reformatedTweet.tweetLink =
-      "https://x.com/" +
-      reformatedTweet.username +
-      "/status/" +
-      reformatedTweet.id;
+      )[0] || "None";
+
+    const videoVariants =
+      jp.query(
+        tweet,
+        "$.result.legacy.extended_entities..video_info.variants",
+      )[0] || [];
+
+    const video =
+      videoVariants.filter((x) => x.content_type === "video/mp4")[0]?.url ||
+      "None";
+
+    reformatedTweet.imageLink = imageLink;
+    reformatedTweet.video = video;
+
+    // Generate tweet link
+    reformatedTweet.tweetLink = generateTweetLink(
+      reformatedTweet.username,
+      reformatedTweet.id,
+    );
+
     return reformatedTweet;
   });
   return reformatedTweets;
@@ -148,28 +175,8 @@ export const reformatZeeschuimerTweets = (uploadedTweets, uploadedFileName) => {
 
 export const reformatZeeschuimerTiktoks = (uploadedData, uploadedFileName) => {
   const reformatedTiktoks = uploadedData.map((tiktok) => {
-    let rawTiktok = tiktok.data;
-    let reformatedTiktok = {};
-    reformatedTiktok.id = rawTiktok.id;
-    reformatedTiktok.collectionID = uploadedFileName;
-    Object.keys(TIKTOK_PROPERTY_PATHS).forEach(
-      (k) =>
-        (reformatedTiktok[k] = _.get(
-          rawTiktok,
-          TIKTOK_PROPERTY_PATHS[k].path,
-          TIKTOK_PROPERTY_PATHS[k].default,
-        )),
-    );
-    reformatedTiktok.date = dayjs
-      .unix(reformatedTiktok.date)
-      .format("YYYY-MM-DDTHH:mm:ss");
-    reformatedTiktok.hashtags.length >= 1
-      ? (reformatedTiktok.hashtags = reformatedTiktok.hashtags
-          .map((v) => "#" + v.hashtagName)
-          .filter((v) => v.length > 2))
-      : {};
-    reformatedTiktok.reposts = parseInt(reformatedTiktok.reposts);
-    return reformatedTiktok;
+    const rawTiktok = tiktok.data;
+    return transformTiktok(rawTiktok, rawTiktok.id, uploadedFileName);
   });
   return reformatedTiktoks;
 };

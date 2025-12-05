@@ -1,8 +1,10 @@
-import dayjs from "dayjs";
+import DBStorage from "@/utils/dbstorage";
+import {
+  transformTiktok,
+  transformTweet,
+} from "components/NavItems/tools/SNA/utils/snaDataTransformers";
 import { JSONPath as jp } from "jsonpath-plus";
 import _ from "lodash";
-
-import DBStorage from "./dbstorage";
 
 // Initialize the databases (moved from background script)
 /*const db = new Dexie("tweetTest");
@@ -24,167 +26,36 @@ const snaDB = new DBStorage("snaData", 1, {
     },
   },
   tweets: {
-    keyPath: "id",
+    keyPath: ["collectionID", "id"],
     indexes: {
       "by-collectionID": { keyPath: ["collectionID", "id"] },
     },
   },
   tiktoks: {
-    keyPath: "id",
+    keyPath: ["collectionID", "id"],
     indexes: {
       "by-collectionID": { keyPath: ["collectionID", "id"] },
     },
   },
 });
 
-// Property path configurations (moved from background script)
-export const TWEET_PROPERTY_PATHS = {
-  id: { path: "rest_id", default: "" },
-  username: { path: "core.user_results.result.core.screen_name", default: "" },
-  display_name: { path: "core.user_results.result.core.name", default: "" },
-  account_created: {
-    path: "core.user_results.result.core.created_at",
-    default: "",
-  },
-  followers: {
-    path: "core.user_results.result.legacy.followers_count",
-    default: "",
-  },
-  total_posts: {
-    path: "core.user_results.result.legacy.statuses_count",
-    default: "",
-  },
-  text: { path: "legacy.full_text", default: "" },
-  replying_to: { path: "legacy.in_reply_to_screen_name", default: false },
-  isQuote: { path: "legacy.is_quote_status", default: false },
-  retweeted: { path: "legacy.retweeted", default: false },
-  links: { path: "legacy.entities.urls", default: "" },
-  mentions: { path: "legacy.entities.user_mentions", default: "" },
-  hashtags: { path: "legacy.entities.hashtags", default: "" },
-  date: { path: "legacy.created_at", default: "" },
-  likes: { path: "legacy.favorite_count", default: 0 },
-  quotes: { path: "legacy.quote_count", default: 0 },
-  retweets: { path: "legacy.retweet_count", default: 0 },
-  replies: { path: "legacy.reply_count", default: 0 },
-  views: { path: "views.count", default: 0 },
-};
-
-export const TIKTOK_PROPERTY_PATHS = {
-  username: {
-    path: "author.uniqueId",
-    default: "",
-  },
-  date: {
-    path: "createTime",
-    default: "",
-  },
-  hashtags: {
-    path: "textExtra",
-    default: "",
-  },
-  soundID: {
-    path: "music.id",
-    default: "",
-  },
-  soundAuthor: {
-    path: "music.authorName",
-    default: "",
-  },
-  soundTitle: {
-    path: "music.title",
-    default: "",
-  },
-  likes: {
-    path: "stats.diggCount",
-    default: 0,
-  },
-  replies: {
-    path: "stats.commentCount",
-    default: 0,
-  },
-  views: {
-    path: "stats.playCount",
-    default: 0,
-  },
-  shares: {
-    path: "stats.shareCount",
-    default: 0,
-  },
-  reposts: {
-    path: "statsV2.repostCount",
-    default: 0,
-  },
-  text: {
-    path: "desc",
-    default: "",
-  },
-  isAd: {
-    path: "isAd",
-    default: false,
-  },
-};
-
 // Helper functions (moved from background script)
 const getTweetsFromDB = async () => {
   const dbTweetsRaw = await snaDB.getAll("tweets");
-  const dbTweetsResults = dbTweetsRaw.map((rawTweet) => ({
+  /*const dbTweetsResults = dbTweetsRaw.map((rawTweet) => ({
     collID: rawTweet.collectionID,
     res: jp({ json: rawTweet, path: "$..tweet_results" })[0],
   }));
   const reformatedTweets = dbTweetsResults.map((tweet) => {
     if (!tweet.res || _.isEmpty(tweet.res)) return;
-    let tweetInfo =
+    const tweetInfo =
       tweet.res.result.tweet || tweet.res.result || tweet.res.tweet;
-    let reformatedTweet = {};
-    reformatedTweet.collectionID = tweet.collID;
-    Object.keys(TWEET_PROPERTY_PATHS).forEach(
-      (k) =>
-        (reformatedTweet[k] = _.get(
-          tweetInfo,
-          TWEET_PROPERTY_PATHS[k].path,
-          TWEET_PROPERTY_PATHS[k].default,
-        )),
-    );
-
-    reformatedTweet.views = parseInt(reformatedTweet.views);
-
-    reformatedTweet.mentions.length >= 1
-      ? (reformatedTweet.mentions = reformatedTweet.mentions
-          .flat(1)
-          .map((obj) => (obj.screen_name ? obj.screen_name : ""))
-          .filter((obj) => obj.length > 1))
-      : {};
-
-    reformatedTweet.hashtags.length >= 1
-      ? (reformatedTweet.hashtags = reformatedTweet.hashtags
-          .flat(1)
-          .map((obj) => (obj.text ? obj.text : ""))
-          .filter((obj) => obj.length > 1))
-      : {};
-
-    reformatedTweet.links.length >= 1
-      ? (reformatedTweet.links = reformatedTweet.links
-          .flat(1)
-          .map((obj) => (obj.expanded_url ? obj.expanded_url : ""))
-          .filter((obj) => obj.length > 1))
-      : {};
-    reformatedTweet.imageLink =
-      jp({
-        json: tweetInfo,
-        path: "$.legacy.extended_entities..media_url_https",
-      })[0] || "None";
-
-    reformatedTweet.video =
-      jp({
-        json: tweetInfo,
-        path: "$.legacy.extended_entities..video_info.variants",
-      })[0]?.filter((x) => x.url.includes(".mp4"))[0].url || "None";
-    reformatedTweet.tweetLink =
-      "https://x.com/" +
-      reformatedTweet.username +
-      "/status/" +
-      reformatedTweet.id;
-    return reformatedTweet;
+    return transformTweet(tweetInfo, tweet.collID);
+  });
+  return reformatedTweets;*/
+  const reformatedTweets = dbTweetsRaw.map((entry) => {
+    let tweet = entry.tweet;
+    return tweet;
   });
   return reformatedTweets;
 };
@@ -193,29 +64,77 @@ const getTikToksFromDB = async () => {
   //const rawTiktoks = await db.tiktoks.toArray();
   const rawTiktoks = await snaDB.getAll("tiktoks");
   const reformatedTiktoks = rawTiktoks.map((rawTiktok) => {
-    let reformatedTiktok = {};
-    reformatedTiktok.id = rawTiktok.id;
-    reformatedTiktok.collectionID = rawTiktok.collectionID;
-    Object.keys(TIKTOK_PROPERTY_PATHS).forEach(
-      (k) =>
-        (reformatedTiktok[k] = _.get(
-          rawTiktok.tiktok,
-          TIKTOK_PROPERTY_PATHS[k].path,
-          TIKTOK_PROPERTY_PATHS[k].default,
-        )),
+    return transformTiktok(
+      rawTiktok.tiktok,
+      rawTiktok.id,
+      rawTiktok.collectionID,
     );
-    reformatedTiktok.date = dayjs
-      .unix(reformatedTiktok.date)
-      .format("YYYY-MM-DDTHH:mm:ss");
-    reformatedTiktok.hashtags.length >= 1
-      ? (reformatedTiktok.hashtags = reformatedTiktok.hashtags
-          .map((v) => "#" + v.hashtagName)
-          .filter((v) => v.length > 2))
-      : {};
-    reformatedTiktok.reposts = parseInt(reformatedTiktok.reposts);
-    return reformatedTiktok;
   });
   return reformatedTiktoks;
+};
+
+/**
+ * Get the table name for a given platform
+ * @param {string} platform - Platform name (twitter/tiktok)
+ * @returns {string} Table name
+ */
+const getTableForPlatform = (platform) => {
+  return platform === "twitter" ? "tweets" : "tiktoks";
+};
+
+/**
+ * Get the data key for a given platform
+ * @param {string} platform - Platform name (twitter/tiktok)
+ * @returns {string} Data key name
+ */
+const getDataKeyForPlatform = (platform) => {
+  return platform === "twitter" ? "tweet" : "tiktok";
+};
+
+/**
+ * Delete collection by platform
+ * @param {string} platform - Platform name (twitter/tiktok)
+ * @param {string} collectionId - Collection ID to delete
+ */
+const deleteCollectionByPlatform = async (platform, collectionId) => {
+  const table = getTableForPlatform(platform);
+  await snaDB.deleteByKeyPath(table, "collectionID", collectionId);
+};
+
+/**
+ * Get raw collection data by platform
+ * @param {string} platform - Platform name (twitter/tiktok)
+ * @returns {Promise<Array>} Raw collection data
+ */
+const getRawCollectionByPlatform = async (platform) => {
+  const table = getTableForPlatform(platform);
+  return await snaDB.getAllFromIndex(table, "by-collectionID");
+};
+
+/**
+ * Add data to collection by platform
+ * @param {string} platform - Platform name (twitter/tiktok)
+ * @param {Array} data - Data array to add
+ * @param {string} collectionId - Collection ID
+ */
+const addToCollectionByPlatform = async (platform, data, collectionId) => {
+  //TEST if collection exists. If not add it in database
+  let collections = await snaDB.get("collections", collectionId);
+  if (!collections) collections = await snaDB.put("collections", collectionId);
+  //const collections = await snaDB.put("collections", collectionId)
+  console.log("colllections ...", collections);
+  const table = getTableForPlatform(platform);
+  const dataKey = getDataKeyForPlatform(platform);
+
+  await Promise.all(
+    data.map(async (item) =>
+      snaDB.add(table, {
+        id: item.id,
+        collectionID: collectionId,
+        [dataKey]: item,
+      }),
+    ),
+  );
 };
 
 // Main message handler function
@@ -236,37 +155,7 @@ export const handleSNARecorderChromeMessage = async (
       await snaDB.deleteDatabase().then(() => snaDB.init());
       sendResponse({ success: true });
     } else if (request.prompt === "deleteCollection") {
-      if (request.source === "twitter") {
-        /*await db.tweets
-          .where("[collectionID+id]")
-          .between(
-            [request.collectionId, Dexie.minKey],
-            [request.collectionId, Dexie.maxKey],
-            true,
-            true,
-          )
-          .delete();*/
-        await snaDB.deleteByKeyPath(
-          "tweets",
-          "collectionID",
-          request.collectionId,
-        );
-      } else if (request.source === "tiktok") {
-        /*await db.tiktoks
-          .where("[collectionID+id]")
-          .between(
-            [request.collectionId, Dexie.minKey],
-            [request.collectionId, Dexie.maxKey],
-            true,
-            true,
-          )
-          .delete();*/
-        await snaDB.deleteByKeyPath(
-          "tweets",
-          "collectionID",
-          request.collectionId,
-        );
-      }
+      await deleteCollectionByPlatform(request.source, request.collectionId);
       sendResponse({ success: true });
     } else if (request.prompt === "getRecordingInfo") {
       //const currentCollections = await db.collections.toArray();
@@ -314,66 +203,14 @@ export const handleSNARecorderChromeMessage = async (
       });*/
       sendResponse({ success: true });
     } else if (request.prompt === "getRawCollection") {
-      if (request.platform === "twitter") {
-        /*const x = await db.tweets
-          .where("[collectionID+id]")
-          .between(
-            [request.collectionId, Dexie.minKey],
-            [request.collectionId, Dexie.maxKey],
-            true,
-            true,
-          )
-          .toArray();*/
-        const x = await snaDB.getAllFromIndex("tweets", "by-collectionID");
-        sendResponse({ data: x });
-      } else if (request.platform === "tiktok") {
-        /*const x = await db.tiktoks
-          .where("[collectionID+id]")
-          .between(
-            [request.collectionId, Dexie.minKey],
-            [request.collectionId, Dexie.maxKey],
-            true,
-            true,
-          )
-          .toArray();*/
-        const x = await snaDB.getAllFromIndex("tiktoks", "by-collectionID");
-        sendResponse({ data: x });
-      }
+      const data = await getRawCollectionByPlatform(request.platform);
+      sendResponse({ data });
     } else if (request.prompt === "addToCollection") {
-      const data = request.data;
-      if (request.platform === "twitter") {
-        await Promise.all(
-          data.map(
-            async (t) =>
-              snaDB.add("tweets", {
-                id: t.id,
-                collectionID: request.collectionId,
-                tweet: t.tweet,
-              }),
-            /*db.tweets.add({
-              id: t.id,
-              collectionID: request.collectionId,
-              tweet: t.tweet,
-            })*/
-          ),
-        );
-      } else if (request.platform === "tiktok") {
-        await Promise.all(
-          data.map(
-            async (t) =>
-              snaDB.add("tiktoks", {
-                id: t.id,
-                collectionID: request.collectionId,
-                tiktok: t.tiktok,
-              }),
-            /*db.tiktoks.add({
-              id: t.id,
-              collectionID: request.collectionId,
-              tiktok: t.tiktok,
-            })*/
-          ),
-        );
-      }
+      await addToCollectionByPlatform(
+        request.platform,
+        request.data,
+        request.collectionId,
+      );
       sendResponse({ done: "ok" });
     } else {
       // Handle unknown prompts
@@ -385,9 +222,21 @@ export const handleSNARecorderChromeMessage = async (
   }
 };
 
+/**
+ * Store tiktok item to database
+ * @param {Object} item - Tiktok item
+ * @param {string} collectionID - Collection ID
+ */
+const storeTiktokItem = async (item, collectionID) => {
+  await snaDB.put("tiktoks", {
+    id: item.id,
+    collectionID,
+    tiktok: item,
+  });
+};
+
 export const handleRecordedMessage = async (request) => {
   const entryIds = jp({ json: request, path: "$..entryId" });
-  //const session = await db.recording.toArray();
   const session = await snaDB.getAll("recording");
 
   const currentSession = session[0].state;
@@ -395,57 +244,35 @@ export const handleRecordedMessage = async (request) => {
     return;
   }
   if (request.prompt === "tiktokCapture") {
-    request.content.itemList?.forEach(async (item) => {
-      /*await db.tiktoks.put({
-        id: item.id,
-        collectionID: currentSession,
-        tiktok: item,
-      });*/
-      await snaDB.put("tiktoks", {
-        id: item.id,
-        collectionID: currentSession,
-        tiktok: item,
-      });
-    });
-    //Tiktok responses can have item details in either data or itemList field
-    request.content.data
-      ?.map((x) => x.item)
-      .forEach(async (item) => {
-        /*await db.tiktoks.put({
-          id: item.id,
-          collectionID: currentSession,
-          tiktok: item,
-        });*/
-        await snaDB.put("tiktoks", {
-          id: item.id,
-          collectionID: currentSession,
-          tiktok: item,
-        });
-      });
+    // Tiktok responses can have item details in either itemList or data field
+    const itemsFromList = request.content.itemList || [];
+    const itemsFromData = request.content.data?.map((x) => x.item) || [];
+    const allItems = [...itemsFromList, ...itemsFromData];
+
+    await Promise.all(
+      allItems.map((item) => storeTiktokItem(item, currentSession)),
+    );
     return;
   }
 
   if (jp({ json: request, path: "$..entryId" }).length > 0) {
     for (let entryId of entryIds) {
-      let current = jp({
-        json: request,
-        path: `$..entries[?(@.entryId=="${entryId}")]`,
-      });
-      jp({
+      let tweet_results = jp({
         json: request,
         path: `$..entries[?(@.entryId=="${entryId}")]..tweet_results`,
-      }).length > 0
-        ? await snaDB.put("tweets", {
-            id: entryId,
-            collectionID: currentSession,
-            tweet: current[0],
-          })
-        : /*await db.tweets.put({
-            id: entryId,
-            collectionID: currentSession,
-            tweet: current[0],
-          })*/
-          {};
+      });
+      if (tweet_results.length > 0) {
+        let content =
+          tweet_results[0].result.tweet ||
+          tweet_results[0].result ||
+          tweet_results[0].tweet;
+        let tweet = transformTweet(content, currentSession);
+        await snaDB.put("tweets", {
+          id: entryId,
+          collectionID: currentSession,
+          tweet: tweet,
+        });
+      }
     }
   }
 };
