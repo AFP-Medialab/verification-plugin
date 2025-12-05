@@ -3,7 +3,7 @@ import React from "react";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 
-import { SEARCH_ENGINE_SETTINGS } from "components/Shared/ReverseSearch/reverseSearchUtils";
+import { SEARCH_ENGINE_SETTINGS } from "@/components/Shared/ReverseSearch/reverseSearchUtils";
 
 import { i18nLoadNamespace } from "../Languages/i18nLoadNamespace";
 import useMyStyles from "../MaterialUiStyles/useMyStyles";

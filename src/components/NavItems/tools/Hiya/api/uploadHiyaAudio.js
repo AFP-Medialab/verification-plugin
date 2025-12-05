@@ -46,7 +46,7 @@ export const uploadHiyaAudio = async (
   const uploadRequestConfig = {
     method: "post",
     maxBodyLength: Infinity,
-    url: process.env.REACT_APP_LOCCUS_URL + "/upload",
+    url: import.meta.env.VITE_LOCCUS_URL + "/upload",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",

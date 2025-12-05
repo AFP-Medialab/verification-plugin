@@ -33,8 +33,8 @@ const applyOptions = (options, callback) => {
  * API URLs for each keyframe input type.
  */
 const API_URLS = {
-  [KeyframeInputType.FILE]: process.env.REACT_APP_KEYFRAME_API_FILE,
-  [KeyframeInputType.URL]: process.env.REACT_APP_KEYFRAME_API,
+  [KeyframeInputType.FILE]: import.meta.env.VITE_KEYFRAME_API_FILE,
+  [KeyframeInputType.URL]: import.meta.env.VITE_KEYFRAME_API,
 };
 
 /**

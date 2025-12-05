@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import Container from "@mui/material/Container";
 import Fade from "@mui/material/Fade";
 
@@ -87,7 +88,22 @@ const DrawerItemContent = ({ tool }) => {
         style={{ flex: 1, display: "flex", flexDirection: "column" }}
       >
         <Box>
-          <Box sx={{ flex: 1 }}>{tool.content}</Box>
+          <Box sx={{ flex: 1 }}>
+            <Suspense
+              fallback={
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  minHeight="200px"
+                >
+                  <CircularProgress />
+                </Box>
+              }
+            >
+              {tool.content}
+            </Suspense>
+          </Box>
           <Box component="footer" sx={{ mt: "auto" }}>
             {tool.footer}
           </Box>

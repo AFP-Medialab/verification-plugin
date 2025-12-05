@@ -89,7 +89,7 @@ export const getRecordingInfo = async (
   setSelectedCollection,
 ) => {
   try {
-    let recInfo = await chrome.runtime.sendMessage({
+    let recInfo = await browser.runtime.sendMessage({
       prompt: "getRecordingInfo",
     });
 
@@ -139,7 +139,7 @@ const handleAddCollection = (
     // Use functional state update to avoid depending on collections array
     setCollections((prevCollections) => {
       if (!prevCollections.includes(newCollectionName)) {
-        chrome.runtime.sendMessage({
+        browser.runtime.sendMessage({
           prompt: "addCollection",
           newCollectionName: newCollectionName,
         });
@@ -156,7 +156,7 @@ const handleMainButtonClick = (recording, setRecording, setExpanded) => {
   if (recording) {
     setRecording(false);
     setExpanded(false);
-    chrome.runtime.sendMessage({ prompt: "stopRecording" });
+    browser.runtime.sendMessage({ prompt: "stopRecording" });
   } else {
     setExpanded((prev) => !prev);
   }
@@ -168,7 +168,7 @@ const handleStartRecording = (
   setExpanded,
   selectedSocialMedia,
 ) => {
-  chrome.runtime.sendMessage({
+  browser.runtime.sendMessage({
     prompt: "startRecording",
     currentCollectionName: selectedCollection,
     platforms: selectedSocialMedia,

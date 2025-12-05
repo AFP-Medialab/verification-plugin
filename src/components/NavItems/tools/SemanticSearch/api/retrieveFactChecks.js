@@ -34,7 +34,7 @@ export const retrieveFactChecks = async (
     getAllLanguageKeysForLocalizedLanguage,
   } = options;
 
-  const baseUrl = process.env.REACT_APP_SEMANTIC_SEARCH_URL;
+  const baseUrl = import.meta.env.VITE_SEMANTIC_SEARCH_URL;
 
   if (!baseUrl) {
     throw new Error(

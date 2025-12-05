@@ -1,4 +1,4 @@
-import { onlyUnique } from "components/NavItems/tools/SNA/utils/accessSavedCollections";
+import { onlyUnique } from "@/components/NavItems/tools/SNA/utils/accessSavedCollections";
 
 export const entryAggregatorByListValue = (
   selectedContent,

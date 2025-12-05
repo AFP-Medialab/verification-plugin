@@ -20,6 +20,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useTrackEvent } from "@/Hooks/useAnalytics";
 import { loadImageSize, useLoading } from "@/Hooks/useInput";
 import { thumbnails } from "@/constants/tools";
+import { setError } from "@/redux/reducers/errorReducer";
 import {
   cleanThumbnailsState,
   setThumbnailsLoading,
@@ -36,7 +37,6 @@ import {
   reverseImageSearch,
   reverseImageSearchAll,
 } from "@Shared/ReverseSearch/reverseSearchUtils";
-import { setError } from "redux/reducers/errorReducer";
 
 const Thumbnails = () => {
   const { url } = useParams();

@@ -42,7 +42,7 @@ const SecondStep = ({ url }) => {
           <Stack direction="column" spacing={2}>
             <Link
               href={
-                "https://chrome.google.com/webstore/detail/webrecorder/fpeoodllldobpkbkabpblcfaogecpndd"
+                "https://browser.google.com/webstore/detail/webrecorder/fpeoodllldobpkbkabpblcfaogecpndd"
               }
               target={"_blank"}
               variant={"body1"}

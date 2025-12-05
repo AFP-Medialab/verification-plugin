@@ -26,8 +26,8 @@ import {
   setStateSelectingUrl,
 } from "@/redux/reducers/tools/gifReducer";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { TabContext, TabList } from "@mui/lab";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";

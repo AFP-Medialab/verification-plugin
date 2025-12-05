@@ -39,7 +39,7 @@ const TopMenu = ({ topMenuItems }) => {
   const [collections, setCollections] = useState(["Default Collection"]);
 
   const getRecordingInfo = async () => {
-    let recInfo = await chrome.runtime.sendMessage({
+    let recInfo = await browser.runtime.sendMessage({
       prompt: "getRecordingInfo",
     });
     setCollections(recInfo.collections.map((x) => x.id).flat());
@@ -57,7 +57,7 @@ const TopMenu = ({ topMenuItems }) => {
 
   const navigate = useNavigate();
 
-  const LOGO_EU = process.env.REACT_APP_LOGO_EU;
+  const LOGO_EU = import.meta.env.VITE_LOGO_EU;
 
   const topMenuItemSelected = useSelector((state) => state.nav);
 

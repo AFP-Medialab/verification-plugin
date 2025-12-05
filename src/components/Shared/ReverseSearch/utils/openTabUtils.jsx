@@ -5,23 +5,23 @@
  */
 export const openNewTabWithUrl = async (url, isRequestFromContextMenu) => {
   if (isRequestFromContextMenu) openTabsSearch(url);
-  else await chrome.tabs.create(url);
+  else await browser.tabs.create(url);
 };
 
 export const openTabs = (url) => {
-  chrome.tabs.create(url, (createdTab) => {
-    chrome.tabs.onUpdated.addListener(async function _(tabId) {
+  browser.tabs.create(url, (createdTab) => {
+    browser.tabs.onUpdated.addListener(async function _(tabId) {
       if (tabId === createdTab.id) {
-        chrome.tabs.onUpdated.removeListener(_);
+        browser.tabs.onUpdated.removeListener(_);
       } else {
-        await chrome.tabs.get(tabId, async () => {
-          if (!chrome.runtime.lastError) {
+        await browser.tabs.get(tabId, async () => {
+          if (!browser.runtime.lastError) {
             //console.log("tab exist ", tabId)
-            await chrome.tabs.remove(tabId, () => {
-              if (!chrome.runtime.lastError) {
+            await browser.tabs.remove(tabId, () => {
+              if (!browser.runtime.lastError) {
                 //nothing todo
               }
-              //chrome.tabs.onUpdated.removeListener(_);
+              //browser.tabs.onUpdated.removeListener(_);
             });
           }
         });
@@ -31,22 +31,22 @@ export const openTabs = (url) => {
 };
 
 const openTabsSearch = (url) => {
-  chrome.tabs.create(url, (createdTab) => {
-    chrome.tabs.onUpdated.addListener(async function _(tabId, info, tab) {
+  browser.tabs.create(url, (createdTab) => {
+    browser.tabs.onUpdated.addListener(async function _(tabId, info, tab) {
       let pending_url = ns(createdTab.pendingUrl);
       let tab_url = ns(tab.url);
       if (tabId === createdTab.id && pending_url === tab_url) {
         //console.log("remove .... listerner", tabId);
-        chrome.tabs.onUpdated.removeListener(_);
+        browser.tabs.onUpdated.removeListener(_);
       } else {
         if (pending_url === tab_url) {
           //console.log("remove id ", tabId);
-          await chrome.tabs.get(tabId, async () => {
-            if (!chrome.runtime.lastError) {
+          await browser.tabs.get(tabId, async () => {
+            if (!browser.runtime.lastError) {
               //console.log("tab exist ", tabId)
-              await chrome.tabs.remove(tabId, async () => {
+              await browser.tabs.remove(tabId, async () => {
                 //nothing todo
-                if (!chrome.runtime.lastError) {
+                if (!browser.runtime.lastError) {
                   //nothing todo
                 }
               });

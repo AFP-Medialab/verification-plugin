@@ -7,7 +7,7 @@ import Collapse from "@mui/material/Collapse";
 
 import { ExpandLess, ExpandMore, Psychology } from "@mui/icons-material";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import remarkGfm from "remark-gfm";
 
 /**

@@ -1,8 +1,11 @@
 import React from "react";
-import Typography from "@mui/material/Typography";
+
 import Link from "@mui/material/Link";
+import Typography from "@mui/material/Typography";
+
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const TimeToLocalTime = (props) => {
   const classes = useMyStyles();

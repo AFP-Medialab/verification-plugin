@@ -1,15 +1,15 @@
 import {
+  c2paCurrentImageIdSet,
+  c2paMainImageIdSet,
+  c2paResultSet,
+} from "@/redux/reducers/tools/c2paReducer";
+import {
   createC2pa,
   selectEditsAndActivity,
   selectGenerativeInfo,
   selectProducer,
   selectSocialAccounts,
 } from "c2pa";
-import {
-  c2paCurrentImageIdSet,
-  c2paMainImageIdSet,
-  c2paResultSet,
-} from "redux/reducers/tools/c2paReducer";
 
 /**
  * This function reads the image's capture information from the assertions

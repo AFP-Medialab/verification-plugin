@@ -5,8 +5,8 @@ import Stack from "@mui/material/Stack";
 
 import { SmartToy } from "@mui/icons-material";
 
-import HeaderTool from "components/Shared/HeaderTool/HeaderTool";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import HeaderTool from "@/components/Shared/HeaderTool/HeaderTool";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 import ChatbotUI from "./components/ChatbotUI";
 

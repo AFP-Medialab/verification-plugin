@@ -50,7 +50,7 @@ const DownloadWaczFile = ({ url }) => {
       },
     });
 
-    const baseUrl = process.env.REACT_APP_ARCHIVE_CAPTURE;
+    const baseUrl = import.meta.env.VITE_ARCHIVE_CAPTURE;
 
     const config = {
       method: "post",

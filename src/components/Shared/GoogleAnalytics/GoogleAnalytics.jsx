@@ -57,7 +57,7 @@ function matomoCall(actions) {
   url_params.append("_id", actions.client_id);
   url_params.append("_cvar", JSON.stringify(actions.cvar));
 
-  const url = process.env.REACT_APP_MATOMO_URL;
+  const url = import.meta.env.VITE_MATOMO_URL;
 
   fetch(url, {
     method: "POST",
@@ -69,7 +69,7 @@ function matomoCall(actions) {
 }
 
 function ga4Call(events) {
-  const GACode = process.env.REACT_APP_GOOGLE_ANALYTICS_KEY;
+  const GACode = import.meta.env.VITE_GOOGLE_ANALYTICS_KEY;
   const url_params =
     "measurement_id=" + GACode + "&api_secret=Akub_0F8QyWH9x_-mf_mGg";
   // const url_debug =

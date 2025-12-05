@@ -7,6 +7,8 @@ import {
   getHiyaDetectionChunks,
   uploadHiyaAudio,
 } from "@/components/NavItems/tools/Hiya/api";
+import useAuthenticatedRequest from "@/components/Shared/Authentication/useAuthenticatedRequest";
+import { setError } from "@/redux/reducers/errorReducer";
 import {
   resetHiyaAudio,
   setHiyaError,
@@ -14,12 +16,10 @@ import {
   setHiyaResult,
   setHiyaResultWithWarning,
 } from "@/redux/reducers/tools/hiyaReducer";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { isValidUrl } from "@Shared/Utils/URLUtils";
 import { blobToBase64, preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import axios from "axios";
-import useAuthenticatedRequest from "components/Shared/Authentication/useAuthenticatedRequest";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { setError } from "redux/reducers/errorReducer";
 
 import { API_RESPONSE_LABELS } from "../constants/detectionConstants";
 
@@ -309,13 +309,8 @@ export const useHiyaAudioAnalysis = () => {
       return new Error(keyword("error_invalid_media_file"));
     }
 
-    const isChromium = !!window.chrome;
-
     // TODO: Use ffmpeg to convert the m4a files if possible
-    if (
-      isChromium &&
-      (file.type.includes("basic") || file.type.includes("aiff"))
-    ) {
+    if (file.type.includes("basic") || file.type.includes("aiff")) {
       dispatch(setError(keyword("error_invalid_audio_file")));
       resetState();
       return Error(keyword("error_invalid_audio_file"));

@@ -10,7 +10,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import { ROLES } from "@/constants/roles";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
 

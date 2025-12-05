@@ -47,7 +47,7 @@ const SinglefileConverter = (telegramURL) => {
    */
   const domainCertSign = async (hash) => {
     const resp = await authenticatedRequest({
-      url: process.env.REACT_APP_WACZ_SIGNING + hash,
+      url: import.meta.env.VITE_WACZ_SIGNING + hash,
       method: "get",
     });
     if (resp.status === 200) {

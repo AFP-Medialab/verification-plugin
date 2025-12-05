@@ -25,7 +25,7 @@ import {
   setAnalysisVerifiedComments,
 } from "@/redux/actions/tools/analysisActions";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import _ from "lodash";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
@@ -39,7 +39,7 @@ import YoutubeResults from "./Results/YoutubeResults";
 import styles from "./Results/layout.module.css";
 
 const Analysis = () => {
-  const caa_analysis_url = process.env.REACT_APP_CAA_ANALYSIS_URL;
+  const caa_analysis_url = import.meta.env.VITE_CAA_ANALYSIS_URL;
   const { url } = useParams();
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Analysis");

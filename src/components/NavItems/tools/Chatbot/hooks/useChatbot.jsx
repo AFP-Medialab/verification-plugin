@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 import { PROMPTS_CONFIG_I18N } from "../config/prompts";
 import {
@@ -21,7 +21,7 @@ import {
  * @returns {Object} Hook state and methods
  */
 const useChatbot = (
-  apiBaseUrl = process.env.REACT_APP_CHATBOT_API_URL || "http://localhost:8000",
+  apiBaseUrl = import.meta.env.VITE_CHATBOT_API_URL || "http://localhost:8000",
 ) => {
   const [selectedModel, setSelectedModel] = useState("");
   const [error, setError] = useState(null);
