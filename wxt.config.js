@@ -5,7 +5,14 @@ import { defineConfig } from "wxt";
 import pkg from "./package.json";
 
 export default defineConfig({
-  modules: ["@wxt-dev/module-react"],
+  modules: ["@wxt-dev/module-react", "@wxt-dev/auto-icons"],
+
+  autoIcons: {
+    baseIconPath:
+      import.meta.env.VITE_ENVIRONMENT === "production"
+        ? "public/icon-128.png"
+        : "public/img/icon-staging.png",
+  },
 
   manifest: {
     manifest_version: 3,
@@ -28,12 +35,6 @@ export default defineConfig({
     ],
 
     host_permissions: ["<all_urls>"],
-
-    // icons: {
-    //   16: "icon-16.png",
-    //   48: "icon-48.png",
-    //   128: "icon-128.png",
-    // },
 
     content_security_policy: {
       extension_pages:

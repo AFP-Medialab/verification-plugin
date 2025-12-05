@@ -1,10 +1,95 @@
-import {
-  TIKTOK_PROPERTY_PATHS,
-  TWEET_PROPERTY_PATHS,
-} from "@/background/main.jsx";
 import dayjs from "dayjs";
 import jp from "jsonpath";
 import _ from "lodash";
+
+const TIKTOK_PROPERTY_PATHS = {
+  username: {
+    path: "author.uniqueId",
+    default: "",
+  },
+  date: {
+    path: "createTime",
+    default: "",
+  },
+  hashtags: {
+    path: "textExtra",
+    default: "",
+  },
+  soundID: {
+    path: "music.id",
+    default: "",
+  },
+  soundAuthor: {
+    path: "music.authorName",
+    default: "",
+  },
+  soundTitle: {
+    path: "music.title",
+    default: "",
+  },
+  likes: {
+    path: "stats.diggCount",
+    default: 0,
+  },
+  replies: {
+    path: "stats.commentCount",
+    default: 0,
+  },
+  views: {
+    path: "stats.playCount",
+    default: 0,
+  },
+  shares: {
+    path: "stats.shareCount",
+    default: 0,
+  },
+  reposts: {
+    path: "statsV2.repostCount",
+    default: 0,
+  },
+  text: {
+    path: "desc",
+    default: "",
+  },
+  isAd: {
+    path: "isAd",
+    default: false,
+  },
+};
+
+const TWEET_PROPERTY_PATHS = {
+  id: { path: "rest_id", default: "" },
+  username: {
+    path: "core.user_results.result.core.screen_name",
+    default: "",
+  },
+  display_name: { path: "core.user_results.result.core.name", default: "" },
+  account_created: {
+    path: "core.user_results.result.core.created_at",
+    default: "",
+  },
+  followers: {
+    path: "core.user_results.result.legacy.followers_count",
+    default: "",
+  },
+  total_posts: {
+    path: "core.user_results.result.legacy.statuses_count",
+    default: "",
+  },
+  text: { path: "legacy.full_text", default: "" },
+  replying_to: { path: "legacy.in_reply_to_screen_name", default: false },
+  isQuote: { path: "legacy.is_quote_status", default: false },
+  retweeted: { path: "legacy.retweeted", default: false },
+  links: { path: "legacy.entities.urls", default: "" },
+  mentions: { path: "legacy.entities.user_mentions", default: "" },
+  hashtags: { path: "legacy.entities.hashtags", default: "" },
+  date: { path: "legacy.created_at", default: "" },
+  likes: { path: "legacy.favorite_count", default: 0 },
+  quotes: { path: "legacy.quote_count", default: 0 },
+  retweets: { path: "legacy.retweet_count", default: 0 },
+  replies: { path: "legacy.reply_count", default: 0 },
+  views: { path: "views.count", default: 0 },
+};
 
 const cleanCrowdTangleFbDataUpload = (uploadedData) => {
   uploadedData.forEach((entry) => (entry.date = entry.date?.slice(0, -4)));
