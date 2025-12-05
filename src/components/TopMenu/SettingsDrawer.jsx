@@ -26,7 +26,7 @@ import {
 import { MAX_FONT_SIZE, MIN_FONT_SIZE, getStoredFontSize } from "@/theme";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
-import manifest from "../../public/manifest.json";
+import manifest from "../../../public/manifest.json";
 import Languages from "../NavItems/languages/languages";
 import ColorModeSelect from "./ColorModeSelect";
 

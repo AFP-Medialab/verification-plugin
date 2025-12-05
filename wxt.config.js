@@ -12,9 +12,7 @@ export default defineConfig({
   autoIcons: {
     developmentIndicator: "overlay",
     baseIconPath:
-      env === "production"
-        ? "public/icon-128.png"
-        : "public/img/icon-staging.png",
+      env === "production" ? "assets/icon-128.png" : "assets/icon-staging.png",
   },
 
   manifest: {
