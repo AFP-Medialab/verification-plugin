@@ -283,6 +283,12 @@ function* similaritySearch(searchEndpoint, stateStorageFunction) {
 function* handleSourceCredibilityCall(action) {
   if (action.type === "CLEAN_STATE") return;
   try {
+    // prevent from running if local file
+    const imageVideoSelected = yield select(
+      (state) => state.assistant.imageVideoSelected,
+    );
+    if (imageVideoSelected) return;
+
     // prevent from running if youtube
     const inputUrl = yield select((state) => state.assistant.inputUrl);
     const urlType = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
