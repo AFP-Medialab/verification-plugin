@@ -87,12 +87,10 @@ export default function assistantApiCalls() {
       for (let i = 0; i < iris.length; i += chunkSize) {
         const chunk = iris.slice(i, i + chunkSize);
         const dbQuery = `
-          SELECT ?iri ?abstract (GROUP_CONCAT(DISTINCT ?type; SEPARATOR = ",") AS ?schemaTypes)
+          SELECT ?iri (GROUP_CONCAT(DISTINCT ?type; SEPARATOR = ",") AS ?schemaTypes)
           WHERE {
             VALUES ?iri { ${chunk.join(" ")} }
-            ?iri rdfs:comment ?abstract .
             ?iri rdf:type ?type .
-            FILTER (lang(?abstract) = "${lang}")
           }`;
         const dbpediaEndpoint = process.env.REACT_APP_DBPEDIA_SPARQL_URL;
         const dbpediaResult = await axios.get(
@@ -104,7 +102,7 @@ export default function assistantApiCalls() {
       }
       for (const entity of dbpediaResultBindings) {
         mapping["<" + entity.iri.value + ">"]["abstract"] =
-          entity.abstract.value;
+          entity.abstract?.value || "";
         mapping["<" + entity.iri.value + ">"]["schemaTypes"] =
           entity.schemaTypes.value.split(",");
       }
@@ -207,7 +205,6 @@ export default function assistantApiCalls() {
           assistantEndpoint + "gcloud/source-credibility",
           {
             urls: urlList,
-            frontendVersion: "0.88",
           },
         );
         return result.data;
@@ -273,7 +270,6 @@ export default function assistantApiCalls() {
           assistantEndpoint + "gcloud/persuasion-span-clfr",
           {
             text: text,
-            frontendVersion: 0.88,
           },
         );
         return result.data;
@@ -295,7 +291,6 @@ export default function assistantApiCalls() {
       async () => {
         const result = await axios.post(assistantEndpoint + "dw/subjectivity", {
           content: text,
-          frontendVersion: 0.88,
         });
         return result.data;
       },

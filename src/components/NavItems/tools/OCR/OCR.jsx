@@ -151,11 +151,11 @@ const OCR = () => {
 
   const processUrl = useSelector((state) => state.assistant.processUrl);
   useEffect(() => {
-    if (processUrl) {
+    if (processUrl && url?.includes("autoRun")) {
       setInput(processUrl);
       submitUrl(processUrl);
     }
-  }, [processUrl]);
+  }, [processUrl, url]);
 
   const resetState = () => {
     dispatch(resetOcrState());

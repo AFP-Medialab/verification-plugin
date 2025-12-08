@@ -228,11 +228,11 @@ const Thumbnails = () => {
 
   const processUrl = useSelector((state) => state.assistant.processUrl);
   useEffect(() => {
-    if (processUrl) {
+    if (processUrl && url?.includes("autoRun")) {
       setInput(processUrl);
       setUrlDetected(true);
     }
-  }, [processUrl]);
+  }, [processUrl, url]);
 
   return (
     <div>
