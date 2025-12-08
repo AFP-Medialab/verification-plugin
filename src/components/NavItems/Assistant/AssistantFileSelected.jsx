@@ -16,7 +16,6 @@ import {
   setInputUrl,
   setScrapedData,
   setSingleMediaPresent,
-  setVideoThumbnailUrl,
   submitUpload,
 } from "redux/actions/tools/assistantActions";
 
@@ -43,21 +42,6 @@ const AssistantFileSelected = () => {
 
   const [videoUploaded, setVideoUploaded] = useState(false);
   const [imageUploaded, setImageUploaded] = useState(false);
-
-  const getVideoThumbnail = (blobUrl) => {
-    return new Promise((resolve) => {
-      const video = document.createElement("video");
-      video.src = blobUrl;
-      video.currentTime = 1;
-      video.onloadeddata = () => {
-        const canvas = document.createElement("canvas");
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        canvas.getContext("2d").drawImage(video, 0, 0);
-        canvas.toBlob(resolve);
-      };
-    });
-  };
 
   // const convertToDataUrl = (file) => {
   //   return new Promise((resolve) => {
@@ -100,9 +84,6 @@ const AssistantFileSelected = () => {
         // dispatch(submitUpload(dataUrl, ctype));
         dispatch(submitUpload(videoUrl, ctype));
         setVideoUploaded(true);
-
-        const thumbnailBlob = await getVideoThumbnail(videoUrl);
-        dispatch(setVideoThumbnailUrl(URL.createObjectURL(thumbnailBlob)));
 
         return;
       }

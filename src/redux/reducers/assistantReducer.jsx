@@ -2,7 +2,6 @@ const defaultState = {
   urlMode: false,
   imageVideoSelected: false,
   singleMediaPresent: null,
-  videoThumbnailUrl: null,
 
   inputUrl: null,
   errorKey: null,
@@ -124,7 +123,6 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_WARNING_EXPANDED":
     case "SET_ASSURANCE_EXPANDED":
     case "SET_STATE_EXPANDED":
-    case "SET_VIDEO_THUMBNAIL_URL":
     case "SUBMIT_UPLOAD":
       return Object.assign({}, state, action.payload);
 
@@ -146,7 +144,6 @@ const assistantReducer = (state = defaultState, action) => {
         urlMode: false,
         imageVideoSelected: false,
         singleMediaPresent: null,
-        videoThumbnailUrl: null,
 
         inputUrl: null,
         errorKey: null,

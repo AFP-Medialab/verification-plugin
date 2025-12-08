@@ -376,15 +376,6 @@ export const submitUpload = (uploadFileUrl, contentType) => {
   };
 };
 
-export const setVideoThumbnailUrl = (videoThumbnailUrl) => {
-  return {
-    type: "SET_VIDEO_THUMBNAIL_URL",
-    payload: {
-      videoThumbnailUrl: videoThumbnailUrl,
-    },
-  };
-};
-
 export const cleanAssistantState = () => {
   return {
     type: "CLEAN_STATE",

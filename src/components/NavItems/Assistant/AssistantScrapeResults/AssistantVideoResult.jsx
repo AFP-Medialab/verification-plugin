@@ -24,8 +24,8 @@ const AssistantVideoResult = () => {
 
   const processUrl = useSelector((state) => state.assistant.processUrl);
   const input_url_type = useSelector((state) => state.assistant.inputUrlType);
-  const videoThumbnailUrl = useSelector(
-    (state) => state.assistant.videoThumbnailUrl,
+  const imageVideoSelected = useSelector(
+    (state) => state.assistant.imageVideoSelected,
   );
 
   const useIframe = () => {
@@ -53,8 +53,9 @@ const AssistantVideoResult = () => {
     let positionOne = 0;
 
     // Don't embed blob links, they are url for cached in-memory video
+    // imageVideoSelected true for a local file
     if (embedURL.startsWith("blob:")) {
-      return null;
+      return imageVideoSelected ? embedURL : null;
     }
 
     let positionTwo;
@@ -129,10 +130,7 @@ const AssistantVideoResult = () => {
             data-testid="assistant-media-video-tag"
           ></video>
         )}
-        {!preprocessLinkForEmbed(processUrl) && videoThumbnailUrl && (
-          <img src={videoThumbnailUrl} alt="thumbnail" />
-        )}
-        {!preprocessLinkForEmbed(processUrl) && !videoThumbnailUrl && (
+        {!preprocessLinkForEmbed(processUrl) && (
           <div
             style={{
               width: "100%",
