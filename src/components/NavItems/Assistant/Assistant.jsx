@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from "react";
+import { Trans } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { useColorScheme } from "@mui/material";
+// import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import { useColorScheme } from "@mui/material/styles";
 
 import { Close } from "@mui/icons-material";
+// import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
+import AssistantIcon from "@/components/NavBar/images/navbar/assistant-icon-primary.svg";
 import AssistantCheckStatus from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantCheckStatus";
 import AssistantNEResult from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantNEResult";
 import AssistantCommentResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantCommentResult";
@@ -20,18 +28,30 @@ import AssistantMediaResult from "@/components/NavItems/Assistant/AssistantScrap
 import AssistantTextResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantTextResult";
 import AssistantSCResults from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantUrlDomainAnalysisResults";
 import AssistantWarnings from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantWarnings";
+import HeaderTool from "@/components/Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
+import StringFileUploadField from "@/components/Shared/StringFileUploadField";
+import { getFileTypeFromFileObject } from "@/components/Shared/Utils/fileUtils";
+import { KNOWN_LINKS, TOOLS_CATEGORIES } from "@/constants/tools";
 import {
   cleanAssistantState,
+  setImageVideoSelected,
+  setInputUrl,
+  setScrapedData,
+  setSingleMediaPresent,
   setUrlMode,
   submitInputUrl,
+  submitUpload,
 } from "@/redux/actions/tools/assistantActions";
 import { setError } from "@/redux/reducers/errorReducer";
+import { useTrackEvent } from "Hooks/useAnalytics";
 
-import AssistantFileSelected from "./AssistantFileSelected";
-import AssistantIntroduction from "./AssistantIntroduction";
-import AssistantUrlSelected from "./AssistantUrlSelected";
+import {
+  TransAssistantHelpTwoTooltip,
+  TransHtmlDoubleLineBreak,
+  TransSupportedToolsLink,
+} from "./TransComponents";
 
 const Assistant = () => {
   // styles, language, dispatch, params
@@ -46,11 +66,19 @@ const Assistant = () => {
   const resolvedMode = systemMode || mode;
 
   // form states
+  const loading = useSelector((state) => state.assistant.loading);
   const inputUrl = useSelector((state) => state.assistant.inputUrl);
   const urlMode = useSelector((state) => state.assistant.urlMode);
+  const [formInput, setFormInput] = useState("");
+  // const inputUrlType = useSelector((state) => state.assistant.inputUrlType);
+
+  // uploading an image/video
   const imageVideoSelected = useSelector(
     (state) => state.assistant.imageVideoSelected,
   );
+  const [fileInput, setFileInput] = useState(null);
+  const [videoUploaded, setVideoUploaded] = useState(false);
+  const [imageUploaded, setImageUploaded] = useState(false);
 
   // result states
   const imageList = useSelector((state) => state.assistant.imageList);
@@ -119,13 +147,123 @@ const Assistant = () => {
     (state) => state.assistant.multilingualStanceFail,
   );
 
-  //local state
-  const [formInput, setFormInput] = useState(inputUrl);
+  useTrackEvent(
+    "submission",
+    "assistant",
+    "page assistant",
+    formInput,
+    null,
+    url, // TODO right url?
+  );
+
+  // submit url or file
+  const handleSubmit = async (src) => {
+    dispatch(cleanAssistantState());
+    if (formInput) {
+      // submit url
+      dispatch(submitInputUrl(src));
+      navigate("/app/assistant/" + encodeURIComponent(src));
+      //trackEvent("submission", "assistant", "page assistant", formInput);
+    } else if (fileInput) {
+      // submit file
+      try {
+        if (!fileInput) {
+          throw new Error("No input provided"); // Handle missing input
+        }
+
+        // Determine file type
+        const fileType = await getFileTypeFromFileObject(fileInput);
+
+        if (!fileType || fileType instanceof Error) {
+          throw new Error("Unable to determine file type");
+        }
+
+        // set single media present
+        dispatch(setImageVideoSelected(true));
+        dispatch(setSingleMediaPresent(true));
+        navigate("/app/assistant/");
+
+        if (fileType.mime.includes("video")) {
+          // set the video URL
+          const videoUrl = URL.createObjectURL(fileInput);
+          const ctype = TOOLS_CATEGORIES.VIDEO;
+
+          dispatch(setInputUrl(videoUrl, KNOWN_LINKS.OWN));
+          dispatch(
+            setScrapedData(null, null, null, [], [videoUrl], null, null),
+          );
+          dispatch(submitUpload(videoUrl, ctype));
+          setVideoUploaded(true);
+
+          return;
+        }
+
+        if (fileType.mime.includes("image")) {
+          // Set the image URL
+          const imageUrl = URL.createObjectURL(fileInput);
+          const ctype = TOOLS_CATEGORIES.IMAGE;
+
+          dispatch(setInputUrl(imageUrl, KNOWN_LINKS.OWN)); // kicks off getSourceCredSaga
+          dispatch(
+            setScrapedData(null, null, null, [imageUrl], [], null, null),
+          );
+          dispatch(submitUpload(imageUrl, ctype));
+          setImageUploaded(true);
+
+          return;
+        }
+
+        throw new Error("Unsupported file type");
+      } catch (error) {
+        console.error("Error in submitUrl:", error.message);
+        setError(error.message);
+      }
+    }
+  };
+
+  // TODO where best to put this
+  // // for archiving URLs
+  // const handleArchive = () => {
+  //   let archiveUrl = "";
+
+  //   switch (inputUrlType) {
+  //     case KNOWN_LINKS.FACEBOOK:
+  //       archiveUrl =
+  //         "https://www.facebook.com/plugins/post.php?href=" +
+  //         encodeURIComponent(inputUrl);
+  //       break;
+  //     case KNOWN_LINKS.INSTAGRAM:
+  //       if (inputUrl.endsWith("/"))
+  //         archiveUrl = inputUrl.endsWith("/")
+  //           ? inputUrl + "embed/captioned/"
+  //           : inputUrl + "/embed/captioned/";
+  //       break;
+  //     default:
+  //       archiveUrl = inputUrl;
+  //   }
+  //   navigator.clipboard.writeText(archiveUrl).then(() => {
+  //     window.open("https://web.archive.org/save/" + archiveUrl, "_blank");
+  //   });
+  // };
+
+  // pre process media file
+  const preprocessFileInput = (file) => {
+    setFileInput(file);
+    return file;
+  };
 
   // clean assistant
   const cleanAssistant = () => {
     dispatch(cleanAssistantState());
+    // clean url mode
     setFormInput("");
+    navigate("/app/assistant/");
+    dispatch(setUrlMode(false));
+    // clean upload mode
+    dispatch(setImageVideoSelected(false));
+    dispatch(setSingleMediaPresent(false));
+    setImageUploaded(false);
+    setVideoUploaded(false);
   };
 
   // set correct error message
@@ -136,7 +274,7 @@ const Assistant = () => {
     }
   }, [errorKey]);
 
-  // if a url is present in the plugin url(as a param), set it to input
+  // if a url is present in the plugin url (as a param), set it to input
   useEffect(() => {
     if (url !== undefined) {
       let uri = url !== null ? decodeURIComponent(url) : undefined;
@@ -149,59 +287,116 @@ const Assistant = () => {
 
   // for having a single results section with a close button
   const handleClose = () => {
-    //setFormInput("");
     cleanAssistant();
-    dispatch(setUrlMode(true));
   };
 
   return (
-    <Grid
-      container
-      spacing={4}
-      direction="column"
-      className={classes.root}
-      sx={{
-        justifyContent: "flex-start",
-        alignItems: "center",
-      }}
-    >
-      {/* introduction */}
-      <Grid
-        size="grow"
-        sx={{
-          width: "100%",
-        }}
-      >
-        <AssistantIntroduction cleanAssistant={cleanAssistant} />
-      </Grid>
-      {/* url entry field */}
-      {urlMode ? (
-        <Grid
-          size="grow"
-          sx={{
-            width: "100%",
-          }}
-        >
-          <AssistantUrlSelected
-            formInput={formInput}
-            setFormInput={setFormInput}
-            cleanAssistant={cleanAssistant}
+    <div>
+      <HeaderTool
+        name={keyword("assistant_title")}
+        description={keyword("assistant_intro")}
+        icon={
+          <AssistantIcon
+            style={{ marginRight: "10px" }}
+            width="40px"
+            height="40px"
           />
-        </Grid>
-      ) : null}
-      {/* local file selection field */}
-      {imageVideoSelected ? (
-        <Grid
-          size="grow"
-          sx={{
-            width: "100%",
-          }}
-        >
-          <AssistantFileSelected />
-        </Grid>
-      ) : null}
+        }
+      />
+
+      <Card variant="outlined" sx={{ mt: 4 }}>
+        <CardHeader
+          className={classes.assistantCardHeader}
+          title={
+            <Typography style={{ fontWeight: "bold", fontSize: 20 }}>
+              {keyword("assistant_choose")}
+            </Typography>
+          }
+          action={
+            <Tooltip
+              interactive={"true"}
+              title={
+                <>
+                  <Trans
+                    t={keyword}
+                    i18nKey="assistant_help_title"
+                    components={{
+                      b: <b />,
+                    }}
+                  />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
+                  <Trans t={keyword} i18nKey="assistant_help_1" />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
+                  <TransAssistantHelpTwoTooltip keyword={keyword} />
+                  <TransSupportedToolsLink keyword={keyword} />
+                </>
+              }
+              classes={{ tooltip: classes.assistantTooltip }}
+            >
+              <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+            </Tooltip>
+          }
+        />
+
+        <CardContent>
+          <form>
+            <StringFileUploadField
+              labelKeyword={keyword("assistant_urlbox")}
+              placeholderKeyword={keyword("assistant_urlbox_placeholder")}
+              submitButtonKeyword={keyword("button_submit")}
+              localFileKeyword={keyword("button_localfile")}
+              urlInput={formInput}
+              setUrlInput={setFormInput}
+              fileInput={fileInput}
+              setFileInput={setFileInput}
+              handleSubmit={handleSubmit}
+              fileInputTypesAccepted={"image/*, video/*"}
+              handleCloseSelectedFile={cleanAssistant}
+              preprocessLocalFile={preprocessFileInput}
+              handleClearUrl={cleanAssistant}
+            />
+          </form>
+
+          {/* archive */}
+          {/* {inputUrl === null ? null : (
+            <Stack
+              direction="row"
+              sx={{
+                justifyContent: "flex-start",
+                alignItems: "left",
+                mt: 1,
+              }}
+              hidden={!urlMode || imageVideoSelected}
+            >
+              <Button
+                onClick={() => handleArchive()}
+                startIcon={<ArchiveOutlinedIcon />}
+              >
+                <label>{keyword("archive_link")}</label>
+              </Button>
+            </Stack>
+          )} */}
+        </CardContent>
+      </Card>
+
+      {/* loading results */}
+      {loading && (
+        <Card sx={{ mt: 4 }}>
+          <Stack
+            direction="column"
+            spacing={4}
+            sx={{
+              p: 4,
+            }}
+          >
+            <Skeleton variant="rounded" height={40} />
+            <Skeleton variant="rounded" width="50%" height={40} />
+          </Stack>
+        </Card>
+      )}
+
       {/* assistant status */}
-      {urlMode &&
+      {(urlMode || imageVideoSelected) &&
       (scFailState ||
         dbkfTextFailState ||
         dbkfMediaFailState ||
@@ -214,13 +409,47 @@ const Assistant = () => {
         machineGeneratedTextChunksFailState ||
         machineGeneratedTextSentencesFailState ||
         multilingualStanceFailState) ? (
-        <Grid size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }} sx={{ mt: 4 }}>
           <AssistantCheckStatus />
         </Grid>
       ) : null}
-      {/* assistant results section */}
+
+      {/* assistant local file results section */}
+      {!urlMode && fileInput && imageVideoSelected ? (
+        <Card variant="outlined" sx={{ width: "100%", mb: 2, mt: 4 }}>
+          <CardHeader
+            className={classes.assistantCardHeader}
+            title={
+              <Typography style={{ fontWeight: "bold", fontSize: 20 }}>
+                {keyword("assistant_results")}
+              </Typography>
+            }
+            action={
+              <IconButton aria-label="close" onClick={handleClose}>
+                <Close
+                  sx={{ color: resolvedMode === "dark" ? "white" : "grey" }}
+                />
+              </IconButton>
+            }
+          />
+
+          <CardContent>
+            <AssistantMediaResult
+              title={
+                videoUploaded
+                  ? keyword("upload_video")
+                  : imageUploaded
+                    ? keyword("upload_image")
+                    : null
+              }
+            />
+          </CardContent>
+        </Card>
+      ) : null}
+
+      {/* assistant url results section */}
       {urlMode && inputUrl ? (
-        <Card variant="outlined" sx={{ width: "100%", mb: 2 }}>
+        <Card variant="outlined" sx={{ width: "100%", mb: 2, mt: 4 }}>
           <CardHeader
             className={classes.assistantCardHeader}
             title={
@@ -302,7 +531,7 @@ const Assistant = () => {
           </CardContent>
         </Card>
       ) : null}
-    </Grid>
+    </div>
   );
 };
 export default Assistant;
