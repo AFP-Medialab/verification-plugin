@@ -181,7 +181,10 @@ let workerInstance;
 export const resizeImageWithWorker = (image) => {
   if (!workerInstance) {
     workerInstance = new Worker(
-      new URL("@workers/resizeImageWorker", import.meta.url),
+      new URL("@workers/resizeImageWorker.js", import.meta.url),
+      {
+        type: "module",
+      },
     );
   }
 

@@ -1,6 +1,7 @@
 {
   "extends": ".wxt/tsconfig.json",
   "compilerOptions": {
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "lib": ["ESNext", "DOM", "WebWorker"]
   }
 }
