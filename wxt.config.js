@@ -9,6 +9,8 @@ const env = import.meta.env.VITE_ENVIRONMENT;
 export default defineConfig({
   modules: ["@wxt-dev/module-react", "@wxt-dev/auto-icons"],
 
+  manifestVersion: 3,
+
   autoIcons: {
     developmentIndicator: "overlay",
     baseIconPath:
@@ -16,7 +18,6 @@ export default defineConfig({
   },
 
   manifest: {
-    manifest_version: 3,
     name: "Fake news debunker by InVID, WeVerify & VeraAI",
     version: pkg.version,
     description: "InVID WeVerify VeraAI extension",
@@ -58,6 +59,7 @@ export default defineConfig({
   },
 
   srcDir: "src",
+  outDir: "build",
 
   alias: {
     "@workers": resolve(__dirname, "src/workers"),
