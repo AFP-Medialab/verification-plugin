@@ -11,7 +11,6 @@ import Dexie from "dexie";
 import { JSONPath as jp } from "jsonpath-plus";
 import _ from "lodash";
 
-// eslint-disable-next-line no-undef
 export default defineBackground(() => {
   const db = new Dexie("tweetTest");
   db.version(2).stores({
@@ -683,14 +682,14 @@ export default defineBackground(() => {
 
   browser.runtime.onStartup.addListener();
 
-  if (import.meta.env.VITE_ENVIRONMENT !== "production") {
-    browser.action.setIcon({
-      path: {
-        16: "img/icon-staging.png",
-        32: "img/icon-staging.png",
-        48: "img/icon-staging.png",
-        128: "img/icon-staging.png",
-      },
-    });
-  }
+  // if (import.meta.env.VITE_ENVIRONMENT !== "production") {
+  //   browser.action.setIcon({
+  //     path: {
+  //       16: "./icons/16.png",
+  //       32: "./icons/32.png",
+  //       48: "./icons/48.png",
+  //       128: "./icons/128.png",
+  //     },
+  //   });
+  // }
 });
