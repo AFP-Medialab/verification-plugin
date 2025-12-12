@@ -131,7 +131,7 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
                 letterSpacing: 1.2,
               }}
             >
-              Appearance
+              {keyword("drawer_settings_appearance")}
             </Typography>
 
             <Stack spacing={2} sx={{ alignItems: "flex-start" }}>
@@ -283,7 +283,7 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
                     letterSpacing: 1.2,
                   }}
                 >
-                  Advanced Tools
+                  {keyword("drawer_settings_advanced_tools")}
                 </Typography>
 
                 <Box sx={{ pl: 1 }}>
@@ -325,7 +325,7 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
                     letterSpacing: 1.2,
                   }}
                 >
-                  Account
+                  {keyword("drawer_settings_account")}
                 </Typography>
 
                 <Box sx={{ pl: 1 }}>
