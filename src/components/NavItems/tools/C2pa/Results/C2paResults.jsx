@@ -542,7 +542,9 @@ const C2paResults = ({
                                             ?.assertion?.data?.actions?.[1]
                                             ?.softwareAgent?.name ||
                                             manifestData.generativeInfo[0]
-                                              ?.softwareAgent?.name}
+                                              ?.softwareAgent?.name ||
+                                            manifestData.generativeInfo[0]
+                                              ?.softwareAgent}
                                         </TableCell>
                                       </TableRow>
                                       <TableRow>
@@ -554,7 +556,9 @@ const C2paResults = ({
                                             ?.assertion?.data?.actions?.[0]
                                             ?.softwareAgent?.name ||
                                             manifestData.generativeInfo[0]
-                                              ?.softwareAgent?.name}
+                                              ?.softwareAgent?.name ||
+                                            manifestData.generativeInfo[0]
+                                              ?.softwareAgent}
                                         </TableCell>
                                       </TableRow>
                                     </TableBody>

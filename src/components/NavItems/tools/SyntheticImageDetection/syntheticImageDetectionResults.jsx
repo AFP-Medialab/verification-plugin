@@ -774,7 +774,8 @@ const SyntheticImageDetectionResults = ({
                                 <TableCell>
                                   {c2paData[0]?.assertion?.data?.actions?.[1]
                                     ?.softwareAgent?.name ||
-                                    c2paData[0]?.softwareAgent?.name}
+                                    c2paData[0]?.softwareAgent?.name ||
+                                    c2paData[0]?.softwareAgent}
                                 </TableCell>
                               </TableRow>
                               <TableRow>
@@ -786,7 +787,8 @@ const SyntheticImageDetectionResults = ({
                                 <TableCell>
                                   {c2paData[0]?.assertion?.data?.actions?.[0]
                                     ?.softwareAgent?.name ||
-                                    c2paData[0]?.softwareAgent?.name}
+                                    c2paData[0]?.softwareAgent?.name ||
+                                    c2paData[0]?.softwareAgent}
                                 </TableCell>
                               </TableRow>
                             </TableBody>
