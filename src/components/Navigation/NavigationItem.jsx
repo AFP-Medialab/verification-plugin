@@ -19,7 +19,7 @@ import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
  * @returns {Element}
  * @constructor
  */
-const SideMenuElement = ({
+const NavigationItem = ({
   tool,
   isElementSelected,
   onClick,
@@ -93,4 +93,4 @@ const SideMenuElement = ({
   );
 };
 
-export default SideMenuElement;
+export default NavigationItem;
