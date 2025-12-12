@@ -42,10 +42,10 @@ import DataIcon from "../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
 import ImageIcon from "../NavBar/images/SVG/Image/Images.svg";
 import SearchIcon from "../NavBar/images/SVG/Search/Search.svg";
 import VideoIcon from "../NavBar/images/SVG/Video/Video.svg";
+import NavigationItem from "../Navigation/NavigationItem";
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
-import SideMenuElement from "./sideMenuElement";
 
-const SideMenu = ({ tools, setOpenAlert }) => {
+const NavigationSidebar = ({ tools, setOpenAlert }) => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavBar");
 
@@ -527,7 +527,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
                       return null;
                     } else {
                       return (
-                        <SideMenuElement
+                        <NavigationItem
                           tool={itemList}
                           key={keyList}
                           onClick={() => handleSideMenuToolClick(itemList)}
@@ -566,7 +566,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
         </ListSubheader>
         {drawerItemsMore.map((item, key) => {
           return (
-            <SideMenuElement
+            <NavigationItem
               tool={item}
               key={key}
               onClick={() => handleSideMenuToolClick(item)}
@@ -627,4 +627,4 @@ const SideMenu = ({ tools, setOpenAlert }) => {
   );
 };
 
-export default SideMenu;
+export default NavigationSidebar;

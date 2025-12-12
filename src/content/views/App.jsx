@@ -6,11 +6,11 @@ import {
   cleanErrorNetwork,
   setErrorNetwork,
 } from "@/redux/reducers/errorReducer";
+import useAuthenticationAPI from "@Shared/Authentication/useAuthenticationAPI";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
-import ApplicationLayout from "../../components/ApplicationLayout";
-import PopUp from "../../components/PopUp/PopUp";
-import useAuthenticationAPI from "../../components/Shared/Authentication/useAuthenticationAPI";
+import AppLayout from "./components/Layout/AppLayout";
+import PopUp from "./components/PopUp/PopUp";
 
 const App = () => {
   const keyword = i18nLoadNamespace("components/Shared/utils");
@@ -64,7 +64,7 @@ const App = () => {
     >
       <Routes>
         <Route index path="/" element={<PopUp />} />
-        <Route path={"/app/*"} element={<ApplicationLayout />} />
+        <Route path={"/app/*"} element={<AppLayout />} />
       </Routes>
     </HashRouter>
   );

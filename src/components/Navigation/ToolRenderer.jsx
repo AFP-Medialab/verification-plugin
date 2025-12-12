@@ -19,7 +19,7 @@ import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
  * @param toolsList {Tool[]}
  * @returns {Element}
  */
-const DrawerItem = ({ tools }) => {
+const ToolRenderer = ({ tools }) => {
   return (
     <Routes>
       {tools.map((tool, index) => {
@@ -28,20 +28,17 @@ const DrawerItem = ({ tools }) => {
             <Route
               path={"*"}
               key={index}
-              element={<DrawerItemContent tool={tool} />}
+              element={<ToolPageLayout tool={tool} />}
             />
           );
         } else if (tool.path) {
           return (
             <Route path={tool.path} key={index}>
-              <Route index element={<DrawerItemContent tool={tool} />} />
-              <Route
-                path={":url"}
-                element={<DrawerItemContent tool={tool} />}
-              />
+              <Route index element={<ToolPageLayout tool={tool} />} />
+              <Route path={":url"} element={<ToolPageLayout tool={tool} />} />
               <Route
                 path={":url/:type"}
-                element={<DrawerItemContent tool={tool} />}
+                element={<ToolPageLayout tool={tool} />}
               />
             </Route>
           );
@@ -51,7 +48,7 @@ const DrawerItem = ({ tools }) => {
     </Routes>
   );
 };
-const DrawerItemContent = ({ tool }) => {
+const ToolPageLayout = ({ tool }) => {
   const dispatch = useDispatch();
 
   const path = useLocation();
@@ -113,4 +110,4 @@ const DrawerItemContent = ({ tool }) => {
   );
 };
 
-export default DrawerItem;
+export default ToolRenderer;
