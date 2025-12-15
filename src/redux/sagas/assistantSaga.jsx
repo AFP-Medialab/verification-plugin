@@ -189,9 +189,9 @@ function* handleMediaActionList() {
 }
 
 function* handleSubmitUpload(action) {
-  let uploadFileUrl = action.payload.uploadFileUrl;
   let contentType = action.payload.contentType;
-  yield put(setProcessUrl(uploadFileUrl, contentType)); // kicks off getMediaSimilaritySaga()
+  // let uploadFileUrl = action.payload.uploadFileUrl;
+  // yield put(setProcessUrl(uploadFileUrl, contentType)); // kicks off getMediaSimilaritySaga()
 
   let known_link = KNOWN_LINKS.OWN;
   const role = yield select((state) => state.userSession.user.roles);
@@ -220,13 +220,17 @@ function* handleMediaSimilarityCall(action) {
   const processUrl = yield select((state) => state.assistant.processUrl);
   const contentType = yield select((state) => state.assistant.processUrlType);
   const unprocessbleTypes = [
+    KNOWN_LINKS.OWN, // remove this for DBKF media service
     KNOWN_LINKS.YOUTUBE,
     KNOWN_LINKS.VIMEO,
     KNOWN_LINKS.LIVELEAK,
     KNOWN_LINKS.DAILYMOTION,
   ];
 
-  if (contentType === TOOLS_CATEGORIES.IMAGE) {
+  if (
+    contentType === TOOLS_CATEGORIES.IMAGE &&
+    !unprocessbleTypes.includes(inputUrlType) // remove this for DBKF media service
+  ) {
     yield call(
       similaritySearch,
       () => dbkfAPI.callImageSimilarityEndpoint(processUrl),
