@@ -120,14 +120,14 @@ function* getPrevFactChecksSaga() {
 
 function* getMachineGeneratedTextChunksSaga() {
   yield takeLatest(
-    ["SET_SCRAPED_DATA", "AUTH_USER_LOGIN", "CLEAN_STATE"],
+    ["SET_SCRAPED_DATA", "CLEAN_STATE"],
     handleMachineGeneratedTextChunksCall,
   );
 }
 
 function* getMachineGeneratedTextSentencesSaga() {
   yield takeLatest(
-    ["SET_SCRAPED_DATA", "AUTH_USER_LOGIN", "CLEAN_STATE"],
+    ["SET_SCRAPED_DATA", "CLEAN_STATE"],
     handleMachineGeneratedTextSentencesCall,
   );
 }
