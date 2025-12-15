@@ -2,15 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { HashRouter, Route, Routes } from "react-router-dom";
 
+import AppLayout from "@/components/Layout/AppLayout";
+import PopUp from "@/components/PopUp/PopUp";
 import {
   cleanErrorNetwork,
   setErrorNetwork,
 } from "@/redux/reducers/errorReducer";
 import useAuthenticationAPI from "@Shared/Authentication/useAuthenticationAPI";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-
-import AppLayout from "./components/Layout/AppLayout";
-import PopUp from "./components/PopUp/PopUp";
 
 const App = () => {
   const keyword = i18nLoadNamespace("components/Shared/utils");
