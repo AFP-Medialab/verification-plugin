@@ -274,7 +274,6 @@ const Assistant = () => {
   }, [errorKey]);
 
   // if a url is present in the plugin url (as a param), set it to input
-  // TODO check if this is necessary anymore
   useEffect(() => {
     if (url !== undefined) {
       let uri = url !== null ? decodeURIComponent(url) : undefined;
@@ -362,7 +361,7 @@ const Assistant = () => {
           </form>
 
           {/* archive */}
-          {inputUrl !== null ? (
+          {inputUrl !== null && imageVideoSelected === false ? (
             <Stack
               direction="row"
               sx={{
@@ -370,7 +369,6 @@ const Assistant = () => {
                 alignItems: "left",
                 mt: 1,
               }}
-              hidden={!urlMode || imageVideoSelected}
             >
               <Button
                 onClick={() => handleArchive()}
