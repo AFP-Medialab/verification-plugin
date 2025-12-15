@@ -3,7 +3,7 @@ import { Trans } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
-// import Button from "@mui/material/Button";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
@@ -16,7 +16,7 @@ import Typography from "@mui/material/Typography";
 import { useColorScheme } from "@mui/material/styles";
 
 import { Close } from "@mui/icons-material";
-// import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
+import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import AssistantIcon from "@/components/NavBar/images/navbar/assistant-icon-primary.svg";
@@ -70,7 +70,7 @@ const Assistant = () => {
   const inputUrl = useSelector((state) => state.assistant.inputUrl);
   const urlMode = useSelector((state) => state.assistant.urlMode);
   const [formInput, setFormInput] = useState("");
-  // const inputUrlType = useSelector((state) => state.assistant.inputUrlType);
+  const inputUrlType = useSelector((state) => state.assistant.inputUrlType);
 
   // uploading an image/video
   const imageVideoSelected = useSelector(
@@ -221,30 +221,29 @@ const Assistant = () => {
     }
   };
 
-  // TODO where best to put this
-  // // for archiving URLs
-  // const handleArchive = () => {
-  //   let archiveUrl = "";
+  // for archiving URLs
+  const handleArchive = () => {
+    let archiveUrl = "";
 
-  //   switch (inputUrlType) {
-  //     case KNOWN_LINKS.FACEBOOK:
-  //       archiveUrl =
-  //         "https://www.facebook.com/plugins/post.php?href=" +
-  //         encodeURIComponent(inputUrl);
-  //       break;
-  //     case KNOWN_LINKS.INSTAGRAM:
-  //       if (inputUrl.endsWith("/"))
-  //         archiveUrl = inputUrl.endsWith("/")
-  //           ? inputUrl + "embed/captioned/"
-  //           : inputUrl + "/embed/captioned/";
-  //       break;
-  //     default:
-  //       archiveUrl = inputUrl;
-  //   }
-  //   navigator.clipboard.writeText(archiveUrl).then(() => {
-  //     window.open("https://web.archive.org/save/" + archiveUrl, "_blank");
-  //   });
-  // };
+    switch (inputUrlType) {
+      case KNOWN_LINKS.FACEBOOK:
+        archiveUrl =
+          "https://www.facebook.com/plugins/post.php?href=" +
+          encodeURIComponent(inputUrl);
+        break;
+      case KNOWN_LINKS.INSTAGRAM:
+        if (inputUrl.endsWith("/"))
+          archiveUrl = inputUrl.endsWith("/")
+            ? inputUrl + "embed/captioned/"
+            : inputUrl + "/embed/captioned/";
+        break;
+      default:
+        archiveUrl = inputUrl;
+    }
+    navigator.clipboard.writeText(archiveUrl).then(() => {
+      window.open("https://web.archive.org/save/" + archiveUrl, "_blank");
+    });
+  };
 
   // pre process media file
   const preprocessFileInput = (file) => {
@@ -358,7 +357,7 @@ const Assistant = () => {
           </form>
 
           {/* archive */}
-          {/* {inputUrl === null ? null : (
+          {inputUrl !== null ? (
             <Stack
               direction="row"
               sx={{
@@ -372,10 +371,10 @@ const Assistant = () => {
                 onClick={() => handleArchive()}
                 startIcon={<ArchiveOutlinedIcon />}
               >
-                <label>{keyword("archive_link")}</label>
+                <label>{keyword("archive_url_link")}</label>
               </Button>
             </Stack>
-          )} */}
+          ) : null}
         </CardContent>
       </Card>
 
