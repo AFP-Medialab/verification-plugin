@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Trans } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -48,6 +47,7 @@ import { setError } from "@/redux/reducers/errorReducer";
 import { useTrackEvent } from "Hooks/useAnalytics";
 
 import {
+  TransAssistantHelpThreeTooltip,
   TransAssistantHelpTwoTooltip,
   TransHtmlDoubleLineBreak,
   TransSupportedToolsLink,
@@ -274,6 +274,7 @@ const Assistant = () => {
   }, [errorKey]);
 
   // if a url is present in the plugin url (as a param), set it to input
+  // TODO check if this is necessary anymore
   useEffect(() => {
     if (url !== undefined) {
       let uri = url !== null ? decodeURIComponent(url) : undefined;
@@ -301,6 +302,18 @@ const Assistant = () => {
             height="40px"
           />
         }
+        action={
+          <Tooltip
+            interactive={"true"}
+            title={<TransAssistantHelpTwoTooltip keyword={keyword} />}
+            classes={{ tooltip: classes.assistantTooltip }}
+          >
+            <HelpOutlineOutlinedIcon
+              className={classes.toolTipIcon}
+              color={"primary"}
+            />
+          </Tooltip>
+        }
       />
 
       <Card variant="outlined" sx={{ mt: 4 }}>
@@ -316,17 +329,9 @@ const Assistant = () => {
               interactive={"true"}
               title={
                 <>
-                  <Trans
-                    t={keyword}
-                    i18nKey="assistant_help_title"
-                    components={{
-                      b: <b />,
-                    }}
-                  />
+                  {/* TODO add supported local files */}
+                  <TransAssistantHelpThreeTooltip keyword={keyword} />
                   <TransHtmlDoubleLineBreak keyword={keyword} />
-                  <Trans t={keyword} i18nKey="assistant_help_1" />
-                  <TransHtmlDoubleLineBreak keyword={keyword} />
-                  <TransAssistantHelpTwoTooltip keyword={keyword} />
                   <TransSupportedToolsLink keyword={keyword} />
                 </>
               }
