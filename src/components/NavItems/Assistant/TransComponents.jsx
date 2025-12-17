@@ -47,6 +47,33 @@ export function TransSupportedUrlsLink({ keyword }) {
   );
 }
 
+export function TransAssistantHelpFourTooltip({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="assistant_help_4"
+      components={{
+        imageFileTypeSupportLink: (
+          <a
+            href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Image_types"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={A_STYLE}
+          />
+        ),
+        videoFileTypeSupportLink: (
+          <a
+            href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Video_codecs"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={A_STYLE}
+          />
+        ),
+      }}
+    />
+  );
+}
+
 export function TransUrlDomainAnalysisLink({ keyword }) {
   return (
     <Trans

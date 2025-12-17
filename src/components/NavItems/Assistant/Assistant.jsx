@@ -47,6 +47,7 @@ import { setError } from "@/redux/reducers/errorReducer";
 import { useTrackEvent } from "Hooks/useAnalytics";
 
 import {
+  TransAssistantHelpFourTooltip,
   TransAssistantHelpThreeTooltip,
   TransAssistantHelpTwoTooltip,
   TransHtmlDoubleLineBreak,
@@ -328,9 +329,9 @@ const Assistant = () => {
               interactive={"true"}
               title={
                 <>
-                  {/* TODO add supported local files */}
                   <TransAssistantHelpThreeTooltip keyword={keyword} />
                   <TransHtmlDoubleLineBreak keyword={keyword} />
+                  <TransAssistantHelpFourTooltip keyword={keyword} />
                   <TransSupportedToolsLink keyword={keyword} />
                 </>
               }
