@@ -443,9 +443,9 @@ const Assistant = () => {
             <AssistantMediaResult
               title={
                 videoUploaded
-                  ? keyword("upload_video")
+                  ? "upload_video"
                   : imageUploaded
-                    ? keyword("upload_image")
+                    ? "upload_image"
                     : null
               }
               cleanAssistant={cleanAssistant}
