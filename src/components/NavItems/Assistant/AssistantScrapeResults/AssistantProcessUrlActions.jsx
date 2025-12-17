@@ -55,6 +55,7 @@ const AssistantProcessUrlActions = (cleanAssistant) => {
       // Do nothing if path is null
     } else if (inputUrlType === KNOWN_LINKS.OWN) {
       // navigate to tool but don't run tool automatically
+      // TODO is cleanAssistant working correctly?
       cleanAssistant;
       navigate("/app/" + action.path);
     } else if (resultUrl !== null) {
