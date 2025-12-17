@@ -306,7 +306,12 @@ const Assistant = () => {
         action={
           <Tooltip
             interactive={"true"}
-            title={<TransAssistantHelpTwoTooltip keyword={keyword} />}
+            title={
+              <>
+                <TransAssistantHelpTwoTooltip keyword={keyword} />
+                <TransSupportedToolsLink keyword={keyword} />
+              </>
+            }
             classes={{ tooltip: classes.assistantTooltip }}
           >
             <HelpOutlineOutlinedIcon
@@ -333,7 +338,6 @@ const Assistant = () => {
                   <TransAssistantHelpThreeTooltip keyword={keyword} />
                   <TransHtmlDoubleLineBreak keyword={keyword} />
                   <TransAssistantHelpFourTooltip keyword={keyword} />
-                  <TransSupportedToolsLink keyword={keyword} />
                 </>
               }
               classes={{ tooltip: classes.assistantTooltip }}
