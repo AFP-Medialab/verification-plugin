@@ -217,6 +217,7 @@ const Assistant = () => {
         throw new Error("Unsupported file type");
       } catch (error) {
         console.error("Error in submitUrl:", error.message);
+        // TODO assistant results need to disappear and display an error to user on page
         setError(error.message);
       }
     }
@@ -418,7 +419,7 @@ const Assistant = () => {
       ) : null}
 
       {/* assistant local file results section */}
-      {!urlMode && fileInput && imageVideoSelected ? (
+      {!urlMode && imageVideoSelected ? (
         <Card variant="outlined" sx={{ width: "100%", mb: 2, mt: 4 }}>
           <CardHeader
             className={classes.assistantCardHeader}
@@ -436,6 +437,8 @@ const Assistant = () => {
             }
           />
 
+          {/* TODO this is appearing when a local file has been selected but not submitted, if previous results have not been closed
+              , as in from tool navigatation - but cleanAssistant has run? */}
           <CardContent>
             <AssistantMediaResult
               title={
@@ -445,6 +448,7 @@ const Assistant = () => {
                     ? keyword("upload_image")
                     : null
               }
+              cleanAssistant={cleanAssistant}
             />
           </CardContent>
         </Card>

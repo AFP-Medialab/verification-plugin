@@ -21,13 +21,14 @@ import {
   setGeolocationUrl,
 } from "@/redux/reducers/tools/geolocationReducer";
 
-const AssistantProcessUrlActions = () => {
+const AssistantProcessUrlActions = (cleanAssistant) => {
   const classes = useMyStyles();
   const navigate = useNavigate();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const dispatch = useDispatch();
 
   const inputUrl = useSelector((state) => state.assistant.inputUrl);
+  const inputUrlType = useSelector((state) => state.assistant.inputUrlType);
   const processUrl = useSelector((state) => state.assistant.processUrl);
   const contentType = useSelector((state) => state.assistant.processUrlType);
   const processUrlActions = useSelector(
@@ -52,10 +53,15 @@ const AssistantProcessUrlActions = () => {
       dl.click();
     } else if (action.path === null) {
       // Do nothing if path is null
+    } else if (inputUrlType === KNOWN_LINKS.OWN) {
+      // navigate to tool but don't run tool automatically
+      cleanAssistant;
+      navigate("/app/" + action.path);
     } else if (resultUrl !== null) {
       navigate("/app/" + action.path + "/autoRun");
       //history.push("/app/" + action.path + "/" + encodeURIComponent(resultUrl) + "/" + contentType)
     } else {
+      // TODO what is this doing?
       navigate(
         "/app/" +
           action.path +
