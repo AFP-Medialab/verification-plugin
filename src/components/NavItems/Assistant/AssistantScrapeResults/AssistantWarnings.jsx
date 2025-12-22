@@ -131,12 +131,16 @@ const AssistantWarnings = () => {
                 <TransOntotextAuthor keyword={keyword} />
                 <TransHtmlDoubleLineBreak keyword={keyword} />
                 <TransDbkfLink keyword={keyword} />
-                <TransHtmlDoubleLineBreak keyword={keyword} />
-                <Trans t={keyword} i18nKey="previous_fact_checks_tooltip" />
-                <TransHtmlDoubleLineBreak keyword={keyword} />
-                <TransKinitAuthor keyword={keyword} />
-                <TransHtmlDoubleLineBreak keyword={keyword} />
-                <TransPrevFactChecksLink keyword={keyword} />
+                {role.includes(ROLES.BETA_TESTER) ? (
+                  <>
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
+                    <Trans t={keyword} i18nKey="previous_fact_checks_tooltip" />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
+                    <TransKinitAuthor keyword={keyword} />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
+                    <TransPrevFactChecksLink keyword={keyword} />
+                  </>
+                ) : null}
               </>
             }
             classes={{ tooltip: classes.assistantTooltip }}
