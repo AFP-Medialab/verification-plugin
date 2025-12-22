@@ -110,6 +110,16 @@ const AssistantWarnings = () => {
           index === self.findIndex((item) => item.id === obj.id),
       );
     }
+  } else {
+    // not logged in and dbkf only
+    dbkfTextMatch
+      ? dbkfTextMatch.forEach((dbkfResult) => {
+          separateDbkfTextMatch.push({
+            ...dbkfResult,
+            factCheckServices: [DBKF],
+          });
+        })
+      : null;
   }
 
   return (
@@ -155,7 +165,7 @@ const AssistantWarnings = () => {
         {/* not logged in as beta tester, DBKF only */}
         {!role.includes(ROLES.BETA_TESTER) && dbkfTextMatch && (
           <DbkfTextResults
-            results={dbkfTextMatch}
+            results={separateDbkfTextMatch}
             prevFactChecksExist={false}
           />
         )}
