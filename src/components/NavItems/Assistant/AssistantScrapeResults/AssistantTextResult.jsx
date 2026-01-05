@@ -368,7 +368,15 @@ const AssistantTextResult = () => {
         >
           {/* extracted raw text */}
           <CustomTabPanel value={textTabIndex} index={0}>
-            <Typography component={"div"} sx={{ textAlign: "start" }}>
+            <Typography
+              component={"div"}
+              sx={{
+                textAlign: "start",
+                "& p": {
+                  margin: "8px 0",
+                },
+              }}
+            >
               {textHtmlOutput ?? text}
             </Typography>
           </CustomTabPanel>
