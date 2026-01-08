@@ -15,7 +15,7 @@ import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 import Feedback from "../Feedback/Feedback";
 import MySnackbar from "../MySnackbar/MySnackbar";
-import MainContentMenuTopMenuItems from "../NavBar/MainContentMenuTabItems/MainContentMenuTopMenuItems";
+import TopNavigationRouter from "../Navigation/TopNavigationRouter";
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import ScrollTop from "../Shared/ScrollTop/ScrollTop";
 
@@ -25,7 +25,7 @@ import ScrollTop from "../Shared/ScrollTop/ScrollTop";
  * @returns {Element}
  * @constructor
  */
-const MainContent = ({ tools }) => {
+const AppContent = ({ tools }) => {
   const classes = useMyStyles();
 
   const keyword = i18nLoadNamespace("components/NavBar");
@@ -53,7 +53,7 @@ const MainContent = ({ tools }) => {
   return (
     <main className={classes.content}>
       <div className={classes.toolbar} id="back-to-top-anchor" />
-      <MainContentMenuTopMenuItems
+      <TopNavigationRouter
         className={classes.noMargin}
         topMenuItems={TOP_MENU_ITEMS}
         tools={toolsAllowedForRole}
@@ -123,4 +123,4 @@ const MainContent = ({ tools }) => {
   );
 };
 
-export default MainContent;
+export default AppContent;

@@ -120,14 +120,14 @@ function* getPrevFactChecksSaga() {
 
 function* getMachineGeneratedTextChunksSaga() {
   yield takeLatest(
-    ["SET_SCRAPED_DATA", "AUTH_USER_LOGIN", "CLEAN_STATE"],
+    ["SET_SCRAPED_DATA", "CLEAN_STATE"],
     handleMachineGeneratedTextChunksCall,
   );
 }
 
 function* getMachineGeneratedTextSentencesSaga() {
   yield takeLatest(
-    ["SET_SCRAPED_DATA", "AUTH_USER_LOGIN", "CLEAN_STATE"],
+    ["SET_SCRAPED_DATA", "CLEAN_STATE"],
     handleMachineGeneratedTextSentencesCall,
   );
 }
@@ -330,15 +330,9 @@ function* handleSourceCredibilityCall(action) {
 
     yield put(
       setInputSourceCredDetails(
-        result.url.inputUrl > 0
-          ? result.domain[result.url.inputUrl[0].resolvedDomain].positive
-          : null, // input url positive
-        result.url.inputURL > 0
-          ? result.domain[result.url.inputUrl[0].resolvedDomain].caution
-          : null, // input url caution
-        result.url.inputURL > 0
-          ? result.domain[result.url.inputUrl[0].resolvedDomain].mixed
-          : null, // input url mixed
+        result.domain[result.url.inputUrl.credibilityScope]?.positive,
+        result.domain[result.url.inputUrl.credibilityScope]?.caution,
+        result.domain[result.url.inputUrl.credibilityScope]?.mixed,
         result, // all the rest results
         trafficLightColors,
         sourceTypes,
