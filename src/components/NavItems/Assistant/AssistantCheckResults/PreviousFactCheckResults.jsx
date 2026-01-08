@@ -57,7 +57,7 @@ const PreviousFactCheckResults = ({ results }) => {
                   null
                 }
                 website={resultItem.website ?? resultItem.source_name}
-                language={getLanguageName(resultItem.source_language)}
+                language={getLanguageName(resultItem.source_language, resultItem.source_language)}
                 similarityScore={resultItem.score}
                 articleUrl={resultItem.url}
                 domainUrl={resultItem.source_name}

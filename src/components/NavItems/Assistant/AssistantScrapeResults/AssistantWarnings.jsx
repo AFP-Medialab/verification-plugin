@@ -110,6 +110,16 @@ const AssistantWarnings = () => {
           index === self.findIndex((item) => item.id === obj.id),
       );
     }
+  } else {
+    // not logged in and dbkf only
+    dbkfTextMatch
+      ? dbkfTextMatch.forEach((dbkfResult) => {
+          separateDbkfTextMatch.push({
+            ...dbkfResult,
+            factCheckServices: [DBKF],
+          });
+        })
+      : null;
   }
 
   return (
@@ -131,12 +141,16 @@ const AssistantWarnings = () => {
                 <TransOntotextAuthor keyword={keyword} />
                 <TransHtmlDoubleLineBreak keyword={keyword} />
                 <TransDbkfLink keyword={keyword} />
-                <TransHtmlDoubleLineBreak keyword={keyword} />
-                <Trans t={keyword} i18nKey="previous_fact_checks_tooltip" />
-                <TransHtmlDoubleLineBreak keyword={keyword} />
-                <TransKinitAuthor keyword={keyword} />
-                <TransHtmlDoubleLineBreak keyword={keyword} />
-                <TransPrevFactChecksLink keyword={keyword} />
+                {role.includes(ROLES.BETA_TESTER) ? (
+                  <>
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
+                    <Trans t={keyword} i18nKey="previous_fact_checks_tooltip" />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
+                    <TransKinitAuthor keyword={keyword} />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
+                    <TransPrevFactChecksLink keyword={keyword} />
+                  </>
+                ) : null}
               </>
             }
             classes={{ tooltip: classes.assistantTooltip }}
@@ -151,7 +165,7 @@ const AssistantWarnings = () => {
         {/* not logged in as beta tester, DBKF only */}
         {!role.includes(ROLES.BETA_TESTER) && dbkfTextMatch && (
           <DbkfTextResults
-            results={dbkfTextMatch}
+            results={separateDbkfTextMatch}
             prevFactChecksExist={false}
           />
         )}
