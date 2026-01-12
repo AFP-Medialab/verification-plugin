@@ -19,6 +19,7 @@ import {
   resetGeolocation as resetGeolocationImage,
   setGeolocationUrl,
 } from "@/redux/reducers/tools/geolocationReducer";
+import { useSetInputFromAssistant } from "Hooks/useUrlOrFile";
 
 const AssistantProcessUrlActions = () => {
   const classes = useMyStyles();
@@ -31,6 +32,10 @@ const AssistantProcessUrlActions = () => {
   const processUrlActions = useSelector(
     (state) => state.assistant.processUrlActions,
   );
+  const setAssistantSelection = useSetInputFromAssistant();
+  const imageVideoSelected = useSelector(
+    (state) => state.assistant.imageVideoSelected,
+  );
 
   const handleClick = (action) => {
     const resultUrl = action.useInputUrl ? inputUrl : processUrl;
@@ -40,6 +45,10 @@ const AssistantProcessUrlActions = () => {
     }
     if (action.setUrl) {
       dispatch(action.setUrl(resultUrl));
+    }
+    if (!imageVideoSelected) {
+      // if url to media, make sure url is correctly set
+      setAssistantSelection(resultUrl);
     }
 
     if (action.download) {
