@@ -15,22 +15,19 @@ import Typography from "@mui/material/Typography";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
-import { KNOWN_LINKS } from "@/constants/tools";
 import {
   resetGeolocation as resetGeolocationImage,
   setGeolocationUrl,
 } from "@/redux/reducers/tools/geolocationReducer";
 
-const AssistantProcessUrlActions = (cleanAssistant) => {
+const AssistantProcessUrlActions = () => {
   const classes = useMyStyles();
   const navigate = useNavigate();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const dispatch = useDispatch();
 
   const inputUrl = useSelector((state) => state.assistant.inputUrl);
-  const inputUrlType = useSelector((state) => state.assistant.inputUrlType);
   const processUrl = useSelector((state) => state.assistant.processUrl);
-  const contentType = useSelector((state) => state.assistant.processUrlType);
   const processUrlActions = useSelector(
     (state) => state.assistant.processUrlActions,
   );
@@ -53,26 +50,9 @@ const AssistantProcessUrlActions = (cleanAssistant) => {
       dl.click();
     } else if (action.path === null) {
       // Do nothing if path is null
-    } else if (inputUrlType === KNOWN_LINKS.OWN) {
-      // navigate to tool but don't run tool automatically
-      // TODO is cleanAssistant working correctly?
-      cleanAssistant;
-      navigate("/app/" + action.path);
-    } else if (resultUrl !== null) {
-      navigate("/app/" + action.path + "/autoRun");
-      //history.push("/app/" + action.path + "/" + encodeURIComponent(resultUrl) + "/" + contentType)
     } else {
-      // TODO what is this doing?
-      navigate(
-        "/app/" +
-          action.path +
-          "/" +
-          KNOWN_LINKS.OWN +
-          "/" +
-          contentType +
-          "/autoRun",
-      );
-      //history.push("/app/" + action.path + "/" + KNOWN_LINKS.OWN + "/" + contentType)
+      // Go to other tools with fileInput or formInput
+      navigate("/app/" + action.path + "?fromAssistant");
     }
   };
 

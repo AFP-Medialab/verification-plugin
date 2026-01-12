@@ -29,6 +29,7 @@ import "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "@Shared/StringFileUploadField";
 import { TabContext, TabPanel } from "@mui/lab";
+import { useUrlOrFile } from "Hooks/useUrlOrFile";
 
 import { useProcessKeyframes } from "./Hooks/useKeyframeWrapper";
 import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
@@ -70,7 +71,6 @@ const useKeyframesState = () => {
       keyframesFeaturesData: state.keyframes.keyframesFeatures,
       isLoadingSimilarity: state.keyframes.similarityLoading,
       similarityResults: state.keyframes.similarity,
-      processUrl: state.assistant.processUrl,
       role: state.userSession.user.roles,
       userAuthenticated:
         state.userSession && state.userSession.userAuthenticated,
@@ -95,13 +95,12 @@ const Keyframes = () => {
     keyframesFeaturesData,
     isLoadingSimilarity,
     similarityResults,
-    processUrl,
     role,
     userAuthenticated,
   } = useKeyframesState();
 
-  const [input, setInput] = useState(resultUrl || "");
-  const [videoFile, setVideoFile] = useState(null);
+  const [input = resultUrl || "", setInput, videoFile, setVideoFile] =
+    useUrlOrFile();
   const [submittedUrl, setSubmittedUrl] = useState(undefined);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [tabSelected, setTabSelected] = useState(TAB_VALUES.URL);
@@ -210,12 +209,11 @@ const Keyframes = () => {
     setInput(uri);
   }, [urlParam]);
 
-  useEffect(() => {
-    if (processUrl && url?.includes("autoRun")) {
-      setInput(processUrl);
-      submitUrl(processUrl);
-    }
-  }, [processUrl, url]);
+  // useEffect(() => {
+  //   if (url?.includes("fromAssistant")) {
+  //     submitUrl(input, videoFile);
+  //   }
+  // }, [url]);
 
   useEffect(() => {
     if (featureData && data && hasSubmitted) {

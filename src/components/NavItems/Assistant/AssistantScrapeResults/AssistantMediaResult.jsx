@@ -40,7 +40,7 @@ import AssistantImageResult from "./AssistantImageResult";
 import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
 import AssistantVideoResult from "./AssistantVideoResult";
 
-const AssistantMediaResult = ({ title = null, cleanAssistant }) => {
+const AssistantMediaResult = ({ title = null }) => {
   const classes = useMyStyles();
   const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -215,7 +215,7 @@ const AssistantMediaResult = ({ title = null, cleanAssistant }) => {
                 <AssistantImageResult />
               </Grid>
               <Grid size={6}>
-                <AssistantProcessUrlActions cleanAssistant={cleanAssistant} />
+                <AssistantProcessUrlActions />
               </Grid>
             </Grid>
           ) : (
@@ -224,7 +224,7 @@ const AssistantMediaResult = ({ title = null, cleanAssistant }) => {
                 <AssistantVideoResult />
               </Grid>
               <Grid size={6}>
-                <AssistantProcessUrlActions cleanAssistant={cleanAssistant} />
+                <AssistantProcessUrlActions />
               </Grid>
             </Grid>
           )

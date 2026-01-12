@@ -12,6 +12,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import createCache from "@emotion/cache";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AssistantSelectionProvider } from "Hooks/useUrlOrFile";
 import dayjs from "dayjs";
 import "dayjs/locale/ar";
 import "dayjs/locale/de";
@@ -87,8 +88,10 @@ const AppWrapper = ({ children }) => {
             }}
           />
           <QueryClientProvider client={queryClient}>
-            {children}
-            <ReactQueryDevtools initialIsOpen={false}></ReactQueryDevtools>
+            <AssistantSelectionProvider>
+              {children}
+              <ReactQueryDevtools initialIsOpen={false}></ReactQueryDevtools>
+            </AssistantSelectionProvider>
           </QueryClientProvider>
         </ThemeProvider>
       </CacheProvider>

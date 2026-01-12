@@ -45,6 +45,7 @@ import {
 } from "@/redux/actions/tools/assistantActions";
 import { setError } from "@/redux/reducers/errorReducer";
 import { useTrackEvent } from "Hooks/useAnalytics";
+import { useSetInputFromAssistant } from "Hooks/useUrlOrFile";
 
 import {
   TransAssistantHelpFourTooltip,
@@ -80,6 +81,7 @@ const Assistant = () => {
   const [fileInput, setFileInput] = useState(null);
   const [videoUploaded, setVideoUploaded] = useState(false);
   const [imageUploaded, setImageUploaded] = useState(false);
+  const setAssistantSelection = useSetInputFromAssistant();
 
   // result states
   const imageList = useSelector((state) => state.assistant.imageList);
@@ -160,6 +162,8 @@ const Assistant = () => {
   // submit url or file
   const handleSubmit = async (src) => {
     dispatch(cleanAssistantState());
+    // set fileInput and formInput
+    setAssistantSelection(fileInput ?? formInput);
     if (formInput) {
       // submit url
       dispatch(submitInputUrl(src));
@@ -441,8 +445,6 @@ const Assistant = () => {
             }
           />
 
-          {/* TODO this is appearing when a local file has been selected but not submitted, if previous results have not been closed
-              , as in from tool navigatation - but cleanAssistant has run? */}
           <CardContent>
             <AssistantMediaResult
               title={
@@ -452,7 +454,6 @@ const Assistant = () => {
                     ? "upload_image"
                     : null
               }
-              cleanAssistant={cleanAssistant}
             />
           </CardContent>
         </Card>

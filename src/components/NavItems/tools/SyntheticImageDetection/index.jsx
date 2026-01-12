@@ -40,11 +40,6 @@ const SyntheticImageDetection = () => {
     dispatch,
   });
 
-  // don't run automatically if sent from Assistant with a local file
-  if (input.startsWith("blob:")) {
-    resetState();
-  }
-
   return (
     <Stack direction="column" spacing={4}>
       <HeaderTool
