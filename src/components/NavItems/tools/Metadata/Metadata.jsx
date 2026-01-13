@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
@@ -26,6 +26,7 @@ import {
   getFileTypeFromFileObject,
   getFileTypeFromUrl,
 } from "@Shared/Utils/fileUtils";
+import { useUrlOrFile } from "Hooks/useUrlOrFile";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
 
@@ -41,6 +42,7 @@ import { useVideoMetadataMutation } from "./hooks/useVideoMetadataMutation";
 
 const Metadata = () => {
   const { url, type } = useParams();
+  const [searchParams] = useSearchParams();
 
   const keyword = i18nLoadNamespace("components/NavItems/tools/Metadata");
 
@@ -61,8 +63,8 @@ const Metadata = () => {
   const session = useSelector((state) => state.userSession);
   const uid = session && session.user ? session.user.id : null;
 
-  const [input, setInput] = useState(resultUrl ? resultUrl : "");
-  const [fileInput, setFileInput] = useState(null);
+  const [input = resultUrl || "", setInput, fileInput, setFileInput] =
+    useUrlOrFile();
   const [imageUrl, setImageUrl] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
   const [urlDetected, setUrlDetected] = useState(false);
@@ -217,15 +219,12 @@ const Metadata = () => {
     }
   }, [url, type]);
 
-  const processUrl = useSelector((state) => state.assistant.processUrl);
-  const processUrlType = useSelector((state) => state.assistant.processUrlType);
   useEffect(() => {
-    if (processUrl && processUrlType && url?.includes("autoRun")) {
-      setInput(processUrl);
-      dispatch(setMetadataMediaType(processUrlType));
-      setUrlDetected(true);
+    const fromAssistant = searchParams.has("fromAssistant");
+    if (fromAssistant && (input || fileInput)) {
+      submitUrl();
     }
-  }, [processUrl, processUrlType, url]);
+  }, [searchParams]);
 
   const handleCloseResult = () => {
     setInput("");
