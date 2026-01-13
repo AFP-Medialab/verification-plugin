@@ -183,8 +183,9 @@ const Assistant = () => {
           throw new Error("Unable to determine file type");
         }
 
-        // set single media present
+        // set ImgaeVideoSelected for user media upload
         dispatch(setImageVideoSelected(true));
+        // set single media present for display
         dispatch(setSingleMediaPresent(true));
         navigate("/app/assistant/");
 
@@ -494,7 +495,7 @@ const Assistant = () => {
                 </Grid>
               ) : null}
 
-              {/* source credibility//URL domain analysis results */}
+              {/* source credibility/URL domain analysis results */}
               {positiveSourceCred || cautionSourceCred || mixedSourceCred ? (
                 <Grid size={{ xs: 12 }}>
                   <AssistantSCResults />
@@ -502,9 +503,8 @@ const Assistant = () => {
               ) : null}
 
               {/* media results */}
-              {imageList.length > 0 ||
-              videoList.length > 0 ||
-              imageVideoSelected ? (
+              {console.log(imageList, videoList, imageVideoSelected)}
+              {imageList.length > 0 || videoList.length > 0 ? (
                 <Grid size={{ xs: 12 }}>
                   <AssistantMediaResult />
                 </Grid>
