@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
@@ -8,6 +9,7 @@ import Stack from "@mui/material/Stack";
 
 import { videoDeepfake } from "@/constants/tools";
 import { resetDeepfake } from "@/redux/actions/tools/deepfakeVideoActions";
+import { useUrlOrFile } from "Hooks/useUrlOrFile";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
 import { preprocessFileUpload } from "components/Shared/Utils/fileUtils";
@@ -18,6 +20,7 @@ import UseGetDeepfake from "./Hooks/useGetDeepfake";
 import DeepfakeResultsVideo from "./Results/DeepfakeResultsVideo";
 
 const Deepfake = () => {
+  const [searchParams] = useSearchParams();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
@@ -28,24 +31,38 @@ const Deepfake = () => {
   const result = useSelector((state) => state.deepfakeVideo.result);
   const url = useSelector((state) => state.deepfakeVideo.url);
   const role = useSelector((state) => state.userSession.user.roles);
-  const [input, setInput] = useState(url ? url : "");
   const [type, setType] = useState("");
-  const [videoFile, setVideoFile] = useState(undefined);
+  const [input = url || "", setInput, videoFile, setVideoFile] = useUrlOrFile();
+  const fromAssistant = searchParams.has("fromAssistant");
 
   const dispatch = useDispatch();
 
   const submitUrl = async () => {
-    await UseGetDeepfake(
-      keyword,
-      input,
-      true,
-      "VIDEO",
-      dispatch,
-      role,
-      keywordWarning("error_invalid_url"),
-      type,
-      videoFile,
-    );
+    if (fromAssistant && videoFile) {
+      await UseGetDeepfake(
+        keyword,
+        "",
+        true,
+        "VIDEO",
+        dispatch,
+        role,
+        keywordWarning("error_invalid_url"),
+        "local",
+        videoFile,
+      );
+    } else {
+      await UseGetDeepfake(
+        keyword,
+        input,
+        true,
+        "VIDEO",
+        dispatch,
+        role,
+        keywordWarning("error_invalid_url"),
+        type,
+        videoFile,
+      );
+    }
   };
 
   const preprocessingSuccess = (file) => {
@@ -73,6 +90,12 @@ const Deepfake = () => {
     }
   }, [url, input, result]);
 
+  useEffect(() => {
+    if (fromAssistant && (input || videoFile)) {
+      handleSubmit();
+    }
+  }, [searchParams]);
+
   const handleSubmit = async () => {
     dispatch(resetDeepfake());
     await submitUrl();
@@ -84,14 +107,6 @@ const Deepfake = () => {
     setType("");
     dispatch(resetDeepfake());
   };
-
-  const processUrl = useSelector((state) => state.assistant.processUrl);
-  useEffect(() => {
-    if (processUrl && url?.includes("autoRun")) {
-      setInput(processUrl);
-      handleSubmit(processUrl);
-    }
-  }, [processUrl, url]);
 
   return (
     <Box>
