@@ -531,7 +531,15 @@ export function ClassifiedText({
   }
 
   return (
-    <Typography component={"div"} sx={{ textAlign: "start" }}>
+    <Typography
+      component={"div"}
+      sx={{
+        textAlign: "start",
+        "& p": {
+          margin: "8px 0",
+        },
+      }}
+    >
       {output}
     </Typography>
   );
