@@ -6,7 +6,6 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
-import StringFileUploadField from "@/Shared/StringFileUploadField";
 import { imageOcr } from "@/constants/tools";
 import { KNOWN_LINKS } from "@/constants/tools";
 import {
@@ -20,6 +19,7 @@ import {
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import HeaderTool from "@Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import StringFileUploadField from "@Shared/StringFileUploadField";
 import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import { useUrlOrFile } from "Hooks/useUrlOrFile";
 import { setError } from "redux/reducers/errorReducer";
