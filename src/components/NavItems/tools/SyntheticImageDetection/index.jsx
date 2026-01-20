@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
@@ -9,12 +10,14 @@ import { Gradient } from "@mui/icons-material";
 import SyntheticImageDetectionForm from "@/components/NavItems/tools/SyntheticImageDetection/SyntheticImageDetectionForm";
 import { useSyntheticImageDetection } from "@/components/NavItems/tools/SyntheticImageDetection/useSyntheticImageDetection";
 import { resetSyntheticImageDetectionImage } from "@/redux/reducers/tools/syntheticImageDetectionReducer";
+import { useUrlOrFile } from "Hooks/useUrlOrFile";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
 
 const SyntheticImageDetection = () => {
+  const [searchParams] = useSearchParams();
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
   );
@@ -27,14 +30,22 @@ const SyntheticImageDetection = () => {
 
   const dispatch = useDispatch();
 
-  const [input, setInput] = useState(url ? url : "");
-  const [imageFile, setImageFile] = useState(undefined);
+  const [input = url || "", setInput, imageFile, setImageFile] = useUrlOrFile();
 
   const resetState = () => {
     setInput("");
     setImageFile(undefined);
     dispatch(resetSyntheticImageDetectionImage());
   };
+
+  useEffect(() => {
+    const fromAssistant = searchParams.has("fromAssistant");
+    if (fromAssistant && (input || imageFile)) {
+      if (imageFile) {
+        setInput("");
+      }
+    }
+  }, [searchParams]);
 
   const { startDetection, c2paData, imageType } = useSyntheticImageDetection({
     dispatch,
