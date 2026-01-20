@@ -222,6 +222,9 @@ const Metadata = () => {
   useEffect(() => {
     const fromAssistant = searchParams.has("fromAssistant");
     if (fromAssistant && (input || fileInput)) {
+      if (fileInput) {
+        setInput("");
+      }
       submitUrl();
     }
   }, [searchParams]);
