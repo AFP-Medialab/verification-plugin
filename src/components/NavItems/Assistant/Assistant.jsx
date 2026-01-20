@@ -504,7 +504,6 @@ const Assistant = () => {
               ) : null}
 
               {/* media results */}
-              {console.log(imageList, videoList, imageVideoSelected)}
               {imageList.length > 0 || videoList.length > 0 ? (
                 <Grid size={{ xs: 12 }}>
                   <AssistantMediaResult />
