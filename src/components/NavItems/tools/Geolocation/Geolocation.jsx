@@ -78,8 +78,6 @@ const Geolocation = () => {
   }, [urlImage, input, result]);
 
   useEffect(() => {
-    console.log("geolocaliser fromAssistant: input=", input);
-    console.log("geolocaliser fromAssistant: imageFile=", imageFile);
     if (fromAssistant && (input || imageFile)) {
       if (imageFile) {
         setInput("");
