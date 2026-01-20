@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
@@ -82,12 +82,12 @@ const useKeyframesState = () => {
 // Main component
 const Keyframes = () => {
   const { url: urlParam } = useParams();
+  const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Keyframes");
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
   );
-  const { url } = useParams();
 
   const {
     resultUrl,
@@ -209,11 +209,12 @@ const Keyframes = () => {
     setInput(uri);
   }, [urlParam]);
 
-  // useEffect(() => {
-  //   if (url?.includes("fromAssistant")) {
-  //     submitUrl(input, videoFile);
-  //   }
-  // }, [url]);
+  useEffect(() => {
+    const fromAssistant = searchParams.has("fromAssistant");
+    if (fromAssistant && (input || videoFile)) {
+      submitUrl(input, videoFile);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (featureData && data && hasSubmitted) {
