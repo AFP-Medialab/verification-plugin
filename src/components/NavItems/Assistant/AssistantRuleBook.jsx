@@ -222,9 +222,6 @@ export const selectCorrectActions = (
         canUserSeeTool(tool, role, isUserAuthenticated) &&
         tool.category === contentType &&
         tool != imageGif && // ignored as tool requires two resources not just one image
-        // ignore video analysis and thumbnails if video is uploaded as must be youtube URL
-        (tool !== videoAnalysis || processUrlType === KNOWN_LINKS.YOUTUBE) &&
-        (tool !== thumbnails || processUrlType === KNOWN_LINKS.YOUTUBE) &&
         (!tool.assistantProps.linksAccepted ||
           tool.assistantProps.linksAccepted.includes(inputUrlType)) &&
         (!tool.assistantProps.processLinksAccepted ||
