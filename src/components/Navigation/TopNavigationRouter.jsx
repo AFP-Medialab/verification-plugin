@@ -11,7 +11,7 @@ import { toolsHome } from "@/constants/tools";
 import { TOP_MENU_ITEMS } from "@/constants/topMenuItems";
 import { selectTopMenuItem } from "@/redux/reducers/navReducer";
 
-import DrawerItem from "../DrawerItem/DrawerItem";
+import ToolRenderer from "./ToolRenderer";
 
 /**
  * Represents the group of tools to display and their tabs in the ToolsMenu
@@ -21,7 +21,7 @@ import DrawerItem from "../DrawerItem/DrawerItem";
  * @returns {React.JSX.Element|null}
  *
  */
-const MainContentMenuTopMenuItems = ({ topMenuItems, tools }) => {
+const TopNavigationRouter = ({ topMenuItems, tools }) => {
   if (!topMenuItems || topMenuItems.length === 0) return null;
 
   return (
@@ -59,7 +59,7 @@ const TabContent = ({ index, topMenuItem, tools, topMenuItems }) => {
 
   switch (topMenuItem.path) {
     case toolsHome.path:
-      return <DrawerItem tools={tools} />;
+      return <ToolRenderer tools={tools} />;
     case "assistant":
       return (
         <Routes>
@@ -126,4 +126,4 @@ const ContentContainer = ({ topMenuItems, index }) => {
   );
 };
 
-export default MainContentMenuTopMenuItems;
+export default TopNavigationRouter;
