@@ -163,18 +163,19 @@ const Assistant = () => {
   const handleSubmit = async (src) => {
     dispatch(cleanAssistantState());
     // set fileInput and formInput
-    setAssistantSelection(fileInput ?? formInput);
     if (formInput) {
       // submit url
       dispatch(submitInputUrl(src));
       navigate("/app/assistant/" + encodeURIComponent(src));
       //trackEvent("submission", "assistant", "page assistant", formInput);
+      setAssistantSelection(formInput);
     } else if (fileInput) {
       // submit file
       try {
         if (!fileInput) {
           throw new Error("No input provided"); // Handle missing input
         }
+        setAssistantSelection(fileInput);
 
         // Determine file type
         const fileType = await getFileTypeFromFileObject(fileInput);
