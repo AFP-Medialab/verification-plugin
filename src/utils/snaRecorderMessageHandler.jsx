@@ -1,10 +1,9 @@
-import DBStorage from "@/utils/dbstorage";
 import {
   transformTiktok,
   transformTweet,
-} from "components/NavItems/tools/SNA/utils/snaDataTransformers";
+} from "@/components/NavItems/tools/SNA/utils/snaDataTransformers";
+import DBStorage from "@/utils/dbstorage";
 import { JSONPath as jp } from "jsonpath-plus";
-import _ from "lodash";
 
 // Initialize the databases (moved from background script)
 /*const db = new Dexie("tweetTest");
