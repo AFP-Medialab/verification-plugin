@@ -1,15 +1,46 @@
 /**
+ * Cross-browser tab utilities for Chrome and Firefox MV3 compatibility
+ *
+ * Handles browser differences:
+ * - Chrome MV3: supports both 'selected' and 'active' properties
+ * - Firefox MV3: only supports 'active' property
+ *
+ * These utilities automatically normalize 'selected' → 'active' for Firefox compatibility
+ */
+
+/**
  * Wrapper function to open a new tab from the context menus or from the app
  * @param url The url object
  * @param {boolean} isRequestFromContextMenu
  */
 export const openNewTabWithUrl = async (url, isRequestFromContextMenu) => {
-  if (isRequestFromContextMenu) openTabsSearch(url);
-  else await browser.tabs.create(url);
+  if (isRequestFromContextMenu) {
+    openTabsSearch(url);
+  } else {
+    // Normalize tab properties for cross-browser compatibility
+    const normalizedUrl = { ...url };
+
+    // Handle Firefox/Chrome differences
+    if ("selected" in normalizedUrl) {
+      normalizedUrl.active = normalizedUrl.selected;
+      delete normalizedUrl.selected;
+    }
+
+    await browser.tabs.create(normalizedUrl);
+  }
 };
 
 export const openTabs = (url) => {
-  browser.tabs.create(url, (createdTab) => {
+  // Normalize tab properties for cross-browser compatibility
+  const normalizedUrl = { ...url };
+
+  // Handle Firefox/Chrome differences
+  if ("selected" in normalizedUrl) {
+    normalizedUrl.active = normalizedUrl.selected;
+    delete normalizedUrl.selected;
+  }
+
+  browser.tabs.create(normalizedUrl, (createdTab) => {
     browser.tabs.onUpdated.addListener(async function _(tabId) {
       if (tabId === createdTab.id) {
         browser.tabs.onUpdated.removeListener(_);
@@ -31,7 +62,16 @@ export const openTabs = (url) => {
 };
 
 const openTabsSearch = (url) => {
-  browser.tabs.create(url, (createdTab) => {
+  // Normalize tab properties for cross-browser compatibility
+  const normalizedUrl = { ...url };
+
+  // Handle Firefox/Chrome differences
+  if ("selected" in normalizedUrl) {
+    normalizedUrl.active = normalizedUrl.selected;
+    delete normalizedUrl.selected;
+  }
+
+  browser.tabs.create(normalizedUrl, (createdTab) => {
     browser.tabs.onUpdated.addListener(async function _(tabId, info, tab) {
       let pending_url = ns(createdTab.pendingUrl);
       let tab_url = ns(tab.url);

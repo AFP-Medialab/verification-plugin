@@ -14,7 +14,7 @@ export default defineConfig({
     baseIconPath: "assets/icon-128.png",
   },
 
-  manifest: {
+  manifest: ({ mode, browser }) => ({
     name: "Fake news debunker by InVID, WeVerify & VeraAI",
     version: pkg.version,
     description: "InVID WeVerify VeraAI extension",
@@ -37,23 +37,25 @@ export default defineConfig({
 
     content_security_policy: {
       extension_pages:
-        "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';",
+        mode === "production"
+          ? "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+          : "script-src 'self' 'wasm-unsafe-eval' http://localhost:* http://127.0.0.1:*; object-src 'self';",
     },
 
     web_accessible_resources: [
       {
-        resources: [
-          "c2paAssets/toolkit_bg.wasm",
-          "entrypoints/content-scripts/inject.js",
-        ],
+        resources: ["c2paAssets/toolkit_bg.wasm", "content-scripts/inject.js"],
         matches: ["<all_urls>"],
       },
     ],
 
-    externally_connectable: {
-      matches: ["<all_urls>"],
-    },
-  },
+    // externally_connectable is Chrome-only
+    ...(browser === "chrome" && {
+      externally_connectable: {
+        matches: ["<all_urls>"],
+      },
+    }),
+  }),
 
   srcDir: "src",
   outDir: "build",

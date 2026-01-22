@@ -6,11 +6,13 @@
   window.fetch = async (...args) => {
     let ogResponse = await originalFetch(...args);
     if (
-      ogResponse.url.includes("api/recommend") ||
-      ogResponse.url.includes("api/post") ||
-      ogResponse.url.includes("api/repost") ||
-      ogResponse.url.includes("api/search/general/full") ||
-      ogResponse.url.includes("api/explore/item_list")
+      ogResponse &&
+      ogResponse.url &&
+      (ogResponse.url.includes("api/recommend") ||
+        ogResponse.url.includes("api/post") ||
+        ogResponse.url.includes("api/repost") ||
+        ogResponse.url.includes("api/search/general/full") ||
+        ogResponse.url.includes("api/explore/item_list"))
     ) {
       let clone = ogResponse.clone();
 

@@ -12,6 +12,11 @@ import { JSONPath as jp } from "jsonpath-plus";
 import _ from "lodash";
 
 export default defineBackground(() => {
+  // Browser detection
+  const isFirefox = import.meta.env.BROWSER === "firefox";
+  const isChrome = import.meta.env.BROWSER === "chrome";
+  const browserName = import.meta.env.BROWSER;
+
   const db = new Dexie("tweetTest");
   db.version(2).stores({
     tweets: "[id+collectionID], [collectionID+id], tweet",
@@ -117,7 +122,10 @@ export default defineBackground(() => {
     const { menuItemId } = info;
 
     switch (menuItemId) {
+      // Handle both Chrome and Firefox assistant menu IDs
       case "assistant":
+      case "assistant_image":
+      case "assistant_video":
         mediaAssistant(info);
         break;
       case "ocr":
@@ -126,7 +134,10 @@ export default defineBackground(() => {
       case "thumbnail":
         thumbnailsSearch(info);
         break;
+      // Handle both Chrome and Firefox DBKF menu IDs
       case "dbkf":
+      case "dbkf_link":
+      case "dbkf_video":
         videoReversesearchDBKF(info);
         break;
       case "video_analysis":
@@ -166,108 +177,233 @@ export default defineBackground(() => {
         reverseImageSearch(info, SEARCH_ENGINE_SETTINGS.GOOGLE_FACT_CHECK.NAME);
         break;
       default:
+        console.log(
+          `⚠️ ${browserName}: Unknown context menu item: ${menuItemId}`,
+        );
         break;
     }
   }
 
-  // Track if context menu listeners have been initialized
-  let contextMenuInitialized = false;
+  // Helper function to safely create context menus with error handling
+  const createContextMenu = (options) => {
+    try {
+      browser.contextMenus.create(options, () => {
+        if (browser.runtime.lastError) {
+          console.error(
+            `❌ ${browserName}: Failed to create context menu "${options.id}":`,
+            browser.runtime.lastError.message,
+          );
+        } else {
+          // console.log(
+          //   `✅ ${browserName}: Successfully created context menu: ${options.id}`,
+          // );
+        }
+      });
+    } catch (error) {
+      console.error(
+        `❌ ${browserName}: Error creating context menu "${options.id}":`,
+        error,
+      );
+    }
+  };
 
-  browser.runtime.onInstalled.addListener(async () => {
+  // Register context menu click listener immediately (works for both Chrome and Firefox)
+  browser.contextMenus.onClicked.addListener(contextClick);
+
+  // Firefox-specific context menu setup
+  const setupFirefoxContextMenus = () => {
     // Clear all existing context menus to prevent duplicates
-    await browser.contextMenus.removeAll();
+    browser.contextMenus.removeAll(() => {
+      // Create parent menu for InVID tools on images, videos, and links
+      createContextMenu({
+        id: "invid_parent",
+        title: "InVID/WeVerify",
+        contexts: ["image", "link", "video"],
+      });
 
-    browser.contextMenus.create({
-      id: "assistant",
-      title: "Open with assistant",
-      contexts: ["image", "video"],
-    });
-    browser.contextMenus.create({
-      id: "ocr",
-      title: "Open with OCR",
-      contexts: ["image"],
-    });
-    browser.contextMenus.create({
-      id: "thumbnail",
-      title: "Youtube thumbnails reverse search",
-      contexts: ["link", "video"],
-      targetUrlPatterns: ["https://www.youtube.com/*", "https://youtu.be/*"],
-    });
-    browser.contextMenus.create({
-      id: "dbkf",
-      title: "Video Reverse Search - DBKF (beta)",
-      contexts: ["link", "video"],
-    });
-    browser.contextMenus.create({
-      id: "video_analysis",
-      title: "Video contextual Analysis",
-      contexts: ["link", "video"],
-      targetUrlPatterns: [
-        "https://www.youtube.com/*",
-        "https://youtu.be/*",
-        "https://www.facebook.com/*/videos/*",
-        "https://www.facebook.com/*",
-        "https://twitter.com/*",
-      ],
-    });
-    browser.contextMenus.create({
-      id: "magnifier",
-      title: "Image Magnifier",
-      contexts: ["image"],
-    });
-    browser.contextMenus.create({
-      id: "forensic",
-      title: "Image Forensic",
-      contexts: ["image"],
-    });
-    browser.contextMenus.create({
-      id: SEARCH_ENGINE_SETTINGS.ALL.CONTEXT_MENU_ID,
-      title: SEARCH_ENGINE_SETTINGS.ALL.CONTEXT_MENU_TITLE,
-      contexts: ["image"],
-    });
-    browser.contextMenus.create({
-      id: SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.CONTEXT_MENU_ID,
-      title: SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.CONTEXT_MENU_TITLE,
-      contexts: ["image"],
-      targetUrlPatterns: ["http://*:*/*", "https://*:*/*"],
-    });
-    browser.contextMenus.create({
-      id: SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.CONTEXT_MENU_ID,
-      title: SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.CONTEXT_MENU_TITLE,
-      contexts: ["image"],
-    });
-    browser.contextMenus.create({
-      id: SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.CONTEXT_MENU_ID,
-      title: SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.CONTEXT_MENU_TITLE,
-      contexts: ["image"],
-    });
-    browser.contextMenus.create({
-      id: SEARCH_ENGINE_SETTINGS.BING_SEARCH.CONTEXT_MENU_ID,
-      title: SEARCH_ENGINE_SETTINGS.BING_SEARCH.CONTEXT_MENU_TITLE,
-      contexts: ["image"],
-      targetUrlPatterns: ["http://*:*/*", "https://*:*/*"],
-    });
-    browser.contextMenus.create({
-      id: SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.CONTEXT_MENU_ID,
-      title: SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.CONTEXT_MENU_TITLE,
-      contexts: ["image"],
-      targetUrlPatterns: ["http://*:*/*", "https://*:*/*"],
-    });
-    /*browser.contextMenus.create({
-    id: SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.CONTEXT_MENU_ID,
-    title: SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.CONTEXT_MENU_TITLE,
-    contexts: ["image"],
-  });*/
-    browser.contextMenus.create({
-      id: SEARCH_ENGINE_SETTINGS.GOOGLE_FACT_CHECK.CONTEXT_MENU_ID,
-      title: SEARCH_ENGINE_SETTINGS.GOOGLE_FACT_CHECK.CONTEXT_MENU_TITLE,
-      contexts: ["image"],
-    });
+      // Firefox needs separate menus for different contexts
+      // These work on images and links (for images inside links)
+      createContextMenu({
+        id: "assistant_image",
+        title: "Open with assistant",
+        contexts: ["image", "link"],
+        parentId: "invid_parent",
+      });
 
-    // Only register the click listener once per installation
-    if (!contextMenuInitialized) {
-      browser.contextMenus.onClicked.addListener(contextClick);
-      contextMenuInitialized = true;
+      createContextMenu({
+        id: "ocr",
+        title: "Open with OCR",
+        contexts: ["image", "link"],
+        parentId: "invid_parent",
+      });
+
+      createContextMenu({
+        id: "magnifier",
+        title: "Image Magnifier",
+        contexts: ["image", "link"],
+        parentId: "invid_parent",
+      });
+
+      createContextMenu({
+        id: "forensic",
+        title: "Image Forensic",
+        contexts: ["image", "link"],
+        parentId: "invid_parent",
+      });
+
+      // Reverse search parent menu (works on images and links)
+      if (SEARCH_ENGINE_SETTINGS && SEARCH_ENGINE_SETTINGS.ALL) {
+        createContextMenu({
+          id: "reverse_search_parent",
+          title: "Reverse Image Search",
+          contexts: ["image", "link"],
+          parentId: "invid_parent",
+        });
+
+        createContextMenu({
+          id: SEARCH_ENGINE_SETTINGS.ALL.CONTEXT_MENU_ID,
+          title: SEARCH_ENGINE_SETTINGS.ALL.CONTEXT_MENU_TITLE,
+          contexts: ["image", "link"],
+          parentId: "reverse_search_parent",
+        });
+
+        // Add other search engines under parent menu
+        Object.entries(SEARCH_ENGINE_SETTINGS).forEach(([key, setting]) => {
+          if (
+            key !== "ALL" &&
+            setting.CONTEXT_MENU_ID &&
+            setting.CONTEXT_MENU_TITLE
+          ) {
+            createContextMenu({
+              id: setting.CONTEXT_MENU_ID,
+              title: setting.CONTEXT_MENU_TITLE,
+              contexts: ["image", "link"],
+              parentId: "reverse_search_parent",
+            });
+          }
+        });
+      } else {
+        console.error("❌ Firefox: SEARCH_ENGINE_SETTINGS.ALL is undefined!");
+      }
+
+      // Video menu under parent
+      createContextMenu({
+        id: "assistant_video",
+        title: "Open with assistant (video)",
+        contexts: ["video"],
+        parentId: "invid_parent",
+      });
+
+      createContextMenu({
+        id: "dbkf_video",
+        title: "Video Reverse Search - DBKF (beta)",
+        contexts: ["video"],
+        parentId: "invid_parent",
+      });
+
+      // Link-specific menus under parent
+      createContextMenu({
+        id: "dbkf_link",
+        title: "Video Reverse Search - DBKF (beta)",
+        contexts: ["link"],
+        parentId: "invid_parent",
+      });
+
+      createContextMenu({
+        id: "thumbnail",
+        title: "Youtube thumbnails",
+        contexts: ["link"],
+        targetUrlPatterns: ["https://www.youtube.com/*"],
+        parentId: "invid_parent",
+      });
+    });
+  };
+
+  // Chrome-specific context menu setup
+  const setupChromeContextMenus = () => {
+    // Clear all existing context menus to prevent duplicates
+    browser.contextMenus.removeAll(() => {
+      // Chrome can handle combined contexts better
+      createContextMenu({
+        id: "assistant",
+        title: "Open with assistant",
+        contexts: ["image", "video"],
+      });
+
+      createContextMenu({
+        id: "ocr",
+        title: "Open with OCR",
+        contexts: ["image"],
+      });
+
+      createContextMenu({
+        id: "magnifier",
+        title: "Image Magnifier",
+        contexts: ["image"],
+      });
+
+      createContextMenu({
+        id: "forensic",
+        title: "Image Forensic",
+        contexts: ["image"],
+      });
+
+      createContextMenu({
+        id: "dbkf",
+        title: "Video Reverse Search - DBKF (beta)",
+        contexts: ["link", "video"],
+      });
+
+      createContextMenu({
+        id: "thumbnail",
+        title: "Youtube thumbnails",
+        contexts: ["link"],
+        targetUrlPatterns: ["https://www.youtube.com/*"],
+      });
+
+      // Search engine context menus
+      if (SEARCH_ENGINE_SETTINGS && SEARCH_ENGINE_SETTINGS.ALL) {
+        createContextMenu({
+          id: SEARCH_ENGINE_SETTINGS.ALL.CONTEXT_MENU_ID,
+          title: SEARCH_ENGINE_SETTINGS.ALL.CONTEXT_MENU_TITLE,
+          contexts: ["image"],
+        });
+
+        // Add other search engines for Chrome
+        Object.entries(SEARCH_ENGINE_SETTINGS).forEach(([key, setting]) => {
+          if (
+            key !== "ALL" &&
+            setting.CONTEXT_MENU_ID &&
+            setting.CONTEXT_MENU_TITLE
+          ) {
+            createContextMenu({
+              id: setting.CONTEXT_MENU_ID,
+              title: setting.CONTEXT_MENU_TITLE,
+              contexts: ["image"],
+            });
+          }
+        });
+      } else {
+        console.error("❌ Chrome: SEARCH_ENGINE_SETTINGS.ALL is undefined!");
+      }
+    });
+  };
+
+  // Browser-specific initialization
+  browser.runtime.onInstalled.addListener(() => {
+    console.log(
+      `🚀 ${browserName}: onInstalled fired, initializing browser-specific setup...`,
+    );
+
+    if (isFirefox) {
+      setupFirefoxContextMenus();
+    } else if (isChrome) {
+      setupChromeContextMenus();
+    } else {
+      console.log(
+        `🤷 Unknown browser: ${browserName}, using Chrome setup as fallback`,
+      );
+      setupChromeContextMenus();
     }
   });
 
@@ -293,14 +429,17 @@ export default defineBackground(() => {
 
     let recordingSession = recordingState.state;
     let currentTab = await getCurrentTab();
-    if (recordingSession === false) {
+
+    // Safety check: ensure currentTab exists
+    if (!currentTab || recordingSession === false) {
       return;
     }
+
     let platforms = recordingState.platforms.split(",");
     let url_test = [];
     platforms.forEach((platform) => url_test.push(PLATFORM_URLS[platform]));
     if (
-      currentTab.url &&
+      !currentTab.url ||
       !url_test.flat().some((url) => currentTab.url.includes(url))
     ) {
       return;
@@ -312,7 +451,7 @@ export default defineBackground(() => {
           let pluginId = browser.runtime.id;
           let s = document.createElement("script");
           s.dataset.params = pluginId;
-          s.src = browser.runtime.getURL("src/content-scripts/inject.js");
+          s.src = browser.runtime.getURL("content-scripts/inject.js");
           (document.head || document.documentElement).appendChild(s);
         },
       });
@@ -361,7 +500,8 @@ export default defineBackground(() => {
       collID: rawTweet.collectionID,
       res: jp({ json: rawTweet, path: "$..tweet_results" })[0],
     }));
-    const reformatedTweets = dbTweetsResults.map((tweet) => {
+
+    return dbTweetsResults.map((tweet) => {
       if (!tweet.res || _.isEmpty(tweet.res)) return;
       let tweetInfo =
         tweet.res.result.tweet || tweet.res.result || tweet.res.tweet;
@@ -408,7 +548,8 @@ export default defineBackground(() => {
         jp({
           json: tweetInfo,
           path: "$.legacy.extended_entities..video_info.variants",
-        })[0]?.filter((x) => x.url.includes(".mp4"))[0].url || "None";
+        })[0]?.filter((x) => x && x.url && x.url.includes(".mp4"))[0]?.url ||
+        "None";
       reformatedTweet.tweetLink =
         "https://x.com/" +
         reformatedTweet.username +
@@ -416,7 +557,6 @@ export default defineBackground(() => {
         reformatedTweet.id;
       return reformatedTweet;
     });
-    return reformatedTweets;
   };
 
   const TIKTOK_PROPERTY_PATHS = {
@@ -489,7 +629,7 @@ export default defineBackground(() => {
           )),
       );
       reformatedTiktok.date = dayjs
-        .unix(reformatedTiktok.date)
+        .unix(parseInt(reformatedTiktok.date))
         .format("YYYY-MM-DDTHH:mm:ss");
       reformatedTiktok.hashtags.length >= 1
         ? (reformatedTiktok.hashtags = reformatedTiktok.hashtags
@@ -680,16 +820,8 @@ export default defineBackground(() => {
     }
   });
 
-  browser.runtime.onStartup.addListener();
-
-  // if (import.meta.env.VITE_ENVIRONMENT !== "production") {
-  //   browser.action.setIcon({
-  //     path: {
-  //       16: "./icons/16.png",
-  //       32: "./icons/32.png",
-  //       48: "./icons/48.png",
-  //       128: "./icons/128.png",
-  //     },
-  //   });
-  // }
+  // Firefox MV3 requires a callback function for runtime.onStartup
+  browser.runtime.onStartup.addListener(() => {
+    console.log("Extension startup");
+  });
 });
