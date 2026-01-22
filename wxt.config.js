@@ -4,8 +4,6 @@ import { defineConfig } from "wxt";
 
 import pkg from "./package.json";
 
-const env = import.meta.env.VITE_ENVIRONMENT;
-
 export default defineConfig({
   modules: ["@wxt-dev/module-react", "@wxt-dev/auto-icons"],
 
@@ -13,8 +11,7 @@ export default defineConfig({
 
   autoIcons: {
     developmentIndicator: "overlay",
-    baseIconPath:
-      env === "production" ? "assets/icon-128.png" : "assets/icon-staging.png",
+    baseIconPath: "assets/icon-128.png",
   },
 
   manifest: {

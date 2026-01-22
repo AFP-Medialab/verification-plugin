@@ -29,7 +29,7 @@ import {
 import { MAX_FONT_SIZE, MIN_FONT_SIZE, getStoredFontSize } from "@/theme";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
-import manifest from "../../../public/manifest.json";
+import pkg from "../../../package.json";
 import Languages from "../NavItems/languages/languages";
 import useAuthenticationAPI from "../Shared/Authentication/useAuthenticationAPI";
 import ColorModeSelect from "./ColorModeSelect";
@@ -76,7 +76,7 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
     getRecordingInfo(setCollections, setRecording, setSelectedCollection);
   }, []);
 
-  const version = manifest.version;
+  const version = pkg.version;
 
   return (
     <Drawer
