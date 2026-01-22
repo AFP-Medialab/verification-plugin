@@ -317,7 +317,7 @@ export const handleRecorderOnCommit = async (details) => {
         let pluginId = chrome.runtime.id;
         let s = document.createElement("script");
         s.dataset.params = pluginId;
-        s.src = chrome.runtime.getURL("inject.js");
+        s.src = chrome.runtime.getURL("content-scripts/inject.js");
         (document.head || document.documentElement).appendChild(s);
       },
     });

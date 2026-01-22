@@ -59,6 +59,7 @@ export default defineConfig({
 
   srcDir: "src",
   outDir: "build",
+  publicDir: "public",
 
   zip: {
     zipSources: false,
