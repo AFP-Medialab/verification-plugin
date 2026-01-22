@@ -7,7 +7,6 @@ import {
 import { openTabs } from "@Shared/ReverseSearch/utils/openTabUtils";
 import { getImgUrl } from "@Shared/ReverseSearch/utils/searchUtils";
 import dayjs from "dayjs";
-import Dexie from "dexie";
 import { JSONPath as jp } from "jsonpath-plus";
 import _ from "lodash";
 
