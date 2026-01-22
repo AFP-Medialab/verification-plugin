@@ -10,10 +10,15 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Select from "@mui/material/Select";
-import TextField from "@mui/material/TextField";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowRight";
+
+import { handleAddCollection } from "../utils/snaUtils";
+import { CollectionSelect } from "./CollectionSelect";
+
+// Re-export for backward compatibility with other components
+export { getRecordingInfo } from "../utils/snaUtils";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -83,75 +88,6 @@ const MultipleSelectChip = ({
   );
 };
 
-export const getRecordingInfo = async (
-  setCollections,
-  setRecording,
-  setSelectedCollection,
-) => {
-  try {
-    let recInfo = await browser.runtime.sendMessage({
-      prompt: "getRecordingInfo",
-    });
-
-    if (recInfo && recInfo.collections && recInfo.recording) {
-      // Use stable comparison to avoid unnecessary updates
-      const newCollections = recInfo.collections.map((x) => x.id);
-      setCollections((prevCollections) => {
-        // Only update if the arrays are actually different
-        if (
-          JSON.stringify(prevCollections) !== JSON.stringify(newCollections)
-        ) {
-          return newCollections;
-        }
-        return prevCollections;
-      });
-
-      const isRecording = recInfo.recording[0]?.state !== false;
-      setRecording((prevRecording) => {
-        if (prevRecording !== isRecording) {
-          return isRecording;
-        }
-        return prevRecording;
-      });
-
-      if (isRecording) {
-        setSelectedCollection((prevSelected) => {
-          const newSelected = recInfo.recording[0].state;
-          if (prevSelected !== newSelected) {
-            return newSelected;
-          }
-          return prevSelected;
-        });
-      }
-    }
-  } catch (error) {
-    console.error("Error getting recording info:", error);
-  }
-};
-
-const handleAddCollection = (
-  newCollectionName,
-  setCollections,
-  setSelectedCollection,
-  setNewCollectionName,
-) => {
-  if (newCollectionName.trim()) {
-    // Use functional state update to avoid depending on collections array
-    setCollections((prevCollections) => {
-      if (!prevCollections.includes(newCollectionName)) {
-        browser.runtime.sendMessage({
-          prompt: "addCollection",
-          newCollectionName: newCollectionName,
-        });
-        setSelectedCollection(newCollectionName);
-        setNewCollectionName("");
-        return [...prevCollections, newCollectionName];
-      }
-      return prevCollections;
-    });
-  }
-};
-
 const handleMainButtonClick = (recording, setRecording, setExpanded) => {
   if (recording) {
     setRecording(false);
@@ -197,44 +133,15 @@ const CollectionSelector = ({
           setSelectedSocialMedia={setSelectedSocialMedia}
           keyword={keyword}
         />
-        <FormControl fullWidth>
-          <InputLabel>
-            {keyword("snaRecording_selectCollectionLabel")}
-          </InputLabel>
-          <Select
-            value={selectedCollection}
-            onChange={(e) => setSelectedCollection(e.target.value)}
-            label={keyword("snaRecording_selectCollectionLabel")}
-          >
-            {collections.map((name) => (
-              <MenuItem key={name} value={name}>
-                {name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <Box display="flex" gap={1}>
-          <TextField
-            label={keyword("snaTools_newCollectionLabel")}
-            value={newCollectionName}
-            onChange={(e) => setNewCollectionName(e.target.value)}
-            fullWidth
-          />
-          <Button
-            variant="outlined"
-            onClick={onAddCollection}
-            color="primary"
-            sx={{
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              justifyContent: "flex-start",
-              textAlign: "left",
-            }}
-          >
-            {keyword("snaTools_addNewCollectionLabel")}
-          </Button>
-        </Box>
+        <CollectionSelect
+          keyword={keyword}
+          selectedCollection={selectedCollection}
+          setSelectedCollection={setSelectedCollection}
+          collections={collections}
+          newCollectionName={newCollectionName}
+          setNewCollectionName={setNewCollectionName}
+          onAddCollection={onAddCollection}
+        />
         <Button
           variant="contained"
           color="primary"

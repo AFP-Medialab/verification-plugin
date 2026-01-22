@@ -54,7 +54,6 @@ export const getSavedCollections = async (collectionSource) => {
   });
 
   const filteredEntries = allCollectionEntries.filter((x) => x != undefined);
-
   const entriesGroupedByCollection = Object.groupBy(
     filteredEntries,
     ({ collectionID }) => collectionID,
@@ -92,6 +91,7 @@ export const getSavedCollections = async (collectionSource) => {
 export const initializePage = async () => {
   let savedTweets = await getSavedCollections("twitter");
   let savedTiktoks = await getSavedCollections("tiktok");
+
   return [...savedTweets, ...savedTiktoks];
 };
 

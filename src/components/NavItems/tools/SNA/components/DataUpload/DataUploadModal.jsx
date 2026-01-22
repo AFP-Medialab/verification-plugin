@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -17,14 +17,15 @@ import CloseIcon from "@mui/icons-material/Close";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import { v4 as uuidv4 } from "uuid";
-
+import { handleAddCollection } from "../../utils/snaUtils";
+import { CollectionSelect } from "../CollectionSelect";
+import { getRecordingInfo } from "../Recording";
 import {
   dataUploadModalStyle,
   required_fields,
   uploadTemplates,
 } from "./DataUploadConstants";
-import { cleanDataUpload, getAccountNameMap } from "./DataUploadFunctions";
+import { cleanDataUpload } from "./DataUploadFunctions";
 
 /**
  * Map from COOR required field name
@@ -176,7 +177,25 @@ const DataUploadModal = ({
   setUploadedFileName,
   uploadModalError,
   setUploadModalError,
+  onUploadComplete,
 }) => {
+  const [collections, setCollections] = useState(["Default Collection"]);
+  const [selectedCollection, setSelectedCollection] = useState("");
+  const [newCollectionName, setNewCollectionName] = useState("");
+
+  const handleAddCollectionClick = useCallback(() => {
+    handleAddCollection(
+      newCollectionName,
+      setCollections,
+      setSelectedCollection,
+      setNewCollectionName,
+    );
+  }, [
+    newCollectionName,
+    setCollections,
+    setSelectedCollection,
+    setNewCollectionName,
+  ]);
   let customUploadSectionProps = {
     setCustomExpanded,
     customExpanded,
@@ -185,19 +204,21 @@ const DataUploadModal = ({
     setSocialMediaSelected,
   };
 
-  const handleModalClose = () => {
+  const handleModalClose = async () => {
     setUploadModalError(false);
     setSocialMediaSelected("");
     setUploadedData([]);
     setUploadedFileName("");
+    setSelectedCollection("");
     setShowUploadModal(false);
   };
 
-  const addUploadToDataSources = (
+  const addUploadToDataSources = async (
     dataSources,
     socialMediaSelected,
     uploadedData,
     uploadFilename,
+    selectedCollection,
   ) => {
     let fieldLabelsMap =
       socialMediaSelected.length > 0 && socialMediaSelected != "customUpload"
@@ -206,15 +227,15 @@ const DataUploadModal = ({
 
     let reformatedUploadEntries = uploadedData.map(
       ({
-        [fieldLabelsMap.get("Object")]: objects,
+        //[fieldLabelsMap.get("Object")]: objects,
         [fieldLabelsMap.get("Share Time")]: date,
         [fieldLabelsMap.get("Entry ID")]: id,
         [fieldLabelsMap.get("User ID")]: uid,
         [fieldLabelsMap.get("Text")]: text,
         ...rest
       }) => ({
-        objects: objects,
-        [fieldLabelsMap.get("Object")]: objects,
+        //objects: objects,
+        //[fieldLabelsMap.get("Object")]: objects,
         date: date,
         username: uid,
         text: text,
@@ -222,28 +243,43 @@ const DataUploadModal = ({
         ...rest,
       }),
     );
-
     let entriesCleaned = cleanDataUpload(
       reformatedUploadEntries,
       socialMediaSelected,
-    );
-    let accountNameMap = getAccountNameMap(
-      reformatedUploadEntries,
-      socialMediaSelected,
+      selectedCollection,
     );
 
-    dataSources.push({
+    try {
+      await chrome.runtime.sendMessage({
+        prompt: "addToCollection",
+        data: entriesCleaned,
+        platform: socialMediaSelected,
+        collectionId: selectedCollection,
+      });
+
+      // Trigger refresh to show the newly uploaded collection
+      if (onUploadComplete) {
+        await onUploadComplete();
+      }
+    } catch (error) {
+      console.error("Error uploading raw collection:", error);
+    }
+    // let collectionMetrics = getCollectionMetrics(entriesCleaned)
+    /*dataSources.push({
       id: "fileUpload~" + uuidv4(),
       name: uploadFilename,
       length: entriesCleaned.length,
+      metrics: collectionMetrics,
       content: entriesCleaned,
       headers: Object.keys(entriesCleaned[0]),
       accountNameMap: accountNameMap,
       source: "fileUpload",
-    });
+    });*/
     handleModalClose();
   };
-
+  useEffect(() => {
+    getRecordingInfo(setCollections);
+  }, []);
   return (
     <>
       <Modal open={showUploadModal} onClose={handleModalClose}>
@@ -255,7 +291,7 @@ const DataUploadModal = ({
               justifyContent="space-between"
             >
               <Typography id="modal-modal-title" variant="h6" component="h2">
-                {keyword("uploadModal_modalTitle")}
+                {keyword("uploadModal_modalTitle")}-pro
               </Typography>
               <IconButton
                 onClick={handleModalClose}
@@ -280,6 +316,15 @@ const DataUploadModal = ({
                 );
               })}
             </Stack>
+            <CollectionSelect
+              keyword={keyword}
+              selectedCollection={selectedCollection}
+              setSelectedCollection={setSelectedCollection}
+              collections={collections}
+              newCollectionName={newCollectionName}
+              setNewCollectionName={setNewCollectionName}
+              onAddCollection={handleAddCollectionClick}
+            />
             <CustomUploadSection {...customUploadSectionProps} />
             <Button
               variant="outlined"
@@ -291,11 +336,13 @@ const DataUploadModal = ({
                     socialMediaSelected,
                     uploadedData,
                     uploadedFileName,
+                    selectedCollection,
                   );
                 } catch {
                   setUploadModalError(true);
                 }
               }}
+              disabled={!selectedCollection || selectedCollection.trim() === ""}
             >
               {keyword("uploadModal_ConfirmButton")}
             </Button>

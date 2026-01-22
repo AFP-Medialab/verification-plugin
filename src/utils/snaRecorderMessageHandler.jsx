@@ -1,0 +1,336 @@
+import DBStorage from "@/utils/dbstorage";
+import {
+  transformTiktok,
+  transformTweet,
+} from "components/NavItems/tools/SNA/utils/snaDataTransformers";
+import { JSONPath as jp } from "jsonpath-plus";
+import _ from "lodash";
+
+// Initialize the databases (moved from background script)
+/*const db = new Dexie("tweetTest");
+db.version(2).stores({
+  tweets: "[id+collectionID], [collectionID+id], tweet",
+  tiktoks: "[id+collectionID],[collectionID+id], tiktok",
+  collections: "id",
+  recording: "id,state",
+});*/
+
+const snaDB = new DBStorage("snaData", 1, {
+  collections: {
+    keyPath: "id",
+  },
+  recording: {
+    keyPath: "id",
+    indexes: {
+      "by-state": { keyPath: "state" },
+    },
+  },
+  tweets: {
+    keyPath: ["collectionID", "id"],
+    indexes: {
+      "by-collectionID": { keyPath: ["collectionID", "id"] },
+    },
+  },
+  tiktoks: {
+    keyPath: ["collectionID", "id"],
+    indexes: {
+      "by-collectionID": { keyPath: ["collectionID", "id"] },
+    },
+  },
+});
+
+// Helper functions (moved from background script)
+const getTweetsFromDB = async () => {
+  const dbTweetsRaw = await snaDB.getAll("tweets");
+  /*const dbTweetsResults = dbTweetsRaw.map((rawTweet) => ({
+    collID: rawTweet.collectionID,
+    res: jp({ json: rawTweet, path: "$..tweet_results" })[0],
+  }));
+  const reformatedTweets = dbTweetsResults.map((tweet) => {
+    if (!tweet.res || _.isEmpty(tweet.res)) return;
+    const tweetInfo =
+      tweet.res.result.tweet || tweet.res.result || tweet.res.tweet;
+    return transformTweet(tweetInfo, tweet.collID);
+  });
+  return reformatedTweets;*/
+  const reformatedTweets = dbTweetsRaw.map((entry) => {
+    let tweet = entry.tweet;
+    return tweet;
+  });
+  return reformatedTweets;
+};
+
+const getTikToksFromDB = async () => {
+  //const rawTiktoks = await db.tiktoks.toArray();
+  const rawTiktoks = await snaDB.getAll("tiktoks");
+  const reformatedTiktoks = rawTiktoks.map((rawTiktok) => {
+    return transformTiktok(
+      rawTiktok.tiktok,
+      rawTiktok.id,
+      rawTiktok.collectionID,
+    );
+  });
+  return reformatedTiktoks;
+};
+
+/**
+ * Get the table name for a given platform
+ * @param {string} platform - Platform name (twitter/tiktok)
+ * @returns {string} Table name
+ */
+const getTableForPlatform = (platform) => {
+  return platform === "twitter" ? "tweets" : "tiktoks";
+};
+
+/**
+ * Get the data key for a given platform
+ * @param {string} platform - Platform name (twitter/tiktok)
+ * @returns {string} Data key name
+ */
+const getDataKeyForPlatform = (platform) => {
+  return platform === "twitter" ? "tweet" : "tiktok";
+};
+
+/**
+ * Delete collection by platform
+ * @param {string} platform - Platform name (twitter/tiktok)
+ * @param {string} collectionId - Collection ID to delete
+ */
+const deleteCollectionByPlatform = async (platform, collectionId) => {
+  const table = getTableForPlatform(platform);
+  await snaDB.deleteByKeyPath(table, "collectionID", collectionId);
+};
+
+/**
+ * Get raw collection data by platform
+ * @param {string} platform - Platform name (twitter/tiktok)
+ * @returns {Promise<Array>} Raw collection data
+ */
+const getRawCollectionByPlatform = async (platform) => {
+  const table = getTableForPlatform(platform);
+  return await snaDB.getAllFromIndex(table, "by-collectionID");
+};
+
+/**
+ * Add data to collection by platform
+ * @param {string} platform - Platform name (twitter/tiktok)
+ * @param {Array} data - Data array to add
+ * @param {string} collectionId - Collection ID
+ */
+const addToCollectionByPlatform = async (platform, data, collectionId) => {
+  //TEST if collection exists. If not add it in database
+  let collections = await snaDB.get("collections", collectionId);
+  if (!collections) collections = await snaDB.put("collections", collectionId);
+  //const collections = await snaDB.put("collections", collectionId)
+  console.log("colllections ...", collections);
+  const table = getTableForPlatform(platform);
+  const dataKey = getDataKeyForPlatform(platform);
+
+  await Promise.all(
+    data.map(async (item) =>
+      snaDB.add(table, {
+        id: item.id,
+        collectionID: collectionId,
+        [dataKey]: item,
+      }),
+    ),
+  );
+};
+
+// Main message handler function
+export const handleSNARecorderChromeMessage = async (
+  request,
+  sender,
+  sendResponse,
+) => {
+  try {
+    if (request.prompt === "getTweets") {
+      const tweetResponse = await getTweetsFromDB();
+      sendResponse(tweetResponse);
+    } else if (request.prompt === "getTiktoks") {
+      const tiktokResp = await getTikToksFromDB();
+      sendResponse(tiktokResp);
+    } else if (request.prompt === "deleteAll") {
+      //await db.delete().then(() => db.open());
+      await snaDB.deleteDatabase().then(() => snaDB.init());
+      sendResponse({ success: true });
+    } else if (request.prompt === "deleteCollection") {
+      await deleteCollectionByPlatform(request.source, request.collectionId);
+      sendResponse({ success: true });
+    } else if (request.prompt === "getRecordingInfo") {
+      //const currentCollections = await db.collections.toArray();
+      const currentCollections = await snaDB.getAll("collections");
+      if (!currentCollections.includes("Default Collection")) {
+        //await db.collections.put({ id: "Default Collection" });
+        await snaDB.put("collections", { id: "Default Collection" });
+      }
+      //const updatedCollections = await db.collections.toArray();
+      const updatedCollections = await snaDB.getAll("collections");
+
+      //const currentStatus = await db.recording.toArray();
+      const currentStatus = await snaDB.getAll("recording");
+
+      if (currentStatus.length === 0) {
+        //await db.recording.put({ id: "main", state: false });
+        await snaDB.put("recording", { id: "main", state: false });
+      }
+
+      //const updatedStatus = await db.recording.toArray();
+      const updatedStatus = await snaDB.getAll("recording");
+
+      sendResponse({
+        recording: updatedStatus,
+        collections: updatedCollections,
+      });
+    } else if (request.prompt === "addCollection") {
+      //await db.collections.put({ id: request.newCollectionName });
+      await snaDB.put("collections", { id: request.newCollectionName });
+      sendResponse({ success: true });
+    } else if (request.prompt === "stopRecording") {
+      //await db.recording.put({ id: "main", state: false, platforms: "" });
+      await snaDB.put("recording", { id: "main", state: false, platforms: "" });
+      sendResponse({ success: true });
+    } else if (request.prompt === "startRecording") {
+      await snaDB.put("recording", {
+        id: "main",
+        state: request.currentCollectionName,
+        platforms: request.platforms.join(","),
+      });
+      /*await db.recording.put({
+        id: "main",
+        state: request.currentCollectionName,
+        platforms: request.platforms.join(","),
+      });*/
+      sendResponse({ success: true });
+    } else if (request.prompt === "getRawCollection") {
+      const data = await getRawCollectionByPlatform(request.platform);
+      sendResponse({ data });
+    } else if (request.prompt === "addToCollection") {
+      await addToCollectionByPlatform(
+        request.platform,
+        request.data,
+        request.collectionId,
+      );
+      sendResponse({ done: "ok" });
+    } else {
+      // Handle unknown prompts
+      sendResponse({ error: "Unknown prompt" });
+    }
+  } catch (error) {
+    console.error("Error in message listener:", error);
+    sendResponse({ error: error.message });
+  }
+};
+
+/**
+ * Store tiktok item to database
+ * @param {Object} item - Tiktok item
+ * @param {string} collectionID - Collection ID
+ */
+const storeTiktokItem = async (item, collectionID) => {
+  await snaDB.put("tiktoks", {
+    id: item.id,
+    collectionID,
+    tiktok: item,
+  });
+};
+
+export const handleRecordedMessage = async (request) => {
+  const entryIds = jp({ json: request, path: "$..entryId" });
+  const session = await snaDB.getAll("recording");
+
+  const currentSession = session[0].state;
+  if (currentSession === false) {
+    return;
+  }
+  if (request.prompt === "tiktokCapture") {
+    // Tiktok responses can have item details in either itemList or data field
+    const itemsFromList = request.content.itemList || [];
+    const itemsFromData = request.content.data?.map((x) => x.item) || [];
+    const allItems = [...itemsFromList, ...itemsFromData];
+
+    await Promise.all(
+      allItems.map((item) => storeTiktokItem(item, currentSession)),
+    );
+    return;
+  }
+
+  if (jp({ json: request, path: "$..entryId" }).length > 0) {
+    for (let entryId of entryIds) {
+      let tweet_results = jp({
+        json: request,
+        path: `$..entries[?(@.entryId=="${entryId}")]..tweet_results`,
+      });
+      if (tweet_results.length > 0) {
+        let content =
+          tweet_results[0].result.tweet ||
+          tweet_results[0].result ||
+          tweet_results[0].tweet;
+        let tweet = transformTweet(content, currentSession);
+        await snaDB.put("tweets", {
+          id: entryId,
+          collectionID: currentSession,
+          tweet: tweet,
+        });
+      }
+    }
+  }
+};
+
+const PLATFORM_URLS = {
+  Tiktok: [".tiktok.com", "/tiktok.com"],
+  Twitter: [".x.com", "/x.com"],
+};
+async function getCurrentTab() {
+  let queryOptions = { active: true, lastFocusedWindow: true };
+  let [tab] = await chrome.tabs.query(queryOptions);
+  return tab;
+}
+
+export const handleRecorderOnCommit = async (details) => {
+  if (details.frameId !== 0) return; //Skip subframes
+
+  //const recordingState = await db.recording.get("main");
+  const recordingState = await snaDB.get("recording", "main");
+
+  if (!recordingState) {
+    return;
+  }
+
+  let recordingSession = recordingState.state;
+  let currentTab = await getCurrentTab();
+  if (recordingSession === false) {
+    return;
+  }
+  let platforms = recordingState.platforms.split(",");
+  let url_test = [];
+  platforms.forEach((platform) => url_test.push(PLATFORM_URLS[platform]));
+  if (
+    currentTab.url &&
+    !url_test.flat().some((url) => currentTab.url.includes(url))
+  ) {
+    return;
+  }
+  try {
+    await chrome.scripting.executeScript({
+      target: { tabId: currentTab.id, allFrames: true },
+      function: () => {
+        let pluginId = chrome.runtime.id;
+        let s = document.createElement("script");
+        s.dataset.params = pluginId;
+        s.src = chrome.runtime.getURL("inject.js");
+        (document.head || document.documentElement).appendChild(s);
+      },
+    });
+  } catch (e) {
+    throw Error(e);
+  }
+};
+// Initialize the snaDB
+export const initializeMessageHandler = async () => {
+  await snaDB.init();
+  console.log("Message handler initialized with snaDB:", snaDB);
+};
+
+// Export the databases for use in other modules if needed
+export { snaDB };
