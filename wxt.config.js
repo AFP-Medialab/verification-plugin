@@ -60,6 +60,10 @@ export default defineConfig({
   srcDir: "src",
   outDir: "build",
 
+  zip: {
+    zipSources: false,
+  },
+
   alias: {
     "@workers": resolve(__dirname, "src/workers"),
     "@Shared": resolve(__dirname, "src/components/Shared"),

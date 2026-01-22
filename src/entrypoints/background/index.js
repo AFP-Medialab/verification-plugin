@@ -212,12 +212,15 @@ export default defineBackground(() => {
 
   // Firefox-specific context menu setup
   const setupFirefoxContextMenus = () => {
+    const manifest = browser.runtime.getManifest();
+    const extensionName = manifest.name;
+
     // Clear all existing context menus to prevent duplicates
     browser.contextMenus.removeAll(() => {
       // Create parent menu for InVID tools on images, videos, and links
       createContextMenu({
         id: "invid_parent",
-        title: "InVID/WeVerify",
+        title: extensionName,
         contexts: ["image", "link", "video"],
       });
 
