@@ -183,7 +183,7 @@ const AppHeader = ({ topMenuItems }) => {
           }}
         >
           <Grid
-            size={{ xs: 2 }}
+            size={{ xs: isDisplayMobile ? 4 : 2 }}
             sx={{
               height: "100%",
               display: "flex",
@@ -193,7 +193,7 @@ const AppHeader = ({ topMenuItems }) => {
           >
             <Stack
               direction="row"
-              spacing={1}
+              spacing={isDisplayMobile ? 0.5 : 1}
               sx={{
                 alignItems: "center",
                 justifyContent: "start",
@@ -203,7 +203,7 @@ const AppHeader = ({ topMenuItems }) => {
             >
               {isDisplayMobile && (
                 <IconButton
-                  sx={{ p: 1 }}
+                  sx={{ p: 0.5, flexShrink: 0 }}
                   onClick={handleMobileMenuToggle}
                   aria-label="Toggle navigation menu"
                 >
@@ -216,9 +216,10 @@ const AppHeader = ({ topMenuItems }) => {
                     style={{
                       height: "auto",
                       width: "100%",
-                      minWidth: "48px",
+                      minWidth: "64px",
                       maxWidth: "96px",
                       maxHeight: "48px",
+                      flexShrink: 1,
                     }}
                     alt="logo"
                     className={classes.logoLeft}
@@ -229,9 +230,10 @@ const AppHeader = ({ topMenuItems }) => {
                     style={{
                       height: "auto",
                       width: "100%",
-                      minWidth: "48px",
+                      minWidth: "64px",
                       maxWidth: "96px",
                       maxHeight: "48px",
+                      flexShrink: 1,
                     }}
                     alt="logo"
                     className={classes.logoLeft}
@@ -243,9 +245,10 @@ const AppHeader = ({ topMenuItems }) => {
                   style={{
                     height: "auto",
                     width: "200%",
-                    minWidth: "48px",
+                    minWidth: "64px",
                     maxWidth: "96px",
                     maxHeight: "48px",
+                    flexShrink: 1,
                   }}
                   alt="logo"
                   className={classes.logoLeft}
@@ -258,9 +261,10 @@ const AppHeader = ({ topMenuItems }) => {
                   style={{
                     height: "auto",
                     width: "100%",
-                    minWidth: "24px",
+                    minWidth: "40px",
                     maxWidth: "48px",
                     maxHeight: "48px",
+                    flexShrink: 1,
                   }}
                   alt="logo"
                   className={classes.logoRight}
@@ -271,9 +275,10 @@ const AppHeader = ({ topMenuItems }) => {
                   style={{
                     height: "auto",
                     width: "100%",
-                    minWidth: "24px",
+                    minWidth: "40px",
                     maxWidth: "48px",
                     maxHeight: "48px",
+                    flexShrink: 1,
                   }}
                   alt="logo"
                   className={classes.logoRight}
