@@ -319,7 +319,9 @@ const AppHeader = ({ topMenuItems }) => {
                       aria-haspopup="true"
                       aria-expanded={isProfileMenuOpen ? "true" : undefined}
                     >
-                      <AccountCircle />
+                      <AccountCircle
+                        sx={{ color: "var(--mui-palette-primary-main)" }}
+                      />
                     </IconButton>
                   </Tooltip>
                   <Menu
