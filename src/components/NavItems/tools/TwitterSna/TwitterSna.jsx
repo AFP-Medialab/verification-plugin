@@ -316,6 +316,10 @@ const TwitterSna = () => {
   const uid = session && session.user ? session.user.id : null;
   const client_id = getclientId();
 
+  const [submittedRequest, setSubmittedRequest] = useState(
+    userAuthenticated ? null : makeRequest(),
+  );
+
   const onSubmit = () => {
     //Mandatory Fields errors
     if (keyWords.trim() === "" && keyWordsAny.trim() === "") {
@@ -365,6 +369,7 @@ const TwitterSna = () => {
       setSubmittedRequest(newRequest);
     }
   };
+
   useTrackEvent(
     "submission",
     "tsna",
@@ -373,10 +378,6 @@ const TwitterSna = () => {
     client_id,
     submittedRequest,
     uid,
-  );
-  // const [submittedRequest, setSubmittedRequest] = useState(null);
-  const [submittedRequest, setSubmittedRequest] = useState(
-    userAuthenticated ? null : makeRequest(),
   );
   useTwitterSnaRequest(submittedRequest);
 
