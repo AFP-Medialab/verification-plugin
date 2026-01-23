@@ -79,5 +79,9 @@ export default defineConfig({
         },
       }),
     ],
+    server: {
+      // Disable HMR
+      // hmr: false,
+    },
   }),
 });

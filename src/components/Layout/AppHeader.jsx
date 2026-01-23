@@ -7,6 +7,10 @@ import AppBar from "@mui/material/AppBar";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
@@ -14,6 +18,8 @@ import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 
 import { Settings } from "@mui/icons-material";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 import { toolsHome } from "@/constants/tools";
 import { selectTopMenuItem } from "@/redux/reducers/navReducer";
@@ -28,6 +34,7 @@ import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg";
 import LogoVeraBlack from "../NavBar/images/SVG/Navbar/vera-logo_black.svg";
 import LogoVeraWhite from "../NavBar/images/SVG/Navbar/vera-logo_white.svg";
 import AdvancedTools from "../NavItems/tools/Alltools/AdvancedTools/AdvancedTools";
+import useAuthenticationAPI from "../Shared/Authentication/useAuthenticationAPI";
 import SettingsDrawer from "./SettingsDrawer";
 
 const AppHeader = ({ topMenuItems }) => {
@@ -52,6 +59,7 @@ const AppHeader = ({ topMenuItems }) => {
   const classes = useMyStyles();
 
   const keyword = i18nLoadNamespace("components/NavBar");
+  const authKeyword = i18nLoadNamespace("components/Shared/Authentication");
 
   const dispatch = useDispatch();
 
@@ -60,6 +68,29 @@ const AppHeader = ({ topMenuItems }) => {
   const LOGO_EU = import.meta.env.VITE_LOGO_EU;
 
   const topMenuItemSelected = useSelector((state) => state.nav);
+  const userAuthenticated = useSelector(
+    (state) => state.userSession && state.userSession.userAuthenticated,
+  );
+
+  const authenticationAPI = useAuthenticationAPI();
+
+  const [profileMenuAnchor, setProfileMenuAnchor] = useState(null);
+  const isProfileMenuOpen = Boolean(profileMenuAnchor);
+
+  const handleProfileMenuOpen = (event) => {
+    setProfileMenuAnchor(event.currentTarget);
+  };
+
+  const handleProfileMenuClose = () => {
+    setProfileMenuAnchor(null);
+  };
+
+  const handleLogout = () => {
+    authenticationAPI.logout().catch((error) => {
+      console.error("Logout error:", error);
+    });
+    handleProfileMenuClose();
+  };
 
   const handleTopMenuChange = (event, newValue) => {
     dispatch(selectTopMenuItem(newValue));
@@ -276,7 +307,43 @@ const AppHeader = ({ topMenuItems }) => {
             >
               <AdvancedTools />
 
-              <Tooltip title={"Settings"}>
+              {userAuthenticated && (
+                <>
+                  <Tooltip title={keyword("drawer_settings_account")}>
+                    <IconButton
+                      sx={{ p: 1 }}
+                      onClick={handleProfileMenuOpen}
+                      aria-controls={
+                        isProfileMenuOpen ? "profile-menu" : undefined
+                      }
+                      aria-haspopup="true"
+                      aria-expanded={isProfileMenuOpen ? "true" : undefined}
+                    >
+                      <AccountCircle />
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    id="profile-menu"
+                    anchorEl={profileMenuAnchor}
+                    open={isProfileMenuOpen}
+                    onClose={handleProfileMenuClose}
+                    onClick={handleProfileMenuClose}
+                    transformOrigin={{ horizontal: "right", vertical: "top" }}
+                    anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                  >
+                    <MenuItem onClick={handleLogout}>
+                      <ListItemIcon>
+                        <LogoutIcon fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText>
+                        {authKeyword("LOGUSER_LOGOUT_LABEL")}
+                      </ListItemText>
+                    </MenuItem>
+                  </Menu>
+                </>
+              )}
+
+              <Tooltip title={keyword("drawer_settings_title")}>
                 <IconButton sx={{ p: 1 }} onClick={handleMenuClick}>
                   <Settings />
                 </IconButton>
