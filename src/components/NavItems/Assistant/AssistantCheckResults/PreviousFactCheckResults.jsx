@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 
+import ResultDisplayItem from "@/components/NavItems/tools/SemanticSearch/components/ResultDisplayItem";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
-import ResultDisplayItem from "components/NavItems/tools/SemanticSearch/components/ResultDisplayItem";
-import { getLanguageName } from "components/Shared/Utils/languageUtils";
+import { getLanguageName } from "@/components/Shared/Utils/languageUtils";
 import dayjs from "dayjs";
 import LocaleData from "dayjs/plugin/localeData";
 import localizedFormat from "dayjs/plugin/localizedFormat";
@@ -57,7 +57,10 @@ const PreviousFactCheckResults = ({ results }) => {
                   null
                 }
                 website={resultItem.website ?? resultItem.source_name}
-                language={getLanguageName(resultItem.source_language, resultItem.source_language)}
+                language={getLanguageName(
+                  resultItem.source_language,
+                  resultItem.source_language,
+                )}
                 similarityScore={resultItem.score}
                 articleUrl={resultItem.url}
                 domainUrl={resultItem.source_name}

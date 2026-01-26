@@ -4,9 +4,18 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { useColorScheme, useMediaQuery } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
@@ -14,6 +23,9 @@ import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 
 import { Settings } from "@mui/icons-material";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import LogoutIcon from "@mui/icons-material/Logout";
+import MenuIcon from "@mui/icons-material/Menu";
 
 import { toolsHome } from "@/constants/tools";
 import { selectTopMenuItem } from "@/redux/reducers/navReducer";
@@ -28,6 +40,7 @@ import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg";
 import LogoVeraBlack from "../NavBar/images/SVG/Navbar/vera-logo_black.svg";
 import LogoVeraWhite from "../NavBar/images/SVG/Navbar/vera-logo_white.svg";
 import AdvancedTools from "../NavItems/tools/Alltools/AdvancedTools/AdvancedTools";
+import useAuthenticationAPI from "../Shared/Authentication/useAuthenticationAPI";
 import SettingsDrawer from "./SettingsDrawer";
 
 const AppHeader = ({ topMenuItems }) => {
@@ -39,7 +52,7 @@ const AppHeader = ({ topMenuItems }) => {
   const [collections, setCollections] = useState(["Default Collection"]);
 
   const getRecordingInfo = async () => {
-    let recInfo = await chrome.runtime.sendMessage({
+    let recInfo = await browser.runtime.sendMessage({
       prompt: "getRecordingInfo",
     });
     setCollections(recInfo.collections.map((x) => x.id).flat());
@@ -52,14 +65,57 @@ const AppHeader = ({ topMenuItems }) => {
   const classes = useMyStyles();
 
   const keyword = i18nLoadNamespace("components/NavBar");
+  const authKeyword = i18nLoadNamespace("components/Shared/Authentication");
 
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
-  const LOGO_EU = process.env.REACT_APP_LOGO_EU;
+  const LOGO_EU = import.meta.env.VITE_LOGO_EU;
 
   const topMenuItemSelected = useSelector((state) => state.nav);
+  const userAuthenticated = useSelector(
+    (state) => state.userSession && state.userSession.userAuthenticated,
+  );
+
+  const authenticationAPI = useAuthenticationAPI();
+
+  const [profileMenuAnchor, setProfileMenuAnchor] = useState(null);
+  const isProfileMenuOpen = Boolean(profileMenuAnchor);
+
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleProfileMenuOpen = (event) => {
+    setProfileMenuAnchor(event.currentTarget);
+  };
+
+  const handleProfileMenuClose = () => {
+    setProfileMenuAnchor(null);
+  };
+
+  const handleMobileMenuToggle = () => {
+    setMobileMenuOpen((prev) => !prev);
+  };
+
+  const handleMobileMenuClose = () => {
+    setMobileMenuOpen(false);
+  };
+
+  const handleMobileMenuItemClick = (item) => {
+    dispatch(selectTopMenuItem(item.title));
+    if (item.title !== toolsHome.titleKeyword) {
+      dispatch(resetToolSelected());
+    }
+    navigate("/app/" + item.path);
+    handleMobileMenuClose();
+  };
+
+  const handleLogout = () => {
+    authenticationAPI.logout().catch((error) => {
+      console.error("Logout error:", error);
+    });
+    handleProfileMenuClose();
+  };
 
   const handleTopMenuChange = (event, newValue) => {
     dispatch(selectTopMenuItem(newValue));
@@ -127,7 +183,7 @@ const AppHeader = ({ topMenuItems }) => {
           }}
         >
           <Grid
-            size={{ xs: 2 }}
+            size={{ xs: isDisplayMobile ? 4 : 2 }}
             sx={{
               height: "100%",
               display: "flex",
@@ -137,7 +193,7 @@ const AppHeader = ({ topMenuItems }) => {
           >
             <Stack
               direction="row"
-              spacing={1}
+              spacing={isDisplayMobile ? 0.5 : 1}
               sx={{
                 alignItems: "center",
                 justifyContent: "start",
@@ -145,15 +201,25 @@ const AppHeader = ({ topMenuItems }) => {
                 height: "auto",
               }}
             >
+              {isDisplayMobile && (
+                <IconButton
+                  sx={{ p: 0.5, flexShrink: 0 }}
+                  onClick={handleMobileMenuToggle}
+                  aria-label="Toggle navigation menu"
+                >
+                  <MenuIcon />
+                </IconButton>
+              )}
               {LOGO_EU ? (
                 resolvedMode === "light" ? (
                   <LogoEuCom
                     style={{
                       height: "auto",
                       width: "100%",
-                      minWidth: "48px",
+                      minWidth: "64px",
                       maxWidth: "96px",
                       maxHeight: "48px",
+                      flexShrink: 1,
                     }}
                     alt="logo"
                     className={classes.logoLeft}
@@ -164,9 +230,10 @@ const AppHeader = ({ topMenuItems }) => {
                     style={{
                       height: "auto",
                       width: "100%",
-                      minWidth: "48px",
+                      minWidth: "64px",
                       maxWidth: "96px",
                       maxHeight: "48px",
+                      flexShrink: 1,
                     }}
                     alt="logo"
                     className={classes.logoLeft}
@@ -178,9 +245,10 @@ const AppHeader = ({ topMenuItems }) => {
                   style={{
                     height: "auto",
                     width: "200%",
-                    minWidth: "48px",
+                    minWidth: "64px",
                     maxWidth: "96px",
                     maxHeight: "48px",
+                    flexShrink: 1,
                   }}
                   alt="logo"
                   className={classes.logoLeft}
@@ -193,9 +261,10 @@ const AppHeader = ({ topMenuItems }) => {
                   style={{
                     height: "auto",
                     width: "100%",
-                    minWidth: "24px",
+                    minWidth: "40px",
                     maxWidth: "48px",
                     maxHeight: "48px",
+                    flexShrink: 1,
                   }}
                   alt="logo"
                   className={classes.logoRight}
@@ -206,9 +275,10 @@ const AppHeader = ({ topMenuItems }) => {
                   style={{
                     height: "auto",
                     width: "100%",
-                    minWidth: "24px",
+                    minWidth: "40px",
                     maxWidth: "48px",
                     maxHeight: "48px",
+                    flexShrink: 1,
                   }}
                   alt="logo"
                   className={classes.logoRight}
@@ -217,53 +287,55 @@ const AppHeader = ({ topMenuItems }) => {
               )}
             </Stack>
           </Grid>
-          <Grid
-            size={{ xs: 1, sm: "grow" }}
-            sx={{
-              pl: isDisplayMobile ? 4 : 0,
-              pr: isDisplayMobile ? 4 : 0,
-              width: "-webkit-fill-available",
-            }}
-          >
-            <Tabs
-              value={topMenuItemSelected}
-              variant="scrollable"
-              onChange={handleTopMenuChange}
-              scrollButtons="auto"
-              allowScrollButtonsMobile
-              indicatorColor="primary"
-              textColor="primary"
-              slotProps={{
-                indicator: {
-                  ...{
-                    style: { display: "none" },
-                  },
-
-                  ...{
-                    display: "none",
-                  },
-                },
-              }}
+          {!isDisplayMobile && (
+            <Grid
+              size={{ xs: 1, sm: "grow" }}
               sx={{
-                color: "var(--mui-palette-text-primary)",
+                pl: isDisplayMobile ? 4 : 0,
+                pr: isDisplayMobile ? 4 : 0,
+                width: "-webkit-fill-available",
               }}
             >
-              {topMenuItems.map((item, index) => (
-                <Tab
-                  key={index}
-                  label={keyword(item.title)}
-                  icon={<item.icon sx={iconConditionalStyling(item.title)} />}
-                  to={item.path}
-                  component={Link}
-                  sx={{
-                    minWidth: "100px",
-                    fontSize: "1rem",
-                  }}
-                  value={item.title}
-                />
-              ))}
-            </Tabs>
-          </Grid>
+              <Tabs
+                value={topMenuItemSelected}
+                variant="scrollable"
+                onChange={handleTopMenuChange}
+                scrollButtons="auto"
+                allowScrollButtonsMobile
+                indicatorColor="primary"
+                textColor="primary"
+                slotProps={{
+                  indicator: {
+                    ...{
+                      style: { display: "none" },
+                    },
+
+                    ...{
+                      display: "none",
+                    },
+                  },
+                }}
+                sx={{
+                  color: "var(--mui-palette-text-primary)",
+                }}
+              >
+                {topMenuItems.map((item, index) => (
+                  <Tab
+                    key={index}
+                    label={keyword(item.title)}
+                    icon={<item.icon sx={iconConditionalStyling(item.title)} />}
+                    to={item.path}
+                    component={Link}
+                    sx={{
+                      minWidth: "100px",
+                      fontSize: "1rem",
+                    }}
+                    value={item.title}
+                  />
+                ))}
+              </Tabs>
+            </Grid>
+          )}
 
           <Grid>
             <Stack
@@ -276,7 +348,45 @@ const AppHeader = ({ topMenuItems }) => {
             >
               <AdvancedTools />
 
-              <Tooltip title={"Settings"}>
+              {userAuthenticated && (
+                <>
+                  <Tooltip title={keyword("drawer_settings_account")}>
+                    <IconButton
+                      sx={{ p: 1 }}
+                      onClick={handleProfileMenuOpen}
+                      aria-controls={
+                        isProfileMenuOpen ? "profile-menu" : undefined
+                      }
+                      aria-haspopup="true"
+                      aria-expanded={isProfileMenuOpen ? "true" : undefined}
+                    >
+                      <AccountCircle
+                        sx={{ color: "var(--mui-palette-primary-main)" }}
+                      />
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    id="profile-menu"
+                    anchorEl={profileMenuAnchor}
+                    open={isProfileMenuOpen}
+                    onClose={handleProfileMenuClose}
+                    onClick={handleProfileMenuClose}
+                    transformOrigin={{ horizontal: "right", vertical: "top" }}
+                    anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                  >
+                    <MenuItem onClick={handleLogout}>
+                      <ListItemIcon>
+                        <LogoutIcon fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText>
+                        {authKeyword("LOGUSER_LOGOUT_LABEL")}
+                      </ListItemText>
+                    </MenuItem>
+                  </Menu>
+                </>
+              )}
+
+              <Tooltip title={keyword("drawer_settings_title")}>
                 <IconButton sx={{ p: 1 }} onClick={handleMenuClick}>
                   <Settings />
                 </IconButton>
@@ -296,6 +406,67 @@ const AppHeader = ({ topMenuItems }) => {
         selectedCollection={selectedCollection}
         setSelectedCollection={setSelectedCollection}
       />
+
+      {/* Mobile Navigation Drawer */}
+      <Drawer
+        anchor="left"
+        open={mobileMenuOpen}
+        onClose={handleMobileMenuClose}
+        sx={{
+          "& .MuiDrawer-paper": {
+            width: 280,
+            marginTop: "86px",
+            height: "calc(100% - 86px)",
+          },
+        }}
+      >
+        <Box sx={{ overflow: "auto" }}>
+          <List>
+            {topMenuItems.map((item, index) => (
+              <ListItem
+                key={index}
+                sx={{
+                  p: 0,
+                }}
+              >
+                <ListItemButton
+                  selected={topMenuItemSelected === item.title}
+                  onClick={() => handleMobileMenuItemClick(item)}
+                  sx={{
+                    py: 1.5,
+                    px: 2,
+                    "&.Mui-selected": {
+                      backgroundColor: "var(--mui-palette-action-selected)",
+                    },
+                    pl: 2.5,
+                  }}
+                >
+                  <ListItemIcon sx={{ minWidth: 48 }}>
+                    <item.icon
+                      sx={{
+                        fontSize: "32px",
+                        fill:
+                          topMenuItemSelected === item.title
+                            ? "var(--mui-palette-primary-main)"
+                            : "var(--mui-palette-text-secondary)",
+                      }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={keyword(item.title)}
+                    sx={{
+                      color:
+                        topMenuItemSelected === item.title
+                          ? "var(--mui-palette-primary-main)"
+                          : "var(--mui-palette-text-primary)",
+                    }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
     </AppBar>
   );
 };

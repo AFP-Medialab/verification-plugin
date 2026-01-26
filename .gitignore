@@ -11,14 +11,12 @@
 # production
 /build
 /dist
+.output
+.wxt
 
 # misc
 .DS_Store
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env*
 
 npm-debug.log*
 yarn-debug.log*

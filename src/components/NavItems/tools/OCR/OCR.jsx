@@ -16,13 +16,13 @@ import {
   setOcrResult,
   setb64InputFile,
 } from "@/redux/actions/tools/ocrActions";
+import { setError } from "@/redux/reducers/errorReducer";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import HeaderTool from "@Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "@Shared/StringFileUploadField";
 import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import { useUrlOrFile } from "Hooks/useUrlOrFile";
-import { setError } from "redux/reducers/errorReducer";
 
 import OcrResult from "./Results/OcrResult";
 

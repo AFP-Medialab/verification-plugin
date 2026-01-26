@@ -32,15 +32,15 @@ import SearchIcon from "@mui/icons-material/Search";
 import TranslateIcon from "@mui/icons-material/Translate";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
+import DateAndTimePicker from "@/components/Shared/DateTimePicker/DateAndTimePicker";
 import { dataAnalysisSna } from "@/constants/tools";
+import { setError } from "@/redux/reducers/errorReducer";
 import { convertMomentToGMT } from "@Shared/DateTimePicker/convertToGMT";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
-import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import dateFormat from "dateformat";
 import dayjs from "dayjs";
 import _ from "lodash";
-import { setError } from "redux/reducers/errorReducer";
 
 import { theme as defaultTheme } from "../../../../theme";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
@@ -316,6 +316,10 @@ const TwitterSna = () => {
   const uid = session && session.user ? session.user.id : null;
   const client_id = getclientId();
 
+  const [submittedRequest, setSubmittedRequest] = useState(
+    userAuthenticated ? null : makeRequest(),
+  );
+
   const onSubmit = () => {
     //Mandatory Fields errors
     if (keyWords.trim() === "" && keyWordsAny.trim() === "") {
@@ -365,6 +369,7 @@ const TwitterSna = () => {
       setSubmittedRequest(newRequest);
     }
   };
+
   useTrackEvent(
     "submission",
     "tsna",
@@ -373,10 +378,6 @@ const TwitterSna = () => {
     client_id,
     submittedRequest,
     uid,
-  );
-  // const [submittedRequest, setSubmittedRequest] = useState(null);
-  const [submittedRequest, setSubmittedRequest] = useState(
-    userAuthenticated ? null : makeRequest(),
   );
   useTwitterSnaRequest(submittedRequest);
 

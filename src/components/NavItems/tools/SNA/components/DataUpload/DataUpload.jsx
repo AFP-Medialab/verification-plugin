@@ -20,6 +20,7 @@ const DataUpload = ({
     const file = event.target.files[0];
     Papa.parse(file, {
       header: true,
+      dynamicTyping: true,
       complete: (res) => {
         setUploadedFileName(file.name);
         setUploadedData(res.data);

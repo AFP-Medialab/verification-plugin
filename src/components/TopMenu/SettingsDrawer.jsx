@@ -13,6 +13,11 @@ import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import RemoveIcon from "@mui/icons-material/Remove";
 
+import {
+  RecordingWindow,
+  getRecordingInfo,
+} from "@/components/NavItems/tools/SNA/components/Recording";
+import { ROLES } from "@/constants/roles";
 import { toggleUnlockExplanationCheckBox } from "@/redux/actions";
 import {
   toggleAnalyticsCheckBox,
@@ -20,17 +25,12 @@ import {
 } from "@/redux/reducers/cookiesReducers";
 import { MAX_FONT_SIZE, MIN_FONT_SIZE, getStoredFontSize } from "@/theme";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-import {
-  RecordingWindow,
-  getRecordingInfo,
-} from "components/NavItems/tools/SNA/components/Recording";
-import { ROLES } from "constants/roles";
 
-import manifest from "../../../public/manifest.json";
+import pkg from "../../../package.json";
 import Languages from "../NavItems/languages/languages";
 import ColorModeSelect from "./ColorModeSelect";
 
-const environment = process.env.REACT_APP_ENVIRONMENT;
+const environment = import.meta.env.VITE_ENVIRONMENT;
 const isStaging = environment !== "production";
 
 const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
@@ -59,7 +59,7 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
     getRecordingInfo(setCollections, setRecording, setSelectedCollection);
   }, []);
 
-  const version = manifest.version;
+  const version = pkg.version;
 
   return (
     <Drawer

@@ -12,6 +12,7 @@ import Stack from "@mui/material/Stack";
 import { useTrackEvent } from "@/Hooks/useAnalytics";
 import C2paResults from "@/components/NavItems/tools/C2pa/Results/C2paResults";
 import { useC2paMetadataMutation } from "@/components/NavItems/tools/Metadata/hooks/useC2paMetadataMutation";
+import StringFileUploadField from "@/components/Shared/StringFileUploadField";
 import { KNOWN_LINKS } from "@/constants/tools";
 import {
   cleanMetadataState,
@@ -22,13 +23,12 @@ import {
 } from "@/redux/reducers/tools/metadataReducer";
 import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequest";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import {
   getFileTypeFromFileObject,
   getFileTypeFromUrl,
 } from "@Shared/Utils/fileUtils";
 import { useUrlOrFile } from "Hooks/useUrlOrFile";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import StringFileUploadField from "components/Shared/StringFileUploadField";
 
 import { imageMetadata as imageMetadataTool } from "../../../../constants/tools";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";

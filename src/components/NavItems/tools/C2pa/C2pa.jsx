@@ -18,12 +18,9 @@ import Typography from "@mui/material/Typography";
 
 import { ArrowDownward } from "@mui/icons-material";
 
+import HeaderTool from "@/components/Shared/HeaderTool/HeaderTool";
+import StringFileUploadField from "@/components/Shared/StringFileUploadField";
 import { ROLES } from "@/constants/roles";
-import { useUrlOrFile } from "Hooks/useUrlOrFile";
-import HeaderTool from "components/Shared/HeaderTool/HeaderTool";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import StringFileUploadField from "components/Shared/StringFileUploadField";
-import exifr from "exifr";
 import {
   c2paLoadingSet,
   resetC2paState,
@@ -31,7 +28,10 @@ import {
   setC2paThumbnail,
   setC2paThumbnailCaption,
   setHdImageC2paData,
-} from "redux/reducers/tools/c2paReducer";
+} from "@/redux/reducers/tools/c2paReducer";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import { useUrlOrFile } from "Hooks/useUrlOrFile";
+import exifr from "exifr";
 import { v4 as uuidv4 } from "uuid";
 
 import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
@@ -79,7 +79,7 @@ const C2paData = () => {
   const authenticatedRequest = useAuthenticatedRequest();
 
   const getTransactionId = () => {
-    return `verificationplugin-${chrome.runtime.getManifest().version}-${uuidv4()}`;
+    return `verificationplugin-${browser.runtime.getManifest().version}-${uuidv4()}`;
   };
 
   const getAfpReverseSearch = async () => {
@@ -98,7 +98,7 @@ const C2paData = () => {
         ? afpRenditionTypeHD
         : afpRenditionTypeThumbnail;
 
-    const serverUrl = process.env.REACT_APP_AFP_REVERSE_SEARCH_URL;
+    const serverUrl = import.meta.env.VITE_AFP_REVERSE_SEARCH_URL;
 
     const config = {
       method: "post",
@@ -144,7 +144,7 @@ const C2paData = () => {
     ) => {
       let status = data;
 
-      const serverUrl = process.env.REACT_APP_AFP_REVERSE_SEARCH_URL;
+      const serverUrl = import.meta.env.VITE_AFP_REVERSE_SEARCH_URL;
 
       const getNewStatus = async () => {
         const statusConfig = {

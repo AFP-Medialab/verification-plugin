@@ -114,7 +114,7 @@ const CollectionActionsCell = ({
 
     const handleRawUpload = async (parsed, rowName) => {
       try {
-        await chrome.runtime.sendMessage({
+        await browser.runtime.sendMessage({
           prompt: "addToCollection",
           data: parsed,
           platform: row.source,
@@ -199,7 +199,7 @@ const CollectionActionsCell = ({
       if (!selectedData) return;
 
       try {
-        let content = await chrome.runtime.sendMessage({
+        let content = await browser.runtime.sendMessage({
           prompt: "getRawCollection",
           platform: selectedData.source,
           collectionId: selectedData.name.split("~")[0],
@@ -275,7 +275,7 @@ const CollectionActionsCell = ({
 
       if (dataSource.source !== "fileUpload") {
         try {
-          await chrome.runtime.sendMessage({
+          await browser.runtime.sendMessage({
             prompt: "deleteCollection",
             source: dataSource.source,
             collectionId: dataSource.name.split("~")[0],

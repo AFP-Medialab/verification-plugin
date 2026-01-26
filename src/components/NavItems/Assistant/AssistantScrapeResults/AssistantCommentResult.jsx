@@ -34,10 +34,10 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
 
+import CopyButton from "@/components/Shared/CopyButton";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { Translate } from "@/components/Shared/Utils/Translate";
-import CopyButton from "components/Shared/CopyButton";
 import moment from "moment/moment";
 import PropTypes from "prop-types";
 

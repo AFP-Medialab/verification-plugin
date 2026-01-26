@@ -14,9 +14,9 @@ import {
   setGeolocationLoading,
   setGeolocationResult,
 } from "@/redux/reducers/tools/geolocationReducer";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "@Shared/StringFileUploadField";
 import { useUrlOrFile } from "Hooks/useUrlOrFile";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import {

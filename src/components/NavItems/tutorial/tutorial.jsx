@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";

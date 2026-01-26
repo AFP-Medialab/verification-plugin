@@ -11,8 +11,8 @@ import Select from "@mui/material/Select";
 import Slider from "@mui/material/Slider";
 import Typography from "@mui/material/Typography";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "components/Shared/MaterialUiStyles/useMyStyles";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 import { preloadImage } from "../../Forensic/utils";
 
