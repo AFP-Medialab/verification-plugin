@@ -173,7 +173,7 @@ const Assistant = () => {
       // submit file
       try {
         if (!fileInput) {
-          throw new Error("No input provided"); // Handle missing input
+          throw new Error(keyword("no input provided")); // TODO Handle missing input
         }
         setAssistantSelection(fileInput);
 
@@ -181,7 +181,7 @@ const Assistant = () => {
         const fileType = await getFileTypeFromFileObject(fileInput);
 
         if (!fileType || fileType instanceof Error) {
-          throw new Error("Unable to determine file type");
+          throw new Error(keyword("Unable to determine file type"));
         }
 
         // set ImgaeVideoSelected for user media upload
@@ -220,7 +220,7 @@ const Assistant = () => {
           return;
         }
 
-        throw new Error("Unsupported file type");
+        throw new Error(keyword("Unsupported file type"));
       } catch (error) {
         console.error("Error in submitUrl:", error.message);
         // TODO assistant results need to disappear and display an error to user on page
