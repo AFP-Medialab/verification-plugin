@@ -12,6 +12,8 @@
     "build:chrome:production": "wxt build -b chrome --mode production",
     "build:firefox:development": "wxt build -b firefox --mode development",
     "build:firefox:production": "wxt build -b firefox --mode production",
+    "build:safari:development": "wxt build -b safari --mode development",
+    "build:safari:production": "wxt build -b safari --mode production",
     "build:all:development": "wxt build -b chrome --mode development && wxt build -b firefox --mode development",
     "build:all:production": "wxt build -b chrome --mode production && wxt build -b firefox --mode production",
     "prepare": "husky",
