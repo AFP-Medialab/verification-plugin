@@ -3,7 +3,7 @@ import React from "react";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 import useMyStyles from "../MaterialUiStyles/useMyStyles";
 

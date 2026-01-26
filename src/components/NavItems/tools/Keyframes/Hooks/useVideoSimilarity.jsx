@@ -9,7 +9,7 @@ import axios from "axios";
 
 export const useVideoSimilarity = (url, keyword) => {
   const dispatch = useDispatch();
-  const similarityAPI = process.env.REACT_APP_DBKF_SIMILARITY_API;
+  const similarityAPI = import.meta.env.VITE_DBKF_SIMILARITY_API;
   useEffect(() => {
     const getData = (dbkfApiUrl) => {
       axios

@@ -21,7 +21,7 @@ import Typography from "@mui/material/Typography";
 import { CastForEducation, ExpandMore } from "@mui/icons-material";
 
 import { changeTabEvent } from "@Shared/GoogleAnalytics/GoogleAnalytics";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import PropTypes from "prop-types";
 
 import IconClassRoom from "../../NavBar/images/SVG/Navbar/Classroom.svg";

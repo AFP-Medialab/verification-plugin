@@ -150,14 +150,14 @@ const NavigationSidebar = ({ tools, setOpenAlert }) => {
       tool.path === "xnetwork"
     ) {
       window.open(
-        process.env.REACT_APP_TSNA_SERVER + tool.path + "?lang=" + currentLang,
+        import.meta.env.VITE_TSNA_SERVER + tool.path + "?lang=" + currentLang,
         "_blank",
       );
       return;
     }
 
     if (tool.path === "disinfoDeck") {
-      window.open(process.env.REACT_APP_DISINFO_DECK_SERVER, "_blank");
+      window.open(import.meta.env.VITE_DISINFO_DECK_SERVER, "_blank");
       return;
     }
 

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default function assistantApiCalls() {
-  const assistantEndpoint = process.env.REACT_APP_ASSISTANT_URL;
+  const assistantEndpoint = import.meta.env.VITE_ASSISTANT_URL;
 
   function handleAssistantError(errorResponse) {
     if (errorResponse.response) {
@@ -92,7 +92,7 @@ export default function assistantApiCalls() {
             VALUES ?iri { ${chunk.join(" ")} }
             ?iri rdf:type ?type .
           }`;
-        const dbpediaEndpoint = process.env.REACT_APP_DBPEDIA_SPARQL_URL;
+        const dbpediaEndpoint = import.meta.env.VITE_DBPEDIA_SPARQL_URL;
         const dbpediaResult = await axios.get(
           `${dbpediaEndpoint}?query=${encodeURIComponent(dbQuery)}&format=application%2Fsparql-results%2Bjson&timeout=30000&signal_void=on&signal_unconnected=on`,
         );

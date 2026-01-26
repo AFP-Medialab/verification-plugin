@@ -6,10 +6,10 @@ import Card from "@mui/material/Card";
 import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack";
 
+import useAuthenticatedRequest from "@/components/Shared/Authentication/useAuthenticatedRequest";
+import HeaderTool from "@/components/Shared/HeaderTool/HeaderTool";
 import { dataAnalysisSna } from "@/constants/tools";
-import useAuthenticatedRequest from "components/Shared/Authentication/useAuthenticatedRequest";
-import HeaderTool from "components/Shared/HeaderTool/HeaderTool";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 import {
   AccountActivityChart,
@@ -335,6 +335,10 @@ const SNA = () => {
     setShowZeeschuimerUploadModal,
   };
 
+  const handleRefreshCollections = async () => {
+    await refreshPage(setInitLoading, dataSources, setDataSources);
+  };
+
   const dataUploadModalProps = {
     dataSources,
     showUploadModal,
@@ -350,6 +354,7 @@ const SNA = () => {
     setUploadedFileName,
     uploadModalError,
     setUploadModalError,
+    onUploadComplete: handleRefreshCollections,
   };
 
   const zeeschuimerDataUploadModalProps = {
