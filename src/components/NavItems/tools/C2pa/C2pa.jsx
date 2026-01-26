@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -18,6 +19,7 @@ import Typography from "@mui/material/Typography";
 import { ArrowDownward } from "@mui/icons-material";
 
 import { ROLES } from "@/constants/roles";
+import { useUrlOrFile } from "Hooks/useUrlOrFile";
 import HeaderTool from "components/Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
@@ -39,6 +41,9 @@ import AfpReverseSearchResults from "./components/AfpReverseSearchResults";
 import HdImageResults from "./components/HdImageResults";
 
 const C2paData = () => {
+  const [searchParams] = useSearchParams();
+  const fromAssistant = searchParams.has("fromAssistant");
+
   const role = useSelector((state) => state.userSession.user.roles);
 
   const isLoading = useSelector((state) => state.c2pa.loading);
@@ -56,8 +61,8 @@ const C2paData = () => {
 
   const urlImage = useSelector((state) => state.c2pa.url);
 
-  const [input, setInput] = useState(urlImage ? urlImage : "");
-  const [imageFile, setImageFile] = useState(undefined);
+  const [input = urlImage || "", setInput, imageFile, setImageFile] =
+    useUrlOrFile();
 
   const [imageMetadata, setImageMetadata] = useState(null);
 
@@ -279,10 +284,16 @@ const C2paData = () => {
   };
 
   useEffect(() => {
-    if (urlImage && input && !result) {
+    if (urlImage && input && !result && !fromAssistant) {
       handleSubmit();
     }
   }, [urlImage, input, result]);
+
+  useEffect(() => {
+    if (fromAssistant && (input || imageFile)) {
+      handleSubmit();
+    }
+  }, [searchParams, input, imageFile]);
 
   const resetState = () => {
     setImageFile(undefined);
