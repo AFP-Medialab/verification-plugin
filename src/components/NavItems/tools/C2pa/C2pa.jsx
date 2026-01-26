@@ -87,7 +87,8 @@ const C2paData = () => {
 
     formData.append("imageData", imageFile);
 
-    const data = input ? { imageUrl: input } : formData;
+    // priority for imageFile first to work fromAssistant
+    const data = imageFile ? formData : { imageUrl: input };
 
     const afpRenditionTypeHD = "HD";
     const afpRenditionTypeThumbnail = "THUMBNAIL";
@@ -107,9 +108,9 @@ const C2paData = () => {
         Accept: "*/*",
         "X-AFP-RENDITION-TYPE": afpRenditionType,
         "X-AFP-TRANSACTION-ID": getTransactionId(),
-        "Content-Type": input
-          ? "application/x-www-form-urlencoded"
-          : imageFile.type,
+        "Content-Type": imageFile
+          ? imageFile.type
+          : "application/x-www-form-urlencoded",
       },
       data: data,
     };
