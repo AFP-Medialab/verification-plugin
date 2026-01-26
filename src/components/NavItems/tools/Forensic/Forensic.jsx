@@ -11,12 +11,12 @@ import Stack from "@mui/material/Stack";
 import { useTrackEvent } from "@/Hooks/useAnalytics";
 import { imageForensic } from "@/constants/tools";
 import { resetForensicState } from "@/redux/actions/tools/forensicActions";
+import { setError } from "@/redux/reducers/errorReducer";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import { useUrlOrFile } from "Hooks/useUrlOrFile";
 import axios from "axios";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { setError } from "redux/reducers/errorReducer";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
@@ -26,6 +26,8 @@ import ForensicResults from "./Results/ForensicResult";
 const Forensic = () => {
   const { url } = useParams();
   const [searchParams] = useSearchParams();
+  const fromAssistant = searchParams.has("fromAssistant");
+
   const keyword = i18nLoadNamespace("components/NavItems/tools/Forensic");
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
@@ -41,25 +43,16 @@ const Forensic = () => {
 
   const uid = session && session.user ? session.user.id : null;
 
-  const [input = resultUrl, setInput, imageFile, setImageFile] = useUrlOrFile();
+  const [input = resultUrl || "", setInput, imageFile, setImageFile] =
+    useUrlOrFile();
   const [urlDetected, setUrlDetected] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const [type, setType] = useState("");
-
-  // const fromAssistant = searchParams.has('fromAssistant');
-
-  // console.log("FORENSIC", "resultUrl=", resultUrl);
-  // console.log("FORENSIC", type, "=", imageFile);
-
-  // if (fromAssistant && imageFile) {
-  //   console.log("useGetImages && fromAssistant && local");
-  //   setType("local");
-  //   // useGetImages(imageFile, "local", keyword);
-  // } else {
-  //   console.log("useGetImages &&", type)
-  //   // setType("url");
-  //   // useGetImages(imageFile, type, keyword);
-  // }
+  const [type, setType] = useState(() => {
+    if (fromAssistant) {
+      return imageFile ? "local" : input ? "url" : "";
+    }
+    return "";
+  });
 
   useGetImages(imageFile, type, keyword);
 
@@ -77,19 +70,6 @@ const Forensic = () => {
   );
   const submitUrl = () => {
     dispatch(resetForensicState());
-    // dispatch(setForensicsLoading(true));
-    //
-    // if (fromAssistant && imageFile) {
-    //   setType("local");
-    //   setLoaded(true);
-    //   setImageFile(imageFile);
-    //   setInput("");
-    // } else {
-    //   setType(imageFile ? "local" : "url");
-    //   setLoaded(true);
-    //   setImageFile(imageFile || "");
-    //   setInput(input || "")
-    // }
 
     const fileUrl = imageFile ? URL.createObjectURL(imageFile) : input;
 
@@ -136,15 +116,17 @@ const Forensic = () => {
     setImageFile(undefined);
   }, [imageFile]);
 
-  // useEffect(() => {
-  //   const fromAssistant = searchParams.has('fromAssistant');
-  //   if (fromAssistant && (input || imageFile)) {
-  //     if (imageFile) {
-  //       setType("local");
-  //     }
-  //     submitUrl();
-  //   }
-  // }, [searchParams]);
+  useEffect(() => {
+    if (fromAssistant && (input || imageFile)) {
+      if (imageFile) {
+        setType("local");
+        setImageFile(imageFile);
+      } else if (input) {
+        setType("url");
+        setUrlDetected(true);
+      }
+    }
+  }, [searchParams]);
 
   const preprocessingSuccess = (file) => {
     dispatch(resetForensicState());
