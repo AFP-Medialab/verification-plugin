@@ -31,38 +31,29 @@ const Deepfake = () => {
   const result = useSelector((state) => state.deepfakeVideo.result);
   const url = useSelector((state) => state.deepfakeVideo.url);
   const role = useSelector((state) => state.userSession.user.roles);
-  const [type, setType] = useState("");
   const [input = url || "", setInput, videoFile, setVideoFile] = useUrlOrFile();
   const fromAssistant = searchParams.has("fromAssistant");
+  const [type, setType] = useState(() => {
+    if (fromAssistant) {
+      return videoFile ? "local" : input ? "url" : "";
+    }
+    return "";
+  });
 
   const dispatch = useDispatch();
 
   const submitUrl = async () => {
-    if (fromAssistant && videoFile) {
-      await UseGetDeepfake(
-        keyword,
-        "",
-        true,
-        "VIDEO",
-        dispatch,
-        role,
-        keywordWarning("error_invalid_url"),
-        "local",
-        videoFile,
-      );
-    } else {
-      await UseGetDeepfake(
-        keyword,
-        input,
-        true,
-        "VIDEO",
-        dispatch,
-        role,
-        keywordWarning("error_invalid_url"),
-        type,
-        videoFile,
-      );
-    }
+    await UseGetDeepfake(
+      keyword,
+      input,
+      true,
+      "VIDEO",
+      dispatch,
+      role,
+      keywordWarning("error_invalid_url"),
+      type,
+      videoFile,
+    );
   };
 
   const preprocessingSuccess = (file) => {
@@ -92,6 +83,9 @@ const Deepfake = () => {
 
   useEffect(() => {
     if (fromAssistant && (input || videoFile)) {
+      if (videoFile) {
+        setInput("");
+      }
       handleSubmit();
     }
   }, [searchParams]);
