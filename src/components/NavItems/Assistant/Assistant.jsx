@@ -156,7 +156,7 @@ const Assistant = () => {
     "page assistant",
     formInput,
     null,
-    url, // TODO right url?
+    url,
   );
 
   // submit url or file
@@ -173,7 +173,7 @@ const Assistant = () => {
       // submit file
       try {
         if (!fileInput) {
-          throw new Error(keyword("no input provided")); // TODO Handle missing input
+          throw new Error(keyword("no_input_provided"));
         }
         setAssistantSelection(fileInput);
 
@@ -181,7 +181,7 @@ const Assistant = () => {
         const fileType = await getFileTypeFromFileObject(fileInput);
 
         if (!fileType || fileType instanceof Error) {
-          throw new Error(keyword("Unable to determine file type"));
+          throw new Error(keyword("unable_to_determine_file_type"));
         }
 
         // set ImgaeVideoSelected for user media upload
@@ -220,7 +220,7 @@ const Assistant = () => {
           return;
         }
 
-        throw new Error(keyword("Unsupported file type"));
+        throw new Error(keyword("unsupported_file_type"));
       } catch (error) {
         console.error("Error in submitUrl:", error.message);
         // TODO assistant results need to disappear and display an error to user on page
@@ -299,6 +299,7 @@ const Assistant = () => {
 
   return (
     <div>
+      {/* header */}
       <HeaderTool
         name={keyword("assistant_title")}
         description={keyword("assistant_intro")}
@@ -354,6 +355,7 @@ const Assistant = () => {
         />
 
         <CardContent>
+          {/* upload file or submit url form */}
           <form>
             <StringFileUploadField
               labelKeyword={keyword("assistant_urlbox")}
