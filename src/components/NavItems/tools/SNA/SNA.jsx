@@ -1,4 +1,11 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { cardClasses } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -9,6 +16,10 @@ import Stack from "@mui/material/Stack";
 import useAuthenticatedRequest from "@/components/Shared/Authentication/useAuthenticatedRequest";
 import HeaderTool from "@/components/Shared/HeaderTool/HeaderTool";
 import { dataAnalysisSna } from "@/constants/tools";
+import {
+  setSNADataSources,
+  setSNALoading,
+} from "@/redux/reducers/tools/snaDataReducer";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 import {
@@ -54,11 +65,18 @@ import {
   initializePage,
   keepOnlyNumberFields,
   onlyUnique,
-  refreshPage,
+  refreshPageSelective,
+  refreshSpecificCollection,
+  updateCollectionMetrics,
 } from "./utils/accessSavedCollections";
 
 const SNA = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/NewSNA");
+  const dispatch = useDispatch();
+
+  // Get cached data from Redux
+  const cachedDataSources = useSelector((state) => state.snaData.dataSources);
+
   /**
    * Holds the gathered and uploaded collections
    * as objects formatted as:
@@ -73,8 +91,27 @@ const SNA = () => {
    * }
    */
   const [dataSources, setDataSources] = useState([]);
+  const dataSourcesRef = useRef(dataSources);
+  const isInitialized = useRef(false);
+  const recordingState = useRef({
+    isRecording: false,
+    collectionId: null,
+    platforms: [],
+  });
 
   const [initLoading, setInitLoading] = useState(true);
+
+  /**
+   * Wrapper function to update both local state and Redux cache
+   */
+  const updateDataSources = useCallback(
+    (newDataSources) => {
+      setDataSources(newDataSources);
+      dataSourcesRef.current = newDataSources;
+      dispatch(setSNADataSources(newDataSources));
+    },
+    [dispatch],
+  );
 
   //Detailed view props
   const [detailContent, setDetailContent] = useState([]);
@@ -155,6 +192,8 @@ const SNA = () => {
     );
   };
 
+  // Memoize selected sources with stable reference
+  // Only recalculate when selected IDs change or when specific collections in dataSources change
   const selectedSources = useMemo(() => {
     if (!selected || !dataSources) return [];
     return dataSources.filter((source) => selected.includes(source.id));
@@ -304,26 +343,40 @@ const SNA = () => {
 
   const authenticatedRequest = useAuthenticatedRequest();
 
-  const detailModalProps = {
-    detailContent,
-    openDetailModal,
-    setOpenDetailModal,
-    detailSearchFilter,
-    setDetailSearchFilter,
-    keyword,
-  };
-  const collectionsTableProps = {
-    selected,
-    setSelected,
-    setDetailContent,
-    setOpenDetailModal,
-    fileInputRef,
-    dataSources,
-    dlAnchorEl,
-    setDlAnchorEl,
-    setDataSources,
-    keyword,
-  };
+  const detailModalProps = useMemo(
+    () => ({
+      detailContent,
+      openDetailModal,
+      setOpenDetailModal,
+      detailSearchFilter,
+      setDetailSearchFilter,
+      keyword,
+    }),
+    [detailContent, openDetailModal, detailSearchFilter, keyword],
+  );
+
+  const collectionsTableProps = useMemo(
+    () => ({
+      selected,
+      setSelected,
+      setDetailContent,
+      setOpenDetailModal,
+      fileInputRef,
+      dataSources,
+      dlAnchorEl,
+      setDlAnchorEl,
+      setDataSources: updateDataSources,
+      keyword,
+    }),
+    [
+      selected,
+      dataSources,
+      dlAnchorEl,
+      keyword,
+      fileInputRef,
+      updateDataSources,
+    ],
+  );
 
   const dataUploadProps = {
     keyword,
@@ -335,9 +388,13 @@ const SNA = () => {
     setShowZeeschuimerUploadModal,
   };
 
-  const handleRefreshCollections = async () => {
-    await refreshPage(setInitLoading, dataSources, setDataSources);
-  };
+  const handleRefreshCollections = useCallback(async () => {
+    await refreshPageSelective(
+      setInitLoading,
+      dataSourcesRef.current,
+      updateDataSources,
+    );
+  }, [updateDataSources]);
 
   const dataUploadModalProps = {
     dataSources,
@@ -556,31 +613,159 @@ const SNA = () => {
   };
 
   /**
-   * On page load, send message to background
-   * to add gathered collections to dataSources
+   * Initialize data sources once on mount
    */
   useEffect(() => {
+    // Only initialize once
+    if (isInitialized.current) return;
+    isInitialized.current = true;
+
     const loadData = async () => {
+      // Check if we have cached data in Redux
+      if (cachedDataSources !== null) {
+        console.log("Using cached data from Redux");
+        setDataSources(cachedDataSources);
+        setInitLoading(false);
+        return;
+      }
+
+      // Load from IndexedDB if no cache
+      console.log("Loading data from IndexedDB");
+      dispatch(setSNALoading(true));
       const loadedCollections = await initializePage();
-      setDataSources(loadedCollections);
+      updateDataSources(loadedCollections);
       setInitLoading(false);
     };
 
     loadData();
+  }, [cachedDataSources, dispatch, updateDataSources]);
 
-    const refreshOnReturnToTab = async () => {
-      if (document.visibilityState === "visible") {
-        console.log("refress ");
-        await refreshPage(setInitLoading, dataSources, setDataSources);
+  /**
+   * Update collection metrics when SNA tab/window becomes visible
+   * Event-driven approach - only updates when user views the tab
+   * Triggers targeted refresh of recorded collections when recording stops
+   */
+  useEffect(() => {
+    const updateMetricsIfRecording = async () => {
+      try {
+        const recordingInfo = await browser.runtime.sendMessage({
+          prompt: "getRecordingInfo",
+        });
+
+        const isRecording =
+          recordingInfo.recording &&
+          recordingInfo.recording[0] &&
+          recordingInfo.recording[0].state !== false;
+
+        const collectionId = isRecording
+          ? recordingInfo.recording[0].state
+          : null;
+        const platforms = isRecording
+          ? recordingInfo.recording[0].platforms.split(",")
+          : [];
+
+        // Detect when recording STARTS (load all collections to show new one)
+        if (!recordingState.current.isRecording && isRecording) {
+          console.log(
+            `Recording started for collection "${collectionId}" - loading all collections`,
+          );
+
+          // Do a full refresh to show the new collection alongside existing ones
+          setInitLoading(true);
+          const allCollections = await initializePage();
+          setDataSources(allCollections);
+          dataSourcesRef.current = allCollections;
+          dispatch(setSNADataSources(allCollections));
+          setInitLoading(false);
+
+          // Update state
+          recordingState.current = {
+            isRecording: true,
+            collectionId,
+            platforms,
+          };
+          return;
+        }
+
+        // Detect when recording STOPS
+        if (recordingState.current.isRecording && !isRecording) {
+          console.log(
+            `Recording stopped for collection "${recordingState.current.collectionId}" - refreshing recorded collections only`,
+          );
+
+          // Targeted refresh: only reload the collections that were being recorded
+          await refreshSpecificCollection(
+            recordingState.current.collectionId,
+            recordingState.current.platforms,
+            dataSourcesRef.current,
+            (newDataSources) => {
+              setDataSources(newDataSources);
+              dataSourcesRef.current = newDataSources;
+              dispatch(setSNADataSources(newDataSources));
+            },
+          );
+
+          // Reset state
+          recordingState.current = {
+            isRecording: false,
+            collectionId: null,
+            platforms: [],
+          };
+          return;
+        }
+
+        // Update tracking state
+        recordingState.current = {
+          isRecording,
+          collectionId,
+          platforms,
+        };
+
+        if (isRecording) {
+          console.log(
+            `Recording active for "${collectionId}" - updating metrics only`,
+          );
+          // Update only metrics (counts), not full content
+          await updateCollectionMetrics(
+            dataSourcesRef.current,
+            (newDataSources) => {
+              setDataSources(newDataSources);
+              dataSourcesRef.current = newDataSources;
+              dispatch(setSNADataSources(newDataSources));
+            },
+          );
+        }
+      } catch (error) {
+        console.error("Error updating collection metrics:", error);
       }
     };
 
-    document.addEventListener("visibilitychange", refreshOnReturnToTab);
+    const handleVisibilityChange = async () => {
+      // Only check when tab becomes visible
+      if (document.visibilityState === "visible") {
+        await updateMetricsIfRecording();
+      }
+    };
+
+    const handleWindowFocus = async () => {
+      // Check when extension popup window gains focus
+      await updateMetricsIfRecording();
+    };
+
+    // Listen for visibility changes
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("focus", handleWindowFocus);
+
+    // Check immediately when component mounts (if visible)
+    if (document.visibilityState === "visible") {
+      updateMetricsIfRecording();
+    }
 
     return () => {
-      document.removeEventListener("visibilitychange", refreshOnReturnToTab);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("focus", handleWindowFocus);
     };
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
