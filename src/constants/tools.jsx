@@ -37,6 +37,7 @@ import MagnifierIcon from "../components/NavBar/images/SVG/Image/Magnifier.svg";
 import MetadataIcon from "../components/NavBar/images/SVG/Image/Metadata.svg";
 import OcrIcon from "../components/NavBar/images/SVG/Image/OCR.svg";
 import AboutIcon from "../components/NavBar/images/SVG/Navbar/About.svg";
+import AfpDigitalCoursesIconComponent from "../components/NavBar/images/SVG/Navbar/AfpDigitalCoursesIcon";
 import ToolsIcon from "../components/NavBar/images/SVG/Navbar/Tools.svg";
 import CovidSearchIcon from "../components/NavBar/images/SVG/Search/Covid19.svg";
 import TwitterSearchIcon from "../components/NavBar/images/SVG/Search/Twitter_search.svg";
@@ -793,6 +794,19 @@ export const chatbot = new Tool(
  *
  * Other Group tools
  */
+const afpDigitalCourses = new Tool(
+  "",
+  "",
+  AfpDigitalCoursesIconComponent,
+  null,
+  null,
+  null,
+  "afpDigitalCourses",
+  TOOL_GROUPS.MORE,
+  null,
+  null,
+);
+
 const about = new Tool(
   "navbar_about",
   "",
@@ -853,6 +867,7 @@ export const tools = Object.freeze([
   disinfoDeck,
   archiving,
   chatbot,
+  afpDigitalCourses,
   about,
   c2paData,
 ]);
