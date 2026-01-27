@@ -10,6 +10,7 @@ import Fade from "@mui/material/Fade";
 import Stack from "@mui/material/Stack";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import C2paResults from "@/components/NavItems/tools/C2pa/Results/C2paResults";
 import { useC2paMetadataMutation } from "@/components/NavItems/tools/Metadata/hooks/useC2paMetadataMutation";
 import StringFileUploadField from "@/components/Shared/StringFileUploadField";
@@ -28,7 +29,6 @@ import {
   getFileTypeFromFileObject,
   getFileTypeFromUrl,
 } from "@Shared/Utils/fileUtils";
-import { useUrlOrFile } from "Hooks/useUrlOrFile";
 
 import { imageMetadata as imageMetadataTool } from "../../../../constants/tools";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";

@@ -7,6 +7,7 @@ import Card from "@mui/material/Card";
 import LinearProgress from "@mui/material/LinearProgress";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import { imageMagnifier } from "@/constants/tools";
 import { KNOWN_LINKS } from "@/constants/tools";
 import {
@@ -17,7 +18,6 @@ import {
 import { setError } from "@/redux/reducers/errorReducer";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-import { useUrlOrFile } from "Hooks/useUrlOrFile";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";

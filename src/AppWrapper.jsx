@@ -9,10 +9,10 @@ import CssBaseline from "@mui/material/CssBaseline";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import { ThemeProvider } from "@mui/material/styles";
 
+import { AssistantSelectionProvider } from "@/Hooks/useUrlOrFile";
 import createCache from "@emotion/cache";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AssistantSelectionProvider } from "Hooks/useUrlOrFile";
 import dayjs from "dayjs";
 import "dayjs/locale/ar";
 import "dayjs/locale/de";

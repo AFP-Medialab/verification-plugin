@@ -7,13 +7,13 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 
+import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import StringFileUploadField from "@/components/Shared/StringFileUploadField";
 import { preprocessFileUpload } from "@/components/Shared/Utils/fileUtils";
 import { videoDeepfake } from "@/constants/tools";
 import { resetDeepfake } from "@/redux/actions/tools/deepfakeVideoActions";
 import { setError } from "@/redux/reducers/errorReducer";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-import { useUrlOrFile } from "Hooks/useUrlOrFile";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import UseGetDeepfake from "./Hooks/useGetDeepfake";

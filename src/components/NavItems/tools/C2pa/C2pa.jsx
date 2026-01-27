@@ -18,6 +18,7 @@ import Typography from "@mui/material/Typography";
 
 import { ArrowDownward } from "@mui/icons-material";
 
+import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import HeaderTool from "@/components/Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "@/components/Shared/StringFileUploadField";
 import { ROLES } from "@/constants/roles";
@@ -30,7 +31,6 @@ import {
   setHdImageC2paData,
 } from "@/redux/reducers/tools/c2paReducer";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-import { useUrlOrFile } from "Hooks/useUrlOrFile";
 import exifr from "exifr";
 import { v4 as uuidv4 } from "uuid";
 

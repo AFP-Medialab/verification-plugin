@@ -13,6 +13,7 @@ import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import KeyframesHeader from "@/components/NavItems/tools/Keyframes/components/KeyframesHeader";
 import KeyframesResults from "@/components/NavItems/tools/Keyframes/components/KeyframesResults";
 import KeyframesTabs from "@/components/NavItems/tools/Keyframes/components/KeyframesTabs";
@@ -29,7 +30,6 @@ import "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "@Shared/StringFileUploadField";
 import { TabContext, TabPanel } from "@mui/lab";
-import { useUrlOrFile } from "Hooks/useUrlOrFile";
 
 import { useProcessKeyframes } from "./Hooks/useKeyframeWrapper";
 import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";

@@ -8,6 +8,7 @@ import Card from "@mui/material/Card";
 import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 
+import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import { imageGeolocation } from "@/constants/tools";
 import {
   resetGeolocation,
@@ -16,7 +17,6 @@ import {
 } from "@/redux/reducers/tools/geolocationReducer";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "@Shared/StringFileUploadField";
-import { useUrlOrFile } from "Hooks/useUrlOrFile";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import {

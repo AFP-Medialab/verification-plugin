@@ -9,13 +9,13 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import { imageForensic } from "@/constants/tools";
 import { resetForensicState } from "@/redux/actions/tools/forensicActions";
 import { setError } from "@/redux/reducers/errorReducer";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
-import { useUrlOrFile } from "Hooks/useUrlOrFile";
 import axios from "axios";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";

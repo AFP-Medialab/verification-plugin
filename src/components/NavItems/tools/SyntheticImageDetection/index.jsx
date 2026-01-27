@@ -7,11 +7,11 @@ import Stack from "@mui/material/Stack";
 
 import { Gradient } from "@mui/icons-material";
 
+import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import SyntheticImageDetectionForm from "@/components/NavItems/tools/SyntheticImageDetection/SyntheticImageDetectionForm";
 import { useSyntheticImageDetection } from "@/components/NavItems/tools/SyntheticImageDetection/useSyntheticImageDetection";
 import { resetSyntheticImageDetectionImage } from "@/redux/reducers/tools/syntheticImageDetectionReducer";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-import { useUrlOrFile } from "Hooks/useUrlOrFile";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";

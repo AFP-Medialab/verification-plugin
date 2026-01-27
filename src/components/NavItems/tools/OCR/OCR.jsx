@@ -6,6 +6,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import { imageOcr } from "@/constants/tools";
 import { KNOWN_LINKS } from "@/constants/tools";
 import {
@@ -22,7 +23,6 @@ import HeaderTool from "@Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "@Shared/StringFileUploadField";
 import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
-import { useUrlOrFile } from "Hooks/useUrlOrFile";
 
 import OcrResult from "./Results/OcrResult";
 

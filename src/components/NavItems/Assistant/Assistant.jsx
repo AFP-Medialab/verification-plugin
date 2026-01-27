@@ -18,6 +18,8 @@ import { Close } from "@mui/icons-material";
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { useSetInputFromAssistant } from "@/Hooks/useUrlOrFile";
 import AssistantIcon from "@/components/NavBar/images/navbar/assistant-icon-primary.svg";
 import AssistantCheckStatus from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantCheckStatus";
 import AssistantNEResult from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantNEResult";
@@ -44,8 +46,6 @@ import {
   submitUpload,
 } from "@/redux/actions/tools/assistantActions";
 import { setError } from "@/redux/reducers/errorReducer";
-import { useTrackEvent } from "Hooks/useAnalytics";
-import { useSetInputFromAssistant } from "Hooks/useUrlOrFile";
 
 import {
   TransAssistantHelpFourTooltip,

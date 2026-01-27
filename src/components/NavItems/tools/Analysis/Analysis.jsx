@@ -14,6 +14,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import TextField from "@mui/material/TextField";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import { videoAnalysis } from "@/constants/tools";
 import { KNOWN_LINKS } from "@/constants/tools";
 import {
@@ -26,7 +27,6 @@ import {
 } from "@/redux/actions/tools/analysisActions";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-import { useUrlOrFile } from "Hooks/useUrlOrFile";
 import _ from "lodash";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
