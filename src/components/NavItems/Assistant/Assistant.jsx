@@ -223,8 +223,7 @@ const Assistant = () => {
         throw new Error(keyword("unsupported_file_type"));
       } catch (error) {
         console.error("Error in submitUrl:", error.message);
-        // TODO assistant results need to disappear and display an error to user on page
-        setError(error.message);
+        dispatch(setError(error.message));
       }
     }
   };
