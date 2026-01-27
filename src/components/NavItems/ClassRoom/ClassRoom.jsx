@@ -12,13 +12,19 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
-import { CastForEducation, ExpandMore } from "@mui/icons-material";
+import {
+  CastForEducation,
+  ExpandMore,
+  Instagram,
+  X,
+} from "@mui/icons-material";
 
 import { changeTabEvent } from "@Shared/GoogleAnalytics/GoogleAnalytics";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
@@ -136,6 +142,8 @@ const ClassRoom = () => {
         return keyword("user_resources_title");
       case 6:
         return keyword("glossary_title");
+      case 7:
+        return keyword("afp_digital_courses_title");
       default:
         return keyword("classroom_introduction");
     }
@@ -212,6 +220,11 @@ const ClassRoom = () => {
                 sx={{ minWidth: "100px !important" }}
                 label={tabTitle(6)}
                 {...a11yProps(6)}
+              />
+              <Tab
+                sx={{ minWidth: "100px !important" }}
+                label={tabTitle(7)}
+                {...a11yProps(7)}
               />
             </Tabs>
             <TabPanel value={value} index={0}>
@@ -408,6 +421,66 @@ const ClassRoom = () => {
                   </div>
                 );
               })}
+            </TabPanel>
+            <TabPanel value={value} index={7}>
+              <Stack direction="column" spacing={3}>
+                <Box>
+                  <Typography variant="body1" align={"justify"}>
+                    {keyword("afp_digital_courses_description")}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography variant="h6" gutterBottom>
+                    {keyword("afp_digital_courses_video_title")}
+                  </Typography>
+                  <Box
+                    sx={{
+                      width: "100%",
+                      maxWidth: "640px",
+                      aspectRatio: "16 / 9",
+                      mb: 2,
+                    }}
+                  >
+                    <iframe
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        border: 0,
+                      }}
+                      src="https://www.youtube-nocookie.com/embed/vaPSfRmwq0g?si=wzRhio6KzEpcOUAc"
+                      title="YouTube video player"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      allowFullScreen
+                    />
+                  </Box>
+                  <Stack direction="row" spacing={2}>
+                    <IconButton
+                      color="primary"
+                      component="a"
+                      href="https://x.com/AFPFactCheck/status/1873942236410634731/video/1"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      size="large"
+                      sx={{ p: 1 }}
+                    >
+                      <X />
+                    </IconButton>
+
+                    <IconButton
+                      color="primary"
+                      component="a"
+                      href="https://www.instagram.com/reel/C8xhGcJM_vA/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      size="large"
+                      sx={{ p: 1 }}
+                    >
+                      <Instagram />
+                    </IconButton>
+                  </Stack>
+                </Box>
+              </Stack>
             </TabPanel>
           </Box>
           <a
