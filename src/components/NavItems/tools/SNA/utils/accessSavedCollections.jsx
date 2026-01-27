@@ -125,7 +125,6 @@ export const getSavedCollections = async (collectionSource) => {
   const allCollectionEntries = await browser.runtime.sendMessage({
     prompt: collectionAccessors[collectionSource].prompt,
   });
-  console.log("allCollectionEntries ", allCollectionEntries);
   const filteredEntries = allCollectionEntries.filter((x) => x != undefined);
   const entriesGroupedByCollection = Object.groupBy(
     filteredEntries,

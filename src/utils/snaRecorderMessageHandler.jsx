@@ -155,15 +155,47 @@ const addToCollectionByPlatform = async (platform, data, collectionId) => {
   const table = getTableForPlatform(platform);
   const dataKey = getDataKeyForPlatform(platform);
 
-  await Promise.all(
-    data.map(async (item) =>
-      snaDB.add(table, {
-        id: item.id,
-        collectionID: collectionId,
-        [dataKey]: item,
-      }),
-    ),
-  );
+  // Chunk size for batch operations - optimal balance between performance and memory
+  const CHUNK_SIZE = 1000;
+  let totalProcessed = 0;
+
+  try {
+    // Process data in chunks for better performance with large datasets
+    for (let i = 0; i < data.length; i += CHUNK_SIZE) {
+      const chunk = data.slice(i, i + CHUNK_SIZE);
+
+      // Use 'put' instead of 'add' to allow updates and avoid duplicate key errors
+      const operations = chunk.map((item) => ({
+        type: "put",
+        storeName: table,
+        value: {
+          id: item.id,
+          collectionID: collectionId,
+          [dataKey]: item,
+        },
+      }));
+
+      await snaDB.batch(operations, "readwrite");
+      totalProcessed += chunk.length;
+
+      // Log progress for large datasets
+      if (data.length > CHUNK_SIZE) {
+        console.log(
+          `Processed ${totalProcessed}/${data.length} items for ${platform}`,
+        );
+      }
+    }
+
+    console.log(
+      `Successfully added ${data.length} items to ${table} collection ${collectionId}`,
+    );
+  } catch (error) {
+    console.error(
+      `Failed to add items to ${table} (processed ${totalProcessed}/${data.length}):`,
+      error,
+    );
+    throw error;
+  }
 };
 
 // Main message handler function
