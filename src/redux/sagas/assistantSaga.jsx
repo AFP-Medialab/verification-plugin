@@ -55,7 +55,10 @@ const assistantApi = assistantApiCalls();
  * WATCHERS
  **/
 function* getUploadSaga() {
-  yield takeLatest("SUBMIT_UPLOAD", handleSubmitUpload);
+  yield takeLatest(
+    ["SUBMIT_UPLOAD", "AUTH_USER_LOGIN", "AUTH_USER_LOGOUT"],
+    handleSubmitUpload,
+  );
 }
 
 function* getMediaListSaga() {
@@ -183,16 +186,13 @@ function* handleMediaActionList() {
       role,
       userAuthenticated,
     );
-
     yield put(setProcessUrlActions(contentType, actions));
   }
 }
 
-function* handleSubmitUpload(action) {
-  let contentType = action.payload.contentType;
-  // let uploadFileUrl = action.payload.uploadFileUrl;
+function* handleSubmitUpload() {
+  const contentType = yield select((state) => state.assistant.processUrlType);
   // yield put(setProcessUrl(uploadFileUrl, contentType)); // kicks off getMediaSimilaritySaga()
-
   let known_link = KNOWN_LINKS.OWN;
   const role = yield select((state) => state.userSession.user.roles);
   const userAuthenticated = yield select(
