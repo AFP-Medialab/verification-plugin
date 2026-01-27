@@ -568,16 +568,16 @@ const SNA = () => {
 
     loadData();
 
-    const refreshOnReturnToTab = async () => {
+    /*const refreshOnReturnToTab = async () => {
       if (document.visibilityState === "visible") {
         await refreshPage(setInitLoading, dataSources, setDataSources);
       }
-    };
+    };*/
 
-    document.addEventListener("visibilitychange", refreshOnReturnToTab);
+    //document.addEventListener("visibilitychange", refreshOnReturnToTab);
 
     return () => {
-      document.removeEventListener("visibilitychange", refreshOnReturnToTab);
+      //document.removeEventListener("visibilitychange", refreshOnReturnToTab);
     };
   }, []);
 

@@ -1,3 +1,70 @@
+import { getAccountNameMap } from "../components/DataUpload/DataUploadFunctions";
+
+/**
+ * Clean Facebook data to ensure views and likes fields are properly formatted
+ * @param {Array} entries - Facebook entries to clean
+ * @returns {Array} Cleaned entries with views and likes as integers
+ */
+const cleanFacebookData = (entries) => {
+  return entries.map((entry) => {
+    const cleanedEntry = { ...entry };
+
+    // Map "Total Views" to views if it exists
+    if (entry["Total Views"] !== undefined) {
+      cleanedEntry.views = parseInt(entry["Total Views"]) || 0;
+    } else if (entry.views !== undefined) {
+      cleanedEntry.views = parseInt(entry.views) || 0;
+    } else {
+      cleanedEntry.views = 0;
+    }
+
+    // Ensure likes is an integer (use lowercase 'likes' field)
+    if (entry.likes !== undefined) {
+      cleanedEntry.likes = parseInt(entry.likes) || 0;
+    } else {
+      cleanedEntry.likes = 0;
+    }
+
+    return cleanedEntry;
+  });
+};
+
+/**
+ * Helper function to safely parse numeric values, handling "missing" and other invalid values
+ * @param {*} value - Value to parse
+ * @returns {number} Parsed integer or 0
+ */
+const safeParseInt = (value) => {
+  if (
+    value === "missing" ||
+    value === null ||
+    value === undefined ||
+    value === ""
+  ) {
+    return 0;
+  }
+  const parsed = parseInt(value);
+  return isNaN(parsed) ? 0 : parsed;
+};
+
+/**
+ * Clean TikTok data to ensure numeric fields are properly formatted
+ * @param {Array} entries - TikTok entries to clean
+ * @returns {Array} Cleaned entries with numeric fields as integers
+ */
+const cleanTiktokData = (entries) => {
+  return entries.map((entry) => {
+    return {
+      ...entry,
+      likes: safeParseInt(entry.likes),
+      views: safeParseInt(entry.views),
+      replies: safeParseInt(entry.replies),
+      shares: safeParseInt(entry.shares),
+      reposts: safeParseInt(entry.reposts),
+    };
+  });
+};
+
 const collectionAccessors = {
   twitter: {
     prompt: "getTweets",
@@ -11,16 +78,22 @@ const collectionAccessors = {
     idTag: "tiktoks~",
     sourceTag: "tiktok",
   },
+  fb: {
+    prompt: "getFBPosts",
+    nameTag: "~FACEBOOK",
+    idTag: "fb-post~",
+    sourceTag: "fb",
+  },
 };
 
 export const getCollectionMetrics = (collectionEntries) => {
   let uniqueUsers = collectionEntries.map((e) => e.username).filter(onlyUnique);
   let totalLikes = collectionEntries
-    .map((e) => parseInt(e.likes))
-    .reduce((acc, curr) => acc + curr || 0, 0);
+    .map((e) => safeParseInt(e.likes))
+    .reduce((acc, curr) => acc + curr, 0);
   let totalViews = collectionEntries
-    .map((e) => parseInt(e.views))
-    .reduce((acc, curr) => acc + curr || 0, 0);
+    .map((e) => safeParseInt(e.views))
+    .reduce((acc, curr) => acc + curr, 0);
 
   return [
     {
@@ -52,7 +125,7 @@ export const getSavedCollections = async (collectionSource) => {
   const allCollectionEntries = await browser.runtime.sendMessage({
     prompt: collectionAccessors[collectionSource].prompt,
   });
-
+  console.log("allCollectionEntries ", allCollectionEntries);
   const filteredEntries = allCollectionEntries.filter((x) => x != undefined);
   const entriesGroupedByCollection = Object.groupBy(
     filteredEntries,
@@ -68,8 +141,19 @@ export const getSavedCollections = async (collectionSource) => {
         new Map(collectionEntries.map((item) => [item.id, item])).values(),
       );
 
+      // Apply platform-specific cleaning
+      if (collectionSource === "fb") {
+        dedpulicateEntries = cleanFacebookData(dedpulicateEntries);
+      } else if (collectionSource === "tiktok") {
+        dedpulicateEntries = cleanTiktokData(dedpulicateEntries);
+      }
+
       let collectionMetrics = getCollectionMetrics(dedpulicateEntries);
 
+      let accountNameMap = getAccountNameMap(
+        dedpulicateEntries,
+        collectionSource,
+      );
       return {
         id: collectionAccessors[collectionSource].idTag + idx,
         name: collectionID + collectionAccessors[collectionSource].nameTag,
@@ -80,7 +164,7 @@ export const getSavedCollections = async (collectionSource) => {
           dedpulicateEntries.length > 0
             ? Object.keys(dedpulicateEntries[0])
             : [],
-        accountNameMap: new Map(),
+        accountNameMap: accountNameMap,
         source: collectionAccessors[collectionSource].sourceTag,
       };
     },
@@ -91,8 +175,9 @@ export const getSavedCollections = async (collectionSource) => {
 export const initializePage = async () => {
   let savedTweets = await getSavedCollections("twitter");
   let savedTiktoks = await getSavedCollections("tiktok");
+  let savedFBs = await getSavedCollections("fb");
 
-  return [...savedTweets, ...savedTiktoks];
+  return [...savedTweets, ...savedTiktoks, ...savedFBs];
 };
 
 export const refreshPage = async (setLoading, dataSources, setDataSources) => {
@@ -105,10 +190,12 @@ export const refreshPage = async (setLoading, dataSources, setDataSources) => {
   );
   let savedTweets = await getSavedCollections("twitter");
   let savedTiktoks = await getSavedCollections("tiktok");
+  let savedFBs = await getSavedCollections("fb");
 
   let newCollectedContentLength =
     savedTweets.map((x) => x.content).flat().length +
-    savedTiktoks.map((x) => x.content).flat().length;
+    savedTiktoks.map((x) => x.content).flat().length +
+    savedFBs.map((x) => x.content).flat().length;
 
   let includedCollectionsLength = includedCollections
     .map((x) => x.content)
@@ -120,8 +207,14 @@ export const refreshPage = async (setLoading, dataSources, setDataSources) => {
   if (noNewContentFound) {
     setLoading(false);
   } else {
-    let updatedDS = [...savedTweets, ...savedTiktoks, ...uploadedCollections];
+    let updatedDS = [
+      ...savedTweets,
+      ...savedTiktoks,
+      ...savedFBs,
+      ...uploadedCollections,
+    ];
     setDataSources(updatedDS);
+    console.log("New data source ", dataSources);
     setLoading(false);
   }
 };
@@ -151,6 +244,7 @@ export const getSelectedSourcesNameMaps = (dataSources, selected) => {
       )
       .flatMap((m) => [...m]),
   );
+  console.log("selected Maps ", nameMaps);
   return nameMaps;
 };
 

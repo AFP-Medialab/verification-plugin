@@ -80,7 +80,7 @@ export const uploadTemplates = {
     id: "twitter",
     tooltipText: "uploadModal_snaTwitter_tooltip",
   },
-  tikTok: {
+  tiktok: {
     icon: (
       <img
         src={tiktokLogoUrl}

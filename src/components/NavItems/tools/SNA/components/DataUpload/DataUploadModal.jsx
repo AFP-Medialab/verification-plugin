@@ -220,6 +220,8 @@ const DataUploadModal = ({
     uploadFilename,
     selectedCollection,
   ) => {
+    console.log("uploadedData  ", uploadedData);
+    console.log("socialMediaSelected  ", socialMediaSelected);
     let fieldLabelsMap =
       socialMediaSelected.length > 0 && socialMediaSelected != "customUpload"
         ? uploadTemplates[socialMediaSelected].defaultFieldsMap
@@ -227,15 +229,15 @@ const DataUploadModal = ({
 
     let reformatedUploadEntries = uploadedData.map(
       ({
-        //[fieldLabelsMap.get("Object")]: objects,
+        [fieldLabelsMap.get("Object")]: objects,
         [fieldLabelsMap.get("Share Time")]: date,
         [fieldLabelsMap.get("Entry ID")]: id,
         [fieldLabelsMap.get("User ID")]: uid,
         [fieldLabelsMap.get("Text")]: text,
         ...rest
       }) => ({
-        //objects: objects,
-        //[fieldLabelsMap.get("Object")]: objects,
+        objects: objects,
+        [fieldLabelsMap.get("Object")]: objects,
         date: date,
         username: uid,
         text: text,
@@ -248,7 +250,6 @@ const DataUploadModal = ({
       socialMediaSelected,
       selectedCollection,
     );
-
     try {
       await chrome.runtime.sendMessage({
         prompt: "addToCollection",

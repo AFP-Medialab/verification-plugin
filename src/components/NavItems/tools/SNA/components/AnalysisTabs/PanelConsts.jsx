@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -118,6 +118,22 @@ export const AnalysisDisplayTemplate = ({
     }
   };
 
+  // Check if any datasources are selected
+  const hasSelectedDataSources = selected && selected.length > 0;
+
+  // Auto-update analysis when selection changes (if analysis was already run)
+  useEffect(() => {
+    if (!hasSelectedDataSources) {
+      // Clear results when no datasources are selected
+      setToolResult(null);
+      setErrorMessage("");
+    } else if (toolResult !== null) {
+      // If we have previous results and datasources changed, re-run analysis
+      generateResult();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected]);
+
   return (
     <>
       <Stack direction="column" spacing={2} key={"toolTab_" + toolDescription}>
@@ -125,24 +141,36 @@ export const AnalysisDisplayTemplate = ({
           <Typography sx={{ padding: 2 }}>
             {keyword(toolDescription)}
           </Typography>
-          <Button variant="outlined" onClick={() => generateResult()}>
+          <Button
+            variant="outlined"
+            onClick={() => generateResult()}
+            disabled={!hasSelectedDataSources}
+          >
             {keyword(toolButtonText)}
           </Button>
         </Stack>
-        {toolSettings ? toolSettings.display(toolSettings.args) : <></>}
-        {toolLoading ? (
-          <Box
-            sx={{
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <CircularProgress />
-          </Box>
-        ) : toolResult && errorMessage.length === 0 ? (
-          <ToolVizResult result={toolResult} />
+        {!hasSelectedDataSources ? (
+          <Typography color="text.secondary" sx={{ padding: 2 }}>
+            {keyword("snaTools_noDataSourceSelected")}
+          </Typography>
         ) : (
-          <Typography>{keyword(errorMessage)}</Typography>
+          <>
+            {toolSettings ? toolSettings.display(toolSettings.args) : <></>}
+            {toolLoading ? (
+              <Box
+                sx={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <CircularProgress />
+              </Box>
+            ) : toolResult && errorMessage.length === 0 ? (
+              <ToolVizResult result={toolResult} />
+            ) : (
+              <Typography>{keyword(errorMessage)}</Typography>
+            )}
+          </>
         )}
       </Stack>
     </>

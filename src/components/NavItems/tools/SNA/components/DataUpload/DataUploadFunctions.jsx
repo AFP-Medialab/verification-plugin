@@ -9,22 +9,31 @@ import {
 
 const cleanCrowdTangleFbDataUpload = (uploadedData) => {
   uploadedData.forEach((entry) => (entry.date = entry.date?.slice(0, -4)));
+  let entriesWithTextAndHashtags = uploadedData.map((entry) => {
+    // Extract and parse likes value (use lowercase 'likes' field)
+    const likesValue = entry.likes || entry.Likes || "0";
+    const parsedLikes = parseInt(likesValue) || 0;
 
-  let entriesWithTextAndHashtags = uploadedData.map(
-    ({
-      text,
-      Likes: likes,
-      // ["Message"]: text,
-      ...rest
-    }) => ({
-      ...rest,
-      text,
-      likes: parseInt(likes),
-      hashtags: text?.split(" ").filter((x) => x.length > 2 && x.includes("#")),
-    }),
-  );
+    // Extract and parse Total Views
+    const totalViewsValue = entry["Total Views"] || "0";
+    const parsedViews = parseInt(totalViewsValue) || 0;
 
-  const excludedHeaders = ["date", "id", "username"];
+    // Extract text and create hashtags
+    const text = entry.text || "";
+    const hashtags = String(text)
+      .split(" ")
+      .filter((x) => x.length > 2 && x.includes("#"));
+
+    return {
+      ...entry,
+      text,
+      likes: parsedLikes,
+      views: parsedViews,
+      hashtags,
+    };
+  });
+
+  const excludedHeaders = ["date", "id", "username", "likes", "views"];
 
   let numberHeaders = Object.keys(uploadedData[0]).filter(
     (k) => !isNaN(parseInt(uploadedData[0][k])) && !excludedHeaders.includes(k),
@@ -32,7 +41,7 @@ const cleanCrowdTangleFbDataUpload = (uploadedData) => {
 
   entriesWithTextAndHashtags.forEach((entry) => {
     numberHeaders.forEach(
-      (header) => (entry[header] = parseInt(entry[header])),
+      (header) => (entry[header] = parseInt(entry[header]) || 0),
     );
   });
 
@@ -82,23 +91,71 @@ const cleanTwitterUpload = (uploadedData) => {
   return uploadedData;
 };
 
+/**
+ * Helper function to safely parse numeric values, handling "missing" and other invalid values
+ * @param {*} value - Value to parse
+ * @returns {number} Parsed integer or 0
+ */
+const safeParseInt = (value) => {
+  if (
+    value === "missing" ||
+    value === null ||
+    value === undefined ||
+    value === ""
+  ) {
+    return 0;
+  }
+  const parsed = parseInt(value);
+  return isNaN(parsed) ? 0 : parsed;
+};
+
+/**
+ * Clean TikTok upload data by ensuring numeric fields are properly parsed
+ * @param {Array} uploadedData - Raw uploaded data
+ * @returns {Array} Cleaned data with parsed numeric fields
+ */
+const cleanTiktokUpload = (uploadedData) => {
+  return uploadedData.map((entry) => {
+    return {
+      ...entry,
+      likes: safeParseInt(entry.likes),
+      views: safeParseInt(entry.views),
+      replies: safeParseInt(entry.replies),
+      shares: safeParseInt(entry.shares),
+      reposts: safeParseInt(entry.reposts),
+    };
+  });
+};
+
 export const cleanDataUpload = (
   uploadedData,
   socialMediaSelected,
   selectedCollection,
 ) => {
   let ret;
-  //console.log("socialMediaSelected ", socialMediaSelected)
+  console.log("cleanDataUpload - socialMediaSelected:", socialMediaSelected);
+  console.log(
+    "cleanDataUpload - sample entry before cleaning:",
+    uploadedData[0],
+  );
+
   if (socialMediaSelected === "crowdTangleFb") {
     ret = cleanCrowdTangleFbDataUpload(uploadedData);
   } else if (socialMediaSelected === "customUpload") {
     ret = cleanCustomUpload(uploadedData);
   } else if (socialMediaSelected === "twitter") {
     ret = cleanTwitterUpload(uploadedData);
+  } else if (socialMediaSelected === "tiktok") {
+    console.log("Applying TikTok cleaning...");
+    ret = cleanTiktokUpload(uploadedData);
   } else {
+    console.log("No specific cleaning applied, using raw data");
     ret = uploadedData;
   }
+
   let cleanedRet = ret.filter((entry) => entry.id != undefined);
+
+  console.log("cleanDataUpload - sample entry after cleaning:", cleanedRet[0]);
 
   // Add  collectionID key from selected Collection
   cleanedRet.forEach((entry) => {
@@ -115,7 +172,7 @@ const makeCrowdTangleFbAccountNameMap = (uploadedData) => {
 };
 
 export const getAccountNameMap = (uploadedData, socialMediaSelected) => {
-  if (socialMediaSelected === "crowdTangleFb") {
+  if (socialMediaSelected === "fb") {
     return makeCrowdTangleFbAccountNameMap(uploadedData);
   } else {
     return new Map();

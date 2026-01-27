@@ -14,6 +14,10 @@ db.version(2).stores({
   recording: "id,state",
 });*/
 
+const TIKTOKCOLLECTION = "tiktoks";
+const TWITTERCOLLECTION = "tweets";
+const FBCOLLECTION = "fb";
+
 const snaDB = new DBStorage("snaData", 1, {
   collections: {
     keyPath: "id",
@@ -36,40 +40,44 @@ const snaDB = new DBStorage("snaData", 1, {
       "by-collectionID": { keyPath: ["collectionID", "id"] },
     },
   },
+  fb: {
+    keyPath: ["collectionID", "id"],
+    indexes: {
+      "by-collectionID": { keyPath: ["collectionID", "id"] },
+    },
+  },
+  custom: {
+    keyPath: ["collectionID", "id"],
+    indexes: {
+      "by-collectionID": { keyPath: ["collectionID", "id"] },
+    },
+  },
 });
 
 // Helper functions (moved from background script)
-const getTweetsFromDB = async () => {
-  const dbTweetsRaw = await snaDB.getAll("tweets");
-  /*const dbTweetsResults = dbTweetsRaw.map((rawTweet) => ({
-    collID: rawTweet.collectionID,
-    res: jp({ json: rawTweet, path: "$..tweet_results" })[0],
-  }));
-  const reformatedTweets = dbTweetsResults.map((tweet) => {
-    if (!tweet.res || _.isEmpty(tweet.res)) return;
-    const tweetInfo =
-      tweet.res.result.tweet || tweet.res.result || tweet.res.tweet;
-    return transformTweet(tweetInfo, tweet.collID);
+/**
+ *
+ * @param {*} collectionName
+ * @param {*} format
+ * @returns
+ */
+const getItemsFromDB = async (collectionName, format) => {
+  const raws = await snaDB.getAll(collectionName);
+  const reformatData = raws.map((rawData) => {
+    return format(rawData);
   });
-  return reformatedTweets;*/
-  const reformatedTweets = dbTweetsRaw.map((entry) => {
-    let tweet = entry.tweet;
-    return tweet;
-  });
-  return reformatedTweets;
+  return reformatData;
 };
-
-const getTikToksFromDB = async () => {
-  //const rawTiktoks = await db.tiktoks.toArray();
-  const rawTiktoks = await snaDB.getAll("tiktoks");
-  const reformatedTiktoks = rawTiktoks.map((rawTiktok) => {
-    return transformTiktok(
-      rawTiktok.tiktok,
-      rawTiktok.id,
-      rawTiktok.collectionID,
-    );
-  });
-  return reformatedTiktoks;
+const tweetFormat = (rawData) => {
+  let tweet = rawData.tweet;
+  return tweet;
+};
+const tiktokFormat = (rawData) => {
+  return transformTiktok(rawData.tiktok, rawData.id, rawData.collectionID);
+};
+const postFormat = (rawData) => {
+  let post = rawData.post;
+  return post;
 };
 
 /**
@@ -78,7 +86,18 @@ const getTikToksFromDB = async () => {
  * @returns {string} Table name
  */
 const getTableForPlatform = (platform) => {
-  return platform === "twitter" ? "tweets" : "tiktoks";
+  switch (platform) {
+    case "twitter":
+      return TWITTERCOLLECTION;
+    case "tiktok":
+      return TIKTOKCOLLECTION;
+    case "crowdTangleFb":
+      return "fb";
+    case "fb":
+      return "fb";
+    default:
+      return "custom";
+  }
 };
 
 /**
@@ -87,7 +106,16 @@ const getTableForPlatform = (platform) => {
  * @returns {string} Data key name
  */
 const getDataKeyForPlatform = (platform) => {
-  return platform === "twitter" ? "tweet" : "tiktok";
+  switch (platform) {
+    case "twitter":
+      return "tweet";
+    case "tiktok":
+      return "tiktok";
+    case "crowdTangleFb":
+      return "post";
+    default:
+      return "post";
+  }
 };
 
 /**
@@ -118,6 +146,8 @@ const getRawCollectionByPlatform = async (platform) => {
  */
 const addToCollectionByPlatform = async (platform, data, collectionId) => {
   //TEST if collection exists. If not add it in database
+  console.log("collectionsId ", collectionId);
+  console.log("platform ", platform);
   let collections = await snaDB.get("collections", collectionId);
   if (!collections) collections = await snaDB.put("collections", collectionId);
   //const collections = await snaDB.put("collections", collectionId)
@@ -144,11 +174,20 @@ export const handleSNARecorderChromeMessage = async (
 ) => {
   try {
     if (request.prompt === "getTweets") {
-      const tweetResponse = await getTweetsFromDB();
+      //const tweetResponse = await getTweetsFromDB();
+      const tweetResponse = await getItemsFromDB(
+        TWITTERCOLLECTION,
+        tweetFormat,
+      );
       sendResponse(tweetResponse);
     } else if (request.prompt === "getTiktoks") {
-      const tiktokResp = await getTikToksFromDB();
+      //const tiktokResp = await getTikToksFromDB();
+      const tiktokResp = await getItemsFromDB(TIKTOKCOLLECTION, tiktokFormat);
+      console.log("tiktokResp ", tiktokResp);
       sendResponse(tiktokResp);
+    } else if (request.prompt === "getFBPosts") {
+      const fbPostResp = await getItemsFromDB(FBCOLLECTION, postFormat);
+      sendResponse(fbPostResp);
     } else if (request.prompt === "deleteAll") {
       //await db.delete().then(() => db.open());
       await snaDB.deleteDatabase().then(() => snaDB.init());
@@ -227,7 +266,7 @@ export const handleSNARecorderChromeMessage = async (
  * @param {string} collectionID - Collection ID
  */
 const storeTiktokItem = async (item, collectionID) => {
-  await snaDB.put("tiktoks", {
+  await snaDB.put(TIKTOKCOLLECTION, {
     id: item.id,
     collectionID,
     tiktok: item,
@@ -266,7 +305,7 @@ export const handleRecordedMessage = async (request) => {
           tweet_results[0].result ||
           tweet_results[0].tweet;
         let tweet = transformTweet(content, currentSession);
-        await snaDB.put("tweets", {
+        await snaDB.put(TWITTERCOLLECTION, {
           id: entryId,
           collectionID: currentSession,
           tweet: tweet,
