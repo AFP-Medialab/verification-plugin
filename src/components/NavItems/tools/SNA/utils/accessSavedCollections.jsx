@@ -237,9 +237,6 @@ export const updateCollectionMetrics = async (dataSources, setDataSources) => {
 
   // If there are new collections, fetch their full data
   if (newCollectionIds.length > 0) {
-    console.log(
-      `Found ${newCollectionIds.length} new collection(s) during recording`,
-    );
     hasChanges = true;
 
     // Fetch full data for new collections only
@@ -280,7 +277,6 @@ export const updateCollectionMetrics = async (dataSources, setDataSources) => {
 
   // Only trigger update if something changed
   if (hasChanges) {
-    console.log("Collection metrics updated during recording");
     // Add new collections at the beginning, before existing collections
     setDataSources([...newCollections, ...updated]);
   }
@@ -296,11 +292,6 @@ export const refreshSpecificCollection = async (
   dataSources,
   setDataSources,
 ) => {
-  console.log(
-    `Refreshing collection "${collectionId}" for platforms:`,
-    platforms,
-  );
-
   // Map platform names to sources
   const platformMap = {
     Twitter: "twitter",
@@ -370,14 +361,11 @@ export const refreshSpecificCollection = async (
     if (!fresh) {
       return ds; // Keep unchanged if no match
     }
-
-    console.log(`Updated collection: ${ds.name}`);
     return fresh; // Replace with fresh data
   });
 
   // Add new collections at the beginning
   if (newCollections.length > 0) {
-    console.log(`Added ${newCollections.length} new collection(s)`);
     setDataSources([...newCollections, ...updated]);
   } else {
     setDataSources(updated);
@@ -437,7 +425,6 @@ export const refreshPageSelective = async (
   const fbChanged = detectChanges(fbIndices, savedFBs);
 
   if (!twitterChanged && !tiktokChanged && !fbChanged) {
-    console.log("No changes detected in collections");
     setLoading(false);
     return;
   }
@@ -535,7 +522,6 @@ export const refreshPage = async (setLoading, dataSources, setDataSources) => {
       ...uploadedCollections,
     ];
     setDataSources(updatedDS);
-    console.log("New data source ", dataSources);
     setLoading(false);
   }
 };
@@ -565,7 +551,6 @@ export const getSelectedSourcesNameMaps = (dataSources, selected) => {
       )
       .flatMap((m) => [...m]),
   );
-  console.log("selected Maps ", nameMaps);
   return nameMaps;
 };
 

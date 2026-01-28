@@ -32,6 +32,4 @@
       }
     }
   }, false);
-
-  console.log('SNA Content Script Bridge initialized');
 })();

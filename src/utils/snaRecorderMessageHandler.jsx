@@ -149,7 +149,6 @@ const addToCollectionByPlatform = async (platform, data, collectionId) => {
   let collections = await snaDB.get("collections", collectionId);
   if (!collections) collections = await snaDB.put("collections", collectionId);
   //const collections = await snaDB.put("collections", collectionId)
-  console.log("colllections ...", collections);
   const table = getTableForPlatform(platform);
   const dataKey = getDataKeyForPlatform(platform);
 
@@ -177,11 +176,11 @@ const addToCollectionByPlatform = async (platform, data, collectionId) => {
       totalProcessed += chunk.length;
 
       // Log progress for large datasets
-      if (data.length > CHUNK_SIZE) {
+      /* if (data.length > CHUNK_SIZE) {
         console.log(
           `Processed ${totalProcessed}/${data.length} items for ${platform}`,
         );
-      }
+      }*/
     }
 
     console.log(
@@ -301,7 +300,6 @@ const storeTiktokItem = async (item, collectionID) => {
 };
 
 export const handleRecordedMessage = async (request) => {
-  console.log("recording ... ", request);
   const entryIds = jp({ json: request, path: "$..entryId" });
   const session = await snaDB.getAll("recording");
 
@@ -309,6 +307,7 @@ export const handleRecordedMessage = async (request) => {
   if (currentSession === false) {
     return;
   }
+
   if (request.prompt === "tiktokCapture") {
     // Tiktok responses can have item details in either itemList or data field
     const itemsFromList = request.content.itemList || [];
@@ -321,23 +320,57 @@ export const handleRecordedMessage = async (request) => {
     return;
   }
 
+  // Twitter capture
   if (jp({ json: request, path: "$..entryId" }).length > 0) {
     for (let entryId of entryIds) {
       let tweet_results = jp({
         json: request,
         path: `$..entries[?(@.entryId=="${entryId}")]..tweet_results`,
       });
+
       if (tweet_results.length > 0) {
         let content =
           tweet_results[0].result.tweet ||
           tweet_results[0].result ||
           tweet_results[0].tweet;
+
         let tweet = transformTweet(content, currentSession);
         await snaDB.put(TWITTERCOLLECTION, {
           id: entryId,
           collectionID: currentSession,
           tweet: tweet,
         });
+      }
+    }
+  } else {
+    // Try alternative patterns for Twitter data
+    const timelineInstructions = jp({
+      json: request,
+      path: "$..timeline..instructions[*]..entries[*]",
+    });
+
+    if (timelineInstructions.length > 0) {
+      for (let entry of timelineInstructions) {
+        if (entry.entryId && entry.content) {
+          const tweet_results = jp({
+            json: entry,
+            path: "$..tweet_results",
+          });
+
+          if (tweet_results.length > 0) {
+            let content =
+              tweet_results[0].result.tweet ||
+              tweet_results[0].result ||
+              tweet_results[0].tweet;
+
+            let tweet = transformTweet(content, currentSession);
+            await snaDB.put(TWITTERCOLLECTION, {
+              id: entry.entryId,
+              collectionID: currentSession,
+              tweet: tweet,
+            });
+          }
+        }
       }
     }
   }

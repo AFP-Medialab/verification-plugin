@@ -224,8 +224,6 @@ const DataUploadModal = ({
     selectedCollection,
   ) => {
     setIsUploading(true);
-    console.log("uploadedData  ", uploadedData);
-    console.log("socialMediaSelected  ", socialMediaSelected);
     let fieldLabelsMap =
       socialMediaSelected.length > 0 && socialMediaSelected != "customUpload"
         ? uploadTemplates[socialMediaSelected].defaultFieldsMap
@@ -302,7 +300,7 @@ const DataUploadModal = ({
               justifyContent="space-between"
             >
               <Typography id="modal-modal-title" variant="h6" component="h2">
-                {keyword("uploadModal_modalTitle")}-pro
+                {keyword("uploadModal_modalTitle")}
               </Typography>
               <IconButton
                 onClick={handleModalClose}

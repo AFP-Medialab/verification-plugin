@@ -69,12 +69,16 @@
 
   XHR.send = function () {
     this.addEventListener("load", function () {
-      if (
-        this._url.includes("graphql") &&
-        this.response.slice(0, 10).includes("data")
-      ) {
+      // Check if this is a Twitter/X GraphQL request
+      if (this._url && this._url.includes("graphql")) {
         try {
-          sendToExtension(JSON.parse(this.responseText));
+          // Parse response
+          const twitterData = JSON.parse(this.responseText);
+
+          // Check if response contains data (Twitter GraphQL responses always have a 'data' field)
+          if (twitterData && twitterData.data) {
+            sendToExtension(twitterData);
+          }
         } catch (error) {
           console.error('SNA Recorder: Error parsing Twitter response:', error);
         }
@@ -83,5 +87,4 @@
     return send.apply(this, arguments);
   };
 
-  console.log('SNA Page Context Script initialized');
 })();

@@ -666,10 +666,6 @@ const SNA = () => {
 
         // Detect when recording STARTS (load all collections to show new one)
         if (!recordingState.current.isRecording && isRecording) {
-          console.log(
-            `Recording started for collection "${collectionId}" - loading all collections`,
-          );
-
           // Do a full refresh to show the new collection alongside existing ones
           setInitLoading(true);
           const allCollections = await initializePage();
@@ -689,10 +685,6 @@ const SNA = () => {
 
         // Detect when recording STOPS
         if (recordingState.current.isRecording && !isRecording) {
-          console.log(
-            `Recording stopped for collection "${recordingState.current.collectionId}" - refreshing recorded collections only`,
-          );
-
           // Targeted refresh: only reload the collections that were being recorded
           await refreshSpecificCollection(
             recordingState.current.collectionId,
@@ -722,9 +714,6 @@ const SNA = () => {
         };
 
         if (isRecording) {
-          console.log(
-            `Recording active for "${collectionId}" - updating metrics only`,
-          );
           // Update only metrics (counts), not full content
           await updateCollectionMetrics(
             dataSourcesRef.current,

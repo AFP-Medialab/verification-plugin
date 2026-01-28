@@ -420,17 +420,24 @@ export default defineBackground(() => {
       // TikTok: { prompt: "tiktokCapture", content: {...} }
       // Twitter: GraphQL response with nested data structure
       const isTiktokCapture = request.prompt === "tiktokCapture";
+
+      // Twitter messages have a 'data' field at the root level (GraphQL responses)
       const isTwitterCapture =
         request.data &&
-        // Check for Twitter GraphQL response patterns
+        typeof request.data === "object" &&
+        // Check for various Twitter GraphQL response patterns
         (request.data.entryId ||
-          // Or check for entries array which is common in Twitter API
-          (Array.isArray(request.data.entries) &&
-            request.data.entries.length > 0));
+          (request.data.entries && Array.isArray(request.data.entries)) ||
+          // Twitter Home Timeline, Search, User tweets, etc.
+          (request.data.home && request.data.home.home_timeline_urt) ||
+          request.data.search_by_raw_query ||
+          (request.data.user && request.data.user.result) ||
+          // Check for timeline instructions
+          request.data.threaded_conversation_with_injections_v2);
 
       if (isTiktokCapture || isTwitterCapture) {
         handleRecordedMessage(request);
-        return false; // No async response needed
+        return false;
       }
 
       // Handle other SNA messages from popup/UI
