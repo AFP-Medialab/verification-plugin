@@ -56,9 +56,42 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
   const [newCollectionName, setNewCollectionName] = useState("");
   const [selectedSocialMedia, setSelectedSocialMedia] = useState([]);
 
+  // Initial load of recording info
   useEffect(() => {
-    getRecordingInfo(setCollections, setRecording, setSelectedCollection);
+    getRecordingInfo(
+      setCollections,
+      setRecording,
+      setSelectedCollection,
+      setSelectedSocialMedia,
+    );
   }, []);
+
+  // Update recording state when drawer opens or when visibility changes
+  useEffect(() => {
+    if (!isPanelOpen) return;
+
+    // Update immediately when panel opens
+    getRecordingInfo(
+      setCollections,
+      setRecording,
+      setSelectedCollection,
+      setSelectedSocialMedia,
+    );
+
+    // Set up polling interval to keep state fresh while panel is open
+    const intervalId = setInterval(() => {
+      getRecordingInfo(
+        setCollections,
+        setRecording,
+        setSelectedCollection,
+        setSelectedSocialMedia,
+      );
+    }, 1000); // Poll every second
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [isPanelOpen]);
 
   const version = pkg.version;
 

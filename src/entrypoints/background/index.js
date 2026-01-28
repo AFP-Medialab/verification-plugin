@@ -416,14 +416,28 @@ export default defineBackground(() => {
 
   browser.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
+      // Check if this is a recorded message from content script bridge
+      // TikTok: { prompt: "tiktokCapture", content: {...} }
+      // Twitter: GraphQL response with nested data structure
+      const isTiktokCapture = request.prompt === "tiktokCapture";
+      const isTwitterCapture =
+        request.data &&
+        // Check for Twitter GraphQL response patterns
+        (request.data.entryId ||
+          // Or check for entries array which is common in Twitter API
+          (Array.isArray(request.data.entries) &&
+            request.data.entries.length > 0));
+
+      if (isTiktokCapture || isTwitterCapture) {
+        handleRecordedMessage(request);
+        return false; // No async response needed
+      }
+
+      // Handle other SNA messages from popup/UI
       handleSNARecorderChromeMessage(request, sender, sendResponse);
       return true;
     },
   );
-
-  browser.runtime.onMessageExternal.addListener(function (request) {
-    handleRecordedMessage(request);
-  });
 
   // Firefox MV3 requires a callback function for runtime.onStartup
   browser.runtime.onStartup.addListener(() => {

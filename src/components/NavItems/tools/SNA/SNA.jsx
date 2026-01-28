@@ -630,7 +630,7 @@ const SNA = () => {
       }
 
       // Load from IndexedDB if no cache
-      console.log("Loading data from IndexedDB");
+      //console.log("Loading data from IndexedDB");
       dispatch(setSNALoading(true));
       const loadedCollections = await initializePage();
       updateDataSources(loadedCollections);

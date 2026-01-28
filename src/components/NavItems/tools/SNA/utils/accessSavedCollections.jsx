@@ -213,7 +213,7 @@ const getCollectionCounts = async (source) => {
 };
 
 /**
- * Lightweight update that only refreshes collection metrics (counts)
+ * Lightweight update that refreshes collection metrics (counts) and adds new collections
  * without reloading the full content - used during active recording
  */
 export const updateCollectionMetrics = async (dataSources, setDataSources) => {
@@ -224,10 +224,39 @@ export const updateCollectionMetrics = async (dataSources, setDataSources) => {
 
   const allCounts = [...twitterCounts, ...tiktokCounts, ...fbCounts];
 
-  // Check if any metrics changed
-  let hasChanges = false;
+  // Find existing collection IDs in dataSources
+  const existingIds = dataSources.map((ds) => ds.id);
 
-  // Update only the metrics, keeping content intact
+  // Find new collections that don't exist in dataSources yet
+  const newCollectionIds = allCounts
+    .filter((count) => !existingIds.includes(count.id))
+    .map((count) => count.id);
+
+  let hasChanges = false;
+  let newCollections = [];
+
+  // If there are new collections, fetch their full data
+  if (newCollectionIds.length > 0) {
+    console.log(
+      `Found ${newCollectionIds.length} new collection(s) during recording`,
+    );
+    hasChanges = true;
+
+    // Fetch full data for new collections only
+    const newTwitter = (await getSavedCollections("twitter")).filter((col) =>
+      newCollectionIds.includes(col.id),
+    );
+    const newTiktok = (await getSavedCollections("tiktok")).filter((col) =>
+      newCollectionIds.includes(col.id),
+    );
+    const newFb = (await getSavedCollections("fb")).filter((col) =>
+      newCollectionIds.includes(col.id),
+    );
+
+    newCollections = [...newTwitter, ...newTiktok, ...newFb];
+  }
+
+  // Update only the metrics for existing collections, keeping content intact
   const updated = dataSources.map((ds) => {
     // Skip file uploads
     if (ds.source === "fileUpload") return ds;
@@ -252,7 +281,8 @@ export const updateCollectionMetrics = async (dataSources, setDataSources) => {
   // Only trigger update if something changed
   if (hasChanges) {
     console.log("Collection metrics updated during recording");
-    setDataSources(updated);
+    // Add new collections at the beginning, before existing collections
+    setDataSources([...newCollections, ...updated]);
   }
 };
 

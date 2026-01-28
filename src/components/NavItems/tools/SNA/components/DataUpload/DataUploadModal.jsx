@@ -255,7 +255,7 @@ const DataUploadModal = ({
       selectedCollection,
     );
     try {
-      await chrome.runtime.sendMessage({
+      await browser.runtime.sendMessage({
         prompt: "addToCollection",
         data: entriesCleaned,
         platform: socialMediaSelected,

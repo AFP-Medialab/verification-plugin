@@ -204,16 +204,13 @@ export const handleSNARecorderChromeMessage = async (
 ) => {
   try {
     if (request.prompt === "getTweets") {
-      //const tweetResponse = await getTweetsFromDB();
       const tweetResponse = await getItemsFromDB(
         TWITTERCOLLECTION,
         tweetFormat,
       );
       sendResponse(tweetResponse);
     } else if (request.prompt === "getTiktoks") {
-      //const tiktokResp = await getTikToksFromDB();
       const tiktokResp = await getItemsFromDB(TIKTOKCOLLECTION, tiktokFormat);
-      console.log("tiktokResp ", tiktokResp);
       sendResponse(tiktokResp);
     } else if (request.prompt === "getFBPosts") {
       const fbPostResp = await getItemsFromDB(FBCOLLECTION, postFormat);
@@ -304,6 +301,7 @@ const storeTiktokItem = async (item, collectionID) => {
 };
 
 export const handleRecordedMessage = async (request) => {
+  console.log("recording ... ", request);
   const entryIds = jp({ json: request, path: "$..entryId" });
   const session = await snaDB.getAll("recording");
 
@@ -351,7 +349,7 @@ const PLATFORM_URLS = {
 };
 async function getCurrentTab() {
   let queryOptions = { active: true, lastFocusedWindow: true };
-  let [tab] = await chrome.tabs.query(queryOptions);
+  let [tab] = await browser.tabs.query(queryOptions);
   return tab;
 }
 
@@ -380,24 +378,34 @@ export const handleRecorderOnCommit = async (details) => {
     return;
   }
   try {
-    await chrome.scripting.executeScript({
+    const scriptUrl = browser.runtime.getURL("content-scripts/inject.js");
+
+    // Step 1: Inject the content script bridge (runs in content script context)
+    await browser.scripting.executeScript({
+      target: { tabId: currentTab.id, allFrames: false },
+      files: ["content-scripts/sna-bridge.js"],
+    });
+
+    // Step 2: Inject the page context script (runs in page context)
+    // The page script communicates with the bridge via window.postMessage
+    await browser.scripting.executeScript({
       target: { tabId: currentTab.id, allFrames: true },
-      function: () => {
-        let pluginId = chrome.runtime.id;
+      func: (url) => {
         let s = document.createElement("script");
-        s.dataset.params = pluginId;
-        s.src = chrome.runtime.getURL("content-scripts/inject.js");
+        s.src = url;
         (document.head || document.documentElement).appendChild(s);
       },
+      args: [scriptUrl],
     });
   } catch (e) {
+    console.error("SNA Recorder: Error injecting scripts:", e);
     throw Error(e);
   }
 };
 // Initialize the snaDB
 export const initializeMessageHandler = async () => {
   await snaDB.init();
-  console.log("Message handler initialized with snaDB:", snaDB);
+  //console.log("Message handler initialized with snaDB:", snaDB);
 };
 
 // Export the databases for use in other modules if needed

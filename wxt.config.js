@@ -44,7 +44,7 @@ export default defineConfig({
 
     web_accessible_resources: [
       {
-        resources: ["c2paAssets/toolkit_bg.wasm", "content-scripts/inject.js"],
+        resources: ["c2paAssets/toolkit_bg.wasm", "content-scripts/inject.js", "content-scripts/sna-bridge.js"],
         matches: ["<all_urls>"],
       },
     ],
