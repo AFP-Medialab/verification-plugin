@@ -217,6 +217,14 @@ const getCollectionCounts = async (source) => {
  * without reloading the full content - used during active recording
  */
 export const updateCollectionMetrics = async (dataSources, setDataSources) => {
+  // Ensure dataSources is an array
+  if (!Array.isArray(dataSources)) {
+    console.warn(
+      "updateCollectionMetrics: dataSources is not an array, skipping update",
+    );
+    return;
+  }
+
   // Get current counts from IndexedDB (without full content)
   const twitterCounts = await getCollectionCounts("twitter");
   const tiktokCounts = await getCollectionCounts("tiktok");
@@ -292,6 +300,13 @@ export const refreshSpecificCollection = async (
   dataSources,
   setDataSources,
 ) => {
+  // Ensure dataSources is an array, if not do a full page initialization
+  if (!Array.isArray(dataSources)) {
+    const allCollections = await initializePage();
+    setDataSources(allCollections);
+    return;
+  }
+
   // Map platform names to sources
   const platformMap = {
     Twitter: "twitter",
@@ -382,6 +397,14 @@ export const refreshPageSelective = async (
   setDataSources,
 ) => {
   setLoading(true);
+
+  // Ensure dataSources is an array, if not do a full page initialization
+  if (!Array.isArray(dataSources)) {
+    const allCollections = await initializePage();
+    setDataSources(allCollections);
+    setLoading(false);
+    return;
+  }
 
   // Fetch all collections from IndexedDB
   let savedTweets = await getSavedCollections("twitter");
