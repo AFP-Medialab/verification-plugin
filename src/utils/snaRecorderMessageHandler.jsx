@@ -52,12 +52,6 @@ const snaDB = new DBStorage("snaData", 1, {
       "by-collectionID": { keyPath: ["collectionID", "id"] },
     },
   },
-  custom_3: {
-    keyPath: ["collectionID", "id"],
-    indexes: {
-      "by-collectionID": { keyPath: ["collectionID", "id"] },
-    },
-  },
 });
 
 // Helper functions (moved from background script)
