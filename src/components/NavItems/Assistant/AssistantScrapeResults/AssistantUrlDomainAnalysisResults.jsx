@@ -20,7 +20,7 @@ import {
 } from "@/components/NavItems/Assistant/AssistantCheckResults/assistantUtils";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
-import { setAssuranceExpanded } from "@/redux/actions/tools/assistantActions";
+import { setDomainAnalysisExpanded } from "@/redux/actions/tools/assistantActions";
 
 import {
   TransHtmlDoubleLineBreak,
@@ -36,8 +36,8 @@ const AssistantSCResults = () => {
   const classes = useMyStyles();
 
   // state
-  const assuranceExpanded = useSelector(
-    (state) => state.assistant.assuranceExpanded,
+  const domainAnalysisExpanded = useSelector(
+    (state) => state.assistant.domainAnalysisExpanded,
   );
   const positiveSourceCred = useSelector(
     (state) => state.assistant.positiveSourceCred,
@@ -99,7 +99,9 @@ const AssistantSCResults = () => {
           >
             <IconButton
               className={classes.assistantIconRight}
-              onClick={() => dispatch(setAssuranceExpanded(!assuranceExpanded))}
+              onClick={() =>
+                dispatch(setDomainAnalysisExpanded(!domainAnalysisExpanded))
+              }
               sx={{ p: 1 }}
             >
               <ExpandMoreIcon color={"primary"} />
@@ -137,7 +139,7 @@ const AssistantSCResults = () => {
 
         <Grid size={{ xs: 12 }}>
           <Collapse
-            in={assuranceExpanded}
+            in={domainAnalysisExpanded}
             className={classes.assistantBackground}
           >
             <Box mt={3} ml={2}>

@@ -1,16 +1,20 @@
 import React from "react";
 import { Trans } from "react-i18next";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardHeader from "@mui/material/CardHeader";
+import CardMedia from "@mui/material/CardMedia";
+import Collapse from "@mui/material/Collapse";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
+import { WarningAmber } from "@mui/icons-material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import DbkfMediaResults from "@/components/NavItems/Assistant/AssistantCheckResults/DbkfMediaResults";
@@ -19,6 +23,7 @@ import PreviousFactCheckResults from "@/components/NavItems/Assistant/AssistantC
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { ROLES } from "@/constants/roles";
+import { setFactChecksExpanded } from "@/redux/actions/tools/assistantActions";
 
 import {
   TransDbkfLink,
@@ -31,9 +36,15 @@ import {
 const AssistantWarnings = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const classes = useMyStyles();
+  const dispatch = useDispatch();
 
   // checking if user logged in
   const role = useSelector((state) => state.userSession.user.roles);
+
+  // expanded view
+  const factChecksExpanded = useSelector(
+    (state) => state.assistant.factChecksExpanded,
+  );
 
   // state
   const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
@@ -123,81 +134,150 @@ const AssistantWarnings = () => {
   }
 
   return (
-    <Card variant="outlined" id="warnings">
-      <CardHeader
-        className={classes.assistantCardHeader}
-        title={
-          <Alert severity="warning" sx={{ bgcolor: "background.paper" }}>
-            <Typography>{keyword("warnings_title")}</Typography>
-          </Alert>
-        }
-        action={
-          <Tooltip
-            interactive={"true"}
-            title={
-              <>
-                <Trans t={keyword} i18nKey="dbkf_tooltip" />
-                <TransHtmlDoubleLineBreak keyword={keyword} />
-                <TransOntotextAuthor keyword={keyword} />
-                <TransHtmlDoubleLineBreak keyword={keyword} />
-                <TransDbkfLink keyword={keyword} />
-                {role.includes(ROLES.BETA_TESTER) ? (
-                  <>
-                    <TransHtmlDoubleLineBreak keyword={keyword} />
-                    <Trans t={keyword} i18nKey="previous_fact_checks_tooltip" />
-                    <TransHtmlDoubleLineBreak keyword={keyword} />
-                    <TransKinitAuthor keyword={keyword} />
-                    <TransHtmlDoubleLineBreak keyword={keyword} />
-                    <TransPrevFactChecksLink keyword={keyword} />
-                  </>
-                ) : null}
-              </>
-            }
-            classes={{ tooltip: classes.assistantTooltip }}
-          >
-            <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
-          </Tooltip>
-        }
-      />
-      <CardContent>
-        {(dbkfImageMatch || dbkfVideoMatch) && <DbkfMediaResults />}
+    <Card
+      variant={"outlined"}
+      className={classes.sourceCredibilityBorder}
+      id="warnings"
+      height="400"
+    >
+      <Grid container>
+        <Grid size={{ xs: 11 }} className={classes.displayFlex}>
+          {/* icon */}
+          <CardMedia>
+            <Box
+              sx={{
+                m: 1,
+              }}
+            >
+              <WarningAmber fontSize={"large"} color={"warning"} />
+            </Box>
+          </CardMedia>
 
-        {/* not logged in as beta tester, DBKF only */}
-        {!role.includes(ROLES.BETA_TESTER) && dbkfTextMatch && (
-          <DbkfTextResults
-            results={separateDbkfTextMatch}
-            prevFactChecksExist={false}
-          />
-        )}
-
-        {/* logged in as beta tester, DBKF and FCSS/prevFactChecks */}
-        {role.includes(ROLES.BETA_TESTER) &&
-          prevFactChecksDone &&
-          (updatedPrevFactCheckResult.length > 0 ? (
-            <>
-              <DbkfTextResults
-                results={uniqueSeparateDbkfTextMatch}
-                prevFactChecksExist={true}
-              />
-              <PreviousFactCheckResults results={updatedPrevFactCheckResult} />
-            </>
-          ) : (
-            <DbkfTextResults results={dbkfTextMatch} />
-          ))}
-
-        {role.includes(ROLES.BETA_TESTER) && prevFactChecksLoading && (
-          <Stack
-            direction="column"
-            spacing={4}
+          {/* spacing */}
+          <Box
             sx={{
-              p: 4,
+              m: 1,
+            }}
+          />
+
+          {/* title */}
+          <Box
+            sx={{
+              mt: 1.5,
             }}
           >
-            <Skeleton variant="rounded" height={40} />
-            <Skeleton variant="rounded" width={400} height={40} />
-          </Stack>
-        )}
-      </CardContent>
+            <Typography component={"span"} variant={"h6"}>
+              {keyword("warnings_title")}
+            </Typography>
+          </Box>
+
+          {/* expand button */}
+          <Box
+            sx={{
+              pr: 1,
+              pt: 1,
+            }}
+          >
+            <IconButton
+              className={classes.assistantIconRight}
+              onClick={() =>
+                dispatch(setFactChecksExpanded(!factChecksExpanded))
+              }
+              sx={{ p: 1 }}
+            >
+              <ExpandMoreIcon color={"primary"} />
+            </IconButton>
+          </Box>
+        </Grid>
+
+        <Grid size={{ xs: 1 }}>
+          {/* help tooltip */}
+          <Box
+            align="right"
+            sx={{
+              mt: 1.5,
+            }}
+          >
+            <Tooltip
+              interactive={"true"}
+              title={
+                <>
+                  <Trans t={keyword} i18nKey="dbkf_tooltip" />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
+                  <TransOntotextAuthor keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
+                  <TransDbkfLink keyword={keyword} />
+                  {role.includes(ROLES.BETA_TESTER) ? (
+                    <>
+                      <TransHtmlDoubleLineBreak keyword={keyword} />
+                      <Trans
+                        t={keyword}
+                        i18nKey="previous_fact_checks_tooltip"
+                      />
+                      <TransHtmlDoubleLineBreak keyword={keyword} />
+                      <TransKinitAuthor keyword={keyword} />
+                      <TransHtmlDoubleLineBreak keyword={keyword} />
+                      <TransPrevFactChecksLink keyword={keyword} />
+                    </>
+                  ) : null}
+                </>
+              }
+              classes={{ tooltip: classes.assistantTooltip }}
+            >
+              <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+            </Tooltip>
+          </Box>
+        </Grid>
+
+        <Grid size={{ xs: 12 }}>
+          <Collapse
+            in={factChecksExpanded}
+            className={classes.assistantBackground}
+          >
+            <Box mt={3} ml={2}>
+              {(dbkfImageMatch || dbkfVideoMatch) && <DbkfMediaResults />}
+
+              {/* not logged in as beta tester, DBKF only */}
+              {!role.includes(ROLES.BETA_TESTER) && dbkfTextMatch && (
+                <DbkfTextResults
+                  results={separateDbkfTextMatch}
+                  prevFactChecksExist={false}
+                />
+              )}
+
+              {/* logged in as beta tester, DBKF and FCSS/prevFactChecks */}
+              {role.includes(ROLES.BETA_TESTER) &&
+                prevFactChecksDone &&
+                (updatedPrevFactCheckResult.length > 0 ? (
+                  <>
+                    <DbkfTextResults
+                      results={uniqueSeparateDbkfTextMatch}
+                      prevFactChecksExist={true}
+                    />
+                    <PreviousFactCheckResults
+                      results={updatedPrevFactCheckResult}
+                    />
+                  </>
+                ) : (
+                  <DbkfTextResults results={dbkfTextMatch} />
+                ))}
+
+              {role.includes(ROLES.BETA_TESTER) && prevFactChecksLoading && (
+                <Stack
+                  direction="column"
+                  spacing={4}
+                  sx={{
+                    p: 4,
+                  }}
+                >
+                  <Skeleton variant="rounded" height={40} />
+                  <Skeleton variant="rounded" width={400} height={40} />
+                </Stack>
+              )}
+            </Box>
+          </Collapse>
+        </Grid>
+      </Grid>
     </Card>
   );
 };
