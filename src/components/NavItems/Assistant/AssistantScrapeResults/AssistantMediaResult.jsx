@@ -67,9 +67,6 @@ const AssistantMediaResult = () => {
   const dbkfImageMatch = useSelector((state) => state.assistant.dbkfImageMatch);
   const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
 
-  const factChecksExpanded = useSelector(
-    (state) => state.assistant.factChecksExpanded,
-  );
   const resultIsImage = resultProcessType === TOOLS_CATEGORIES.IMAGE;
 
   // local control state
