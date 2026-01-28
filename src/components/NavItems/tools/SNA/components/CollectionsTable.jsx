@@ -503,16 +503,18 @@ const CollectionsTable = ({
 // Custom comparison function for React.memo
 // Only re-render if actual data content changes, not just reference
 const arePropsEqual = (prevProps, nextProps) => {
-  // Quick reference check
-  if (prevProps.dataSources === nextProps.dataSources) return true;
-
-  // Check if selection changed
+  // IMPORTANT: Check selection state FIRST before checking dataSources
+  // Otherwise checkboxes won't update when selection changes
   if (
     prevProps.selected.length !== nextProps.selected.length ||
-    !prevProps.selected.every((id, idx) => id === nextProps.selected[idx])
+    !prevProps.selected.every((id) => nextProps.selected.includes(id)) ||
+    !nextProps.selected.every((id) => prevProps.selected.includes(id))
   ) {
-    return false;
+    return false; // Selection changed, need to re-render
   }
+
+  // Quick reference check for dataSources
+  if (prevProps.dataSources === nextProps.dataSources) return true;
 
   // Check if dataSources content actually changed
   if (prevProps.dataSources.length !== nextProps.dataSources.length) {

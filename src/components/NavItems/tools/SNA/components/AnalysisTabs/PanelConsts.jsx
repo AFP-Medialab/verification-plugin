@@ -131,7 +131,6 @@ export const AnalysisDisplayTemplate = ({
       // If we have previous results and datasources changed, re-run analysis
       generateResult();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
   return (
