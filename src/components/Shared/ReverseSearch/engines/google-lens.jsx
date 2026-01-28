@@ -48,7 +48,7 @@ export const reverseImageSearchGoogleLensLocal = async (
     const dataUrl = await blobToDataUrl(imgBlob);
 
     // Open Google homepage (this is where Google Lens upload starts)
-    const tab = await chrome.tabs.create({
+    const tab = await browser.tabs.create({
       url: "https://www.google.com/webhp?hl=en",
       active: !isRequestFromContextMenu,
     });
@@ -57,16 +57,16 @@ export const reverseImageSearchGoogleLensLocal = async (
     await new Promise((resolve) => {
       const listener = (tabId, changeInfo) => {
         if (tabId === tab.id && changeInfo.status === "complete") {
-          chrome.tabs.onUpdated.removeListener(listener);
+          browser.tabs.onUpdated.removeListener(listener);
           // Add a small delay to ensure page is fully interactive
           setTimeout(resolve, 1000);
         }
       };
-      chrome.tabs.onUpdated.addListener(listener);
+      browser.tabs.onUpdated.addListener(listener);
     });
 
     // Inject the content script inline and execute upload
-    const results = await chrome.scripting.executeScript({
+    const results = await browser.scripting.executeScript({
       target: { tabId: tab.id },
       func: uploadToGoogleLens,
       args: [dataUrl, "image.jpg"],

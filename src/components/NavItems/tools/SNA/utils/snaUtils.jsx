@@ -22,7 +22,7 @@ export const handleAddCollection = (
     // Use functional state update to avoid depending on collections array
     setCollections((prevCollections) => {
       if (!prevCollections.includes(newCollectionName)) {
-        chrome.runtime.sendMessage({
+        browser.runtime.sendMessage({
           prompt: "addCollection",
           newCollectionName: newCollectionName,
         });
@@ -42,15 +42,17 @@ export const handleAddCollection = (
  * @param {Function} setCollections - State setter for collections array
  * @param {Function} [setRecording] - Optional state setter for recording status
  * @param {Function} [setSelectedCollection] - Optional state setter for selected collection
+ * @param {Function} [setSelectedSocialMedia] - Optional state setter for selected social media platforms
  * @returns {Promise<void>}
  */
 export const getRecordingInfo = async (
   setCollections,
   setRecording = null,
   setSelectedCollection = null,
+  setSelectedSocialMedia = null,
 ) => {
   try {
-    let recInfo = await chrome.runtime.sendMessage({
+    let recInfo = await browser.runtime.sendMessage({
       prompt: "getRecordingInfo",
     });
 
@@ -84,6 +86,22 @@ export const getRecordingInfo = async (
             return newSelected;
           }
           return prevSelected;
+        });
+      }
+
+      if (
+        isRecording &&
+        setSelectedSocialMedia &&
+        recInfo.recording[0]?.platforms
+      ) {
+        const platforms = recInfo.recording[0].platforms
+          .split(",")
+          .filter((p) => p);
+        setSelectedSocialMedia((prevPlatforms) => {
+          if (JSON.stringify(prevPlatforms) !== JSON.stringify(platforms)) {
+            return platforms;
+          }
+          return prevPlatforms;
         });
       }
     }
