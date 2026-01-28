@@ -1,3 +1,70 @@
+import { getAccountNameMap } from "../components/DataUpload/DataUploadFunctions";
+
+/**
+ * Clean Facebook data to ensure views and likes fields are properly formatted
+ * @param {Array} entries - Facebook entries to clean
+ * @returns {Array} Cleaned entries with views and likes as integers
+ */
+const cleanFacebookData = (entries) => {
+  return entries.map((entry) => {
+    const cleanedEntry = { ...entry };
+
+    // Map "Total Views" to views if it exists
+    if (entry["Total Views"] !== undefined) {
+      cleanedEntry.views = parseInt(entry["Total Views"]) || 0;
+    } else if (entry.views !== undefined) {
+      cleanedEntry.views = parseInt(entry.views) || 0;
+    } else {
+      cleanedEntry.views = 0;
+    }
+
+    // Ensure likes is an integer (use lowercase 'likes' field)
+    if (entry.likes !== undefined) {
+      cleanedEntry.likes = parseInt(entry.likes) || 0;
+    } else {
+      cleanedEntry.likes = 0;
+    }
+
+    return cleanedEntry;
+  });
+};
+
+/**
+ * Helper function to safely parse numeric values, handling "missing" and other invalid values
+ * @param {*} value - Value to parse
+ * @returns {number} Parsed integer or 0
+ */
+const safeParseInt = (value) => {
+  if (
+    value === "missing" ||
+    value === null ||
+    value === undefined ||
+    value === ""
+  ) {
+    return 0;
+  }
+  const parsed = parseInt(value);
+  return isNaN(parsed) ? 0 : parsed;
+};
+
+/**
+ * Clean TikTok data to ensure numeric fields are properly formatted
+ * @param {Array} entries - TikTok entries to clean
+ * @returns {Array} Cleaned entries with numeric fields as integers
+ */
+const cleanTiktokData = (entries) => {
+  return entries.map((entry) => {
+    return {
+      ...entry,
+      likes: safeParseInt(entry.likes),
+      views: safeParseInt(entry.views),
+      replies: safeParseInt(entry.replies),
+      shares: safeParseInt(entry.shares),
+      reposts: safeParseInt(entry.reposts),
+    };
+  });
+};
+
 const collectionAccessors = {
   twitter: {
     prompt: "getTweets",
@@ -11,16 +78,22 @@ const collectionAccessors = {
     idTag: "tiktoks~",
     sourceTag: "tiktok",
   },
+  fb: {
+    prompt: "getFBPosts",
+    nameTag: "~FACEBOOK",
+    idTag: "fb-post~",
+    sourceTag: "fb",
+  },
 };
 
 export const getCollectionMetrics = (collectionEntries) => {
   let uniqueUsers = collectionEntries.map((e) => e.username).filter(onlyUnique);
   let totalLikes = collectionEntries
-    .map((e) => parseInt(e.likes))
-    .reduce((acc, curr) => acc + curr || 0, 0);
+    .map((e) => safeParseInt(e.likes))
+    .reduce((acc, curr) => acc + curr, 0);
   let totalViews = collectionEntries
-    .map((e) => parseInt(e.views))
-    .reduce((acc, curr) => acc + curr || 0, 0);
+    .map((e) => safeParseInt(e.views))
+    .reduce((acc, curr) => acc + curr, 0);
 
   return [
     {
@@ -52,7 +125,6 @@ export const getSavedCollections = async (collectionSource) => {
   const allCollectionEntries = await browser.runtime.sendMessage({
     prompt: collectionAccessors[collectionSource].prompt,
   });
-
   const filteredEntries = allCollectionEntries.filter((x) => x != undefined);
   const entriesGroupedByCollection = Object.groupBy(
     filteredEntries,
@@ -68,8 +140,19 @@ export const getSavedCollections = async (collectionSource) => {
         new Map(collectionEntries.map((item) => [item.id, item])).values(),
       );
 
+      // Apply platform-specific cleaning
+      if (collectionSource === "fb") {
+        dedpulicateEntries = cleanFacebookData(dedpulicateEntries);
+      } else if (collectionSource === "tiktok") {
+        dedpulicateEntries = cleanTiktokData(dedpulicateEntries);
+      }
+
       let collectionMetrics = getCollectionMetrics(dedpulicateEntries);
 
+      let accountNameMap = getAccountNameMap(
+        dedpulicateEntries,
+        collectionSource,
+      );
       return {
         id: collectionAccessors[collectionSource].idTag + idx,
         name: collectionID + collectionAccessors[collectionSource].nameTag,
@@ -80,7 +163,7 @@ export const getSavedCollections = async (collectionSource) => {
           dedpulicateEntries.length > 0
             ? Object.keys(dedpulicateEntries[0])
             : [],
-        accountNameMap: new Map(),
+        accountNameMap: accountNameMap,
         source: collectionAccessors[collectionSource].sourceTag,
       };
     },
@@ -91,10 +174,303 @@ export const getSavedCollections = async (collectionSource) => {
 export const initializePage = async () => {
   let savedTweets = await getSavedCollections("twitter");
   let savedTiktoks = await getSavedCollections("tiktok");
+  let savedFBs = await getSavedCollections("fb");
 
-  return [...savedTweets, ...savedTiktoks];
+  return [...savedTweets, ...savedTiktoks, ...savedFBs];
 };
 
+/**
+ * Get lightweight collection counts without loading full content
+ * Much faster than getSavedCollections for metric updates
+ */
+const getCollectionCounts = async (source) => {
+  const allEntries = await browser.runtime.sendMessage({
+    prompt: collectionAccessors[source].prompt,
+  });
+
+  const filteredEntries = allEntries.filter((x) => x != undefined);
+  const entriesGroupedByCollection = Object.groupBy(
+    filteredEntries,
+    ({ collectionID }) => collectionID,
+  );
+
+  return Object.keys(entriesGroupedByCollection).map((collectionID, idx) => {
+    let collectionEntries = entriesGroupedByCollection[collectionID].filter(
+      (entry) => entry.id.length > 0,
+    );
+    let deduplicatedEntries = Array.from(
+      new Map(collectionEntries.map((item) => [item.id, item])).values(),
+    );
+
+    let collectionMetrics = getCollectionMetrics(deduplicatedEntries);
+
+    return {
+      id: collectionAccessors[source].idTag + idx,
+      length: deduplicatedEntries.length,
+      metrics: collectionMetrics,
+    };
+  });
+};
+
+/**
+ * Lightweight update that only refreshes collection metrics (counts)
+ * without reloading the full content - used during active recording
+ */
+export const updateCollectionMetrics = async (dataSources, setDataSources) => {
+  // Get current counts from IndexedDB (without full content)
+  const twitterCounts = await getCollectionCounts("twitter");
+  const tiktokCounts = await getCollectionCounts("tiktok");
+  const fbCounts = await getCollectionCounts("fb");
+
+  const allCounts = [...twitterCounts, ...tiktokCounts, ...fbCounts];
+
+  // Check if any metrics changed
+  let hasChanges = false;
+
+  // Update only the metrics, keeping content intact
+  const updated = dataSources.map((ds) => {
+    // Skip file uploads
+    if (ds.source === "fileUpload") return ds;
+
+    // Find matching collection count
+    const countInfo = allCounts.find((c) => c.id === ds.id);
+    if (!countInfo) return ds;
+
+    // Only update if count changed
+    if (countInfo.length === ds.length) return ds;
+
+    hasChanges = true;
+
+    // Return new object with updated metrics but same content
+    return {
+      ...ds,
+      length: countInfo.length,
+      metrics: countInfo.metrics,
+    };
+  });
+
+  // Only trigger update if something changed
+  if (hasChanges) {
+    console.log("Collection metrics updated during recording");
+    setDataSources(updated);
+  }
+};
+
+/**
+ * Refresh only a specific collection by ID
+ * Used when recording starts/stops to load complete content for recorded collection only
+ */
+export const refreshSpecificCollection = async (
+  collectionId,
+  platforms,
+  dataSources,
+  setDataSources,
+) => {
+  console.log(
+    `Refreshing collection "${collectionId}" for platforms:`,
+    platforms,
+  );
+
+  // Map platform names to sources
+  const platformMap = {
+    Twitter: "twitter",
+    Tiktok: "tiktok",
+    Facebook: "fb",
+  };
+
+  // Get fresh data only for recorded platforms
+  const refreshPromises = platforms.map(async (platform) => {
+    const source = platformMap[platform];
+    if (!source) return null;
+    const collections = await getSavedCollections(source);
+    // Filter to only the specific collection ID
+    return collections.filter((col) => col.name.includes(collectionId));
+  });
+
+  const freshCollections = (await Promise.all(refreshPromises))
+    .filter((c) => c !== null)
+    .flat();
+
+  if (freshCollections.length === 0) {
+    console.log(
+      "No data found for collection - it may be newly created and empty",
+    );
+    // For new collections, we still want to trigger a re-render
+    // to pick up the empty collection from a full refresh
+    const allCollections = await initializePage();
+    const matchingCollections = allCollections.filter((col) =>
+      col.name.includes(collectionId),
+    );
+
+    if (matchingCollections.length > 0) {
+      // Add new collections to dataSources
+      const existingIds = dataSources.map((ds) => ds.id);
+      const newCollections = matchingCollections.filter(
+        (col) => !existingIds.includes(col.id),
+      );
+
+      if (newCollections.length > 0) {
+        console.log(`Added ${newCollections.length} new collection(s)`);
+        setDataSources([...newCollections, ...dataSources]);
+        return;
+      }
+    }
+
+    return;
+  }
+
+  // Check if these are new collections that don't exist in dataSources yet
+  const existingIds = dataSources.map((ds) => ds.id);
+  const newCollections = freshCollections.filter(
+    (fc) => !existingIds.includes(fc.id),
+  );
+  const existingCollections = freshCollections.filter((fc) =>
+    existingIds.includes(fc.id),
+  );
+
+  // Update existing collections
+  const updated = dataSources.map((ds) => {
+    // Only update if this collection name matches the recorded collection
+    if (!ds.name.includes(collectionId)) {
+      return ds; // Keep unchanged
+    }
+
+    // Find matching fresh collection
+    const fresh = existingCollections.find((fc) => fc.id === ds.id);
+    if (!fresh) {
+      return ds; // Keep unchanged if no match
+    }
+
+    console.log(`Updated collection: ${ds.name}`);
+    return fresh; // Replace with fresh data
+  });
+
+  // Add new collections at the beginning
+  if (newCollections.length > 0) {
+    console.log(`Added ${newCollections.length} new collection(s)`);
+    setDataSources([...newCollections, ...updated]);
+  } else {
+    setDataSources(updated);
+  }
+};
+
+/**
+ * Refresh only the collections that have changed
+ * Uses surgical updates to prevent full UI re-renders
+ */
+export const refreshPageSelective = async (
+  setLoading,
+  dataSources,
+  setDataSources,
+) => {
+  setLoading(true);
+
+  // Fetch all collections from IndexedDB
+  let savedTweets = await getSavedCollections("twitter");
+  let savedTiktoks = await getSavedCollections("tiktok");
+  let savedFBs = await getSavedCollections("fb");
+
+  // Get indices of each source type in current dataSources
+  const getSourceIndices = (source) => {
+    return dataSources
+      .map((ds, idx) => ({ ds, idx }))
+      .filter(({ ds }) => ds.source === source)
+      .map(({ idx }) => idx);
+  };
+
+  const twitterIndices = getSourceIndices("twitter");
+  const tiktokIndices = getSourceIndices("tiktok");
+  const fbIndices = getSourceIndices("fb");
+
+  // Compare and detect changes
+  const detectChanges = (currentIndices, freshCollections) => {
+    const currentCollections = currentIndices.map((idx) => dataSources[idx]);
+
+    // Quick check: different number of collections
+    if (currentCollections.length !== freshCollections.length) return true;
+
+    // Compare total content length
+    const currentTotal = currentCollections.reduce(
+      (sum, col) => sum + col.content.length,
+      0,
+    );
+    const freshTotal = freshCollections.reduce(
+      (sum, col) => sum + col.content.length,
+      0,
+    );
+
+    return currentTotal !== freshTotal;
+  };
+
+  const twitterChanged = detectChanges(twitterIndices, savedTweets);
+  const tiktokChanged = detectChanges(tiktokIndices, savedTiktoks);
+  const fbChanged = detectChanges(fbIndices, savedFBs);
+
+  if (!twitterChanged && !tiktokChanged && !fbChanged) {
+    console.log("No changes detected in collections");
+    setLoading(false);
+    return;
+  }
+
+  // Surgical update: modify only changed items
+  setDataSources((currentDataSources) => {
+    // Create a shallow copy of the array for surgical updates
+    const newDataSources = [...currentDataSources];
+
+    // Remove old collections of changed sources (in reverse to maintain indices)
+    if (twitterChanged) {
+      for (let i = twitterIndices.length - 1; i >= 0; i--) {
+        newDataSources.splice(twitterIndices[i], 1);
+      }
+    }
+    if (tiktokChanged) {
+      for (let i = tiktokIndices.length - 1; i >= 0; i--) {
+        newDataSources.splice(tiktokIndices[i], 1);
+      }
+    }
+    if (fbChanged) {
+      for (let i = fbIndices.length - 1; i >= 0; i--) {
+        newDataSources.splice(fbIndices[i], 1);
+      }
+    }
+
+    // Find where to insert updated collections (keep them grouped by source)
+    // Insert at the beginning of non-fileUpload items
+    const firstUploadIndex = newDataSources.findIndex(
+      (ds) => ds.source === "fileUpload",
+    );
+    const insertIndex =
+      firstUploadIndex === -1 ? newDataSources.length : firstUploadIndex;
+
+    // Insert updated collections
+    const updatedCollections = [
+      ...(twitterChanged ? savedTweets : []),
+      ...(tiktokChanged ? savedTiktoks : []),
+      ...(fbChanged ? savedFBs : []),
+    ];
+
+    newDataSources.splice(insertIndex, 0, ...updatedCollections);
+
+    console.log("Collections updated:", {
+      twitter: twitterChanged
+        ? `${savedTweets.length} collections`
+        : "unchanged",
+      tiktok: tiktokChanged
+        ? `${savedTiktoks.length} collections`
+        : "unchanged",
+      fb: fbChanged ? `${savedFBs.length} collections` : "unchanged",
+    });
+
+    return newDataSources;
+  });
+
+  setLoading(false);
+};
+
+/**
+ * Legacy refresh function - reloads all collections
+ * Use refreshPageSelective for better performance
+ */
 export const refreshPage = async (setLoading, dataSources, setDataSources) => {
   setLoading(true);
   let includedCollections = dataSources.filter(
@@ -105,10 +481,12 @@ export const refreshPage = async (setLoading, dataSources, setDataSources) => {
   );
   let savedTweets = await getSavedCollections("twitter");
   let savedTiktoks = await getSavedCollections("tiktok");
+  let savedFBs = await getSavedCollections("fb");
 
   let newCollectedContentLength =
     savedTweets.map((x) => x.content).flat().length +
-    savedTiktoks.map((x) => x.content).flat().length;
+    savedTiktoks.map((x) => x.content).flat().length +
+    savedFBs.map((x) => x.content).flat().length;
 
   let includedCollectionsLength = includedCollections
     .map((x) => x.content)
@@ -120,8 +498,14 @@ export const refreshPage = async (setLoading, dataSources, setDataSources) => {
   if (noNewContentFound) {
     setLoading(false);
   } else {
-    let updatedDS = [...savedTweets, ...savedTiktoks, ...uploadedCollections];
+    let updatedDS = [
+      ...savedTweets,
+      ...savedTiktoks,
+      ...savedFBs,
+      ...uploadedCollections,
+    ];
     setDataSources(updatedDS);
+    console.log("New data source ", dataSources);
     setLoading(false);
   }
 };
@@ -151,6 +535,7 @@ export const getSelectedSourcesNameMaps = (dataSources, selected) => {
       )
       .flatMap((m) => [...m]),
   );
+  console.log("selected Maps ", nameMaps);
   return nameMaps;
 };
 

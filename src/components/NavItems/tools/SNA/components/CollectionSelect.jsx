@@ -28,6 +28,7 @@ export const CollectionSelect = ({
   newCollectionName,
   setNewCollectionName,
   onAddCollection,
+  disabled,
 }) => {
   return (
     <>
@@ -63,6 +64,7 @@ export const CollectionSelect = ({
             justifyContent: "flex-start",
             textAlign: "left",
           }}
+          disabled={disabled}
         >
           {keyword("snaTools_addNewCollectionLabel")}
         </Button>
