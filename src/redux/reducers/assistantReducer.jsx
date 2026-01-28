@@ -119,6 +119,7 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_MACHINE_GENERATED_TEXT_CHUNKS_DETAILS":
     case "SET_MACHINE_GENERATED_TEXT_SENTENCES_DETAILS":
     case "SET_MULTILINGUAL_STANCE_DETAILS":
+    case "SET_LOADING":
     case "SET_MISSING_MEDIA":
     case "SET_FACT_CHECKS_EXPANDED":
     case "SET_DOMAIN_ANALYSIS_EXPANDED":
