@@ -37,6 +37,7 @@ import { selectTopMenuItem } from "@/redux/reducers/navReducer";
 import { selectTool } from "@/redux/reducers/tools/toolReducer";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import clsx from "clsx";
+import { browser } from "wxt/browser";
 
 import DataIcon from "../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
 import ImageIcon from "../NavBar/images/SVG/Image/Images.svg";
@@ -149,15 +150,32 @@ const NavigationSidebar = ({ tools, setOpenAlert }) => {
       tool.path === "factcheck" ||
       tool.path === "xnetwork"
     ) {
-      window.open(
-        import.meta.env.VITE_TSNA_SERVER + tool.path + "?lang=" + currentLang,
-        "_blank",
-      );
+      browser.tabs.create({
+        url:
+          import.meta.env.VITE_TSNA_SERVER + tool.path + "?lang=" + currentLang,
+      });
       return;
     }
 
     if (tool.path === "disinfoDeck") {
-      window.open(import.meta.env.VITE_DISINFO_DECK_SERVER, "_blank");
+      browser.tabs.create({
+        url: import.meta.env.VITE_DISINFO_DECK_SERVER,
+      });
+      return;
+    }
+
+    if (tool.path === "afpDigitalCourses") {
+      let urlPrefix = "";
+      if (currentLang === "fr") {
+        urlPrefix = "fr.";
+      } else if (currentLang === "es") {
+        urlPrefix = "es.";
+      } else if (currentLang === "pt") {
+        urlPrefix = "br.";
+      }
+      browser.tabs.create({
+        url: `https://${urlPrefix}digitalcourses.afp.com`,
+      });
       return;
     }
 
@@ -361,10 +379,11 @@ const NavigationSidebar = ({ tools, setOpenAlert }) => {
    * @returns {{fontSize: string, fill: (string)}|{fontSize: string}}
    */
   const iconConditionalStyling = (tool) => {
-    if (!tool.titleKeyword)
-      return {
-        fontSize: "24px",
-      };
+    // For tools without titleKeyword (like AFP Digital Courses), don't apply color styling
+    // since they use their own SVG with embedded colors
+    if (!tool.titleKeyword) {
+      return {};
+    }
 
     let isSelected;
 

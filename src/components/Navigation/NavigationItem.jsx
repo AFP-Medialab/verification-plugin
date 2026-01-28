@@ -34,10 +34,9 @@ const NavigationItem = ({
    * @returns {{fontSize: string, fill: (string)}|{fontSize: string}}
    */
   const iconConditionalStyling = () => {
-    if (!tool.titleKeyword)
-      return {
-        fontSize: "24px",
-      };
+    // For tools without titleKeyword (like AFP Digital Courses), don't apply color styling
+    // since they use their own SVG with embedded colors
+    if (!tool.titleKeyword) return {};
 
     return {
       fill: isElementSelected
@@ -50,6 +49,9 @@ const NavigationItem = ({
     };
   };
 
+  // Check if titleKeyword is empty - if so, only show icon without text
+  const showOnlyIcon = !tool.titleKeyword || tool.titleKeyword === "";
+
   return (
     <ListItemButton
       selected={isElementSelected}
@@ -60,24 +62,29 @@ const NavigationItem = ({
         <>
           <ListItemIcon
             sx={{
-              marginRight: "12px",
+              marginRight: showOnlyIcon ? "0" : "12px",
               minWidth: "unset",
+              width: showOnlyIcon ? "100%" : "auto",
+              display: showOnlyIcon ? "flex" : "inline-flex",
+              justifyContent: "flex-start",
             }}
           >
             <tool.icon sx={iconConditionalStyling} />
           </ListItemIcon>
-          <ListItemText
-            primary={
-              <Typography
-                color={isElementSelected ? "primary" : ""}
-                className={`${
-                  isSideMenuOpen ? classes.drawerListText : classes.hidden
-                }`}
-              >
-                {keyword(tool.titleKeyword)}
-              </Typography>
-            }
-          />
+          {!showOnlyIcon && (
+            <ListItemText
+              primary={
+                <Typography
+                  color={isElementSelected ? "primary" : ""}
+                  className={`${
+                    isSideMenuOpen ? classes.drawerListText : classes.hidden
+                  }`}
+                >
+                  {keyword(tool.titleKeyword)}
+                </Typography>
+              }
+            />
+          )}
         </>
       ) : (
         <Stack

@@ -416,7 +416,6 @@ export default defineBackground(() => {
 
   browser.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
-      console.log("req ", request);
       handleSNARecorderChromeMessage(request, sender, sendResponse);
       return true;
     },

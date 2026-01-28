@@ -233,15 +233,15 @@ const DataUploadModal = ({
 
     let reformatedUploadEntries = uploadedData.map(
       ({
-        [fieldLabelsMap.get("Object")]: objects,
+        //[fieldLabelsMap.get("Object")]: objects,
         [fieldLabelsMap.get("Share Time")]: date,
         [fieldLabelsMap.get("Entry ID")]: id,
         [fieldLabelsMap.get("User ID")]: uid,
         [fieldLabelsMap.get("Text")]: text,
         ...rest
       }) => ({
-        objects: objects,
-        [fieldLabelsMap.get("Object")]: objects,
+        //objects: objects,
+        //[fieldLabelsMap.get("Object")]: objects,
         date: date,
         username: uid,
         text: text,
@@ -302,7 +302,7 @@ const DataUploadModal = ({
               justifyContent="space-between"
             >
               <Typography id="modal-modal-title" variant="h6" component="h2">
-                {keyword("uploadModal_modalTitle")}
+                {keyword("uploadModal_modalTitle")}-pro
               </Typography>
               <IconButton
                 onClick={handleModalClose}

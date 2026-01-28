@@ -133,12 +133,7 @@ export const cleanDataUpload = (
   selectedCollection,
 ) => {
   let ret;
-  console.log("cleanDataUpload - socialMediaSelected:", socialMediaSelected);
-  console.log(
-    "cleanDataUpload - sample entry before cleaning:",
-    uploadedData[0],
-  );
-
+  //console.log("socialMediaSelected ", socialMediaSelected)
   if (socialMediaSelected === "crowdTangleFb") {
     ret = cleanCrowdTangleFbDataUpload(uploadedData);
   } else if (socialMediaSelected === "customUpload") {
@@ -154,8 +149,6 @@ export const cleanDataUpload = (
   }
 
   let cleanedRet = ret.filter((entry) => entry.id != undefined);
-
-  console.log("cleanDataUpload - sample entry after cleaning:", cleanedRet[0]);
 
   // Add  collectionID key from selected Collection
   cleanedRet.forEach((entry) => {

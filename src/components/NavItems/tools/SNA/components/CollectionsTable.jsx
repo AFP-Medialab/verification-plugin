@@ -275,7 +275,6 @@ const CollectionActionsCell = ({
 
       if (dataSource.source !== "fileUpload") {
         try {
-          console.log("delete plateform ", dataSource.source);
           await browser.runtime.sendMessage({
             prompt: "deleteCollection",
             source: dataSource.source,

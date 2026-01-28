@@ -152,8 +152,6 @@ const getRawCollectionByPlatform = async (platform) => {
  */
 const addToCollectionByPlatform = async (platform, data, collectionId) => {
   //TEST if collection exists. If not add it in database
-  console.log("collectionsId ", collectionId);
-  console.log("platform ", platform);
   let collections = await snaDB.get("collections", collectionId);
   if (!collections) collections = await snaDB.put("collections", collectionId);
   //const collections = await snaDB.put("collections", collectionId)
