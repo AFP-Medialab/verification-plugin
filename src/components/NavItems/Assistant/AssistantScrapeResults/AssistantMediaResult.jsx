@@ -141,7 +141,7 @@ const AssistantMediaResult = () => {
                     color={"warning"}
                     className={classes.toolTipWarning}
                     onClick={() => {
-                      dispatch(setFactChecksExpanded(!factChecksExpanded));
+                      dispatch(setFactChecksExpanded(true));
                       scrollToElement("warnings", 100);
                     }}
                   />
