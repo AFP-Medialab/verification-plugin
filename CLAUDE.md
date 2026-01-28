@@ -6,10 +6,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Building and Development
 
-- `npm run dev` - Build in development mode with watch
-- `npm run srv_dev` - Start webpack dev server
-- `npm run build` - Build for production
+- `npm run dev` - Build in development mode with WXT and Vite watch
+- `npm run dev:chrome` - Build for Chrome in development mode
+- `npm run dev:firefox` - Build for Firefox in development mode
+- `npm run build` - Build for production using WXT
+- `npm run build:chrome:production` - Build for Chrome in production mode
+- `npm run build:firefox:production` - Build for Firefox in production mode
+- `npm run build:safari:production` - Build for Safari in production mode
 - `npm install` - Install dependencies
+- `npm run postinstall` - WXT prepare step (runs automatically after install)
 
 ### Testing
 
@@ -28,13 +33,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Architecture
 
+### WXT Framework
+
+This project uses WXT (Web Extension Tools) as the build framework:
+- Manifest V3 support with automatic manifest generation from `wxt.config.js`
+- Vite-powered build system for fast development and builds
+- Built-in TypeScript support (config file uses .js but supports both)
+- Auto-imports for browser APIs via `wxt/browser` package
+- Hot Module Replacement (HMR) during development
+- Multi-browser support (Chrome, Firefox, Safari)
+- **Convention-based entry points**: All extension entry points must be in `src/entrypoints/` directory
+  - WXT automatically detects popup, background, and content scripts based on folder structure
+  - No manual manifest configuration needed for entry points
+
 ### Browser Extension Structure
 
-This is a React-based browser extension for fact-checking and media verification. The main entry points are:
+This is a React-based browser extension for fact-checking and media verification. WXT follows a convention-based structure where entry points are located in `src/entrypoints/`:
 
-- `src/index.jsx` - Main popup application entry
-- `src/background/index.js` - Background script
-- `src/background/inject.js` - Content injection script
+- `src/entrypoints/popup/index.jsx` - Main popup application entry (WXT auto-detects as popup)
+- `src/entrypoints/background/index.js` - Background script (WXT auto-detects)
+- `src/entrypoints/content-scripts/` - Content scripts directory (WXT auto-detects scripts here)
+
+WXT automatically detects and configures these entry points based on their location in the `entrypoints/` directory, eliminating the need for manual manifest configuration.
 
 ### Redux State Management
 
@@ -72,28 +92,38 @@ The extension provides various verification tools organized in `src/components/N
 
 ### Build Configuration
 
-- Webpack configuration with separate dev/prod configs
-- Path aliases: `@` → `src/`, `@Shared` → `src/components/Shared/`
-- SVG handling with @svgr/webpack for React components
+- WXT configuration in `wxt.config.js`
+- Vite configuration embedded within WXT config for React and build optimization
+- Path aliases configured in `wxt.config.js`: `@Shared` → `src/components/Shared/`, `@workers` → `src/workers/`
+- SVG handling with `vite-plugin-svgr` for React components (replaces webpack's @svgr/webpack)
 - Material-UI with Emotion for styling
+- Output directory: `build/<browser>-mv3/` (e.g., `build/chrome-mv3/`)
 
 ### Environment Variables
 
-Requires `.env` file with various API endpoints:
+Requires `.env` file with `VITE_` prefixed variables (Vite naming convention):
 
-- REACT_APP_KEYFRAME_API
-- REACT_APP_TRANSLATION_URL
-- REACT_APP_ASSISTANT_URL
+- VITE_KEYFRAME_API
+- VITE_TRANSLATION_URL
+- VITE_ASSISTANT_URL
+- VITE_TSNA_SERVER
+- VITE_DBKF_SEARCH_API
+- VITE_CAA_FORENSICS_URL
+- VITE_CAA_ANALYSIS_URL
+- VITE_LOCCUS_URL
 - Plus numerous other service URLs
+
+**Important**: Only variables prefixed with `VITE_` are exposed to client code. Access them in code via `import.meta.env.VITE_*`. This differs from the previous `REACT_APP_` prefix and `process.env.REACT_APP_*` access pattern used with webpack.
 
 ### Testing Framework
 
 Uses Playwright for all testing:
 
-- Component tests use experimental Playwright component testing
-- E2e tests load the built extension into browser
+- Component tests use experimental Playwright component testing with Vite
+- E2e tests load the built extension from `build/chrome-mv3/` directory
 - Test fixtures in `/tests/e2e/fixtures.ts` provide extension context
 - Configurations in `playwright.config.ts` and `playwright-ct.config.js`
+- Must build extension first before running e2e tests: `npm run build`
 
 ## Key Development Notes
 
@@ -102,7 +132,12 @@ Uses Playwright for all testing:
 - React components use `.jsx` extension
 - Redux files organized by feature in `src/redux/`
 - Images and assets in component-specific directories
-- Public assets in `/public/` copied during build
+- Public assets in `/public/` copied during build to `build/<browser>-mv3/`
+- **WXT Entry Points Convention**: All extension entry points must be in `src/entrypoints/`:
+  - `src/entrypoints/popup/` - Popup UI entry point
+  - `src/entrypoints/background/` - Background script entry point
+  - `src/entrypoints/content-scripts/` - Content scripts
+- WXT auto-detects and configures these based on directory structure
 
 ### State Persistence
 
@@ -112,7 +147,75 @@ Uses Playwright for all testing:
 
 ### Extension Loading
 
-For development, load the extension from the `build/` folder in Chrome developer mode after running `npm run build`.
+For development, load the extension from the browser-specific build output directory in Chrome developer mode:
+
+1. Build the extension: `npm run build` or `npm run build:chrome:development`
+2. Navigate to `chrome://extensions/` and enable Developer Mode
+3. Click "Load unpacked" and select `build/chrome-mv3/` directory
+
+**Note**: WXT outputs built extensions to `build/<browser>-mv3/` directories. The exact path depends on the target browser (e.g., `build/chrome-mv3/`, `build/firefox-mv3/`).
+
+### Browser APIs with WXT
+
+WXT provides unified browser API access via the `wxt/browser` package:
+
+```javascript
+import { browser } from 'wxt/browser';
+
+// Example: Open new tab
+browser.tabs.create({ url: 'https://example.com' });
+
+// Example: Storage API
+browser.storage.local.get('key');
+
+// Example: Runtime messaging
+browser.runtime.sendMessage({ type: 'action' });
+```
+
+**Important**: Use `browser.*` from `wxt/browser` instead of:
+- Direct `chrome.*` API calls
+- `window.open()` for opening tabs
+- Direct `window.chrome` or `window.browser` references
+
+This provides cross-browser compatibility and proper typing.
+
+### Migration from Webpack to WXT/Vite
+
+Key changes from the webpack-based build system:
+
+1. **Environment Variables**:
+   - Old: `process.env.REACT_APP_*`
+   - New: `import.meta.env.VITE_*`
+
+2. **Browser APIs**:
+   - Old: Direct `chrome.*` or `window.open()`
+   - New: `import { browser } from 'wxt/browser'`
+
+3. **Build System**:
+   - Old: Webpack with separate dev/prod configs
+   - New: WXT with Vite (configured in `wxt.config.js`)
+
+4. **SVG Imports**:
+   - Old: `@svgr/webpack`
+   - New: `vite-plugin-svgr`
+
+5. **Output Directory**:
+   - Old: `build/`
+   - New: `build/<browser>-mv3/` (e.g., `build/chrome-mv3/`)
+
+6. **Development Server**:
+   - Old: `webpack-dev-server`
+   - New: Vite dev server with HMR
+
+7. **Build Speed**:
+   - Significantly faster builds and HMR with Vite
+
+8. **Entry Points Structure**:
+   - Old: Entry points in `src/index.jsx`, `src/background/index.js`
+   - New: All entry points in `src/entrypoints/` directory
+     - `src/entrypoints/popup/index.jsx`
+     - `src/entrypoints/background/index.js`
+     - `src/entrypoints/content-scripts/`
 
 ### Material UI
 

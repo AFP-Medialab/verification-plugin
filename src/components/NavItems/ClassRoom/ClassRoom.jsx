@@ -127,25 +127,25 @@ const ClassRoom = () => {
   const tabTitle = (index) => {
     switch (index) {
       case 0:
-        return keyword("classroom_introduction");
-      case 1:
-        return keyword("classroom_teaching");
-      case 2:
-        return keyword("remote_resources_title");
-      case 3:
-        return keyword("classroom_game");
-      case 4:
-        return keyword("classroom_gamification");
-      /*case 5:
-                                                                                                                                                                          return keyword("classroom_gamification_2");*/
-      case 5:
-        return keyword("user_resources_title");
-      case 6:
-        return keyword("glossary_title");
-      case 7:
         return keyword("afp_digital_courses_title");
-      default:
+      case 1:
         return keyword("classroom_introduction");
+      case 2:
+        return keyword("classroom_teaching");
+      case 3:
+        return keyword("remote_resources_title");
+      case 4:
+        return keyword("classroom_game");
+      case 5:
+        return keyword("classroom_gamification");
+      /*case 6:
+                                                                                                                                                                          return keyword("classroom_gamification_2");*/
+      case 6:
+        return keyword("user_resources_title");
+      case 7:
+        return keyword("glossary_title");
+      default:
+        return keyword("afp_digital_courses_title");
     }
   };
 
@@ -228,201 +228,6 @@ const ClassRoom = () => {
               />
             </Tabs>
             <TabPanel value={value} index={0}>
-              {introduction(5).map((obj, index) => {
-                return (
-                  <Accordion key={index}>
-                    <AccordionSummary
-                      expandIcon={<ExpandMore />}
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                    >
-                      <Typography className={classes.heading}>
-                        {obj.title}
-                      </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <Typography
-                        sx={{
-                          textAlign: "start",
-                        }}
-                      >
-                        {obj.content}
-                      </Typography>
-                    </AccordionDetails>
-                  </Accordion>
-                );
-              })}
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-              <Iframe
-                frameBorder="0"
-                url={keyword("teaching_url")}
-                allow="fullscreen"
-                height="700"
-                width="100%"
-              />
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-              <Divider />
-              {EducationalResources().map((value, index) => {
-                return (
-                  <div key={index}>
-                    <Box
-                      sx={{
-                        m: 1,
-                      }}
-                    />
-                    <Grid
-                      key={index}
-                      container
-                      direction="row"
-                      spacing={2}
-                      sx={{
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Grid
-                        container
-                        direction="row"
-                        size={{ xs: 10 }}
-                        spacing={2}
-                        sx={{
-                          justifyContent: "flex-start",
-                          alignItems: "flex-start",
-                        }}
-                      >
-                        <Grid size={{ xs: 1 }}>
-                          <CastForEducation fontSize={"large"} />
-                        </Grid>
-                        <Grid size="grow">
-                          <Typography variant={"h6"}>{value.title}</Typography>
-                        </Grid>
-                      </Grid>
-                      <Grid size="grow">
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={() => setVideoUrl(value.url)}
-                        >
-                          {keyword("display")}
-                        </Button>
-                      </Grid>
-                    </Grid>
-                    <Divider />
-                  </div>
-                );
-              })}
-            </TabPanel>
-            <TabPanel value={value} index={3}>
-              <Iframe
-                frameBorder="0"
-                url={keyword("quiz_url")}
-                allow="fullscreen"
-                height="450"
-                width="100%"
-              />
-            </TabPanel>
-            <TabPanel value={value} index={4}>
-              <Iframe
-                frameBorder="0"
-                url={keyword("gamification_url")}
-                allow="fullscreen"
-                height="450"
-                width="100%"
-              />
-            </TabPanel>
-            {/*<TabPanel value={value} index={5}>
-                                <Iframe
-                                    frameBorder="0"
-                                    url={keyword("gamification_url_2")}
-                                    allow="fullscreen"
-                                    height="450"
-                                    width="100%"
-                                />
-                            </TabPanel>*/}
-            <TabPanel value={value} index={5}>
-              <Grid container direction="column" spacing={2}>
-                <Grid
-                  sx={{
-                    mb: 2,
-                  }}
-                >
-                  <Typography variant={"h5"}>
-                    {keyword("user_resources_intro")}
-                  </Typography>
-                </Grid>
-                <Grid>
-                  <Typography variant="body1" align={"justify"}>
-                    {keyword("user_resources_intro_remote")}
-                  </Typography>
-                </Grid>
-                <Grid>
-                  <TextField
-                    inputRef={(ref) => setInputRef(ref)}
-                    id="standard-full-width"
-                    label={keyword("api_input")}
-                    placeholder="URL"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => setVideoUrl(inputRef.value)}
-                  >
-                    {keyword("display")}
-                  </Button>
-                </Grid>
-                <Grid
-                  sx={{
-                    mt: 4,
-                  }}
-                >
-                  <Typography variant="body1">{keyword("examples")}</Typography>
-                  <Typography variant="body1">
-                    {keyword("youtube_example")}
-                  </Typography>
-                  <Typography variant="body1">
-                    {keyword("twitter_example")}
-                  </Typography>
-                  <Typography variant="body1">
-                    {keyword("website_example")}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </TabPanel>
-            <TabPanel value={value} index={6}>
-              {glossary().map((obj, key) => {
-                return (
-                  <div key={key}>
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        display: "inline",
-                      }}
-                    >
-                      {obj.word + " : "}
-                    </Typography>
-                    <Typography
-                      variant="body1"
-                      align={"justify"}
-                      sx={{
-                        display: "inline",
-                      }}
-                    >
-                      {obj.definition}
-                    </Typography>
-                    <Box
-                      sx={{
-                        m: 2,
-                      }}
-                    />
-                  </div>
-                );
-              })}
-            </TabPanel>
-            <TabPanel value={value} index={7}>
               <Stack direction="column" spacing={3}>
                 <Box>
                   <Typography variant="body1" align={"justify"}>
@@ -482,14 +287,211 @@ const ClassRoom = () => {
                 </Box>
               </Stack>
             </TabPanel>
+            <TabPanel value={value} index={1}>
+              {introduction(5).map((obj, index) => {
+                return (
+                  <Accordion key={index}>
+                    <AccordionSummary
+                      expandIcon={<ExpandMore />}
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
+                    >
+                      <Typography className={classes.heading}>
+                        {obj.title}
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography
+                        sx={{
+                          textAlign: "start",
+                        }}
+                      >
+                        {obj.content}
+                      </Typography>
+                    </AccordionDetails>
+                  </Accordion>
+                );
+              })}
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+              <Iframe
+                frameBorder="0"
+                url={keyword("teaching_url")}
+                allow="fullscreen"
+                height="700"
+                width="100%"
+              />
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+              <Divider />
+              {EducationalResources().map((value, index) => {
+                return (
+                  <div key={index}>
+                    <Box
+                      sx={{
+                        m: 1,
+                      }}
+                    />
+                    <Grid
+                      key={index}
+                      container
+                      direction="row"
+                      spacing={2}
+                      sx={{
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Grid
+                        container
+                        direction="row"
+                        size={{ xs: 10 }}
+                        spacing={2}
+                        sx={{
+                          justifyContent: "flex-start",
+                          alignItems: "flex-start",
+                        }}
+                      >
+                        <Grid size={{ xs: 1 }}>
+                          <CastForEducation fontSize={"large"} />
+                        </Grid>
+                        <Grid size="grow">
+                          <Typography variant={"h6"}>{value.title}</Typography>
+                        </Grid>
+                      </Grid>
+                      <Grid size="grow">
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => setVideoUrl(value.url)}
+                        >
+                          {keyword("display")}
+                        </Button>
+                      </Grid>
+                    </Grid>
+                    <Divider />
+                  </div>
+                );
+              })}
+            </TabPanel>
+            <TabPanel value={value} index={4}>
+              <Iframe
+                frameBorder="0"
+                url={keyword("quiz_url")}
+                allow="fullscreen"
+                height="450"
+                width="100%"
+              />
+            </TabPanel>
+            <TabPanel value={value} index={5}>
+              <Iframe
+                frameBorder="0"
+                url={keyword("gamification_url")}
+                allow="fullscreen"
+                height="450"
+                width="100%"
+              />
+            </TabPanel>
+            {/*<TabPanel value={value} index={6}>
+                                <Iframe
+                                    frameBorder="0"
+                                    url={keyword("gamification_url_2")}
+                                    allow="fullscreen"
+                                    height="450"
+                                    width="100%"
+                                />
+                            </TabPanel>*/}
+            <TabPanel value={value} index={6}>
+              <Grid container direction="column" spacing={2}>
+                <Grid
+                  sx={{
+                    mb: 2,
+                  }}
+                >
+                  <Typography variant={"h5"}>
+                    {keyword("user_resources_intro")}
+                  </Typography>
+                </Grid>
+                <Grid>
+                  <Typography variant="body1" align={"justify"}>
+                    {keyword("user_resources_intro_remote")}
+                  </Typography>
+                </Grid>
+                <Grid>
+                  <TextField
+                    inputRef={(ref) => setInputRef(ref)}
+                    id="standard-full-width"
+                    label={keyword("api_input")}
+                    placeholder="URL"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => setVideoUrl(inputRef.value)}
+                  >
+                    {keyword("display")}
+                  </Button>
+                </Grid>
+                <Grid
+                  sx={{
+                    mt: 4,
+                  }}
+                >
+                  <Typography variant="body1">{keyword("examples")}</Typography>
+                  <Typography variant="body1">
+                    {keyword("youtube_example")}
+                  </Typography>
+                  <Typography variant="body1">
+                    {keyword("twitter_example")}
+                  </Typography>
+                  <Typography variant="body1">
+                    {keyword("website_example")}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </TabPanel>
+            <TabPanel value={value} index={7}>
+              {glossary().map((obj, key) => {
+                return (
+                  <div key={key}>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        display: "inline",
+                      }}
+                    >
+                      {obj.word + " : "}
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      align={"justify"}
+                      sx={{
+                        display: "inline",
+                      }}
+                    >
+                      {obj.definition}
+                    </Typography>
+                    <Box
+                      sx={{
+                        m: 2,
+                      }}
+                    />
+                  </div>
+                );
+              })}
+            </TabPanel>
           </Box>
-          <a
-            href={keyword("youverify_link")}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img src={youverifyImage} width={"10%"} alt={youverifyImage} />
-          </a>
+          {value !== 0 && (
+            <a
+              href={keyword("youverify_link")}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src={youverifyImage} width={"10%"} alt={youverifyImage} />
+            </a>
+          )}
           <Dialog
             height={"400px"}
             fullWidth
