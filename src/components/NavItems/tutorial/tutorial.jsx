@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -66,6 +67,9 @@ const Tutorial = () => {
             m: 1,
           }}
         />
+        <Alert severity="info" sx={{ mb: 2 }}>
+          {keyword("afp_digital_courses_alert")}
+        </Alert>
         <Typography variant="h3">{keyword("tuto_h_1")}</Typography>
         <Box
           sx={{
