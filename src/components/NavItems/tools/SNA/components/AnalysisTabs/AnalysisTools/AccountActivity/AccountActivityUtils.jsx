@@ -118,8 +118,8 @@ export const AccountActivityChart = ({
   const nameMaps = getSelectedSourcesNameMaps(dataSources, selected);
 
   const CustomizedAxisTick = ({ x, y, payload }) => {
-    let tickLabel = nameMaps.has(payload.value)
-      ? nameMaps.get(payload.value)
+    let tickLabel = nameMaps.has(parseInt(payload.value))
+      ? nameMaps.get(parseInt(payload.value))
       : payload.value;
 
     let slicedLabel =

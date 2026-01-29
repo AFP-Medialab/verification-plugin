@@ -1,5 +1,22 @@
-(function (xhr) {
-  let pluginId = document.currentScript.dataset.params;
+(function () {
+  /**
+   * SNA Page Context Script
+   * This script runs in the page context to intercept fetch/XHR requests.
+   * It uses window.postMessage to communicate with the content script bridge,
+   * which then forwards messages to the extension background script.
+   */
+
+  /**
+   * Send message to extension via content script bridge
+   * @param {Object} data - Message data to send
+   */
+  const sendToExtension = (data) => {
+    window.postMessage({
+      source: 'sna-recorder',
+      type: 'SEND_TO_EXTENSION',
+      payload: data
+    }, '*');
+  };
 
   //TIKTOK Capture
   let originalFetch = window.fetch;
@@ -16,11 +33,15 @@
     ) {
       let clone = ogResponse.clone();
 
-      let json = await clone.json();
-      chrome.runtime.sendMessage(pluginId, {
-        prompt: "tiktokCapture",
-        content: json,
-      });
+      try {
+        let json = await clone.json();
+        sendToExtension({
+          prompt: "tiktokCapture",
+          content: json,
+        });
+      } catch (error) {
+        console.error('SNA Recorder: Error parsing TikTok response:', error);
+      }
     }
     return ogResponse;
   };
@@ -48,13 +69,22 @@
 
   XHR.send = function () {
     this.addEventListener("load", function () {
-      if (
-        this._url.includes("graphql") &&
-        this.response.slice(0, 10).includes("data")
-      ) {
-        chrome.runtime.sendMessage(pluginId, JSON.parse(this.responseText));
+      // Check if this is a Twitter/X GraphQL request
+      if (this._url && this._url.includes("graphql")) {
+        try {
+          // Parse response
+          const twitterData = JSON.parse(this.responseText);
+
+          // Check if response contains data (Twitter GraphQL responses always have a 'data' field)
+          if (twitterData && twitterData.data) {
+            sendToExtension(twitterData);
+          }
+        } catch (error) {
+          console.error('SNA Recorder: Error parsing Twitter response:', error);
+        }
       }
     });
     return send.apply(this, arguments);
   };
-})(XMLHttpRequest);
+
+})();
