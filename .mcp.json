@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "search-by-image Docs": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://gitmcp.io/dessant/search-by-image"
+      ]
+    },
+    "idb Docs": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://gitmcp.io/jakearchibald/idb"
+      ]
+    }
+  }
+  
+}

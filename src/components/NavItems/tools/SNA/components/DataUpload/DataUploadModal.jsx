@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import Collapse from "@mui/material/Collapse";
 import FormControl from "@mui/material/FormControl";
 import IconButton from "@mui/material/IconButton";
@@ -182,6 +183,7 @@ const DataUploadModal = ({
   const [collections, setCollections] = useState(["Default Collection"]);
   const [selectedCollection, setSelectedCollection] = useState("");
   const [newCollectionName, setNewCollectionName] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleAddCollectionClick = useCallback(() => {
     handleAddCollection(
@@ -210,6 +212,7 @@ const DataUploadModal = ({
     setUploadedData([]);
     setUploadedFileName("");
     setSelectedCollection("");
+    setIsUploading(false);
     setShowUploadModal(false);
   };
 
@@ -220,6 +223,9 @@ const DataUploadModal = ({
     uploadFilename,
     selectedCollection,
   ) => {
+    setIsUploading(true);
+    console.log("uploadedData  ", uploadedData);
+    console.log("socialMediaSelected  ", socialMediaSelected);
     let fieldLabelsMap =
       socialMediaSelected.length > 0 && socialMediaSelected != "customUpload"
         ? uploadTemplates[socialMediaSelected].defaultFieldsMap
@@ -248,7 +254,6 @@ const DataUploadModal = ({
       socialMediaSelected,
       selectedCollection,
     );
-
     try {
       await chrome.runtime.sendMessage({
         prompt: "addToCollection",
@@ -263,6 +268,9 @@ const DataUploadModal = ({
       }
     } catch (error) {
       console.error("Error uploading raw collection:", error);
+      setIsUploading(false);
+      setUploadModalError(true);
+      return;
     }
     // let collectionMetrics = getCollectionMetrics(entriesCleaned)
     /*dataSources.push({
@@ -282,7 +290,10 @@ const DataUploadModal = ({
   }, []);
   return (
     <>
-      <Modal open={showUploadModal} onClose={handleModalClose}>
+      <Modal
+        open={showUploadModal}
+        onClose={isUploading ? undefined : handleModalClose}
+      >
         <Box gap={2} sx={dataUploadModalStyle}>
           <Stack direction={"column"} spacing={2}>
             <Box
@@ -297,6 +308,7 @@ const DataUploadModal = ({
                 onClick={handleModalClose}
                 size="small"
                 sx={{ padding: 1.5 }}
+                disabled={isUploading}
               >
                 <CloseIcon />
               </IconButton>
@@ -310,7 +322,9 @@ const DataUploadModal = ({
                     socialMediaId={template.id}
                     socialMediaIcon={template.icon}
                     socialMediaSelected={socialMediaSelected}
-                    setSocialMediaSelected={setSocialMediaSelected}
+                    setSocialMediaSelected={
+                      isUploading ? "" : setSocialMediaSelected
+                    }
                     tooltipText={keyword(template.tooltipText)}
                   />
                 );
@@ -324,28 +338,53 @@ const DataUploadModal = ({
               newCollectionName={newCollectionName}
               setNewCollectionName={setNewCollectionName}
               onAddCollection={handleAddCollectionClick}
+              disabled={isUploading}
             />
-            <CustomUploadSection {...customUploadSectionProps} />
-            <Button
-              variant="outlined"
-              onClick={() => {
-                setUploadModalError(false);
-                try {
-                  addUploadToDataSources(
-                    dataSources,
-                    socialMediaSelected,
-                    uploadedData,
-                    uploadedFileName,
-                    selectedCollection,
-                  );
-                } catch {
-                  setUploadModalError(true);
-                }
-              }}
-              disabled={!selectedCollection || selectedCollection.trim() === ""}
-            >
-              {keyword("uploadModal_ConfirmButton")}
-            </Button>
+
+            {isUploading ? (
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                gap={2}
+                py={2}
+              >
+                <CircularProgress size={40} />
+                <Typography variant="body2" color="text.secondary">
+                  {keyword("uploadModal_uploading") || "Uploading data..."}
+                </Typography>
+              </Box>
+            ) : (
+              <>
+                {/*<CustomUploadSection {...customUploadSectionProps} /> Disable Not support yet*/}
+                <Button
+                  variant="outlined"
+                  onClick={() => {
+                    setUploadModalError(false);
+                    try {
+                      addUploadToDataSources(
+                        dataSources,
+                        socialMediaSelected,
+                        uploadedData,
+                        uploadedFileName,
+                        selectedCollection,
+                      );
+                    } catch {
+                      setUploadModalError(true);
+                    }
+                  }}
+                  disabled={
+                    !selectedCollection ||
+                    selectedCollection.trim() === "" ||
+                    !socialMediaSelected ||
+                    socialMediaSelected.trim() === ""
+                  }
+                >
+                  {keyword("uploadModal_ConfirmButton")}
+                </Button>
+              </>
+            )}
 
             {uploadModalError ? (
               <Typography align="left" color="error">
