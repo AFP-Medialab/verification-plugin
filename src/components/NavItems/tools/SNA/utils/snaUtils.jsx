@@ -36,6 +36,36 @@ export const handleAddCollection = (
 };
 
 /**
+ * Upload data to a collection
+ * Sends data to the background script and optionally triggers a refresh callback
+ *
+ * @param {Array} data - Array of data items to upload
+ * @param {string} platform - Platform name (e.g., "twitter", "tiktok", "fb")
+ * @param {string} collectionId - ID of the collection to add data to
+ * @param {Function} [onUploadComplete] - Optional callback to execute after successful upload
+ * @returns {Promise<void>}
+ * @throws {Error} If the upload fails
+ */
+export const uploadToCollection = async (
+  data,
+  platform,
+  collectionId,
+  onUploadComplete = null,
+) => {
+  await browser.runtime.sendMessage({
+    prompt: "addToCollection",
+    data: data,
+    platform: platform,
+    collectionId: collectionId,
+  });
+
+  // Trigger refresh to show the newly uploaded collection
+  if (onUploadComplete) {
+    await onUploadComplete();
+  }
+};
+
+/**
  * Get recording information from chrome runtime
  * Fetches collections and recording state
  *

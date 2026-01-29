@@ -58,8 +58,12 @@ import {
 import SNAPanel from "./components/AnalysisTabs/SNAPanel";
 import CollectionsTable from "./components/CollectionsTable";
 import DataUpload from "./components/DataUpload/DataUpload";
-import DataUploadModal from "./components/DataUpload/DataUploadModal";
-import ZeeschuimerUploadModal from "./components/DataUpload/ZeeschuimerUploadModal";
+import {
+  uploadTemplates,
+  zeeschuimerUploadTemplates,
+} from "./components/DataUpload/DataUploadConstants";
+import { createUploadConfig } from "./components/DataUpload/UploadHandlers";
+import UploadModal from "./components/DataUpload/UploadModal";
 import DetailModal from "./components/DetailModal";
 import {
   initializePage,
@@ -131,14 +135,9 @@ const SNA = () => {
 
   //Data upload modal props
   const [socialMediaSelected, setSocialMediaSelected] = useState("");
-  const [customExpanded, setCustomExpanded] = useState(false);
   const [uploadModalError, setUploadModalError] = useState(false);
+  const [uploadType, setUploadType] = useState("csv"); // 'csv' or 'ndjson'
 
-  //Zeeschuimer data upload modal props
-  const [showZeeschuimerUploadModal, setShowZeeschuimerUploadModal] =
-    useState(false);
-  const [zeeschuimerUploadModalError, setZeeschuimerUploadModalError] =
-    useState(false);
   //SNA Panel props
   const [snaTab, setSnaTab] = useState(0);
 
@@ -384,8 +383,7 @@ const SNA = () => {
     setUploadedData,
     setShowUploadModal,
     setUploadedFileName,
-    showZeeschuimerUploadModal,
-    setShowZeeschuimerUploadModal,
+    setUploadType,
   };
 
   const handleRefreshCollections = useCallback(async () => {
@@ -396,37 +394,31 @@ const SNA = () => {
     );
   }, [updateDataSources]);
 
-  const dataUploadModalProps = {
-    dataSources,
-    showUploadModal,
-    setUploadedData,
-    setShowUploadModal,
-    keyword,
-    socialMediaSelected,
-    setSocialMediaSelected,
-    setCustomExpanded,
-    customExpanded,
-    uploadedData,
-    uploadedFileName,
-    setUploadedFileName,
-    uploadModalError,
-    setUploadModalError,
-    onUploadComplete: handleRefreshCollections,
-  };
+  // Create upload configurations using template pattern
+  const csvUploadConfig = createUploadConfig.csv(
+    uploadTemplates,
+    handleRefreshCollections,
+  );
 
-  const zeeschuimerDataUploadModalProps = {
+  const ndjsonUploadConfig = createUploadConfig.ndjson(
+    zeeschuimerUploadTemplates,
     dataSources,
-    showZeeschuimerUploadModal,
+    updateDataSources,
+  );
+
+  const uploadModalProps = {
+    showModal: showUploadModal,
+    setShowModal: setShowUploadModal,
     setUploadedData,
-    setShowZeeschuimerUploadModal,
+    setUploadedFileName,
+    setSocialMediaSelected,
+    setUploadModalError,
     keyword,
     socialMediaSelected,
-    setSocialMediaSelected,
     uploadedData,
     uploadedFileName,
-    setUploadedFileName,
-    zeeschuimerUploadModalError,
-    setZeeschuimerUploadModalError,
+    uploadModalError,
+    uploadConfig: uploadType === "csv" ? csvUploadConfig : ndjsonUploadConfig,
   };
 
   const timelineDistributionProps = {
@@ -759,8 +751,7 @@ const SNA = () => {
   return (
     <>
       <DetailModal {...detailModalProps} />
-      <DataUploadModal {...dataUploadModalProps} />
-      <ZeeschuimerUploadModal {...zeeschuimerDataUploadModalProps} />
+      <UploadModal {...uploadModalProps} />
       <HeaderTool
         name={keyword("SNA_header_title")}
         description={keyword("SNA_header_description")}

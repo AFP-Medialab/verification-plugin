@@ -88,8 +88,10 @@ const postFormat = (rawData) => {
 const getTableForPlatform = (platform) => {
   switch (platform) {
     case "twitter":
+    case "zeeschuimerTwitter":
       return TWITTERCOLLECTION;
     case "tiktok":
+    case "zeeschuimerTiktok":
       return TIKTOKCOLLECTION;
     case "crowdTangleFb":
       return "fb";
@@ -108,8 +110,10 @@ const getTableForPlatform = (platform) => {
 const getDataKeyForPlatform = (platform) => {
   switch (platform) {
     case "twitter":
+    case "zeeschuimerTwitter":
       return "tweet";
     case "tiktok":
+    case "zeeschuimerTiktok":
       return "tiktok";
     case "crowdTangleFb":
       return "post";
