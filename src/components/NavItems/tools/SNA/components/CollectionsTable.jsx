@@ -320,8 +320,13 @@ const CollectionActionsCell = ({
 };
 
 const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
-  const { selected, setSelected, setDetailContent, setOpenDetailModal } =
-    rowProps;
+  const {
+    selected,
+    setSelected,
+    setDetailContent,
+    setDetailSource,
+    setOpenDetailModal,
+  } = rowProps;
   const {
     fileInputRef,
     dataSources,
@@ -358,6 +363,7 @@ const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
         <IconButton
           onClick={() => {
             setDetailContent(row.content);
+            setDetailSource(row.source);
             setOpenDetailModal(true);
           }}
           sx={{ p: 1 }}
@@ -439,6 +445,7 @@ const CollectionsTable = ({
   selected,
   setSelected,
   setDetailContent,
+  setDetailSource,
   setOpenDetailModal,
   fileInputRef,
   dataSources,
@@ -459,6 +466,7 @@ const CollectionsTable = ({
     selected,
     setSelected,
     setDetailContent,
+    setDetailSource,
     setOpenDetailModal,
   };
 

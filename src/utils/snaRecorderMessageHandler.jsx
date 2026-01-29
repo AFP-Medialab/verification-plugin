@@ -316,7 +316,9 @@ export const handleRecordedMessage = async (request) => {
     // Tiktok responses can have item details in either itemList or data field
     const itemsFromList = request.content.itemList || [];
     const itemsFromData = request.content.data?.map((x) => x.item) || [];
-    const allItems = [...itemsFromList, ...itemsFromData];
+    const allItems = [...itemsFromList, ...itemsFromData].filter(
+      (item) => item != null && item.id != null,
+    );
 
     await Promise.all(
       allItems.map((item) => storeTiktokItem(item, currentSession)),

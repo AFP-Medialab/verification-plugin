@@ -3,6 +3,9 @@ import React from "react";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import XIcon from "@mui/icons-material/X";
 
+import { size } from "lodash";
+import { column } from "stylis";
+
 import TiktocIcon from "../../../../../NavBar/images/SVG/DataAnalysis/Tiktok_sna.svg";
 
 export const dataUploadModalStyle = {
@@ -83,5 +86,60 @@ export const zeeschuimerUploadTemplates = {
     objectMappings: "",
     id: "zeeschuimerTiktok",
     tooltipText: "uploadModalZS_tiktok_tooltip",
+  },
+};
+
+export const detailsFormat = {
+  twitter: {
+    column: [
+      {
+        headers: ["text", "tweetlink", "links", "imagelink", "video"],
+        size: 350,
+      },
+      {
+        headers: ["username", "display_name", "collectionid", "replying_to"],
+        size: 150,
+      },
+    ],
+  },
+  tiktok: {
+    column: [
+      {
+        headers: [
+          "text",
+          "hashtags",
+          "objects",
+          "id",
+          "link",
+          "linktext",
+          "description",
+        ],
+        size: 350,
+      },
+      {
+        headers: ["username", "soundauthor", "soundtitle", "collectionid"],
+        size: 150,
+      },
+    ],
+  },
+  fb: {
+    column: [
+      {
+        headers: [
+          "text",
+          "pagedescription",
+          "objects",
+          "id",
+          "link",
+          "linktext",
+          "description",
+        ],
+        size: 350,
+      },
+      {
+        headers: ["pagename", "username", "pagecategory", "type"],
+        size: 150,
+      },
+    ],
   },
 };

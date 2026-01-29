@@ -119,6 +119,7 @@ const SNA = () => {
 
   //Detailed view props
   const [detailContent, setDetailContent] = useState([]);
+  const [detailSource, setDetailSource] = useState("");
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [detailSearchFilter, setDetailSearchFilter] = useState("");
 
@@ -345,13 +346,14 @@ const SNA = () => {
   const detailModalProps = useMemo(
     () => ({
       detailContent,
+      detailSource,
       openDetailModal,
       setOpenDetailModal,
       detailSearchFilter,
       setDetailSearchFilter,
       keyword,
     }),
-    [detailContent, openDetailModal, detailSearchFilter, keyword],
+    [detailContent, openDetailModal, detailSearchFilter, selected, keyword],
   );
 
   const collectionsTableProps = useMemo(
@@ -359,6 +361,7 @@ const SNA = () => {
       selected,
       setSelected,
       setDetailContent,
+      setDetailSource,
       setOpenDetailModal,
       fileInputRef,
       dataSources,

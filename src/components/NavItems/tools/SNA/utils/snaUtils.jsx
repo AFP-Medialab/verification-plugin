@@ -139,3 +139,22 @@ export const getRecordingInfo = async (
     console.error("Error getting recording info:", error);
   }
 };
+
+/**
+ *
+ * @param {*} inputString
+ * @returns {Array}
+ */
+export const universalTokenize = (inputString) => {
+  // Regex Breakdown:
+  // 1. (http?:\/\/[^\s]+)  -> Capture complete URLs (starting with http/https)
+  // 2. | (\w+)              -> OR Capture words (alphanumeric)
+  // 3. | ([^\w\s])          -> OR Capture punctuation/symbols (excluding whitespace)
+
+  const regex = /(http?:\/\/[^\s]+)|(\w+)|([^\w\s])/g;
+
+  // match() will return a simple array of all strings that matched ANY of the groups
+  const tokens = inputString.match(regex);
+
+  return tokens || [];
+};
