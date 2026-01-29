@@ -696,7 +696,7 @@ const machineGeneratedText = new Tool(
   "mgt",
   TOOL_GROUPS.VERIFICATION,
   <MachineGeneratedText />,
-  <Footer type={FOOTER_TYPES.USFD} />,
+  <Footer type={FOOTER_TYPES.KINIT} />,
 );
 
 /**

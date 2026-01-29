@@ -27,9 +27,12 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 
-import { toolsHome } from "@/constants/tools";
+import { canUserSeeTool, toolsHome } from "@/constants/tools";
 import { selectTopMenuItem } from "@/redux/reducers/navReducer";
-import { resetToolSelected } from "@/redux/reducers/tools/toolReducer";
+import {
+  resetToolSelected,
+  selectTool,
+} from "@/redux/reducers/tools/toolReducer";
 import { theme } from "@/theme";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
@@ -43,7 +46,7 @@ import AdvancedTools from "../NavItems/tools/Alltools/AdvancedTools/AdvancedTool
 import useAuthenticationAPI from "../Shared/Authentication/useAuthenticationAPI";
 import SettingsDrawer from "./SettingsDrawer";
 
-const AppHeader = ({ topMenuItems }) => {
+const AppHeader = ({ topMenuItems, tools }) => {
   const [selectedCollection, setSelectedCollection] =
     useState("Default Collection");
 
@@ -74,11 +77,19 @@ const AppHeader = ({ topMenuItems }) => {
   const LOGO_EU = import.meta.env.VITE_LOGO_EU;
 
   const topMenuItemSelected = useSelector((state) => state.nav);
+  const selectedToolTitleKeyword = useSelector((state) => state.tool.toolName);
+  const pinnedTools = useSelector((state) => state.tool?.pinnedTools || []);
   const userAuthenticated = useSelector(
     (state) => state.userSession && state.userSession.userAuthenticated,
   );
+  const role = useSelector((state) => state.userSession.user.roles);
 
   const authenticationAPI = useAuthenticationAPI();
+
+  // Get pinned tool objects
+  const pinnedToolObjects = pinnedTools
+    .map((toolKeyword) => tools.find((t) => t.titleKeyword === toolKeyword))
+    .filter((tool) => tool && canUserSeeTool(tool, role, userAuthenticated));
 
   const [profileMenuAnchor, setProfileMenuAnchor] = useState(null);
   const isProfileMenuOpen = Boolean(profileMenuAnchor);
@@ -118,11 +129,33 @@ const AppHeader = ({ topMenuItems }) => {
   };
 
   const handleTopMenuChange = (event, newValue) => {
-    dispatch(selectTopMenuItem(newValue));
+    // Check if the new value is a pinned tool
+    const isPinnedTool = pinnedToolObjects.some(
+      (tool) => tool.titleKeyword === newValue,
+    );
 
-    if (newValue !== toolsHome.titleKeyword) {
-      dispatch(resetToolSelected());
+    if (isPinnedTool) {
+      // Handle pinned tool click
+      const tool = pinnedToolObjects.find((t) => t.titleKeyword === newValue);
+      if (tool) {
+        dispatch(selectTopMenuItem(toolsHome.titleKeyword));
+        dispatch(selectTool(tool.titleKeyword));
+        navigate("/app/tools/" + tool.path);
+      }
+    } else {
+      // Handle regular top menu item click
+      dispatch(selectTopMenuItem(newValue));
+
+      if (newValue !== toolsHome.titleKeyword) {
+        dispatch(resetToolSelected());
+      }
     }
+  };
+
+  const handlePinnedToolClick = (tool) => {
+    dispatch(selectTopMenuItem(toolsHome.titleKeyword));
+    dispatch(selectTool(tool.titleKeyword));
+    navigate("/app/tools/" + tool.path);
   };
 
   const handleHomeIconClick = () => {
@@ -130,6 +163,18 @@ const AppHeader = ({ topMenuItems }) => {
   };
 
   const iconConditionalStyling = (toolName) => {
+    // For "Tools" tab, don't highlight if the selected tool is pinned
+    if (
+      toolName === "navbar_tools" &&
+      topMenuItemSelected === toolName &&
+      pinnedTools.includes(selectedToolTitleKeyword)
+    ) {
+      return {
+        fill: "var(--mui-palette-text-secondary)",
+        fontSize: "24px",
+      };
+    }
+
     return {
       fill:
         topMenuItemSelected === toolName
@@ -297,7 +342,12 @@ const AppHeader = ({ topMenuItems }) => {
               }}
             >
               <Tabs
-                value={topMenuItemSelected}
+                value={
+                  topMenuItemSelected === "navbar_tools" &&
+                  pinnedTools.includes(selectedToolTitleKeyword)
+                    ? selectedToolTitleKeyword
+                    : topMenuItemSelected
+                }
                 variant="scrollable"
                 onChange={handleTopMenuChange}
                 scrollButtons="auto"
@@ -329,10 +379,41 @@ const AppHeader = ({ topMenuItems }) => {
                     sx={{
                       minWidth: "100px",
                       fontSize: "1rem",
+                      ...(index === topMenuItems.length - 1 &&
+                        pinnedToolObjects.length > 0 && {
+                          borderRight: "1px solid var(--mui-palette-divider)",
+                          mr: 1,
+                        }),
                     }}
                     value={item.title}
                   />
                 ))}
+                {pinnedToolObjects.map((tool, index) => {
+                  const isToolSelected =
+                    topMenuItemSelected === "navbar_tools" &&
+                    selectedToolTitleKeyword === tool.titleKeyword;
+                  return (
+                    <Tab
+                      key={`pinned-${index}`}
+                      label={keyword(tool.titleKeyword)}
+                      icon={
+                        <tool.icon
+                          sx={{
+                            fill: isToolSelected
+                              ? "var(--mui-palette-primary-main)"
+                              : "var(--mui-palette-text-secondary)",
+                            fontSize: "24px",
+                          }}
+                        />
+                      }
+                      sx={{
+                        minWidth: "100px",
+                        fontSize: "1rem",
+                      }}
+                      value={tool.titleKeyword}
+                    />
+                  );
+                })}
               </Tabs>
             </Grid>
           )}
@@ -464,6 +545,72 @@ const AppHeader = ({ topMenuItems }) => {
                 </ListItemButton>
               </ListItem>
             ))}
+            {pinnedToolObjects.length > 0 && (
+              <>
+                <Divider sx={{ my: 1 }} />
+                <ListItemText
+                  primary={keyword("navbar_pinned")}
+                  sx={{
+                    px: 2.5,
+                    py: 1,
+                    fontSize: "0.75rem",
+                    fontWeight: 500,
+                    color: "text.secondary",
+                    textTransform: "uppercase",
+                  }}
+                />
+                {pinnedToolObjects.map((tool, index) => (
+                  <ListItem
+                    key={`mobile-pinned-${index}`}
+                    sx={{
+                      p: 0,
+                    }}
+                  >
+                    <ListItemButton
+                      selected={
+                        topMenuItemSelected === "navbar_tools" &&
+                        selectedToolTitleKeyword === tool.titleKeyword
+                      }
+                      onClick={() => {
+                        handlePinnedToolClick(tool);
+                        handleMobileMenuClose();
+                      }}
+                      sx={{
+                        py: 1.5,
+                        px: 2,
+                        "&.Mui-selected": {
+                          backgroundColor: "var(--mui-palette-action-selected)",
+                        },
+                        pl: 2.5,
+                      }}
+                    >
+                      <ListItemIcon sx={{ minWidth: 48 }}>
+                        <tool.icon
+                          sx={{
+                            fontSize: "32px",
+                            fill:
+                              topMenuItemSelected === "navbar_tools" &&
+                              selectedToolTitleKeyword === tool.titleKeyword
+                                ? "var(--mui-palette-primary-main)"
+                                : "var(--mui-palette-text-secondary)",
+                          }}
+                        />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={keyword(tool.titleKeyword)}
+                        sx={{
+                          color:
+                            topMenuItemSelected === "navbar_tools" &&
+                            selectedToolTitleKeyword === tool.titleKeyword
+                              ? "var(--mui-palette-primary-main)"
+                              : "var(--mui-palette-text-primary)",
+                        }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+              </>
+            )}
           </List>
         </Box>
       </Drawer>
