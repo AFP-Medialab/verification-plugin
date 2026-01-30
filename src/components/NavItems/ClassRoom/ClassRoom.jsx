@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { Trans } from "react-i18next";
 import Iframe from "react-iframe";
+import { useSelector } from "react-redux";
 
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -74,6 +76,7 @@ function a11yProps(index) {
 const ClassRoom = () => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/ClassRoom");
+  const language = useSelector((state) => state.language);
 
   const [value, setValue] = React.useState(0);
 
@@ -84,6 +87,32 @@ const ClassRoom = () => {
 
   const [videoUrl, setVideoUrl] = useState(null);
   const [inputRef, setInputRef] = useState(null);
+
+  // Determine X URL based on language
+  const getXUrl = () => {
+    if (language === "fr") {
+      return "https://x.com/AfpFactuel/status/1808517554266157081";
+    } else if (language === "es") {
+      return "https://x.com/AfpFactual/status/1806693787025969653";
+    } else if (language === "pt") {
+      return "https://x.com/AfpChecamos/status/1817251102040940911";
+    } else {
+      // Fallback for all other languages
+      return "https://x.com/AFPFactCheck/status/1873942236410634731/video/1";
+    }
+  };
+
+  // Determine Instagram URL based on language
+  const getInstagramUrl = () => {
+    if (language === "es") {
+      return "https://www.instagram.com/p/C87m5wIMNIN/";
+    } else if (language === "pt") {
+      return "https://www.instagram.com/p/C8ww9S_pNDN/";
+    } else {
+      // Fallback for all other languages
+      return "https://www.instagram.com/reel/C8xhGcJM_vA/";
+    }
+  };
 
   const glossary = () => {
     let res = [];
@@ -231,13 +260,23 @@ const ClassRoom = () => {
               <Stack direction="column" spacing={3}>
                 <Box>
                   <Typography variant="body1" align={"justify"}>
-                    {keyword("afp_digital_courses_description")}
+                    <Trans
+                      t={keyword}
+                      i18nKey={"afp_digital_courses_description"}
+                      components={{
+                        digitalCoursesUrl: (
+                          <a
+                            href={keyword("afp_digital_courses_url")}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ color: "var(--mui-palette-primary-main)" }}
+                          />
+                        ),
+                      }}
+                    />
                   </Typography>
                 </Box>
                 <Box>
-                  <Typography variant="h6" gutterBottom>
-                    {keyword("afp_digital_courses_video_title")}
-                  </Typography>
                   <Box
                     sx={{
                       width: "100%",
@@ -263,7 +302,7 @@ const ClassRoom = () => {
                     <IconButton
                       color="primary"
                       component="a"
-                      href="https://x.com/AFPFactCheck/status/1873942236410634731/video/1"
+                      href={getXUrl()}
                       target="_blank"
                       rel="noopener noreferrer"
                       size="large"
@@ -275,7 +314,7 @@ const ClassRoom = () => {
                     <IconButton
                       color="primary"
                       component="a"
-                      href="https://www.instagram.com/reel/C8xhGcJM_vA/"
+                      href={getInstagramUrl()}
                       target="_blank"
                       rel="noopener noreferrer"
                       size="large"

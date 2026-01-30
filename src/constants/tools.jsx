@@ -692,7 +692,7 @@ const machineGeneratedText = new Tool(
   mgtSvgIcon,
   TOOLS_CATEGORIES.SEARCH,
   [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.NEW],
-  [ROLES.EXTRA_FEATURE],
+  [ROLES.BETA_TESTER],
   "mgt",
   TOOL_GROUPS.VERIFICATION,
   <MachineGeneratedText />,
