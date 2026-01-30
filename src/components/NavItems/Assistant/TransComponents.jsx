@@ -269,6 +269,36 @@ export function TransAssistantHelpThreeTooltip({ keyword }) {
   );
 }
 
+export function TransAssistantHelpFourTooltip({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="assistant_help_4"
+      components={{
+        b: <b />,
+        ul: <ul style={UL_STYLE} />,
+        li: <li style={LI_STYLE} />,
+        imageFileTypeSupportLink: (
+          <a
+            href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Image_types"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={A_STYLE}
+          />
+        ),
+        videoFileTypeSupportLink: (
+          <a
+            href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Video_codecs"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={A_STYLE}
+          />
+        ),
+      }}
+    />
+  );
+}
+
 export function TransSourceCredibilityTooltip({ keyword }) {
   return (
     <Trans

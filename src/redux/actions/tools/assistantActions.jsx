@@ -366,10 +366,11 @@ export const submitInputUrl = (inputUrl) => {
   };
 };
 
-export const submitUpload = (contentType) => {
+export const submitUpload = (uploadFileUrl, contentType) => {
   return {
     type: "SUBMIT_UPLOAD",
     payload: {
+      uploadFileUrl: uploadFileUrl,
       contentType: contentType,
     },
   };

@@ -55,7 +55,10 @@ const assistantApi = assistantApiCalls();
  * WATCHERS
  **/
 function* getUploadSaga() {
-  yield takeLatest("SUBMIT_UPLOAD", handleSubmitUpload);
+  yield takeLatest(
+    ["SUBMIT_UPLOAD", "AUTH_USER_LOGIN", "AUTH_USER_LOGOUT"],
+    handleSubmitUpload,
+  );
 }
 
 function* getMediaListSaga() {
@@ -183,13 +186,13 @@ function* handleMediaActionList() {
       role,
       userAuthenticated,
     );
-
     yield put(setProcessUrlActions(contentType, actions));
   }
 }
 
-function* handleSubmitUpload(action) {
-  let contentType = action.payload.contentType;
+function* handleSubmitUpload() {
+  const contentType = yield select((state) => state.assistant.processUrlType);
+  // yield put(setProcessUrl(uploadFileUrl, contentType)); // kicks off getMediaSimilaritySaga()
   let known_link = KNOWN_LINKS.OWN;
   const role = yield select((state) => state.userSession.user.roles);
   const userAuthenticated = yield select(
@@ -217,13 +220,17 @@ function* handleMediaSimilarityCall(action) {
   const processUrl = yield select((state) => state.assistant.processUrl);
   const contentType = yield select((state) => state.assistant.processUrlType);
   const unprocessbleTypes = [
+    KNOWN_LINKS.OWN, // remove this for DBKF media service
     KNOWN_LINKS.YOUTUBE,
     KNOWN_LINKS.VIMEO,
     KNOWN_LINKS.LIVELEAK,
     KNOWN_LINKS.DAILYMOTION,
   ];
 
-  if (contentType === TOOLS_CATEGORIES.IMAGE) {
+  if (
+    contentType === TOOLS_CATEGORIES.IMAGE &&
+    !unprocessbleTypes.includes(inputUrlType) // remove this for DBKF media service
+  ) {
     yield call(
       similaritySearch,
       () => dbkfAPI.callImageSimilarityEndpoint(processUrl),
@@ -280,6 +287,12 @@ function* similaritySearch(searchEndpoint, stateStorageFunction) {
 function* handleSourceCredibilityCall(action) {
   if (action.type === "CLEAN_STATE") return;
   try {
+    // prevent from running if local file
+    const imageVideoSelected = yield select(
+      (state) => state.assistant.imageVideoSelected,
+    );
+    if (imageVideoSelected) return;
+
     // prevent from running if youtube
     const inputUrl = yield select((state) => state.assistant.inputUrl);
     const urlType = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
