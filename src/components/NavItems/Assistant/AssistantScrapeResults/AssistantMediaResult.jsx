@@ -40,7 +40,7 @@ import AssistantImageResult from "./AssistantImageResult";
 import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
 import AssistantVideoResult from "./AssistantVideoResult";
 
-const AssistantMediaResult = () => {
+const AssistantMediaResult = ({ title = null }) => {
   const classes = useMyStyles();
   const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -129,7 +129,7 @@ const AssistantMediaResult = () => {
     >
       <CardHeader
         className={classes.assistantCardHeader}
-        title={keyword("media_title")}
+        title={title ? keyword(title) : keyword("media_title")}
         subheader={keyword("media_below")}
         action={
           <div style={{ display: "flex" }}>

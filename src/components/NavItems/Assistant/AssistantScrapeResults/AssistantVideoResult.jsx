@@ -24,6 +24,9 @@ const AssistantVideoResult = () => {
 
   const processUrl = useSelector((state) => state.assistant.processUrl);
   const input_url_type = useSelector((state) => state.assistant.inputUrlType);
+  const imageVideoSelected = useSelector(
+    (state) => state.assistant.imageVideoSelected,
+  );
 
   const useIframe = () => {
     switch (input_url_type) {
@@ -50,8 +53,9 @@ const AssistantVideoResult = () => {
     let positionOne = 0;
 
     // Don't embed blob links, they are url for cached in-memory video
+    // imageVideoSelected true for a local file
     if (embedURL.startsWith("blob:")) {
-      return null;
+      return imageVideoSelected ? embedURL : null;
     }
 
     let positionTwo;

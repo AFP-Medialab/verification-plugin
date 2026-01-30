@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
@@ -9,6 +9,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import { imageForensic } from "@/constants/tools";
 import { resetForensicState } from "@/redux/actions/tools/forensicActions";
 import { setError } from "@/redux/reducers/errorReducer";
@@ -24,6 +25,9 @@ import ForensicResults from "./Results/ForensicResult";
 
 const Forensic = () => {
   const { url } = useParams();
+  const [searchParams] = useSearchParams();
+  const fromAssistant = searchParams.has("fromAssistant");
+
   const keyword = i18nLoadNamespace("components/NavItems/tools/Forensic");
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
@@ -39,11 +43,16 @@ const Forensic = () => {
 
   const uid = session && session.user ? session.user.id : null;
 
-  const [input, setInput] = useState(resultUrl);
-  const [imageFile, setImageFile] = useState(undefined);
+  const [input = resultUrl || "", setInput, imageFile, setImageFile] =
+    useUrlOrFile();
   const [urlDetected, setUrlDetected] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const [type, setType] = useState("");
+  const [type, setType] = useState(() => {
+    if (fromAssistant) {
+      return imageFile ? "local" : input ? "url" : "";
+    }
+    return "";
+  });
 
   useGetImages(imageFile, type, keyword);
 
@@ -107,13 +116,17 @@ const Forensic = () => {
     setImageFile(undefined);
   }, [imageFile]);
 
-  const processUrl = useSelector((state) => state.assistant.processUrl);
   useEffect(() => {
-    if (processUrl && url?.includes("autoRun")) {
-      setInput(processUrl);
-      setUrlDetected(true);
+    if (fromAssistant && (input || imageFile)) {
+      if (imageFile) {
+        setType("local");
+        setImageFile(imageFile);
+      } else if (input) {
+        setType("url");
+        setUrlDetected(true);
+      }
     }
-  }, [processUrl, url]);
+  }, [searchParams]);
 
   const preprocessingSuccess = (file) => {
     dispatch(resetForensicState());
