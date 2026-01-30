@@ -26,7 +26,7 @@ export async function pollKeyframeJobStatusApi(
 
     const config = {
       method: "get",
-      url: `${process.env.REACT_APP_KEYFRAME_API}/status/${jobId}`,
+      url: `${import.meta.env.VITE_KEYFRAME_API}/status/${jobId}`,
     };
 
     const response = await authenticatedRequest(config);

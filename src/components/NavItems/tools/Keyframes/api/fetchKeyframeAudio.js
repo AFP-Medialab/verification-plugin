@@ -10,8 +10,8 @@ import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequ
 export async function fetchKeyframeAudioApi(authenticatedRequest, jobId) {
   const config = {
     method: "get",
-    // url: `${process.env.REACT_APP_KEYFRAME_API}/json/audio/${jobId}`,
-    url: `${process.env.REACT_APP_KEYFRAME_API}/mp3/${jobId}`,
+    // url: `${import.meta.env.VITE_KEYFRAME_API}/json/audio/${jobId}`,
+    url: `${import.meta.env.VITE_KEYFRAME_API}/mp3/${jobId}`,
   };
 
   const response = await authenticatedRequest(config);

@@ -17,11 +17,11 @@ import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
 
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 const Feedback = () => {
   const keyword = i18nLoadNamespace("components/FeedBack");
-  const API_URL = process.env.REACT_APP_MY_WEB_HOOK_URL;
+  const API_URL = import.meta.env.VITE_MY_WEB_HOOK_URL;
 
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   const [displayCard, setDisplayCard] = useState(false);

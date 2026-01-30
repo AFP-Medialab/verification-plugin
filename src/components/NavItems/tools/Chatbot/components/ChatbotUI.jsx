@@ -35,7 +35,7 @@ import {
   setUserInput,
   updateStreamingMessage,
 } from "@/redux/reducers/chatbotReducer";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 import { DEFAULT_TEMPERATURE } from "../config/constants";
 import useChatbot from "../hooks/useChatbot";

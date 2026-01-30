@@ -157,7 +157,7 @@ const KeyframesResults = ({
   };
 
   const openAudioAnalysisInHiya = async (jobId) => {
-    const hiyaUrl = `${process.env.REACT_APP_KEYFRAME_API}/audio/${jobId}`;
+    const hiyaUrl = `${import.meta.env.VITE_KEYFRAME_API}/audio/${jobId}`;
     const encodedUrl = encodeURIComponent(hiyaUrl);
 
     await openNewTabWithUrl(
@@ -305,7 +305,7 @@ const KeyframesResults = ({
                             startIcon={<DownloadIcon />}
                             onClick={() =>
                               handleDownload(
-                                `${process.env.REACT_APP_KEYFRAME_API}/audio/${data.session}`,
+                                `${import.meta.env.VITE_KEYFRAME_API}/audio/${data.session}`,
                                 "extracted_audio",
                                 setIsAudioDownloading,
                               )

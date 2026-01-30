@@ -2,7 +2,10 @@ import React from "react";
 
 import SvgIcon from "@mui/material/SvgIcon";
 
-import SNAIcon from "../../../../../NavBar/images/SVG/DataAnalysis/Twitter_sna.svg";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import XIcon from "@mui/icons-material/X";
+
+import TiktocIconSVG from "../../../../../NavBar/images/SVG/DataAnalysis/Tiktok_sna.svg";
 
 export const dataUploadModalStyle = {
   position: "absolute",
@@ -23,12 +26,6 @@ export const required_fields = [
   "Text",
 ];
 
-const metaLogoUrl =
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Facebook_logo_%28square%29.png/960px-Facebook_logo_%28square%29.png";
-
-const tiktokLogoUrl =
-  "https://www.citypng.com/public/uploads/preview/round-tiktok-icon-logo-transparent-background-701751695033010oraha4pc0r.png";
-
 const metaDefaultFields = new Map([
   ["Object", "Link"],
   ["User ID", "Facebook Id"],
@@ -36,14 +33,6 @@ const metaDefaultFields = new Map([
   ["Share Time", "Post Created"],
   ["Text", "Message"],
 ]);
-
-const snaIcon = (
-  <SvgIcon
-    component={SNAIcon}
-    inheritViewBox
-    style={{ width: 38, height: 21 }}
-  />
-);
 
 const snaTwitterDefaultFields = new Map([
   ["Object", "objects"],
@@ -61,56 +50,99 @@ const snaTiktokDefaultFields = new Map([
   ["Text", "text"],
 ]);
 
+const TiktocIcon = (props) => {
+  return <SvgIcon component={TiktocIconSVG} inheritViewBox {...props} />;
+};
+
 export const uploadTemplates = {
   crowdTangleFb: {
     icon: (
-      <img
-        src={metaLogoUrl}
-        alt={"crowdtangleFB"}
-        style={{ width: 38, height: 34 }}
-      />
+      <FacebookIcon alt={"crowdtangleFB"} style={{ width: 38, height: 34 }} />
     ),
     defaultFieldsMap: metaDefaultFields,
     id: "crowdTangleFb",
     tooltipText: "uploadModal_crowdtangleFB_tooltip",
   },
-  snaTwitter: {
-    icon: snaIcon,
+  twitter: {
+    icon: <XIcon alt={"X"} style={{ width: 38, height: 34 }} />,
     defaultFieldsMap: snaTwitterDefaultFields,
-    id: "snaTwitter",
+    id: "twitter",
     tooltipText: "uploadModal_snaTwitter_tooltip",
   },
-  snaTikTok: {
-    icon: (
-      <img
-        src={tiktokLogoUrl}
-        alt={"tiktok"}
-        style={{ width: 38, height: 34 }}
-      />
-    ),
+  tiktok: {
+    icon: <TiktocIcon alt={"tiktok"} style={{ width: 38, height: 34 }} />,
     defaultFieldsMap: snaTiktokDefaultFields,
-    id: "snaTiktok",
+    id: "tiktok",
     tooltipText: "uploadModal_snaTiktok_tooltip",
   },
 };
 
 export const zeeschuimerUploadTemplates = {
   twitter: {
-    icon: snaIcon,
+    icon: <XIcon alt={"X"} style={{ width: 38, height: 34 }} />,
     objectMappings: "",
     id: "zeeschuimerTwitter",
     tooltipText: "uploadModalZS_twitter_tooltip",
   },
   tiktok: {
-    icon: (
-      <img
-        src={tiktokLogoUrl}
-        alt={"tiktok"}
-        style={{ width: 38, height: 34 }}
-      />
-    ),
+    icon: <TiktocIcon alt={"tiktok"} style={{ width: 38, height: 34 }} />,
     objectMappings: "",
     id: "zeeschuimerTiktok",
     tooltipText: "uploadModalZS_tiktok_tooltip",
+  },
+};
+
+export const detailsFormat = {
+  twitter: {
+    column: [
+      {
+        headers: ["text", "tweetlink", "links", "imagelink", "video"],
+        size: 350,
+      },
+      {
+        headers: ["username", "display_name", "collectionid", "replying_to"],
+        size: 150,
+      },
+    ],
+  },
+  tiktok: {
+    column: [
+      {
+        headers: [
+          "text",
+          "hashtags",
+          "objects",
+          "id",
+          "link",
+          "linktext",
+          "description",
+        ],
+        size: 350,
+      },
+      {
+        headers: ["username", "soundauthor", "soundtitle", "collectionid"],
+        size: 150,
+      },
+    ],
+  },
+  fb: {
+    column: [
+      {
+        headers: [
+          "text",
+          "pagedescription",
+          "objects",
+          "id",
+          "link",
+          "linktext",
+          "description",
+        ],
+        size: 350,
+      },
+      {
+        headers: ["pagename", "username", "pagecategory", "type"],
+        size: 150,
+      },
+    ],
   },
 };

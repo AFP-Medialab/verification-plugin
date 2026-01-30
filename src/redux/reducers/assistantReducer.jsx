@@ -123,6 +123,7 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_WARNING_EXPANDED":
     case "SET_ASSURANCE_EXPANDED":
     case "SET_STATE_EXPANDED":
+    case "SUBMIT_UPLOAD":
       return Object.assign({}, state, action.payload);
 
     case "SET_IMPORTANT_SENTENCE_THRESHOLD":

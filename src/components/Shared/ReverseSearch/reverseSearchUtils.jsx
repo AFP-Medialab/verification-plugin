@@ -33,8 +33,8 @@ export const SEARCH_ENGINE_SETTINGS = {
     CONTEXT_MENU_TITLE: "Image Reverse Search - Google Lens",
     SUPPORTED_IMAGE_FORMAT: [
       IMAGE_FORMATS.URI,
-      //IMAGE_FORMATS.BLOB,
-      //IMAGE_FORMATS.LOCAL,
+      IMAGE_FORMATS.BLOB,
+      IMAGE_FORMATS.LOCAL,
     ],
   },
   BAIDU_SEARCH: {

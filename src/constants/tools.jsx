@@ -25,8 +25,6 @@ import {
   setSyntheticImageDetectionUrl,
 } from "@/redux/reducers/tools/syntheticImageDetectionReducer";
 import { FOOTER_TYPES, Footer } from "@Shared/Footer/Footer";
-import C2paData from "components/NavItems/tools/C2pa/C2pa";
-import SNA from "components/NavItems/tools/SNA/SNA";
 
 import CsvSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/CSV_SNA.svg";
 import TwitterSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/Twitter_sna.svg";
@@ -39,6 +37,7 @@ import MagnifierIcon from "../components/NavBar/images/SVG/Image/Magnifier.svg";
 import MetadataIcon from "../components/NavBar/images/SVG/Image/Metadata.svg";
 import OcrIcon from "../components/NavBar/images/SVG/Image/OCR.svg";
 import AboutIcon from "../components/NavBar/images/SVG/Navbar/About.svg";
+import AfpDigitalCoursesIconComponent from "../components/NavBar/images/SVG/Navbar/AfpDigitalCoursesIcon";
 import ToolsIcon from "../components/NavBar/images/SVG/Navbar/Tools.svg";
 import CovidSearchIcon from "../components/NavBar/images/SVG/Search/Covid19.svg";
 import TwitterSearchIcon from "../components/NavBar/images/SVG/Search/Twitter_search.svg";
@@ -46,27 +45,72 @@ import XnetworkIcon from "../components/NavBar/images/SVG/Search/Xnetwork.svg";
 import KeyframesIcon from "../components/NavBar/images/SVG/Video/Keyframes.svg";
 import ThumbnailsIcon from "../components/NavBar/images/SVG/Video/Thumbnails.svg";
 import AnalysisIcon from "../components/NavBar/images/SVG/Video/Video_analysis.svg";
-import About from "../components/NavItems/About/About";
-import MachineGeneratedText from "../components/NavItems/MachineGeneratedText";
-import ToolsMenu from "../components/NavItems/tools/Alltools/ToolsMenu";
-import Analysis from "../components/NavItems/tools/Analysis/Analysis";
-import Archive from "../components/NavItems/tools/Archive";
-import Chatbot from "../components/NavItems/tools/Chatbot";
-import DeepfakeVideo from "../components/NavItems/tools/Deepfake/DeepfakeVideo";
-import Forensic from "../components/NavItems/tools/Forensic/Forensic";
-import Geolocation from "../components/NavItems/tools/Geolocation/Geolocation";
-import CheckGif from "../components/NavItems/tools/Gif/CheckGif";
-import Hiya from "../components/NavItems/tools/Hiya";
-import Keyframes from "../components/NavItems/tools/Keyframes/Keyframes";
-import Magnifier from "../components/NavItems/tools/Magnifier/Magnifier";
-import Metadata from "../components/NavItems/tools/Metadata/Metadata";
-import OCR from "../components/NavItems/tools/OCR/OCR";
-import SemanticSearch from "../components/NavItems/tools/SemanticSearch";
-import SyntheticImageDetection from "../components/NavItems/tools/SyntheticImageDetection";
-import Thumbnails from "../components/NavItems/tools/Thumbnails/Thumbnails";
-import TwitterAdvancedSearch from "../components/NavItems/tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
-import TwitterSna from "../components/NavItems/tools/TwitterSna/TwitterSna";
 import { ROLES } from "./roles";
+
+// Lazy load heavy components
+const C2paData = React.lazy(
+  () => import("@/components/NavItems/tools/C2pa/C2pa"),
+);
+const SNA = React.lazy(() => import("@/components/NavItems/tools/SNA/SNA"));
+
+// Lazy load heavy components (continued)
+const About = React.lazy(() => import("../components/NavItems/About/About"));
+const MachineGeneratedText = React.lazy(
+  () => import("../components/NavItems/MachineGeneratedText"),
+);
+const ToolsMenu = React.lazy(
+  () => import("../components/NavItems/tools/Alltools/ToolsMenu"),
+);
+const Analysis = React.lazy(
+  () => import("../components/NavItems/tools/Analysis/Analysis"),
+);
+const Archive = React.lazy(
+  () => import("../components/NavItems/tools/Archive"),
+);
+const Chatbot = React.lazy(
+  () => import("../components/NavItems/tools/Chatbot"),
+);
+const DeepfakeVideo = React.lazy(
+  () => import("../components/NavItems/tools/Deepfake/DeepfakeVideo"),
+);
+const Forensic = React.lazy(
+  () => import("../components/NavItems/tools/Forensic/Forensic"),
+);
+const Geolocation = React.lazy(
+  () => import("../components/NavItems/tools/Geolocation/Geolocation"),
+);
+const CheckGif = React.lazy(
+  () => import("../components/NavItems/tools/Gif/CheckGif"),
+);
+const Hiya = React.lazy(() => import("../components/NavItems/tools/Hiya"));
+const Keyframes = React.lazy(
+  () => import("../components/NavItems/tools/Keyframes/Keyframes"),
+);
+const Magnifier = React.lazy(
+  () => import("../components/NavItems/tools/Magnifier/Magnifier"),
+);
+const Metadata = React.lazy(
+  () => import("../components/NavItems/tools/Metadata/Metadata"),
+);
+const OCR = React.lazy(() => import("../components/NavItems/tools/OCR/OCR"));
+const SemanticSearch = React.lazy(
+  () => import("../components/NavItems/tools/SemanticSearch"),
+);
+const SyntheticImageDetection = React.lazy(
+  () => import("../components/NavItems/tools/SyntheticImageDetection"),
+);
+const Thumbnails = React.lazy(
+  () => import("../components/NavItems/tools/Thumbnails/Thumbnails"),
+);
+const TwitterAdvancedSearch = React.lazy(
+  () =>
+    import(
+      "../components/NavItems/tools/TwitterAdvancedSearch/TwitterAdvancedSearch"
+    ),
+);
+const TwitterSna = React.lazy(
+  () => import("../components/NavItems/tools/TwitterSna/TwitterSna"),
+);
 
 /**
  * Represents the categories to which the tools belong
@@ -648,11 +692,11 @@ const machineGeneratedText = new Tool(
   mgtSvgIcon,
   TOOLS_CATEGORIES.SEARCH,
   [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.NEW],
-  [ROLES.EXTRA_FEATURE],
+  [ROLES.BETA_TESTER],
   "mgt",
   TOOL_GROUPS.VERIFICATION,
   <MachineGeneratedText />,
-  <Footer type={FOOTER_TYPES.USFD} />,
+  <Footer type={FOOTER_TYPES.KINIT} />,
 );
 
 /**
@@ -750,6 +794,19 @@ export const chatbot = new Tool(
  *
  * Other Group tools
  */
+const afpDigitalCourses = new Tool(
+  "",
+  "",
+  AfpDigitalCoursesIconComponent,
+  null,
+  null,
+  null,
+  "afpDigitalCourses",
+  TOOL_GROUPS.MORE,
+  null,
+  null,
+);
+
 const about = new Tool(
   "navbar_about",
   "",
@@ -810,6 +867,7 @@ export const tools = Object.freeze([
   disinfoDeck,
   archiving,
   chatbot,
+  afpDigitalCourses,
   about,
   c2paData,
 ]);
