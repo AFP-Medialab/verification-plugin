@@ -88,8 +88,10 @@ const postFormat = (rawData) => {
 const getTableForPlatform = (platform) => {
   switch (platform) {
     case "twitter":
+    case "zeeschuimerTwitter":
       return TWITTERCOLLECTION;
     case "tiktok":
+    case "zeeschuimerTiktok":
       return TIKTOKCOLLECTION;
     case "crowdTangleFb":
       return "fb";
@@ -108,8 +110,10 @@ const getTableForPlatform = (platform) => {
 const getDataKeyForPlatform = (platform) => {
   switch (platform) {
     case "twitter":
+    case "zeeschuimerTwitter":
       return "tweet";
     case "tiktok":
+    case "zeeschuimerTiktok":
       return "tiktok";
     case "crowdTangleFb":
       return "post";
@@ -149,7 +153,6 @@ const addToCollectionByPlatform = async (platform, data, collectionId) => {
   let collections = await snaDB.get("collections", collectionId);
   if (!collections) collections = await snaDB.put("collections", collectionId);
   //const collections = await snaDB.put("collections", collectionId)
-  console.log("colllections ...", collections);
   const table = getTableForPlatform(platform);
   const dataKey = getDataKeyForPlatform(platform);
 
@@ -177,11 +180,11 @@ const addToCollectionByPlatform = async (platform, data, collectionId) => {
       totalProcessed += chunk.length;
 
       // Log progress for large datasets
-      if (data.length > CHUNK_SIZE) {
+      /* if (data.length > CHUNK_SIZE) {
         console.log(
           `Processed ${totalProcessed}/${data.length} items for ${platform}`,
         );
-      }
+      }*/
     }
 
     console.log(
@@ -204,16 +207,13 @@ export const handleSNARecorderChromeMessage = async (
 ) => {
   try {
     if (request.prompt === "getTweets") {
-      //const tweetResponse = await getTweetsFromDB();
       const tweetResponse = await getItemsFromDB(
         TWITTERCOLLECTION,
         tweetFormat,
       );
       sendResponse(tweetResponse);
     } else if (request.prompt === "getTiktoks") {
-      //const tiktokResp = await getTikToksFromDB();
       const tiktokResp = await getItemsFromDB(TIKTOKCOLLECTION, tiktokFormat);
-      console.log("tiktokResp ", tiktokResp);
       sendResponse(tiktokResp);
     } else if (request.prompt === "getFBPosts") {
       const fbPostResp = await getItemsFromDB(FBCOLLECTION, postFormat);
@@ -311,11 +311,14 @@ export const handleRecordedMessage = async (request) => {
   if (currentSession === false) {
     return;
   }
+
   if (request.prompt === "tiktokCapture") {
     // Tiktok responses can have item details in either itemList or data field
     const itemsFromList = request.content.itemList || [];
     const itemsFromData = request.content.data?.map((x) => x.item) || [];
-    const allItems = [...itemsFromList, ...itemsFromData];
+    const allItems = [...itemsFromList, ...itemsFromData].filter(
+      (item) => item != null && item.id != null,
+    );
 
     await Promise.all(
       allItems.map((item) => storeTiktokItem(item, currentSession)),
@@ -323,23 +326,57 @@ export const handleRecordedMessage = async (request) => {
     return;
   }
 
+  // Twitter capture
   if (jp({ json: request, path: "$..entryId" }).length > 0) {
     for (let entryId of entryIds) {
       let tweet_results = jp({
         json: request,
         path: `$..entries[?(@.entryId=="${entryId}")]..tweet_results`,
       });
+
       if (tweet_results.length > 0) {
         let content =
           tweet_results[0].result.tweet ||
           tweet_results[0].result ||
           tweet_results[0].tweet;
+
         let tweet = transformTweet(content, currentSession);
         await snaDB.put(TWITTERCOLLECTION, {
           id: entryId,
           collectionID: currentSession,
           tweet: tweet,
         });
+      }
+    }
+  } else {
+    // Try alternative patterns for Twitter data
+    const timelineInstructions = jp({
+      json: request,
+      path: "$..timeline..instructions[*]..entries[*]",
+    });
+
+    if (timelineInstructions.length > 0) {
+      for (let entry of timelineInstructions) {
+        if (entry.entryId && entry.content) {
+          const tweet_results = jp({
+            json: entry,
+            path: "$..tweet_results",
+          });
+
+          if (tweet_results.length > 0) {
+            let content =
+              tweet_results[0].result.tweet ||
+              tweet_results[0].result ||
+              tweet_results[0].tweet;
+
+            let tweet = transformTweet(content, currentSession);
+            await snaDB.put(TWITTERCOLLECTION, {
+              id: entry.entryId,
+              collectionID: currentSession,
+              tweet: tweet,
+            });
+          }
+        }
       }
     }
   }
@@ -351,7 +388,7 @@ const PLATFORM_URLS = {
 };
 async function getCurrentTab() {
   let queryOptions = { active: true, lastFocusedWindow: true };
-  let [tab] = await chrome.tabs.query(queryOptions);
+  let [tab] = await browser.tabs.query(queryOptions);
   return tab;
 }
 
@@ -380,24 +417,34 @@ export const handleRecorderOnCommit = async (details) => {
     return;
   }
   try {
-    await chrome.scripting.executeScript({
+    const scriptUrl = browser.runtime.getURL("content-scripts/inject.js");
+
+    // Step 1: Inject the content script bridge (runs in content script context)
+    await browser.scripting.executeScript({
+      target: { tabId: currentTab.id, allFrames: false },
+      files: ["content-scripts/sna-bridge.js"],
+    });
+
+    // Step 2: Inject the page context script (runs in page context)
+    // The page script communicates with the bridge via window.postMessage
+    await browser.scripting.executeScript({
       target: { tabId: currentTab.id, allFrames: true },
-      function: () => {
-        let pluginId = chrome.runtime.id;
+      func: (url) => {
         let s = document.createElement("script");
-        s.dataset.params = pluginId;
-        s.src = chrome.runtime.getURL("content-scripts/inject.js");
+        s.src = url;
         (document.head || document.documentElement).appendChild(s);
       },
+      args: [scriptUrl],
     });
   } catch (e) {
+    console.error("SNA Recorder: Error injecting scripts:", e);
     throw Error(e);
   }
 };
 // Initialize the snaDB
 export const initializeMessageHandler = async () => {
   await snaDB.init();
-  console.log("Message handler initialized with snaDB:", snaDB);
+  //console.log("Message handler initialized with snaDB:", snaDB);
 };
 
 // Export the databases for use in other modules if needed

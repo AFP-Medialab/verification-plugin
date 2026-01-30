@@ -557,6 +557,7 @@ const NavigationSidebar = ({ tools, setOpenAlert }) => {
                           }
                           keyword={keyword}
                           level={1}
+                          showPinButton={true}
                         />
                       );
                     }

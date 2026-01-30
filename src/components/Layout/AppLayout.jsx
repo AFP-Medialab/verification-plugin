@@ -18,7 +18,7 @@ const AppLayout = () => {
     <Box sx={{ display: "flex" }}>
       <NotificationSnackbar openAlert={openAlert} setOpenAlert={setOpenAlert} />
       <NavigationSidebar tools={tools} setOpenAlert={setOpenAlert} />
-      <AppHeader topMenuItems={TOP_MENU_ITEMS} />
+      <AppHeader topMenuItems={TOP_MENU_ITEMS} tools={tools} />
       <AppContent tools={tools} />
     </Box>
   );

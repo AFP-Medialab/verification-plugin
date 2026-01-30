@@ -226,7 +226,6 @@ export const generateAccountActivityData = (
   selectedContent,
   { activitySelect },
 ) => {
-  console.log("selectedContent  ", selectedContent);
   let contentGroupedByUser = Object.groupBy(
     selectedContent,
     ({ username }) => username,

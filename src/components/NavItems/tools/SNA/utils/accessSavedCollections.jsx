@@ -213,10 +213,18 @@ const getCollectionCounts = async (source) => {
 };
 
 /**
- * Lightweight update that only refreshes collection metrics (counts)
+ * Lightweight update that refreshes collection metrics (counts) and adds new collections
  * without reloading the full content - used during active recording
  */
 export const updateCollectionMetrics = async (dataSources, setDataSources) => {
+  // Ensure dataSources is an array
+  if (!Array.isArray(dataSources)) {
+    console.warn(
+      "updateCollectionMetrics: dataSources is not an array, skipping update",
+    );
+    return;
+  }
+
   // Get current counts from IndexedDB (without full content)
   const twitterCounts = await getCollectionCounts("twitter");
   const tiktokCounts = await getCollectionCounts("tiktok");
@@ -224,10 +232,36 @@ export const updateCollectionMetrics = async (dataSources, setDataSources) => {
 
   const allCounts = [...twitterCounts, ...tiktokCounts, ...fbCounts];
 
-  // Check if any metrics changed
-  let hasChanges = false;
+  // Find existing collection IDs in dataSources
+  const existingIds = dataSources.map((ds) => ds.id);
 
-  // Update only the metrics, keeping content intact
+  // Find new collections that don't exist in dataSources yet
+  const newCollectionIds = allCounts
+    .filter((count) => !existingIds.includes(count.id))
+    .map((count) => count.id);
+
+  let hasChanges = false;
+  let newCollections = [];
+
+  // If there are new collections, fetch their full data
+  if (newCollectionIds.length > 0) {
+    hasChanges = true;
+
+    // Fetch full data for new collections only
+    const newTwitter = (await getSavedCollections("twitter")).filter((col) =>
+      newCollectionIds.includes(col.id),
+    );
+    const newTiktok = (await getSavedCollections("tiktok")).filter((col) =>
+      newCollectionIds.includes(col.id),
+    );
+    const newFb = (await getSavedCollections("fb")).filter((col) =>
+      newCollectionIds.includes(col.id),
+    );
+
+    newCollections = [...newTwitter, ...newTiktok, ...newFb];
+  }
+
+  // Update only the metrics for existing collections, keeping content intact
   const updated = dataSources.map((ds) => {
     // Skip file uploads
     if (ds.source === "fileUpload") return ds;
@@ -251,8 +285,8 @@ export const updateCollectionMetrics = async (dataSources, setDataSources) => {
 
   // Only trigger update if something changed
   if (hasChanges) {
-    console.log("Collection metrics updated during recording");
-    setDataSources(updated);
+    // Add new collections at the beginning, before existing collections
+    setDataSources([...newCollections, ...updated]);
   }
 };
 
@@ -266,10 +300,12 @@ export const refreshSpecificCollection = async (
   dataSources,
   setDataSources,
 ) => {
-  console.log(
-    `Refreshing collection "${collectionId}" for platforms:`,
-    platforms,
-  );
+  // Ensure dataSources is an array, if not do a full page initialization
+  if (!Array.isArray(dataSources)) {
+    const allCollections = await initializePage();
+    setDataSources(allCollections);
+    return;
+  }
 
   // Map platform names to sources
   const platformMap = {
@@ -340,14 +376,11 @@ export const refreshSpecificCollection = async (
     if (!fresh) {
       return ds; // Keep unchanged if no match
     }
-
-    console.log(`Updated collection: ${ds.name}`);
     return fresh; // Replace with fresh data
   });
 
   // Add new collections at the beginning
   if (newCollections.length > 0) {
-    console.log(`Added ${newCollections.length} new collection(s)`);
     setDataSources([...newCollections, ...updated]);
   } else {
     setDataSources(updated);
@@ -364,6 +397,14 @@ export const refreshPageSelective = async (
   setDataSources,
 ) => {
   setLoading(true);
+
+  // Ensure dataSources is an array, if not do a full page initialization
+  if (!Array.isArray(dataSources)) {
+    const allCollections = await initializePage();
+    setDataSources(allCollections);
+    setLoading(false);
+    return;
+  }
 
   // Fetch all collections from IndexedDB
   let savedTweets = await getSavedCollections("twitter");
@@ -407,7 +448,6 @@ export const refreshPageSelective = async (
   const fbChanged = detectChanges(fbIndices, savedFBs);
 
   if (!twitterChanged && !tiktokChanged && !fbChanged) {
-    console.log("No changes detected in collections");
     setLoading(false);
     return;
   }
@@ -505,7 +545,6 @@ export const refreshPage = async (setLoading, dataSources, setDataSources) => {
       ...uploadedCollections,
     ];
     setDataSources(updatedDS);
-    console.log("New data source ", dataSources);
     setLoading(false);
   }
 };
@@ -535,7 +574,6 @@ export const getSelectedSourcesNameMaps = (dataSources, selected) => {
       )
       .flatMap((m) => [...m]),
   );
-  console.log("selected Maps ", nameMaps);
   return nameMaps;
 };
 

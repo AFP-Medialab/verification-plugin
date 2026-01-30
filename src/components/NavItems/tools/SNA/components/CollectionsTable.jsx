@@ -21,6 +21,8 @@ import DownloadIcon from "@mui/icons-material/Download";
 import UploadIcon from "@mui/icons-material/Upload";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
+import { uploadToCollection } from "../utils/snaUtils";
+
 const EmptyTablePlaceholder = ({ keyword }) => {
   return (
     <>
@@ -114,12 +116,7 @@ const CollectionActionsCell = ({
 
     const handleRawUpload = async (parsed, rowName) => {
       try {
-        await browser.runtime.sendMessage({
-          prompt: "addToCollection",
-          data: parsed,
-          platform: row.source,
-          collectionId: rowName.split("~")[0],
-        });
+        await uploadToCollection(parsed, row.source, rowName.split("~")[0]);
       } catch (error) {
         console.error("Error uploading raw collection:", error);
       }
@@ -323,8 +320,13 @@ const CollectionActionsCell = ({
 };
 
 const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
-  const { selected, setSelected, setDetailContent, setOpenDetailModal } =
-    rowProps;
+  const {
+    selected,
+    setSelected,
+    setDetailContent,
+    setDetailSource,
+    setOpenDetailModal,
+  } = rowProps;
   const {
     fileInputRef,
     dataSources,
@@ -361,6 +363,7 @@ const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
         <IconButton
           onClick={() => {
             setDetailContent(row.content);
+            setDetailSource(row.source);
             setOpenDetailModal(true);
           }}
           sx={{ p: 1 }}
@@ -442,6 +445,7 @@ const CollectionsTable = ({
   selected,
   setSelected,
   setDetailContent,
+  setDetailSource,
   setOpenDetailModal,
   fileInputRef,
   dataSources,
@@ -462,6 +466,7 @@ const CollectionsTable = ({
     selected,
     setSelected,
     setDetailContent,
+    setDetailSource,
     setOpenDetailModal,
   };
 
