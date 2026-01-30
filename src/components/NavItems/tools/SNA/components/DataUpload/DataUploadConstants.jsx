@@ -1,12 +1,11 @@
 import React from "react";
 
+import SvgIcon from "@mui/material/SvgIcon";
+
 import FacebookIcon from "@mui/icons-material/Facebook";
 import XIcon from "@mui/icons-material/X";
 
-import { size } from "lodash";
-import { column } from "stylis";
-
-import TiktocIcon from "../../../../../NavBar/images/SVG/DataAnalysis/Tiktok_sna.svg";
+import TiktocIconSVG from "../../../../../NavBar/images/SVG/DataAnalysis/Tiktok_sna.svg";
 
 export const dataUploadModalStyle = {
   position: "absolute",
@@ -50,6 +49,10 @@ const snaTiktokDefaultFields = new Map([
   ["Share Time", "date"],
   ["Text", "text"],
 ]);
+
+const TiktocIcon = (props) => {
+  return <SvgIcon component={TiktocIconSVG} inheritViewBox {...props} />;
+};
 
 export const uploadTemplates = {
   crowdTangleFb: {

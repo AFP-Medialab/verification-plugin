@@ -329,7 +329,7 @@ const Keyframes = () => {
                             labelId="audio-enabled-label"
                             id="audio-enabled-select"
                             value={audioEnabled}
-                            label={keyword("audio")}
+                            label={keyword("enable_audio_processing")}
                             disabled={isBusy}
                             onChange={(e) =>
                               setAudioEnabled(Number(e.target.value))
