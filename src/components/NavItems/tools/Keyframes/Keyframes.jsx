@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
@@ -13,6 +13,7 @@ import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import KeyframesHeader from "@/components/NavItems/tools/Keyframes/components/KeyframesHeader";
 import KeyframesResults from "@/components/NavItems/tools/Keyframes/components/KeyframesResults";
 import KeyframesTabs from "@/components/NavItems/tools/Keyframes/components/KeyframesTabs";
@@ -70,7 +71,6 @@ const useKeyframesState = () => {
       keyframesFeaturesData: state.keyframes.keyframesFeatures,
       isLoadingSimilarity: state.keyframes.similarityLoading,
       similarityResults: state.keyframes.similarity,
-      processUrl: state.assistant.processUrl,
       role: state.userSession.user.roles,
       userAuthenticated:
         state.userSession && state.userSession.userAuthenticated,
@@ -82,12 +82,12 @@ const useKeyframesState = () => {
 // Main component
 const Keyframes = () => {
   const { url: urlParam } = useParams();
+  const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Keyframes");
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
   );
-  const { url } = useParams();
 
   const {
     resultUrl,
@@ -95,13 +95,12 @@ const Keyframes = () => {
     keyframesFeaturesData,
     isLoadingSimilarity,
     similarityResults,
-    processUrl,
     role,
     userAuthenticated,
   } = useKeyframesState();
 
-  const [input, setInput] = useState(resultUrl || "");
-  const [videoFile, setVideoFile] = useState(null);
+  const [input = resultUrl || "", setInput, videoFile, setVideoFile] =
+    useUrlOrFile();
   const [submittedUrl, setSubmittedUrl] = useState(undefined);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [tabSelected, setTabSelected] = useState(TAB_VALUES.URL);
@@ -211,11 +210,11 @@ const Keyframes = () => {
   }, [urlParam]);
 
   useEffect(() => {
-    if (processUrl && url?.includes("autoRun")) {
-      setInput(processUrl);
-      submitUrl(processUrl);
+    const fromAssistant = searchParams.has("fromAssistant");
+    if (fromAssistant && (input || videoFile)) {
+      submitUrl(input, videoFile);
     }
-  }, [processUrl, url]);
+  }, [searchParams]);
 
   useEffect(() => {
     if (featureData && data && hasSubmitted) {
@@ -330,7 +329,7 @@ const Keyframes = () => {
                             labelId="audio-enabled-label"
                             id="audio-enabled-select"
                             value={audioEnabled}
-                            label={keyword("audio")}
+                            label={keyword("enable_audio_processing")}
                             disabled={isBusy}
                             onChange={(e) =>
                               setAudioEnabled(Number(e.target.value))

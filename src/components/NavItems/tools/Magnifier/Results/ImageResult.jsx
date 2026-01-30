@@ -11,10 +11,10 @@ import IconButton from "@mui/material/IconButton";
 
 import CloseIcon from "@mui/icons-material/Close";
 
+import { ReverseSearchButtons } from "@/components/Shared/ReverseSearch/ReverseSearchButtons";
 import { setMagnifierResult } from "@/redux/actions/tools/magnifierActions";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { reverseImageSearch } from "@Shared/ReverseSearch/reverseSearchUtils";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { ReverseSearchButtons } from "components/Shared/ReverseSearch/ReverseSearchButtons";
 
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import ImageCropper from "../Utils/ImageCropper";

@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__search-by-image_Docs__search_search_by_image_docs",
+      "mcp__search-by-image_Docs__search_search_by_image_code",
+      "mcp__search-by-image_Docs__fetch_generic_url_content",
+      "WebFetch(domain:raw.githubusercontent.com)"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "context7",
+    "archimate",
+    "git",
+    "search-by-image Docs"
+  ]
+}

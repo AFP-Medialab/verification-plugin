@@ -8,7 +8,9 @@ import {
   Tool,
   canUserSeeTool,
   imageGif,
+  thumbnails,
   tools,
+  videoAnalysis,
 } from "@/constants/tools";
 
 export const NE_SUPPORTED_LANGS = ["en", "pt", "fr", "de", "el", "es", "it"];
@@ -219,7 +221,7 @@ export const selectCorrectActions = (
       (tool) =>
         canUserSeeTool(tool, role, isUserAuthenticated) &&
         tool.category === contentType &&
-        tool != imageGif && // ignored here as tool requires two resources not just one image
+        tool != imageGif && // ignored as tool requires two resources not just one image
         (!tool.assistantProps.linksAccepted ||
           tool.assistantProps.linksAccepted.includes(inputUrlType)) &&
         (!tool.assistantProps.processLinksAccepted ||

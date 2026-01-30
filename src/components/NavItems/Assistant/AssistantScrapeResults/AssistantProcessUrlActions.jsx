@@ -13,9 +13,9 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 
+import { useSetInputFromAssistant } from "@/Hooks/useUrlOrFile";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
-import { KNOWN_LINKS } from "@/constants/tools";
 import {
   resetGeolocation as resetGeolocationImage,
   setGeolocationUrl,
@@ -29,9 +29,12 @@ const AssistantProcessUrlActions = () => {
 
   const inputUrl = useSelector((state) => state.assistant.inputUrl);
   const processUrl = useSelector((state) => state.assistant.processUrl);
-  const contentType = useSelector((state) => state.assistant.processUrlType);
   const processUrlActions = useSelector(
     (state) => state.assistant.processUrlActions,
+  );
+  const setAssistantSelection = useSetInputFromAssistant();
+  const imageVideoSelected = useSelector(
+    (state) => state.assistant.imageVideoSelected,
   );
 
   const handleClick = (action) => {
@@ -43,6 +46,10 @@ const AssistantProcessUrlActions = () => {
     if (action.setUrl) {
       dispatch(action.setUrl(resultUrl));
     }
+    if (!imageVideoSelected) {
+      // if url to media, make sure url is correctly set
+      setAssistantSelection(resultUrl);
+    }
 
     if (action.download) {
       // Creates an A tag for downloading the video
@@ -52,20 +59,9 @@ const AssistantProcessUrlActions = () => {
       dl.click();
     } else if (action.path === null) {
       // Do nothing if path is null
-    } else if (resultUrl !== null) {
-      navigate("/app/" + action.path + "/autoRun");
-      //history.push("/app/" + action.path + "/" + encodeURIComponent(resultUrl) + "/" + contentType)
     } else {
-      navigate(
-        "/app/" +
-          action.path +
-          "/" +
-          KNOWN_LINKS.OWN +
-          "/" +
-          contentType +
-          "/autoRun",
-      );
-      //history.push("/app/" + action.path + "/" + KNOWN_LINKS.OWN + "/" + contentType)
+      // Go to other tools with fileInput or formInput
+      navigate("/app/" + action.path + "?fromAssistant");
     }
   };
 

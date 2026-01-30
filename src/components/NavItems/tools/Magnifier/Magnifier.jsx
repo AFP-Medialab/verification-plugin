@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import LinearProgress from "@mui/material/LinearProgress";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import { imageMagnifier } from "@/constants/tools";
 import { KNOWN_LINKS } from "@/constants/tools";
 import {
@@ -14,9 +15,9 @@ import {
   setMagnifierLoading,
   setMagnifierResult,
 } from "@/redux/actions/tools/magnifierActions";
+import { setError } from "@/redux/reducers/errorReducer";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { setError } from "redux/reducers/errorReducer";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
@@ -24,6 +25,7 @@ import ImageResult from "./Results/ImageResult";
 
 const Magnifier = () => {
   const { url } = useParams();
+  const [searchParams] = useSearchParams();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Magnifier");
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
@@ -36,9 +38,7 @@ const Magnifier = () => {
   const uid = session && session.user ? session.user.id : null;
   const dispatch = useDispatch();
 
-  const [input, setInput] = useState(resultUrl);
-
-  const [imageFile, setImageFile] = useState(undefined);
+  const [input = resultUrl, setInput, imageFile, setImageFile] = useUrlOrFile();
 
   const getErrorText = () => {
     return keyword("please_give_a_correct_link");
@@ -99,13 +99,15 @@ const Magnifier = () => {
     }
   }, [url]);
 
-  const processUrl = useSelector((state) => state.assistant.processUrl);
   useEffect(() => {
-    if (processUrl && url?.includes("autoRun")) {
-      setInput(processUrl);
-      submitUrl(processUrl);
+    const fromAssistant = searchParams.has("fromAssistant");
+    if (fromAssistant && (input || imageFile)) {
+      if (imageFile) {
+        setInput("");
+      }
+      submitUrl(input || imageFile);
     }
-  }, [processUrl, url]);
+  }, [searchParams]);
 
   const preprocessImage = (file) => {
     setImageFile(file);

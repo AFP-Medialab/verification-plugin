@@ -1,8 +1,8 @@
 import axios from "axios";
 
 export default function DBKFApi() {
-  const dbkfAPI = process.env.REACT_APP_DBKF_SEARCH_API;
-  const similarityAPI = process.env.REACT_APP_DBKF_SIMILARITY_API;
+  const dbkfAPI = import.meta.env.VITE_DBKF_SEARCH_API;
+  const similarityAPI = import.meta.env.VITE_DBKF_SIMILARITY_API;
 
   function cleanQuery(query) {
     // Remove the non-alphanumeric suffixes, since the TextSimilarityEndpoint doesn't seem to like them

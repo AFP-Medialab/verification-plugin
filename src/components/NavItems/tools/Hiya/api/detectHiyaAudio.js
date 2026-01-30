@@ -45,7 +45,7 @@ export const detectHiyaAudioAuthenticity = async (
   const detectionRequestConfig = {
     method: "post",
     maxBodyLength: Infinity,
-    url: process.env.REACT_APP_LOCCUS_URL + "/detection",
+    url: import.meta.env.VITE_LOCCUS_URL + "/detection",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",

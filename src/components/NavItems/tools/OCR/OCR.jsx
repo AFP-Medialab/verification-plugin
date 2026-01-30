@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import { imageOcr } from "@/constants/tools";
 import { KNOWN_LINKS } from "@/constants/tools";
 import {
@@ -16,17 +17,18 @@ import {
   setOcrResult,
   setb64InputFile,
 } from "@/redux/actions/tools/ocrActions";
+import { setError } from "@/redux/reducers/errorReducer";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import HeaderTool from "@Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import StringFileUploadField from "@Shared/StringFileUploadField";
 import { preprocessFileUpload } from "@Shared/Utils/fileUtils";
-import { setError } from "redux/reducers/errorReducer";
 
-import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import OcrResult from "./Results/OcrResult";
 
 const OCR = () => {
   const { url } = useParams();
+  const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/OCR");
   const keywordAllTools = i18nLoadNamespace(
@@ -42,8 +44,8 @@ const OCR = () => {
   const session = useSelector((state) => state.userSession);
   const uid = session && session.user ? session.user.id : null;
 
-  const [input, setInput] = useState(ocrInputUrl ?? "");
-  const [imageFile, setImageFile] = useState(undefined);
+  const [input = ocrInputUrl || "", setInput, imageFile, setImageFile] =
+    useUrlOrFile();
   const [b64Image, setB64Image] = useState(undefined);
   const [eventUrl, setEventUrl] = useState(undefined);
 
@@ -149,13 +151,12 @@ const OCR = () => {
     }
   }, [url]);
 
-  const processUrl = useSelector((state) => state.assistant.processUrl);
   useEffect(() => {
-    if (processUrl && url?.includes("autoRun")) {
-      setInput(processUrl);
-      submitUrl(processUrl);
+    const fromAssistant = searchParams.has("fromAssistant");
+    if (fromAssistant && (input || imageFile)) {
+      submitUrl(imageFile ?? input);
     }
-  }, [processUrl, url]);
+  }, [searchParams]);
 
   const resetState = () => {
     dispatch(resetOcrState());

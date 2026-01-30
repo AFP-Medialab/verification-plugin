@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -45,6 +45,8 @@ const SyntheticImageDetectionForm = ({
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const urlParam = urlParams.get("url");
+  const [searchParams] = useSearchParams();
+  const fromAssistant = searchParams.has("fromAssistant");
 
   const keyword = i18nLoadNamespace(
     "components/NavItems/tools/SyntheticImageDetection",
@@ -125,7 +127,11 @@ const SyntheticImageDetectionForm = ({
 
   useEffect(() => {
     if (url && input && !result) {
-      handleSubmit(input);
+      if (fromAssistant) {
+        handleSubmit(imageFile ?? input);
+      } else {
+        handleSubmit(input);
+      }
     }
   }, [url, input, result]);
 

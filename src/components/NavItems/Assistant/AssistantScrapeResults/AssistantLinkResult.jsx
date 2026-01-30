@@ -16,10 +16,10 @@ import Typography from "@mui/material/Typography";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import ExtractedUrlDomainAnalysisResults from "@/components/NavItems/Assistant/AssistantCheckResults/ExtractedUrlDomainAnalysisResults";
+import CopyButton from "@/components/Shared/CopyButton";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { DataGrid, getGridSingleSelectOperators } from "@mui/x-data-grid";
-import CopyButton from "components/Shared/CopyButton";
 
 import { prependHttps } from "../AssistantCheckResults/assistantUtils";
 import {
