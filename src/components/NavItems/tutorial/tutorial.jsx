@@ -1,4 +1,5 @@
 import React from "react";
+import { Trans } from "react-i18next";
 import { useSelector } from "react-redux";
 
 import Accordion from "@mui/material/Accordion";
@@ -68,7 +69,22 @@ const Tutorial = () => {
           }}
         />
         <Alert severity="info" sx={{ mb: 2 }}>
-          {keyword("afp_digital_courses_alert")}
+          {
+            <Trans
+              t={keyword}
+              i18nKey="afp_digital_courses_alert"
+              components={{
+                digitalCoursesUrl: (
+                  <a
+                    href={keyword("afp_digital_courses_url")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: "var(--mui-palette-primary-main)" }}
+                  />
+                ),
+              }}
+            />
+          }
         </Alert>
         <Typography variant="h3">{keyword("tuto_h_1")}</Typography>
         <Box
