@@ -91,26 +91,29 @@ const ClassRoom = () => {
   // Determine X URL based on language
   const getXUrl = () => {
     if (language === "fr") {
-      return "https://x.com/AfpFactuel/status/1808517554266157081";
+      return "https://x.com/AfpFactuel/";
     } else if (language === "es") {
-      return "https://x.com/AfpFactual/status/1806693787025969653";
+      return "https://x.com/AfpFactual/";
     } else if (language === "pt") {
-      return "https://x.com/AfpChecamos/status/1817251102040940911";
+      return "https://x.com/AfpChecamos/";
     } else {
       // Fallback for all other languages
-      return "https://x.com/AFPFactCheck/status/1873942236410634731/video/1";
+      return "https://x.com/AFPFactCheck/";
     }
   };
 
   // Determine Instagram URL based on language
   const getInstagramUrl = () => {
+    if (language === "fr") {
+      return "https://www.instagram.com/afpfactuel/";
+    }
     if (language === "es") {
-      return "https://www.instagram.com/p/C87m5wIMNIN/";
+      return "https://www.instagram.com/afp_factual/";
     } else if (language === "pt") {
-      return "https://www.instagram.com/p/C8ww9S_pNDN/";
+      return "https://www.instagram.com/afpchecamos/";
     } else {
       // Fallback for all other languages
-      return "https://www.instagram.com/reel/C8xhGcJM_vA/";
+      return "https://www.instagram.com/afpfactcheck/";
     }
   };
 
