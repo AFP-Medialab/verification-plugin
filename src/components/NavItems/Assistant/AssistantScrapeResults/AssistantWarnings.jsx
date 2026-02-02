@@ -155,7 +155,7 @@ const AssistantWarnings = () => {
               pl: 1,
             }}
           >
-            {keyword("Related fact checks")}
+            {keyword("warnings_title")}
           </Typography>
 
           {/* expand button */}
