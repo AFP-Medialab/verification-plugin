@@ -258,8 +258,12 @@ export const transformTiktok = (tiktokInfo, id, collectionID) => {
   // Transform hashtags
   tiktok.hashtags = transformTiktokHashtags(tiktok.hashtags);
 
-  // Parse reposts as integer
-  tiktok.reposts = parseInt(tiktok.reposts);
+  // Parse numeric fields as integers
+  tiktok.likes = parseInt(tiktok.likes) || 0;
+  tiktok.views = parseInt(tiktok.views) || 0;
+  tiktok.reposts = parseInt(tiktok.reposts) || 0;
+  tiktok.replies = parseInt(tiktok.replies) || 0;
+  tiktok.shares = parseInt(tiktok.shares) || 0;
 
   return tiktok;
 };

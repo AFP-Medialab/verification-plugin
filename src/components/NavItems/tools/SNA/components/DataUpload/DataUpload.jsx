@@ -12,7 +12,7 @@ const DataUpload = ({
   setUploadedData,
   setShowUploadModal,
   setUploadedFileName,
-  setShowZeeschuimerUploadModal,
+  setUploadType,
 }) => {
   const openUploadPrompt = () => dataUploadInputRef.current?.click();
 
@@ -24,6 +24,7 @@ const DataUpload = ({
       complete: (res) => {
         setUploadedFileName(file.name);
         setUploadedData(res.data);
+        setUploadType("csv");
         setShowUploadModal(true);
       },
     });
@@ -47,7 +48,8 @@ const DataUpload = ({
           });
         setUploadedFileName(file.name);
         setUploadedData(result);
-        setShowZeeschuimerUploadModal(true);
+        setUploadType("ndjson");
+        setShowUploadModal(true);
       },
       false,
     );

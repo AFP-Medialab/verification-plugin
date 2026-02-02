@@ -141,21 +141,32 @@ class DBStorage {
 
   /**
    * Handle database schema upgrades
+   * Automatically creates new stores, adds/removes indexes, and migrates schema
    * @private
    */
-  _handleUpgrade(db, _oldVersion, _newVersion, _transaction) {
-    // Create object stores based on schema
+  _handleUpgrade(db, oldVersion, newVersion, transaction) {
+    console.log(
+      `[DBStorage ${this.name}] Upgrading from v${oldVersion} to v${newVersion}`,
+    );
+
     Object.entries(this.schema).forEach(([storeName, storeConfig]) => {
+      let store;
+
+      // Create new object store if it doesn't exist
       if (!db.objectStoreNames.contains(storeName)) {
-        const store = db.createObjectStore(storeName, {
+        console.log(`[DBStorage ${this.name}] Creating store: ${storeName}`);
+        store = db.createObjectStore(storeName, {
           keyPath: storeConfig.keyPath,
           autoIncrement: storeConfig.autoIncrement || false,
         });
 
-        // Create indexes if defined
+        // Create indexes for new store
         if (storeConfig.indexes) {
           Object.entries(storeConfig.indexes).forEach(
             ([indexName, indexConfig]) => {
+              console.log(
+                `[DBStorage ${this.name}] Creating index ${indexName} on ${storeName}`,
+              );
               store.createIndex(indexName, indexConfig.keyPath || indexName, {
                 unique: indexConfig.unique || false,
                 multiEntry: indexConfig.multiEntry || false,
@@ -163,8 +174,76 @@ class DBStorage {
             },
           );
         }
+      } else {
+        // Store exists - update indexes if needed
+        store = transaction.objectStore(storeName);
+
+        if (storeConfig.indexes) {
+          const existingIndexes = Array.from(store.indexNames);
+
+          // Add new indexes that don't exist
+          Object.entries(storeConfig.indexes).forEach(
+            ([indexName, indexConfig]) => {
+              if (!existingIndexes.includes(indexName)) {
+                console.log(
+                  `[DBStorage ${this.name}] Adding index ${indexName} to existing store ${storeName}`,
+                );
+                store.createIndex(indexName, indexConfig.keyPath || indexName, {
+                  unique: indexConfig.unique || false,
+                  multiEntry: indexConfig.multiEntry || false,
+                });
+              } else {
+                // Check if index configuration changed
+                const existingIndex = store.index(indexName);
+                const needsRecreation =
+                  existingIndex.unique !== (indexConfig.unique || false) ||
+                  existingIndex.multiEntry !==
+                    (indexConfig.multiEntry || false);
+
+                if (needsRecreation) {
+                  console.log(
+                    `[DBStorage ${this.name}] Recreating index ${indexName} on ${storeName} due to config change`,
+                  );
+                  store.deleteIndex(indexName);
+                  store.createIndex(
+                    indexName,
+                    indexConfig.keyPath || indexName,
+                    {
+                      unique: indexConfig.unique || false,
+                      multiEntry: indexConfig.multiEntry || false,
+                    },
+                  );
+                }
+              }
+            },
+          );
+
+          // Remove indexes that are no longer in schema (optional cleanup)
+          const desiredIndexes = Object.keys(storeConfig.indexes);
+          existingIndexes.forEach((indexName) => {
+            if (!desiredIndexes.includes(indexName)) {
+              console.log(
+                `[DBStorage ${this.name}] Removing obsolete index ${indexName} from ${storeName}`,
+              );
+              store.deleteIndex(indexName);
+            }
+          });
+        }
       }
     });
+
+    // Optional: Remove stores that are no longer in schema
+    const desiredStores = Object.keys(this.schema);
+    Array.from(db.objectStoreNames).forEach((storeName) => {
+      if (!desiredStores.includes(storeName)) {
+        console.log(
+          `[DBStorage ${this.name}] Removing obsolete store: ${storeName}`,
+        );
+        db.deleteObjectStore(storeName);
+      }
+    });
+
+    console.log(`[DBStorage ${this.name}] Schema upgrade complete`);
   }
 
   /**
@@ -778,6 +857,70 @@ export default DBStorage;
  *
  * ```javascript
  * import DBStorage from '@/utils/dbstorage';
+ *
+ * // ========== SCHEMA MIGRATION EXAMPLES ==========
+ *
+ * // VERSION 1: Initial schema
+ * const userDB = new DBStorage('UserApp', 1, {
+ *   users: {
+ *     keyPath: 'id',
+ *     indexes: {
+ *       'by-email': { keyPath: 'email', unique: true }
+ *     }
+ *   }
+ * });
+ * await userDB.init();
+ *
+ * // VERSION 2: Add new index to existing store
+ * // Just increment version and add the new index to schema
+ * const userDB = new DBStorage('UserApp', 2, {
+ *   users: {
+ *     keyPath: 'id',
+ *     indexes: {
+ *       'by-email': { keyPath: 'email', unique: true },
+ *       'by-name': { keyPath: 'name' },  // New index - automatically added!
+ *       'by-created': { keyPath: 'createdAt' }  // Another new index
+ *     }
+ *   }
+ * });
+ * await userDB.init();
+ * // The upgrade handler will automatically:
+ * // - Detect existing 'users' store
+ * // - Add 'by-name' and 'by-created' indexes
+ * // - Keep existing data intact
+ *
+ * // VERSION 3: Add new store and modify indexes
+ * const userDB = new DBStorage('UserApp', 3, {
+ *   users: {
+ *     keyPath: 'id',
+ *     indexes: {
+ *       'by-email': { keyPath: 'email', unique: true },
+ *       'by-name': { keyPath: 'name' }
+ *       // 'by-created' removed - will be automatically deleted
+ *     }
+ *   },
+ *   sessions: {  // New store - automatically created!
+ *     keyPath: 'sessionId',
+ *     indexes: {
+ *       'by-user': { keyPath: 'userId' }
+ *     }
+ *   }
+ * });
+ * await userDB.init();
+ *
+ * // VERSION 4: Change index configuration
+ * const userDB = new DBStorage('UserApp', 4, {
+ *   users: {
+ *     keyPath: 'id',
+ *     indexes: {
+ *       'by-email': { keyPath: 'email', unique: false }  // Changed from unique:true
+ *       // Index will be recreated with new configuration
+ *     }
+ *   }
+ * });
+ * await userDB.init();
+ *
+ * // ========== BASIC USAGE ==========
  *
  * // 1. CREATE DATABASE WITH SCHEMA
  * const userDB = new DBStorage('UserApp', 1, {

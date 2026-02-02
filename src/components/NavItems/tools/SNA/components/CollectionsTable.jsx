@@ -21,6 +21,8 @@ import DownloadIcon from "@mui/icons-material/Download";
 import UploadIcon from "@mui/icons-material/Upload";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
+import { uploadToCollection } from "../utils/snaUtils";
+
 const EmptyTablePlaceholder = ({ keyword }) => {
   return (
     <>
@@ -114,12 +116,7 @@ const CollectionActionsCell = ({
 
     const handleRawUpload = async (parsed, rowName) => {
       try {
-        await browser.runtime.sendMessage({
-          prompt: "addToCollection",
-          data: parsed,
-          platform: row.source,
-          collectionId: rowName.split("~")[0],
-        });
+        await uploadToCollection(parsed, row.source, rowName.split("~")[0]);
       } catch (error) {
         console.error("Error uploading raw collection:", error);
       }
@@ -323,8 +320,13 @@ const CollectionActionsCell = ({
 };
 
 const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
-  const { selected, setSelected, setDetailContent, setOpenDetailModal } =
-    rowProps;
+  const {
+    selected,
+    setSelected,
+    setDetailContent,
+    setDetailSource,
+    setOpenDetailModal,
+  } = rowProps;
   const {
     fileInputRef,
     dataSources,
@@ -347,7 +349,6 @@ const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
     } else {
       newSelected = selected.filter((item) => item !== id);
     }
-
     setSelected(newSelected);
   };
 
@@ -362,6 +363,7 @@ const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
         <IconButton
           onClick={() => {
             setDetailContent(row.content);
+            setDetailSource(row.source);
             setOpenDetailModal(true);
           }}
           sx={{ p: 1 }}
@@ -443,6 +445,7 @@ const CollectionsTable = ({
   selected,
   setSelected,
   setDetailContent,
+  setDetailSource,
   setOpenDetailModal,
   fileInputRef,
   dataSources,
@@ -463,6 +466,7 @@ const CollectionsTable = ({
     selected,
     setSelected,
     setDetailContent,
+    setDetailSource,
     setOpenDetailModal,
   };
 
@@ -500,4 +504,37 @@ const CollectionsTable = ({
   );
 };
 
-export default CollectionsTable;
+// Custom comparison function for React.memo
+// Only re-render if actual data content changes, not just reference
+const arePropsEqual = (prevProps, nextProps) => {
+  // IMPORTANT: Check selection state FIRST before checking dataSources
+  // Otherwise checkboxes won't update when selection changes
+  if (
+    prevProps.selected.length !== nextProps.selected.length ||
+    !prevProps.selected.every((id) => nextProps.selected.includes(id)) ||
+    !nextProps.selected.every((id) => prevProps.selected.includes(id))
+  ) {
+    return false; // Selection changed, need to re-render
+  }
+
+  // Quick reference check for dataSources
+  if (prevProps.dataSources === nextProps.dataSources) return true;
+
+  // Check if dataSources content actually changed
+  if (prevProps.dataSources.length !== nextProps.dataSources.length) {
+    return false;
+  }
+
+  // Deep comparison of collection content lengths (lightweight proxy for content change)
+  const prevHash = prevProps.dataSources
+    .map((ds) => `${ds.id}:${ds.length}`)
+    .join("|");
+  const nextHash = nextProps.dataSources
+    .map((ds) => `${ds.id}:${ds.length}`)
+    .join("|");
+
+  // If hash is the same, props are equal (no re-render needed)
+  return prevHash === nextHash;
+};
+
+export default React.memo(CollectionsTable, arePropsEqual);

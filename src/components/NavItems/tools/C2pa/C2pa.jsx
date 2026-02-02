@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -17,6 +18,7 @@ import Typography from "@mui/material/Typography";
 
 import { ArrowDownward } from "@mui/icons-material";
 
+import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import HeaderTool from "@/components/Shared/HeaderTool/HeaderTool";
 import StringFileUploadField from "@/components/Shared/StringFileUploadField";
 import { ROLES } from "@/constants/roles";
@@ -39,6 +41,9 @@ import AfpReverseSearchResults from "./components/AfpReverseSearchResults";
 import HdImageResults from "./components/HdImageResults";
 
 const C2paData = () => {
+  const [searchParams] = useSearchParams();
+  const fromAssistant = searchParams.has("fromAssistant");
+
   const role = useSelector((state) => state.userSession.user.roles);
 
   const isLoading = useSelector((state) => state.c2pa.loading);
@@ -56,8 +61,8 @@ const C2paData = () => {
 
   const urlImage = useSelector((state) => state.c2pa.url);
 
-  const [input, setInput] = useState(urlImage ? urlImage : "");
-  const [imageFile, setImageFile] = useState(undefined);
+  const [input = urlImage || "", setInput, imageFile, setImageFile] =
+    useUrlOrFile();
 
   const [imageMetadata, setImageMetadata] = useState(null);
 
@@ -82,7 +87,8 @@ const C2paData = () => {
 
     formData.append("imageData", imageFile);
 
-    const data = input ? { imageUrl: input } : formData;
+    // priority for imageFile first to work fromAssistant
+    const data = imageFile ? formData : { imageUrl: input };
 
     const afpRenditionTypeHD = "HD";
     const afpRenditionTypeThumbnail = "THUMBNAIL";
@@ -102,9 +108,9 @@ const C2paData = () => {
         Accept: "*/*",
         "X-AFP-RENDITION-TYPE": afpRenditionType,
         "X-AFP-TRANSACTION-ID": getTransactionId(),
-        "Content-Type": input
-          ? "application/x-www-form-urlencoded"
-          : imageFile.type,
+        "Content-Type": imageFile
+          ? imageFile.type
+          : "application/x-www-form-urlencoded",
       },
       data: data,
     };
@@ -279,10 +285,16 @@ const C2paData = () => {
   };
 
   useEffect(() => {
-    if (urlImage && input && !result) {
+    if (urlImage && input && !result && !fromAssistant) {
       handleSubmit();
     }
   }, [urlImage, input, result]);
+
+  useEffect(() => {
+    if (fromAssistant && (input || imageFile)) {
+      handleSubmit();
+    }
+  }, [searchParams, input, imageFile]);
 
   const resetState = () => {
     setImageFile(undefined);

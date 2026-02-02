@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { Trans } from "react-i18next";
 import Iframe from "react-iframe";
+import { useSelector } from "react-redux";
 
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -12,13 +14,19 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
-import { CastForEducation, ExpandMore } from "@mui/icons-material";
+import {
+  CastForEducation,
+  ExpandMore,
+  Instagram,
+  X,
+} from "@mui/icons-material";
 
 import { changeTabEvent } from "@Shared/GoogleAnalytics/GoogleAnalytics";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
@@ -68,6 +76,7 @@ function a11yProps(index) {
 const ClassRoom = () => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/ClassRoom");
+  const language = useSelector((state) => state.language);
 
   const [value, setValue] = React.useState(0);
 
@@ -78,6 +87,35 @@ const ClassRoom = () => {
 
   const [videoUrl, setVideoUrl] = useState(null);
   const [inputRef, setInputRef] = useState(null);
+
+  // Determine X URL based on language
+  const getXUrl = () => {
+    if (language === "fr") {
+      return "https://x.com/AfpFactuel/";
+    } else if (language === "es") {
+      return "https://x.com/AfpFactual/";
+    } else if (language === "pt") {
+      return "https://x.com/AfpChecamos/";
+    } else {
+      // Fallback for all other languages
+      return "https://x.com/AFPFactCheck/";
+    }
+  };
+
+  // Determine Instagram URL based on language
+  const getInstagramUrl = () => {
+    if (language === "fr") {
+      return "https://www.instagram.com/afpfactuel/";
+    }
+    if (language === "es") {
+      return "https://www.instagram.com/afp_factual/";
+    } else if (language === "pt") {
+      return "https://www.instagram.com/afpchecamos/";
+    } else {
+      // Fallback for all other languages
+      return "https://www.instagram.com/afpfactcheck/";
+    }
+  };
 
   const glossary = () => {
     let res = [];
@@ -121,23 +159,25 @@ const ClassRoom = () => {
   const tabTitle = (index) => {
     switch (index) {
       case 0:
-        return keyword("classroom_introduction");
+        return keyword("afp_digital_courses_title");
       case 1:
-        return keyword("classroom_teaching");
+        return keyword("classroom_introduction");
       case 2:
-        return keyword("remote_resources_title");
+        return keyword("classroom_teaching");
       case 3:
-        return keyword("classroom_game");
+        return keyword("remote_resources_title");
       case 4:
-        return keyword("classroom_gamification");
-      /*case 5:
-                                                                                                                                                                          return keyword("classroom_gamification_2");*/
+        return keyword("classroom_game");
       case 5:
-        return keyword("user_resources_title");
+        return keyword("classroom_gamification");
+      /*case 6:
+                                                                                                                                                                          return keyword("classroom_gamification_2");*/
       case 6:
+        return keyword("user_resources_title");
+      case 7:
         return keyword("glossary_title");
       default:
-        return keyword("classroom_introduction");
+        return keyword("afp_digital_courses_title");
     }
   };
 
@@ -213,8 +253,83 @@ const ClassRoom = () => {
                 label={tabTitle(6)}
                 {...a11yProps(6)}
               />
+              <Tab
+                sx={{ minWidth: "100px !important" }}
+                label={tabTitle(7)}
+                {...a11yProps(7)}
+              />
             </Tabs>
             <TabPanel value={value} index={0}>
+              <Stack direction="column" spacing={3}>
+                <Box>
+                  <Typography variant="body1" align={"justify"}>
+                    <Trans
+                      t={keyword}
+                      i18nKey={"afp_digital_courses_description"}
+                      components={{
+                        digitalCoursesUrl: (
+                          <a
+                            href={keyword("afp_digital_courses_url")}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ color: "var(--mui-palette-primary-main)" }}
+                          />
+                        ),
+                      }}
+                    />
+                  </Typography>
+                </Box>
+                <Box>
+                  <Box
+                    sx={{
+                      width: "100%",
+                      maxWidth: "640px",
+                      aspectRatio: "16 / 9",
+                      mb: 2,
+                    }}
+                  >
+                    <iframe
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        border: 0,
+                      }}
+                      src="https://www.youtube-nocookie.com/embed/vaPSfRmwq0g?si=wzRhio6KzEpcOUAc"
+                      title="YouTube video player"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      allowFullScreen
+                    />
+                  </Box>
+                  <Stack direction="row" spacing={2}>
+                    <IconButton
+                      color="primary"
+                      component="a"
+                      href={getXUrl()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      size="large"
+                      sx={{ p: 1 }}
+                    >
+                      <X />
+                    </IconButton>
+
+                    <IconButton
+                      color="primary"
+                      component="a"
+                      href={getInstagramUrl()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      size="large"
+                      sx={{ p: 1 }}
+                    >
+                      <Instagram />
+                    </IconButton>
+                  </Stack>
+                </Box>
+              </Stack>
+            </TabPanel>
+            <TabPanel value={value} index={1}>
               {introduction(5).map((obj, index) => {
                 return (
                   <Accordion key={index}>
@@ -240,7 +355,7 @@ const ClassRoom = () => {
                 );
               })}
             </TabPanel>
-            <TabPanel value={value} index={1}>
+            <TabPanel value={value} index={2}>
               <Iframe
                 frameBorder="0"
                 url={keyword("teaching_url")}
@@ -249,7 +364,7 @@ const ClassRoom = () => {
                 width="100%"
               />
             </TabPanel>
-            <TabPanel value={value} index={2}>
+            <TabPanel value={value} index={3}>
               <Divider />
               {EducationalResources().map((value, index) => {
                 return (
@@ -300,7 +415,7 @@ const ClassRoom = () => {
                 );
               })}
             </TabPanel>
-            <TabPanel value={value} index={3}>
+            <TabPanel value={value} index={4}>
               <Iframe
                 frameBorder="0"
                 url={keyword("quiz_url")}
@@ -309,7 +424,7 @@ const ClassRoom = () => {
                 width="100%"
               />
             </TabPanel>
-            <TabPanel value={value} index={4}>
+            <TabPanel value={value} index={5}>
               <Iframe
                 frameBorder="0"
                 url={keyword("gamification_url")}
@@ -318,7 +433,7 @@ const ClassRoom = () => {
                 width="100%"
               />
             </TabPanel>
-            {/*<TabPanel value={value} index={5}>
+            {/*<TabPanel value={value} index={6}>
                                 <Iframe
                                     frameBorder="0"
                                     url={keyword("gamification_url_2")}
@@ -327,7 +442,7 @@ const ClassRoom = () => {
                                     width="100%"
                                 />
                             </TabPanel>*/}
-            <TabPanel value={value} index={5}>
+            <TabPanel value={value} index={6}>
               <Grid container direction="column" spacing={2}>
                 <Grid
                   sx={{
@@ -379,7 +494,7 @@ const ClassRoom = () => {
                 </Grid>
               </Grid>
             </TabPanel>
-            <TabPanel value={value} index={6}>
+            <TabPanel value={value} index={7}>
               {glossary().map((obj, key) => {
                 return (
                   <div key={key}>
@@ -410,13 +525,15 @@ const ClassRoom = () => {
               })}
             </TabPanel>
           </Box>
-          <a
-            href={keyword("youverify_link")}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img src={youverifyImage} width={"10%"} alt={youverifyImage} />
-          </a>
+          {value !== 0 && (
+            <a
+              href={keyword("youverify_link")}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src={youverifyImage} width={"10%"} alt={youverifyImage} />
+            </a>
+          )}
           <Dialog
             height={"400px"}
             fullWidth

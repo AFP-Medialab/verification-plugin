@@ -26,6 +26,7 @@ import keyframesReducer from "./tools/keyframesReducer";
 import magnifierReducer from "./tools/magnifierReducer";
 import metadataReducer from "./tools/metadataReducer";
 import ocrReducer from "./tools/ocrReducer";
+import snaDataReducer from "./tools/snaDataReducer";
 import thumbnailsReducer from "./tools/thumbnailsReducer";
 import toolReducer from "./tools/toolReducer";
 import twitterSnaReducer from "./tools/twitterSnaReducer";
@@ -59,6 +60,7 @@ const allReducers = combineReducers({
   metadata: metadataReducer,
   thumbnails: thumbnailsReducer,
   twitterSna: twitterSnaReducer,
+  snaData: snaDataReducer,
   assistant: assistantReducer,
   chatbot: chatbotReducer,
   ocr: ocrReducer,
