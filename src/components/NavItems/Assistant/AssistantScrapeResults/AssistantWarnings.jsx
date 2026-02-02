@@ -60,11 +60,6 @@ const AssistantWarnings = () => {
     (state) => state.assistant.prevFactChecksResult,
   );
 
-  console.log(prevFactChecksResult);
-  console.log(dbkfTextMatch);
-  console.log(dbkfImageMatch);
-  console.log(dbkfVideoMatch);
-
   // wait for previous fact checks results to compare with DBKFText before showing to users
   // combine results if necessary
   // only happens if beta user logged in
@@ -141,7 +136,7 @@ const AssistantWarnings = () => {
   return (
     <Card
       variant={"outlined"}
-      className={classes.sourceCredibilityBorder}
+      className={classes.assistantWarningBorder}
       id="warnings"
     >
       <Grid container>

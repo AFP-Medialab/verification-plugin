@@ -54,11 +54,7 @@ const AssistantSCResults = () => {
   const sourceTypes = useSelector((state) => state.assistant.sourceTypes);
 
   return (
-    <Card
-      variant={"outlined"}
-      className={classes.sourceCredibilityBorder}
-      // TODO id="sourceCredibility"
-    >
+    <Card variant={"outlined"} className={classes.sourceCredibilityBorder}>
       <Grid container>
         <Grid size={{ xs: 11 }} className={classes.displayFlex}>
           {/* icon */}
