@@ -143,97 +143,65 @@ const AssistantWarnings = () => {
       variant={"outlined"}
       className={classes.sourceCredibilityBorder}
       id="warnings"
-      height="400"
     >
       <Grid container>
         <Grid size={{ xs: 11 }} className={classes.displayFlex}>
           {/* icon */}
           <CardMedia>
-            <Box
-              sx={{
-                m: 1,
-              }}
-            >
-              <WarningAmber fontSize={"large"} color={"warning"} />
-            </Box>
+            <WarningAmber fontSize={"large"} color={"warning"} sx={{ m: 1 }} />
           </CardMedia>
 
-          {/* spacing */}
-          <Box
-            sx={{
-              m: 1,
-            }}
-          />
-
           {/* title */}
-          <Box
+          <Typography
+            component={"span"}
+            variant={"h6"}
             sx={{
               mt: 1.5,
+              pl: 1,
             }}
           >
-            <Typography component={"span"} variant={"h6"}>
-              {keyword("Related fact checks")}
-            </Typography>
-          </Box>
+            {keyword("Related fact checks")}
+          </Typography>
 
           {/* expand button */}
-          <Box
-            sx={{
-              pr: 1,
-              pt: 1,
-            }}
+          <IconButton
+            className={classes.assistantIconRight}
+            onClick={() => dispatch(setFactChecksExpanded(!factChecksExpanded))}
+            sx={{ p: 1 }}
           >
-            <IconButton
-              className={classes.assistantIconRight}
-              onClick={() =>
-                dispatch(setFactChecksExpanded(!factChecksExpanded))
-              }
-              sx={{ p: 1 }}
-            >
-              <ExpandMoreIcon color={"primary"} />
-            </IconButton>
-          </Box>
+            <ExpandMoreIcon color={"primary"} />
+          </IconButton>
         </Grid>
 
         <Grid size={{ xs: 1 }}>
           {/* help tooltip */}
-          <Box
-            align="right"
-            sx={{
-              mt: 1.5,
-            }}
+          <Tooltip
+            interactive={"true"}
+            leaveDelay={50}
+            sx={{ display: "flex", ml: "auto", textAlign: "right", mt: 1.5 }}
+            title={
+              <>
+                <Trans t={keyword} i18nKey="dbkf_tooltip" />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
+                <TransOntotextAuthor keyword={keyword} />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
+                <TransDbkfLink keyword={keyword} />
+                {role.includes(ROLES.BETA_TESTER) ? (
+                  <>
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
+                    <Trans t={keyword} i18nKey="previous_fact_checks_tooltip" />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
+                    <TransKinitAuthor keyword={keyword} />
+                    <TransHtmlDoubleLineBreak keyword={keyword} />
+                    <TransPrevFactChecksLink keyword={keyword} />
+                  </>
+                ) : null}
+              </>
+            }
+            classes={{ tooltip: classes.assistantTooltip }}
           >
-            <Tooltip
-              interactive={"true"}
-              leaveDelay={50}
-              style={{ display: "flex", marginLeft: "auto" }}
-              title={
-                <>
-                  <Trans t={keyword} i18nKey="dbkf_tooltip" />
-                  <TransHtmlDoubleLineBreak keyword={keyword} />
-                  <TransOntotextAuthor keyword={keyword} />
-                  <TransHtmlDoubleLineBreak keyword={keyword} />
-                  <TransDbkfLink keyword={keyword} />
-                  {role.includes(ROLES.BETA_TESTER) ? (
-                    <>
-                      <TransHtmlDoubleLineBreak keyword={keyword} />
-                      <Trans
-                        t={keyword}
-                        i18nKey="previous_fact_checks_tooltip"
-                      />
-                      <TransHtmlDoubleLineBreak keyword={keyword} />
-                      <TransKinitAuthor keyword={keyword} />
-                      <TransHtmlDoubleLineBreak keyword={keyword} />
-                      <TransPrevFactChecksLink keyword={keyword} />
-                    </>
-                  ) : null}
-                </>
-              }
-              classes={{ tooltip: classes.assistantTooltip }}
-            >
-              <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
-            </Tooltip>
-          </Box>
+            <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+          </Tooltip>
         </Grid>
 
         <Grid size={{ xs: 12 }}>
