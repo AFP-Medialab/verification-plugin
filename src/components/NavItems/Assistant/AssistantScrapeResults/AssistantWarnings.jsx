@@ -60,6 +60,11 @@ const AssistantWarnings = () => {
     (state) => state.assistant.prevFactChecksResult,
   );
 
+  console.log(prevFactChecksResult);
+  console.log(dbkfTextMatch);
+  console.log(dbkfImageMatch);
+  console.log(dbkfVideoMatch);
+
   // wait for previous fact checks results to compare with DBKFText before showing to users
   // combine results if necessary
   // only happens if beta user logged in
@@ -167,7 +172,7 @@ const AssistantWarnings = () => {
             }}
           >
             <Typography component={"span"} variant={"h6"}>
-              {keyword("warnings_title")}
+              {keyword("Related fact checks")}
             </Typography>
           </Box>
 
@@ -200,6 +205,8 @@ const AssistantWarnings = () => {
           >
             <Tooltip
               interactive={"true"}
+              leaveDelay={50}
+              style={{ display: "flex", marginLeft: "auto" }}
               title={
                 <>
                   <Trans t={keyword} i18nKey="dbkf_tooltip" />
@@ -234,7 +241,13 @@ const AssistantWarnings = () => {
             in={factChecksExpanded}
             className={classes.assistantBackground}
           >
-            <Box mt={3} ml={2}>
+            <Box
+              sx={{
+                width: "100%",
+                mt: 3,
+                ml: 2,
+              }}
+            >
               {(dbkfImageMatch || dbkfVideoMatch) && <DbkfMediaResults />}
 
               {/* not logged in as beta tester, DBKF only */}
@@ -262,6 +275,7 @@ const AssistantWarnings = () => {
                   <DbkfTextResults results={dbkfTextMatch} />
                 ))}
 
+              {/* logged in as beta tester but waiting for results */}
               {role.includes(ROLES.BETA_TESTER) && prevFactChecksLoading && (
                 <Stack
                   direction="column"
