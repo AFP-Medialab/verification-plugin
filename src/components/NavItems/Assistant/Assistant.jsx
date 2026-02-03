@@ -67,6 +67,9 @@ const Assistant = () => {
   const { mode, systemMode } = useColorScheme();
   const resolvedMode = systemMode || mode;
 
+  // submitted
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+
   // form states
   const loading = useSelector((state) => state.assistant.loading);
   const inputUrl = useSelector((state) => state.assistant.inputUrl);
@@ -159,9 +162,10 @@ const Assistant = () => {
     url,
   );
 
-  // submit url or file
-  const handleSubmit = async (src) => {
+  const handleSubmit = async () => {
     dispatch(cleanAssistantState());
+    setHasSubmitted(true);
+
     // set fileInput and formInput
     if (formInput) {
       const fixedUrl = formInput.replace(/ /g, "%20"); // fix space issue
@@ -263,6 +267,7 @@ const Assistant = () => {
   const cleanAssistant = () => {
     dispatch(cleanAssistantState());
     // clean url mode
+    setHasSubmitted(false);
     setFormInput("");
     navigate("/app/assistant/");
     dispatch(setUrlMode(false));
@@ -283,7 +288,7 @@ const Assistant = () => {
 
   // if a url is present in the plugin url (as a param), set it to input
   useEffect(() => {
-    if (url !== undefined) {
+    if (url !== undefined && !hasSubmitted) {
       let uri = url !== null ? decodeURIComponent(url) : undefined;
       uri = uri.replace(/ /g, "%20"); // fix space issue
       dispatch(setUrlMode(true));
