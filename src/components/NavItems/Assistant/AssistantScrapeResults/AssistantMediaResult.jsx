@@ -20,6 +20,7 @@ import Typography from "@mui/material/Typography";
 import { WarningAmber } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import PermMediaIcon from "@mui/icons-material/PermMedia";
 
 import ImageGridList from "@/components/Shared/ImageGridList/ImageGridList";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
@@ -129,7 +130,12 @@ const AssistantMediaResult = ({ title = null }) => {
     >
       <CardHeader
         className={classes.assistantCardHeader}
-        title={title ? keyword(title) : keyword("media_title")}
+        title={
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <PermMediaIcon color="primary" />
+            {title ? keyword(title) : keyword("media_title")}
+          </Box>
+        }
         subheader={keyword("media_below")}
         action={
           <div style={{ display: "flex" }}>

@@ -3,6 +3,7 @@ import { Trans } from "react-i18next";
 import { useSelector } from "react-redux";
 import { TagCloud } from "react-tagcloud";
 
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Card from "@mui/material/Card";
@@ -15,6 +16,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import LabelIcon from "@mui/icons-material/Label";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
@@ -131,7 +133,12 @@ const AssistantNEResult = () => {
       <Card variant="outlined">
         <CardHeader
           className={classes.assistantCardHeader}
-          title={keyword("named_entity_title")}
+          title={
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <LabelIcon color="primary" />
+              {keyword("named_entity_title")}
+            </Box>
+          }
           action={
             <Tooltip
               interactive={"true"}

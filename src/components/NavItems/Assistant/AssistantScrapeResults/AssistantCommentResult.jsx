@@ -28,6 +28,7 @@ import TableRow from "@mui/material/TableRow";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
+import CommentIcon from "@mui/icons-material/Comment";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -589,7 +590,12 @@ const AssistantCommentResult = ({ collectedComments }) => {
     <Card data-testid="assistant-collected-comments">
       <CardHeader
         className={classes.assistantCardHeader}
-        title={keyword("collected_comments_title")}
+        title={
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <CommentIcon color="primary" />
+            {keyword("collected_comments_title")}
+          </Box>
+        }
         action={
           <Tooltip
             interactive={"true"}

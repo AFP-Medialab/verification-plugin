@@ -13,6 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import { WarningAmber } from "@mui/icons-material";
+import ArticleIcon from "@mui/icons-material/Article";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import AssistantTextClassification from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantTextClassification";
@@ -236,7 +237,12 @@ const AssistantTextResult = () => {
     >
       <CardHeader
         className={classes.assistantCardHeader}
-        title={keyword("text_title")}
+        title={
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <ArticleIcon color="primary" />
+            {keyword("text_title")}
+          </Box>
+        }
         action={
           // top right warning and tooltip
           <div style={{ display: "flex" }}>
