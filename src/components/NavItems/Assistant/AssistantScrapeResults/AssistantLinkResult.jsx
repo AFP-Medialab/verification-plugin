@@ -459,7 +459,7 @@ const AssistantLinkResult = () => {
   }
 
   return (
-    <Card variant="outlined">
+    <Card id="extracted-urls" variant="outlined">
       <CardHeader
         className={classes.assistantCardHeader}
         title={

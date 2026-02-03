@@ -124,6 +124,7 @@ const AssistantMediaResult = ({ title = null }) => {
 
   return (
     <Card
+      id="url-media-results"
       variant="outlined"
       data-testid="url-media-results"
       hidden={!filteredImageList.length && !videoList.length}

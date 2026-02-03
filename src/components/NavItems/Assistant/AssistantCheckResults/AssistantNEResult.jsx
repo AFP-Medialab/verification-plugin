@@ -130,7 +130,7 @@ const AssistantNEResult = () => {
 
   return (
     <Grid size={{ xs: 12 }}>
-      <Card variant="outlined">
+      <Card id="named-entity-results" variant="outlined">
         <CardHeader
           className={classes.assistantCardHeader}
           title={

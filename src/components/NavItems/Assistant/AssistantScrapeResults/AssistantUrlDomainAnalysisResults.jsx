@@ -55,6 +55,7 @@ const AssistantSCResults = () => {
 
   return (
     <Card
+      id="url-domain-analysis"
       variant={"outlined"}
       className={classes.sourceCredibilityBorder}
       height="400"

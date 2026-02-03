@@ -587,7 +587,10 @@ const AssistantCommentResult = ({ collectedComments }) => {
   }
 
   return (
-    <Card data-testid="assistant-collected-comments">
+    <Card
+      id="assistant-collected-comments"
+      data-testid="assistant-collected-comments"
+    >
       <CardHeader
         className={classes.assistantCardHeader}
         title={
