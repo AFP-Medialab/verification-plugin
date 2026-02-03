@@ -164,11 +164,12 @@ const Assistant = () => {
     dispatch(cleanAssistantState());
     // set fileInput and formInput
     if (formInput) {
+      const fixedUrl = formInput.replace(/ /g, "%20"); // fix space issue
       // submit url
-      dispatch(submitInputUrl(src));
-      navigate("/app/assistant/" + encodeURIComponent(src));
-      //trackEvent("submission", "assistant", "page assistant", formInput);
-      setAssistantSelection(formInput);
+      dispatch(submitInputUrl(fixedUrl));
+      navigate("/app/assistant/" + encodeURIComponent(fixedUrl));
+      //trackEvent("submission", "assistant", "page assistant", fixedUrl);
+      setAssistantSelection(fixedUrl);
     } else if (fileInput) {
       // submit file
       try {
@@ -284,6 +285,7 @@ const Assistant = () => {
   useEffect(() => {
     if (url !== undefined) {
       let uri = url !== null ? decodeURIComponent(url) : undefined;
+      uri = uri.replace(/ /g, "%20"); // fix space issue
       dispatch(setUrlMode(true));
       setFormInput(uri);
       dispatch(submitInputUrl(uri));
