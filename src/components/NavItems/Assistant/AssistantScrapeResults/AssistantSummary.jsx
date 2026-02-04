@@ -37,8 +37,9 @@ const SummaryIcon = ({
   keyword,
   onClick,
   loading,
+  useDotIndicator,
 }) => {
-  const disabled = loading || value === 0 || value === "0";
+  const disabled = loading || value === 0 || value === false;
 
   const handleClick = () => {
     if (disabled) return;
@@ -96,6 +97,15 @@ const SummaryIcon = ({
             >
               {loading ? (
                 <CircularProgress size={24} />
+              ) : useDotIndicator ? (
+                <Box
+                  sx={{
+                    width: 12,
+                    height: 12,
+                    borderRadius: "50%",
+                    bgcolor: disabled ? "action.disabled" : "primary.main",
+                  }}
+                />
               ) : (
                 <Typography variant="h6" color={displayColor}>
                   {value}
@@ -182,7 +192,7 @@ const AssistantSummary = () => {
   const imageCount = imageList?.length || 0;
   const videoCount = videoList?.length || 0;
   const commentsCount = collectedComments?.length || 0;
-  const textCount = text ? "✓" : 0;
+  const hasText = !!text;
   const namedEntityCount = neResultCount?.length || 0;
   const linksCount = linkList?.length || 0;
 
@@ -247,9 +257,10 @@ const AssistantSummary = () => {
       <SummaryIcon
         icon={ArticleOutlinedIcon}
         label="text_title"
-        value={textCount}
+        value={hasText}
         targetId="credibility-signals"
         keyword={keyword}
+        useDotIndicator
       />
       <SummaryIcon
         icon={LabelOutlinedIcon}
