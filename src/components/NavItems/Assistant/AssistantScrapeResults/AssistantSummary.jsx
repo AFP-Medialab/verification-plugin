@@ -135,6 +135,9 @@ const AssistantSummary = () => {
   // media state
   const imageList = useSelector((state) => state.assistant.imageList);
   const videoList = useSelector((state) => state.assistant.videoList);
+  const singleMediaPresent = useSelector(
+    (state) => state.assistant.singleMediaPresent,
+  );
 
   // comments state
   const collectedComments = useSelector(
@@ -217,14 +220,18 @@ const AssistantSummary = () => {
         svgIcon={ImageIcon}
         label="images_label"
         value={imageCount}
-        targetId="assistant-image-results"
+        targetId={
+          singleMediaPresent ? "url-media-results" : "assistant-image-results"
+        }
         keyword={keyword}
       />
       <SummaryIcon
         svgIcon={VideoIcon}
         label="videos_label"
         value={videoCount}
-        targetId="assistant-video-results"
+        targetId={
+          singleMediaPresent ? "url-media-results" : "assistant-video-results"
+        }
         keyword={keyword}
       />
       {(inputUrlType === KNOWN_LINKS.YOUTUBE ||
