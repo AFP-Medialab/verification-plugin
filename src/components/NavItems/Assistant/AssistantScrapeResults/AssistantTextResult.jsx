@@ -12,8 +12,8 @@ import Tabs from "@mui/material/Tabs";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { WarningAmber } from "@mui/icons-material";
-import ArticleIcon from "@mui/icons-material/Article";
+import { WarningAmberOutlined } from "@mui/icons-material";
+import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import AssistantTextClassification from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantTextClassification";
@@ -239,7 +239,7 @@ const AssistantTextResult = () => {
         className={classes.assistantCardHeader}
         title={
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <ArticleIcon color="primary" />
+            <ArticleOutlinedIcon color="primary" />
             {keyword("text_title")}
           </Box>
         }
@@ -258,7 +258,7 @@ const AssistantTextResult = () => {
                   />
                 }
               >
-                <WarningAmber
+                <WarningAmberOutlined
                   color={"warning"}
                   className={classes.toolTipWarning}
                   sx={{ cursor: "pointer" }}

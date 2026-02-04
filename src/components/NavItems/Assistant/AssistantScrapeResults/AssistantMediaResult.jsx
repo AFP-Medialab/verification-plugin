@@ -14,14 +14,17 @@ import Collapse from "@mui/material/Collapse";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import LinearProgress from "@mui/material/LinearProgress";
+import SvgIcon from "@mui/material/SvgIcon";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { WarningAmber } from "@mui/icons-material";
+import { WarningAmberOutlined } from "@mui/icons-material";
+import CollectionsOutlinedIcon from "@mui/icons-material/CollectionsOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import PermMediaIcon from "@mui/icons-material/PermMedia";
 
+import ImageIcon from "@/components/NavBar/images/SVG/Image/Images.svg";
+import VideoIcon from "@/components/NavBar/images/SVG/Video/Video.svg";
 import ImageGridList from "@/components/Shared/ImageGridList/ImageGridList";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
@@ -133,7 +136,7 @@ const AssistantMediaResult = ({ title = null }) => {
         className={classes.assistantCardHeader}
         title={
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <PermMediaIcon color="primary" />
+            <CollectionsOutlinedIcon color="primary" />
             {title ? keyword(title) : keyword("media_title")}
           </Box>
         }
@@ -143,7 +146,7 @@ const AssistantMediaResult = ({ title = null }) => {
             <div>
               {(dbkfImageMatch || dbkfVideoMatch) && (
                 <Tooltip title={keyword("image_warning")}>
-                  <WarningAmber
+                  <WarningAmberOutlined
                     color={"warning"}
                     className={classes.toolTipWarning}
                     onClick={() => {
@@ -243,11 +246,18 @@ const AssistantMediaResult = ({ title = null }) => {
           <CardContent style={{ wordBreak: "break-word" }}>
             {/* image list */}
             {filteredImageList.length > 0 ? (
-              <Accordion defaultExpanded>
+              <Accordion defaultExpanded id="assistant-image-results">
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography variant="h6">
-                    {keyword("images_label")}
-                  </Typography>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <SvgIcon
+                      component={ImageIcon}
+                      color="primary"
+                      inheritViewBox
+                    />
+                    <Typography variant="h6">
+                      {keyword("images_label")}
+                    </Typography>
+                  </Box>
                 </AccordionSummary>
                 <AccordionDetails>
                   <ImageGridList
@@ -264,11 +274,18 @@ const AssistantMediaResult = ({ title = null }) => {
 
             {/* video list */}
             {videoList.length > 0 ? (
-              <Accordion defaultExpanded>
+              <Accordion defaultExpanded id="assistant-video-results">
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography variant="h6">
-                    {keyword("videos_label")}
-                  </Typography>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <SvgIcon
+                      component={VideoIcon}
+                      color="primary"
+                      inheritViewBox
+                    />
+                    <Typography variant="h6">
+                      {keyword("videos_label")}
+                    </Typography>
+                  </Box>
                 </AccordionSummary>
                 <AccordionDetails style={{ paddingTop: 0 }}>
                   <VideoGridList

@@ -10,13 +10,12 @@ import SvgIcon from "@mui/material/SvgIcon";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import ArticleIcon from "@mui/icons-material/Article";
-import CommentIcon from "@mui/icons-material/Comment";
-import FindInPageIcon from "@mui/icons-material/FindInPage";
-import LabelIcon from "@mui/icons-material/Label";
-import LinkIcon from "@mui/icons-material/Link";
-import PermMediaIcon from "@mui/icons-material/PermMedia";
-import WarningAmberIcon from "@mui/icons-material/WarningAmber";
+import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
+import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
+import FindInPageOutlinedIcon from "@mui/icons-material/FindInPageOutlined";
+import LabelOutlinedIcon from "@mui/icons-material/LabelOutlined";
+import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
+import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
 
 import ImageIcon from "@/components/NavBar/images/SVG/Image/Images.svg";
 import VideoIcon from "@/components/NavBar/images/SVG/Video/Video.svg";
@@ -38,7 +37,7 @@ const SummaryIcon = ({
   onClick,
   loading,
 }) => {
-  const disabled = !loading && (value === 0 || value === "0");
+  const disabled = loading || value === 0 || value === "0";
 
   const handleClick = () => {
     if (disabled) return;
@@ -261,7 +260,7 @@ const AssistantSummary = () => {
       }}
     >
       <SummaryIcon
-        icon={WarningAmberIcon}
+        icon={WarningAmberOutlinedIcon}
         label="warnings_title"
         color={"warning"}
         value={warningsCount}
@@ -273,7 +272,7 @@ const AssistantSummary = () => {
         }
       />
       <SummaryIcon
-        icon={FindInPageIcon}
+        icon={FindInPageOutlinedIcon}
         label="url_domain_analysis"
         value={domainAnalysisCount}
         targetId="url-domain-analysis"
@@ -298,7 +297,7 @@ const AssistantSummary = () => {
       {(inputUrlType === KNOWN_LINKS.YOUTUBE ||
         inputUrlType === KNOWN_LINKS.YOUTUBESHORTS) && (
         <SummaryIcon
-          icon={CommentIcon}
+          icon={CommentOutlinedIcon}
           label="collected_comments_title"
           value={commentsCount}
           targetId="assistant-collected-comments"
@@ -306,14 +305,14 @@ const AssistantSummary = () => {
         />
       )}
       <SummaryIcon
-        icon={ArticleIcon}
+        icon={ArticleOutlinedIcon}
         label="text_title"
         value={textCount}
         targetId="credibility-signals"
         keyword={keyword}
       />
       <SummaryIcon
-        icon={LabelIcon}
+        icon={LabelOutlinedIcon}
         label="named_entity_title"
         value={namedEntityCount}
         targetId="named-entity-results"
@@ -321,7 +320,7 @@ const AssistantSummary = () => {
         loading={neLoading}
       />
       <SummaryIcon
-        icon={LinkIcon}
+        icon={LinkOutlinedIcon}
         label="extracted_urls_url_domain_analysis"
         value={linksCount}
         targetId="extracted-urls"
