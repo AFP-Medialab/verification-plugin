@@ -27,25 +27,32 @@ import {
 const SummaryIcon = ({
   icon: Icon,
   label,
+  color,
   value,
   targetId,
   keyword,
   onClick,
   loading,
 }) => {
+  const disabled = !loading && (value === 0 || value === "0");
+
   const handleClick = () => {
+    if (disabled) return;
     if (onClick) {
       onClick();
     }
     scrollToElement(targetId, 100);
   };
 
+  const displayColor = disabled ? "disabled" : color || "primary";
+
   return (
     <Card
       variant="outlined"
       sx={{
+        opacity: disabled ? 0.5 : 1,
         "&:hover": {
-          borderColor: "primary.main",
+          borderColor: disabled ? "divider" : "primary.main",
         },
       }}
     >
@@ -59,8 +66,13 @@ const SummaryIcon = ({
             p: 1,
           }}
         >
-          <IconButton onClick={handleClick} color="primary" sx={{ gap: 1 }}>
-            <Icon fontSize="large" />
+          <IconButton
+            onClick={handleClick}
+            disabled={disabled}
+            color="primary"
+            sx={{ gap: 1 }}
+          >
+            <Icon fontSize="large" color={displayColor} />
             <Box
               sx={{
                 minWidth: 40,
@@ -72,7 +84,7 @@ const SummaryIcon = ({
               {loading ? (
                 <CircularProgress size={24} />
               ) : (
-                <Typography variant="h6" color="primary">
+                <Typography variant="h6" color={displayColor}>
                   {value}
                 </Typography>
               )}
@@ -160,11 +172,9 @@ const AssistantSummary = () => {
     (positiveSourceCred?.length || 0) +
     (cautionSourceCred?.length || 0) +
     (mixedSourceCred?.length || 0);
-  const imageCount = imageList?.length || 0;
-  const videoCount = videoList?.length || 0;
-  const mediaCount = imageCount + videoCount;
+  const mediaCount = (imageList?.length || 0) + (videoList?.length || 0);
   const commentsCount = collectedComments?.length || 0;
-  const textCount = "✓";
+  const textCount = text ? "✓" : 0;
   const namedEntityCount = neResultCount?.length || 0;
   const linksCount = linkList?.length || 0;
 
@@ -192,45 +202,35 @@ const AssistantSummary = () => {
         gap: 2,
       }}
     >
-      {(hasWarnings ||
-        dbkfTextMatchLoading ||
-        dbkfMediaMatchLoading ||
-        prevFactChecksLoading) && (
-        <SummaryIcon
-          icon={WarningAmberIcon}
-          label="warnings_title"
-          value={warningsCount}
-          targetId="warnings"
-          keyword={keyword}
-          onClick={() => dispatch(setWarningExpanded(true))}
-          loading={
-            dbkfTextMatchLoading ||
-            dbkfMediaMatchLoading ||
-            prevFactChecksLoading
-          }
-        />
-      )}
-      {(hasDomainAnalysis || inputSCLoading) && (
-        <SummaryIcon
-          icon={FindInPageIcon}
-          label="url_domain_analysis"
-          value={domainAnalysisCount}
-          targetId="url-domain-analysis"
-          keyword={keyword}
-          onClick={() => dispatch(setAssuranceExpanded(true))}
-          loading={inputSCLoading}
-        />
-      )}
-      {hasMedia && (
-        <SummaryIcon
-          icon={PermMediaIcon}
-          label="media_title"
-          value={mediaCount}
-          targetId="url-media-results"
-          keyword={keyword}
-        />
-      )}
-      {hasComments && (
+      <SummaryIcon
+        icon={WarningAmberIcon}
+        label="warnings_title"
+        color={"warning"}
+        value={warningsCount}
+        targetId="warnings"
+        keyword={keyword}
+        onClick={() => dispatch(setWarningExpanded(true))}
+        loading={
+          dbkfTextMatchLoading || dbkfMediaMatchLoading || prevFactChecksLoading
+        }
+      />
+      <SummaryIcon
+        icon={FindInPageIcon}
+        label="url_domain_analysis"
+        value={domainAnalysisCount}
+        targetId="url-domain-analysis"
+        keyword={keyword}
+        onClick={() => dispatch(setAssuranceExpanded(true))}
+        loading={inputSCLoading}
+      />
+      <SummaryIcon
+        icon={PermMediaIcon}
+        label="media_title"
+        value={mediaCount}
+        targetId="url-media-results"
+        keyword={keyword}
+      />
+      {
         <SummaryIcon
           icon={CommentIcon}
           label="collected_comments_title"
@@ -238,35 +238,29 @@ const AssistantSummary = () => {
           targetId="assistant-collected-comments"
           keyword={keyword}
         />
-      )}
-      {hasText && (
-        <SummaryIcon
-          icon={ArticleIcon}
-          label="text_title"
-          value={textCount}
-          targetId="credibility-signals"
-          keyword={keyword}
-        />
-      )}
-      {(hasNamedEntity || neLoading) && (
-        <SummaryIcon
-          icon={LabelIcon}
-          label="named_entity_title"
-          value={namedEntityCount}
-          targetId="named-entity-results"
-          keyword={keyword}
-          loading={neLoading}
-        />
-      )}
-      {hasLinks && (
-        <SummaryIcon
-          icon={LinkIcon}
-          label="extracted_urls_url_domain_analysis"
-          value={linksCount}
-          targetId="extracted-urls"
-          keyword={keyword}
-        />
-      )}
+      }
+      <SummaryIcon
+        icon={ArticleIcon}
+        label="text_title"
+        value={textCount}
+        targetId="credibility-signals"
+        keyword={keyword}
+      />
+      <SummaryIcon
+        icon={LabelIcon}
+        label="named_entity_title"
+        value={namedEntityCount}
+        targetId="named-entity-results"
+        keyword={keyword}
+        loading={neLoading}
+      />
+      <SummaryIcon
+        icon={LinkIcon}
+        label="extracted_urls_url_domain_analysis"
+        value={linksCount}
+        targetId="extracted-urls"
+        keyword={keyword}
+      />
     </Stack>
   );
 };
