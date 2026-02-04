@@ -29,77 +29,6 @@ import {
 
 const SummaryIcon = ({
   icon: Icon,
-  label,
-  color,
-  value,
-  targetId,
-  keyword,
-  onClick,
-  loading,
-}) => {
-  const disabled = loading || value === 0 || value === "0";
-
-  const handleClick = () => {
-    if (disabled) return;
-    if (onClick) {
-      onClick();
-    }
-    scrollToElement(targetId, 100);
-  };
-
-  const displayColor = disabled ? "disabled" : color || "primary";
-
-  return (
-    <Card
-      variant="outlined"
-      sx={{
-        opacity: disabled ? 0.5 : 1,
-        "&:hover": {
-          borderColor: disabled ? "divider" : "primary.main",
-        },
-      }}
-    >
-      <Tooltip title={keyword(label)}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 1,
-            p: 1,
-          }}
-        >
-          <IconButton
-            onClick={handleClick}
-            disabled={disabled}
-            color="primary"
-            sx={{ gap: 1 }}
-          >
-            <Icon fontSize="large" color={displayColor} />
-            <Box
-              sx={{
-                minWidth: 40,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              {loading ? (
-                <CircularProgress size={24} />
-              ) : (
-                <Typography variant="h6" color={displayColor}>
-                  {value}
-                </Typography>
-              )}
-            </Box>
-          </IconButton>
-        </Box>
-      </Tooltip>
-    </Card>
-  );
-};
-
-const SvgSummaryIcon = ({
   svgIcon,
   label,
   color,
@@ -147,12 +76,16 @@ const SvgSummaryIcon = ({
             color="primary"
             sx={{ gap: 1 }}
           >
-            <SvgIcon
-              component={svgIcon}
-              fontSize="large"
-              color={displayColor}
-              inheritViewBox
-            />
+            {svgIcon ? (
+              <SvgIcon
+                component={svgIcon}
+                fontSize="large"
+                color={displayColor}
+                inheritViewBox
+              />
+            ) : (
+              <Icon fontSize="large" color={displayColor} />
+            )}
             <Box
               sx={{
                 minWidth: 40,
@@ -280,14 +213,14 @@ const AssistantSummary = () => {
         onClick={() => dispatch(setAssuranceExpanded(true))}
         loading={inputSCLoading}
       />
-      <SvgSummaryIcon
+      <SummaryIcon
         svgIcon={ImageIcon}
         label="images_label"
         value={imageCount}
         targetId="assistant-image-results"
         keyword={keyword}
       />
-      <SvgSummaryIcon
+      <SummaryIcon
         svgIcon={VideoIcon}
         label="videos_label"
         value={videoCount}
