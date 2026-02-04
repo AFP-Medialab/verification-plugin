@@ -19,6 +19,7 @@ import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
 import { scrollToElement } from "@/components/NavItems/Assistant/AssistantScrapeResults/assistantUtils";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import { KNOWN_LINKS } from "@/constants/tools";
 import {
   setAssuranceExpanded,
   setWarningExpanded,
@@ -132,11 +133,13 @@ const AssistantSummary = () => {
   const text = useSelector((state) => state.assistant.urlText);
 
   // named entity state
-  const neResult = useSelector((state) => state.assistant.neResultCategory);
   const neResultCount = useSelector((state) => state.assistant.neResultCount);
 
   // links state
   const linkList = useSelector((state) => state.assistant.linkList);
+
+  // url type state
+  const inputUrlType = useSelector((state) => state.assistant.inputUrlType);
 
   // loading states
   const inputSCLoading = useSelector((state) => state.assistant.inputSCLoading);
@@ -150,17 +153,6 @@ const AssistantSummary = () => {
   const prevFactChecksLoading = useSelector(
     (state) => state.assistant.prevFactChecksLoading,
   );
-
-  // determine which sections have results
-  const hasWarnings =
-    dbkfTextMatch || dbkfImageMatch || dbkfVideoMatch || prevFactChecksResult;
-  const hasDomainAnalysis =
-    positiveSourceCred || cautionSourceCred || mixedSourceCred;
-  const hasMedia = imageList?.length > 0 || videoList?.length > 0;
-  const hasComments = collectedComments?.length > 0;
-  const hasText = !!text;
-  const hasNamedEntity = text && neResult;
-  const hasLinks = text && linkList?.length > 0;
 
   // calculate counts for each section
   const warningsCount =
@@ -178,24 +170,9 @@ const AssistantSummary = () => {
   const namedEntityCount = neResultCount?.length || 0;
   const linksCount = linkList?.length || 0;
 
-  // check if any results exist
-  const hasAnyResults =
-    hasWarnings ||
-    hasDomainAnalysis ||
-    hasMedia ||
-    hasComments ||
-    hasText ||
-    hasNamedEntity ||
-    hasLinks;
-
-  if (!hasAnyResults) {
-    return null;
-  }
-
   return (
     <Stack
       direction="row"
-      spacing={2}
       sx={{
         justifyContent: "center",
         flexWrap: "wrap",
@@ -230,7 +207,8 @@ const AssistantSummary = () => {
         targetId="url-media-results"
         keyword={keyword}
       />
-      {
+      {(inputUrlType === KNOWN_LINKS.YOUTUBE ||
+        inputUrlType === KNOWN_LINKS.YOUTUBESHORTS) && (
         <SummaryIcon
           icon={CommentIcon}
           label="collected_comments_title"
@@ -238,7 +216,7 @@ const AssistantSummary = () => {
           targetId="assistant-collected-comments"
           keyword={keyword}
         />
-      }
+      )}
       <SummaryIcon
         icon={ArticleIcon}
         label="text_title"
