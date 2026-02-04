@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardHeader from "@mui/material/CardHeader";
+import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
@@ -20,7 +19,6 @@ import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
 import { scrollToElement } from "@/components/NavItems/Assistant/AssistantScrapeResults/assistantUtils";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
-import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import {
   setAssuranceExpanded,
   setWarningExpanded,
@@ -33,6 +31,7 @@ const SummaryIcon = ({
   targetId,
   keyword,
   onClick,
+  loading,
 }) => {
   const handleClick = () => {
     if (onClick) {
@@ -42,29 +41,51 @@ const SummaryIcon = ({
   };
 
   return (
-    <Tooltip title={keyword(label)}>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          minWidth: 80,
-        }}
-      >
-        <IconButton onClick={handleClick} color="primary">
-          <Icon fontSize="large" />
-        </IconButton>
-        <Typography variant="body2" color="text.secondary">
-          {value}
-        </Typography>
-      </Box>
-    </Tooltip>
+    <Card
+      variant="outlined"
+      sx={{
+        "&:hover": {
+          borderColor: "primary.main",
+        },
+      }}
+    >
+      <Tooltip title={keyword(label)}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 1,
+            p: 1,
+          }}
+        >
+          <IconButton onClick={handleClick} color="primary" sx={{ gap: 1 }}>
+            <Icon fontSize="large" />
+            <Box
+              sx={{
+                minWidth: 40,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {loading ? (
+                <CircularProgress size={24} />
+              ) : (
+                <Typography variant="h6" color="primary">
+                  {value}
+                </Typography>
+              )}
+            </Box>
+          </IconButton>
+        </Box>
+      </Tooltip>
+    </Card>
   );
 };
 
 const AssistantSummary = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
-  const classes = useMyStyles();
   const dispatch = useDispatch();
 
   // warnings state
@@ -100,9 +121,23 @@ const AssistantSummary = () => {
 
   // named entity state
   const neResult = useSelector((state) => state.assistant.neResultCategory);
+  const neResultCount = useSelector((state) => state.assistant.neResultCount);
 
   // links state
   const linkList = useSelector((state) => state.assistant.linkList);
+
+  // loading states
+  const inputSCLoading = useSelector((state) => state.assistant.inputSCLoading);
+  const dbkfTextMatchLoading = useSelector(
+    (state) => state.assistant.dbkfTextMatchLoading,
+  );
+  const dbkfMediaMatchLoading = useSelector(
+    (state) => state.assistant.dbkfMediaMatchLoading,
+  );
+  const neLoading = useSelector((state) => state.assistant.neLoading);
+  const prevFactChecksLoading = useSelector(
+    (state) => state.assistant.prevFactChecksLoading,
+  );
 
   // determine which sections have results
   const hasWarnings =
@@ -115,14 +150,23 @@ const AssistantSummary = () => {
   const hasNamedEntity = text && neResult;
   const hasLinks = text && linkList?.length > 0;
 
-  // placeholder values - will be replaced with actual counts later
-  const warningsCount = "x";
-  const domainAnalysisCount = "x";
-  const mediaCount = "x";
-  const commentsCount = "x";
-  const textCount = "x";
-  const namedEntityCount = "x";
-  const linksCount = "x";
+  // calculate counts for each section
+  const warningsCount =
+    (dbkfTextMatch?.length || 0) +
+    (dbkfImageMatch ? 1 : 0) +
+    (dbkfVideoMatch ? 1 : 0) +
+    (prevFactChecksResult?.length || 0);
+  const domainAnalysisCount =
+    (positiveSourceCred?.length || 0) +
+    (cautionSourceCred?.length || 0) +
+    (mixedSourceCred?.length || 0);
+  const imageCount = imageList?.length || 0;
+  const videoCount = videoList?.length || 0;
+  const mediaCount = imageCount + videoCount;
+  const commentsCount = collectedComments?.length || 0;
+  const textCount = "✓";
+  const namedEntityCount = neResultCount?.length || 0;
+  const linksCount = linkList?.length || 0;
 
   // check if any results exist
   const hasAnyResults =
@@ -139,89 +183,91 @@ const AssistantSummary = () => {
   }
 
   return (
-    <Card variant="outlined">
-      <CardHeader
-        className={classes.assistantCardHeader}
-        title={<Typography>{keyword("results_summary")}</Typography>}
-      />
-      <CardContent>
-        <Stack
-          direction="row"
-          spacing={2}
-          sx={{
-            justifyContent: "center",
-            flexWrap: "wrap",
-            gap: 2,
-          }}
-        >
-          {hasWarnings && (
-            <SummaryIcon
-              icon={WarningAmberIcon}
-              label="warnings_title"
-              value={warningsCount}
-              targetId="warnings"
-              keyword={keyword}
-              onClick={() => dispatch(setWarningExpanded(true))}
-            />
-          )}
-          {hasDomainAnalysis && (
-            <SummaryIcon
-              icon={FindInPageIcon}
-              label="url_domain_analysis"
-              value={domainAnalysisCount}
-              targetId="url-domain-analysis"
-              keyword={keyword}
-              onClick={() => dispatch(setAssuranceExpanded(true))}
-            />
-          )}
-          {hasMedia && (
-            <SummaryIcon
-              icon={PermMediaIcon}
-              label="media_title"
-              value={mediaCount}
-              targetId="url-media-results"
-              keyword={keyword}
-            />
-          )}
-          {hasComments && (
-            <SummaryIcon
-              icon={CommentIcon}
-              label="collected_comments_title"
-              value={commentsCount}
-              targetId="assistant-collected-comments"
-              keyword={keyword}
-            />
-          )}
-          {hasText && (
-            <SummaryIcon
-              icon={ArticleIcon}
-              label="text_title"
-              value={textCount}
-              targetId="credibility-signals"
-              keyword={keyword}
-            />
-          )}
-          {hasNamedEntity && (
-            <SummaryIcon
-              icon={LabelIcon}
-              label="named_entity_title"
-              value={namedEntityCount}
-              targetId="named-entity-results"
-              keyword={keyword}
-            />
-          )}
-          {hasLinks && (
-            <SummaryIcon
-              icon={LinkIcon}
-              label="extracted_urls_url_domain_analysis"
-              value={linksCount}
-              targetId="extracted-urls"
-              keyword={keyword}
-            />
-          )}
-        </Stack>
-      </CardContent>
-    </Card>
+    <Stack
+      direction="row"
+      spacing={2}
+      sx={{
+        justifyContent: "center",
+        flexWrap: "wrap",
+        gap: 2,
+      }}
+    >
+      {(hasWarnings ||
+        dbkfTextMatchLoading ||
+        dbkfMediaMatchLoading ||
+        prevFactChecksLoading) && (
+        <SummaryIcon
+          icon={WarningAmberIcon}
+          label="warnings_title"
+          value={warningsCount}
+          targetId="warnings"
+          keyword={keyword}
+          onClick={() => dispatch(setWarningExpanded(true))}
+          loading={
+            dbkfTextMatchLoading ||
+            dbkfMediaMatchLoading ||
+            prevFactChecksLoading
+          }
+        />
+      )}
+      {(hasDomainAnalysis || inputSCLoading) && (
+        <SummaryIcon
+          icon={FindInPageIcon}
+          label="url_domain_analysis"
+          value={domainAnalysisCount}
+          targetId="url-domain-analysis"
+          keyword={keyword}
+          onClick={() => dispatch(setAssuranceExpanded(true))}
+          loading={inputSCLoading}
+        />
+      )}
+      {hasMedia && (
+        <SummaryIcon
+          icon={PermMediaIcon}
+          label="media_title"
+          value={mediaCount}
+          targetId="url-media-results"
+          keyword={keyword}
+        />
+      )}
+      {hasComments && (
+        <SummaryIcon
+          icon={CommentIcon}
+          label="collected_comments_title"
+          value={commentsCount}
+          targetId="assistant-collected-comments"
+          keyword={keyword}
+        />
+      )}
+      {hasText && (
+        <SummaryIcon
+          icon={ArticleIcon}
+          label="text_title"
+          value={textCount}
+          targetId="credibility-signals"
+          keyword={keyword}
+        />
+      )}
+      {(hasNamedEntity || neLoading) && (
+        <SummaryIcon
+          icon={LabelIcon}
+          label="named_entity_title"
+          value={namedEntityCount}
+          targetId="named-entity-results"
+          keyword={keyword}
+          loading={neLoading}
+        />
+      )}
+      {hasLinks && (
+        <SummaryIcon
+          icon={LinkIcon}
+          label="extracted_urls_url_domain_analysis"
+          value={linksCount}
+          targetId="extracted-urls"
+          keyword={keyword}
+        />
+      )}
+    </Stack>
   );
 };
 export default AssistantSummary;
