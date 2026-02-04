@@ -2,9 +2,8 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
+import ButtonBase from "@mui/material/ButtonBase";
 import CircularProgress from "@mui/material/CircularProgress";
-import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import SvgIcon from "@mui/material/SvgIcon";
 import Tooltip from "@mui/material/Tooltip";
@@ -42,7 +41,6 @@ const SummaryIcon = ({
   const disabled = loading || value === 0 || value === false;
 
   const handleClick = () => {
-    if (disabled) return;
     if (onClick) {
       onClick();
     }
@@ -52,70 +50,68 @@ const SummaryIcon = ({
   const displayColor = disabled ? "disabled" : color || "primary";
 
   return (
-    <Card
-      variant="outlined"
-      sx={{
-        opacity: disabled ? 0.5 : 1,
-        "&:hover": {
-          borderColor: disabled ? "divider" : "primary.main",
-        },
-      }}
-    >
-      <Tooltip title={keyword(label)}>
+    <Tooltip title={keyword(label)}>
+      <ButtonBase
+        onClick={handleClick}
+        disabled={disabled}
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 1,
+          px: 2,
+          py: 1,
+          borderRadius: 1,
+          bgcolor: "background.paper",
+          boxShadow: 1,
+          transition: "all 0.2s ease-in-out",
+          opacity: disabled ? 0.5 : 1,
+          "&:hover": {
+            bgcolor: "action.hover",
+            boxShadow: 3,
+          },
+          "&:active": {
+            bgcolor: "action.selected",
+          },
+        }}
+      >
+        {svgIcon ? (
+          <SvgIcon
+            component={svgIcon}
+            fontSize="large"
+            color={displayColor}
+            inheritViewBox
+          />
+        ) : (
+          <Icon fontSize="large" color={displayColor} />
+        )}
         <Box
           sx={{
+            minWidth: 40,
             display: "flex",
-            flexDirection: "row",
+            justifyContent: "center",
             alignItems: "center",
-            gap: 1,
-            p: 1,
           }}
         >
-          <IconButton
-            onClick={handleClick}
-            disabled={disabled}
-            color="primary"
-            sx={{ gap: 1 }}
-          >
-            {svgIcon ? (
-              <SvgIcon
-                component={svgIcon}
-                fontSize="large"
-                color={displayColor}
-                inheritViewBox
-              />
-            ) : (
-              <Icon fontSize="large" color={displayColor} />
-            )}
+          {loading ? (
+            <CircularProgress size={24} />
+          ) : useDotIndicator ? (
             <Box
               sx={{
-                minWidth: 40,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
+                width: 12,
+                height: 12,
+                borderRadius: "50%",
+                bgcolor: disabled ? "action.disabled" : "primary.main",
               }}
-            >
-              {loading ? (
-                <CircularProgress size={24} />
-              ) : useDotIndicator ? (
-                <Box
-                  sx={{
-                    width: 12,
-                    height: 12,
-                    borderRadius: "50%",
-                    bgcolor: disabled ? "action.disabled" : "primary.main",
-                  }}
-                />
-              ) : (
-                <Typography variant="h6" color={displayColor}>
-                  {value}
-                </Typography>
-              )}
-            </Box>
-          </IconButton>
+            />
+          ) : (
+            <Typography variant="h6" color={displayColor}>
+              {value}
+            </Typography>
+          )}
         </Box>
-      </Tooltip>
-    </Card>
+      </ButtonBase>
+    </Tooltip>
   );
 };
 
