@@ -289,12 +289,12 @@ const Assistant = () => {
   // if a url is present in the plugin url (as a param), set it to input
   useEffect(() => {
     if (url !== undefined && !hasSubmitted) {
-      let uri = url !== null ? decodeURIComponent(url) : undefined;
-      uri = uri.replace(/ /g, "%20"); // fix space issue
+      // only handle user-entered spaces which shouldn't normally be in URLs
+      const uri = url.replace(/ /g, "%20");
       dispatch(setUrlMode(true));
       setFormInput(uri);
       dispatch(submitInputUrl(uri));
-      navigate("/app/assistant/" + encodeURIComponent(url));
+      navigate("/app/assistant/" + encodeURIComponent(uri));
     }
   }, [url]);
 
