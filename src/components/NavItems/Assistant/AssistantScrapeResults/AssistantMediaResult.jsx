@@ -170,9 +170,6 @@ const AssistantMediaResult = ({ title = null }) => {
             </div>
           </div>
         }
-        slotProps={{
-          subheader: { sx: { color: "white" } },
-        }}
       />
       {dbkfMediaMatchLoading ? (
         <div>
