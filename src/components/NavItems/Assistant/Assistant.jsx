@@ -290,7 +290,7 @@ const Assistant = () => {
   useEffect(() => {
     if (url !== undefined && !hasSubmitted) {
       // only handle user-entered spaces which shouldn't normally be in URLs
-      const uri = url.replace(/ /g, "%20");
+      const uri = url !== null ? url.replace(/ /g, "%20") : undefined;
       dispatch(setUrlMode(true));
       setFormInput(uri);
       dispatch(submitInputUrl(uri));
