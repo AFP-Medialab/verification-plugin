@@ -175,8 +175,8 @@ const AssistantNEResult = () => {
               ))}
             </ButtonGroup>
           </Box>
-          <Grid container justifyContent="center">
-            <Grid>
+          <Grid container>
+            <Grid sx={{ textAlign: "center" }}>
               <TagCloud
                 tags={neResultCount}
                 shuffle={false}
