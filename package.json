@@ -55,7 +55,7 @@
     "@wavesurfer/react": "^1.0.7",
     "@wxt-dev/auto-icons": "^1.1.0",
     "attr-accept": "^2.2.5",
-    "axios": "^1.12.0",
+    "axios": "^1.13.5",
     "buffer": "^6.0.3",
     "c2pa": "0.30.17",
     "chart.js": "^4.4.4",
