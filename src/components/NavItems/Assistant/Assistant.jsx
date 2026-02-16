@@ -119,6 +119,9 @@ const Assistant = () => {
   const dbkfTextFailState = useSelector(
     (state) => state.assistant.dbkfTextMatchFail,
   );
+  const dbkfMediaFailState = useSelector(
+    (state) => state.assistant.dbkfMediaMatchFail,
+  );
   const neFailState = useSelector((state) => state.assistant.neFail);
   const newsFramingFailState = useSelector(
     (state) => state.assistant.newsFramingFail,
@@ -416,6 +419,7 @@ const Assistant = () => {
       {(urlMode || imageVideoSelected) &&
       (scFailState ||
         dbkfTextFailState ||
+        dbkfMediaFailState ||
         neFailState ||
         newsFramingFailState ||
         newsGenreFailState ||
