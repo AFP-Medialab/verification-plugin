@@ -8,12 +8,21 @@ import {
   Tool,
   canUserSeeTool,
   imageGif,
-  thumbnails,
   tools,
-  videoAnalysis,
 } from "@/constants/tools";
 
-export const NE_SUPPORTED_LANGS = ["en", "pt", "fr", "de", "el", "es", "it"];
+export const NE_SUPPORTED_LANGS = [
+  "en",
+  "fr",
+  "el",
+  "es",
+  "it",
+  "ar",
+  "de",
+  "ja",
+  "hu",
+  "pt",
+];
 
 export const KNOWN_LINKS = {
   TWITTER: "twitter",
