@@ -25,8 +25,8 @@ import {
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import {
+  setFactChecksExpanded,
   setImportantSentenceThreshold,
-  setWarningExpanded,
 } from "@/redux/actions/tools/assistantActions";
 
 import {
@@ -248,7 +248,7 @@ const AssistantTextResult = () => {
                   className={classes.toolTipWarning}
                   sx={{ cursor: "pointer" }}
                   onClick={() => {
-                    dispatch(setWarningExpanded(true));
+                    dispatch(setFactChecksExpanded(true));
                     scrollToElement("warnings", 100);
                   }}
                 />

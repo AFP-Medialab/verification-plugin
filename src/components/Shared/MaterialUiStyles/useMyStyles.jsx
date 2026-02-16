@@ -338,7 +338,6 @@ const styles = (theme) => ({
     border: "2px solid",
     borderColor: "red",
     borderRadius: "15px",
-    display: "flex",
     padding: "12px",
   },
   assistantBackground: {
