@@ -17,6 +17,7 @@ import { WarningAmber } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
+import DbkfMediaResults from "@/components/NavItems/Assistant/AssistantCheckResults/DbkfMediaResults";
 import DbkfTextResults from "@/components/NavItems/Assistant/AssistantCheckResults/DbkfTextResults";
 import PreviousFactCheckResults from "@/components/NavItems/Assistant/AssistantCheckResults/PreviousFactCheckResults";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
@@ -47,6 +48,8 @@ const AssistantWarnings = () => {
 
   // state
   const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
+  const dbkfImageMatch = useSelector((state) => state.assistant.dbkfImageMatch);
+  const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
   const prevFactChecksDone = useSelector(
     (state) => state.assistant.prevFactChecksDone,
   );
@@ -194,39 +197,12 @@ const AssistantWarnings = () => {
           >
             <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
           </Tooltip>
-        }
-      />
-      <CardContent>
-        {/* not logged in as beta tester, DBKF only */}
-        {!role.includes(ROLES.BETA_TESTER) && dbkfTextMatch && (
-          <DbkfTextResults
-            results={separateDbkfTextMatch}
-            prevFactChecksExist={false}
-          />
-        )}
+        </Grid>
 
-        {/* logged in as beta tester, DBKF and FCSS/prevFactChecks */}
-        {role.includes(ROLES.BETA_TESTER) &&
-          prevFactChecksDone &&
-          (updatedPrevFactCheckResult.length > 0 ? (
-            <>
-              <DbkfTextResults
-                results={uniqueSeparateDbkfTextMatch}
-                prevFactChecksExist={true}
-              />
-              <PreviousFactCheckResults results={updatedPrevFactCheckResult} />
-            </>
-          ) : (
-            <DbkfTextResults results={dbkfTextMatch} />
-          ))}
-
-        {role.includes(ROLES.BETA_TESTER) && prevFactChecksLoading && (
-          <Stack
-            direction="column"
-            spacing={4}
-            sx={{
-              p: 4,
-            }}
+        <Grid size={{ xs: 12 }}>
+          <Collapse
+            in={factChecksExpanded}
+            className={classes.assistantBackground}
           >
             <Box
               sx={{

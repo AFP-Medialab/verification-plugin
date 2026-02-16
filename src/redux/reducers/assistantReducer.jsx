@@ -33,6 +33,12 @@ const defaultState = {
   dbkfTextMatchDone: false,
   dbkfTextMatchFail: false,
 
+  dbkfImageMatch: null,
+  dbkfVideoMatch: null,
+  dbkfMediaMatchLoading: false,
+  dbkfMediaMatchDone: false,
+  dbkfMediaMatchFail: false,
+
   neResultCategory: null,
   neResultCount: null,
   neLoading: false,
@@ -97,6 +103,8 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_SINGLE_MEDIA_PRESENT":
     case "SET_INPUT_SC_DETAILS":
     case "SET_DBKF_TEXT_MATCH_DETAILS":
+    case "SET_DBKF_IMAGE_MATCH_DETAILS":
+    case "SET_DBKF_VIDEO_MATCH_DETAILS":
     case "SET_NE_DETAILS":
     case "SET_NEWS_TOPIC_DETAILS":
     case "SET_NEWS_GENRE_DETAILS":
@@ -161,6 +169,12 @@ const assistantReducer = (state = defaultState, action) => {
         dbkfTextMatchLoading: false,
         dbkfTextMatchDone: false,
         dbkfTextMatchFail: false,
+
+        dbkfImageMatch: null,
+        dbkfVideoMatch: null,
+        dbkfMediaMatchLoading: false,
+        dbkfMediaMatchDone: false,
+        dbkfMediaMatchFail: false,
 
         neResultCategory: null,
         neResultCount: null,
