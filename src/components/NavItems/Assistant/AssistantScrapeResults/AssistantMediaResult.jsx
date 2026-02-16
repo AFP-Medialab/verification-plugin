@@ -165,9 +165,6 @@ const AssistantMediaResult = ({ title = null }) => {
             </div>
           </div>
         }
-        slotProps={{
-          subheader: { sx: { color: "white" } },
-        }}
       />
 
       {/* selected image or video with recommended tools */}
