@@ -12,9 +12,7 @@ import { TOOLS_CATEGORIES } from "@/constants/tools";
 import {
   cleanAssistantState,
   setAssistantLoading,
-  setDbkfImageMatchDetails,
   setDbkfTextMatchDetails,
-  setDbkfVideoMatchDetails,
   setErrorKey,
   setImageVideoSelected,
   setInputSourceCredDetails,
@@ -73,13 +71,6 @@ function* getMediaActionSaga() {
 
 function* getAssistantScrapeSaga() {
   yield takeLatest("SUBMIT_INPUT_URL", handleAssistantScrapeCall);
-}
-
-function* getMediaSimilaritySaga() {
-  yield takeLatest(
-    ["SET_PROCESS_URL", "CLEAN_STATE"],
-    handleMediaSimilarityCall,
-  );
 }
 
 function* getDbkfTextMatchSaga() {
@@ -205,77 +196,6 @@ function* handleSubmitUpload() {
 /**
  * API HANDLERS
  **/
-function* handleMediaSimilarityCall(action) {
-  if (action.type === "CLEAN_STATE") return;
-
-  const inputUrlType = yield select((state) => state.assistant.inputUrlType);
-  const processUrl = yield select((state) => state.assistant.processUrl);
-  const contentType = yield select((state) => state.assistant.processUrlType);
-  const unprocessbleTypes = [
-    KNOWN_LINKS.OWN, // remove this for DBKF media service
-    KNOWN_LINKS.YOUTUBE,
-    KNOWN_LINKS.VIMEO,
-    KNOWN_LINKS.LIVELEAK,
-    KNOWN_LINKS.DAILYMOTION,
-  ];
-
-  if (
-    contentType === TOOLS_CATEGORIES.IMAGE &&
-    !unprocessbleTypes.includes(inputUrlType) // remove this for DBKF media service
-  ) {
-    yield call(
-      similaritySearch,
-      () => dbkfAPI.callImageSimilarityEndpoint(processUrl),
-      (result, loading, done, fail) =>
-        setDbkfImageMatchDetails(result, loading, done, fail),
-    );
-  } else if (
-    contentType === TOOLS_CATEGORIES.VIDEO &&
-    !unprocessbleTypes.includes(inputUrlType)
-  ) {
-    yield call(
-      similaritySearch,
-      () => dbkfAPI.callVideoSimilarityEndpoint(processUrl),
-      (result, loading, done, fail) =>
-        setDbkfVideoMatchDetails(result, loading, done, fail),
-    );
-  }
-}
-
-function* similaritySearch(searchEndpoint, stateStorageFunction) {
-  yield put(stateStorageFunction(null, true, false, false));
-
-  try {
-    let result = yield call(searchEndpoint);
-    if (Object.keys(result).length) {
-      let similarityResult = result;
-      let resultList = [];
-      Object.keys(similarityResult).forEach((key) => {
-        result[key].appearancesResults.forEach((appearance) => {
-          resultList.push({
-            claimUrl: result[key].externalLink,
-            similarity: appearance.similarity,
-          });
-        });
-        result[key].evidencesResults.forEach((evidence) => {
-          resultList.push({
-            claimUrl: result[key].externalLink,
-            similarity: evidence.similarity,
-          });
-        });
-      });
-      resultList.sort((a, b) => b.similarity - a.similarity);
-      resultList = resultList.slice(0, 3);
-      yield put(stateStorageFunction(resultList, false, true, false));
-    } else {
-      yield put(stateStorageFunction(null, false, true, false));
-    }
-  } catch (error) {
-    console.log(error);
-    yield put(stateStorageFunction(null, false, false, true));
-  }
-}
-
 function* handleSourceCredibilityCall(action) {
   if (action.type === "CLEAN_STATE") return;
   try {
@@ -1071,7 +991,6 @@ export default function* assistantSaga() {
     fork(getDbkfTextMatchSaga),
     fork(getSourceCredSaga),
     fork(getMediaActionSaga),
-    fork(getMediaSimilaritySaga),
     fork(getMediaListSaga),
     fork(getNamedEntitySaga),
     fork(getAssistantScrapeSaga),

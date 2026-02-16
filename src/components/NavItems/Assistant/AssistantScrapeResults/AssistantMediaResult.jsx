@@ -61,9 +61,6 @@ const AssistantMediaResult = ({ title = null }) => {
 
   // third party topMenuItem states
   //const ocrLoading = useSelector(state=>state.assistant.ocrLoading)
-  const dbkfMediaMatchLoading = useSelector(
-    (state) => state.assistant.dbkfMediaMatchLoading,
-  );
   const dbkfImageMatch = useSelector((state) => state.assistant.dbkfImageMatch);
   const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
 
@@ -172,11 +169,7 @@ const AssistantMediaResult = ({ title = null }) => {
           subheader: { sx: { color: "white" } },
         }}
       />
-      {dbkfMediaMatchLoading ? (
-        <div>
-          <LinearProgress />
-        </div>
-      ) : null}
+
       {/* selected image or video with recommended tools */}
       <CardContent sx={{ padding: processUrl == null ? 0 : undefined }}>
         {missingMedia ? (
