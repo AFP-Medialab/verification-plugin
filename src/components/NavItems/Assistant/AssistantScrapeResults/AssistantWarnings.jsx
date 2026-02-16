@@ -1,16 +1,20 @@
 import React from "react";
 import { Trans } from "react-i18next";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardHeader from "@mui/material/CardHeader";
+import CardMedia from "@mui/material/CardMedia";
+import Collapse from "@mui/material/Collapse";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
+import { WarningAmber } from "@mui/icons-material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import DbkfTextResults from "@/components/NavItems/Assistant/AssistantCheckResults/DbkfTextResults";
@@ -18,6 +22,7 @@ import PreviousFactCheckResults from "@/components/NavItems/Assistant/AssistantC
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { ROLES } from "@/constants/roles";
+import { setFactChecksExpanded } from "@/redux/actions/tools/assistantActions";
 
 import {
   TransDbkfLink,
@@ -30,9 +35,15 @@ import {
 const AssistantWarnings = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const classes = useMyStyles();
+  const dispatch = useDispatch();
 
   // checking if user logged in
   const role = useSelector((state) => state.userSession.user.roles);
+
+  // expanded view
+  const factChecksExpanded = useSelector(
+    (state) => state.assistant.factChecksExpanded,
+  );
 
   // state
   const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
@@ -120,17 +131,46 @@ const AssistantWarnings = () => {
   }
 
   return (
-    <Card variant="outlined" id="warnings">
-      <CardHeader
-        className={classes.assistantCardHeader}
-        title={
-          <Alert severity="warning" sx={{ bgcolor: "background.paper" }}>
-            <Typography>{keyword("warnings_title")}</Typography>
-          </Alert>
-        }
-        action={
+    <Card
+      variant={"outlined"}
+      className={classes.assistantWarningBorder}
+      id="warnings"
+    >
+      <Grid container>
+        <Grid size={{ xs: 11 }} className={classes.displayFlex}>
+          {/* icon */}
+          <CardMedia>
+            <WarningAmber fontSize={"large"} color={"warning"} sx={{ m: 1 }} />
+          </CardMedia>
+
+          {/* title */}
+          <Typography
+            component={"span"}
+            variant={"h6"}
+            sx={{
+              mt: 1.5,
+              pl: 1,
+            }}
+          >
+            {keyword("warnings_title")}
+          </Typography>
+
+          {/* expand button */}
+          <IconButton
+            className={classes.assistantIconRight}
+            onClick={() => dispatch(setFactChecksExpanded(!factChecksExpanded))}
+            sx={{ p: 1 }}
+          >
+            <ExpandMoreIcon color={"primary"} />
+          </IconButton>
+        </Grid>
+
+        <Grid size={{ xs: 1 }}>
+          {/* help tooltip */}
           <Tooltip
             interactive={"true"}
+            leaveDelay={50}
+            sx={{ display: "flex", ml: "auto", textAlign: "right", mt: 1.5 }}
             title={
               <>
                 <Trans t={keyword} i18nKey="dbkf_tooltip" />
@@ -188,11 +228,57 @@ const AssistantWarnings = () => {
               p: 4,
             }}
           >
-            <Skeleton variant="rounded" height={40} />
-            <Skeleton variant="rounded" width={400} height={40} />
-          </Stack>
-        )}
-      </CardContent>
+            <Box
+              sx={{
+                width: "100%",
+                mt: 3,
+                ml: 2,
+              }}
+            >
+              {(dbkfImageMatch || dbkfVideoMatch) && <DbkfMediaResults />}
+
+              {/* not logged in as beta tester, DBKF only */}
+              {!role.includes(ROLES.BETA_TESTER) && dbkfTextMatch && (
+                <DbkfTextResults
+                  results={separateDbkfTextMatch}
+                  prevFactChecksExist={false}
+                />
+              )}
+
+              {/* logged in as beta tester, DBKF and FCSS/prevFactChecks */}
+              {role.includes(ROLES.BETA_TESTER) &&
+                prevFactChecksDone &&
+                (updatedPrevFactCheckResult.length > 0 ? (
+                  <>
+                    <DbkfTextResults
+                      results={uniqueSeparateDbkfTextMatch}
+                      prevFactChecksExist={true}
+                    />
+                    <PreviousFactCheckResults
+                      results={updatedPrevFactCheckResult}
+                    />
+                  </>
+                ) : (
+                  <DbkfTextResults results={dbkfTextMatch} />
+                ))}
+
+              {/* logged in as beta tester but waiting for results */}
+              {role.includes(ROLES.BETA_TESTER) && prevFactChecksLoading && (
+                <Stack
+                  direction="column"
+                  spacing={4}
+                  sx={{
+                    p: 4,
+                  }}
+                >
+                  <Skeleton variant="rounded" height={40} />
+                  <Skeleton variant="rounded" width={400} height={40} />
+                </Stack>
+              )}
+            </Box>
+          </Collapse>
+        </Grid>
+      </Grid>
     </Card>
   );
 };

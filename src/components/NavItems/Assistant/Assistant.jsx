@@ -108,9 +108,7 @@ const Assistant = () => {
   );
 
   const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
-  const dbkfImageResult = useSelector(
-    (state) => state.assistant.dbkfImageMatch,
-  );
+  const dbkfImageMatch = useSelector((state) => state.assistant.dbkfImageMatch);
   const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
 
   // third party fail states
@@ -479,9 +477,16 @@ const Assistant = () => {
 
           <CardContent>
             <Grid container spacing={4}>
+              {/* source credibility//URL domain analysis results */}
+              {positiveSourceCred || cautionSourceCred || mixedSourceCred ? (
+                <Grid size={{ xs: 12 }}>
+                  <AssistantSCResults />
+                </Grid>
+              ) : null}
+
               {/* warnings and api status checks */}
               {dbkfTextMatch ||
-              dbkfImageResult ||
+              dbkfImageMatch ||
               dbkfVideoMatch ||
               prevFactChecksResult ? (
                 <Grid
@@ -490,13 +495,6 @@ const Assistant = () => {
                   hidden={urlMode === false}
                 >
                   <AssistantWarnings />
-                </Grid>
-              ) : null}
-
-              {/* source credibility/URL domain analysis results */}
-              {positiveSourceCred || cautionSourceCred || mixedSourceCred ? (
-                <Grid size={{ xs: 12 }}>
-                  <AssistantSCResults />
                 </Grid>
               ) : null}
 

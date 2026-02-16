@@ -351,29 +351,6 @@ export default function assistantApiCalls() {
     );
   };
 
-  const callMachineGeneratedTextSentencesService = async (text) => {
-    return await callAsyncWithNumRetries(
-      MAX_NUM_RETRIES,
-      async () => {
-        const result = await axios.post(
-          assistantEndpoint + "kinit/machine-generated-text-sentences",
-          {
-            content: text,
-          },
-        );
-        return result.data;
-      },
-      (numTries) => {
-        console.log(
-          "Could not connect to machine generated text service for sentences, tries " +
-            (numTries + 1) +
-            "/" +
-            MAX_NUM_RETRIES,
-        );
-      },
-    );
-  };
-
   const callMultilingualStanceService = async (comments) => {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
@@ -408,7 +385,6 @@ export default function assistantApiCalls() {
     callSubjectivityService,
     callPrevFactChecksService,
     callMachineGeneratedTextChunksService,
-    callMachineGeneratedTextSentencesService,
     callMultilingualStanceService,
   };
 }
