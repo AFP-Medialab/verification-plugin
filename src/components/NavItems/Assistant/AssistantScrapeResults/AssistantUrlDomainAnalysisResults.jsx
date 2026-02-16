@@ -11,7 +11,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import FindInPageIcon from "@mui/icons-material/FindInPage";
+import FindInPageOutlinedIcon from "@mui/icons-material/FindInPageOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import {
@@ -55,6 +55,7 @@ const AssistantSCResults = () => {
 
   return (
     <Card
+      id="url-domain-analysis"
       variant={"outlined"}
       className={classes.sourceCredibilityBorder}
       height="400"
@@ -68,7 +69,7 @@ const AssistantSCResults = () => {
                 m: 1,
               }}
             >
-              <FindInPageIcon fontSize={"large"} color={"primary"} />
+              <FindInPageOutlinedIcon fontSize={"large"} color={"primary"} />
             </Box>
           </CardMedia>
 

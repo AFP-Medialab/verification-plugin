@@ -1,0 +1,279 @@
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import Box from "@mui/material/Box";
+import ButtonBase from "@mui/material/ButtonBase";
+import CircularProgress from "@mui/material/CircularProgress";
+import Stack from "@mui/material/Stack";
+import SvgIcon from "@mui/material/SvgIcon";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
+import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
+import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
+import FindInPageOutlinedIcon from "@mui/icons-material/FindInPageOutlined";
+import LabelOutlinedIcon from "@mui/icons-material/LabelOutlined";
+import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
+import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
+
+import ImageIcon from "@/components/NavBar/images/SVG/Image/Images.svg";
+import VideoIcon from "@/components/NavBar/images/SVG/Video/Video.svg";
+import { scrollToElement } from "@/components/NavItems/Assistant/AssistantScrapeResults/assistantUtils";
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import { KNOWN_LINKS } from "@/constants/tools";
+import {
+  setAssuranceExpanded,
+  setWarningExpanded,
+} from "@/redux/actions/tools/assistantActions";
+
+const SummaryIcon = ({
+  icon: Icon,
+  svgIcon,
+  label,
+  color,
+  value,
+  targetId,
+  keyword,
+  onClick,
+  loading,
+  useDotIndicator,
+}) => {
+  const disabled = loading || value === 0 || value === false;
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    }
+    scrollToElement(targetId, 100);
+  };
+
+  const displayColor = disabled ? "disabled" : color || "primary";
+
+  return (
+    <Tooltip title={keyword(label)}>
+      <ButtonBase
+        onClick={handleClick}
+        disabled={disabled}
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 1,
+          px: 2,
+          py: 1,
+          borderRadius: 1,
+          bgcolor: "background.paper",
+          boxShadow: 1,
+          transition: "all 0.2s ease-in-out",
+          opacity: disabled ? 0.5 : 1,
+          "&:hover": {
+            bgcolor: "action.hover",
+            boxShadow: 3,
+          },
+          "&:active": {
+            bgcolor: "action.selected",
+          },
+        }}
+      >
+        {svgIcon ? (
+          <SvgIcon
+            component={svgIcon}
+            fontSize="large"
+            color={displayColor}
+            inheritViewBox
+          />
+        ) : (
+          <Icon fontSize="large" color={displayColor} />
+        )}
+        <Box
+          sx={{
+            minWidth: 40,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {loading ? (
+            <CircularProgress size={24} />
+          ) : useDotIndicator ? (
+            <Box
+              sx={{
+                width: 12,
+                height: 12,
+                borderRadius: "50%",
+                bgcolor: disabled ? "action.disabled" : "primary.main",
+              }}
+            />
+          ) : (
+            <Typography variant="h6" color={displayColor}>
+              {value}
+            </Typography>
+          )}
+        </Box>
+      </ButtonBase>
+    </Tooltip>
+  );
+};
+
+const AssistantSummary = () => {
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
+  const dispatch = useDispatch();
+
+  // warnings state
+  const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
+  const dbkfImageMatch = useSelector((state) => state.assistant.dbkfImageMatch);
+  const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
+  const prevFactChecksResult = useSelector(
+    (state) => state.assistant.prevFactChecksResult,
+  );
+
+  // source credibility state
+  const positiveSourceCred = useSelector(
+    (state) => state.assistant.positiveSourceCred,
+  );
+  const cautionSourceCred = useSelector(
+    (state) => state.assistant.cautionSourceCred,
+  );
+  const mixedSourceCred = useSelector(
+    (state) => state.assistant.mixedSourceCred,
+  );
+
+  // media state
+  const imageList = useSelector((state) => state.assistant.imageList);
+  const videoList = useSelector((state) => state.assistant.videoList);
+  const singleMediaPresent = useSelector(
+    (state) => state.assistant.singleMediaPresent,
+  );
+
+  // comments state
+  const collectedComments = useSelector(
+    (state) => state.assistant.collectedComments,
+  );
+
+  // text state
+  const text = useSelector((state) => state.assistant.urlText);
+
+  // named entity state
+  const neResultCount = useSelector((state) => state.assistant.neResultCount);
+
+  // links state
+  const linkList = useSelector((state) => state.assistant.linkList);
+
+  // url type state
+  const inputUrlType = useSelector((state) => state.assistant.inputUrlType);
+
+  // loading states
+  const inputSCLoading = useSelector((state) => state.assistant.inputSCLoading);
+  const dbkfTextMatchLoading = useSelector(
+    (state) => state.assistant.dbkfTextMatchLoading,
+  );
+  const dbkfMediaMatchLoading = useSelector(
+    (state) => state.assistant.dbkfMediaMatchLoading,
+  );
+  const neLoading = useSelector((state) => state.assistant.neLoading);
+  const prevFactChecksLoading = useSelector(
+    (state) => state.assistant.prevFactChecksLoading,
+  );
+
+  // calculate counts for each section
+  const warningsCount =
+    (dbkfTextMatch?.length || 0) +
+    (dbkfImageMatch ? 1 : 0) +
+    (dbkfVideoMatch ? 1 : 0) +
+    (prevFactChecksResult?.length || 0);
+  const domainAnalysisCount =
+    (positiveSourceCred?.length || 0) +
+    (cautionSourceCred?.length || 0) +
+    (mixedSourceCred?.length || 0);
+  const imageCount = imageList?.length || 0;
+  const videoCount = videoList?.length || 0;
+  const commentsCount = collectedComments?.length || 0;
+  const hasText = !!text;
+  const namedEntityCount = neResultCount?.length || 0;
+  const linksCount = linkList?.length || 0;
+
+  return (
+    <Stack
+      direction="row"
+      sx={{
+        justifyContent: "center",
+        flexWrap: "wrap",
+        gap: 2,
+      }}
+    >
+      <SummaryIcon
+        icon={WarningAmberOutlinedIcon}
+        label="warnings_title"
+        color={"warning"}
+        value={warningsCount}
+        targetId="warnings"
+        keyword={keyword}
+        onClick={() => dispatch(setWarningExpanded(true))}
+        loading={
+          dbkfTextMatchLoading || dbkfMediaMatchLoading || prevFactChecksLoading
+        }
+      />
+      <SummaryIcon
+        icon={FindInPageOutlinedIcon}
+        label="url_domain_analysis"
+        value={domainAnalysisCount}
+        targetId="url-domain-analysis"
+        keyword={keyword}
+        onClick={() => dispatch(setAssuranceExpanded(true))}
+        loading={inputSCLoading}
+      />
+      <SummaryIcon
+        svgIcon={ImageIcon}
+        label="images_label"
+        value={imageCount}
+        targetId={
+          singleMediaPresent ? "url-media-results" : "assistant-image-results"
+        }
+        keyword={keyword}
+      />
+      <SummaryIcon
+        svgIcon={VideoIcon}
+        label="videos_label"
+        value={videoCount}
+        targetId={
+          singleMediaPresent ? "url-media-results" : "assistant-video-results"
+        }
+        keyword={keyword}
+      />
+      {(inputUrlType === KNOWN_LINKS.YOUTUBE ||
+        inputUrlType === KNOWN_LINKS.YOUTUBESHORTS) && (
+        <SummaryIcon
+          icon={CommentOutlinedIcon}
+          label="collected_comments_title"
+          value={commentsCount}
+          targetId="assistant-collected-comments"
+          keyword={keyword}
+        />
+      )}
+      <SummaryIcon
+        icon={ArticleOutlinedIcon}
+        label="text_title"
+        value={hasText}
+        targetId="credibility-signals"
+        keyword={keyword}
+        useDotIndicator
+      />
+      <SummaryIcon
+        icon={LabelOutlinedIcon}
+        label="named_entity_title"
+        value={namedEntityCount}
+        targetId="named-entity-results"
+        keyword={keyword}
+        loading={neLoading}
+      />
+      <SummaryIcon
+        icon={LinkOutlinedIcon}
+        label="extracted_urls_url_domain_analysis"
+        value={linksCount}
+        targetId="extracted-urls"
+        keyword={keyword}
+      />
+    </Stack>
+  );
+};
+export default AssistantSummary;

@@ -14,6 +14,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
 
 import ExtractedUrlDomainAnalysisResults from "@/components/NavItems/Assistant/AssistantCheckResults/ExtractedUrlDomainAnalysisResults";
 import CopyButton from "@/components/Shared/CopyButton";
@@ -458,10 +459,15 @@ const AssistantLinkResult = () => {
   }
 
   return (
-    <Card variant="outlined">
+    <Card id="extracted-urls" variant="outlined">
       <CardHeader
         className={classes.assistantCardHeader}
-        title={keyword("extracted_urls_url_domain_analysis")}
+        title={
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <LinkOutlinedIcon color="primary" />
+            {keyword("extracted_urls_url_domain_analysis")}
+          </Box>
+        }
         action={
           <Tooltip
             interactive={"true"}
