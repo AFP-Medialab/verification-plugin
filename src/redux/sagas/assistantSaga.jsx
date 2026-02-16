@@ -146,7 +146,7 @@ function* handleMediaActionList() {
   const processUrl = yield select((state) => state.assistant.processUrl);
   const contentType = yield select((state) => state.assistant.processUrlType);
   const role = yield select((state) => state.userSession.user.roles);
-  const userAuthenticated = select(
+  const userAuthenticated = yield select(
     (state) => state.userSession.userAuthenticated,
   );
   if (processUrl !== null) {
