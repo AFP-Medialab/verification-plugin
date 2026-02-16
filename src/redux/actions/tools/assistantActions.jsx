@@ -268,23 +268,6 @@ export const setMachineGeneratedTextChunksDetails = (
   };
 };
 
-export const setMachineGeneratedTextSentencesDetails = (
-  mgtsResult,
-  mgtsLoading,
-  mgtsDone,
-  mgtsFail,
-) => {
-  return {
-    type: "SET_MACHINE_GENERATED_TEXT_SENTENCES_DETAILS",
-    payload: {
-      machineGeneratedTextSentencesResult: mgtsResult,
-      machineGeneratedTextSentencesLoading: mgtsLoading,
-      machineGeneratedTextSentencesDone: mgtsDone,
-      machineGeneratedTextSentencesFail: mgtsFail,
-    },
-  };
-};
-
 export const setMultilingualStanceDetails = (
   msResult,
   msLoading,
