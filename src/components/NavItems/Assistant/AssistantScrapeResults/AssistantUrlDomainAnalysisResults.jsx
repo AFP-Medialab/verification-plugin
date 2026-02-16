@@ -20,7 +20,7 @@ import {
 } from "@/components/NavItems/Assistant/AssistantCheckResults/assistantUtils";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
-import { setDomainAnalysisExpanded } from "@/redux/actions/tools/assistantActions";
+import { setAssuranceExpanded } from "@/redux/actions/tools/assistantActions";
 
 import {
   TransHtmlDoubleLineBreak,
@@ -36,8 +36,8 @@ const AssistantSCResults = () => {
   const classes = useMyStyles();
 
   // state
-  const domainAnalysisExpanded = useSelector(
-    (state) => state.assistant.domainAnalysisExpanded,
+  const assuranceExpanded = useSelector(
+    (state) => state.assistant.assuranceExpanded,
   );
   const positiveSourceCred = useSelector(
     (state) => state.assistant.positiveSourceCred,
@@ -54,66 +54,90 @@ const AssistantSCResults = () => {
   const sourceTypes = useSelector((state) => state.assistant.sourceTypes);
 
   return (
-    <Card variant={"outlined"} className={classes.sourceCredibilityBorder}>
+    <Card
+      variant={"outlined"}
+      className={classes.sourceCredibilityBorder}
+      height="400"
+    >
       <Grid container>
         <Grid size={{ xs: 11 }} className={classes.displayFlex}>
           {/* icon */}
           <CardMedia>
-            <FindInPageIcon
-              fontSize={"large"}
-              color={"primary"}
-              sx={{ m: 1 }}
-            />
+            <Box
+              sx={{
+                m: 1,
+              }}
+            >
+              <FindInPageIcon fontSize={"large"} color={"primary"} />
+            </Box>
           </CardMedia>
 
+          {/* spacing */}
+          <Box
+            sx={{
+              m: 1,
+            }}
+          />
+
           {/* title */}
-          <Typography
-            component={"span"}
-            variant={"h6"}
+          <Box
             sx={{
               mt: 1.5,
-              pl: 1,
             }}
           >
-            {keyword("url_domain_analysis")}
-          </Typography>
+            <Typography component={"span"} variant={"h6"}>
+              {keyword("url_domain_analysis")}
+            </Typography>
+          </Box>
 
           {/* expand button */}
-          <IconButton
-            className={classes.assistantIconRight}
-            onClick={() =>
-              dispatch(setDomainAnalysisExpanded(!domainAnalysisExpanded))
-            }
-            sx={{ p: 1 }}
+          <Box
+            sx={{
+              pr: 1,
+              pt: 1,
+            }}
           >
-            <ExpandMoreIcon color={"primary"} />
-          </IconButton>
+            <IconButton
+              className={classes.assistantIconRight}
+              onClick={() => dispatch(setAssuranceExpanded(!assuranceExpanded))}
+              sx={{ p: 1 }}
+            >
+              <ExpandMoreIcon color={"primary"} />
+            </IconButton>
+          </Box>
         </Grid>
 
         <Grid size={{ xs: 1 }}>
           {/* help tooltip */}
-          <Tooltip
-            interactive={"true"}
-            leaveDelay={50}
-            sx={{ display: "flex", ml: "auto", textAlign: "right", mt: 1.5 }}
-            title={
-              <>
-                <TransSourceCredibilityTooltip keyword={keyword} />
-                <TransHtmlDoubleLineBreak keyword={keyword} />
-                <TransUsfdAuthor keyword={keyword} />
-                <TransHtmlDoubleLineBreak keyword={keyword} />
-                <TransUrlDomainAnalysisLink keyword={keyword} />
-              </>
-            }
-            classes={{ tooltip: classes.assistantTooltip }}
+          <Box
+            align="right"
+            sx={{
+              mt: 1.5,
+            }}
           >
-            <HelpOutlineOutlinedIcon color={"action"} />
-          </Tooltip>
+            <Tooltip
+              interactive={"true"}
+              leaveDelay={50}
+              style={{ display: "flex", marginLeft: "auto" }}
+              title={
+                <>
+                  <TransSourceCredibilityTooltip keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
+                  <TransUsfdAuthor keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
+                  <TransUrlDomainAnalysisLink keyword={keyword} />
+                </>
+              }
+              classes={{ tooltip: classes.assistantTooltip }}
+            >
+              <HelpOutlineOutlinedIcon color={"action"} />
+            </Tooltip>
+          </Box>
         </Grid>
 
         <Grid size={{ xs: 12 }}>
           <Collapse
-            in={domainAnalysisExpanded}
+            in={assuranceExpanded}
             className={classes.assistantBackground}
           >
             <Box mt={3} ml={2}>

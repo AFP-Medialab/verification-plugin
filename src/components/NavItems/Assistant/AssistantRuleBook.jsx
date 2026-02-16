@@ -8,21 +8,12 @@ import {
   Tool,
   canUserSeeTool,
   imageGif,
+  thumbnails,
   tools,
+  videoAnalysis,
 } from "@/constants/tools";
 
-export const NE_SUPPORTED_LANGS = [
-  "en",
-  "fr",
-  "el",
-  "es",
-  "it",
-  "ar",
-  "de",
-  "ja",
-  "hu",
-  "pt",
-];
+export const NE_SUPPORTED_LANGS = ["en", "pt", "fr", "de", "el", "es", "it"];
 
 export const KNOWN_LINKS = {
   TWITTER: "twitter",
@@ -250,9 +241,6 @@ export const selectCorrectActions = (
 };
 
 export const matchPattern = (toMatch, matchObject) => {
-  if (!toMatch) {
-    return null;
-  }
   // find the record where from the regex patterns in said record, one of them matches "toMatch"
   let match = matchObject.find((record) =>
     record.patterns.some((rgxpattern) => toMatch.match(rgxpattern) != null),
