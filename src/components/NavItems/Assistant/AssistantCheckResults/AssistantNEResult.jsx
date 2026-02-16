@@ -3,7 +3,6 @@ import { Trans } from "react-i18next";
 import { useSelector } from "react-redux";
 import { TagCloud } from "react-tagcloud";
 
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Card from "@mui/material/Card";
@@ -153,30 +152,28 @@ const AssistantNEResult = () => {
         />
         {neLoading && <LinearProgress />}
         <CardContent>
-          <Box sx={{ textAlign: "center" }}>
-            <ButtonGroup sx={{ paddingBottom: 2 }}>
-              {neResult.map((tag) => (
-                <Button
-                  className={
-                    visibleCategories[tag.category.toLowerCase()]
-                      ? classes.namedEntityButtonHidden
-                      : ""
-                  }
-                  style={{
-                    color: "white",
-                    border: "none",
-                    backgroundColor: getWordColor(tag),
-                  }}
-                  key={tag.category}
-                  onClick={() => toggleCategory(tag.category.toLowerCase())}
-                >
-                  {tag.category}
-                </Button>
-              ))}
-            </ButtonGroup>
-          </Box>
+          <ButtonGroup sx={{ paddingBottom: "15px" }}>
+            {neResult.map((tag) => (
+              <Button
+                className={
+                  visibleCategories[tag.category.toLowerCase()]
+                    ? classes.namedEntityButtonHidden
+                    : ""
+                }
+                style={{
+                  color: "white",
+                  border: "none",
+                  backgroundColor: getWordColor(tag),
+                }}
+                key={tag.category}
+                onClick={() => toggleCategory(tag.category.toLowerCase())}
+              >
+                {tag.category}
+              </Button>
+            ))}
+          </ButtonGroup>
           <Grid container>
-            <Grid sx={{ textAlign: "center" }}>
+            <Grid align={"center"}>
               <TagCloud
                 tags={neResultCount}
                 shuffle={false}

@@ -27,9 +27,9 @@ import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "@/components/Shared/VideoGridList/VideoGridList";
 import { TOOLS_CATEGORIES } from "@/constants/tools";
 import {
-  setFactChecksExpanded,
   setProcessUrl,
   setStateExpanded,
+  setWarningExpanded,
 } from "@/redux/actions/tools/assistantActions";
 
 import {
@@ -39,7 +39,6 @@ import {
 import AssistantImageResult from "./AssistantImageResult";
 import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
 import AssistantVideoResult from "./AssistantVideoResult";
-import { scrollToElement } from "./assistantUtils";
 
 const AssistantMediaResult = ({ title = null }) => {
   const classes = useMyStyles();
@@ -67,6 +66,9 @@ const AssistantMediaResult = ({ title = null }) => {
   const dbkfImageMatch = useSelector((state) => state.assistant.dbkfImageMatch);
   const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
 
+  const warningExpanded = useSelector(
+    (state) => state.assistant.warningExpanded,
+  );
   const resultIsImage = resultProcessType === TOOLS_CATEGORIES.IMAGE;
 
   // local control state
@@ -138,8 +140,8 @@ const AssistantMediaResult = ({ title = null }) => {
                     color={"warning"}
                     className={classes.toolTipWarning}
                     onClick={() => {
-                      dispatch(setFactChecksExpanded(true));
-                      scrollToElement("warnings", 100);
+                      dispatch(setWarningExpanded(!warningExpanded));
+                      window.scroll(0, 0);
                     }}
                   />
                 </Tooltip>

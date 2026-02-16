@@ -268,6 +268,23 @@ export const setMachineGeneratedTextChunksDetails = (
   };
 };
 
+export const setMachineGeneratedTextSentencesDetails = (
+  mgtsResult,
+  mgtsLoading,
+  mgtsDone,
+  mgtsFail,
+) => {
+  return {
+    type: "SET_MACHINE_GENERATED_TEXT_SENTENCES_DETAILS",
+    payload: {
+      machineGeneratedTextSentencesResult: mgtsResult,
+      machineGeneratedTextSentencesLoading: mgtsLoading,
+      machineGeneratedTextSentencesDone: mgtsDone,
+      machineGeneratedTextSentencesFail: mgtsFail,
+    },
+  };
+};
+
 export const setMultilingualStanceDetails = (
   msResult,
   msLoading,
@@ -322,20 +339,11 @@ export const setWarningExpanded = (warningExpanded) => {
   };
 };
 
-export const setFactChecksExpanded = (factChecksExpanded) => {
+export const setAssuranceExpanded = (assuranceExpanded) => {
   return {
-    type: "SET_FACT_CHECKS_EXPANDED",
+    type: "SET_ASSURANCE_EXPANDED",
     payload: {
-      factChecksExpanded: factChecksExpanded,
-    },
-  };
-};
-
-export const setDomainAnalysisExpanded = (domainAnalysisExpanded) => {
-  return {
-    type: "SET_DOMAIN_ANALYSIS_EXPANDED",
-    payload: {
-      domainAnalysisExpanded: domainAnalysisExpanded,
+      assuranceExpanded: assuranceExpanded,
     },
   };
 };
