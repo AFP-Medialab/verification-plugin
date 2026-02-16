@@ -241,6 +241,9 @@ export const selectCorrectActions = (
 };
 
 export const matchPattern = (toMatch, matchObject) => {
+  if (!toMatch) {
+    return null;
+  }
   // find the record where from the regex patterns in said record, one of them matches "toMatch"
   let match = matchObject.find((record) =>
     record.patterns.some((rgxpattern) => toMatch.match(rgxpattern) != null),
