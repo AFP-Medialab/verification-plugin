@@ -36,13 +36,7 @@ export const renderSourceTypeChip = (
   sourceType,
 ) => {
   return (
-    <Box sx={{ textAlign: "center" }}>
-      <Chip
-        label={keyword(sourceType)}
-        color={trafficLightColor}
-        size="small"
-      />
-    </Box>
+    <Chip label={keyword(sourceType)} color={trafficLightColor} size="small" />
   );
 };
 
