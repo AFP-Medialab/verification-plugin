@@ -157,11 +157,39 @@ const AssistantWarnings = () => {
           >
             <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
           </Tooltip>
-        </Grid>
-        <Grid size={{ xs: 12 }}>
-          <Collapse
-            in={factChecksExpanded}
-            className={classes.assistantBackground}
+        }
+      />
+      <CardContent>
+        {/* not logged in as beta tester, DBKF only */}
+        {!role.includes(ROLES.BETA_TESTER) && dbkfTextMatch && (
+          <DbkfTextResults
+            results={separateDbkfTextMatch}
+            prevFactChecksExist={false}
+          />
+        )}
+
+        {/* logged in as beta tester, DBKF and FCSS/prevFactChecks */}
+        {role.includes(ROLES.BETA_TESTER) &&
+          prevFactChecksDone &&
+          (updatedPrevFactCheckResult.length > 0 ? (
+            <>
+              <DbkfTextResults
+                results={uniqueSeparateDbkfTextMatch}
+                prevFactChecksExist={true}
+              />
+              <PreviousFactCheckResults results={updatedPrevFactCheckResult} />
+            </>
+          ) : (
+            <DbkfTextResults results={dbkfTextMatch} />
+          ))}
+
+        {role.includes(ROLES.BETA_TESTER) && prevFactChecksLoading && (
+          <Stack
+            direction="column"
+            spacing={4}
+            sx={{
+              p: 4,
+            }}
           >
             <Skeleton variant="rounded" height={40} />
             <Skeleton variant="rounded" width={400} height={40} />
