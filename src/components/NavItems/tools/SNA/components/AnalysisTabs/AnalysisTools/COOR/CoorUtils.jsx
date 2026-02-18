@@ -1,0 +1,669 @@
+import React from "react";
+import ForceGraph2D from "react-force-graph-2d";
+import { TableVirtuoso } from "react-virtuoso";
+
+import { useColorScheme } from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import FormControl from "@mui/material/FormControl";
+import IconButton from "@mui/material/IconButton";
+import MenuItem from "@mui/material/MenuItem";
+import Paper from "@mui/material/Paper";
+import Select from "@mui/material/Select";
+import Stack from "@mui/material/Stack";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TextField from "@mui/material/TextField";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+
+import {
+  getSelectedSourceSharedHeaders,
+  getSelectedSourcesNameMaps,
+  getTextClusters,
+  onlyUnique,
+} from "@/components/NavItems/tools/SNA/utils/accessSavedCollections";
+import dayjs from "dayjs";
+import { MultiUndirectedGraph } from "graphology";
+import louvain from "graphology-communities-louvain";
+
+const MAX_TABLE_TEXT_LENGTH = 45;
+
+const CoorTextEntry = ({
+  keyword,
+  fieldDescription,
+  fieldHelpText,
+  textField,
+  textFieldSetter,
+}) => {
+  return (
+    <Box key={"coorEntry_" + fieldDescription}>
+      <Typography sx={{ padding: 0.5 }}>{keyword(fieldDescription)}</Typography>
+      <Tooltip title={keyword(fieldHelpText)}>
+        <IconButton>
+          <HelpOutlineIcon fontSize="inherit" />
+        </IconButton>
+      </Tooltip>
+      <FormControl>
+        <TextField
+          variant="outlined"
+          sx={{ width: "100px" }}
+          value={textField}
+          onChange={(e) => {
+            textFieldSetter(e.target.value);
+          }}
+        />
+      </FormControl>
+    </Box>
+  );
+};
+
+const CoorFieldSelect = ({
+  keyword,
+  fieldDescription,
+  fieldHelpText,
+  selectedValue,
+  setSelectedValue,
+  selectOptions,
+}) => {
+  return (
+    <Box key={"coorSelect"}>
+      <Typography sx={{ padding: 0.5 }}>{keyword(fieldDescription)}</Typography>
+      <Tooltip title={keyword(fieldHelpText)}>
+        <IconButton>
+          <HelpOutlineIcon fontSize="inherit" />
+        </IconButton>
+      </Tooltip>
+      <FormControl>
+        <Select
+          value={selectedValue}
+          onChange={(e) => {
+            setSelectedValue(e.target.value);
+          }}
+        >
+          {selectOptions.map((option, idx) => (
+            <MenuItem key={option.value + idx} value={option.value}>
+              {option.isKeyword ? keyword(option.label) : option.label}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Box>
+  );
+};
+
+export const getObjectSelectOptions = (dataSources, selected) => {
+  let textSimilarityObjectSelect = [
+    {
+      label: "snaTools_coorTextSimilarityOption",
+      value: "textSimilarity",
+      isKeyword: true,
+    },
+  ];
+
+  let sharedHeadersObjectSelect = getSelectedSourceSharedHeaders(
+    dataSources,
+    selected,
+  ).map((header) => ({
+    label: header,
+    value: header,
+    isKeyword: false,
+  }));
+
+  return textSimilarityObjectSelect.concat(sharedHeadersObjectSelect);
+};
+
+export const coorSettingsDisplay = ({
+  keyword,
+  coorTimeWindow,
+  setCoorTimeWindow,
+  coorEdgeThresh,
+  setCoorEdgeThresh,
+  coorMinParticipation,
+  setCoorMinParticipation,
+  coorObjectChoice,
+  setCoorObjectChoice,
+  coorObjectSelectOptions,
+}) => {
+  const coorSettingsFields = [
+    {
+      id: "timeWindow",
+      component: (
+        <CoorTextEntry
+          key="coorTimeWindowEntry"
+          keyword={keyword}
+          fieldDescription="snaTools_coorTimeWindowLabel"
+          fieldHelpText="snaTools_coorTimeWindowHelperText"
+          textField={coorTimeWindow}
+          textFieldSetter={setCoorTimeWindow}
+        />
+      ),
+    },
+    {
+      id: "edgeThresh",
+      component: (
+        <CoorTextEntry
+          key="coorEdgeThreshEntry"
+          keyword={keyword}
+          fieldDescription="snaTools_coorEdgeThreshLabel"
+          fieldHelpText="snaTools_coorEdgeThreshHelperText"
+          textField={coorEdgeThresh}
+          textFieldSetter={setCoorEdgeThresh}
+        />
+      ),
+    },
+    {
+      id: "minParticipants",
+      component: (
+        <CoorTextEntry
+          key="coorMinParticipationhEntry"
+          keyword={keyword}
+          fieldDescription="snaTools_coorMinParticipantsLabel"
+          fieldHelpText="snaTools_coorMinParticipantsHelperText"
+          textField={coorMinParticipation}
+          textFieldSetter={setCoorMinParticipation}
+        />
+      ),
+    },
+    {
+      id: "objectChoice",
+      component: (
+        <CoorFieldSelect
+          key="coorObjectSelect"
+          keyword={keyword}
+          fieldDescription="snaTools_coorObjectChoiceLabel"
+          fieldHelpText="snaTools_coorObjectChoiceHelperText"
+          selectedValue={coorObjectChoice}
+          setSelectedValue={setCoorObjectChoice}
+          selectOptions={coorObjectSelectOptions}
+        />
+      ),
+    },
+  ];
+
+  return (
+    <Stack direction="row" spacing={1} alignItems="center">
+      {coorSettingsFields.map((option) => option.component)}
+    </Stack>
+  );
+};
+
+/**
+ *
+ * @param {string} objectChoice a string specifying the header field in the dataset which contains the objects possibly shared in coordination or "textSimilarity" to call d3lta server to check similarity
+ * @param {object[]} selectedContent array of objects included in the dataset
+ * @param {function} authenticatedRequest function call that uses user authentification to call d3lta server
+ * @returns
+ */
+const getCoorContent = async (
+  objectChoice,
+  selectedContent,
+  authenticatedRequest,
+) => {
+  if (typeof objectChoice != "string")
+    throw new Error("Improper object choice arg");
+  if (!selectedContent.length > 0) return;
+  if (objectChoice === "textSimilarity") {
+    let resp = await getTextClusters(selectedContent, authenticatedRequest);
+    let filteredResp = resp
+      .map((o) => {
+        let x = o["cluster"];
+        o.objects = x;
+        return o;
+      })
+      .filter(
+        (x) =>
+          x.objects?.length > 0 && x.objects !== "NaN" && x.objects !== "nan",
+      );
+    return filteredResp;
+  }
+  let filteredContent = selectedContent
+    .map((o) => {
+      let x = o[objectChoice];
+      o.objects = x;
+      return o;
+    })
+    .filter((o) => o.objects?.length > 0);
+  return filteredContent;
+};
+
+/**
+ * Takes entries already filtered
+ * to retain only those with objects
+ *
+ * Filter the entries to keep only users
+ * meeting the minParticipation criterion
+ * then by those containing a same object
+ * shared by more than one user
+ * then those shared within the timeWindow
+ * then assign weights to the retained
+ * pairs of users measuring how often they
+ * shared hte same content.
+ *
+ * If edgeThresh>0 return only entries
+ * in the edgeThresh percentile
+ * Else return all entries meeting
+ * cosharing criteria
+ *
+ * returns [{
+ *      cosharers: str ("firstUserId-secondUserId"),
+ *      count: int,
+ *      entries: Object[],
+ * }]
+ *
+ * @param {number} timeWindow the timeWindow to detect cosharing separating two entries with the same object
+ * @param {number} edgeThresh to retain users who coshared only in the edgeThresh [0-1] percentile
+ * @param {number} minParticipation to retain users who authored dataset entries more than minParticipation
+ * @param {object[]} content the dataset, list of objects that has been pre-processed
+ * @returns {object[]} list of cosharing user pairs, how often they posted the same object and their entries in the dataset
+ */
+const detectCoor = (timeWindow, edgeThresh, minParticipation, content) => {
+  let contentGroupedByUser = Object.groupBy(
+    content,
+    ({ username }) => username,
+  );
+
+  let contentFilteredByMinParticipation = Object.values(contentGroupedByUser)
+    .filter((x) => x.length >= minParticipation)
+    .flat();
+
+  let contentGroupedByObject = Object.groupBy(
+    contentFilteredByMinParticipation,
+    ({ objects }) => objects,
+  );
+
+  let contentSharedByMultipleUsers = Object.values(
+    contentGroupedByObject,
+  ).filter(
+    (entriesByObject) =>
+      entriesByObject.map((e) => e.username).filter(onlyUnique).length > 1,
+  );
+
+  let cosharingInTimeWindow = contentSharedByMultipleUsers
+    .map((groupedContent) => {
+      let objects = groupedContent[0].objects;
+      let entryList = groupedContent.map((entry) => ({
+        entry: entry,
+        username: entry.username,
+        ts: dayjs(entry.date).unix(),
+      }));
+      entryList.forEach((user) => {
+        user.cosharers = entryList
+          .filter(
+            (other) =>
+              other.username !== user.username &&
+              Math.abs(user.ts - other.ts) <= timeWindow,
+          )
+          .map((other) => other.username);
+      });
+      let onlyCosharingEntryList = entryList.filter(
+        (user) => user.cosharers.length > 0,
+      );
+      return {
+        objects: objects,
+        entries: onlyCosharingEntryList,
+      };
+    })
+    .flat()
+    .filter((groupedContent) => groupedContent.entries.length > 0);
+
+  let cosharingPairs = {};
+
+  cosharingInTimeWindow.forEach((sharedObject) => {
+    sharedObject.entries.forEach((entry) =>
+      entry.cosharers.forEach((cosharer) => {
+        let pairId = [entry.username, cosharer].sort().join("-");
+        if (cosharingPairs[pairId]) {
+          cosharingPairs[pairId].count++;
+
+          cosharingPairs[pairId].entries
+            .map((e) => e.id)
+            .includes(entry.entry.id)
+            ? {}
+            : cosharingPairs[pairId].entries.push(entry.entry);
+        } else {
+          cosharingPairs[pairId] = {
+            count: 1,
+            entries: [entry.entry],
+            cosharers: pairId,
+          };
+        }
+      }),
+    );
+  });
+
+  if (edgeThresh > 0) {
+    return Object.values(cosharingPairs)
+      .sort((a, b) => a.count - b.count)
+      .slice(Math.floor(edgeThresh * Object.values(cosharingPairs).length));
+  } else {
+    return Object.values(cosharingPairs);
+  }
+};
+
+const getCosharersByObject = (coorResult) => {
+  let cosharedEntries = coorResult
+    .map((sharingPair) => sharingPair.entries)
+    .flat();
+  return Object.groupBy(cosharedEntries, ({ objects }) => objects);
+};
+
+export const runCoorAnalysis = async (
+  selectedContent,
+  {
+    coorTimeWindow,
+    coorEdgeThresh,
+    coorMinParticipation,
+    coorObjectChoice,
+    authenticatedRequest,
+    dataSources,
+    selected,
+  },
+) => {
+  let readiedContent = await getCoorContent(
+    coorObjectChoice,
+    selectedContent,
+    authenticatedRequest,
+  );
+  let coorResult = detectCoor(
+    coorTimeWindow,
+    coorEdgeThresh,
+    coorMinParticipation,
+    readiedContent,
+  );
+
+  let coorGraphData = generateCoorGraphData(coorResult, dataSources, selected);
+
+  return { coorResult: coorResult, coorGraphData: coorGraphData };
+};
+
+export const generateCoorGraphData = (coorResult, dataSources, selected) => {
+  let nodes = {};
+  let edges = [];
+  let nameMaps = getSelectedSourcesNameMaps(dataSources, selected);
+  coorResult.forEach((cosharingPair) => {
+    let userPair = cosharingPair.cosharers.split("-");
+    edges.push({
+      source: userPair[0],
+      target: userPair[1],
+    });
+    userPair.forEach((user) => {
+      if (nodes[user]) {
+        cosharingPair.entries.forEach((entry) => {
+          if (!nodes[user].entries.map((e) => e.id).includes(entry.id)) {
+            nodes[user].entries.push(entry);
+          }
+        });
+      } else {
+        nodes[user] = {
+          id: user,
+          entries: cosharingPair.entries,
+          displayName: nameMaps.has(user) ? nameMaps.get(user) : user,
+        };
+      }
+    });
+  });
+  let graphData = {
+    nodes: Object.values(nodes),
+    links: edges,
+  };
+
+  let graph = new MultiUndirectedGraph();
+
+  graphData.nodes.forEach((node) => {
+    if (!graph.hasNode(node.id)) graph.addNode(node.id, node);
+  });
+  graphData.links.forEach((edge) => {
+    if (
+      graph.hasNode(edge.source) &&
+      graph.hasNode(edge.target) &&
+      !graph.hasUndirectedEdge(edge.source, edge.target)
+    ) {
+      graph.addUndirectedEdge(edge.source, edge.target);
+    }
+  });
+
+  const communities = louvain(graph);
+
+  graphData.nodes.forEach((node) => (node.community = communities[node.id]));
+  graphData.graph = graph;
+
+  return graphData;
+};
+
+export const CoorNetworkGraph = ({
+  graphData,
+  setDetailContent,
+  setOpenDetailModal,
+}) => {
+  const handleNodeClick = (node) => {
+    let detailModalContent = graphData.graph.getNodeAttribute(
+      node.id,
+      "entries",
+    );
+    setDetailContent(detailModalContent);
+    setOpenDetailModal(true);
+  };
+
+  const { systemMode, mode } = useColorScheme();
+  const resolvedMode = systemMode || mode;
+
+  return (
+    <ForceGraph2D
+      graphData={graphData}
+      warmupTicks={100}
+      cooldownTicks={0}
+      autoPauseRedraw={true}
+      nodeRelSize={6}
+      nodeAutoColorBy="community"
+      linkColor={() => "#aaa"}
+      nodeLabel={"displayName"}
+      nodeCanvasObjectMode={() => "after"}
+      nodeCanvasObject={(node, ctx) => {
+        const fontSize = 4;
+        ctx.font = `${fontSize}px Sans-Serif`;
+        ctx.fillStyle = resolvedMode === "dark" ? "white" : "black";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(node.displayName, node.x, node.y);
+      }}
+      onNodeClick={(node) => handleNodeClick(node)}
+    />
+  );
+};
+
+const coorTableHeaderFields = [
+  {
+    dataKey: "viewButton",
+    width: 30,
+  },
+  {
+    dataKey: "objectName",
+    text: "snaTools_coorTableObjectsHeader",
+    width: 200,
+  },
+  {
+    dataKey: "shareCount",
+    text: "snaTools_coorTableEntryCountHeader",
+    width: 150,
+  },
+  {
+    dataKey: "userCount",
+    text: "snaTools_coorTableUserCountHeader",
+    width: 150,
+  },
+];
+
+const coorTableHeader = (keyword) => {
+  // eslint-disable-next-line react/display-name
+  return () => {
+    return (
+      <TableRow>
+        {coorTableHeaderFields.map((headerField) => (
+          <TableCell
+            key={headerField.dataKey}
+            variant="head"
+            style={{ width: headerField.width }}
+            sx={{ backgroundColor: "background.paper" }}
+          >
+            {headerField.text ? keyword(headerField.text) : ""}
+          </TableCell>
+        ))}
+      </TableRow>
+    );
+  };
+};
+
+const VirtuosoTableComponents = {
+  // eslint-disable-next-line react/display-name
+  Scroller: React.forwardRef((props, ref) => (
+    <TableContainer component={Paper} {...props} ref={ref} />
+  )),
+  Table: (props) => (
+    <Table
+      {...props}
+      sx={{ borderCollapse: "separate", tableLayout: "fixed" }}
+    />
+  ),
+  // eslint-disable-next-line react/display-name
+  TableHead: React.forwardRef((props, ref) => (
+    <TableHead {...props} ref={ref} />
+  )),
+  TableRow,
+  // eslint-disable-next-line react/display-name
+  TableBody: React.forwardRef((props, ref) => (
+    <TableBody {...props} ref={ref} />
+  )),
+};
+
+const CoorTable = ({
+  coorResult,
+  keyword,
+  setDetailContent,
+  setOpenDetailModal,
+}) => {
+  if (coorResult.length === 0) return <></>;
+
+  let coorByObject = getCosharersByObject(coorResult);
+
+  const countUsersByObject = (objectEntries) => {
+    return objectEntries.map((entry) => entry.username).filter(onlyUnique)
+      .length;
+  };
+
+  const rows = Object.keys(coorByObject).map((sharedObject) => {
+    let sharingUsersCount = countUsersByObject(coorByObject[sharedObject]);
+    let numberOfShares = coorByObject[sharedObject].length;
+    let entries = coorByObject[sharedObject];
+    return {
+      sharedObject: sharedObject,
+      numberOfShares: numberOfShares,
+      sharingUsersCount: sharingUsersCount,
+      entries: entries,
+    };
+  });
+
+  const showDetailModalWithObject = (detailContent) => {
+    setDetailContent(detailContent);
+    setOpenDetailModal(true);
+  };
+
+  const rowContent = (_index, row) => {
+    let info = row;
+    let sharedObject = info.sharedObject;
+    let entries = info.entries;
+    let numberOfShares = info.numberOfShares;
+    let sharingUsersCount = info.sharingUsersCount;
+
+    return (
+      <>
+        <TableCell key={"viewButton"}>
+          <IconButton onClick={() => showDetailModalWithObject(entries)}>
+            <VisibilityIcon />
+          </IconButton>
+        </TableCell>
+        <TableCell key={"objectName"}>
+          {String(sharedObject).length > MAX_TABLE_TEXT_LENGTH
+            ? String(sharedObject).slice(0, MAX_TABLE_TEXT_LENGTH) + "..."
+            : String(sharedObject)}
+        </TableCell>
+        <TableCell key={"shareCount"}>{numberOfShares}</TableCell>
+        <TableCell key={"userCount"}>{sharingUsersCount}</TableCell>
+      </>
+    );
+  };
+
+  return (
+    <Paper style={{ height: 400, width: "100%" }}>
+      <TableVirtuoso
+        data={rows}
+        components={VirtuosoTableComponents}
+        fixedHeaderContent={coorTableHeader(keyword)}
+        itemContent={rowContent}
+      />
+    </Paper>
+  );
+};
+
+const exportCoorResult = (coorResult) => {
+  let res = {
+    cosharingPairs: coorResult,
+    cosharingByObject: getCosharersByObject(coorResult),
+  };
+  let dl = JSON.stringify(res);
+  const blob = new Blob([dl], { type: "application/json;charset=utf-8;" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `COOR_export.json`;
+  a.click();
+};
+
+const CoorExportButton = ({ keyword, coorResult }) => {
+  return (
+    <>
+      <Stack direction={"row"} spacing={1}>
+        <Typography>{keyword("snaTools_coorExportDescription")}</Typography>
+        <Button variant="outlined" onClick={() => exportCoorResult(coorResult)}>
+          {keyword("snaTools_coorExportButton")}
+        </Button>
+      </Stack>
+    </>
+  );
+};
+
+export const CoorViz = ({
+  keyword,
+  setDetailContent,
+  setOpenDetailModal,
+  coorResult,
+  coorGraphData,
+}) => {
+  if (coorResult.length === 0)
+    return (
+      <Typography> {keyword("snaTools_noCoorDetectedMessage")} </Typography>
+    );
+
+  return (
+    <Stack direction="column" spacing={2}>
+      <CoorExportButton keyword={keyword} coorResult={coorResult} />
+      <CoorNetworkGraph
+        graphData={coorGraphData}
+        setDetailContent={setDetailContent}
+        setOpenDetailModal={setOpenDetailModal}
+      />
+      <CoorTable
+        coorResult={coorResult}
+        keyword={keyword}
+        setDetailContent={setDetailContent}
+        setOpenDetailModal={setOpenDetailModal}
+      />
+    </Stack>
+  );
+};

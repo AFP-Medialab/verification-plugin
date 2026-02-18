@@ -1,4 +1,5 @@
-import { Timeout } from "components/Shared/Utils/URLUtils";
+import { Timeout } from "@/components/Shared/Utils/URLUtils";
+
 import { openNewTabWithUrl } from "../utils/openTabUtils";
 
 export const reverseImageSearchGoogle = (

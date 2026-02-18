@@ -8,10 +8,23 @@ import {
   Dashboard,
   Gradient,
   ManageSearch,
+  SmartToy,
 } from "@mui/icons-material";
 
+import {
+  resetDeepfake,
+  setDeepfakeUrlVideo,
+} from "@//redux/actions/tools/deepfakeVideoActions";
+import { c2paUrlSet, resetC2paState } from "@/redux/reducers/tools/c2paReducer";
+import {
+  resetGeolocation as resetGeolocationImage,
+  setGeolocationUrl,
+} from "@/redux/reducers/tools/geolocationReducer";
+import {
+  resetSyntheticImageDetectionImage,
+  setSyntheticImageDetectionUrl,
+} from "@/redux/reducers/tools/syntheticImageDetectionReducer";
 import { FOOTER_TYPES, Footer } from "@Shared/Footer/Footer";
-import C2paData from "components/NavItems/tools/C2pa/C2pa";
 
 import CsvSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/CSV_SNA.svg";
 import TwitterSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/Twitter_sna.svg";
@@ -24,6 +37,7 @@ import MagnifierIcon from "../components/NavBar/images/SVG/Image/Magnifier.svg";
 import MetadataIcon from "../components/NavBar/images/SVG/Image/Metadata.svg";
 import OcrIcon from "../components/NavBar/images/SVG/Image/OCR.svg";
 import AboutIcon from "../components/NavBar/images/SVG/Navbar/About.svg";
+import AfpDigitalCoursesIconComponent from "../components/NavBar/images/SVG/Navbar/AfpDigitalCoursesIcon";
 import ToolsIcon from "../components/NavBar/images/SVG/Navbar/Tools.svg";
 import CovidSearchIcon from "../components/NavBar/images/SVG/Search/Covid19.svg";
 import TwitterSearchIcon from "../components/NavBar/images/SVG/Search/Twitter_search.svg";
@@ -31,26 +45,72 @@ import XnetworkIcon from "../components/NavBar/images/SVG/Search/Xnetwork.svg";
 import KeyframesIcon from "../components/NavBar/images/SVG/Video/Keyframes.svg";
 import ThumbnailsIcon from "../components/NavBar/images/SVG/Video/Thumbnails.svg";
 import AnalysisIcon from "../components/NavBar/images/SVG/Video/Video_analysis.svg";
-import About from "../components/NavItems/About/About";
-import MachineGeneratedText from "../components/NavItems/MachineGeneratedText";
-import ToolsMenu from "../components/NavItems/tools/Alltools/ToolsMenu";
-import Analysis from "../components/NavItems/tools/Analysis/Analysis";
-import Archive from "../components/NavItems/tools/Archive";
-import DeepfakeVideo from "../components/NavItems/tools/Deepfake/DeepfakeVideo";
-import Forensic from "../components/NavItems/tools/Forensic/Forensic";
-import Geolocation from "../components/NavItems/tools/Geolocation/Geolocation";
-import CheckGif from "../components/NavItems/tools/Gif/CheckGif";
-import Keyframes from "../components/NavItems/tools/Keyframes/Keyframes";
-import Loccus from "../components/NavItems/tools/Loccus";
-import Magnifier from "../components/NavItems/tools/Magnifier/Magnifier";
-import Metadata from "../components/NavItems/tools/Metadata/Metadata";
-import OCR from "../components/NavItems/tools/OCR/OCR";
-import SemanticSearch from "../components/NavItems/tools/SemanticSearch";
-import SyntheticImageDetection from "../components/NavItems/tools/SyntheticImageDetection";
-import Thumbnails from "../components/NavItems/tools/Thumbnails/Thumbnails";
-import TwitterAdvancedSearch from "../components/NavItems/tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
-import TwitterSna from "../components/NavItems/tools/TwitterSna/TwitterSna";
 import { ROLES } from "./roles";
+
+// Lazy load heavy components
+const C2paData = React.lazy(
+  () => import("@/components/NavItems/tools/C2pa/C2pa"),
+);
+const SNA = React.lazy(() => import("@/components/NavItems/tools/SNA/SNA"));
+
+// Lazy load heavy components (continued)
+const About = React.lazy(() => import("../components/NavItems/About/About"));
+const MachineGeneratedText = React.lazy(
+  () => import("../components/NavItems/MachineGeneratedText"),
+);
+const ToolsMenu = React.lazy(
+  () => import("../components/NavItems/tools/Alltools/ToolsMenu"),
+);
+const Analysis = React.lazy(
+  () => import("../components/NavItems/tools/Analysis/Analysis"),
+);
+const Archive = React.lazy(
+  () => import("../components/NavItems/tools/Archive"),
+);
+const Chatbot = React.lazy(
+  () => import("../components/NavItems/tools/Chatbot"),
+);
+const DeepfakeVideo = React.lazy(
+  () => import("../components/NavItems/tools/Deepfake/DeepfakeVideo"),
+);
+const Forensic = React.lazy(
+  () => import("../components/NavItems/tools/Forensic/Forensic"),
+);
+const Geolocation = React.lazy(
+  () => import("../components/NavItems/tools/Geolocation/Geolocation"),
+);
+const CheckGif = React.lazy(
+  () => import("../components/NavItems/tools/Gif/CheckGif"),
+);
+const Hiya = React.lazy(() => import("../components/NavItems/tools/Hiya"));
+const Keyframes = React.lazy(
+  () => import("../components/NavItems/tools/Keyframes/Keyframes"),
+);
+const Magnifier = React.lazy(
+  () => import("../components/NavItems/tools/Magnifier/Magnifier"),
+);
+const Metadata = React.lazy(
+  () => import("../components/NavItems/tools/Metadata/Metadata"),
+);
+const OCR = React.lazy(() => import("../components/NavItems/tools/OCR/OCR"));
+const SemanticSearch = React.lazy(
+  () => import("../components/NavItems/tools/SemanticSearch"),
+);
+const SyntheticImageDetection = React.lazy(
+  () => import("../components/NavItems/tools/SyntheticImageDetection"),
+);
+const Thumbnails = React.lazy(
+  () => import("../components/NavItems/tools/Thumbnails/Thumbnails"),
+);
+const TwitterAdvancedSearch = React.lazy(
+  () =>
+    import(
+      "../components/NavItems/tools/TwitterAdvancedSearch/TwitterAdvancedSearch"
+    ),
+);
+const TwitterSna = React.lazy(
+  () => import("../components/NavItems/tools/TwitterSna/TwitterSna"),
+);
 
 /**
  * Represents the categories to which the tools belong
@@ -113,6 +173,7 @@ export class Tool {
    * @param toolGroup {ToolGroups} The group to which the topMenuItem belongs
    * @param content The React Element to display for the topMenuItem
    * @param footer The React element to display at the bottom of the topMenuItem React Element
+   * @param assistantProps Additional properties used by the assistant to determine whether to recommend a tool
    */
   constructor(
     titleKeyword,
@@ -125,6 +186,7 @@ export class Tool {
     toolGroup,
     content,
     footer,
+    assistantProps = {},
   ) {
     this.titleKeyword = titleKeyword;
     this.descriptionKeyword = descriptionKeyword;
@@ -136,8 +198,28 @@ export class Tool {
     this.toolGroup = toolGroup;
     this.content = content;
     this.footer = footer;
+    this.assistantProps = assistantProps;
   }
 }
+
+export const KNOWN_LINKS = {
+  TWITTER: "twitter",
+  INSTAGRAM: "instagram",
+  SNAPCHAT: "snapchat",
+  FACEBOOK: "facebook",
+  TIKTOK: "tiktok",
+  TELEGRAM: "telegram",
+  YOUTUBE: "youtube",
+  YOUTUBESHORTS: "youtubeshorts",
+  DAILYMOTION: "dailymotion",
+  LIVELEAK: "liveleak",
+  VIMEO: "vimeo",
+  MASTODON: "mastodon",
+  OWN: "own",
+  VK: "vk",
+  BLUESKY: "bsky",
+  MISC: "general",
+};
 
 const ToolsSvgIcon = (props) => {
   return <SvgIcon component={ToolsIcon} inheritViewBox {...props} />;
@@ -235,6 +317,10 @@ const disinfoDeckIcon = (props) => {
   return <Dashboard {...props} />;
 };
 
+const chatbotSvgIcon = (props) => {
+  return <SmartToy {...props} />;
+};
+
 /**
  * The Homepage that lists all the tools available
  * @type {Tool}
@@ -267,6 +353,17 @@ export const videoAnalysis = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <Analysis />,
   <Footer type={FOOTER_TYPES.ITI} />,
+  {
+    linksAccepted: [
+      KNOWN_LINKS.YOUTUBE,
+      KNOWN_LINKS.FACEBOOK,
+      KNOWN_LINKS.SNAPCHAT,
+      KNOWN_LINKS.OWN,
+    ],
+    exceptions: [],
+    useInputUrl: true,
+    text: "video_analysis_text",
+  },
 );
 
 export const keyframes = new Tool(
@@ -280,6 +377,21 @@ export const keyframes = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <Keyframes />,
   <Footer type={FOOTER_TYPES.ITI} />,
+  {
+    linksAccepted: [
+      KNOWN_LINKS.TWITTER,
+      KNOWN_LINKS.YOUTUBE,
+      KNOWN_LINKS.FACEBOOK,
+      KNOWN_LINKS.YOUTUBE,
+      KNOWN_LINKS.YOUTUBESHORTS,
+      KNOWN_LINKS.LIVELEAK,
+      KNOWN_LINKS.SNAPCHAT,
+      KNOWN_LINKS.OWN,
+    ],
+    exceptions: [],
+    useInputUrl: true,
+    text: "keyframes_text",
+  },
 );
 
 export const thumbnails = new Tool(
@@ -293,6 +405,12 @@ export const thumbnails = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <Thumbnails />,
   <Footer type={FOOTER_TYPES.AFP} />,
+  {
+    linksAccepted: [KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.OWN],
+    exceptions: [],
+    useInputUrl: true,
+    text: "thumbnails_text",
+  },
 );
 
 const videoMetadata = new Tool(
@@ -306,6 +424,14 @@ const videoMetadata = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <Metadata />,
   <Footer type={FOOTER_TYPES.AFP} />,
+  {
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    exceptions: [
+      /(pbs.twimg.com)|(youtu.be|youtube)|(instagram)|(fbcdn.net)|(vimeo)|(snapchat)|(tiktok.com)/,
+    ],
+    useInputUrl: false,
+    text: "metadata_text",
+  },
 );
 
 export const videoDeepfake = new Tool(
@@ -319,6 +445,29 @@ export const videoDeepfake = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <DeepfakeVideo />,
   <Footer type={FOOTER_TYPES.ITI} />,
+  {
+    processLinksAccepted: [
+      KNOWN_LINKS.YOUTUBE,
+      KNOWN_LINKS.TWITTER,
+      // KNOWN_LINKS.INSTAGRAM, // assistant fails to load video (even if logged in); deepfakevideo tool directly works
+      // KNOWN_LINKS.FACEBOOK, // assistant fails to load video; deepfakevideo has no face detected, video doesn't load properly
+      // KNOWN_LINKS.TIKTOK, // assistant fails to load video; deepfakevideo has no face detected, video doesn't load properly
+      KNOWN_LINKS.TELEGRAM,
+      KNOWN_LINKS.YOUTUBESHORTS,
+      KNOWN_LINKS.DAILYMOTION,
+      // KNOWN_LINKS.LIVELEAK, // doesn't exist anymore; assistant works; deepfakevideo has no face detected, video doesn't load properly
+      // KNOWN_LINKS.VIMEO, // assistant works; deepfakevideo has no face detected, video doesn't load properly
+      // KNOWN_LINKS.MASTODON, // assistant fails to load video; deepfakevideo has no face detected, video doesn't load properly
+      // KNOWN_LINKS.VK, // assistant fails to load; deepfakevideo works
+      KNOWN_LINKS.MISC,
+      KNOWN_LINKS.OWN,
+    ],
+    exceptions: [],
+    useInputUrl: false,
+    text: "deepfake_video_text",
+    resetUrl: resetDeepfake,
+    setUrl: (resultUrl) => setDeepfakeUrlVideo({ url: resultUrl }),
+  },
 );
 
 /**
@@ -336,6 +485,12 @@ export const imageMagnifier = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <Magnifier />,
   <Footer type={FOOTER_TYPES.AFP} />,
+  {
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    exceptions: [],
+    useInputUrl: false,
+    text: "magnifier_text",
+  },
 );
 
 export const imageMetadata = new Tool(
@@ -349,6 +504,14 @@ export const imageMetadata = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <Metadata />,
   <Footer type={FOOTER_TYPES.AFP} />,
+  {
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    exceptions: [
+      /(pbs.twimg.com)|(youtu.be|youtube)|(instagram)|(fbcdn.net)|(vimeo)|(snapchat)|(tiktok.com)/,
+    ],
+    useInputUrl: false,
+    text: "metadata_text",
+  },
 );
 
 export const imageForensic = new Tool(
@@ -362,6 +525,12 @@ export const imageForensic = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <Forensic />,
   <Footer type={FOOTER_TYPES.ITI_BORELLI_AFP} />,
+  {
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    exceptions: [],
+    useInputUrl: false,
+    text: "forensic_text",
+  },
 );
 
 export const imageOcr = new Tool(
@@ -375,6 +544,12 @@ export const imageOcr = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <OCR />,
   <Footer type={FOOTER_TYPES.USFD} />,
+  {
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    exceptions: [],
+    useInputUrl: false,
+    text: "ocr_text",
+  },
 );
 
 export const imageGif = new Tool(
@@ -388,6 +563,12 @@ export const imageGif = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <CheckGif />,
   <Footer type={FOOTER_TYPES.BORELLI_AFP} />,
+  {
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    exceptions: [],
+    useInputUrl: false,
+    text: "gif_text",
+  },
 );
 
 export const imageSyntheticDetection = new Tool(
@@ -401,6 +582,14 @@ export const imageSyntheticDetection = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <SyntheticImageDetection />,
   <Footer type={FOOTER_TYPES.ITI_UNINA} />,
+  {
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    exceptions: [],
+    useInputUrl: false,
+    text: "synthetic_image_detection_text",
+    resetUrl: resetSyntheticImageDetectionImage,
+    setUrl: (resultUrl) => setSyntheticImageDetectionUrl({ url: resultUrl }),
+  },
 );
 
 export const imageGeolocation = new Tool(
@@ -414,23 +603,31 @@ export const imageGeolocation = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <Geolocation />,
   <Footer type={FOOTER_TYPES.ITI} />,
+  {
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    exceptions: [],
+    useInputUrl: false,
+    text: "geolocation_text",
+    resetUrl: resetGeolocationImage,
+    setUrl: setGeolocationUrl,
+  },
 );
 
 /**
  * Audio tools
  **/
 
-const audioLoccus = new Tool(
-  "navbar_loccus",
-  "navbar_loccus_description",
+export const audioHiya = new Tool(
+  "navbar_hiya",
+  "navbar_hiya_description",
   audioFileSvgIcon,
   TOOLS_CATEGORIES.AUDIO,
   [TOOL_STATUS_ICON.NEW, TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.LOCK],
   [ROLES.BETA_TESTER],
-  "loccus",
+  "hiya",
   TOOL_GROUPS.VERIFICATION,
-  <Loccus />,
-  <Footer type={FOOTER_TYPES.LOCCUS} />,
+  <Hiya />,
+  <Footer type={FOOTER_TYPES.HIYA} />,
 );
 
 /**
@@ -495,11 +692,11 @@ const machineGeneratedText = new Tool(
   mgtSvgIcon,
   TOOLS_CATEGORIES.SEARCH,
   [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.NEW],
-  [ROLES.EXTRA_FEATURE],
+  [ROLES.BETA_TESTER],
   "mgt",
   TOOL_GROUPS.VERIFICATION,
   <MachineGeneratedText />,
-  <Footer type={FOOTER_TYPES.USFD} />,
+  <Footer type={FOOTER_TYPES.KINIT} />,
 );
 
 /**
@@ -512,7 +709,7 @@ export const dataAnalysisSna = new Tool(
   twitterSnaSvgIcon,
   TOOLS_CATEGORIES.DATA_ANALYSIS,
   [TOOL_STATUS_ICON.LOCK],
-  [ROLES.REGISTERED_USER],
+  null,
   "twitterSna",
   TOOL_GROUPS.VERIFICATION,
   <TwitterSna />,
@@ -530,6 +727,19 @@ const dataAnalysisCrowdtangle = new Tool(
   TOOL_GROUPS.VERIFICATION,
   null,
   null,
+);
+
+export const newSna = new Tool(
+  "navbar_sna",
+  "navbar_sna_description",
+  twitterSnaSvgIcon,
+  TOOLS_CATEGORIES.DATA_ANALYSIS,
+  [TOOL_STATUS_ICON.LOCK],
+  [ROLES.BETA_TESTER, ROLES.EVALUATION],
+  "Sna",
+  TOOL_GROUPS.VERIFICATION,
+  <SNA />,
+  <Footer type={FOOTER_TYPES.AFP_URBINO_VIGINUM} />,
 );
 
 const disinfoDeck = new Tool(
@@ -567,10 +777,36 @@ export const archiving = new Tool(
   <Footer type={FOOTER_TYPES.AFP} />,
 );
 
+export const chatbot = new Tool(
+  "navbar_chatbot",
+  "navbar_chatbot_description",
+  chatbotSvgIcon,
+  TOOLS_CATEGORIES.OTHER,
+  [TOOL_STATUS_ICON.NEW],
+  [ROLES.EXTRA_FEATURE],
+  "chatbot",
+  TOOL_GROUPS.VERIFICATION,
+  <Chatbot />,
+  <Footer type={FOOTER_TYPES.AFP} />,
+);
+
 /**
  *
  * Other Group tools
  */
+const afpDigitalCourses = new Tool(
+  "",
+  "",
+  AfpDigitalCoursesIconComponent,
+  null,
+  null,
+  null,
+  "afpDigitalCourses",
+  TOOL_GROUPS.MORE,
+  null,
+  null,
+);
+
 const about = new Tool(
   "navbar_about",
   "",
@@ -595,6 +831,14 @@ const c2paData = new Tool(
   TOOL_GROUPS.VERIFICATION,
   <C2paData />,
   <Footer type={FOOTER_TYPES.AFP} />,
+  {
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    exceptions: [],
+    useInputUrl: false,
+    text: "c2pa_text",
+    resetUrl: resetC2paState,
+    setUrl: c2paUrlSet,
+  },
 );
 
 export const tools = Object.freeze([
@@ -611,7 +855,7 @@ export const tools = Object.freeze([
   imageGif,
   imageSyntheticDetection,
   imageGeolocation,
-  audioLoccus,
+  audioHiya,
   searchTwitter,
   searchSemantic,
   searchCovid,
@@ -619,8 +863,11 @@ export const tools = Object.freeze([
   machineGeneratedText,
   dataAnalysisSna,
   dataAnalysisCrowdtangle,
+  newSna,
   disinfoDeck,
   archiving,
+  chatbot,
+  afpDigitalCourses,
   about,
   c2paData,
 ]);

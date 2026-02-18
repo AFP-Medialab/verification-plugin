@@ -1,19 +1,18 @@
+import { trackEvent } from "../GoogleAnalytics/MatomoAnalytics";
+import { baiduReverseSearch } from "./engines/baidu";
+import { bingReverseSearch } from "./engines/bing";
+import { dbkfReverseSearch } from "./engines/dbkf";
+import { googleFactCheckReverseSearch } from "./engines/google-factcheck";
+import { googleLensReversearch } from "./engines/google-lens";
+import { tineyeReverseSearch } from "./engines/tineye";
+import { yandexReverseSearch } from "./engines/yandex";
 import {
   getBlob,
-  isBase64,
   getImgUrl,
   getLocalImageFromSourcePath,
+  isBase64,
 } from "./utils/searchUtils";
-
-import { dbkfReverseSearch } from "./engines/dbkf";
-import { baiduReverseSearch } from "./engines/baidu";
-import { googleLensReversearch } from "./engines/google-lens";
-import { yandexReverseSearch } from "./engines/yandex";
-import { bingReverseSearch } from "./engines/bing";
-import { tineyeReverseSearch } from "./engines/tineye";
-import { ImageObject, IMAGE_FORMATS } from "./utils/searchUtils";
-import { googleFactCheckReverseSearch } from "./engines/google-factcheck";
-import { trackEvent } from "../GoogleAnalytics/MatomoAnalytics";
+import { IMAGE_FORMATS, ImageObject } from "./utils/searchUtils";
 
 export const SEARCH_ENGINE_SETTINGS = {
   // To open all search engines at once
@@ -43,9 +42,10 @@ export const SEARCH_ENGINE_SETTINGS = {
     CONTEXT_MENU_ID: "reverse_search_baidu",
     CONTEXT_MENU_TITLE: "Image Reverse Search - Baidu",
     SUPPORTED_IMAGE_FORMAT: [
-      IMAGE_FORMATS.BLOB,
-      IMAGE_FORMATS.LOCAL,
-      IMAGE_FORMATS.URI,
+      //DEPRECATED NEED TO UPGRADE THE IMPLEMENTATION
+      //IMAGE_FORMATS.BLOB,
+      //IMAGE_FORMATS.LOCAL,
+      //IMAGE_FORMATS.URI,
     ],
   },
   YANDEX_SEARCH: {
@@ -131,9 +131,9 @@ const retrieveImgObjectForSearchEngine = async (info, searchEngineName) => {
       info.startsWith("http")
         ? IMAGE_FORMATS.URI
         : // @ts-ignore
-        info.startsWith("file")
-        ? IMAGE_FORMATS.LOCAL
-        : IMAGE_FORMATS.UNKNOW;
+          info.startsWith("data")
+          ? IMAGE_FORMATS.LOCAL
+          : IMAGE_FORMATS.UNKNOW;
   } else {
     // is data content
     inputFormat = IMAGE_FORMATS.UNKNOW;

@@ -142,40 +142,6 @@ export const setDbkfTextMatchDetails = (
   };
 };
 
-export const setDbkfImageMatchDetails = (
-  imageMatch,
-  dbkfMediaMatchLoading,
-  dbkfMediaMatchDone,
-  dbkfMediaMatchFail,
-) => {
-  return {
-    type: "SET_DBKF_IMAGE_MATCH_DETAILS",
-    payload: {
-      dbkfImageMatch: imageMatch,
-      dbkfMediaMatchLoading: dbkfMediaMatchLoading,
-      dbkfMediaMatchDone: dbkfMediaMatchDone,
-      dbkfMediaMatchFail: dbkfMediaMatchFail,
-    },
-  };
-};
-
-export const setDbkfVideoMatchDetails = (
-  videoMatch,
-  dbkfMediaMatchLoading,
-  dbkfMediaMatchDone,
-  dbkfMediaMatchFail,
-) => {
-  return {
-    type: "SET_DBKF_VIDEO_MATCH_DETAILS",
-    payload: {
-      dbkfVideoMatch: videoMatch,
-      dbkfMediaMatchLoading: dbkfMediaMatchLoading,
-      dbkfMediaMatchDone: dbkfMediaMatchDone,
-      dbkfMediaMatchFail: dbkfMediaMatchFail,
-    },
-  };
-};
-
 export const setNewsTopicDetails = (ntResult, ntLoading, ntDone, ntFail) => {
   return {
     type: "SET_NEWS_TOPIC_DETAILS",
@@ -366,10 +332,11 @@ export const submitInputUrl = (inputUrl) => {
   };
 };
 
-export const submitUpload = (contentType) => {
+export const submitUpload = (uploadFileUrl, contentType) => {
   return {
     type: "SUBMIT_UPLOAD",
     payload: {
+      uploadFileUrl: uploadFileUrl,
       contentType: contentType,
     },
   };
@@ -378,5 +345,19 @@ export const submitUpload = (contentType) => {
 export const cleanAssistantState = () => {
   return {
     type: "CLEAN_STATE",
+  };
+};
+
+export const setImportantSentenceThreshold = (threshold) => {
+  return {
+    type: "SET_IMPORTANT_SENTENCE_THRESHOLD",
+    payload: threshold,
+  };
+};
+
+export const setCurrentLabel = (currentLabel) => {
+  return {
+    type: "SET_CURRENT_LABEL",
+    payload: currentLabel,
   };
 };

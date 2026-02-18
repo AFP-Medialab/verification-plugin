@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from "react";
 import Iframe from "react-iframe";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
@@ -14,7 +14,9 @@ import LinearProgress from "@mui/material/LinearProgress";
 import TextField from "@mui/material/TextField";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import { videoAnalysis } from "@/constants/tools";
+import { KNOWN_LINKS } from "@/constants/tools";
 import {
   cleanAnalysisState,
   setAnalysisComments,
@@ -24,12 +26,11 @@ import {
   setAnalysisVerifiedComments,
 } from "@/redux/actions/tools/analysisActions";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import _ from "lodash";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import { useAnalysisWrapper } from "./Hooks/useAnalysisWrapper";
 import useGenerateApiUrl from "./Hooks/useGenerateApiUrl";
 import AFacebookResults from "./Results/AFacebookResults";
@@ -39,8 +40,9 @@ import YoutubeResults from "./Results/YoutubeResults";
 import styles from "./Results/layout.module.css";
 
 const Analysis = () => {
-  const caa_analysis_url = process.env.REACT_APP_CAA_ANALYSIS_URL;
+  const caa_analysis_url = import.meta.env.VITE_CAA_ANALYSIS_URL;
   const { url } = useParams();
+  const [searchParams] = useSearchParams();
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Analysis");
   const keywordAllTools = i18nLoadNamespace(
@@ -52,7 +54,7 @@ const Analysis = () => {
   const resultData = useSelector((state) => state.analysis.result);
   const isLoading = useSelector((state) => state.analysis.loading);
 
-  const [input, setInput] = useState(resultUrl ? resultUrl : "");
+  const [input = resultUrl || "", setInput] = useUrlOrFile();
   const [urlDetected, setUrlDetected] = useState(false);
   const [submittedUrl, setSubmittedUrl] = useState(undefined);
   const [reprocess, setReprocess] = useState(false);
@@ -122,13 +124,13 @@ const Analysis = () => {
     }
   }, [url]);
 
-  const processUrl = useSelector((state) => state.assistant.processUrl);
   useEffect(() => {
-    if (processUrl) {
-      setInput(processUrl);
-      setSubmittedUrl(processUrl);
+    const fromAssistant = searchParams.has("fromAssistant");
+    if (fromAssistant && input) {
+      setInput(input);
+      setUrlDetected(true);
     }
-  }, [processUrl]);
+  }, [searchParams]);
 
   return (
     <div>

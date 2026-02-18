@@ -23,17 +23,17 @@ import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 
 import {
   renderDescription,
+  renderDomainTitle,
   renderEvidence,
   renderLabels,
   renderScope,
   renderSourceTypeChip,
   renderThisDomainOrAccount,
-  renderUrlTitle,
 } from "./assistantUtils";
 
 const ExtractedUrlDomainAnalysisResults = ({
-  extractedSourceCredibilityResults,
-  url,
+  domainResults,
+  credibilityScope,
   urlColor,
   sourceTypes,
   trafficLightColors,
@@ -52,21 +52,9 @@ const ExtractedUrlDomainAnalysisResults = ({
 
   // passing through correct colours for details here
   const sourceCredibility = [
-    [
-      extractedSourceCredibilityResults.caution,
-      trafficLightColors.caution,
-      sourceTypes.caution,
-    ],
-    [
-      extractedSourceCredibilityResults.mixed,
-      trafficLightColors.mixed,
-      sourceTypes.mixed,
-    ],
-    [
-      extractedSourceCredibilityResults.positive,
-      trafficLightColors.positive,
-      sourceTypes.positive,
-    ],
+    [domainResults.caution, trafficLightColors.caution, sourceTypes.caution],
+    [domainResults.mixed, trafficLightColors.mixed, sourceTypes.mixed],
+    [domainResults.positive, trafficLightColors.positive, sourceTypes.positive],
   ];
 
   return (
@@ -108,10 +96,10 @@ const ExtractedUrlDomainAnalysisResults = ({
                     <DialogTitle>
                       {/* display the url */}
                       {sourceCredibility
-                        ? renderUrlTitle(
+                        ? renderDomainTitle(
                             keyword,
                             classes,
-                            url,
+                            credibilityScope,
                             urlColor,
                             handleClose,
                           )
@@ -148,7 +136,7 @@ const ExtractedUrlDomainAnalysisResults = ({
                                       {renderThisDomainOrAccount(
                                         keyword,
                                         value.credibilityScope,
-                                        value.credibilitySource,
+                                        value.source,
                                       )}
                                     </Stack>
                                   ) : null}
@@ -173,23 +161,21 @@ const ExtractedUrlDomainAnalysisResults = ({
                                       )}
                                     </ListItem>
                                     <ListItem>
-                                      {renderLabels(
-                                        keyword,
-                                        value.credibilityLabels,
-                                      )}
+                                      {renderLabels(keyword, value.labels)}
                                     </ListItem>
                                     <ListItem>
                                       {renderDescription(
                                         keyword,
-                                        value.credibilityDescription,
+                                        value.description,
                                       )}
                                     </ListItem>
                                   </List>
-                                  {value.credibilityEvidence.length > 0
+                                  {value.evidence
                                     ? renderEvidence(
                                         keyword,
-                                        value.credibilityEvidence,
-                                        value.credibilitySource,
+                                        value.labels,
+                                        value.evidence,
+                                        value.source,
                                         value.credibilityScope,
                                       )
                                     : null}

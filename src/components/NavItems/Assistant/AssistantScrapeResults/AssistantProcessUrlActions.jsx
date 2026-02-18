@@ -13,18 +13,13 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 
-import {
-  resetDeepfake as resetDeepfakeVideo,
-  setDeepfakeUrlVideo,
-} from "@//redux/actions/tools/deepfakeVideoActions";
+import { useSetInputFromAssistant } from "@/Hooks/useUrlOrFile";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import {
-  resetSyntheticImageDetectionImage,
-  setSyntheticImageDetectionUrl,
-} from "@/redux/actions/tools/syntheticImageDetectionActions";
-
-import { KNOWN_LINKS } from "../AssistantRuleBook";
+  resetGeolocation as resetGeolocationImage,
+  setGeolocationUrl,
+} from "@/redux/reducers/tools/geolocationReducer";
 
 const AssistantProcessUrlActions = () => {
   const classes = useMyStyles();
@@ -34,22 +29,26 @@ const AssistantProcessUrlActions = () => {
 
   const inputUrl = useSelector((state) => state.assistant.inputUrl);
   const processUrl = useSelector((state) => state.assistant.processUrl);
-  const contentType = useSelector((state) => state.assistant.processUrlType);
   const processUrlActions = useSelector(
     (state) => state.assistant.processUrlActions,
+  );
+  const setAssistantSelection = useSetInputFromAssistant();
+  const imageVideoSelected = useSelector(
+    (state) => state.assistant.imageVideoSelected,
   );
 
   const handleClick = (action) => {
     const resultUrl = action.useInputUrl ? inputUrl : processUrl;
 
-    // deepfake and synthetic image detection set URL actions
-    if (action.path === "tools/deepfakeVideo") {
-      dispatch(resetDeepfakeVideo());
-      dispatch(setDeepfakeUrlVideo({ url: resultUrl }));
+    if (action.resetUrl) {
+      dispatch(action.resetUrl());
     }
-    if (action.path === "tools/syntheticImageDetection") {
-      dispatch(resetSyntheticImageDetectionImage());
-      dispatch(setSyntheticImageDetectionUrl({ url: resultUrl }));
+    if (action.setUrl) {
+      dispatch(action.setUrl(resultUrl));
+    }
+    if (!imageVideoSelected) {
+      // if url to media, make sure url is correctly set
+      setAssistantSelection(resultUrl);
     }
 
     if (action.download) {
@@ -60,14 +59,9 @@ const AssistantProcessUrlActions = () => {
       dl.click();
     } else if (action.path === null) {
       // Do nothing if path is null
-    } else if (resultUrl !== null) {
-      navigate("/app/" + action.path + "/");
-      //history.push("/app/" + action.path + "/" + encodeURIComponent(resultUrl) + "/" + contentType)
     } else {
-      navigate(
-        "/app/" + action.path + "/" + KNOWN_LINKS.OWN + "/" + contentType,
-      );
-      //history.push("/app/" + action.path + "/" + KNOWN_LINKS.OWN + "/" + contentType)
+      // Go to other tools with fileInput or formInput
+      navigate("/app/" + action.path + "?fromAssistant");
     }
   };
 
@@ -77,7 +71,12 @@ const AssistantProcessUrlActions = () => {
         {keyword("recommended_tools")}
       </Typography>
       <Divider />
-      <List>
+      <List
+        sx={{
+          overflowY: "auto",
+          height: "500px",
+        }}
+      >
         {processUrlActions.map((action, index) => {
           return (
             <Box

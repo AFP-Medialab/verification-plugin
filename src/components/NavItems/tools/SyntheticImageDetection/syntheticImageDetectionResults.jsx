@@ -30,12 +30,12 @@ import Typography from "@mui/material/Typography";
 import { Download, ExpandMore } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { getclientId } from "@/components/Shared/GoogleAnalytics/MatomoAnalytics";
 import { ROLES } from "@/constants/roles";
 import { JsonBlock } from "@Shared/JsonBlock";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
-import { useTrackEvent } from "Hooks/useAnalytics";
-import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import CustomAlertScore from "../../../Shared/CustomAlertScore";
 import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
@@ -175,6 +175,7 @@ const SyntheticImageDetectionResults = ({
         syntheticImageDetectionAlgorithm.name,
         syntheticImageDetectionAlgorithm.description,
         syntheticImageDetectionAlgorithm.rolesNeeded,
+        syntheticImageDetectionAlgorithm.warning,
       );
       this.predictionScore = predictionScore;
       this.isError = isError;
@@ -773,7 +774,8 @@ const SyntheticImageDetectionResults = ({
                                 <TableCell>
                                   {c2paData[0]?.assertion?.data?.actions?.[1]
                                     ?.softwareAgent?.name ||
-                                    c2paData[0]?.softwareAgent?.name}
+                                    c2paData[0]?.softwareAgent?.name ||
+                                    c2paData[0]?.softwareAgent}
                                 </TableCell>
                               </TableRow>
                               <TableRow>
@@ -785,7 +787,8 @@ const SyntheticImageDetectionResults = ({
                                 <TableCell>
                                   {c2paData[0]?.assertion?.data?.actions?.[0]
                                     ?.softwareAgent?.name ||
-                                    c2paData[0]?.softwareAgent?.name}
+                                    c2paData[0]?.softwareAgent?.name ||
+                                    c2paData[0]?.softwareAgent}
                                 </TableCell>
                               </TableRow>
                             </TableBody>
@@ -959,9 +962,16 @@ const SyntheticImageDetectionResults = ({
                                       "var(--mui-palette-background-paper)",
                                   }}
                                 >
-                                  <Typography>
-                                    {keyword(item.description)}
-                                  </Typography>
+                                  <Stack direction="column" spacing={2}>
+                                    <Typography>
+                                      {keyword(item.description)}
+                                    </Typography>
+                                    {item.warning && (
+                                      <Alert severity="warning">
+                                        {keyword(item.warning)}
+                                      </Alert>
+                                    )}
+                                  </Stack>
                                 </Box>
                               </Stack>
                               {syntheticImageScores.length > key + 1 && (

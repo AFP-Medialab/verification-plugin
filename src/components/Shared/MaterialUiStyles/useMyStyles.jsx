@@ -165,7 +165,7 @@ const styles = (theme) => ({
   },
 
   footer: {
-    padding: theme.spacing(10, 5),
+    padding: theme.spacing(10, 0, 3, 0),
     textAlign: "center",
     bottom: 0,
   },
@@ -264,6 +264,7 @@ const styles = (theme) => ({
   InteractiveMedia: {
     maxWidth: "80%",
     maxHeight: window.innerHeight / 2,
+    display: "inline-block",
   },
 
   customTitle: {
@@ -319,6 +320,9 @@ const styles = (theme) => ({
   assistantCardHeader: {
     fontSize: theme.typography.h6.fontSize,
     textAlign: "start",
+    "& .MuiCardHeader-subheader": {
+      color: "var(--mui-palette-text-primary)",
+    },
   },
   assistantHover: {
     borderWidth: 3,
@@ -368,6 +372,7 @@ const styles = (theme) => ({
   ocrImageCanvas: {
     position: "absolute",
     left: 0,
+    top: 0,
   },
   ocrImage: {
     objectFit: "contain",

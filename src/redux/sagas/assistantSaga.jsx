@@ -1,5 +1,6 @@
+import assistantApiCalls from "@/components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
+import DBKFApi from "@/components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
 import {
-  CONTENT_TYPE,
   KNOWN_LINKS,
   KNOWN_LINK_PATTERNS,
   NE_SUPPORTED_LANGS,
@@ -7,26 +8,11 @@ import {
   matchPattern,
   selectCorrectActions,
 } from "@/components/NavItems/Assistant/AssistantRuleBook";
-import isEqual from "lodash/isEqual";
-import uniqWith from "lodash/uniqWith";
-import {
-  all,
-  call,
-  fork,
-  put,
-  select,
-  take,
-  takeLatest,
-} from "redux-saga/effects";
-
-import assistantApiCalls from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
-import DBKFApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
+import { TOOLS_CATEGORIES } from "@/constants/tools";
 import {
   cleanAssistantState,
   setAssistantLoading,
-  setDbkfImageMatchDetails,
   setDbkfTextMatchDetails,
-  setDbkfVideoMatchDetails,
   setErrorKey,
   setImageVideoSelected,
   setInputSourceCredDetails,
@@ -46,7 +32,16 @@ import {
   setSingleMediaPresent,
   setSubjectivityDetails,
   setUrlMode,
-} from "../actions/tools/assistantActions";
+} from "@/redux/actions/tools/assistantActions";
+import {
+  all,
+  call,
+  fork,
+  put,
+  select,
+  take,
+  takeLatest,
+} from "redux-saga/effects";
 
 /**
  * APIs
@@ -58,7 +53,10 @@ const assistantApi = assistantApiCalls();
  * WATCHERS
  **/
 function* getUploadSaga() {
-  yield takeLatest("SUBMIT_UPLOAD", handleSubmitUpload);
+  yield takeLatest(
+    ["SUBMIT_UPLOAD", "AUTH_USER_LOGIN", "AUTH_USER_LOGOUT"],
+    handleSubmitUpload,
+  );
 }
 
 function* getMediaListSaga() {
@@ -74,13 +72,6 @@ function* getMediaActionSaga() {
 
 function* getAssistantScrapeSaga() {
   yield takeLatest("SUBMIT_INPUT_URL", handleAssistantScrapeCall);
-}
-
-function* getMediaSimilaritySaga() {
-  yield takeLatest(
-    ["SET_PROCESS_URL", "CLEAN_STATE"],
-    handleMediaSimilarityCall,
-  );
 }
 
 function* getDbkfTextMatchSaga() {
@@ -123,14 +114,14 @@ function* getPrevFactChecksSaga() {
 
 function* getMachineGeneratedTextChunksSaga() {
   yield takeLatest(
-    ["SET_SCRAPED_DATA", "AUTH_USER_LOGIN", "CLEAN_STATE"],
+    ["SET_SCRAPED_DATA", "CLEAN_STATE"],
     handleMachineGeneratedTextChunksCall,
   );
 }
 
 function* getMachineGeneratedTextSentencesSaga() {
   yield takeLatest(
-    ["SET_SCRAPED_DATA", "AUTH_USER_LOGIN", "CLEAN_STATE"],
+    ["SET_SCRAPED_DATA", "CLEAN_STATE"],
     handleMachineGeneratedTextSentencesCall,
   );
 }
@@ -150,10 +141,10 @@ function* handleMediaLists() {
   const videoList = yield select((state) => state.assistant.videoList);
 
   if (imageList.length === 1 && videoList.length === 0) {
-    yield put(setProcessUrl(imageList[0], CONTENT_TYPE.IMAGE));
+    yield put(setProcessUrl(imageList[0], TOOLS_CATEGORIES.IMAGE));
     yield put(setSingleMediaPresent(true));
   } else if (videoList.length === 1 && imageList.length === 0) {
-    yield put(setProcessUrl(videoList[0], CONTENT_TYPE.VIDEO));
+    yield put(setProcessUrl(videoList[0], TOOLS_CATEGORIES.VIDEO));
     yield put(setSingleMediaPresent(true));
   }
 }
@@ -163,7 +154,9 @@ function* handleMediaActionList() {
   const processUrl = yield select((state) => state.assistant.processUrl);
   const contentType = yield select((state) => state.assistant.processUrlType);
   const role = yield select((state) => state.userSession.user.roles);
-
+  const userAuthenticated = yield select(
+    (state) => state.userSession.userAuthenticated,
+  );
   if (processUrl !== null) {
     let knownInputLink = yield call(
       matchPattern,
@@ -182,22 +175,27 @@ function* handleMediaActionList() {
       knownProcessLink,
       processUrl,
       role,
+      userAuthenticated,
     );
-
     yield put(setProcessUrlActions(contentType, actions));
   }
 }
 
-function* handleSubmitUpload(action) {
-  let contentType = action.payload.contentType;
+function* handleSubmitUpload() {
+  const contentType = yield select((state) => state.assistant.processUrlType);
+  // yield put(setProcessUrl(uploadFileUrl, contentType)); // kicks off getMediaSimilaritySaga()
   let known_link = KNOWN_LINKS.OWN;
   const role = yield select((state) => state.userSession.user.roles);
+  const userAuthenticated = yield select(
+    (state) => state.userSession.userAuthenticated,
+  );
   let actions = selectCorrectActions(
     contentType,
     known_link,
     known_link,
     "",
     role,
+    userAuthenticated,
   );
   yield put(setProcessUrlActions(contentType, actions));
   yield put(setImageVideoSelected(true));
@@ -206,76 +204,15 @@ function* handleSubmitUpload(action) {
 /**
  * API HANDLERS
  **/
-function* handleMediaSimilarityCall(action) {
-  if (action.type === "CLEAN_STATE") return;
-
-  const inputUrlType = yield select((state) => state.assistant.inputUrlType);
-  const processUrl = yield select((state) => state.assistant.processUrl);
-  const contentType = yield select((state) => state.assistant.processUrlType);
-  const unprocessbleTypes = [
-    KNOWN_LINKS.YOUTUBE,
-    KNOWN_LINKS.VIMEO,
-    KNOWN_LINKS.LIVELEAK,
-    KNOWN_LINKS.DAILYMOTION,
-  ];
-
-  if (contentType === CONTENT_TYPE.IMAGE) {
-    yield call(
-      similaritySearch,
-      () => dbkfAPI.callImageSimilarityEndpoint(processUrl),
-      (result, loading, done, fail) =>
-        setDbkfImageMatchDetails(result, loading, done, fail),
-    );
-  } else if (
-    contentType === CONTENT_TYPE.VIDEO &&
-    !unprocessbleTypes.includes(inputUrlType)
-  ) {
-    yield call(
-      similaritySearch,
-      () => dbkfAPI.callVideoSimilarityEndpoint(processUrl),
-      (result, loading, done, fail) =>
-        setDbkfVideoMatchDetails(result, loading, done, fail),
-    );
-  }
-}
-
-function* similaritySearch(searchEndpoint, stateStorageFunction) {
-  yield put(stateStorageFunction(null, true, false, false));
-
-  try {
-    let result = yield call(searchEndpoint);
-    if (Object.keys(result).length) {
-      let similarityResult = result;
-      let resultList = [];
-      Object.keys(similarityResult).forEach((key) => {
-        result[key].appearancesResults.forEach((appearance) => {
-          resultList.push({
-            claimUrl: result[key].externalLink,
-            similarity: appearance.similarity,
-          });
-        });
-        result[key].evidencesResults.forEach((evidence) => {
-          resultList.push({
-            claimUrl: result[key].externalLink,
-            similarity: evidence.similarity,
-          });
-        });
-      });
-      resultList.sort((a, b) => b.similarity - a.similarity);
-      resultList = resultList.slice(0, 3);
-      yield put(stateStorageFunction(resultList, false, true, false));
-    } else {
-      yield put(stateStorageFunction(null, false, true, false));
-    }
-  } catch (error) {
-    console.log(error);
-    yield put(stateStorageFunction(null, false, false, true));
-  }
-}
-
 function* handleSourceCredibilityCall(action) {
   if (action.type === "CLEAN_STATE") return;
   try {
+    // prevent from running if local file
+    const imageVideoSelected = yield select(
+      (state) => state.assistant.imageVideoSelected,
+    );
+    if (imageVideoSelected) return;
+
     // prevent from running if youtube
     const inputUrl = yield select((state) => state.assistant.inputUrl);
     const urlType = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
@@ -304,42 +241,11 @@ function* handleSourceCredibilityCall(action) {
     const linkList = yield select((state) => state.assistant.linkList);
     const inputUrlLinkList = [inputUrl].concat(linkList);
 
-    let result = [];
-    let links = [];
-    const batchSize = 20; // batches of links as UDA service has hard limit of 30 seconds
-    const parallelCalls = 2; // parallel calls to service, max two at a time
-    for (let i = 0; i < inputUrlLinkList.length; i += batchSize) {
-      const batchLinks = inputUrlLinkList.slice(i, i + batchSize);
-      const batchLinksString = batchLinks.join(" ");
-      links.push(batchLinksString);
-
-      if (links.length === parallelCalls) {
-        const [batchResult1, batchResult2] = yield all([
-          call(assistantApi.callSourceCredibilityService, [links[0]]),
-          call(assistantApi.callSourceCredibilityService, [links[1]]),
-        ]);
-        links = [];
-
-        if (batchResult1.entities.SourceCredibility) {
-          result = result.concat(batchResult1.entities.SourceCredibility);
-        }
-        if (batchResult2.entities.SourceCredibility) {
-          result = result.concat(batchResult2.entities.SourceCredibility);
-        }
-      }
-    }
-    if (links.length) {
-      const batchResult = yield call(
-        assistantApi.callSourceCredibilityService,
-        [links[0]],
-      );
-      if (batchResult.entities.SourceCredibility) {
-        result = result.concat(batchResult.entities.SourceCredibility);
-      }
-    }
-    if (!result.length) {
-      result = null;
-    }
+    // send all urls and do batches on backend
+    const result = yield call(
+      assistantApi.callSourceCredibilityService,
+      inputUrlLinkList,
+    );
 
     const trafficLightColors = {
       positive: "success", //"#008000", // green
@@ -355,32 +261,15 @@ function* handleSourceCredibilityCall(action) {
       unlabelled: "unlabelled",
     };
 
-    const [
-      positiveResults,
-      mixedResults,
-      cautionResults,
-      filteredExtractedResults,
-    ] = filterSourceCredibilityResults(
-      result,
-      inputUrl,
-      linkList,
-      trafficLightColors,
-    );
-
-    const extractedLinks = sortSourceCredibilityLinks(
-      filteredExtractedResults,
-      trafficLightColors,
-    );
-
     yield put(
       setInputSourceCredDetails(
-        positiveResults,
-        cautionResults,
-        mixedResults,
-        filteredExtractedResults,
+        result.domain[result.url.inputUrl.credibilityScope]?.positive,
+        result.domain[result.url.inputUrl.credibilityScope]?.caution,
+        result.domain[result.url.inputUrl.credibilityScope]?.mixed,
+        result, // all the rest results
         trafficLightColors,
         sourceTypes,
-        extractedLinks,
+        result.url.extracted.map((obj) => obj.string), // extractedLinks in order: caution, mixed, positive, unlabelled
         false,
         true,
         false,
@@ -411,16 +300,21 @@ function* handleDbkfTextCall(action) {
   try {
     const text = yield select((state) => state.assistant.urlText);
     if (text) {
-      let textToUse = text.length > 500 ? text.substring(0, 500) : text;
+      let textToUse = text.length > 100 ? text.substring(0, 100) : text;
       /*
-                                                            let textRegex = /[\W]$/
-                                                            //Infinite loop for some url exemple: https://twitter.com/TheArchitect009/status/1427280578496303107
-                                                            while(textToUse.match(textRegex)){
-                                                                if(textToUse.length === 1) break
-                                                                textToUse = text.slice(0, -1)
-                                                            }*/
+        let textRegex = /[\W]$/
+        //Infinite loop for some url example: https://twitter.com/TheArchitect009/status/1427280578496303107
+        while(textToUse.match(textRegex)){
+          if(textToUse.length === 1) break
+          textToUse = text.slice(0, -1)
+        }
+      */
       let result = yield call(dbkfAPI.callTextSimilarityEndpoint, textToUse);
-      let filteredResult = result.length ? result : null;
+
+      let filteredResult = result?.length
+        ? result.filter((res) => res.score >= 40)
+        : [];
+      filteredResult = filteredResult?.length ? filteredResult : null;
 
       yield put(setDbkfTextMatchDetails(filteredResult, false, true, false));
     }
@@ -527,6 +421,8 @@ function* handleSubjectivityCall(action) {
         // merge results
         if (i === 0) {
           result = textChunkResult;
+          result.entities.Subjective[0].score =
+            result.entities.Subjective[0].score * textChunks[i].length;
         } else {
           // add step to sentences indices and Important_Sentence indices
           step = i * SERVER_TIMEOUT_LIMIT;
@@ -564,7 +460,6 @@ function* handleSubjectivityCall(action) {
               sentence: sentence.sentence,
             });
           }
-
           // update results
           result = {
             text: result.text + textChunkResult.text,
@@ -573,12 +468,22 @@ function* handleSubjectivityCall(action) {
               Important_Sentence: result.entities.Important_Sentence.concat(
                 stepImportantSentences,
               ),
-              Subjective: result.entities.Subjective,
+              Subjective: [
+                {
+                  score:
+                    result.entities.Subjective[0].score +
+                    textChunkResult.entities.Subjective[0].score *
+                      textChunks[i].length,
+                },
+              ],
             },
             sentences: result.sentences.concat(stepSentences),
           };
         }
       }
+      // update overall subjectivity score to be weighted
+      result.entities.Subjective[0].score =
+        result.entities.Subjective[0].score / text.length;
 
       yield put(setSubjectivityDetails(result, false, true, false));
     }
@@ -691,7 +596,7 @@ function* handleNamedEntityCall(action) {
             entities.push({
               word: instance.features.string,
               link: instance.features.link,
-              abstract: instance.features.abstract,
+              abstract: instance.features.abstract ?? "",
               category: entity[0],
             });
           }
@@ -795,16 +700,17 @@ function* handleMultilingualStanceCall(action) {
   try {
     const inputUrl = yield select((state) => state.assistant.inputUrl); //action.payload.inputUrl;
     const urlType = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
+    const collectedComments = yield select(
+      (state) => state.assistant.collectedComments,
+    );
 
-    // only run stance classifier for youtube
+    // only run stance classifier for youtube if comments exist
     if (
-      urlType === KNOWN_LINKS.YOUTUBE ||
-      urlType === KNOWN_LINKS.YOUTUBESHORTS
+      (urlType === KNOWN_LINKS.YOUTUBE ||
+        urlType === KNOWN_LINKS.YOUTUBESHORTS) &&
+      collectedComments.length > 0
     ) {
       yield put(setMultilingualStanceDetails(null, true, false, false));
-      const collectedComments = yield select(
-        (state) => state.assistant.collectedComments,
-      );
 
       function createCommentArray(
         comments,
@@ -1072,7 +978,7 @@ const filterAssistantResults = (
       break;
     case KNOWN_LINKS.MISC:
       if (contentType) {
-        contentType === CONTENT_TYPE.IMAGE
+        contentType === TOOLS_CATEGORIES.IMAGE
           ? (imageList = [userInput])
           : (videoList = [userInput]);
       } else {
@@ -1112,145 +1018,6 @@ const filterAssistantResults = (
   };
 };
 
-const filterSourceCredibilityResults = (
-  originalResult,
-  inputUrl,
-  linkList,
-  trafficLightColors,
-) => {
-  if (!originalResult) {
-    return [null, null, null, null];
-  }
-  let sourceCredibility = originalResult;
-
-  sourceCredibility.forEach((dc) => {
-    delete dc["indices"];
-  });
-  sourceCredibility = uniqWith(sourceCredibility, isEqual);
-
-  let sourceCredibilityDict = {};
-
-  // collecting results for each link in extracted linkList
-  sourceCredibility.forEach((result) => {
-    const link = result["string"];
-
-    if (!(link in sourceCredibilityDict)) {
-      sourceCredibilityDict[link] = {
-        link: link,
-        resolvedLink: result["resolved-url"],
-        resolvedDomain: result["resolved-domain"],
-        urlColor: trafficLightColors.unlabelled,
-        positive: [],
-        mixed: [],
-        caution: [],
-      };
-    }
-
-    if (result["source-type"] === "positive") {
-      addToRelevantSourceCred(sourceCredibilityDict[link].positive, result);
-    } else if (
-      result["source-type"] === "mixed" &&
-      result["source"] !== "GDI-MMR"
-    ) {
-      addToRelevantSourceCred(sourceCredibilityDict[link].mixed, result);
-    } else if (result["source-type"] === "caution") {
-      addToRelevantSourceCred(sourceCredibilityDict[link].caution, result);
-    }
-  });
-
-  // catching the missing links without source credibility results
-  for (let link of linkList) {
-    if (!sourceCredibilityDict[link]) {
-      sourceCredibilityDict[link] = {
-        link: link,
-        resolvedLink: link,
-        resolvedDomain: "",
-        urlColor: trafficLightColors.unlabelled,
-        positive: [],
-        mixed: [],
-        caution: [],
-      };
-    }
-  }
-
-  // collecting results for the inputUrl
-  const positiveResults = sourceCredibilityDict[inputUrl]
-    ? sourceCredibilityDict[inputUrl].positive
-    : null;
-  const mixedResults = sourceCredibilityDict[inputUrl]
-    ? sourceCredibilityDict[inputUrl].mixed
-    : null;
-  const cautionResults = sourceCredibilityDict[inputUrl]
-    ? sourceCredibilityDict[inputUrl].caution
-    : null;
-  delete sourceCredibilityDict[inputUrl];
-
-  return [positiveResults, mixedResults, cautionResults, sourceCredibilityDict];
-};
-
-const sortSourceCredibilityLinks = (
-  sourceCredibilityDict,
-  trafficLightColors,
-) => {
-  if (!sourceCredibilityDict) {
-    return null;
-  }
-
-  let positiveLinks = [];
-  let mixedLinks = [];
-  let cautionLinks = [];
-  let unlabelledLinks = [];
-
-  for (let link in sourceCredibilityDict) {
-    let result = sourceCredibilityDict[link];
-
-    result.positive = result.positive.length ? result.positive : null;
-    result.mixed = result.mixed.length ? result.mixed : null;
-    result.caution = result.caution.length ? result.caution : null;
-
-    if (result.caution) {
-      result.urlColor = trafficLightColors.caution;
-      cautionLinks.push(link);
-    } else if (result.mixed) {
-      result.urlColor = trafficLightColors.mixed;
-      mixedLinks.push(link);
-    } else if (result.positive) {
-      result.urlColor = trafficLightColors.positive;
-      positiveLinks.push(link);
-    } else {
-      result.urlColor = trafficLightColors.unlabelled;
-      unlabelledLinks.push(link);
-    }
-  }
-
-  let extractedLinks = [];
-  extractedLinks = extractedLinks.concat(
-    cautionLinks,
-    mixedLinks,
-    positiveLinks,
-    unlabelledLinks,
-  );
-
-  return extractedLinks;
-};
-
-const addToRelevantSourceCred = (sourceCredList, result) => {
-  let resultEvidence = result["evidence"] ? result["evidence"] : [];
-  if (resultEvidence.length) {
-    resultEvidence = resultEvidence.toString();
-    resultEvidence = resultEvidence.split(",");
-  }
-
-  sourceCredList.push({
-    credibilityUrl: result["string"],
-    credibilitySource: result["source"],
-    credibilityLabels: result["labels"],
-    credibilityDescription: result["description"],
-    credibilityEvidence: resultEvidence,
-    credibilityScope: result["credibility-scope"],
-  });
-};
-
 /**
  * EXPORT
  **/
@@ -1259,7 +1026,6 @@ export default function* assistantSaga() {
     fork(getDbkfTextMatchSaga),
     fork(getSourceCredSaga),
     fork(getMediaActionSaga),
-    fork(getMediaSimilaritySaga),
     fork(getMediaListSaga),
     fork(getNamedEntitySaga),
     fork(getAssistantScrapeSaga),

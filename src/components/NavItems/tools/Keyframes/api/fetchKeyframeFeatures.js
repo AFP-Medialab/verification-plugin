@@ -10,7 +10,7 @@ import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequ
 export async function fetchKeyframeFeaturesApi(authenticatedRequest, jobId) {
   const config = {
     method: "get",
-    url: `${process.env.REACT_APP_KEYFRAME_API_2}/keyframes_enhance/${jobId}`,
+    url: `${import.meta.env.VITE_KEYFRAME_API}/json/det/${jobId}`,
   };
 
   const response = await authenticatedRequest(config);
@@ -29,8 +29,8 @@ export async function fetchKeyframeFeaturesApi(authenticatedRequest, jobId) {
     }
 
     const representative = /** @type {ImageRepresentative} */ {
-      index: imageFeature.representative.item_index,
-      imageUrl: imageFeature.representative.enhanced_url,
+      index: imageFeature.representative?.item_index || 0,
+      imageUrl: imageFeature.representative?.enhanced_url || items[0]?.imageUrl,
     };
 
     faces.push({
@@ -51,8 +51,8 @@ export async function fetchKeyframeFeaturesApi(authenticatedRequest, jobId) {
     }
 
     const representative = /** @type {ImageRepresentative} */ {
-      index: imageFeature.representative.item_index,
-      imageUrl: imageFeature.representative.enhanced_url,
+      index: imageFeature.representative?.item_index || 0,
+      imageUrl: imageFeature.representative?.enhanced_url || items[0]?.imageUrl,
     };
 
     texts.push({

@@ -1,8 +1,7 @@
 import axios from "axios";
 
 export default function DBKFApi() {
-  const dbkfAPI = process.env.REACT_APP_DBKF_SEARCH_API;
-  const similarityAPI = process.env.REACT_APP_DBKF_SIMILARITY_API;
+  const dbkfAPI = import.meta.env.VITE_DBKF_SEARCH_API;
 
   function cleanQuery(query) {
     // Remove the non-alphanumeric suffixes, since the TextSimilarityEndpoint doesn't seem to like them
@@ -29,29 +28,7 @@ export default function DBKFApi() {
     return [];
   };
 
-  const callVideoSimilarityEndpoint = async (url) => {
-    let final_url =
-      similarityAPI +
-      "/similarVideos?&collection_id=similarity&url=" +
-      encodeURIComponent(url);
-    let searchResult = await axios.get(final_url);
-    let searchData = searchResult.data;
-    return searchData;
-  };
-
-  const callImageSimilarityEndpoint = async (url) => {
-    let final_url =
-      similarityAPI +
-      "/similarImages?&collection_id=similarity&url=" +
-      encodeURIComponent(url);
-    let searchResult = await axios.get(final_url);
-    let searchData = searchResult.data;
-    return searchData;
-  };
-
   return {
     callTextSimilarityEndpoint,
-    callImageSimilarityEndpoint,
-    callVideoSimilarityEndpoint,
   };
 }

@@ -26,6 +26,7 @@ import {
   TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
+  TransUsfdAuthor,
 } from "../TransComponents";
 
 const AssistantSCResults = () => {
@@ -51,13 +52,6 @@ const AssistantSCResults = () => {
     (state) => state.assistant.trafficLightColors,
   );
   const sourceTypes = useSelector((state) => state.assistant.sourceTypes);
-
-  // passing through correct colours for details here
-  const sourceCredibility = [
-    [cautionSourceCred, trafficLightColors.caution, sourceTypes.caution],
-    [mixedSourceCred, trafficLightColors.mixed, sourceTypes.mixed],
-    [positiveSourceCred, trafficLightColors.positive, sourceTypes.positive],
-  ];
 
   return (
     <Card
@@ -128,6 +122,8 @@ const AssistantSCResults = () => {
               title={
                 <>
                   <TransSourceCredibilityTooltip keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
+                  <TransUsfdAuthor keyword={keyword} />
                   <TransHtmlDoubleLineBreak keyword={keyword} />
                   <TransUrlDomainAnalysisLink keyword={keyword} />
                 </>

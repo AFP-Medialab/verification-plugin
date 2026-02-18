@@ -1,9 +1,10 @@
-import syntheticImageDetectionActions from "@/redux/actions/tools/syntheticImageDetectionActions";
 import toolTabSelected from "@/redux/reducers/toolTabSelectedReducer";
+import syntheticImageDetectionActions from "@/redux/reducers/tools/syntheticImageDetectionReducer";
 import { combineReducers } from "redux";
 
 import assistantReducer from "./assistantReducer";
 import authenticationReducer from "./authenticationReducer";
+import chatbotReducer from "./chatbotReducer";
 import cookiesReducer from "./cookiesReducers";
 import defaultLanguageReducer from "./defaultLanguageReducer";
 import dictionaryReducer from "./dictionaryReducer";
@@ -20,11 +21,12 @@ import deepfakeReducerVideo from "./tools/deepfakeVideoReducer";
 import forensicReducer from "./tools/forensicReducer";
 import geolocationReducer from "./tools/geolocationReducer";
 import gifReducer from "./tools/gifReducer";
+import hiyaReducer from "./tools/hiyaReducer";
 import keyframesReducer from "./tools/keyframesReducer";
-import loccusReducer from "./tools/loccusReducer";
 import magnifierReducer from "./tools/magnifierReducer";
 import metadataReducer from "./tools/metadataReducer";
 import ocrReducer from "./tools/ocrReducer";
+import snaDataReducer from "./tools/snaDataReducer";
 import thumbnailsReducer from "./tools/thumbnailsReducer";
 import toolReducer from "./tools/toolReducer";
 import twitterSnaReducer from "./tools/twitterSnaReducer";
@@ -58,11 +60,13 @@ const allReducers = combineReducers({
   metadata: metadataReducer,
   thumbnails: thumbnailsReducer,
   twitterSna: twitterSnaReducer,
+  snaData: snaDataReducer,
   assistant: assistantReducer,
+  chatbot: chatbotReducer,
   ocr: ocrReducer,
   gif: gifReducer,
   syntheticImageDetection: syntheticImageDetectionActions,
-  syntheticAudioDetection: loccusReducer,
+  syntheticAudioDetection: hiyaReducer,
   deepfakeVideo: deepfakeReducerVideo,
   geolocation: geolocationReducer,
   c2pa: c2paReducer,

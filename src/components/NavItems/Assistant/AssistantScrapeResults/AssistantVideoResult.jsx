@@ -16,8 +16,7 @@ import ImageIcon from "@mui/icons-material/Image";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
-
-import { KNOWN_LINKS } from "../AssistantRuleBook";
+import { KNOWN_LINKS } from "@/constants/tools";
 
 const AssistantVideoResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -25,6 +24,9 @@ const AssistantVideoResult = () => {
 
   const processUrl = useSelector((state) => state.assistant.processUrl);
   const input_url_type = useSelector((state) => state.assistant.inputUrlType);
+  const imageVideoSelected = useSelector(
+    (state) => state.assistant.imageVideoSelected,
+  );
 
   const useIframe = () => {
     switch (input_url_type) {
@@ -51,8 +53,9 @@ const AssistantVideoResult = () => {
     let positionOne = 0;
 
     // Don't embed blob links, they are url for cached in-memory video
+    // imageVideoSelected true for a local file
     if (embedURL.startsWith("blob:")) {
-      return null;
+      return imageVideoSelected ? embedURL : null;
     }
 
     let positionTwo;
@@ -125,7 +128,7 @@ const AssistantVideoResult = () => {
             height="400"
             width="100%"
             data-testid="assistant-media-video-tag"
-          />
+          ></video>
         )}
         {!preprocessLinkForEmbed(processUrl) && (
           <div

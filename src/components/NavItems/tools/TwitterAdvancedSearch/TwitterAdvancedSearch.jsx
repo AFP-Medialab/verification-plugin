@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import Alert from "@mui/material/Alert";
@@ -14,7 +14,7 @@ import TextField from "@mui/material/TextField";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
 import { useInput } from "@/Hooks/useInput";
-import { searchTwitter } from "@/constants/tools";
+import { canUserSeeTool, newSna, searchTwitter } from "@/constants/tools";
 import DateAndTimePicker from "@Shared/DateTimePicker/DateAndTimePicker";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import HeaderTool from "@Shared/HeaderTool/HeaderTool";
@@ -24,6 +24,7 @@ import useMyStyles, {
 } from "@Shared/MaterialUiStyles/useMyStyles";
 import dayjs from "dayjs";
 
+import { RecordingWindow, getRecordingInfo } from "../SNA/components/Recording";
 import { createUrl } from "./createUrl";
 
 const TwitterAdvancedSearch = () => {
@@ -35,6 +36,7 @@ const TwitterAdvancedSearch = () => {
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
   );
+  const keywordNewSna = i18nLoadNamespace("components/NavItems/tools/NewSNA");
 
   const term = useInput("");
   const account = useInput("");
@@ -78,7 +80,7 @@ const TwitterAdvancedSearch = () => {
 
   const [fromDate, setSelectedFromDate] = useState(null);
   const [fromDateError, setSelectedFromDateError] = useState(false);
-  ``;
+
   const [toDate, setSelectedToDate] = useState(null);
   const [toDateError, setSelectedToDateError] = useState(false);
 
@@ -135,6 +137,27 @@ const TwitterAdvancedSearch = () => {
     }
   };
 
+  //SNA Recording props
+  const [recording, setRecording] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [collections, setCollections] = useState(["Default Collection"]);
+  const [selectedCollection, setSelectedCollection] =
+    useState("Default Collection");
+  const [newCollectionName, setNewCollectionName] = useState("");
+  const [selectedSocialMedia, setSelectedSocialMedia] = useState([]);
+  const userRoles = useSelector((state) => state.userSession.user.roles);
+  const isUserAuthenticated = useSelector(
+    (state) => state.userSession.userAuthenticated,
+  );
+
+  useEffect(() => {
+    if (!canUserSeeTool(newSna, userRoles, isUserAuthenticated)) {
+      return;
+    }
+
+    getRecordingInfo(setCollections, setRecording, setSelectedCollection);
+  }, []);
+
   return (
     <div>
       <HeaderTool
@@ -157,7 +180,25 @@ const TwitterAdvancedSearch = () => {
           title={keyword("cardheader_parameters")}
           className={classes.headerUploadedImage}
         />
+
         <div className={classes.root2}>
+          {canUserSeeTool(newSna, userRoles, isUserAuthenticated) && (
+            <RecordingWindow
+              recording={recording}
+              setRecording={setRecording}
+              expanded={expanded}
+              setExpanded={setExpanded}
+              selectedCollection={selectedCollection}
+              setSelectedCollection={setSelectedCollection}
+              collections={collections}
+              setCollections={setCollections}
+              newCollectionName={newCollectionName}
+              setNewCollectionName={setNewCollectionName}
+              selectedSocialMedia={selectedSocialMedia}
+              setSelectedSocialMedia={setSelectedSocialMedia}
+              keyword={keywordNewSna}
+            />
+          )}
           {largeInputList.map((value, key) => {
             return (
               <TextField

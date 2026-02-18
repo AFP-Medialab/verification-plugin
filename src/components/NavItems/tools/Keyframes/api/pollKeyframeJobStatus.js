@@ -1,3 +1,4 @@
+import { getKeyframesJobPositionInQueueApi } from "@/components/NavItems/tools/Keyframes/api/getKeyframesJobPositionInQueue";
 import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequest";
 
 /**
@@ -25,7 +26,7 @@ export async function pollKeyframeJobStatusApi(
 
     const config = {
       method: "get",
-      url: `${process.env.REACT_APP_KEYFRAME_API_2}/status/${jobId}`,
+      url: `${import.meta.env.VITE_KEYFRAME_API}/status/${jobId}`,
     };
 
     const response = await authenticatedRequest(config);
@@ -49,6 +50,12 @@ export async function pollKeyframeJobStatusApi(
     if (!statusMessage) {
       emptyStatusTriesNumber++;
       setStatus?.(`Processing... Trying to retrieve the status`);
+    } else if (statusMessage.includes("waiting in queue")) {
+      const queueLength = await getKeyframesJobPositionInQueueApi(
+        authenticatedRequest,
+        jobId,
+      );
+      setStatus?.(`Processing... ${statusMessage} (position: ${queueLength})`);
     } else {
       setStatus?.(`Processing... ${statusMessage} ${statusPercentage}%`);
     }

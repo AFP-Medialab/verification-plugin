@@ -32,8 +32,7 @@ const CustomAlertScore = ({
   };
 
   const DETECTION_TYPES = {
-    VOICE_CLONING: "synthetic",
-    VOICE_RECORDING: "replay",
+    VOICE_CLONING: "synthesis",
     IMAGE: "image",
     VIDEO: "video",
     MACHINE_GENERATED_TEXT: "machine_generated_text",
@@ -63,14 +62,10 @@ const CustomAlertScore = ({
       else {
         if (detectionType === DETECTION_TYPES.VOICE_CLONING) {
           return "_voice_cloning_detection";
-        } else if (detectionType === DETECTION_TYPES.VOICE_RECORDING) {
-          return "_voice_recording_detection";
         } else if (detectionType === DETECTION_TYPES.IMAGE) {
           return "_image";
         } else if (detectionType === DETECTION_TYPES.VIDEO) {
           return "_video";
-        } else if (detectionType === DETECTION_TYPES.MACHINE_GENERATED_TEXT) {
-          return "_machine_generated_text";
         } else return "";
       }
     };
@@ -91,7 +86,7 @@ const CustomAlertScore = ({
         detectionType === DETECTION_TYPES.IMAGE ||
         detectionType === DETECTION_TYPES.MACHINE_GENERATED_TEXT
           ? keyword(`${toolNameSnakeCase}${detectionTranslation}_rating_4`)
-          : keyword(`loccus_voice_recording_detection_rating_4`);
+          : keyword(`hiya_voice_recording_detection_rating_4`);
     } else if (score >= DETECTION_THRESHOLD_2) {
       displayText +=
         !detectionType ||
@@ -100,7 +95,7 @@ const CustomAlertScore = ({
         detectionType === DETECTION_TYPES.IMAGE ||
         detectionType === DETECTION_TYPES.MACHINE_GENERATED_TEXT
           ? keyword(`${toolNameSnakeCase}${detectionTranslation}_rating_3`)
-          : keyword(`loccus_voice_recording_detection_rating_3`);
+          : keyword(`hiya_voice_recording_detection_rating_3`);
     } else if (score >= DETECTION_THRESHOLD_1) {
       displayText +=
         !detectionType ||
@@ -109,7 +104,7 @@ const CustomAlertScore = ({
         detectionType === DETECTION_TYPES.IMAGE ||
         detectionType === DETECTION_TYPES.MACHINE_GENERATED_TEXT
           ? keyword(`${toolNameSnakeCase}${detectionTranslation}_rating_2`)
-          : keyword(`loccus_voice_recording_detection_rating_2`);
+          : keyword(`hiya_voice_recording_detection_rating_2`);
     } else {
       displayText +=
         !detectionType ||
@@ -118,7 +113,7 @@ const CustomAlertScore = ({
         detectionType === DETECTION_TYPES.IMAGE ||
         detectionType === DETECTION_TYPES.MACHINE_GENERATED_TEXT
           ? keyword(`${toolNameSnakeCase}${detectionTranslation}_rating_1`)
-          : keyword(`loccus_voice_recording_detection_rating_1`);
+          : keyword(`hiya_voice_recording_detection_rating_1`);
     }
 
     return displayText;

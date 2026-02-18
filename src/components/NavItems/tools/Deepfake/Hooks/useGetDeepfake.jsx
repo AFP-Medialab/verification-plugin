@@ -2,9 +2,9 @@ import {
   setDeepfakeLoadingVideo,
   setDeepfakeResultVideo,
 } from "@/redux/actions/tools/deepfakeVideoActions";
+import { setError } from "@/redux/reducers/errorReducer";
 import { isValidUrl } from "@Shared/Utils/URLUtils";
 import axios from "axios";
-import { setError } from "redux/reducers/errorReducer";
 
 async function UseGetDeepfake(
   keyword,
@@ -34,7 +34,7 @@ async function UseGetDeepfake(
     return;
   }
 
-  const baseURL = process.env.REACT_APP_CAA_DEEPFAKE_URL;
+  const baseURL = import.meta.env.VITE_CAA_DEEPFAKE_URL;
 
   let res;
 

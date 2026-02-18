@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -17,11 +18,10 @@ import Typography from "@mui/material/Typography";
 
 import { ArrowDownward } from "@mui/icons-material";
 
+import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
+import HeaderTool from "@/components/Shared/HeaderTool/HeaderTool";
+import StringFileUploadField from "@/components/Shared/StringFileUploadField";
 import { ROLES } from "@/constants/roles";
-import HeaderTool from "components/Shared/HeaderTool/HeaderTool";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import StringFileUploadField from "components/Shared/StringFileUploadField";
-import exifr from "exifr";
 import {
   c2paLoadingSet,
   resetC2paState,
@@ -29,7 +29,9 @@ import {
   setC2paThumbnail,
   setC2paThumbnailCaption,
   setHdImageC2paData,
-} from "redux/reducers/tools/c2paReducer";
+} from "@/redux/reducers/tools/c2paReducer";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import exifr from "exifr";
 import { v4 as uuidv4 } from "uuid";
 
 import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
@@ -39,6 +41,9 @@ import AfpReverseSearchResults from "./components/AfpReverseSearchResults";
 import HdImageResults from "./components/HdImageResults";
 
 const C2paData = () => {
+  const [searchParams] = useSearchParams();
+  const fromAssistant = searchParams.has("fromAssistant");
+
   const role = useSelector((state) => state.userSession.user.roles);
 
   const isLoading = useSelector((state) => state.c2pa.loading);
@@ -54,8 +59,10 @@ const C2paData = () => {
 
   const hdImageC2paData = useSelector((state) => state.c2pa.hdImageC2paData);
 
-  const [input, setInput] = useState("");
-  const [imageFile, setImageFile] = useState(undefined);
+  const urlImage = useSelector((state) => state.c2pa.url);
+
+  const [input = urlImage || "", setInput, imageFile, setImageFile] =
+    useUrlOrFile();
 
   const [imageMetadata, setImageMetadata] = useState(null);
 
@@ -72,7 +79,7 @@ const C2paData = () => {
   const authenticatedRequest = useAuthenticatedRequest();
 
   const getTransactionId = () => {
-    return `verificationplugin-${chrome.runtime.getManifest().version}-${uuidv4()}`;
+    return `verificationplugin-${browser.runtime.getManifest().version}-${uuidv4()}`;
   };
 
   const getAfpReverseSearch = async () => {
@@ -80,7 +87,8 @@ const C2paData = () => {
 
     formData.append("imageData", imageFile);
 
-    const data = input ? { imageUrl: input } : formData;
+    // priority for imageFile first to work fromAssistant
+    const data = imageFile ? formData : { imageUrl: input };
 
     const afpRenditionTypeHD = "HD";
     const afpRenditionTypeThumbnail = "THUMBNAIL";
@@ -90,7 +98,7 @@ const C2paData = () => {
         ? afpRenditionTypeHD
         : afpRenditionTypeThumbnail;
 
-    const serverUrl = process.env.REACT_APP_AFP_REVERSE_SEARCH_URL;
+    const serverUrl = import.meta.env.VITE_AFP_REVERSE_SEARCH_URL;
 
     const config = {
       method: "post",
@@ -100,9 +108,9 @@ const C2paData = () => {
         Accept: "*/*",
         "X-AFP-RENDITION-TYPE": afpRenditionType,
         "X-AFP-TRANSACTION-ID": getTransactionId(),
-        "Content-Type": input
-          ? "application/x-www-form-urlencoded"
-          : imageFile.type,
+        "Content-Type": imageFile
+          ? imageFile.type
+          : "application/x-www-form-urlencoded",
       },
       data: data,
     };
@@ -136,7 +144,7 @@ const C2paData = () => {
     ) => {
       let status = data;
 
-      const serverUrl = process.env.REACT_APP_AFP_REVERSE_SEARCH_URL;
+      const serverUrl = import.meta.env.VITE_AFP_REVERSE_SEARCH_URL;
 
       const getNewStatus = async () => {
         const statusConfig = {
@@ -275,6 +283,18 @@ const C2paData = () => {
 
     dispatch(c2paLoadingSet(false));
   };
+
+  useEffect(() => {
+    if (urlImage && input && !result && !fromAssistant) {
+      handleSubmit();
+    }
+  }, [urlImage, input, result]);
+
+  useEffect(() => {
+    if (fromAssistant && (input || imageFile)) {
+      handleSubmit();
+    }
+  }, [searchParams, input, imageFile]);
 
   const resetState = () => {
     setImageFile(undefined);

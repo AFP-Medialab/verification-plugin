@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -8,6 +9,7 @@ import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 
 import HighlightedText from "@/components/NavItems/MachineGeneratedText/components/HighlightedText";
+import { ROLES } from "@/constants/roles";
 import GaugeChartResult from "@Shared/GaugeChartResults/GaugeChartResult";
 import { JsonBlock } from "@Shared/JsonBlock";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
@@ -32,10 +34,8 @@ const MachineGeneratedTextResults = ({
     "components/NavItems/tools/MachineGeneratedText",
   );
 
-  // Testing the UI for now, to remove when the standalone tool will not be for testing purposes anymore
-  const assistantKeyword = i18nLoadNamespace(
-    "components/NavItems/tools/Assistant",
-  );
+  const userRoles = useSelector((state) => state.userSession.user.roles);
+  const hasExtraFeatureAccess = userRoles?.includes(ROLES.EXTRA_FEATURE);
 
   const [activeTab, setActiveTab] = useState("sentences");
 
@@ -63,11 +63,21 @@ const MachineGeneratedTextResults = ({
     },
   };
 
+  const chunksScore = mutationChunks?.data?.entities?.mgt_overall_score
+    ? Number(mutationChunks.data.entities.mgt_overall_score[0].score) * 100
+    : null;
+
+  const sentencesScore = mutationSentences?.data?.entities?.mgt_overall_score
+    ? Number(mutationSentences.data.entities.mgt_overall_score[0].score) * 100
+    : null;
+
+  const displayScore = hasExtraFeatureAccess
+    ? Math.max(chunksScore ?? 0, sentencesScore ?? 0)
+    : chunksScore;
+
   const MachineGeneratedTextMethodNamesResults = {
     methodName: "machineGeneratedText",
-    predictionScore: mutationChunks?.data?.entities?.mgt_overall_score
-      ? Number(mutationChunks.data.entities.mgt_overall_score[0].score) * 100
-      : null,
+    predictionScore: displayScore,
   };
 
   return (
@@ -86,20 +96,22 @@ const MachineGeneratedTextResults = ({
                   "%"}
               </Typography>
 
-              <Typography>
-                {"Detection score (sentences): " +
-                  Math.round(
-                    Number(
-                      mutationSentences.data.entities.mgt_overall_score[0]
-                        .score,
-                    ) * 100,
-                  ) +
-                  "%"}
-              </Typography>
+              {hasExtraFeatureAccess && (
+                <Typography>
+                  {"Detection score (sentences): " +
+                    Math.round(
+                      Number(
+                        mutationSentences.data.entities.mgt_overall_score[0]
+                          .score,
+                      ) * 100,
+                    ) +
+                    "%"}
+                </Typography>
+              )}
 
               {mutationChunks.data.entities.mgt_overall_score && (
                 <GaugeChartResult
-                  keyword={assistantKeyword}
+                  keyword={keyword}
                   scores={[MachineGeneratedTextMethodNamesResults]}
                   methodNames={MachineGeneratedTextMethodNames}
                   detectionThresholds={DETECTION_THRESHOLDS}
@@ -107,49 +119,53 @@ const MachineGeneratedTextResults = ({
                   resultsHaveErrors={false}
                   sanitizeDetectionPercentage={(n) => Math.round(n)}
                   gaugeExplanation={{ colors: colors, keywords: keywords }}
-                  toolName="Assistant" // this points to the correct translations .tsv file
+                  toolName="MachineGeneratedText"
                   detectionType={"machine_generated_text"}
                 />
               )}
             </Stack>
 
-            <Tabs
-              value={activeTab}
-              onChange={(event, newValue) => setActiveTab(newValue)}
-              indicatorColor="primary"
-              textColor="primary"
-              aria-label="data selection tabs"
-            >
-              <Tab label="Sentences" value="sentences" />
-              <Tab label="Chunks" value="chunks" />
-            </Tabs>
+            {hasExtraFeatureAccess && (
+              <Tabs
+                value={activeTab}
+                onChange={(event, newValue) => setActiveTab(newValue)}
+                indicatorColor="primary"
+                textColor="primary"
+                aria-label="data selection tabs"
+              >
+                <Tab label="Sentences" value="sentences" />
+                <Tab label="Chunks" value="chunks" />
+              </Tabs>
+            )}
 
             <HighlightedText
               text={submittedText}
               chunks={
-                activeTab === "sentences"
+                hasExtraFeatureAccess && activeTab === "sentences"
                   ? mutationSentences.data
                   : mutationChunks.data
               }
             />
 
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-              }}
-            >
-              <JsonBlock
-                jsonString={JSON.stringify(
-                  activeTab === "sentences"
-                    ? mutationSentences.data
-                    : mutationChunks.data,
-                  null,
-                  2,
-                )}
-              />
-            </Box>
+            {hasExtraFeatureAccess && (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "flex-start",
+                }}
+              >
+                <JsonBlock
+                  jsonString={JSON.stringify(
+                    activeTab === "sentences"
+                      ? mutationSentences.data
+                      : mutationChunks.data,
+                    null,
+                    2,
+                  )}
+                />
+              </Box>
+            )}
           </Stack>
         </Box>
       </Card>

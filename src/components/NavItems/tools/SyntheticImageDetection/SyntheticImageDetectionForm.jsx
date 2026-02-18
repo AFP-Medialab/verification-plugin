@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -11,11 +11,11 @@ import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
 
 import { ROLES } from "@/constants/roles";
+import { setError } from "@/redux/reducers/errorReducer";
 import {
   resetSyntheticImageDetectionImage,
   setSyntheticImageDetectionLoading,
-} from "@/redux/actions/tools/syntheticImageDetectionActions";
-import { setError } from "@/redux/reducers/errorReducer";
+} from "@/redux/reducers/tools/syntheticImageDetectionReducer";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import StringFileUploadField from "@Shared/StringFileUploadField";
 import {
@@ -45,6 +45,8 @@ const SyntheticImageDetectionForm = ({
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const urlParam = urlParams.get("url");
+  const [searchParams] = useSearchParams();
+  const fromAssistant = searchParams.has("fromAssistant");
 
   const keyword = i18nLoadNamespace(
     "components/NavItems/tools/SyntheticImageDetection",
@@ -86,14 +88,22 @@ const SyntheticImageDetectionForm = ({
    * @param {File} file
    * @returns {File|null|undefined}
    */
-  const preprocessImage = (file) => {
+  const preprocessImage = async (file) => {
     return preprocessFileUpload(
       file,
       role,
-      undefined,
+      await preprocessImageTypeFilter(file),
       preprocessingSuccess,
       preprocessingError,
     );
+  };
+  const EXT_EXCLUSION = ["image/heic", "image/heif"];
+  const preprocessImageTypeFilter = async (file) => {
+    if (EXT_EXCLUSION.includes(file.type)) {
+      dispatch(setError(keywordWarning("warning_file_format_not_supported")));
+      return Error(keywordWarning("warning_file_format_not_supported"));
+    }
+    return file;
   };
 
   /**
@@ -117,7 +127,11 @@ const SyntheticImageDetectionForm = ({
 
   useEffect(() => {
     if (url && input && !result) {
-      handleSubmit(input);
+      if (fromAssistant) {
+        handleSubmit(imageFile ?? input);
+      } else {
+        handleSubmit(input);
+      }
     }
   }, [url, input, result]);
 
