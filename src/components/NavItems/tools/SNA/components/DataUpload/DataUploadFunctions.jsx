@@ -141,10 +141,10 @@ export const cleanDataUpload = (
   } else if (socialMediaSelected === "twitter") {
     ret = cleanTwitterUpload(uploadedData);
   } else if (socialMediaSelected === "tiktok") {
-    console.log("Applying TikTok cleaning...");
+    //console.log("Applying TikTok cleaning...");
     ret = cleanTiktokUpload(uploadedData);
   } else {
-    console.log("No specific cleaning applied, using raw data");
+    //console.log("No specific cleaning applied, using raw data");
     ret = uploadedData;
   }
 

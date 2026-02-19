@@ -8,12 +8,13 @@ import { useColorScheme } from "@mui/material/styles";
  * based on the current theme mode
  */
 const AfpDigitalCoursesIcon = (props) => {
-  const { mode } = useColorScheme();
+  const { systemMode, mode } = useColorScheme();
+  const resolvedMode = systemMode || mode;
 
   // Use light logo for light mode, dark logo for dark mode
   // If mode is 'system', it will resolve to either 'light' or 'dark'
   const logoSrc =
-    mode === "dark"
+    resolvedMode === "dark"
       ? "/img/afp_digital_courses_dark.svg"
       : "/img/afp_digital_courses_light.svg";
 

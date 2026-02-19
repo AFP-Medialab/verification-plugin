@@ -407,12 +407,12 @@ function* handleSubjectivityCall(action) {
       let result = {};
       let step = 0;
       for (let i = 0; i < textChunks.length; i += 1) {
-        console.log(
+        /*console.log(
           "Subjectivity service: sending text chunk",
           i + 1,
           "/",
           textChunks.length,
-        );
+        );*/
         const textChunkResult = yield call(
           assistantApi.callSubjectivityService,
           textChunks[i],
