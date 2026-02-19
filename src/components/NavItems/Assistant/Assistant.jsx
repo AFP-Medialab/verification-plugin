@@ -67,6 +67,9 @@ const Assistant = () => {
   const { mode, systemMode } = useColorScheme();
   const resolvedMode = systemMode || mode;
 
+  // submitted
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+
   // form states
   const loading = useSelector((state) => state.assistant.loading);
   const inputUrl = useSelector((state) => state.assistant.inputUrl);
@@ -118,9 +121,6 @@ const Assistant = () => {
   const dbkfTextFailState = useSelector(
     (state) => state.assistant.dbkfTextMatchFail,
   );
-  const dbkfMediaFailState = useSelector(
-    (state) => state.assistant.dbkfMediaMatchFail,
-  );
   const neFailState = useSelector((state) => state.assistant.neFail);
   const newsFramingFailState = useSelector(
     (state) => state.assistant.newsFramingFail,
@@ -159,16 +159,18 @@ const Assistant = () => {
     url,
   );
 
-  // submit url or file
-  const handleSubmit = async (src) => {
+  const handleSubmit = async () => {
     dispatch(cleanAssistantState());
+    setHasSubmitted(true);
+
     // set fileInput and formInput
     if (formInput) {
+      const fixedUrl = formInput.replace(/ /g, "%20"); // fix space issue
       // submit url
-      dispatch(submitInputUrl(src));
-      navigate("/app/assistant/" + encodeURIComponent(src));
-      //trackEvent("submission", "assistant", "page assistant", formInput);
-      setAssistantSelection(formInput);
+      dispatch(submitInputUrl(fixedUrl));
+      navigate("/app/assistant/" + encodeURIComponent(fixedUrl));
+      //trackEvent("submission", "assistant", "page assistant", fixedUrl);
+      setAssistantSelection(fixedUrl);
     } else if (fileInput) {
       // submit file
       try {
@@ -262,6 +264,7 @@ const Assistant = () => {
   const cleanAssistant = () => {
     dispatch(cleanAssistantState());
     // clean url mode
+    setHasSubmitted(false);
     setFormInput("");
     navigate("/app/assistant/");
     dispatch(setUrlMode(false));
@@ -282,12 +285,13 @@ const Assistant = () => {
 
   // if a url is present in the plugin url (as a param), set it to input
   useEffect(() => {
-    if (url !== undefined) {
-      let uri = url !== null ? decodeURIComponent(url) : undefined;
+    if (url !== undefined && !hasSubmitted) {
+      // only handle user-entered spaces which shouldn't normally be in URLs
+      const uri = url !== null ? url.replace(/ /g, "%20") : undefined;
       dispatch(setUrlMode(true));
       setFormInput(uri);
       dispatch(submitInputUrl(uri));
-      navigate("/app/assistant/" + encodeURIComponent(url));
+      navigate("/app/assistant/" + encodeURIComponent(uri));
     }
   }, [url]);
 
@@ -414,7 +418,6 @@ const Assistant = () => {
       {(urlMode || imageVideoSelected) &&
       (scFailState ||
         dbkfTextFailState ||
-        dbkfMediaFailState ||
         neFailState ||
         newsFramingFailState ||
         newsGenreFailState ||

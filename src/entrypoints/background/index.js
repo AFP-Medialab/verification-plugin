@@ -133,11 +133,11 @@ export default defineBackground(() => {
         thumbnailsSearch(info);
         break;
       // Handle both Chrome and Firefox DBKF menu IDs
-      case "dbkf":
+      /*case "dbkf":
       case "dbkf_link":
       case "dbkf_video":
         videoReversesearchDBKF(info);
-        break;
+        break;*/
       case "video_analysis":
         analysisVideo(info);
         break;
@@ -295,7 +295,7 @@ export default defineBackground(() => {
         parentId: "invid_parent",
       });
 
-      createContextMenu({
+      /* createContextMenu({
         id: "dbkf_video",
         title: "Video Reverse Search - DBKF (beta)",
         contexts: ["video"],
@@ -303,12 +303,12 @@ export default defineBackground(() => {
       });
 
       // Link-specific menus under parent
-      createContextMenu({
+     createContextMenu({
         id: "dbkf_link",
         title: "Video Reverse Search - DBKF (beta)",
         contexts: ["link"],
         parentId: "invid_parent",
-      });
+      });*/
 
       createContextMenu({
         id: "thumbnail",
@@ -349,11 +349,11 @@ export default defineBackground(() => {
         contexts: ["image"],
       });
 
-      createContextMenu({
+      /*createContextMenu({
         id: "dbkf",
         title: "Video Reverse Search - DBKF (beta)",
         contexts: ["link", "video"],
-      });
+      });*/
 
       createContextMenu({
         id: "thumbnail",
@@ -392,9 +392,9 @@ export default defineBackground(() => {
 
   // Browser-specific initialization
   browser.runtime.onInstalled.addListener(() => {
-    console.log(
+    /*console.log(
       `🚀 ${browserName}: onInstalled fired, initializing browser-specific setup...`,
-    );
+    );*/
 
     if (isFirefox) {
       setupFirefoxContextMenus();
@@ -448,6 +448,6 @@ export default defineBackground(() => {
 
   // Firefox MV3 requires a callback function for runtime.onStartup
   browser.runtime.onStartup.addListener(() => {
-    console.log("Extension startup");
+    //console.log("Extension startup");
   });
 });
