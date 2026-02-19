@@ -25,7 +25,7 @@ const Languages = () => {
     (state) => state.languageSupport.languagesList,
   );
 
-  console.log(languageSupport);
+  //console.log(languageSupport);
 
   const dispatch = useDispatch();
 
