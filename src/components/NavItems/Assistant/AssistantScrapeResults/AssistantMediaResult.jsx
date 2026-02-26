@@ -13,11 +13,9 @@ import CardHeader from "@mui/material/CardHeader";
 import Collapse from "@mui/material/Collapse";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
-import LinearProgress from "@mui/material/LinearProgress";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { WarningAmber } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
@@ -29,7 +27,6 @@ import { TOOLS_CATEGORIES } from "@/constants/tools";
 import {
   setProcessUrl,
   setStateExpanded,
-  setWarningExpanded,
 } from "@/redux/actions/tools/assistantActions";
 
 import {
@@ -60,12 +57,7 @@ const AssistantMediaResult = ({ title = null }) => {
 
   // third party topMenuItem states
   //const ocrLoading = useSelector(state=>state.assistant.ocrLoading)
-  const dbkfImageMatch = useSelector((state) => state.assistant.dbkfImageMatch);
-  const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
 
-  const warningExpanded = useSelector(
-    (state) => state.assistant.warningExpanded,
-  );
   const resultIsImage = resultProcessType === TOOLS_CATEGORIES.IMAGE;
 
   // local control state
@@ -130,20 +122,6 @@ const AssistantMediaResult = ({ title = null }) => {
         subheader={keyword("media_below")}
         action={
           <div style={{ display: "flex" }}>
-            <div>
-              {(dbkfImageMatch || dbkfVideoMatch) && (
-                <Tooltip title={keyword("image_warning")}>
-                  <WarningAmber
-                    color={"warning"}
-                    className={classes.toolTipWarning}
-                    onClick={() => {
-                      dispatch(setWarningExpanded(!warningExpanded));
-                      window.scroll(0, 0);
-                    }}
-                  />
-                </Tooltip>
-              )}
-            </div>
             <div>
               <Tooltip
                 interactive={"true"}
