@@ -31,8 +31,10 @@ import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "@/components/Shared/VideoGridList/VideoGridList";
 import { TOOLS_CATEGORIES } from "@/constants/tools";
 import {
+  setImageResultsExpanded,
   setProcessUrl,
   setStateExpanded,
+  setVideoResultsExpanded,
   setWarningExpanded,
 } from "@/redux/actions/tools/assistantActions";
 
@@ -69,6 +71,13 @@ const AssistantMediaResult = ({ title = null }) => {
   );
   const dbkfImageMatch = useSelector((state) => state.assistant.dbkfImageMatch);
   const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
+
+  const imageResultsExpanded = useSelector(
+    (state) => state.assistant.imageResultsExpanded,
+  );
+  const videoResultsExpanded = useSelector(
+    (state) => state.assistant.videoResultsExpanded,
+  );
 
   const warningExpanded = useSelector(
     (state) => state.assistant.warningExpanded,
@@ -220,7 +229,7 @@ const AssistantMediaResult = ({ title = null }) => {
         ) : null}
         {processUrl !== null ? (
           resultIsImage ? (
-            <Grid container spacing={2}>
+            <Grid container spacing={2} id="assistant-image-results">
               <Grid size={6}>
                 <AssistantImageResult />
               </Grid>
@@ -229,7 +238,7 @@ const AssistantMediaResult = ({ title = null }) => {
               </Grid>
             </Grid>
           ) : (
-            <Grid container spacing={2}>
+            <Grid container spacing={2} id="assistant-video-results">
               <Grid size={6}>
                 <AssistantVideoResult />
               </Grid>
@@ -246,7 +255,13 @@ const AssistantMediaResult = ({ title = null }) => {
           <CardContent style={{ wordBreak: "break-word" }}>
             {/* image list */}
             {filteredImageList.length > 0 ? (
-              <Accordion defaultExpanded id="assistant-image-results">
+              <Accordion
+                expanded={imageResultsExpanded}
+                onChange={(_, expanded) =>
+                  dispatch(setImageResultsExpanded(expanded))
+                }
+                id="assistant-image-results"
+              >
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     <SvgIcon
@@ -274,7 +289,13 @@ const AssistantMediaResult = ({ title = null }) => {
 
             {/* video list */}
             {videoList.length > 0 ? (
-              <Accordion defaultExpanded id="assistant-video-results">
+              <Accordion
+                expanded={videoResultsExpanded}
+                onChange={(_, expanded) =>
+                  dispatch(setVideoResultsExpanded(expanded))
+                }
+                id="assistant-video-results"
+              >
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     <SvgIcon

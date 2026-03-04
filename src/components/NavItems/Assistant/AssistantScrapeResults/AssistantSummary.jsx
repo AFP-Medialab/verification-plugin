@@ -27,7 +27,9 @@ import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespa
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import {
   setAssuranceExpanded,
+  setImageResultsExpanded,
   setTextTabIndex,
+  setVideoResultsExpanded,
   setWarningExpanded,
 } from "@/redux/actions/tools/assistantActions";
 
@@ -156,10 +158,6 @@ const AssistantSummary = () => {
   // media state
   const imageList = useSelector((state) => state.assistant.imageList);
   const videoList = useSelector((state) => state.assistant.videoList);
-  const singleMediaPresent = useSelector(
-    (state) => state.assistant.singleMediaPresent,
-  );
-
   // comments state
   const collectedComments = useSelector(
     (state) => state.assistant.collectedComments,
@@ -345,23 +343,17 @@ const AssistantSummary = () => {
                 svgIcon={ImageIcon}
                 label="images_label"
                 value={imageCount}
-                targetId={
-                  singleMediaPresent
-                    ? "url-media-results"
-                    : "assistant-image-results"
-                }
+                targetId="assistant-image-results"
                 keyword={keyword}
+                onClick={() => dispatch(setImageResultsExpanded(true))}
               />
               <SummaryIcon
                 svgIcon={VideoIcon}
                 label="videos_label"
                 value={videoCount}
-                targetId={
-                  singleMediaPresent
-                    ? "url-media-results"
-                    : "assistant-video-results"
-                }
+                targetId="assistant-video-results"
                 keyword={keyword}
+                onClick={() => dispatch(setVideoResultsExpanded(true))}
               />
             </Stack>
           </Stack>
