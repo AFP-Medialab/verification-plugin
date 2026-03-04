@@ -509,6 +509,75 @@ export function TransMultilingualStanceTooltip({ keyword }) {
   );
 }
 
+// Summary tooltips
+
+export function TransSummaryDomainTooltip({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="summary_domain_tooltip"
+      components={{
+        b: <b />,
+        ul: <ul style={UL_STYLE} />,
+        li: <li style={LI_STYLE} />,
+      }}
+    />
+  );
+}
+
+export function TransSummaryPersuasionTooltip({ keyword, categories }) {
+  return (
+    <>
+      <Trans
+        t={keyword}
+        i18nKey="summary_persuasion_tooltip"
+        components={{
+          b: <b />,
+          ul: <ul style={UL_STYLE} />,
+          li: <li style={LI_STYLE} />,
+        }}
+      />
+      {categories?.length > 0 && (
+        <ul style={UL_STYLE}>
+          {categories.map((cat) => (
+            <li key={cat} style={LI_STYLE}>
+              {keyword(cat)}
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
+  );
+}
+
+export function TransSummaryMgtTooltip({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="summary_mgt_tooltip"
+      components={{
+        b: <b />,
+        ul: <ul style={UL_STYLE} />,
+        li: <li style={LI_STYLE} />,
+      }}
+    />
+  );
+}
+
+export function TransSummaryCommentsTooltip({ keyword }) {
+  return (
+    <Trans
+      t={keyword}
+      i18nKey="summary_comments_tooltip"
+      components={{
+        b: <b />,
+        ul: <ul style={UL_STYLE} />,
+        li: <li style={LI_STYLE} />,
+      }}
+    />
+  );
+}
+
 // Whitespace
 
 export function TransHtmlDoubleLineBreak({ keyword }) {

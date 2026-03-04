@@ -23,6 +23,12 @@ import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
 import ImageIcon from "@/components/NavBar/images/SVG/Image/Images.svg";
 import VideoIcon from "@/components/NavBar/images/SVG/Video/Video.svg";
 import { scrollToElement } from "@/components/NavItems/Assistant/AssistantScrapeResults/assistantUtils";
+import {
+  TransSummaryCommentsTooltip,
+  TransSummaryDomainTooltip,
+  TransSummaryMgtTooltip,
+  TransSummaryPersuasionTooltip,
+} from "@/components/NavItems/Assistant/TransComponents";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import {
@@ -38,6 +44,7 @@ const SummaryIcon = ({
   svgIcon,
   label,
   description,
+  descriptionNode,
   color,
   value,
   targetId,
@@ -57,14 +64,17 @@ const SummaryIcon = ({
 
   const displayColor = disabled ? "disabled" : color || "primary";
 
+  const tooltipDescription =
+    descriptionNode ?? (description ? keyword(description) : null);
+
   return (
     <Tooltip
       title={
-        description ? (
+        tooltipDescription ? (
           <>
             {keyword(label)}
             <br />
-            {keyword(description)}
+            {tooltipDescription}
           </>
         ) : (
           keyword(label)
@@ -236,16 +246,19 @@ const AssistantSummary = () => {
     credDomains.filter((d) => d.caution || d.mixed).flatMap((d) => d.url || []),
   ).size;
 
-  // persuasion count: total spans belonging to Red_Herring or Manipulative_Wording categories
+  // persuasion count: total spans belonging to warning categories
   // technique keys follow the "Category__Technique" format
+  // warningCategories is provided by the backend config; fallback to defaults if absent
+  const persuasionWarningCategories = persuasionResult?.configs
+    ?.persuasionTechniquesWarningCategories ?? [
+    "Red_Herring",
+    "Manipulative_Wording",
+  ];
   const persuasionCount = persuasionResult?.entities
     ? Object.entries(persuasionResult.entities)
-        .filter(([label]) => {
-          const category = label.split("__")[0];
-          return (
-            category === "Red_Herring" || category === "Manipulative_Wording"
-          );
-        })
+        .filter(([label]) =>
+          persuasionWarningCategories.includes(label.split("__")[0]),
+        )
         .reduce((total, [, spans]) => total + spans.length, 0)
     : 0;
 
@@ -288,6 +301,9 @@ const AssistantSummary = () => {
               <SummaryIcon
                 icon={FindInPageOutlinedIcon}
                 label="url_domain_analysis"
+                descriptionNode={
+                  <TransSummaryDomainTooltip keyword={keyword} />
+                }
                 color={
                   cautionSourceCred?.length || mixedSourceCred?.length
                     ? "warning"
@@ -316,6 +332,7 @@ const AssistantSummary = () => {
               <SummaryIcon
                 icon={WarningAmberOutlinedIcon}
                 label="warnings_title"
+                description="summary_factchecks_tooltip"
                 color={"warning"}
                 value={warningsCount}
                 targetId="warnings"
@@ -344,6 +361,7 @@ const AssistantSummary = () => {
               <SummaryIcon
                 svgIcon={ImageIcon}
                 label="images_label"
+                description="summary_images_tooltip"
                 value={imageCount}
                 targetId="assistant-image-results"
                 keyword={keyword}
@@ -352,11 +370,11 @@ const AssistantSummary = () => {
               <SummaryIcon
                 svgIcon={VideoIcon}
                 label="videos_label"
+                description="summary_videos_tooltip"
                 value={videoCount}
                 targetId="assistant-video-results"
                 keyword={keyword}
                 onClick={() => dispatch(setVideoResultsExpanded(true))}
-                description="images_count_tooltip"
               />
             </Stack>
           </Stack>
@@ -375,6 +393,12 @@ const AssistantSummary = () => {
               <SummaryIcon
                 icon={RecordVoiceOverOutlinedIcon}
                 label="persuasion_techniques_title"
+                descriptionNode={
+                  <TransSummaryPersuasionTooltip
+                    keyword={keyword}
+                    categories={persuasionWarningCategories}
+                  />
+                }
                 color="warning"
                 value={persuasionCount}
                 targetId="credibility-signals"
@@ -385,6 +409,7 @@ const AssistantSummary = () => {
               <SummaryIcon
                 icon={SmartToyOutlinedIcon}
                 label="machine_generated_text_title"
+                descriptionNode={<TransSummaryMgtTooltip keyword={keyword} />}
                 color={
                   mgtScore != null && mgtScore >= MGT_ERROR_THRESHOLD
                     ? "error"
@@ -402,6 +427,7 @@ const AssistantSummary = () => {
               <SummaryIcon
                 icon={LabelOutlinedIcon}
                 label="named_entity_title"
+                description="summary_named_entities_tooltip"
                 value={namedEntityCount}
                 targetId="named-entity-results"
                 keyword={keyword}
@@ -410,6 +436,7 @@ const AssistantSummary = () => {
               <SummaryIcon
                 icon={LinkOutlinedIcon}
                 label="extracted_urls_url_domain_analysis"
+                description="summary_links_tooltip"
                 loading={inputSCLoading}
                 color={cautionOrMixedLinksCount > 0 ? "warning" : undefined}
                 value={
@@ -423,6 +450,9 @@ const AssistantSummary = () => {
               <SummaryIcon
                 icon={CommentOutlinedIcon}
                 label="collected_comments_title"
+                descriptionNode={
+                  <TransSummaryCommentsTooltip keyword={keyword} />
+                }
                 loading={multilingualStanceLoading}
                 color={
                   denyCommentsCount + queryCommentsCount > 0
