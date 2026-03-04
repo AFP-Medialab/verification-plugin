@@ -62,7 +62,7 @@ export default function assistantApiCalls() {
       const wdQuery = `
       SELECT (REPLACE(STR(?concept), "http://www.wikidata.org/entity/", "") AS ?conceptID)
       (STR(?article) AS ?wikipediaUrl)
-      (REPLACE(STR(?article), "https://${lang}.wikipedia.org/wiki/", "${dbpedia}/page/") AS ?link)
+      (REPLACE(STR(?article), "https://${lang}.wikipedia.org/wiki/", "${dbpedia}/page/") AS ?dbpediaUrl)
       (REPLACE(STR(?article), "https://${lang}.wikipedia.org/wiki/", "${dbpedia}/resource/") AS ?iri)
       ?title
       WHERE {
