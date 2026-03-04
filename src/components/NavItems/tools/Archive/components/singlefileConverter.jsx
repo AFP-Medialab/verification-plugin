@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import { sha256 } from "hash-wasm";
 import { v4 as uuidv4 } from "uuid";
 import { CDXIndexer, WARCRecord, WARCSerializer } from "warcio";
+import pako from "pako";
 
 import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
 import { prettifyLargeString } from "../utils";
@@ -295,7 +296,6 @@ const SinglefileConverter = (telegramURL) => {
             tmp.set(new Uint8Array(res[1]), res[0].byteLength);
             const recordDigest = await sha256(res[1]);
 
-            const pako = require("pako");
             const res0 = pako.gzip(res[0]);
             const res1 = pako.gzip(res[1]);
             // const res2 = pako.gzip(res[2]); //For response/request
