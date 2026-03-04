@@ -43,9 +43,6 @@ const SummaryIcon = ({
   keyword,
   onClick,
   loading,
-  useDotIndicator,
-  valueIcon: ValueIcon,
-  valueIconColor,
 }) => {
   const disabled = loading || value === 0 || value === false;
 
@@ -105,20 +102,6 @@ const SummaryIcon = ({
           >
             {loading ? (
               <CircularProgress size={24} />
-            ) : ValueIcon ? (
-              <ValueIcon
-                fontSize="small"
-                color={valueIconColor || displayColor}
-              />
-            ) : useDotIndicator ? (
-              <Box
-                sx={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: "50%",
-                  bgcolor: disabled ? "action.disabled" : "primary.main",
-                }}
-              />
             ) : (
               <Typography variant="h6" color={displayColor}>
                 {value}
@@ -291,7 +274,9 @@ const AssistantSummary = () => {
                 icon={FindInPageOutlinedIcon}
                 label="url_domain_analysis"
                 color={
-                  cautionSourceCred || mixedSourceCred ? "warning" : undefined
+                  cautionSourceCred?.length || mixedSourceCred?.length
+                    ? "warning"
+                    : undefined
                 }
                 value={domainAnalysisCount}
                 targetId="url-domain-analysis"
