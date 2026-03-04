@@ -262,11 +262,7 @@ const AssistantSummary = () => {
         >
           {/* url domain analysis group */}
           <Stack direction="column" gap={0.5}>
-            <Typography
-              variant="body1"
-              color="text.secondary"
-              textAlign="center"
-            >
+            <Typography variant="body2" color="text.primary" textAlign="center">
               {keyword("Domain")}
             </Typography>
             <Stack direction="row" gap={1} justifyContent="center">
@@ -289,11 +285,7 @@ const AssistantSummary = () => {
 
           {/* warnings group */}
           <Stack direction="column" gap={0.5}>
-            <Typography
-              variant="body1"
-              color="text.secondary"
-              textAlign="center"
-            >
+            <Typography variant="body2" color="text.primary" textAlign="center">
               {keyword("Fact-checks")}
             </Typography>
             <Stack direction="row" gap={1} justifyContent="center">
@@ -316,11 +308,7 @@ const AssistantSummary = () => {
 
           {/* media group */}
           <Stack direction="column" gap={0.5}>
-            <Typography
-              variant="body1"
-              color="text.secondary"
-              textAlign="center"
-            >
+            <Typography variant="body2" color="text.primary" textAlign="center">
               {keyword("Media")}
             </Typography>
             <Stack direction="row" gap={1} justifyContent="center">
@@ -345,11 +333,7 @@ const AssistantSummary = () => {
 
           {/* text group */}
           <Stack direction="column" gap={0.5}>
-            <Typography
-              variant="body1"
-              color="text.secondary"
-              textAlign="center"
-            >
+            <Typography variant="body2" color="text.primary" textAlign="center">
               {keyword("Text")}
             </Typography>
             <Stack direction="row" gap={1} justifyContent="center">
