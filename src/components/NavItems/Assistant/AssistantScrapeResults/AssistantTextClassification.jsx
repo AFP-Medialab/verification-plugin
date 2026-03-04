@@ -57,6 +57,8 @@ export default function AssistantTextClassification({
       "likely_machine",
       "highly_likely_machine",
     ],
+    // machine generated text arc lengths: [highly_likely_human, likely_human, likely_machine, highly_likely_machine]
+    arcsLength: [0.05, 0.45, 0.45, 0.05],
     // news framing
     newsFramingConfidenceThreshold: 0.8,
     // news genre
@@ -241,7 +243,7 @@ export default function AssistantTextClassification({
                 }
                 resolvedMode={resolvedMode}
                 colours={resolvedMode === "dark" ? mgtColoursDark : mgtColours}
-                arcsLength={[0.05, 0.45, 0.45, 0.05]}
+                arcsLength={configs.arcsLength}
                 gaugeLabels={["gauge_no_detection", "gauge_detection"]}
                 orderedCategories={orderedCategories}
                 credibilitySignal={credibilitySignal}
