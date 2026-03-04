@@ -37,6 +37,7 @@ const SummaryIcon = ({
   icon: Icon,
   svgIcon,
   label,
+  description,
   color,
   value,
   targetId,
@@ -57,7 +58,19 @@ const SummaryIcon = ({
   const displayColor = disabled ? "disabled" : color || "primary";
 
   return (
-    <Tooltip title={keyword(label)}>
+    <Tooltip
+      title={
+        description ? (
+          <>
+            {keyword(label)}
+            <br />
+            {keyword(description)}
+          </>
+        ) : (
+          keyword(label)
+        )
+      }
+    >
       <span>
         <ButtonBase
           onClick={handleClick}
@@ -259,13 +272,19 @@ const AssistantSummary = () => {
           gap={3}
           alignItems="flex-start"
           justifyContent="center"
+          flexWrap="wrap"
         >
           {/* url domain analysis group */}
           <Stack direction="column" gap={0.5}>
             <Typography variant="body2" color="text.primary" textAlign="center">
               {keyword("Domain")}
             </Typography>
-            <Stack direction="row" gap={1} justifyContent="center">
+            <Stack
+              direction="row"
+              gap={1}
+              justifyContent="center"
+              flexWrap="wrap"
+            >
               <SummaryIcon
                 icon={FindInPageOutlinedIcon}
                 label="url_domain_analysis"
@@ -288,7 +307,12 @@ const AssistantSummary = () => {
             <Typography variant="body2" color="text.primary" textAlign="center">
               {keyword("Fact-checks")}
             </Typography>
-            <Stack direction="row" gap={1} justifyContent="center">
+            <Stack
+              direction="row"
+              gap={1}
+              justifyContent="center"
+              flexWrap="wrap"
+            >
               <SummaryIcon
                 icon={WarningAmberOutlinedIcon}
                 label="warnings_title"
@@ -311,7 +335,12 @@ const AssistantSummary = () => {
             <Typography variant="body2" color="text.primary" textAlign="center">
               {keyword("Media")}
             </Typography>
-            <Stack direction="row" gap={1} justifyContent="center">
+            <Stack
+              direction="row"
+              gap={1}
+              justifyContent="center"
+              flexWrap="wrap"
+            >
               <SummaryIcon
                 svgIcon={ImageIcon}
                 label="images_label"
@@ -327,6 +356,7 @@ const AssistantSummary = () => {
                 targetId="assistant-video-results"
                 keyword={keyword}
                 onClick={() => dispatch(setVideoResultsExpanded(true))}
+                description="images_count_tooltip"
               />
             </Stack>
           </Stack>
@@ -336,7 +366,12 @@ const AssistantSummary = () => {
             <Typography variant="body2" color="text.primary" textAlign="center">
               {keyword("Text")}
             </Typography>
-            <Stack direction="row" gap={1} justifyContent="center">
+            <Stack
+              direction="row"
+              gap={1}
+              justifyContent="center"
+              flexWrap="wrap"
+            >
               <SummaryIcon
                 icon={RecordVoiceOverOutlinedIcon}
                 label="persuasion_techniques_title"
