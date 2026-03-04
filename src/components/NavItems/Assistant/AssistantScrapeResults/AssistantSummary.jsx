@@ -43,8 +43,9 @@ const SummaryIcon = ({
   keyword,
   onClick,
   loading,
+  disabled: disabledProp,
 }) => {
-  const disabled = loading || value === 0 || value === false;
+  const disabled = disabledProp || loading || value === 0 || value === false;
 
   const handleClick = () => {
     if (onClick) {
@@ -246,9 +247,8 @@ const AssistantSummary = () => {
   const mgtScore =
     machineGeneratedTextChunksResult?.entities?.mgt_overall_score?.[0]?.score ??
     null;
-  // Represent as a percentage string so "0%" stays truthy (not disabled)
   const mgtScoreValue =
-    mgtScore != null ? `${Math.round(mgtScore * 100)}%` : false;
+    mgtScore != null ? `${Math.round(mgtScore * 100)}%` : "0%";
 
   return (
     <Card variant="outlined">
@@ -374,6 +374,7 @@ const AssistantSummary = () => {
                       : undefined
                 }
                 value={mgtScoreValue}
+                disabled={mgtScore === null}
                 targetId="credibility-signals"
                 keyword={keyword}
                 onClick={() => dispatch(setTextTabIndex(5))}
