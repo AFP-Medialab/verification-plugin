@@ -18,7 +18,7 @@ export const toolEvent = (
   client_id,
   uid = "",
 ) => {
-  console.log("action_name ", action_name);
+  //console.log("action_name ", action_name);
   let actions = {
     action_name: action_name,
     client_id: client_id,

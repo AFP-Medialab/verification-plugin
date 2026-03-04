@@ -16,7 +16,7 @@ export async function fetchKeyframeAudioApi(authenticatedRequest, jobId) {
 
   const response = await authenticatedRequest(config);
 
-  console.log(response.data);
+  //console.log(response.data);
 
   // return /** @type {KeyframesFeatures} */ {
   //   faces: faces,

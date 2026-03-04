@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 
 import createCache from "@emotion/cache";
 import { configureStore } from "@reduxjs/toolkit";
+import { throttle } from "lodash";
 import createSagaMiddleware from "redux-saga";
 import { browser } from "wxt/browser";
 
@@ -15,7 +16,7 @@ import "../../index.css";
 import allReducers from "../../redux/reducers";
 import rootSaga from "../../redux/sagas";
 
-async function saveToLocalStorage(state) {
+async function actualSaveToLocalStorage(state) {
   try {
     const savedState = {
       humanRightsCheckBox: state.humanRightsCheckBox,
@@ -44,6 +45,12 @@ async function saveToLocalStorage(state) {
     console.error("Error saving to storage:", e);
   }
 }
+
+// Use throttled version - this prevents saving too often to storage
+const saveToLocalStorage = throttle(actualSaveToLocalStorage, 500, {
+  leading: false,
+  trailing: true,
+});
 
 async function loadFromLocalStorage() {
   try {

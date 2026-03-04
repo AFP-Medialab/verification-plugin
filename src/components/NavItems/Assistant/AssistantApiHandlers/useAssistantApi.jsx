@@ -61,7 +61,8 @@ export default function assistantApiCalls() {
       const dbpedia = `http://${lang == "en" ? "" : "en."}dbpedia.org`;
       const wdQuery = `
       SELECT (REPLACE(STR(?concept), "http://www.wikidata.org/entity/", "") AS ?conceptID)
-      (REPLACE(STR(?article), "https://${lang}.wikipedia.org/wiki/", "${dbpedia}/page/") AS ?link)
+      (STR(?article) AS ?wikipediaUrl)
+      (REPLACE(STR(?article), "https://${lang}.wikipedia.org/wiki/", "${dbpedia}/page/") AS ?dbpediaUrl)
       (REPLACE(STR(?article), "https://${lang}.wikipedia.org/wiki/", "${dbpedia}/resource/") AS ?iri)
       ?title
       WHERE {
@@ -78,7 +79,7 @@ export default function assistantApiCalls() {
         mapping["<" + entity.iri.value + ">"] = {
           concept: entity.conceptID.value,
           title: entity.title.value,
-          link: entity.link.value,
+          link: entity.wikipediaUrl.value,
         };
       }
       const iris = Object.keys(mapping);

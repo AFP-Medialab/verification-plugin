@@ -56,6 +56,16 @@ export default defineConfig({
         matches: ["<all_urls>"],
       },
     }),
+
+    // Firefox requires explicit addon ID for storage API to work
+    ...(browser === "firefox" && {
+      browser_specific_settings: {
+        gecko: {
+          id: "weverify@localhost.dev",
+          strict_min_version: "109.0",
+        },
+      },
+    }),
   }),
 
   srcDir: "src",

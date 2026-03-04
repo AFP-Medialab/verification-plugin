@@ -72,7 +72,7 @@ export const reverseImageSearchGoogleLensLocal = async (
       args: [dataUrl, "image.jpg"],
     });
 
-    console.log("Upload script execution result:", results);
+    //console.log("Upload script execution result:", results);
   } catch (error) {
     console.error("Error in reverseImageSearchGoogleLensLocal:", error);
     // Show error to user
@@ -88,7 +88,7 @@ export const reverseImageSearchGoogleLensLocal = async (
  * Based on search-by-images extension implementation
  */
 async function uploadToGoogleLens(imageDataUrl, filename) {
-  console.log("[Google Lens Upload] Starting upload process...");
+  //console.log("[Google Lens Upload] Starting upload process...");
 
   return new Promise((resolve, reject) => {
     (async () => {
@@ -101,9 +101,9 @@ async function uploadToGoogleLens(imageDataUrl, filename) {
           selector,
           { selectorType = "css", timeout = 10000 } = {},
         ) => {
-          console.log(
+          /*console.log(
             `[Google Lens Upload] Looking for element: ${selector} (type: ${selectorType})`,
-          );
+          );*/
           const startTime = Date.now();
 
           return new Promise((resolve, reject) => {
@@ -124,17 +124,17 @@ async function uploadToGoogleLens(imageDataUrl, filename) {
               }
 
               if (element) {
-                console.log(
+                /*console.log(
                   `[Google Lens Upload] Found element: ${selector}`,
                   element,
-                );
+                );*/
                 resolve(element);
               } else if (Date.now() - startTime > timeout) {
                 console.error(
                   `[Google Lens Upload] Timeout finding element: ${selector}`,
                 );
                 // Log available elements for debugging
-                console.log(
+                /*console.log(
                   "[Google Lens Upload] Available divs with data attributes:",
                   document.querySelectorAll("div[data-*]"),
                 );
@@ -145,7 +145,7 @@ async function uploadToGoogleLens(imageDataUrl, filename) {
                 console.log(
                   "[Google Lens Upload] Available file inputs:",
                   document.querySelectorAll('input[type="file"]'),
-                );
+                );*/
                 reject(new Error(`Element not found: ${selector}`));
               } else {
                 setTimeout(check, 100);
@@ -172,7 +172,7 @@ async function uploadToGoogleLens(imageDataUrl, filename) {
         // Main upload flow - matches search-by-images approach
         const inputSelector = 'input[type="file"]';
 
-        console.log("[Google Lens Upload] Page loaded, searching for elements");
+        /*console.log("[Google Lens Upload] Page loaded, searching for elements");
         console.log("[Google Lens Upload] Current URL:", window.location.href);
         console.log("[Google Lens Upload] Page title:", document.title);
 
@@ -180,7 +180,7 @@ async function uploadToGoogleLens(imageDataUrl, filename) {
         console.log("[Google Lens Upload] === DIAGNOSTIC INFO ===");
         console.log(
           "[Google Lens Upload] All divs with 'lens' in data attributes:",
-        );
+        );*/
         const lensElements = Array.from(
           document.querySelectorAll("div[data-*]"),
         ).filter((el) => {
@@ -188,59 +188,59 @@ async function uploadToGoogleLens(imageDataUrl, filename) {
             (attr) => attr.name.includes("lens") || attr.value.includes("lens"),
           );
         });
-        console.log(lensElements);
+        //console.log(lensElements);
 
-        console.log("[Google Lens Upload] All buttons on page:");
+        //console.log("[Google Lens Upload] All buttons on page:");
         const buttons = Array.from(document.querySelectorAll("button"));
         buttons.forEach((btn, i) => {
-          console.log(
+          /*console.log(
             `Button ${i}:`,
             btn.getAttribute("aria-label"),
             btn.textContent,
             btn,
-          );
+          );*/
         });
 
-        console.log("[Google Lens Upload] All file inputs:");
+        /*console.log("[Google Lens Upload] All file inputs:");
         console.log(document.querySelectorAll('input[type="file"]'));
 
         console.log("[Google Lens Upload] Search bar area:");
         console.log(document.querySelectorAll('form[role="search"]'));
         console.log(document.querySelectorAll("textarea[name]"));
 
-        console.log("[Google Lens Upload] All SVG/icons that might be Lens:");
+        console.log("[Google Lens Upload] All SVG/icons that might be Lens:");*/
         const svgs = Array.from(document.querySelectorAll("svg")).filter(
           (svg) =>
             svg.innerHTML.includes("lens") ||
             svg.parentElement?.getAttribute("aria-label")?.includes("lens"),
         );
-        console.log(svgs);
-        console.log("[Google Lens Upload] === END DIAGNOSTIC ===");
+        /*console.log(svgs);
+        console.log("[Google Lens Upload] === END DIAGNOSTIC ===");*/
 
         // Function to click the Lens button
         const clickButton = async () => {
-          console.log(
+          /*console.log(
             "[Google Lens Upload] Attempting to click Lens button...",
-          );
+          );*/
           await processNode("div[data-base-lens-url]", async function (node) {
-            console.log(
+            /*console.log(
               "[Google Lens Upload] Found Lens button, waiting 1s...",
-            );
+            );*/
             await sleep(1000);
 
             if (!document.querySelector(inputSelector)) {
-              console.log("[Google Lens Upload] Clicking Lens button...");
+              //console.log("[Google Lens Upload] Clicking Lens button...");
               node.click();
             } else {
-              console.log(
+              /*console.log(
                 "[Google Lens Upload] File input already visible, skipping click",
-              );
+              );*/
             }
           });
         };
 
         // Handle consent popup - exact XPath from search-by-images
-        console.log("[Google Lens Upload] Checking for consent popup...");
+        //console.log("[Google Lens Upload] Checking for consent popup...");
         processNode(
           `//div[@role="dialog"
             and contains(., "g.co/privacytools")
@@ -250,9 +250,9 @@ async function uploadToGoogleLens(imageDataUrl, filename) {
           ]`,
           function (node) {
             if (node) {
-              console.log(
+              /*console.log(
                 "[Google Lens Upload] Found consent popup, dismissing",
-              );
+              );*/
               node.querySelectorAll("button")[2].click();
               clickButton();
             }
@@ -263,36 +263,36 @@ async function uploadToGoogleLens(imageDataUrl, filename) {
         // Click button to reveal file input
         await clickButton();
 
-        console.log("[Google Lens Upload] Waiting for file input...");
+        //console.log("[Google Lens Upload] Waiting for file input...");
         // Wait for file input
         const input = await findNode(inputSelector);
 
-        console.log("[Google Lens Upload] Converting image to file...");
+        //console.log("[Google Lens Upload] Converting image to file...");
         // Convert data URL to blob
         const response = await fetch(imageDataUrl);
         const blob = await response.blob();
-        console.log("[Google Lens Upload] Blob created:", blob.size, "bytes");
+        //console.log("[Google Lens Upload] Blob created:", blob.size, "bytes");
 
         // Create File object
         const file = new File([blob], filename, {
           type: blob.type || "image/jpeg",
         });
-        console.log("[Google Lens Upload] File created:", file.name, file.type);
+        //console.log("[Google Lens Upload] File created:", file.name, file.type);
 
         // Set file input data using DataTransfer API (setFileInputData approach)
         const dataTransfer = new DataTransfer();
         dataTransfer.items.add(file);
         input.files = dataTransfer.files;
-        console.log("[Google Lens Upload] File assigned to input");
+        //console.log("[Google Lens Upload] File assigned to input");
 
         // Dispatch change event
         input.dispatchEvent(new Event("change", { bubbles: true }));
-        console.log("[Google Lens Upload] Change event dispatched");
+        //console.log("[Google Lens Upload] Change event dispatched");
 
         // Wait a bit to let Google process the upload
         await sleep(500);
 
-        console.log("[Google Lens Upload] Upload completed successfully!");
+        //console.log("[Google Lens Upload] Upload completed successfully!");
         resolve({ success: true });
       } catch (error) {
         console.error("[Google Lens Upload] Error:", error);

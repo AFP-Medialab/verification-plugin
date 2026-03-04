@@ -13,12 +13,10 @@ import CardHeader from "@mui/material/CardHeader";
 import Collapse from "@mui/material/Collapse";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
-import LinearProgress from "@mui/material/LinearProgress";
 import SvgIcon from "@mui/material/SvgIcon";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { WarningAmberOutlined } from "@mui/icons-material";
 import CollectionsOutlinedIcon from "@mui/icons-material/CollectionsOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
@@ -35,7 +33,6 @@ import {
   setProcessUrl,
   setStateExpanded,
   setVideoResultsExpanded,
-  setWarningExpanded,
 } from "@/redux/actions/tools/assistantActions";
 
 import {
@@ -66,11 +63,6 @@ const AssistantMediaResult = ({ title = null }) => {
 
   // third party topMenuItem states
   //const ocrLoading = useSelector(state=>state.assistant.ocrLoading)
-  const dbkfMediaMatchLoading = useSelector(
-    (state) => state.assistant.dbkfMediaMatchLoading,
-  );
-  const dbkfImageMatch = useSelector((state) => state.assistant.dbkfImageMatch);
-  const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
 
   const imageResultsExpanded = useSelector(
     (state) => state.assistant.imageResultsExpanded,
@@ -79,9 +71,6 @@ const AssistantMediaResult = ({ title = null }) => {
     (state) => state.assistant.videoResultsExpanded,
   );
 
-  const warningExpanded = useSelector(
-    (state) => state.assistant.warningExpanded,
-  );
   const resultIsImage = resultProcessType === TOOLS_CATEGORIES.IMAGE;
 
   // local control state
@@ -153,20 +142,6 @@ const AssistantMediaResult = ({ title = null }) => {
         action={
           <div style={{ display: "flex" }}>
             <div>
-              {(dbkfImageMatch || dbkfVideoMatch) && (
-                <Tooltip title={keyword("image_warning")}>
-                  <WarningAmberOutlined
-                    color={"warning"}
-                    className={classes.toolTipWarning}
-                    onClick={() => {
-                      dispatch(setWarningExpanded(!warningExpanded));
-                      window.scroll(0, 0);
-                    }}
-                  />
-                </Tooltip>
-              )}
-            </div>
-            <div>
               <Tooltip
                 interactive={"true"}
                 title={
@@ -189,15 +164,8 @@ const AssistantMediaResult = ({ title = null }) => {
             </div>
           </div>
         }
-        slotProps={{
-          subheader: { sx: { color: "white" } },
-        }}
       />
-      {dbkfMediaMatchLoading ? (
-        <div>
-          <LinearProgress />
-        </div>
-      ) : null}
+
       {/* selected image or video with recommended tools */}
       <CardContent sx={{ padding: processUrl == null ? 0 : undefined }}>
         {missingMedia ? (

@@ -141,7 +141,7 @@ const AssistantSCResults = () => {
             in={assuranceExpanded}
             className={classes.assistantBackground}
           >
-            <Box mt={3} ml={2}>
+            <Box mt={3} ml={2} textAlign="center">
               {/* Caution/Warning */}
               {positiveSourceCred?.length > 0 ? (
                 <>

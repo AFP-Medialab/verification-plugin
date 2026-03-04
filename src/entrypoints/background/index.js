@@ -63,26 +63,6 @@ export default defineBackground(() => {
     }
   };
 
-  const videoReversesearchDBKF = (info) => {
-    let search_url =
-      "https://weverify-demo.ontotext.com/#!/similaritySearchResults&type=Videos&params=";
-    let urlvideo = info.linkUrl;
-    if (urlvideo !== "" && urlvideo.startsWith("http")) {
-      let url = search_url + encodeURIComponent(urlvideo);
-      openTabs({
-        url: url,
-        selected: false,
-      });
-      // Analytics
-      trackEvent(
-        "contextMenu",
-        "contextMenuClick",
-        "Video Reverse Search - DBKF (beta)",
-        url,
-      );
-    }
-  };
-
   const analysisVideo = (info) => {
     let url = info.linkUrl;
     if (url !== "") {
@@ -133,11 +113,11 @@ export default defineBackground(() => {
         thumbnailsSearch(info);
         break;
       // Handle both Chrome and Firefox DBKF menu IDs
-      case "dbkf":
+      /*case "dbkf":
       case "dbkf_link":
       case "dbkf_video":
         videoReversesearchDBKF(info);
-        break;
+        break;*/
       case "video_analysis":
         analysisVideo(info);
         break;
@@ -149,9 +129,6 @@ export default defineBackground(() => {
         break;
       case SEARCH_ENGINE_SETTINGS.ALL.CONTEXT_MENU_ID:
         reverseImageSearchAll(info);
-        break;
-      case SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.CONTEXT_MENU_ID:
-        reverseImageSearch(info, SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.NAME);
         break;
       case SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.CONTEXT_MENU_ID:
         reverseImageSearch(
@@ -295,7 +272,7 @@ export default defineBackground(() => {
         parentId: "invid_parent",
       });
 
-      createContextMenu({
+      /* createContextMenu({
         id: "dbkf_video",
         title: "Video Reverse Search - DBKF (beta)",
         contexts: ["video"],
@@ -303,12 +280,12 @@ export default defineBackground(() => {
       });
 
       // Link-specific menus under parent
-      createContextMenu({
+     createContextMenu({
         id: "dbkf_link",
         title: "Video Reverse Search - DBKF (beta)",
         contexts: ["link"],
         parentId: "invid_parent",
-      });
+      });*/
 
       createContextMenu({
         id: "thumbnail",
@@ -349,11 +326,11 @@ export default defineBackground(() => {
         contexts: ["image"],
       });
 
-      createContextMenu({
+      /*createContextMenu({
         id: "dbkf",
         title: "Video Reverse Search - DBKF (beta)",
         contexts: ["link", "video"],
-      });
+      });*/
 
       createContextMenu({
         id: "thumbnail",
@@ -392,9 +369,9 @@ export default defineBackground(() => {
 
   // Browser-specific initialization
   browser.runtime.onInstalled.addListener(() => {
-    console.log(
+    /*console.log(
       `🚀 ${browserName}: onInstalled fired, initializing browser-specific setup...`,
-    );
+    );*/
 
     if (isFirefox) {
       setupFirefoxContextMenus();
@@ -448,6 +425,6 @@ export default defineBackground(() => {
 
   // Firefox MV3 requires a callback function for runtime.onStartup
   browser.runtime.onStartup.addListener(() => {
-    console.log("Extension startup");
+    //console.log("Extension startup");
   });
 });

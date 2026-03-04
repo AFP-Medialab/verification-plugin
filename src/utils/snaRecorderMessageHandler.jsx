@@ -187,9 +187,9 @@ const addToCollectionByPlatform = async (platform, data, collectionId) => {
       }*/
     }
 
-    console.log(
+    /*console.log(
       `Successfully added ${data.length} items to ${table} collection ${collectionId}`,
-    );
+    );*/
   } catch (error) {
     console.error(
       `Failed to add items to ${table} (processed ${totalProcessed}/${data.length}):`,

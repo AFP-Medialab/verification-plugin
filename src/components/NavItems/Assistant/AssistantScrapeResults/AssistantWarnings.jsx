@@ -13,7 +13,6 @@ import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-import DbkfMediaResults from "@/components/NavItems/Assistant/AssistantCheckResults/DbkfMediaResults";
 import DbkfTextResults from "@/components/NavItems/Assistant/AssistantCheckResults/DbkfTextResults";
 import PreviousFactCheckResults from "@/components/NavItems/Assistant/AssistantCheckResults/PreviousFactCheckResults";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
@@ -37,8 +36,6 @@ const AssistantWarnings = () => {
 
   // state
   const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
-  const dbkfImageMatch = useSelector((state) => state.assistant.dbkfImageMatch);
-  const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
   const prevFactChecksDone = useSelector(
     (state) => state.assistant.prevFactChecksDone,
   );
@@ -160,8 +157,6 @@ const AssistantWarnings = () => {
         }
       />
       <CardContent>
-        {(dbkfImageMatch || dbkfVideoMatch) && <DbkfMediaResults />}
-
         {/* not logged in as beta tester, DBKF only */}
         {!role.includes(ROLES.BETA_TESTER) && dbkfTextMatch && (
           <DbkfTextResults

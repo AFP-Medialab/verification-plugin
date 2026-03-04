@@ -320,6 +320,9 @@ const styles = (theme) => ({
   assistantCardHeader: {
     fontSize: theme.typography.h6.fontSize,
     textAlign: "start",
+    "& .MuiCardHeader-subheader": {
+      color: "var(--mui-palette-text-primary)",
+    },
   },
   assistantHover: {
     borderWidth: 3,

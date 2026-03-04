@@ -159,28 +159,30 @@ const AssistantNEResult = () => {
         />
         {neLoading && <LinearProgress />}
         <CardContent>
-          <ButtonGroup sx={{ paddingBottom: "15px" }}>
-            {neResult.map((tag) => (
-              <Button
-                className={
-                  visibleCategories[tag.category.toLowerCase()]
-                    ? classes.namedEntityButtonHidden
-                    : ""
-                }
-                style={{
-                  color: "white",
-                  border: "none",
-                  backgroundColor: getWordColor(tag),
-                }}
-                key={tag.category}
-                onClick={() => toggleCategory(tag.category.toLowerCase())}
-              >
-                {tag.category}
-              </Button>
-            ))}
-          </ButtonGroup>
+          <Box sx={{ textAlign: "center" }}>
+            <ButtonGroup sx={{ paddingBottom: 2 }}>
+              {neResult.map((tag) => (
+                <Button
+                  className={
+                    visibleCategories[tag.category.toLowerCase()]
+                      ? classes.namedEntityButtonHidden
+                      : ""
+                  }
+                  style={{
+                    color: "white",
+                    border: "none",
+                    backgroundColor: getWordColor(tag),
+                  }}
+                  key={tag.category}
+                  onClick={() => toggleCategory(tag.category.toLowerCase())}
+                >
+                  {tag.category}
+                </Button>
+              ))}
+            </ButtonGroup>
+          </Box>
           <Grid container>
-            <Grid align={"center"}>
+            <Grid sx={{ textAlign: "center" }}>
               <TagCloud
                 tags={neResultCount}
                 shuffle={false}
