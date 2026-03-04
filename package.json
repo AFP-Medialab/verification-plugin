@@ -1,6 +1,6 @@
 {
   "name": "weverify-plugin",
-  "version": "0.89",
+  "version": "0.89.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -35,9 +35,9 @@
   "license": "MIT",
   "dependencies": {
     "@emotion/cache": "^11.14.0",
-    "@emotion/css": "^11.13.0",
-    "@emotion/react": "^11.13.3",
-    "@emotion/styled": "^11.13.0",
+    "@emotion/css": "^11.13.5",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.6",
     "@mui/lab": "^7.0.1-beta.20",
     "@mui/material": "^7.3.6",
@@ -55,7 +55,7 @@
     "@wavesurfer/react": "^1.0.7",
     "@wxt-dev/auto-icons": "^1.1.0",
     "attr-accept": "^2.2.5",
-    "axios": "^1.12.0",
+    "axios": "^1.13.6",
     "buffer": "^6.0.3",
     "c2pa": "0.30.17",
     "chart.js": "^4.4.4",
@@ -81,7 +81,7 @@
     "i18next-http-backend": "^2.6.1",
     "idb": "^8.0.3",
     "jscodeshift": "^17.1.2",
-    "jsonpath": "^1.1.1",
+    "jsonpath": "^1.2.1",
     "jsonpath-plus": "^10.3.0",
     "jwt-decode": "^4.0.0",
     "konva": "^9.3.15",
@@ -118,9 +118,9 @@
     "stylis-plugin-rtl": "^2.1.1",
     "tippy.js": "^6.3.7",
     "uuid": "^10.0.0",
-    "warcio": "^2.4.3",
+    "warcio": "^2.4.10",
     "wavesurfer.js": "^7.8.6",
-    "yup": "^1.4.0"
+    "yup": "^1.7.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -141,12 +141,12 @@
     "eslint": "^9.11.1",
     "eslint-plugin-react": "^7.36.1",
     "globals": "^15.9.0",
-    "husky": "^9.1.6",
+    "husky": "^9.1.7",
     "lint-staged": "^15.2.10",
     "prettier": "3.3.3",
-    "vite": "^7.2.6",
+    "vite": "^7.3.1",
     "vite-plugin-svgr": "^4.5.0",
-    "wxt": "^0.20.13"
+    "wxt": "^0.20.18"
   },
   "lint-staged": {
     "src/**/*.{js,css,md}": [
