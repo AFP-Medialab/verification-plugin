@@ -389,6 +389,13 @@ export const setImportantSentenceThreshold = (threshold) => {
   };
 };
 
+export const setTextTabIndex = (index) => {
+  return {
+    type: "SET_TEXT_TAB_INDEX",
+    payload: { textTabIndex: index },
+  };
+};
+
 export const setCurrentLabel = (currentLabel) => {
   return {
     type: "SET_CURRENT_LABEL",

@@ -27,6 +27,7 @@ import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespa
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import {
   setImportantSentenceThreshold,
+  setTextTabIndex,
   setWarningExpanded,
 } from "@/redux/actions/tools/assistantActions";
 
@@ -138,9 +139,9 @@ const AssistantTextResult = () => {
   const textBox = document.getElementById("element-to-check");
   const [expanded, setExpanded] = useState(false);
   const [displayOrigLang, setDisplayOrigLang] = useState(true);
-  const [textTabIndex, setTextTabIndex] = useState(0);
+  const textTabIndex = useSelector((state) => state.assistant.textTabIndex);
   const handleTabChange = (event, newValue) => {
-    setTextTabIndex(newValue);
+    dispatch(setTextTabIndex(newValue));
     // reset slider value on tab change to 80
     dispatch(setImportantSentenceThreshold(80));
   };

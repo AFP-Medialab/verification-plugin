@@ -92,6 +92,8 @@ const defaultState = {
 
   importantSentenceThreshold: 80,
 
+  textTabIndex: 0,
+
   currentLabel: null,
 };
 
@@ -123,6 +125,7 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_WARNING_EXPANDED":
     case "SET_ASSURANCE_EXPANDED":
     case "SET_STATE_EXPANDED":
+    case "SET_TEXT_TAB_INDEX":
     case "SUBMIT_UPLOAD":
       return Object.assign({}, state, action.payload);
 
@@ -233,6 +236,8 @@ const assistantReducer = (state = defaultState, action) => {
         stateExpanded: false,
 
         importantSentenceThreshold: 80,
+
+        textTabIndex: 0,
 
         currentLabel: null,
       };
