@@ -1,7 +1,6 @@
 import { trackEvent } from "../GoogleAnalytics/MatomoAnalytics";
 import { baiduReverseSearch } from "./engines/baidu";
 import { bingReverseSearch } from "./engines/bing";
-import { dbkfReverseSearch } from "./engines/dbkf";
 import { googleFactCheckReverseSearch } from "./engines/google-factcheck";
 import { googleLensReversearch } from "./engines/google-lens";
 import { tineyeReverseSearch } from "./engines/tineye";
@@ -21,12 +20,6 @@ export const SEARCH_ENGINE_SETTINGS = {
     CONTEXT_MENU_ID: "reverse_search_all",
     CONTEXT_MENU_TITLE: "Image Reverse Search - ALL",
   },
-  /*DBKF_SEARCH: {
-    NAME: "DBKF",
-    CONTEXT_MENU_ID: "reverse_search_dbkf",
-    CONTEXT_MENU_TITLE: "Image Reverse Search - DBKF (beta)",
-    SUPPORTED_IMAGE_FORMAT: [IMAGE_FORMATS.URI],
-  },*/
   GOOGLE_LENS_SEARCH: {
     NAME: "Google Lens",
     CONTEXT_MENU_ID: "reverse_search_google_lens",

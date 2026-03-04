@@ -150,9 +150,6 @@ export default defineBackground(() => {
       case SEARCH_ENGINE_SETTINGS.ALL.CONTEXT_MENU_ID:
         reverseImageSearchAll(info);
         break;
-      case SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.CONTEXT_MENU_ID:
-        reverseImageSearch(info, SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.NAME);
-        break;
       case SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.CONTEXT_MENU_ID:
         reverseImageSearch(
           info,
