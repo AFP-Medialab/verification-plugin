@@ -16,7 +16,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import LabelIcon from "@mui/icons-material/Label";
+import LabelOutlinedIcon from "@mui/icons-material/LabelOutlined";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
@@ -135,7 +135,7 @@ const AssistantNEResult = () => {
           className={classes.assistantCardHeader}
           title={
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <LabelIcon color="primary" />
+              <LabelOutlinedIcon color="primary" />
               {keyword("named_entity_title")}
             </Box>
           }
