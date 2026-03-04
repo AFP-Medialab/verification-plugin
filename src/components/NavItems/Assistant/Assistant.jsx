@@ -111,10 +111,6 @@ const Assistant = () => {
   );
 
   const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
-  const dbkfImageResult = useSelector(
-    (state) => state.assistant.dbkfImageMatch,
-  );
-  const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
 
   // third party fail states
   const scFailState = useSelector((state) => state.assistant.inputSCFail);
@@ -294,6 +290,14 @@ const Assistant = () => {
       navigate("/app/assistant/" + encodeURIComponent(uri));
     }
   }, [url]);
+
+  // when navigating to a different tool then back to assistant
+  // make sure url is set in form
+  useEffect(() => {
+    if (inputUrl) {
+      setFormInput(inputUrl);
+    }
+  }, [inputUrl]);
 
   // for having a single results section with a close button
   const handleClose = () => {
@@ -487,10 +491,7 @@ const Assistant = () => {
           <CardContent>
             <Grid container spacing={4}>
               {/* warnings and api status checks */}
-              {dbkfTextMatch ||
-              dbkfImageResult ||
-              dbkfVideoMatch ||
-              prevFactChecksResult ? (
+              {dbkfTextMatch || prevFactChecksResult ? (
                 <Grid
                   size={{ xs: 12 }}
                   className={classes.assistantGrid}

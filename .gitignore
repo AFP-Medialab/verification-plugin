@@ -29,10 +29,10 @@ yarn-error.log*
 # IDE
 .vscode
 .idea
+.claude
 
 # Playwright
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-
