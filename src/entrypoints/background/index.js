@@ -63,26 +63,6 @@ export default defineBackground(() => {
     }
   };
 
-  const videoReversesearchDBKF = (info) => {
-    let search_url =
-      "https://weverify-demo.ontotext.com/#!/similaritySearchResults&type=Videos&params=";
-    let urlvideo = info.linkUrl;
-    if (urlvideo !== "" && urlvideo.startsWith("http")) {
-      let url = search_url + encodeURIComponent(urlvideo);
-      openTabs({
-        url: url,
-        selected: false,
-      });
-      // Analytics
-      trackEvent(
-        "contextMenu",
-        "contextMenuClick",
-        "Video Reverse Search - DBKF (beta)",
-        url,
-      );
-    }
-  };
-
   const analysisVideo = (info) => {
     let url = info.linkUrl;
     if (url !== "") {
@@ -149,9 +129,6 @@ export default defineBackground(() => {
         break;
       case SEARCH_ENGINE_SETTINGS.ALL.CONTEXT_MENU_ID:
         reverseImageSearchAll(info);
-        break;
-      case SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.CONTEXT_MENU_ID:
-        reverseImageSearch(info, SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.NAME);
         break;
       case SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.CONTEXT_MENU_ID:
         reverseImageSearch(
