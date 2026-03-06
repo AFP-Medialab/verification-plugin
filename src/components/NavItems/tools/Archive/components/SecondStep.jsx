@@ -10,6 +10,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import YouTubeEmbed from "@Shared/Utils/YouTubeEmbed";
 
 import DownloadWaczFile from "./downloadWaczFile";
 import SinglefileConverter from "./singlefileConverter";
@@ -62,16 +63,7 @@ const SecondStep = ({ url }) => {
         <Box>
           <Stack direction="column" spacing={2}>
             <Typography>{keyword("step2_video_tutorial_title")}</Typography>
-            <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube-nocookie.com/embed/ZkfKeGN7EjM?si=2GV_J3O5wtJT30zd"
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            ></iframe>
+            <YouTubeEmbed videoId="ZkfKeGN7EjM" />
             <Divider />
           </Stack>
         </Box>

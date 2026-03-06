@@ -128,9 +128,6 @@ export const AnalysisDisplayTemplate = ({
       // Clear results when no datasources are selected
       setToolResult(null);
       setErrorMessage("");
-    } else if (toolResult !== null) {
-      // If we have previous results and datasources changed, re-run analysis
-      generateResult();
     }
   }, [selected]);
 
