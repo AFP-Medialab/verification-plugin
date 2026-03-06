@@ -296,6 +296,24 @@ export const setSingleMediaPresent = (singleMediaPresent) => {
   };
 };
 
+export const setImageResultsExpanded = (imageResultsExpanded) => {
+  return {
+    type: "SET_IMAGE_RESULTS_EXPANDED",
+    payload: {
+      imageResultsExpanded: imageResultsExpanded,
+    },
+  };
+};
+
+export const setVideoResultsExpanded = (videoResultsExpanded) => {
+  return {
+    type: "SET_VIDEO_RESULTS_EXPANDED",
+    payload: {
+      videoResultsExpanded: videoResultsExpanded,
+    },
+  };
+};
+
 export const setWarningExpanded = (warningExpanded) => {
   return {
     type: "SET_WARNING_EXPANDED",
@@ -352,6 +370,13 @@ export const setImportantSentenceThreshold = (threshold) => {
   return {
     type: "SET_IMPORTANT_SENTENCE_THRESHOLD",
     payload: threshold,
+  };
+};
+
+export const setTextTabIndex = (index) => {
+  return {
+    type: "SET_TEXT_TAB_INDEX",
+    payload: { textTabIndex: index },
   };
 };
 

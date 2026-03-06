@@ -13,20 +13,26 @@ import CardHeader from "@mui/material/CardHeader";
 import Collapse from "@mui/material/Collapse";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
+import SvgIcon from "@mui/material/SvgIcon";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
+import CollectionsOutlinedIcon from "@mui/icons-material/CollectionsOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
+import ImageIcon from "@/components/NavBar/images/SVG/Image/Images.svg";
+import VideoIcon from "@/components/NavBar/images/SVG/Video/Video.svg";
 import ImageGridList from "@/components/Shared/ImageGridList/ImageGridList";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "@/components/Shared/VideoGridList/VideoGridList";
 import { TOOLS_CATEGORIES } from "@/constants/tools";
 import {
+  setImageResultsExpanded,
   setProcessUrl,
   setStateExpanded,
+  setVideoResultsExpanded,
 } from "@/redux/actions/tools/assistantActions";
 
 import {
@@ -57,6 +63,13 @@ const AssistantMediaResult = ({ title = null }) => {
 
   // third party topMenuItem states
   //const ocrLoading = useSelector(state=>state.assistant.ocrLoading)
+
+  const imageResultsExpanded = useSelector(
+    (state) => state.assistant.imageResultsExpanded,
+  );
+  const videoResultsExpanded = useSelector(
+    (state) => state.assistant.videoResultsExpanded,
+  );
 
   const resultIsImage = resultProcessType === TOOLS_CATEGORIES.IMAGE;
 
@@ -112,13 +125,19 @@ const AssistantMediaResult = ({ title = null }) => {
 
   return (
     <Card
+      id="url-media-results"
       variant="outlined"
       data-testid="url-media-results"
       hidden={!filteredImageList.length && !videoList.length}
     >
       <CardHeader
         className={classes.assistantCardHeader}
-        title={title ? keyword(title) : keyword("media_title")}
+        title={
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <CollectionsOutlinedIcon color="primary" />
+            {title ? keyword(title) : keyword("media_title")}
+          </Box>
+        }
         subheader={keyword("media_below")}
         action={
           <div style={{ display: "flex" }}>
@@ -178,7 +197,7 @@ const AssistantMediaResult = ({ title = null }) => {
         ) : null}
         {processUrl !== null ? (
           resultIsImage ? (
-            <Grid container spacing={2}>
+            <Grid container spacing={2} id="assistant-image-results">
               <Grid size={6}>
                 <AssistantImageResult />
               </Grid>
@@ -187,7 +206,7 @@ const AssistantMediaResult = ({ title = null }) => {
               </Grid>
             </Grid>
           ) : (
-            <Grid container spacing={2}>
+            <Grid container spacing={2} id="assistant-video-results">
               <Grid size={6}>
                 <AssistantVideoResult />
               </Grid>
@@ -204,11 +223,24 @@ const AssistantMediaResult = ({ title = null }) => {
           <CardContent style={{ wordBreak: "break-word" }}>
             {/* image list */}
             {filteredImageList.length > 0 ? (
-              <Accordion defaultExpanded>
+              <Accordion
+                expanded={imageResultsExpanded}
+                onChange={(_, expanded) =>
+                  dispatch(setImageResultsExpanded(expanded))
+                }
+                id="assistant-image-results"
+              >
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography variant="h6">
-                    {keyword("images_label")}
-                  </Typography>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <SvgIcon
+                      component={ImageIcon}
+                      color="primary"
+                      inheritViewBox
+                    />
+                    <Typography variant="h6">
+                      {keyword("images_label")}
+                    </Typography>
+                  </Box>
                 </AccordionSummary>
                 <AccordionDetails>
                   <ImageGridList
@@ -225,11 +257,24 @@ const AssistantMediaResult = ({ title = null }) => {
 
             {/* video list */}
             {videoList.length > 0 ? (
-              <Accordion defaultExpanded>
+              <Accordion
+                expanded={videoResultsExpanded}
+                onChange={(_, expanded) =>
+                  dispatch(setVideoResultsExpanded(expanded))
+                }
+                id="assistant-video-results"
+              >
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography variant="h6">
-                    {keyword("videos_label")}
-                  </Typography>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <SvgIcon
+                      component={VideoIcon}
+                      color="primary"
+                      inheritViewBox
+                    />
+                    <Typography variant="h6">
+                      {keyword("videos_label")}
+                    </Typography>
+                  </Box>
                 </AccordionSummary>
                 <AccordionDetails style={{ paddingTop: 0 }}>
                   <VideoGridList

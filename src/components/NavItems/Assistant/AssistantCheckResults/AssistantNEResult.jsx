@@ -16,6 +16,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import LabelOutlinedIcon from "@mui/icons-material/LabelOutlined";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
@@ -129,10 +130,15 @@ const AssistantNEResult = () => {
 
   return (
     <Grid size={{ xs: 12 }}>
-      <Card variant="outlined">
+      <Card id="named-entity-results" variant="outlined">
         <CardHeader
           className={classes.assistantCardHeader}
-          title={keyword("named_entity_title")}
+          title={
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <LabelOutlinedIcon color="primary" />
+              {keyword("named_entity_title")}
+            </Box>
+          }
           action={
             <Tooltip
               interactive={"true"}

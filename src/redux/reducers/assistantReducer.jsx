@@ -83,8 +83,12 @@ const defaultState = {
   warningExpanded: false,
   assuranceExpanded: false,
   stateExpanded: false,
+  imageResultsExpanded: true,
+  videoResultsExpanded: true,
 
   importantSentenceThreshold: 80,
+
+  textTabIndex: 0,
 
   currentLabel: null,
 };
@@ -115,6 +119,9 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_WARNING_EXPANDED":
     case "SET_ASSURANCE_EXPANDED":
     case "SET_STATE_EXPANDED":
+    case "SET_IMAGE_RESULTS_EXPANDED":
+    case "SET_VIDEO_RESULTS_EXPANDED":
+    case "SET_TEXT_TAB_INDEX":
     case "SUBMIT_UPLOAD":
       return Object.assign({}, state, action.payload);
 
@@ -217,8 +224,12 @@ const assistantReducer = (state = defaultState, action) => {
         warningExpanded: false,
         assuranceExpanded: false,
         stateExpanded: false,
+        imageResultsExpanded: true,
+        videoResultsExpanded: true,
 
         importantSentenceThreshold: 80,
+
+        textTabIndex: 0,
 
         currentLabel: null,
       };

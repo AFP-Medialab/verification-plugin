@@ -47,6 +47,7 @@ import {
 } from "@/redux/actions/tools/assistantActions";
 import { setError } from "@/redux/reducers/errorReducer";
 
+import AssistantSummary from "./AssistantScrapeResults/AssistantSummary";
 import {
   TransAssistantHelpFourTooltip,
   TransAssistantHelpThreeTooltip,
@@ -490,6 +491,11 @@ const Assistant = () => {
 
           <CardContent>
             <Grid container spacing={4}>
+              {/* assistant result summary */}
+              <Grid size={{ xs: 12 }}>
+                <AssistantSummary />
+              </Grid>
+
               {/* warnings and api status checks */}
               {dbkfTextMatch || prevFactChecksResult ? (
                 <Grid
