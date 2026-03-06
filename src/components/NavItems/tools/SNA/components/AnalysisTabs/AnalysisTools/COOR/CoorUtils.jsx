@@ -215,8 +215,7 @@ const getCoorContent = async (
     let filteredResp = resp
       .map((o) => {
         let x = o["cluster"];
-        o.objects = x;
-        return o;
+        return { ...o, objects: x };
       })
       .filter(
         (x) =>
@@ -227,8 +226,7 @@ const getCoorContent = async (
   let filteredContent = selectedContent
     .map((o) => {
       let x = o[objectChoice];
-      o.objects = x;
-      return o;
+      return { ...o, objects: x };
     })
     .filter((o) => o.objects?.length > 0);
   return filteredContent;

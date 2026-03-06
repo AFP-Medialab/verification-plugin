@@ -29,6 +29,9 @@ yarn-error.log*
 # IDE
 .vscode
 .idea
+# Claude
+.claude
+.mcp.json
 
 # Playwright
 /test-results/

@@ -111,7 +111,8 @@ export const AnalysisDisplayTemplate = ({
       } else {
         setToolResult(result);
       }
-    } catch {
+    } catch (e) {
+      console.log("Error ", e);
       setErrorMessage("snaTools_analysisErrorMessage");
     } finally {
       setToolLoading(false);
