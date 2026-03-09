@@ -511,21 +511,78 @@ export function TransMultilingualStanceTooltip({ keyword }) {
 
 // Summary tooltips
 
-export function TransSummaryDomainTooltip({ keyword }) {
+export function TransSummaryDomainTooltip({
+  keyword,
+  cautionCount,
+  mixedCount,
+  positiveCount,
+  loaded,
+}) {
   return (
-    <Trans
-      t={keyword}
-      i18nKey="summary_domain_tooltip"
-      components={{
-        b: <b />,
-        ul: <ul style={UL_STYLE} />,
-        li: <li style={LI_STYLE} />,
-      }}
-    />
+    <>
+      <Trans
+        t={keyword}
+        i18nKey="summary_domain_tooltip"
+        components={{
+          b: <b />,
+          ul: <ul style={UL_STYLE} />,
+          li: <li style={LI_STYLE} />,
+        }}
+      />
+      {loaded && (
+        <ul style={UL_STYLE}>
+          <li style={LI_STYLE}>
+            {cautionCount} {keyword("summary_domain_tooltip_warning")}
+          </li>
+          <li style={LI_STYLE}>
+            {mixedCount} {keyword("summary_domain_tooltip_mentions")}
+          </li>
+          <li style={LI_STYLE}>
+            {positiveCount} {keyword("summary_domain_tooltip_fact_checker")}
+          </li>
+        </ul>
+      )}
+    </>
   );
 }
 
-export function TransSummaryPersuasionTooltip({ keyword, categories }) {
+export function TransSummaryFactChecksTooltip({
+  keyword,
+  dbkfCount,
+  fcssCount,
+  loaded,
+}) {
+  return (
+    <>
+      <Trans
+        t={keyword}
+        i18nKey="summary_factchecks_tooltip"
+        components={{
+          b: <b />,
+          ul: <ul style={UL_STYLE} />,
+          li: <li style={LI_STYLE} />,
+        }}
+      />
+      {loaded && (
+        <ul style={UL_STYLE}>
+          <li style={LI_STYLE}>
+            {dbkfCount} {keyword("summary_factchecks_tooltip_dbkf")}
+          </li>
+          <li style={LI_STYLE}>
+            {fcssCount} {keyword("summary_factchecks_tooltip_fcss")}
+          </li>
+        </ul>
+      )}
+    </>
+  );
+}
+
+export function TransSummaryPersuasionTooltip({
+  keyword,
+  categoryCounts,
+  otherCount,
+  loaded,
+}) {
   return (
     <>
       <Trans
@@ -537,44 +594,126 @@ export function TransSummaryPersuasionTooltip({ keyword, categories }) {
           li: <li style={LI_STYLE} />,
         }}
       />
-      {categories?.length > 0 && (
+      {loaded && categoryCounts?.length > 0 && (
         <ul style={UL_STYLE}>
-          {categories.map((cat) => (
-            <li key={cat} style={LI_STYLE}>
-              {keyword(cat)}
+          {categoryCounts.map(({ name, count }) => (
+            <li key={name} style={LI_STYLE}>
+              {count} {keyword(name)}
             </li>
           ))}
+          <li style={LI_STYLE}>
+            {otherCount} {keyword("summary_persuasion_tooltip_other")}
+          </li>
         </ul>
       )}
     </>
   );
 }
 
-export function TransSummaryMgtTooltip({ keyword }) {
+export function TransSummaryLinksTooltip({
+  keyword,
+  warningLinksCount,
+  mentionsLinksCount,
+  factCheckerLinksCount,
+  linksCount,
+  loaded,
+}) {
   return (
-    <Trans
-      t={keyword}
-      i18nKey="summary_mgt_tooltip"
-      components={{
-        b: <b />,
-        ul: <ul style={UL_STYLE} />,
-        li: <li style={LI_STYLE} />,
-      }}
-    />
+    <>
+      <Trans
+        t={keyword}
+        i18nKey="summary_links_tooltip"
+        components={{
+          b: <b />,
+          ul: <ul style={UL_STYLE} />,
+          li: <li style={LI_STYLE} />,
+        }}
+      />
+      {loaded && (
+        <ul style={UL_STYLE}>
+          <li style={LI_STYLE}>
+            {warningLinksCount} {keyword("summary_links_tooltip_warning")}
+          </li>
+          <li style={LI_STYLE}>
+            {mentionsLinksCount} {keyword("summary_links_tooltip_mentions")}
+          </li>
+          <li style={LI_STYLE}>
+            {factCheckerLinksCount}{" "}
+            {keyword("summary_links_tooltip_fact_checker")}
+          </li>
+          <li style={LI_STYLE}>
+            {linksCount} {keyword("summary_links_tooltip_total")}
+          </li>
+        </ul>
+      )}
+    </>
   );
 }
 
-export function TransSummaryCommentsTooltip({ keyword }) {
+export function TransSummaryMgtTooltip({
+  keyword,
+  mgtScoreValue,
+  mgtCategory,
+  loaded,
+}) {
   return (
-    <Trans
-      t={keyword}
-      i18nKey="summary_comments_tooltip"
-      components={{
-        b: <b />,
-        ul: <ul style={UL_STYLE} />,
-        li: <li style={LI_STYLE} />,
-      }}
-    />
+    <>
+      <Trans
+        t={keyword}
+        i18nKey="summary_mgt_tooltip"
+        components={{
+          b: <b />,
+          ul: <ul style={UL_STYLE} />,
+          li: <li style={LI_STYLE} />,
+        }}
+      />
+      {loaded && mgtScoreValue && mgtCategory && (
+        <ul style={UL_STYLE}>
+          <li style={LI_STYLE}>
+            {mgtScoreValue} {keyword(mgtCategory)}
+          </li>
+        </ul>
+      )}
+    </>
+  );
+}
+
+export function TransSummaryCommentsTooltip({
+  keyword,
+  denyCount,
+  queryCount,
+  supportCount,
+  commentCount,
+  loaded,
+}) {
+  return (
+    <>
+      <Trans
+        t={keyword}
+        i18nKey="summary_comments_tooltip"
+        components={{
+          b: <b />,
+          ul: <ul style={UL_STYLE} />,
+          li: <li style={LI_STYLE} />,
+        }}
+      />
+      {loaded && (
+        <ul style={UL_STYLE}>
+          <li style={LI_STYLE}>
+            {denyCount} {keyword("summary_comments_tooltip_deny")}
+          </li>
+          <li style={LI_STYLE}>
+            {queryCount} {keyword("summary_comments_tooltip_query")}
+          </li>
+          <li style={LI_STYLE}>
+            {supportCount} {keyword("summary_comments_tooltip_support")}
+          </li>
+          <li style={LI_STYLE}>
+            {commentCount} {keyword("summary_comments_tooltip_comment")}
+          </li>
+        </ul>
+      )}
+    </>
   );
 }
 

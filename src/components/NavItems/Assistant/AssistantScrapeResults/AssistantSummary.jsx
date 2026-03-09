@@ -26,6 +26,8 @@ import { scrollToElement } from "@/components/NavItems/Assistant/AssistantScrape
 import {
   TransSummaryCommentsTooltip,
   TransSummaryDomainTooltip,
+  TransSummaryFactChecksTooltip,
+  TransSummaryLinksTooltip,
   TransSummaryMgtTooltip,
   TransSummaryPersuasionTooltip,
 } from "@/components/NavItems/Assistant/TransComponents";
@@ -237,13 +239,32 @@ const AssistantSummary = () => {
         (c) => multilingualStanceResult[c.id]?.stance === "query",
       ).length
     : 0;
+  const supportCommentsCount = multilingualStanceResult
+    ? (collectedComments || []).filter(
+        (c) => multilingualStanceResult[c.id]?.stance === "support",
+      ).length
+    : 0;
+  const commentCommentsCount = multilingualStanceResult
+    ? (collectedComments || []).filter(
+        (c) => multilingualStanceResult[c.id]?.stance === "comment",
+      ).length
+    : 0;
   const namedEntityCount = neResultCount?.length || 0;
   const linksCount = linkList?.length || 0;
   const credDomains = extractedSourceCred?.domain
     ? Object.values(extractedSourceCred.domain)
     : [];
+  const warningLinksCount = new Set(
+    credDomains.filter((d) => d.caution).flatMap((d) => d.url || []),
+  ).size;
+  const mentionsLinksCount = new Set(
+    credDomains.filter((d) => d.mixed).flatMap((d) => d.url || []),
+  ).size;
   const cautionOrMixedLinksCount = new Set(
     credDomains.filter((d) => d.caution || d.mixed).flatMap((d) => d.url || []),
+  ).size;
+  const factCheckerLinksCount = new Set(
+    credDomains.filter((d) => d.positive).flatMap((d) => d.url || []),
   ).size;
 
   // persuasion count: total spans belonging to warning categories
@@ -254,10 +275,23 @@ const AssistantSummary = () => {
     "Red_Herring",
     "Manipulative_Wording",
   ];
-  const persuasionCount = persuasionResult?.entities
+  const persuasionCategoryCounts = persuasionWarningCategories.map((cat) => ({
+    name: cat,
+    count: persuasionResult?.entities
+      ? Object.entries(persuasionResult.entities)
+          .filter(([label]) => label.split("__")[0] === cat)
+          .reduce((total, [, spans]) => total + spans.length, 0)
+      : 0,
+  }));
+  const persuasionCount = persuasionCategoryCounts.reduce(
+    (total, { count }) => total + count,
+    0,
+  );
+  const persuasionOtherCount = persuasionResult?.entities
     ? Object.entries(persuasionResult.entities)
-        .filter(([label]) =>
-          persuasionWarningCategories.includes(label.split("__")[0]),
+        .filter(
+          ([label]) =>
+            !persuasionWarningCategories.includes(label.split("__")[0]),
         )
         .reduce((total, [, spans]) => total + spans.length, 0)
     : 0;
@@ -302,7 +336,13 @@ const AssistantSummary = () => {
                 icon={FindInPageOutlinedIcon}
                 label="url_domain_analysis"
                 descriptionNode={
-                  <TransSummaryDomainTooltip keyword={keyword} />
+                  <TransSummaryDomainTooltip
+                    keyword={keyword}
+                    cautionCount={cautionSourceCred?.length || 0}
+                    mixedCount={mixedSourceCred?.length || 0}
+                    positiveCount={positiveSourceCred?.length || 0}
+                    loaded={!inputSCLoading}
+                  />
                 }
                 color={
                   cautionSourceCred?.length || mixedSourceCred?.length
@@ -332,7 +372,22 @@ const AssistantSummary = () => {
               <SummaryIcon
                 icon={WarningAmberOutlinedIcon}
                 label="warnings_title"
-                description="summary_factchecks_tooltip"
+                descriptionNode={
+                  <TransSummaryFactChecksTooltip
+                    keyword={keyword}
+                    dbkfCount={
+                      (dbkfTextMatch?.length || 0) +
+                      (dbkfImageMatch ? 1 : 0) +
+                      (dbkfVideoMatch ? 1 : 0)
+                    }
+                    fcssCount={prevFactChecksResult?.length || 0}
+                    loaded={
+                      !dbkfTextMatchLoading &&
+                      !dbkfMediaMatchLoading &&
+                      !prevFactChecksLoading
+                    }
+                  />
+                }
                 color={"warning"}
                 value={warningsCount}
                 targetId="warnings"
@@ -396,7 +451,9 @@ const AssistantSummary = () => {
                 descriptionNode={
                   <TransSummaryPersuasionTooltip
                     keyword={keyword}
-                    categories={persuasionWarningCategories}
+                    categoryCounts={persuasionCategoryCounts}
+                    otherCount={persuasionOtherCount}
+                    loaded={!persuasionLoading}
                   />
                 }
                 color="warning"
@@ -409,7 +466,17 @@ const AssistantSummary = () => {
               <SummaryIcon
                 icon={SmartToyOutlinedIcon}
                 label="machine_generated_text_title"
-                descriptionNode={<TransSummaryMgtTooltip keyword={keyword} />}
+                descriptionNode={
+                  <TransSummaryMgtTooltip
+                    keyword={keyword}
+                    mgtScoreValue={mgtScoreValue}
+                    mgtCategory={
+                      machineGeneratedTextChunksResult?.entities
+                        ?.mgt_overall_score?.[0]?.pred
+                    }
+                    loaded={!machineGeneratedTextChunksLoading}
+                  />
+                }
                 color={
                   mgtScore != null && mgtScore >= MGT_ERROR_THRESHOLD
                     ? "error"
@@ -436,7 +503,16 @@ const AssistantSummary = () => {
               <SummaryIcon
                 icon={LinkOutlinedIcon}
                 label="extracted_urls_url_domain_analysis"
-                description="summary_links_tooltip"
+                descriptionNode={
+                  <TransSummaryLinksTooltip
+                    keyword={keyword}
+                    warningLinksCount={warningLinksCount}
+                    mentionsLinksCount={mentionsLinksCount}
+                    factCheckerLinksCount={factCheckerLinksCount}
+                    linksCount={linksCount}
+                    loaded={!inputSCLoading}
+                  />
+                }
                 loading={inputSCLoading}
                 color={cautionOrMixedLinksCount > 0 ? "warning" : undefined}
                 value={
@@ -451,7 +527,14 @@ const AssistantSummary = () => {
                 icon={CommentOutlinedIcon}
                 label="collected_comments_title"
                 descriptionNode={
-                  <TransSummaryCommentsTooltip keyword={keyword} />
+                  <TransSummaryCommentsTooltip
+                    keyword={keyword}
+                    denyCount={denyCommentsCount}
+                    queryCount={queryCommentsCount}
+                    supportCount={supportCommentsCount}
+                    commentCount={commentCommentsCount}
+                    loaded={!multilingualStanceLoading}
+                  />
                 }
                 loading={multilingualStanceLoading}
                 color={
