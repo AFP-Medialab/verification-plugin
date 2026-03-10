@@ -33,6 +33,7 @@ import {
 } from "@/components/NavItems/Assistant/TransComponents";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
+import { ROLES } from "@/constants/roles";
 import {
   setAssuranceExpanded,
   setImageResultsExpanded,
@@ -145,10 +146,11 @@ const AssistantSummary = () => {
   const classes = useMyStyles();
   const dispatch = useDispatch();
 
+  const role = useSelector((state) => state.userSession.user.roles);
+  const isBetaTester = role.includes(ROLES.BETA_TESTER);
+
   // warnings state
   const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
-  const dbkfImageMatch = useSelector((state) => state.assistant.dbkfImageMatch);
-  const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
   const prevFactChecksResult = useSelector(
     (state) => state.assistant.prevFactChecksResult,
   );
@@ -208,9 +210,6 @@ const AssistantSummary = () => {
   const dbkfTextMatchLoading = useSelector(
     (state) => state.assistant.dbkfTextMatchLoading,
   );
-  const dbkfMediaMatchLoading = useSelector(
-    (state) => state.assistant.dbkfMediaMatchLoading,
-  );
   const neLoading = useSelector((state) => state.assistant.neLoading);
   const prevFactChecksLoading = useSelector(
     (state) => state.assistant.prevFactChecksLoading,
@@ -219,9 +218,7 @@ const AssistantSummary = () => {
   // calculate counts for each section
   const warningsCount =
     (dbkfTextMatch?.length || 0) +
-    (dbkfImageMatch ? 1 : 0) +
-    (dbkfVideoMatch ? 1 : 0) +
-    (prevFactChecksResult?.length || 0);
+    (isBetaTester ? prevFactChecksResult?.length || 0 : 0);
   const domainAnalysisCount =
     (positiveSourceCred?.length || 0) +
     (cautionSourceCred?.length || 0) +
@@ -375,17 +372,10 @@ const AssistantSummary = () => {
                 descriptionNode={
                   <TransSummaryFactChecksTooltip
                     keyword={keyword}
-                    dbkfCount={
-                      (dbkfTextMatch?.length || 0) +
-                      (dbkfImageMatch ? 1 : 0) +
-                      (dbkfVideoMatch ? 1 : 0)
-                    }
+                    dbkfCount={dbkfTextMatch?.length || 0}
                     fcssCount={prevFactChecksResult?.length || 0}
-                    loaded={
-                      !dbkfTextMatchLoading &&
-                      !dbkfMediaMatchLoading &&
-                      !prevFactChecksLoading
-                    }
+                    isBetaTester={isBetaTester}
+                    loaded={!dbkfTextMatchLoading && !prevFactChecksLoading}
                   />
                 }
                 color={"warning"}
@@ -393,11 +383,7 @@ const AssistantSummary = () => {
                 targetId="warnings"
                 keyword={keyword}
                 onClick={() => dispatch(setWarningExpanded(true))}
-                loading={
-                  dbkfTextMatchLoading ||
-                  dbkfMediaMatchLoading ||
-                  prevFactChecksLoading
-                }
+                loading={dbkfTextMatchLoading || prevFactChecksLoading}
               />
             </Stack>
           </Stack>

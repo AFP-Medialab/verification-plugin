@@ -550,6 +550,7 @@ export function TransSummaryFactChecksTooltip({
   keyword,
   dbkfCount,
   fcssCount,
+  isBetaTester,
   loaded,
 }) {
   return (
@@ -568,9 +569,11 @@ export function TransSummaryFactChecksTooltip({
           <li style={LI_STYLE}>
             {dbkfCount} {keyword("summary_factchecks_tooltip_dbkf")}
           </li>
-          <li style={LI_STYLE}>
-            {fcssCount} {keyword("summary_factchecks_tooltip_fcss")}
-          </li>
+          {isBetaTester && (
+            <li style={LI_STYLE}>
+              {fcssCount} {keyword("summary_factchecks_tooltip_fcss")}
+            </li>
+          )}
         </ul>
       )}
     </>
