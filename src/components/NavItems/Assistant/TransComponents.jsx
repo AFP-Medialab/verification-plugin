@@ -720,6 +720,79 @@ export function TransSummaryCommentsTooltip({
   );
 }
 
+export function TransSummaryVideosTooltip({ keyword, videoCount, loaded }) {
+  return (
+    <>
+      <Trans
+        t={keyword}
+        i18nKey="summary_videos_tooltip"
+        components={{
+          b: <b />,
+          ul: <ul style={UL_STYLE} />,
+          li: <li style={LI_STYLE} />,
+        }}
+      />
+      {loaded && (
+        <ul style={UL_STYLE}>
+          <li style={LI_STYLE}>
+            {videoCount} {keyword("summary_videos_tooltip_count")}
+          </li>
+        </ul>
+      )}
+    </>
+  );
+}
+
+export function TransSummaryNamedEntitiesTooltip({
+  keyword,
+  namedEntityCount,
+  loaded,
+}) {
+  return (
+    <>
+      <Trans
+        t={keyword}
+        i18nKey="summary_named_entities_tooltip"
+        components={{
+          b: <b />,
+          ul: <ul style={UL_STYLE} />,
+          li: <li style={LI_STYLE} />,
+        }}
+      />
+      {loaded && (
+        <ul style={UL_STYLE}>
+          <li style={LI_STYLE}>
+            {namedEntityCount} {keyword("summary_named_entities_tooltip_count")}
+          </li>
+        </ul>
+      )}
+    </>
+  );
+}
+
+export function TransSummaryImagesTooltip({ keyword, imageCount, loaded }) {
+  return (
+    <>
+      <Trans
+        t={keyword}
+        i18nKey="summary_images_tooltip"
+        components={{
+          b: <b />,
+          ul: <ul style={UL_STYLE} />,
+          li: <li style={LI_STYLE} />,
+        }}
+      />
+      {loaded && (
+        <ul style={UL_STYLE}>
+          <li style={LI_STYLE}>
+            {imageCount} {keyword("summary_images_tooltip_count")}
+          </li>
+        </ul>
+      )}
+    </>
+  );
+}
+
 // Whitespace
 
 export function TransHtmlDoubleLineBreak({ keyword }) {

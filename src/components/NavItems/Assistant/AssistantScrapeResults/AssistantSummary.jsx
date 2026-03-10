@@ -16,7 +16,7 @@ import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
 import FindInPageOutlinedIcon from "@mui/icons-material/FindInPageOutlined";
 import LabelOutlinedIcon from "@mui/icons-material/LabelOutlined";
 import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
-import RecordVoiceOverOutlinedIcon from "@mui/icons-material/RecordVoiceOverOutlined";
+import PsychologyOutlinedIcon from "@mui/icons-material/PsychologyOutlined";
 import SmartToyOutlinedIcon from "@mui/icons-material/SmartToyOutlined";
 import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
 
@@ -27,9 +27,12 @@ import {
   TransSummaryCommentsTooltip,
   TransSummaryDomainTooltip,
   TransSummaryFactChecksTooltip,
+  TransSummaryImagesTooltip,
   TransSummaryLinksTooltip,
   TransSummaryMgtTooltip,
+  TransSummaryNamedEntitiesTooltip,
   TransSummaryPersuasionTooltip,
+  TransSummaryVideosTooltip,
 } from "@/components/NavItems/Assistant/TransComponents";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
@@ -402,7 +405,13 @@ const AssistantSummary = () => {
               <SummaryIcon
                 svgIcon={ImageIcon}
                 label="images_label"
-                description="summary_images_tooltip"
+                descriptionNode={
+                  <TransSummaryImagesTooltip
+                    keyword={keyword}
+                    imageCount={imageCount}
+                    loaded={true}
+                  />
+                }
                 value={imageCount}
                 targetId="assistant-image-results"
                 keyword={keyword}
@@ -411,7 +420,13 @@ const AssistantSummary = () => {
               <SummaryIcon
                 svgIcon={VideoIcon}
                 label="videos_label"
-                description="summary_videos_tooltip"
+                descriptionNode={
+                  <TransSummaryVideosTooltip
+                    keyword={keyword}
+                    videoCount={videoCount}
+                    loaded={true}
+                  />
+                }
                 value={videoCount}
                 targetId="assistant-video-results"
                 keyword={keyword}
@@ -432,7 +447,7 @@ const AssistantSummary = () => {
               flexWrap="wrap"
             >
               <SummaryIcon
-                icon={RecordVoiceOverOutlinedIcon}
+                icon={PsychologyOutlinedIcon}
                 label="persuasion_techniques_title"
                 descriptionNode={
                   <TransSummaryPersuasionTooltip
@@ -480,7 +495,13 @@ const AssistantSummary = () => {
               <SummaryIcon
                 icon={LabelOutlinedIcon}
                 label="named_entity_title"
-                description="summary_named_entities_tooltip"
+                descriptionNode={
+                  <TransSummaryNamedEntitiesTooltip
+                    keyword={keyword}
+                    namedEntityCount={namedEntityCount}
+                    loaded={!neLoading}
+                  />
+                }
                 value={namedEntityCount}
                 targetId="named-entity-results"
                 keyword={keyword}
