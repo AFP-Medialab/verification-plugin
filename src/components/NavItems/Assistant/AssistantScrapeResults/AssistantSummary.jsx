@@ -65,7 +65,7 @@ const SummaryIcon = ({
     scrollToElement(targetId, 100);
   };
 
-  const displayColor = disabled ? "disabled" : color || "primary";
+  const displayColor = disabled ? "disabled" : color || "info";
 
   const tooltipDescription =
     descriptionNode ?? (description ? keyword(description) : null);
@@ -128,7 +128,7 @@ const SummaryIcon = ({
             }}
           >
             {loading ? (
-              <CircularProgress size={24} />
+              <CircularProgress size={24} color="info" />
             ) : (
               <Typography variant="h6" color={displayColor}>
                 {value}
