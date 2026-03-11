@@ -290,12 +290,14 @@ const AssistantSummary = () => {
     0,
   );
   const persuasionOtherCount = persuasionResult?.entities
-    ? Object.entries(persuasionResult.entities)
-        .filter(
-          ([label]) =>
-            !persuasionWarningCategories.includes(label.split("__")[0]),
-        )
-        .reduce((total, [, spans]) => total + spans.length, 0)
+    ? new Set(
+        Object.keys(persuasionResult.entities)
+          .filter(
+            (label) =>
+              !persuasionWarningCategories.includes(label.split("__")[0]),
+          )
+          .map((label) => label.split("__")[0]),
+      ).size
     : 0;
 
   // MGT arc thresholds derived from backend configs (fallback matches default in AssistantTextClassification.jsx)
