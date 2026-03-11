@@ -25,11 +25,6 @@ function InlineChip({ color, children }) {
 
 export function TransTooltipChip({ keyword, i18nKey, color }) {
   const colorMap = {
-    // url domain analysis
-    warning: "error",
-    mentions: "warning",
-    fact_checker: "success",
-    unlabelled: "default",
     // stance classifier
     deny: "error",
     query: "warning",
