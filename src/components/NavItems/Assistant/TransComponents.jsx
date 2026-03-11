@@ -1,11 +1,66 @@
 import React from "react";
 import { Trans } from "react-i18next";
 
+import Chip from "@mui/material/Chip";
+
 // CSS STYLES
 
 const UL_STYLE = { paddingLeft: "20px", margin: "8px 0" };
 const LI_STYLE = { display: "list-item", listStyleType: "disc" };
 export const A_STYLE = { color: "blue", textDecoration: "underline" };
+
+// chips with colour
+
+const CHIP_SX = {
+  mx: 0.5,
+  height: "16px",
+  borderRadius: "4px",
+  "& .MuiChip-label": { fontSize: "0.65rem", px: "6px" },
+  color: "white",
+};
+
+function InlineChip({ color, children }) {
+  return <Chip size="small" color={color} label={children} sx={CHIP_SX} />;
+}
+
+export function TransTooltipChip({ keyword, i18nKey, color }) {
+  const colorMap = {
+    // url domain analysis
+    warning: "error",
+    mentions: "warning",
+    fact_checker: "success",
+    unlabelled: "default",
+    // fact-checks
+    dbkf_acronym: "warning",
+    fcss_acronym: "warning",
+    // machine generated text (colours match getMgtColours lightGreenRgb/greenRgb defaults)
+    highly_likely_human: "success",
+    likely_human: "#aaff00",
+    likely_machine: "warning",
+    highly_likely_machine: "error",
+    // stance classifier
+    deny: "error",
+    query: "warning",
+    support: "success",
+    comment: "default",
+  };
+
+  const mapped = color || colorMap[i18nKey] || "default";
+  const isCustomColor = mapped.startsWith("#") || mapped.startsWith("rgb");
+
+  return (
+    <Chip
+      size="small"
+      color={isCustomColor ? "default" : mapped}
+      label={keyword(i18nKey)}
+      sx={
+        isCustomColor
+          ? { ...CHIP_SX, backgroundColor: mapped, color: "rgba(0,0,0,0.87)" }
+          : CHIP_SX
+      }
+    />
+  );
+}
 
 // Links
 
@@ -307,36 +362,9 @@ export function TransSourceCredibilityTooltip({ keyword }) {
       components={{
         ul: <ul style={UL_STYLE} />,
         li: <li style={LI_STYLE} />,
-        strongWarning: (
-          <strong
-            style={{
-              background: "#d32f2f",
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-        strongMentions: (
-          <strong
-            style={{
-              background: "#ed6c02",
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-        strongFactChecker: (
-          <strong
-            style={{
-              background: "#2e7d32",
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
+        chipWarning: <InlineChip color="error" />,
+        chipMentions: <InlineChip color="warning" />,
+        chipFactChecker: <InlineChip color="success" />,
       }}
     />
   );
@@ -395,117 +423,18 @@ export function TransPersuasionTechniquesTooltip({ keyword }) {
   );
 }
 
-export function TransMachineGeneratedTextTooltip({ keyword }) {
-  return (
-    <Trans
-      t={keyword}
-      i18nKey="machine_generated_text_tooltip"
-      components={{
-        ul: <ul style={UL_STYLE} />,
-        li: <li style={LI_STYLE} />,
-        highlyLikelyHuman: (
-          <strong
-            style={{
-              background: "#00fc00",
-              color: "black",
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-        likelyHuman: (
-          <strong
-            style={{
-              background: "#aaff00",
-              color: "black",
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-        likelyMachine: (
-          <strong
-            style={{
-              background: "#fcaa00",
-              color: "black",
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-        highlyLikelyMachine: (
-          <strong
-            style={{
-              background: "#fc0000",
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-      }}
-    />
-  );
-}
-
-const stanceSupportColour = "#2e7d32";
-const stanceQueryColour = "#ed6c02";
-const stanceDenyColour = "#d32f2f";
-const stanceCommentColour = "#757575";
-
 export function TransMultilingualStanceTooltip({ keyword }) {
   return (
-    <Trans
-      t={keyword}
-      i18nKey="multilingual_stance_tooltip"
-      components={{
-        ul: <ul style={UL_STYLE} />,
-        li: <li style={LI_STYLE} />,
-        strongSupport: (
-          <strong
-            style={{
-              background: stanceSupportColour,
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-        strongQuery: (
-          <strong
-            style={{
-              background: stanceQueryColour,
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-        strongDeny: (
-          <strong
-            style={{
-              background: stanceDenyColour,
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-        strongComment: (
-          <strong
-            style={{
-              background: stanceCommentColour,
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-      }}
-    />
+    <>
+      <Trans t={keyword} i18nKey="multilingual_stance_tooltip" />
+      <ul style={UL_STYLE}>
+        {["support", "query", "deny", "comment"].map((key) => (
+          <li key={key} style={LI_STYLE}>
+            <TransTooltipChip keyword={keyword} i18nKey={key} />
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }
 
@@ -520,25 +449,20 @@ export function TransSummaryDomainTooltip({
 }) {
   return (
     <>
-      <Trans
-        t={keyword}
-        i18nKey="summary_domain_tooltip"
-        components={{
-          b: <b />,
-          ul: <ul style={UL_STYLE} />,
-          li: <li style={LI_STYLE} />,
-        }}
-      />
+      <Trans t={keyword} i18nKey="summary_domain_tooltip" />
       {loaded && (
         <ul style={UL_STYLE}>
           <li style={LI_STYLE}>
-            {cautionCount} {keyword("summary_domain_tooltip_warning")}
+            {cautionCount}{" "}
+            <TransTooltipChip keyword={keyword} i18nKey="warning" />
           </li>
           <li style={LI_STYLE}>
-            {mixedCount} {keyword("summary_domain_tooltip_mentions")}
+            {mixedCount}{" "}
+            <TransTooltipChip keyword={keyword} i18nKey="mentions" />
           </li>
           <li style={LI_STYLE}>
-            {positiveCount} {keyword("summary_domain_tooltip_fact_checker")}
+            {positiveCount}{" "}
+            <TransTooltipChip keyword={keyword} i18nKey="fact_checker" />
           </li>
         </ul>
       )}
@@ -555,25 +479,49 @@ export function TransSummaryFactChecksTooltip({
 }) {
   return (
     <>
-      <Trans
-        t={keyword}
-        i18nKey="summary_factchecks_tooltip"
-        components={{
-          b: <b />,
-          ul: <ul style={UL_STYLE} />,
-          li: <li style={LI_STYLE} />,
-        }}
-      />
+      <Trans t={keyword} i18nKey="summary_factchecks_tooltip" />
       {loaded && (
         <ul style={UL_STYLE}>
           <li style={LI_STYLE}>
-            {dbkfCount} {keyword("summary_factchecks_tooltip_dbkf")}
+            {dbkfCount}{" "}
+            <TransTooltipChip keyword={keyword} i18nKey="dbkf_acronym" />
           </li>
           {isBetaTester && (
             <li style={LI_STYLE}>
-              {fcssCount} {keyword("summary_factchecks_tooltip_fcss")}
+              {fcssCount}{" "}
+              <TransTooltipChip keyword={keyword} i18nKey="fcss_acronym" />
             </li>
           )}
+        </ul>
+      )}
+    </>
+  );
+}
+
+export function TransSummaryImagesTooltip({ keyword, imageCount, loaded }) {
+  return (
+    <>
+      <Trans t={keyword} i18nKey="summary_images_tooltip" />
+      {loaded && (
+        <ul style={UL_STYLE}>
+          <li style={LI_STYLE}>
+            {imageCount} {keyword("summary_images_tooltip_count")}
+          </li>
+        </ul>
+      )}
+    </>
+  );
+}
+
+export function TransSummaryVideosTooltip({ keyword, videoCount, loaded }) {
+  return (
+    <>
+      <Trans t={keyword} i18nKey="summary_videos_tooltip" />
+      {loaded && (
+        <ul style={UL_STYLE}>
+          <li style={LI_STYLE}>
+            {videoCount} {keyword("summary_videos_tooltip_count")}
+          </li>
         </ul>
       )}
     </>
@@ -588,24 +536,61 @@ export function TransSummaryPersuasionTooltip({
 }) {
   return (
     <>
-      <Trans
-        t={keyword}
-        i18nKey="summary_persuasion_tooltip"
-        components={{
-          b: <b />,
-          ul: <ul style={UL_STYLE} />,
-          li: <li style={LI_STYLE} />,
-        }}
-      />
+      <Trans t={keyword} i18nKey="summary_persuasion_tooltip" />
       {loaded && categoryCounts?.length > 0 && (
         <ul style={UL_STYLE}>
           {categoryCounts.map(({ name, count }) => (
             <li key={name} style={LI_STYLE}>
-              {count} {keyword(name)}
+              {count}{" "}
+              <TransTooltipChip
+                keyword={keyword}
+                i18nKey={name}
+                color={"warning"}
+              />
             </li>
           ))}
           <li style={LI_STYLE}>
             {otherCount} {keyword("summary_persuasion_tooltip_other")}
+          </li>
+        </ul>
+      )}
+    </>
+  );
+}
+
+export function TransSummaryMgtTooltip({
+  keyword,
+  mgtScoreValue,
+  mgtCategory,
+  loaded,
+}) {
+  return (
+    <>
+      <Trans t={keyword} i18nKey="summary_mgt_tooltip" />
+      {loaded && mgtScoreValue && mgtCategory && (
+        <ul style={UL_STYLE}>
+          <li style={LI_STYLE}>
+            {mgtScoreValue}{" "}
+            <TransTooltipChip keyword={keyword} i18nKey={mgtCategory} />
+          </li>
+        </ul>
+      )}
+    </>
+  );
+}
+
+export function TransSummaryNamedEntitiesTooltip({
+  keyword,
+  namedEntityCount,
+  loaded,
+}) {
+  return (
+    <>
+      <Trans t={keyword} i18nKey="summary_named_entities_tooltip" />
+      {loaded && (
+        <ul style={UL_STYLE}>
+          <li style={LI_STYLE}>
+            {namedEntityCount} {keyword("summary_named_entities_tooltip_count")}
           </li>
         </ul>
       )}
@@ -622,62 +607,25 @@ export function TransSummaryLinksTooltip({
   linksCount,
   loaded,
 }) {
+  const items = [
+    { count: warningLinksCount, key: "warning", color: "error" },
+    { count: mentionsLinksCount, key: "mentions", color: "warning" },
+    { count: factCheckerLinksCount, key: "fact_checker", color: "success" },
+    { count: unlabelledLinksCount, key: "unlabelled", color: "default" },
+  ];
   return (
     <>
-      <Trans
-        t={keyword}
-        i18nKey="summary_links_tooltip"
-        components={{
-          b: <b />,
-          ul: <ul style={UL_STYLE} />,
-          li: <li style={LI_STYLE} />,
-        }}
-      />
+      <Trans t={keyword} i18nKey="summary_links_tooltip" />
       {loaded && (
         <ul style={UL_STYLE}>
-          <li style={LI_STYLE}>
-            {warningLinksCount} {keyword("summary_links_tooltip_warning")}
-          </li>
-          <li style={LI_STYLE}>
-            {mentionsLinksCount} {keyword("summary_links_tooltip_mentions")}
-          </li>
-          <li style={LI_STYLE}>
-            {factCheckerLinksCount}{" "}
-            {keyword("summary_links_tooltip_fact_checker")}
-          </li>
-          <li style={LI_STYLE}>
-            {unlabelledLinksCount} {keyword("summary_links_tooltip_unlabelled")}
-          </li>
+          {items.map(({ count, key, color }) => (
+            <li key={key} style={LI_STYLE}>
+              {count}{" "}
+              <TransTooltipChip keyword={keyword} i18nKey={key} color={color} />
+            </li>
+          ))}
           <li style={LI_STYLE}>
             {linksCount} {keyword("summary_links_tooltip_total")}
-          </li>
-        </ul>
-      )}
-    </>
-  );
-}
-
-export function TransSummaryMgtTooltip({
-  keyword,
-  mgtScoreValue,
-  mgtCategory,
-  loaded,
-}) {
-  return (
-    <>
-      <Trans
-        t={keyword}
-        i18nKey="summary_mgt_tooltip"
-        components={{
-          b: <b />,
-          ul: <ul style={UL_STYLE} />,
-          li: <li style={LI_STYLE} />,
-        }}
-      />
-      {loaded && mgtScoreValue && mgtCategory && (
-        <ul style={UL_STYLE}>
-          <li style={LI_STYLE}>
-            {mgtScoreValue} {keyword(mgtCategory)}
           </li>
         </ul>
       )}
@@ -695,101 +643,22 @@ export function TransSummaryCommentsTooltip({
 }) {
   return (
     <>
-      <Trans
-        t={keyword}
-        i18nKey="summary_comments_tooltip"
-        components={{
-          b: <b />,
-          ul: <ul style={UL_STYLE} />,
-          li: <li style={LI_STYLE} />,
-        }}
-      />
+      <Trans t={keyword} i18nKey="summary_comments_tooltip" />
       {loaded && (
         <ul style={UL_STYLE}>
           <li style={LI_STYLE}>
-            {denyCount} {keyword("summary_comments_tooltip_deny")}
+            {denyCount} <TransTooltipChip keyword={keyword} i18nKey="deny" />
           </li>
           <li style={LI_STYLE}>
-            {queryCount} {keyword("summary_comments_tooltip_query")}
+            {queryCount} <TransTooltipChip keyword={keyword} i18nKey="query" />
           </li>
           <li style={LI_STYLE}>
-            {supportCount} {keyword("summary_comments_tooltip_support")}
+            {supportCount}{" "}
+            <TransTooltipChip keyword={keyword} i18nKey="support" />
           </li>
           <li style={LI_STYLE}>
-            {commentCount} {keyword("summary_comments_tooltip_comment")}
-          </li>
-        </ul>
-      )}
-    </>
-  );
-}
-
-export function TransSummaryVideosTooltip({ keyword, videoCount, loaded }) {
-  return (
-    <>
-      <Trans
-        t={keyword}
-        i18nKey="summary_videos_tooltip"
-        components={{
-          b: <b />,
-          ul: <ul style={UL_STYLE} />,
-          li: <li style={LI_STYLE} />,
-        }}
-      />
-      {loaded && (
-        <ul style={UL_STYLE}>
-          <li style={LI_STYLE}>
-            {videoCount} {keyword("summary_videos_tooltip_count")}
-          </li>
-        </ul>
-      )}
-    </>
-  );
-}
-
-export function TransSummaryNamedEntitiesTooltip({
-  keyword,
-  namedEntityCount,
-  loaded,
-}) {
-  return (
-    <>
-      <Trans
-        t={keyword}
-        i18nKey="summary_named_entities_tooltip"
-        components={{
-          b: <b />,
-          ul: <ul style={UL_STYLE} />,
-          li: <li style={LI_STYLE} />,
-        }}
-      />
-      {loaded && (
-        <ul style={UL_STYLE}>
-          <li style={LI_STYLE}>
-            {namedEntityCount} {keyword("summary_named_entities_tooltip_count")}
-          </li>
-        </ul>
-      )}
-    </>
-  );
-}
-
-export function TransSummaryImagesTooltip({ keyword, imageCount, loaded }) {
-  return (
-    <>
-      <Trans
-        t={keyword}
-        i18nKey="summary_images_tooltip"
-        components={{
-          b: <b />,
-          ul: <ul style={UL_STYLE} />,
-          li: <li style={LI_STYLE} />,
-        }}
-      />
-      {loaded && (
-        <ul style={UL_STYLE}>
-          <li style={LI_STYLE}>
-            {imageCount} {keyword("summary_images_tooltip_count")}
+            {commentCount}{" "}
+            <TransTooltipChip keyword={keyword} i18nKey="comment" />
           </li>
         </ul>
       )}
