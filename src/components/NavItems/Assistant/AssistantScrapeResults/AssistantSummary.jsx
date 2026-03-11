@@ -104,6 +104,8 @@ const SummaryIcon = ({
             borderRadius: 1,
             bgcolor: "background.paper",
             boxShadow: 1,
+            border: "1px solid",
+            borderColor: "divider",
             transition: "all 0.2s ease-in-out",
             opacity: disabled ? 0.5 : 1,
             "&:hover": {
