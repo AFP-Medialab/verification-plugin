@@ -12,6 +12,7 @@ import SvgIcon from "@mui/material/SvgIcon";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
+import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
 import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
 import FindInPageOutlinedIcon from "@mui/icons-material/FindInPageOutlined";
 import LabelOutlinedIcon from "@mui/icons-material/LabelOutlined";
@@ -318,7 +319,11 @@ const AssistantSummary = () => {
 
   return (
     <Card variant="outlined">
-      <CardHeader className={classes.assistantCardHeader} title="Summary" />
+      <CardHeader
+        className={classes.assistantCardHeader}
+        title={keyword("summary_title")}
+        avatar={<AssessmentOutlinedIcon color="primary" />}
+      />
       <CardContent>
         <Stack
           direction="row"
