@@ -619,7 +619,7 @@ export function TransSummaryLinksTooltip({
   ];
   return (
     <>
-      <Trans t={keyword} i18nKey="summary_links_tooltip" />
+      <Trans t={keyword} i18nKey="summary_extracted_urls_tooltip" />
       {loaded && (
         <ul style={UL_STYLE}>
           {items.map(({ count, key, color }) => (
@@ -647,7 +647,7 @@ export function TransSummaryCommentsTooltip({
 }) {
   return (
     <>
-      <Trans t={keyword} i18nKey="summary_comments_tooltip" />
+      <Trans t={keyword} i18nKey="summary_video_comments_tooltip" />
       {loaded && (
         <ul style={UL_STYLE}>
           <li style={LI_STYLE}>
