@@ -618,6 +618,7 @@ export function TransSummaryLinksTooltip({
   warningLinksCount,
   mentionsLinksCount,
   factCheckerLinksCount,
+  unlabelledLinksCount,
   linksCount,
   loaded,
 }) {
@@ -643,6 +644,9 @@ export function TransSummaryLinksTooltip({
           <li style={LI_STYLE}>
             {factCheckerLinksCount}{" "}
             {keyword("summary_links_tooltip_fact_checker")}
+          </li>
+          <li style={LI_STYLE}>
+            {unlabelledLinksCount} {keyword("summary_links_tooltip_unlabelled")}
           </li>
           <li style={LI_STYLE}>
             {linksCount} {keyword("summary_links_tooltip_total")}

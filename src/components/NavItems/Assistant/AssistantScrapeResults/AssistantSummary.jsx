@@ -266,6 +266,8 @@ const AssistantSummary = () => {
   const factCheckerLinksCount = new Set(
     credDomains.filter((d) => d.positive).flatMap((d) => d.url || []),
   ).size;
+  const unlabelledLinksCount =
+    extractedSourceCred?.url?.unlabelled?.length || 0;
 
   // persuasion count: total spans belonging to warning categories
   // technique keys follow the "Category__Technique" format
@@ -516,6 +518,7 @@ const AssistantSummary = () => {
                     warningLinksCount={warningLinksCount}
                     mentionsLinksCount={mentionsLinksCount}
                     factCheckerLinksCount={factCheckerLinksCount}
+                    unlabelledLinksCount={unlabelledLinksCount}
                     linksCount={linksCount}
                     loaded={!inputSCLoading}
                   />
