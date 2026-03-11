@@ -449,7 +449,7 @@ export function TransSummaryDomainTooltip({
 }) {
   return (
     <>
-      <Trans t={keyword} i18nKey="summary_domain_tooltip" />
+      <Trans t={keyword} i18nKey="summary_url_domain_analysis_tooltip" />
       {loaded && (
         <ul style={UL_STYLE}>
           <li style={LI_STYLE}>
@@ -479,7 +479,11 @@ export function TransSummaryFactChecksTooltip({
 }) {
   return (
     <>
-      <Trans t={keyword} i18nKey="summary_factchecks_tooltip" />
+      {isBetaTester ? (
+        <Trans t={keyword} i18nKey="summary_dbkf_fcss_tooltip" />
+      ) : (
+        <Trans t={keyword} i18nKey="summary_dbkf_tooltip" />
+      )}
       {loaded && (
         <ul style={UL_STYLE}>
           <li style={LI_STYLE}>
@@ -505,7 +509,7 @@ export function TransSummaryImagesTooltip({ keyword, imageCount, loaded }) {
       {loaded && (
         <ul style={UL_STYLE}>
           <li style={LI_STYLE}>
-            {imageCount} {keyword("summary_images_tooltip_count")}
+            {imageCount} {keyword("images_label")}
           </li>
         </ul>
       )}
@@ -520,7 +524,7 @@ export function TransSummaryVideosTooltip({ keyword, videoCount, loaded }) {
       {loaded && (
         <ul style={UL_STYLE}>
           <li style={LI_STYLE}>
-            {videoCount} {keyword("summary_videos_tooltip_count")}
+            {videoCount} {keyword("videos_label")}
           </li>
         </ul>
       )}
@@ -536,7 +540,7 @@ export function TransSummaryPersuasionTooltip({
 }) {
   return (
     <>
-      <Trans t={keyword} i18nKey="summary_persuasion_tooltip" />
+      <Trans t={keyword} i18nKey="summary_persuasion_techniques_tooltip" />
       {loaded && categoryCounts?.length > 0 && (
         <ul style={UL_STYLE}>
           {categoryCounts.map(({ name, count }) => (
@@ -566,7 +570,7 @@ export function TransSummaryMgtTooltip({
 }) {
   return (
     <>
-      <Trans t={keyword} i18nKey="summary_mgt_tooltip" />
+      <Trans t={keyword} i18nKey="summary_machine_generated_text_tooltip" />
       {loaded && mgtScoreValue && mgtCategory && (
         <ul style={UL_STYLE}>
           <li style={LI_STYLE}>
@@ -590,7 +594,7 @@ export function TransSummaryNamedEntitiesTooltip({
       {loaded && (
         <ul style={UL_STYLE}>
           <li style={LI_STYLE}>
-            {namedEntityCount} {keyword("summary_named_entities_tooltip_count")}
+            {namedEntityCount} {keyword("named_entities_label")}
           </li>
         </ul>
       )}
