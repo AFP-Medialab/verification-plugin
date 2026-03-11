@@ -45,6 +45,8 @@ import {
   setWarningExpanded,
 } from "@/redux/actions/tools/assistantActions";
 
+import { TransHtmlDoubleLineBreak } from "../TransComponents";
+
 const SummaryIcon = ({
   icon: Icon,
   svgIcon,
@@ -79,7 +81,7 @@ const SummaryIcon = ({
         tooltipDescription ? (
           <>
             {keyword(label)}
-            <br />
+            <TransHtmlDoubleLineBreak keyword={keyword} />
             {tooltipDescription}
           </>
         ) : (
