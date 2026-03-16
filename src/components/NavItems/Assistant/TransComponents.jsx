@@ -6,7 +6,7 @@ import { Trans } from "react-i18next";
 const UL_STYLE = { paddingLeft: "20px", margin: "8px 0" };
 const LI_STYLE = { display: "list-item", listStyleType: "disc" };
 const A_STYLE = {
-  color: "white", // passes tests except WCAG AAA on https://webaim.org/resources/contrastchecker/. Background needs to be darker to pass all tests
+  color: "white", // passes all tests on https://webaim.org/resources/contrastchecker/
   textDecoration: "underline",
 };
 
