@@ -221,15 +221,13 @@ export default function AssistantTextClassification({
             className={classes.assistantCardHeader}
             title={keyword(credibilitySignal)}
             action={
-              <div style={{ display: "flex" }}>
-                <Tooltip
-                  interactive={"true"}
-                  title={categoriesTooltipContent}
-                  classes={{ tooltip: classes.assistantTooltip }}
-                >
-                  <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
-                </Tooltip>
-              </div>
+              <Tooltip
+                interactive={"true"}
+                title={categoriesTooltipContent}
+                classes={{ tooltip: classes.assistantTooltip }}
+              >
+                <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+              </Tooltip>
             }
           />
           <CardContent>

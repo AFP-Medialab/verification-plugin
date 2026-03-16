@@ -140,29 +140,25 @@ const AssistantMediaResult = ({ title = null }) => {
         }
         subheader={keyword("media_below")}
         action={
-          <div style={{ display: "flex" }}>
-            <div>
-              <Tooltip
-                interactive={"true"}
-                title={
-                  <>
-                    <Trans
-                      t={keyword}
-                      i18nKey="media_tooltip"
-                      components={{
-                        b: <b />,
-                      }}
-                    />
-                    <TransHtmlDoubleLineBreak keyword={keyword} />
-                    <TransSupportedToolsLink keyword={keyword} />
-                  </>
-                }
-                classes={{ tooltip: classes.assistantTooltip }}
-              >
-                <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
-              </Tooltip>
-            </div>
-          </div>
+          <Tooltip
+            interactive={"true"}
+            title={
+              <>
+                <Trans
+                  t={keyword}
+                  i18nKey="media_tooltip"
+                  components={{
+                    b: <b />,
+                  }}
+                />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
+                <TransSupportedToolsLink keyword={keyword} />
+              </>
+            }
+            classes={{ tooltip: classes.assistantTooltip }}
+          >
+            <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+          </Tooltip>
         }
       />
 
