@@ -2,16 +2,16 @@ import React from "react";
 import { Trans } from "react-i18next";
 import { useSelector } from "react-redux";
 
-import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
 import DbkfTextResults from "@/components/NavItems/Assistant/AssistantCheckResults/DbkfTextResults";
 import PreviousFactCheckResults from "@/components/NavItems/Assistant/AssistantCheckResults/PreviousFactCheckResults";
@@ -124,9 +124,10 @@ const AssistantWarnings = () => {
       <CardHeader
         className={classes.assistantCardHeader}
         title={
-          <Alert severity="warning" sx={{ bgcolor: "background.paper" }}>
-            <Typography>{keyword("warnings_title")}</Typography>
-          </Alert>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <WarningAmberIcon color="warning" />
+            {keyword("warnings_title")}
+          </Box>
         }
         action={
           <Tooltip
