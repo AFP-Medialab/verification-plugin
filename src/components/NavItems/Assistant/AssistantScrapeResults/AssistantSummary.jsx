@@ -279,8 +279,8 @@ const AssistantSummary = () => {
   // warningCategories is provided by the backend config; fallback to defaults if absent
   const persuasionWarningCategories = persuasionResult?.configs
     ?.persuasionTechniquesWarningCategories ?? [
-    "Red_Herring",
-    "Manipulative_Wording",
+    "Doubt",
+    "Appeal_to_Fear-Prejudice",
   ];
   const persuasionCategoryCounts = persuasionWarningCategories.map((cat) => ({
     name: cat,
