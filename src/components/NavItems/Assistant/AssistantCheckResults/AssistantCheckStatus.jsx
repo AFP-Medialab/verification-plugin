@@ -14,13 +14,10 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
+import { KNOWN_LINKS, KNOWN_LINK_PATTERNS } from "@/constants/tools";
 import { setStateExpanded } from "@/redux/actions/tools/assistantActions";
 
-import {
-  KNOWN_LINKS,
-  KNOWN_LINK_PATTERNS,
-  matchPattern,
-} from "../AssistantRuleBook";
+import { matchPattern } from "../AssistantRuleBook";
 
 const AssistantCheckStatus = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");

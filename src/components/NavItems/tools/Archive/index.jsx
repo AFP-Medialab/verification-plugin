@@ -13,6 +13,7 @@ import Typography from "@mui/material/Typography";
 import { ArrowBack } from "@mui/icons-material";
 
 import { archiving } from "@/constants/tools";
+import { KNOWN_LINKS, KNOWN_LINK_PATTERNS } from "@/constants/tools";
 import {
   archiveStateCleaned,
   setArchiveUrl,
@@ -21,11 +22,7 @@ import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
 import assistantApiCalls from "../../Assistant/AssistantApiHandlers/useAssistantApi";
-import {
-  KNOWN_LINKS,
-  KNOWN_LINK_PATTERNS,
-  matchPattern,
-} from "../../Assistant/AssistantRuleBook";
+import { matchPattern } from "../../Assistant/AssistantRuleBook";
 import FifthStep from "./components/FifthStep";
 import FirstStep from "./components/FirstStep";
 import FourthStep from "./components/FourthStep";
