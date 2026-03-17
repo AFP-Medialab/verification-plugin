@@ -30,6 +30,7 @@ const AssistantVideoResult = () => {
 
   const useIframe = () => {
     switch (input_url_type) {
+      case KNOWN_LINKS.BBC:
       case KNOWN_LINKS.YOUTUBE:
       case KNOWN_LINKS.VIMEO:
       case KNOWN_LINKS.DAILYMOTION:
