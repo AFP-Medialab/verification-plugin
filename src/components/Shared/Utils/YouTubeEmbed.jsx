@@ -14,8 +14,21 @@ import { browser } from "wxt/browser";
  *
  * Direct embedding often fails in browser extensions (error 152-4),
  * so this provides a reliable click-to-watch experience
+ *
+ * @param {string} [videoId] - YouTube video ID (e.g. "xf8mjbVRqao")
+ * @param {string} [embedLink] - Full YouTube embed URL (e.g. "https://www.youtube.com/embed/xf8mjbVRqao?rel=0").
+ *   The video ID is extracted automatically. Used when videoId is not provided.
  */
-const YouTubeEmbed = ({ videoId, width = "560", height = "315" }) => {
+const YouTubeEmbed = ({
+  videoId,
+  embedLink,
+  width = "560",
+  height = "315",
+}) => {
+  if (!videoId && embedLink) {
+    const match = embedLink.match(/\/embed\/([a-zA-Z0-9_-]+)/);
+    videoId = match ? match[1] : null;
+  }
   const handleWatchOnYouTube = () => {
     browser.tabs.create({
       url: `https://www.youtube.com/watch?v=${videoId}`,

@@ -533,13 +533,17 @@ const ClassRoom = () => {
             aria-labelledby="max-width-dialog-title"
           >
             <DialogContent>
-              <Iframe
-                frameBorder="0"
-                url={videoUrl}
-                allow="fullscreen"
-                height="400"
-                width="100%"
-              />
+              {/(?:youtube\.com|youtu\.be)/i.test(videoUrl) ? (
+                <YouTubeEmbed embedLink={videoUrl} height="400" width="100%" />
+              ) : (
+                <Iframe
+                  frameBorder="0"
+                  url={videoUrl}
+                  allow="fullscreen"
+                  height="400"
+                  width="100%"
+                />
+              )}
             </DialogContent>
             <DialogActions>
               <Button onClick={() => setVideoUrl(null)} color="primary">
