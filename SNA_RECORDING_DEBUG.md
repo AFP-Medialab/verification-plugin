@@ -1,4 +1,4 @@
-# SNA Recording Debug Guide
+# SNA Recording HOW TO
 
 This guide will help you debug why SNA recording is not working on X.com (Twitter) or TikTok.
 
