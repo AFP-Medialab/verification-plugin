@@ -34,6 +34,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@contentauth/c2pa-web": "^0.7.0",
     "@emotion/cache": "^11.14.0",
     "@emotion/css": "^11.13.5",
     "@emotion/react": "^11.14.0",
@@ -57,7 +58,6 @@
     "attr-accept": "^2.2.5",
     "axios": "^1.13.6",
     "buffer": "^6.0.3",
-    "c2pa": "0.30.17",
     "chart.js": "^4.4.4",
     "chartjs-adapter-dayjs-4": "^1.0.4",
     "client-zip": "^2.4.6",

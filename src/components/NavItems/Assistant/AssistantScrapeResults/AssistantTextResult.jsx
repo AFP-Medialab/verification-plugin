@@ -35,7 +35,6 @@ import {
   TransExtractedTextTooltip,
   TransHtmlDoubleLineBreak,
   TransKinitAuthor,
-  TransMachineGeneratedTextTooltip,
   TransNewsFramingTooltip,
   TransNewsGenreTooltip,
   TransPersuasionTechniquesTooltip,
@@ -217,7 +216,7 @@ const AssistantTextResult = () => {
 
   const machineGeneratedTextTooltip = (
     <>
-      <TransMachineGeneratedTextTooltip keyword={keyword} />
+      <Trans t={keyword} i18nKey="machine_generated_text_tooltip" />
       <TransHtmlDoubleLineBreak keyword={keyword} />
       <TransKinitAuthor keyword={keyword} />
       <TransHtmlDoubleLineBreak keyword={keyword} />

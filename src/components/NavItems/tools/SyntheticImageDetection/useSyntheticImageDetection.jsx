@@ -9,32 +9,38 @@ import {
   setSyntheticImageDetectionResult,
 } from "@/redux/reducers/tools/syntheticImageDetectionReducer";
 import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequest";
+import { createC2pa } from "@contentauth/c2pa-web";
+import wasmSrc from "@contentauth/c2pa-web/resources/c2pa.wasm?url";
 import axios from "axios";
-import { createC2pa, selectGenerativeInfo } from "c2pa";
 
 import { syntheticImageDetectionAlgorithms } from "./SyntheticImageDetectionAlgorithms";
 
 const fetchGenerativeInfoFromC2pa = async (url) => {
   const settings = await getToolkitSettings();
   const c2pa = await createC2pa({
-    wasmSrc: "./c2paAssets/toolkit_bg.wasm",
-    workerSrc: "./c2paAssets/c2pa.worker.min.js",
+    wasmSrc,
   });
-
-  const { manifestStore } = await c2pa.read(url, { settings });
-  const activeManifest = manifestStore?.activeManifest;
-  if (!activeManifest) return null;
-
+  const response = await fetch(url);
+  const blob = await response.blob();
   let genInfo = null;
+  try {
+    const reader = await c2pa.reader.fromBlob(blob.type, blob, settings);
 
-  if (!manifestStore.manifests) return null;
+    const activeManifest = await reader.activeManifest();
+    if (!activeManifest) return null;
+    const manifestStore = await reader.manifestStore();
 
-  for (const manifestValue of Object.values(manifestStore.manifests)) {
-    const generativeInfo = selectGenerativeInfo(manifestValue);
+    if (!manifestStore.manifests) return null;
+    genInfo = [];
+    for (const manifestValue of Object.values(manifestStore.manifests)) {
+      const generativeInfo = { assertion: manifestValue.assertions };
 
-    if (generativeInfo) {
-      genInfo = generativeInfo;
+      if (generativeInfo) {
+        genInfo.push(generativeInfo);
+      }
     }
+  } catch (e) {
+    console.log(e);
   }
 
   return genInfo;
