@@ -19,6 +19,7 @@ export const FOOTER_TYPES = {
   KINIT: "kinit",
   AFP: "afp",
   AFP_URBINO_VIGINUM: "afp-urbino-viginum",
+  CIMPLE: "cimple",
 };
 
 export const Footer = (props) => {
@@ -123,6 +124,12 @@ export const Footer = (props) => {
       provideBy = keyword("afp_part_1");
       link = keyword("kinit_link");
       linkLabel = keyword("kinit_link_label");
+      contactUs = keyword("afp_part_2");
+      break;
+    case FOOTER_TYPES.CIMPLE:
+      provideBy = keyword("afp_part_1");
+      link = keyword("cimple_link");
+      linkLabel = keyword("cimple_link_label");
       contactUs = keyword("afp_part_2");
       break;
     default:

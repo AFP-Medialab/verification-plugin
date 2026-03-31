@@ -39,6 +39,7 @@ import OcrIcon from "../components/NavBar/images/SVG/Image/OCR.svg";
 import AboutIcon from "../components/NavBar/images/SVG/Navbar/About.svg";
 import AfpDigitalCoursesIconComponent from "../components/NavBar/images/SVG/Navbar/AfpDigitalCoursesIcon";
 import ToolsIcon from "../components/NavBar/images/SVG/Navbar/Tools.svg";
+import CimpleIcon from "../components/NavBar/images/SVG/Search/Cimple.svg";
 import CovidSearchIcon from "../components/NavBar/images/SVG/Search/Covid19.svg";
 import TwitterSearchIcon from "../components/NavBar/images/SVG/Search/Twitter_search.svg";
 import XnetworkIcon from "../components/NavBar/images/SVG/Search/Xnetwork.svg";
@@ -110,6 +111,9 @@ const TwitterAdvancedSearch = React.lazy(
 );
 const TwitterSna = React.lazy(
   () => import("../components/NavItems/tools/TwitterSna/TwitterSna"),
+);
+const CimpleSearch = React.lazy(
+  () => import("../components/NavItems/tools/CimpleSearch"),
 );
 
 /**
@@ -287,6 +291,10 @@ const covidSearchSvgIcon = (props) => {
 
 const xnetworkSvgIcon = (props) => {
   return <SvgIcon component={XnetworkIcon} inheritViewBox {...props} />;
+};
+
+const cimpleSvgIcon = (props) => {
+  return <SvgIcon component={CimpleIcon} inheritViewBox {...props} />;
 };
 
 const mgtSvgIcon = (props) => {
@@ -686,6 +694,19 @@ const searchXnetwork = new Tool(
   null,
 );
 
+export const searchCimple = new Tool(
+  "navbar_cimple",
+  "navbar_cimple_description",
+  cimpleSvgIcon,
+  TOOLS_CATEGORIES.SEARCH,
+  null,
+  null,
+  "cimple",
+  TOOL_GROUPS.VERIFICATION,
+  <CimpleSearch />,
+  <Footer type={FOOTER_TYPES.CIMPLE} />,
+);
+
 const machineGeneratedText = new Tool(
   "navbar_mgt",
   "navbar_mgt_description",
@@ -860,6 +881,7 @@ export const tools = Object.freeze([
   searchSemantic,
   searchCovid,
   searchXnetwork,
+  searchCimple,
   machineGeneratedText,
   dataAnalysisSna,
   dataAnalysisCrowdtangle,

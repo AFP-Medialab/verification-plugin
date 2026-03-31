@@ -59,6 +59,7 @@ by Vite.
    VITE_ASSISTANT_URL=<assistant_url>
    VITE_DBKF_SEARCH_API=<dbkf_url>
    VITE_DBKF_SIMILARITY_API=<dbkf_similarity_url>
+   VITE_CIMPLE_API=<cimple_url>
    VITE_BASEURL=<baseurl>
    VITE_WRAPPER=<wrapper_url>
    VITE_CAA_FORENSICS_URL=<forensics_url>
