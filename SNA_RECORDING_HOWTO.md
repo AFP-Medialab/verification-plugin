@@ -5,13 +5,13 @@ This guide will help you debug why SNA recording is not working on X.com (Twitte
 ## Step 1: Build the Extension
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 Or for specific browsers:
 ```bash
-npm run build:firefox:development
-npm run build:chrome:development
+pnpm run build:firefox:development
+pnpm run build:chrome:development
 ```
 
 ## Step 2: Load Extension and Open DevTools
