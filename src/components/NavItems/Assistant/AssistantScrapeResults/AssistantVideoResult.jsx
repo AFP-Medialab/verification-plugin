@@ -184,10 +184,9 @@ const AssistantVideoResult = () => {
         <Tooltip title={keyword("archive_link")}>
           <IconButton
             onClick={() => {
-              window.open(
-                "https://web.archive.org/save/" + processUrl,
-                "_blank",
-              );
+              browser.tabs.create({
+                url: "https://web.archive.org/save/" + processUrl,
+              });
             }}
           >
             <ArchiveOutlinedIcon color={"action"} />
