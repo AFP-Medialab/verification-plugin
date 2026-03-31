@@ -67,7 +67,7 @@ const AssistantVideoResult = () => {
         if (!embedURL.includes("/embed/")) {
           let ids = embedURL.match("(?<=v=|youtu.be/)([a-zA-Z0-9_-]+)[&|?]?");
           if (ids) {
-            embedURL = "http://www.youtube.com/embed/" + ids[0];
+            embedURL = "https://www.youtube.com/embed/" + ids[0];
           }
         }
         break;
