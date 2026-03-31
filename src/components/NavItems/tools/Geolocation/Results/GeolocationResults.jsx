@@ -19,6 +19,13 @@ const GeolocationResults = ({ result, urlImage }) => {
 
   const userRoles = useSelector((state) => state.userSession.user.roles);
 
+  const resultIcon = new Icon({
+    iconUrl: "img/marker-icon.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [0, -41],
+  });
+
   if (!userRoles.includes(ROLES.EXTRA_FEATURE)) {
     result = result.slice(0, 1);
   }
@@ -127,13 +134,7 @@ const GeolocationResults = ({ result, urlImage }) => {
                           />
                           <Marker
                             position={[res.latitude, res.longitude]}
-                            icon={
-                              new Icon({
-                                iconUrl: "img/marker_location.svg",
-                                iconSize: [60, 60],
-                                iconAnchor: [30, 0],
-                              })
-                            }
+                            icon={resultIcon}
                           >
                             <Popup>{keyword("geo_prediction")}</Popup>
                           </Marker>
@@ -226,4 +227,5 @@ const GeolocationResults = ({ result, urlImage }) => {
     </Box>
   );
 };
+
 export default GeolocationResults;
