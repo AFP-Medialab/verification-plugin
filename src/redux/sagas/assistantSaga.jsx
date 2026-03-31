@@ -18,7 +18,6 @@ import {
   setInputSourceCredDetails,
   setInputUrl,
   setMachineGeneratedTextChunksDetails,
-  setMachineGeneratedTextSentencesDetails,
   setMissingMedia,
   setMultilingualStanceDetails,
   setNeDetails,
@@ -116,13 +115,6 @@ function* getMachineGeneratedTextChunksSaga() {
   yield takeLatest(
     ["SET_SCRAPED_DATA", "CLEAN_STATE"],
     handleMachineGeneratedTextChunksCall,
-  );
-}
-
-function* getMachineGeneratedTextSentencesSaga() {
-  yield takeLatest(
-    ["SET_SCRAPED_DATA", "CLEAN_STATE"],
-    handleMachineGeneratedTextSentencesCall,
   );
 }
 
@@ -543,35 +535,8 @@ function* handleMachineGeneratedTextChunksCall(action) {
         setMachineGeneratedTextChunksDetails(result, false, true, false),
       );
     }
-  } catch (error) {
+  } catch {
     yield put(setMachineGeneratedTextChunksDetails(null, false, false, true));
-  }
-}
-
-function* handleMachineGeneratedTextSentencesCall(action) {
-  if (action.type === "CLEAN_STATE") return;
-
-  try {
-    const text = yield select((state) => state.assistant.urlText);
-
-    if (text) {
-      yield put(
-        setMachineGeneratedTextSentencesDetails(null, true, false, false),
-      );
-
-      const result = yield call(
-        assistantApi.callMachineGeneratedTextSentencesService,
-        text.substring(0, URL_BUFFER_LIMIT),
-      );
-
-      yield put(
-        setMachineGeneratedTextSentencesDetails(result, false, true, false),
-      );
-    }
-  } catch (error) {
-    yield put(
-      setMachineGeneratedTextSentencesDetails(null, false, false, true),
-    );
   }
 }
 
@@ -1037,6 +1002,5 @@ export default function* assistantSaga() {
     fork(getPrevFactChecksSaga),
     fork(getMultilingualStanceSaga),
     fork(getMachineGeneratedTextChunksSaga),
-    fork(getMachineGeneratedTextSentencesSaga),
   ]);
 }
