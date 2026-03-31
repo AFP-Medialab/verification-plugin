@@ -7,6 +7,7 @@ import CardActions from "@mui/material/CardActions";
 import CardMedia from "@mui/material/CardMedia";
 import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
+import SvgIcon from "@mui/material/SvgIcon";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
@@ -14,6 +15,7 @@ import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import ImageIcon from "@mui/icons-material/Image";
 
+import VideoIcon from "@/components/NavBar/images/SVG/Video/Video.svg";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { KNOWN_LINKS } from "@/constants/tools";
@@ -156,7 +158,7 @@ const AssistantVideoResult = () => {
         </Typography>
       </CardMedia>
       <CardActions>
-        <ImageIcon color={"action"} />
+        <SvgIcon component={VideoIcon} color="action" inheritViewBox />
         <Link
           className={classes.longText}
           href={processUrl}
