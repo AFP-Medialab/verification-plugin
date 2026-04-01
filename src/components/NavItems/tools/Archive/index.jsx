@@ -12,8 +12,7 @@ import Typography from "@mui/material/Typography";
 
 import { ArrowBack } from "@mui/icons-material";
 
-import { archiving } from "@/constants/tools";
-import { KNOWN_LINKS } from "@/constants/tools";
+import { KNOWN_LINKS, archiving } from "@/constants/tools";
 import {
   archiveStateCleaned,
   setArchiveUrl,
