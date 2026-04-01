@@ -72,6 +72,7 @@ by Vite.
    VITE_LOCCUS_URL=<loccus_url>
    VITE_AFP_REVERSE_SEARCH_URL=<reversesearch_url>
    VITE_SEMANTIC_SEARCH_URL=<semanticsearch_url>
+   VITE_DISINFO_DECK_SERVER=<disinfo_url>
    ARCHIVE_BACKEND=<archive_url>
    ```
 
