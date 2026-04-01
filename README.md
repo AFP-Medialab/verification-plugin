@@ -42,7 +42,7 @@ by Vite.
 
 1. To install the dependencies run
    ```
-   npm install
+   ppnpm install
    ```
    or
    ```
@@ -83,25 +83,25 @@ WXT provides commands for building the extension for different browsers:
 
 - Run the `dev` script to build the extension in development mode with watch
   ```
-  npm run dev
+  pnpm run dev
   ```
 
 - Build for specific browsers in development mode:
   ```
-  npm run dev:chrome
-  npm run dev:firefox
+  pnpm run dev:chrome
+  pnpm run dev:firefox
   ```
 
 - Build for production:
   ```
-  npm run build
+  pnpm run build
   ```
 
 - Build for specific browsers in production:
   ```
-  npm run build:chrome:production
-  npm run build:firefox:production
-  npm run build:safari:production
+  pnpm run build:chrome:production
+  pnpm run build:firefox:production
+  pnpm run build:safari:production
   ```
 
 WXT features:
@@ -152,11 +152,11 @@ to generate the JSON files
 
 1. Build the extension first:
    ```
-   npm run build
+   ppnpm run build
    ```
    or for development build:
    ```
-   npm run build:chrome:development
+   ppnpm run build:chrome:development
    ```
 
 2. Go to the Extensions page by entering [chrome://extensions/](chrome://extensions/) in a new tab.
@@ -181,14 +181,14 @@ tests
 
 ```
 
-**Note: Before running all (or just e2e) tests, the extension must first be built using `npm run build`. See
+**Note: Before running all (or just e2e) tests, the extension must first be built using `pnpm run build`. See
 End-to-end (e2e) testing section for more details**
 
 All tests (e2e, component & unit) can be run using the command:
 
 ```
 
-npm run test
+pnpm run test
 
 ```
 
@@ -198,7 +198,7 @@ Component and unit testing are run together using the following command:
 
 ```
 
-npm run test-cu
+pnpm run test-cu
 
 ```
 
@@ -215,7 +215,7 @@ Note: Component testing is best done on components that can be easily isolated. 
 are likely to be more suitable for e2e testing.
 
 Note: Playwright/vite generates cache files at `/playwright/.cache` which sometimes does not get updated properly
-when `.jsx` files changes, so currently the command `npm run test-cu` deletes the cache directory before running the
+when `.jsx` files changes, so currently the command `pnpm run test-cu` deletes the cache directory before running the
 tests.
 
 ### End-to-end (e2e) testing
@@ -224,13 +224,13 @@ E2E testing can be run using the following command:
 
 ```
 
-npm run test-e2e
+pnpm run test-e2e
 
 ```
 
 Playwright configurations of the e2e tests can be found in `/playwright.config.ts`.
 
-Before running all (or just e2e) tests, the extension must first be built using `npm run build`.
+Before running all (or just e2e) tests, the extension must first be built using `pnpm run build`.
 
 The compiled extension in the `./build/chrome-mv3` directory can be loaded into the browser by using the fixture code in
 `/tests/e2e/fixtures.ts`. All e2e tests of the extension should import the overridden `test` and `expect` functions in
@@ -256,7 +256,7 @@ test('Example extension test', async ({page, extensionId}) => {
 UI mode is for e2e test can be run using:
 
 ```
-npm run test-e2e-ui
+pnpm run test-e2e-ui
 ```
 
 This will open a browser with interactive testing environment which can be useful for debugging.
