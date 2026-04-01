@@ -38,7 +38,6 @@ import { v4 as uuidv4 } from "uuid";
 export default function AssistantTextClassification({
   text,
   classification,
-  overallClassification,
   categoriesTooltipContent = "",
   configs = {
     // machine generated text and subjectivity
@@ -236,9 +235,7 @@ export default function AssistantTextClassification({
                 categories={sortedFilteredCategories}
                 keyword={keyword}
                 fullTextScoreLabel={fullTextScoreLabel}
-                overallScore={
-                  overallClassification[mgtOverallScoreLabel][0].score
-                }
+                overallScore={classification[mgtOverallScoreLabel][0].score}
                 resolvedMode={resolvedMode}
                 colours={resolvedMode === "dark" ? mgtColoursDark : mgtColours}
                 arcsLength={[0.05, 0.45, 0.45, 0.05]}

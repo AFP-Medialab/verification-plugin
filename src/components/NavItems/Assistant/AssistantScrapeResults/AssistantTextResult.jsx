@@ -35,7 +35,6 @@ import {
   TransExtractedTextTooltip,
   TransHtmlDoubleLineBreak,
   TransKinitAuthor,
-  TransMachineGeneratedTextTooltip,
   TransNewsFramingTooltip,
   TransNewsGenreTooltip,
   TransPersuasionTechniquesTooltip,
@@ -117,15 +116,6 @@ const AssistantTextResult = () => {
   );
   const machineGeneratedTextChunksFail = useSelector(
     (state) => state.assistant.machineGeneratedTextChunksFail,
-  );
-  const machineGeneratedTextSentencesResult = useSelector(
-    (state) => state.assistant.machineGeneratedTextSentencesResult,
-  );
-  const machineGeneratedTextSentencesLoading = useSelector(
-    (state) => state.assistant.machineGeneratedTextSentencesLoading,
-  );
-  const machineGeneratedTextSentencesFail = useSelector(
-    (state) => state.assistant.machineGeneratedTextSentencesFail,
   );
 
   // previous fact-checks
@@ -217,7 +207,7 @@ const AssistantTextResult = () => {
 
   const machineGeneratedTextTooltip = (
     <>
-      <TransMachineGeneratedTextTooltip keyword={keyword} />
+      <Trans t={keyword} i18nKey="machine_generated_text_tooltip" />
       <TransHtmlDoubleLineBreak keyword={keyword} />
       <TransKinitAuthor keyword={keyword} />
       <TransHtmlDoubleLineBreak keyword={keyword} />
@@ -342,16 +332,13 @@ const AssistantTextResult = () => {
             label={
               <div>
                 {keyword(machineGeneratedTextTitle)}
-                {(machineGeneratedTextChunksLoading ||
-                  machineGeneratedTextSentencesLoading) && <LinearProgress />}
+                {machineGeneratedTextChunksLoading && <LinearProgress />}
               </div>
             }
             {...a11yProps(5)}
             disabled={
               machineGeneratedTextChunksFail ||
-              machineGeneratedTextChunksLoading ||
-              machineGeneratedTextSentencesFail ||
-              machineGeneratedTextSentencesLoading
+              machineGeneratedTextChunksLoading
             }
           />
         </Tabs>
@@ -433,9 +420,8 @@ const AssistantTextResult = () => {
           <CustomTabPanel value={textTabIndex} index={5}>
             <AssistantTextClassification
               text={text}
-              classification={machineGeneratedTextSentencesResult?.entities}
-              overallClassification={machineGeneratedTextChunksResult?.entities}
-              configs={machineGeneratedTextSentencesResult?.configs}
+              classification={machineGeneratedTextChunksResult?.entities}
+              configs={machineGeneratedTextChunksResult?.configs}
               categoriesTooltipContent={machineGeneratedTextTooltip}
               textHtmlMap={textHtmlMap}
               credibilitySignal={machineGeneratedTextTitle}
