@@ -1,11 +1,56 @@
 import React from "react";
 import { Trans } from "react-i18next";
 
+import Chip from "@mui/material/Chip";
+
 // CSS STYLES
 
 const UL_STYLE = { paddingLeft: "20px", margin: "8px 0" };
 const LI_STYLE = { display: "list-item", listStyleType: "disc" };
-export const A_STYLE = { color: "blue", textDecoration: "underline" };
+const A_STYLE = {
+  color: "#D6D6FF", // passes all tests on https://webaim.org/resources/contrastchecker/
+  textDecoration: "underline",
+};
+
+// chips with colour
+
+const CHIP_SX = {
+  mx: 0.5,
+  height: "16px",
+  borderRadius: "4px",
+  "& .MuiChip-label": { fontSize: "0.65rem", px: "6px" },
+  color: "white",
+};
+
+function InlineChip({ color, children }) {
+  return <Chip size="small" color={color} label={children} sx={CHIP_SX} />;
+}
+
+export function TransTooltipChip({ keyword, i18nKey, color }) {
+  const colorMap = {
+    // stance classifier
+    deny: "error",
+    query: "warning",
+    support: "success",
+    comment: "default",
+  };
+
+  const mapped = color || colorMap[i18nKey] || "default";
+  const isCustomColor = mapped.startsWith("#") || mapped.startsWith("rgb");
+
+  return (
+    <Chip
+      size="small"
+      color={isCustomColor ? "default" : mapped}
+      label={keyword(i18nKey)}
+      sx={
+        isCustomColor
+          ? { ...CHIP_SX, backgroundColor: mapped, color: "rgba(0,0,0,0.87)" }
+          : CHIP_SX
+      }
+    />
+  );
+}
 
 // Links
 
@@ -307,36 +352,9 @@ export function TransSourceCredibilityTooltip({ keyword }) {
       components={{
         ul: <ul style={UL_STYLE} />,
         li: <li style={LI_STYLE} />,
-        strongWarning: (
-          <strong
-            style={{
-              background: "#d32f2f",
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-        strongMentions: (
-          <strong
-            style={{
-              background: "#ed6c02",
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-        strongFactChecker: (
-          <strong
-            style={{
-              background: "#2e7d32",
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
+        chipWarning: <InlineChip color="error" />,
+        chipMentions: <InlineChip color="warning" />,
+        chipFactChecker: <InlineChip color="success" />,
       }}
     />
   );
@@ -395,117 +413,18 @@ export function TransPersuasionTechniquesTooltip({ keyword }) {
   );
 }
 
-export function TransMachineGeneratedTextTooltip({ keyword }) {
-  return (
-    <Trans
-      t={keyword}
-      i18nKey="machine_generated_text_tooltip"
-      components={{
-        ul: <ul style={UL_STYLE} />,
-        li: <li style={LI_STYLE} />,
-        highlyLikelyHuman: (
-          <strong
-            style={{
-              background: "#00fc00",
-              color: "black",
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-        likelyHuman: (
-          <strong
-            style={{
-              background: "#aaff00",
-              color: "black",
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-        likelyMachine: (
-          <strong
-            style={{
-              background: "#fcaa00",
-              color: "black",
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-        highlyLikelyMachine: (
-          <strong
-            style={{
-              background: "#fc0000",
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-      }}
-    />
-  );
-}
-
-const stanceSupportColour = "#2e7d32";
-const stanceQueryColour = "#ed6c02";
-const stanceDenyColour = "#d32f2f";
-const stanceCommentColour = "#757575";
-
 export function TransMultilingualStanceTooltip({ keyword }) {
   return (
-    <Trans
-      t={keyword}
-      i18nKey="multilingual_stance_tooltip"
-      components={{
-        ul: <ul style={UL_STYLE} />,
-        li: <li style={LI_STYLE} />,
-        strongSupport: (
-          <strong
-            style={{
-              background: stanceSupportColour,
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-        strongQuery: (
-          <strong
-            style={{
-              background: stanceQueryColour,
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-        strongDeny: (
-          <strong
-            style={{
-              background: stanceDenyColour,
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-        strongComment: (
-          <strong
-            style={{
-              background: stanceCommentColour,
-              paddingBottom: "0.2em",
-              paddingRight: "0.1em",
-              paddingLeft: "0.1em",
-            }}
-          />
-        ),
-      }}
-    />
+    <>
+      <Trans t={keyword} i18nKey="multilingual_stance_tooltip" />
+      <ul style={UL_STYLE}>
+        {["support", "query", "deny", "comment"].map((key) => (
+          <li key={key} style={LI_STYLE}>
+            <TransTooltipChip keyword={keyword} i18nKey={key} />
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }
 
