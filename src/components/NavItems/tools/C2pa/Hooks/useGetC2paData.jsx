@@ -3,63 +3,49 @@ import {
   c2paMainImageIdSet,
   c2paResultSet,
 } from "@/redux/reducers/tools/c2paReducer";
-import {
-  createC2pa,
-  selectEditsAndActivity,
-  selectGenerativeInfo,
-  selectProducer,
-  selectSocialAccounts,
-} from "c2pa";
+import { createC2pa } from "@contentauth/c2pa-web";
+import wasmSrc from "@contentauth/c2pa-web/resources/c2pa.wasm?url";
 
 /**
  * This function reads the image's capture information from the assertions
  * @param {Array} assertions array containing the assertions of a manifest
  * @returns {Object} parsed capture information
  */
+const EXIF_FIELD_MAP = {
+  make: ["EXIF:Make", "exif:Make"],
+  model: ["EXIF:Model", "exif:Model"],
+  dateTime: ["EXIF:DateTimeOriginal", "exif:DateTimeOriginal"],
+  latitude: ["EXIF:GPSLatitude", "exif:GPSLatitude"],
+  longitude: ["EXIF:GPSLongitude", "exif:GPSLongitude"],
+};
+
 const exifData = (assertions) => {
+  const exifAssertions = assertions.filter((a) => a.label === "stds.exif");
+  const actionAssertions = assertions.filter(
+    (a) => a.label === "c2pa.actions.v2",
+  );
+
   let captureInfo = null;
-  let allCaptureInfo = null;
-
-  for (let i = 0; i < assertions.length; i++) {
-    if (assertions[i].label === "stds.exif") {
-      if (!captureInfo) captureInfo = {};
-      if (assertions[i]["data"]["EXIF:Make"]) {
-        captureInfo.make = assertions[i]["data"]["EXIF:Make"];
+  if (exifAssertions.length > 0) {
+    captureInfo = { allCaptureInfo: exifAssertions };
+    for (const assertion of exifAssertions) {
+      for (const [field, [upperKey, lowerKey]] of Object.entries(
+        EXIF_FIELD_MAP,
+      )) {
+        const value = assertion.data[lowerKey] || assertion.data[upperKey];
+        if (value) captureInfo[field] = value;
       }
-      if (assertions[i]["data"]["exif:Make"]) {
-        captureInfo.make = assertions[i]["data"]["exif:Make"];
-      }
-      if (assertions[i]["data"]["EXIF:Model"]) {
-        captureInfo.model = assertions[i]["data"]["EXIF:Model"];
-      }
-      if (assertions[i]["data"]["exif:Model"]) {
-        captureInfo.model = assertions[i]["data"]["exif:Model"];
-      }
-      if (assertions[i]["data"]["EXIF:DateTimeOriginal"]) {
-        captureInfo.dateTime = assertions[i]["data"]["EXIF:DateTimeOriginal"];
-      }
-      if (assertions[i]["data"]["exif:DateTimeOriginal"]) {
-        captureInfo.dateTime = assertions[i]["data"]["exif:DateTimeOriginal"];
-      }
-      if (assertions[i]["data"]["EXIF:GPSLatitude"]) {
-        captureInfo.latitude = assertions[i]["data"]["EXIF:GPSLatitude"];
-      }
-      if (assertions[i]["data"]["exif:GPSLatitude"]) {
-        captureInfo.latitude = assertions[i]["data"]["exif:GPSLatitude"];
-      }
-      if (assertions[i]["data"]["EXIF:GPSLongitude"]) {
-        captureInfo.longitude = assertions[i]["data"]["EXIF:GPSLongitude"];
-      }
-      if (assertions[i]["data"]["exif:GPSLongitude"]) {
-        captureInfo.longitude = assertions[i]["data"]["exif:GPSLongitude"];
-      }
-
-      if (!allCaptureInfo) allCaptureInfo = [];
-      allCaptureInfo.push(assertions[i]);
     }
   }
-  if (captureInfo) captureInfo.allCaptureInfo = allCaptureInfo;
-  return captureInfo;
+
+  const producers = actionAssertions
+    .flatMap((a) => a.data.actions)
+    .filter(
+      (action) => action.action === "c2pa.created" && action.parameters?.name,
+    )
+    .map((action) => ({ name: action.parameters.name }));
+
+  return { captureInfo, producerInfo: producers.length > 0 ? producers : null };
 };
 
 /**
@@ -68,38 +54,50 @@ const exifData = (assertions) => {
  * @param {string=} parent id of manifest's parent if there is one
  * @param {Object} result Object containing the data for the manifests that have already been read
  * @param {string} url image corresponding with the manifest
- * @param {number} depth nunber of ancestors of the manifest already read, used to avoid having a result object that is too large if a manifest has many descendants
+ * @param {number} depth nunber of ancestors of the manifest already read, used to avoid having a result object that is too large if a manifest has many descendant
+ * @param {Reader} c2pa reader use to fetch resources
  * @returns {Object} contains the id of the manifest that was just read, as well as the updated results
  */
-async function readManifest(manifest, parent, result, url, depth) {
+async function readManifest(
+  activeManifestId,
+  manifests,
+  parent,
+  result,
+  url,
+  depth,
+  reader,
+) {
   // the object that will contain the data from this manifest, as well as the parent it
   const res = {
     url: url,
     parent: parent,
   };
-
+  const manifest = manifests[activeManifestId];
   if (manifest) {
-    const manifestId = manifest.instanceId;
+    const manifestId = manifest.instance_id;
 
     const manifestData = {};
 
     manifestData.title = manifest.title;
     manifestData.signatureInfo = {
-      issuer: manifest.signatureInfo.issuer,
-      time: manifest.signatureInfo.time,
+      issuer: manifest.signature_info.issuer,
+      commonName: manifest.signature_info.common_name,
+      time: manifest.signature_info.time ? manifest.signature_info.time : null,
     };
 
-    const editsAndActivity = await selectEditsAndActivity(manifest);
+    const softwareUsed = selectCreateSoftware(manifest.assertions);
 
-    if (editsAndActivity) manifestData.editsAndActivity = editsAndActivity;
+    if (softwareUsed) manifestData.softwareUsed = softwareUsed;
+    const generativeInfo = { assertion: manifest.assertions };
 
-    const generativeInfo = await selectGenerativeInfo(manifest);
     if (generativeInfo) manifestData.generativeInfo = generativeInfo;
-
-    const captureInfo = exifData(manifest.assertions.data);
+    const claimGenerator = getClaimGenerator(manifest);
+    if (claimGenerator) manifestData.claimGenerator = claimGenerator;
+    const { captureInfo, producerInfo } = exifData(manifest.assertions);
     if (captureInfo) manifestData.captureInfo = captureInfo;
+    if (producerInfo) manifestData.producer = producerInfo;
 
-    if (manifest.ingredients.length > 0) {
+    if (manifest.ingredients) {
       let children = [];
 
       for (let i = 0; i < manifest.ingredients.length; i++) {
@@ -107,40 +105,41 @@ async function readManifest(manifest, parent, result, url, depth) {
         let ingredientUrl;
 
         try {
-          ingredientUrl = thumbnail.getUrl();
+          ingredientUrl = thumbnail
+            ? await resourceToObjectUrl(reader, thumbnail)
+            : null;
         } catch {
           ingredientUrl = null;
         }
 
-        let validationIssues = getValidationIssues(
-          manifest.ingredients[i].validationStatus,
-        );
+        let validationIssues = getValidationIssues(manifest.ingredients[i]);
         let ingredientId;
-
         // if a child has more than 5 ancestors, C2PA data will not be shown.
         if (depth < 5) {
-          if (manifest.ingredients[i].manifest) {
+          if (manifest.ingredients[i].active_manifest) {
             let { id, data } = await readManifest(
-              manifest.ingredients[i].manifest,
+              manifest.ingredients[i].active_manifest,
+              manifests,
               manifestId,
               result,
-              ingredientUrl?.url ?? null,
+              ingredientUrl ?? null,
               depth + 1,
+              reader,
             );
             ingredientId = id;
             result = data;
             result[id].validationIssues = validationIssues;
           } else {
-            ingredientId = manifest.ingredients[i].instanceId;
+            ingredientId = manifest.ingredients[i].instance_id;
             result[ingredientId] = {
-              url: ingredientUrl?.url ?? null,
+              url: ingredientUrl ?? null,
               parent: manifestId,
             };
           }
         } else {
-          ingredientId = manifest.ingredients[i].instanceId;
+          ingredientId = manifest.ingredients[i].instance_id;
           result[ingredientId] = {
-            url: ingredientUrl?.url ?? null,
+            url: ingredientUrl ?? null,
             parent: manifestId,
             depthExceeded: true,
           };
@@ -148,16 +147,6 @@ async function readManifest(manifest, parent, result, url, depth) {
         children.push(ingredientId);
         manifestData.children = children;
       }
-    }
-
-    const producer = selectProducer(manifest);
-    if (producer) manifestData.producer = { name: producer.name };
-
-    const producerSocials = selectSocialAccounts(manifest);
-    if (producerSocials && producerSocials.length > 0) {
-      manifestData.producer
-        ? (manifestData.producer.socials = producerSocials)
-        : (manifestData.producer = { socials: producerSocials.name });
     }
 
     res.manifestData = manifestData;
@@ -170,50 +159,101 @@ async function readManifest(manifest, parent, result, url, depth) {
 
 /**
  *
- * @param {Array} validationStatus Array containing validation issues if there are any
- * @returns {Object} contains a boolean determining wheter or not the issues are do to trust in a source, as well as the messages for the issues
+ * @param {Objet} Object that get the validation status
  */
-function getValidationIssues(validationStatus) {
-  if (validationStatus.length > 0) {
-    let errorMessages = [];
-    let trustedSourceIssue = false;
-
+function getValidationIssues(manifest) {
+  let validationStatus = manifest.validation_status;
+  if (validationStatus && validationStatus.length > 0) {
+    let status = [];
     for (let i = 0; i < validationStatus.length; i++) {
-      if (validationStatus[i].code === "signingCredential.untrusted") {
-        trustedSourceIssue = true;
-      }
-      errorMessages.push(validationStatus[i].explanation);
+      status.push({
+        code: validationStatus[i].code,
+        explanation: validationStatus[i].explanation,
+      });
     }
-    return { trustedSourceIssue, errorMessages };
+    return { status };
   } else {
     return null;
   }
 }
 
+const selectCreateSoftware = (assertions) => {
+  const actionAssertions = assertions.filter(
+    (a) => a.label === "c2pa.actions.v2",
+  );
+  const editsAndActivity = actionAssertions
+    .flatMap((a) => a.data.actions)
+    .filter(
+      (action) => action.action === "c2pa.created" && action.softwareAgent,
+    )
+    .map((action) => ({
+      softwareAgent: action.softwareAgent.name,
+      digitalSourceType: action.digitalSourceType,
+    }));
+  return editsAndActivity.length > 0 ? editsAndActivity : null;
+};
+const getClaimGenerator = (manifest) => {
+  const generator = manifest.claim_generator;
+  const generatorInfo = manifest.claim_generator_info?.map((info) => ({
+    name: info.name,
+    version: info.version,
+  }));
+  return { name: generator, info: generatorInfo };
+};
+
+const REMOTE_TRUST_BASE = "https://verify.contentauthenticity.org/trust";
+const C2PA_ORG_TRUST_LIST_URL =
+  "https://raw.githubusercontent.com/c2pa-org/conformance-public/main/trust-list/C2PA-TRUST-LIST.pem";
+
 /**
- *
- * @param {string} file
- * @returns
+ * Fetches a trust resource from a remote URL, falling back to a local copy in public/trust/ on failure.
+ * @param {string} file filename (e.g. "anchors.pem")
+ * @returns {Promise<string>}
  */
 async function loadTrustResource(file) {
-  const res = await fetch(`https://contentcredentials.org/trust/${file}`);
+  try {
+    const res = await fetch(`${REMOTE_TRUST_BASE}/${file}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.text();
+  } catch {
+    const res = await fetch(`/trust/${file}`);
+    return res.text();
+  }
+}
 
-  return res.text();
+/**
+ * Fetches the c2pa-org conformance trust list, falling back to a local copy on failure.
+ * @returns {Promise<string>}
+ */
+async function loadC2paTrustList() {
+  try {
+    const res = await fetch(C2PA_ORG_TRUST_LIST_URL);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.text();
+  } catch {
+    const res = await fetch("/trust/C2PA-TRUST-LIST.pem");
+    return res.text();
+  }
 }
 
 /**
  *
- * @returns {Object} settings allowing the C2PA. Read function to determine if the source of the Content Credentials is on adobe's trusted list
+ * @returns {Object} settings allowing the C2PA. Read function to determine if the source of the Content Credentials is on the trusted list.
+ * Combines contentauthenticity.org trust anchors with the c2pa-org conformance trust list.
  */
 export async function getToolkitSettings() {
-  const [trustAnchors, allowedList, trustConfig] = await Promise.all(
-    ["anchors.pem", "allowed.sha256.txt", "store.cfg"].map(loadTrustResource),
-  );
+  const [trustAnchors, allowedList, trustConfig, c2paTrustList] =
+    await Promise.all([
+      loadTrustResource("anchors.pem"),
+      loadTrustResource("allowed.sha256.txt"),
+      loadTrustResource("store.cfg"),
+      loadC2paTrustList(),
+    ]);
 
   return {
     trust: {
       trustConfig,
-      trustAnchors,
+      trustAnchors: trustAnchors + c2paTrustList,
       allowedList,
     },
     verify: {
@@ -223,78 +263,76 @@ export async function getToolkitSettings() {
 }
 
 /**
- *
- * @param {Object} url the url of the image containing C2PA data
- * @param {function} dispatch
+ * Shared core: creates a c2pa reader from a URL, parses its manifest store,
+ * and returns the result, currentImageId, and mainImageId.
+ * @param {string} url
+ * @returns {{ result: Object, currentImageId: string, mainImageId: string }}
  */
-
-async function getC2paData(url, dispatch) {
+async function readC2paFromUrl(url) {
   const settings = await getToolkitSettings();
+  const c2pa = await createC2pa({ wasmSrc });
+  const response = await fetch(url);
+  const blob = await response.blob();
+  const reader = await c2pa.reader.fromBlob(blob.type, blob, settings);
 
-  const c2pa = await createC2pa({
-    wasmSrc: "./c2paAssets/toolkit_bg.wasm",
-    workerSrc: "./c2paAssets/c2pa.worker.min.js",
-  });
-
-  //dispatch(c2paLoadingSet(true));
-  // const url = URL.createObjectURL(image);
+  if (!reader) {
+    const data = { id: { url } };
+    return { result: data, currentImageId: "id", mainImageId: "id" };
+  }
 
   try {
-    const { manifestStore } = await c2pa.read(url, {
-      settings: settings,
-    });
+    const manifestStore = await reader.manifestStore();
+    //console.log("manifestStore ", manifestStore)
+    const activeManifestId = manifestStore.active_manifest ?? null;
+    const manifests = manifestStore.manifests;
+    const activeManifest = manifests[activeManifestId];
 
-    if (manifestStore) {
-      const activeManifest = manifestStore.activeManifest
-        ? manifestStore.activeManifest
-        : null;
-
-      let validationIssues = null;
-      if (manifestStore.validationStatus.length > 0) {
-        validationIssues = getValidationIssues(manifestStore.validationStatus);
-      }
-      if (activeManifest) {
-        let { id, data } = await readManifest(activeManifest, null, {}, url, 0);
-        data[id].validationIssues = validationIssues;
-        dispatch(c2paResultSet(data));
-
-        // each manifest has an id. The current image id determines which image's data is displayed
-        // and the main image id is used to return to the first image if a child image is being displayed
-
-        dispatch(c2paCurrentImageIdSet(id));
-        dispatch(c2paMainImageIdSet(id));
-      } else {
-        console.log("no active manifest");
-      }
-    } else {
-      // if there is no manifest store, the only data saved for an image is its url
-      const data = {};
-      data["id"] = { url: url };
-      dispatch(c2paResultSet(data));
-      dispatch(c2paCurrentImageIdSet("id"));
-      dispatch(c2paMainImageIdSet("id"));
+    let validationIssues = {
+      state: manifestStore.validation_state,
+      status: manifestStore.validation_status,
+    };
+    if (activeManifest) {
+      const { id, data } = await readManifest(
+        activeManifestId,
+        manifests,
+        null,
+        {},
+        url,
+        0,
+        reader,
+      );
+      data[id].validationIssues = validationIssues;
+      return { result: data, currentImageId: id, mainImageId: id };
     }
-    //dispatch(c2paLoadingSet(false));
-  } catch (err) {
-    console.error("Error reading image:", err);
-    //dispatch(c2paLoadingSet(false));
+
+    return { result: null, currentImageId: null, mainImageId: null };
+  } finally {
+    reader.free();
   }
 }
 
 /**
- *
+ * @param {string} url the url of the image containing C2PA data
+ * @param {function} dispatch
+ */
+async function getC2paData(url, dispatch) {
+  try {
+    const { result, currentImageId, mainImageId } = await readC2paFromUrl(url);
+    if (result) {
+      dispatch(c2paResultSet(result));
+      dispatch(c2paCurrentImageIdSet(currentImageId));
+      dispatch(c2paMainImageIdSet(mainImageId));
+    }
+  } catch (err) {
+    console.error("Error reading image:", err);
+  }
+}
+
+/**
  * @param {string} url the url of the image containing C2PA data
  */
-
 export async function getC2paDataHd(url) {
-  const settings = await getToolkitSettings();
-
-  const c2pa = await createC2pa({
-    wasmSrc: "./c2paAssets/toolkit_bg.wasm",
-    workerSrc: "./c2paAssets/c2pa.worker.min.js",
-  });
-
-  let c2paData = {
+  const c2paData = {
     result: null,
     loading: false,
     url: null,
@@ -305,46 +343,23 @@ export async function getC2paDataHd(url) {
   };
 
   try {
-    const { manifestStore } = await c2pa.read(url, {
-      settings: settings,
-    });
-
-    if (manifestStore) {
-      const activeManifest = manifestStore.activeManifest
-        ? manifestStore.activeManifest
-        : null;
-
-      let validationIssues = null;
-      if (manifestStore.validationStatus.length > 0) {
-        validationIssues = getValidationIssues(manifestStore.validationStatus);
-      }
-      if (activeManifest) {
-        let { id, data } = await readManifest(activeManifest, null, {}, url, 0);
-        data[id].validationIssues = validationIssues;
-        c2paData.result = data;
-
-        // each manifest has an id. The current image id determines which image's data is displayed
-        // and the main image id is used to return to the first image if a child image is being displayed
-        c2paData.currentImageId = id;
-        c2paData.mainImageId = id;
-      } else {
-        console.log("no active manifest");
-      }
-    } else {
-      // if there is no manifest store, the only data saved for an image is its url
-      const data = {};
-      data["id"] = { url: url };
-
-      c2paData.result = data;
-      c2paData.currentImageId = "id";
-      c2paData.mainImageId = "id";
-    }
-
-    return c2paData;
+    const { result, currentImageId, mainImageId } = await readC2paFromUrl(url);
+    c2paData.result = result;
+    c2paData.currentImageId = currentImageId;
+    c2paData.mainImageId = mainImageId;
   } catch (err) {
     console.error("Error reading image:", err);
   }
+
   return c2paData;
 }
+
+const resourceToObjectUrl = async (reader, thumbnail) => {
+  const ref = thumbnail.identifier;
+  const contentType = thumbnail.format;
+  const byteArray = await reader.resourceToBytes(ref);
+  const blob = new Blob([byteArray], { type: contentType });
+  return URL.createObjectURL(blob);
+};
 
 export default getC2paData;

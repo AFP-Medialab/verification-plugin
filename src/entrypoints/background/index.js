@@ -4,7 +4,7 @@ import {
   handleSNARecorderChromeMessage,
   initializeMessageHandler,
 } from "@/utils/snaRecorderMessageHandler";
-import { trackEvent } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import { trackEvent } from "@Shared/GoogleAnalytics/MatomoAnalyticsCore";
 import {
   SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,

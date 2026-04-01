@@ -4,8 +4,8 @@ import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Tab from "@mui/material/Tab";
 
+import ConstructionIcon from "@mui/icons-material/Construction";
 import LinkIcon from "@mui/icons-material/Link";
-import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 import { KeyframeInputType as TAB_VALUES } from "@/components/NavItems/tools/Keyframes/api/createKeyframeJob";
 import { TabList } from "@mui/lab";
@@ -21,7 +21,7 @@ const KeyframesTabs = ({ value, onChange, keyword }) => (
         sx={{ minWidth: "inherit !important", textTransform: "none" }}
       />
       <Tab
-        icon={<UploadFileIcon />}
+        icon={<ConstructionIcon />}
         iconPosition="start"
         label={keyword("filemode_title")}
         value={TAB_VALUES.FILE}
