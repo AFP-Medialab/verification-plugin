@@ -39,8 +39,8 @@ const YouTubeEmbed = ({
     <Box
       onClick={handleWatchOnYouTube}
       sx={{
-        width: width + "px",
-        height: height + "px",
+        width: isNaN(width) ? width : width + "px",
+        height: isNaN(height) ? height : height + "px",
         position: "relative",
         backgroundColor: "#000",
         backgroundImage: `url(https://img.youtube.com/vi/${videoId}/maxresdefault.jpg)`,
