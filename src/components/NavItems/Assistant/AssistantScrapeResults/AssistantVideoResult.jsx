@@ -33,9 +33,9 @@ const AssistantVideoResult = () => {
 
   const getVideoRenderType = () => {
     switch (input_url_type) {
-      case KNOWN_LINKS.BBC:
       case KNOWN_LINKS.YOUTUBE:
         return "youtube";
+      case KNOWN_LINKS.BBC:
       case KNOWN_LINKS.VIMEO:
       case KNOWN_LINKS.DAILYMOTION:
       case KNOWN_LINKS.LIVELEAK:
