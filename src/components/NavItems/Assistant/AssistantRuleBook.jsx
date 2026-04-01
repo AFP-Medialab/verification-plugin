@@ -12,19 +12,7 @@ import {
   tools,
 } from "@/constants/tools";
 
-// check how these are used - should pt actually be pt-BR?
-export const NE_SUPPORTED_LANGS = [
-  "en",
-  "fr",
-  "es",
-  "el",
-  "it",
-  "ar",
-  "de",
-  "ja",
-  "hu",
-  "pt",
-];
+export const NE_SUPPORTED_LANGS = ["en", "pt", "fr", "de", "el", "es", "it"];
 
 export const TYPE_PATTERNS = [
   {
