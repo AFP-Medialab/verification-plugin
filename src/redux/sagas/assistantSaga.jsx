@@ -1,16 +1,13 @@
 import assistantApiCalls from "@/components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
 import DBKFApi from "@/components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
 import {
+  KNOWN_LINK_PATTERNS,
   NE_SUPPORTED_LANGS,
   TYPE_PATTERNS,
   matchPattern,
   selectCorrectActions,
 } from "@/components/NavItems/Assistant/AssistantRuleBook";
-import {
-  KNOWN_LINKS,
-  KNOWN_LINK_PATTERNS,
-  TOOLS_CATEGORIES,
-} from "@/constants/tools";
+import { KNOWN_LINKS, TOOLS_CATEGORIES } from "@/constants/tools";
 import {
   cleanAssistantState,
   setAssistantLoading,
