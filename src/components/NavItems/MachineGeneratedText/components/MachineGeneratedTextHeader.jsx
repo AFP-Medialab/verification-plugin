@@ -16,7 +16,6 @@ const MachineGeneratedTextHeader = () => {
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
   );
-  const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
 
   return (
     <Box>
