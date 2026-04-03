@@ -35,6 +35,7 @@ import {
 import { TOP_MENU_ITEMS } from "@/constants/topMenuItems";
 import { selectTopMenuItem } from "@/redux/reducers/navReducer";
 import { selectTool } from "@/redux/reducers/tools/toolReducer";
+import { trackEvent } from "@Shared/GoogleAnalytics/MatomoAnalyticsCore";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import clsx from "clsx";
 import { browser } from "wxt/browser";
@@ -173,6 +174,16 @@ const NavigationSidebar = ({ tools, setOpenAlert }) => {
       } else if (currentLang === "pt") {
         urlPrefix = "br.";
       }
+
+      // Tracking du clic sur le lien vers digitalCourses
+      trackEvent(
+        "navigation",
+        "click",
+        "afpDigitalCourses",
+        `https://${urlPrefix}digitalcourses.afp.com`,
+        "",
+      );
+
       browser.tabs.create({
         url: `https://${urlPrefix}digitalcourses.afp.com`,
       });
