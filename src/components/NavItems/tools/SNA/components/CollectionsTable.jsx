@@ -21,7 +21,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import UploadIcon from "@mui/icons-material/Upload";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
-import { uploadToCollection } from "../utils/snaUtils";
+import { addingUrl, uploadToCollection } from "../utils/snaUtils";
 
 const EmptyTablePlaceholder = ({ keyword }) => {
   return (
@@ -351,7 +351,8 @@ const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
       <TableCell>
         <IconButton
           onClick={() => {
-            setDetailContent(row.content);
+            const contentWithUrl = addingUrl(row.content, row.id);
+            setDetailContent(contentWithUrl);
             setDetailSource(row.source);
             setOpenDetailModal(true);
           }}
