@@ -81,16 +81,14 @@ const CollectionTableHeader = ({
 const CollectionActionsCell = ({
   row,
   dataSources,
-  dlAnchorEl,
-  setDlAnchorEl,
   setSelected,
   selected,
   setDataSources,
   keyword,
-  activeDownloadRow,
-  setActiveDownloadRow,
 }) => {
   const rowFileInputRef = useRef(null);
+
+  const [dlAnchorEl, setDlAnchorEl] = useState(null);
 
   const rawUploadIconButton = (row) => {
     const handleRawFileChange = (event, rowID) => {
@@ -150,11 +148,10 @@ const CollectionActionsCell = ({
 
     const handleDownload = (event, row) => {
       setDlAnchorEl(event.currentTarget);
-      setActiveDownloadRow(row);
     };
 
     const downloadTweetCSV = () => {
-      const selectedData = activeDownloadRow;
+      const selectedData = row;
       if (!selectedData) return;
       let headers = selectedData.headers.join(",");
       let csvData = selectedData.content
@@ -175,11 +172,10 @@ const CollectionActionsCell = ({
       a.download = `${selectedData.name}_export.csv`;
       a.click();
       setDlAnchorEl(null);
-      setActiveDownloadRow(null);
     };
 
     const downloadTweetsJson = () => {
-      const selectedData = activeDownloadRow;
+      const selectedData = row;
       if (!selectedData) return;
       let dl = JSON.stringify(selectedData.content);
       const blob = new Blob([dl], { type: "application/json;charset=utf-8;" });
@@ -188,11 +184,10 @@ const CollectionActionsCell = ({
       a.download = `${selectedData.name}_export.json`;
       a.click();
       setDlAnchorEl(null);
-      setActiveDownloadRow(null);
     };
 
     const downloadTweetsRaw = async () => {
-      const selectedData = activeDownloadRow;
+      const selectedData = row;
       if (!selectedData) return;
 
       try {
@@ -215,7 +210,6 @@ const CollectionActionsCell = ({
       }
 
       setDlAnchorEl(null);
-      setActiveDownloadRow(null);
     };
 
     return (
@@ -246,7 +240,6 @@ const CollectionActionsCell = ({
           open={open}
           onClose={() => {
             setDlAnchorEl(null);
-            setActiveDownloadRow(null);
           }}
           MenuListProps={{
             "aria-labelledby": "basic-button",
@@ -330,14 +323,10 @@ const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
   const {
     fileInputRef,
     dataSources,
-    dlAnchorEl,
-    setDlAnchorEl,
     setSelected: setSelectedActions,
     selected: selectedActions,
     setDataSources,
     keyword: keywordActions,
-    activeDownloadRow,
-    setActiveDownloadRow,
   } = actionsProps;
 
   const handleSelectRow = (id) => {
@@ -402,14 +391,10 @@ const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
         row={row}
         fileInputRef={fileInputRef}
         dataSources={dataSources}
-        dlAnchorEl={dlAnchorEl}
-        setDlAnchorEl={setDlAnchorEl}
         setSelected={setSelectedActions}
         selected={selectedActions}
         setDataSources={setDataSources}
         keyword={keywordActions}
-        activeDownloadRow={activeDownloadRow}
-        setActiveDownloadRow={setActiveDownloadRow}
       />
     </TableRow>
   );
@@ -453,8 +438,6 @@ const CollectionsTable = ({
   setDlAnchorEl,
   setDataSources,
 }) => {
-  const [activeDownloadRow, setActiveDownloadRow] = useState(null);
-
   let collectionTableHeaderProps = {
     selected,
     setSelected,
@@ -473,14 +456,10 @@ const CollectionsTable = ({
   let collectionActionsCellProps = {
     fileInputRef,
     dataSources,
-    dlAnchorEl,
-    setDlAnchorEl,
     setSelected,
     selected,
     setDataSources,
     keyword,
-    activeDownloadRow,
-    setActiveDownloadRow,
   };
 
   return (
