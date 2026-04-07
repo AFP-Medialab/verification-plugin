@@ -142,6 +142,40 @@ export const setDbkfTextMatchDetails = (
   };
 };
 
+export const setDbkfImageMatchDetails = (
+  imageMatch,
+  dbkfMediaMatchLoading,
+  dbkfMediaMatchDone,
+  dbkfMediaMatchFail,
+) => {
+  return {
+    type: "SET_DBKF_IMAGE_MATCH_DETAILS",
+    payload: {
+      dbkfImageMatch: imageMatch,
+      dbkfMediaMatchLoading: dbkfMediaMatchLoading,
+      dbkfMediaMatchDone: dbkfMediaMatchDone,
+      dbkfMediaMatchFail: dbkfMediaMatchFail,
+    },
+  };
+};
+
+export const setDbkfVideoMatchDetails = (
+  videoMatch,
+  dbkfMediaMatchLoading,
+  dbkfMediaMatchDone,
+  dbkfMediaMatchFail,
+) => {
+  return {
+    type: "SET_DBKF_VIDEO_MATCH_DETAILS",
+    payload: {
+      dbkfVideoMatch: videoMatch,
+      dbkfMediaMatchLoading: dbkfMediaMatchLoading,
+      dbkfMediaMatchDone: dbkfMediaMatchDone,
+      dbkfMediaMatchFail: dbkfMediaMatchFail,
+    },
+  };
+};
+
 export const setNewsTopicDetails = (ntResult, ntLoading, ntDone, ntFail) => {
   return {
     type: "SET_NEWS_TOPIC_DETAILS",
@@ -230,6 +264,23 @@ export const setMachineGeneratedTextChunksDetails = (
       machineGeneratedTextChunksLoading: mgtcLoading,
       machineGeneratedTextChunksDone: mgtcDone,
       machineGeneratedTextChunksFail: mgtcFail,
+    },
+  };
+};
+
+export const setMachineGeneratedTextSentencesDetails = (
+  mgtsResult,
+  mgtsLoading,
+  mgtsDone,
+  mgtsFail,
+) => {
+  return {
+    type: "SET_MACHINE_GENERATED_TEXT_SENTENCES_DETAILS",
+    payload: {
+      machineGeneratedTextSentencesResult: mgtsResult,
+      machineGeneratedTextSentencesLoading: mgtsLoading,
+      machineGeneratedTextSentencesDone: mgtsDone,
+      machineGeneratedTextSentencesFail: mgtsFail,
     },
   };
 };

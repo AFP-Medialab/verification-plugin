@@ -77,7 +77,7 @@ const PreviousFactCheckResults = ({ results }) => {
         color={"textSecondary"}
         fontSize="small"
         sx={{
-          textAlign: "center",
+          align: "center",
           mt: 2,
         }}
       >

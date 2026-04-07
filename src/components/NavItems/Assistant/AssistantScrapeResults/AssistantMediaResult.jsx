@@ -27,6 +27,7 @@ import { TOOLS_CATEGORIES } from "@/constants/tools";
 import {
   setProcessUrl,
   setStateExpanded,
+  setWarningExpanded,
 } from "@/redux/actions/tools/assistantActions";
 
 import {
@@ -57,7 +58,15 @@ const AssistantMediaResult = ({ title = null }) => {
 
   // third party topMenuItem states
   //const ocrLoading = useSelector(state=>state.assistant.ocrLoading)
+  const dbkfMediaMatchLoading = useSelector(
+    (state) => state.assistant.dbkfMediaMatchLoading,
+  );
+  const dbkfImageMatch = useSelector((state) => state.assistant.dbkfImageMatch);
+  const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
 
+  const warningExpanded = useSelector(
+    (state) => state.assistant.warningExpanded,
+  );
   const resultIsImage = resultProcessType === TOOLS_CATEGORIES.IMAGE;
 
   // local control state
@@ -123,6 +132,20 @@ const AssistantMediaResult = ({ title = null }) => {
         action={
           <div style={{ display: "flex" }}>
             <div>
+              {(dbkfImageMatch || dbkfVideoMatch) && (
+                <Tooltip title={keyword("image_warning")}>
+                  <WarningAmber
+                    color={"warning"}
+                    className={classes.toolTipWarning}
+                    onClick={() => {
+                      dispatch(setWarningExpanded(!warningExpanded));
+                      window.scroll(0, 0);
+                    }}
+                  />
+                </Tooltip>
+              )}
+            </div>
+            <div>
               <Tooltip
                 interactive={"true"}
                 title={
@@ -146,7 +169,11 @@ const AssistantMediaResult = ({ title = null }) => {
           </div>
         }
       />
-
+      {dbkfMediaMatchLoading ? (
+        <div>
+          <LinearProgress />
+        </div>
+      ) : null}
       {/* selected image or video with recommended tools */}
       <CardContent sx={{ padding: processUrl == null ? 0 : undefined }}>
         {missingMedia ? (

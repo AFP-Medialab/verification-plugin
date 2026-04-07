@@ -117,6 +117,15 @@ const AssistantTextResult = () => {
   const machineGeneratedTextChunksFail = useSelector(
     (state) => state.assistant.machineGeneratedTextChunksFail,
   );
+  const machineGeneratedTextSentencesResult = useSelector(
+    (state) => state.assistant.machineGeneratedTextSentencesResult,
+  );
+  const machineGeneratedTextSentencesLoading = useSelector(
+    (state) => state.assistant.machineGeneratedTextSentencesLoading,
+  );
+  const machineGeneratedTextSentencesFail = useSelector(
+    (state) => state.assistant.machineGeneratedTextSentencesFail,
+  );
 
   // previous fact-checks
   const prevFactChecksResult = useSelector(
@@ -332,13 +341,16 @@ const AssistantTextResult = () => {
             label={
               <div>
                 {keyword(machineGeneratedTextTitle)}
-                {machineGeneratedTextChunksLoading && <LinearProgress />}
+                {(machineGeneratedTextChunksLoading ||
+                  machineGeneratedTextSentencesLoading) && <LinearProgress />}
               </div>
             }
             {...a11yProps(5)}
             disabled={
               machineGeneratedTextChunksFail ||
-              machineGeneratedTextChunksLoading
+              machineGeneratedTextChunksLoading ||
+              machineGeneratedTextSentencesFail ||
+              machineGeneratedTextSentencesLoading
             }
           />
         </Tabs>
@@ -420,8 +432,9 @@ const AssistantTextResult = () => {
           <CustomTabPanel value={textTabIndex} index={5}>
             <AssistantTextClassification
               text={text}
-              classification={machineGeneratedTextChunksResult?.entities}
-              configs={machineGeneratedTextChunksResult?.configs}
+              classification={machineGeneratedTextSentencesResult?.entities}
+              overallClassification={machineGeneratedTextChunksResult?.entities}
+              configs={machineGeneratedTextSentencesResult?.configs}
               categoriesTooltipContent={machineGeneratedTextTooltip}
               textHtmlMap={textHtmlMap}
               credibilitySignal={machineGeneratedTextTitle}
