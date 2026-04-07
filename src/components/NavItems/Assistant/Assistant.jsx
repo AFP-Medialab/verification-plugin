@@ -111,18 +111,11 @@ const Assistant = () => {
   );
 
   const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
-  const dbkfImageResult = useSelector(
-    (state) => state.assistant.dbkfImageMatch,
-  );
-  const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
 
   // third party fail states
   const scFailState = useSelector((state) => state.assistant.inputSCFail);
   const dbkfTextFailState = useSelector(
     (state) => state.assistant.dbkfTextMatchFail,
-  );
-  const dbkfMediaFailState = useSelector(
-    (state) => state.assistant.dbkfMediaMatchFail,
   );
   const neFailState = useSelector((state) => state.assistant.neFail);
   const newsFramingFailState = useSelector(
@@ -429,7 +422,6 @@ const Assistant = () => {
       {(urlMode || imageVideoSelected) &&
       (scFailState ||
         dbkfTextFailState ||
-        dbkfMediaFailState ||
         neFailState ||
         newsFramingFailState ||
         newsGenreFailState ||
@@ -499,10 +491,7 @@ const Assistant = () => {
           <CardContent>
             <Grid container spacing={4}>
               {/* warnings and api status checks */}
-              {dbkfTextMatch ||
-              dbkfImageResult ||
-              dbkfVideoMatch ||
-              prevFactChecksResult ? (
+              {dbkfTextMatch || prevFactChecksResult ? (
                 <Grid
                   size={{ xs: 12 }}
                   className={classes.assistantGrid}

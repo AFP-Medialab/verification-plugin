@@ -33,12 +33,6 @@ const defaultState = {
   dbkfTextMatchDone: false,
   dbkfTextMatchFail: false,
 
-  dbkfImageMatch: null,
-  dbkfVideoMatch: null,
-  dbkfMediaMatchLoading: false,
-  dbkfMediaMatchDone: false,
-  dbkfMediaMatchFail: false,
-
   neResultCategory: null,
   neResultCount: null,
   neLoading: false,
@@ -75,11 +69,6 @@ const defaultState = {
   machineGeneratedTextChunksDone: false,
   machineGeneratedTextChunksFail: false,
 
-  machineGeneratedTextSentencesResult: null,
-  machineGeneratedTextSentencesLoading: false,
-  machineGeneratedTextSentencesDone: false,
-  machineGeneratedTextSentencesFail: false,
-
   multilingualStanceResult: null,
   multilingualStanceLoading: false,
   multilingualStanceDone: false,
@@ -107,8 +96,6 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_SINGLE_MEDIA_PRESENT":
     case "SET_INPUT_SC_DETAILS":
     case "SET_DBKF_TEXT_MATCH_DETAILS":
-    case "SET_DBKF_IMAGE_MATCH_DETAILS":
-    case "SET_DBKF_VIDEO_MATCH_DETAILS":
     case "SET_NE_DETAILS":
     case "SET_NEWS_TOPIC_DETAILS":
     case "SET_NEWS_GENRE_DETAILS":
@@ -116,7 +103,6 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_SUBJECTIVITY_DETAILS":
     case "SET_PREV_FACT_CHECKS_DETAILS":
     case "SET_MACHINE_GENERATED_TEXT_CHUNKS_DETAILS":
-    case "SET_MACHINE_GENERATED_TEXT_SENTENCES_DETAILS":
     case "SET_MULTILINGUAL_STANCE_DETAILS":
     case "SET_LOADING":
     case "SET_MISSING_MEDIA":
@@ -175,12 +161,6 @@ const assistantReducer = (state = defaultState, action) => {
         dbkfTextMatchDone: false,
         dbkfTextMatchFail: false,
 
-        dbkfImageMatch: null,
-        dbkfVideoMatch: null,
-        dbkfMediaMatchLoading: false,
-        dbkfMediaMatchDone: false,
-        dbkfMediaMatchFail: false,
-
         neResultCategory: null,
         neResultCount: null,
         neLoading: false,
@@ -216,11 +196,6 @@ const assistantReducer = (state = defaultState, action) => {
         machineGeneratedTextChunksLoading: false,
         machineGeneratedTextChunksDone: false,
         machineGeneratedTextChunksFail: false,
-
-        machineGeneratedTextSentencesResult: null,
-        machineGeneratedTextSentencesLoading: false,
-        machineGeneratedTextSentencesDone: false,
-        machineGeneratedTextSentencesFail: false,
 
         multilingualStanceResult: null,
         multilingualStanceLoading: false,
