@@ -55,13 +55,18 @@ const Geolocation = () => {
     if (imageFile) {
       try {
         const prediction = (await geolocateLocalFile(imageFile)).predictions;
-        dispatch(
-          setGeolocationResult({
-            urlImage: URL.createObjectURL(imageFile),
-            result: prediction,
-            loading: false,
-          }),
-        );
+        if (prediction.length === 0) {
+          handleError("geo_error_no_result_found", keyword, dispatch);
+          dispatch(setGeolocationLoading(false));
+        } else {
+          dispatch(
+            setGeolocationResult({
+              urlImage: URL.createObjectURL(imageFile),
+              result: prediction,
+              loading: false,
+            }),
+          );
+        }
       } catch (error) {
         handleError(error, keyword, dispatch);
         dispatch(setGeolocationLoading(false));
