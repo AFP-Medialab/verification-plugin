@@ -594,14 +594,14 @@ export const getTextClusters = async (
   authenticatedRequest,
 ) => {
   if (selectedContent.length === 0) return { status: "error" };
-  selectedContent.forEach((x, idx) => (x.id = idx));
+  const contentWithIds = selectedContent.map((x, idx) => ({ ...x, id: idx }));
 
   let d3ltaUrl = import.meta.env.VITE_D3LTA_URL; //
 
   const d3ltaInitRequestConfig = {
     method: "post",
     url: d3ltaUrl,
-    data: selectedContent,
+    data: contentWithIds,
   };
 
   const d3ltaStatusRequestConfig = {

@@ -7,6 +7,7 @@ import {
 } from "@/redux/reducers/tools/keyframesReducer";
 import axios from "axios";
 
+//DEPRECATED
 export const useVideoSimilarity = (url, keyword) => {
   const dispatch = useDispatch();
   const similarityAPI = import.meta.env.VITE_DBKF_SIMILARITY_API;

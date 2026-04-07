@@ -353,6 +353,12 @@ const styles = (theme) => ({
   assistantIconLeft: {
     marginRight: "-15px",
   },
+  assistantTooltip: {
+    "&&": {
+      textAlign: "left",
+      backgroundColor: "#424242",
+    },
+  },
 
   /* OCR classes */
   /* ================================================================================== */

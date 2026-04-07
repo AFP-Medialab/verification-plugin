@@ -32,7 +32,7 @@ import StringFileUploadField from "@Shared/StringFileUploadField";
 import { TabContext, TabPanel } from "@mui/lab";
 
 import { useProcessKeyframes } from "./Hooks/useKeyframeWrapper";
-import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
+//import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
 import LocalFile from "./LocalFile/LocalFile";
 
 // Constants
@@ -142,7 +142,7 @@ const Keyframes = () => {
     featureDataError,
   } = useProcessKeyframes(source);
 
-  useVideoSimilarity(submittedUrl, keyword);
+  //useVideoSimilarity(submittedUrl, keyword);
   useTrackEvent(
     "submission",
     "keyframe",

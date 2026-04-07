@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
 /**
- * Hook to memoize data sources by platform
+ * Hook to memorize data sources by platform
  * This prevents re-renders when only one platform changes
  */
 export const useOptimizedDataSources = (dataSources) => {

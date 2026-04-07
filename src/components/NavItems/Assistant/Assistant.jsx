@@ -298,6 +298,14 @@ const Assistant = () => {
     }
   }, [url]);
 
+  // when navigating to a different tool then back to assistant
+  // make sure url is set in form
+  useEffect(() => {
+    if (inputUrl) {
+      setFormInput(inputUrl);
+    }
+  }, [inputUrl]);
+
   // for having a single results section with a close button
   const handleClose = () => {
     cleanAssistant();

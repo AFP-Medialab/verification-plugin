@@ -17,6 +17,7 @@
 # misc
 .DS_Store
 .env*
+.venv
 
 npm-debug.log*
 yarn-debug.log*
@@ -29,10 +30,12 @@ yarn-error.log*
 # IDE
 .vscode
 .idea
+# Claude
+.claude
+.mcp.json
 
 # Playwright
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-

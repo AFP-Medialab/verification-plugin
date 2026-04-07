@@ -6,6 +6,7 @@ import {
   Archive as ArchiveIcon,
   AudioFile,
   Dashboard,
+  GeneratingTokensRounded,
   Gradient,
   ManageSearch,
   SmartToy,
@@ -290,7 +291,7 @@ const xnetworkSvgIcon = (props) => {
 };
 
 const mgtSvgIcon = (props) => {
-  return <ManageSearch {...props} />;
+  return <GeneratingTokensRounded {...props} />;
 };
 
 const twitterSnaSvgIcon = (props) => {

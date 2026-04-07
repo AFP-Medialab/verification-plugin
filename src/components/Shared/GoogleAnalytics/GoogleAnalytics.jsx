@@ -2,7 +2,7 @@ import { history } from "../History/History";
 
 export function submissionEvent(payload) {
   const pathname = history.location.pathname;
-  console.log("pathname ", pathname);
+  //console.log("pathname ", pathname);
   let events = [
     {
       name: "tool_submission",

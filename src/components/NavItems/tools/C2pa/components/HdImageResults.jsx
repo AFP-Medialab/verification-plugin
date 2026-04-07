@@ -33,6 +33,8 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
 
   const [processedC2paData, setProcessedC2paData] = useState(null);
 
+  const [currentImageId, setCurrentImageId] = useState(null);
+
   useEffect(() => {
     if (!hdImageC2paData) return;
 
@@ -51,8 +53,17 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
       resizedHdImageUrl;
 
     setProcessedC2paData(c2paDataWithResizedHdUrl);
+    setCurrentImageId(c2paDataWithResizedHdUrl.currentImageId);
     setSelectedImage(resizedHdImageUrl);
   }, [hdImageC2paData, resizedHdImageUrl]);
+
+  useEffect(() => {
+    if (!processedC2paData?.result || !selectedImage) return;
+    const entry = Object.entries(processedC2paData.result).find(
+      ([, v]) => v.url === selectedImage,
+    );
+    if (entry) setCurrentImageId(entry[0]);
+  }, [selectedImage, processedC2paData]);
 
   useEffect(() => {
     if (
@@ -197,12 +208,16 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
                 </Grid>
               )}
 
-            {processedC2paData && resizedHdImageUrl && (
+            {processedC2paData && resizedHdImageUrl && currentImageId && (
               <C2paCard
-                c2paData={processedC2paData}
-                currentImageSrc={selectedImage}
-                setCurrentImageSrc={setSelectedImage}
-                resizedImageUrl={resizedHdImageUrl}
+                result={processedC2paData.result}
+                currentImageId={currentImageId}
+                mainImageId={processedC2paData.mainImageId}
+                onNavigate={(id) => {
+                  setCurrentImageId(id);
+                  setSelectedImage(processedC2paData.result[id].url);
+                }}
+                isImage={true}
               />
             )}
           </Grid>

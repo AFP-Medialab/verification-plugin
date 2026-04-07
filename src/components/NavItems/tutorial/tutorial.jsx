@@ -13,6 +13,7 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import HtmlWithYouTubeEmbed from "@Shared/Utils/HtmlWithYouTubeEmbed";
 
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
@@ -133,11 +134,11 @@ const Tutorial = () => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <div
+            <HtmlWithYouTubeEmbed
               className={"content"}
               style={dangerousDivStyle}
-              dangerouslySetInnerHTML={{ __html: keyword("tuto_4") }}
-            ></div>
+              html={keyword("tuto_4")}
+            />
           </AccordionDetails>
         </Accordion>
         <Accordion>
@@ -151,11 +152,11 @@ const Tutorial = () => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <div
+            <HtmlWithYouTubeEmbed
               className={"content"}
               style={dangerousDivStyle}
-              dangerouslySetInnerHTML={{ __html: keyword("tuto_5") }}
-            ></div>
+              html={keyword("tuto_5")}
+            />
           </AccordionDetails>
         </Accordion>
         <Accordion>
@@ -169,11 +170,11 @@ const Tutorial = () => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <div
+            <HtmlWithYouTubeEmbed
               className={"content"}
               style={dangerousDivStyle}
-              dangerouslySetInnerHTML={{ __html: keyword("tuto_6") }}
-            ></div>
+              html={keyword("tuto_6")}
+            />
           </AccordionDetails>
         </Accordion>
         <Accordion>
@@ -187,11 +188,11 @@ const Tutorial = () => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <div
+            <HtmlWithYouTubeEmbed
               className={"content"}
               style={dangerousDivStyle}
-              dangerouslySetInnerHTML={{ __html: keyword("tuto_7") }}
-            ></div>
+              html={keyword("tuto_7")}
+            />
           </AccordionDetails>
         </Accordion>
         <Accordion>
@@ -205,11 +206,11 @@ const Tutorial = () => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <div
+            <HtmlWithYouTubeEmbed
               className={"content"}
               style={dangerousDivStyle}
-              dangerouslySetInnerHTML={{ __html: keyword("tuto_8") }}
-            ></div>
+              html={keyword("tuto_8")}
+            />
           </AccordionDetails>
         </Accordion>
         <Accordion>
@@ -223,11 +224,11 @@ const Tutorial = () => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <div
+            <HtmlWithYouTubeEmbed
               className={"content"}
               style={dangerousDivStyle}
-              dangerouslySetInnerHTML={{ __html: keyword("tuto_9") }}
-            ></div>
+              html={keyword("tuto_9")}
+            />
           </AccordionDetails>
         </Accordion>
         <Accordion>
@@ -241,11 +242,11 @@ const Tutorial = () => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <div
+            <HtmlWithYouTubeEmbed
               className={"content"}
               style={dangerousDivStyle}
-              dangerouslySetInnerHTML={{ __html: keyword("tuto_10") }}
-            ></div>
+              html={keyword("tuto_10")}
+            />
           </AccordionDetails>
         </Accordion>
         <Accordion>
