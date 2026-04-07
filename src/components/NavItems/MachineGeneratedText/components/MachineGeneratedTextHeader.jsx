@@ -4,7 +4,7 @@ import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 
-import { ManageSearch } from "@mui/icons-material";
+import { GeneratingTokensRounded } from "@mui/icons-material";
 
 import HeaderTool from "@Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
@@ -23,7 +23,7 @@ const MachineGeneratedTextHeader = () => {
         name={keywordAllTools("navbar_mgt")}
         description={keywordAllTools("navbar_mgt_description")}
         icon={
-          <ManageSearch
+          <GeneratingTokensRounded
             style={{
               fill: "var(--mui-palette-primary-main)",
               height: "40px",
