@@ -226,6 +226,7 @@ E2E testing can be run using the following command:
 ```
 
 pnpm run test-e2e
+pnpm run test-e2e:dev (for testing in dev, because the path is not the same)
 
 ```
 
@@ -261,3 +262,11 @@ pnpm run test-e2e-ui
 ```
 
 This will open a browser with interactive testing environment which can be useful for debugging.
+
+### Generating test with codegen 
+
+You can generate test using codegen by using : 
+
+````
+node record-playwright.js
+````

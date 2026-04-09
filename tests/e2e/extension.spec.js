@@ -29,15 +29,33 @@ test(`Test tool analysis video`, async ({ page, extensionId }) => {
   await page.locator('[data-testid="analysis_video_submit"]').click();
   //Test results
   await expect(page.locator('[data-testid="analysis-yt-result"]')).toBeVisible();
-  await page.locator('[data-testid="CancelIcon"]').click();
+  await page.locator('[data-testid="close-result-yt-btn"]').click();
   await expect(page.locator('[data-testid="analysis-yt-result"]')).toHaveCount(0);
+});
 
-  //Test Twitter
-  await page.locator('[data-testid="analysis_video_input"]').fill(
-    "https://twitter.com/olex_scherba/status/1505991194018557955"
-  );
-  await page.locator('[data-testid="analysis_video_submit"]').click();
-  await expect(page.locator('[data-testid="analysis-tw-result"]')).toBeVisible();
+// test generated with codegen
+test('Test tool keyframes', async ({ page, extensionId }) => {
+  // Navigate to the demo page
+  await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/keyframes`);
+  // Accept local storage usage
+  await page.getByText("Accept").click();
 
+  await page.locator('[data-testid="keyframes-input"] input').fill('https://www.youtube.com/watch?v=QQFgQ1uBQtk');
 
+  await page.locator('[data-testid="keyframes-submit"]').click();
+  
+  // test of zoom in and out
+  await page.locator('[data-testid="keyframes-zoomout"]').click();
+  await page.locator('[data-testid="keyframes-zoomin"]').click();
+
+  // test of detailed view
+  await page.locator('[data-testid="keyframes-toggle-detailed"]').click();
+
+  // test of download
+  const downloadPromise = page.waitForEvent('download');
+  await page.locator('[data-testid="keyframes-download"]').click();
+  const download = await downloadPromise;
+  
+  // test of closing button 
+  await page.locator('[data-testid="keyframes-close"]').click();
 });

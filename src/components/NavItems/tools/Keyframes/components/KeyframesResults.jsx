@@ -194,6 +194,7 @@ const KeyframesResults = ({
                           <HelpOutlineIcon />
                         </IconButton>
                         <IconButton
+                          data-testid="keyframes-close"
                           aria-label="close"
                           onClick={handleClose}
                           sx={{ p: 1 }}
@@ -217,7 +218,10 @@ const KeyframesResults = ({
                         }}
                       >
                         <Grid>
-                          <Button onClick={toggleDetail}>
+                          <Button
+                            onClick={toggleDetail}
+                            data-testid="keyframes-toggle-detailed"
+                          >
                             {!detailed
                               ? keyword("keyframe_title_get_detail")
                               : keyword("keyframe_title_get_simple")}
@@ -226,6 +230,7 @@ const KeyframesResults = ({
 
                         <Grid>
                           <Button
+                            data-testid="keyframes-download"
                             color="primary"
                             loading={isZipDownloading}
                             loadingPosition="start"
@@ -244,6 +249,7 @@ const KeyframesResults = ({
 
                         <Grid sx={{ flexGrow: 1, textAlign: "end" }}>
                           <Button
+                            data-testid="keyframes-zoomout"
                             onClick={zoomOut}
                             startIcon={<ZoomOutIcon />}
                             disabled={cols === ALLOWED_COLS[0]}
@@ -253,6 +259,7 @@ const KeyframesResults = ({
                         </Grid>
                         <Grid>
                           <Button
+                            data-testid="keyframes-zoomin"
                             onClick={zoomIn}
                             startIcon={<ZoomInIcon />}
                             disabled={
