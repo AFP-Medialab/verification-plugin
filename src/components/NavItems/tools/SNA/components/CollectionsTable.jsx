@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
@@ -20,6 +21,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
 import UploadIcon from "@mui/icons-material/Upload";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+
+import ErrorBoundaryFallback from "@Shared/ErrorBoundaryFallback/ErrorBoundaryFallback";
 
 import { addingUrl, uploadToCollection } from "../utils/snaUtils";
 
@@ -154,6 +157,7 @@ const CollectionActionsCell = ({
       const selectedData = row;
       if (!selectedData) return;
       let headers = selectedData.headers.join(",");
+      console.log(headers);
       let csvData = selectedData.content
         .map((obj) =>
           selectedData.headers.map((k) =>
@@ -351,8 +355,7 @@ const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
       <TableCell>
         <IconButton
           onClick={() => {
-            const contentWithUrl = addingUrl(row.content, row.id);
-            setDetailContent(contentWithUrl);
+            setDetailContent(row.content);
             setDetailSource(row.source);
             setOpenDetailModal(true);
           }}
@@ -408,21 +411,27 @@ const CollectionsTableBody = ({
   keyword,
 }) => {
   return (
-    <TableBody>
-      {dataSources?.length > 0 ? (
-        dataSources.map((row) => (
-          <CollectionsTableRow
-            key={"row_" + row.id}
-            row={row}
-            rowProps={rowProps}
-            actionsProps={actionsProps}
-            keyword={keyword}
-          />
-        ))
-      ) : (
-        <EmptyTablePlaceholder keyword={keyword} />
-      )}
-    </TableBody>
+    <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
+      <TableBody>
+        {dataSources?.length > 0 ? (
+          dataSources.map((row) => {
+            // we create a new object based on row, because row is freezed, and add to it a video url column
+            const enrichedRow = addingUrl(row);
+            return (
+              <CollectionsTableRow
+                key={"row_" + row.id}
+                row={enrichedRow}
+                rowProps={rowProps}
+                actionsProps={actionsProps}
+                keyword={keyword}
+              />
+            );
+          })
+        ) : (
+          <EmptyTablePlaceholder keyword={keyword} />
+        )}
+      </TableBody>
+    </ErrorBoundary>
   );
 };
 
