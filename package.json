@@ -25,9 +25,10 @@
     "zip:firefox:production": "wxt zip -b firefox --mode production",
     "zip:all:development": "wxt zip -b chrome --mode development && wxt zip -b firefox --mode development",
     "zip:all:production": "wxt zip -b chrome --mode production && wxt zip -b firefox --mode production",
-    "test": "npm run test-cu && npm run test-e2e",
+    "test": "pnpm run test-cu && pnpm run test-e2e",
     "test-cu": "rm -rf playwright/.cache && playwright test -c playwright-ct.config.js",
     "test-e2e": "playwright test",
+    "test-e2e:dev": "NODE_ENV=development playwright test",
     "test-e2e-ui": "playwright test --ui"
   },
   "keywords": [],

@@ -115,6 +115,7 @@ const YoutubeResults = (props) => {
                   onClick={() => {
                     dispatch(cleanAnalysisState());
                   }}
+                  data-testid="close-result-yt-btn"
                 >
                   <CloseIcon />
                 </IconButton>

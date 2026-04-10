@@ -260,6 +260,8 @@ const Keyframes = () => {
                     // preprocessLocalFile={}
                     isParentLoading={isBusy}
                     handleClearUrl={resetResults}
+                    urlInputTestId="keyframes-input"
+                    submitButtonTestId="keyframes-submit"
                   />
 
                   {hasAdvancedSettingsAccess && (
