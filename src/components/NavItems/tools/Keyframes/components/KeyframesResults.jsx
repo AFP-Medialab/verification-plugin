@@ -110,8 +110,9 @@ const KeyframesResults = ({
     setAnchorHelp(event.currentTarget);
   }
 
-  const ResultsCard = ({ children, p = 4 }) => (
-    <Card variant="outlined">
+  // We use the spread operator to retrieve the “other” properties, including the `data-testid` used in Playwright
+  const ResultsCard = ({ children, p = 4, ...props }) => (
+    <Card variant="outlined" {...props}>
       <Box sx={{ p }}>
         <Stack direction="column" spacing={2}>
           {children}
@@ -177,7 +178,7 @@ const KeyframesResults = ({
         <>
           {data && (
             <Stack direction="column" spacing={4}>
-              <Card variant="outlined">
+              <Card variant="outlined" data-testid="keyframes-results-general">
                 <Box sx={{ pb: 4, pt: 2, px: 4 }}>
                   <Stack direction="column" spacing={2}>
                     <Stack
@@ -289,7 +290,7 @@ const KeyframesResults = ({
                 </Box>
               </Card>
 
-              <Card variant="outlined">
+              <Card variant="outlined" data-testid="keyframes-results-audio">
                 <Box sx={{ pb: 4, pt: 2, px: 4 }}>
                   <Stack direction="column" spacing={2}>
                     <Stack
@@ -342,7 +343,7 @@ const KeyframesResults = ({
 
               {features && (
                 <>
-                  <ResultsCard>
+                  <ResultsCard data-testid="keyframes-results-face">
                     <Typography variant="h6">Text Detected</Typography>
                     <ImageGrid
                       images={features.texts}
@@ -356,7 +357,7 @@ const KeyframesResults = ({
                       }}
                     />
                   </ResultsCard>
-                  <ResultsCard>
+                  <ResultsCard data-testid="keyframes-results-text">
                     <Typography variant="h6">Faces Detected</Typography>
                     <ImageGrid
                       images={features.faces}
