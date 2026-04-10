@@ -164,14 +164,15 @@ export const universalTokenize = (inputString) => {
  * @param {JSON} content
  * @returns
  */
-export const addingUrl = (content, id) => {
-  if (id.includes("tiktoks")) {
-    const contentWithUrl = content.map((element) => ({
-      ...element,
-      videoUrl: `https://tiktok.com/share/video/${element.id}`,
-    }));
-    return contentWithUrl;
-  }
+export const addingUrl = (row) => {
+  if (!row.id.includes("tiktoks")) return row;
 
-  return content;
+  return {
+    ...row,
+    content: row.content.map((element) => ({
+      videoUrl: `https://tiktok.com/share/video/${element.id}`,
+      ...element,
+    })),
+    headers: ["videoUrl", ...row.headers],
+  };
 };

@@ -278,6 +278,7 @@ const Metadata = () => {
               fileInputTypesAccepted={"image/*, video/*"}
               handleCloseSelectedFile={resetState}
               handleClearUrl={resetState}
+              submitButtonTestId="metadata-submit"
             />
           </Box>
         </form>
@@ -305,7 +306,7 @@ const Metadata = () => {
         />
       )}
       {c2paResults && c2paResults.result && (
-        <Card variant="outlined">
+        <Card variant="outlined" data-testid="c2pa-result">
           <C2paResults
             result={c2paResults.result}
             hasSimilarAfpResult={false}

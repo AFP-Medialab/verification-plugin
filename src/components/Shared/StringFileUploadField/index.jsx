@@ -54,6 +54,8 @@ const StringFileUploadField = ({
   preprocessLocalFile,
   isParentLoading,
   handleClearUrl,
+  urlInputTestId = "urlInputTestIdByDefault",
+  submitButtonTestId = "submitButtonTestIdByDefault",
 }) => {
   const fileRef = useRef(null);
 
@@ -147,6 +149,7 @@ const StringFileUploadField = ({
         >
           <Grid size="grow">
             <TextField
+              data-testid={urlInputTestId}
               type="url"
               id="standard-full-width"
               label={labelKeyword}
@@ -177,6 +180,7 @@ const StringFileUploadField = ({
           </Grid>
           <Grid>
             <Button
+              data-testid={submitButtonTestId}
               type="submit"
               variant="contained"
               color="primary"

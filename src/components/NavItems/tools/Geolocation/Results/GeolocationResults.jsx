@@ -11,7 +11,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import { ROLES } from "@/constants/roles";
-import ErrorBoundaryFallback from "@Shared/ErrorBoundaryFallback/ErrorBoundaryGeolocationFallback";
+import ErrorBoundaryFallback from "@Shared/ErrorBoundaryFallback/ErrorBoundaryFallback";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
