@@ -426,7 +426,7 @@ const videoMetadata = new Tool(
   <Metadata />,
   <Footer type={FOOTER_TYPES.AFP} />,
   {
-    processLinksAccepted: [KNOWN_LINKS.BBC, KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     exceptions: [
       /(pbs.twimg.com)|(youtu.be|youtube)|(instagram)|(fbcdn.net)|(vimeo)|(snapchat)|(tiktok.com)/,
     ],
@@ -460,7 +460,7 @@ export const videoDeepfake = new Tool(
       // KNOWN_LINKS.VIMEO, // assistant works; deepfakevideo has no face detected, video doesn't load properly
       // KNOWN_LINKS.MASTODON, // assistant fails to load video; deepfakevideo has no face detected, video doesn't load properly
       // KNOWN_LINKS.VK, // assistant fails to load; deepfakevideo works
-      KNOWN_LINKS.BBC,
+      // KNOWN_LINKS.BBC,
       KNOWN_LINKS.MISC,
       KNOWN_LINKS.OWN,
     ],
