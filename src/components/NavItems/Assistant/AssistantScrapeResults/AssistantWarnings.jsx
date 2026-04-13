@@ -165,12 +165,15 @@ const AssistantWarnings = () => {
           </IconButton>
         </Grid>
 
-        <Grid size={{ xs: 1 }}>
+        <Grid
+          size={{ xs: 1 }}
+          sx={{ display: "flex", justifyContent: "flex-end" }}
+        >
           {/* help tooltip */}
           <Tooltip
             interactive={"true"}
             leaveDelay={50}
-            sx={{ display: "flex", ml: "auto", textAlign: "right", mt: 1.5 }}
+            className={classes.assistantTooltipUrlAnalysisWarnings}
             title={
               <>
                 <Trans t={keyword} i18nKey="dbkf_tooltip" />

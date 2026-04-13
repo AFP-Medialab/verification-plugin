@@ -90,12 +90,15 @@ const AssistantSCResults = () => {
           </IconButton>
         </Grid>
 
-        <Grid size={{ xs: 1 }}>
+        <Grid
+          size={{ xs: 1 }}
+          sx={{ display: "flex", justifyContent: "flex-end" }}
+        >
           {/* help tooltip */}
           <Tooltip
             interactive={"true"}
             leaveDelay={50}
-            sx={{ display: "flex", ml: "auto", textAlign: "right", mt: 1.5 }}
+            className={classes.assistantTooltipUrlAnalysisWarnings}
             title={
               <>
                 <TransSourceCredibilityTooltip keyword={keyword} />
@@ -107,7 +110,7 @@ const AssistantSCResults = () => {
             }
             classes={{ tooltip: classes.assistantTooltip }}
           >
-            <HelpOutlineOutlinedIcon color={"action"} />
+            <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
           </Tooltip>
         </Grid>
 
@@ -116,7 +119,14 @@ const AssistantSCResults = () => {
             in={domainAnalysisExpanded}
             className={classes.assistantBackground}
           >
-            <Box mt={3} ml={2} textAlign="center">
+            <Box
+              sx={{
+                width: "100%",
+                mt: 3,
+                ml: 2,
+                textAlign: "center",
+              }}
+            >
               {/* Caution/Warning */}
               {positiveSourceCred?.length > 0 ? (
                 <>
