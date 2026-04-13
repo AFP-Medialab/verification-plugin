@@ -60,11 +60,6 @@ const AssistantMediaResult = ({ title = null }) => {
 
   const resultIsImage = resultProcessType === TOOLS_CATEGORIES.IMAGE;
 
-  // local control state
-  // const [expandMedia, setExpandMedia] = useState(
-  //   !singleMediaPresent || processUrl == null,
-  // );
-
   // select the correct media to process, then load actions possible
   const submitMediaToProcess = (url) => {
     //setExpandMedia(false);
