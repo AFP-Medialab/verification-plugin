@@ -15,7 +15,7 @@ import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-import ExtractedUrlDomainAnalysisResults from "@/components/NavItems/Assistant/AssistantCheckResults/ExtractedUrlDomainAnalysisResults";
+import ExtractedUrlDomainAnalysisResult from "@/components/NavItems/Assistant/AssistantCheckResults/ExtractedUrlDomainAnalysisResult";
 import CopyButton from "@/components/Shared/CopyButton";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
@@ -128,7 +128,7 @@ const Details = (params) => {
         labelAfterCopy={keyword("copied_to_clipboard")}
       />
       {params.done && params.credibilityScope && (
-        <ExtractedUrlDomainAnalysisResults
+        <ExtractedUrlDomainAnalysisResult
           domainResults={params.domainResults}
           credibilityScope={params.credibilityScope}
           credibilityScopeHttps={params.credibilityScopeHttps}

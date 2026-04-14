@@ -13,8 +13,8 @@ import Typography from "@mui/material/Typography";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-import DbkfTextResults from "@/components/NavItems/Assistant/AssistantCheckResults/DbkfTextResults";
-import PreviousFactCheckResults from "@/components/NavItems/Assistant/AssistantCheckResults/PreviousFactCheckResults";
+import DbkfTextResult from "@/components/NavItems/Assistant/AssistantCheckResults/DbkfTextResult";
+import PreviousFactCheckResult from "@/components/NavItems/Assistant/AssistantCheckResults/PreviousFactCheckResult";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { ROLES } from "@/constants/roles";
@@ -159,7 +159,7 @@ const AssistantFactCheckResult = () => {
       <CardContent>
         {/* not logged in as beta tester, DBKF only */}
         {!role.includes(ROLES.BETA_TESTER) && dbkfTextMatch && (
-          <DbkfTextResults
+          <DbkfTextResult
             results={separateDbkfTextMatch}
             prevFactChecksExist={false}
           />
@@ -170,14 +170,14 @@ const AssistantFactCheckResult = () => {
           prevFactChecksDone &&
           (updatedPrevFactCheckResult.length > 0 ? (
             <>
-              <DbkfTextResults
+              <DbkfTextResult
                 results={uniqueSeparateDbkfTextMatch}
                 prevFactChecksExist={true}
               />
-              <PreviousFactCheckResults results={updatedPrevFactCheckResult} />
+              <PreviousFactCheckResult results={updatedPrevFactCheckResult} />
             </>
           ) : (
-            <DbkfTextResults results={dbkfTextMatch} />
+            <DbkfTextResult results={dbkfTextMatch} />
           ))}
 
         {role.includes(ROLES.BETA_TESTER) && prevFactChecksLoading && (

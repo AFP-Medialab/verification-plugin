@@ -31,7 +31,7 @@ import {
   renderThisDomainOrAccount,
 } from "../utils";
 
-const ExtractedUrlDomainAnalysisResults = ({
+const ExtractedUrlDomainAnalysisResult = ({
   domainResults,
   credibilityScope,
   urlColor,
@@ -196,4 +196,4 @@ const ExtractedUrlDomainAnalysisResults = ({
     </List>
   );
 };
-export default ExtractedUrlDomainAnalysisResults;
+export default ExtractedUrlDomainAnalysisResult;
