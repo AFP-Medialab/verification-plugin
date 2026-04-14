@@ -10,7 +10,6 @@ import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
@@ -46,7 +45,7 @@ export function DomainDialog({
   };
 
   return (
-    <ListItemSecondaryAction>
+    <>
       {/* Tooltip with more details icon */}
       <Tooltip title="Details">
         <ListAltOutlinedIcon
@@ -128,6 +127,6 @@ export function DomainDialog({
           )}
         </DialogContent>
       </Dialog>
-    </ListItemSecondaryAction>
+    </>
   );
 }

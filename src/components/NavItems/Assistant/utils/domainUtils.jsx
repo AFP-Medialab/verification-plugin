@@ -230,7 +230,19 @@ export const renderDomainAnalysisResults = (
   return (
     <List disablePadding={true}>
       {sourceCredibiltyResults?.map((value, key) => (
-        <ListItem key={key}>
+        <ListItem
+          key={key}
+          secondaryAction={
+            value.evidence ? (
+              <DomainDialog
+                keyword={keyword}
+                value={value}
+                trafficLightColor={trafficLightColor}
+                sourceType={sourceType}
+              />
+            ) : null
+          }
+        >
           <ListItemText
             primary={
               <Box>
@@ -257,14 +269,6 @@ export const renderDomainAnalysisResults = (
                 {renderScope(keyword, value.credibilityScope)}
                 {renderLabels(keyword, value.labels)}
                 {renderDescription(keyword, value.description)}
-                {value.evidence ? (
-                  <DomainDialog
-                    keyword={keyword}
-                    value={value}
-                    trafficLightColor={trafficLightColor}
-                    sourceType={sourceType}
-                  />
-                ) : null}
               </Typography>
             }
           />
