@@ -28,8 +28,6 @@ import {
   TransUsfdAuthor,
 } from "../TransComponents";
 
-// functions for AssistantUrlDomainAnalysis and ExtractedUrlDomainAnalysis
-
 export const renderSourceTypeChip = (
   keyword,
   trafficLightColor,
@@ -39,8 +37,6 @@ export const renderSourceTypeChip = (
     <Chip label={keyword(sourceType)} color={trafficLightColor} size="small" />
   );
 };
-
-// functions for ExtractedUrlDomainAnalysis
 
 export function prependHttps(url) {
   return url ? (url.startsWith("http://") ? url : "https://" + url) : null;
@@ -239,8 +235,6 @@ export const renderDomainTitle = (
   );
 };
 
-// functions for AssistantUrlDomainAnalysis
-
 export const renderDomainAnalysisResults = (
   keyword,
   sourceCredibiltyResults,
@@ -281,9 +275,14 @@ export const renderDomainAnalysisResults = (
                 {renderScope(keyword, value.credibilityScope)}
                 {renderLabels(keyword, value.labels)}
                 {renderDescription(keyword, value.description)}
-                {value.evidence
-                  ? renderDialog(keyword, value, trafficLightColor, sourceType)
-                  : null}
+                {value.evidence ? (
+                  <DomainDialog
+                    keyword={keyword}
+                    value={value}
+                    trafficLightColor={trafficLightColor}
+                    sourceType={sourceType}
+                  />
+                ) : null}
               </Typography>
             }
           />
@@ -293,7 +292,7 @@ export const renderDomainAnalysisResults = (
   );
 };
 
-const renderDialog = (keyword, value, trafficLightColor, sourceType) => {
+function DomainDialog({ keyword, value, trafficLightColor, sourceType }) {
   const classes = useMyStyles();
 
   const [open, setOpen] = useState(false);
@@ -399,4 +398,4 @@ const renderDialog = (keyword, value, trafficLightColor, sourceType) => {
       </Dialog>
     </ListItemSecondaryAction>
   );
-};
+}

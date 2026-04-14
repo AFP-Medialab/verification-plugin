@@ -17,7 +17,7 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import {
   renderDomainAnalysisResults,
   renderSourceTypeChip,
-} from "@/components/NavItems/Assistant/AssistantCheckResults/assistantUtils";
+} from "@/components/NavItems/Assistant/utils";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { setAssuranceExpanded } from "@/redux/actions/tools/assistantActions";

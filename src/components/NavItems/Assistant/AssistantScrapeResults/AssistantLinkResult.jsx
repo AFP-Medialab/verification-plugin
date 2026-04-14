@@ -21,13 +21,13 @@ import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespa
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { DataGrid, getGridSingleSelectOperators } from "@mui/x-data-grid";
 
-import { prependHttps } from "../AssistantCheckResults/assistantUtils";
 import {
   TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
   TransUsfdAuthor,
 } from "../TransComponents";
+import { prependHttps } from "../utils";
 
 // render status for extracted urls
 const Status = (params) => {

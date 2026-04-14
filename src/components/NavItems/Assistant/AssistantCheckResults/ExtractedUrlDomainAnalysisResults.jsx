@@ -29,7 +29,7 @@ import {
   renderScope,
   renderSourceTypeChip,
   renderThisDomainOrAccount,
-} from "./assistantUtils";
+} from "../utils";
 
 const ExtractedUrlDomainAnalysisResults = ({
   domainResults,

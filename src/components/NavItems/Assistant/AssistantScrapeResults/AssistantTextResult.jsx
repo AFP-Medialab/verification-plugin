@@ -21,7 +21,7 @@ import TextFooter from "@/components/NavItems/Assistant/AssistantScrapeResults/T
 import {
   scrollToElement,
   treeMapToElements,
-} from "@/components/NavItems/Assistant/AssistantScrapeResults/assistantUtils";
+} from "@/components/NavItems/Assistant/utils";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import {
