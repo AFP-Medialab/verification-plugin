@@ -216,7 +216,7 @@ export default function assistantApiCalls() {
       },
       (numTries) => {
         console.log(
-          "Could not connect to source credibility service, tries " +
+          "Could not connect to URL domain analysis service, tries " +
             (numTries + 1) +
             "/" +
             MAX_NUM_RETRIES,
