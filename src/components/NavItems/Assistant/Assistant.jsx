@@ -25,10 +25,10 @@ import AssistantCheckStatus from "@/components/NavItems/Assistant/AssistantCheck
 import AssistantNEResult from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantNEResult";
 import AssistantSCResults from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantUrlDomainAnalysisResults";
 import AssistantCommentResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantCommentResult";
+import AssistantFactCheckResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantFactCheckResult";
 import AssistantLinkResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantLinkResult";
 import AssistantMediaResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantMediaResult";
 import AssistantTextResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantTextResult";
-import AssistantWarnings from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantWarnings";
 import HeaderTool from "@/components/Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
@@ -497,7 +497,7 @@ const Assistant = () => {
                   className={classes.assistantGrid}
                   hidden={urlMode === false}
                 >
-                  <AssistantWarnings />
+                  <AssistantFactCheckResult />
                 </Grid>
               ) : null}
 

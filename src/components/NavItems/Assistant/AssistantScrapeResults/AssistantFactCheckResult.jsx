@@ -27,7 +27,7 @@ import {
   TransPrevFactChecksLink,
 } from "../components";
 
-const AssistantWarnings = () => {
+const AssistantFactCheckResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const classes = useMyStyles();
 
@@ -196,4 +196,4 @@ const AssistantWarnings = () => {
     </Card>
   );
 };
-export default AssistantWarnings;
+export default AssistantFactCheckResult;
