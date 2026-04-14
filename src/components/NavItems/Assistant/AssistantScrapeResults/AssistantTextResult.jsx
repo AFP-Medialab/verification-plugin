@@ -12,7 +12,8 @@ import Tabs from "@mui/material/Tabs";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { WarningAmber } from "@mui/icons-material";
+import { WarningAmberOutlined } from "@mui/icons-material";
+import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import AssistantTextClassification from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantTextClassification";
@@ -26,6 +27,7 @@ import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespa
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import {
   setImportantSentenceThreshold,
+  setTextTabIndex,
   setWarningExpanded,
 } from "@/redux/actions/tools/assistantActions";
 
@@ -127,9 +129,9 @@ const AssistantTextResult = () => {
   const textBox = document.getElementById("element-to-check");
   const [expanded, setExpanded] = useState(false);
   const [displayOrigLang, setDisplayOrigLang] = useState(true);
-  const [textTabIndex, setTextTabIndex] = useState(0);
+  const textTabIndex = useSelector((state) => state.assistant.textTabIndex);
   const handleTabChange = (event, newValue) => {
-    setTextTabIndex(newValue);
+    dispatch(setTextTabIndex(newValue));
     // reset slider value on tab change to 80
     dispatch(setImportantSentenceThreshold(80));
   };
@@ -226,7 +228,12 @@ const AssistantTextResult = () => {
     >
       <CardHeader
         className={classes.assistantCardHeader}
-        title={keyword("text_title")}
+        title={
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <ArticleOutlinedIcon color="primary" />
+            {keyword("text_title")}
+          </Box>
+        }
         action={
           // top right warning and tooltip
           <div style={{ display: "flex" }}>
@@ -242,7 +249,7 @@ const AssistantTextResult = () => {
                   />
                 }
               >
-                <WarningAmber
+                <WarningAmberOutlined
                   color={"warning"}
                   className={classes.toolTipWarning}
                   sx={{ cursor: "pointer" }}

@@ -11,9 +11,9 @@ import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { downloadZip } from "client-zip";
 import dayjs from "dayjs";
 import { sha256 } from "hash-wasm";
+import pako from "pako";
 import { v4 as uuidv4 } from "uuid";
 import { CDXIndexer, WARCRecord, WARCSerializer } from "warcio";
-import pako from "pako";
 
 import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
 import { prettifyLargeString } from "../utils";

@@ -56,6 +56,8 @@ export default function AssistantTextClassification({
       "likely_machine",
       "highly_likely_machine",
     ],
+    // machine generated text arc lengths: [highly_likely_human, likely_human, likely_machine, highly_likely_machine]
+    arcsLength: [0.05, 0.45, 0.45, 0.05],
     // news framing
     newsFramingConfidenceThreshold: 0.8,
     // news genre
@@ -218,15 +220,13 @@ export default function AssistantTextClassification({
             className={classes.assistantCardHeader}
             title={keyword(credibilitySignal)}
             action={
-              <div style={{ display: "flex" }}>
-                <Tooltip
-                  interactive={"true"}
-                  title={categoriesTooltipContent}
-                  classes={{ tooltip: classes.assistantTooltip }}
-                >
-                  <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
-                </Tooltip>
-              </div>
+              <Tooltip
+                interactive={"true"}
+                title={categoriesTooltipContent}
+                classes={{ tooltip: classes.assistantTooltip }}
+              >
+                <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+              </Tooltip>
             }
           />
           <CardContent>
@@ -238,7 +238,7 @@ export default function AssistantTextClassification({
                 overallScore={classification[mgtOverallScoreLabel][0].score}
                 resolvedMode={resolvedMode}
                 colours={resolvedMode === "dark" ? mgtColoursDark : mgtColours}
-                arcsLength={[0.05, 0.45, 0.45, 0.05]}
+                arcsLength={configs.arcsLength}
                 gaugeLabels={["gauge_no_detection", "gauge_detection"]}
                 orderedCategories={orderedCategories}
                 credibilitySignal={credibilitySignal}

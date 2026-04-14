@@ -52,6 +52,59 @@ export function TransTooltipChip({ keyword, i18nKey, color }) {
   );
 }
 
+// chips with colour
+
+const CHIP_SX = {
+  mx: 0.5,
+  height: "16px",
+  borderRadius: "4px",
+  "& .MuiChip-label": { fontSize: "0.65rem", px: "6px" },
+  color: "white",
+};
+
+function InlineChip({ color, children }) {
+  return <Chip size="small" color={color} label={children} sx={CHIP_SX} />;
+}
+
+export function TransTooltipChip({ keyword, i18nKey, color }) {
+  const colorMap = {
+    // url domain analysis
+    warning: "error",
+    mentions: "warning",
+    fact_checker: "success",
+    unlabelled: "default",
+    // fact-checks
+    dbkf_acronym: "warning",
+    fcss_acronym: "warning",
+    // machine generated text (colours match getMgtColours lightGreenRgb/greenRgb defaults)
+    highly_likely_human: "success",
+    likely_human: "#aaff00",
+    likely_machine: "warning",
+    highly_likely_machine: "error",
+    // stance classifier
+    deny: "error",
+    query: "warning",
+    support: "success",
+    comment: "default",
+  };
+
+  const mapped = color || colorMap[i18nKey] || "default";
+  const isCustomColor = mapped.startsWith("#") || mapped.startsWith("rgb");
+
+  return (
+    <Chip
+      size="small"
+      color={isCustomColor ? "default" : mapped}
+      label={keyword(i18nKey)}
+      sx={
+        isCustomColor
+          ? { ...CHIP_SX, backgroundColor: mapped, color: "rgba(0,0,0,0.87)" }
+          : CHIP_SX
+      }
+    />
+  );
+}
+
 // Links
 
 export function TransSupportedToolsLink({ keyword }) {
@@ -424,6 +477,238 @@ export function TransMultilingualStanceTooltip({ keyword }) {
           </li>
         ))}
       </ul>
+    </>
+  );
+}
+
+// Summary tooltips
+
+export function TransSummaryDomainTooltip({
+  keyword,
+  cautionCount,
+  mixedCount,
+  positiveCount,
+  loaded,
+}) {
+  return (
+    <>
+      <Trans t={keyword} i18nKey="summary_url_domain_analysis_tooltip" />
+      {loaded && (
+        <ul style={UL_STYLE}>
+          <li style={LI_STYLE}>
+            {cautionCount}{" "}
+            <TransTooltipChip keyword={keyword} i18nKey="warning" />
+          </li>
+          <li style={LI_STYLE}>
+            {mixedCount}{" "}
+            <TransTooltipChip keyword={keyword} i18nKey="mentions" />
+          </li>
+          <li style={LI_STYLE}>
+            {positiveCount}{" "}
+            <TransTooltipChip keyword={keyword} i18nKey="fact_checker" />
+          </li>
+        </ul>
+      )}
+    </>
+  );
+}
+
+export function TransSummaryFactChecksTooltip({
+  keyword,
+  dbkfCount,
+  fcssCount,
+  isBetaTester,
+  loaded,
+}) {
+  return (
+    <>
+      {isBetaTester ? (
+        <Trans t={keyword} i18nKey="summary_dbkf_fcss_tooltip" />
+      ) : (
+        <Trans t={keyword} i18nKey="summary_dbkf_tooltip" />
+      )}
+      {loaded && (
+        <ul style={UL_STYLE}>
+          <li style={LI_STYLE}>
+            {dbkfCount}{" "}
+            <TransTooltipChip keyword={keyword} i18nKey="dbkf_acronym" />
+          </li>
+          {isBetaTester && (
+            <li style={LI_STYLE}>
+              {fcssCount}{" "}
+              <TransTooltipChip keyword={keyword} i18nKey="fcss_acronym" />
+            </li>
+          )}
+        </ul>
+      )}
+    </>
+  );
+}
+
+export function TransSummaryImagesTooltip({ keyword, imageCount, loaded }) {
+  return (
+    <>
+      <Trans t={keyword} i18nKey="summary_images_tooltip" />
+      {loaded && (
+        <ul style={UL_STYLE}>
+          <li style={LI_STYLE}>
+            {imageCount} {keyword("images_label")}
+          </li>
+        </ul>
+      )}
+    </>
+  );
+}
+
+export function TransSummaryVideosTooltip({ keyword, videoCount, loaded }) {
+  return (
+    <>
+      <Trans t={keyword} i18nKey="summary_videos_tooltip" />
+      {loaded && (
+        <ul style={UL_STYLE}>
+          <li style={LI_STYLE}>
+            {videoCount} {keyword("videos_label")}
+          </li>
+        </ul>
+      )}
+    </>
+  );
+}
+
+export function TransSummaryPersuasionTooltip({
+  keyword,
+  categoryCounts,
+  otherCount,
+  loaded,
+}) {
+  return (
+    <>
+      <Trans t={keyword} i18nKey="summary_persuasion_techniques_tooltip" />
+      {loaded && categoryCounts?.length > 0 && (
+        <ul style={UL_STYLE}>
+          {categoryCounts.map(({ name, count }) => (
+            <li key={name} style={LI_STYLE}>
+              {count}{" "}
+              <TransTooltipChip
+                keyword={keyword}
+                i18nKey={name}
+                color={"warning"}
+              />
+            </li>
+          ))}
+          <li style={LI_STYLE}>
+            {otherCount} {keyword("summary_persuasion_tooltip_other")}
+          </li>
+        </ul>
+      )}
+    </>
+  );
+}
+
+export function TransSummaryMgtTooltip({
+  keyword,
+  mgtScoreValue,
+  mgtCategory,
+  loaded,
+}) {
+  return (
+    <>
+      <Trans t={keyword} i18nKey="summary_machine_generated_text_tooltip" />
+      {loaded && mgtScoreValue && mgtCategory && (
+        <ul style={UL_STYLE}>
+          <li style={LI_STYLE}>
+            {mgtScoreValue}{" "}
+            <TransTooltipChip keyword={keyword} i18nKey={mgtCategory} />
+          </li>
+        </ul>
+      )}
+    </>
+  );
+}
+
+export function TransSummaryNamedEntitiesTooltip({
+  keyword,
+  namedEntityCount,
+  loaded,
+}) {
+  return (
+    <>
+      <Trans t={keyword} i18nKey="summary_named_entities_tooltip" />
+      {loaded && (
+        <ul style={UL_STYLE}>
+          <li style={LI_STYLE}>
+            {namedEntityCount} {keyword("named_entities_label")}
+          </li>
+        </ul>
+      )}
+    </>
+  );
+}
+
+export function TransSummaryLinksTooltip({
+  keyword,
+  warningLinksCount,
+  mentionsLinksCount,
+  factCheckerLinksCount,
+  unlabelledLinksCount,
+  linksCount,
+  loaded,
+}) {
+  const items = [
+    { count: warningLinksCount, key: "warning", color: "error" },
+    { count: mentionsLinksCount, key: "mentions", color: "warning" },
+    { count: factCheckerLinksCount, key: "fact_checker", color: "success" },
+    { count: unlabelledLinksCount, key: "unlabelled", color: "default" },
+  ];
+  return (
+    <>
+      <Trans t={keyword} i18nKey="summary_extracted_urls_tooltip" />
+      {loaded && (
+        <ul style={UL_STYLE}>
+          {items.map(({ count, key, color }) => (
+            <li key={key} style={LI_STYLE}>
+              {count}{" "}
+              <TransTooltipChip keyword={keyword} i18nKey={key} color={color} />
+            </li>
+          ))}
+          <li style={LI_STYLE}>
+            {linksCount} {keyword("summary_links_tooltip_total")}
+          </li>
+        </ul>
+      )}
+    </>
+  );
+}
+
+export function TransSummaryCommentsTooltip({
+  keyword,
+  denyCount,
+  queryCount,
+  supportCount,
+  commentCount,
+  loaded,
+}) {
+  return (
+    <>
+      <Trans t={keyword} i18nKey="summary_video_comments_tooltip" />
+      {loaded && (
+        <ul style={UL_STYLE}>
+          <li style={LI_STYLE}>
+            {denyCount} <TransTooltipChip keyword={keyword} i18nKey="deny" />
+          </li>
+          <li style={LI_STYLE}>
+            {queryCount} <TransTooltipChip keyword={keyword} i18nKey="query" />
+          </li>
+          <li style={LI_STYLE}>
+            {supportCount}{" "}
+            <TransTooltipChip keyword={keyword} i18nKey="support" />
+          </li>
+          <li style={LI_STYLE}>
+            {commentCount}{" "}
+            <TransTooltipChip keyword={keyword} i18nKey="comment" />
+          </li>
+        </ul>
+      )}
     </>
   );
 }
