@@ -279,11 +279,10 @@ export function createGaugeChart(
 
 /**
  * Slider component utilised by news framing, news genre, persuasion techniques and subjectivity
- * @param { credibilitySignal, importantSentenceThreshold, handleSliderChange }
+ * @param { importantSentenceThreshold, handleSliderChange, keyword }
  * @returns slider component
  */
 export function ThresholdSlider({
-  credibilitySignal,
   importantSentenceThreshold,
   handleSliderChange,
   keyword,
@@ -310,7 +309,7 @@ export function ThresholdSlider({
 
   return (
     <List>
-      <ListItem key={`${credibilitySignal}_thresholdSlider`}>
+      <ListItem>
         <Slider
           aria-label="important sentence threshold slider"
           marks={marks}

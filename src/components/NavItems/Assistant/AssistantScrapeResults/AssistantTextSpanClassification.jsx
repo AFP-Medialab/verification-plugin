@@ -412,7 +412,6 @@ export function CategoriesListToggle({
         {keyword("threshold_slider_confidence")}
       </Typography>
       <ThresholdSlider
-        credibilitySignal={credibilitySignal}
         importantSentenceThreshold={importantSentenceThreshold}
         handleSliderChange={handleSliderChange}
         keyword={keyword}

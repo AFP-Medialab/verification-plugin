@@ -358,7 +358,6 @@ export function GaugeCategoriesList({
                 {keyword("threshold_slider_confidence")}
               </Typography>
               <ThresholdSlider
-                credibilitySignal={credibilitySignal}
                 importantSentenceThreshold={importantSentenceThreshold}
                 handleSliderChange={handleSliderChange}
                 keyword={keyword}
@@ -449,7 +448,6 @@ export function CategoriesList({
         {keyword("threshold_slider_relevance")}
       </Typography>
       <ThresholdSlider
-        credibilitySignal={credibilitySignal}
         importantSentenceThreshold={importantSentenceThreshold}
         handleSliderChange={handleSliderChange}
         keyword={keyword}
