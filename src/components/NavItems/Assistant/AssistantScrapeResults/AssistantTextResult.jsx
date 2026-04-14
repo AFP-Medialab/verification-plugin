@@ -41,6 +41,7 @@ import {
   TransSupportedToolsLink,
   TransUsfdAuthor,
 } from "../TransComponents";
+import { CREDIBILITY_SIGNAL_TITLES } from "../constants";
 
 const AssistantTextResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -63,7 +64,7 @@ const AssistantTextResult = () => {
   );
 
   // news framing (topic)
-  const newsFramingTitle = "news_framing_title";
+  const newsFramingTitle = CREDIBILITY_SIGNAL_TITLES.NEWS_FRAMING;
   const newsFramingResult = useSelector(
     (state) => state.assistant.newsFramingResult,
   );
@@ -75,7 +76,7 @@ const AssistantTextResult = () => {
   );
 
   // news genre
-  const newsGenreTitle = "news_genre_title";
+  const newsGenreTitle = CREDIBILITY_SIGNAL_TITLES.NEWS_GENRE;
   const newsGenreResult = useSelector(
     (state) => state.assistant.newsGenreResult,
   );
@@ -85,7 +86,7 @@ const AssistantTextResult = () => {
   const newsGenreFail = useSelector((state) => state.assistant.newsGenreFail);
 
   // persuasion techniques
-  const persuasionTitle = "persuasion_techniques_title";
+  const persuasionTitle = CREDIBILITY_SIGNAL_TITLES.PERSUASION;
   const persuasionResult = useSelector(
     (state) => state.assistant.persuasionResult,
   );
@@ -95,7 +96,7 @@ const AssistantTextResult = () => {
   const persuasionFail = useSelector((state) => state.assistant.persuasionFail);
 
   // subjectivity
-  const subjectivityTitle = "subjectivity_title";
+  const subjectivityTitle = CREDIBILITY_SIGNAL_TITLES.SUBJECTIVITY;
   const subjectivityResult = useSelector(
     (state) => state.assistant.subjectivityResult,
   );
@@ -107,7 +108,8 @@ const AssistantTextResult = () => {
   );
 
   // machine generated text
-  const machineGeneratedTextTitle = "machine_generated_text_title";
+  const machineGeneratedTextTitle =
+    CREDIBILITY_SIGNAL_TITLES.MACHINE_GENERATED_TEXT;
   const machineGeneratedTextChunksResult = useSelector(
     (state) => state.assistant.machineGeneratedTextChunksResult,
   );

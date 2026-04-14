@@ -3,6 +3,8 @@ import { Trans } from "react-i18next";
 
 import Chip from "@mui/material/Chip";
 
+import { DOCS_URLS, STANCE_CATEGORIES, STANCE_COLOR_MAP } from "./constants";
+
 // CSS STYLES
 
 const UL_STYLE = { paddingLeft: "20px", margin: "8px 0" };
@@ -27,15 +29,7 @@ function InlineChip({ color, children }) {
 }
 
 export function TransTooltipChip({ keyword, i18nKey, color }) {
-  const colorMap = {
-    // stance classifier
-    deny: "error",
-    query: "warning",
-    support: "success",
-    comment: "default",
-  };
-
-  const mapped = color || colorMap[i18nKey] || "default";
+  const mapped = color || STANCE_COLOR_MAP[i18nKey] || "default";
   const isCustomColor = mapped.startsWith("#") || mapped.startsWith("rgb");
 
   return (
@@ -62,7 +56,7 @@ export function TransSupportedToolsLink({ keyword }) {
       components={{
         supportedToolsLink: (
           <a
-            href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools"
+            href={DOCS_URLS.SUPPORTED_TOOLS}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -81,7 +75,7 @@ export function TransSupportedUrlsLink({ keyword }) {
       components={{
         supportedUrlsLink: (
           <a
-            href="https://gatenlp.github.io/we-verify-app-assistant/supported-urls"
+            href={DOCS_URLS.SUPPORTED_URLS}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -100,7 +94,7 @@ export function TransUrlDomainAnalysisLink({ keyword }) {
       components={{
         urlDomainAnalysisLink: (
           <a
-            href="https://gatenlp.github.io/domain-analysis-lists/"
+            href={DOCS_URLS.DOMAIN_ANALYSIS}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -119,7 +113,7 @@ export function TransNamedEntityRecogniserLink({ keyword }) {
       components={{
         namedEntityRecogniserLink: (
           <a
-            href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#named-entity-recogniser"
+            href={DOCS_URLS.NAMED_ENTITY_RECOGNISER}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -138,7 +132,7 @@ export function TransCredibilitySignalsLink({ keyword }) {
       components={{
         credibilitySignalsLink: (
           <a
-            href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#credibility-signals"
+            href={DOCS_URLS.CREDIBILITY_SIGNALS}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -157,7 +151,7 @@ export function TransPrevFactChecksLink({ keyword }) {
       components={{
         previousFactChecksLink: (
           <a
-            href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#previous-fact-checks"
+            href={DOCS_URLS.PREV_FACT_CHECKS}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -176,7 +170,7 @@ export function TransDbkfLink({ keyword }) {
       components={{
         dbkfLink: (
           <a
-            href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#database-of-known-fakes"
+            href={DOCS_URLS.DBKF}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -195,7 +189,7 @@ export function TransMultilingualStanceLink({ keyword }) {
       components={{
         multilingualStanceLink: (
           <a
-            href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#stance-classifier"
+            href={DOCS_URLS.STANCE_CLASSIFIER}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -216,7 +210,7 @@ export function TransUsfdAuthor({ keyword }) {
       components={{
         usfdLink: (
           <a
-            href="https://cloud.gate.ac.uk/shopfront"
+            href={DOCS_URLS.GATE_SHOPFRONT}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -235,7 +229,7 @@ export function TransDeutscheWelleAuthor({ keyword }) {
       components={{
         deutscheWelleLink: (
           <a
-            href="https://www.dw.com/"
+            href={DOCS_URLS.DEUTSCHE_WELLE}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -254,7 +248,7 @@ export function TransKinitAuthor({ keyword }) {
       components={{
         kinitLink: (
           <a
-            href="https://kinit.sk/"
+            href={DOCS_URLS.KINIT}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -273,7 +267,7 @@ export function TransOntotextAuthor({ keyword }) {
       components={{
         ontotextLink: (
           <a
-            href="https://www.ontotext.com/"
+            href={DOCS_URLS.ONTOTEXT}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -325,7 +319,7 @@ export function TransAssistantHelpFourTooltip({ keyword }) {
         li: <li style={LI_STYLE} />,
         imageFileTypeSupportLink: (
           <a
-            href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Image_types"
+            href={DOCS_URLS.MDN_IMAGE_TYPES}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -333,7 +327,7 @@ export function TransAssistantHelpFourTooltip({ keyword }) {
         ),
         videoFileTypeSupportLink: (
           <a
-            href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Video_codecs"
+            href={DOCS_URLS.MDN_VIDEO_CODECS}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -418,7 +412,7 @@ export function TransMultilingualStanceTooltip({ keyword }) {
     <>
       <Trans t={keyword} i18nKey="multilingual_stance_tooltip" />
       <ul style={UL_STYLE}>
-        {["support", "query", "deny", "comment"].map((key) => (
+        {STANCE_CATEGORIES.map((key) => (
           <li key={key} style={LI_STYLE}>
             <TransTooltipChip keyword={keyword} i18nKey={key} />
           </li>
