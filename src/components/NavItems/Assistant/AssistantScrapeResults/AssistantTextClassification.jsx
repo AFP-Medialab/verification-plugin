@@ -18,8 +18,8 @@ import { hexToRgb } from "@mui/material/styles";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
+import { ThresholdSlider } from "@/components/NavItems/Assistant/components";
 import {
-  ThresholdSlider,
   createGaugeChart,
   getMgtColours,
   getSubjectivityColours,

@@ -26,7 +26,7 @@ import {
   TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
   TransUsfdAuthor,
-} from "../TransComponents";
+} from "../components";
 import { prependHttps } from "../utils";
 
 // render status for extracted urls

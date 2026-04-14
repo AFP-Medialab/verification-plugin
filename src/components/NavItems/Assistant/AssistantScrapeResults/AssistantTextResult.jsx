@@ -40,7 +40,7 @@ import {
   TransPersuasionTechniquesTooltip,
   TransSupportedToolsLink,
   TransUsfdAuthor,
-} from "../TransComponents";
+} from "../components";
 import { CREDIBILITY_SIGNAL_TITLES } from "../constants";
 
 const AssistantTextResult = () => {

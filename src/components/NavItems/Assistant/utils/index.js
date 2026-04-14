@@ -26,6 +26,5 @@ export {
   mergeSpanIndices,
   getPersuasionCategoryTechnique,
   createGaugeChart,
-  ThresholdSlider,
   scrollToElement,
 } from "./textUtils";

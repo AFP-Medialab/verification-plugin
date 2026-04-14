@@ -27,7 +27,7 @@ import {
   TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
   TransUsfdAuthor,
-} from "../TransComponents";
+} from "../components";
 
 const AssistantSCResults = () => {
   // central
