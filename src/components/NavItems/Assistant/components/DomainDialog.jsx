@@ -50,6 +50,7 @@ export function DomainDialog({
       <Tooltip title="Details">
         <ListAltOutlinedIcon
           style={{ cursor: "pointer" }}
+          color={"action"}
           onClick={handleClickOpen}
         />
       </Tooltip>
