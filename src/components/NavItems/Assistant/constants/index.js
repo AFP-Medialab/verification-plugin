@@ -18,5 +18,4 @@ export {
   NE_ENTITY_CHUNK_SIZE,
   API_ENDPOINTS,
   DBKF_RESULTS_LIMIT,
-  DOCS_URLS,
 } from "./apiConstants";
