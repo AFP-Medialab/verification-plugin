@@ -7,7 +7,50 @@ import Chip from "@mui/material/Chip";
 
 const UL_STYLE = { paddingLeft: "20px", margin: "8px 0" };
 const LI_STYLE = { display: "list-item", listStyleType: "disc" };
-export const A_STYLE = { color: "blue", textDecoration: "underline" };
+const A_STYLE = {
+  color: "#D6D6FF", // passes all tests on https://webaim.org/resources/contrastchecker/
+  textDecoration: "underline",
+};
+
+// chips with colour
+
+const CHIP_SX = {
+  mx: 0.5,
+  height: "16px",
+  borderRadius: "4px",
+  "& .MuiChip-label": { fontSize: "0.65rem", px: "6px" },
+  color: "white",
+};
+
+function InlineChip({ color, children }) {
+  return <Chip size="small" color={color} label={children} sx={CHIP_SX} />;
+}
+
+export function TransTooltipChip({ keyword, i18nKey, color }) {
+  const colorMap = {
+    // stance classifier
+    deny: "error",
+    query: "warning",
+    support: "success",
+    comment: "default",
+  };
+
+  const mapped = color || colorMap[i18nKey] || "default";
+  const isCustomColor = mapped.startsWith("#") || mapped.startsWith("rgb");
+
+  return (
+    <Chip
+      size="small"
+      color={isCustomColor ? "default" : mapped}
+      label={keyword(i18nKey)}
+      sx={
+        isCustomColor
+          ? { ...CHIP_SX, backgroundColor: mapped, color: "rgba(0,0,0,0.87)" }
+          : CHIP_SX
+      }
+    />
+  );
+}
 
 // chips with colour
 

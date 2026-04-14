@@ -87,6 +87,7 @@ const ImageCropper = ({
   setMagnifierResult,
   original,
   setIsImageUrl,
+  ...props
 }) => {
   const [crop, setCrop] = useState();
   const [completedCrop, setCompletedCrop] = useState();
@@ -210,6 +211,7 @@ const ImageCropper = ({
               {keyword("crop_save")}
             </Button>
             <Button
+              {...props}
               color="primary"
               variant="contained"
               onClick={() => handleClose()}

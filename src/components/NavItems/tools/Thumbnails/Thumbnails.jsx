@@ -263,6 +263,7 @@ const Thumbnails = () => {
             >
               <Grid size="grow">
                 <TextField
+                  data-testid="thumbnails-input"
                   id="standard-full-width"
                   label={keyword("youtube_input")}
                   placeholder={keyword("api_input")}
@@ -290,6 +291,7 @@ const Thumbnails = () => {
               </Grid>
               <Grid>
                 <Button
+                  data-testid="thumbnails-submit"
                   type="submit"
                   variant="contained"
                   color="primary"
@@ -356,6 +358,7 @@ const Thumbnails = () => {
             className={classes.headerUploadedImage}
             action={
               <IconButton
+                data-testid="thumbnails-close"
                 aria-label="close"
                 onClick={() => dispatch(cleanThumbnailsState())}
                 sx={{ p: 1 }}

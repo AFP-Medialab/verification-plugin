@@ -155,6 +155,8 @@ const Magnifier = () => {
               handleCloseSelectedFile={resetState}
               preprocessLocalFile={preprocessImage}
               handleClearUrl={resetState}
+              urlInputTestId="magnifier-input"
+              submitButtonTestId="magnifier-submit"
             />
           </form>
 

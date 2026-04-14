@@ -1,4 +1,4 @@
-import { trackEvent } from "../GoogleAnalytics/MatomoAnalytics";
+import { trackEvent } from "../GoogleAnalytics/MatomoAnalyticsCore";
 import { baiduReverseSearch } from "./engines/baidu";
 import { bingReverseSearch } from "./engines/bing";
 import { googleFactCheckReverseSearch } from "./engines/google-factcheck";

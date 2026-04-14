@@ -9,6 +9,7 @@ import MachineGeneratedTextForm from "@/components/NavItems/MachineGeneratedText
 import MachineGeneratedTextResults from "@/components/NavItems/MachineGeneratedText/components/MachineGeneratedTextResults";
 import { JsonBlock } from "@Shared/JsonBlock";
 
+import MachineGeneratedTextHeader from "./components/MachineGeneratedTextHeader";
 import { useMachineGeneratedText } from "./useMachineGeneratedText";
 
 const MachineGeneratedText = () => {
@@ -26,6 +27,7 @@ const MachineGeneratedText = () => {
 
   return (
     <Stack direction="column" spacing={4}>
+      <MachineGeneratedTextHeader />
       <MachineGeneratedTextForm
         mutationChunks={mutationChunks}
         mutationSentences={mutationSentences}

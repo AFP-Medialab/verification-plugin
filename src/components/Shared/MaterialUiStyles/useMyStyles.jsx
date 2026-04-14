@@ -337,13 +337,6 @@ const styles = (theme) => ({
     display: "flex",
     padding: "12px",
   },
-  assistantWarningBorder: {
-    border: "2px solid",
-    borderColor: "red",
-    borderRadius: "15px",
-    display: "flex",
-    padding: "12px",
-  },
   assistantBackground: {
     backgroundColor: "transparent",
   },
@@ -352,6 +345,12 @@ const styles = (theme) => ({
   },
   assistantIconLeft: {
     marginRight: "-15px",
+  },
+  assistantTooltip: {
+    "&&": {
+      textAlign: "left",
+      backgroundColor: "#424242",
+    },
   },
 
   /* OCR classes */

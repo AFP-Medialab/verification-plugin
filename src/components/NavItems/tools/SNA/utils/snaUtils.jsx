@@ -158,3 +158,21 @@ export const universalTokenize = (inputString) => {
 
   return tokens || [];
 };
+
+/**
+ * utils pour ajouter post scrapping une clé avec l'url de la video pour les collections TikTok
+ * @param {JSON} content
+ * @returns
+ */
+export const addingUrl = (row) => {
+  if (!row.id.includes("tiktoks")) return row;
+
+  return {
+    ...row,
+    content: row.content.map((element) => ({
+      videoUrl: `https://tiktok.com/share/video/${element.id}`,
+      ...element,
+    })),
+    headers: ["videoUrl", ...row.headers],
+  };
+};

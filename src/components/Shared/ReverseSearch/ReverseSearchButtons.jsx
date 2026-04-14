@@ -13,6 +13,7 @@ export const ReverseSearchButtons = ({
   reverseSearch,
   isimageUrl = true,
   children,
+  ...props
 }) => {
   const keyword = i18nLoadNamespace("components/Shared/ReverseSearch");
   const classes = useMyStyles();
@@ -40,6 +41,7 @@ export const ReverseSearchButtons = ({
                 variant="contained"
                 color={"primary"}
                 onClick={async () => await reverseSearch(engine.NAME)}
+                {...props}
               >
                 {keyword(engine.CONTEXT_MENU_ID)}
               </Button>

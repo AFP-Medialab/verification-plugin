@@ -30,6 +30,7 @@ import {
 
 import { changeTabEvent } from "@Shared/GoogleAnalytics/GoogleAnalytics";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import YouTubeEmbed from "@Shared/Utils/YouTubeEmbed";
 import PropTypes from "prop-types";
 
 import IconClassRoom from "../../NavBar/images/SVG/Navbar/Classroom.svg";
@@ -171,7 +172,7 @@ const ClassRoom = () => {
       case 5:
         return keyword("classroom_gamification");
       /*case 6:
-                                                                                                                                                                          return keyword("classroom_gamification_2");*/
+          return keyword("classroom_gamification_2");*/
       case 6:
         return keyword("user_resources_title");
       case 7:
@@ -288,18 +289,7 @@ const ClassRoom = () => {
                       mb: 2,
                     }}
                   >
-                    <iframe
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        border: 0,
-                      }}
-                      src="https://www.youtube-nocookie.com/embed/vaPSfRmwq0g?si=wzRhio6KzEpcOUAc"
-                      title="YouTube video player"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      allowFullScreen
-                    />
+                    <YouTubeEmbed videoId="vaPSfRmwq0g" />
                   </Box>
                   <Stack direction="row" spacing={2}>
                     <IconButton
@@ -543,13 +533,17 @@ const ClassRoom = () => {
             aria-labelledby="max-width-dialog-title"
           >
             <DialogContent>
-              <Iframe
-                frameBorder="0"
-                url={videoUrl}
-                allow="fullscreen"
-                height="400"
-                width="100%"
-              />
+              {/(?:youtube\.com|youtu\.be)/i.test(videoUrl) ? (
+                <YouTubeEmbed embedLink={videoUrl} height="400" width="100%" />
+              ) : (
+                <Iframe
+                  frameBorder="0"
+                  url={videoUrl}
+                  allow="fullscreen"
+                  height="400"
+                  width="100%"
+                />
+              )}
             </DialogContent>
             <DialogActions>
               <Button onClick={() => setVideoUrl(null)} color="primary">

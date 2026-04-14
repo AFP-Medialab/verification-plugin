@@ -43,7 +43,6 @@ import moment from "moment/moment";
 import PropTypes from "prop-types";
 
 import {
-  A_STYLE,
   TransHtmlDoubleLineBreak,
   TransMultilingualStanceLink,
   TransMultilingualStanceTooltip,
@@ -172,6 +171,11 @@ const AssistantCommentResult = ({ collectedComments }) => {
     const parentRowRef = useRef(null);
     const [colWidths, setColWidths] = useState([]);
 
+    const A_STYLE = {
+      color: resolvedMode === "dark" ? "#6BABFA" : "blue", // passes all tests on https://webaim.org/resources/contrastchecker/
+      textDecoration: "underline",
+    };
+
     // resize replies columns to match top level comment columns
     useEffect(() => {
       const updateColumnWidths = () => {
@@ -208,8 +212,13 @@ const AssistantCommentResult = ({ collectedComments }) => {
         <TableRow
           ref={parentRowRef}
           sx={{
-            "& > *": { borderBottom: "unset" },
-            backgroundColor: resolvedMode === "dark" ? "#0c0d0d" : "#e0f2f1",
+            "& > *": {
+              borderBottom:
+                resolvedMode === "dark"
+                  ? "1px solid #333"
+                  : "1px solid #B2DFDB",
+            },
+            backgroundColor: resolvedMode === "dark" ? "#0c0d0d" : "#EDF7F7",
           }}
         >
           {/* replies collapse */}

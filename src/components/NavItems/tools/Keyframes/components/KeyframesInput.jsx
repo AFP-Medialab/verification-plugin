@@ -1,3 +1,6 @@
+/**
+ * This file is deprecated, we use the shared file StringFileUploadField to manage the input in the keyframes features.
+ */
 import React from "react";
 
 import Box from "@mui/material/Box";
@@ -20,6 +23,7 @@ const KeyframesInput = ({
     <Grid container direction="row" spacing={3} sx={{ alignItems: "center" }}>
       <Grid size="grow">
         <TextField
+          data-testid="keyframes-input"
           id="keyframes-input"
           label={keyword("keyframes_input")}
           fullWidth
@@ -45,6 +49,7 @@ const KeyframesInput = ({
       </Grid>
       <Grid>
         <Button
+          data-testid="keyframes-submit"
           type="submit"
           variant="contained"
           color="primary"

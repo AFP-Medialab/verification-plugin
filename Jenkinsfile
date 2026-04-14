@@ -23,8 +23,8 @@ pipeline {
             steps {
                 slackSend channel: 'medialab_builds', message: "Start build ${env.JOB_NAME} - ID: ${env.BUILD_ID}", tokenCredentialId: 'medialab_slack_token'
                 configFileProvider([configFile(fileId: CONFIG_FILE_ID, targetLocation: '.env')]){
-                    sh "npm ci"
-                    sh "npm run build"
+                    sh "pnpm install --frozen-lockfile"
+                    sh "pnpm run zip:all:production"
                 }
             }
         }
