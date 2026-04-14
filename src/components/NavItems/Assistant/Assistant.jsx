@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -257,7 +257,7 @@ const Assistant = () => {
   };
 
   // clean assistant
-  const cleanAssistant = () => {
+  const cleanAssistant = useCallback(() => {
     dispatch(cleanAssistantState());
     // clean url mode
     setHasSubmitted(false);
@@ -269,7 +269,7 @@ const Assistant = () => {
     dispatch(setSingleMediaPresent(false));
     setImageUploaded(false);
     setVideoUploaded(false);
-  };
+  }, [dispatch, navigate]);
 
   // set correct error message
   useEffect(() => {
@@ -277,7 +277,7 @@ const Assistant = () => {
       dispatch(setError(keyword(errorKey)));
       cleanAssistant();
     }
-  }, [errorKey]);
+  }, [errorKey, dispatch, keyword, cleanAssistant]);
 
   // if a url is present in the plugin url (as a param), set it to input
   useEffect(() => {
@@ -289,7 +289,7 @@ const Assistant = () => {
       dispatch(submitInputUrl(uri));
       navigate("/app/assistant/" + encodeURIComponent(uri));
     }
-  }, [url]);
+  }, [url, hasSubmitted, dispatch, navigate]);
 
   // when navigating to a different tool then back to assistant
   // make sure url is set in form
