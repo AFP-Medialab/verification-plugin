@@ -210,6 +210,7 @@ const NavigationSidebar = ({ tools, setOpenAlert }) => {
   const drawerItemsVideo = tools.filter(
     (tool) => tool.category === TOOLS_CATEGORIES.VIDEO,
   );
+
   const [openListVideo, setOpenListVideo] = useState(() => {
     const tool = tools.filter(
       (tool) => tool.titleKeyword === selectedToolTitleKeyword,

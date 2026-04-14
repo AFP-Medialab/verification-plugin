@@ -6,6 +6,7 @@ import {
   Archive as ArchiveIcon,
   AudioFile,
   Dashboard,
+  FaceRetouchingNatural,
   GeneratingTokensRounded,
   Gradient,
   ManageSearch,
@@ -16,6 +17,10 @@ import {
   resetDeepfake,
   setDeepfakeUrlVideo,
 } from "@//redux/actions/tools/deepfakeVideoActions";
+import {
+  resetPoiForensics,
+  setPoiForensicsUrl,
+} from "@/redux/actions/tools/poiForensicsActions";
 import { c2paUrlSet, resetC2paState } from "@/redux/reducers/tools/c2paReducer";
 import {
   resetGeolocation as resetGeolocationImage,
@@ -73,6 +78,9 @@ const Chatbot = React.lazy(
 );
 const DeepfakeVideo = React.lazy(
   () => import("../components/NavItems/tools/Deepfake/DeepfakeVideo"),
+);
+const PoiForensics = React.lazy(
+  () => import("../components/NavItems/tools/POIForensics/PoiForensics"),
 );
 const Forensic = React.lazy(
   () => import("../components/NavItems/tools/Forensic/Forensic"),
@@ -244,6 +252,10 @@ const metadataSvgIcon = (props) => {
 
 const deepfakeSvgIcon = (props) => {
   return <SvgIcon component={DeepfakeIcon} inheritViewBox {...props} />;
+};
+
+const poiForensicSvgIcon = (props) => {
+  return <FaceRetouchingNatural inheritViewBox {...props} />;
 };
 
 const magnifierSvgIcon = (props) => {
@@ -468,6 +480,35 @@ export const videoDeepfake = new Tool(
     text: "deepfake_video_text",
     resetUrl: resetDeepfake,
     setUrl: (resultUrl) => setDeepfakeUrlVideo({ url: resultUrl }),
+  },
+);
+
+export const poiForensic = new Tool(
+  "navbar_poiforensics",
+  "navbar_poiforensics_description",
+  poiForensicSvgIcon,
+  TOOLS_CATEGORIES.VIDEO,
+  [TOOL_STATUS_ICON.LOCK],
+  [ROLES.EXTRA_FEATURE],
+  "poiforensic",
+  TOOL_GROUPS.VERIFICATION,
+  <PoiForensics />,
+  <Footer type={FOOTER_TYPES.ITI} />,
+  {
+    processLinksAccepted: [
+      KNOWN_LINKS.YOUTUBE,
+      KNOWN_LINKS.TWITTER,
+      KNOWN_LINKS.TELEGRAM,
+      KNOWN_LINKS.YOUTUBESHORTS,
+      KNOWN_LINKS.DAILYMOTION,
+      KNOWN_LINKS.MISC,
+      KNOWN_LINKS.OWN,
+    ],
+    exceptions: [],
+    useInputUrl: false,
+    text: "deepfake_video_text",
+    resetUrl: resetPoiForensics,
+    setUrl: (resultUrl) => setPoiForensicsUrl({ url: resultUrl }),
   },
 );
 
@@ -849,6 +890,7 @@ export const tools = Object.freeze([
   thumbnails,
   videoMetadata,
   videoDeepfake,
+  poiForensic,
   imageMagnifier,
   imageMetadata,
   imageForensic,
