@@ -63,24 +63,25 @@ const AssistantWarnings = () => {
   if (role.includes(ROLES.BETA_TESTER)) {
     if (prevFactChecksResult && dbkfTextMatch) {
       // pfc and dbkf results
+      const dbkfLinkSet = new Set(dbkfTextMatch.map((r) => r.externalLink));
+
       prevFactChecksResult.forEach((pfcResult) => {
-        dbkfTextMatch.forEach((dbkfResult) => {
-          if (pfcResult.url === dbkfResult.externalLink) {
-            updatedPrevFactCheckResult.push({
-              ...pfcResult,
-              factCheckServices: [FCSS, DBKF],
-            });
-          } else {
-            updatedPrevFactCheckResult.push({
-              ...pfcResult,
-              factCheckServices: [FCSS],
-            });
-            separateDbkfTextMatch.push({
-              ...dbkfResult,
-              factCheckServices: [DBKF],
-            });
-          }
+        updatedPrevFactCheckResult.push({
+          ...pfcResult,
+          factCheckServices: dbkfLinkSet.has(pfcResult.url)
+            ? [FCSS, DBKF]
+            : [FCSS],
         });
+      });
+
+      const pfcLinkSet = new Set(prevFactChecksResult.map((r) => r.url));
+      dbkfTextMatch.forEach((dbkfResult) => {
+        if (!pfcLinkSet.has(dbkfResult.externalLink)) {
+          separateDbkfTextMatch.push({
+            ...dbkfResult,
+            factCheckServices: [DBKF],
+          });
+        }
       });
       uniqueSeparateDbkfTextMatch = separateDbkfTextMatch.filter(
         (obj, index, self) =>
