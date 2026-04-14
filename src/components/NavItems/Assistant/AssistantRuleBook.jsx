@@ -12,11 +12,7 @@ import {
   tools,
 } from "@/constants/tools";
 
-export {
-  NE_SUPPORTED_LANGS,
-  TYPE_PATTERNS,
-  KNOWN_LINK_PATTERNS,
-} from "./constants";
+export { TYPE_PATTERNS, KNOWN_LINK_PATTERNS } from "./constants";
 
 const DisabledDownloadIcon = (props) => {
   return <DownloadIcon color="disabled" {...props} />;
