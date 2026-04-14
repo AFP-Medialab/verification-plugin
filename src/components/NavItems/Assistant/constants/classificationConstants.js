@@ -11,32 +11,6 @@ export const CREDIBILITY_SIGNAL_TITLES = {
 };
 
 /**
- * Stance categories used by the multilingual stance classifier
- */
-export const STANCE_CATEGORIES = ["support", "query", "deny", "comment"];
-
-/**
- * Maps stance category values to MUI Chip color names
- */
-export const STANCE_COLOR_MAP = {
-  support: "success",
-  deny: "error",
-  query: "warning",
-  comment: "inherit",
-};
-
-/**
- * Colour assigned to each named-entity type in the tag cloud and category buttons
- */
-export const NE_TYPE_COLORS = {
-  person: "#648FFF",
-  location: "#DC267F",
-  organization: "#FFB000",
-  hashtag: "#FE6100",
-  userid: "#785EF0",
-};
-
-/**
  * Ordered category list for the machine-generated text classifier.
  * Used as the default value for the `orderedCategories` config prop.
  */
@@ -75,3 +49,34 @@ export const DETECTION_EXPLANATION_KEYWORDS_MGT = [
   "gauge_scale_modal_explanation_rating_3_mgt",
   "gauge_scale_modal_explanation_rating_4_mgt",
 ];
+
+/**
+ * Stance categories used by the multilingual stance classifier
+ */
+export const STANCE_CATEGORIES = ["support", "query", "deny", "comment"];
+
+/**
+ * Maps stance category values to MUI Chip color names
+ */
+export const STANCE_COLOR_MAP = {
+  support: "success",
+  deny: "error",
+  query: "warning",
+  comment: "inherit",
+};
+
+/**
+ * Languages supported by the named-entity recognition service
+ */
+export const NE_SUPPORTED_LANGS = ["en", "pt", "fr", "de", "el", "es", "it"];
+
+/**
+ * Colour assigned to each named-entity type in the tag cloud and category buttons
+ */
+export const NE_TYPE_COLORS = {
+  person: "#648FFF",
+  location: "#DC267F",
+  organization: "#FFB000",
+  hashtag: "#FE6100",
+  userid: "#785EF0",
+};

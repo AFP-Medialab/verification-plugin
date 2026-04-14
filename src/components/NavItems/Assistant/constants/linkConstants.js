@@ -1,11 +1,6 @@
 import { KNOWN_LINKS, TOOLS_CATEGORIES } from "@/constants/tools";
 
 /**
- * Languages supported by the named-entity recognition service
- */
-export const NE_SUPPORTED_LANGS = ["en", "pt", "fr", "de", "el", "es", "it"];
-
-/**
  * File-extension patterns used to classify a URL as video or image
  */
 export const TYPE_PATTERNS = [
