@@ -51,7 +51,7 @@ const ExtractedUrlDomainAnalysisResult = ({
   };
 
   // passing through correct colours for details here
-  const sourceCredibility = [
+  const urlDomainAnalysisData = [
     [domainResults.caution, trafficLightColors.caution, sourceTypes.caution],
     [domainResults.mixed, trafficLightColors.mixed, sourceTypes.mixed],
     [domainResults.positive, trafficLightColors.positive, sourceTypes.positive],
@@ -59,7 +59,7 @@ const ExtractedUrlDomainAnalysisResult = ({
 
   return (
     <List component={Stack} direction="row" disablePadding={true}>
-      {sourceCredibility ? (
+      {urlDomainAnalysisData ? (
         <ListItem>
           <ListItemText
             primary={
@@ -95,7 +95,7 @@ const ExtractedUrlDomainAnalysisResult = ({
                   >
                     <DialogTitle>
                       {/* display the url */}
-                      {sourceCredibility
+                      {urlDomainAnalysisData
                         ? renderDomainTitle(
                             keyword,
                             classes,
@@ -108,17 +108,17 @@ const ExtractedUrlDomainAnalysisResult = ({
 
                     <DialogContent dividers>
                       {/* display the URL Domain Analysis results in an accordion*/}
-                      {sourceCredibility?.map(
+                      {urlDomainAnalysisData?.map(
                         (
                           [
-                            sourceCredibilityResults,
+                            urlDomainAnalysisResults,
                             trafficLightColor,
                             sourceType,
                           ],
                           index,
                         ) => (
                           <Box key={index} mt={3} ml={2}>
-                            {sourceCredibilityResults?.map((value, key) => (
+                            {urlDomainAnalysisResults?.map((value, key) => (
                               <Accordion
                                 key={key}
                                 style={{ overflow: "hidden" }}

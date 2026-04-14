@@ -24,7 +24,7 @@ import AssistantIcon from "@/components/NavBar/images/navbar/assistant-icon-prim
 import AssistantCheckStatus from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantCheckStatus";
 import AssistantFactCheckResult from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantFactCheckResult";
 import AssistantNEResult from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantNEResult";
-import AssistantSCResults from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantUrlDomainAnalysisResult";
+import AssistantUrlDomainAnalysisResult from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantUrlDomainAnalysisResult";
 import AssistantCommentResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantCommentResult";
 import AssistantLinkResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantLinkResult";
 import AssistantMediaResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantMediaResult";
@@ -100,20 +100,22 @@ const Assistant = () => {
   const neResult = useSelector((state) => state.assistant.neResultCategory);
 
   // source credibility
-  const positiveSourceCred = useSelector(
-    (state) => state.assistant.positiveSourceCred,
+  const positiveUrlDomainAnalysis = useSelector(
+    (state) => state.assistant.positiveUrlDomainAnalysis,
   );
-  const cautionSourceCred = useSelector(
-    (state) => state.assistant.cautionSourceCred,
+  const cautionUrlDomainAnalysis = useSelector(
+    (state) => state.assistant.cautionUrlDomainAnalysis,
   );
-  const mixedSourceCred = useSelector(
-    (state) => state.assistant.mixedSourceCred,
+  const mixedUrlDomainAnalysis = useSelector(
+    (state) => state.assistant.mixedUrlDomainAnalysis,
   );
 
   const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
 
   // third party fail states
-  const scFailState = useSelector((state) => state.assistant.inputSCFail);
+  const urlDomainAnalysisFailState = useSelector(
+    (state) => state.assistant.inputUrlDomainAnalysisFail,
+  );
   const dbkfTextFailState = useSelector(
     (state) => state.assistant.dbkfTextMatchFail,
   );
@@ -208,7 +210,7 @@ const Assistant = () => {
           const imageUrl = URL.createObjectURL(fileInput);
           const ctype = TOOLS_CATEGORIES.IMAGE;
 
-          dispatch(setInputUrl(imageUrl, KNOWN_LINKS.OWN)); // kicks off getSourceCredSaga
+          dispatch(setInputUrl(imageUrl, KNOWN_LINKS.OWN)); // kicks off getUrlDomainAnalysisSaga
           dispatch(
             setScrapedData(null, null, null, [imageUrl], [], null, null),
           );
@@ -420,7 +422,7 @@ const Assistant = () => {
 
       {/* assistant status */}
       {(urlMode || imageVideoSelected) &&
-      (scFailState ||
+      (urlDomainAnalysisFailState ||
         dbkfTextFailState ||
         neFailState ||
         newsFramingFailState ||
@@ -502,9 +504,11 @@ const Assistant = () => {
               ) : null}
 
               {/* source credibility/URL domain analysis results */}
-              {positiveSourceCred || cautionSourceCred || mixedSourceCred ? (
+              {positiveUrlDomainAnalysis ||
+              cautionUrlDomainAnalysis ||
+              mixedUrlDomainAnalysis ? (
                 <Grid size={{ xs: 12 }}>
-                  <AssistantSCResults />
+                  <AssistantUrlDomainAnalysisResult />
                 </Grid>
               ) : null}
 

@@ -363,7 +363,7 @@ export function TransAssistantHelpFourTooltip({ keyword }) {
   );
 }
 
-export function TransSourceCredibilityTooltip({ keyword }) {
+export function TransUrlDomainAnalysisTooltip({ keyword }) {
   return (
     <Trans
       t={keyword}

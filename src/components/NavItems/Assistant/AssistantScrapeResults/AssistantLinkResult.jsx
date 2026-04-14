@@ -23,8 +23,8 @@ import { DataGrid, getGridSingleSelectOperators } from "@mui/x-data-grid";
 
 import {
   TransHtmlDoubleLineBreak,
-  TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
+  TransUrlDomainAnalysisTooltip,
   TransUsfdAuthor,
 } from "../components";
 import { prependHttps } from "../utils";
@@ -167,20 +167,26 @@ const AssistantLinkResult = () => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
-  const extractedSourceCred = useSelector(
-    (state) => state.assistant.extractedSourceCred,
+  const extractedUrlDomainAnalysis = useSelector(
+    (state) => state.assistant.extractedUrlDomainAnalysis,
   );
   const linkList = useSelector((state) => state.assistant.linkList);
   const extractedLinks = useSelector((state) => state.assistant.extractedLinks);
-  const inputSCDone = useSelector((state) => state.assistant.inputSCDone);
-  const inputSCLoading = useSelector((state) => state.assistant.inputSCLoading);
-  const inputSCFail = useSelector((state) => state.assistant.inputSCFail);
+  const inputUrlDomainAnalysisDone = useSelector(
+    (state) => state.assistant.inputUrlDomainAnalysisDone,
+  );
+  const inputUrlDomainAnalysisLoading = useSelector(
+    (state) => state.assistant.inputUrlDomainAnalysisLoading,
+  );
+  const inputUrlDomainAnalysisFail = useSelector(
+    (state) => state.assistant.inputUrlDomainAnalysisFail,
+  );
   const trafficLightColors = useSelector(
     (state) => state.assistant.trafficLightColors,
   );
   const sourceTypes = useSelector((state) => state.assistant.sourceTypes);
 
-  const urls = inputSCDone
+  const urls = inputUrlDomainAnalysisDone
     ? extractedLinks || linkList || null
     : linkList || null;
   // TODO check this is still correct
@@ -189,10 +195,12 @@ const AssistantLinkResult = () => {
   let rows = [];
 
   // source credibility done with results
-  if (extractedSourceCred) {
+  if (extractedUrlDomainAnalysis) {
     // domain rows
     const unlabelled = "unlabelled";
-    for (const domainResults of Object.values(extractedSourceCred.domain)) {
+    for (const domainResults of Object.values(
+      extractedUrlDomainAnalysis.domain,
+    )) {
       let urlColor = "inherit"; //trafficLightColors.unlabelled;
 
       // find correct source type label
@@ -226,9 +234,9 @@ const AssistantLinkResult = () => {
       rows.push({
         id: rows.length + 1,
         status: {
-          loading: inputSCLoading,
-          done: inputSCDone,
-          fail: inputSCFail,
+          loading: inputUrlDomainAnalysisLoading,
+          done: inputUrlDomainAnalysisDone,
+          fail: inputUrlDomainAnalysisFail,
           domainResults: domainResults,
           url: domainResults.url, // url list
           trafficLightColors: trafficLightColors,
@@ -246,9 +254,9 @@ const AssistantLinkResult = () => {
           urlColor: urlColor,
         },
         details: {
-          loading: inputSCLoading,
-          done: inputSCDone,
-          fail: inputSCFail,
+          loading: inputUrlDomainAnalysisLoading,
+          done: inputUrlDomainAnalysisDone,
+          fail: inputUrlDomainAnalysisFail,
           domainResults: domainResults,
           url: domainResults.url,
           urlColor: urlColor,
@@ -261,15 +269,15 @@ const AssistantLinkResult = () => {
     }
 
     // unlabelled rows
-    for (let i = 0; i < extractedSourceCred.url.unlabelled.length; i++) {
-      const url = extractedSourceCred.url.unlabelled[i].string;
+    for (let i = 0; i < extractedUrlDomainAnalysis.url.unlabelled.length; i++) {
+      const url = extractedUrlDomainAnalysis.url.unlabelled[i].string;
 
       rows.push({
         id: rows.length + 1,
         status: {
-          loading: inputSCLoading,
-          done: inputSCDone,
-          fail: inputSCFail,
+          loading: inputUrlDomainAnalysisLoading,
+          done: inputUrlDomainAnalysisDone,
+          fail: inputUrlDomainAnalysisFail,
           domainResults: null,
           url: url,
           trafficLightColors: trafficLightColors,
@@ -287,9 +295,9 @@ const AssistantLinkResult = () => {
           urlColor: "inherit",
         },
         details: {
-          loading: inputSCLoading,
-          done: inputSCDone,
-          fail: inputSCFail,
+          loading: inputUrlDomainAnalysisLoading,
+          done: inputUrlDomainAnalysisDone,
+          fail: inputUrlDomainAnalysisFail,
           domainResults: null,
           url: [url],
           urlColor: "inherit",
@@ -303,16 +311,16 @@ const AssistantLinkResult = () => {
   }
 
   // source credibility failed or loading
-  if (inputSCLoading || inputSCFail) {
+  if (inputUrlDomainAnalysisLoading || inputUrlDomainAnalysisFail) {
     for (let i = 0; i < urls.length; i++) {
       const url = urls[i];
 
       rows.push({
         id: rows.length + 1,
         status: {
-          loading: inputSCLoading,
-          done: inputSCDone,
-          fail: inputSCFail,
+          loading: inputUrlDomainAnalysisLoading,
+          done: inputUrlDomainAnalysisDone,
+          fail: inputUrlDomainAnalysisFail,
           domainResults: null,
           url: url,
           trafficLightColors: trafficLightColors,
@@ -329,9 +337,9 @@ const AssistantLinkResult = () => {
           urlColor: "inherit",
         },
         details: {
-          loading: inputSCLoading,
-          done: inputSCDone,
-          fail: inputSCFail,
+          loading: inputUrlDomainAnalysisLoading,
+          done: inputUrlDomainAnalysisDone,
+          fail: inputUrlDomainAnalysisFail,
           domainResults: null,
           url: [url],
           urlColor: "inherit",
@@ -469,7 +477,7 @@ const AssistantLinkResult = () => {
               <>
                 <Trans t={keyword} i18nKey="extracted_urls_tooltip" />
                 <TransHtmlDoubleLineBreak keyword={keyword} />
-                <TransSourceCredibilityTooltip keyword={keyword} />
+                <TransUrlDomainAnalysisTooltip keyword={keyword} />
                 <TransHtmlDoubleLineBreak keyword={keyword} />
                 <TransUsfdAuthor keyword={keyword} />
                 <TransHtmlDoubleLineBreak keyword={keyword} />

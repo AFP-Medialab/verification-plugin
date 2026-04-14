@@ -330,7 +330,7 @@ const styles = (theme) => ({
       borderColor: theme.palette.primary.main,
     },
   },
-  sourceCredibilityBorder: {
+  urlDomainAnalysisBorder: {
     border: "2px solid",
     borderColor: theme.palette.primary.main,
     borderRadius: "15px",

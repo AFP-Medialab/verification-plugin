@@ -16,8 +16,8 @@ import {
   setDbkfTextMatchDetails,
   setErrorKey,
   setImageVideoSelected,
-  setInputSourceCredDetails,
   setInputUrl,
+  setInputUrlDomainAnalysisDetails,
   setMachineGeneratedTextChunksDetails,
   setMissingMedia,
   setMultilingualStanceDetails,
@@ -90,10 +90,10 @@ function* getPersuasionSaga() {
   yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handlePersuasionCall);
 }
 
-function* getSourceCredSaga() {
+function* getUrlDomainAnalysisSaga() {
   yield takeLatest(
     ["SET_INPUT_URL", "CLEAN_STATE"],
-    handleSourceCredibilityCall,
+    handleUrlDomainAnalysisCall,
   );
 }
 
@@ -197,7 +197,7 @@ function* handleSubmitUpload() {
 /**
  * API HANDLERS
  **/
-function* handleSourceCredibilityCall(action) {
+function* handleUrlDomainAnalysisCall(action) {
   if (action.type === "CLEAN_STATE") return;
   try {
     // prevent from running if local file
@@ -216,7 +216,7 @@ function* handleSourceCredibilityCall(action) {
       return;
 
     yield put(
-      setInputSourceCredDetails(
+      setInputUrlDomainAnalysisDetails(
         null,
         null,
         null,
@@ -236,7 +236,7 @@ function* handleSourceCredibilityCall(action) {
 
     // send all urls and do batches on backend
     const result = yield call(
-      assistantApi.callSourceCredibilityService,
+      assistantApi.callUrlDomainAnalysisService,
       inputUrlLinkList,
     );
 
@@ -255,7 +255,7 @@ function* handleSourceCredibilityCall(action) {
     };
 
     yield put(
-      setInputSourceCredDetails(
+      setInputUrlDomainAnalysisDetails(
         result.domain[result.url.inputUrl.credibilityScope]?.positive,
         result.domain[result.url.inputUrl.credibilityScope]?.caution,
         result.domain[result.url.inputUrl.credibilityScope]?.mixed,
@@ -271,7 +271,7 @@ function* handleSourceCredibilityCall(action) {
   } catch (error) {
     console.log(error);
     yield put(
-      setInputSourceCredDetails(
+      setInputUrlDomainAnalysisDetails(
         null,
         null,
         null,
@@ -990,7 +990,7 @@ const filterAssistantResults = (
 export default function* assistantSaga() {
   yield all([
     fork(getDbkfTextMatchSaga),
-    fork(getSourceCredSaga),
+    fork(getUrlDomainAnalysisSaga),
     fork(getMediaActionSaga),
     fork(getMediaListSaga),
     fork(getNamedEntitySaga),

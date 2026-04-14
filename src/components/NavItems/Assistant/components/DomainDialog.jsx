@@ -21,8 +21,8 @@ import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 
 import {
   TransHtmlDoubleLineBreak,
-  TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
+  TransUrlDomainAnalysisTooltip,
   TransUsfdAuthor,
 } from "./TransComponents";
 
@@ -84,7 +84,7 @@ export function DomainDialog({
                   style={{ display: "flex", marginLeft: "auto" }}
                   title={
                     <>
-                      <TransSourceCredibilityTooltip keyword={keyword} />
+                      <TransUrlDomainAnalysisTooltip keyword={keyword} />
                       <TransHtmlDoubleLineBreak keyword={keyword} />
                       <TransUsfdAuthor keyword={keyword} />
                       <TransHtmlDoubleLineBreak keyword={keyword} />

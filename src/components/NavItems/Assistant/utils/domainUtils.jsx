@@ -17,8 +17,8 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import {
   DomainDialog,
   TransHtmlDoubleLineBreak,
-  TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
+  TransUrlDomainAnalysisTooltip,
   TransUsfdAuthor,
 } from "../components";
 
@@ -196,7 +196,7 @@ export const renderDomainTitle = (
               style={{ display: "flex", marginLeft: "auto" }}
               title={
                 <>
-                  <TransSourceCredibilityTooltip keyword={keyword} />
+                  <TransUrlDomainAnalysisTooltip keyword={keyword} />
                   <TransHtmlDoubleLineBreak keyword={keyword} />
                   <TransUsfdAuthor keyword={keyword} />
                   <TransHtmlDoubleLineBreak keyword={keyword} />
@@ -223,13 +223,13 @@ export const renderDomainTitle = (
 
 export const renderDomainAnalysisResults = (
   keyword,
-  sourceCredibiltyResults,
+  urlDomainAnalysisResults,
   trafficLightColor,
   sourceType,
 ) => {
   return (
     <List disablePadding={true}>
-      {sourceCredibiltyResults?.map((value, key) => (
+      {urlDomainAnalysisResults?.map((value, key) => (
         <ListItem
           key={key}
           secondaryAction={

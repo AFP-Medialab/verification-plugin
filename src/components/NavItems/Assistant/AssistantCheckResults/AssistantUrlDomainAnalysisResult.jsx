@@ -24,12 +24,12 @@ import { setAssuranceExpanded } from "@/redux/actions/tools/assistantActions";
 
 import {
   TransHtmlDoubleLineBreak,
-  TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
+  TransUrlDomainAnalysisTooltip,
   TransUsfdAuthor,
 } from "../components";
 
-const AssistantSCResults = () => {
+const AssistantUrlDomainAnalysisResult = () => {
   // central
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const dispatch = useDispatch();
@@ -39,14 +39,14 @@ const AssistantSCResults = () => {
   const assuranceExpanded = useSelector(
     (state) => state.assistant.assuranceExpanded,
   );
-  const positiveSourceCred = useSelector(
-    (state) => state.assistant.positiveSourceCred,
+  const positiveUrlDomainAnalysis = useSelector(
+    (state) => state.assistant.positiveUrlDomainAnalysis,
   );
-  const cautionSourceCred = useSelector(
-    (state) => state.assistant.cautionSourceCred,
+  const cautionUrlDomainAnalysis = useSelector(
+    (state) => state.assistant.cautionUrlDomainAnalysis,
   );
-  const mixedSourceCred = useSelector(
-    (state) => state.assistant.mixedSourceCred,
+  const mixedUrlDomainAnalysis = useSelector(
+    (state) => state.assistant.mixedUrlDomainAnalysis,
   );
   const trafficLightColors = useSelector(
     (state) => state.assistant.trafficLightColors,
@@ -56,7 +56,7 @@ const AssistantSCResults = () => {
   return (
     <Card
       variant={"outlined"}
-      className={classes.sourceCredibilityBorder}
+      className={classes.urlDomainAnalysisBorder}
       height="400"
     >
       <Grid container>
@@ -121,7 +121,7 @@ const AssistantSCResults = () => {
               style={{ display: "flex", marginLeft: "auto" }}
               title={
                 <>
-                  <TransSourceCredibilityTooltip keyword={keyword} />
+                  <TransUrlDomainAnalysisTooltip keyword={keyword} />
                   <TransHtmlDoubleLineBreak keyword={keyword} />
                   <TransUsfdAuthor keyword={keyword} />
                   <TransHtmlDoubleLineBreak keyword={keyword} />
@@ -142,7 +142,7 @@ const AssistantSCResults = () => {
           >
             <Box mt={3} ml={2} textAlign="center">
               {/* Caution/Warning */}
-              {positiveSourceCred?.length > 0 ? (
+              {positiveUrlDomainAnalysis?.length > 0 ? (
                 <>
                   {renderSourceTypeChip(
                     keyword,
@@ -151,7 +151,7 @@ const AssistantSCResults = () => {
                   )}
                   {renderDomainAnalysisResults(
                     keyword,
-                    positiveSourceCred,
+                    positiveUrlDomainAnalysis,
                     trafficLightColors.positive,
                     sourceTypes.positive,
                   )}
@@ -159,7 +159,7 @@ const AssistantSCResults = () => {
               ) : null}
 
               {/* Mixed/Mentions */}
-              {cautionSourceCred?.length > 0 ? (
+              {cautionUrlDomainAnalysis?.length > 0 ? (
                 <>
                   {renderSourceTypeChip(
                     keyword,
@@ -168,7 +168,7 @@ const AssistantSCResults = () => {
                   )}
                   {renderDomainAnalysisResults(
                     keyword,
-                    cautionSourceCred,
+                    cautionUrlDomainAnalysis,
                     trafficLightColors.caution,
                     sourceTypes.caution,
                   )}
@@ -176,7 +176,7 @@ const AssistantSCResults = () => {
               ) : null}
 
               {/* Positive/Fact-checker */}
-              {mixedSourceCred?.length > 0 ? (
+              {mixedUrlDomainAnalysis?.length > 0 ? (
                 <>
                   {renderSourceTypeChip(
                     keyword,
@@ -185,7 +185,7 @@ const AssistantSCResults = () => {
                   )}
                   {renderDomainAnalysisResults(
                     keyword,
-                    mixedSourceCred,
+                    mixedUrlDomainAnalysis,
                     trafficLightColors.mixed,
                     sourceTypes.mixed,
                   )}
@@ -198,4 +198,4 @@ const AssistantSCResults = () => {
     </Card>
   );
 };
-export default AssistantSCResults;
+export default AssistantUrlDomainAnalysisResult;

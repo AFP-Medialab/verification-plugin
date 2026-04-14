@@ -26,8 +26,10 @@ const AssistantCheckStatus = () => {
   const dispatch = useDispatch();
   const stateExpanded = useSelector((state) => state.assistant.stateExpanded);
 
-  const scTitle = keyword("source_cred_title");
-  const scFailState = useSelector((state) => state.assistant.inputSCFail);
+  const urlDomainAnalysisTitle = keyword("url_domain_analysis_title");
+  const urlDomainAnalysisFailState = useSelector(
+    (state) => state.assistant.inputUrlDomainAnalysisFail,
+  );
   const dbkfTextTitle = keyword("dbkf_text_title");
   const dbkfTextFailState = useSelector(
     (state) => state.assistant.dbkfTextMatchFail,
@@ -78,7 +80,7 @@ const AssistantCheckStatus = () => {
   const urlType = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
 
   const failStates = [
-    { title: scTitle, failed: scFailState },
+    { title: urlDomainAnalysisTitle, failed: urlDomainAnalysisFailState },
     { title: dbkfTextTitle, failed: dbkfTextFailState },
     { title: neTitle, failed: neFailState },
     { title: newsFramingTitle, failed: newsFramingFailState },
