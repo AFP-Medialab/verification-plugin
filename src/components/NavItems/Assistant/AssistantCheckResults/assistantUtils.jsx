@@ -324,14 +324,18 @@ const renderDialog = (keyword, value, trafficLightColor, sourceType) => {
         sx={{ "& .MuiDialog-paper": { minWidth: "50%" } }}
       >
         <DialogTitle>
-          <Grid container>
+          <Grid container alignItems="center">
             <Grid size={{ xs: 11 }}>
-              <Typography variant="body1" component="div">
+              <Typography
+                variant="body1"
+                component="div"
+                sx={{ display: "flex", alignItems: "center", gap: 1 }}
+              >
                 <Chip
                   label={keyword(sourceType)}
                   color={trafficLightColor}
                   size="small"
-                />{" "}
+                />
                 {keyword("source_cred_popup_header_domain")} {value.source}
               </Typography>
             </Grid>
@@ -340,14 +344,11 @@ const renderDialog = (keyword, value, trafficLightColor, sourceType) => {
               sx={{
                 display: "flex",
                 justifyContent: "flex-end",
+                alignItems: "center",
               }}
             >
               {/* tooltip help */}
-              <Box
-                sx={{
-                  pt: 0.75,
-                }}
-              >
+              <Box>
                 <Tooltip
                   interactive={"true"}
                   leaveDelay={50}
