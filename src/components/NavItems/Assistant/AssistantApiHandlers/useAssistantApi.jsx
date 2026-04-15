@@ -159,7 +159,7 @@ export default function assistantApiCalls() {
 
       return namedEntityResult.data;
     } catch (error) {
-      console.log("ERROR", error);
+      if (!axios.isCancel(error)) console.log("ERROR", error);
     }
   };
 
