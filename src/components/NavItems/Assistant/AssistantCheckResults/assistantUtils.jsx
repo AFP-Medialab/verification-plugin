@@ -317,7 +317,12 @@ const renderDialog = (keyword, value, trafficLightColor, sourceType) => {
       </Tooltip>
 
       {/* dialog box which appears when clicking tooltip icon above */}
-      <Dialog onClose={handleClose} maxWidth={"lg"} open={open}>
+      <Dialog
+        onClose={handleClose}
+        maxWidth={"lg"}
+        open={open}
+        sx={{ "& .MuiDialog-paper": { minWidth: "50%" } }}
+      >
         <DialogTitle>
           <Grid container>
             <Grid size={{ xs: 11 }}>
