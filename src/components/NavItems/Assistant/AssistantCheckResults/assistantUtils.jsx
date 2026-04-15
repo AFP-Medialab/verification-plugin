@@ -176,7 +176,7 @@ export const renderDomainTitle = (
   handleClose,
 ) => {
   return (
-    <Grid container>
+    <Grid container alignItems="center">
       {/* domain or account */}
       <Grid size={handleClose != null ? { xs: 11 } : { xs: 12 }}>
         <Typography sx={{ wordWrap: "break-word", align: "start" }}>
@@ -197,13 +197,14 @@ export const renderDomainTitle = (
       </Grid>
 
       {handleClose != null ? (
-        <Grid size={{ xs: 1 }} display="flex" justifyContent="flex-end">
+        <Grid
+          size={{ xs: 1 }}
+          display="flex"
+          justifyContent="flex-end"
+          alignItems="center"
+        >
           {/* tooltip help */}
-          <Box
-            sx={{
-              pt: 0.75,
-            }}
-          >
+          <Box>
             <Tooltip
               interactive={"true"}
               leaveDelay={50}
