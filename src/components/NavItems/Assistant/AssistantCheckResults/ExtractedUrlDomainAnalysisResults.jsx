@@ -92,6 +92,7 @@ const ExtractedUrlDomainAnalysisResults = ({
                     maxWidth={"lg"}
                     open={open}
                     scroll={"paper"}
+                    sx={{ "& .MuiDialog-paper": { minWidth: "50%" } }}
                   >
                     <DialogTitle>
                       {/* display the url */}
