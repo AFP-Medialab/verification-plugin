@@ -27,8 +27,6 @@ async function useGetPoiForensics(
     .filter(([name, value]) => value === true)
     .map(([name, value]) => name);
 
-  console.log(poi);
-
   const servicesParams = poi.map((poi) =>
     JSON.stringify({ poi_forensics: { poi: poi, modality: "audiovideo" } }),
   );
@@ -40,6 +38,7 @@ async function useGetPoiForensics(
   const handleError = (e) => {
     dispatch(setError(keyword(e)));
     dispatch(setPoiForensicsLoading(false));
+    return;
   };
 
   if (!isValidUrl(url) && !mediaFile) {
@@ -107,7 +106,6 @@ async function useGetPoiForensics(
 
     if (response.data != null) {
       dispatch(setPoiForensicsResult({ url: url, result: response.data }));
-      console.log(response.data);
     } else {
       handleError("error_mode_not_supported_" + response.data.mode);
     }
@@ -138,7 +136,6 @@ async function useGetPoiForensics(
 }
 
 function sleep(fn, param) {
-  console.log("sleep");
   return new Promise((resolve) => {
     setTimeout(() => resolve(fn(param)), 3000);
   });

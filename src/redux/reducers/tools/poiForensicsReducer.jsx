@@ -2,7 +2,6 @@ const defaultState = {
   url: "",
   result: null,
   loading: false,
-  type: "",
 };
 
 const poiForensicsReducer = (state = defaultState, action) => {

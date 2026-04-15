@@ -22,6 +22,7 @@ import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useGetPoiForensics from "./Hooks/useGetPoiForensic";
+import PoiForensicsResults from "./Results/PoiForensicsResults";
 import { PERSON_OF_INTEREST } from "./poiUtils";
 
 /**
@@ -37,7 +38,7 @@ const PoiForensics = () => {
 
   const [searchParams] = useSearchParams();
 
-  const isLoading = useSelector((state) => state.poiForensics.isLoading);
+  const isLoading = useSelector((state) => state.poiForensics.loading);
   const result = useSelector((state) => state.poiForensics.result);
   const url = useSelector((state) => state.poiForensics.url);
   const role = useSelector((state) => state.userSession.user.roles);
@@ -123,6 +124,10 @@ const PoiForensics = () => {
     dispatch(resetPoiForensics());
   };
 
+  useEffect(() => {
+    console.log("[Component] isLoading changed →", isLoading);
+  }, [isLoading]);
+
   return (
     <Box>
       <Stack direction="column" spacing={4}>
@@ -196,6 +201,8 @@ const PoiForensics = () => {
             </FormControl>
           </Box>
         </Card>
+
+        {result && <PoiForensicsResults result={result} />}
       </Stack>
     </Box>
   );
