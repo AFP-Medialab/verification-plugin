@@ -101,7 +101,7 @@ export const KNOWN_LINK_PATTERNS = [
   },
   {
     key: KNOWN_LINKS.BBC,
-    patterns: ["(https?:\\/{2})?(www\\.)?bbc\\.co\\.uk\\/.*"],
+    patterns: ["(https?:\\/{2})?(www\\.)?(bbc\\.co\\.uk|bbc\\.com|bbc\\.in)\\/.*"],
   },
   {
     key: KNOWN_LINKS.MISC,
