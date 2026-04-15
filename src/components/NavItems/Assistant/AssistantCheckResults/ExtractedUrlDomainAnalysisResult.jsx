@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
@@ -41,6 +42,7 @@ const ExtractedUrlDomainAnalysisResult = ({
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -81,10 +83,14 @@ const ExtractedUrlDomainAnalysisResult = ({
               >
                 <ListItemSecondaryAction>
                   <Tooltip title="Details">
-                    <ListAltOutlinedIcon
-                      style={{ cursor: "pointer" }}
+                    <IconButton
+                      ref={triggerRef}
+                      aria-label="View details"
+                      size="small"
                       onClick={handleClickOpen}
-                    />
+                    >
+                      <ListAltOutlinedIcon />
+                    </IconButton>
                   </Tooltip>
 
                   <Dialog
@@ -92,6 +98,10 @@ const ExtractedUrlDomainAnalysisResult = ({
                     maxWidth={"lg"}
                     open={open}
                     scroll={"paper"}
+                    disableRestoreFocus
+                    TransitionProps={{
+                      onExited: () => triggerRef.current?.focus(),
+                    }}
                   >
                     <DialogTitle>
                       {/* display the url */}
@@ -142,17 +152,7 @@ const ExtractedUrlDomainAnalysisResult = ({
                                   ) : null}
                                 </AccordionSummary>
 
-                                <AccordionDetails
-                                  sx={
-                                    scroll == true
-                                      ? {
-                                          display: "flex",
-                                          maxHeight: "300px",
-                                          overflowY: "scroll",
-                                        }
-                                      : null
-                                  }
-                                >
+                                <AccordionDetails>
                                   <List key={key}>
                                     <ListItem>
                                       {renderScope(
