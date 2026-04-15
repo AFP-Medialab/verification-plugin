@@ -269,7 +269,7 @@ const Assistant = () => {
     dispatch(setSingleMediaPresent(false));
     setImageUploaded(false);
     setVideoUploaded(false);
-  }, [dispatch, navigate]);
+  }, []);
 
   // set correct error message
   useEffect(() => {
@@ -277,7 +277,7 @@ const Assistant = () => {
       dispatch(setError(keyword(errorKey)));
       cleanAssistant();
     }
-  }, [errorKey, dispatch, keyword, cleanAssistant]);
+  }, [errorKey, keyword, cleanAssistant]);
 
   // if a url is present in the plugin url (as a param), set it to input
   useEffect(() => {
@@ -289,7 +289,7 @@ const Assistant = () => {
       dispatch(submitInputUrl(uri));
       navigate("/app/assistant/" + encodeURIComponent(uri));
     }
-  }, [url, hasSubmitted, dispatch, navigate]);
+  }, [url, hasSubmitted]);
 
   // when navigating to a different tool then back to assistant
   // make sure url is set in form
