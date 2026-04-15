@@ -22,7 +22,7 @@ export default function assistantApiCalls() {
     }
   }
 
-  const callAssistantScraper = async (urlType, userInput) => {
+  const callAssistantScraper = async (urlType, userInput, signal) => {
     let scrapeResult;
     try {
       scrapeResult = await axios.get(
@@ -31,6 +31,7 @@ export default function assistantApiCalls() {
           urlType +
           "?url=" +
           encodeURIComponent(userInput),
+        { signal },
       );
     } catch (error) {
       handleAssistantError(error);
@@ -44,7 +45,7 @@ export default function assistantApiCalls() {
     }
   };
 
-  const callNamedEntityService = async (text, lang) => {
+  const callNamedEntityService = async (text, lang, signal) => {
     try {
       const namedEntityResult = await axios.post(
         assistantEndpoint + "gcloud/named-entity",
@@ -52,6 +53,7 @@ export default function assistantApiCalls() {
           content: text,
           lang: lang,
         },
+        { signal },
       );
       const concepts = new Set(
         namedEntityResult.data.entities.Unclassified.map(
@@ -73,6 +75,7 @@ export default function assistantApiCalls() {
       }`;
       const mappingResult = await axios.get(
         `https://query.wikidata.org/sparql?format=json&query=${encodeURIComponent(wdQuery)}`,
+        { signal },
       );
       const mapping = {};
       for (const entity of mappingResult.data.results.bindings) {
@@ -96,6 +99,7 @@ export default function assistantApiCalls() {
         const dbpediaEndpoint = import.meta.env.VITE_DBPEDIA_SPARQL_URL;
         const dbpediaResult = await axios.get(
           `${dbpediaEndpoint}?query=${encodeURIComponent(dbQuery)}&format=application%2Fsparql-results%2Bjson&timeout=30000&signal_void=on&signal_unconnected=on`,
+          { signal },
         );
         dbpediaResultBindings = dbpediaResultBindings.concat(
           dbpediaResult.data.results.bindings,
@@ -159,12 +163,16 @@ export default function assistantApiCalls() {
     }
   };
 
-  const callOcrService = async (data, script, mode) => {
-    const result = await axios.post(assistantEndpoint + "gcloud/ocr", {
-      text: data,
-      script: script,
-      data_type: mode,
-    });
+  const callOcrService = async (data, script, mode, signal) => {
+    const result = await axios.post(
+      assistantEndpoint + "gcloud/ocr",
+      {
+        text: data,
+        script: script,
+        data_type: mode,
+      },
+      { signal },
+    );
 
     return result.data;
   };
@@ -187,6 +195,7 @@ export default function assistantApiCalls() {
       try {
         return await asyncFunc();
       } catch (e) {
+        if (axios.isCancel(e)) throw e;
         if (retryCount + 1 >= MAX_NUM_RETRIES) {
           throw e;
         } else {
@@ -196,7 +205,7 @@ export default function assistantApiCalls() {
     }
   }
 
-  const callSourceCredibilityService = async (urlList) => {
+  const callSourceCredibilityService = async (urlList, signal) => {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
       async () => {
@@ -207,6 +216,7 @@ export default function assistantApiCalls() {
           {
             urls: urlList,
           },
+          { signal },
         );
         return result.data;
       },
@@ -221,13 +231,14 @@ export default function assistantApiCalls() {
     );
   };
 
-  const callNewsFramingService = async (text) => {
+  const callNewsFramingService = async (text, signal) => {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
       async () => {
         const result = await axios.post(
           assistantEndpoint + "gcloud/news-framing-clfr",
           { text: text },
+          { signal },
         );
         return result.data;
       },
@@ -242,13 +253,14 @@ export default function assistantApiCalls() {
     );
   };
 
-  const callNewsGenreService = async (text) => {
+  const callNewsGenreService = async (text, signal) => {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
       async () => {
         const result = await axios.post(
           assistantEndpoint + "gcloud/news-genre-clfr",
           { text: text },
+          { signal },
         );
         return result.data;
       },
@@ -263,7 +275,7 @@ export default function assistantApiCalls() {
     );
   };
 
-  const callPersuasionService = async (text) => {
+  const callPersuasionService = async (text, signal) => {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
       async () => {
@@ -272,6 +284,7 @@ export default function assistantApiCalls() {
           {
             text: text,
           },
+          { signal },
         );
         return result.data;
       },
@@ -286,13 +299,17 @@ export default function assistantApiCalls() {
     );
   };
 
-  const callSubjectivityService = async (text) => {
+  const callSubjectivityService = async (text, signal) => {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
       async () => {
-        const result = await axios.post(assistantEndpoint + "dw/subjectivity", {
-          content: text,
-        });
+        const result = await axios.post(
+          assistantEndpoint + "dw/subjectivity",
+          {
+            content: text,
+          },
+          { signal },
+        );
         return result.data;
       },
       (numTries) => {
@@ -306,7 +323,7 @@ export default function assistantApiCalls() {
     );
   };
 
-  const callPrevFactChecksService = async (text) => {
+  const callPrevFactChecksService = async (text, signal) => {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
       async () => {
@@ -315,6 +332,7 @@ export default function assistantApiCalls() {
           {
             content: text,
           },
+          { signal },
         );
         return result.data;
       },
@@ -329,7 +347,7 @@ export default function assistantApiCalls() {
     );
   };
 
-  const callMachineGeneratedTextChunksService = async (text) => {
+  const callMachineGeneratedTextChunksService = async (text, signal) => {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
       async () => {
@@ -338,6 +356,7 @@ export default function assistantApiCalls() {
           {
             content: text,
           },
+          { signal },
         );
         return result.data;
       },
@@ -352,7 +371,7 @@ export default function assistantApiCalls() {
     );
   };
 
-  const callMultilingualStanceService = async (comments) => {
+  const callMultilingualStanceService = async (comments, signal) => {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
       async () => {
@@ -361,6 +380,7 @@ export default function assistantApiCalls() {
           {
             comments: comments,
           },
+          { signal },
         );
         return result.data;
       },

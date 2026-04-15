@@ -35,6 +35,7 @@ import {
 import {
   all,
   call,
+  cancelled,
   fork,
   put,
   select,
@@ -198,6 +199,7 @@ function* handleSubmitUpload() {
  **/
 function* handleSourceCredibilityCall(action) {
   if (action.type === "CLEAN_STATE") return;
+  const abort = new AbortController();
   try {
     // prevent from running if local file
     const imageVideoSelected = yield select(
@@ -237,6 +239,7 @@ function* handleSourceCredibilityCall(action) {
     const result = yield call(
       assistantApi.callSourceCredibilityService,
       inputUrlLinkList,
+      abort.signal,
     );
 
     const trafficLightColors = {
@@ -283,12 +286,16 @@ function* handleSourceCredibilityCall(action) {
         true,
       ),
     );
+  } finally {
+    if (yield cancelled()) {
+      abort.abort();
+    }
   }
 }
 
 function* handleDbkfTextCall(action) {
   if (action.type === "CLEAN_STATE") return;
-
+  const abort = new AbortController();
   try {
     const text = yield select((state) => state.assistant.urlText);
     if (text) {
@@ -301,7 +308,11 @@ function* handleDbkfTextCall(action) {
           textToUse = text.slice(0, -1)
         }
       */
-      let result = yield call(dbkfAPI.callTextSimilarityEndpoint, textToUse);
+      let result = yield call(
+        dbkfAPI.callTextSimilarityEndpoint,
+        textToUse,
+        abort.signal,
+      );
 
       let filteredResult = result?.length
         ? result.filter((res) => res.score >= 40)
@@ -313,57 +324,85 @@ function* handleDbkfTextCall(action) {
   } catch (error) {
     console.log(error);
     yield put(setDbkfTextMatchDetails(null, false, false, true));
+  } finally {
+    if (yield cancelled()) {
+      abort.abort();
+    }
   }
 }
 
 function* handleNewsTopicCall(action) {
   if (action.type === "CLEAN_STATE") return;
-
+  const abort = new AbortController();
   try {
     const text = yield select((state) => state.assistant.urlText);
 
     if (text) {
       yield put(setNewsTopicDetails(null, true, false, false));
 
-      const result = yield call(assistantApi.callNewsFramingService, text);
+      const result = yield call(
+        assistantApi.callNewsFramingService,
+        text,
+        abort.signal,
+      );
       yield put(setNewsTopicDetails(result, false, true, false));
     }
   } catch {
     yield put(setNewsTopicDetails(null, false, false, true));
+  } finally {
+    if (yield cancelled()) {
+      abort.abort();
+    }
   }
 }
 
 function* handleNewsGenreCall(action) {
   if (action.type === "CLEAN_STATE") return;
-
+  const abort = new AbortController();
   try {
     const text = yield select((state) => state.assistant.urlText);
 
     if (text) {
       yield put(setNewsGenreDetails(null, true, false, false));
 
-      const result = yield call(assistantApi.callNewsGenreService, text);
+      const result = yield call(
+        assistantApi.callNewsGenreService,
+        text,
+        abort.signal,
+      );
       yield put(setNewsGenreDetails(result, false, true, false));
     }
   } catch {
     yield put(setNewsGenreDetails(null, false, false, true));
+  } finally {
+    if (yield cancelled()) {
+      abort.abort();
+    }
   }
 }
 
 function* handlePersuasionCall(action) {
   if (action.type === "CLEAN_STATE") return;
-
+  const abort = new AbortController();
   try {
     const text = yield select((state) => state.assistant.urlText);
 
     if (text) {
       yield put(setPersuasionDetails(null, true, false, false));
 
-      const result = yield call(assistantApi.callPersuasionService, text);
+      const result = yield call(
+        assistantApi.callPersuasionService,
+        text,
+        abort.signal,
+      );
       yield put(setPersuasionDetails(result, false, true, false));
     }
   } catch {
     yield put(setPersuasionDetails(null, false, false, true));
+  } finally {
+    if (yield cancelled()) {
+      abort.abort();
+    }
   }
 }
 
@@ -385,7 +424,7 @@ const getTextChunks = (text) => {
 
 function* handleSubjectivityCall(action) {
   if (action.type === "CLEAN_STATE") return;
-
+  const abort = new AbortController();
   try {
     const text = yield select((state) => state.assistant.urlText);
 
@@ -408,6 +447,7 @@ function* handleSubjectivityCall(action) {
         const textChunkResult = yield call(
           assistantApi.callSubjectivityService,
           textChunks[i],
+          abort.signal,
         );
 
         // merge results
@@ -481,6 +521,10 @@ function* handleSubjectivityCall(action) {
     }
   } catch {
     yield put(setSubjectivityDetails(null, false, false, true));
+  } finally {
+    if (yield cancelled()) {
+      abort.abort();
+    }
   }
 }
 
@@ -488,7 +532,7 @@ const URL_BUFFER_LIMIT = 6000;
 
 function* handlePrevFactChecksCall(action) {
   if (action.type === "CLEAN_STATE") return;
-
+  const abort = new AbortController();
   try {
     const text = yield select((state) => state.assistant.urlText);
 
@@ -501,6 +545,7 @@ function* handlePrevFactChecksCall(action) {
       const result = yield call(
         assistantApi.callPrevFactChecksService,
         text.substring(0, URL_BUFFER_LIMIT),
+        abort.signal,
       );
 
       yield put(
@@ -514,12 +559,16 @@ function* handlePrevFactChecksCall(action) {
     }
   } catch {
     yield put(setPrevFactChecksDetails(null, false, false, true));
+  } finally {
+    if (yield cancelled()) {
+      abort.abort();
+    }
   }
 }
 
 function* handleMachineGeneratedTextChunksCall(action) {
   if (action.type === "CLEAN_STATE") return;
-
+  const abort = new AbortController();
   try {
     const text = yield select((state) => state.assistant.urlText);
 
@@ -529,6 +578,7 @@ function* handleMachineGeneratedTextChunksCall(action) {
       const result = yield call(
         assistantApi.callMachineGeneratedTextChunksService,
         text.substring(0, URL_BUFFER_LIMIT),
+        abort.signal,
       );
 
       yield put(
@@ -537,12 +587,16 @@ function* handleMachineGeneratedTextChunksCall(action) {
     }
   } catch {
     yield put(setMachineGeneratedTextChunksDetails(null, false, false, true));
+  } finally {
+    if (yield cancelled()) {
+      abort.abort();
+    }
   }
 }
 
 function* handleNamedEntityCall(action) {
   if (action.type === "CLEAN_STATE") return;
-
+  const abort = new AbortController();
   try {
     const text = yield select((state) => state.assistant.urlText);
     const textLang = yield select((state) => state.assistant.textLang);
@@ -552,6 +606,7 @@ function* handleNamedEntityCall(action) {
         assistantApi.callNamedEntityService,
         text,
         textLang,
+        abort.signal,
       );
       let entities = [];
 
@@ -586,6 +641,10 @@ function* handleNamedEntityCall(action) {
     }
   } catch {
     yield put(setNeDetails(null, null, false, false, true));
+  } finally {
+    if (yield cancelled()) {
+      abort.abort();
+    }
   }
 }
 
@@ -612,6 +671,7 @@ function* handleAssistantScrapeCall(action) {
     inputUrl = formatTelegramLink(inputUrl);
   }
 
+  const abort = new AbortController();
   try {
     let scrapeResult = null;
     if (decideWhetherToScrape(urlType, contentType, inputUrl)) {
@@ -619,6 +679,7 @@ function* handleAssistantScrapeCall(action) {
         assistantApi.callAssistantScraper,
         urlType,
         inputUrl,
+        abort.signal,
       );
     }
 
@@ -655,13 +716,17 @@ function* handleAssistantScrapeCall(action) {
     } else {
       yield put(setErrorKey(error.message));
     }
+  } finally {
+    if (yield cancelled()) {
+      abort.abort();
+    }
   }
 }
 
 // Multilingual Stance Classification for YouTube Comments
 function* handleMultilingualStanceCall(action) {
   if (action.type === "CLEAN_STATE") return;
-
+  const abort = new AbortController();
   try {
     const inputUrl = yield select((state) => state.assistant.inputUrl); //action.payload.inputUrl;
     const urlType = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
@@ -721,6 +786,7 @@ function* handleMultilingualStanceCall(action) {
         const result = yield call(
           assistantApi.callMultilingualStanceService,
           convertedComments,
+          abort.signal,
         );
 
         yield put(setMultilingualStanceDetails(result, false, true, false));
@@ -728,6 +794,10 @@ function* handleMultilingualStanceCall(action) {
     }
   } catch {
     yield put(setMultilingualStanceDetails(null, false, false, true));
+  } finally {
+    if (yield cancelled()) {
+      abort.abort();
+    }
   }
 }
 
