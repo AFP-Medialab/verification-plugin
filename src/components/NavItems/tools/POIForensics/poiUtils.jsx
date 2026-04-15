@@ -12,10 +12,10 @@ export const PERSON_OF_INTEREST = {
   },
   PUTIN: {
     DISPLAY_NAME: "Putin",
-    NAME_TOSEND: "Putin",
+    NAME_TOSEND: "Putin_ru",
   },
   Zelensky: {
     DISPLAY_NAME: "Zelensky",
-    NAME_TOSEND: "Zelensky",
+    NAME_TOSEND: "Zelensky_ru",
   },
 };

@@ -53,7 +53,7 @@ const PoiForensics = () => {
   const dispatch = useDispatch();
 
   /**
-   * Initialize selected POI with MAcron
+   * Initialize selected POI with Macron
    * @returns {selectedValue}
    */
   const initializeSelectedPoi = () => {
@@ -181,8 +181,8 @@ const PoiForensics = () => {
                       key={index}
                       control={
                         <Checkbox
-                          checked={selectedPoi[poi.DISPLAY_NAME]}
-                          value={poi.DISPLAY_NAME}
+                          checked={selectedPoi[poi.NAME_TOSEND] || false}
+                          value={poi.NAME_TOSEND}
                           onChange={(e) => handleChangePoi(e)}
                           color="primary"
                         />
