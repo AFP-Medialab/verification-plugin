@@ -35,6 +35,15 @@ import GaugeChartModalExplanation from "@Shared/GaugeChartResults/GaugeChartModa
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
+import {
+  CREDIBILITY_SIGNAL_TITLES,
+  DETECTION_EXPLANATION_KEYWORDS_MGT,
+  DETECTION_EXPLANATION_KEYWORDS_SUB,
+  MGT_ARC_LENGTHS,
+  MGT_ORDERED_CATEGORIES,
+  SUBJECTIVITY_ARC_LENGTHS,
+} from "../constants";
+
 export default function AssistantTextClassification({
   text,
   classification,
@@ -50,12 +59,7 @@ export default function AssistantTextClassification({
     // machine generated text
     lightGreenRgb: [170, 255, 0],
     lightGreenRgbDark: [210, 255, 121],
-    orderedCategories: [
-      "highly_likely_human",
-      "likely_human",
-      "likely_machine",
-      "highly_likely_machine",
-    ],
+    orderedCategories: MGT_ORDERED_CATEGORIES,
     // news framing
     newsFramingConfidenceThreshold: 0.8,
     // news genre
@@ -69,10 +73,11 @@ export default function AssistantTextClassification({
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   // titles
-  const newsFramingTitle = "news_framing_title";
-  const newsGenreTitle = "news_genre_title";
-  const subjectivityTitle = "subjectivity_title";
-  const machineGeneratedTextTitle = "machine_generated_text_title";
+  const newsFramingTitle = CREDIBILITY_SIGNAL_TITLES.NEWS_FRAMING;
+  const newsGenreTitle = CREDIBILITY_SIGNAL_TITLES.NEWS_GENRE;
+  const subjectivityTitle = CREDIBILITY_SIGNAL_TITLES.SUBJECTIVITY;
+  const machineGeneratedTextTitle =
+    CREDIBILITY_SIGNAL_TITLES.MACHINE_GENERATED_TEXT;
 
   // slider
   const importantSentenceThreshold = useSelector(
@@ -238,7 +243,7 @@ export default function AssistantTextClassification({
                 overallScore={classification[mgtOverallScoreLabel][0].score}
                 resolvedMode={resolvedMode}
                 colours={resolvedMode === "dark" ? mgtColoursDark : mgtColours}
-                arcsLength={[0.05, 0.45, 0.45, 0.05]}
+                arcsLength={MGT_ARC_LENGTHS}
                 gaugeLabels={["gauge_no_detection", "gauge_detection"]}
                 orderedCategories={orderedCategories}
                 credibilitySignal={credibilitySignal}
@@ -257,7 +262,7 @@ export default function AssistantTextClassification({
                     ? subjectivityColoursDark
                     : subjectivityColours
                 }
-                arcsLength={[0.4, 0.25, 0.35]}
+                arcsLength={SUBJECTIVITY_ARC_LENGTHS}
                 gaugeLabels={["gauge_no_detection_sub", "gauge_detection_sub"]}
                 credibilitySignal={credibilitySignal}
                 importantSentenceThreshold={importantSentenceThreshold}
@@ -336,18 +341,6 @@ export function GaugeCategoriesList({
       }
     }
   }
-
-  const DETECTION_EXPLANATION_KEYWORDS_SUB = [
-    "gauge_scale_modal_explanation_rating_1_sub",
-    "gauge_scale_modal_explanation_rating_2_sub",
-    "gauge_scale_modal_explanation_rating_3_sub",
-  ];
-  const DETECTION_EXPLANATION_KEYWORDS_MGT = [
-    "gauge_scale_modal_explanation_rating_1_mgt",
-    "gauge_scale_modal_explanation_rating_2_mgt",
-    "gauge_scale_modal_explanation_rating_3_mgt",
-    "gauge_scale_modal_explanation_rating_4_mgt",
-  ];
 
   return (
     <>
