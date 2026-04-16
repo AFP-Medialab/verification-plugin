@@ -92,6 +92,7 @@ const ExtractedUrlDomainAnalysisResults = ({
                     maxWidth={"lg"}
                     open={open}
                     scroll={"paper"}
+                    sx={{ "& .MuiDialog-paper": { minWidth: "50%" } }}
                   >
                     <DialogTitle>
                       {/* display the url */}
@@ -127,7 +128,11 @@ const ExtractedUrlDomainAnalysisResults = ({
                                   expandIcon={<ExpandMoreIcon />}
                                 >
                                   {value.credibilityScope ? (
-                                    <Stack direction="row">
+                                    <Stack
+                                      direction="row"
+                                      spacing={1}
+                                      alignItems="center"
+                                    >
                                       {renderSourceTypeChip(
                                         keyword,
                                         trafficLightColor,
