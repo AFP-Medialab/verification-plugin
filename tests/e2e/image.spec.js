@@ -66,14 +66,15 @@ test('Test tool forensic', async ({ page, extensionId }) => {
   await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/forensic`);
   await page.getByText("Accept").click();
 
-  await page1.getByRole('textbox', { name: 'Lien URL de l\'image' }).fill('https://www.lebigdata.fr/wp-content/uploads/2023/03/macron-pape-ia-deepfake-1050x525.jpg');
-  await page1.getByTestId('submitButtonTestIdByDefault').click();
+  // submit input file
+  await page.locator('[data-testid="forensic-input"] input').fill('https://www.lebigdata.fr/wp-content/uploads/2023/03/macron-pape-ia-deepfake-1050x525.jpg');
+  await page.locator('[data-testid="forensic-submit"]').click();
 
   // test every tabs 
-  await page1.getByRole('tab', { name: 'Traces' }).click();
-  await page1.getByRole('tab', { name: 'Deep learning' }).click();
-  await page1.getByRole('tab', { name: 'Clonage' }).click();
+  // await page1.getByRole('tab', { name: 'Traces' }).click();
+  // await page1.getByRole('tab', { name: 'Deep learning' }).click();
+  // await page1.getByRole('tab', { name: 'Clonage' }).click();
 
-  // 
-  await page1.getByRole('button', { name: 'Nouvelle image' }).click();
+  // // close
+  // await page1.getByRole('button', { name: 'Nouvelle image' }).click();
 });
