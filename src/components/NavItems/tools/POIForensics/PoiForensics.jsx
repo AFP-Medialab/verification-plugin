@@ -23,7 +23,7 @@ import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useGetPoiForensics from "./Hooks/useGetPoiForensic";
 import PoiForensicsResults from "./Results/PoiForensicsResults";
-import { PERSON_OF_INTEREST } from "./poiUtils";
+import { getPersonOfInterest } from "./poiUtils";
 
 /**
  * React node that displays the POI Forensics feature
@@ -35,6 +35,7 @@ const PoiForensics = () => {
   );
   const keyword = i18nLoadNamespace("components/NavItems/tools/PoiForensics");
   const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
+  const personsOfInterest = getPersonOfInterest(keyword);
 
   const [searchParams] = useSearchParams();
 
@@ -60,9 +61,9 @@ const PoiForensics = () => {
   const initializeSelectedPoi = () => {
     let selectedList = {};
 
-    for (const poi of Object.values(PERSON_OF_INTEREST)) {
+    for (const poi of Object.values(personsOfInterest)) {
       selectedList[poi.NAME_TOSEND] =
-        poi.NAME_TOSEND === PERSON_OF_INTEREST.MACRON.NAME_TOSEND;
+        poi.NAME_TOSEND === personsOfInterest.MACRON.NAME_TOSEND;
     }
 
     return selectedList;
@@ -124,10 +125,6 @@ const PoiForensics = () => {
     dispatch(resetPoiForensics());
   };
 
-  useEffect(() => {
-    console.log("[Component] isLoading changed →", isLoading);
-  }, [isLoading]);
-
   return (
     <Box>
       <Stack direction="column" spacing={4}>
@@ -180,7 +177,7 @@ const PoiForensics = () => {
             />
             <FormControl component="fieldset">
               <FormGroup row>
-                {Object.entries(PERSON_OF_INTEREST).map(([index, poi]) => {
+                {Object.entries(personsOfInterest).map(([index, poi]) => {
                   return (
                     <FormControlLabel
                       key={index}
@@ -202,7 +199,9 @@ const PoiForensics = () => {
           </Box>
         </Card>
 
-        {result && <PoiForensicsResults result={result} />}
+        {result && (
+          <PoiForensicsResults result={result} handleClose={resetState} />
+        )}
       </Stack>
     </Box>
   );

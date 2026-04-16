@@ -14,11 +14,6 @@ const poiForensicsReducer = (state = defaultState, action) => {
         loading: false,
         type: "",
       };
-    case "SET_POI_FORENSICS_TYPE":
-      return {
-        ...state,
-        type: action.payload,
-      };
     case "SET_POI_FORENSICS_LOADING":
       return {
         ...state,
