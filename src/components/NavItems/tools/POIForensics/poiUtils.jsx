@@ -21,3 +21,18 @@ export const getPersonOfInterest = (keyword) => ({
     NAME_TOSEND: "GiorgiaMeloni",
   },
 });
+
+/**
+ * Enumeration that contains the modes the model accept.
+ * It is displayed as chekboxes in the POI Forensics features.
+ */
+export const getMode = (keyword) => ({
+  AUDIO_VIDEO: {
+    DISPLAY_NAME: `${keyword("poiforensics_mode_audiovideo")}`,
+    NAME_TOSEND: "audiovideo",
+  },
+  VIDEO: {
+    DISPLAY_NAME: `${keyword("poiforensics_mode_video")}`,
+    NAME_TOSEND: "video",
+  },
+});

@@ -9,6 +9,9 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
+import FormLabel from "@mui/material/FormLabel";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
 import Stack from "@mui/material/Stack";
 
 import { FaceRetouchingNatural } from "@mui/icons-material";
@@ -23,7 +26,7 @@ import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useGetPoiForensics from "./Hooks/useGetPoiForensic";
 import PoiForensicsResults from "./Results/PoiForensicsResults";
-import { getPersonOfInterest } from "./poiUtils";
+import { getMode, getPersonOfInterest } from "./poiUtils";
 
 /**
  * React node that displays the POI Forensics feature
@@ -36,6 +39,7 @@ const PoiForensics = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/PoiForensics");
   const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
   const personsOfInterest = getPersonOfInterest(keyword);
+  const modes = getMode(keyword);
 
   const [searchParams] = useSearchParams();
 
@@ -78,10 +82,27 @@ const PoiForensics = () => {
     });
   };
 
+  /**
+   * Initialize selecrted modewith audiovideo
+   * @returns {string}
+   */
+  const initializeSelectedMode = () => {
+    return modes.AUDIO_VIDEO.NAME_TOSEND;
+  };
+
+  const [selectedMode, setSelectedMode] = useState(() =>
+    initializeSelectedMode(),
+  );
+
+  const handleChangeMode = (event) => {
+    setSelectedMode(event.target.value);
+  };
+
   // pour l'instant on va juste console log l'url construit
   const submitUrl = async () => {
     await useGetPoiForensics(
       selectedPoi,
+      selectedMode,
       keyword,
       input,
       true,
@@ -170,32 +191,49 @@ const PoiForensics = () => {
                 handleClearUrl={resetState}
               />
             </form>
-            <Box
-              sx={{
-                m: 2,
-              }}
-            />
-            <FormControl component="fieldset">
-              <FormGroup row>
-                {Object.entries(personsOfInterest).map(([index, poi]) => {
-                  return (
+            <Box sx={{ m: 2 }}>
+              <FormControl component="fieldset">
+                <FormLabel component="legend">Personnes d'intérêt</FormLabel>
+                <FormGroup row>
+                  {Object.entries(personsOfInterest).map(([index, poi]) => {
+                    return (
+                      <FormControlLabel
+                        key={index}
+                        control={
+                          <Checkbox
+                            checked={selectedPoi[poi.NAME_TOSEND] || false}
+                            value={poi.NAME_TOSEND}
+                            onChange={(e) => handleChangePoi(e)}
+                            color="primary"
+                          />
+                        }
+                        label={poi.DISPLAY_NAME}
+                        labelPlacement="end"
+                      />
+                    );
+                  })}
+                </FormGroup>
+              </FormControl>
+            </Box>
+            <Box sx={{ m: 2 }}>
+              <FormControl component="fieldset">
+                <FormLabel id="mode-selection-label">Mode d'analyse</FormLabel>
+                <RadioGroup
+                  row
+                  value={selectedMode}
+                  onChange={handleChangeMode}
+                >
+                  {Object.entries(modes).map(([index, mode]) => (
                     <FormControlLabel
                       key={index}
-                      control={
-                        <Checkbox
-                          checked={selectedPoi[poi.NAME_TOSEND] || false}
-                          value={poi.NAME_TOSEND}
-                          onChange={(e) => handleChangePoi(e)}
-                          color="primary"
-                        />
-                      }
-                      label={poi.DISPLAY_NAME}
-                      labelPlacement="end"
+                      value={mode.NAME_TOSEND}
+                      control={<Radio />}
+                      label={mode.DISPLAY_NAME}
                     />
-                  );
-                })}
-              </FormGroup>
-            </FormControl>
+                  ))}
+                </RadioGroup>
+              </FormControl>
+            </Box>
           </Box>
         </Card>
 
