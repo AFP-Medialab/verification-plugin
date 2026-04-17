@@ -68,7 +68,7 @@ export const drawBoundingBox = (videoTime, videoRef, canvasRef, result) => {
 
   const ctx = canvas.getContext("2d");
 
-  // Ajustement de la résolution
+  // make sure that the canva is always exactly the size of the video
   if (
     canvas.width !== video.videoWidth ||
     canvas.height !== video.videoHeight
@@ -80,19 +80,17 @@ export const drawBoundingBox = (videoTime, videoRef, canvasRef, result) => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   const threshold = report.decision_threshold;
 
-  // Parcourir chaque track de manière indépendante
-  report.results_per_track.forEach((track) => {
-    // Trouver l'index spécifique à CE track pour le temps actuel
-    const trackIndex = track.time_vector.findIndex((t, i) => {
-      return (
-        videoTime >= t &&
-        (track.time_vector[i + 1]
-          ? videoTime < track.time_vector[i + 1]
-          : videoTime < t + 1)
-      );
-    });
+  // we have to check if there is still data to display, in order to delete the box if not (0.3 is totally arbitrary)
+  const lastTime = report.time_vector[report.time_vector.length - 1];
+  if (videoTime > lastTime + 0.3) {
+    return;
+  }
 
-    // Si le temps de la vidéo correspond à une plage de ce track
+  // sometimes the results are on several tracks, we need to go through every track to
+  // get all the results
+  report.results_per_track.forEach((track) => {
+    const trackIndex = getIndexFromTime(videoTime, track.time_vector);
+
     if (trackIndex !== -1) {
       const bbox = track.bboxes[trackIndex];
       const score = track.scores[trackIndex];

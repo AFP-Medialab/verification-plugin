@@ -18,11 +18,8 @@ export const usePoiSync = (videoRef, canvasRef, result, setSelectedIndex) => {
     const syncFrame = () => {
       const currentTime = video.currentTime;
 
-      // On envoie le temps brut, la fonction utilitaire gérera le mapping par track
       drawBoundingBox(currentTime, videoRef, canvasRef, result);
 
-      // Pour le graphique global (qui lui utilise souvent le time_vector racine)
-      // On peut toujours calculer un index global pour le tooltip si besoin
       const globalTimes = result.poi_forensics_report.time_vector;
       const globalIndex = globalTimes.findIndex(
         (t, i) =>
