@@ -19,6 +19,14 @@ import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { ChartsReferenceLine } from "@mui/x-charts/ChartsReferenceLine";
 import { LineChart } from "@mui/x-charts/LineChart";
 
+import { usePoiSync } from "../Hooks/usePoiSync";
+import { drawBoundingBox } from "../poiUtils";
+
+/**
+ * React component that displays the results of POI forensics feature
+ * @param {results, handleClose} props
+ * @returns
+ */
 const PoiForensicsResults = (props) => {
   const userAuthenticated = useSelector(
     (state) => state.userSession && state.userSession.userAuthenticated,
@@ -33,6 +41,10 @@ const PoiForensicsResults = (props) => {
 
   const [xAxisData, setXAxisData] = useState([]);
   const [yAxisData, setYAxisData] = useState([]);
+
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
 
   useEffect(() => {
     if (
@@ -55,6 +67,24 @@ const PoiForensicsResults = (props) => {
   const handleClose = () => {
     props.handleClose();
   };
+
+  const handleChartClick = (event, d) => {
+    if (d && d.dataIndex !== undefined) {
+      const index = d.dataIndex;
+      setSelectedIndex(index);
+
+      const timestamp = results.poi_forensics_report.time_vector[index];
+      if (videoRef.current) {
+        videoRef.current.currentTime = timestamp;
+
+        videoRef.current.onseeked = () => drawBoundingBox(index);
+      }
+    }
+  };
+
+  // this personalized Hook is in charge of syncing the canvas with the video so we can have a box around the face
+  // when its detected
+  usePoiSync(videoRef, canvasRef, results, setSelectedIndex);
 
   return (
     <>
@@ -88,23 +118,45 @@ const PoiForensicsResults = (props) => {
                     }}
                   >
                     <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
-                      <video
-                        width="100%"
-                        height="auto"
-                        controls
-                        key={results.poi_forensics_report.video_path}
-                        style={{
-                          borderRadius: "10px",
-                          maxHeight: "50vh",
+                      <Box
+                        sx={{
+                          position: "relative",
+                          width: "100%",
+                          lineHeight: 0,
                         }}
                       >
-                        <source
-                          src={
-                            results.poi_forensics_report.video_path + "#t=2,4"
-                          }
-                          type="video/mp4"
+                        <video
+                          ref={videoRef}
+                          crossOrigin="anonymous"
+                          width="100%"
+                          height="auto"
+                          controls
+                          key={results.poi_forensics_report.video_path}
+                          style={{
+                            borderRadius: "10px",
+                            maxHeight: "50vh",
+                          }}
+                        >
+                          <source
+                            src={
+                              results.poi_forensics_report.video_path + "#t=2,4"
+                            }
+                            type="video/mp4"
+                          />
+                        </video>
+                        <canvas
+                          ref={canvasRef}
+                          style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            width: "100%",
+                            height: "100%",
+                            pointerEvents: "none",
+                            borderRadius: "10px",
+                          }}
                         />
-                      </video>
+                      </Box>
                     </ErrorBoundary>
                   </Grid>
                 </Grid>
@@ -132,6 +184,7 @@ const PoiForensicsResults = (props) => {
                             ]}
                             height={300}
                             grid={{ vertical: true, horizontal: true }}
+                            onAxisClick={handleChartClick}
                           >
                             <ChartsReferenceLine
                               y={1}

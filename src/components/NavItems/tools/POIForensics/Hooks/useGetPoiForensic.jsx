@@ -8,6 +8,7 @@ import axios from "axios";
 
 async function useGetPoiForensics(
   selectedPoi,
+  selectedMode,
   keyword,
   url,
   processURL,
@@ -28,7 +29,7 @@ async function useGetPoiForensics(
     .map(([name, value]) => name);
 
   const servicesParams = poi.map((poi) =>
-    JSON.stringify({ poi_forensics: { poi: poi, modality: "audiovideo" } }),
+    JSON.stringify({ poi_forensics: { poi: poi, modality: selectedMode } }),
   );
 
   const baseURL = import.meta.env.VITE_CAA_DEEPFAKE_URL;
