@@ -29,7 +29,7 @@ import PoiForensicsResults from "./Results/PoiForensicsResults";
 import { getMode, getPersonOfInterest } from "./poiUtils";
 
 /**
- * React node that displays the POI Forensics feature
+ * React component that displays the POI Forensics feature, input and results
  * @returns
  */
 const PoiForensics = () => {
