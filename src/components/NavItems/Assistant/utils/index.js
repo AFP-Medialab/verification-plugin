@@ -18,7 +18,7 @@ export {
   renderEvidence,
   renderDomainTitle,
   renderDomainAnalysisResults,
-} from "./domainUtils";
+} from "./urlDomainAnalysisUtils";
 
 export {
   treeMapToElements,
