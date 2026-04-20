@@ -212,7 +212,6 @@ const PoiForensicsResults = (props) => {
                   </Stack>
                 </Grid>
               </Stack>
-              <JsonBlock jsonString={JSON.stringify(results)} />
             </Grid>
           </Stack>
         </CardContent>

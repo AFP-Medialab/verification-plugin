@@ -86,44 +86,43 @@ export const drawBoundingBox = (videoTime, videoRef, canvasRef, result) => {
 
   const threshold = report.decision_threshold;
 
+  // we build bboxes general to get rid off the separation by track and simplify the change of index
+  const bboxes = report.results_per_track
+    .filter((track) => track.bboxes)
+    .flatMap((track) => track.bboxes);
+
   // we have to check if there is still data to display, in order to delete the box if not (0.3 is arbitrary)
   const lastTime = report.time_vector[report.time_vector.length - 1];
   if (videoTime > lastTime + 0.3) {
     return;
   }
 
-  // sometimes the results are on several tracks, we need to go through every track to
-  // get all the results
-  report.results_per_track.forEach((track) => {
-    const trackIndex = getIndexFromTime(videoTime, track.time_vector);
+  const index = getIndexFromTime(videoTime, report.time_vector);
 
-    if (trackIndex !== -1) {
-      const bbox = track.bboxes[trackIndex];
-      const score = track.scores[trackIndex];
+  const bbox = bboxes[index];
+  const score = report.scores_per_time[index];
 
-      if (bbox) {
-        const [xmin_base, ymin_base, xmax_base, ymax_base] = bbox;
+  if (bbox) {
+    const [xmin_base, ymin_base, xmax_base, ymax_base] = bbox;
 
-        const xmin = xmin_base * scaleX;
-        const ymin = ymin_base * scaleY;
-        const xmax = xmax_base * scaleX;
-        const ymax = ymax_base * scaleY;
+    const xmin = xmin_base * scaleX;
+    const ymin = ymin_base * scaleY;
+    const xmax = xmax_base * scaleX;
+    const ymax = ymax_base * scaleY;
 
-        const color = score > threshold ? "#ff0000" : "#00ff00";
+    const color = score > threshold ? "#ff0000" : "#00ff00";
 
-        ctx.beginPath();
-        ctx.lineWidth = 7;
-        ctx.strokeStyle = color;
-        ctx.rect(xmin, ymin, xmax - xmin, ymax - ymin);
-        ctx.stroke();
+    ctx.beginPath();
+    ctx.lineWidth = 7;
+    ctx.strokeStyle = color;
+    ctx.rect(xmin, ymin, xmax - xmin, ymax - ymin);
+    ctx.stroke();
 
-        const fontSize = Math.floor(canvas.height / 15);
-        ctx.font = `bold ${fontSize}px Arial`;
-        ctx.fillStyle = "Black";
-        ctx.fillText(`${score.toFixed(2)}`, xmin, ymin - 10);
-      }
-    }
-  });
+    const fontSize = Math.floor(canvas.height / 15);
+    ctx.font = `bold ${fontSize}px Arial`;
+    ctx.fillStyle = "Black";
+    ctx.fillText(`${score.toFixed(2)}`, xmin, ymin - 10);
+  }
 };
 
 /**
@@ -139,6 +138,6 @@ export const getIndexFromTime = (currentTime, timeVector) => {
       // three condition to be the index associated to the currentTime : time[index] < currentTime and time[index+1] > currentTime and not being
       // the last index of the track (to prevent any superposition of tracks)
       currentTime >= t &&
-      (timeVector[i + 1] ? currentTime < timeVector[i + 1] : false),
+      (timeVector[i + 1] ? currentTime < timeVector[i + 1] : true),
   );
 };
