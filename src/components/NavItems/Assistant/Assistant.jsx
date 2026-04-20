@@ -128,7 +128,7 @@ const Assistant = () => {
     (state) => state.assistant.persuasionFail,
   );
   const prevFactChecksFailState = useSelector(
-    (state) => state.assistant.previousFactChecksFail,
+    (state) => state.assistant.prevFactChecksFail,
   );
   const prevFactChecksResult = useSelector(
     (state) => state.assistant.prevFactChecksResult,
