@@ -35,6 +35,10 @@ export const getMode = (keyword) => ({
     DISPLAY_NAME: `${keyword("poiforensics_mode_video")}`,
     NAME_TOSEND: "video",
   },
+  AUDIO: {
+    DISPLAY_NAME: `${keyword("poiforensics_mode_audio")}`,
+    NAME_TOSEND: "audio",
+  },
 });
 
 /**

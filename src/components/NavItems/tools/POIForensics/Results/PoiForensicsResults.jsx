@@ -18,6 +18,7 @@ import { JsonBlock } from "@Shared/JsonBlock";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { ChartsReferenceLine } from "@mui/x-charts/ChartsReferenceLine";
 import { LineChart } from "@mui/x-charts/LineChart";
+import { result } from "lodash";
 
 import { usePoiSync } from "../Hooks/usePoiSync";
 import { drawBoundingBox } from "../poiUtils";
@@ -176,6 +177,12 @@ const PoiForensicsResults = (props) => {
                             xAxis={[
                               {
                                 data: xAxisData,
+                                min: 0,
+                              },
+                            ]}
+                            yAxis={[
+                              {
+                                min: 0,
                               },
                             ]}
                             series={[
@@ -205,6 +212,7 @@ const PoiForensicsResults = (props) => {
                   </Stack>
                 </Grid>
               </Stack>
+              <JsonBlock jsonString={JSON.stringify(results)} />
             </Grid>
           </Stack>
         </CardContent>
