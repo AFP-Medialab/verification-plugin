@@ -128,21 +128,22 @@ const PoiForensicsResults = (props) => {
                         <video
                           ref={videoRef}
                           crossOrigin="anonymous"
-                          width="100%"
                           height="auto"
                           controls
                           key={results.poi_forensics_report.video_path}
                           style={{
                             borderRadius: "10px",
                             maxHeight: "50vh",
+                            width: "auto",
+                            maxWidth: "100%",
+                            display: "block",
+                            objectFit: "contain",
                           }}
                           controlsList="nofullscreen nodownload"
-                          disablepictureinpicture="true"
+                          disablePictureInPicture={true}
                         >
                           <source
-                            src={
-                              results.poi_forensics_report.video_path + "#t=2,4"
-                            }
+                            src={results.poi_forensics_report.video_path}
                             type="video/mp4"
                           />
                         </video>
@@ -152,8 +153,6 @@ const PoiForensicsResults = (props) => {
                             position: "absolute",
                             top: 0,
                             left: 0,
-                            width: "100%",
-                            height: "100%",
                             pointerEvents: "none",
                             borderRadius: "10px",
                           }}

@@ -133,7 +133,7 @@ async function useGetPoiForensics(
     }
   };
 
-  res ? waitUntilFinish(res.data.id) : null;
+  res ? waitUntilFinish(res.data.id) : console.log(res);
 }
 
 function sleep(fn, param) {

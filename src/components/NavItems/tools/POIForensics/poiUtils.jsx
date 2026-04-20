@@ -68,19 +68,21 @@ export const drawBoundingBox = (videoTime, videoRef, canvasRef, result) => {
 
   const ctx = canvas.getContext("2d");
 
-  // make sure that the canva is always exactly the size of the video
-  if (
-    canvas.width !== video.videoWidth ||
-    canvas.height !== video.videoHeight
-  ) {
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-  }
+  // clientWidth reprensent the size of the video shown in the navigator not the size of the video source
+  // An issue with vertical videos made us remove the lateral borders and use this parameter
+  canvas.width = video.clientWidth;
+  canvas.height = video.clientHeight;
+
+  // We need to rescale the boxes that we received with those ratio because the boxes are made to be displayed
+  // on the video source which is not the same size that the video we are showing in the navigator
+  const scaleX = video.clientWidth / video.videoWidth;
+  const scaleY = video.clientHeight / video.videoHeight;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
   const threshold = report.decision_threshold;
 
-  // we have to check if there is still data to display, in order to delete the box if not (0.3 is totally arbitrary)
+  // we have to check if there is still data to display, in order to delete the box if not (0.3 is arbitrary)
   const lastTime = report.time_vector[report.time_vector.length - 1];
   if (videoTime > lastTime + 0.3) {
     return;
@@ -96,7 +98,13 @@ export const drawBoundingBox = (videoTime, videoRef, canvasRef, result) => {
       const score = track.scores[trackIndex];
 
       if (bbox) {
-        const [xmin, ymin, xmax, ymax] = bbox;
+        const [xmin_base, ymin_base, xmax_base, ymax_base] = bbox;
+
+        const xmin = xmin_base * scaleX;
+        const ymin = ymin_base * scaleY;
+        const xmax = xmax_base * scaleX;
+        const ymax = ymax_base * scaleY;
+
         const color = score > threshold ? "#ff0000" : "#00ff00";
 
         ctx.beginPath();
@@ -124,8 +132,9 @@ export const drawBoundingBox = (videoTime, videoRef, canvasRef, result) => {
 export const getIndexFromTime = (currentTime, timeVector) => {
   return timeVector.findIndex(
     (t, i) =>
-      // two condition to be the index associated to the currentTime : time[index] < currentTime and time[index+1] > currentTime
+      // three condition to be the index associated to the currentTime : time[index] < currentTime and time[index+1] > currentTime and not being
+      // the last index of the track (to prevent any superposition of tracks)
       currentTime >= t &&
-      (timeVector[i + 1] ? currentTime < timeVector[i + 1] : true),
+      (timeVector[i + 1] ? currentTime < timeVector[i + 1] : false),
   );
 };
