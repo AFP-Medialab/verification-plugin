@@ -27,6 +27,7 @@ import {
   TransNamedEntityRecogniserLink,
   TransUsfdAuthor,
 } from "../TransComponents";
+import { NE_TYPE_COLORS } from "../constants";
 
 const AssistantNEResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -51,26 +52,7 @@ const AssistantNEResult = () => {
   };
 
   function getWordColor(tag) {
-    switch (tag.category.toLowerCase()) {
-      case "person":
-        return "#648FFF";
-      // return "blue";
-      case "location":
-        return "#DC267F";
-      // return "red";
-      case "organization":
-        return "#FFB000";
-      // return "green";
-      case "hashtag":
-        return "#FE6100";
-      // return "orange";
-      case "userid":
-        return "#785EF0";
-      // return "purple";
-      default:
-        return "black";
-      // return "black";
-    }
+    return NE_TYPE_COLORS[tag.category.toLowerCase()] ?? "black";
   }
 
   const styles = {

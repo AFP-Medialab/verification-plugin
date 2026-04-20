@@ -47,6 +47,7 @@ import {
   TransMultilingualStanceTooltip,
   TransUsfdAuthor,
 } from "../TransComponents";
+import { STANCE_COLOR_MAP } from "../constants";
 
 const AssistantCommentResult = ({ collectedComments }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -79,12 +80,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
   const { mode, systemMode } = useColorScheme();
   const resolvedMode = systemMode || mode;
 
-  const stanceColours = {
-    support: "success",
-    deny: "error",
-    query: "warning",
-    comment: "inherit",
-  };
+  const stanceColours = STANCE_COLOR_MAP;
 
   // read in verification keywords from TSV file in public/ folder
   const [caaVerificationKeywordsTsv, setCaaVerificationKeywordsTsv] = useState(
