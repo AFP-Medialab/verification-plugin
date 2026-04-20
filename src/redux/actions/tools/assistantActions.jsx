@@ -279,20 +279,20 @@ export const setSingleMediaPresent = (singleMediaPresent) => {
   };
 };
 
-export const setWarningExpanded = (warningExpanded) => {
+export const setFactChecksExpanded = (factChecksExpanded) => {
   return {
-    type: "SET_WARNING_EXPANDED",
+    type: "SET_FACT_CHECKS_EXPANDED",
     payload: {
-      warningExpanded: warningExpanded,
+      factChecksExpanded: factChecksExpanded,
     },
   };
 };
 
-export const setAssuranceExpanded = (assuranceExpanded) => {
+export const setDomainAnalysisExpanded = (domainAnalysisExpanded) => {
   return {
-    type: "SET_ASSURANCE_EXPANDED",
+    type: "SET_DOMAIN_ANALYSIS_EXPANDED",
     payload: {
-      assuranceExpanded: assuranceExpanded,
+      domainAnalysisExpanded: domainAnalysisExpanded,
     },
   };
 };

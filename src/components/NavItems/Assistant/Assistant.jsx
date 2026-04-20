@@ -490,6 +490,13 @@ const Assistant = () => {
 
           <CardContent>
             <Grid container spacing={4}>
+              {/* source credibility/URL domain analysis results */}
+              {positiveSourceCred || cautionSourceCred || mixedSourceCred ? (
+                <Grid size={{ xs: 12 }}>
+                  <AssistantSCResults />
+                </Grid>
+              ) : null}
+
               {/* warnings and api status checks */}
               {dbkfTextMatch || prevFactChecksResult ? (
                 <Grid
@@ -498,13 +505,6 @@ const Assistant = () => {
                   hidden={urlMode === false}
                 >
                   <AssistantWarnings />
-                </Grid>
-              ) : null}
-
-              {/* source credibility/URL domain analysis results */}
-              {positiveSourceCred || cautionSourceCred || mixedSourceCred ? (
-                <Grid size={{ xs: 12 }}>
-                  <AssistantSCResults />
                 </Grid>
               ) : null}
 

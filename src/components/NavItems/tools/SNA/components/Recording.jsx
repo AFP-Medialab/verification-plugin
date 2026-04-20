@@ -31,7 +31,7 @@ const SocialMediaSelectMenuProps = {
   },
 };
 
-const socialMediaPlatforms = ["Twitter", "Tiktok"];
+const socialMediaPlatforms = ["X", "Tiktok"];
 
 const renderSelectedValue = (selected) => (
   <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>

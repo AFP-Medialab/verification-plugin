@@ -197,11 +197,7 @@ const AssistantLinkResult = () => {
 
       // find correct source type label
       let sourceTypeList = [
-        sourceTypes
-          ? sourceTypes.unlabelled
-            ? unlabelled
-            : unlabelled
-          : unlabelled,
+        sourceTypes?.unlabelled ? keyword(sourceTypes.unlabelled) : unlabelled,
       ];
       if (domainResults.positive) {
         urlColor = trafficLightColors.positive;
