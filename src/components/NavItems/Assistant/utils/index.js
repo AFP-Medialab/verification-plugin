@@ -26,5 +26,6 @@ export {
   mergeSpanIndices,
   getPersuasionCategoryTechnique,
   createGaugeChart,
-  scrollToElement,
 } from "./textAnalysisUtils";
+
+export { scrollToElement } from "./domUtils";
