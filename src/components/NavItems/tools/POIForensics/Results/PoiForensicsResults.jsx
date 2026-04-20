@@ -136,6 +136,8 @@ const PoiForensicsResults = (props) => {
                             borderRadius: "10px",
                             maxHeight: "50vh",
                           }}
+                          controlsList="nofullscreen nodownload"
+                          disablepictureinpicture="true"
                         >
                           <source
                             src={
@@ -205,18 +207,6 @@ const PoiForensicsResults = (props) => {
                 </Grid>
               </Stack>
             </Grid>
-
-            <Divider />
-
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-              }}
-            >
-              <JsonBlock jsonString={JSON.stringify(results, null, 2)} />
-            </Box>
           </Stack>
         </CardContent>
       </Card>

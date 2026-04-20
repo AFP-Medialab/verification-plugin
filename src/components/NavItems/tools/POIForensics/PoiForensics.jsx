@@ -98,7 +98,6 @@ const PoiForensics = () => {
     setSelectedMode(event.target.value);
   };
 
-  // pour l'instant on va juste console log l'url construit
   const submitUrl = async () => {
     await useGetPoiForensics(
       selectedPoi,
