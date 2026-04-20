@@ -27,4 +27,4 @@ export {
   getPersuasionCategoryTechnique,
   createGaugeChart,
   scrollToElement,
-} from "./textUtils";
+} from "./textAnalysisUtils";
