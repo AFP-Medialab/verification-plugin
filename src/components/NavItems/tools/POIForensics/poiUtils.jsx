@@ -35,6 +35,10 @@ export const getMode = (keyword) => ({
     DISPLAY_NAME: `${keyword("poiforensics_mode_video")}`,
     NAME_TOSEND: "video",
   },
+  AUDIO: {
+    DISPLAY_NAME: `${keyword("poiforensics_mode_audio")}`,
+    NAME_TOSEND: "audio",
+  },
 });
 
 /**
@@ -68,50 +72,57 @@ export const drawBoundingBox = (videoTime, videoRef, canvasRef, result) => {
 
   const ctx = canvas.getContext("2d");
 
-  // make sure that the canva is always exactly the size of the video
-  if (
-    canvas.width !== video.videoWidth ||
-    canvas.height !== video.videoHeight
-  ) {
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-  }
+  // clientWidth reprensent the size of the video shown in the navigator not the size of the video source
+  // An issue with vertical videos made us remove the lateral borders and use this parameter
+  canvas.width = video.clientWidth;
+  canvas.height = video.clientHeight;
+
+  // We need to rescale the boxes that we received with those ratio because the boxes are made to be displayed
+  // on the video source which is not the same size that the video we are showing in the navigator
+  const scaleX = video.clientWidth / video.videoWidth;
+  const scaleY = video.clientHeight / video.videoHeight;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
   const threshold = report.decision_threshold;
 
-  // we have to check if there is still data to display, in order to delete the box if not (0.3 is totally arbitrary)
+  // we build bboxes general to get rid off the separation by track and simplify the change of index
+  const bboxes = report.results_per_track
+    .filter((track) => track.bboxes)
+    .flatMap((track) => track.bboxes);
+
+  // we have to check if there is still data to display, in order to delete the box if not (0.3 is arbitrary)
   const lastTime = report.time_vector[report.time_vector.length - 1];
   if (videoTime > lastTime + 0.3) {
     return;
   }
 
-  // sometimes the results are on several tracks, we need to go through every track to
-  // get all the results
-  report.results_per_track.forEach((track) => {
-    const trackIndex = getIndexFromTime(videoTime, track.time_vector);
+  const index = getIndexFromTime(videoTime, report.time_vector);
 
-    if (trackIndex !== -1) {
-      const bbox = track.bboxes[trackIndex];
-      const score = track.scores[trackIndex];
+  const bbox = bboxes[index];
+  const score = report.scores_per_time[index];
 
-      if (bbox) {
-        const [xmin, ymin, xmax, ymax] = bbox;
-        const color = score > threshold ? "#ff0000" : "#00ff00";
+  if (bbox) {
+    const [xmin_base, ymin_base, xmax_base, ymax_base] = bbox;
 
-        ctx.beginPath();
-        ctx.lineWidth = 7;
-        ctx.strokeStyle = color;
-        ctx.rect(xmin, ymin, xmax - xmin, ymax - ymin);
-        ctx.stroke();
+    const xmin = xmin_base * scaleX;
+    const ymin = ymin_base * scaleY;
+    const xmax = xmax_base * scaleX;
+    const ymax = ymax_base * scaleY;
 
-        const fontSize = Math.floor(canvas.height / 15);
-        ctx.font = `bold ${fontSize}px Arial`;
-        ctx.fillStyle = "Black";
-        ctx.fillText(`${score.toFixed(2)}`, xmin, ymin - 10);
-      }
-    }
-  });
+    const color = score > threshold ? "#ff0000" : "#00ff00";
+
+    ctx.beginPath();
+    ctx.lineWidth = 7;
+    ctx.strokeStyle = color;
+    ctx.rect(xmin, ymin, xmax - xmin, ymax - ymin);
+    ctx.stroke();
+
+    const fontSize = Math.floor(canvas.height / 15);
+    ctx.font = `bold ${fontSize}px Arial`;
+    ctx.fillStyle = "Black";
+    ctx.fillText(`${score.toFixed(2)}`, xmin, ymin - 10);
+  }
 };
 
 /**
@@ -124,7 +135,8 @@ export const drawBoundingBox = (videoTime, videoRef, canvasRef, result) => {
 export const getIndexFromTime = (currentTime, timeVector) => {
   return timeVector.findIndex(
     (t, i) =>
-      // two condition to be the index associated to the currentTime : time[index] < currentTime and time[index+1] > currentTime
+      // three condition to be the index associated to the currentTime : time[index] < currentTime and time[index+1] > currentTime and not being
+      // the last index of the track (to prevent any superposition of tracks)
       currentTime >= t &&
       (timeVector[i + 1] ? currentTime < timeVector[i + 1] : true),
   );

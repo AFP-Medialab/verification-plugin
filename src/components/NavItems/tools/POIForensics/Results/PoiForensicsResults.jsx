@@ -18,6 +18,7 @@ import { JsonBlock } from "@Shared/JsonBlock";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { ChartsReferenceLine } from "@mui/x-charts/ChartsReferenceLine";
 import { LineChart } from "@mui/x-charts/LineChart";
+import { result } from "lodash";
 
 import { usePoiSync } from "../Hooks/usePoiSync";
 import { drawBoundingBox } from "../poiUtils";
@@ -128,19 +129,22 @@ const PoiForensicsResults = (props) => {
                         <video
                           ref={videoRef}
                           crossOrigin="anonymous"
-                          width="100%"
                           height="auto"
                           controls
                           key={results.poi_forensics_report.video_path}
                           style={{
                             borderRadius: "10px",
                             maxHeight: "50vh",
+                            width: "auto",
+                            maxWidth: "100%",
+                            display: "block",
+                            objectFit: "contain",
                           }}
+                          controlsList="nofullscreen nodownload"
+                          disablePictureInPicture={true}
                         >
                           <source
-                            src={
-                              results.poi_forensics_report.video_path + "#t=2,4"
-                            }
+                            src={results.poi_forensics_report.video_path}
                             type="video/mp4"
                           />
                         </video>
@@ -150,8 +154,6 @@ const PoiForensicsResults = (props) => {
                             position: "absolute",
                             top: 0,
                             left: 0,
-                            width: "100%",
-                            height: "100%",
                             pointerEvents: "none",
                             borderRadius: "10px",
                           }}
@@ -175,6 +177,12 @@ const PoiForensicsResults = (props) => {
                             xAxis={[
                               {
                                 data: xAxisData,
+                                min: 0,
+                              },
+                            ]}
+                            yAxis={[
+                              {
+                                min: 0,
                               },
                             ]}
                             series={[
@@ -205,18 +213,6 @@ const PoiForensicsResults = (props) => {
                 </Grid>
               </Stack>
             </Grid>
-
-            <Divider />
-
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-              }}
-            >
-              <JsonBlock jsonString={JSON.stringify(results, null, 2)} />
-            </Box>
           </Stack>
         </CardContent>
       </Card>
