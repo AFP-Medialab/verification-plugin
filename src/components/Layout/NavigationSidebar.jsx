@@ -210,11 +210,12 @@ const NavigationSidebar = ({ tools, setOpenAlert }) => {
   const drawerItemsVideo = tools.filter(
     (tool) => tool.category === TOOLS_CATEGORIES.VIDEO,
   );
+
   const [openListVideo, setOpenListVideo] = useState(() => {
-    const tool = tools.filter(
-      (tool) => tool.titleKeyword === selectedToolTitleKeyword,
-    )[0];
-    return tool.category === TOOLS_CATEGORIES.VIDEO;
+    const tool = tools.find(
+      (t) => t?.titleKeyword === selectedToolTitleKeyword,
+    );
+    return tool?.category === TOOLS_CATEGORIES.VIDEO;
   });
 
   const handleClickListVideo = (setOpen) => {

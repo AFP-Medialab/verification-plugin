@@ -352,6 +352,12 @@ const styles = (theme) => ({
       backgroundColor: "#424242",
     },
   },
+  assistantTooltipUrlAnalysisWarnings: {
+    display: "flex",
+    ml: "auto",
+    textAlign: "right",
+    mt: 1,
+  },
 
   /* OCR classes */
   /* ================================================================================== */

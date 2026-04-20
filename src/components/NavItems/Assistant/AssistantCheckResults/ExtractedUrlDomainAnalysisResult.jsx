@@ -137,7 +137,11 @@ const ExtractedUrlDomainAnalysisResult = ({
                                   expandIcon={<ExpandMoreIcon />}
                                 >
                                   {value.credibilityScope ? (
-                                    <Stack direction="row">
+                                    <Stack
+                                      direction="row"
+                                      spacing={1}
+                                      alignItems="center"
+                                    >
                                       {renderSourceTypeChip(
                                         keyword,
                                         trafficLightColor,
