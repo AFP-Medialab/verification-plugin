@@ -139,9 +139,6 @@ const Assistant = () => {
   const machineGeneratedTextChunksFailState = useSelector(
     (state) => state.assistant.machineGeneratedChunksTextFail,
   );
-  const machineGeneratedTextSentencesFailState = useSelector(
-    (state) => state.assistant.machineGeneratedTextSentencesFail,
-  );
   const multilingualStanceFailState = useSelector(
     (state) => state.assistant.multilingualStanceFail,
   );

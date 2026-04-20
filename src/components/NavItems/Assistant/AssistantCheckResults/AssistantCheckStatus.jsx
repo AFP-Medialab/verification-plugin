@@ -65,9 +65,6 @@ const AssistantCheckStatus = () => {
   const machineGeneratedTextChunksFailState = useSelector(
     (state) => state.assistant.machineGeneratedTextChunksFail,
   );
-  const machineGeneratedTextSentencesFailState = useSelector(
-    (state) => state.assistant.machineGeneratedTextSentencesFail,
-  );
 
   const multilingualStanceTitle = keyword("multilingual_stance_title");
   const multilingualStanceFailState = useSelector(
