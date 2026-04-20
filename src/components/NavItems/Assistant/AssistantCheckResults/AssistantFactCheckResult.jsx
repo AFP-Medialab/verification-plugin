@@ -174,7 +174,7 @@ const AssistantFactCheckResult = () => {
           <Tooltip
             interactive={"true"}
             leaveDelay={50}
-            className={classes.assistantTooltipUrlAnalysisWarnings}
+            className={classes.assistantTooltipCollapsibleCard}
             title={
               <>
                 <Trans t={keyword} i18nKey="dbkf_tooltip" />

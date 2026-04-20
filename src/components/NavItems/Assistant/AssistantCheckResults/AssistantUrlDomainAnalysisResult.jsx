@@ -102,7 +102,7 @@ const AssistantUrlDomainAnalysisResult = () => {
           <Tooltip
             interactive={"true"}
             leaveDelay={50}
-            style={{ display: "flex", marginLeft: "auto" }}
+            className={classes.assistantTooltipCollapsibleCard}
             title={
               <>
                 <TransUrlDomainAnalysisTooltip keyword={keyword} />
@@ -114,7 +114,7 @@ const AssistantUrlDomainAnalysisResult = () => {
             }
             classes={{ tooltip: classes.assistantTooltip }}
           >
-            <HelpOutlineOutlinedIcon color={"action"} />
+            <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
           </Tooltip>
         </Grid>
 
