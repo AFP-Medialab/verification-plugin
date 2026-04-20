@@ -18,7 +18,7 @@ export {
   renderEvidence,
   renderDomainTitle,
   renderDomainAnalysisResults,
-} from "./domainUtils";
+} from "./urlDomainAnalysisUtils";
 
 export {
   treeMapToElements,
@@ -26,5 +26,6 @@ export {
   mergeSpanIndices,
   getPersuasionCategoryTechnique,
   createGaugeChart,
-  scrollToElement,
-} from "./textUtils";
+} from "./textAnalysisUtils";
+
+export { scrollToElement } from "./domUtils";
