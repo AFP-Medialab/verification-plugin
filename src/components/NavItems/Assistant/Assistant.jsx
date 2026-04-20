@@ -234,10 +234,9 @@ const Assistant = () => {
           encodeURIComponent(inputUrl);
         break;
       case KNOWN_LINKS.INSTAGRAM:
-        if (inputUrl.endsWith("/"))
-          archiveUrl = inputUrl.endsWith("/")
-            ? inputUrl + "embed/captioned/"
-            : inputUrl + "/embed/captioned/";
+        archiveUrl = inputUrl.endsWith("/")
+          ? inputUrl + "embed/captioned/"
+          : inputUrl + "/embed/captioned/";
         break;
       default:
         archiveUrl = inputUrl;
