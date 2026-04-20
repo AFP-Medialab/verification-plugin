@@ -492,7 +492,16 @@ const Assistant = () => {
 
           <CardContent>
             <Grid container spacing={4}>
-              {/* warnings and api status checks */}
+              {/* URL domain analysis results */}
+              {positiveUrlDomainAnalysis ||
+              cautionUrlDomainAnalysis ||
+              mixedUrlDomainAnalysis ? (
+                <Grid size={{ xs: 12 }}>
+                  <AssistantUrlDomainAnalysisResult />
+                </Grid>
+              ) : null}
+
+              {/* fact check results */}
               {dbkfTextMatch || prevFactChecksResult ? (
                 <Grid
                   size={{ xs: 12 }}
@@ -500,15 +509,6 @@ const Assistant = () => {
                   hidden={urlMode === false}
                 >
                   <AssistantFactCheckResult />
-                </Grid>
-              ) : null}
-
-              {/* source credibility/URL domain analysis results */}
-              {positiveUrlDomainAnalysis ||
-              cautionUrlDomainAnalysis ||
-              mixedUrlDomainAnalysis ? (
-                <Grid size={{ xs: 12 }}>
-                  <AssistantUrlDomainAnalysisResult />
                 </Grid>
               ) : null}
 
