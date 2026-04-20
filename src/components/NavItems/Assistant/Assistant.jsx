@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -67,8 +67,8 @@ const Assistant = () => {
   const { mode, systemMode } = useColorScheme();
   const resolvedMode = systemMode || mode;
 
-  // submitted
-  const [hasSubmitted, setHasSubmitted] = useState(false);
+  // submitted - using ref to avoid triggering useEffect on change
+  const hasSubmitted = useRef(false);
 
   // form states
   const loading = useSelector((state) => state.assistant.loading);
@@ -157,7 +157,7 @@ const Assistant = () => {
 
   const handleSubmit = async () => {
     dispatch(cleanAssistantState());
-    setHasSubmitted(true);
+    hasSubmitted.current = true;
 
     // set fileInput and formInput
     if (formInput) {
@@ -257,10 +257,10 @@ const Assistant = () => {
   };
 
   // clean assistant
-  const cleanAssistant = () => {
+  const cleanAssistant = useCallback(() => {
     dispatch(cleanAssistantState());
     // clean url mode
-    setHasSubmitted(false);
+    hasSubmitted.current = false;
     setFormInput("");
     navigate("/app/assistant/");
     dispatch(setUrlMode(false));
@@ -269,7 +269,7 @@ const Assistant = () => {
     dispatch(setSingleMediaPresent(false));
     setImageUploaded(false);
     setVideoUploaded(false);
-  };
+  }, []);
 
   // set correct error message
   useEffect(() => {
@@ -277,11 +277,11 @@ const Assistant = () => {
       dispatch(setError(keyword(errorKey)));
       cleanAssistant();
     }
-  }, [errorKey]);
+  }, [errorKey, keyword, cleanAssistant]);
 
   // if a url is present in the plugin url (as a param), set it to input
   useEffect(() => {
-    if (url !== undefined && !hasSubmitted) {
+    if (url !== undefined && !hasSubmitted.current) {
       // only handle user-entered spaces which shouldn't normally be in URLs
       const uri = url !== null ? url.replace(/ /g, "%20") : undefined;
       dispatch(setUrlMode(true));
