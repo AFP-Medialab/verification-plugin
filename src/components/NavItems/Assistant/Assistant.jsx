@@ -424,7 +424,6 @@ const Assistant = () => {
         subjectivityFailState ||
         prevFactChecksFailState ||
         machineGeneratedTextChunksFailState ||
-        machineGeneratedTextSentencesFailState ||
         multilingualStanceFailState) ? (
         <Grid size={{ xs: 12 }} sx={{ mt: 4 }}>
           <AssistantCheckStatus />

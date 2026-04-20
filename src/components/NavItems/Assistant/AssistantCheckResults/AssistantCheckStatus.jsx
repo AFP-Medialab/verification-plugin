@@ -85,9 +85,7 @@ const AssistantCheckStatus = () => {
     { title: prevFactChecksTitle, failed: prevFactChecksFailState },
     {
       title: machineGeneratedTextTitle,
-      failed:
-        machineGeneratedTextChunksFailState ||
-        machineGeneratedTextSentencesFailState,
+      failed: machineGeneratedTextChunksFailState,
     },
     {
       title: multilingualStanceTitle,
