@@ -167,9 +167,6 @@ const Assistant = () => {
     } else if (fileInput) {
       // submit file
       try {
-        if (!fileInput) {
-          throw new Error(keyword("no_input_provided"));
-        }
         setAssistantSelection(fileInput);
 
         // Determine file type
@@ -220,6 +217,8 @@ const Assistant = () => {
         console.error("Error in submitUrl:", error.message);
         dispatch(setError(error.message));
       }
+    } else {
+      throw new Error(keyword("no_input_provided"));
     }
   };
 
