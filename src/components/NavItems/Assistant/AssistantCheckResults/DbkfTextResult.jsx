@@ -13,7 +13,7 @@ import TextFieldsIcon from "@mui/icons-material/TextFields";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 
-const DbkfTextResults = ({ results, prevFactChecksExist }) => {
+const DbkfTextResult = ({ results, prevFactChecksExist }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   return (
@@ -123,4 +123,4 @@ const DbkfTextResults = ({ results, prevFactChecksExist }) => {
     </>
   );
 };
-export default DbkfTextResults;
+export default DbkfTextResult;

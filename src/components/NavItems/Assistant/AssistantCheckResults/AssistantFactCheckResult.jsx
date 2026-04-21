@@ -17,8 +17,8 @@ import { WarningAmber } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-import DbkfTextResults from "@/components/NavItems/Assistant/AssistantCheckResults/DbkfTextResults";
-import PreviousFactCheckResults from "@/components/NavItems/Assistant/AssistantCheckResults/PreviousFactCheckResults";
+import DbkfTextResult from "@/components/NavItems/Assistant/AssistantCheckResults/DbkfTextResult";
+import PreviousFactCheckResult from "@/components/NavItems/Assistant/AssistantCheckResults/PreviousFactCheckResult";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { ROLES } from "@/constants/roles";
@@ -30,9 +30,9 @@ import {
   TransKinitAuthor,
   TransOntotextAuthor,
   TransPrevFactChecksLink,
-} from "../TransComponents";
+} from "../components";
 
-const AssistantWarnings = () => {
+const AssistantFactCheckResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const classes = useMyStyles();
   const dispatch = useDispatch();
@@ -174,7 +174,7 @@ const AssistantWarnings = () => {
           <Tooltip
             interactive={"true"}
             leaveDelay={50}
-            className={classes.assistantTooltipUrlAnalysisWarnings}
+            className={classes.assistantTooltipCollapsibleCard}
             title={
               <>
                 <Trans t={keyword} i18nKey="dbkf_tooltip" />
@@ -214,7 +214,7 @@ const AssistantWarnings = () => {
             >
               {/* not logged in as beta tester, DBKF only */}
               {!role.includes(ROLES.BETA_TESTER) && dbkfTextMatch && (
-                <DbkfTextResults
+                <DbkfTextResult
                   results={separateDbkfTextMatch}
                   prevFactChecksExist={false}
                 />
@@ -225,16 +225,16 @@ const AssistantWarnings = () => {
                 prevFactChecksDone &&
                 (updatedPrevFactCheckResult.length > 0 ? (
                   <>
-                    <DbkfTextResults
+                    <DbkfTextResult
                       results={uniqueSeparateDbkfTextMatch}
                       prevFactChecksExist={true}
                     />
-                    <PreviousFactCheckResults
+                    <PreviousFactCheckResult
                       results={updatedPrevFactCheckResult}
                     />
                   </>
                 ) : (
-                  <DbkfTextResults results={dbkfTextMatch} />
+                  <DbkfTextResult results={dbkfTextMatch} />
                 ))}
 
               {/* logged in as beta tester but waiting for results */}
@@ -257,4 +257,4 @@ const AssistantWarnings = () => {
     </Card>
   );
 };
-export default AssistantWarnings;
+export default AssistantFactCheckResult;

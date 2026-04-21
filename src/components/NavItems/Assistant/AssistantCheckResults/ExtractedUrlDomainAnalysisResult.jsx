@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
@@ -29,9 +30,9 @@ import {
   renderScope,
   renderSourceTypeChip,
   renderThisDomainOrAccount,
-} from "./assistantUtils";
+} from "../utils";
 
-const ExtractedUrlDomainAnalysisResults = ({
+const ExtractedUrlDomainAnalysisResult = ({
   domainResults,
   credibilityScope,
   urlColor,
@@ -41,6 +42,7 @@ const ExtractedUrlDomainAnalysisResults = ({
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -51,7 +53,7 @@ const ExtractedUrlDomainAnalysisResults = ({
   };
 
   // passing through correct colours for details here
-  const sourceCredibility = [
+  const urlDomainAnalysisData = [
     [domainResults.caution, trafficLightColors.caution, sourceTypes.caution],
     [domainResults.mixed, trafficLightColors.mixed, sourceTypes.mixed],
     [domainResults.positive, trafficLightColors.positive, sourceTypes.positive],
@@ -59,7 +61,7 @@ const ExtractedUrlDomainAnalysisResults = ({
 
   return (
     <List component={Stack} direction="row" disablePadding={true}>
-      {sourceCredibility ? (
+      {urlDomainAnalysisData ? (
         <ListItem>
           <ListItemText
             primary={
@@ -81,10 +83,14 @@ const ExtractedUrlDomainAnalysisResults = ({
               >
                 <ListItemSecondaryAction>
                   <Tooltip title="Details">
-                    <ListAltOutlinedIcon
-                      style={{ cursor: "pointer" }}
+                    <IconButton
+                      ref={triggerRef}
+                      aria-label="View details"
+                      size="small"
                       onClick={handleClickOpen}
-                    />
+                    >
+                      <ListAltOutlinedIcon />
+                    </IconButton>
                   </Tooltip>
 
                   <Dialog
@@ -92,11 +98,14 @@ const ExtractedUrlDomainAnalysisResults = ({
                     maxWidth={"lg"}
                     open={open}
                     scroll={"paper"}
-                    sx={{ "& .MuiDialog-paper": { minWidth: "50%" } }}
+                    disableRestoreFocus
+                    TransitionProps={{
+                      onExited: () => triggerRef.current?.focus(),
+                    }}
                   >
                     <DialogTitle>
                       {/* display the url */}
-                      {sourceCredibility
+                      {urlDomainAnalysisData
                         ? renderDomainTitle(
                             keyword,
                             classes,
@@ -109,17 +118,17 @@ const ExtractedUrlDomainAnalysisResults = ({
 
                     <DialogContent dividers>
                       {/* display the URL Domain Analysis results in an accordion*/}
-                      {sourceCredibility?.map(
+                      {urlDomainAnalysisData?.map(
                         (
                           [
-                            sourceCredibilityResults,
+                            urlDomainAnalysisResults,
                             trafficLightColor,
                             sourceType,
                           ],
                           index,
                         ) => (
                           <Box key={index} mt={3} ml={2}>
-                            {sourceCredibilityResults?.map((value, key) => (
+                            {urlDomainAnalysisResults?.map((value, key) => (
                               <Accordion
                                 key={key}
                                 style={{ overflow: "hidden" }}
@@ -147,17 +156,7 @@ const ExtractedUrlDomainAnalysisResults = ({
                                   ) : null}
                                 </AccordionSummary>
 
-                                <AccordionDetails
-                                  sx={
-                                    scroll == true
-                                      ? {
-                                          display: "flex",
-                                          maxHeight: "300px",
-                                          overflowY: "scroll",
-                                        }
-                                      : null
-                                  }
-                                >
+                                <AccordionDetails>
                                   <List key={key}>
                                     <ListItem>
                                       {renderScope(
@@ -201,4 +200,4 @@ const ExtractedUrlDomainAnalysisResults = ({
     </List>
   );
 };
-export default ExtractedUrlDomainAnalysisResults;
+export default ExtractedUrlDomainAnalysisResult;

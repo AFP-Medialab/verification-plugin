@@ -46,7 +46,7 @@ import {
   TransMultilingualStanceLink,
   TransMultilingualStanceTooltip,
   TransUsfdAuthor,
-} from "../TransComponents";
+} from "../components";
 import { STANCE_COLOR_MAP } from "../constants";
 
 const AssistantCommentResult = ({ collectedComments }) => {

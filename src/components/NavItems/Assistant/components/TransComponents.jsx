@@ -3,7 +3,7 @@ import { Trans } from "react-i18next";
 
 import Chip from "@mui/material/Chip";
 
-import { STANCE_CATEGORIES, STANCE_COLOR_MAP } from "./constants";
+import { STANCE_CATEGORIES, STANCE_COLOR_MAP } from "../constants";
 
 const URLS = {
   SUPPORTED_TOOLS:
@@ -363,7 +363,7 @@ export function TransAssistantHelpFourTooltip({ keyword }) {
   );
 }
 
-export function TransSourceCredibilityTooltip({ keyword }) {
+export function TransUrlDomainAnalysisTooltip({ keyword }) {
   return (
     <Trans
       t={keyword}
