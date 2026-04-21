@@ -671,7 +671,6 @@ function* handleAssistantScrapeCall(action) {
     inputUrl = formatTelegramLink(inputUrl);
   }
 
-  const abort = new AbortController();
   try {
     let scrapeResult = null;
     if (decideWhetherToScrape(urlType, contentType, inputUrl)) {
@@ -679,8 +678,11 @@ function* handleAssistantScrapeCall(action) {
         assistantApi.callAssistantScraper,
         urlType,
         inputUrl,
-        abort.signal,
       );
+    }
+    if (!scrapeResult) {
+      yield put(setAssistantLoading(false));
+      return;
     }
 
     let filteredSR = filterAssistantResults(
@@ -715,10 +717,6 @@ function* handleAssistantScrapeCall(action) {
       yield put(setErrorKey("assistant_error_instagram"));
     } else {
       yield put(setErrorKey(error.message));
-    }
-  } finally {
-    if (yield cancelled()) {
-      abort.abort();
     }
   }
 }
