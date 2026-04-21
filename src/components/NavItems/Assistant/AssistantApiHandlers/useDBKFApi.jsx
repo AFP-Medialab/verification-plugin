@@ -11,7 +11,7 @@ export default function DBKFApi() {
     return query;
   }
 
-  const callTextSimilarityEndpoint = async (query, signal) => {
+  const callTextSimilarityEndpoint = async (query) => {
     /* if (... probably "when") this breaks: encodeURIComponent encodes line breaks, nbsp etc. according to utf-8
             https://www.w3schools.com/tags/ref_urlencode.ASP. but this call can't seem to handle any "space" except %20.
             even %20%20 breaks it. >1 space/newlines/breaks etc. removed on server side for the time being.  */
@@ -21,7 +21,7 @@ export default function DBKFApi() {
       encodeURIComponent(
         cleanQuery(query.replace(/["\\/\n|\-\[\]\(\)]/g, " ")),
       );
-    let searchResult = await axios.get(finalUri, { signal });
+    let searchResult = await axios.get(finalUri);
     if (searchResult && searchResult.data) {
       return searchResult.data.documents;
     }
