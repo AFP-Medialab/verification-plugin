@@ -40,6 +40,9 @@ const PoiForensicsResults = (props) => {
 
   const results = props.result;
 
+  // we take the selected mode to modify the display of the score
+  const mode = props.mode;
+
   const [xAxisData, setXAxisData] = useState([]);
   const [yAxisData, setYAxisData] = useState([]);
 
@@ -85,7 +88,7 @@ const PoiForensicsResults = (props) => {
 
   // this personalized Hook is in charge of syncing the canvas with the video so we can have a box around the face
   // when its detected
-  usePoiSync(videoRef, canvasRef, results, setSelectedIndex);
+  usePoiSync(videoRef, canvasRef, results, setSelectedIndex, mode);
 
   return (
     <>

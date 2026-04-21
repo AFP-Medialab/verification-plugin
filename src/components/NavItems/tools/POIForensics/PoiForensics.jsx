@@ -237,7 +237,11 @@ const PoiForensics = () => {
         </Card>
 
         {result && (
-          <PoiForensicsResults result={result} handleClose={resetState} />
+          <PoiForensicsResults
+            result={result}
+            handleClose={resetState}
+            mode={selectedMode}
+          />
         )}
       </Stack>
     </Box>
