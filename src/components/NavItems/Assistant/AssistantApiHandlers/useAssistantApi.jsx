@@ -163,16 +163,12 @@ export default function assistantApiCalls() {
     }
   };
 
-  const callOcrService = async (data, script, mode, signal) => {
-    const result = await axios.post(
-      assistantEndpoint + "gcloud/ocr",
-      {
-        text: data,
-        script: script,
-        data_type: mode,
-      },
-      { signal },
-    );
+  const callOcrService = async (data, script, mode) => {
+    const result = await axios.post(assistantEndpoint + "gcloud/ocr", {
+      text: data,
+      script: script,
+      data_type: mode,
+    });
 
     return result.data;
   };
