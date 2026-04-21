@@ -274,7 +274,7 @@ const AssistantTextResult = () => {
         }
       />
       {dbkfTextMatchLoading && (
-        <LinearProgress variant={"indeterminate"} color={"secondary"} />
+        <LinearProgress variant={"indeterminate"} color={"primary"} />
       )}
       <CardContent
         style={{
