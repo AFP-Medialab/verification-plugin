@@ -164,61 +164,62 @@ const Assistant = () => {
       navigate("/app/assistant/" + encodeURIComponent(fixedUrl));
       //trackEvent("submission", "assistant", "page assistant", fixedUrl);
       setAssistantSelection(fixedUrl);
-    } else if (fileInput) {
-      // submit file
+    } else {
       try {
-        setAssistantSelection(fileInput);
+        if (fileInput) {
+          setAssistantSelection(fileInput);
 
-        // Determine file type
-        const fileType = await getFileTypeFromFileObject(fileInput);
+          // Determine file type
+          const fileType = await getFileTypeFromFileObject(fileInput);
 
-        if (!fileType || fileType instanceof Error) {
-          throw new Error(keyword("unable_to_determine_file_type"));
+          if (!fileType || fileType instanceof Error) {
+            throw new Error(keyword("unable_to_determine_file_type"));
+          }
+
+          // set ImgaeVideoSelected for user media upload
+          dispatch(setImageVideoSelected(true));
+          // set single media present for display
+          dispatch(setSingleMediaPresent(true));
+          navigate("/app/assistant/");
+
+          if (fileType.mime.includes("video")) {
+            // set the video URL
+            const videoUrl = URL.createObjectURL(fileInput);
+            const ctype = TOOLS_CATEGORIES.VIDEO;
+
+            dispatch(setInputUrl(videoUrl, KNOWN_LINKS.OWN));
+            dispatch(
+              setScrapedData(null, null, null, [], [videoUrl], null, null),
+            );
+            dispatch(submitUpload(videoUrl, ctype));
+            setVideoUploaded(true);
+
+            return;
+          }
+
+          if (fileType.mime.includes("image")) {
+            // Set the image URL
+            const imageUrl = URL.createObjectURL(fileInput);
+            const ctype = TOOLS_CATEGORIES.IMAGE;
+
+            dispatch(setInputUrl(imageUrl, KNOWN_LINKS.OWN)); // kicks off getSourceCredSaga
+            dispatch(
+              setScrapedData(null, null, null, [imageUrl], [], null, null),
+            );
+            dispatch(submitUpload(imageUrl, ctype));
+            setImageUploaded(true);
+
+            return;
+          }
+
+          throw new Error(keyword("unsupported_file_type"));
+        } else {
+          throw new Error(keyword("no_input_provided"));
         }
-
-        // set ImgaeVideoSelected for user media upload
-        dispatch(setImageVideoSelected(true));
-        // set single media present for display
-        dispatch(setSingleMediaPresent(true));
-        navigate("/app/assistant/");
-
-        if (fileType.mime.includes("video")) {
-          // set the video URL
-          const videoUrl = URL.createObjectURL(fileInput);
-          const ctype = TOOLS_CATEGORIES.VIDEO;
-
-          dispatch(setInputUrl(videoUrl, KNOWN_LINKS.OWN));
-          dispatch(
-            setScrapedData(null, null, null, [], [videoUrl], null, null),
-          );
-          dispatch(submitUpload(videoUrl, ctype));
-          setVideoUploaded(true);
-
-          return;
-        }
-
-        if (fileType.mime.includes("image")) {
-          // Set the image URL
-          const imageUrl = URL.createObjectURL(fileInput);
-          const ctype = TOOLS_CATEGORIES.IMAGE;
-
-          dispatch(setInputUrl(imageUrl, KNOWN_LINKS.OWN)); // kicks off getSourceCredSaga
-          dispatch(
-            setScrapedData(null, null, null, [imageUrl], [], null, null),
-          );
-          dispatch(submitUpload(imageUrl, ctype));
-          setImageUploaded(true);
-
-          return;
-        }
-
-        throw new Error(keyword("unsupported_file_type"));
       } catch (error) {
         console.error("Error in submitUrl:", error.message);
         dispatch(setError(error.message));
       }
-    } else {
-      throw new Error(keyword("no_input_provided"));
     }
   };
 
