@@ -88,9 +88,11 @@ export default defineConfig({
   vite: () => ({
     plugins: [
       svgr({
-        include: "**/*.svg",
         svgrOptions: {
           icon: true,
+        },
+        esbuildOptions: {
+          loader: "jsx",
         },
       }),
     ],
