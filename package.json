@@ -29,7 +29,8 @@
     "test-cu": "rm -rf playwright/.cache && playwright test -c playwright-ct.config.js",
     "test-e2e": "playwright test",
     "test-e2e:dev": "NODE_ENV=development playwright test",
-    "test-e2e-ui": "playwright test --ui"
+    "test-e2e-ui": "playwright test --ui",
+    "test-e2e-ui:dev": "NODE_ENV=development playwright test --ui"
   },
   "keywords": [],
   "author": "",

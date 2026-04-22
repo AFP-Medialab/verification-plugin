@@ -66,14 +66,41 @@ test('Test tool forensic', async ({ page, extensionId }) => {
   await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/forensic`);
   await page.getByText("Accept").click();
 
-  await page1.getByRole('textbox', { name: 'Lien URL de l\'image' }).fill('https://www.lebigdata.fr/wp-content/uploads/2023/03/macron-pape-ia-deepfake-1050x525.jpg');
-  await page1.getByTestId('submitButtonTestIdByDefault').click();
+  await page.locator('[data-testid="forensic-input"] input').fill('https://www.lebigdata.fr/wp-content/uploads/2023/03/macron-pape-ia-deepfake-1050x525.jpg');
+  await page.getByTestId('forensic-submit').click();
 
-  // test every tabs 
-  await page1.getByRole('tab', { name: 'Traces' }).click();
-  await page1.getByRole('tab', { name: 'Deep learning' }).click();
-  await page1.getByRole('tab', { name: 'Clonage' }).click();
+  await expect (page.locator('[data-testid="forensic-results"]')).toBeVisible();
 
-  // 
-  await page1.getByRole('button', { name: 'Nouvelle image' }).click();
+  await expect (page.locator('[data-testid="forensic-result-image"]')).toBeVisible();
+  await expect (page.locator('[data-testid="forensic-results-lenses"]')).toBeVisible();
+  await expect (page.locator('[data-testid="forensic-results-filters"]')).toBeVisible();
+
+  await page.getByTestId('forensic-tab-noise').click();
+  await page.getByTestId('forensic-tab-family').click();
+  await page.getByTestId('forensic-tab-cloning').click();
+
+  await page.getByTestId('forensic-newimage-button').click();
+  await expect (page.locator('[data-testid="forensic-results"]')).toHaveCount(0);
 });
+
+test('Test tool OCR', async ({ page, context, extensionId }) => {
+  await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/ocr`);
+  await page.getByText("Accept").click();
+
+  await page.locator('[data-testid="ocr-input"] input').fill('https://www.rue89strasbourg.com/wp-content/uploads/2024/06/dsc-3582-1920x1280.jpg');
+  await page.getByTestId('ocr-submit').click();
+
+  await expect (page.locator('[data-testid="ocr-results"]')).toBeVisible();
+
+  await page.getByTestId('ocr-results-copy').click();
+  await page.getByTestId('ocr-results-translate').click();
+
+  await page.getByTestId('ocr-results-yandex').click();
+  await page.getByTestId('ocr-results-bing').click();
+  await page.getByTestId('ocr-results-google').click();
+
+  await expect.poll(async () => {
+    return context.pages().length;
+  }).toBe(4);
+});
+
