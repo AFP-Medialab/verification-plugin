@@ -130,11 +130,6 @@ function vitePluginSvgr({ svgrOptions, include = "**/*.svg?react", exclude } = {
                 { filePath, caller: { defaultPlugins: [jsx] } },
               );
 
-              // Build: return raw JSX with moduleType so Rolldown handles transformation
-              if (isBuild) {
-                  return { code: componentCode, map: null, moduleType: "jsx" };
-              }
-
               // Dev: read JSX config from resolved Vite config (set by @vitejs/plugin-react)
               const jsxOptions = resolvedConfig?.oxc?.jsx ?? { runtime: "automatic" };
               const res = await transformWithOxc(componentCode, id, { lang: "jsx", jsx: jsxOptions });
