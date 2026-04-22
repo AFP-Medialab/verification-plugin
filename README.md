@@ -72,6 +72,7 @@ by Vite.
    VITE_LOCCUS_URL=<loccus_url>
    VITE_AFP_REVERSE_SEARCH_URL=<reversesearch_url>
    VITE_SEMANTIC_SEARCH_URL=<semanticsearch_url>
+   VITE_DISINFO_DECK_SERVER=<disinfo_url>
    ARCHIVE_BACKEND=<archive_url>
    ```
 
@@ -225,6 +226,7 @@ E2E testing can be run using the following command:
 ```
 
 pnpm run test-e2e
+pnpm run test-e2e:dev (for testing in dev, because the path is not the same)
 
 ```
 
@@ -260,3 +262,11 @@ pnpm run test-e2e-ui
 ```
 
 This will open a browser with interactive testing environment which can be useful for debugging.
+
+### Generating test with codegen 
+
+You can generate test using codegen by using : 
+
+````
+node record-playwright.js
+````

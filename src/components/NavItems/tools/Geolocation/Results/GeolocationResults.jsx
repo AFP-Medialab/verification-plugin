@@ -1,4 +1,5 @@
 import React from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { useSelector } from "react-redux";
 
@@ -10,6 +11,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import { ROLES } from "@/constants/roles";
+import ErrorBoundaryFallback from "@Shared/ErrorBoundaryFallback/ErrorBoundaryFallback";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -118,27 +120,31 @@ const GeolocationResults = ({ result, urlImage }) => {
                           width: "100%",
                         }}
                       >
-                        <MapContainer
-                          center={[res.latitude, res.longitude]}
-                          zoom={13}
-                          scrollWheelZoom={false}
-                          style={{
-                            width: "100%",
-                            height: "400px",
-                            borderRadius: 10,
-                          }}
+                        <ErrorBoundary
+                          FallbackComponent={ErrorBoundaryFallback}
                         >
-                          <TileLayer
-                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                          />
-                          <Marker
-                            position={[res.latitude, res.longitude]}
-                            icon={resultIcon}
+                          <MapContainer
+                            center={[res.latitude, res.longitude]}
+                            zoom={13}
+                            scrollWheelZoom={false}
+                            style={{
+                              width: "100%",
+                              height: "400px",
+                              borderRadius: 10,
+                            }}
                           >
-                            <Popup>{keyword("geo_prediction")}</Popup>
-                          </Marker>
-                        </MapContainer>
+                            <TileLayer
+                              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            />
+                            <Marker
+                              position={[res.latitude, res.longitude]}
+                              icon={resultIcon}
+                            >
+                              <Popup>{keyword("geo_prediction")}</Popup>
+                            </Marker>
+                          </MapContainer>
+                        </ErrorBoundary>
                       </Box>
                       <Box
                         sx={{

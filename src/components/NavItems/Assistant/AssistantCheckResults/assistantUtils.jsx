@@ -176,7 +176,7 @@ export const renderDomainTitle = (
   handleClose,
 ) => {
   return (
-    <Grid container>
+    <Grid container alignItems="center">
       {/* domain or account */}
       <Grid size={handleClose != null ? { xs: 11 } : { xs: 12 }}>
         <Typography sx={{ wordWrap: "break-word", align: "start" }}>
@@ -197,13 +197,14 @@ export const renderDomainTitle = (
       </Grid>
 
       {handleClose != null ? (
-        <Grid size={{ xs: 1 }} display="flex" justifyContent="flex-end">
+        <Grid
+          size={{ xs: 1 }}
+          display="flex"
+          justifyContent="flex-end"
+          alignItems="center"
+        >
           {/* tooltip help */}
-          <Box
-            sx={{
-              pt: 0.75,
-            }}
-          >
+          <Box>
             <Tooltip
               interactive={"true"}
               leaveDelay={50}
@@ -317,16 +318,25 @@ const renderDialog = (keyword, value, trafficLightColor, sourceType) => {
       </Tooltip>
 
       {/* dialog box which appears when clicking tooltip icon above */}
-      <Dialog onClose={handleClose} maxWidth={"lg"} open={open}>
+      <Dialog
+        onClose={handleClose}
+        maxWidth={"lg"}
+        open={open}
+        sx={{ "& .MuiDialog-paper": { minWidth: "50%" } }}
+      >
         <DialogTitle>
-          <Grid container>
+          <Grid container alignItems="center">
             <Grid size={{ xs: 11 }}>
-              <Typography variant="body1" component="div">
+              <Typography
+                variant="body1"
+                component="div"
+                sx={{ display: "flex", alignItems: "center", gap: 1 }}
+              >
                 <Chip
                   label={keyword(sourceType)}
                   color={trafficLightColor}
                   size="small"
-                />{" "}
+                />
                 {keyword("source_cred_popup_header_domain")} {value.source}
               </Typography>
             </Grid>
@@ -335,14 +345,11 @@ const renderDialog = (keyword, value, trafficLightColor, sourceType) => {
               sx={{
                 display: "flex",
                 justifyContent: "flex-end",
+                alignItems: "center",
               }}
             >
               {/* tooltip help */}
-              <Box
-                sx={{
-                  pt: 0.75,
-                }}
-              >
+              <Box>
                 <Tooltip
                   interactive={"true"}
                   leaveDelay={50}

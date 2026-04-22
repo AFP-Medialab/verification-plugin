@@ -22,7 +22,6 @@ export const useGeolocate = (url, processURL, keyword) => {
   useEffect(() => {
     if (processURL && url !== "") {
       dispatch(setGeolocationLoading(true));
-
       axios
         .get(caa_localtion_base_url + "?image_url=" + url + "&use_gradcam=0")
         .then((response) => {

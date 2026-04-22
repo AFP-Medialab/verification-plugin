@@ -17,7 +17,8 @@ import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { KNOWN_LINKS } from "@/constants/tools";
 import { setStateExpanded } from "@/redux/actions/tools/assistantActions";
 
-import { KNOWN_LINK_PATTERNS, matchPattern } from "../AssistantRuleBook";
+import { matchPattern } from "../AssistantRuleBook";
+import { KNOWN_LINK_PATTERNS } from "../constants";
 
 const AssistantCheckStatus = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");

@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
@@ -21,7 +22,9 @@ import DownloadIcon from "@mui/icons-material/Download";
 import UploadIcon from "@mui/icons-material/Upload";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
-import { uploadToCollection } from "../utils/snaUtils";
+import ErrorBoundaryFallback from "@Shared/ErrorBoundaryFallback/ErrorBoundaryFallback";
+
+import { addingUrl, uploadToCollection } from "../utils/snaUtils";
 
 const EmptyTablePlaceholder = ({ keyword }) => {
   return (
@@ -81,16 +84,14 @@ const CollectionTableHeader = ({
 const CollectionActionsCell = ({
   row,
   dataSources,
-  dlAnchorEl,
-  setDlAnchorEl,
   setSelected,
   selected,
   setDataSources,
   keyword,
-  activeDownloadRow,
-  setActiveDownloadRow,
 }) => {
   const rowFileInputRef = useRef(null);
+
+  const [dlAnchorEl, setDlAnchorEl] = useState(null);
 
   const rawUploadIconButton = (row) => {
     const handleRawFileChange = (event, rowID) => {
@@ -150,13 +151,13 @@ const CollectionActionsCell = ({
 
     const handleDownload = (event, row) => {
       setDlAnchorEl(event.currentTarget);
-      setActiveDownloadRow(row);
     };
 
     const downloadTweetCSV = () => {
-      const selectedData = activeDownloadRow;
+      const selectedData = row;
       if (!selectedData) return;
       let headers = selectedData.headers.join(",");
+      console.log(headers);
       let csvData = selectedData.content
         .map((obj) =>
           selectedData.headers.map((k) =>
@@ -175,11 +176,10 @@ const CollectionActionsCell = ({
       a.download = `${selectedData.name}_export.csv`;
       a.click();
       setDlAnchorEl(null);
-      setActiveDownloadRow(null);
     };
 
     const downloadTweetsJson = () => {
-      const selectedData = activeDownloadRow;
+      const selectedData = row;
       if (!selectedData) return;
       let dl = JSON.stringify(selectedData.content);
       const blob = new Blob([dl], { type: "application/json;charset=utf-8;" });
@@ -188,11 +188,10 @@ const CollectionActionsCell = ({
       a.download = `${selectedData.name}_export.json`;
       a.click();
       setDlAnchorEl(null);
-      setActiveDownloadRow(null);
     };
 
     const downloadTweetsRaw = async () => {
-      const selectedData = activeDownloadRow;
+      const selectedData = row;
       if (!selectedData) return;
 
       try {
@@ -215,7 +214,6 @@ const CollectionActionsCell = ({
       }
 
       setDlAnchorEl(null);
-      setActiveDownloadRow(null);
     };
 
     return (
@@ -246,7 +244,6 @@ const CollectionActionsCell = ({
           open={open}
           onClose={() => {
             setDlAnchorEl(null);
-            setActiveDownloadRow(null);
           }}
           MenuListProps={{
             "aria-labelledby": "basic-button",
@@ -330,14 +327,10 @@ const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
   const {
     fileInputRef,
     dataSources,
-    dlAnchorEl,
-    setDlAnchorEl,
     setSelected: setSelectedActions,
     selected: selectedActions,
     setDataSources,
     keyword: keywordActions,
-    activeDownloadRow,
-    setActiveDownloadRow,
   } = actionsProps;
 
   const handleSelectRow = (id) => {
@@ -402,14 +395,10 @@ const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
         row={row}
         fileInputRef={fileInputRef}
         dataSources={dataSources}
-        dlAnchorEl={dlAnchorEl}
-        setDlAnchorEl={setDlAnchorEl}
         setSelected={setSelectedActions}
         selected={selectedActions}
         setDataSources={setDataSources}
         keyword={keywordActions}
-        activeDownloadRow={activeDownloadRow}
-        setActiveDownloadRow={setActiveDownloadRow}
       />
     </TableRow>
   );
@@ -422,21 +411,27 @@ const CollectionsTableBody = ({
   keyword,
 }) => {
   return (
-    <TableBody>
-      {dataSources?.length > 0 ? (
-        dataSources.map((row) => (
-          <CollectionsTableRow
-            key={"row_" + row.id}
-            row={row}
-            rowProps={rowProps}
-            actionsProps={actionsProps}
-            keyword={keyword}
-          />
-        ))
-      ) : (
-        <EmptyTablePlaceholder keyword={keyword} />
-      )}
-    </TableBody>
+    <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
+      <TableBody>
+        {dataSources?.length > 0 ? (
+          dataSources.map((row) => {
+            // we create a new object based on row, because row is freezed, and add to it a video url column
+            const enrichedRow = addingUrl(row);
+            return (
+              <CollectionsTableRow
+                key={"row_" + row.id}
+                row={enrichedRow}
+                rowProps={rowProps}
+                actionsProps={actionsProps}
+                keyword={keyword}
+              />
+            );
+          })
+        ) : (
+          <EmptyTablePlaceholder keyword={keyword} />
+        )}
+      </TableBody>
+    </ErrorBoundary>
   );
 };
 
@@ -453,8 +448,6 @@ const CollectionsTable = ({
   setDlAnchorEl,
   setDataSources,
 }) => {
-  const [activeDownloadRow, setActiveDownloadRow] = useState(null);
-
   let collectionTableHeaderProps = {
     selected,
     setSelected,
@@ -473,14 +466,10 @@ const CollectionsTable = ({
   let collectionActionsCellProps = {
     fileInputRef,
     dataSources,
-    dlAnchorEl,
-    setDlAnchorEl,
     setSelected,
     selected,
     setDataSources,
     keyword,
-    activeDownloadRow,
-    setActiveDownloadRow,
   };
 
   return (
