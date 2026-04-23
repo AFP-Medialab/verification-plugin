@@ -101,6 +101,6 @@ test('Test tool OCR', async ({ page, context, extensionId }) => {
 
   await expect.poll(async () => {
     return context.pages().length;
-  }).toBe(4);
+  }).toBe(6);
 });
 

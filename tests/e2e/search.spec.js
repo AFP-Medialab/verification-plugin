@@ -10,7 +10,7 @@
 import { test, expect } from './fixtures';
 import path from 'path';
 
-test('Test twitter search', async ({ page, extensionId }) => {
+test('Test twitter search', async ({ page, context, extensionId }) => {
     await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/twitter`);
     await page.getByText("Accept").click();
 
@@ -22,15 +22,11 @@ test('Test twitter search', async ({ page, extensionId }) => {
     await page.locator('[data-testid="twitter-search-5"] input').fill('Paris');
     await page.locator('[data-testid="twitter-search-6"] input').fill('15km'); 
 
-    await page.getByRole('dialog', { name: '* Since' })
-          .getByRole('option', { name: '1 hours', exact: true })
-          .click();
-    await page.getByRole('button', { name: 'OK' }).click();
+    await page.getByLabel(`* Since`).fill('2023-10-25 10:00');
+    await page.keyboard.press('Enter');
 
-    await page.getByRole('dialog', { name: '* Until'  })
-          .getByRole('option', { name: '2 hours', exact: true })
-          .click();
-    await page.getByRole('button', { name: 'OK' }).click();
+    await page.getByLabel(`* Until`).fill('2023-10-26 15:30');
+    await page.keyboard.press('Enter');
     
     await page.getByTestId('twitter-radio-gmt').click();
     await page.getByTestId('twitter-radio-local').click();
@@ -39,5 +35,5 @@ test('Test twitter search', async ({ page, extensionId }) => {
 
     await expect.poll(async () => {
         return context.pages().length;
-    }).toBe(1);
+    }).toBe(3);
 });
