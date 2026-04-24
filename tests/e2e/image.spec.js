@@ -104,3 +104,448 @@ test('Test tool OCR', async ({ page, context, extensionId }) => {
   }).toBe(6);
 });
 
+test('Test tool CheckGif', async({page, authenticatedBetaTesterExtensionId}) => {
+  // mocking main route (TODO : put this json in test assets folder, in a dedicated file to mocked api response)
+  await page.route('**/ipol/homographic', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        "key": "8A4ADC5A2BBB622AAF7FFC8068CEDD42",
+        "algo_info": {
+            "error_message": " ",
+            "run_time": "1.006547212600708"
+        },
+        "work_url": "/api/core/shared_folder/run/77777000125/8A4ADC5A2BBB622AAF7FFC8068CEDD42/",
+        "messages": [
+            "Input #1 has been preprocessed {#channels: 4 --> 3}."
+        ],
+        "results": {
+            "output0": "/ipol/homographic/result/8A4ADC5A2BBB622AAF7FFC8068CEDD42/output_0.jpg",
+            "output1": "/ipol/homographic/result/8A4ADC5A2BBB622AAF7FFC8068CEDD42/output_1.jpg",
+            "png0": "/ipol/homographic/result/8A4ADC5A2BBB622AAF7FFC8068CEDD42/output_0.png",
+            "png1": "/ipol/homographic/result/8A4ADC5A2BBB622AAF7FFC8068CEDD42/output_1.png",
+            "pano": "/ipol/homographic/result/8A4ADC5A2BBB622AAF7FFC8068CEDD42/pano.jpg",
+            "stdout": "/ipol/homographic/result/8A4ADC5A2BBB622AAF7FFC8068CEDD42/stdout.txt"
+        }
+      })
+    })
+  });
+
+  // mocking download gif adn video api 
+  const base64Data = "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"; // fake gif 
+  const buffer = Buffer.from(base64Data, 'base64');
+  await page.route('**/animatedbase64', route => {
+    route.fulfill({
+      status: 200,
+      contentType: 'image/gif',
+      headers: {
+        'Content-Disposition': 'attachment; filename="mocked.gif"',
+        'Content-Length': buffer.length.toString()
+      },
+      body: buffer
+    });
+  });
+
+  await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/gif`);
+
+  const filePath1 = path.resolve(__dirname, '../../tests-assets/test-checkgif-false.jpeg');
+  const filePath2 = path.resolve(__dirname, '../../tests-assets/test-checkgif-true.png');
+
+  await page.getByTestId("gif-tab-localfile").click();
+
+  await page.getByTestId("gif-inputfile-1").setInputFiles(filePath1);
+  await page.getByTestId("gif-inputfile-2").setInputFiles(filePath2);
+
+  await page.getByTestId("gif-submit").click();
+
+  await expect (page.getByTestId("gif-results")).toBeVisible();
+  await expect (page.getByTestId("gif-image-result-1")).toBeVisible();
+  await expect (page.getByTestId("gif-image-result-1")).toBeVisible();
+
+  const [downloadGif] = await Promise.all([
+    page.waitForEvent('download'),
+    page.getByTestId("gif-download-gif").click(),
+  ]);
+
+  const [downloadVideo] = await Promise.all([
+    page.waitForEvent('download'),
+    page.getByTestId("gif-download-video").click(),
+  ]);
+
+  await page.getByTestId("gif-result-toggle-annotation").click();
+
+  const slider = page.getByTestId("gif-slider");
+  await slider.click();
+  await page.keyboard.press('ArrowRight');
+
+  await page.getByTestId("gif-new-gif").click();
+  await expect (page.getByTestId("gif-results")).toHaveCount(0);
+});
+
+test('Test tool Synthetic Images', async({page, authenticatedBetaTesterExtensionId}) => {
+  await page.route('**/deepfake/images/**', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        "id": "c35dceeefcd34246bf7814622a486f75",
+        "status": "COMPLETED",
+        "info": {
+            "progan_r50_grip": {
+                "status": "COMPLETED",
+                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
+                "completed_at": "2026-04-24T14:28:52.908191+00:00",
+                "cache_hit": true
+            },
+            "ldm_r50_grip": {
+                "status": "COMPLETED",
+                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
+                "completed_at": "2026-04-24T14:28:52.911264+00:00",
+                "cache_hit": true
+            },
+            "gan_r50_mever": {
+                "status": "COMPLETED",
+                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
+                "completed_at": "2026-04-24T14:28:52.921143+00:00",
+                "cache_hit": true
+            },
+            "ldm_r50_mever": {
+                "status": "COMPLETED",
+                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
+                "completed_at": "2026-04-24T14:28:52.923477+00:00",
+                "cache_hit": true
+            },
+            "gigagan-webp_r50_grip": {
+                "status": "COMPLETED",
+                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
+                "completed_at": "2026-04-24T14:28:52.918821+00:00",
+                "cache_hit": true
+            },
+            "ldm-webp_r50_grip": {
+                "status": "COMPLETED",
+                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
+                "completed_at": "2026-04-24T14:28:52.915972+00:00",
+                "cache_hit": true
+            },
+            "progan-webp_r50_grip": {
+                "status": "COMPLETED",
+                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
+                "completed_at": "2026-04-24T14:28:52.913668+00:00",
+                "cache_hit": true
+            },
+            "itw_rine_mever": {
+                "status": "COMPLETED",
+                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
+                "completed_at": "2026-04-24T14:28:52.925999+00:00",
+                "cache_hit": true
+            },
+            "itw_spai_mever": {
+                "status": "COMPLETED",
+                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
+                "completed_at": "2026-04-24T14:28:52.928491+00:00",
+                "cache_hit": true
+            },
+            "sd21_bfree-dino2reg4_grip": {
+                "status": "COMPLETED",
+                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
+                "completed_at": "2026-04-24T14:28:52.930806+00:00",
+                "cache_hit": true
+            },
+            "multi_bfree-dino2reg4_grip": {
+                "status": "COMPLETED",
+                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
+                "completed_at": "2026-04-24T14:28:52.933411+00:00",
+                "cache_hit": true
+            },
+            "sd21_bfree-siglip_grip": {
+                "status": "COMPLETED",
+                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
+                "completed_at": "2026-04-24T14:28:52.935779+00:00",
+                "cache_hit": true
+            }
+        },
+        "progan_r50_grip_report": {
+            "version": "1",
+            "completed": true,
+            "prediction": 0.007072636857628822,
+            "label": "WEAK_EVIDENCE"
+        },
+        "ldm_r50_grip_report": {
+            "version": "1",
+            "completed": true,
+            "prediction": 0.9982118606567383,
+            "label": "VERY_STRONG_EVIDENCE"
+        },
+        "gan_r50_mever_report": {
+            "version": "1",
+            "completed": true,
+            "prediction": 0.1568605899810791
+        },
+        "ldm_r50_mever_report": {
+            "version": "1",
+            "completed": true,
+            "prediction": 0.05429184436798096
+        },
+        "gigagan-webp_r50_grip_report": {
+            "version": "1",
+            "completed": true,
+            "prediction": 0.9545763731002808,
+            "label": "VERY_STRONG_EVIDENCE"
+        },
+        "ldm-webp_r50_grip_report": {
+            "version": "1",
+            "completed": true,
+            "prediction": 0.9999982118606567,
+            "label": "VERY_STRONG_EVIDENCE"
+        },
+        "progan-webp_r50_grip_report": {
+            "version": "1",
+            "completed": true,
+            "prediction": 0.0008250739774666727,
+            "label": "WEAK_EVIDENCE"
+        },
+        "itw_rine_mever_report": {
+            "version": "1",
+            "completed": true,
+            "prediction": 0.17413431406021118,
+            "coordinates": [
+                [
+                    [
+                        672,
+                        224
+                    ],
+                    [
+                        896,
+                        224
+                    ],
+                    [
+                        672,
+                        448
+                    ],
+                    [
+                        896,
+                        448
+                    ]
+                ],
+                [
+                    [
+                        672,
+                        448
+                    ],
+                    [
+                        896,
+                        448
+                    ],
+                    [
+                        672,
+                        672
+                    ],
+                    [
+                        896,
+                        672
+                    ]
+                ],
+                [
+                    [
+                        0,
+                        448
+                    ],
+                    [
+                        224,
+                        448
+                    ],
+                    [
+                        0,
+                        672
+                    ],
+                    [
+                        224,
+                        672
+                    ]
+                ],
+                [
+                    [
+                        0,
+                        224
+                    ],
+                    [
+                        224,
+                        224
+                    ],
+                    [
+                        0,
+                        448
+                    ],
+                    [
+                        224,
+                        448
+                    ]
+                ],
+                [
+                    [
+                        0,
+                        0
+                    ],
+                    [
+                        224,
+                        0
+                    ],
+                    [
+                        0,
+                        224
+                    ],
+                    [
+                        224,
+                        224
+                    ]
+                ],
+                [
+                    [
+                        672,
+                        0
+                    ],
+                    [
+                        896,
+                        0
+                    ],
+                    [
+                        672,
+                        224
+                    ],
+                    [
+                        896,
+                        224
+                    ]
+                ],
+                [
+                    [
+                        896,
+                        448
+                    ],
+                    [
+                        1120,
+                        448
+                    ],
+                    [
+                        896,
+                        672
+                    ],
+                    [
+                        1120,
+                        672
+                    ]
+                ],
+                [
+                    [
+                        1120,
+                        448
+                    ],
+                    [
+                        1344,
+                        448
+                    ],
+                    [
+                        1120,
+                        672
+                    ],
+                    [
+                        1344,
+                        672
+                    ]
+                ],
+                [
+                    [
+                        1184,
+                        448
+                    ],
+                    [
+                        1408,
+                        448
+                    ],
+                    [
+                        1184,
+                        672
+                    ],
+                    [
+                        1408,
+                        672
+                    ]
+                ],
+                [
+                    [
+                        896,
+                        224
+                    ],
+                    [
+                        1120,
+                        224
+                    ],
+                    [
+                        896,
+                        448
+                    ],
+                    [
+                        1120,
+                        448
+                    ]
+                ]
+            ],
+            "probabilities": [
+                0.0778307095170021,
+                0.07015969604253769,
+                0.3256422281265259,
+                0.30644312500953674,
+                0.14475016295909882,
+                0.5747804641723633,
+                0.04003025218844414,
+                0.2013256549835205,
+                0.08151558041572571,
+                0.37457725405693054
+            ],
+            "label": "WEAK_EVIDENCE"
+        },
+        "itw_spai_mever_report": {
+            "version": "1",
+            "completed": true,
+            "prediction": 0.0005302779609337449,
+            "label": "WEAK_EVIDENCE"
+        },
+        "sd21_bfree-dino2reg4_grip_report": {
+            "version": "1",
+            "completed": true,
+            "prediction": 0.9847395420074463,
+            "label": "STRONG_EVIDENCE"
+        },
+        "multi_bfree-dino2reg4_grip_report": {
+            "version": "1",
+            "completed": true,
+            "prediction": 0.994277834892273,
+            "label": "VERY_STRONG_EVIDENCE"
+        },
+        "sd21_bfree-siglip_grip_report": {
+            "version": "1",
+            "completed": true,
+            "prediction": 0.5441785454750061,
+            "label": "MODERATE_EVIDENCE"
+        }
+      })
+    })
+  });
+
+
+  await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/syntheticImageDetection`);
+
+  await page.locator('[data-testid="synhtetic-images-input"] input').fill('https://images.bfmtv.com/4SA6EYvJyYJn_JL2hhM4czEpRKo=/0x0:0x0/1200x0/images/Image-du-pape-Francois-en-doudoune-generee-par-l-IA-Midjourney-1606935.jpg');
+  await page.getByTestId('synhtetic-images-submit').click();
+
+  await expect (page.getByTestId("synthetic-images-results")).toBeVisible();
+  await expect (page.getByTestId("synthetic-images-results-image")).toBeVisible();
+  await expect (page.getByTestId("synthetic-images-gauge")).toBeVisible();
+
+  await page.getByTestId('synthetic-images-accordion').click();
+  await expect (page.getByTestId("synthetic-images-accordion-details")).toBeVisible();
+
+  await page.getByTestId('synthetic-images-close').click();
+  await expect (page.getByTestId("synthetic-images-results")).toHaveCount(0);
+})
