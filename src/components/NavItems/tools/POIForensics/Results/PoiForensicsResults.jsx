@@ -96,13 +96,22 @@ const PoiForensicsResults = (props) => {
         <CardHeader
           title={keyword("poi_forensics_result_title")}
           action={
-            <IconButton aria-label="close" onClick={handleClose} sx={{ p: 1 }}>
+            <IconButton
+              aria-label="close"
+              onClick={handleClose}
+              sx={{ p: 1 }}
+              data-testid="poiforensic-close"
+            >
               <CloseIcon />
             </IconButton>
           }
         />
         <CardContent>
-          <Stack direction="column" spacing={4}>
+          <Stack
+            direction="column"
+            spacing={4}
+            data-testid="poiforensic-results"
+          >
             <Grid
               container
               direction="row"
@@ -145,6 +154,7 @@ const PoiForensicsResults = (props) => {
                           }}
                           controlsList="nofullscreen nodownload"
                           disablePictureInPicture={true}
+                          data-testid="poiforensic-video"
                         >
                           <source
                             src={results.poi_forensics_report.video_path}
@@ -196,6 +206,7 @@ const PoiForensicsResults = (props) => {
                             height={300}
                             grid={{ vertical: true, horizontal: true }}
                             onAxisClick={handleChartClick}
+                            data-testid="poiforensic-chart"
                           >
                             <ChartsReferenceLine
                               y={1}

@@ -188,6 +188,8 @@ const PoiForensics = () => {
                 preprocessLocalFile={preprocessVideo}
                 isParentLoading={isLoading}
                 handleClearUrl={resetState}
+                urlInputTestId="poiforensic-input"
+                submitButtonTestId="poiforensic-submit"
               />
             </form>
             <Box sx={{ m: 2 }}>

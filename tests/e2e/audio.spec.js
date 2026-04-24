@@ -6,7 +6,7 @@
 import { test, expect } from './fixtures';
 import path from 'path';
 
-test(`Test tool analysis audio`, async ({ page, authenticatedExtensionId }) => {
+test(`Test tool analysis audio`, async ({ page, authenticatedBetaTesterExtensionId }) => {
     // mocking upload route 
     await page.route('**/vera/loccus/upload', async (route) => {
         await route.fulfill({
@@ -80,7 +80,7 @@ test(`Test tool analysis audio`, async ({ page, authenticatedExtensionId }) => {
         });
     });
 
-    await page.goto(`chrome-extension://${authenticatedExtensionId}/popup.html#/app/tools/hiya`);
+    await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/hiya`);
 
     const filePath = path.resolve(__dirname, '../../tests-assets/test-hiya.mp3');
     
