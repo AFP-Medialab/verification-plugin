@@ -293,6 +293,8 @@ function* handleDbkfTextCall(action) {
   try {
     const text = yield select((state) => state.assistant.urlText);
     if (text) {
+      yield put(setDbkfTextMatchDetails(null, true, false, false));
+
       let textToUse = text.length > 100 ? text.substring(0, 100) : text;
       /*
         let textRegex = /[\W]$/

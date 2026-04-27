@@ -56,8 +56,8 @@ const defaultState = {
 
   subjectivityResult: null,
   subjectivityLoading: false,
-  subjectivityTextDone: false,
-  subjectivityTextFail: false,
+  subjectivityDone: false,
+  subjectivityFail: false,
 
   prevFactChecksResult: null,
   prevFactChecksLoading: false,
@@ -184,8 +184,8 @@ const assistantReducer = (state = defaultState, action) => {
 
         subjectivityResult: null,
         subjectivityLoading: false,
-        subjectivityTextDone: false,
-        subjectivityTextFail: false,
+        subjectivityDone: false,
+        subjectivityFail: false,
 
         prevFactChecksResult: null,
         prevFactChecksLoading: false,

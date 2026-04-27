@@ -91,13 +91,15 @@ const AssistantCommentResult = ({ collectedComments }) => {
     fetch("/caaVerificationKeywords.tsv")
       .then((response) => response.text())
       .then((text) => {
-        let lines = text.split("\n");
+        const lines = text.split("\n");
         // skip first line with languages header
+        const caaVerificationKeywords = [];
         for (let i = 1; i < lines.length; i++) {
-          let words = lines[i].split("\t");
-          words.forEach((word) => caaVerificationKeywordsTsv.push(word));
+          lines[i]
+            .split("\t")
+            .forEach((word) => caaVerificationKeywords.push(word));
         }
-        setCaaVerificationKeywordsTsv(caaVerificationKeywordsTsv);
+        setCaaVerificationKeywordsTsv(caaVerificationKeywords);
       })
       .catch((err) => {
         console.error(err);
