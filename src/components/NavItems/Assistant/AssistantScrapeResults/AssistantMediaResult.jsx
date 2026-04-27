@@ -33,10 +33,10 @@ import {
   TransHtmlDoubleLineBreak,
   TransSupportedToolsLink,
 } from "../components";
+import { scrollToElement } from "../utils/index";
 import AssistantImageResult from "./AssistantImageResult";
 import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
 import AssistantVideoResult from "./AssistantVideoResult";
-import { scrollToElement } from "./assistantUtils";
 
 const AssistantMediaResult = ({ title = null }) => {
   const classes = useMyStyles();
