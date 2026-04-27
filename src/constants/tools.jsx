@@ -227,6 +227,7 @@ export const KNOWN_LINKS = {
   OWN: "own",
   VK: "vk",
   BLUESKY: "bsky",
+  BBC: "bbc",
   MISC: "general",
 };
 
@@ -472,6 +473,7 @@ export const videoDeepfake = new Tool(
       // KNOWN_LINKS.VIMEO, // assistant works; deepfakevideo has no face detected, video doesn't load properly
       // KNOWN_LINKS.MASTODON, // assistant fails to load video; deepfakevideo has no face detected, video doesn't load properly
       // KNOWN_LINKS.VK, // assistant fails to load; deepfakevideo works
+      // KNOWN_LINKS.BBC,
       KNOWN_LINKS.MISC,
       KNOWN_LINKS.OWN,
     ],
@@ -528,7 +530,7 @@ export const imageMagnifier = new Tool(
   <Magnifier />,
   <Footer type={FOOTER_TYPES.AFP} />,
   {
-    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    processLinksAccepted: [KNOWN_LINKS.BBC, KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     exceptions: [],
     useInputUrl: false,
     text: "magnifier_text",
@@ -547,7 +549,7 @@ export const imageMetadata = new Tool(
   <Metadata />,
   <Footer type={FOOTER_TYPES.AFP} />,
   {
-    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    processLinksAccepted: [KNOWN_LINKS.BBC, KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     exceptions: [
       /(pbs.twimg.com)|(youtu.be|youtube)|(instagram)|(fbcdn.net)|(vimeo)|(snapchat)|(tiktok.com)/,
     ],
@@ -568,7 +570,7 @@ export const imageForensic = new Tool(
   <Forensic />,
   <Footer type={FOOTER_TYPES.ITI_BORELLI_AFP} />,
   {
-    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    processLinksAccepted: [KNOWN_LINKS.BBC, KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     exceptions: [],
     useInputUrl: false,
     text: "forensic_text",
@@ -587,7 +589,7 @@ export const imageOcr = new Tool(
   <OCR />,
   <Footer type={FOOTER_TYPES.USFD} />,
   {
-    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    processLinksAccepted: [KNOWN_LINKS.BBC, KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     exceptions: [],
     useInputUrl: false,
     text: "ocr_text",
@@ -606,7 +608,7 @@ export const imageGif = new Tool(
   <CheckGif />,
   <Footer type={FOOTER_TYPES.BORELLI_AFP} />,
   {
-    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    processLinksAccepted: [KNOWN_LINKS.BBC, KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     exceptions: [],
     useInputUrl: false,
     text: "gif_text",
@@ -625,7 +627,7 @@ export const imageSyntheticDetection = new Tool(
   <SyntheticImageDetection />,
   <Footer type={FOOTER_TYPES.ITI_UNINA} />,
   {
-    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    processLinksAccepted: [KNOWN_LINKS.BBC, KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     exceptions: [],
     useInputUrl: false,
     text: "synthetic_image_detection_text",
@@ -646,7 +648,7 @@ export const imageGeolocation = new Tool(
   <Geolocation />,
   <Footer type={FOOTER_TYPES.ITI} />,
   {
-    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    processLinksAccepted: [KNOWN_LINKS.BBC, KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     exceptions: [],
     useInputUrl: false,
     text: "geolocation_text",

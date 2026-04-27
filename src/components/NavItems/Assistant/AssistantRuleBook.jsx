@@ -66,6 +66,7 @@ const downloadActions = [
         KNOWN_LINKS.LIVELEAK,
         KNOWN_LINKS.DAILYMOTION,
         KNOWN_LINKS.BLUESKY,
+        KNOWN_LINKS.BBC,
       ],
       exceptions: [],
       useInputUrl: false,

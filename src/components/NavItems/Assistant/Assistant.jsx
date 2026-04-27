@@ -182,7 +182,7 @@ const Assistant = () => {
           throw new Error(keyword("unable_to_determine_file_type"));
         }
 
-        // set ImgaeVideoSelected for user media upload
+        // set ImageVideoSelected for user media upload
         dispatch(setImageVideoSelected(true));
         // set single media present for display
         dispatch(setSingleMediaPresent(true));
