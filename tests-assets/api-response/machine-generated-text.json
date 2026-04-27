@@ -1,0 +1,36 @@
+{
+    "pred": "machine",
+    "score": 0.5661966167720018,
+    "chunks": [
+        {
+            "startchar": 0,
+            "endchar": 129,
+            "score": 0.934876561164856
+        },
+        {
+            "startchar": 130,
+            "endchar": 221,
+            "score": 0.9220463633537292
+        },
+        {
+            "startchar": 222,
+            "endchar": 308,
+            "score": 5.033281114366319e-06
+        },
+        {
+            "startchar": 309,
+            "endchar": 438,
+            "score": 0.4823404881689283
+        },
+        {
+            "startchar": 439,
+            "endchar": 641,
+            "score": 0.04903207222620646
+        },
+        {
+            "startchar": 642,
+            "endchar": 837,
+            "score": 0.98954176902771
+        }
+    ]
+}

@@ -9,6 +9,8 @@
  */
 import { test, expect } from './fixtures';
 import path from 'path';
+import fs from 'fs/promises';
+import mockedMGTresponse from '../../tests-assets/api-response/machine-generated-text.json'
 
 test('Test twitter search', async ({ page, context, extensionId }) => {
     await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/twitter`);
@@ -37,3 +39,26 @@ test('Test twitter search', async ({ page, context, extensionId }) => {
         return context.pages().length;
     }).toBe(3);
 });
+
+test('Test Machine generated text search', async ({ page, authenticatedBetaTesterExtensionId }) => {
+    await page.route('**/kinit/mgt/detection', async(route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(mockedMGTresponse)
+        })
+    })
+
+    await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/mgt`);
+
+    const filePath = path.resolve(__dirname, '../../tests-assets/mgt-input.txt');
+    const fileContent = await fs.readFile(filePath, 'utf-8');
+    await page.locator('[data-testid="mgt-input"] textarea:not([aria-hidden])').fill(fileContent);
+
+    await page.getByTestId('mgt-submit').click();
+
+    await expect (page.getByTestId("mgt-results")).toBeVisible();
+    await expect (page.getByTestId("mgt-results-gauge")).toBeVisible();
+
+    await expect (page.getByTestId("mgt-results-highlight-text")).toBeVisible();
+})

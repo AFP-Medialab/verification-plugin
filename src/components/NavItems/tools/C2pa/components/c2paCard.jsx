@@ -98,7 +98,7 @@ const C2PaCard = ({
   );
 
   return (
-    <Box>
+    <Box data-testid="c2pa-resutls-content">
       <Card p={1} variant="outlined">
         <CardContent>
           {!manifestData ? (

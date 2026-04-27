@@ -9,6 +9,8 @@
  */
 import { test, expect } from './fixtures';
 import path from 'path';
+import mockedSyntheticImageResponse from '../../tests-assets/api-response/syntheticimages-response.json'
+import mockedGeolocationResponse from '../../tests-assets/api-response/geolocation-response.json'
 
 test('Test tool magnifier', async ({ page, context, extensionId }) => {
     // Navigate to the demo page
@@ -184,368 +186,67 @@ test('Test tool CheckGif', async({page, authenticatedBetaTesterExtensionId}) => 
 });
 
 test('Test tool Synthetic Images', async({page, authenticatedBetaTesterExtensionId}) => {
-  await page.route('**/deepfake/images/**', async (route) => {
-    await route.fulfill({
-      status: 200,
-      contentType: 'application/json',
-      body: JSON.stringify({
-        "id": "c35dceeefcd34246bf7814622a486f75",
-        "status": "COMPLETED",
-        "info": {
-            "progan_r50_grip": {
-                "status": "COMPLETED",
-                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
-                "completed_at": "2026-04-24T14:28:52.908191+00:00",
-                "cache_hit": true
-            },
-            "ldm_r50_grip": {
-                "status": "COMPLETED",
-                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
-                "completed_at": "2026-04-24T14:28:52.911264+00:00",
-                "cache_hit": true
-            },
-            "gan_r50_mever": {
-                "status": "COMPLETED",
-                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
-                "completed_at": "2026-04-24T14:28:52.921143+00:00",
-                "cache_hit": true
-            },
-            "ldm_r50_mever": {
-                "status": "COMPLETED",
-                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
-                "completed_at": "2026-04-24T14:28:52.923477+00:00",
-                "cache_hit": true
-            },
-            "gigagan-webp_r50_grip": {
-                "status": "COMPLETED",
-                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
-                "completed_at": "2026-04-24T14:28:52.918821+00:00",
-                "cache_hit": true
-            },
-            "ldm-webp_r50_grip": {
-                "status": "COMPLETED",
-                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
-                "completed_at": "2026-04-24T14:28:52.915972+00:00",
-                "cache_hit": true
-            },
-            "progan-webp_r50_grip": {
-                "status": "COMPLETED",
-                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
-                "completed_at": "2026-04-24T14:28:52.913668+00:00",
-                "cache_hit": true
-            },
-            "itw_rine_mever": {
-                "status": "COMPLETED",
-                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
-                "completed_at": "2026-04-24T14:28:52.925999+00:00",
-                "cache_hit": true
-            },
-            "itw_spai_mever": {
-                "status": "COMPLETED",
-                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
-                "completed_at": "2026-04-24T14:28:52.928491+00:00",
-                "cache_hit": true
-            },
-            "sd21_bfree-dino2reg4_grip": {
-                "status": "COMPLETED",
-                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
-                "completed_at": "2026-04-24T14:28:52.930806+00:00",
-                "cache_hit": true
-            },
-            "multi_bfree-dino2reg4_grip": {
-                "status": "COMPLETED",
-                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
-                "completed_at": "2026-04-24T14:28:52.933411+00:00",
-                "cache_hit": true
-            },
-            "sd21_bfree-siglip_grip": {
-                "status": "COMPLETED",
-                "submitted_at": "2026-04-24T14:28:52.844546+00:00",
-                "completed_at": "2026-04-24T14:28:52.935779+00:00",
-                "cache_hit": true
-            }
-        },
-        "progan_r50_grip_report": {
-            "version": "1",
-            "completed": true,
-            "prediction": 0.007072636857628822,
-            "label": "WEAK_EVIDENCE"
-        },
-        "ldm_r50_grip_report": {
-            "version": "1",
-            "completed": true,
-            "prediction": 0.9982118606567383,
-            "label": "VERY_STRONG_EVIDENCE"
-        },
-        "gan_r50_mever_report": {
-            "version": "1",
-            "completed": true,
-            "prediction": 0.1568605899810791
-        },
-        "ldm_r50_mever_report": {
-            "version": "1",
-            "completed": true,
-            "prediction": 0.05429184436798096
-        },
-        "gigagan-webp_r50_grip_report": {
-            "version": "1",
-            "completed": true,
-            "prediction": 0.9545763731002808,
-            "label": "VERY_STRONG_EVIDENCE"
-        },
-        "ldm-webp_r50_grip_report": {
-            "version": "1",
-            "completed": true,
-            "prediction": 0.9999982118606567,
-            "label": "VERY_STRONG_EVIDENCE"
-        },
-        "progan-webp_r50_grip_report": {
-            "version": "1",
-            "completed": true,
-            "prediction": 0.0008250739774666727,
-            "label": "WEAK_EVIDENCE"
-        },
-        "itw_rine_mever_report": {
-            "version": "1",
-            "completed": true,
-            "prediction": 0.17413431406021118,
-            "coordinates": [
-                [
-                    [
-                        672,
-                        224
-                    ],
-                    [
-                        896,
-                        224
-                    ],
-                    [
-                        672,
-                        448
-                    ],
-                    [
-                        896,
-                        448
-                    ]
-                ],
-                [
-                    [
-                        672,
-                        448
-                    ],
-                    [
-                        896,
-                        448
-                    ],
-                    [
-                        672,
-                        672
-                    ],
-                    [
-                        896,
-                        672
-                    ]
-                ],
-                [
-                    [
-                        0,
-                        448
-                    ],
-                    [
-                        224,
-                        448
-                    ],
-                    [
-                        0,
-                        672
-                    ],
-                    [
-                        224,
-                        672
-                    ]
-                ],
-                [
-                    [
-                        0,
-                        224
-                    ],
-                    [
-                        224,
-                        224
-                    ],
-                    [
-                        0,
-                        448
-                    ],
-                    [
-                        224,
-                        448
-                    ]
-                ],
-                [
-                    [
-                        0,
-                        0
-                    ],
-                    [
-                        224,
-                        0
-                    ],
-                    [
-                        0,
-                        224
-                    ],
-                    [
-                        224,
-                        224
-                    ]
-                ],
-                [
-                    [
-                        672,
-                        0
-                    ],
-                    [
-                        896,
-                        0
-                    ],
-                    [
-                        672,
-                        224
-                    ],
-                    [
-                        896,
-                        224
-                    ]
-                ],
-                [
-                    [
-                        896,
-                        448
-                    ],
-                    [
-                        1120,
-                        448
-                    ],
-                    [
-                        896,
-                        672
-                    ],
-                    [
-                        1120,
-                        672
-                    ]
-                ],
-                [
-                    [
-                        1120,
-                        448
-                    ],
-                    [
-                        1344,
-                        448
-                    ],
-                    [
-                        1120,
-                        672
-                    ],
-                    [
-                        1344,
-                        672
-                    ]
-                ],
-                [
-                    [
-                        1184,
-                        448
-                    ],
-                    [
-                        1408,
-                        448
-                    ],
-                    [
-                        1184,
-                        672
-                    ],
-                    [
-                        1408,
-                        672
-                    ]
-                ],
-                [
-                    [
-                        896,
-                        224
-                    ],
-                    [
-                        1120,
-                        224
-                    ],
-                    [
-                        896,
-                        448
-                    ],
-                    [
-                        1120,
-                        448
-                    ]
-                ]
-            ],
-            "probabilities": [
-                0.0778307095170021,
-                0.07015969604253769,
-                0.3256422281265259,
-                0.30644312500953674,
-                0.14475016295909882,
-                0.5747804641723633,
-                0.04003025218844414,
-                0.2013256549835205,
-                0.08151558041572571,
-                0.37457725405693054
-            ],
-            "label": "WEAK_EVIDENCE"
-        },
-        "itw_spai_mever_report": {
-            "version": "1",
-            "completed": true,
-            "prediction": 0.0005302779609337449,
-            "label": "WEAK_EVIDENCE"
-        },
-        "sd21_bfree-dino2reg4_grip_report": {
-            "version": "1",
-            "completed": true,
-            "prediction": 0.9847395420074463,
-            "label": "STRONG_EVIDENCE"
-        },
-        "multi_bfree-dino2reg4_grip_report": {
-            "version": "1",
-            "completed": true,
-            "prediction": 0.994277834892273,
-            "label": "VERY_STRONG_EVIDENCE"
-        },
-        "sd21_bfree-siglip_grip_report": {
-            "version": "1",
-            "completed": true,
-            "prediction": 0.5441785454750061,
-            "label": "MODERATE_EVIDENCE"
-        }
-      })
+    await page.route('**/deepfake/images/**', async (route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(mockedSyntheticImageResponse)
+        })
+    });
+
+    await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/syntheticImageDetection`);
+
+    await page.locator('[data-testid="synhtetic-images-input"] input').fill('testurl');
+    await page.getByTestId('synhtetic-images-submit').click();
+
+    await expect (page.getByTestId("synthetic-images-results")).toBeVisible();
+    await expect (page.getByTestId("synthetic-images-results-image")).toBeVisible();
+    await expect (page.getByTestId("synthetic-images-gauge")).toBeVisible();
+
+    await page.getByTestId('synthetic-images-accordion').click();
+    await expect (page.getByTestId("synthetic-images-accordion-details")).toBeVisible();
+
+    await page.getByTestId('synthetic-images-close').click();
+    await expect (page.getByTestId("synthetic-images-results")).toHaveCount(0);
+})
+
+test('Test tool geolocalisation', async ({page, authenticatedBetaTesterExtensionId, context}) => {
+    await page.route('**/geolocate?image_url=**', async(route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(mockedGeolocationResponse)
+        })
     })
-  });
 
+    await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/geolocation`);
 
-  await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/syntheticImageDetection`);
+    await page.locator('[data-testid="geolocation-input"] input').fill('testurl');
+    await page.getByTestId('geolocation-submit').click();
 
-  await page.locator('[data-testid="synhtetic-images-input"] input').fill('https://images.bfmtv.com/4SA6EYvJyYJn_JL2hhM4czEpRKo=/0x0:0x0/1200x0/images/Image-du-pape-Francois-en-doudoune-generee-par-l-IA-Midjourney-1606935.jpg');
-  await page.getByTestId('synhtetic-images-submit').click();
+    await expect (page.getByTestId("geolocation-results")).toBeVisible();
+    await expect (page.getByTestId("geolocation-results-image")).toBeVisible();
+    await expect (page.getByTestId("geolocation-results-map")).toBeVisible();
 
-  await expect (page.getByTestId("synthetic-images-results")).toBeVisible();
-  await expect (page.getByTestId("synthetic-images-results-image")).toBeVisible();
-  await expect (page.getByTestId("synthetic-images-gauge")).toBeVisible();
+    await page.getByTestId('geolocation-results-button-to-gmaps').click();
+    
+    await expect.poll(async () => {
+        return context.pages().length;
+    }).toBe(2);
+})
 
-  await page.getByTestId('synthetic-images-accordion').click();
-  await expect (page.getByTestId("synthetic-images-accordion-details")).toBeVisible();
+// TODO : manage to mock the api for afp reverse search (api response for this available in tests assets)
+test('Test tool C2PA', async ({page, authenticatedExtraFeaturesExtensionId}) => {
+    await page.goto(`chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/tools/c2pa`);
 
-  await page.getByTestId('synthetic-images-close').click();
-  await expect (page.getByTestId("synthetic-images-results")).toHaveCount(0);
+    const filePath = path.resolve(__dirname, '../../tests-assets/test-c2pa.jpg');
+    await page.locator('input[type="file"]').setInputFiles(filePath);
+
+    await page.getByTestId('c2pa-reversesearch-toggle').click();
+    
+    await page.getByTestId('c2pa-submit').click();
+
+    await expect (page.getByTestId("c2pa-results")).toBeVisible();
+    await expect (page.getByTestId("c2pa-results-source")).toBeVisible();
+    await expect (page.getByTestId("c2pa-resutls-content")).toBeVisible();
 })

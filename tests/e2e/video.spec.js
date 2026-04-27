@@ -7,6 +7,9 @@
  */
 import { test, expect } from './fixtures';
 import path from 'path';
+import mockedKeyframesResponse from '../../tests-assets/api-response/keyframes-response.json'
+import mockedDeepfakeResponse from '../../tests-assets/api-response/deepfake-response.json'
+import mockedPoiForensicResponse from '../../tests-assets/api-response/poiforensic-response.json'
 
 test(`Test tool analysis video`, async ({ page, extensionId }) => {
   await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/analysis`);
@@ -27,38 +30,46 @@ test(`Test tool analysis video`, async ({ page, extensionId }) => {
 
 // test generated with codegen
 test('Test tool keyframes', async ({ page, extensionId }) => {
-  await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/keyframes`);
-  // Accept local storage usage
-  await page.getByText("Accept").click();
+    await page.route('**/vera/public/kse_video_analysis', async (route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(mockedKeyframesResponse),
+        });
+    });
 
-  await page.locator('[data-testid="keyframes-input"] input').fill('https://www.youtube.com/watch?v=QQFgQ1uBQtk');
+    await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/keyframes`);
+    // Accept local storage usage
+    await page.getByText("Accept").click();
 
-  await page.locator('[data-testid="keyframes-submit"]').click();
-  
-  // test of zoom in and out
-  await page.locator('[data-testid="keyframes-zoomout"]').click();
-  await page.locator('[data-testid="keyframes-zoomin"]').click();
+    await page.locator('[data-testid="keyframes-input"] input').fill('https://www.youtube.com/watch?v=QQFgQ1uBQtk');
 
-  // test of detailed view
-  await page.locator('[data-testid="keyframes-toggle-detailed"]').click();
+    await page.locator('[data-testid="keyframes-submit"]').click();
 
-  // test of download
-  const downloadPromise = page.waitForEvent('download');
-  await page.locator('[data-testid="keyframes-download"]').click();
-  const download = await downloadPromise;
-  
-  await expect (page.locator('[data-testid="keyframes-results-general"]')).toBeVisible();
-  await expect (page.locator('[data-testid="keyframes-results-audio"]')).toBeVisible();
-  await expect (page.locator('[data-testid="keyframes-results-face"]')).toBeVisible();
-  await expect (page.locator('[data-testid="keyframes-results-text"]')).toBeVisible();
+    // test of zoom in and out
+    await page.locator('[data-testid="keyframes-zoomout"]').click();
+    await page.locator('[data-testid="keyframes-zoomin"]').click();
 
-  // test of closing button 
-  await page.locator('[data-testid="keyframes-close"]').click();
+    // test of detailed view
+    await page.locator('[data-testid="keyframes-toggle-detailed"]').click();
 
-  await expect (page.locator('[data-testid="keyframes-results-general"]')).toHaveCount(0);
-  await expect (page.locator('[data-testid="keyframes-results-audio"]')).toHaveCount(0);
-  await expect (page.locator('[data-testid="keyframes-results-face"]')).toHaveCount(0);
-  await expect (page.locator('[data-testid="keyframes-results-text"]')).toHaveCount(0);
+    // test of download
+    const downloadPromise = page.waitForEvent('download');
+    await page.locator('[data-testid="keyframes-download"]').click();
+    const download = await downloadPromise;
+
+    await expect (page.locator('[data-testid="keyframes-results-general"]')).toBeVisible();
+    await expect (page.locator('[data-testid="keyframes-results-audio"]')).toBeVisible();
+    await expect (page.locator('[data-testid="keyframes-results-face"]')).toBeVisible();
+    await expect (page.locator('[data-testid="keyframes-results-text"]')).toBeVisible();
+
+    // test of closing button 
+    await page.locator('[data-testid="keyframes-close"]').click();
+
+    await expect (page.locator('[data-testid="keyframes-results-general"]')).toHaveCount(0);
+    await expect (page.locator('[data-testid="keyframes-results-audio"]')).toHaveCount(0);
+    await expect (page.locator('[data-testid="keyframes-results-face"]')).toHaveCount(0);
+    await expect (page.locator('[data-testid="keyframes-results-text"]')).toHaveCount(0);
 });
 
 test('Test tool thumbnails', async ({ page, context, extensionId }) => {
@@ -100,367 +111,7 @@ test('Test tool deepfake video', async ({page, authenticatedBetaTesterExtensionI
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify({
-        "id": "613b2c41794f48cdbc3160f955b20906",
-        "status": "COMPLETED",
-        "info": {
-            "faceswap_fsfm": {
-                "status": "COMPLETED",
-                "submitted_at": "2026-04-24T08:25:52.445125+00:00",
-                "completed_at": "2026-04-24T08:26:31.470096+00:00",
-                "started_at": "2026-04-24T08:26:18.490715+00:00",
-                "queue_time": 26.05,
-                "cache_hit": false,
-                "duration": 12.98
-            },
-            "download": {
-                "status": "COMPLETED",
-                "started_at": "2026-04-24T08:25:52.506955+00:00",
-                "completed_at": "2026-04-24T08:26:03.248540+00:00",
-                "duration": 10.74,
-                "skipped": false,
-                "video_duration": 28.7287
-            }
-        },
-        "faceswap_fsfm_report": {
-            "version": "1",
-            "completed": true,
-            "gpu": true,
-            "message": "Process completed successfully.",
-            "number_of_shots": 1,
-            "prediction": 0.955737576837368,
-            "prediction_time": 12.970382561907172,
-            "total_number_of_frames_for_inference": 28,
-            "video_path": "https://s3.mever.gr/deepfake-public/videos/f4fcf74da4437a273689749180fc69b1/video.mp4",
-            "results": [
-                {
-                  "message": "Prediction completed for the shot.",
-                  "prediction_time": 12.969568143598735,
-                  "shot": 0,
-                  "shot_start": 0.0,
-                  "shot_end": 28.0,
-                  "number_of_faces": 1,
-                  "components_info": [
-                      {
-                          "component_no": 0,
-                          "enriched_bboxes": [
-                              {
-                                  "bbox": {
-                                      "bottom": 373,
-                                      "left": 493,
-                                      "right": 789,
-                                      "top": 77
-                                  },
-                                  "frame_id": 30,
-                                  "prediction": 0.7429813146591187,
-                                  "timestamp": 1.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 371,
-                                      "left": 454,
-                                      "right": 744,
-                                      "top": 81
-                                  },
-                                  "frame_id": 60,
-                                  "prediction": 0.9130548238754272,
-                                  "timestamp": 2.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 387,
-                                      "left": 405,
-                                      "right": 707,
-                                      "top": 85
-                                  },
-                                  "frame_id": 90,
-                                  "prediction": 0.632803738117218,
-                                  "timestamp": 3.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 365,
-                                      "left": 525,
-                                      "right": 813,
-                                      "top": 77
-                                  },
-                                  "frame_id": 120,
-                                  "prediction": 0.821010410785675,
-                                  "timestamp": 4.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 376,
-                                      "left": 537,
-                                      "right": 831,
-                                      "top": 82
-                                  },
-                                  "frame_id": 150,
-                                  "prediction": 0.5228121876716614,
-                                  "timestamp": 5.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 371,
-                                      "left": 502,
-                                      "right": 798,
-                                      "top": 75
-                                  },
-                                  "frame_id": 180,
-                                  "prediction": 0.9934552311897278,
-                                  "timestamp": 6.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 371,
-                                      "left": 482,
-                                      "right": 771,
-                                      "top": 82
-                                  },
-                                  "frame_id": 210,
-                                  "prediction": 0.1254914253950119,
-                                  "timestamp": 7.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 375,
-                                      "left": 489,
-                                      "right": 786,
-                                      "top": 78
-                                  },
-                                  "frame_id": 240,
-                                  "prediction": 0.8970268964767456,
-                                  "timestamp": 8.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 371,
-                                      "left": 491,
-                                      "right": 784,
-                                      "top": 78
-                                  },
-                                  "frame_id": 270,
-                                  "prediction": 0.908547580242157,
-                                  "timestamp": 9.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 371,
-                                      "left": 518,
-                                      "right": 798,
-                                      "top": 91
-                                  },
-                                  "frame_id": 300,
-                                  "prediction": 0.40836504101753235,
-                                  "timestamp": 10.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 380,
-                                      "left": 519,
-                                      "right": 809,
-                                      "top": 90
-                                  },
-                                  "frame_id": 330,
-                                  "prediction": 0.7016952633857727,
-                                  "timestamp": 11.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 374,
-                                      "left": 512,
-                                      "right": 799,
-                                      "top": 87
-                                  },
-                                  "frame_id": 360,
-                                  "prediction": 0.9874243140220642,
-                                  "timestamp": 12.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 380,
-                                      "left": 500,
-                                      "right": 800,
-                                      "top": 80
-                                  },
-                                  "frame_id": 390,
-                                  "prediction": 0.9303684830665588,
-                                  "timestamp": 13.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 354,
-                                      "left": 480,
-                                      "right": 770,
-                                      "top": 64
-                                  },
-                                  "frame_id": 420,
-                                  "prediction": 0.7159194946289062,
-                                  "timestamp": 14.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 365,
-                                      "left": 482,
-                                      "right": 772,
-                                      "top": 75
-                                  },
-                                  "frame_id": 450,
-                                  "prediction": 0.9118983745574951,
-                                  "timestamp": 15.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 367,
-                                      "left": 484,
-                                      "right": 774,
-                                      "top": 77
-                                  },
-                                  "frame_id": 480,
-                                  "prediction": 0.9678377509117126,
-                                  "timestamp": 16.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 361,
-                                      "left": 500,
-                                      "right": 789,
-                                      "top": 72
-                                  },
-                                  "frame_id": 510,
-                                  "prediction": 0.8478957414627075,
-                                  "timestamp": 17.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 360,
-                                      "left": 504,
-                                      "right": 790,
-                                      "top": 74
-                                  },
-                                  "frame_id": 540,
-                                  "prediction": 0.9225829839706421,
-                                  "timestamp": 18.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 353,
-                                      "left": 480,
-                                      "right": 773,
-                                      "top": 60
-                                  },
-                                  "frame_id": 570,
-                                  "prediction": 0.41522103548049927,
-                                  "timestamp": 19.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 344,
-                                      "left": 471,
-                                      "right": 758,
-                                      "top": 57
-                                  },
-                                  "frame_id": 600,
-                                  "prediction": 0.8922948837280273,
-                                  "timestamp": 20.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 369,
-                                      "left": 500,
-                                      "right": 787,
-                                      "top": 82
-                                  },
-                                  "frame_id": 630,
-                                  "prediction": 0.33881816267967224,
-                                  "timestamp": 21.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 366,
-                                      "left": 477,
-                                      "right": 764,
-                                      "top": 79
-                                  },
-                                  "frame_id": 660,
-                                  "prediction": 0.7144265174865723,
-                                  "timestamp": 22.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 373,
-                                      "left": 502,
-                                      "right": 800,
-                                      "top": 75
-                                  },
-                                  "frame_id": 690,
-                                  "prediction": 0.9772054553031921,
-                                  "timestamp": 23.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 367,
-                                      "left": 510,
-                                      "right": 798,
-                                      "top": 79
-                                  },
-                                  "frame_id": 720,
-                                  "prediction": 0.620204508304596,
-                                  "timestamp": 24.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 369,
-                                      "left": 508,
-                                      "right": 802,
-                                      "top": 75
-                                  },
-                                  "frame_id": 750,
-                                  "prediction": 0.8658076524734497,
-                                  "timestamp": 25.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 371,
-                                      "left": 502,
-                                      "right": 798,
-                                      "top": 75
-                                  },
-                                  "frame_id": 780,
-                                  "prediction": 0.5406335592269897,
-                                  "timestamp": 26.0
-                              },
-                              {
-                                  "bbox": {
-                                      "bottom": 354,
-                                      "left": 482,
-                                      "right": 777,
-                                      "top": 59
-                                  },
-                                  "frame_id": 810,
-                                  "prediction": 0.9500991702079773,
-                                  "timestamp": 27.0
-                              }
-                          ]
-                      }
-                  ],
-                  "number_of_frames_for_inference": 28,
-                  "total_frames_in_shot": 840,
-                  "prediction": 0.955737576837368,
-                  "face_predictions": [
-                      0.9191006501515706
-                  ],
-                  "face_image_paths": [
-                      "https://s3.mever.gr/deepfake-public/videos/f4fcf74da4437a273689749180fc69b1/shot_0_face_0.jpg"
-                  ],
-                  "collage_paths": [
-                      "https://s3.mever.gr/deepfake-public/videos/f4fcf74da4437a273689749180fc69b1/shot_0_face_0_collage.jpg"
-                  ],
-                  "shot_image": "https://s3.mever.gr/deepfake-public/videos/f4fcf74da4437a273689749180fc69b1/keyframe_0.jpg"
-              }
-            ]
-          }
-        })
+      body: JSON.stringify(mockedDeepfakeResponse)
     });
   });
 
@@ -480,215 +131,11 @@ test('Test tool deepfake video', async ({page, authenticatedBetaTesterExtensionI
 });
 
 test('Test tool poi forensic video', async ({page, authenticatedExtraFeaturesExtensionId}) => {
-  // mocking main route (TODO : put this json in test assets folder, in a dedicated file to mocked api response)
   await page.route('**/deepfake/videos/jobs?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DSOo7fHT_Na0&services=poi_forensics&services_parameters=%7B%22poi_forensics%22%3A%7B%22poi%22%3A%22Macron%22%2C%22modality%22%3A%22audiovideo%22%7D%7D', async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify({
-        "id": "0648aad0807f4dbaaf5728feec2df76c",
-        "status": "COMPLETED",
-        "info": {
-            "poi_forensics": {
-                "status": "COMPLETED",
-                "submitted_at": "2026-04-24T09:24:02.960943+00:00",
-                "completed_at": "2026-04-24T09:30:42.985418+00:00",
-                "started_at": "2026-04-24T09:24:30.424294+00:00",
-                "queue_time": 27.46,
-                "cache_hit": false,
-                "duration": 372.56
-            },
-            "download": {
-                "status": "COMPLETED",
-                "started_at": "2026-04-24T09:24:03.024815+00:00",
-                "completed_at": "2026-04-24T09:24:24.255804+00:00",
-                "duration": 21.23,
-                "skipped": false,
-                "video_duration": 107.43333333333334
-            }
-        },
-        "poi_forensics_report": {
-            "version": "3",
-            "completed": true,
-            "gpu": true,
-            "message": "Process completed successfully.",
-            "overall_score": 6.046761749783199,
-            "decision_threshold": 1.0,
-            "overall_prediction": "Fake",
-            "scores_per_time": [
-                6.6547697016195135,
-                9.806964132061237,
-                4.429831916444404,
-                7.50521670634932,
-                11.562741981877636,
-                9.77978260303631,
-                19.60520482196356,
-                18.686850072814046,
-                9.689841601805876,
-                12.935053774020336,
-                10.213881880637008
-            ],
-            "time_vector": [
-                9.28,
-                10.28,
-                11.28,
-                16.96,
-                29.16,
-                30.16,
-                33.2,
-                50.0,
-                51.0,
-                57.12,
-                58.12
-            ],
-            "results_per_track": [
-                {
-                    "bboxes": [
-                        [
-                            359,
-                            106,
-                            989,
-                            736
-                        ],
-                        [
-                            22,
-                            116,
-                            706,
-                            800
-                        ],
-                        [
-                            315,
-                            74,
-                            1001,
-                            760
-                        ]
-                    ],
-                    "scores": [
-                        6.6547697016195135,
-                        9.806964132061237,
-                        4.429831916444404
-                    ],
-                    "time_vector": [
-                        9.28,
-                        10.28,
-                        11.28
-                    ],
-                    "trackID": 11
-                },
-                {
-                    "bboxes": [
-                        [
-                            441,
-                            81,
-                            987,
-                            627
-                        ]
-                    ],
-                    "scores": [
-                        7.50521670634932
-                    ],
-                    "time_vector": [
-                        16.96
-                    ],
-                    "trackID": 27
-                },
-                {
-                    "bboxes": [
-                        [
-                            310,
-                            -12,
-                            1525,
-                            1203
-                        ],
-                        [
-                            36,
-                            6,
-                            1275,
-                            1245
-                        ]
-                    ],
-                    "scores": [
-                        11.562741981877636,
-                        9.77978260303631
-                    ],
-                    "time_vector": [
-                        29.16,
-                        30.16
-                    ],
-                    "trackID": 47
-                },
-                {
-                    "bboxes": [
-                        [
-                            703,
-                            98,
-                            1223,
-                            618
-                        ]
-                    ],
-                    "scores": [
-                        19.60520482196356
-                    ],
-                    "time_vector": [
-                        33.2
-                    ],
-                    "trackID": 56
-                },
-                {
-                    "bboxes": [
-                        [
-                            451,
-                            180,
-                            900,
-                            629
-                        ],
-                        [
-                            555,
-                            187,
-                            944,
-                            576
-                        ]
-                    ],
-                    "scores": [
-                        18.686850072814046,
-                        9.689841601805876
-                    ],
-                    "time_vector": [
-                        50.0,
-                        51.0
-                    ],
-                    "trackID": 111
-                },
-                {
-                    "bboxes": [
-                        [
-                            516,
-                            143,
-                            1136,
-                            763
-                        ],
-                        [
-                            395,
-                            153,
-                            769,
-                            527
-                        ]
-                    ],
-                    "scores": [
-                        12.935053774020336,
-                        10.213881880637008
-                    ],
-                    "time_vector": [
-                        57.12,
-                        58.12
-                    ],
-                    "trackID": 129
-                }
-            ],
-            "prediction_time": 370.8853420340456,
-            "video_path": "https://s3.mever.gr/deepfake-public/videos/b13e53b7b873b9010e67b7d58fb0a25d/video.mp4"
-        }
-      })
+      body: JSON.stringify(mockedPoiForensicResponse)
     });
   });
 

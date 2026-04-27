@@ -85,6 +85,7 @@ const MachineGeneratedTextForm = ({
                   onSubmit();
                 }
               }}
+              data-testid="mgt-input"
               slotProps={{
                 input: {
                   endAdornment: (
@@ -127,6 +128,7 @@ const MachineGeneratedTextForm = ({
               variant="contained"
               disabled={isLoading || !searchString}
               loading={isLoading}
+              data-testid="mgt-submit"
             >
               {keyword("mgt_form_submit_button")}
             </Button>
