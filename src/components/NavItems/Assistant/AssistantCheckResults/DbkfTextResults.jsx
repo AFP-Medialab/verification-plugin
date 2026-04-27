@@ -19,7 +19,7 @@ const DbkfTextResults = ({ results, prevFactChecksExist }) => {
   return (
     <>
       {/* This code mimics ResultDisplayItem.jsx from SemanticSearch to match output */}
-      {results.map((value, key) => {
+      {results?.map((value, key) => {
         return (
           <Box
             key={key}

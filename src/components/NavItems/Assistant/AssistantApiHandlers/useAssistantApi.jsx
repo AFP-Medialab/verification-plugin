@@ -1,5 +1,11 @@
 import axios from "axios";
 
+import {
+  API_ENDPOINTS,
+  MAX_NUM_RETRIES,
+  NE_ENTITY_CHUNK_SIZE,
+} from "../constants";
+
 export default function assistantApiCalls() {
   const assistantEndpoint = import.meta.env.VITE_ASSISTANT_URL;
 
@@ -47,7 +53,7 @@ export default function assistantApiCalls() {
   const callNamedEntityService = async (text, lang) => {
     try {
       const namedEntityResult = await axios.post(
-        assistantEndpoint + "gcloud/named-entity",
+        assistantEndpoint + API_ENDPOINTS.NAMED_ENTITY,
         {
           content: text,
           lang: lang,
@@ -84,7 +90,7 @@ export default function assistantApiCalls() {
       }
       const iris = Object.keys(mapping);
       let dbpediaResultBindings = [];
-      const chunkSize = 25;
+      const chunkSize = NE_ENTITY_CHUNK_SIZE;
       for (let i = 0; i < iris.length; i += chunkSize) {
         const chunk = iris.slice(i, i + chunkSize);
         const dbQuery = `
@@ -160,7 +166,7 @@ export default function assistantApiCalls() {
   };
 
   const callOcrService = async (data, script, mode) => {
-    const result = await axios.post(assistantEndpoint + "gcloud/ocr", {
+    const result = await axios.post(assistantEndpoint + API_ENDPOINTS.OCR, {
       text: data,
       script: script,
       data_type: mode,
@@ -168,8 +174,6 @@ export default function assistantApiCalls() {
 
     return result.data;
   };
-
-  const MAX_NUM_RETRIES = 3;
 
   /**
    * Calls an async function that throws an exception when it fails, will retry for numMaxRetries
@@ -203,7 +207,7 @@ export default function assistantApiCalls() {
         if (urlList.length === 0) return null;
 
         const result = await axios.post(
-          assistantEndpoint + "gcloud/source-credibility",
+          assistantEndpoint + API_ENDPOINTS.SOURCE_CREDIBILITY,
           {
             urls: urlList,
           },
@@ -226,7 +230,7 @@ export default function assistantApiCalls() {
       MAX_NUM_RETRIES,
       async () => {
         const result = await axios.post(
-          assistantEndpoint + "gcloud/news-framing-clfr",
+          assistantEndpoint + API_ENDPOINTS.NEWS_FRAMING,
           { text: text },
         );
         return result.data;
@@ -247,7 +251,7 @@ export default function assistantApiCalls() {
       MAX_NUM_RETRIES,
       async () => {
         const result = await axios.post(
-          assistantEndpoint + "gcloud/news-genre-clfr",
+          assistantEndpoint + API_ENDPOINTS.NEWS_GENRE,
           { text: text },
         );
         return result.data;
@@ -268,7 +272,7 @@ export default function assistantApiCalls() {
       MAX_NUM_RETRIES,
       async () => {
         const result = await axios.post(
-          assistantEndpoint + "gcloud/persuasion-span-clfr",
+          assistantEndpoint + API_ENDPOINTS.PERSUASION,
           {
             text: text,
           },
@@ -290,9 +294,12 @@ export default function assistantApiCalls() {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
       async () => {
-        const result = await axios.post(assistantEndpoint + "dw/subjectivity", {
-          content: text,
-        });
+        const result = await axios.post(
+          assistantEndpoint + API_ENDPOINTS.SUBJECTIVITY,
+          {
+            content: text,
+          },
+        );
         return result.data;
       },
       (numTries) => {
@@ -311,7 +318,7 @@ export default function assistantApiCalls() {
       MAX_NUM_RETRIES,
       async () => {
         const result = await axios.post(
-          assistantEndpoint + "kinit/prev-fact-checks",
+          assistantEndpoint + API_ENDPOINTS.PREV_FACT_CHECKS,
           {
             content: text,
           },
@@ -334,7 +341,7 @@ export default function assistantApiCalls() {
       MAX_NUM_RETRIES,
       async () => {
         const result = await axios.post(
-          assistantEndpoint + "kinit/machine-generated-text-chunks",
+          assistantEndpoint + API_ENDPOINTS.MGT_CHUNKS,
           {
             content: text,
           },
@@ -357,7 +364,7 @@ export default function assistantApiCalls() {
       MAX_NUM_RETRIES,
       async () => {
         const result = await axios.post(
-          assistantEndpoint + "gcloud/multilingual-stance-classification",
+          assistantEndpoint + API_ENDPOINTS.STANCE,
           {
             comments: comments,
           },

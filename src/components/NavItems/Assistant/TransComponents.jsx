@@ -3,6 +3,33 @@ import { Trans } from "react-i18next";
 
 import Chip from "@mui/material/Chip";
 
+import { STANCE_CATEGORIES, STANCE_COLOR_MAP } from "./constants";
+
+const URLS = {
+  SUPPORTED_TOOLS:
+    "https://gatenlp.github.io/we-verify-app-assistant/supported-tools",
+  SUPPORTED_URLS:
+    "https://gatenlp.github.io/we-verify-app-assistant/supported-urls",
+  DOMAIN_ANALYSIS: "https://gatenlp.github.io/domain-analysis-lists/",
+  NAMED_ENTITY_RECOGNISER:
+    "https://gatenlp.github.io/we-verify-app-assistant/supported-tools#named-entity-recogniser",
+  CREDIBILITY_SIGNALS:
+    "https://gatenlp.github.io/we-verify-app-assistant/supported-tools#credibility-signals",
+  PREV_FACT_CHECKS:
+    "https://gatenlp.github.io/we-verify-app-assistant/supported-tools#previous-fact-checks",
+  DBKF: "https://gatenlp.github.io/we-verify-app-assistant/supported-tools#database-of-known-fakes",
+  STANCE_CLASSIFIER:
+    "https://gatenlp.github.io/we-verify-app-assistant/supported-tools#stance-classifier",
+  GATE_SHOPFRONT: "https://cloud.gate.ac.uk/shopfront",
+  DEUTSCHE_WELLE: "https://www.dw.com/",
+  KINIT: "https://kinit.sk/",
+  ONTOTEXT: "https://www.ontotext.com/",
+  MDN_IMAGE_TYPES:
+    "https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Image_types",
+  MDN_VIDEO_CODECS:
+    "https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Video_codecs",
+};
+
 // CSS STYLES
 
 const UL_STYLE = { paddingLeft: "20px", margin: "8px 0" };
@@ -27,15 +54,7 @@ function InlineChip({ color, children }) {
 }
 
 export function TransTooltipChip({ keyword, i18nKey, color }) {
-  const colorMap = {
-    // stance classifier
-    deny: "error",
-    query: "warning",
-    support: "success",
-    comment: "default",
-  };
-
-  const mapped = color || colorMap[i18nKey] || "default";
+  const mapped = color || STANCE_COLOR_MAP[i18nKey] || "default";
   const isCustomColor = mapped.startsWith("#") || mapped.startsWith("rgb");
 
   return (
@@ -62,7 +81,7 @@ export function TransSupportedToolsLink({ keyword }) {
       components={{
         supportedToolsLink: (
           <a
-            href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools"
+            href={URLS.SUPPORTED_TOOLS}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -81,7 +100,7 @@ export function TransSupportedUrlsLink({ keyword }) {
       components={{
         supportedUrlsLink: (
           <a
-            href="https://gatenlp.github.io/we-verify-app-assistant/supported-urls"
+            href={URLS.SUPPORTED_URLS}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -100,7 +119,7 @@ export function TransUrlDomainAnalysisLink({ keyword }) {
       components={{
         urlDomainAnalysisLink: (
           <a
-            href="https://gatenlp.github.io/domain-analysis-lists/"
+            href={URLS.DOMAIN_ANALYSIS}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -119,7 +138,7 @@ export function TransNamedEntityRecogniserLink({ keyword }) {
       components={{
         namedEntityRecogniserLink: (
           <a
-            href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#named-entity-recogniser"
+            href={URLS.NAMED_ENTITY_RECOGNISER}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -138,7 +157,7 @@ export function TransCredibilitySignalsLink({ keyword }) {
       components={{
         credibilitySignalsLink: (
           <a
-            href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#credibility-signals"
+            href={URLS.CREDIBILITY_SIGNALS}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -157,7 +176,7 @@ export function TransPrevFactChecksLink({ keyword }) {
       components={{
         previousFactChecksLink: (
           <a
-            href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#previous-fact-checks"
+            href={URLS.PREV_FACT_CHECKS}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -176,7 +195,7 @@ export function TransDbkfLink({ keyword }) {
       components={{
         dbkfLink: (
           <a
-            href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#database-of-known-fakes"
+            href={URLS.DBKF}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -195,7 +214,7 @@ export function TransMultilingualStanceLink({ keyword }) {
       components={{
         multilingualStanceLink: (
           <a
-            href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools#stance-classifier"
+            href={URLS.STANCE_CLASSIFIER}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -216,7 +235,7 @@ export function TransUsfdAuthor({ keyword }) {
       components={{
         usfdLink: (
           <a
-            href="https://cloud.gate.ac.uk/shopfront"
+            href={URLS.GATE_SHOPFRONT}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -235,7 +254,7 @@ export function TransDeutscheWelleAuthor({ keyword }) {
       components={{
         deutscheWelleLink: (
           <a
-            href="https://www.dw.com/"
+            href={URLS.DEUTSCHE_WELLE}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -254,7 +273,7 @@ export function TransKinitAuthor({ keyword }) {
       components={{
         kinitLink: (
           <a
-            href="https://kinit.sk/"
+            href={URLS.KINIT}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -273,7 +292,7 @@ export function TransOntotextAuthor({ keyword }) {
       components={{
         ontotextLink: (
           <a
-            href="https://www.ontotext.com/"
+            href={URLS.ONTOTEXT}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -325,7 +344,7 @@ export function TransAssistantHelpFourTooltip({ keyword }) {
         li: <li style={LI_STYLE} />,
         imageFileTypeSupportLink: (
           <a
-            href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Image_types"
+            href={URLS.MDN_IMAGE_TYPES}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -333,7 +352,7 @@ export function TransAssistantHelpFourTooltip({ keyword }) {
         ),
         videoFileTypeSupportLink: (
           <a
-            href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Video_codecs"
+            href={URLS.MDN_VIDEO_CODECS}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}
@@ -418,7 +437,7 @@ export function TransMultilingualStanceTooltip({ keyword }) {
     <>
       <Trans t={keyword} i18nKey="multilingual_stance_tooltip" />
       <ul style={UL_STYLE}>
-        {["support", "query", "deny", "comment"].map((key) => (
+        {STANCE_CATEGORIES.map((key) => (
           <li key={key} style={LI_STYLE}>
             <TransTooltipChip keyword={keyword} i18nKey={key} />
           </li>
