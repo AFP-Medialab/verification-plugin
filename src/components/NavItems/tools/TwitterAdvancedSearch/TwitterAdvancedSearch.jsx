@@ -209,6 +209,7 @@ const TwitterAdvancedSearch = () => {
                 placeholder={"ex : (need tsv changes)"}
                 fullWidth
                 {...value.props}
+                data-testid={`twitter-search-${key}`}
               />
             );
           })}
@@ -238,12 +239,14 @@ const TwitterAdvancedSearch = () => {
                 control={<Radio color="primary" />}
                 label={keyword("twitter_local_time")}
                 labelPlacement="end"
+                data-testid="twitter-radio-local"
               />
               <FormControlLabel
                 value={"false"}
                 control={<Radio color="primary" />}
                 label={keyword("twitter_gmt")}
                 labelPlacement="end"
+                data-testid="twitter-radio-gmt"
               />
             </RadioGroup>
           </FormControl>
@@ -252,7 +255,12 @@ const TwitterAdvancedSearch = () => {
               m: 2,
             }}
           />
-          <Button variant="contained" color="primary" onClick={onSubmit}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={onSubmit}
+            data-testid="twitter-submit"
+          >
             {keyword("button_submit")}
           </Button>
         </div>

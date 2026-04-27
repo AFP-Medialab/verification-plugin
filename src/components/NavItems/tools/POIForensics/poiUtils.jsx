@@ -63,7 +63,13 @@ export const clearCanvas = (canvasRef) => {
  * @param {JSON} result
  * @returns
  */
-export const drawBoundingBox = (videoTime, videoRef, canvasRef, result) => {
+export const drawBoundingBox = (
+  videoTime,
+  videoRef,
+  canvasRef,
+  result,
+  mode,
+) => {
   const video = videoRef.current;
   const canvas = canvasRef.current;
   const report = result?.poi_forensics_report;
@@ -121,7 +127,7 @@ export const drawBoundingBox = (videoTime, videoRef, canvasRef, result) => {
     const fontSize = Math.floor(canvas.height / 15);
     ctx.font = `bold ${fontSize}px Arial`;
     ctx.fillStyle = "Black";
-    ctx.fillText(`${score.toFixed(2)}`, xmin, ymin - 10);
+    ctx.fillText(`${score.toFixed(2)} (${mode})`, xmin, ymin - 10);
   }
 };
 

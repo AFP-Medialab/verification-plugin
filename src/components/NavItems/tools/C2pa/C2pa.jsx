@@ -353,6 +353,8 @@ const C2paData = () => {
                 handleCloseSelectedFile={resetState}
                 isParentLoading={isLoading}
                 handleClearUrl={resetState}
+                urlInputTestId="c2pa-input"
+                submitButtonTestId="c2pa-submit"
               />
 
               {(role.includes(ROLES.AFP_C2PA_GOLD) ||
@@ -368,6 +370,7 @@ const C2paData = () => {
                         inputProps={{
                           "aria-label": "toggle using reverse search",
                         }}
+                        data-testid="c2pa-reversesearch-toggle"
                       />
                     }
                     label={keyword("reverse_search_switch_label")}
@@ -428,7 +431,7 @@ const C2paData = () => {
         )}
 
         {thumbnailImage && typeof thumbnailImage === "string" && (
-          <Accordion defaultExpanded>
+          <Accordion defaultExpanded data-testid="c2pa-results-afp-published">
             <AccordionSummary
               expandIcon={<ArrowDownward />}
               aria-controls="panel2-content"
@@ -451,7 +454,7 @@ const C2paData = () => {
         )}
 
         {hdImage && (
-          <Accordion defaultExpanded>
+          <Accordion defaultExpanded data-testid="c2pa-results-afp-original">
             <AccordionSummary
               expandIcon={<ArrowDownward />}
               aria-controls="panel2-content"

@@ -43,7 +43,7 @@ const DateAndTimePicker = ({
         <>
           <DateTimePicker
             onChange={handleSinceChange}
-            disbled={disabled}
+            disabled={disabled}
             input={true}
             label={"*  " + keywordFromDate}
             dateFormat={"YYYY-MM-DD"}
@@ -54,7 +54,7 @@ const DateAndTimePicker = ({
           />
           <DateTimePicker
             onChange={handleUntilChange}
-            disbled={disabled}
+            disabled={disabled}
             input={true}
             label={"*  " + keywordUntilDate}
             dateFormat={"YYYY-MM-DD"}

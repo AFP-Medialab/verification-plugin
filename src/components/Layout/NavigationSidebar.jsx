@@ -1,3 +1,7 @@
+import DataIcon from "../NavBar/images/SVG/DataAnalysis/Data_analysis.svg?react";
+import ImageIcon from "../NavBar/images/SVG/Image/Images.svg?react";
+import SearchIcon from "../NavBar/images/SVG/Search/Search.svg?react";
+import VideoIcon from "../NavBar/images/SVG/Video/Video.svg?react";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -40,10 +44,6 @@ import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import clsx from "clsx";
 import { browser } from "wxt/browser";
 
-import DataIcon from "../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
-import ImageIcon from "../NavBar/images/SVG/Image/Images.svg";
-import SearchIcon from "../NavBar/images/SVG/Search/Search.svg";
-import VideoIcon from "../NavBar/images/SVG/Video/Video.svg";
 import NavigationItem from "../Navigation/NavigationItem";
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 

@@ -10,7 +10,13 @@ import { clearCanvas, drawBoundingBox, getIndexFromTime } from "../poiUtils";
  * @param {JSON} result
  * @param {Setter} setSelectedIndex
  */
-export const usePoiSync = (videoRef, canvasRef, result, setSelectedIndex) => {
+export const usePoiSync = (
+  videoRef,
+  canvasRef,
+  result,
+  setSelectedIndex,
+  mode,
+) => {
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !result) return;
@@ -18,7 +24,7 @@ export const usePoiSync = (videoRef, canvasRef, result, setSelectedIndex) => {
     const syncFrame = () => {
       const currentTime = video.currentTime;
 
-      drawBoundingBox(currentTime, videoRef, canvasRef, result);
+      drawBoundingBox(currentTime, videoRef, canvasRef, result, mode);
 
       const globalTimes = result.poi_forensics_report.time_vector;
       const globalIndex = globalTimes.findIndex(

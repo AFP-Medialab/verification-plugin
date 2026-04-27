@@ -17,7 +17,7 @@ const HighlightedText = ({ text, chunks }) => {
   const resolvedMode = systemMode || mode;
 
   return (
-    <Box>
+    <Box data-testid="mgt-results-highlight-text">
       {chunks.entities.Important_Sentence.map((chunk, index) => {
         const chunkText = text.slice(chunk.indices[0], chunk.indices[1]);
         const color = resolvedMode === "light" ? chunk.rgb : chunk.rgbDark;

@@ -38,6 +38,7 @@ export const SocialMediaIconBox = ({
     <Tooltip key={socialMediaId + "_toolTip"} title={tooltipText || ""}>
       <Box
         key={socialMediaId + "_ModalIconBox"}
+        data-testid={`sna-social-media-icon-${socialMediaId}`}
         onClick={toggleSocialMediaSelection}
         sx={{
           width: 50,
@@ -243,6 +244,7 @@ const UploadModal = ({
               variant="outlined"
               onClick={handleUpload}
               disabled={isConfirmDisabled}
+              data-testid="sna-upload-modal-confirm-button"
             >
               {keyword("uploadModal_ConfirmButton")}
             </Button>

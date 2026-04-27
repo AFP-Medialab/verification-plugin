@@ -1,3 +1,21 @@
+import CsvSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/CSV_SNA.svg?react";
+import TwitterSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/Twitter_sna.svg?react";
+import C2paIcon from "../components/NavBar/images/SVG/Image/C2pa.svg?react";
+import DeepfakeIcon from "../components/NavBar/images/SVG/Image/Deepfake.svg?react";
+import ForensicIcon from "../components/NavBar/images/SVG/Image/Forensic.svg?react";
+import GeolocationIcon from "../components/NavBar/images/SVG/Image/Geolocation.svg?react";
+import GifIcon from "../components/NavBar/images/SVG/Image/Gif.svg?react";
+import MagnifierIcon from "../components/NavBar/images/SVG/Image/Magnifier.svg?react";
+import MetadataIcon from "../components/NavBar/images/SVG/Image/Metadata.svg?react";
+import OcrIcon from "../components/NavBar/images/SVG/Image/OCR.svg?react";
+import AboutIcon from "../components/NavBar/images/SVG/Navbar/About.svg?react";
+import ToolsIcon from "../components/NavBar/images/SVG/Navbar/Tools.svg?react";
+import CovidSearchIcon from "../components/NavBar/images/SVG/Search/Covid19.svg?react";
+import TwitterSearchIcon from "../components/NavBar/images/SVG/Search/Twitter_search.svg?react";
+import XnetworkIcon from "../components/NavBar/images/SVG/Search/Xnetwork.svg?react";
+import KeyframesIcon from "../components/NavBar/images/SVG/Video/Keyframes.svg?react";
+import ThumbnailsIcon from "../components/NavBar/images/SVG/Video/Thumbnails.svg?react";
+import AnalysisIcon from "../components/NavBar/images/SVG/Video/Video_analysis.svg?react";
 import React from "react";
 
 import SvgIcon from "@mui/material/SvgIcon";
@@ -32,25 +50,7 @@ import {
 } from "@/redux/reducers/tools/syntheticImageDetectionReducer";
 import { FOOTER_TYPES, Footer } from "@Shared/Footer/Footer";
 
-import CsvSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/CSV_SNA.svg";
-import TwitterSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/Twitter_sna.svg";
-import C2paIcon from "../components/NavBar/images/SVG/Image/C2pa.svg";
-import DeepfakeIcon from "../components/NavBar/images/SVG/Image/Deepfake.svg";
-import ForensicIcon from "../components/NavBar/images/SVG/Image/Forensic.svg";
-import GeolocationIcon from "../components/NavBar/images/SVG/Image/Geolocation.svg";
-import GifIcon from "../components/NavBar/images/SVG/Image/Gif.svg";
-import MagnifierIcon from "../components/NavBar/images/SVG/Image/Magnifier.svg";
-import MetadataIcon from "../components/NavBar/images/SVG/Image/Metadata.svg";
-import OcrIcon from "../components/NavBar/images/SVG/Image/OCR.svg";
-import AboutIcon from "../components/NavBar/images/SVG/Navbar/About.svg";
 import AfpDigitalCoursesIconComponent from "../components/NavBar/images/SVG/Navbar/AfpDigitalCoursesIcon";
-import ToolsIcon from "../components/NavBar/images/SVG/Navbar/Tools.svg";
-import CovidSearchIcon from "../components/NavBar/images/SVG/Search/Covid19.svg";
-import TwitterSearchIcon from "../components/NavBar/images/SVG/Search/Twitter_search.svg";
-import XnetworkIcon from "../components/NavBar/images/SVG/Search/Xnetwork.svg";
-import KeyframesIcon from "../components/NavBar/images/SVG/Video/Keyframes.svg";
-import ThumbnailsIcon from "../components/NavBar/images/SVG/Video/Thumbnails.svg";
-import AnalysisIcon from "../components/NavBar/images/SVG/Video/Video_analysis.svg";
 import { ROLES } from "./roles";
 
 // Lazy load heavy components

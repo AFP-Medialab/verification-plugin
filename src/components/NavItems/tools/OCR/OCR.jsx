@@ -205,6 +205,8 @@ const OCR = () => {
               handleCloseSelectedFile={resetState}
               preprocessLocalFile={preprocessImage}
               handleClearUrl={resetState}
+              urlInputTestId="ocr-input"
+              submitButtonTestId="ocr-submit"
             />
           </form>
         </Box>

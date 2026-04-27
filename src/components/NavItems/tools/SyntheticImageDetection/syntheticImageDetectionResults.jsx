@@ -421,7 +421,11 @@ const SyntheticImageDetectionResults = ({
   const resolvedMode = systemMode || mode;
 
   return (
-    <Card variant="outlined" sx={{ width: "100%" }}>
+    <Card
+      variant="outlined"
+      sx={{ width: "100%" }}
+      data-testid="synthetic-images-results"
+    >
       <CardContent sx={{ flex: "1 0 auto" }}>
         <Stack direction="column" spacing={4}>
           <Stack
@@ -454,7 +458,12 @@ const SyntheticImageDetectionResults = ({
               )}
             </Stack>
 
-            <IconButton aria-label="close" onClick={handleClose} sx={{ p: 1 }}>
+            <IconButton
+              aria-label="close"
+              onClick={handleClose}
+              sx={{ p: 1 }}
+              data-testid="synthetic-images-close"
+            >
               <CloseIcon />
             </IconButton>
           </Stack>
@@ -510,6 +519,7 @@ const SyntheticImageDetectionResults = ({
                         }}
                         crossOrigin={"anonymous"}
                         ref={imgElement}
+                        data-testid="synthetic-images-results-image"
                       />
                       <List dense={true}>
                         <ListItem>
@@ -616,6 +626,7 @@ const SyntheticImageDetectionResults = ({
                           justifyContent: "center",
                           alignItems: "center",
                         }}
+                        data-testid="synthetic-images-gauge"
                       >
                         <GaugeChart
                           id={"gauge-chart"}
@@ -856,11 +867,18 @@ const SyntheticImageDetectionResults = ({
                     defaultExpanded={false}
                     onChange={handleDetailsChange}
                   >
-                    <AccordionSummary expandIcon={<ExpandMore />}>
+                    <AccordionSummary
+                      expandIcon={<ExpandMore />}
+                      data-testid="synthetic-images-accordion"
+                    >
                       <Typography>{keyword(detailsPanelMessage)}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                      <Stack direction={"column"} spacing={4}>
+                      <Stack
+                        direction={"column"}
+                        spacing={4}
+                        data-testid="synthetic-images-accordion-details"
+                      >
                         {syntheticImageScores.map((item, key) => {
                           let predictionScore;
 

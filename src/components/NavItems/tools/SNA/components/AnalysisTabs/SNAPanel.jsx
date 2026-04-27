@@ -29,6 +29,7 @@ const SNAPanel = ({ snaTab, setSnaTab, keyword, analysisToolsProps }) => {
             <Tab
               key={tool.propKey}
               label={keyword(tool.keywordLabel)}
+              data-testid={`sna-tab-${tool.propKey}`}
               {...snaPanelTabProps(idx)}
             />
           ))}
