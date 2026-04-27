@@ -32,7 +32,7 @@ import {
 import {
   TransHtmlDoubleLineBreak,
   TransSupportedToolsLink,
-} from "../TransComponents";
+} from "../components";
 import AssistantImageResult from "./AssistantImageResult";
 import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
 import AssistantVideoResult from "./AssistantVideoResult";

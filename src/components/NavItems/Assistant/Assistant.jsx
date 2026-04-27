@@ -53,7 +53,7 @@ import {
   TransAssistantHelpTwoTooltip,
   TransHtmlDoubleLineBreak,
   TransSupportedToolsLink,
-} from "./TransComponents";
+} from "./components";
 
 const Assistant = () => {
   // styles, language, dispatch, params

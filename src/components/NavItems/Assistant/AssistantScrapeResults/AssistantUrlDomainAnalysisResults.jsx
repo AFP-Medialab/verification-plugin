@@ -17,7 +17,7 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import {
   renderDomainAnalysisResults,
   renderSourceTypeChip,
-} from "@/components/NavItems/Assistant/AssistantCheckResults/assistantUtils";
+} from "@/components/NavItems/Assistant/utils";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { setDomainAnalysisExpanded } from "@/redux/actions/tools/assistantActions";
@@ -27,7 +27,7 @@ import {
   TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
   TransUsfdAuthor,
-} from "../TransComponents";
+} from "../components";
 
 const AssistantSCResults = () => {
   // central
