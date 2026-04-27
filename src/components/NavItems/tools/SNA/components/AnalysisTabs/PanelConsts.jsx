@@ -142,6 +142,7 @@ export const AnalysisDisplayTemplate = ({
             variant="outlined"
             onClick={() => generateResult()}
             disabled={!hasSelectedDataSources}
+            data-testid={`sna-run-analysis-button-${toolDescription}`}
           >
             {keyword(toolButtonText)}
           </Button>

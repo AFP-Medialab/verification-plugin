@@ -38,6 +38,7 @@ export const CollectionSelect = ({
           value={selectedCollection}
           onChange={(e) => setSelectedCollection(e.target.value)}
           label={keyword("snaRecording_selectCollectionLabel")}
+          SelectDisplayProps={{ "data-testid": "sna-collection-select" }}
         >
           {collections.map((name) => (
             <MenuItem key={name} value={name}>
@@ -53,6 +54,7 @@ export const CollectionSelect = ({
           value={newCollectionName}
           onChange={(e) => setNewCollectionName(e.target.value)}
           fullWidth
+          inputProps={{ "data-testid": "sna-new-collection-input" }}
         />
         <Button
           variant="outlined"
@@ -65,6 +67,7 @@ export const CollectionSelect = ({
             textAlign: "left",
           }}
           disabled={disabled}
+          data-testid="sna-add-collection-button"
         >
           {keyword("snaTools_addNewCollectionLabel")}
         </Button>

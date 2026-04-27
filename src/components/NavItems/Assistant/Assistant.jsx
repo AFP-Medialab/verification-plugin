@@ -1,3 +1,4 @@
+import AssistantIcon from "@/components/NavBar/images/navbar/assistant-icon-primary.svg?react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -20,7 +21,6 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
 import { useSetInputFromAssistant } from "@/Hooks/useUrlOrFile";
-import AssistantIcon from "@/components/NavBar/images/navbar/assistant-icon-primary.svg";
 import AssistantCheckStatus from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantCheckStatus";
 import AssistantNEResult from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantNEResult";
 import AssistantCommentResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantCommentResult";
@@ -53,7 +53,7 @@ import {
   TransAssistantHelpTwoTooltip,
   TransHtmlDoubleLineBreak,
   TransSupportedToolsLink,
-} from "./TransComponents";
+} from "./components";
 
 const Assistant = () => {
   // styles, language, dispatch, params

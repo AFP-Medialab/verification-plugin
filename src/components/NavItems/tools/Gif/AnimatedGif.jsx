@@ -252,7 +252,7 @@ const AnimatedGif = ({
       </Grid>
     </Grid>
   ) : (
-    <div>
+    <div data-testid="gif-results">
       <Box
         className={classes.height100}
         sx={{
@@ -278,7 +278,10 @@ const AnimatedGif = ({
               justifyContent: "center",
             }}
           >
-            <Box className={classes.imagesGifImage}>
+            <Box
+              className={classes.imagesGifImage}
+              data-testid="gif-image-result-1"
+            >
               <TextImageCanvas
                 imgSrc={homoImg1}
                 text={keyword("fake_annotation")}
@@ -287,7 +290,11 @@ const AnimatedGif = ({
                 annotation={annotation}
               />
             </Box>
-            <Box id="gifFilterElement" className={classes.imagesGifFilter}>
+            <Box
+              id="gifFilterElement"
+              className={classes.imagesGifFilter}
+              data-testid="gif-image-result-2"
+            >
               <TextImageCanvas
                 imgSrc={homoImg2}
                 filterDataURL={setFilterDataURL}
@@ -324,6 +331,7 @@ const AnimatedGif = ({
               color={annotation ? "error" : "primary"}
               disabled={toolState === 7}
               onClick={() => addRemoveAnnotation(!annotation)}
+              data-testid="gif-result-toggle-annotation"
             >
               {annotation ? keyword("button_remove") : keyword("button_add")}
             </Button>
@@ -361,6 +369,7 @@ const AnimatedGif = ({
               onChange={(_e, val) => changeSpeed(val)}
               onChangeCommitted={() => commitChangeSpeed(speed)}
               className={classes.sliderClass}
+              data-testid="gif-slider"
             />
 
             <Box
@@ -382,6 +391,7 @@ const AnimatedGif = ({
                   color="primary"
                   disabled={toolState === 7}
                   onClick={() => handleDownload("gif")}
+                  data-testid="gif-download-gif"
                 >
                   {keyword("button_download")}
                 </Button>
@@ -392,6 +402,7 @@ const AnimatedGif = ({
                   color="primary"
                   disabled={toolState === 7}
                   onClick={() => handleDownload("mp4")}
+                  data-testid="gif-download-video"
                 >
                   {keyword("button_video")}
                 </Button>

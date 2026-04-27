@@ -9,6 +9,8 @@
  */
 import { test, expect } from './fixtures';
 import path from 'path';
+import mockedSyntheticImageResponse from '../../tests-assets/api-response/syntheticimages-response.json'
+import mockedGeolocationResponse from '../../tests-assets/api-response/geolocation-response.json'
 
 test('Test tool magnifier', async ({ page, context, extensionId }) => {
     // Navigate to the demo page
@@ -66,15 +68,185 @@ test('Test tool forensic', async ({ page, extensionId }) => {
   await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/forensic`);
   await page.getByText("Accept").click();
 
-  // submit input file
   await page.locator('[data-testid="forensic-input"] input').fill('https://www.lebigdata.fr/wp-content/uploads/2023/03/macron-pape-ia-deepfake-1050x525.jpg');
-  await page.locator('[data-testid="forensic-submit"]').click();
+  await page.getByTestId('forensic-submit').click();
 
-  // test every tabs 
-  // await page1.getByRole('tab', { name: 'Traces' }).click();
-  // await page1.getByRole('tab', { name: 'Deep learning' }).click();
-  // await page1.getByRole('tab', { name: 'Clonage' }).click();
+  await expect (page.locator('[data-testid="forensic-results"]')).toBeVisible();
 
-  // // close
-  // await page1.getByRole('button', { name: 'Nouvelle image' }).click();
+  await expect (page.locator('[data-testid="forensic-result-image"]')).toBeVisible();
+  await expect (page.locator('[data-testid="forensic-results-lenses"]')).toBeVisible();
+  await expect (page.locator('[data-testid="forensic-results-filters"]')).toBeVisible();
+
+  await page.getByTestId('forensic-tab-noise').click();
+  await page.getByTestId('forensic-tab-family').click();
+  await page.getByTestId('forensic-tab-cloning').click();
+
+  await page.getByTestId('forensic-newimage-button').click();
+  await expect (page.locator('[data-testid="forensic-results"]')).toHaveCount(0);
 });
+
+test('Test tool OCR', async ({ page, context, extensionId }) => {
+  await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/ocr`);
+  await page.getByText("Accept").click();
+
+  await page.locator('[data-testid="ocr-input"] input').fill('https://www.rue89strasbourg.com/wp-content/uploads/2024/06/dsc-3582-1920x1280.jpg');
+  await page.getByTestId('ocr-submit').click();
+
+  await expect (page.locator('[data-testid="ocr-results"]')).toBeVisible();
+
+  await page.getByTestId('ocr-results-copy').click();
+  await page.getByTestId('ocr-results-translate').click();
+
+  await page.getByTestId('ocr-results-yandex').click();
+  await page.getByTestId('ocr-results-bing').click();
+  await page.getByTestId('ocr-results-google').click();
+
+  await expect.poll(async () => {
+    return context.pages().length;
+  }).toBe(6);
+});
+
+test('Test tool CheckGif', async({page, authenticatedBetaTesterExtensionId}) => {
+  // mocking main route (TODO : put this json in test assets folder, in a dedicated file to mocked api response)
+  await page.route('**/ipol/homographic', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        "key": "8A4ADC5A2BBB622AAF7FFC8068CEDD42",
+        "algo_info": {
+            "error_message": " ",
+            "run_time": "1.006547212600708"
+        },
+        "work_url": "/api/core/shared_folder/run/77777000125/8A4ADC5A2BBB622AAF7FFC8068CEDD42/",
+        "messages": [
+            "Input #1 has been preprocessed {#channels: 4 --> 3}."
+        ],
+        "results": {
+            "output0": "/ipol/homographic/result/8A4ADC5A2BBB622AAF7FFC8068CEDD42/output_0.jpg",
+            "output1": "/ipol/homographic/result/8A4ADC5A2BBB622AAF7FFC8068CEDD42/output_1.jpg",
+            "png0": "/ipol/homographic/result/8A4ADC5A2BBB622AAF7FFC8068CEDD42/output_0.png",
+            "png1": "/ipol/homographic/result/8A4ADC5A2BBB622AAF7FFC8068CEDD42/output_1.png",
+            "pano": "/ipol/homographic/result/8A4ADC5A2BBB622AAF7FFC8068CEDD42/pano.jpg",
+            "stdout": "/ipol/homographic/result/8A4ADC5A2BBB622AAF7FFC8068CEDD42/stdout.txt"
+        }
+      })
+    })
+  });
+
+  // mocking download gif adn video api 
+  const base64Data = "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"; // fake gif 
+  const buffer = Buffer.from(base64Data, 'base64');
+  await page.route('**/animatedbase64', route => {
+    route.fulfill({
+      status: 200,
+      contentType: 'image/gif',
+      headers: {
+        'Content-Disposition': 'attachment; filename="mocked.gif"',
+        'Content-Length': buffer.length.toString()
+      },
+      body: buffer
+    });
+  });
+
+  await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/gif`);
+
+  const filePath1 = path.resolve(__dirname, '../../tests-assets/test-checkgif-false.jpeg');
+  const filePath2 = path.resolve(__dirname, '../../tests-assets/test-checkgif-true.png');
+
+  await page.getByTestId("gif-tab-localfile").click();
+
+  await page.getByTestId("gif-inputfile-1").setInputFiles(filePath1);
+  await page.getByTestId("gif-inputfile-2").setInputFiles(filePath2);
+
+  await page.getByTestId("gif-submit").click();
+
+  await expect (page.getByTestId("gif-results")).toBeVisible();
+  await expect (page.getByTestId("gif-image-result-1")).toBeVisible();
+  await expect (page.getByTestId("gif-image-result-1")).toBeVisible();
+
+  const [downloadGif] = await Promise.all([
+    page.waitForEvent('download'),
+    page.getByTestId("gif-download-gif").click(),
+  ]);
+
+  const [downloadVideo] = await Promise.all([
+    page.waitForEvent('download'),
+    page.getByTestId("gif-download-video").click(),
+  ]);
+
+  await page.getByTestId("gif-result-toggle-annotation").click();
+
+  const slider = page.getByTestId("gif-slider");
+  await slider.click();
+  await page.keyboard.press('ArrowRight');
+
+  await page.getByTestId("gif-new-gif").click();
+  await expect (page.getByTestId("gif-results")).toHaveCount(0);
+});
+
+test('Test tool Synthetic Images', async({page, authenticatedBetaTesterExtensionId}) => {
+    await page.route('**/deepfake/images/**', async (route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(mockedSyntheticImageResponse)
+        })
+    });
+
+    await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/syntheticImageDetection`);
+
+    await page.locator('[data-testid="synhtetic-images-input"] input').fill('testurl');
+    await page.getByTestId('synhtetic-images-submit').click();
+
+    await expect (page.getByTestId("synthetic-images-results")).toBeVisible();
+    await expect (page.getByTestId("synthetic-images-results-image")).toBeVisible();
+    await expect (page.getByTestId("synthetic-images-gauge")).toBeVisible();
+
+    await page.getByTestId('synthetic-images-accordion').click();
+    await expect (page.getByTestId("synthetic-images-accordion-details")).toBeVisible();
+
+    await page.getByTestId('synthetic-images-close').click();
+    await expect (page.getByTestId("synthetic-images-results")).toHaveCount(0);
+})
+
+test('Test tool geolocalisation', async ({page, authenticatedBetaTesterExtensionId, context}) => {
+    await page.route('**/geolocate?image_url=**', async(route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(mockedGeolocationResponse)
+        })
+    })
+
+    await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/geolocation`);
+
+    await page.locator('[data-testid="geolocation-input"] input').fill('testurl');
+    await page.getByTestId('geolocation-submit').click();
+
+    await expect (page.getByTestId("geolocation-results")).toBeVisible();
+    await expect (page.getByTestId("geolocation-results-image")).toBeVisible();
+    await expect (page.getByTestId("geolocation-results-map")).toBeVisible();
+
+    await page.getByTestId('geolocation-results-button-to-gmaps').click();
+    
+    await expect.poll(async () => {
+        return context.pages().length;
+    }).toBe(2);
+})
+
+// TODO : manage to mock the api for afp reverse search (api response for this available in tests assets)
+test('Test tool C2PA', async ({page, authenticatedExtraFeaturesExtensionId}) => {
+    await page.goto(`chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/tools/c2pa`);
+
+    const filePath = path.resolve(__dirname, '../../tests-assets/test-c2pa.jpg');
+    await page.locator('input[type="file"]').setInputFiles(filePath);
+
+    await page.getByTestId('c2pa-reversesearch-toggle').click();
+    
+    await page.getByTestId('c2pa-submit').click();
+
+    await expect (page.getByTestId("c2pa-results")).toBeVisible();
+    await expect (page.getByTestId("c2pa-results-source")).toBeVisible();
+    await expect (page.getByTestId("c2pa-resutls-content")).toBeVisible();
+})

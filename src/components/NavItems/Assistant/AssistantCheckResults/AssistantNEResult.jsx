@@ -26,7 +26,7 @@ import {
   TransHtmlDoubleLineBreak,
   TransNamedEntityRecogniserLink,
   TransUsfdAuthor,
-} from "../TransComponents";
+} from "../components";
 import { NE_TYPE_COLORS } from "../constants";
 
 const AssistantNEResult = () => {

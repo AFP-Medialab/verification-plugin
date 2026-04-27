@@ -146,6 +146,7 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
         justifyContent: "flex-start",
         alignItems: "flex-start",
       }}
+      data-testid="hiya-results"
     >
       <Card variant="outlined" sx={{ width: "100%" }}>
         <Box
@@ -161,6 +162,7 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
                 aria-label="close"
                 onClick={handleClose}
                 sx={{ p: 1 }}
+                data-testid="hiya-close"
               >
                 <CloseIcon />
               </IconButton>
@@ -182,6 +184,7 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
               sx={{
                 p: 4,
               }}
+              data-testid="hiya-results-leftpanel"
             >
               <Box sx={{ width: "100%", position: "relative" }}>
                 <Grid
@@ -256,6 +259,7 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
                 sm: 12,
                 md: 6,
               }}
+              data-testid="hiya-results-rightpanel"
             >
               <Stack direction="column" spacing={4}>
                 <Stack

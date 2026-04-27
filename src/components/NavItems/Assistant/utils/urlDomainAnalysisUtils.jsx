@@ -1,34 +1,26 @@
-import React, { useState } from "react";
+import React from "react";
 
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import ListItemText from "@mui/material/ListItemText";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import CloseIcon from "@mui/icons-material/Close";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
-
-import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 
 import {
+  DomainDialog,
   TransHtmlDoubleLineBreak,
   TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
   TransUsfdAuthor,
-} from "../TransComponents";
-
-// functions for AssistantUrlDomainAnalysis and ExtractedUrlDomainAnalysis
+} from "../components";
 
 export const renderSourceTypeChip = (
   keyword,
@@ -39,8 +31,6 @@ export const renderSourceTypeChip = (
     <Chip label={keyword(sourceType)} color={trafficLightColor} size="small" />
   );
 };
-
-// functions for ExtractedUrlDomainAnalysis
 
 export function prependHttps(url) {
   return url ? (url.startsWith("http://") ? url : "https://" + url) : null;
@@ -204,7 +194,7 @@ export const renderDomainTitle = (
           alignItems="center"
         >
           {/* tooltip help */}
-          <Box>
+          <Box sx={{ pt: 0.75 }}>
             <Tooltip
               interactive={"true"}
               leaveDelay={50}
@@ -225,11 +215,7 @@ export const renderDomainTitle = (
           </Box>
 
           {/* close button */}
-          <Box
-            sx={{
-              pr: 1,
-            }}
-          >
+          <Box sx={{ pr: 1 }}>
             <IconButton onClick={handleClose}>
               <CloseIcon />
             </IconButton>
@@ -240,8 +226,6 @@ export const renderDomainTitle = (
   );
 };
 
-// functions for AssistantUrlDomainAnalysis
-
 export const renderDomainAnalysisResults = (
   keyword,
   sourceCredibiltyResults,
@@ -251,7 +235,19 @@ export const renderDomainAnalysisResults = (
   return (
     <List disablePadding={true}>
       {sourceCredibiltyResults?.map((value, key) => (
-        <ListItem key={key}>
+        <ListItem
+          key={key}
+          secondaryAction={
+            value.evidence ? (
+              <DomainDialog
+                keyword={keyword}
+                value={value}
+                trafficLightColor={trafficLightColor}
+                sourceType={sourceType}
+              />
+            ) : null
+          }
+        >
           <ListItemText
             primary={
               <Box>
@@ -266,11 +262,7 @@ export const renderDomainAnalysisResults = (
                     value.source,
                   )}
                 </Typography>
-                <Box
-                  sx={{
-                    mb: 0.5,
-                  }}
-                />
+                <Box sx={{ mb: 0.5 }} />
               </Box>
             }
             secondary={
@@ -282,128 +274,11 @@ export const renderDomainAnalysisResults = (
                 {renderScope(keyword, value.credibilityScope)}
                 {renderLabels(keyword, value.labels)}
                 {renderDescription(keyword, value.description)}
-                {value.evidence
-                  ? renderDialog(keyword, value, trafficLightColor, sourceType)
-                  : null}
               </Typography>
             }
           />
         </ListItem>
       ))}
     </List>
-  );
-};
-
-const renderDialog = (keyword, value, trafficLightColor, sourceType) => {
-  const classes = useMyStyles();
-
-  const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <ListItemSecondaryAction>
-      {/* Tooltip with more details icon */}
-      <Tooltip title="Details">
-        <ListAltOutlinedIcon
-          style={{ cursor: "pointer" }}
-          onClick={handleClickOpen}
-        />
-      </Tooltip>
-
-      {/* dialog box which appears when clicking tooltip icon above */}
-      <Dialog
-        onClose={handleClose}
-        maxWidth={"lg"}
-        open={open}
-        sx={{ "& .MuiDialog-paper": { minWidth: "50%" } }}
-      >
-        <DialogTitle>
-          <Grid container alignItems="center">
-            <Grid size={{ xs: 11 }}>
-              <Typography
-                variant="body1"
-                component="div"
-                sx={{ display: "flex", alignItems: "center", gap: 1 }}
-              >
-                <Chip
-                  label={keyword(sourceType)}
-                  color={trafficLightColor}
-                  size="small"
-                />
-                {keyword("source_cred_popup_header_domain")} {value.source}
-              </Typography>
-            </Grid>
-            <Grid
-              size={{ xs: 1 }}
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                alignItems: "center",
-              }}
-            >
-              {/* tooltip help */}
-              <Box>
-                <Tooltip
-                  interactive={"true"}
-                  leaveDelay={50}
-                  style={{ display: "flex", marginLeft: "auto" }}
-                  title={
-                    <>
-                      <TransSourceCredibilityTooltip keyword={keyword} />
-                      <TransHtmlDoubleLineBreak keyword={keyword} />
-                      <TransUsfdAuthor keyword={keyword} />
-                      <TransHtmlDoubleLineBreak keyword={keyword} />
-                      <TransUrlDomainAnalysisLink keyword={keyword} />
-                    </>
-                  }
-                  classes={{ tooltip: classes.assistantTooltip }}
-                >
-                  <HelpOutlineOutlinedIcon color={"action"} />
-                </Tooltip>
-              </Box>
-
-              {/* close button */}
-              <Box
-                sx={{
-                  pr: 1,
-                }}
-              >
-                <IconButton onClick={handleClose}>
-                  <CloseIcon />
-                </IconButton>
-              </Box>
-            </Grid>
-          </Grid>
-        </DialogTitle>
-
-        <DialogContent dividers>
-          <List sx={{ listStyle: "decimal", ml: 4 }}>
-            {value.evidence.map((result, index) => (
-              <ListItem key={index} sx={{ display: "list-item" }}>
-                <Typography>
-                  <Link target="_blank" href={result} color="inherit">
-                    {result}
-                  </Link>
-                </Typography>
-              </ListItem>
-            ))}
-          </List>
-          {value.labels === "present in GDI reports" && (
-            <Typography variant={"subtitle2"} sx={{ align: "start" }}>
-              <Box sx={{ fontStyle: "italic", m: 1 }}>
-                {keyword("gdi_reports_warning")}
-              </Box>
-            </Typography>
-          )}
-        </DialogContent>
-      </Dialog>
-    </ListItemSecondaryAction>
   );
 };
