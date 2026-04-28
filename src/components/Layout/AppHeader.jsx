@@ -1,3 +1,8 @@
+import LogoEuComWhite from "../NavBar/images/SVG/Navbar/ep-logo-white.svg?react";
+import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg?react";
+import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg?react";
+import LogoVeraBlack from "../NavBar/images/SVG/Navbar/vera-logo_black.svg?react";
+import LogoVeraWhite from "../NavBar/images/SVG/Navbar/vera-logo_white.svg?react";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -37,11 +42,6 @@ import { theme } from "@/theme";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@Shared/MaterialUiStyles/useMyStyles";
 
-import LogoEuComWhite from "../NavBar/images/SVG/Navbar/ep-logo-white.svg";
-import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg";
-import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg";
-import LogoVeraBlack from "../NavBar/images/SVG/Navbar/vera-logo_black.svg";
-import LogoVeraWhite from "../NavBar/images/SVG/Navbar/vera-logo_white.svg";
 import AdvancedTools from "../NavItems/tools/Alltools/AdvancedTools/AdvancedTools";
 import useAuthenticationAPI from "../Shared/Authentication/useAuthenticationAPI";
 import SettingsDrawer from "./SettingsDrawer";

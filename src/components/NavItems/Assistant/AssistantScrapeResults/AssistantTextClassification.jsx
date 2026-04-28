@@ -18,8 +18,8 @@ import { hexToRgb } from "@mui/material/styles";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
+import { ThresholdSlider } from "@/components/NavItems/Assistant/components";
 import {
-  ThresholdSlider,
   createGaugeChart,
   getMgtColours,
   getSubjectivityColours,
@@ -27,7 +27,7 @@ import {
   rgbToString,
   treeMapToElements,
   wrapPlainTextSpan,
-} from "@/components/NavItems/Assistant/AssistantScrapeResults/assistantUtils";
+} from "@/components/NavItems/Assistant/utils";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { setImportantSentenceThreshold } from "@/redux/actions/tools/assistantActions";
@@ -358,7 +358,6 @@ export function GaugeCategoriesList({
                 {keyword("threshold_slider_confidence")}
               </Typography>
               <ThresholdSlider
-                credibilitySignal={credibilitySignal}
                 importantSentenceThreshold={importantSentenceThreshold}
                 handleSliderChange={handleSliderChange}
                 keyword={keyword}
@@ -449,7 +448,6 @@ export function CategoriesList({
         {keyword("threshold_slider_relevance")}
       </Typography>
       <ThresholdSlider
-        credibilitySignal={credibilitySignal}
         importantSentenceThreshold={importantSentenceThreshold}
         handleSliderChange={handleSliderChange}
         keyword={keyword}

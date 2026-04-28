@@ -59,6 +59,7 @@ const C2paResults = ({
         sx={{
           p: 4,
         }}
+        data-testid="c2pa-results"
       >
         <Grid
           container
@@ -68,7 +69,7 @@ const C2paResults = ({
           }}
         >
           {url && (
-            <Grid>
+            <Grid data-testid="c2pa-results-source">
               {isImage ? (
                 <img
                   src={url}

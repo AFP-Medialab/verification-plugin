@@ -1,0 +1,589 @@
+{
+    "session": "74e6d26bb665fc870889014a2",
+    "generated_at": "2026-04-27 10:59:27.380740",
+    "expires_at": "2026-04-28 10:59:27.380745",
+    "backend_version": "2.3.0",
+    "filename": "74e6d26bb665fc870889014a2.mp4",
+    "url": "https://www.youtube.com/watch?v=QQFgQ1uBQtk",
+    "framerate": 25.0,
+    "duration": "0:01:41.960000",
+    "keyframes_zip": "https://kse.idt.iti.gr/kse/keyframes_zip/74e6d26bb665fc870889014a2",
+    "shots": [
+        {
+            "begintime": 0.0,
+            "endtime": 0.2,
+            "beginframe": 0,
+            "endframe": 5
+        },
+        {
+            "begintime": 0.24,
+            "endtime": 3.76,
+            "beginframe": 6,
+            "endframe": 94
+        },
+        {
+            "begintime": 3.8,
+            "endtime": 32.04,
+            "beginframe": 95,
+            "endframe": 801
+        },
+        {
+            "begintime": 32.08,
+            "endtime": 34.84,
+            "beginframe": 802,
+            "endframe": 871
+        },
+        {
+            "begintime": 34.88,
+            "endtime": 40.56,
+            "beginframe": 872,
+            "endframe": 1014
+        },
+        {
+            "begintime": 40.6,
+            "endtime": 45.32,
+            "beginframe": 1015,
+            "endframe": 1133
+        },
+        {
+            "begintime": 45.36,
+            "endtime": 54.88,
+            "beginframe": 1134,
+            "endframe": 1372
+        },
+        {
+            "begintime": 54.92,
+            "endtime": 56.12,
+            "beginframe": 1373,
+            "endframe": 1403
+        },
+        {
+            "begintime": 56.16,
+            "endtime": 64.72,
+            "beginframe": 1404,
+            "endframe": 1618
+        },
+        {
+            "begintime": 64.76,
+            "endtime": 66.48,
+            "beginframe": 1619,
+            "endframe": 1662
+        },
+        {
+            "begintime": 66.52,
+            "endtime": 71.56,
+            "beginframe": 1663,
+            "endframe": 1789
+        },
+        {
+            "begintime": 71.6,
+            "endtime": 73.24,
+            "beginframe": 1790,
+            "endframe": 1831
+        },
+        {
+            "begintime": 73.28,
+            "endtime": 83.44,
+            "beginframe": 1832,
+            "endframe": 2086
+        },
+        {
+            "begintime": 83.48,
+            "endtime": 86.04,
+            "beginframe": 2087,
+            "endframe": 2151
+        },
+        {
+            "begintime": 86.08,
+            "endtime": 92.04,
+            "beginframe": 2152,
+            "endframe": 2301
+        },
+        {
+            "begintime": 92.08,
+            "endtime": 96.72,
+            "beginframe": 2302,
+            "endframe": 2418
+        },
+        {
+            "begintime": 96.76,
+            "endtime": 98.52,
+            "beginframe": 2419,
+            "endframe": 2463
+        },
+        {
+            "begintime": 98.56,
+            "endtime": 101.72,
+            "beginframe": 2464,
+            "endframe": 2543
+        }
+    ],
+    "subshots": [
+        {
+            "begintime": 0.0,
+            "endtime": 0.2,
+            "beginframe": 0,
+            "endframe": 5,
+            "shot": 1
+        },
+        {
+            "begintime": 0.24,
+            "endtime": 3.76,
+            "beginframe": 6,
+            "endframe": 94,
+            "shot": 2
+        },
+        {
+            "begintime": 3.8,
+            "endtime": 32.04,
+            "beginframe": 95,
+            "endframe": 801,
+            "shot": 3
+        },
+        {
+            "begintime": 32.08,
+            "endtime": 34.84,
+            "beginframe": 802,
+            "endframe": 871,
+            "shot": 4
+        },
+        {
+            "begintime": 34.88,
+            "endtime": 40.56,
+            "beginframe": 872,
+            "endframe": 1014,
+            "shot": 5
+        },
+        {
+            "begintime": 40.6,
+            "endtime": 45.32,
+            "beginframe": 1015,
+            "endframe": 1133,
+            "shot": 6
+        },
+        {
+            "begintime": 45.36,
+            "endtime": 54.88,
+            "beginframe": 1134,
+            "endframe": 1372,
+            "shot": 7
+        },
+        {
+            "begintime": 54.92,
+            "endtime": 56.12,
+            "beginframe": 1373,
+            "endframe": 1403,
+            "shot": 8
+        },
+        {
+            "begintime": 56.16,
+            "endtime": 64.72,
+            "beginframe": 1404,
+            "endframe": 1618,
+            "shot": 9
+        },
+        {
+            "begintime": 64.76,
+            "endtime": 66.48,
+            "beginframe": 1619,
+            "endframe": 1662,
+            "shot": 10
+        },
+        {
+            "begintime": 66.52,
+            "endtime": 71.56,
+            "beginframe": 1663,
+            "endframe": 1789,
+            "shot": 11
+        },
+        {
+            "begintime": 71.6,
+            "endtime": 73.24,
+            "beginframe": 1790,
+            "endframe": 1831,
+            "shot": 12
+        },
+        {
+            "begintime": 73.28,
+            "endtime": 83.44,
+            "beginframe": 1832,
+            "endframe": 2086,
+            "shot": 13
+        },
+        {
+            "begintime": 83.48,
+            "endtime": 86.04,
+            "beginframe": 2087,
+            "endframe": 2151,
+            "shot": 14
+        },
+        {
+            "begintime": 86.08,
+            "endtime": 92.04,
+            "beginframe": 2152,
+            "endframe": 2301,
+            "shot": 15
+        },
+        {
+            "begintime": 92.08,
+            "endtime": 96.72,
+            "beginframe": 2302,
+            "endframe": 2418,
+            "shot": 16
+        },
+        {
+            "begintime": 96.76,
+            "endtime": 98.52,
+            "beginframe": 2419,
+            "endframe": 2463,
+            "shot": 17
+        },
+        {
+            "begintime": 98.56,
+            "endtime": 101.68,
+            "beginframe": 2464,
+            "endframe": 2542,
+            "shot": 18
+        },
+        {
+            "begintime": 101.72,
+            "endtime": 101.92,
+            "beginframe": 2543,
+            "endframe": 2548,
+            "shot": 1
+        }
+    ],
+    "keyframes": [
+        {
+            "shot": 1,
+            "subshot": 1,
+            "frame": 5,
+            "keyframe_time": 0.2,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/5.jpg"
+        },
+        {
+            "shot": 2,
+            "subshot": 2,
+            "frame": 16,
+            "keyframe_time": 0.64,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/16.jpg"
+        },
+        {
+            "shot": 2,
+            "subshot": 2,
+            "frame": 49,
+            "keyframe_time": 1.96,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/49.jpg"
+        },
+        {
+            "shot": 3,
+            "subshot": 3,
+            "frame": 95,
+            "keyframe_time": 3.8,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/95.jpg"
+        },
+        {
+            "shot": 3,
+            "subshot": 3,
+            "frame": 264,
+            "keyframe_time": 10.56,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/264.jpg"
+        },
+        {
+            "shot": 4,
+            "subshot": 4,
+            "frame": 802,
+            "keyframe_time": 32.08,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/802.jpg"
+        },
+        {
+            "shot": 5,
+            "subshot": 5,
+            "frame": 979,
+            "keyframe_time": 39.16,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/979.jpg"
+        },
+        {
+            "shot": 6,
+            "subshot": 6,
+            "frame": 1040,
+            "keyframe_time": 41.6,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/1040.jpg"
+        },
+        {
+            "shot": 7,
+            "subshot": 7,
+            "frame": 1355,
+            "keyframe_time": 54.2,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/1355.jpg"
+        },
+        {
+            "shot": 8,
+            "subshot": 8,
+            "frame": 1373,
+            "keyframe_time": 54.92,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/1373.jpg"
+        },
+        {
+            "shot": 9,
+            "subshot": 9,
+            "frame": 1427,
+            "keyframe_time": 57.08,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/1427.jpg"
+        },
+        {
+            "shot": 9,
+            "subshot": 9,
+            "frame": 1465,
+            "keyframe_time": 58.6,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/1465.jpg"
+        },
+        {
+            "shot": 10,
+            "subshot": 10,
+            "frame": 1619,
+            "keyframe_time": 64.76,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/1619.jpg"
+        },
+        {
+            "shot": 11,
+            "subshot": 11,
+            "frame": 1675,
+            "keyframe_time": 67.0,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/1675.jpg"
+        },
+        {
+            "shot": 12,
+            "subshot": 12,
+            "frame": 1823,
+            "keyframe_time": 72.92,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/1823.jpg"
+        },
+        {
+            "shot": 13,
+            "subshot": 13,
+            "frame": 1832,
+            "keyframe_time": 73.28,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/1832.jpg"
+        },
+        {
+            "shot": 13,
+            "subshot": 13,
+            "frame": 2075,
+            "keyframe_time": 83.0,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/2075.jpg"
+        },
+        {
+            "shot": 14,
+            "subshot": 14,
+            "frame": 2087,
+            "keyframe_time": 83.48,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/2087.jpg"
+        },
+        {
+            "shot": 15,
+            "subshot": 15,
+            "frame": 2292,
+            "keyframe_time": 91.68,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/2292.jpg"
+        },
+        {
+            "shot": 16,
+            "subshot": 16,
+            "frame": 2302,
+            "keyframe_time": 92.08,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/2302.jpg"
+        },
+        {
+            "shot": 16,
+            "subshot": 16,
+            "frame": 2405,
+            "keyframe_time": 96.2,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/2405.jpg"
+        },
+        {
+            "shot": 17,
+            "subshot": 17,
+            "frame": 2419,
+            "keyframe_time": 96.76,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/2419.jpg"
+        },
+        {
+            "shot": 18,
+            "subshot": 18,
+            "frame": 2464,
+            "keyframe_time": 98.56,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/2464.jpg"
+        },
+        {
+            "shot": 18,
+            "subshot": 18,
+            "frame": 2540,
+            "keyframe_time": 101.6,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/2540.jpg"
+        }
+    ],
+    "keyframes_xtra": [
+        {
+            "shot": 2,
+            "subshot": 2,
+            "frame": 13,
+            "keyframe_time": 0.52,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/13.jpg"
+        },
+        {
+            "shot": 2,
+            "subshot": 2,
+            "frame": 65,
+            "keyframe_time": 2.6,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/65.jpg"
+        },
+        {
+            "shot": 2,
+            "subshot": 2,
+            "frame": 81,
+            "keyframe_time": 3.24,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/81.jpg"
+        },
+        {
+            "shot": 3,
+            "subshot": 3,
+            "frame": 232,
+            "keyframe_time": 9.28,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/232.jpg"
+        },
+        {
+            "shot": 3,
+            "subshot": 3,
+            "frame": 240,
+            "keyframe_time": 9.6,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/240.jpg"
+        },
+        {
+            "shot": 3,
+            "subshot": 3,
+            "frame": 662,
+            "keyframe_time": 26.48,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/662.jpg"
+        },
+        {
+            "shot": 4,
+            "subshot": 4,
+            "frame": 871,
+            "keyframe_time": 34.84,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/871.jpg"
+        },
+        {
+            "shot": 5,
+            "subshot": 5,
+            "frame": 872,
+            "keyframe_time": 34.88,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/872.jpg"
+        },
+        {
+            "shot": 5,
+            "subshot": 5,
+            "frame": 896,
+            "keyframe_time": 35.84,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/896.jpg"
+        },
+        {
+            "shot": 5,
+            "subshot": 5,
+            "frame": 1008,
+            "keyframe_time": 40.32,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/1008.jpg"
+        },
+        {
+            "shot": 9,
+            "subshot": 9,
+            "frame": 1529,
+            "keyframe_time": 61.16,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/1529.jpg"
+        },
+        {
+            "shot": 11,
+            "subshot": 11,
+            "frame": 1714,
+            "keyframe_time": 68.56,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/1714.jpg"
+        },
+        {
+            "shot": 11,
+            "subshot": 11,
+            "frame": 1778,
+            "keyframe_time": 71.12,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/1778.jpg"
+        },
+        {
+            "shot": 13,
+            "subshot": 13,
+            "frame": 2059,
+            "keyframe_time": 82.36,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/2059.jpg"
+        },
+        {
+            "shot": 14,
+            "subshot": 14,
+            "frame": 2151,
+            "keyframe_time": 86.04,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/2151.jpg"
+        },
+        {
+            "shot": 15,
+            "subshot": 15,
+            "frame": 2152,
+            "keyframe_time": 86.08,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/2152.jpg"
+        },
+        {
+            "shot": 16,
+            "subshot": 16,
+            "frame": 2358,
+            "keyframe_time": 94.32,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/2358.jpg"
+        },
+        {
+            "shot": 16,
+            "subshot": 16,
+            "frame": 2369,
+            "keyframe_time": 94.76,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/2369.jpg"
+        },
+        {
+            "shot": 17,
+            "subshot": 17,
+            "frame": 2433,
+            "keyframe_time": 97.32,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/2433.jpg"
+        },
+        {
+            "shot": 17,
+            "subshot": 17,
+            "frame": 2442,
+            "keyframe_time": 97.68,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/2442.jpg"
+        },
+        {
+            "shot": 17,
+            "subshot": 17,
+            "frame": 2445,
+            "keyframe_time": 97.8,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/2445.jpg"
+        },
+        {
+            "shot": 17,
+            "subshot": 17,
+            "frame": 2463,
+            "keyframe_time": 98.52,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/2463.jpg"
+        },
+        {
+            "shot": 18,
+            "subshot": 19,
+            "frame": 2543,
+            "keyframe_time": 101.72,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/74e6d26bb665fc870889014a2/2543.jpg"
+        }
+    ]
+}

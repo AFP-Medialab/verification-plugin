@@ -249,9 +249,24 @@ const CollectionActionsCell = ({
             "aria-labelledby": "basic-button",
           }}
         >
-          <MenuItem onClick={() => downloadTweetCSV()}>CSV</MenuItem>
-          <MenuItem onClick={() => downloadTweetsJson()}>JSON</MenuItem>
-          <MenuItem onClick={() => downloadTweetsRaw()}>Raw JSON</MenuItem>
+          <MenuItem
+            onClick={() => downloadTweetCSV()}
+            data-testid={`sna-download-csv-${row.id}`}
+          >
+            CSV
+          </MenuItem>
+          <MenuItem
+            onClick={() => downloadTweetsJson()}
+            data-testid={`sna-download-json-${row.id}`}
+          >
+            JSON
+          </MenuItem>
+          <MenuItem
+            onClick={() => downloadTweetsRaw()}
+            data-testid={`sna-download-raw-json-${row.id}`}
+          >
+            Raw JSON
+          </MenuItem>
         </Menu>
       </>
     );
@@ -287,6 +302,7 @@ const CollectionActionsCell = ({
           aria-label="delete"
           color="error"
           sx={{ p: 1 }}
+          data-testid={`sna-delete-button-${row.id}`}
         >
           <DeleteIcon />
         </IconButton>
@@ -351,6 +367,7 @@ const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
       hover
       role="checkbox"
       selected={selected.indexOf(row.id) !== -1}
+      data-testid={`sna-collection-row-${row.name}`}
     >
       <TableCell>
         <IconButton
@@ -360,6 +377,7 @@ const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
             setOpenDetailModal(true);
           }}
           sx={{ p: 1 }}
+          data-testid={`sna-visibility-button-${row.id}`}
         >
           <VisibilityIcon />
         </IconButton>
@@ -369,6 +387,7 @@ const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
           key={row.id + "_collectionTableCheckbox"}
           checked={selected.indexOf(row.id) !== -1}
           onChange={() => handleSelectRow(row.id)}
+          data-testid={`sna-collection-checkbox-${row.id}`}
         />
       </TableCell>
       <TableCell>{row.name}</TableCell>

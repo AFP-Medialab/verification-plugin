@@ -30,7 +30,7 @@ import {
   TransKinitAuthor,
   TransOntotextAuthor,
   TransPrevFactChecksLink,
-} from "../TransComponents";
+} from "../components";
 
 const AssistantWarnings = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");

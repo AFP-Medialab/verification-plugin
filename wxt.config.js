@@ -1,8 +1,11 @@
 import { resolve } from "path";
-import svgr from "vite-plugin-svgr";
+import { transformWithOxc } from "vite";
 import { defineConfig } from "wxt";
-
+import { createFilter } from '@rollup/pluginutils';
 import pkg from "./package.json";
+import { promises as fs } from "node:fs";
+import { transform as svgrTransform } from "@svgr/core";
+import jsx from "@svgr/plugin-jsx";
 
 export default defineConfig({
   modules: ["@wxt-dev/module-react", "@wxt-dev/auto-icons"],
@@ -87,16 +90,51 @@ export default defineConfig({
 
   vite: () => ({
     plugins: [
-      svgr({
-        include: "**/*.svg",
-        svgrOptions: {
-          icon: true,
-        },
-      }),
+      vitePluginSvgr({svgrOptions: {icon: true}})
     ],
+
     server: {
       // Disable HMR
       // hmr: false,
     },
   }),
 });
+
+/**
+ * This function is meant to outpass the regression of Oxc used in Vite 8+ (to replace EsBuild) about the svg files imported as React component.
+ * It was given in this issue on Vite GitHub : https://github.com/pd4d10/vite-plugin-svgr/issues/141
+ * 
+ * @returns plugin
+ */
+function vitePluginSvgr({ svgrOptions, include = "**/*.svg?react", exclude } = {}) {
+    const filter = createFilter(include, exclude);
+    const postfixRE = /[?#].*$/s;
+    let isBuild = false;
+    let resolvedConfig;
+    return {
+        name: "vite-plugin-svgr",
+        enforce: "pre",
+        configResolved(config) {
+            resolvedConfig = config;
+            isBuild = config.command === "build";
+        },
+        async load(id) {
+            if (filter(id)) {
+              // get the code of the REact component associated to the SVG
+              const filePath = id.replace(/[?#].*$/s, "");
+              
+              const svgCode = await fs.readFile(filePath, "utf8");
+              const componentCode = await svgrTransform(
+                svgCode,
+                { icon: true },
+                { filePath, caller: { defaultPlugins: [jsx] } },
+              );
+
+              // Dev: read JSX config from resolved Vite config (set by @vitejs/plugin-react)
+              const jsxOptions = resolvedConfig?.oxc?.jsx ?? { runtime: "automatic" };
+              const res = await transformWithOxc(componentCode, id, { lang: "jsx", jsx: jsxOptions });
+              return { code: res.code, map: null };
+            }
+        },
+    };
+}

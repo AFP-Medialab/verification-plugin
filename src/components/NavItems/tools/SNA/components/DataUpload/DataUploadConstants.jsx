@@ -1,11 +1,10 @@
+import TiktocIconSVG from "../../../../../NavBar/images/SVG/DataAnalysis/Tiktok_sna.svg?react";
 import React from "react";
 
 import SvgIcon from "@mui/material/SvgIcon";
 
 import FacebookIcon from "@mui/icons-material/Facebook";
 import XIcon from "@mui/icons-material/X";
-
-import TiktocIconSVG from "../../../../../NavBar/images/SVG/DataAnalysis/Tiktok_sna.svg";
 
 export const dataUploadModalStyle = {
   position: "absolute",

@@ -21,7 +21,7 @@ import TextFooter from "@/components/NavItems/Assistant/AssistantScrapeResults/T
 import {
   scrollToElement,
   treeMapToElements,
-} from "@/components/NavItems/Assistant/AssistantScrapeResults/assistantUtils";
+} from "@/components/NavItems/Assistant/utils";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import {
@@ -40,7 +40,7 @@ import {
   TransPersuasionTechniquesTooltip,
   TransSupportedToolsLink,
   TransUsfdAuthor,
-} from "../TransComponents";
+} from "../components";
 import { CREDIBILITY_SIGNAL_TITLES } from "../constants";
 
 const AssistantTextResult = () => {
@@ -58,7 +58,6 @@ const AssistantTextResult = () => {
 
   // third party check states
   const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
-  const mtLoading = useSelector((state) => state.assistant.mtLoading);
   const dbkfTextMatchLoading = useSelector(
     (state) => state.assistant.dbkfTextMatchLoading,
   );
@@ -274,8 +273,8 @@ const AssistantTextResult = () => {
           </div>
         }
       />
-      {dbkfTextMatchLoading && mtLoading && (
-        <LinearProgress variant={"indeterminate"} color={"secondary"} />
+      {dbkfTextMatchLoading && (
+        <LinearProgress variant={"indeterminate"} color={"primary"} />
       )}
       <CardContent
         style={{

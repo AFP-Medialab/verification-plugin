@@ -1,3 +1,4 @@
+import IconInternetArchive from "../../../../NavBar/images/SVG/Others/archive-icon.svg?react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -16,7 +17,6 @@ import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { history } from "@Shared/History/History";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
-import IconInternetArchive from "../../../../NavBar/images/SVG/Others/archive-icon.svg";
 import CopyButton from "../../../../Shared/CopyButton";
 import { prettifyLargeString } from "../utils";
 import DownloadWaczFile from "./downloadWaczFile";

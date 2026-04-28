@@ -143,6 +143,8 @@ const Deepfake = () => {
                 preprocessLocalFile={preprocessVideo}
                 isParentLoading={isLoading}
                 handleClearUrl={resetState}
+                urlInputTestId="deepfake-input"
+                submitButtonTestId="deepfake-submit"
               />
             </form>
           </Box>

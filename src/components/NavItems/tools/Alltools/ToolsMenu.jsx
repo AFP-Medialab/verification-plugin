@@ -1,3 +1,7 @@
+import DataIcon from "../../../NavBar/images/SVG/DataAnalysis/Data_analysis.svg?react";
+import ImageIcon from "../../../NavBar/images/SVG/Image/Images.svg?react";
+import SearchIcon from "../../../NavBar/images/SVG/Search/Search.svg?react";
+import VideoIcon from "../../../NavBar/images/SVG/Video/Video.svg?react";
 import React, { useState } from "react";
 import Iframe from "react-iframe";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,10 +29,6 @@ import { TOOLS_CATEGORIES, canUserSeeTool, tools } from "@/constants/tools";
 import { selectToolTab } from "@/redux/reducers/toolTabSelectedReducer";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
-import DataIcon from "../../../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
-import ImageIcon from "../../../NavBar/images/SVG/Image/Images.svg";
-import SearchIcon from "../../../NavBar/images/SVG/Search/Search.svg";
-import VideoIcon from "../../../NavBar/images/SVG/Video/Video.svg";
 import ToolsMenuItem from "./ToolsMenuItem";
 
 function TabPanel(props) {
