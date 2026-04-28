@@ -55,6 +55,8 @@ export const test = base.extend<{
       args: [
         `--disable-extensions-except=${pathToExtension}`,
         `--load-extension=${pathToExtension}`,
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
       ],
     });
     await use(context);
