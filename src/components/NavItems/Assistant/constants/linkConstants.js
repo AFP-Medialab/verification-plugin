@@ -93,6 +93,12 @@ export const KNOWN_LINK_PATTERNS = [
     ],
   },
   {
+    key: KNOWN_LINKS.BBC,
+    patterns: [
+      "(https?:\\/{2})?(www\\.)?(bbc\\.co\\.uk|bbc\\.com|bbc\\.in)\\/.*",
+    ],
+  },
+  {
     key: KNOWN_LINKS.MISC,
     patterns: [
       "(http(s)?://.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)",

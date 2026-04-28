@@ -293,6 +293,8 @@ function* handleDbkfTextCall(action) {
   try {
     const text = yield select((state) => state.assistant.urlText);
     if (text) {
+      yield put(setDbkfTextMatchDetails(null, true, false, false));
+
       let textToUse = text.length > 100 ? text.substring(0, 100) : text;
       /*
         let textRegex = /[\W]$/
@@ -824,6 +826,7 @@ const decideWhetherToScrape = (urlType, contentType) => {
     case KNOWN_LINKS.TWITTER:
     case KNOWN_LINKS.SNAPCHAT:
     case KNOWN_LINKS.BLUESKY:
+    case KNOWN_LINKS.BBC:
     case KNOWN_LINKS.TELEGRAM:
     case KNOWN_LINKS.MASTODON:
     case KNOWN_LINKS.VK:
@@ -935,6 +938,7 @@ const filterAssistantResults = (
     case KNOWN_LINKS.MASTODON:
     case KNOWN_LINKS.TELEGRAM:
     case KNOWN_LINKS.VK:
+    case KNOWN_LINKS.BBC:
       if (scrapeResult.images.length > 0) {
         imageList = scrapeResult.images;
       }

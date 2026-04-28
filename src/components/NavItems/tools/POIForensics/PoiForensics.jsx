@@ -98,7 +98,6 @@ const PoiForensics = () => {
     setSelectedMode(event.target.value);
   };
 
-  // pour l'instant on va juste console log l'url construit
   const submitUrl = async () => {
     await useGetPoiForensics(
       selectedPoi,
@@ -189,6 +188,8 @@ const PoiForensics = () => {
                 preprocessLocalFile={preprocessVideo}
                 isParentLoading={isLoading}
                 handleClearUrl={resetState}
+                urlInputTestId="poiforensic-input"
+                submitButtonTestId="poiforensic-submit"
               />
             </form>
             <Box sx={{ m: 2 }}>
@@ -238,7 +239,11 @@ const PoiForensics = () => {
         </Card>
 
         {result && (
-          <PoiForensicsResults result={result} handleClose={resetState} />
+          <PoiForensicsResults
+            result={result}
+            handleClose={resetState}
+            mode={selectedMode}
+          />
         )}
       </Stack>
     </Box>

@@ -7,6 +7,9 @@
  */
 import { test, expect } from './fixtures';
 import path from 'path';
+import mockedKeyframesResponse from '../../tests-assets/api-response/keyframes-response.json'
+import mockedDeepfakeResponse from '../../tests-assets/api-response/deepfake-response.json'
+import mockedPoiForensicResponse from '../../tests-assets/api-response/poiforensic-response.json'
 
 test(`Test tool analysis video`, async ({ page, extensionId }) => {
   await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/analysis`);
@@ -27,44 +30,50 @@ test(`Test tool analysis video`, async ({ page, extensionId }) => {
 
 // test generated with codegen
 test('Test tool keyframes', async ({ page, extensionId }) => {
-  await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/keyframes`);
-  // Accept local storage usage
-  await page.getByText("Accept").click();
+    await page.route('**/vera/public/kse_video_analysis', async (route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(mockedKeyframesResponse),
+        });
+    });
 
-  await page.locator('[data-testid="keyframes-input"] input').fill('https://www.youtube.com/watch?v=QQFgQ1uBQtk');
+    await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/keyframes`);
+    // Accept local storage usage
+    await page.getByText("Accept").click();
 
-  await page.locator('[data-testid="keyframes-submit"]').click();
-  
-  // test of zoom in and out
-  await page.locator('[data-testid="keyframes-zoomout"]').click();
-  await page.locator('[data-testid="keyframes-zoomin"]').click();
+    await page.locator('[data-testid="keyframes-input"] input').fill('https://www.youtube.com/watch?v=QQFgQ1uBQtk');
 
-  // test of detailed view
-  await page.locator('[data-testid="keyframes-toggle-detailed"]').click();
+    await page.locator('[data-testid="keyframes-submit"]').click();
 
-  // test of download
-  const downloadPromise = page.waitForEvent('download');
-  await page.locator('[data-testid="keyframes-download"]').click();
-  const download = await downloadPromise;
-  
-  await expect (page.locator('[data-testid="keyframes-results-general"]')).toBeVisible();
-  await expect (page.locator('[data-testid="keyframes-results-audio"]')).toBeVisible();
-  await expect (page.locator('[data-testid="keyframes-results-face"]')).toBeVisible();
-  await expect (page.locator('[data-testid="keyframes-results-text"]')).toBeVisible();
+    // test of zoom in and out
+    await page.locator('[data-testid="keyframes-zoomout"]').click();
+    await page.locator('[data-testid="keyframes-zoomin"]').click();
 
-  // test of closing button 
-  await page.locator('[data-testid="keyframes-close"]').click();
+    // test of detailed view
+    await page.locator('[data-testid="keyframes-toggle-detailed"]').click();
 
-  await expect (page.locator('[data-testid="keyframes-results-general"]')).toHaveCount(0);
-  await expect (page.locator('[data-testid="keyframes-results-audio"]')).toHaveCount(0);
-  await expect (page.locator('[data-testid="keyframes-results-face"]')).toHaveCount(0);
-  await expect (page.locator('[data-testid="keyframes-results-text"]')).toHaveCount(0);
+    // test of download
+    const downloadPromise = page.waitForEvent('download');
+    await page.locator('[data-testid="keyframes-download"]').click();
+    const download = await downloadPromise;
+
+    await expect (page.locator('[data-testid="keyframes-results-general"]')).toBeVisible();
+    await expect (page.locator('[data-testid="keyframes-results-audio"]')).toBeVisible();
+    await expect (page.locator('[data-testid="keyframes-results-face"]')).toBeVisible();
+    await expect (page.locator('[data-testid="keyframes-results-text"]')).toBeVisible();
+
+    // test of closing button 
+    await page.locator('[data-testid="keyframes-close"]').click();
+
+    await expect (page.locator('[data-testid="keyframes-results-general"]')).toHaveCount(0);
+    await expect (page.locator('[data-testid="keyframes-results-audio"]')).toHaveCount(0);
+    await expect (page.locator('[data-testid="keyframes-results-face"]')).toHaveCount(0);
+    await expect (page.locator('[data-testid="keyframes-results-text"]')).toHaveCount(0);
 });
 
 test('Test tool thumbnails', async ({ page, context, extensionId }) => {
-  // Navigate to the demo page
   await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/thumbnails`);
-  // Accept local storage usage
   await page.getByText("Accept").click();
 
   // Counting tabs before submitting
@@ -94,6 +103,53 @@ test('Test tool metadata video', async ({ page, extensionId }) => {
   await page.locator('[data-testid="metadata-submit"]').click();
 
   await expect (page.locator('[data-testid="c2pa-result"]')).toBeVisible();
+});
+
+test('Test tool deepfake video', async ({page, authenticatedBetaTesterExtensionId}) => {
+  // mocking main route (TODO : put this json in test assets folder, in a dedicated file to mocked api response)
+  await page.route('**/deepfake/videos/jobs?url=https:%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DyVEhrIMc-ps&services=faceswap_fsfm', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(mockedDeepfakeResponse)
+    });
+  });
+
+  await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/deepfakeVideo`);
+
+  await page.locator('[data-testid="deepfake-input"] input').fill('https://www.youtube.com/watch?v=bPhUhypV27w');
+  await page.getByTestId('deepfake-submit').click();
+
+  await expect (page.getByTestId("deepfake-results")).toBeVisible();
+  await expect (page.getByTestId("deepfake-video")).toBeVisible();
+  await expect (page.getByTestId("deepfake-chart")).toBeVisible();
+  await expect (page.getByTestId("deepfake-gauge")).toBeVisible();
+  await expect (page.getByTestId("deepfake-keyframes")).toBeVisible();
+
+  await page.getByTestId('deepfake-close').click();
+  await expect (page.getByTestId("deepfake-results")).toHaveCount(0);
+});
+
+test('Test tool poi forensic video', async ({page, authenticatedExtraFeaturesExtensionId}) => {
+  await page.route('**/deepfake/videos/jobs?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DSOo7fHT_Na0&services=poi_forensics&services_parameters=%7B%22poi_forensics%22%3A%7B%22poi%22%3A%22Macron%22%2C%22modality%22%3A%22audiovideo%22%7D%7D', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(mockedPoiForensicResponse)
+    });
+  });
+
+  await page.goto(`chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/tools/poiforensic`);
+
+  await page.locator('[data-testid="poiforensic-input"] input').fill('https://www.youtube.com/watch?v=SOo7fHT_Na0');
+  await page.getByTestId('poiforensic-submit').click();
+
+  await expect (page.getByTestId("poiforensic-results")).toBeVisible();
+  await expect (page.getByTestId("poiforensic-video")).toBeVisible();
+  await expect (page.getByTestId("poiforensic-chart")).toBeVisible();
+
+  await page.getByTestId('poiforensic-close').click();
+  await expect (page.getByTestId("poiforensic-results")).toHaveCount(0);
 });
 
 
