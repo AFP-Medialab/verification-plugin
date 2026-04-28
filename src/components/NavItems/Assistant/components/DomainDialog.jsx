@@ -66,7 +66,8 @@ export function DomainDialog({
                   color={trafficLightColor}
                   size="small"
                 />{" "}
-                {keyword("source_cred_popup_header_domain")} {value.source}
+                {keyword("url_domain_analysis_popup_header_domain")}{" "}
+                {value.source}
               </Typography>
             </Grid>
             <Grid

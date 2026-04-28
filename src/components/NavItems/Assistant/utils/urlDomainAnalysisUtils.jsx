@@ -59,11 +59,11 @@ export const renderThisDomainOrAccount = (
         <Typography>
           {` ${keyword("this")} `}
           {getUrlTypeFromCredScope(credibilityScope)}
-          {` ${keyword("source_credibility_warning_account")} ${source}`}
+          {` ${keyword("url_domain_analysis_warning_account")} ${source}`}
         </Typography>
       ) : (
         <Typography>
-          {` ${keyword("source_credibility_warning_domain")} ${source}`}
+          {` ${keyword("url_domain_analysis_warning_domain")} ${source}`}
         </Typography>
       )}
     </>
@@ -122,8 +122,8 @@ export const renderEvidence = (
       <ListItem>
         <Typography variant={"subtitle2"}>
           {credibilityScope?.includes("/")
-            ? keyword("source_cred_popup_header_account")
-            : keyword("source_cred_popup_header_domain")}{" "}
+            ? keyword("url_domain_analysis_popup_header_account")
+            : keyword("url_domain_analysis_popup_header_domain")}{" "}
           {source}
         </Typography>
       </ListItem>
