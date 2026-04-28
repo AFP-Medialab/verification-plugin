@@ -1,10 +1,14 @@
 import { onlyUnique } from "@/components/NavItems/tools/SNA/utils/accessSavedCollections";
 
+import { STOP_WORDS_SET } from "./stopWords";
+
 export const entryAggregatorByListValue = (
   selectedContent,
   listField,
   label,
+  excludeWords = STOP_WORDS_SET,
 ) => {
+  console.log(selectedContent);
   let aggregator = {};
   selectedContent.forEach((entry) => {
     if (!entry[listField]) return;
@@ -12,6 +16,7 @@ export const entryAggregatorByListValue = (
     entry[listField]
       .map((x) => x.toLowerCase())
       .filter(onlyUnique)
+      .filter((listItem) => !excludeWords.has(listItem))
       .forEach((listItem) => {
         if (aggregator[listItem]) {
           aggregator[listItem].count++;
@@ -25,7 +30,7 @@ export const entryAggregatorByListValue = (
         }
       });
   });
-
+  console.log(Object.values(aggregator).sort((a, b) => b.count - a.count));
   return Object.values(aggregator).sort((a, b) => b.count - a.count);
 };
 
