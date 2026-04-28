@@ -21,8 +21,8 @@ import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 
 import {
   TransHtmlDoubleLineBreak,
-  TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
+  TransUrlDomainAnalysisTooltip,
   TransUsfdAuthor,
 } from "./TransComponents";
 
@@ -56,17 +56,27 @@ export function DomainDialog({
       </Tooltip>
 
       {/* dialog box which appears when clicking tooltip icon above */}
-      <Dialog onClose={handleClose} maxWidth={"lg"} open={open}>
+      <Dialog
+        onClose={handleClose}
+        maxWidth={"lg"}
+        sx={{ "& .MuiDialog-paper": { minWidth: "50%" } }}
+        open={open}
+      >
         <DialogTitle>
-          <Grid container>
+          <Grid container alignItems="center">
             <Grid size={{ xs: 11 }}>
-              <Typography variant="body1" component="div">
+              <Typography
+                variant="body1"
+                component="div"
+                sx={{ display: "flex", alignItems: "center", gap: 1 }}
+              >
                 <Chip
                   label={keyword(sourceType)}
                   color={trafficLightColor}
                   size="small"
-                />{" "}
-                {keyword("source_cred_popup_header_domain")} {value.source}
+                />
+                {keyword("url_domain_analysis_popup_header_domain")}
+                {value.source}
               </Typography>
             </Grid>
             <Grid
@@ -74,17 +84,18 @@ export function DomainDialog({
               sx={{
                 display: "flex",
                 justifyContent: "flex-end",
+                alignItems: "center",
               }}
             >
               {/* tooltip help */}
-              <Box sx={{ pt: 0.75 }}>
+              <Box>
                 <Tooltip
                   interactive={"true"}
                   leaveDelay={50}
                   style={{ display: "flex", marginLeft: "auto" }}
                   title={
                     <>
-                      <TransSourceCredibilityTooltip keyword={keyword} />
+                      <TransUrlDomainAnalysisTooltip keyword={keyword} />
                       <TransHtmlDoubleLineBreak keyword={keyword} />
                       <TransUsfdAuthor keyword={keyword} />
                       <TransHtmlDoubleLineBreak keyword={keyword} />

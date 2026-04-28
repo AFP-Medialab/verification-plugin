@@ -22,13 +22,13 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { useTrackEvent } from "@/Hooks/useAnalytics";
 import { useSetInputFromAssistant } from "@/Hooks/useUrlOrFile";
 import AssistantCheckStatus from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantCheckStatus";
+import AssistantFactCheckResult from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantFactCheckResult";
 import AssistantNEResult from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantNEResult";
+import AssistantUrlDomainAnalysisResult from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantUrlDomainAnalysisResult";
 import AssistantCommentResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantCommentResult";
 import AssistantLinkResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantLinkResult";
 import AssistantMediaResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantMediaResult";
 import AssistantTextResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantTextResult";
-import AssistantSCResults from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantUrlDomainAnalysisResults";
-import AssistantWarnings from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantWarnings";
 import HeaderTool from "@/components/Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
@@ -100,20 +100,22 @@ const Assistant = () => {
   const neResult = useSelector((state) => state.assistant.neResultCategory);
 
   // source credibility
-  const positiveSourceCred = useSelector(
-    (state) => state.assistant.positiveSourceCred,
+  const positiveUrlDomainAnalysis = useSelector(
+    (state) => state.assistant.positiveUrlDomainAnalysis,
   );
-  const cautionSourceCred = useSelector(
-    (state) => state.assistant.cautionSourceCred,
+  const cautionUrlDomainAnalysis = useSelector(
+    (state) => state.assistant.cautionUrlDomainAnalysis,
   );
-  const mixedSourceCred = useSelector(
-    (state) => state.assistant.mixedSourceCred,
+  const mixedUrlDomainAnalysis = useSelector(
+    (state) => state.assistant.mixedUrlDomainAnalysis,
   );
 
   const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
 
   // third party fail states
-  const scFailState = useSelector((state) => state.assistant.inputSCFail);
+  const urlDomainAnalysisFailState = useSelector(
+    (state) => state.assistant.inputUrlDomainAnalysisFail,
+  );
   const dbkfTextFailState = useSelector(
     (state) => state.assistant.dbkfTextMatchFail,
   );
@@ -202,7 +204,7 @@ const Assistant = () => {
             const imageUrl = URL.createObjectURL(fileInput);
             const ctype = TOOLS_CATEGORIES.IMAGE;
 
-            dispatch(setInputUrl(imageUrl, KNOWN_LINKS.OWN)); // kicks off getSourceCredSaga
+            dispatch(setInputUrl(imageUrl, KNOWN_LINKS.OWN)); // kicks off getUrlDomainAnalysisSaga
             dispatch(
               setScrapedData(null, null, null, [imageUrl], [], null, null),
             );
@@ -416,7 +418,7 @@ const Assistant = () => {
 
       {/* assistant status */}
       {(urlMode || imageVideoSelected) &&
-      (scFailState ||
+      (urlDomainAnalysisFailState ||
         dbkfTextFailState ||
         neFailState ||
         newsFramingFailState ||
@@ -485,21 +487,23 @@ const Assistant = () => {
 
           <CardContent>
             <Grid container spacing={4}>
-              {/* source credibility/URL domain analysis results */}
-              {positiveSourceCred || cautionSourceCred || mixedSourceCred ? (
+              {/* URL domain analysis results */}
+              {positiveUrlDomainAnalysis ||
+              cautionUrlDomainAnalysis ||
+              mixedUrlDomainAnalysis ? (
                 <Grid size={{ xs: 12 }}>
-                  <AssistantSCResults />
+                  <AssistantUrlDomainAnalysisResult />
                 </Grid>
               ) : null}
 
-              {/* warnings and api status checks */}
+              {/* fact check results */}
               {dbkfTextMatch || prevFactChecksResult ? (
                 <Grid
                   size={{ xs: 12 }}
                   className={classes.assistantGrid}
                   hidden={urlMode === false}
                 >
-                  <AssistantWarnings />
+                  <AssistantFactCheckResult />
                 </Grid>
               ) : null}
 

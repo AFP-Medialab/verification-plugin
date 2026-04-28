@@ -363,11 +363,11 @@ export function TransAssistantHelpFourTooltip({ keyword }) {
   );
 }
 
-export function TransSourceCredibilityTooltip({ keyword }) {
+export function TransUrlDomainAnalysisTooltip({ keyword }) {
   return (
     <Trans
       t={keyword}
-      i18nKey="sc_tooltip"
+      i18nKey="url_domain_analysis_tooltip"
       components={{
         ul: <ul style={UL_STYLE} />,
         li: <li style={LI_STYLE} />,

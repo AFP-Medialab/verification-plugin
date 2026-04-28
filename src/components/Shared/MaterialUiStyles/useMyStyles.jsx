@@ -330,7 +330,7 @@ const styles = (theme) => ({
       borderColor: theme.palette.primary.main,
     },
   },
-  sourceCredibilityBorder: {
+  urlDomainAnalysisBorder: {
     border: "2px solid",
     borderColor: theme.palette.primary.main,
     borderRadius: "15px",
@@ -352,7 +352,8 @@ const styles = (theme) => ({
       backgroundColor: "#424242",
     },
   },
-  assistantTooltipUrlAnalysisWarnings: {
+  /* for URL Domain Analysis and Fact Check results */
+  assistantTooltipCollapsibleCard: {
     display: "flex",
     ml: "auto",
     textAlign: "right",

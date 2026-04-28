@@ -17,8 +17,8 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import {
   DomainDialog,
   TransHtmlDoubleLineBreak,
-  TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
+  TransUrlDomainAnalysisTooltip,
   TransUsfdAuthor,
 } from "../components";
 
@@ -59,11 +59,11 @@ export const renderThisDomainOrAccount = (
         <Typography>
           {` ${keyword("this")} `}
           {getUrlTypeFromCredScope(credibilityScope)}
-          {` ${keyword("source_credibility_warning_account")} ${source}`}
+          {` ${keyword("url_domain_analysis_warning_account")} ${source}`}
         </Typography>
       ) : (
         <Typography>
-          {` ${keyword("source_credibility_warning_domain")} ${source}`}
+          {` ${keyword("url_domain_analysis_warning_domain")} ${source}`}
         </Typography>
       )}
     </>
@@ -122,8 +122,8 @@ export const renderEvidence = (
       <ListItem>
         <Typography variant={"subtitle2"}>
           {credibilityScope?.includes("/")
-            ? keyword("source_cred_popup_header_account")
-            : keyword("source_cred_popup_header_domain")}{" "}
+            ? keyword("url_domain_analysis_popup_header_account")
+            : keyword("url_domain_analysis_popup_header_domain")}{" "}
           {source}
         </Typography>
       </ListItem>
@@ -194,14 +194,14 @@ export const renderDomainTitle = (
           alignItems="center"
         >
           {/* tooltip help */}
-          <Box sx={{ pt: 0.75 }}>
+          <Box>
             <Tooltip
               interactive={"true"}
               leaveDelay={50}
               style={{ display: "flex", marginLeft: "auto" }}
               title={
                 <>
-                  <TransSourceCredibilityTooltip keyword={keyword} />
+                  <TransUrlDomainAnalysisTooltip keyword={keyword} />
                   <TransHtmlDoubleLineBreak keyword={keyword} />
                   <TransUsfdAuthor keyword={keyword} />
                   <TransHtmlDoubleLineBreak keyword={keyword} />
@@ -228,13 +228,13 @@ export const renderDomainTitle = (
 
 export const renderDomainAnalysisResults = (
   keyword,
-  sourceCredibiltyResults,
+  urlDomainAnalysisResults,
   trafficLightColor,
   sourceType,
 ) => {
   return (
     <List disablePadding={true}>
-      {sourceCredibiltyResults?.map((value, key) => (
+      {urlDomainAnalysisResults?.map((value, key) => (
         <ListItem
           key={key}
           secondaryAction={
