@@ -384,7 +384,7 @@ export const handleRecordedMessage = async (request) => {
 
 const PLATFORM_URLS = {
   Tiktok: [".tiktok.com", "/tiktok.com"],
-  Twitter: [".x.com", "/x.com"],
+  X: [".x.com", "/x.com"],
 };
 async function getCurrentTab() {
   let queryOptions = { active: true, lastFocusedWindow: true };

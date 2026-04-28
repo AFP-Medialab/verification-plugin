@@ -309,7 +309,7 @@ export const refreshSpecificCollection = async (
 
   // Map platform names to sources
   const platformMap = {
-    Twitter: "twitter",
+    X: "twitter",
     Tiktok: "tiktok",
     Facebook: "fb",
   };
