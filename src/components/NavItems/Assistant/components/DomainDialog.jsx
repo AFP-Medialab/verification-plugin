@@ -56,17 +56,26 @@ export function DomainDialog({
       </Tooltip>
 
       {/* dialog box which appears when clicking tooltip icon above */}
-      <Dialog onClose={handleClose} maxWidth={"lg"} open={open}>
+      <Dialog
+        onClose={handleClose}
+        maxWidth={"lg"}
+        sx={{ "& .MuiDialog-paper": { minWidth: "50%" } }}
+        open={open}
+      >
         <DialogTitle>
-          <Grid container>
+          <Grid container alignItems="center">
             <Grid size={{ xs: 11 }}>
-              <Typography variant="body1" component="div">
+              <Typography
+                variant="body1"
+                component="div"
+                sx={{ display: "flex", alignItems: "center", gap: 1 }}
+              >
                 <Chip
                   label={keyword(sourceType)}
                   color={trafficLightColor}
                   size="small"
-                />{" "}
-                {keyword("url_domain_analysis_popup_header_domain")}{" "}
+                />
+                {keyword("url_domain_analysis_popup_header_domain")}
                 {value.source}
               </Typography>
             </Grid>
@@ -75,10 +84,11 @@ export function DomainDialog({
               sx={{
                 display: "flex",
                 justifyContent: "flex-end",
+                alignItems: "center",
               }}
             >
               {/* tooltip help */}
-              <Box sx={{ pt: 0.75 }}>
+              <Box>
                 <Tooltip
                   interactive={"true"}
                   leaveDelay={50}

@@ -98,6 +98,7 @@ const ExtractedUrlDomainAnalysisResult = ({
                     maxWidth={"lg"}
                     open={open}
                     scroll={"paper"}
+                    sx={{ "& .MuiDialog-paper": { minWidth: "50%" } }}
                     disableRestoreFocus
                     TransitionProps={{
                       onExited: () => triggerRef.current?.focus(),

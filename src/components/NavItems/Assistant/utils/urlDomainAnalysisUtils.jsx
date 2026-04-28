@@ -194,7 +194,7 @@ export const renderDomainTitle = (
           alignItems="center"
         >
           {/* tooltip help */}
-          <Box sx={{ pt: 0.75 }}>
+          <Box>
             <Tooltip
               interactive={"true"}
               leaveDelay={50}
