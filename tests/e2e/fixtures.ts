@@ -78,7 +78,12 @@ export const test = base.extend<{
         `--load-extension=${pathToExtension}`,
         '--no-sandbox',
         '--disable-setuid-sandbox',
-        '--disable-gpu'
+        '--disable-gpu',
+        '--disable-dev-shm-usage',
+        '--remote-debugging-port=9222',
+        '--disable-dbus-deprecation-message',
+        '--disable-freestyler-dogfood',
+        '--no-zygote', 
       ],
     });
     await use(context);
