@@ -70,10 +70,11 @@ export const test = base.extend<{
   authenticatedArchiveExtensionId: string;
 }>({
   context: async ({ }, use) => {
-    const pathToExtension = process.env.NODE_ENV === 'development' ? path.resolve(__dirname, '../../build/chrome-mv3') : path.join(__dirname, '../../dist');
+    const pathToExtension = path.resolve(__dirname, '../../build/chrome-mv3');
     const context = await chromium.launchPersistentContext('', {
       headless: false,
       args: [
+        ...(process.env.CI ? ['--headless=new'] : []),
         `--disable-extensions-except=${pathToExtension}`,
         `--load-extension=${pathToExtension}`,
         '--no-sandbox',
