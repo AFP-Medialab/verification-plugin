@@ -57,6 +57,7 @@ export const test = base.extend<{
         `--load-extension=${pathToExtension}`,
         '--no-sandbox',
         '--disable-setuid-sandbox',
+        '--disable-gpu'
       ],
     });
     await use(context);
@@ -66,7 +67,7 @@ export const test = base.extend<{
     // for manifest v3:
     let [background] = context.serviceWorkers();
     if (!background)
-      background = await context.waitForEvent('serviceworker');
+      background = await context.waitForEvent('serviceworker', { timeout: 20000 });
 
     const extensionId = background.url().split('/')[2];
     await use(extensionId);
