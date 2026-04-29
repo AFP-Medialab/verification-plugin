@@ -20,7 +20,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps chromium
     - name: Build extension
-      run: cp .env.production .env && pnpm run build
+      run: pnpm run build
     - name: Run Playwright Component and unit tests
       run: npx playwright test -c playwright-ct.config.js
     - name: Run Playwright E2E tests
