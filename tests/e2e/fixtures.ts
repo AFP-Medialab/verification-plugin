@@ -71,10 +71,13 @@ export const test = base.extend<{
 }>({
   context: async ({ }, use) => {
     const pathToExtension = path.resolve(__dirname, '../../build/chrome-mv3');
+
+    const isCI = !!process.env.CI;
+
     const context = await chromium.launchPersistentContext('', {
-      headless: false,
+      headless: isCI,
       args: [
-        ...(process.env.CI ? ['--headless=new'] : []),
+        ...(isCI ? ['--headless=new'] : []),
         `--disable-extensions-except=${pathToExtension}`,
         `--load-extension=${pathToExtension}`,
         '--no-sandbox',
