@@ -76,6 +76,7 @@ export const test = base.extend<{
 
     const context = await chromium.launchPersistentContext('', {
       headless: isCI,
+      channel: 'chromium',
       args: [
         ...(isCI ? ['--headless=new'] : []),
         `--disable-extensions-except=${pathToExtension}`,
