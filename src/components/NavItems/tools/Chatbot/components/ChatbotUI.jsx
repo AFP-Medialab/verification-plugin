@@ -342,7 +342,11 @@ const ChatbotUI = () => {
       <CardHeader
         action={
           <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-            <FormControl size="small" sx={{ minWidth: 150 }}>
+            <FormControl
+              size="small"
+              sx={{ minWidth: 150 }}
+              data-testid="chatbot-select-model"
+            >
               <InputLabel>{keyword("models_label")}</InputLabel>
               <Select
                 variant="outlined"
@@ -352,7 +356,11 @@ const ChatbotUI = () => {
                 disabled={isModelsLoading}
               >
                 {models.map((model) => (
-                  <MenuItem key={model.id} value={model.id}>
+                  <MenuItem
+                    key={model.id}
+                    value={model.id}
+                    data-testid={`chatbot-${model.id}`}
+                  >
                     {model.id}
                   </MenuItem>
                 ))}
@@ -395,7 +403,11 @@ const ChatbotUI = () => {
         {/* Prompt Selection */}
         {prompts.length > 1 && (
           <Box sx={{ mb: 2 }}>
-            <FormControl fullWidth size="small">
+            <FormControl
+              fullWidth
+              size="small"
+              data-testid="chatbot-select-prompt"
+            >
               <InputLabel>{keyword("preprompt_label")}</InputLabel>
               <Select
                 variant="outlined"
@@ -414,6 +426,7 @@ const ChatbotUI = () => {
                     key={prompt.id}
                     value={prompt.id}
                     disabled={prompt.disabled}
+                    data-testid={`chatbot-${prompt.id}`}
                   >
                     <Tooltip
                       title={
@@ -482,7 +495,10 @@ const ChatbotUI = () => {
               {keyword("chat_bot_start")}
             </Typography>
           ) : (
-            <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <Box
+              sx={{ display: "flex", flexDirection: "column" }}
+              data-testid="chatbot-result"
+            >
               {messages.map((message) => (
                 <MessageRenderer key={message.id} message={message} />
               ))}
@@ -547,6 +563,7 @@ const ChatbotUI = () => {
                     keyword("content_analysis")
                   : keyword("chatbot_type_here")
             }
+            data-testid="chatbot-input"
             variant="outlined"
             disabled={isLoading || (messages.length === 0 && !activePrompt)}
             helperText={
@@ -599,6 +616,7 @@ const ChatbotUI = () => {
               (messages.length === 0 && !activePrompt)
             }
             sx={{ minWidth: 56, height: 56 }}
+            data-testid="chatbot-submit"
           >
             <SendIcon />
           </Button>

@@ -7,7 +7,8 @@
  */
 import { test, expect } from './fixtures';
 import path from 'path';
-import singlefileResponse from '../../tests-assets/api-response/singlefile-to-wacz-response'
+import singlefileResponse from '../../tests-assets/api-response/singlefile-to-wacz-response';
+import mockedChatbotResponse from '../../tests-assets/api-response/chatbot-response';
 
 test('Test tool archive savepagenow', async ({page, authenticatedArchiveExtensionId, context}) => {
     await page.goto(`chrome-extension://${authenticatedArchiveExtensionId}/popup.html#/app/tools/archive`);
@@ -88,3 +89,40 @@ test('Test tool archive', async ({page, authenticatedArchiveExtensionId}) => {
     const download2 = await downloadPromise2;
     expect(download2.suggestedFilename()).toBe('test-capture-id.wacz');
 });
+
+test('Test tool chatbot', async ({page, authenticatedExtraFeaturesExtensionId}) => {
+    // mock of the answer of the model
+    await page.route('**completions**', async (route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(mockedChatbotResponse)
+        });
+    });
+
+    // mock of the available model 
+    await page.route('**models**', async (route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({
+                data: [
+                    { id: 'mistral-7b' }
+                ]
+            }),
+        });
+    });
+
+    await page.goto(`chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/tools/chatbot`);
+
+    await page.getByTestId('chatbot-select-model').click();
+    await page.getByTestId('chatbot-mistral-7b').click();
+
+    await page.getByTestId('chatbot-select-prompt').click();
+    await page.getByTestId('chatbot-fact-check-analysis').click();
+
+    await page.locator('[data-testid="chatbot-input"] textarea:not([aria-hidden])').fill('Test chatbot');
+    await page.getByTestId('chatbot-submit').click();
+
+    await expect (page.getByTestId("chatbot-result")).toBeVisible();
+})
