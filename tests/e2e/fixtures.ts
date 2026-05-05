@@ -42,21 +42,45 @@ const fakeAuthStateExtraFeatures = {
   },
 };
 
+const fakeAuthStateArchive = {
+  userAuthenticated: true,
+  userLoginLoading: false,
+  userRegistrationLoading: false,
+  userRegistrationSent: false,
+  accessCodeRequestLoading: false,
+  accessCodeRequestSent: false,
+  accessToken: 'fake-access-token-for-e2e',
+  accessTokenExpiry: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+  refreshToken: 'fake-refresh-token-for-e2e',
+  user: {
+    id: 'test-user-id',
+    firstName: 'Test',
+    lastName: 'User',
+    email: 'test@e2e.local',
+    username: 'test-user',
+    roles: ['ARCHIVE'],
+  },
+};
+
 export const test = base.extend<{
   context: BrowserContext;
   extensionId: string;
   authenticatedBetaTesterExtensionId: string;
   authenticatedExtraFeaturesExtensionId: string;
+  authenticatedArchiveExtensionId: string;
 }>({
   context: async ({ }, use) => {
-    const pathToExtension = process.env.NODE_ENV === 'development' ? path.resolve(__dirname, '../../build/chrome-mv3') : path.join(__dirname, '../../dist');
+    const pathToExtension = path.resolve(__dirname, '../../build/chrome-mv3');
+
+    const isCI = !!process.env.CI;
+
     const context = await chromium.launchPersistentContext('', {
-      headless: false,
+      headless: isCI,
+      channel: 'chromium',
       args: [
+        ...(isCI ? ['--headless=new'] : []),
         `--disable-extensions-except=${pathToExtension}`,
         `--load-extension=${pathToExtension}`,
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
       ],
     });
     await use(context);
@@ -66,7 +90,7 @@ export const test = base.extend<{
     // for manifest v3:
     let [background] = context.serviceWorkers();
     if (!background)
-      background = await context.waitForEvent('serviceworker');
+      background = await context.waitForEvent('serviceworker', { timeout: 20000 });
 
     const extensionId = background.url().split('/')[2];
     await use(extensionId);
@@ -122,6 +146,31 @@ export const test = base.extend<{
         }
       });
     }, fakeAuthStateExtraFeatures);
+
+    await page.close();
+    await use(extensionId);
+  },
+
+  authenticatedArchiveExtensionId: async ({ context, extensionId }, use) => {
+    const page = await context.newPage();
+    await page.goto(`chrome-extension://${extensionId}/popup.html`);
+    await page.waitForLoadState('domcontentloaded');
+
+    await page.evaluate((authState) => {
+      const persistState = { cookies: true, userSession: authState };
+      return new Promise<void>((resolve, reject) => {
+        const storage = chrome.storage?.sync || chrome.storage?.local;
+        if (storage) {
+          storage.set({ 'persist:state': persistState }, () => {
+            if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
+            else resolve();
+          });
+        } else {
+          localStorage.setItem('persist:state', JSON.stringify(persistState));
+          resolve();
+        }
+      });
+    }, fakeAuthStateArchive);
 
     await page.close();
     await use(extensionId);

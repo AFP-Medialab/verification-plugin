@@ -212,7 +212,7 @@ const UrlArchive = ({ url, mediaUrl }) => {
   };
 
   return (
-    <Card variant="outlined" m={2}>
+    <Card variant="outlined" m={2} data-testid="archive-url-archive-card">
       <CardContent>
         <Typography
           variant="h6"

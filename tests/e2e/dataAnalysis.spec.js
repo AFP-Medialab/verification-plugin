@@ -43,7 +43,7 @@ const runAllAnalysisTools = async (page) => {
 //     .click();
 };
 
-test("SNA - upload TikTok CSV, run all analysis tools, download and delete", async ({
+test("Test tool tittok", async ({
   page,
   authenticatedBetaTesterExtensionId,
 }) => {
@@ -101,7 +101,7 @@ test("SNA - upload TikTok CSV, run all analysis tools, download and delete", asy
   await expect(collectionRow).not.toBeVisible({ timeout: 5000 });
 });
 
-test("SNA - upload Twitter CSV, run all analysis tools, download and delete", async ({
+test("Test tool twitter", async ({
   page,
   authenticatedBetaTesterExtensionId,
 }) => {
