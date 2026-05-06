@@ -50,7 +50,7 @@ pipeline {
             }
         }
 
-        stage('E2E Tests (Playwright)') {
+        stage('Tests (Playwright)') {
             when {
                 anyOf { 
                     branch 'thomas-dev';
@@ -60,8 +60,12 @@ pipeline {
                 container('playwright') {
                     sh "npm install -g pnpm"
                     sh "pnpm install --frozen-lockfile --store-dir ${WORKSPACE}/.pnpm-store" 
-                    sh "pnpm exec playwright install chromium --with-deps"                                                                                                       
-                    sh "pnpm exec playwright test"     
+                    sh "npx playwright install --with-deps chromium" 
+                    echo "Component tests :"
+                    sh "npx playwright test -c playwright-ct.config.js" 
+                    echo "E2E tests :"                                                                                                     
+                    sh "dbus-run-session -- npx playwright test"
+                    sh "npx playwright test"     
                 }
             }
             
