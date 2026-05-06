@@ -137,7 +137,7 @@ const AssistantFactCheckResult = () => {
       className={classes.urlDomainAnalysisBorder}
       id="warnings"
     >
-      <Grid container>
+      <Grid container sx={{ width: "100%" }}>
         <Grid size={{ xs: 11 }} className={classes.displayFlex}>
           {/* icon */}
           <CardMedia>
