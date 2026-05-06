@@ -83,6 +83,11 @@ export const test = base.extend<{
         `--load-extension=${pathToExtension}`,
       ],
     });
+
+    if (!context.serviceWorkers().length) {                                                                                                                                         
+      await context.waitForEvent('serviceworker', { timeout: 30000 });                                                                                                              
+    }
+    
     await use(context);
     await context.close();
   },
@@ -90,7 +95,7 @@ export const test = base.extend<{
     // for manifest v3:
     let [background] = context.serviceWorkers();
     if (!background)
-      background = await context.waitForEvent('serviceworker', { timeout: 20000 });
+      background = await context.waitForEvent('serviceworker', { timeout: 10000 });
 
     const extensionId = background.url().split('/')[2];
     await use(extensionId);

@@ -13,6 +13,7 @@ pipeline {
         VERSION_TAG = "${env.BRANCH_NAME}-${env.BUILD_ID}"
         S3_BUCKET = "verification-plugin-builds"
         AWS_REGION = "eu-west-1"
+        CI="true"
     }
 
     stages {
@@ -60,12 +61,11 @@ pipeline {
                 container('playwright') {
                     sh "npm install -g pnpm"
                     sh "pnpm install --frozen-lockfile --store-dir ${WORKSPACE}/.pnpm-store" 
-                    sh "npx playwright install --with-deps chromium" 
+                    sh "pnpm exec playwright install --with-deps chromium" 
                     echo "Component tests :"
-                    sh "npx playwright test -c playwright-ct.config.js" 
+                    sh "pnpm exec playwright test -c playwright-ct.config.js" 
                     echo "E2E tests :"                                                                                                     
-                    sh "dbus-run-session -- npx playwright test"
-                    sh "npx playwright test"     
+                    sh "dbus-run-session -- pnpm exec playwright test"  
                 }
             }
             
