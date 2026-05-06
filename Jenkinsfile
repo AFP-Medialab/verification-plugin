@@ -27,10 +27,6 @@ pipeline {
             steps {
                 slackSend channel: 'medialab_builds', message: "Start build ${env.JOB_NAME} - ID: ${env.BUILD_ID}", tokenCredentialId: 'medialab_slack_token'
                 script {
-                    // DEBUG AWS NOT FOUND
-                    sh "cat /etc/hosts" 
-                    echo "Nom de la branche : ${env.BRANCH_NAME}"
-
                     if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "pre-master") {
                             env.ENV_FILE = ".env.production"
                             env.P_SCRIPT = "zip:all:production"
@@ -40,7 +36,7 @@ pipeline {
                     }
                 }
                 container('aws-cli') {
-                    sh "aws s3 cp s3://${S3_BUCKET}/configuration/config-${env.BRANCH_NAME}.properties ${envFile}"
+                    sh "aws s3 cp s3://${S3_BUCKET}/configuration/config-${env.BRANCH_NAME}.properties ${env.ENV_FILE}"
                 }
                 container('node') {
                     script {
