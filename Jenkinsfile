@@ -58,7 +58,8 @@ pipeline {
             }
             steps {
                 container('playwright') {
-                    sh "pnpm exec playwright test"
+                    sh 'npm ci'
+                    sh 'npx playwright test'
                 }
             }
             
