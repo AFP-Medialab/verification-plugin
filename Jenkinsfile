@@ -41,7 +41,7 @@ pipeline {
                 container('node') {
                     script {
                         sh "npm install -g pnpm"
-                        sh "pnpm install --frozen-lockfile"
+                        sh "pnpm install --frozen-lockfile --store-dir ${WORKSPACE}/.pnpm-store"
                         
                         echo "Running build script: ${env.P_SCRIPT}"
                         sh "pnpm run ${env.P_SCRIPT}"
@@ -58,8 +58,9 @@ pipeline {
             }
             steps {
                 container('playwright') {
-                    sh 'npm ci'
-                    sh 'npx playwright test'
+                    sh "npm install -g pnpm"
+                    sh "pnpm install --frozen-lockfile --store-dir ${WORKSPACE}/.pnpm-store"                                                                                                        
+                    sh "pnpm exec playwright test"     
                 }
             }
             
