@@ -247,7 +247,7 @@ const AssistantFactCheckResult = () => {
                   }}
                 >
                   <Skeleton variant="rounded" height={40} />
-                  <Skeleton variant="rounded" width={400} height={40} />
+                  <Skeleton variant="rounded" width="50%" height={40} />
                 </Stack>
               )}
             </Box>
