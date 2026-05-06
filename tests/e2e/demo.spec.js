@@ -4,7 +4,6 @@
 import { test, expect } from './fixtures';
 
 test(`Test interactive demo page`, async ({ page, extensionId }) => {
-
   // Navigate to the demo page
   await page.goto(`chrome-extension://${extensionId}/popup.html#/app/interactive`);
   // Accept local storage usage
