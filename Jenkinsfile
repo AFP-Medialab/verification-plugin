@@ -27,6 +27,11 @@ pipeline {
                 slackSend channel: 'medialab_builds', message: "Start build ${env.JOB_NAME} - ID: ${env.BUILD_ID}", tokenCredentialId: 'medialab_slack_token'
                 container('aws-cli') {
                     script {
+                        sh "id"
+                        sh "ls -l /usr/local/bin/aws || echo 'AWS non trouvé dans /usr/local/bin'"
+                        sh "echo \$PATH"
+                        sh "aws --version"
+
                         def envFile = ""
 
                         if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "pre-master") {
