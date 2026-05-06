@@ -134,7 +134,7 @@ const AssistantFactCheckResult = () => {
   return (
     <Card
       variant={"outlined"}
-      className={classes.sourceCredibilityBorder}
+      className={classes.urlDomainAnalysisBorder}
       id="warnings"
     >
       <Grid container>
