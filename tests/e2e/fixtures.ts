@@ -78,7 +78,12 @@ export const test = base.extend<{
       headless: false,
       channel: 'chromium',
       args: [
-        ...(isCI ? ['--headless=new'] : []),
+        ...(isCI ? [
+          '--headless=new',
+          '--no-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-gpu',
+        ] : []),
         `--disable-extensions-except=${pathToExtension}`,
         `--load-extension=${pathToExtension}`,
       ],
