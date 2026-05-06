@@ -59,7 +59,8 @@ pipeline {
             steps {
                 container('playwright') {
                     sh "npm install -g pnpm"
-                    sh "pnpm install --frozen-lockfile --store-dir ${WORKSPACE}/.pnpm-store"                                                                                                        
+                    sh "pnpm install --frozen-lockfile --store-dir ${WORKSPACE}/.pnpm-store" 
+                    sh "pnpm exec playwright install chromium --with-deps"                                                                                                       
                     sh "pnpm exec playwright test"     
                 }
             }
