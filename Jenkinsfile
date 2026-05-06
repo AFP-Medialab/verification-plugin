@@ -14,6 +14,7 @@ pipeline {
         S3_BUCKET = "verification-plugin-builds"
         AWS_REGION = "eu-west-1"
         P_SCRIPT=""
+        ENV_FILE=""
     }
 
     stages {
@@ -25,26 +26,21 @@ pipeline {
             }
             steps {
                 slackSend channel: 'medialab_builds', message: "Start build ${env.JOB_NAME} - ID: ${env.BUILD_ID}", tokenCredentialId: 'medialab_slack_token'
-                container('aws-cli') {
-                    script {
-                        sh "id"
-                        sh "ls -l /usr/local/bin/aws || echo 'AWS non trouvé dans /usr/local/bin'"
-                        sh "echo \$PATH"
-                        sh "aws --version"
+                script {
+                    // DEBUG AWS NOT FOUND
+                    sh "cat /etc/hosts" 
+                    echo "Nom de la branche : ${env.BRANCH_NAME}"
 
-                        def envFile = ""
-
-                        if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "pre-master") {
-                            envFile = ".env.production"
+                    if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "pre-master") {
+                            env.ENV_FILE = ".env.production"
                             env.P_SCRIPT = "zip:all:production"
-                        } else {
-                            envFile = ".env.development"
-                            env.P_SCRIPT = "zip:all:development"
-                        }
-
-                        sh "aws s3 cp s3://${S3_BUCKET}/configuration/config-${env.BRANCH_NAME}.properties ${envFile}"
+                    } else {
+                        env.ENV_FILE = ".env.development"
+                        env.P_SCRIPT = "zip:all:development"
                     }
-
+                }
+                container('aws-cli') {
+                    sh "aws s3 cp s3://${S3_BUCKET}/configuration/config-${env.BRANCH_NAME}.properties ${envFile}"
                 }
                 container('node') {
                     script {
