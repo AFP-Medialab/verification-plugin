@@ -13,8 +13,6 @@ pipeline {
         VERSION_TAG = "${env.BRANCH_NAME}-${env.BUILD_ID}"
         S3_BUCKET = "verification-plugin-builds"
         AWS_REGION = "eu-west-1"
-        P_SCRIPT=""
-        ENV_FILE=""
     }
 
     stages {
@@ -28,21 +26,23 @@ pipeline {
                 slackSend channel: 'medialab_builds', message: "Start build ${env.JOB_NAME} - ID: ${env.BUILD_ID}", tokenCredentialId: 'medialab_slack_token'
                 script {
                     if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "pre-master") {
-                            env.ENV_FILE = ".env.production"
-                            env.P_SCRIPT = "zip:all:production"
+                        env.ENV_FILE = ".env.production"
+                        env.P_SCRIPT = "zip:all:production"
                     } else {
                         env.ENV_FILE = ".env.development"
                         env.P_SCRIPT = "zip:all:development"
                     }
                 }
                 container('aws-cli') {
-                    sh "aws s3 cp s3://${S3_BUCKET}/configuration/config-${env.BRANCH_NAME}.properties ${env.ENV_FILE}"
+                    script {
+                        sh "aws s3 cp s3://${S3_BUCKET}/configuration/config-${env.BRANCH_NAME}.properties ${env.ENV_FILE}"
+                    }
                 }
                 container('node') {
                     script {
                         sh "npm install -g pnpm"
                         sh "pnpm install --frozen-lockfile"
-                       
+                        
                         echo "Running build script: ${env.P_SCRIPT}"
                         sh "pnpm run ${env.P_SCRIPT}"
                     }
