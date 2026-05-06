@@ -239,7 +239,10 @@ const AssistantTextResult = () => {
           // top right warning and tooltip
           <div style={{ display: "flex" }}>
             <div
-              hidden={dbkfTextMatch === null && prevFactChecksResult === null}
+              hidden={
+                !dbkfTextMatch &&
+                !(prevFactChecksResult && role.includes(ROLES.BETA_TESTER))
+              }
             >
               <Tooltip
                 title={
