@@ -82,24 +82,26 @@ export const test = base.extend<{
           '--no-sandbox',
           '--disable-dev-shm-usage',
           '--disable-gpu',
+          '--disable-setuid-sandbox',
         ] : []),
         `--disable-extensions-except=${pathToExtension}`,
         `--load-extension=${pathToExtension}`,
       ],
     });
-
-    if (!context.serviceWorkers().length) {                                                                                                                                         
-      await context.waitForEvent('serviceworker', { timeout: 30000 });                                                                                                              
-    }
     
     await use(context);
     await context.close();
   },
   extensionId: async ({ context }, use) => {
-    // for manifest v3:
     let [background] = context.serviceWorkers();
-    if (!background)
-      background = await context.waitForEvent('serviceworker', { timeout: 10000 });
+    if (!background) {
+      try {
+        background = await context.waitForEvent('serviceworker', { timeout: 30000 });
+      } catch (e) {
+        [background] = context.serviceWorkers();
+        if (!background) throw new Error("ServiceWorker did not start.");
+      }
+    }
 
     const extensionId = background.url().split('/')[2];
     await use(extensionId);
