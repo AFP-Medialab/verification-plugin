@@ -14,7 +14,7 @@ export const NE_ENTITY_CHUNK_SIZE = 25;
 export const API_ENDPOINTS = {
   NAMED_ENTITY: "gcloud/named-entity",
   OCR: "gcloud/ocr",
-  SOURCE_CREDIBILITY: "gcloud/source-credibility",
+  URL_DOMAIN_ANALYSIS: "gcloud/source-credibility",
   NEWS_FRAMING: "gcloud/news-framing-clfr",
   NEWS_GENRE: "gcloud/news-genre-clfr",
   PERSUASION: "gcloud/persuasion-span-clfr",

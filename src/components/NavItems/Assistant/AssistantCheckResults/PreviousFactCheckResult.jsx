@@ -12,7 +12,7 @@ import dayjs from "dayjs";
 import LocaleData from "dayjs/plugin/localeData";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 
-const PreviousFactCheckResults = ({ results }) => {
+const PreviousFactCheckResult = ({ results }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   // previous fact checks
@@ -92,4 +92,4 @@ const PreviousFactCheckResults = ({ results }) => {
   );
 };
 
-export default PreviousFactCheckResults;
+export default PreviousFactCheckResult;

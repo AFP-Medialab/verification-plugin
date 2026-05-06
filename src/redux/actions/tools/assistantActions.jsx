@@ -78,31 +78,31 @@ export const setScrapedData = (
   };
 };
 
-export const setInputSourceCredDetails = (
-  positiveSC,
-  cautionSC,
-  mixedSC,
-  extractedSC,
+export const setInputUrlDomainAnalysisDetails = (
+  positiveUDA,
+  cautionUDA,
+  mixedUDA,
+  extractedUDA,
   trafficLights,
   sourceTypes,
   extractedLks,
-  inputSCLoading,
-  inputSCDone,
-  inputSCFail,
+  inputUDALoading,
+  inputUDADone,
+  inputUDAFail,
 ) => {
   return {
-    type: "SET_INPUT_SC_DETAILS",
+    type: "SET_INPUT_URL_DOMAIN_ANALYSIS_DETAILS",
     payload: {
-      positiveSourceCred: positiveSC,
-      cautionSourceCred: cautionSC,
-      mixedSourceCred: mixedSC,
-      extractedSourceCred: extractedSC,
+      positiveUrlDomainAnalysis: positiveUDA,
+      cautionUrlDomainAnalysis: cautionUDA,
+      mixedUrlDomainAnalysis: mixedUDA,
+      extractedUrlDomainAnalysis: extractedUDA,
       trafficLightColors: trafficLights,
       sourceTypes: sourceTypes,
       extractedLinks: extractedLks,
-      inputSCLoading: inputSCLoading,
-      inputSCDone: inputSCDone,
-      inputSCFail: inputSCFail,
+      inputUrlDomainAnalysisLoading: inputUDALoading,
+      inputUrlDomainAnalysisDone: inputUDADone,
+      inputUrlDomainAnalysisFail: inputUDAFail,
     },
   };
 };
