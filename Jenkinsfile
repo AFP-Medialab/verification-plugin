@@ -53,19 +53,21 @@ pipeline {
 
         stage('Tests (Playwright)') {
             when {
-                anyOf { 
+                anyOf {
                     branch 'thomas-dev';
                 }
             }
             steps {
                 container('playwright') {
                     sh "npm install -g pnpm"
-                    sh "pnpm install --frozen-lockfile --store-dir ${WORKSPACE}/.pnpm-store" 
-                    sh "pnpm exec playwright install --with-deps chromium" 
+                    sh "pnpm install --frozen-lockfile --ignore-scripts"
+                    sh "pnpm exec wxt prepare"
+                    sh "pnpm run build"
+                    sh "npx playwright install --with-deps chromium"
                     echo "Component tests :"
-                    sh "pnpm exec playwright test -c playwright-ct.config.js" 
-                    echo "E2E tests :"                                                                                                     
-                    sh "dbus-run-session -- pnpm exec playwright test"  
+                    sh "pnpm exec playwright test -c playwright-ct.config.js"
+                    echo "E2E tests :"
+                    sh "dbus-run-session -- pnpm exec playwright test"
                 }
             }
             

@@ -40,3 +40,7 @@ yarn-error.log*
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Docker to test pipeline in local
+Dockerfile
+.dockerignore

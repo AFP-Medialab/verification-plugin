@@ -75,33 +75,29 @@ export const test = base.extend<{
     const isCI = !!process.env.CI;
 
     const context = await chromium.launchPersistentContext('', {
-      headless: false,
+      headless: isCI,
+      channel: 'chromium',
       args: [
-        ...(isCI ? [
-          '--headless=new',
-          '--no-sandbox',
-          '--disable-dev-shm-usage',
-          '--disable-gpu',
-          '--disable-setuid-sandbox',
-        ] : []),
+        ...(isCI ? ['--headless=new'] : []),
         `--disable-extensions-except=${pathToExtension}`,
         `--load-extension=${pathToExtension}`,
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-gpu',
+        '--disable-dev-shm-usage',
+        '--disable-dbus-deprecation-message',
+        '--disable-freestyler-dogfood',
+        '--no-zygote', 
       ],
     });
-    
     await use(context);
     await context.close();
   },
   extensionId: async ({ context }, use) => {
+    // for manifest v3:
     let [background] = context.serviceWorkers();
-    if (!background) {
-      try {
-        background = await context.waitForEvent('serviceworker', { timeout: 30000 });
-      } catch (e) {
-        [background] = context.serviceWorkers();
-        if (!background) throw new Error("ServiceWorker did not start.");
-      }
-    }
+    if (!background)
+      background = await context.waitForEvent('serviceworker', { timeout: 20000 });
 
     const extensionId = background.url().split('/')[2];
     await use(extensionId);
