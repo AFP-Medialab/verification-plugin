@@ -43,7 +43,7 @@ const runAllAnalysisTools = async (page) => {
 //     .click();
 };
 
-test("Test tool tittok", async ({
+test("Test tool tittok SNA", async ({
   page,
   authenticatedBetaTesterExtensionId,
 }) => {
@@ -101,7 +101,7 @@ test("Test tool tittok", async ({
   await expect(collectionRow).not.toBeVisible({ timeout: 5000 });
 });
 
-test("Test tool twitter", async ({
+test("Test tool twitter SNA", async ({
   page,
   authenticatedBetaTesterExtensionId,
 }) => {
