@@ -58,12 +58,9 @@ pipeline {
                 }
             }
             steps {
-                container('aws-cli') {
-                    sh "aws s3 cp s3://${S3_BUCKET}/configuration/config-${env.BRANCH_NAME}.properties .env.development"
-                }
                 container('playwright') {
                     sh "npm install -g pnpm"
-                    sh "pnpm install --frozen-lockfile --ignore-scripts"
+                    sh "pnpm install --frozen-lockfile --store-dir ${WORKSPACE}/.pnpm-store --ignore-scripts"
                     sh "pnpm exec wxt prepare"
                     sh "pnpm run build:chrome:development"
                     sh "npx playwright install --with-deps chromium"
