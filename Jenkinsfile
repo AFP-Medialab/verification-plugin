@@ -109,12 +109,12 @@ pipeline {
     }
     post {
         success {
-            slackSend channel: 'medialab_builds', 
+            slackSend channel: 'jenkins_builds', 
                       message: "✅ SUCCESS: ${env.JOB_NAME} #${env.BUILD_ID}\nArtefact: s3://${S3_BUCKET}/builds/${env.BRANCH_NAME}/we-verify-plugin-${VERSION_TAG}.zip", 
                       tokenCredentialId: 'medialab_slack_token'
         }
         failure {
-            slackSend channel: 'medialab_builds', 
+            slackSend channel: 'jenkins_builds', 
                       message: "❌ FAILURE: ${env.JOB_NAME} #${env.BUILD_ID}. Vérifiez les logs et le rapport Playwright.", 
                       tokenCredentialId: 'medialab_slack_token'
         }
