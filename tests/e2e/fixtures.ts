@@ -70,7 +70,7 @@ export const test = base.extend<{
   authenticatedArchiveExtensionId: string;
 }>({
   context: async ({ }, use) => {
-    const pathToExtension = path.resolve(__dirname, '../../build/chrome-mv3');
+    const pathToExtension = path.resolve(__dirname, `../../build/${process.env.EXTENSION_BUILD_DIR ?? 'chrome-mv3'}`);
 
     const isCI = !!process.env.CI;
 

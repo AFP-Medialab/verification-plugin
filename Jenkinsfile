@@ -59,15 +59,24 @@ pipeline {
             }
             steps {
                 container('playwright') {
-                    sh "npm install -g pnpm"
-                    sh "pnpm install --frozen-lockfile --ignore-scripts"
-                    sh "pnpm exec wxt prepare"
-                    sh "pnpm run build"
-                    sh "npx playwright install --with-deps chromium"
-                    echo "Component tests :"
-                    sh "pnpm exec playwright test -c playwright-ct.config.js"
-                    echo "E2E tests :"
-                    sh "dbus-run-session -- pnpm exec playwright test"
+                    script {
+                        sh "npm install -g pnpm"
+                        sh "pnpm install --frozen-lockfile --store-dir ${WORKSPACE}/.pnpm-store --ignore-scripts"
+                        sh "pnpm exec wxt prepare"
+                        def extensionBuildDir
+                        if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "pre-master") {
+                            sh "pnpm run build"
+                            extensionBuildDir = "chrome-mv3"
+                        } else {
+                            sh "pnpm run build:chrome:development"
+                            extensionBuildDir = "chrome-mv3-dev"
+                        }
+                        sh "npx playwright install --with-deps chromium"
+                        echo "Component tests :"
+                        sh "pnpm exec playwright test -c playwright-ct.config.js"
+                        echo "E2E tests :"
+                        sh "EXTENSION_BUILD_DIR=${extensionBuildDir} dbus-run-session -- pnpm exec playwright test"
+                    }
                 }
             }
             
