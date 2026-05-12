@@ -62,7 +62,6 @@ pipeline {
                     sh "npm install -g pnpm"
                     sh "pnpm install --frozen-lockfile --ignore-scripts"
                     sh "pnpm exec wxt prepare"
-                    sh "pnpm run build"
                     sh "npx playwright install --with-deps chromium"
                     echo "Component tests :"
                     sh "pnpm exec playwright test -c playwright-ct.config.js"
