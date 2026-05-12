@@ -109,14 +109,16 @@ pipeline {
     }
     post {
         success {
-            slackSend channel: 'U0APPBW7DCJ', 
-                      message: "Test success", 
-                      tokenCredentialId: 'medialab_slack_token'
+            slackSend channel: 'C0B34ADJ7C3', 
+                    color: 'good',
+                    message: "✅ SUCCESS: ${env.JOB_NAME} #${env.BUILD_ID}\nArtefact: s3://${S3_BUCKET}/builds/${env.BRANCH_NAME}/we-verify-plugin-${VERSION_TAG}.zip", 
+                    tokenCredentialId: 'medialab_slack_token'
         }
         failure {
-            slackSend channel: 'U0APPBW7DCJ', 
-                      message: "Test failure", 
-                      tokenCredentialId: 'medialab_slack_token'
+            slackSend channel: 'C0B34ADJ7C3', 
+                    color: 'danger',
+                    message: "❌ FAILURE: ${env.JOB_NAME} #${env.BUILD_ID}. Vérifiez les logs.", 
+                    tokenCredentialId: 'medialab_slack_token'
         }
     }
 }
