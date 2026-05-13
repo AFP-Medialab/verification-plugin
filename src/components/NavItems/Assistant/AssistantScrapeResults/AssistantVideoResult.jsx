@@ -1,3 +1,4 @@
+import VideoIcon from "@/components/NavBar/images/SVG/Video/Video.svg?react";
 import React from "react";
 import Iframe from "react-iframe";
 import { useSelector } from "react-redux";
@@ -14,7 +15,6 @@ import Typography from "@mui/material/Typography";
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 
-import VideoIcon from "@/components/NavBar/images/SVG/Video/Video.svg";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import YouTubeEmbed from "@/components/Shared/Utils/YouTubeEmbed";
@@ -35,6 +35,7 @@ const AssistantVideoResult = () => {
     switch (input_url_type) {
       case KNOWN_LINKS.YOUTUBE:
         return "youtube";
+      case KNOWN_LINKS.BBC:
       case KNOWN_LINKS.VIMEO:
       case KNOWN_LINKS.DAILYMOTION:
       case KNOWN_LINKS.LIVELEAK:

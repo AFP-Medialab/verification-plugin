@@ -198,6 +198,8 @@ const SyntheticImageDetectionForm = ({
               preprocessLocalFile={preprocessImage}
               isParentLoading={isLoading}
               handleClearUrl={resetState}
+              urlInputTestId="synhtetic-images-input"
+              submitButtonTestId="synhtetic-images-submit"
             />
           </form>
 

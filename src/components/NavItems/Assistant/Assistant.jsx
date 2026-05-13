@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import AssistantIcon from "@/components/NavBar/images/navbar/assistant-icon-primary.svg?react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -20,15 +21,14 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
 import { useSetInputFromAssistant } from "@/Hooks/useUrlOrFile";
-import AssistantIcon from "@/components/NavBar/images/navbar/assistant-icon-primary.svg";
 import AssistantCheckStatus from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantCheckStatus";
+import AssistantFactCheckResult from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantFactCheckResult";
 import AssistantNEResult from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantNEResult";
+import AssistantUrlDomainAnalysisResult from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantUrlDomainAnalysisResult";
 import AssistantCommentResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantCommentResult";
 import AssistantLinkResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantLinkResult";
 import AssistantMediaResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantMediaResult";
 import AssistantTextResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantTextResult";
-import AssistantSCResults from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantUrlDomainAnalysisResults";
-import AssistantWarnings from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantWarnings";
 import HeaderTool from "@/components/Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
@@ -53,7 +53,7 @@ import {
   TransAssistantHelpTwoTooltip,
   TransHtmlDoubleLineBreak,
   TransSupportedToolsLink,
-} from "./TransComponents";
+} from "./components";
 
 const Assistant = () => {
   // styles, language, dispatch, params
@@ -67,8 +67,8 @@ const Assistant = () => {
   const { mode, systemMode } = useColorScheme();
   const resolvedMode = systemMode || mode;
 
-  // submitted
-  const [hasSubmitted, setHasSubmitted] = useState(false);
+  // submitted - using ref to avoid triggering useEffect on change
+  const hasSubmitted = useRef(false);
 
   // form states
   const loading = useSelector((state) => state.assistant.loading);
@@ -100,20 +100,22 @@ const Assistant = () => {
   const neResult = useSelector((state) => state.assistant.neResultCategory);
 
   // source credibility
-  const positiveSourceCred = useSelector(
-    (state) => state.assistant.positiveSourceCred,
+  const positiveUrlDomainAnalysis = useSelector(
+    (state) => state.assistant.positiveUrlDomainAnalysis,
   );
-  const cautionSourceCred = useSelector(
-    (state) => state.assistant.cautionSourceCred,
+  const cautionUrlDomainAnalysis = useSelector(
+    (state) => state.assistant.cautionUrlDomainAnalysis,
   );
-  const mixedSourceCred = useSelector(
-    (state) => state.assistant.mixedSourceCred,
+  const mixedUrlDomainAnalysis = useSelector(
+    (state) => state.assistant.mixedUrlDomainAnalysis,
   );
 
   const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
 
   // third party fail states
-  const scFailState = useSelector((state) => state.assistant.inputSCFail);
+  const urlDomainAnalysisFailState = useSelector(
+    (state) => state.assistant.inputUrlDomainAnalysisFail,
+  );
   const dbkfTextFailState = useSelector(
     (state) => state.assistant.dbkfTextMatchFail,
   );
@@ -128,7 +130,7 @@ const Assistant = () => {
     (state) => state.assistant.persuasionFail,
   );
   const prevFactChecksFailState = useSelector(
-    (state) => state.assistant.previousFactChecksFail,
+    (state) => state.assistant.prevFactChecksFail,
   );
   const prevFactChecksResult = useSelector(
     (state) => state.assistant.prevFactChecksResult,
@@ -137,10 +139,7 @@ const Assistant = () => {
     (state) => state.assistant.subjectivityFail,
   );
   const machineGeneratedTextChunksFailState = useSelector(
-    (state) => state.assistant.machineGeneratedChunksTextFail,
-  );
-  const machineGeneratedTextSentencesFailState = useSelector(
-    (state) => state.assistant.machineGeneratedTextSentencesFail,
+    (state) => state.assistant.machineGeneratedTextChunksFail,
   );
   const multilingualStanceFailState = useSelector(
     (state) => state.assistant.multilingualStanceFail,
@@ -157,7 +156,7 @@ const Assistant = () => {
 
   const handleSubmit = async () => {
     dispatch(cleanAssistantState());
-    setHasSubmitted(true);
+    hasSubmitted.current = true;
 
     // set fileInput and formInput
     if (formInput) {
@@ -167,58 +166,58 @@ const Assistant = () => {
       navigate("/app/assistant/" + encodeURIComponent(fixedUrl));
       //trackEvent("submission", "assistant", "page assistant", fixedUrl);
       setAssistantSelection(fixedUrl);
-    } else if (fileInput) {
-      // submit file
+    } else {
       try {
-        if (!fileInput) {
+        if (fileInput) {
+          setAssistantSelection(fileInput);
+
+          // Determine file type
+          const fileType = await getFileTypeFromFileObject(fileInput);
+
+          if (!fileType || fileType instanceof Error) {
+            throw new Error(keyword("unable_to_determine_file_type"));
+          }
+
+          // set ImgaeVideoSelected for user media upload
+          dispatch(setImageVideoSelected(true));
+          // set single media present for display
+          dispatch(setSingleMediaPresent(true));
+          navigate("/app/assistant/");
+
+          if (fileType.mime.includes("video")) {
+            // set the video URL
+            const videoUrl = URL.createObjectURL(fileInput);
+            const ctype = TOOLS_CATEGORIES.VIDEO;
+
+            dispatch(setInputUrl(videoUrl, KNOWN_LINKS.OWN));
+            dispatch(
+              setScrapedData(null, null, null, [], [videoUrl], null, null),
+            );
+            dispatch(submitUpload(videoUrl, ctype));
+            setVideoUploaded(true);
+
+            return;
+          }
+
+          if (fileType.mime.includes("image")) {
+            // Set the image URL
+            const imageUrl = URL.createObjectURL(fileInput);
+            const ctype = TOOLS_CATEGORIES.IMAGE;
+
+            dispatch(setInputUrl(imageUrl, KNOWN_LINKS.OWN)); // kicks off getUrlDomainAnalysisSaga
+            dispatch(
+              setScrapedData(null, null, null, [imageUrl], [], null, null),
+            );
+            dispatch(submitUpload(imageUrl, ctype));
+            setImageUploaded(true);
+
+            return;
+          }
+
+          throw new Error(keyword("unsupported_file_type"));
+        } else {
           throw new Error(keyword("no_input_provided"));
         }
-        setAssistantSelection(fileInput);
-
-        // Determine file type
-        const fileType = await getFileTypeFromFileObject(fileInput);
-
-        if (!fileType || fileType instanceof Error) {
-          throw new Error(keyword("unable_to_determine_file_type"));
-        }
-
-        // set ImgaeVideoSelected for user media upload
-        dispatch(setImageVideoSelected(true));
-        // set single media present for display
-        dispatch(setSingleMediaPresent(true));
-        navigate("/app/assistant/");
-
-        if (fileType.mime.includes("video")) {
-          // set the video URL
-          const videoUrl = URL.createObjectURL(fileInput);
-          const ctype = TOOLS_CATEGORIES.VIDEO;
-
-          dispatch(setInputUrl(videoUrl, KNOWN_LINKS.OWN));
-          dispatch(
-            setScrapedData(null, null, null, [], [videoUrl], null, null),
-          );
-          dispatch(submitUpload(videoUrl, ctype));
-          setVideoUploaded(true);
-
-          return;
-        }
-
-        if (fileType.mime.includes("image")) {
-          // Set the image URL
-          const imageUrl = URL.createObjectURL(fileInput);
-          const ctype = TOOLS_CATEGORIES.IMAGE;
-
-          dispatch(setInputUrl(imageUrl, KNOWN_LINKS.OWN)); // kicks off getSourceCredSaga
-          dispatch(
-            setScrapedData(null, null, null, [imageUrl], [], null, null),
-          );
-          dispatch(submitUpload(imageUrl, ctype));
-          setImageUploaded(true);
-
-          return;
-        }
-
-        throw new Error(keyword("unsupported_file_type"));
       } catch (error) {
         console.error("Error in submitUrl:", error.message);
         dispatch(setError(error.message));
@@ -237,10 +236,9 @@ const Assistant = () => {
           encodeURIComponent(inputUrl);
         break;
       case KNOWN_LINKS.INSTAGRAM:
-        if (inputUrl.endsWith("/"))
-          archiveUrl = inputUrl.endsWith("/")
-            ? inputUrl + "embed/captioned/"
-            : inputUrl + "/embed/captioned/";
+        archiveUrl = inputUrl.endsWith("/")
+          ? inputUrl + "embed/captioned/"
+          : inputUrl + "/embed/captioned/";
         break;
       default:
         archiveUrl = inputUrl;
@@ -257,10 +255,10 @@ const Assistant = () => {
   };
 
   // clean assistant
-  const cleanAssistant = () => {
+  const cleanAssistant = useCallback(() => {
     dispatch(cleanAssistantState());
     // clean url mode
-    setHasSubmitted(false);
+    hasSubmitted.current = false;
     setFormInput("");
     navigate("/app/assistant/");
     dispatch(setUrlMode(false));
@@ -269,7 +267,7 @@ const Assistant = () => {
     dispatch(setSingleMediaPresent(false));
     setImageUploaded(false);
     setVideoUploaded(false);
-  };
+  }, []);
 
   // set correct error message
   useEffect(() => {
@@ -277,11 +275,11 @@ const Assistant = () => {
       dispatch(setError(keyword(errorKey)));
       cleanAssistant();
     }
-  }, [errorKey]);
+  }, [errorKey, keyword, cleanAssistant]);
 
   // if a url is present in the plugin url (as a param), set it to input
   useEffect(() => {
-    if (url !== undefined && !hasSubmitted) {
+    if (url !== undefined && !hasSubmitted.current) {
       // only handle user-entered spaces which shouldn't normally be in URLs
       const uri = url !== null ? url.replace(/ /g, "%20") : undefined;
       dispatch(setUrlMode(true));
@@ -420,7 +418,7 @@ const Assistant = () => {
 
       {/* assistant status */}
       {(urlMode || imageVideoSelected) &&
-      (scFailState ||
+      (urlDomainAnalysisFailState ||
         dbkfTextFailState ||
         neFailState ||
         newsFramingFailState ||
@@ -429,7 +427,6 @@ const Assistant = () => {
         subjectivityFailState ||
         prevFactChecksFailState ||
         machineGeneratedTextChunksFailState ||
-        machineGeneratedTextSentencesFailState ||
         multilingualStanceFailState) ? (
         <Grid size={{ xs: 12 }} sx={{ mt: 4 }}>
           <AssistantCheckStatus />
@@ -490,21 +487,23 @@ const Assistant = () => {
 
           <CardContent>
             <Grid container spacing={4}>
-              {/* warnings and api status checks */}
+              {/* URL domain analysis results */}
+              {positiveUrlDomainAnalysis ||
+              cautionUrlDomainAnalysis ||
+              mixedUrlDomainAnalysis ? (
+                <Grid size={{ xs: 12 }}>
+                  <AssistantUrlDomainAnalysisResult />
+                </Grid>
+              ) : null}
+
+              {/* fact check results */}
               {dbkfTextMatch || prevFactChecksResult ? (
                 <Grid
                   size={{ xs: 12 }}
                   className={classes.assistantGrid}
                   hidden={urlMode === false}
                 >
-                  <AssistantWarnings />
-                </Grid>
-              ) : null}
-
-              {/* source credibility/URL domain analysis results */}
-              {positiveSourceCred || cautionSourceCred || mixedSourceCred ? (
-                <Grid size={{ xs: 12 }}>
-                  <AssistantSCResults />
+                  <AssistantFactCheckResult />
                 </Grid>
               ) : null}
 

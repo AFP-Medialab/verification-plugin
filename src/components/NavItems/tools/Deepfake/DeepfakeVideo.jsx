@@ -76,6 +76,8 @@ const Deepfake = () => {
   };
 
   useEffect(() => {
+    console.log(url);
+    console.log(input);
     if (url && input && !result) {
       handleSubmit(input);
     }
@@ -141,6 +143,8 @@ const Deepfake = () => {
                 preprocessLocalFile={preprocessVideo}
                 isParentLoading={isLoading}
                 handleClearUrl={resetState}
+                urlInputTestId="deepfake-input"
+                submitButtonTestId="deepfake-submit"
               />
             </form>
           </Box>

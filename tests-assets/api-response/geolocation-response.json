@@ -1,0 +1,22 @@
+{
+    "predictions": [
+        {
+            "latitude": 45.860592,
+            "longitude": 23.339744,
+            "confidence": 0.92,
+            "retrieved_images": [
+                "https://s3.mever.gr/geolocation/transformers/datasets/mp16_train/396421544.jpg?AWSAccessKeyId=ZF8E20F6L8LNUIDYZ4K9&Signature=b8DvBwYzG8bVTAspQqBhpqKTOa8%3D&Expires=1777365582",
+                "https://s3.mever.gr/geolocation/transformers/datasets/mp16_train/5097770268.jpg?AWSAccessKeyId=ZF8E20F6L8LNUIDYZ4K9&Signature=1CijMu67CDLIs5m2uLOyE6KJSLY%3D&Expires=1777365582",
+                "https://s3.mever.gr/geolocation/transformers/datasets/mp16_train/6250033262.jpg?AWSAccessKeyId=ZF8E20F6L8LNUIDYZ4K9&Signature=gNUImjWz8OsJAS6vtyd5LuWCMuc%3D&Expires=1777365582",
+                "https://s3.mever.gr/geolocation/transformers/datasets/mp16_train/2445157881.jpg?AWSAccessKeyId=ZF8E20F6L8LNUIDYZ4K9&Signature=I6L%2BcNoffdKaSrWtysjmE%2B2JJRU%3D&Expires=1777365582",
+                "https://s3.mever.gr/geolocation/transformers/datasets/mp16_train/32492613.jpg?AWSAccessKeyId=ZF8E20F6L8LNUIDYZ4K9&Signature=KJ4FLeGgoYbCEY%2BjtXPBMQ66V0I%3D&Expires=1777365582",
+                "https://s3.mever.gr/geolocation/transformers/datasets/mp16_train/246782363.jpg?AWSAccessKeyId=ZF8E20F6L8LNUIDYZ4K9&Signature=aXtx57oxSzSPfeHckIYGtwJva7w%3D&Expires=1777365582",
+                "https://s3.mever.gr/geolocation/transformers/datasets/mp16_train/5075743515.jpg?AWSAccessKeyId=ZF8E20F6L8LNUIDYZ4K9&Signature=1RFl7Y7HJ3TBCSjYXcsJOYzspyw%3D&Expires=1777365582",
+                "https://s3.mever.gr/geolocation/transformers/datasets/mp16_train/3205394946.jpg?AWSAccessKeyId=ZF8E20F6L8LNUIDYZ4K9&Signature=jKh1htEF%2BM70FaYCIA0ZvgzJbA0%3D&Expires=1777365582",
+                "https://s3.mever.gr/geolocation/transformers/datasets/mp16_train/6618714813.jpg?AWSAccessKeyId=ZF8E20F6L8LNUIDYZ4K9&Signature=8a2ApsMZ0Hp7K9QdhKnf0dHszhA%3D&Expires=1777365582",
+                "https://s3.mever.gr/geolocation/transformers/datasets/mp16_train/8420228291.jpg?AWSAccessKeyId=ZF8E20F6L8LNUIDYZ4K9&Signature=%2BVMnPwBxZCh9FBhYsAsntu%2Fbxq4%3D&Expires=1777365582"
+            ]
+        }
+    ],
+    "soft_confidence_threshold": 0.1
+}

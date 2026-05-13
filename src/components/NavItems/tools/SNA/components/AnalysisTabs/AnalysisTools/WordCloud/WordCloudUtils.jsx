@@ -8,7 +8,10 @@ const MAX_WORDS = 100;
 export const generateWordCloudGraphData = (selectedContent) => {
   const normalizedContent = selectedContent.map((entry) => ({
     ...entry,
-    splitText: entry.text.toLowerCase().split(" "),
+    splitText: entry.text
+      .toLowerCase()
+      .split(/[^a-z0-9à-ÿ.!?']+/)
+      .filter((word) => word.length > 1),
   }));
 
   let ret = entryAggregatorByListValue(normalizedContent, "splitText", "text");

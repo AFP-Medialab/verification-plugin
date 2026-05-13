@@ -38,7 +38,11 @@ const GeolocationResults = ({ result, urlImage }) => {
         {result &&
           result.length > 0 &&
           result.map((res, key) => (
-            <Card variant="outlined" key={key}>
+            <Card
+              variant="outlined"
+              key={key}
+              data-testid="geolocation-results"
+            >
               {userRoles.includes(ROLES.EXTRA_FEATURE) &&
                 res.confidence &&
                 typeof res.confidence === "number" && (
@@ -83,6 +87,7 @@ const GeolocationResults = ({ result, urlImage }) => {
                       justifyContent: "center",
                       display: "flex",
                     }}
+                    data-testid="geolocation-results-image"
                   >
                     <img
                       src={urlImage}
@@ -119,6 +124,7 @@ const GeolocationResults = ({ result, urlImage }) => {
                         sx={{
                           width: "100%",
                         }}
+                        data-testid="geolocation-results-map"
                       >
                         <ErrorBoundary
                           FallbackComponent={ErrorBoundaryFallback}
@@ -219,6 +225,7 @@ const GeolocationResults = ({ result, urlImage }) => {
                               "_blank ",
                             )
                           }
+                          data-testid="geolocation-results-button-to-gmaps"
                         >
                           {keyword("geo_maps")}
                         </Button>

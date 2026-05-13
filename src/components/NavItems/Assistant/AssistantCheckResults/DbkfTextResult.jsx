@@ -13,13 +13,13 @@ import TextFieldsIcon from "@mui/icons-material/TextFields";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 
-const DbkfTextResults = ({ results, prevFactChecksExist }) => {
+const DbkfTextResult = ({ results, prevFactChecksExist }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   return (
     <>
       {/* This code mimics ResultDisplayItem.jsx from SemanticSearch to match output */}
-      {results.map((value, key) => {
+      {results?.map((value, key) => {
         return (
           <Box
             key={key}
@@ -123,4 +123,4 @@ const DbkfTextResults = ({ results, prevFactChecksExist }) => {
     </>
   );
 };
-export default DbkfTextResults;
+export default DbkfTextResult;

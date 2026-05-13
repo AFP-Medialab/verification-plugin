@@ -7,6 +7,10 @@
  */
 import { test, expect } from './fixtures';
 import path from 'path';
+import fs from 'fs';
+import mockedKeyframesResponse from '../../tests-assets/api-response/keyframes-response.json'
+import mockedDeepfakeResponse from '../../tests-assets/api-response/deepfake-response.json'
+import mockedPoiForensicResponse from '../../tests-assets/api-response/poiforensic-response.json'
 
 test(`Test tool analysis video`, async ({ page, extensionId }) => {
   await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/analysis`);
@@ -27,14 +31,97 @@ test(`Test tool analysis video`, async ({ page, extensionId }) => {
 
 // test generated with codegen
 test('Test tool keyframes', async ({ page, extensionId }) => {
+  // mock session id
+  await page.route('**/vera/public/kse_video_analysis', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        "message": "Video already exists",
+        "session": "2f3d48ca01a4da56e416e19c2",
+        "status": "completed:::100"
+      }),
+    });
+  });
+  
+  // mock status polling
+  await page.route('**/vera/public/kse_video_analysis/status/2f3d48ca01a4da56e416e19c2', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ status: 'completed:::100' }),
+    });
+  });
+
+  // mock seg response (keyframes + shots data)
+  await page.route('**/vera/public/kse_video_analysis/json/seg/2f3d48ca01a4da56e416e19c2', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(mockedKeyframesResponse),
+    });
+  });
+
+  // mock det response (faces/text groups)
+  await page.route('**/vera/public/kse_video_analysis/json/det/2f3d48ca01a4da56e416e19c2', async (route) => {
+    await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(mockedKeyframesResponse),
+    });
+  });
+
+  // mock frame response
+  let frameCount = 0;
+  await page.route('**/kse/keyframe/**/**', async (route) => {
+    frameCount++;
+    if (frameCount > 10) { // trying to limit request
+        await route.abort();
+        return;
+    }
+
+    const imagePath = path.resolve(__dirname, '../../tests-assets/test-metadata.jpg');
+    const imageBuffer = fs.readFileSync(imagePath);
+
+    await route.fulfill({
+        status: 200,
+        contentType: 'image/jpeg',
+        body: imageBuffer,
+    });
+  });
+
+  // mock grouped frames
+  await page.route('**/kse/**_grouped/**/**', async (route) => {
+    const imagePath = path.resolve(__dirname, '../../tests-assets/test-metadata.jpg');
+    const imageBuffer = fs.readFileSync(imagePath);
+
+    await route.fulfill({
+        status: 200,
+        contentType: 'image/jpeg',
+        body: imageBuffer,
+    });
+  });
+
+  // mock zip for downloading
+  await page.route('**/kse/keyframes_zip/**', async (route) => {
+    const zipPath = path.resolve(__dirname, '../../tests-assets/keyframes_zip.zip');
+    const zipBuffer = fs.readFileSync(zipPath);
+
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/zip',
+      body: zipBuffer,
+    });
+  });
+
   await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/keyframes`);
   // Accept local storage usage
   await page.getByText("Accept").click();
 
-  await page.locator('[data-testid="keyframes-input"] input').fill('https://www.youtube.com/watch?v=QQFgQ1uBQtk');
+  await page.locator('[data-testid="keyframes-input"] input').fill('https://www.youtube.com/watch?v=S1MBVXkQbWU');
 
   await page.locator('[data-testid="keyframes-submit"]').click();
-  
+
   // test of zoom in and out
   await page.locator('[data-testid="keyframes-zoomout"]').click();
   await page.locator('[data-testid="keyframes-zoomin"]').click();
@@ -46,7 +133,7 @@ test('Test tool keyframes', async ({ page, extensionId }) => {
   const downloadPromise = page.waitForEvent('download');
   await page.locator('[data-testid="keyframes-download"]').click();
   const download = await downloadPromise;
-  
+
   await expect (page.locator('[data-testid="keyframes-results-general"]')).toBeVisible();
   await expect (page.locator('[data-testid="keyframes-results-audio"]')).toBeVisible();
   await expect (page.locator('[data-testid="keyframes-results-face"]')).toBeVisible();
@@ -62,9 +149,7 @@ test('Test tool keyframes', async ({ page, extensionId }) => {
 });
 
 test('Test tool thumbnails', async ({ page, context, extensionId }) => {
-  // Navigate to the demo page
   await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/thumbnails`);
-  // Accept local storage usage
   await page.getByText("Accept").click();
 
   // Counting tabs before submitting
@@ -94,6 +179,53 @@ test('Test tool metadata video', async ({ page, extensionId }) => {
   await page.locator('[data-testid="metadata-submit"]').click();
 
   await expect (page.locator('[data-testid="c2pa-result"]')).toBeVisible();
+});
+
+test('Test tool deepfake video', async ({page, authenticatedBetaTesterExtensionId}) => {
+  // mocking main route (TODO : put this json in test assets folder, in a dedicated file to mocked api response)
+  await page.route('**/deepfake/videos/jobs?url=https:%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DyVEhrIMc-ps&services=faceswap_fsfm', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(mockedDeepfakeResponse)
+    });
+  });
+
+  await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/deepfakeVideo`);
+
+  await page.locator('[data-testid="deepfake-input"] input').fill('https://www.youtube.com/watch?v=bPhUhypV27w');
+  await page.getByTestId('deepfake-submit').click();
+
+  await expect (page.getByTestId("deepfake-results")).toBeVisible();
+  await expect (page.getByTestId("deepfake-video")).toBeVisible();
+  await expect (page.getByTestId("deepfake-chart")).toBeVisible();
+  await expect (page.getByTestId("deepfake-gauge")).toBeVisible();
+  await expect (page.getByTestId("deepfake-keyframes")).toBeVisible();
+
+  await page.getByTestId('deepfake-close').click();
+  await expect (page.getByTestId("deepfake-results")).toHaveCount(0);
+});
+
+test('Test tool poi forensic video', async ({page, authenticatedExtraFeaturesExtensionId}) => {
+  await page.route('**/deepfake/videos/**', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(mockedPoiForensicResponse)
+    });
+  });
+
+  await page.goto(`chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/tools/poiforensic`);
+
+  await page.locator('[data-testid="poiforensic-input"] input').fill('https://www.youtube.com/watch?v=SOo7fHT_Na0');
+  await page.getByTestId('poiforensic-submit').click();
+
+  await expect (page.getByTestId("poiforensic-results")).toBeVisible();
+  await expect (page.getByTestId("poiforensic-video")).toBeVisible();
+  await expect (page.getByTestId("poiforensic-chart")).toBeVisible();
+
+  await page.getByTestId('poiforensic-close').click();
+  await expect (page.getByTestId("poiforensic-results")).toHaveCount(0);
 });
 
 

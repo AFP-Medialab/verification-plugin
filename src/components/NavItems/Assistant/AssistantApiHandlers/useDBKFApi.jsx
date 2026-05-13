@@ -1,5 +1,7 @@
 import axios from "axios";
 
+import { DBKF_RESULTS_LIMIT } from "../constants";
+
 export default function DBKFApi() {
   const dbkfAPI = import.meta.env.VITE_DBKF_SEARCH_API;
 
@@ -17,7 +19,7 @@ export default function DBKFApi() {
             even %20%20 breaks it. >1 space/newlines/breaks etc. removed on server side for the time being.  */
     let finalUri =
       dbkfAPI +
-      "/documents?&limit=5&orderBy=score&q=" +
+      `/documents?&limit=${DBKF_RESULTS_LIMIT}&orderBy=score&q=` +
       encodeURIComponent(
         cleanQuery(query.replace(/["\\/\n|\-\[\]\(\)]/g, " ")),
       );

@@ -128,6 +128,8 @@ const Hiya = () => {
               preprocessLocalFile={preprocessLocalFile}
               isParentLoading={getAnalysisResultsForAudio.isPending}
               handleClearUrl={resetState}
+              urlInputTestId="hiya-input"
+              submitButtonTestId="hiya-submit"
             />
           </form>
           {getAnalysisResultsForAudio.isPending && (

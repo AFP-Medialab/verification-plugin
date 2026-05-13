@@ -1,3 +1,4 @@
+import IconClassRoom from "../../NavBar/images/SVG/Navbar/Classroom.svg?react";
 import React, { useState } from "react";
 import { Trans } from "react-i18next";
 import Iframe from "react-iframe";
@@ -33,7 +34,6 @@ import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import YouTubeEmbed from "@Shared/Utils/YouTubeEmbed";
 import PropTypes from "prop-types";
 
-import IconClassRoom from "../../NavBar/images/SVG/Navbar/Classroom.svg";
 import HeaderTool from "../../Shared/HeaderTool/HeaderTool";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import youverifyImage from "./Images/YouVerify_Logo.png";

@@ -17,36 +17,36 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import {
   renderDomainAnalysisResults,
   renderSourceTypeChip,
-} from "@/components/NavItems/Assistant/AssistantCheckResults/assistantUtils";
+} from "@/components/NavItems/Assistant/utils";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
-import { setAssuranceExpanded } from "@/redux/actions/tools/assistantActions";
+import { setDomainAnalysisExpanded } from "@/redux/actions/tools/assistantActions";
 
 import {
   TransHtmlDoubleLineBreak,
-  TransSourceCredibilityTooltip,
   TransUrlDomainAnalysisLink,
+  TransUrlDomainAnalysisTooltip,
   TransUsfdAuthor,
-} from "../TransComponents";
+} from "../components";
 
-const AssistantSCResults = () => {
+const AssistantUrlDomainAnalysisResult = () => {
   // central
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const dispatch = useDispatch();
   const classes = useMyStyles();
 
   // state
-  const assuranceExpanded = useSelector(
-    (state) => state.assistant.assuranceExpanded,
+  const domainAnalysisExpanded = useSelector(
+    (state) => state.assistant.domainAnalysisExpanded,
   );
-  const positiveSourceCred = useSelector(
-    (state) => state.assistant.positiveSourceCred,
+  const positiveUrlDomainAnalysis = useSelector(
+    (state) => state.assistant.positiveUrlDomainAnalysis,
   );
-  const cautionSourceCred = useSelector(
-    (state) => state.assistant.cautionSourceCred,
+  const cautionUrlDomainAnalysis = useSelector(
+    (state) => state.assistant.cautionUrlDomainAnalysis,
   );
-  const mixedSourceCred = useSelector(
-    (state) => state.assistant.mixedSourceCred,
+  const mixedUrlDomainAnalysis = useSelector(
+    (state) => state.assistant.mixedUrlDomainAnalysis,
   );
   const trafficLightColors = useSelector(
     (state) => state.assistant.trafficLightColors,
@@ -56,93 +56,83 @@ const AssistantSCResults = () => {
   return (
     <Card
       variant={"outlined"}
-      className={classes.sourceCredibilityBorder}
+      className={classes.urlDomainAnalysisBorder}
       height="400"
     >
       <Grid container>
         <Grid size={{ xs: 11 }} className={classes.displayFlex}>
           {/* icon */}
           <CardMedia>
-            <Box
-              sx={{
-                m: 1,
-              }}
-            >
-              <FindInPageIcon fontSize={"large"} color={"primary"} />
-            </Box>
+            <FindInPageIcon
+              fontSize={"large"}
+              color={"primary"}
+              sx={{ m: 1 }}
+            />
           </CardMedia>
 
-          {/* spacing */}
-          <Box
-            sx={{
-              m: 1,
-            }}
-          />
-
           {/* title */}
-          <Box
+          <Typography
+            component={"span"}
+            variant={"h6"}
             sx={{
               mt: 1.5,
+              pl: 1,
             }}
           >
-            <Typography component={"span"} variant={"h6"}>
-              {keyword("url_domain_analysis")}
-            </Typography>
-          </Box>
+            {keyword("url_domain_analysis")}
+          </Typography>
 
           {/* expand button */}
-          <Box
-            sx={{
-              pr: 1,
-              pt: 1,
-            }}
+          <IconButton
+            className={classes.assistantIconRight}
+            onClick={() =>
+              dispatch(setDomainAnalysisExpanded(!domainAnalysisExpanded))
+            }
+            sx={{ p: 1 }}
           >
-            <IconButton
-              className={classes.assistantIconRight}
-              onClick={() => dispatch(setAssuranceExpanded(!assuranceExpanded))}
-              sx={{ p: 1 }}
-            >
-              <ExpandMoreIcon color={"primary"} />
-            </IconButton>
-          </Box>
+            <ExpandMoreIcon color={"primary"} />
+          </IconButton>
         </Grid>
 
-        <Grid size={{ xs: 1 }}>
+        <Grid
+          size={{ xs: 1 }}
+          sx={{ display: "flex", justifyContent: "flex-end" }}
+        >
           {/* help tooltip */}
-          <Box
-            align="right"
-            sx={{
-              mt: 1.5,
-            }}
+          <Tooltip
+            interactive={"true"}
+            leaveDelay={50}
+            className={classes.assistantTooltipCollapsibleCard}
+            title={
+              <>
+                <TransUrlDomainAnalysisTooltip keyword={keyword} />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
+                <TransUsfdAuthor keyword={keyword} />
+                <TransHtmlDoubleLineBreak keyword={keyword} />
+                <TransUrlDomainAnalysisLink keyword={keyword} />
+              </>
+            }
+            classes={{ tooltip: classes.assistantTooltip }}
           >
-            <Tooltip
-              interactive={"true"}
-              leaveDelay={50}
-              style={{ display: "flex", marginLeft: "auto" }}
-              title={
-                <>
-                  <TransSourceCredibilityTooltip keyword={keyword} />
-                  <TransHtmlDoubleLineBreak keyword={keyword} />
-                  <TransUsfdAuthor keyword={keyword} />
-                  <TransHtmlDoubleLineBreak keyword={keyword} />
-                  <TransUrlDomainAnalysisLink keyword={keyword} />
-                </>
-              }
-              classes={{ tooltip: classes.assistantTooltip }}
-            >
-              <HelpOutlineOutlinedIcon color={"action"} />
-            </Tooltip>
-          </Box>
+            <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+          </Tooltip>
         </Grid>
 
         <Grid size={{ xs: 12 }}>
           <Collapse
-            in={assuranceExpanded}
+            in={domainAnalysisExpanded}
             className={classes.assistantBackground}
           >
-            <Box mt={3} ml={2} textAlign="center">
+            <Box
+              sx={{
+                width: "100%",
+                mt: 3,
+                ml: 2,
+                textAlign: "center",
+              }}
+            >
               {/* Caution/Warning */}
-              {positiveSourceCred?.length > 0 ? (
+              {positiveUrlDomainAnalysis?.length > 0 ? (
                 <>
                   {renderSourceTypeChip(
                     keyword,
@@ -151,7 +141,7 @@ const AssistantSCResults = () => {
                   )}
                   {renderDomainAnalysisResults(
                     keyword,
-                    positiveSourceCred,
+                    positiveUrlDomainAnalysis,
                     trafficLightColors.positive,
                     sourceTypes.positive,
                   )}
@@ -159,7 +149,7 @@ const AssistantSCResults = () => {
               ) : null}
 
               {/* Mixed/Mentions */}
-              {cautionSourceCred?.length > 0 ? (
+              {cautionUrlDomainAnalysis?.length > 0 ? (
                 <>
                   {renderSourceTypeChip(
                     keyword,
@@ -168,7 +158,7 @@ const AssistantSCResults = () => {
                   )}
                   {renderDomainAnalysisResults(
                     keyword,
-                    cautionSourceCred,
+                    cautionUrlDomainAnalysis,
                     trafficLightColors.caution,
                     sourceTypes.caution,
                   )}
@@ -176,7 +166,7 @@ const AssistantSCResults = () => {
               ) : null}
 
               {/* Positive/Fact-checker */}
-              {mixedSourceCred?.length > 0 ? (
+              {mixedUrlDomainAnalysis?.length > 0 ? (
                 <>
                   {renderSourceTypeChip(
                     keyword,
@@ -185,7 +175,7 @@ const AssistantSCResults = () => {
                   )}
                   {renderDomainAnalysisResults(
                     keyword,
-                    mixedSourceCred,
+                    mixedUrlDomainAnalysis,
                     trafficLightColors.mixed,
                     sourceTypes.mixed,
                   )}
@@ -198,4 +188,4 @@ const AssistantSCResults = () => {
     </Card>
   );
 };
-export default AssistantSCResults;
+export default AssistantUrlDomainAnalysisResult;

@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 
 import Box from "@mui/material/Box";
+import { styled } from "@mui/material/styles";
 
 import { scaleLog } from "@visx/scale";
 import { Text } from "@visx/text";
@@ -37,6 +38,15 @@ export const VisxWordcloud = ({ words, wordClickFunction }) => {
 
   const fontSizeSetter = (datum) => fontScale(datum.value);
 
+  // we create a custom component to make the words more visually clickable
+  const StyledText = styled(Text)({
+    cursor: "pointer",
+    transition: "font-size 0.2s ease, opacity 0.2s ease",
+    "&:hover": {
+      fontSize: "1.1em",
+    },
+  });
+
   return (
     <Box display="flex" justifyContent="center">
       <Wordcloud
@@ -52,7 +62,7 @@ export const VisxWordcloud = ({ words, wordClickFunction }) => {
       >
         {(cloudWords) =>
           cloudWords.map((w, i) => (
-            <Text
+            <StyledText
               key={w.text}
               fill={colors[i % colors.length]}
               textAnchor={"middle"}
@@ -60,9 +70,10 @@ export const VisxWordcloud = ({ words, wordClickFunction }) => {
               fontSize={w.size}
               fontFamily={w.font}
               onClick={() => wordClickFunction(w)}
+              class="word-in-wordcloud"
             >
               {w.text}
-            </Text>
+            </StyledText>
           ))
         }
       </Wordcloud>

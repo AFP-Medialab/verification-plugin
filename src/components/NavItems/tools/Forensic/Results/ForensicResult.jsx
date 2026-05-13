@@ -516,7 +516,7 @@ const ForensicResults = (props) => {
   }, [submittedImageRef.current]);
 
   return (
-    <div>
+    <div data-testid="forensic-results">
       <Snackbar
         open={openAlert}
         autoHideDuration={6000}
@@ -584,6 +584,7 @@ const ForensicResults = (props) => {
                           justifyContent: "space-between",
                           alignItems: "center",
                         }}
+                        data-testid="forensic-result-image"
                       >
                         <Grid>
                           <span>{keyword("forensic_title_image")}</span>
@@ -617,6 +618,7 @@ const ForensicResults = (props) => {
                               color: "white",
                             }}
                             onClick={newImage}
+                            data-testid="forensic-newimage-button"
                           >
                             {keyword("forensic_button_newImage")}
                           </Button>
@@ -666,6 +668,7 @@ const ForensicResults = (props) => {
                           justifyContent: "space-between",
                           alignItems: "center",
                         }}
+                        data-testid="forensic-results-lenses"
                       >
                         <span>{keyword("forensic_title_lenses")}</span>
                         <WarningIcon
@@ -880,6 +883,7 @@ const ForensicResults = (props) => {
                           justifyContent: "space-between",
                           alignItems: "center",
                         }}
+                        data-testid="forensic-results-filters"
                       >
                         <span>{keyword("forensic_title_filters")}</span>
                         <HelpOutlineIcon
@@ -948,10 +952,22 @@ const ForensicResults = (props) => {
                     onChange={handleChange}
                     indicatorColor={"primary"}
                   >
-                    <Tab label={keyword("forensic_family_compression_title")} />
-                    <Tab label={keyword("forensic_family_noise_title")} />
-                    <Tab label={keyword("forensic_family_ai_title")} />
-                    <Tab label={keyword("forensic_family_cloning_title")} />
+                    <Tab
+                      data-testid="forensic-tab-compression"
+                      label={keyword("forensic_family_compression_title")}
+                    />
+                    <Tab
+                      data-testid="forensic-tab-noise"
+                      label={keyword("forensic_family_noise_title")}
+                    />
+                    <Tab
+                      data-testid="forensic-tab-family"
+                      label={keyword("forensic_family_ai_title")}
+                    />
+                    <Tab
+                      data-testid="forensic-tab-cloning"
+                      label={keyword("forensic_family_cloning_title")}
+                    />
                   </Tabs>
 
                   {tabs.map((valueTab, keyTab) => {

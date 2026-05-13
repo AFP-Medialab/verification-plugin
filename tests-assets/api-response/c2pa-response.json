@@ -1,0 +1,54 @@
+{
+    "thumbnailUrl": "/A4WH9CQ/thumbnail/39649f27d0cd60824f1b3ec7b4fe9106c4054fce",
+    "hdUrl": "/A4WH9CQ/hd/00a3f3f1043f34053f51c08151e939a72d1d12d5",
+    "imatag": {
+        "guid": "A4WH9CQ",
+        "caption": null,
+        "creator": null,
+        "credit": null,
+        "source": null,
+        "copyright": null,
+        "country": null,
+        "countryCode": null,
+        "city": null,
+        "slug": null,
+        "keywords": null,
+        "mediaCreation": "2026-03-30T13:43:14.803406Z",
+        "watermark": true
+    },
+    "c2pa": {
+        "manifests": {
+            "urn:uuid:0ad01d53-2896-44e4-bf9e-29e25c5a9571": {
+                "assertions": [
+                    {
+                        "label": "c2pa.actions",
+                        "data": {
+                            "actions": [
+                                {
+                                    "action": "c2pa.repackaged"
+                                }
+                            ]
+                        },
+                        "kind": null
+                    }
+                ],
+                "ingredients": [
+                    {
+                        "title": "A4WH9CQ.jpg",
+                        "format": "image/jpeg",
+                        "instance_id": "xmp:iid:b908c754-0150-46d4-95af-c4b4c37055fa",
+                        "active_manifest": null,
+                        "validation_status": null
+                    }
+                ],
+                "signature_info": {
+                    "alg": "Ps256",
+                    "issuer": "AGENCE FRANCE-PRESSE",
+                    "time": null,
+                    "cert_serial_number": "2817152937952154179858839493"
+                }
+            }
+        },
+        "active_manifest": "urn:uuid:0ad01d53-2896-44e4-bf9e-29e25c5a9571"
+    }
+}
