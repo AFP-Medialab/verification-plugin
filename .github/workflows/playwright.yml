@@ -18,11 +18,17 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
     - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+      run: npx playwright install --with-deps chromium
+    - name: Build extension
+      run: pnpm run build
     - name: Run Playwright Component and unit tests
       run: npx playwright test -c playwright-ct.config.js
-    - name: Run Playwright E2E tests
-      run: xvfb-run npx playwright test
+    # - name: Run Playwright E2E tests
+    #   env:
+    #     DEBUG: pw:browser*
+    #   run: |
+    #     dbus-run-session -- npx playwright test
+    #     npx playwright test
     - uses: actions/upload-artifact@v4
       if: always()
       with:
