@@ -200,14 +200,14 @@ export default function assistantApiCalls() {
     }
   }
 
-  const callSourceCredibilityService = async (urlList) => {
+  const callUrlDomainAnalysisService = async (urlList) => {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
       async () => {
         if (urlList.length === 0) return null;
 
         const result = await axios.post(
-          assistantEndpoint + API_ENDPOINTS.SOURCE_CREDIBILITY,
+          assistantEndpoint + API_ENDPOINTS.URL_DOMAIN_ANALYSIS,
           {
             urls: urlList,
           },
@@ -216,7 +216,7 @@ export default function assistantApiCalls() {
       },
       (numTries) => {
         console.log(
-          "Could not connect to source credibility service, tries " +
+          "Could not connect to URL domain analysis service, tries " +
             (numTries + 1) +
             "/" +
             MAX_NUM_RETRIES,
@@ -384,7 +384,7 @@ export default function assistantApiCalls() {
 
   return {
     callAssistantScraper,
-    callSourceCredibilityService,
+    callUrlDomainAnalysisService,
     callNamedEntityService,
     callOcrService,
     callNewsFramingService,
