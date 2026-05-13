@@ -56,7 +56,9 @@ pipeline {
         stage('Tests (Playwright)') {
             when {
                 anyOf {
-                    branch 'thomas-dev';
+                    branch 'master'
+                    branch 'pre-master'
+                    branch 'beta-master'
                 }
             }
             steps {
@@ -92,8 +94,10 @@ pipeline {
         stage ('Deliver to s3') {
             when {
                 anyOf {
-                    branch 'thomas-dev';
-                }  
+                    branch 'master'
+                    branch 'pre-master'
+                    branch 'beta-master'
+                }
             }
             steps {
                 container('aws-cli') {
