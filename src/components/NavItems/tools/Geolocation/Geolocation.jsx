@@ -133,6 +133,8 @@ const Geolocation = () => {
                 handleCloseSelectedFile={resetState}
                 isParentLoading={isLoading}
                 handleClearUrl={resetState}
+                urlInputTestId="geolocation-input"
+                submitButtonTestId="geolocation-submit"
               />
             </form>
           </Box>

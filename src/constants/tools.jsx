@@ -1,3 +1,21 @@
+import CsvSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/CSV_SNA.svg?react";
+import TwitterSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/Twitter_sna.svg?react";
+import C2paIcon from "../components/NavBar/images/SVG/Image/C2pa.svg?react";
+import DeepfakeIcon from "../components/NavBar/images/SVG/Image/Deepfake.svg?react";
+import ForensicIcon from "../components/NavBar/images/SVG/Image/Forensic.svg?react";
+import GeolocationIcon from "../components/NavBar/images/SVG/Image/Geolocation.svg?react";
+import GifIcon from "../components/NavBar/images/SVG/Image/Gif.svg?react";
+import MagnifierIcon from "../components/NavBar/images/SVG/Image/Magnifier.svg?react";
+import MetadataIcon from "../components/NavBar/images/SVG/Image/Metadata.svg?react";
+import OcrIcon from "../components/NavBar/images/SVG/Image/OCR.svg?react";
+import AboutIcon from "../components/NavBar/images/SVG/Navbar/About.svg?react";
+import ToolsIcon from "../components/NavBar/images/SVG/Navbar/Tools.svg?react";
+import CovidSearchIcon from "../components/NavBar/images/SVG/Search/Covid19.svg?react";
+import TwitterSearchIcon from "../components/NavBar/images/SVG/Search/Twitter_search.svg?react";
+import XnetworkIcon from "../components/NavBar/images/SVG/Search/Xnetwork.svg?react";
+import KeyframesIcon from "../components/NavBar/images/SVG/Video/Keyframes.svg?react";
+import ThumbnailsIcon from "../components/NavBar/images/SVG/Video/Thumbnails.svg?react";
+import AnalysisIcon from "../components/NavBar/images/SVG/Video/Video_analysis.svg?react";
 import React from "react";
 
 import SvgIcon from "@mui/material/SvgIcon";
@@ -6,6 +24,7 @@ import {
   Archive as ArchiveIcon,
   AudioFile,
   Dashboard,
+  FaceRetouchingNatural,
   GeneratingTokensRounded,
   Gradient,
   ManageSearch,
@@ -16,6 +35,10 @@ import {
   resetDeepfake,
   setDeepfakeUrlVideo,
 } from "@//redux/actions/tools/deepfakeVideoActions";
+import {
+  resetPoiForensics,
+  setPoiForensicsUrl,
+} from "@/redux/actions/tools/poiForensicsActions";
 import { c2paUrlSet, resetC2paState } from "@/redux/reducers/tools/c2paReducer";
 import {
   resetGeolocation as resetGeolocationImage,
@@ -27,25 +50,7 @@ import {
 } from "@/redux/reducers/tools/syntheticImageDetectionReducer";
 import { FOOTER_TYPES, Footer } from "@Shared/Footer/Footer";
 
-import CsvSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/CSV_SNA.svg";
-import TwitterSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/Twitter_sna.svg";
-import C2paIcon from "../components/NavBar/images/SVG/Image/C2pa.svg";
-import DeepfakeIcon from "../components/NavBar/images/SVG/Image/Deepfake.svg";
-import ForensicIcon from "../components/NavBar/images/SVG/Image/Forensic.svg";
-import GeolocationIcon from "../components/NavBar/images/SVG/Image/Geolocation.svg";
-import GifIcon from "../components/NavBar/images/SVG/Image/Gif.svg";
-import MagnifierIcon from "../components/NavBar/images/SVG/Image/Magnifier.svg";
-import MetadataIcon from "../components/NavBar/images/SVG/Image/Metadata.svg";
-import OcrIcon from "../components/NavBar/images/SVG/Image/OCR.svg";
-import AboutIcon from "../components/NavBar/images/SVG/Navbar/About.svg";
 import AfpDigitalCoursesIconComponent from "../components/NavBar/images/SVG/Navbar/AfpDigitalCoursesIcon";
-import ToolsIcon from "../components/NavBar/images/SVG/Navbar/Tools.svg";
-import CovidSearchIcon from "../components/NavBar/images/SVG/Search/Covid19.svg";
-import TwitterSearchIcon from "../components/NavBar/images/SVG/Search/Twitter_search.svg";
-import XnetworkIcon from "../components/NavBar/images/SVG/Search/Xnetwork.svg";
-import KeyframesIcon from "../components/NavBar/images/SVG/Video/Keyframes.svg";
-import ThumbnailsIcon from "../components/NavBar/images/SVG/Video/Thumbnails.svg";
-import AnalysisIcon from "../components/NavBar/images/SVG/Video/Video_analysis.svg";
 import { ROLES } from "./roles";
 
 // Lazy load heavy components
@@ -73,6 +78,9 @@ const Chatbot = React.lazy(
 );
 const DeepfakeVideo = React.lazy(
   () => import("../components/NavItems/tools/Deepfake/DeepfakeVideo"),
+);
+const PoiForensics = React.lazy(
+  () => import("../components/NavItems/tools/POIForensics/PoiForensics"),
 );
 const Forensic = React.lazy(
   () => import("../components/NavItems/tools/Forensic/Forensic"),
@@ -219,6 +227,7 @@ export const KNOWN_LINKS = {
   OWN: "own",
   VK: "vk",
   BLUESKY: "bsky",
+  BBC: "bbc",
   MISC: "general",
 };
 
@@ -244,6 +253,10 @@ const metadataSvgIcon = (props) => {
 
 const deepfakeSvgIcon = (props) => {
   return <SvgIcon component={DeepfakeIcon} inheritViewBox {...props} />;
+};
+
+const poiForensicSvgIcon = (props) => {
+  return <FaceRetouchingNatural inheritViewBox {...props} />;
 };
 
 const magnifierSvgIcon = (props) => {
@@ -460,6 +473,7 @@ export const videoDeepfake = new Tool(
       // KNOWN_LINKS.VIMEO, // assistant works; deepfakevideo has no face detected, video doesn't load properly
       // KNOWN_LINKS.MASTODON, // assistant fails to load video; deepfakevideo has no face detected, video doesn't load properly
       // KNOWN_LINKS.VK, // assistant fails to load; deepfakevideo works
+      // KNOWN_LINKS.BBC,
       KNOWN_LINKS.MISC,
       KNOWN_LINKS.OWN,
     ],
@@ -468,6 +482,35 @@ export const videoDeepfake = new Tool(
     text: "deepfake_video_text",
     resetUrl: resetDeepfake,
     setUrl: (resultUrl) => setDeepfakeUrlVideo({ url: resultUrl }),
+  },
+);
+
+export const poiForensic = new Tool(
+  "navbar_poiforensics",
+  "navbar_poiforensics_description",
+  poiForensicSvgIcon,
+  TOOLS_CATEGORIES.VIDEO,
+  [TOOL_STATUS_ICON.LOCK],
+  [ROLES.EXTRA_FEATURE],
+  "poiforensic",
+  TOOL_GROUPS.VERIFICATION,
+  <PoiForensics />,
+  <Footer type={FOOTER_TYPES.ITI} />,
+  {
+    processLinksAccepted: [
+      KNOWN_LINKS.YOUTUBE,
+      KNOWN_LINKS.TWITTER,
+      KNOWN_LINKS.TELEGRAM,
+      KNOWN_LINKS.YOUTUBESHORTS,
+      KNOWN_LINKS.DAILYMOTION,
+      KNOWN_LINKS.MISC,
+      KNOWN_LINKS.OWN,
+    ],
+    exceptions: [],
+    useInputUrl: false,
+    text: "deepfake_video_text",
+    resetUrl: resetPoiForensics,
+    setUrl: (resultUrl) => setPoiForensicsUrl({ url: resultUrl }),
   },
 );
 
@@ -487,7 +530,7 @@ export const imageMagnifier = new Tool(
   <Magnifier />,
   <Footer type={FOOTER_TYPES.AFP} />,
   {
-    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    processLinksAccepted: [KNOWN_LINKS.BBC, KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     exceptions: [],
     useInputUrl: false,
     text: "magnifier_text",
@@ -506,7 +549,7 @@ export const imageMetadata = new Tool(
   <Metadata />,
   <Footer type={FOOTER_TYPES.AFP} />,
   {
-    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    processLinksAccepted: [KNOWN_LINKS.BBC, KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     exceptions: [
       /(pbs.twimg.com)|(youtu.be|youtube)|(instagram)|(fbcdn.net)|(vimeo)|(snapchat)|(tiktok.com)/,
     ],
@@ -527,7 +570,7 @@ export const imageForensic = new Tool(
   <Forensic />,
   <Footer type={FOOTER_TYPES.ITI_BORELLI_AFP} />,
   {
-    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    processLinksAccepted: [KNOWN_LINKS.BBC, KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     exceptions: [],
     useInputUrl: false,
     text: "forensic_text",
@@ -546,7 +589,7 @@ export const imageOcr = new Tool(
   <OCR />,
   <Footer type={FOOTER_TYPES.USFD} />,
   {
-    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    processLinksAccepted: [KNOWN_LINKS.BBC, KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     exceptions: [],
     useInputUrl: false,
     text: "ocr_text",
@@ -565,7 +608,7 @@ export const imageGif = new Tool(
   <CheckGif />,
   <Footer type={FOOTER_TYPES.BORELLI_AFP} />,
   {
-    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    processLinksAccepted: [KNOWN_LINKS.BBC, KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     exceptions: [],
     useInputUrl: false,
     text: "gif_text",
@@ -584,7 +627,7 @@ export const imageSyntheticDetection = new Tool(
   <SyntheticImageDetection />,
   <Footer type={FOOTER_TYPES.ITI_UNINA} />,
   {
-    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    processLinksAccepted: [KNOWN_LINKS.BBC, KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     exceptions: [],
     useInputUrl: false,
     text: "synthetic_image_detection_text",
@@ -605,7 +648,7 @@ export const imageGeolocation = new Tool(
   <Geolocation />,
   <Footer type={FOOTER_TYPES.ITI} />,
   {
-    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    processLinksAccepted: [KNOWN_LINKS.BBC, KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     exceptions: [],
     useInputUrl: false,
     text: "geolocation_text",
@@ -849,6 +892,7 @@ export const tools = Object.freeze([
   thumbnails,
   videoMetadata,
   videoDeepfake,
+  poiForensic,
   imageMagnifier,
   imageMetadata,
   imageForensic,

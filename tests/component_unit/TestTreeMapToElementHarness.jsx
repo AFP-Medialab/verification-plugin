@@ -1,5 +1,5 @@
 import React from "react";
-import {treeMapToElements } from "../../src/components/NavItems/Assistant/AssistantScrapeResults/assistantUtils";
+import {treeMapToElements } from "../../src/components/NavItems/Assistant/utils/textAnalysisUtils";
 
 const text = "word0 word1";
 const mapping = {

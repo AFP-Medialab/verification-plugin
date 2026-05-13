@@ -399,6 +399,7 @@ const CheckGif = () => {
               label={keyword("title_local")}
               value="LOCAL"
               sx={{ minWidth: "inherit", textTransform: "none" }}
+              data-testid="gif-tab-localfile"
             />
           </TabList>
           <Divider />
@@ -423,7 +424,11 @@ const CheckGif = () => {
               >
                 <span>{keyword("title_gifcreation")}</span>
 
-                <Button variant="contained" onClick={newGif}>
+                <Button
+                  variant="contained"
+                  onClick={newGif}
+                  data-testid="gif-new-gif"
+                >
                   {keyword("button_new")}
                 </Button>
               </Grid>
@@ -504,6 +509,7 @@ const CheckGif = () => {
                                 multiple
                                 type="file"
                                 onChange={(e) => handleInput(e)}
+                                data-testid="gif-inputfile-1"
                               />
                               <div>
                                 <Box
@@ -582,6 +588,7 @@ const CheckGif = () => {
                                 multiple
                                 type="file"
                                 onChange={(e) => handleInput2(e)}
+                                data-testid="gif-inputfile-2"
                               />
                               <div>
                                 <Box
@@ -615,6 +622,7 @@ const CheckGif = () => {
                         fullWidth
                         onClick={handleSubmission}
                         disabled={toolState !== 3}
+                        data-testid="gif-submit"
                       >
                         {keyword("button_loadImages")}
                       </Button>

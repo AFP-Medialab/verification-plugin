@@ -32,7 +32,8 @@ import {
 import {
   TransHtmlDoubleLineBreak,
   TransSupportedToolsLink,
-} from "../TransComponents";
+} from "../components";
+import { scrollToElement } from "../utils/index";
 import AssistantImageResult from "./AssistantImageResult";
 import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
 import AssistantVideoResult from "./AssistantVideoResult";
@@ -60,11 +61,6 @@ const AssistantMediaResult = ({ title = null }) => {
 
   const resultIsImage = resultProcessType === TOOLS_CATEGORIES.IMAGE;
 
-  // local control state
-  // const [expandMedia, setExpandMedia] = useState(
-  //   !singleMediaPresent || processUrl == null,
-  // );
-
   // select the correct media to process, then load actions possible
   const submitMediaToProcess = (url) => {
     //setExpandMedia(false);
@@ -75,6 +71,7 @@ const AssistantMediaResult = ({ title = null }) => {
       cType = TOOLS_CATEGORIES.VIDEO;
     }
     dispatch(setProcessUrl(url, cType));
+    scrollToElement("url-media-results", 100);
   };
 
   const [filteredImageList, setFilteredImageList] = useState([]);
@@ -113,6 +110,7 @@ const AssistantMediaResult = ({ title = null }) => {
   return (
     <Card
       variant="outlined"
+      id="url-media-results"
       data-testid="url-media-results"
       hidden={!filteredImageList.length && !videoList.length}
     >

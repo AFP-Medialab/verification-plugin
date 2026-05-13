@@ -18,7 +18,7 @@ import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthen
  * @returns {Element}
  * @constructor
  */
-const DownloadWaczFile = ({ url }) => {
+const DownloadWaczFile = ({ url, "data-testid": dataTestId }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
 
   const authenticatedRequest = useAuthenticatedRequest();
@@ -160,6 +160,7 @@ const DownloadWaczFile = ({ url }) => {
           loading={getWaczFileFromScoop.isPending}
           loadingPosition="start"
           startIcon={<Download />}
+          data-testid={dataTestId}
         >
           {getWaczFileFromScoop.isPending
             ? keyword("scoop_button_loading")

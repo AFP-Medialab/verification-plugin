@@ -1,22 +1,23 @@
 import assistantApiCalls from "@/components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
 import DBKFApi from "@/components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
 import {
-  KNOWN_LINKS,
-  KNOWN_LINK_PATTERNS,
-  NE_SUPPORTED_LANGS,
-  TYPE_PATTERNS,
   matchPattern,
   selectCorrectActions,
 } from "@/components/NavItems/Assistant/AssistantRuleBook";
-import { TOOLS_CATEGORIES } from "@/constants/tools";
+import {
+  KNOWN_LINK_PATTERNS,
+  NE_SUPPORTED_LANGS,
+  TYPE_PATTERNS,
+} from "@/components/NavItems/Assistant/constants";
+import { KNOWN_LINKS, TOOLS_CATEGORIES } from "@/constants/tools";
 import {
   cleanAssistantState,
   setAssistantLoading,
   setDbkfTextMatchDetails,
   setErrorKey,
   setImageVideoSelected,
-  setInputSourceCredDetails,
   setInputUrl,
+  setInputUrlDomainAnalysisDetails,
   setMachineGeneratedTextChunksDetails,
   setMissingMedia,
   setMultilingualStanceDetails,
@@ -89,10 +90,10 @@ function* getPersuasionSaga() {
   yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handlePersuasionCall);
 }
 
-function* getSourceCredSaga() {
+function* getUrlDomainAnalysisSaga() {
   yield takeLatest(
     ["SET_INPUT_URL", "CLEAN_STATE"],
-    handleSourceCredibilityCall,
+    handleUrlDomainAnalysisCall,
   );
 }
 
@@ -196,7 +197,7 @@ function* handleSubmitUpload() {
 /**
  * API HANDLERS
  **/
-function* handleSourceCredibilityCall(action) {
+function* handleUrlDomainAnalysisCall(action) {
   if (action.type === "CLEAN_STATE") return;
   try {
     // prevent from running if local file
@@ -215,7 +216,7 @@ function* handleSourceCredibilityCall(action) {
       return;
 
     yield put(
-      setInputSourceCredDetails(
+      setInputUrlDomainAnalysisDetails(
         null,
         null,
         null,
@@ -235,7 +236,7 @@ function* handleSourceCredibilityCall(action) {
 
     // send all urls and do batches on backend
     const result = yield call(
-      assistantApi.callSourceCredibilityService,
+      assistantApi.callUrlDomainAnalysisService,
       inputUrlLinkList,
     );
 
@@ -254,7 +255,7 @@ function* handleSourceCredibilityCall(action) {
     };
 
     yield put(
-      setInputSourceCredDetails(
+      setInputUrlDomainAnalysisDetails(
         result.domain[result.url.inputUrl.credibilityScope]?.positive,
         result.domain[result.url.inputUrl.credibilityScope]?.caution,
         result.domain[result.url.inputUrl.credibilityScope]?.mixed,
@@ -270,7 +271,7 @@ function* handleSourceCredibilityCall(action) {
   } catch (error) {
     console.log(error);
     yield put(
-      setInputSourceCredDetails(
+      setInputUrlDomainAnalysisDetails(
         null,
         null,
         null,
@@ -292,6 +293,8 @@ function* handleDbkfTextCall(action) {
   try {
     const text = yield select((state) => state.assistant.urlText);
     if (text) {
+      yield put(setDbkfTextMatchDetails(null, true, false, false));
+
       let textToUse = text.length > 100 ? text.substring(0, 100) : text;
       /*
         let textRegex = /[\W]$/
@@ -823,6 +826,7 @@ const decideWhetherToScrape = (urlType, contentType) => {
     case KNOWN_LINKS.TWITTER:
     case KNOWN_LINKS.SNAPCHAT:
     case KNOWN_LINKS.BLUESKY:
+    case KNOWN_LINKS.BBC:
     case KNOWN_LINKS.TELEGRAM:
     case KNOWN_LINKS.MASTODON:
     case KNOWN_LINKS.VK:
@@ -934,6 +938,7 @@ const filterAssistantResults = (
     case KNOWN_LINKS.MASTODON:
     case KNOWN_LINKS.TELEGRAM:
     case KNOWN_LINKS.VK:
+    case KNOWN_LINKS.BBC:
       if (scrapeResult.images.length > 0) {
         imageList = scrapeResult.images;
       }
@@ -989,7 +994,7 @@ const filterAssistantResults = (
 export default function* assistantSaga() {
   yield all([
     fork(getDbkfTextMatchSaga),
-    fork(getSourceCredSaga),
+    fork(getUrlDomainAnalysisSaga),
     fork(getMediaActionSaga),
     fork(getMediaListSaga),
     fork(getNamedEntitySaga),

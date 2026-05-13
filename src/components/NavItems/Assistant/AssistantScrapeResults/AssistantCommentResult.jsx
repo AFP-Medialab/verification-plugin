@@ -46,7 +46,8 @@ import {
   TransMultilingualStanceLink,
   TransMultilingualStanceTooltip,
   TransUsfdAuthor,
-} from "../TransComponents";
+} from "../components";
+import { STANCE_COLOR_MAP } from "../constants";
 
 const AssistantCommentResult = ({ collectedComments }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -79,12 +80,7 @@ const AssistantCommentResult = ({ collectedComments }) => {
   const { mode, systemMode } = useColorScheme();
   const resolvedMode = systemMode || mode;
 
-  const stanceColours = {
-    support: "success",
-    deny: "error",
-    query: "warning",
-    comment: "inherit",
-  };
+  const stanceColours = STANCE_COLOR_MAP;
 
   // read in verification keywords from TSV file in public/ folder
   const [caaVerificationKeywordsTsv, setCaaVerificationKeywordsTsv] = useState(
@@ -95,13 +91,15 @@ const AssistantCommentResult = ({ collectedComments }) => {
     fetch("/caaVerificationKeywords.tsv")
       .then((response) => response.text())
       .then((text) => {
-        let lines = text.split("\n");
+        const lines = text.split("\n");
         // skip first line with languages header
+        const caaVerificationKeywords = [];
         for (let i = 1; i < lines.length; i++) {
-          let words = lines[i].split("\t");
-          words.forEach((word) => caaVerificationKeywordsTsv.push(word));
+          lines[i]
+            .split("\t")
+            .forEach((word) => caaVerificationKeywords.push(word));
         }
-        setCaaVerificationKeywordsTsv(caaVerificationKeywordsTsv);
+        setCaaVerificationKeywordsTsv(caaVerificationKeywords);
       })
       .catch((err) => {
         console.error(err);

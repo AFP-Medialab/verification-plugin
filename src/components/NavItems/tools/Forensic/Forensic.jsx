@@ -195,6 +195,8 @@ const Forensic = () => {
               preprocessLocalFile={preprocessImage}
               isParentLoading={loading}
               handleClearUrl={resetToolState}
+              urlInputTestId="forensic-input"
+              submitButtonTestId="forensic-submit"
             />
           </form>
         </Box>

@@ -82,10 +82,14 @@ const MachineGeneratedTextResults = ({
 
   return (
     <Stack direction="column" spacing={4}>
-      <Card variant="outlined">
+      <Card variant="outlined" data-testid="mgt-results">
         <Box p={4} sx={{ position: "relative" }}>
           <Stack direction="column" spacing={4}>
-            <Stack direction="column" spacing={2}>
+            <Stack
+              direction="column"
+              spacing={2}
+              data-testid="mgt-results-gauge"
+            >
               <Typography>
                 {"Detection score (chunks): " +
                   Math.round(
@@ -132,9 +136,18 @@ const MachineGeneratedTextResults = ({
                 indicatorColor="primary"
                 textColor="primary"
                 aria-label="data selection tabs"
+                data-testid="mgt-results-tabs"
               >
-                <Tab label="Sentences" value="sentences" />
-                <Tab label="Chunks" value="chunks" />
+                <Tab
+                  label="Sentences"
+                  value="sentences"
+                  data-testid="mgt-results-tab-sentence"
+                />
+                <Tab
+                  label="Chunks"
+                  value="chunks"
+                  data-testid="mgt-results-tab-chunk"
+                />
               </Tabs>
             )}
 
@@ -163,6 +176,7 @@ const MachineGeneratedTextResults = ({
                     null,
                     2,
                   )}
+                  data-testid="mgt-results-json"
                 />
               </Box>
             )}
