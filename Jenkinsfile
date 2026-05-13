@@ -20,7 +20,9 @@ pipeline {
         stage ('Build Plugin') {
             when {
                 anyOf {
-                    branch 'thomas-dev';
+                    branch 'master'
+                    branch 'pre-master'
+                    branch 'beta-master'
                 }  
             }
             steps {
@@ -100,7 +102,7 @@ pipeline {
                         sh """                                                                                                                                                                                               
                             ZIP=\$(ls build/weverify-plugin-*.zip 2>/dev/null | head -1)                                                                                                                                       
                             if [ -z "\$ZIP" ]; then echo "No zip found!"; exit 1; fi                                                                                                                                           
-                            aws s3 cp "\$ZIP" s3://${S3_BUCKET}/builds/${env.BRANCH_NAME}/we-verify-plugin-${VERSION_TAG}.zip                                                                                                  
+                            aws s3 cp "\$ZIP" s3://${S3_BUCKET}/jenkins/builds/${env.BRANCH_NAME}/we-verify-plugin-${VERSION_TAG}.zip                                                                                                  
                         """   
                     }
                 }
