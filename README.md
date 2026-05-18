@@ -270,3 +270,7 @@ You can generate test using codegen by using :
 ````
 node record-playwright.js
 ````
+### Testing in pipeline condition 
+
+The tests are now run in a Jenkins pipeline. If you want to run your tests in pseudo-real condition, you
+have to use this image of playwright : mcr.microsoft.com/playwright:v1.59.1-noble
