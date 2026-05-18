@@ -73,7 +73,7 @@ const SyntheticImageDetection = () => {
         {keywordWarning("warning_beta_synthetic_image_detection")}
       </Alert>
 
-      <Alert severity="warning">
+      <Alert severity="info">
         {keywordWarning("warning_c2pa_synthetic_image_detection")}
       </Alert>
 
