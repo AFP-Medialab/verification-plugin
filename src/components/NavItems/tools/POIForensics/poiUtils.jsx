@@ -63,13 +63,7 @@ export const clearCanvas = (canvasRef) => {
  * @param {JSON} result
  * @returns
  */
-export const drawBoundingBox = (
-  videoTime,
-  videoRef,
-  canvasRef,
-  result,
-  mode,
-) => {
+export const drawBoundingBox = (videoTime, videoRef, canvasRef, result) => {
   const video = videoRef.current;
   const canvas = canvasRef.current;
   const report = result?.poi_forensics_report;
@@ -78,13 +72,9 @@ export const drawBoundingBox = (
 
   const ctx = canvas.getContext("2d");
 
-  // clientWidth reprensent the size of the video shown in the navigator not the size of the video source
-  // An issue with vertical videos made us remove the lateral borders and use this parameter
   canvas.width = video.clientWidth;
   canvas.height = video.clientHeight;
 
-  // We need to rescale the boxes that we received with those ratio because the boxes are made to be displayed
-  // on the video source which is not the same size that the video we are showing in the navigator
   const scaleX = video.clientWidth / video.videoWidth;
   const scaleY = video.clientHeight / video.videoHeight;
 
@@ -92,43 +82,53 @@ export const drawBoundingBox = (
 
   const threshold = report.decision_threshold;
 
-  // we build bboxes general to get rid off the separation by track and simplify the change of index
-  const bboxes = report.results_per_track
-    .filter((track) => track.bboxes)
-    .flatMap((track) => track.bboxes);
+  report.results_per_track.forEach((track) => {
+    if (!track.bboxes) return;
 
-  // we have to check if there is still data to display, in order to delete the box if not (0.3 is arbitrary)
-  const lastTime = report.time_vector[report.time_vector.length - 1];
-  if (videoTime > lastTime + 0.3) {
-    return;
-  }
+    const trackTimeVector = track.time_vector;
+    if (!trackTimeVector) return;
 
-  const index = getIndexFromTime(videoTime, report.time_vector);
+    const trackIndex = getIndexFromTime(videoTime, trackTimeVector);
 
-  const bbox = bboxes[index];
-  const score = report.scores_per_time[index];
+    const bbox = track.bboxes[trackIndex];
+    if (!bbox) return;
 
-  if (bbox) {
+    const score = track.scores
+      ? track.scores[trackIndex]
+      : report.scores_per_time?.[trackIndex] || 0;
+    const color = score > threshold ? "#ff0000" : "#00ff00";
+
+    if (bbox.some((val) => val === null || isNaN(val))) {
+      ctx.font = `bold ${Math.floor(canvas.height / 20)}px Arial`;
+      ctx.fillStyle = "#858585";
+      ctx.fillText(`${score.toFixed(3)}`, 10, 50);
+      return;
+    }
+
     const [xmin_base, ymin_base, xmax_base, ymax_base] = bbox;
-
     const xmin = xmin_base * scaleX;
     const ymin = ymin_base * scaleY;
     const xmax = xmax_base * scaleX;
     const ymax = ymax_base * scaleY;
-
-    const color = score > threshold ? "#ff0000" : "#00ff00";
+    const width = xmax - xmin;
+    const height = ymax - ymin;
 
     ctx.beginPath();
-    ctx.lineWidth = 7;
+    ctx.lineWidth = 5;
     ctx.strokeStyle = color;
-    ctx.rect(xmin, ymin, xmax - xmin, ymax - ymin);
+    ctx.rect(xmin, ymin, width, height);
     ctx.stroke();
 
-    const fontSize = Math.floor(canvas.height / 15);
+    const fontSize = Math.floor(canvas.height / 25);
     ctx.font = `bold ${fontSize}px Arial`;
-    ctx.fillStyle = "Black";
-    ctx.fillText(`${score.toFixed(2)} (${mode})`, xmin, ymin - 10);
-  }
+    ctx.fillStyle = "#ffffff";
+
+    if (ymin < 50) {
+      ctx.fillText(`${score.toFixed(3)}`, xmin + 5, ymin + height / 4);
+    } else {
+      ctx.fillText(`${score.toFixed(3)}`, xmin + 3, ymin - 10);
+    }
+  });
 };
 
 /**
@@ -139,11 +139,15 @@ export const drawBoundingBox = (
  * @returns
  */
 export const getIndexFromTime = (currentTime, timeVector) => {
-  return timeVector.findIndex(
-    (t, i) =>
-      // three condition to be the index associated to the currentTime : time[index] < currentTime and time[index+1] > currentTime and not being
-      // the last index of the track (to prevent any superposition of tracks)
-      currentTime >= t &&
-      (timeVector[i + 1] ? currentTime < timeVector[i + 1] : true),
-  );
+  let trackIndex = -1;
+  let minDiff = 1;
+
+  for (let i = 0; i < timeVector.length; i++) {
+    const diff = Math.abs(currentTime - timeVector[i]);
+    if (diff < minDiff) {
+      trackIndex = i;
+    }
+  }
+
+  return trackIndex;
 };

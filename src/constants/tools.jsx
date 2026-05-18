@@ -495,7 +495,7 @@ export const poiForensic = new Tool(
   "poiforensic",
   TOOL_GROUPS.VERIFICATION,
   <PoiForensics />,
-  <Footer type={FOOTER_TYPES.ITI} />,
+  <Footer type={FOOTER_TYPES.ITI_UNINA} />,
   {
     processLinksAccepted: [
       KNOWN_LINKS.YOUTUBE,
