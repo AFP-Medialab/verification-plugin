@@ -47,6 +47,7 @@ const SecondStep = ({ url }) => {
               }
               target={"_blank"}
               variant={"body1"}
+              data-testid="archive-download-webrecorder-link"
             >
               {keyword("step2_wbm_dl_extension")}
             </Link>
@@ -54,6 +55,7 @@ const SecondStep = ({ url }) => {
               href={"https://archiveweb.page/guide"}
               target={"_blank"}
               variant={"body1"}
+              data-testid="archive-download-webrecorder-guide"
             >
               {keyword("step2_wbm_user_guide")}
             </Link>
@@ -61,7 +63,11 @@ const SecondStep = ({ url }) => {
         </Box>
 
         <Box>
-          <Stack direction="column" spacing={2}>
+          <Stack
+            direction="column"
+            spacing={2}
+            data-testid="archive-download-webrecorder-tuto"
+          >
             <Typography>{keyword("step2_video_tutorial_title")}</Typography>
             <YouTubeEmbed videoId="ZkfKeGN7EjM" />
             <Divider />
@@ -135,7 +141,7 @@ const SecondStep = ({ url }) => {
             </Stack>
           </ListItem>
           <Box>
-            <DownloadWaczFile url={url} />
+            <DownloadWaczFile url={url} data-testid="archive-download-wacz" />
           </Box>
         </Stack>
       </Stack>

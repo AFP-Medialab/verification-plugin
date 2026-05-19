@@ -63,12 +63,16 @@ const FirstStep = ({ handleClick, url, handleUrlChange }) => {
             value={url}
             onChange={(e) => handleUrlValidation(e.target.value)}
             helperText={isError ? keyword("step1_invalid_url_error") : ""}
+            data-testid="archive-input"
           ></TextField>
         </Box>
       </Stack>
       <List sx={{ maxWidth: "fit-content" }}>
         <ListItem disablePadding>
-          <ListItemButton onClick={() => handleNavigation(2)}>
+          <ListItemButton
+            onClick={() => handleNavigation(2)}
+            data-testid="archive-submit-wacz"
+          >
             <Stack
               direction="column"
               spacing={1}
@@ -91,7 +95,10 @@ const FirstStep = ({ handleClick, url, handleUrlChange }) => {
         </ListItem>
         <Divider />
         <ListItem disablePadding>
-          <ListItemButton onClick={() => handleNavigation(6)}>
+          <ListItemButton
+            onClick={() => handleNavigation(6)}
+            data-testid="archive-submit-savepagenow"
+          >
             <Stack
               direction="column"
               spacing={1}
