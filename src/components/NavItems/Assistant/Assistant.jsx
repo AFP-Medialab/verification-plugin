@@ -34,7 +34,7 @@ import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespa
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "@/components/Shared/StringFileUploadField";
 import { getFileTypeFromFileObject } from "@/components/Shared/Utils/fileUtils";
-import { KNOWN_LINKS, TOOLS_CATEGORIES } from "@/constants/tools";
+import { KNOWN_LINKS, TOOLS_CATEGORIES } from "@/constants/toolsData";
 import {
   cleanAssistantState,
   setImageVideoSelected,

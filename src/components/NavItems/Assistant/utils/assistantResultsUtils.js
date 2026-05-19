@@ -1,4 +1,4 @@
-import { KNOWN_LINKS, TOOLS_CATEGORIES } from "@/constants/tools";
+import { KNOWN_LINKS, TOOLS_CATEGORIES } from "@/constants/toolsData";
 
 export const filterAssistantResults = (
   urlType,

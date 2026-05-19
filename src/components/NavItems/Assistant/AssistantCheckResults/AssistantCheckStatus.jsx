@@ -14,7 +14,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
-import { KNOWN_LINKS } from "@/constants/tools";
+import { KNOWN_LINKS } from "@/constants/toolsData";
 import { setStateExpanded } from "@/redux/actions/tools/assistantActions";
 
 import { matchPattern } from "../AssistantRuleBook";

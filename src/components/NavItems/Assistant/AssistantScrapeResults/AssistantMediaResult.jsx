@@ -23,7 +23,7 @@ import ImageGridList from "@/components/Shared/ImageGridList/ImageGridList";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "@/components/Shared/VideoGridList/VideoGridList";
-import { TOOLS_CATEGORIES } from "@/constants/tools";
+import { TOOLS_CATEGORIES } from "@/constants/toolsData";
 import {
   setProcessUrl,
   setStateExpanded,

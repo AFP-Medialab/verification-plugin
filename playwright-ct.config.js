@@ -1,26 +1,6 @@
 // @ts-check
 const { defineConfig, devices } = require('@playwright/experimental-ct-react');
 const { resolve } = require('path');
-/** @type {any} */
-const Module = require('module');
-
-// Strip Vite query strings (e.g. `?react`) from SVG import specifiers so
-// Node.js module resolution can find the actual .svg file on disk.
-const _origResolveFilename = Module._resolveFilename;
-Module._resolveFilename = function svgQueryStripHook(request, parent, isMain, options) {
-  if (typeof request === 'string' && /\.svg\?/.test(request)) {
-    request = request.replace(/\?[^/]*$/, '');
-  }
-  return _origResolveFilename.call(this, request, parent, isMain, options);
-};
-
-// Return a no-op stub when a .svg file is required in Node.js context.
-Module._extensions['.svg'] = function svgStub(mod) {
-  const stub = function SvgStub() { return null; };
-  stub.default = stub;
-  stub.ReactComponent = stub;
-  mod.exports = stub;
-};
 
 /**
  * @see https://playwright.dev/docs/test-configuration

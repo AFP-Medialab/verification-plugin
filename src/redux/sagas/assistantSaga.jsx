@@ -10,7 +10,7 @@ import {
   TYPE_PATTERNS,
 } from "@/components/NavItems/Assistant/constants";
 import { filterAssistantResults } from "@/components/NavItems/Assistant/utils/assistantResultsUtils";
-import { KNOWN_LINKS, TOOLS_CATEGORIES } from "@/constants/tools";
+import { KNOWN_LINKS, TOOLS_CATEGORIES } from "@/constants/toolsData";
 import {
   cleanAssistantState,
   setAssistantLoading,

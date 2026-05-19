@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/experimental-ct-react";
 import { filterAssistantResults } from "../../src/components/NavItems/Assistant/utils/assistantResultsUtils";
-import { KNOWN_LINKS, TOOLS_CATEGORIES } from "../../src/constants/tools";
+import { KNOWN_LINKS, TOOLS_CATEGORIES } from "../../src/constants/toolsData";
 
 // ---------------------------------------------------------------------------
 // Helpers

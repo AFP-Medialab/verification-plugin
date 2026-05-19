@@ -18,7 +18,7 @@ import FileCopyIcon from "@mui/icons-material/FileCopy";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import YouTubeEmbed from "@/components/Shared/Utils/YouTubeEmbed";
-import { KNOWN_LINKS } from "@/constants/tools";
+import { KNOWN_LINKS } from "@/constants/toolsData";
 import { browser } from "wxt/browser";
 
 const AssistantVideoResult = () => {

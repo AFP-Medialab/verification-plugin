@@ -21,7 +21,7 @@ import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import { KeyframeInputType as TAB_VALUES } from "@/components/NavItems/tools/Keyframes/api/createKeyframeJob";
 import ImageGrid from "@/components/NavItems/tools/Keyframes/components/ImageGrid";
 import KeyframesLoadingState from "@/components/NavItems/tools/Keyframes/components/KeyframesLoadingState";
-import { audioHiya, canUserSeeTool } from "@/constants/tools";
+import { audioHiya, canUserSeeTool } from "@/constants/toolsData";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import {
   SEARCH_ENGINE_SETTINGS,
