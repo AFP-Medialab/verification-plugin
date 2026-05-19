@@ -29,3 +29,5 @@ export {
 } from "./textAnalysisUtils";
 
 export { scrollToElement } from "./domUtils";
+
+export { filterAssistantResults } from "./assistantResultsUtils";
