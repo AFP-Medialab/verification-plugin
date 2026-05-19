@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Slider from "@mui/material/Slider";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import { Edit, PlayArrow } from "@mui/icons-material";
@@ -39,6 +40,7 @@ const AnimatedGif = ({
 
   const [paused, setPaused] = useState(false);
   const [annotation, setAnnotation] = useState(false);
+  const [annotationOriginal, setAnnotationOriginal] = useState(false);
 
   //
   /**
@@ -62,8 +64,32 @@ const AnimatedGif = ({
    * @param {boolean | ((prevState: boolean) => boolean)} newAnnotation
    */
   function addRemoveAnnotation(newAnnotation) {
-    pauseUnpause(!paused);
+    if (newAnnotation) {
+      if (!paused) pauseUnpause(true);
+    } else {
+      if (!annotationOriginal) pauseUnpause(false);
+    }
     setAnnotation(newAnnotation);
+  }
+
+  function addRemoveAnnotationOriginal(newAnnotation) {
+    if (newAnnotation) {
+      setIntervalVar(null);
+      const x = document.getElementById("gifFilterElement");
+      if (x) x.style.display = "block";
+      setPaused(true);
+    } else {
+      if (!annotation) pauseUnpause(false);
+    }
+    setAnnotationOriginal(newAnnotation);
+  }
+
+  function modifyAnnotations() {
+    pauseUnpause(true);
+    if (annotationOriginal) {
+      const x = document.getElementById("gifFilterElement");
+      if (x) x.style.display = "block";
+    }
   }
 
   //=== SPEED SLIDER ===
@@ -72,20 +98,15 @@ const AnimatedGif = ({
   const [interval, setIntervalVar] = useState(null);
 
   function changeSpeed(value) {
-    //console.log("Change speed: " + value); //DEBUG
     setSpeed(value * -1);
   }
 
   function commitChangeSpeed(value) {
-    //console.log("Commit change speed: " + value); //DEBUG
-    //clearInterval(interval);
     if (!paused) setIntervalVar(setInterval(() => animateImages(), value));
   }
 
   //Loop function
   function animateImages() {
-    //console.log("Loop function" + interval); //DEBUG
-    //console.log(interval); //DEBUG
     const x = document.getElementById("gifFilterElement");
 
     if (x.style.display === "none") {
@@ -286,61 +307,81 @@ const AnimatedGif = ({
                 imgSrc={homoImg1}
                 text={keyword("fake_annotation")}
                 filterDataURL={setImageDataURL}
-                paused={paused}
+                editMode={annotation && paused}
                 annotation={annotation}
               />
             </Box>
             <Box
               id="gifFilterElement"
-              className={classes.imagesGifFilter}
+              className={
+                annotationOriginal && paused
+                  ? classes.imagesGifImage
+                  : classes.imagesGifFilter
+              }
               data-testid="gif-image-result-2"
             >
               <TextImageCanvas
                 imgSrc={homoImg2}
                 filterDataURL={setFilterDataURL}
-                text={null}
-                paused={false}
-                annotation={false}
+                text={keyword("original_annotation")}
+                editMode={annotationOriginal && paused}
+                annotation={annotationOriginal}
+                defaultColor="green"
               />
             </Box>
-            <Box
-              sx={{
-                m: 3,
-              }}
-            />
-            {(annotation || paused) && (
-              <>
+            <Stack spacing={1} sx={{ mt: 3, width: "100%" }}>
+              {paused && (
                 <Button
                   variant="outlined"
                   color="primary"
                   disabled={toolState === 7}
-                  onClick={() => pauseUnpause(!paused)}
-                  startIcon={paused ? <PlayArrow /> : <Edit />}
+                  onClick={() => pauseUnpause(false)}
+                  startIcon={<PlayArrow />}
                 >
-                  {paused ? keyword("button_play") : keyword("button_modify")}
+                  {keyword("button_play")}
                 </Button>
-                <Box
-                  sx={{
-                    m: 1,
-                  }}
-                />
-              </>
-            )}
-            <Button
-              variant="outlined"
-              color={annotation ? "error" : "primary"}
-              disabled={toolState === 7}
-              onClick={() => addRemoveAnnotation(!annotation)}
-              data-testid="gif-result-toggle-annotation"
-            >
-              {annotation ? keyword("button_remove") : keyword("button_add")}
-            </Button>
-            <Box
-              sx={{
-                m: 1,
-              }}
-            />
-            <Alert severity="info">{keyword("fake_annotation_tip")}</Alert>
+              )}
+              {(annotation || annotationOriginal) && !paused && (
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  disabled={toolState === 7}
+                  onClick={modifyAnnotations}
+                  startIcon={<Edit />}
+                >
+                  {keyword("button_modify")}
+                </Button>
+              )}
+              <Stack direction="row" spacing={1}>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  color={annotation ? "error" : "primary"}
+                  disabled={toolState === 7}
+                  onClick={() => addRemoveAnnotation(!annotation)}
+                  data-testid="gif-result-toggle-annotation"
+                >
+                  {annotation
+                    ? keyword("button_remove")
+                    : keyword("button_add")}
+                </Button>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  color={annotationOriginal ? "error" : "success"}
+                  disabled={toolState === 7}
+                  onClick={() =>
+                    addRemoveAnnotationOriginal(!annotationOriginal)
+                  }
+                  data-testid="gif-result-toggle-annotation-original"
+                >
+                  {annotationOriginal
+                    ? keyword("button_remove_original")
+                    : keyword("button_add_original")}
+                </Button>
+              </Stack>
+              <Alert severity="info">{keyword("fake_annotation_tip")}</Alert>
+            </Stack>
           </Box>
           <Grid
             container
