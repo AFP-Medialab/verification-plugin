@@ -24,6 +24,7 @@ import {
 } from "@/components/NavItems/Assistant/utils";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
+import { ROLES } from "@/constants/roles";
 import {
   setFactChecksExpanded,
   setImportantSentenceThreshold,
@@ -50,16 +51,27 @@ const AssistantTextResult = () => {
   const classes = useMyStyles();
   const dispatch = useDispatch();
 
+  // checking if user logged in
+  const role = useSelector((state) => state.userSession.user.roles);
+
   // assistant media states
   const text = useSelector((state) => state.assistant.urlText);
   const textLang = useSelector((state) => state.assistant.textLang);
   const textHtmlMap = useSelector((state) => state.assistant.urlTextHtmlMap);
   const [textHtmlOutput, setTextHtmlOutput] = useState(null);
 
-  // third party check states
+  // dbkf check states
   const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
   const dbkfTextMatchLoading = useSelector(
     (state) => state.assistant.dbkfTextMatchLoading,
+  );
+
+  // previous fact-checks check states
+  const prevFactChecksResult = useSelector(
+    (state) => state.assistant.prevFactChecksResult,
+  );
+  const prevFactChecksLoading = useSelector(
+    (state) => state.assistant.prevFactChecksLoading,
   );
 
   // news framing (topic)
@@ -117,11 +129,6 @@ const AssistantTextResult = () => {
   );
   const machineGeneratedTextChunksFail = useSelector(
     (state) => state.assistant.machineGeneratedTextChunksFail,
-  );
-
-  // previous fact-checks
-  const prevFactChecksResult = useSelector(
-    (state) => state.assistant.prevFactChecksResult,
   );
 
   // display states
@@ -232,7 +239,10 @@ const AssistantTextResult = () => {
           // top right warning and tooltip
           <div style={{ display: "flex" }}>
             <div
-              hidden={dbkfTextMatch === null && prevFactChecksResult === null}
+              hidden={
+                !dbkfTextMatch &&
+                !(prevFactChecksResult && role.includes(ROLES.BETA_TESTER))
+              }
             >
               <Tooltip
                 title={
@@ -273,9 +283,13 @@ const AssistantTextResult = () => {
           </div>
         }
       />
-      {dbkfTextMatchLoading && (
+
+      {/* show loading bar when DBKF and prev fact-checks are loading */}
+      {(dbkfTextMatchLoading ||
+        (role.includes(ROLES.BETA_TESTER) ? prevFactChecksLoading : false)) && (
         <LinearProgress variant={"indeterminate"} color={"primary"} />
       )}
+
       <CardContent
         style={{
           wordBreak: "break-word",
