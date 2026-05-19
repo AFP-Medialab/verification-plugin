@@ -1,5 +1,26 @@
 // @ts-check
 const { defineConfig, devices } = require('@playwright/experimental-ct-react');
+const { resolve } = require('path');
+/** @type {any} */
+const Module = require('module');
+
+// Strip Vite query strings (e.g. `?react`) from SVG import specifiers so
+// Node.js module resolution can find the actual .svg file on disk.
+const _origResolveFilename = Module._resolveFilename;
+Module._resolveFilename = function svgQueryStripHook(request, parent, isMain, options) {
+  if (typeof request === 'string' && /\.svg\?/.test(request)) {
+    request = request.replace(/\?[^/]*$/, '');
+  }
+  return _origResolveFilename.call(this, request, parent, isMain, options);
+};
+
+// Return a no-op stub when a .svg file is required in Node.js context.
+Module._extensions['.svg'] = function svgStub(mod) {
+  const stub = function SvgStub() { return null; };
+  stub.default = stub;
+  stub.ReactComponent = stub;
+  mod.exports = stub;
+};
 
 /**
  * @see https://playwright.dev/docs/test-configuration
@@ -27,6 +48,29 @@ module.exports = defineConfig({
 
     /* Port to use for Playwright component endpoint. */
     ctPort: 3100,
+
+    ctViteConfig: {
+      plugins: [
+        // Stub out SVG ?react imports — icons don't need to render in unit tests
+        {
+          name: 'svg-stub',
+          enforce: 'pre',
+          load(id) {
+            if (id.match(/\.svg(\?react)?$/)) {
+              return 'import React from "react"; export default (props) => null;';
+            }
+          },
+        },
+      ],
+      resolve: {
+        alias: [
+          // Mirror the @/ alias that WXT adds automatically (points to srcDir)
+          { find: /^@\//, replacement: resolve(__dirname, 'src') + '/' },
+          { find: '@Shared', replacement: resolve(__dirname, 'src/components/Shared') },
+          { find: '@workers', replacement: resolve(__dirname, 'src/workers') },
+        ],
+      },
+    },
   },
 
   /* Configure projects for major browsers */
