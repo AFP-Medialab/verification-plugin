@@ -362,8 +362,8 @@ const AnimatedGif = ({
                   data-testid="gif-result-toggle-annotation"
                 >
                   {annotation
-                    ? keyword("button_remove")
-                    : keyword("button_add")}
+                    ? keyword("button_remove_fake")
+                    : keyword("button_add_fake")}
                 </Button>
                 <Button
                   fullWidth
