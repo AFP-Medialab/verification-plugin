@@ -1,5 +1,43 @@
+import { parseMetadata } from "@uswriting/exiftool";
+
 // Groups produced by ExifTool that carry no useful user-facing metadata
 const EXCLUDED_GROUPS = new Set(["ExifTool"]);
+
+// Redirects zeroperl.wasm requests to the extension's bundled copy.
+export const extensionFetch = (input, init) => {
+  const url = typeof input === "string" ? input : (input.url ?? input);
+  if (typeof url === "string" && url.endsWith("zeroperl.wasm")) {
+    return fetch(chrome.runtime.getURL("zeroperl.wasm"), init);
+  }
+  return fetch(input, init);
+};
+
+/**
+ * Run ExifTool on a File object and return grouped metadata.
+ * @param {File} file
+ * @param {string[]} args - ExifTool CLI args (defaults to image profile)
+ * @returns {Promise<Record<string, Record<string,unknown>>|null>}
+ */
+export async function runExifTool(
+  file,
+  args = ["-json", "-G", "-n", "-a", "-u"],
+) {
+  const result = await parseMetadata(file, {
+    args,
+    fetch: extensionFetch,
+    transform: (data) => {
+      const parsed = JSON.parse(data);
+      return Array.isArray(parsed) ? parsed[0] : parsed;
+    },
+  });
+
+  if (!result.success) {
+    console.error("ExifTool error:", result.error);
+    return null;
+  }
+
+  return groupExifToolOutput(result.data);
+}
 
 // Maps exifr group names (lowercase) to ExifTool group names (uppercase)
 export const EXIFR_TO_EXIFTOOL_GROUP = {
