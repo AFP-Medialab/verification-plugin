@@ -18,7 +18,11 @@ const VideoImageList = (props) => {
   const classes = useClasses(styles);
 
   return (
-    <ImageList cols={props.cols} gap={8} sx={{ width: "100%", m: 0 }}>
+    <ImageList
+      cols={props.cols}
+      style={{ rowGap: "16px", columnGap: "8px" }}
+      sx={{ width: "100%", m: 0 }}
+    >
       {props.list.map((tile, index) => (
         <ImageListItem key={index} sx={{ position: "relative" }}>
           <PlayArrowIcon
