@@ -43,30 +43,16 @@ const PoiForensicsResults = (props) => {
   // we take the selected mode to modify the display of the score
   const mode = props.mode;
 
-  const [xAxisData, setXAxisData] = useState([]);
-  const [yAxisData, setYAxisData] = useState([]);
+  const scores = results?.poi_forensics_report.scores_per_time;
+  const times = results?.poi_forensics_report.time_vector;
 
   const [selectedIndex, setSelectedIndex] = useState(null);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
-  useEffect(() => {
-    if (
-      results &&
-      results.poi_forensics_report &&
-      results.poi_forensics_report.scores_per_time
-    ) {
-      const scores = results.poi_forensics_report.scores_per_time;
-      const times = results.poi_forensics_report.time_vector;
-
-      setYAxisData(scores);
-      setXAxisData(times);
-    }
-  }, [results]);
-
   // this is meant to prevent JS error in the console for the first render
   // we dont build teh graph if the axis data are not fullfilled
-  const hasData = xAxisData.length > 0 && yAxisData.length > 0;
+  const hasData = scores.length > 0 && times.length > 0;
 
   const handleClose = () => {
     props.handleClose();
@@ -78,10 +64,9 @@ const PoiForensicsResults = (props) => {
       setSelectedIndex(index);
 
       const timestamp = results.poi_forensics_report.time_vector[index];
-      if (videoRef.current) {
-        videoRef.current.currentTime = timestamp;
 
-        videoRef.current.onseeked = () => drawBoundingBox(index);
+      if (videoRef?.current) {
+        videoRef.current.currentTime = timestamp;
       }
     }
   };
@@ -189,7 +174,7 @@ const PoiForensicsResults = (props) => {
                           <LineChart
                             xAxis={[
                               {
-                                data: xAxisData,
+                                data: times,
                                 min: 0,
                               },
                             ]}
@@ -200,7 +185,7 @@ const PoiForensicsResults = (props) => {
                             ]}
                             series={[
                               {
-                                data: yAxisData,
+                                data: scores,
                               },
                             ]}
                             height={300}

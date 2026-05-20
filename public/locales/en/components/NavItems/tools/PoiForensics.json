@@ -1,0 +1,20 @@
+{
+  "poiforensics_video_link": "Video link",
+  "poiforensics_placeholder": "Paste the URL here",
+  "submit_button": "Submit",
+  "button_localfile": "Local file",
+  "poiforensics_error_400": "Error: Invalid image link. Ensure it points to a publicly accessible resource.",
+  "poiforensics_error_500": "Service internal error",
+  "poiforensics_error_413": "The file is too large",
+  "poiforensics_error_422": "The file is too large",
+  "poi_forensics_result_title": "Detections results for POI forensics",
+  "poi_forensics_result_treshold": "Threshold",
+  "poi_forensics_graph_title": "Score in function of time for POI forensics detector",
+  "poi_forensics_macron": "Macron",
+  "poi_forensics_putin": "Putin",
+  "poi_forensics_zelensky": "Zelenskyy",
+  "poi_forensics_meloni": "Meloni",
+  "poiforensics_mode_audiovideo": "Audio-Video",
+  "poiforensics_mode_video": "Video",
+  "poiforensics_mode_audio": "Audio"
+}
