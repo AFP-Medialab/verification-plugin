@@ -13,6 +13,7 @@ import Typography from "@mui/material/Typography";
 
 import CloseIcon from "@mui/icons-material/Close";
 
+import { ROLES } from "@/constants/roles";
 import ErrorBoundaryFallback from "@Shared/ErrorBoundaryFallback/ErrorBoundaryFallback";
 import { JsonBlock } from "@Shared/JsonBlock";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
@@ -32,6 +33,8 @@ const PoiForensicsResults = (props) => {
   const userAuthenticated = useSelector(
     (state) => state.userSession && state.userSession.userAuthenticated,
   );
+
+  const role = useSelector((state) => state.userSession.user.roles);
 
   const keyword = i18nLoadNamespace("components/NavItems/tools/PoiForensics");
 
@@ -213,6 +216,19 @@ const PoiForensicsResults = (props) => {
               </Stack>
             </Grid>
           </Stack>
+        </CardContent>
+        <CardContent>
+          {role.includes(ROLES.EXTRA_FEATURE) && results && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+              }}
+            >
+              <JsonBlock jsonString={JSON.stringify(results, null, 2)} />
+            </Box>
+          )}
         </CardContent>
       </Card>
     </>
