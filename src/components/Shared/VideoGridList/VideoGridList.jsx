@@ -11,6 +11,7 @@ const styles = (theme) => ({
     width: "100%",
     display: "flex",
     flexWrap: "wrap",
+    justifyContent: "space-around",
     overflow: "hidden",
   },
   checkeredBG: {
@@ -51,6 +52,7 @@ const VideoImageList = (props) => {
                 className={classes.checkeredBG}
                 style={{
                   width: "auto",
+                  maxWidth: "100%",
                   height: "120px",
                   cursor: "pointer",
                   margin: "0 auto",
