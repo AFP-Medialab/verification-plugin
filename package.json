@@ -117,6 +117,7 @@
     "redux": "^4.2.1",
     "redux-saga": "^1.2.3",
     "remark-gfm": "^4.0.1",
+    "stopwords-iso": "^1.1.0",
     "stylis": "^4.3.4",
     "stylis-plugin-rtl": "^2.1.1",
     "tippy.js": "^6.3.7",
