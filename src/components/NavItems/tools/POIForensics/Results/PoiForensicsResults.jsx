@@ -13,6 +13,7 @@ import Typography from "@mui/material/Typography";
 
 import CloseIcon from "@mui/icons-material/Close";
 
+import { ROLES } from "@/constants/roles";
 import ErrorBoundaryFallback from "@Shared/ErrorBoundaryFallback/ErrorBoundaryFallback";
 import { JsonBlock } from "@Shared/JsonBlock";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
@@ -33,6 +34,8 @@ const PoiForensicsResults = (props) => {
     (state) => state.userSession && state.userSession.userAuthenticated,
   );
 
+  const role = useSelector((state) => state.userSession.user.roles);
+
   const keyword = i18nLoadNamespace("components/NavItems/tools/PoiForensics");
 
   const currentLang = useSelector((state) => state.language);
@@ -43,30 +46,16 @@ const PoiForensicsResults = (props) => {
   // we take the selected mode to modify the display of the score
   const mode = props.mode;
 
-  const [xAxisData, setXAxisData] = useState([]);
-  const [yAxisData, setYAxisData] = useState([]);
+  const scores = results?.poi_forensics_report.scores_per_time;
+  const times = results?.poi_forensics_report.time_vector;
 
   const [selectedIndex, setSelectedIndex] = useState(null);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
-  useEffect(() => {
-    if (
-      results &&
-      results.poi_forensics_report &&
-      results.poi_forensics_report.scores_per_time
-    ) {
-      const scores = results.poi_forensics_report.scores_per_time;
-      const times = results.poi_forensics_report.time_vector;
-
-      setYAxisData(scores);
-      setXAxisData(times);
-    }
-  }, [results]);
-
   // this is meant to prevent JS error in the console for the first render
   // we dont build teh graph if the axis data are not fullfilled
-  const hasData = xAxisData.length > 0 && yAxisData.length > 0;
+  const hasData = scores.length > 0 && times.length > 0;
 
   const handleClose = () => {
     props.handleClose();
@@ -78,10 +67,9 @@ const PoiForensicsResults = (props) => {
       setSelectedIndex(index);
 
       const timestamp = results.poi_forensics_report.time_vector[index];
-      if (videoRef.current) {
-        videoRef.current.currentTime = timestamp;
 
-        videoRef.current.onseeked = () => drawBoundingBox(index);
+      if (videoRef?.current) {
+        videoRef.current.currentTime = timestamp;
       }
     }
   };
@@ -189,7 +177,7 @@ const PoiForensicsResults = (props) => {
                           <LineChart
                             xAxis={[
                               {
-                                data: xAxisData,
+                                data: times,
                                 min: 0,
                               },
                             ]}
@@ -200,7 +188,7 @@ const PoiForensicsResults = (props) => {
                             ]}
                             series={[
                               {
-                                data: yAxisData,
+                                data: scores,
                               },
                             ]}
                             height={300}
@@ -228,6 +216,19 @@ const PoiForensicsResults = (props) => {
               </Stack>
             </Grid>
           </Stack>
+        </CardContent>
+        <CardContent>
+          {role.includes(ROLES.EXTRA_FEATURE) && results && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+              }}
+            >
+              <JsonBlock jsonString={JSON.stringify(results, null, 2)} />
+            </Box>
+          )}
         </CardContent>
       </Card>
     </>
