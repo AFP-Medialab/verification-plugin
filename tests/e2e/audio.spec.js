@@ -4,7 +4,6 @@
  * auth.setup.js that fill localstorage with auth credentials.
  */
 import { test, expect } from './fixtures';
-import path from 'path';
 
 test(`Test tool analysis audio`, async ({ page, authenticatedBetaTesterExtensionId }) => {
     // mocking upload route 
@@ -82,9 +81,11 @@ test(`Test tool analysis audio`, async ({ page, authenticatedBetaTesterExtension
 
     await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/hiya`);
 
-    const filePath = path.resolve(__dirname, '../../tests-assets/test-hiya.mp3');
-    
-    await page.locator('input[type="file"]').setInputFiles(filePath);
+    await page.locator('input[type="file"]').setInputFiles({
+        name: 'test-hiya.mp3',
+        mimeType: 'audio/mpeg',
+        buffer: Buffer.from('fake-audio-content'),
+    });
     await page.getByTestId('hiya-submit').click();
 
     await expect (page.getByTestId("hiya-results")).toBeVisible();
