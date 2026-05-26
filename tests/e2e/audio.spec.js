@@ -81,11 +81,7 @@ test(`Test tool analysis audio`, async ({ page, authenticatedBetaTesterExtension
 
     await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/hiya`);
 
-    await page.locator('input[type="file"]').setInputFiles({
-        name: 'test-hiya.mp3',
-        mimeType: 'audio/mpeg',
-        buffer: Buffer.from('fake-audio-content'),
-    });
+    await page.locator('[data-testid="hiya-input"] input').fill('https://www.youtube.com/watch?v=pjBG3sbPrq8');
     await page.getByTestId('hiya-submit').click();
 
     await expect (page.getByTestId("hiya-results")).toBeVisible();

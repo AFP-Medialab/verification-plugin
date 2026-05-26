@@ -6,6 +6,7 @@
  * 
  */
 import { test, expect } from './fixtures';
+import path from 'path';
 import singlefileResponse from '../../tests-assets/api-response/singlefile-to-wacz-response';
 import mockedChatbotResponse from '../../tests-assets/api-response/chatbot-response';
 
@@ -79,12 +80,10 @@ test('Test tool archive', async ({page, authenticatedArchiveExtensionId}) => {
     await expect(page.getByTestId("archive-download-webrecorder-guide")).toBeVisible();
     await expect(page.getByTestId("archive-download-webrecorder-tuto")).toBeVisible();
 
+    const filePath = path.resolve(__dirname, '../../tests-assets/test-singlefile-input.html');
+
     const downloadPromise = page.waitForEvent('download');
-    await page.getByTestId('archive-singlefile-input').setInputFiles({
-        name: 'test-singlefile-input.html',
-        mimeType: 'text/html',
-        buffer: Buffer.from('<!DOCTYPE html><html><head><title>Test</title></head><body><p>Test singlefile content</p></body></html>'),
-    });
+    await page.getByTestId('archive-singlefile-input').setInputFiles(filePath);
     const download = await downloadPromise;
     expect(download.suggestedFilename()).toMatch(/\.wacz$/);
 
