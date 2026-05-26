@@ -28,6 +28,7 @@ import {
   MoreHoriz,
 } from "@mui/icons-material";
 
+import { useTrackEventClick } from "@/Hooks/useAnalytics";
 import { ROLES } from "@/constants/roles";
 import {
   TOOLS_CATEGORIES,
@@ -39,7 +40,6 @@ import {
 import { TOP_MENU_ITEMS } from "@/constants/topMenuItems";
 import { selectTopMenuItem } from "@/redux/reducers/navReducer";
 import { selectTool } from "@/redux/reducers/tools/toolReducer";
-import { trackEvent } from "@Shared/GoogleAnalytics/MatomoAnalyticsCore";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import clsx from "clsx";
 import { browser } from "wxt/browser";
@@ -59,6 +59,9 @@ const NavigationSidebar = ({ tools, setOpenAlert }) => {
   const navigate = useNavigate();
 
   const role = useSelector((state) => state.userSession.user.roles);
+
+  // use to track a click with matomo
+  const trackEventClick = useTrackEventClick();
 
   useEffect(() => {
     //Set the redux state if the tool was opened from URL
@@ -176,7 +179,7 @@ const NavigationSidebar = ({ tools, setOpenAlert }) => {
       }
 
       // Tracking du clic sur le lien vers digitalCourses
-      trackEvent(
+      trackEventClick(
         "navigation",
         "click",
         "afpDigitalCourses",

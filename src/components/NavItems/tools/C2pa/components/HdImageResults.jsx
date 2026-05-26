@@ -140,21 +140,15 @@ const HdImageResults = ({ downloadHdImage, hdImage, hdImageC2paData }) => {
         >
           <Alert severity="info">
             <Typography variant="body2">
-              {
-                "To protect the image, an invisible watermark is embedded. This change is automatically recorded in the C2PA history below."
-              }
+              {keyword("hd_image_result_info_1")}
             </Typography>
             <Typography variant="body2">
-              {"Two thumbnails are displayed:"}
+              {keyword("hd_image_result_info_2")}
             </Typography>
             <Box>
               <ul>
-                <li>
-                  {
-                    "The first thumbnail is the original thumbnail which comes from the camera."
-                  }
-                </li>
-                <li>{"The second thumbnail is the watermarked image."}</li>
+                <li>{keyword("hd_image_result_info_3")}</li>
+                <li>{keyword("hd_image_result_info_4")}</li>
               </ul>
             </Box>
           </Alert>

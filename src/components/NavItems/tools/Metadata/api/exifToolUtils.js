@@ -3,11 +3,13 @@ import { parseMetadata } from "@uswriting/exiftool";
 // Groups produced by ExifTool that carry no useful user-facing metadata
 const EXCLUDED_GROUPS = new Set(["ExifTool"]);
 
-// Redirects zeroperl.wasm requests to the extension's bundled copy.
+const ZEROPERL_WASM_URL =
+  "https://cdn.jsdelivr.net/npm/@6over3/zeroperl-ts@1.0.10/dist/esm/zeroperl.wasm";
+
 export const extensionFetch = (input, init) => {
   const url = typeof input === "string" ? input : (input.url ?? input);
   if (typeof url === "string" && url.endsWith("zeroperl.wasm")) {
-    return fetch(chrome.runtime.getURL("zeroperl.wasm"), init);
+    return fetch(ZEROPERL_WASM_URL, init);
   }
   return fetch(input, init);
 };
