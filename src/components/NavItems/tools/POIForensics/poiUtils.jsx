@@ -124,9 +124,17 @@ export const drawBoundingBox = (videoTime, videoRef, canvasRef, result) => {
     ctx.fillStyle = "#ffffff";
 
     if (ymin < 50) {
-      ctx.fillText(`${score.toFixed(3)}`, xmin + 5, ymin + height / 4);
+      ctx.fillText(
+        `Track ${track.trackID} : ${score.toFixed(3)}`,
+        xmin + 5,
+        ymin + height / 4,
+      );
     } else {
-      ctx.fillText(`${score.toFixed(3)}`, xmin + 3, ymin - 10);
+      ctx.fillText(
+        `Track ${track.trackID} : ${score.toFixed(3)}`,
+        xmin + 3,
+        ymin - 10,
+      );
     }
   });
 };
@@ -150,4 +158,72 @@ export const getIndexFromTime = (currentTime, timeVector) => {
   }
 
   return trackIndex;
+};
+
+export const computeGlobalScorePerTrack = (resultsPerTrack) => {
+  const results = [];
+  resultsPerTrack.forEach((result) => {
+    if (!result.scores || result.scores.length === 0) {
+      return;
+    }
+
+    const scores = result.scores;
+    const n = scores.length;
+    let globalScore;
+
+    if (n <= 7) {
+      const total = scores.reduce(
+        (accumulator, currentValue) => accumulator + currentValue,
+        0,
+      );
+      globalScore = total / n;
+    } else {
+      const sortedScores = [...scores].sort((a, b) => a - b);
+
+      const index = (n - 1) * 0.05; // the exact position of the 5th percentile
+      const base = Math.floor(index); // the floor for our 5th percentile
+      const distance = index - base; // the distance between the floor and the actual result
+
+      if (distance != 0) {
+        globalScore =
+          sortedScores[base] +
+          distance * (sortedScores[base + 1] - sortedScores[base]);
+      } else {
+        globalScore = sortedScores[index];
+      }
+    }
+
+    results.push({
+      trackID: result.trackID,
+      globalScore: globalScore.toFixed(3),
+    });
+  });
+
+  return results;
+};
+
+export const computeAreaUnderCurve = (results, times, threshold = 1) => {
+  if (
+    !times ||
+    !results ||
+    times.length !== results.length ||
+    times.length < 2
+  ) {
+    return 0;
+  }
+
+  let totalArea = 0;
+  for (let i = 0; i < times.length - 1; i++) {
+    const dt = times[i + 1] - times[i]; // delta t
+
+    // delta resutls
+    const y1 = results[i] - threshold;
+    const y2 = results[i + 1] - threshold;
+
+    const averageHeight = (y1 + y2) / 2;
+
+    totalArea += dt * averageHeight;
+  }
+
+  return totalArea.toFixed(3);
 };
