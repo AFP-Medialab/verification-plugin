@@ -111,13 +111,53 @@ const CollectionActionsCell = ({
         reader.readAsText(file);
       } else {
         console.error("Please upload a valid JSON file.");
-        // TODO: Replace with snackbar notification in the future
       }
     };
 
     const handleRawUpload = async (parsed, rowName) => {
       try {
-        await uploadToCollection(parsed, row.source, rowName.split("~")[0]);
+        if (!Array.isArray(parsed) || parsed.length === 0) {
+          console.error("Invalid JSON format");
+        }
+        const targetCollectionId = rowName.split("~")[0]; // it retrieve the name of the collection without the social network
+
+        const dataKeyMap = { twitter: "tweet", tiktok: "tiktok", fb: "post" }; // the potential keys of the nested object
+        const dataKey = dataKeyMap[row.source]; // the key of the collection target
+
+        const firstItem = parsed[0];
+
+        const isRawFormat = dataKey && dataKey in firstItem;
+        const innerObjectIsValid =
+          isRawFormat &&
+          typeof firstItem[dataKey] === "object" &&
+          firstItem[dataKey] !== null &&
+          !(dataKey in firstItem[dataKey]);
+        const isClassicWithId = !isRawFormat && "id" in firstItem;
+
+        if (!innerObjectIsValid && !isClassicWithId) {
+          console.error("Error with JSON format");
+        }
+
+        const items = isRawFormat
+          ? parsed.map((item, index) => {
+              // check every row in case the file contains both raw and classical json
+              if (!item[dataKey] || dataKey in item[dataKey]) {
+                throw new Error(
+                  `Erreur à la ligne ${index + 1} : Structure RAW corrompue ou imbriquée.`,
+                );
+              }
+              return { ...item[dataKey], collectionID: targetCollectionId };
+            })
+          : parsed.map((item, index) => {
+              if (!("id" in item) || (dataKey && dataKey in item)) {
+                throw new Error(
+                  `Erreur à la ligne ${index + 1} : Format classique invalide (id manquant ou clé brute présente).`,
+                );
+              }
+              return { ...item, collectionID: targetCollectionId };
+            });
+
+        await uploadToCollection(items, row.source, targetCollectionId);
       } catch (error) {
         console.error("Error uploading raw collection:", error);
       }
