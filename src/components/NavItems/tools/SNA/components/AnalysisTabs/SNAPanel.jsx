@@ -1,19 +1,24 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 
+import { useTrackEventClick } from "@/Hooks/useAnalytics";
 import PropTypes from "prop-types";
 
 import { SNAPanelTab, analysisTools, snaPanelTabProps } from "./PanelConsts";
 
 const SNAPanel = ({ snaTab, setSnaTab, keyword, analysisToolsProps }) => {
   const essentialProps = analysisToolsProps?.essentialProps ?? {};
+  const analytics = useSelector((state) => state.cookies.analytics);
 
   const switchTabs = (event, newValue) => {
     setSnaTab(newValue);
   };
+
+  const trackEventClick = useTrackEventClick();
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -31,6 +36,13 @@ const SNAPanel = ({ snaTab, setSnaTab, keyword, analysisToolsProps }) => {
               label={keyword(tool.keywordLabel)}
               data-testid={`sna-tab-${tool.propKey}`}
               {...snaPanelTabProps(idx)}
+              onClick={() =>
+                trackEventClick(
+                  "navigation",
+                  "click",
+                  `tabs clicked :${tool.keywordLabel}`,
+                )
+              }
             />
           ))}
         </Tabs>
