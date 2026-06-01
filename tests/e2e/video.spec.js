@@ -217,6 +217,8 @@ test('Test tool poi forensic video', async ({page, authenticatedExtraFeaturesExt
   await expect (page.getByTestId("poiforensic-results")).toBeVisible();
   await expect (page.getByTestId("poiforensic-video")).toBeVisible();
   await expect (page.getByTestId("poiforensic-chart")).toBeVisible();
+  await expect (page.getByTestId("poiforensic-table")).toBeVisible();
+  await expect (page.getByTestId("poiforensic-gauge")).toBeVisible();
 
   await page.getByTestId('poiforensic-close').click();
   await expect (page.getByTestId("poiforensic-results")).toHaveCount(0);
