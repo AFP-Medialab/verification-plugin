@@ -156,14 +156,14 @@ const MetadataList = ({ metadata }) => {
           </TabContext>
 
           {metadata &&
-            (tabValue === "gps" || tabValue === "Composite") &&
-            ((metadata["gps"]?.GPSLatitude ??
+            (tabValue === "GPS" || tabValue === "Composite") &&
+            ((metadata["GPS"]?.GPSLatitude ??
               metadata["Composite"]?.GPSLatitude) ||
-              (metadata["gps"]?.GPSLatitudeRef ??
+              (metadata["GPS"]?.GPSLatitudeRef ??
                 metadata["Composite"]?.GPSLatitudeRef) ||
-              (metadata["gps"]?.GPSLongitude ??
+              (metadata["GPS"]?.GPSLongitude ??
                 metadata["Composite"]?.GPSLongitude) ||
-              (metadata["gps"]?.GPSLongitudeRef ??
+              (metadata["GPS"]?.GPSLongitudeRef ??
                 metadata["Composite"]?.GPSLongitudeRef)) && (
               <Button
                 variant="contained"
@@ -172,13 +172,13 @@ const MetadataList = ({ metadata }) => {
                   window.open(
                     getGoogleMapsLink(
                       metadata["Composite"]?.GPSLatitude ??
-                        metadata["gps"]?.GPSLatitude,
+                        metadata["GPS"]?.GPSLatitude,
                       metadata["Composite"]?.GPSLatitudeRef ??
-                        metadata["gps"]?.GPSLatitudeRef,
+                        metadata["GPS"]?.GPSLatitudeRef,
                       metadata["Composite"]?.GPSLongitude ??
-                        metadata["gps"]?.GPSLongitude,
+                        metadata["GPS"]?.GPSLongitude,
                       metadata["Composite"]?.GPSLongitudeRef ??
-                        metadata["gps"]?.GPSLongitudeRef,
+                        metadata["GPS"]?.GPSLongitudeRef,
                     ),
                     "_blank",
                     "noopener,noreferrer",

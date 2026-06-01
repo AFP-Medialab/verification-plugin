@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import { useDispatch } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
@@ -22,7 +23,9 @@ import DownloadIcon from "@mui/icons-material/Download";
 import UploadIcon from "@mui/icons-material/Upload";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
+import { setError } from "@/redux/reducers/errorReducer";
 import ErrorBoundaryFallback from "@Shared/ErrorBoundaryFallback/ErrorBoundaryFallback";
+import { set } from "lodash";
 
 import { addingUrl, uploadToCollection } from "../utils/snaUtils";
 
@@ -93,6 +96,8 @@ const CollectionActionsCell = ({
 
   const [dlAnchorEl, setDlAnchorEl] = useState(null);
 
+  const dispatch = useDispatch(); // to dispatch error state
+
   const rawUploadIconButton = (row) => {
     const handleRawFileChange = (event, rowID) => {
       let dataSource = dataSources.find((ds) => ds.id === rowID);
@@ -105,21 +110,60 @@ const CollectionActionsCell = ({
             const parsed = JSON.parse(e.target.result);
             await handleRawUpload(parsed, rowName);
           } catch (error) {
-            console.error("Invalid JSON file:", error);
+            dispatch(setError(error));
           }
         };
         reader.readAsText(file);
       } else {
-        console.error("Please upload a valid JSON file.");
-        // TODO: Replace with snackbar notification in the future
+        dispatch(setError(keyword("error_upload_file_is_not_json")));
       }
     };
 
     const handleRawUpload = async (parsed, rowName) => {
       try {
-        await uploadToCollection(parsed, row.source, rowName.split("~")[0]);
+        if (!Array.isArray(parsed) || parsed.length === 0) {
+          throw new Error(keyword("error_upload_file_content"));
+        }
+        const targetCollectionId = rowName.split("~")[0]; // it retrieve the name of the collection without the social network
+
+        const dataKeyMap = { twitter: "tweet", tiktok: "tiktok", fb: "post" }; // the potential keys of the nested object
+        const dataKey = dataKeyMap[row.source]; // the key of the collection target
+
+        const firstItem = parsed[0];
+
+        const isRawFormat = dataKey && dataKey in firstItem;
+        const innerObjectIsValid =
+          isRawFormat &&
+          typeof firstItem[dataKey] === "object" &&
+          firstItem[dataKey] !== null &&
+          !(dataKey in firstItem[dataKey]);
+        const isClassicWithId = !isRawFormat && "id" in firstItem;
+
+        if (!innerObjectIsValid && !isClassicWithId) {
+          throw new Error(keyword("error_upload_file_keys"));
+        }
+
+        const items = isRawFormat
+          ? parsed.map((item, index) => {
+              // check every row in case the file contains both raw and classical json -> throw an error if some row are different from the first one
+              // we could analyse row by row, but we assume that a file with multiple types of row is corrupted and we dont want to upload it to
+              // the collection
+              if (!item[dataKey] || dataKey in item[dataKey]) {
+                throw new Error(`${keyword(error_upload_raw)} ${index + 1}`);
+              }
+              return { ...item[dataKey], collectionID: targetCollectionId };
+            })
+          : parsed.map((item, index) => {
+              // same than above here
+              if (!("id" in item) || (dataKey && dataKey in item)) {
+                throw new Error(`${keyword(error_upload_raw)} ${index + 1}`);
+              }
+              return { ...item, collectionID: targetCollectionId };
+            });
+
+        await uploadToCollection(items, row.source, targetCollectionId);
       } catch (error) {
-        console.error("Error uploading raw collection:", error);
+        dispatch(setError(error.message || keyword("error_unknown")));
       }
     };
 
