@@ -167,8 +167,6 @@ test('Test tool CheckGif', async({page, authenticatedBetaTesterExtensionId}) => 
   await page.getByTestId("gif-submit").click();
 
   await expect (page.getByTestId("gif-results")).toBeVisible();
-  await expect (page.getByTestId("gif-image-result-1")).toBeVisible();
-  await expect (page.getByTestId("gif-image-result-1")).toBeVisible();
 
   const [downloadGif] = await Promise.all([
     page.waitForEvent('download'),

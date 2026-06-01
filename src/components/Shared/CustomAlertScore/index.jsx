@@ -72,7 +72,8 @@ const CustomAlertScore = ({
 
     const detectionTranslation = getDetectionTranslation();
 
-    displayText = keyword(`${toolNameSnakeCase}${detectionTranslation}_rating`);
+    displayText =
+      keyword(`${toolNameSnakeCase}${detectionTranslation}_rating`) + " ";
 
     if (isInconclusive) {
       displayText += keyword(

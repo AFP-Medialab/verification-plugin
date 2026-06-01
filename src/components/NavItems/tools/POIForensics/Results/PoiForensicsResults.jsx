@@ -1,6 +1,8 @@
+import { useMemo } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useSelector } from "react-redux";
 
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -9,20 +11,30 @@ import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 
 import CloseIcon from "@mui/icons-material/Close";
 
+import GaugeChartResult from "@/components/Shared/GaugeChartResults/GaugeChartResult";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { ROLES } from "@/constants/roles";
 import ErrorBoundaryFallback from "@Shared/ErrorBoundaryFallback/ErrorBoundaryFallback";
 import { JsonBlock } from "@Shared/JsonBlock";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { ChartsReferenceLine } from "@mui/x-charts/ChartsReferenceLine";
 import { LineChart } from "@mui/x-charts/LineChart";
-import { result } from "lodash";
+import _ from "lodash";
 
 import { usePoiSync } from "../Hooks/usePoiSync";
-import { drawBoundingBox } from "../poiUtils";
+import {
+  computeAreaUnderCurve,
+  computeGlobalScorePerTrack,
+  drawBoundingBox,
+} from "../poiUtils";
 
 /**
  * React component that displays the results of POI forensics feature
@@ -30,6 +42,8 @@ import { drawBoundingBox } from "../poiUtils";
  * @returns
  */
 const PoiForensicsResults = (props) => {
+  const classes = useMyStyles();
+
   const userAuthenticated = useSelector(
     (state) => state.userSession && state.userSession.userAuthenticated,
   );
@@ -43,11 +57,42 @@ const PoiForensicsResults = (props) => {
 
   const results = props.result;
 
-  // we take the selected mode to modify the display of the score
-  const mode = props.mode;
+  const scores = results?.poi_forensics_report?.scores_per_time;
+  const times = results?.poi_forensics_report?.time_vector;
 
-  const scores = results?.poi_forensics_report.scores_per_time;
-  const times = results?.poi_forensics_report.time_vector;
+  const overallScore = results?.poi_forensics_report?.overall_score.toFixed(3);
+  const resultsPerTrack = results?.poi_forensics_report?.results_per_track;
+
+  const globalScorePerTrack = useMemo(() => {
+    if (_.isEmpty(resultsPerTrack)) return [];
+    return computeGlobalScorePerTrack(resultsPerTrack);
+  }, [resultsPerTrack]);
+
+  const areaUnderCurve = useMemo(() => {
+    if (_.isEmpty(scores) || _.isEmpty(times)) return 0;
+    return computeAreaUnderCurve(scores, times).totalArea;
+  }, [scores, times]);
+
+  const areaAboveTreshold = useMemo(() => {
+    if (_.isEmpty(scores) || _.isEmpty(times)) return 0;
+    return computeAreaUnderCurve(scores, times).areaAboveTreshold;
+  }, [scores, times]);
+
+  const areaBelowTreshold = useMemo(() => {
+    if (_.isEmpty(scores) || _.isEmpty(times)) return 0;
+    return computeAreaUnderCurve(scores, times).areaBelowTreshold;
+  }, [scores, times]);
+
+  const percentageFake = useMemo(() => {
+    if (_.isEmpty(scores) || _.isEmpty(times)) return 0;
+    return computeAreaUnderCurve(scores, times).percentageFake;
+  }, [scores, times]);
+
+  const DETECTION_THRESHOLDS = {
+    THRESHOLD_1: 50,
+    THRESHOLD_2: 70,
+    THRESHOLD_3: 90,
+  };
 
   const [selectedIndex, setSelectedIndex] = useState(null);
   const videoRef = useRef(null);
@@ -55,7 +100,7 @@ const PoiForensicsResults = (props) => {
 
   // this is meant to prevent JS error in the console for the first render
   // we dont build teh graph if the axis data are not fullfilled
-  const hasData = scores.length > 0 && times.length > 0;
+  const hasData = !_.isEmpty(scores) && !_.isEmpty(times);
 
   const handleClose = () => {
     props.handleClose();
@@ -76,11 +121,15 @@ const PoiForensicsResults = (props) => {
 
   // this personalized Hook is in charge of syncing the canvas with the video so we can have a box around the face
   // when its detected
-  usePoiSync(videoRef, canvasRef, results, setSelectedIndex, mode);
+  usePoiSync(videoRef, canvasRef, results, setSelectedIndex);
 
   return (
     <>
-      <Card variant="outlined" sx={{ width: "100%" }}>
+      <Card
+        variant="outlined"
+        sx={{ width: "100%" }}
+        data-testid="poiforensic-results"
+      >
         <CardHeader
           title={keyword("poi_forensics_result_title")}
           action={
@@ -94,35 +143,32 @@ const PoiForensicsResults = (props) => {
             </IconButton>
           }
         />
-        <CardContent>
-          <Stack
-            direction="column"
-            spacing={4}
-            data-testid="poiforensic-results"
-          >
-            <Grid
-              container
-              direction="row"
-              sx={{
-                justifyContent: "space-evenly",
-                alignItems: "flex-start",
-              }}
-            >
-              <Stack direction="row" spacing={4}>
-                <Grid size={{ xs: 6 }} container direction="column" spacing={2}>
+        {hasData ? (
+          <>
+            <CardContent>
+              <Grid
+                container
+                direction="row"
+                sx={{
+                  justifyContent: "space-evenly",
+                  alignItems: "flex-start",
+                }}
+              >
+                <Stack direction="row" spacing={4} sx={{ width: "100%" }}>
                   <Grid
                     size={{ xs: 6 }}
+                    sx={{ flex: 1 }}
                     container
                     direction="column"
-                    sx={{
-                      width: "100%",
-                    }}
+                    spacing={2}
+                    alignItems="center"
                   >
                     <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
                       <Box
                         sx={{
                           position: "relative",
-                          width: "100%",
+                          width: "fit-content",
+                          mx: "auto",
                           lineHeight: 0,
                         }}
                       >
@@ -139,6 +185,7 @@ const PoiForensicsResults = (props) => {
                             maxWidth: "100%",
                             display: "block",
                             objectFit: "contain",
+                            margin: "0 auto",
                           }}
                           controlsList="nofullscreen nodownload"
                           disablePictureInPicture={true}
@@ -155,6 +202,8 @@ const PoiForensicsResults = (props) => {
                             position: "absolute",
                             top: 0,
                             left: 0,
+                            width: "100%",
+                            height: "100%",
                             pointerEvents: "none",
                             borderRadius: "10px",
                           }}
@@ -162,17 +211,15 @@ const PoiForensicsResults = (props) => {
                       </Box>
                     </ErrorBoundary>
                   </Grid>
-                </Grid>
 
-                <Grid size={{ xs: 6 }}>
-                  <Stack
-                    direction="column"
-                    sx={{
-                      justifyContent: "center",
-                    }}
-                  >
-                    <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
-                      {hasData && (
+                  <Grid size={{ xs: 6 }} sx={{ flex: 1 }}>
+                    <Stack
+                      direction="column"
+                      sx={{
+                        justifyContent: "center",
+                      }}
+                    >
+                      <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
                         <>
                           <LineChart
                             xAxis={[
@@ -209,27 +256,200 @@ const PoiForensicsResults = (props) => {
                             {keyword("poi_forensics_graph_title")}
                           </Typography>
                         </>
-                      )}
-                    </ErrorBoundary>
-                  </Stack>
-                </Grid>
-              </Stack>
-            </Grid>
-          </Stack>
-        </CardContent>
-        <CardContent>
-          {role.includes(ROLES.EXTRA_FEATURE) && results && (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-              }}
-            >
-              <JsonBlock jsonString={JSON.stringify(results, null, 2)} />
-            </Box>
-          )}
-        </CardContent>
+                      </ErrorBoundary>
+                    </Stack>
+                  </Grid>
+                </Stack>
+              </Grid>
+            </CardContent>
+            <CardContent>
+              <Grid
+                container
+                direction="row"
+                sx={{
+                  justifyContent: "space-evenly",
+                  alignItems: "flex-start",
+                }}
+              >
+                <Stack direction="row" spacing={4} sx={{ width: "100%" }}>
+                  <Grid
+                    size={{ xs: 6 }}
+                    sx={{ flex: 1 }}
+                    container
+                    direction="column"
+                    spacing={2}
+                  >
+                    <Table
+                      className={classes.table}
+                      size="small"
+                      sx={{
+                        maxWidth: 800,
+                        width: "100%",
+                      }}
+                      data-testid="poiforensic-table"
+                    >
+                      <TableBody>
+                        <TableRow>
+                          <TableCell
+                            component="th"
+                            scope="row"
+                            style={{ fontWeight: "bold" }}
+                          >
+                            {keyword("poi_forensics_overall_score")}
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            style={{ fontWeight: "bold" }}
+                          >
+                            {overallScore}
+                          </TableCell>
+                        </TableRow>
+
+                        <TableRow>
+                          <TableCell
+                            component="th"
+                            scope="row"
+                            style={{ fontWeight: "bold" }}
+                          >
+                            {keyword("poi_forensics_auc")}
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            style={{ fontWeight: "bold" }}
+                          >
+                            {areaUnderCurve}
+                          </TableCell>
+                        </TableRow>
+
+                        <TableRow>
+                          <TableCell
+                            component="th"
+                            scope="row"
+                            style={{ fontWeight: "bold" }}
+                          >
+                            {keyword("poi_forensics_area_above")}
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            style={{ fontWeight: "bold" }}
+                          >
+                            {areaAboveTreshold}
+                          </TableCell>
+                        </TableRow>
+
+                        <TableRow>
+                          <TableCell
+                            component="th"
+                            scope="row"
+                            style={{ fontWeight: "bold" }}
+                          >
+                            {keyword("poi_forensics_area_below")}
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            style={{ fontWeight: "bold" }}
+                          >
+                            {areaBelowTreshold}
+                          </TableCell>
+                        </TableRow>
+
+                        <TableRow>
+                          <TableCell
+                            component="th"
+                            scope="row"
+                            style={{ fontWeight: "bold" }}
+                          >
+                            {keyword("poi_forensics_percentage")}
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            style={{ fontWeight: "bold" }}
+                          >
+                            {percentageFake}%
+                          </TableCell>
+                        </TableRow>
+
+                        <TableRow>
+                          <TableCell colSpan={2} style={{ padding: 0 }} />
+                        </TableRow>
+                        {globalScorePerTrack.map((track) => {
+                          return (
+                            <TableRow key={track.trackID}>
+                              <TableCell component="th" scope="row">
+                                Track {track.trackID}
+                              </TableCell>
+                              <TableCell align="right">
+                                {track.globalScore}
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </Grid>
+                  <Grid size={{ xs: 6 }} sx={{ flex: 1 }}>
+                    <Stack
+                      direction="column"
+                      spacing={4}
+                      data-testid="poiforensic-gauge"
+                    >
+                      <GaugeChartResult
+                        keyword={keyword}
+                        scores={[
+                          {
+                            methodName: "poiForensics",
+                            predictionScore: percentageFake,
+                          },
+                        ]}
+                        methodNames={{
+                          poiForensics: {
+                            name: keyword("poi_forensics_videoreport_name"),
+                            description: keyword(
+                              "poi_forensics_videoreport_description",
+                            ),
+                          },
+                        }}
+                        detectionThresholds={DETECTION_THRESHOLDS}
+                        resultsHaveErrors={false}
+                        sanitizeDetectionPercentage={(n) => Math.round(n)}
+                        gaugeExplanation={{
+                          keywords: [
+                            "gauge_scale_modal_explanation_rating_1",
+                            "gauge_scale_modal_explanation_rating_2",
+                            "gauge_scale_modal_explanation_rating_3",
+                            "gauge_scale_modal_explanation_rating_4",
+                          ],
+                          colors: ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"],
+                        }}
+                        toolName={"PoiForensics"}
+                        detectionType={"video"}
+                      />
+                    </Stack>
+                  </Grid>
+                </Stack>
+              </Grid>
+            </CardContent>
+            <CardContent>
+              {role.includes(ROLES.EXTRA_FEATURE) && results && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <JsonBlock jsonString={JSON.stringify(results, null, 2)} />
+                </Box>
+              )}
+            </CardContent>
+          </>
+        ) : (
+          <CardContent>
+            <Alert severity="error">
+              {results?.poi_forensics_report?.message}
+            </Alert>
+          </CardContent>
+        )}
       </Card>
     </>
   );

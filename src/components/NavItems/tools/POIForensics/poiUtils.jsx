@@ -123,10 +123,15 @@ export const drawBoundingBox = (videoTime, videoRef, canvasRef, result) => {
     ctx.font = `bold ${fontSize}px Arial`;
     ctx.fillStyle = "#ffffff";
 
+    const label = `Track ${track.trackID} : ${score.toFixed(1)}`;
+    const textWidth = ctx.measureText(label).width;
+
     if (ymin < 50) {
-      ctx.fillText(`${score.toFixed(3)}`, xmin + 5, ymin + height / 4);
+      const xText = Math.min(xmin + 5, canvas.width - textWidth - 5);
+      ctx.fillText(label, xText, ymin + height / 4);
     } else {
-      ctx.fillText(`${score.toFixed(3)}`, xmin + 3, ymin - 10);
+      const xText = Math.min(xmin + 3, canvas.width - textWidth - 5);
+      ctx.fillText(label, xText, ymin - 10);
     }
   });
 };
@@ -150,4 +155,89 @@ export const getIndexFromTime = (currentTime, timeVector) => {
   }
 
   return trackIndex;
+};
+
+export const computeGlobalScorePerTrack = (resultsPerTrack) => {
+  const results = [];
+  resultsPerTrack.forEach((result) => {
+    if (!result.scores || result.scores.length === 0) {
+      return;
+    }
+
+    const scores = result.scores;
+    const n = scores.length;
+    let globalScore;
+
+    if (n <= 7) {
+      const total = scores.reduce(
+        (accumulator, currentValue) => accumulator + currentValue,
+        0,
+      );
+      globalScore = total / n;
+    } else {
+      const sortedScores = [...scores].sort((a, b) => a - b);
+
+      const index = (n - 1) * 0.05; // the exact position of the 5th percentile
+      const base = Math.floor(index); // the floor for our 5th percentile
+      const distance = index - base; // the distance between the floor and the actual result
+
+      if (distance != 0) {
+        globalScore =
+          sortedScores[base] +
+          distance * (sortedScores[base + 1] - sortedScores[base]);
+      } else {
+        globalScore = sortedScores[index];
+      }
+    }
+
+    results.push({
+      trackID: result.trackID,
+      globalScore: globalScore.toFixed(3),
+    });
+  });
+
+  return results;
+};
+
+export const computeAreaUnderCurve = (results, times, threshold = 1) => {
+  if (
+    !times ||
+    !results ||
+    times.length !== results.length ||
+    times.length < 2
+  ) {
+    return 0;
+  }
+
+  let totalArea = 0;
+  let areaAboveTreshold = 0;
+  let areaBelowTreshold = 0;
+
+  for (let i = 0; i < times.length - 1; i++) {
+    const dt = times[i + 1] - times[i]; // delta t
+
+    // delta resutls
+    const y1 = results[i] - threshold;
+    const y2 = results[i + 1] - threshold;
+
+    const averageHeight = (y1 + y2) / 2;
+    if (averageHeight > 0) {
+      areaAboveTreshold += dt * averageHeight;
+    } else {
+      areaBelowTreshold += dt * averageHeight;
+    }
+
+    totalArea += dt * averageHeight;
+  }
+
+  return {
+    totalArea: totalArea.toFixed(3),
+    areaAboveTreshold: areaAboveTreshold.toFixed(3),
+    areaBelowTreshold: Math.abs(areaBelowTreshold.toFixed(3)),
+    percentageFake: (
+      (Math.abs(areaAboveTreshold) /
+        (Math.abs(areaBelowTreshold) + areaAboveTreshold)) *
+      100
+    ).toFixed(1),
+  };
 };
