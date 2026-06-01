@@ -123,18 +123,15 @@ export const drawBoundingBox = (videoTime, videoRef, canvasRef, result) => {
     ctx.font = `bold ${fontSize}px Arial`;
     ctx.fillStyle = "#ffffff";
 
+    const label = `Track ${track.trackID} : ${score.toFixed(1)}`;
+    const textWidth = ctx.measureText(label).width;
+
     if (ymin < 50) {
-      ctx.fillText(
-        `Track ${track.trackID} : ${score.toFixed(3)}`,
-        xmin + 5,
-        ymin + height / 4,
-      );
+      const xText = Math.min(xmin + 5, canvas.width - textWidth - 5);
+      ctx.fillText(label, xText, ymin + height / 4);
     } else {
-      ctx.fillText(
-        `Track ${track.trackID} : ${score.toFixed(3)}`,
-        xmin + 3,
-        ymin - 10,
-      );
+      const xText = Math.min(xmin + 3, canvas.width - textWidth - 5);
+      ctx.fillText(label, xText, ymin - 10);
     }
   });
 };
@@ -213,6 +210,9 @@ export const computeAreaUnderCurve = (results, times, threshold = 1) => {
   }
 
   let totalArea = 0;
+  let areaAboveTreshold = 0;
+  let areaBelowTreshold = 0;
+
   for (let i = 0; i < times.length - 1; i++) {
     const dt = times[i + 1] - times[i]; // delta t
 
@@ -221,9 +221,23 @@ export const computeAreaUnderCurve = (results, times, threshold = 1) => {
     const y2 = results[i + 1] - threshold;
 
     const averageHeight = (y1 + y2) / 2;
+    if (averageHeight > 0) {
+      areaAboveTreshold += dt * averageHeight;
+    } else {
+      areaBelowTreshold += dt * averageHeight;
+    }
 
     totalArea += dt * averageHeight;
   }
 
-  return totalArea.toFixed(3);
+  return {
+    totalArea: totalArea.toFixed(3),
+    areaAboveTreshold: areaAboveTreshold.toFixed(3),
+    areaBelowTreshold: Math.abs(areaBelowTreshold.toFixed(3)),
+    percentageFake: (
+      (Math.abs(areaAboveTreshold) /
+        (Math.abs(areaBelowTreshold) + areaAboveTreshold)) *
+      100
+    ).toFixed(1),
+  };
 };

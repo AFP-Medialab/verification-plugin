@@ -19,6 +19,7 @@ import Typography from "@mui/material/Typography";
 
 import CloseIcon from "@mui/icons-material/Close";
 
+import GaugeChartResult from "@/components/Shared/GaugeChartResults/GaugeChartResult";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { ROLES } from "@/constants/roles";
 import ErrorBoundaryFallback from "@Shared/ErrorBoundaryFallback/ErrorBoundaryFallback";
@@ -69,8 +70,29 @@ const PoiForensicsResults = (props) => {
 
   const areaUnderCurve = useMemo(() => {
     if (_.isEmpty(scores) || _.isEmpty(times)) return 0;
-    return computeAreaUnderCurve(scores, times);
+    return computeAreaUnderCurve(scores, times).totalArea;
   }, [scores, times]);
+
+  const areaAboveTreshold = useMemo(() => {
+    if (_.isEmpty(scores) || _.isEmpty(times)) return 0;
+    return computeAreaUnderCurve(scores, times).areaAboveTreshold;
+  }, [scores, times]);
+
+  const areaBelowTreshold = useMemo(() => {
+    if (_.isEmpty(scores) || _.isEmpty(times)) return 0;
+    return computeAreaUnderCurve(scores, times).areaBelowTreshold;
+  }, [scores, times]);
+
+  const percentageFake = useMemo(() => {
+    if (_.isEmpty(scores) || _.isEmpty(times)) return 0;
+    return computeAreaUnderCurve(scores, times).percentageFake;
+  }, [scores, times]);
+
+  const DETECTION_THRESHOLDS = {
+    THRESHOLD_1: 50,
+    THRESHOLD_2: 70,
+    THRESHOLD_3: 90,
+  };
 
   const [selectedIndex, setSelectedIndex] = useState(null);
   const videoRef = useRef(null);
@@ -103,7 +125,11 @@ const PoiForensicsResults = (props) => {
 
   return (
     <>
-      <Card variant="outlined" sx={{ width: "100%" }}>
+      <Card
+        variant="outlined"
+        sx={{ width: "100%" }}
+        data-testid="poiforensic-results"
+      >
         <CardHeader
           title={keyword("poi_forensics_result_title")}
           action={
@@ -120,196 +146,288 @@ const PoiForensicsResults = (props) => {
         {hasData ? (
           <>
             <CardContent>
-              <Stack
-                direction="column"
-                spacing={4}
-                data-testid="poiforensic-results"
-              >
-                <Grid
-                  container
-                  direction="row"
-                  sx={{
-                    justifyContent: "space-evenly",
-                    alignItems: "flex-start",
-                  }}
-                >
-                  <Stack direction="row" spacing={4}>
-                    <Grid
-                      size={{ xs: 6 }}
-                      container
-                      direction="column"
-                      spacing={2}
-                    >
-                      <Grid
-                        size={{ xs: 6 }}
-                        container
-                        direction="column"
-                        sx={{
-                          width: "100%",
-                        }}
-                      >
-                        <ErrorBoundary
-                          FallbackComponent={ErrorBoundaryFallback}
-                        >
-                          <Box
-                            sx={{
-                              position: "relative",
-                              width: "100%",
-                              lineHeight: 0,
-                            }}
-                          >
-                            <video
-                              ref={videoRef}
-                              crossOrigin="anonymous"
-                              height="auto"
-                              controls
-                              key={results.poi_forensics_report.video_path}
-                              style={{
-                                borderRadius: "10px",
-                                maxHeight: "50vh",
-                                width: "auto",
-                                maxWidth: "100%",
-                                display: "block",
-                                objectFit: "contain",
-                              }}
-                              controlsList="nofullscreen nodownload"
-                              disablePictureInPicture={true}
-                              data-testid="poiforensic-video"
-                            >
-                              <source
-                                src={results.poi_forensics_report.video_path}
-                                type="video/mp4"
-                              />
-                            </video>
-                            <canvas
-                              ref={canvasRef}
-                              style={{
-                                position: "absolute",
-                                top: 0,
-                                left: 0,
-                                pointerEvents: "none",
-                                borderRadius: "10px",
-                              }}
-                            />
-                          </Box>
-                        </ErrorBoundary>
-                      </Grid>
-                    </Grid>
-
-                    <Grid size={{ xs: 6 }}>
-                      <Stack
-                        direction="column"
-                        sx={{
-                          justifyContent: "center",
-                        }}
-                      >
-                        <ErrorBoundary
-                          FallbackComponent={ErrorBoundaryFallback}
-                        >
-                          <>
-                            <LineChart
-                              xAxis={[
-                                {
-                                  data: times,
-                                  min: 0,
-                                },
-                              ]}
-                              yAxis={[
-                                {
-                                  min: 0,
-                                },
-                              ]}
-                              series={[
-                                {
-                                  data: scores,
-                                },
-                              ]}
-                              height={300}
-                              grid={{ vertical: true, horizontal: true }}
-                              onAxisClick={handleChartClick}
-                              data-testid="poiforensic-chart"
-                            >
-                              <ChartsReferenceLine
-                                y={1}
-                                label={keyword("poi_forensics_result_treshold")}
-                                lineStyle={{
-                                  stroke: "red",
-                                  strokeDasharray: "3 3",
-                                }}
-                              />
-                            </LineChart>
-                            <Typography>
-                              {keyword("poi_forensics_graph_title")}
-                            </Typography>
-                          </>
-                        </ErrorBoundary>
-                      </Stack>
-                    </Grid>
-                  </Stack>
-                </Grid>
-              </Stack>
-            </CardContent>
-            <CardContent>
-              <Box
+              <Grid
+                container
+                direction="row"
                 sx={{
-                  display: "flex",
-                  justifyContent: "center",
+                  justifyContent: "space-evenly",
                   alignItems: "flex-start",
                 }}
               >
-                <Table
-                  className={classes.table}
-                  size="small"
-                  sx={{
-                    maxWidth: 800,
-                    width: "100%",
-                  }}
-                >
-                  <TableBody>
-                    <TableRow>
-                      <TableCell
-                        component="th"
-                        scope="row"
-                        style={{ fontWeight: "bold" }}
+                <Stack direction="row" spacing={4} sx={{ width: "100%" }}>
+                  <Grid
+                    size={{ xs: 6 }}
+                    sx={{ flex: 1 }}
+                    container
+                    direction="column"
+                    spacing={2}
+                    alignItems="center"
+                  >
+                    <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
+                      <Box
+                        sx={{
+                          position: "relative",
+                          width: "fit-content",
+                          mx: "auto",
+                          lineHeight: 0,
+                        }}
                       >
-                        Overall Score
-                      </TableCell>
-                      <TableCell align="right" style={{ fontWeight: "bold" }}>
-                        {overallScore}
-                      </TableCell>
-                    </TableRow>
+                        <video
+                          ref={videoRef}
+                          crossOrigin="anonymous"
+                          height="auto"
+                          controls
+                          key={results.poi_forensics_report.video_path}
+                          style={{
+                            borderRadius: "10px",
+                            maxHeight: "50vh",
+                            width: "auto",
+                            maxWidth: "100%",
+                            display: "block",
+                            objectFit: "contain",
+                            margin: "0 auto",
+                          }}
+                          controlsList="nofullscreen nodownload"
+                          disablePictureInPicture={true}
+                          data-testid="poiforensic-video"
+                        >
+                          <source
+                            src={results.poi_forensics_report.video_path}
+                            type="video/mp4"
+                          />
+                        </video>
+                        <canvas
+                          ref={canvasRef}
+                          style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            width: "100%",
+                            height: "100%",
+                            pointerEvents: "none",
+                            borderRadius: "10px",
+                          }}
+                        />
+                      </Box>
+                    </ErrorBoundary>
+                  </Grid>
 
-                    <TableRow>
-                      <TableCell
-                        component="th"
-                        scope="row"
-                        style={{ fontWeight: "bold" }}
-                      >
-                        AUC
-                      </TableCell>
-                      <TableCell align="right" style={{ fontWeight: "bold" }}>
-                        {areaUnderCurve}
-                      </TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell colSpan={2} style={{ padding: 0 }} />
-                    </TableRow>
-                    {globalScorePerTrack.map((track) => {
-                      return (
-                        <TableRow key={track.trackID}>
-                          <TableCell component="th" scope="row">
-                            Track {track.trackID}
+                  <Grid size={{ xs: 6 }} sx={{ flex: 1 }}>
+                    <Stack
+                      direction="column"
+                      sx={{
+                        justifyContent: "center",
+                      }}
+                    >
+                      <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
+                        <>
+                          <LineChart
+                            xAxis={[
+                              {
+                                data: times,
+                                min: 0,
+                              },
+                            ]}
+                            yAxis={[
+                              {
+                                min: 0,
+                              },
+                            ]}
+                            series={[
+                              {
+                                data: scores,
+                              },
+                            ]}
+                            height={300}
+                            grid={{ vertical: true, horizontal: true }}
+                            onAxisClick={handleChartClick}
+                            data-testid="poiforensic-chart"
+                          >
+                            <ChartsReferenceLine
+                              y={1}
+                              label={keyword("poi_forensics_result_treshold")}
+                              lineStyle={{
+                                stroke: "red",
+                                strokeDasharray: "3 3",
+                              }}
+                            />
+                          </LineChart>
+                          <Typography>
+                            {keyword("poi_forensics_graph_title")}
+                          </Typography>
+                        </>
+                      </ErrorBoundary>
+                    </Stack>
+                  </Grid>
+                </Stack>
+              </Grid>
+            </CardContent>
+            <CardContent>
+              <Grid
+                container
+                direction="row"
+                sx={{
+                  justifyContent: "space-evenly",
+                  alignItems: "flex-start",
+                }}
+              >
+                <Stack direction="row" spacing={4} sx={{ width: "100%" }}>
+                  <Grid
+                    size={{ xs: 6 }}
+                    sx={{ flex: 1 }}
+                    container
+                    direction="column"
+                    spacing={2}
+                  >
+                    <Table
+                      className={classes.table}
+                      size="small"
+                      sx={{
+                        maxWidth: 800,
+                        width: "100%",
+                      }}
+                      data-testid="poiforensic-table"
+                    >
+                      <TableBody>
+                        <TableRow>
+                          <TableCell
+                            component="th"
+                            scope="row"
+                            style={{ fontWeight: "bold" }}
+                          >
+                            {keyword("poi_forensics_overall_score")}
                           </TableCell>
-                          <TableCell align="right">
-                            {track.globalScore}
+                          <TableCell
+                            align="right"
+                            style={{ fontWeight: "bold" }}
+                          >
+                            {overallScore}
                           </TableCell>
                         </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </Box>
+
+                        <TableRow>
+                          <TableCell
+                            component="th"
+                            scope="row"
+                            style={{ fontWeight: "bold" }}
+                          >
+                            {keyword("poi_forensics_auc")}
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            style={{ fontWeight: "bold" }}
+                          >
+                            {areaUnderCurve}
+                          </TableCell>
+                        </TableRow>
+
+                        <TableRow>
+                          <TableCell
+                            component="th"
+                            scope="row"
+                            style={{ fontWeight: "bold" }}
+                          >
+                            {keyword("poi_forensics_area_above")}
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            style={{ fontWeight: "bold" }}
+                          >
+                            {areaAboveTreshold}
+                          </TableCell>
+                        </TableRow>
+
+                        <TableRow>
+                          <TableCell
+                            component="th"
+                            scope="row"
+                            style={{ fontWeight: "bold" }}
+                          >
+                            {keyword("poi_forensics_area_below")}
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            style={{ fontWeight: "bold" }}
+                          >
+                            {areaBelowTreshold}
+                          </TableCell>
+                        </TableRow>
+
+                        <TableRow>
+                          <TableCell
+                            component="th"
+                            scope="row"
+                            style={{ fontWeight: "bold" }}
+                          >
+                            {keyword("poi_forensics_percentage")}
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            style={{ fontWeight: "bold" }}
+                          >
+                            {percentageFake}%
+                          </TableCell>
+                        </TableRow>
+
+                        <TableRow>
+                          <TableCell colSpan={2} style={{ padding: 0 }} />
+                        </TableRow>
+                        {globalScorePerTrack.map((track) => {
+                          return (
+                            <TableRow key={track.trackID}>
+                              <TableCell component="th" scope="row">
+                                Track {track.trackID}
+                              </TableCell>
+                              <TableCell align="right">
+                                {track.globalScore}
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </Grid>
+                  <Grid size={{ xs: 6 }} sx={{ flex: 1 }}>
+                    <Stack
+                      direction="column"
+                      spacing={4}
+                      data-testid="poiforensic-gauge"
+                    >
+                      <GaugeChartResult
+                        keyword={keyword}
+                        scores={[
+                          {
+                            methodName: "poiForensics",
+                            predictionScore: percentageFake,
+                          },
+                        ]}
+                        methodNames={{
+                          poiForensics: {
+                            name: keyword("poi_forensics_videoreport_name"),
+                            description: keyword(
+                              "poi_forensics_videoreport_description",
+                            ),
+                          },
+                        }}
+                        detectionThresholds={DETECTION_THRESHOLDS}
+                        resultsHaveErrors={false}
+                        sanitizeDetectionPercentage={(n) => Math.round(n)}
+                        gaugeExplanation={{
+                          keywords: [
+                            "gauge_scale_modal_explanation_rating_1",
+                            "gauge_scale_modal_explanation_rating_2",
+                            "gauge_scale_modal_explanation_rating_3",
+                            "gauge_scale_modal_explanation_rating_4",
+                          ],
+                          colors: ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"],
+                        }}
+                        toolName={"PoiForensics"}
+                        detectionType={"video"}
+                      />
+                    </Stack>
+                  </Grid>
+                </Stack>
+              </Grid>
             </CardContent>
             <CardContent>
               {role.includes(ROLES.EXTRA_FEATURE) && results && (
