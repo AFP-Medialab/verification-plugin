@@ -21,6 +21,7 @@ const styles = (theme) => ({
 
 const VideoImageList = (props) => {
   const classes = useClasses(styles);
+  const effectiveCols = Math.min(props.list.length, props.cols);
 
   return (
     <div className={classes.root}>
@@ -29,7 +30,7 @@ const VideoImageList = (props) => {
           return (
             <Grid
               key={index}
-              size={{ xs: 12 / props.cols }}
+              size={{ xs: 12 / effectiveCols }}
               sx={{ position: "relative" }}
             >
               <PlayArrowIcon

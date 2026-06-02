@@ -24,13 +24,18 @@ const styles = () => ({
 
 const ImageGridList = (props) => {
   const classes = useClasses(styles);
+  const effectiveCols = Math.min(props.list.length, props.cols);
 
   return (
     <div className={classes.root}>
       <Grid container spacing={1}>
         {props.list.map((tile, index) => {
           return (
-            <Grid key={index} size={{ xs: 12 / props.cols }}>
+            <Grid
+              key={index}
+              size={{ xs: 12 / effectiveCols }}
+              sx={{ position: "relative" }}
+            >
               {index === props.list.length - 1 && props.setLoading !== null ? (
                 <img
                   src={tile}
