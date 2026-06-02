@@ -46,7 +46,9 @@ const VideoImageList = (props) => {
                   top: "50%",
                   transform: "translate(-50%, -50%)",
                   color: "white",
+                  cursor: "pointer",
                 }}
+                onClick={() => props.handleClick(props.list[index])}
               />
               <video
                 className={classes.checkeredBG}
