@@ -24,7 +24,41 @@ const styles = () => ({
 const ImageGridList = (props) => {
   const classes = useClasses(styles);
   const effectiveCols = Math.min(props.list.length, props.cols);
+  const imgStyle = {
+    width: "auto",
+    maxWidth: "100%",
+    height: "120px",
+    cursor: "pointer",
+    display: "block",
+  };
 
+  // for Thumbnails tool
+  if (props.centered) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          gap: "8px",
+        }}
+      >
+        {props.list.map((tile, index) => (
+          <img
+            key={index}
+            src={tile}
+            alt={tile}
+            className={classes.checkeredBG}
+            onClick={() => props.handleClick(props.list[index])}
+            style={imgStyle}
+            data-testid={"assistant-media-grid-image-" + index}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  // for Assistant
   return (
     <div className={classes.root}>
       <Grid container spacing={1} sx={{ justifyContent: "flex-start" }}>
@@ -42,13 +76,7 @@ const ImageGridList = (props) => {
                   className={classes.checkeredBG}
                   onClick={() => props.handleClick(props.list[index])}
                   onLoad={props.setLoading}
-                  style={{
-                    width: "auto",
-                    maxWidth: "100%",
-                    height: "120px",
-                    cursor: "pointer",
-                    display: "block",
-                  }}
+                  style={imgStyle}
                   data-testid={"assistant-media-grid-image-" + index}
                 />
               ) : (
@@ -57,13 +85,7 @@ const ImageGridList = (props) => {
                   alt={tile}
                   className={classes.checkeredBG}
                   onClick={() => props.handleClick(props.list[index])}
-                  style={{
-                    width: "auto",
-                    maxWidth: "100%",
-                    height: "120px",
-                    cursor: "pointer",
-                    display: "block",
-                  }}
+                  style={imgStyle}
                   data-testid={"assistant-media-grid-image-" + index}
                 />
               )}
