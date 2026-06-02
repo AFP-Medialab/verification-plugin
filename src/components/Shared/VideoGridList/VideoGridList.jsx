@@ -25,7 +25,7 @@ const VideoImageList = (props) => {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={1}>
+      <Grid container spacing={1} sx={{ justifyContent: "flex-start" }}>
         {props.list.map((tile, index) => {
           return (
             <Grid
@@ -52,9 +52,10 @@ const VideoImageList = (props) => {
                 className={classes.checkeredBG}
                 style={{
                   width: "auto",
+                  maxWidth: "100%",
                   height: "120px",
                   cursor: "pointer",
-                  margin: "0 auto",
+                  display: "block",
                 }}
                 onClick={() => props.handleClick(props.list[index])}
                 data-testid={"assistant-media-grid-video-" + index}

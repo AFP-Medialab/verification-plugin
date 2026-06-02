@@ -9,7 +9,6 @@ const styles = () => ({
     width: "100%",
     display: "flex",
     flexWrap: "wrap",
-    justifyContent: "space-around",
     overflow: "hidden",
   },
   imageList: {
@@ -28,7 +27,7 @@ const ImageGridList = (props) => {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={1}>
+      <Grid container spacing={1} sx={{ justifyContent: "flex-start" }}>
         {props.list.map((tile, index) => {
           return (
             <Grid
@@ -45,9 +44,10 @@ const ImageGridList = (props) => {
                   onLoad={props.setLoading}
                   style={{
                     width: "auto",
+                    maxWidth: "100%",
                     height: "120px",
                     cursor: "pointer",
-                    margin: "0 auto",
+                    display: "block",
                   }}
                   data-testid={"assistant-media-grid-image-" + index}
                 />
@@ -59,9 +59,10 @@ const ImageGridList = (props) => {
                   onClick={() => props.handleClick(props.list[index])}
                   style={{
                     width: "auto",
+                    maxWidth: "100%",
                     height: "120px",
                     cursor: "pointer",
-                    margin: "0 auto",
+                    display: "block",
                   }}
                   data-testid={"assistant-media-grid-image-" + index}
                 />
