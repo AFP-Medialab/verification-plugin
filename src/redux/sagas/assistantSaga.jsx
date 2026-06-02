@@ -905,11 +905,8 @@ const filterAssistantResults = (
       videoList = scrapeResult.videos;
       break;
     case KNOWN_LINKS.INSTAGRAM:
-      if (scrapeResult.videos.length === 1) {
-        videoList = [scrapeResult.videos[0]];
-      } else {
-        imageList = [scrapeResult.images[0]];
-      }
+      videoList = scrapeResult.videos;
+      imageList = scrapeResult.images;
       break;
     case KNOWN_LINKS.FACEBOOK:
       if (scrapeResult.videos.length === 0) {
