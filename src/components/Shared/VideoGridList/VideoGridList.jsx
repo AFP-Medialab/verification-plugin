@@ -56,7 +56,7 @@ const VideoImageList = (props) => {
                   margin: "0 auto",
                 }}
                 onClick={() => props.handleClick(props.list[index])}
-                data-testid={"assistant-media-grid-image-" + index}
+                data-testid={"assistant-media-grid-video-" + index}
                 src={tile}
               ></video>
             </Grid>
