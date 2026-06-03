@@ -312,6 +312,16 @@ export default function AssistantTextSpanClassification({
   );
 }
 
+function EmptyListMessage({ noCategoriesText }) {
+  return (
+    <ListItem key={noCategoriesText}>
+      <Typography fontSize="small" sx={{ textAlign: "center" }}>
+        {noCategoriesText}
+      </Typography>
+    </ListItem>
+  );
+}
+
 export function CategoriesListToggle({
   categories,
   primaryRgb,
@@ -322,8 +332,11 @@ export function CategoriesListToggle({
   keyword,
   importantSentenceThreshold,
   handleSliderChange,
-  credibilitySignal,
 }) {
+  if (_.isEmpty(categories)) {
+    return <EmptyListMessage noCategoriesText={noCategoriesText} />;
+  }
+
   // categories
   let categoriesList = [];
   let index = 0;
@@ -406,6 +419,8 @@ export function CategoriesListToggle({
     index++;
   }
 
+  importantSentenceThreshold == 99 ? (categoriesList = []) : null;
+
   return (
     <>
       <Typography fontSize="small" sx={{ textAlign: "start" }}>
@@ -421,11 +436,7 @@ export function CategoriesListToggle({
       </Typography>
       <List>
         {_.isEmpty(categoriesList) ? (
-          <ListItem key={noCategoriesText}>
-            <Typography fontSize="small" sx={{ textAlign: "center" }}>
-              {noCategoriesText}
-            </Typography>
-          </ListItem>
+          <EmptyListMessage noCategoriesText={noCategoriesText} />
         ) : (
           categoriesList
         )}
