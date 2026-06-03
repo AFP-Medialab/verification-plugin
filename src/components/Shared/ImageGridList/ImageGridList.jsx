@@ -1,7 +1,5 @@
 import React from "react";
 
-import Grid from "@mui/material/Grid";
-
 import useClasses from "../MaterialUiStyles/useClasses";
 
 const styles = () => ({
@@ -23,7 +21,6 @@ const styles = () => ({
 
 const ImageGridList = (props) => {
   const classes = useClasses(styles);
-  const effectiveCols = Math.min(props.list.length, props.cols);
   const imgStyle = {
     width: "auto",
     maxWidth: "100%",
@@ -61,14 +58,17 @@ const ImageGridList = (props) => {
   // for Assistant
   return (
     <div className={classes.root}>
-      <Grid container spacing={1} sx={{ justifyContent: "flex-start" }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(${props.cols}, 1fr)`,
+          gap: "8px",
+          width: "100%",
+        }}
+      >
         {props.list.map((tile, index) => {
           return (
-            <Grid
-              key={index}
-              size={{ xs: 12 / effectiveCols }}
-              sx={{ position: "relative" }}
-            >
+            <div key={index} style={{ position: "relative" }}>
               {index === props.list.length - 1 && props.setLoading !== null ? (
                 <img
                   src={tile}
@@ -89,10 +89,10 @@ const ImageGridList = (props) => {
                   data-testid={"assistant-media-grid-image-" + index}
                 />
               )}
-            </Grid>
+            </div>
           );
         })}
-      </Grid>
+      </div>
     </div>
   );
 };

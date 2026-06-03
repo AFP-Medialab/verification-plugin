@@ -1,12 +1,10 @@
 import React from "react";
 
-import Grid from "@mui/material/Grid";
-
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 
 import useClasses from "../MaterialUiStyles/useClasses";
 
-const styles = (theme) => ({
+const styles = () => ({
   root: {
     width: "100%",
     display: "flex",
@@ -21,18 +19,19 @@ const styles = (theme) => ({
 
 const VideoImageList = (props) => {
   const classes = useClasses(styles);
-  const effectiveCols = Math.min(props.list.length, props.cols);
-
   return (
     <div className={classes.root}>
-      <Grid container spacing={1} sx={{ justifyContent: "flex-start" }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(${props.cols}, 1fr)`,
+          gap: "8px",
+          width: "100%",
+        }}
+      >
         {props.list.map((tile, index) => {
           return (
-            <Grid
-              key={index}
-              size={{ xs: 12 / effectiveCols }}
-              sx={{ position: "relative" }}
-            >
+            <div key={index} style={{ position: "relative" }}>
               <PlayArrowIcon
                 sx={{
                   background: "rgba(0, 0, 0, 0.8)",
@@ -63,10 +62,10 @@ const VideoImageList = (props) => {
                 data-testid={"assistant-media-grid-video-" + index}
                 src={tile}
               ></video>
-            </Grid>
+            </div>
           );
         })}
-      </Grid>
+      </div>
     </div>
   );
 };
