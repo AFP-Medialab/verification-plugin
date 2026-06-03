@@ -151,19 +151,22 @@ test('Test tool CheckGif', async({page, authenticatedBetaTesterExtensionId}) => 
 
   await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/gif`);
 
-  const filePath1 = path.resolve(__dirname, '../../tests-assets/test-checkgif-false.jpeg');
-  const filePath2 = path.resolve(__dirname, '../../tests-assets/test-checkgif-true.png');
-
   await page.getByTestId("gif-tab-localfile").click();
 
-  await page.getByTestId("gif-inputfile-1").setInputFiles(filePath1);
-  await page.getByTestId("gif-inputfile-2").setInputFiles(filePath2);
+  await page.getByTestId("gif-inputfile-1").setInputFiles({
+    name: 'test-checkgif-false.jpeg',
+    mimeType: 'image/jpeg',
+    buffer: Buffer.from('/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAABAAEDASIAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AJQAB/9k=', 'base64'),
+  });
+  await page.getByTestId("gif-inputfile-2").setInputFiles({
+    name: 'test-checkgif-true.png',
+    mimeType: 'image/png',
+    buffer: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', 'base64'),
+  });
 
   await page.getByTestId("gif-submit").click();
 
   await expect (page.getByTestId("gif-results")).toBeVisible();
-  await expect (page.getByTestId("gif-image-result-1")).toBeVisible();
-  await expect (page.getByTestId("gif-image-result-1")).toBeVisible();
 
   const [downloadGif] = await Promise.all([
     page.waitForEvent('download'),

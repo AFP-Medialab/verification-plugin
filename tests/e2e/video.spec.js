@@ -7,10 +7,13 @@
  */
 import { test, expect } from './fixtures';
 import path from 'path';
-import fs from 'fs';
 import mockedKeyframesResponse from '../../tests-assets/api-response/keyframes-response.json'
 import mockedDeepfakeResponse from '../../tests-assets/api-response/deepfake-response.json'
 import mockedPoiForensicResponse from '../../tests-assets/api-response/poiforensic-response.json'
+
+// Minimal 1x1 JPEG (white pixel)
+const FAKE_JPEG_BUFFER = Buffer.from('/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wAARCAABAAEDASIAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AJQAB/9k=', 'base64');
+const FAKE_ZIP_BUFFER = Buffer.from('fake-zip-content');
 
 test(`Test tool analysis video`, async ({ page, extensionId }) => {
   await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/analysis`);
@@ -80,37 +83,28 @@ test('Test tool keyframes', async ({ page, extensionId }) => {
         return;
     }
 
-    const imagePath = path.resolve(__dirname, '../../tests-assets/test-metadata.jpg');
-    const imageBuffer = fs.readFileSync(imagePath);
-
     await route.fulfill({
         status: 200,
         contentType: 'image/jpeg',
-        body: imageBuffer,
+        body: FAKE_JPEG_BUFFER,
     });
   });
 
   // mock grouped frames
   await page.route('**/kse/**_grouped/**/**', async (route) => {
-    const imagePath = path.resolve(__dirname, '../../tests-assets/test-metadata.jpg');
-    const imageBuffer = fs.readFileSync(imagePath);
-
     await route.fulfill({
         status: 200,
         contentType: 'image/jpeg',
-        body: imageBuffer,
+        body: FAKE_JPEG_BUFFER,
     });
   });
 
   // mock zip for downloading
   await page.route('**/kse/keyframes_zip/**', async (route) => {
-    const zipPath = path.resolve(__dirname, '../../tests-assets/keyframes_zip.zip');
-    const zipBuffer = fs.readFileSync(zipPath);
-
     await route.fulfill({
       status: 200,
       contentType: 'application/zip',
-      body: zipBuffer,
+      body: FAKE_ZIP_BUFFER,
     });
   });
 
@@ -223,6 +217,8 @@ test('Test tool poi forensic video', async ({page, authenticatedExtraFeaturesExt
   await expect (page.getByTestId("poiforensic-results")).toBeVisible();
   await expect (page.getByTestId("poiforensic-video")).toBeVisible();
   await expect (page.getByTestId("poiforensic-chart")).toBeVisible();
+  await expect (page.getByTestId("poiforensic-table")).toBeVisible();
+  await expect (page.getByTestId("poiforensic-gauge")).toBeVisible();
 
   await page.getByTestId('poiforensic-close').click();
   await expect (page.getByTestId("poiforensic-results")).toHaveCount(0);

@@ -34,6 +34,7 @@ import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespa
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "@/components/Shared/StringFileUploadField";
 import { getFileTypeFromFileObject } from "@/components/Shared/Utils/fileUtils";
+import { ROLES } from "@/constants/roles";
 import { KNOWN_LINKS, TOOLS_CATEGORIES } from "@/constants/tools";
 import {
   cleanAssistantState,
@@ -62,6 +63,9 @@ const Assistant = () => {
   const classes = useMyStyles();
   const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
+
+  // checking if user logged in
+  const role = useSelector((state) => state.userSession.user.roles);
 
   // for dark mode
   const { mode, systemMode } = useColorScheme();
@@ -497,7 +501,8 @@ const Assistant = () => {
               ) : null}
 
               {/* fact check results */}
-              {dbkfTextMatch || prevFactChecksResult ? (
+              {dbkfTextMatch ||
+              (prevFactChecksResult && role.includes(ROLES.BETA_TESTER)) ? (
                 <Grid
                   size={{ xs: 12 }}
                   className={classes.assistantGrid}

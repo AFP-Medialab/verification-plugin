@@ -44,3 +44,21 @@ export const useTrackEvent = (
     }
   }, [event, url]);
 };
+
+/**
+ * This hook can be use for tracking when nothing change taht can be observed by a useEffect
+ * @returns function
+ */
+export const useTrackEventClick = () => {
+  const analytics = useSelector((state) => state.cookies.analytics);
+
+  const track = (category, action, name, url, client_id, uid = "") => {
+    if (analytics) {
+      trackEvent(category, action, name, url, client_id, history, uid);
+    } else {
+      trackEventAnonymous(category, action, name, url, history);
+    }
+  };
+
+  return track;
+};
