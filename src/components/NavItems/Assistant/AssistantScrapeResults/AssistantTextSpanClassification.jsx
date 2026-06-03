@@ -419,8 +419,6 @@ export function CategoriesListToggle({
     index++;
   }
 
-  importantSentenceThreshold == 99 ? (categoriesList = []) : null;
-
   return (
     <>
       <Typography fontSize="small" sx={{ textAlign: "start" }}>
