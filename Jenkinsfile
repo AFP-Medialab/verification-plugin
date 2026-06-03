@@ -117,7 +117,7 @@ pipeline {
         success {
             slackSend channel: 'C0B34ADJ7C3', 
                     color: 'good',
-                    message: "✅ SUCCESS: ${env.JOB_NAME} #${env.BUILD_ID}\nArtefact: s3://${S3_BUCKET}/builds/${env.BRANCH_NAME}/we-verify-plugin-${VERSION_TAG}.zip", 
+                    message: "✅ SUCCESS: ${env.JOB_NAME} #${env.BUILD_ID}\nArtefact: s3://${S3_BUCKET}/jenkins/builds/${env.BRANCH_NAME}/we-verify-plugin-${VERSION_TAG}.zip", 
                     tokenCredentialId: 'medialab_slack_token'
         }
         failure {

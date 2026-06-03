@@ -40,8 +40,6 @@ export const WordCloud = ({
 }) => {
   const [language, setLanguage] = useState("en");
 
-  console.log(stopwords[language]);
-
   const filteredWords = language
     ? wordCloudData?.filter((w) => !stopwords[language]?.includes(w.text))
     : wordCloudData;
