@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 /**
  *
  */
-const HeaderTool = ({ name, description, icon }) => {
+const HeaderTool = ({ name, description, icon, action }) => {
   return (
     <Grid
       container
@@ -18,28 +18,32 @@ const HeaderTool = ({ name, description, icon }) => {
         mb: 4,
       }}
     >
-      <Box>
-        <Grid
-          container
-          direction="row"
-          spacing={1}
+      <Grid size={{ xs: 12 }}>
+        <Box
           sx={{
-            justifyContent: "flex-start",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
             alignItems: "center",
+            gap: 1,
+            width: "100%",
           }}
         >
-          {icon}
-          <Typography variant="h5" color={"primary"}>
-            {name}
-          </Typography>
-        </Grid>
-      </Box>
-      <Grid
-        sx={{
-          textAlign: "start",
-        }}
-      >
-        <Typography>{description}</Typography>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            {icon}
+            <Typography variant="h5" color={"primary"}>
+              {name}
+            </Typography>
+          </Box>
+
+          {action && (
+            <Box sx={{ display: "flex", alignItems: "center" }}>{action}</Box>
+          )}
+        </Box>
+      </Grid>
+
+      <Grid size={{ xs: 12 }}>
+        <Typography sx={{ textAlign: "start" }}>{description}</Typography>
       </Grid>
     </Grid>
   );

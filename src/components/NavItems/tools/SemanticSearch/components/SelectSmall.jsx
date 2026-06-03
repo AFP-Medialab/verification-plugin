@@ -1,7 +1,8 @@
 import React from "react";
+
+import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
 export default function SelectSmall(props) {
@@ -22,6 +23,7 @@ export default function SelectSmall(props) {
           if (props.onChange) props.onChange(e.target.value);
         }}
         disabled={props.disabled}
+        variant="outlined"
       >
         {props.items.map((item, index) => {
           return (

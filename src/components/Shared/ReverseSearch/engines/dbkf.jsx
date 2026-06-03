@@ -18,7 +18,7 @@ export const reverseImageSearchDBKF = (
   isRequestFromContextMenu = true,
 ) => {
   const url =
-    "http://weverify-demo.ontotext.com/#!/similaritySearchResults&type=Images&params=" +
+    "https://dbkf.ontotext.com/#!/similaritySearchResults&type=Images&params=" +
     encodeURIComponent(imgUrl);
   const urlObject = { url: url };
   openNewTabWithUrl(urlObject, isRequestFromContextMenu);

@@ -10,6 +10,8 @@ import Typography from "@mui/material/Typography";
 import { DataGrid } from "@mui/x-data-grid";
 import dayjs from "dayjs";
 
+import { detailsFormat } from "./DataUpload/DataUploadConstants";
+
 const style = {
   position: "relative",
   top: "50%",
@@ -22,6 +24,7 @@ const style = {
 
 const DetailModal = ({
   detailContent,
+  detailSource,
   openDetailModal,
   setOpenDetailModal,
   detailSearchFilter,
@@ -32,7 +35,7 @@ const DetailModal = ({
     setOpenDetailModal(false);
     setDetailSearchFilter("");
   };
-
+  const format = detailsFormat[detailSource];
   const columns =
     detailContent && detailContent.length > 0
       ? Object.keys(detailContent[0]).map((x) => {
@@ -41,15 +44,28 @@ const DetailModal = ({
             return {
               field: x,
               headerName: x,
-              width: 90,
+              width: 190,
               sortComparator: (a, b) => dayjs(a).unix() - dayjs(b).unix(),
             };
-          } else
+          } else {
+            let size = 90;
+            // Test if current header is part of format columns and get size
+            if (format && format.column) {
+              const matchingColumn = format.column.find(
+                (column) =>
+                  column.headers &&
+                  column.headers.includes(x.toLowerCase().replace(/\s/g, "")),
+              );
+              if (matchingColumn) {
+                size = matchingColumn.size;
+              }
+            }
             return {
               field: x,
               headerName: x,
-              width: 90,
+              width: size,
             };
+          }
         })
       : [];
   const rows =

@@ -52,6 +52,7 @@ import { useScoreCalculation } from "../hooks/useScoreCalculation";
 import { useWavesurferRegions } from "../hooks/useWavesurferRegions";
 import {
   createChartConfig,
+  getAudioTimeRange,
   getChartDataFromChunks,
   getChartGradient,
   printDurationInMinutesWithoutModulo,
@@ -87,14 +88,6 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
     TimeSeriesScale,
   );
 
-  // Create chart configuration using imported utility
-  const chartConfig = createChartConfig(
-    resolvedMode,
-    isCurrentLanguageLeftToRight,
-    keyword,
-    printDurationInMinutesWithoutModulo,
-  );
-
   // Cache for chart gradient to improve performance
   const gradientCache = useRef({});
 
@@ -117,6 +110,34 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
   // Update regions when wavesurfer is ready and chunks change
   useRegionsUpdater(wavesurfer, isReady, chunks, regionsPlugin);
 
+  // Get audio duration from audio to ensure full timeline is shown
+  const audioDurationMs = useMemo(() => {
+    return wavesurfer && isReady ? wavesurfer.getDuration() * 1000 : undefined;
+  }, [wavesurfer, isReady]);
+
+  const { minTime, maxTime } = useMemo(() => {
+    return getAudioTimeRange(audioDurationMs);
+  }, [audioDurationMs]);
+
+  // Create chart configuration using imported utility
+  const chartConfig = useMemo(() => {
+    return createChartConfig(
+      resolvedMode,
+      isCurrentLanguageLeftToRight,
+      keyword,
+      printDurationInMinutesWithoutModulo,
+      minTime,
+      maxTime,
+    );
+  }, [
+    resolvedMode,
+    isCurrentLanguageLeftToRight,
+    keyword,
+    printDurationInMinutesWithoutModulo,
+    minTime,
+    maxTime,
+  ]);
+
   return (
     <Stack
       direction="row"
@@ -125,6 +146,7 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
         justifyContent: "flex-start",
         alignItems: "flex-start",
       }}
+      data-testid="hiya-results"
     >
       <Card variant="outlined" sx={{ width: "100%" }}>
         <Box
@@ -140,6 +162,7 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
                 aria-label="close"
                 onClick={handleClose}
                 sx={{ p: 1 }}
+                data-testid="hiya-close"
               >
                 <CloseIcon />
               </IconButton>
@@ -161,6 +184,7 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
               sx={{
                 p: 4,
               }}
+              data-testid="hiya-results-leftpanel"
             >
               <Box sx={{ width: "100%", position: "relative" }}>
                 <Grid
@@ -235,6 +259,7 @@ const HiyaResults = ({ result, isInconclusive, url, handleClose, chunks }) => {
                 sm: 12,
                 md: 6,
               }}
+              data-testid="hiya-results-rightpanel"
             >
               <Stack direction="column" spacing={4}>
                 <Stack

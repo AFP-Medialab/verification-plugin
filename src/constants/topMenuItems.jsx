@@ -1,3 +1,8 @@
+import AssistantIcon from "../components/NavBar/images/SVG/Navbar/Assistant.svg?react";
+import ClassroomIcon from "../components/NavBar/images/SVG/Navbar/Classroom.svg?react";
+import GuideIcon from "../components/NavBar/images/SVG/Navbar/Guide.svg?react";
+import InteractiveIcon from "../components/NavBar/images/SVG/Navbar/Interactive.svg?react";
+import ToolsIcon from "../components/NavBar/images/SVG/Navbar/Tools.svg?react";
 import React from "react";
 
 import Box from "@mui/material/Box";
@@ -5,11 +10,6 @@ import SvgIcon from "@mui/material/SvgIcon";
 
 import { FOOTER_TYPES, Footer } from "@Shared/Footer/Footer";
 
-import AssistantIcon from "../components/NavBar/images/SVG/Navbar/Assistant.svg";
-import ClassroomIcon from "../components/NavBar/images/SVG/Navbar/Classroom.svg";
-import GuideIcon from "../components/NavBar/images/SVG/Navbar/Guide.svg";
-import InteractiveIcon from "../components/NavBar/images/SVG/Navbar/Interactive.svg";
-import ToolsIcon from "../components/NavBar/images/SVG/Navbar/Tools.svg";
 import Assistant from "../components/NavItems/Assistant/Assistant";
 import ClassRoom from "../components/NavItems/ClassRoom/ClassRoom";
 import Interactive from "../components/NavItems/Interactive/Interactive";

@@ -22,16 +22,19 @@ export class SyntheticImageDetectionAlgorithm {
    * @param name {string} The algorithm name key
    * @param description {string} The algorithm description key
    * @param rolesNeeded {?[Roles]} Role needed to get the detection results for the algorithm. If more than one role specified, either roles are authorized.
+   * @param warning {?string} Optional warning message to display to the user.
    */
-  constructor(apiServiceName, name, description, rolesNeeded) {
+  constructor(apiServiceName, name, description, rolesNeeded, warning) {
     this.apiServiceName = apiServiceName;
     this.name = name;
     this.description = description;
     this.rolesNeeded = rolesNeeded;
+    this.warning = warning;
   }
 }
 
 export const ganR50Mever = new SyntheticImageDetectionAlgorithm(
+  // this one hase no warning because it creates no FPR
   "gan_r50_mever",
   "synthetic_image_detection_gan_name",
   "synthetic_image_detection_gan_description",
@@ -39,6 +42,7 @@ export const ganR50Mever = new SyntheticImageDetectionAlgorithm(
 );
 
 export const proGanR50Grip = new SyntheticImageDetectionAlgorithm(
+  // this one hase no warning because it creates no FPR
   "progan_r50_grip",
   "synthetic_image_detection_progan_name",
   "synthetic_image_detection_progan_description",
@@ -50,9 +54,11 @@ export const ldmR50Grip = new SyntheticImageDetectionAlgorithm(
   "synthetic_image_detection_diffusion_name",
   "synthetic_image_detection_diffusion_description",
   [ROLES.BETA_TESTER],
+  "synthetic_image_detection_ldm_r50_grip_warning",
 );
 
 export const proGanWebpR50Grip = new SyntheticImageDetectionAlgorithm(
+  // this one hase no warning because it creates no FPR
   "progan-webp_r50_grip",
   "synthetic_image_detection_progan-webp_r50_grip_name",
   "synthetic_image_detection_progan-webp_r50_grip_description",
@@ -60,6 +66,7 @@ export const proGanWebpR50Grip = new SyntheticImageDetectionAlgorithm(
 );
 
 export const ldmWebpR50Grip = new SyntheticImageDetectionAlgorithm(
+  // this one hase no warning because it creates no FPR
   "ldm-webp_r50_grip",
   "synthetic_image_detection_ldm-webp_r50_grip_name",
   "synthetic_image_detection_ldm-webp_r50_grip_description",
@@ -71,46 +78,53 @@ export const gigaGanWebpR50Grip = new SyntheticImageDetectionAlgorithm(
   "synthetic_image_detection_gigagan-webp_r50_grip_name",
   "synthetic_image_detection_gigagan-webp_r50_grip_description",
   [ROLES.EVALUATION, ROLES.EXTRA_FEATURE],
+  "synthetic_image_detection_gigagan-webp_r50_grip_warning",
 );
 export const ldmR50Mever = new SyntheticImageDetectionAlgorithm(
   "ldm_r50_mever",
   "synthetic_image_detection_ldm_r50_mever_name",
   "synthetic_image_detection_ldm_r50_mever_description",
   [ROLES.EVALUATION, ROLES.EXTRA_FEATURE],
+  "synthetic_image_detection_ldm_r50_mever_warning",
 );
 export const itwRineMever = new SyntheticImageDetectionAlgorithm(
   "itw_rine_mever",
   "synthetic_image_detection_itw_rine_mever_name",
   "synthetic_image_detection_itw_rine_mever_description",
-  [ROLES.EVALUATION, ROLES.EXTRA_FEATURE],
+  [ROLES.BETA_TESTER],
+  "synthetic_image_detection_itw_rine_mever_warning",
 );
 
 export const itwSpaiMever = new SyntheticImageDetectionAlgorithm(
   "itw_spai_mever",
   "synthetic_image_detection_itw_spai_mever_name",
   "synthetic_image_detection_itw_spai_mever_description",
-  [ROLES.EVALUATION, ROLES.EXTRA_FEATURE],
+  [ROLES.BETA_TESTER],
+  "synthetic_image_detection_itw_spai_mever_warning",
 );
 
 export const sd21BfreeDino2reg4Grip = new SyntheticImageDetectionAlgorithm(
   "sd21_bfree-dino2reg4_grip",
   "synthetic_image_detection_sd21_bfree-dino2reg4_grip_name",
   "synthetic_image_detection_sd21_bfree-dino2reg4_grip_description",
-  [ROLES.EVALUATION, ROLES.EXTRA_FEATURE],
+  [ROLES.BETA_TESTER],
+  "synthetic_image_detection_sd21_bfree-dino2reg4_grip_warning",
 );
 
 export const multiBfreeDino2reg4Grip = new SyntheticImageDetectionAlgorithm(
   "multi_bfree-dino2reg4_grip",
   "synthetic_image_detection_multi_bfree-dino2reg4_grip_name",
   "synthetic_image_detection_multi_bfree-dino2reg4_grip_description",
-  [ROLES.EVALUATION, ROLES.EXTRA_FEATURE],
+  [ROLES.BETA_TESTER],
+  "synthetic_image_detection_multi_bfree-dino2reg4_grip_warning",
 );
 
 export const sd21BfreeSiglipGrip = new SyntheticImageDetectionAlgorithm(
   "sd21_bfree-siglip_grip",
   "synthetic_image_detection_sd21_bfree-siglip_grip_name",
   "synthetic_image_detection_sd21_bfree-siglip_grip_description",
-  [ROLES.EVALUATION, ROLES.EXTRA_FEATURE],
+  [ROLES.BETA_TESTER],
+  "synthetic_image_detection_sd21_bfree-siglip_grip_warning",
 );
 
 /**

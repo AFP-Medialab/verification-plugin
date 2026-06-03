@@ -120,8 +120,6 @@ export const theme = createTheme({
         root: {
           minWidth: "160px",
           textTransform: "none",
-        },
-        wrapper: {
           fontSize: 12,
         },
       },

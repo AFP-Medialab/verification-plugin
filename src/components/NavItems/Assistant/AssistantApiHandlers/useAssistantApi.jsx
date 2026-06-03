@@ -1,7 +1,13 @@
 import axios from "axios";
 
+import {
+  API_ENDPOINTS,
+  MAX_NUM_RETRIES,
+  NE_ENTITY_CHUNK_SIZE,
+} from "../constants";
+
 export default function assistantApiCalls() {
-  const assistantEndpoint = process.env.REACT_APP_ASSISTANT_URL;
+  const assistantEndpoint = import.meta.env.VITE_ASSISTANT_URL;
 
   function handleAssistantError(errorResponse) {
     if (errorResponse.response) {
@@ -47,7 +53,7 @@ export default function assistantApiCalls() {
   const callNamedEntityService = async (text, lang) => {
     try {
       const namedEntityResult = await axios.post(
-        assistantEndpoint + "gcloud/named-entity",
+        assistantEndpoint + API_ENDPOINTS.NAMED_ENTITY,
         {
           content: text,
           lang: lang,
@@ -61,7 +67,8 @@ export default function assistantApiCalls() {
       const dbpedia = `http://${lang == "en" ? "" : "en."}dbpedia.org`;
       const wdQuery = `
       SELECT (REPLACE(STR(?concept), "http://www.wikidata.org/entity/", "") AS ?conceptID)
-      (REPLACE(STR(?article), "https://${lang}.wikipedia.org/wiki/", "${dbpedia}/page/") AS ?link)
+      (STR(?article) AS ?wikipediaUrl)
+      (REPLACE(STR(?article), "https://${lang}.wikipedia.org/wiki/", "${dbpedia}/page/") AS ?dbpediaUrl)
       (REPLACE(STR(?article), "https://${lang}.wikipedia.org/wiki/", "${dbpedia}/resource/") AS ?iri)
       ?title
       WHERE {
@@ -78,23 +85,21 @@ export default function assistantApiCalls() {
         mapping["<" + entity.iri.value + ">"] = {
           concept: entity.conceptID.value,
           title: entity.title.value,
-          link: entity.link.value,
+          link: entity.wikipediaUrl.value,
         };
       }
       const iris = Object.keys(mapping);
       let dbpediaResultBindings = [];
-      const chunkSize = 25;
+      const chunkSize = NE_ENTITY_CHUNK_SIZE;
       for (let i = 0; i < iris.length; i += chunkSize) {
         const chunk = iris.slice(i, i + chunkSize);
         const dbQuery = `
-          SELECT ?iri ?abstract (GROUP_CONCAT(DISTINCT ?type; SEPARATOR = ",") AS ?schemaTypes)
+          SELECT ?iri (GROUP_CONCAT(DISTINCT ?type; SEPARATOR = ",") AS ?schemaTypes)
           WHERE {
             VALUES ?iri { ${chunk.join(" ")} }
-            ?iri rdfs:comment ?abstract .
             ?iri rdf:type ?type .
-            FILTER (lang(?abstract) = "${lang}")
           }`;
-        const dbpediaEndpoint = process.env.REACT_APP_DBPEDIA_SPARQL_URL;
+        const dbpediaEndpoint = import.meta.env.VITE_DBPEDIA_SPARQL_URL;
         const dbpediaResult = await axios.get(
           `${dbpediaEndpoint}?query=${encodeURIComponent(dbQuery)}&format=application%2Fsparql-results%2Bjson&timeout=30000&signal_void=on&signal_unconnected=on`,
         );
@@ -104,7 +109,7 @@ export default function assistantApiCalls() {
       }
       for (const entity of dbpediaResultBindings) {
         mapping["<" + entity.iri.value + ">"]["abstract"] =
-          entity.abstract.value;
+          entity.abstract?.value || "";
         mapping["<" + entity.iri.value + ">"]["schemaTypes"] =
           entity.schemaTypes.value.split(",");
       }
@@ -161,7 +166,7 @@ export default function assistantApiCalls() {
   };
 
   const callOcrService = async (data, script, mode) => {
-    const result = await axios.post(assistantEndpoint + "gcloud/ocr", {
+    const result = await axios.post(assistantEndpoint + API_ENDPOINTS.OCR, {
       text: data,
       script: script,
       data_type: mode,
@@ -169,8 +174,6 @@ export default function assistantApiCalls() {
 
     return result.data;
   };
-
-  const MAX_NUM_RETRIES = 3;
 
   /**
    * Calls an async function that throws an exception when it fails, will retry for numMaxRetries
@@ -197,23 +200,23 @@ export default function assistantApiCalls() {
     }
   }
 
-  const callSourceCredibilityService = async (urlList) => {
+  const callUrlDomainAnalysisService = async (urlList) => {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
       async () => {
         if (urlList.length === 0) return null;
 
-        let urls = urlList.join(" ");
-
         const result = await axios.post(
-          assistantEndpoint + "gcloud/source-credibility",
-          { text: urls },
+          assistantEndpoint + API_ENDPOINTS.URL_DOMAIN_ANALYSIS,
+          {
+            urls: urlList,
+          },
         );
         return result.data;
       },
       (numTries) => {
         console.log(
-          "Could not connect to source credibility service, tries " +
+          "Could not connect to URL domain analysis service, tries " +
             (numTries + 1) +
             "/" +
             MAX_NUM_RETRIES,
@@ -227,7 +230,7 @@ export default function assistantApiCalls() {
       MAX_NUM_RETRIES,
       async () => {
         const result = await axios.post(
-          assistantEndpoint + "gcloud/news-framing-clfr",
+          assistantEndpoint + API_ENDPOINTS.NEWS_FRAMING,
           { text: text },
         );
         return result.data;
@@ -248,7 +251,7 @@ export default function assistantApiCalls() {
       MAX_NUM_RETRIES,
       async () => {
         const result = await axios.post(
-          assistantEndpoint + "gcloud/news-genre-clfr",
+          assistantEndpoint + API_ENDPOINTS.NEWS_GENRE,
           { text: text },
         );
         return result.data;
@@ -269,10 +272,9 @@ export default function assistantApiCalls() {
       MAX_NUM_RETRIES,
       async () => {
         const result = await axios.post(
-          assistantEndpoint + "gcloud/persuasion-span-clfr",
+          assistantEndpoint + API_ENDPOINTS.PERSUASION,
           {
             text: text,
-            frontendVersion: 0.88,
           },
         );
         return result.data;
@@ -292,10 +294,12 @@ export default function assistantApiCalls() {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
       async () => {
-        const result = await axios.post(assistantEndpoint + "dw/subjectivity", {
-          content: text,
-          frontendVersion: 0.88,
-        });
+        const result = await axios.post(
+          assistantEndpoint + API_ENDPOINTS.SUBJECTIVITY,
+          {
+            content: text,
+          },
+        );
         return result.data;
       },
       (numTries) => {
@@ -314,7 +318,7 @@ export default function assistantApiCalls() {
       MAX_NUM_RETRIES,
       async () => {
         const result = await axios.post(
-          assistantEndpoint + "kinit/prev-fact-checks",
+          assistantEndpoint + API_ENDPOINTS.PREV_FACT_CHECKS,
           {
             content: text,
           },
@@ -337,7 +341,7 @@ export default function assistantApiCalls() {
       MAX_NUM_RETRIES,
       async () => {
         const result = await axios.post(
-          assistantEndpoint + "kinit/machine-generated-text-chunks",
+          assistantEndpoint + API_ENDPOINTS.MGT_CHUNKS,
           {
             content: text,
           },
@@ -355,35 +359,12 @@ export default function assistantApiCalls() {
     );
   };
 
-  const callMachineGeneratedTextSentencesService = async (text) => {
-    return await callAsyncWithNumRetries(
-      MAX_NUM_RETRIES,
-      async () => {
-        const result = await axios.post(
-          assistantEndpoint + "kinit/machine-generated-text-sentences",
-          {
-            content: text,
-          },
-        );
-        return result.data;
-      },
-      (numTries) => {
-        console.log(
-          "Could not connect to machine generated text service for sentences, tries " +
-            (numTries + 1) +
-            "/" +
-            MAX_NUM_RETRIES,
-        );
-      },
-    );
-  };
-
   const callMultilingualStanceService = async (comments) => {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
       async () => {
         const result = await axios.post(
-          assistantEndpoint + "gcloud/multilingual-stance-classification",
+          assistantEndpoint + API_ENDPOINTS.STANCE,
           {
             comments: comments,
           },
@@ -403,7 +384,7 @@ export default function assistantApiCalls() {
 
   return {
     callAssistantScraper,
-    callSourceCredibilityService,
+    callUrlDomainAnalysisService,
     callNamedEntityService,
     callOcrService,
     callNewsFramingService,
@@ -412,7 +393,6 @@ export default function assistantApiCalls() {
     callSubjectivityService,
     callPrevFactChecksService,
     callMachineGeneratedTextChunksService,
-    callMachineGeneratedTextSentencesService,
     callMultilingualStanceService,
   };
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { useSelector } from "react-redux";
 
@@ -10,7 +11,8 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import { ROLES } from "@/constants/roles";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import ErrorBoundaryFallback from "@Shared/ErrorBoundaryFallback/ErrorBoundaryFallback";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -18,6 +20,13 @@ const GeolocationResults = ({ result, urlImage }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Geolocalizer");
 
   const userRoles = useSelector((state) => state.userSession.user.roles);
+
+  const resultIcon = new Icon({
+    iconUrl: "img/marker-icon.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [0, -41],
+  });
 
   if (!userRoles.includes(ROLES.EXTRA_FEATURE)) {
     result = result.slice(0, 1);
@@ -29,7 +38,11 @@ const GeolocationResults = ({ result, urlImage }) => {
         {result &&
           result.length > 0 &&
           result.map((res, key) => (
-            <Card variant="outlined" key={key}>
+            <Card
+              variant="outlined"
+              key={key}
+              data-testid="geolocation-results"
+            >
               {userRoles.includes(ROLES.EXTRA_FEATURE) &&
                 res.confidence &&
                 typeof res.confidence === "number" && (
@@ -74,6 +87,7 @@ const GeolocationResults = ({ result, urlImage }) => {
                       justifyContent: "center",
                       display: "flex",
                     }}
+                    data-testid="geolocation-results-image"
                   >
                     <img
                       src={urlImage}
@@ -110,34 +124,33 @@ const GeolocationResults = ({ result, urlImage }) => {
                         sx={{
                           width: "100%",
                         }}
+                        data-testid="geolocation-results-map"
                       >
-                        <MapContainer
-                          center={[res.latitude, res.longitude]}
-                          zoom={13}
-                          scrollWheelZoom={false}
-                          style={{
-                            width: "100%",
-                            height: "400px",
-                            borderRadius: 10,
-                          }}
+                        <ErrorBoundary
+                          FallbackComponent={ErrorBoundaryFallback}
                         >
-                          <TileLayer
-                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                          />
-                          <Marker
-                            position={[res.latitude, res.longitude]}
-                            icon={
-                              new Icon({
-                                iconUrl: "img/marker_location.svg",
-                                iconSize: [60, 60],
-                                iconAnchor: [30, 0],
-                              })
-                            }
+                          <MapContainer
+                            center={[res.latitude, res.longitude]}
+                            zoom={13}
+                            scrollWheelZoom={false}
+                            style={{
+                              width: "100%",
+                              height: "400px",
+                              borderRadius: 10,
+                            }}
                           >
-                            <Popup>{keyword("geo_prediction")}</Popup>
-                          </Marker>
-                        </MapContainer>
+                            <TileLayer
+                              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            />
+                            <Marker
+                              position={[res.latitude, res.longitude]}
+                              icon={resultIcon}
+                            >
+                              <Popup>{keyword("geo_prediction")}</Popup>
+                            </Marker>
+                          </MapContainer>
+                        </ErrorBoundary>
                       </Box>
                       <Box
                         sx={{
@@ -212,6 +225,7 @@ const GeolocationResults = ({ result, urlImage }) => {
                               "_blank ",
                             )
                           }
+                          data-testid="geolocation-results-button-to-gmaps"
                         >
                           {keyword("geo_maps")}
                         </Button>
@@ -226,4 +240,5 @@ const GeolocationResults = ({ result, urlImage }) => {
     </Box>
   );
 };
+
 export default GeolocationResults;

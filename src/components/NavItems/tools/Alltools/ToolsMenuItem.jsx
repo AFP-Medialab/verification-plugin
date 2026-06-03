@@ -1,3 +1,4 @@
+import ImprovedIcon from "../../../NavBar/images/SVG/Improved.svg?react";
 import React from "react";
 import { useSelector } from "react-redux";
 
@@ -13,7 +14,6 @@ import ScienceIcon from "@mui/icons-material/Science";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
-import ImprovedIcon from "../../../NavBar/images/SVG/Improved.svg";
 import AuthenticationIcon from "./AdvancedTools/AuthenticationIcon";
 
 /**

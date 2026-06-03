@@ -7,17 +7,21 @@ import {
   getHiyaDetectionChunks,
   uploadHiyaAudio,
 } from "@/components/NavItems/tools/Hiya/api";
+import useAuthenticatedRequest from "@/components/Shared/Authentication/useAuthenticatedRequest";
+import { setError } from "@/redux/reducers/errorReducer";
 import {
   resetHiyaAudio,
+  setHiyaError,
   setHiyaFile,
   setHiyaResult,
+  setHiyaResultWithWarning,
 } from "@/redux/reducers/tools/hiyaReducer";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { isValidUrl } from "@Shared/Utils/URLUtils";
 import { blobToBase64, preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import axios from "axios";
-import useAuthenticatedRequest from "components/Shared/Authentication/useAuthenticatedRequest";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { setError } from "redux/reducers/errorReducer";
+
+import { API_RESPONSE_LABELS } from "../constants/detectionConstants";
 
 /**
  * Custom hook for Hiya audio analysis functionality
@@ -126,6 +130,51 @@ export const useHiyaAudioAnalysis = () => {
   };
 
   /**
+   * Analyzes chunks for error labels and determines the appropriate response
+   * @param {Array} chunks - Array of chunk data from the API
+   * @returns {Object|null} Error information object or null if no errors
+   * @returns {string} errorType - 'none', 'partial', or 'all'
+   * @returns {Array} errorLabels - Array of unique error labels found
+   * @returns {string} errorMessage - Generalized error message
+   */
+  const checkForErrorLabel = (chunks) => {
+    if (!chunks || chunks.length === 0) {
+      return null;
+    }
+
+    const totalChunks = chunks.length;
+
+    // Find chunks with error labels
+    const errorChunks = chunks.filter(
+      (chunk) => chunk.label && chunk.label !== API_RESPONSE_LABELS.VALID_VOICE,
+    );
+
+    // Case 1: No errors - show results only
+    if (errorChunks.length === 0) {
+      return null;
+    }
+
+    // Get unique error labels
+    const uniqueErrorLabels = [
+      ...new Set(errorChunks.map((chunk) => chunk.label)),
+    ];
+
+    // Case 2: All chunks have errors - show warning only, no results
+    if (errorChunks.length === totalChunks) {
+      return {
+        errorType: "all",
+        errorLabels: uniqueErrorLabels,
+      };
+    }
+
+    // Case 3: Some chunks have errors - show results AND warnings
+    return {
+      errorType: "partial",
+      errorLabels: uniqueErrorLabels,
+    };
+  };
+
+  /**
    * Analyzes audio for voice cloning/synthetic audio detection
    * Handles the complete workflow: URL fetching, upload, detection, and chunk analysis
    *
@@ -186,10 +235,41 @@ export const useHiyaAudioAnalysis = () => {
         authenticatedRequest,
       );
 
-      const isAnalysisInconclusive = isResultInconclusive(chunks.data);
-
-      // For results, use the actual URL (blob or regular URL)
+      // Check for error labels in the chunks
+      const errorInfo = checkForErrorLabel(chunks.data);
       const resultUrl = audioFile ? URL.createObjectURL(audioFile) : actualUrl;
+
+      if (errorInfo) {
+        if (errorInfo.errorType === "all") {
+          // Case: All chunks have errors - show error only, no results
+          dispatchAction(
+            setHiyaError({
+              url: resultUrl,
+              errorType: errorInfo.errorType,
+              errorLabels: errorInfo.errorLabels,
+            }),
+          );
+          return; // Don't proceed with result processing
+        } else if (errorInfo.errorType === "partial") {
+          // Case: Some chunks have errors - show results WITH warnings
+          const isAnalysisInconclusive = isResultInconclusive(chunks.data);
+
+          dispatchAction(
+            setHiyaResultWithWarning({
+              url: resultUrl,
+              result: detectionResponse.data,
+              chunks: chunks.data,
+              isInconclusive: isAnalysisInconclusive,
+              errorType: errorInfo.errorType,
+              errorLabels: errorInfo.errorLabels,
+            }),
+          );
+          return;
+        }
+      }
+
+      // Case: No errors - show results only
+      const isAnalysisInconclusive = isResultInconclusive(chunks.data);
 
       dispatchAction(
         setHiyaResult({
@@ -229,13 +309,8 @@ export const useHiyaAudioAnalysis = () => {
       return new Error(keyword("error_invalid_media_file"));
     }
 
-    const isChromium = !!window.chrome;
-
     // TODO: Use ffmpeg to convert the m4a files if possible
-    if (
-      isChromium &&
-      (file.type.includes("basic") || file.type.includes("aiff"))
-    ) {
+    if (file.type.includes("basic") || file.type.includes("aiff")) {
       dispatch(setError(keyword("error_invalid_audio_file")));
       resetState();
       return Error(keyword("error_invalid_audio_file"));
@@ -326,7 +401,7 @@ export const useHiyaAudioAnalysis = () => {
    * Success callback for file preprocessing
    * Sets the validated audio file in state and Redux
    *
-   * @param {File} file - The successfully validated audio file
+   * @param {File} newFile - The successfully validated audio file
    */
   const preprocessSuccess = (newFile) => {
     setAudioFile(newFile);

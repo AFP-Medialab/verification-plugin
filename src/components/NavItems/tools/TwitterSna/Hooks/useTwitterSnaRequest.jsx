@@ -50,7 +50,7 @@ const useTwitterSnaRequest = (request) => {
       const userData = encodeURIComponent(JSON.stringify(userLogined));
       // userToken
       window.open(
-        process.env.REACT_APP_TSNA_SERVER +
+        import.meta.env.VITE_TSNA_SERVER +
           "pluginredirect?data=" +
           requestData +
           "&token=" +

@@ -18,8 +18,8 @@ import { hexToRgb } from "@mui/material/styles";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
+import { ThresholdSlider } from "@/components/NavItems/Assistant/components";
 import {
-  ThresholdSlider,
   createGaugeChart,
   getMgtColours,
   getSubjectivityColours,
@@ -27,7 +27,7 @@ import {
   rgbToString,
   treeMapToElements,
   wrapPlainTextSpan,
-} from "@/components/NavItems/Assistant/AssistantScrapeResults/assistantUtils";
+} from "@/components/NavItems/Assistant/utils";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { setImportantSentenceThreshold } from "@/redux/actions/tools/assistantActions";
@@ -35,11 +35,18 @@ import GaugeChartModalExplanation from "@Shared/GaugeChartResults/GaugeChartModa
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
+import {
+  CREDIBILITY_SIGNAL_TITLES,
+  DETECTION_EXPLANATION_KEYWORDS_MGT,
+  DETECTION_EXPLANATION_KEYWORDS_SUB,
+  MGT_ARC_LENGTHS,
+  MGT_ORDERED_CATEGORIES,
+  SUBJECTIVITY_ARC_LENGTHS,
+} from "../constants";
+
 export default function AssistantTextClassification({
   text,
   classification,
-  overallClassification,
-  titleText = "",
   categoriesTooltipContent = "",
   configs = {
     // machine generated text and subjectivity
@@ -52,12 +59,11 @@ export default function AssistantTextClassification({
     // machine generated text
     lightGreenRgb: [170, 255, 0],
     lightGreenRgbDark: [210, 255, 121],
-    orderedCategories: [
-      "highly_likely_human",
-      "likely_human",
-      "likely_machine",
-      "highly_likely_machine",
-    ],
+    orderedCategories: MGT_ORDERED_CATEGORIES,
+    // news framing
+    newsFramingConfidenceThreshold: 0.8,
+    // news genre
+    newsGenreConfidenceThreshold: 0.7,
   },
   textHtmlMap = null,
   credibilitySignal = "",
@@ -67,10 +73,11 @@ export default function AssistantTextClassification({
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   // titles
-  const newsFramingTitle = keyword("news_framing_title");
-  const newsGenreTitle = keyword("news_genre_title");
-  const subjectivityTitle = keyword("subjectivity_title");
-  const machineGeneratedTextTitle = keyword("machine_generated_text_title");
+  const newsFramingTitle = CREDIBILITY_SIGNAL_TITLES.NEWS_FRAMING;
+  const newsGenreTitle = CREDIBILITY_SIGNAL_TITLES.NEWS_GENRE;
+  const subjectivityTitle = CREDIBILITY_SIGNAL_TITLES.SUBJECTIVITY;
+  const machineGeneratedTextTitle =
+    CREDIBILITY_SIGNAL_TITLES.MACHINE_GENERATED_TEXT;
 
   // slider
   const importantSentenceThreshold = useSelector(
@@ -97,14 +104,13 @@ export default function AssistantTextClassification({
   const mgtOverallScoreLabel = "mgt_overall_score";
 
   // define colours
+  let newsFramingConfidenceThreshold, newsGenreConfidenceThreshold;
   let mgtColours, mgtColoursDark, orderedCategories;
   let subjectivityColours, subjectivityColoursDark;
-  let confidenceThresholdLow;
-  if (
-    credibilitySignal === newsFramingTitle ||
-    credibilitySignal === newsGenreTitle
-  ) {
-    confidenceThresholdLow = configs.confidenceThresholdLow;
+  if (credibilitySignal === newsFramingTitle) {
+    newsFramingConfidenceThreshold = configs.newsFramingConfidenceThreshold;
+  } else if (credibilitySignal === newsGenreTitle) {
+    newsGenreConfidenceThreshold = configs.newsGenreConfidenceThreshold;
   } else if (credibilitySignal === machineGeneratedTextTitle) {
     [mgtColours, mgtColoursDark] = getMgtColours(configs);
     orderedCategories = configs.orderedCategories;
@@ -120,6 +126,8 @@ export default function AssistantTextClassification({
   // filtering for all credibility signals
   let filteredSentences = [];
   let filteredCategories = {};
+
+  const REPORTING_LABEL = "Reporting";
 
   // Separate important sentences from categories, filter by threshold
   for (let label in classification) {
@@ -137,16 +145,24 @@ export default function AssistantTextClassification({
         }
       }
     } else {
-      // Filter categories above confidenceThreshold unless machine generated text or subjectivity
+      // machine generated text and subjectivity
       if (
         credibilitySignal === machineGeneratedTextTitle ||
         credibilitySignal === subjectivityTitle
       ) {
         filteredCategories[label] = classification[label];
+      } else if (credibilitySignal === newsGenreTitle) {
+        // set default news genre value if category below threshold
+        label === REPORTING_LABEL ||
+        classification[label][0].score >= newsGenreConfidenceThreshold
+          ? (filteredCategories[label] = classification[label])
+          : (filteredCategories[REPORTING_LABEL] = [
+              { indices: [0, -1], score: newsGenreConfidenceThreshold },
+            ]);
       } else if (
-        // news framing and news genre
-        classification[label][0].score >= confidenceThresholdLow
+        classification[label][0].score >= newsFramingConfidenceThreshold
       ) {
+        // filter news framing categories above threshold
         filteredCategories[label] = classification[label];
       }
     }
@@ -196,6 +212,7 @@ export default function AssistantTextClassification({
           credibilitySignal={credibilitySignal}
           keyword={keyword}
           resolvedMode={resolvedMode}
+          machineGeneratedTextTitle={machineGeneratedTextTitle}
         />
       </Grid>
 
@@ -204,7 +221,7 @@ export default function AssistantTextClassification({
         <Card>
           <CardHeader
             className={classes.assistantCardHeader}
-            title={titleText}
+            title={keyword(credibilitySignal)}
             action={
               <div style={{ display: "flex" }}>
                 <Tooltip
@@ -223,15 +240,15 @@ export default function AssistantTextClassification({
                 categories={sortedFilteredCategories}
                 keyword={keyword}
                 fullTextScoreLabel={fullTextScoreLabel}
-                overallScore={
-                  overallClassification[mgtOverallScoreLabel][0].score
-                }
+                overallScore={classification[mgtOverallScoreLabel][0].score}
                 resolvedMode={resolvedMode}
                 colours={resolvedMode === "dark" ? mgtColoursDark : mgtColours}
-                arcsLength={[0.05, 0.45, 0.45, 0.05]}
+                arcsLength={MGT_ARC_LENGTHS}
                 gaugeLabels={["gauge_no_detection", "gauge_detection"]}
                 orderedCategories={orderedCategories}
                 credibilitySignal={credibilitySignal}
+                machineGeneratedTextTitle={machineGeneratedTextTitle}
+                subjectivityTitle={subjectivityTitle}
               />
             ) : credibilitySignal === subjectivityTitle ? (
               <GaugeCategoriesList
@@ -245,11 +262,13 @@ export default function AssistantTextClassification({
                     ? subjectivityColoursDark
                     : subjectivityColours
                 }
-                arcsLength={[0.4, 0.25, 0.35]}
+                arcsLength={SUBJECTIVITY_ARC_LENGTHS}
                 gaugeLabels={["gauge_no_detection_sub", "gauge_detection_sub"]}
                 credibilitySignal={credibilitySignal}
                 importantSentenceThreshold={importantSentenceThreshold}
                 handleSliderChange={handleSliderChange}
+                machineGeneratedTextTitle={machineGeneratedTextTitle}
+                subjectivityTitle={subjectivityTitle}
               />
             ) : (
               <CategoriesList
@@ -259,6 +278,8 @@ export default function AssistantTextClassification({
                 credibilitySignal={credibilitySignal}
                 importantSentenceThreshold={importantSentenceThreshold}
                 handleSliderChange={handleSliderChange}
+                newsFramingTitle={newsFramingTitle}
+                newsGenreTitle={newsGenreTitle}
               />
             )}
           </CardContent>
@@ -282,6 +303,8 @@ export function GaugeCategoriesList({
   credibilitySignal,
   importantSentenceThreshold,
   handleSliderChange,
+  machineGeneratedTextTitle,
+  subjectivityTitle,
 }) {
   // gauge chart
   const gaugeChart = createGaugeChart(
@@ -296,7 +319,7 @@ export function GaugeCategoriesList({
 
   // categories list
   const output = [];
-  if (credibilitySignal === keyword("machine_generated_text_title")) {
+  if (credibilitySignal === machineGeneratedTextTitle) {
     for (const category of orderedCategories) {
       if (category != fullTextScoreLabel && category in categories) {
         output.push(
@@ -319,21 +342,9 @@ export function GaugeCategoriesList({
     }
   }
 
-  const DETECTION_EXPLANATION_KEYWORDS_SUB = [
-    "gauge_scale_modal_explanation_rating_1_sub",
-    "gauge_scale_modal_explanation_rating_2_sub",
-    "gauge_scale_modal_explanation_rating_3_sub",
-  ];
-  const DETECTION_EXPLANATION_KEYWORDS_MGT = [
-    "gauge_scale_modal_explanation_rating_1_mgt",
-    "gauge_scale_modal_explanation_rating_2_mgt",
-    "gauge_scale_modal_explanation_rating_3_mgt",
-    "gauge_scale_modal_explanation_rating_4_mgt",
-  ];
-
   return (
     <>
-      {credibilitySignal === keyword("subjectivity_title") ? (
+      {credibilitySignal === subjectivityTitle ? (
         <>
           {_.isEmpty(categories) && overallScore === 0 ? (
             <>
@@ -347,7 +358,6 @@ export function GaugeCategoriesList({
                 {keyword("threshold_slider_confidence")}
               </Typography>
               <ThresholdSlider
-                credibilitySignal={credibilitySignal}
                 importantSentenceThreshold={importantSentenceThreshold}
                 handleSliderChange={handleSliderChange}
                 keyword={keyword}
@@ -362,7 +372,7 @@ export function GaugeCategoriesList({
         <GaugeChartModalExplanation
           keyword={keyword}
           keywordsArr={
-            credibilitySignal === keyword("machine_generated_text_title")
+            credibilitySignal === machineGeneratedTextTitle
               ? DETECTION_EXPLANATION_KEYWORDS_MGT
               : DETECTION_EXPLANATION_KEYWORDS_SUB
           }
@@ -371,7 +381,7 @@ export function GaugeCategoriesList({
           colors={colours}
         />
       </Box>
-      {credibilitySignal === keyword("machine_generated_text_title") && (
+      {credibilitySignal === machineGeneratedTextTitle && (
         <>
           <Divider key={`divider_${fullTextScoreLabel}`} sx={{ my: 2 }} />
           <Typography fontSize="small" sx={{ textAlign: "start" }}>
@@ -392,16 +402,18 @@ export function CategoriesList({
   credibilitySignal,
   importantSentenceThreshold,
   handleSliderChange,
+  newsFramingTitle,
+  newsGenreTitle,
 }) {
   if (_.isEmpty(categories)) {
     return (
       <>
-        {credibilitySignal === keyword("news_framing_title") && (
+        {credibilitySignal === newsFramingTitle && (
           <Typography fontSize="small" sx={{ textAlign: "center" }}>
             {keyword("no_detected_topics")}
           </Typography>
         )}
-        {credibilitySignal === keyword("news_genre_title") && (
+        {credibilitySignal === newsGenreTitle && (
           <Typography fontSize="small" sx={{ textAlign: "center" }}>
             {keyword("no_detected_genre")}
           </Typography>
@@ -436,7 +448,6 @@ export function CategoriesList({
         {keyword("threshold_slider_relevance")}
       </Typography>
       <ThresholdSlider
-        credibilitySignal={credibilitySignal}
         importantSentenceThreshold={importantSentenceThreshold}
         handleSliderChange={handleSliderChange}
         keyword={keyword}
@@ -456,15 +467,15 @@ export function ClassifiedText({
   primaryRgb,
   textHtmlMap = null,
   credibilitySignal,
-  keyword,
   resolvedMode,
+  machineGeneratedTextTitle,
 }) {
   let output = text; // Defaults to text output
 
   function wrapHighlightedText(spanText, spanInfo) {
     let bgLuminance;
     let textColour = "black";
-    if (credibilitySignal === keyword("machine_generated_text_title")) {
+    if (credibilitySignal === machineGeneratedTextTitle) {
       backgroundRgb = resolvedMode === "dark" ? spanInfo.rgbDark : spanInfo.rgb;
       bgLuminance = rgbToLuminance(backgroundRgb);
       if (spanInfo.pred == "highly_likely_machine") textColour = "white";
@@ -508,7 +519,15 @@ export function ClassifiedText({
   }
 
   return (
-    <Typography component={"div"} sx={{ textAlign: "start" }}>
+    <Typography
+      component={"div"}
+      sx={{
+        textAlign: "start",
+        "& p": {
+          margin: "8px 0",
+        },
+      }}
+    >
       {output}
     </Typography>
   );

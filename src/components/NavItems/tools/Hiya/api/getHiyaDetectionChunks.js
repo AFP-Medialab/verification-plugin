@@ -41,7 +41,7 @@ export const getHiyaDetectionChunks = async (
     method: "get",
     maxBodyLength: Infinity,
     url:
-      process.env.REACT_APP_LOCCUS_URL +
+      import.meta.env.VITE_LOCCUS_URL +
       `/detection/${detectionHandle}/chunks?page-size=${pageSize}`,
     headers: {
       "Content-Type": "application/json",

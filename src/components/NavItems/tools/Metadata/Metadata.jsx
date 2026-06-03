@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
@@ -10,8 +10,10 @@ import Fade from "@mui/material/Fade";
 import Stack from "@mui/material/Stack";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import C2paResults from "@/components/NavItems/tools/C2pa/Results/C2paResults";
 import { useC2paMetadataMutation } from "@/components/NavItems/tools/Metadata/hooks/useC2paMetadataMutation";
+import StringFileUploadField from "@/components/Shared/StringFileUploadField";
 import { KNOWN_LINKS } from "@/constants/tools";
 import {
   cleanMetadataState,
@@ -22,25 +24,25 @@ import {
 } from "@/redux/reducers/tools/metadataReducer";
 import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequest";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import {
   getFileTypeFromFileObject,
   getFileTypeFromUrl,
 } from "@Shared/Utils/fileUtils";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import StringFileUploadField from "components/Shared/StringFileUploadField";
 
 import { imageMetadata as imageMetadataTool } from "../../../../constants/tools";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import MetadataImageResult from "./Results/MetadataImageResult";
 import MetadataVideoResult from "./Results/MetadataVideoResult";
 import {
-  getImageMetadataFromFile,
-  getImageMetadataFromUrl,
+  extractMetadataFromFile,
+  extractMetadataFromUrl,
 } from "./api/imageMetadataApi";
 import { useVideoMetadataMutation } from "./hooks/useVideoMetadataMutation";
 
 const Metadata = () => {
   const { url, type } = useParams();
+  const [searchParams] = useSearchParams();
 
   const keyword = i18nLoadNamespace("components/NavItems/tools/Metadata");
 
@@ -61,8 +63,8 @@ const Metadata = () => {
   const session = useSelector((state) => state.userSession);
   const uid = session && session.user ? session.user.id : null;
 
-  const [input, setInput] = useState(resultUrl ? resultUrl : "");
-  const [fileInput, setFileInput] = useState(null);
+  const [input = resultUrl || "", setInput, fileInput, setFileInput] =
+    useUrlOrFile();
   const [imageUrl, setImageUrl] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
   const [urlDetected, setUrlDetected] = useState(false);
@@ -160,8 +162,8 @@ const Metadata = () => {
 
         // Extract metadata
         const metadata = input
-          ? await getImageMetadataFromUrl(input)
-          : await getImageMetadataFromFile(fileInput);
+          ? await extractMetadataFromUrl(input)
+          : await extractMetadataFromFile(fileInput);
 
         setImageMetadata(metadata instanceof Error ? null : metadata);
 
@@ -217,15 +219,15 @@ const Metadata = () => {
     }
   }, [url, type]);
 
-  const processUrl = useSelector((state) => state.assistant.processUrl);
-  const processUrlType = useSelector((state) => state.assistant.processUrlType);
   useEffect(() => {
-    if (processUrl) {
-      setInput(processUrl);
-      dispatch(setMetadataMediaType(processUrlType));
-      setUrlDetected(true);
+    const fromAssistant = searchParams.has("fromAssistant");
+    if (fromAssistant && (input || fileInput)) {
+      if (fileInput) {
+        setInput("");
+      }
+      submitUrl();
     }
-  }, [processUrl]);
+  }, [searchParams]);
 
   const handleCloseResult = () => {
     setInput("");
@@ -276,6 +278,7 @@ const Metadata = () => {
               fileInputTypesAccepted={"image/*, video/*"}
               handleCloseSelectedFile={resetState}
               handleClearUrl={resetState}
+              submitButtonTestId="metadata-submit"
             />
           </Box>
         </form>
@@ -303,7 +306,7 @@ const Metadata = () => {
         />
       )}
       {c2paResults && c2paResults.result && (
-        <Card variant="outlined">
+        <Card variant="outlined" data-testid="c2pa-result">
           <C2paResults
             result={c2paResults.result}
             hasSimilarAfpResult={false}

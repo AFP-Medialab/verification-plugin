@@ -13,19 +13,17 @@ import Typography from "@mui/material/Typography";
 import { ArrowBack } from "@mui/icons-material";
 
 import { archiving } from "@/constants/tools";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { KNOWN_LINKS } from "@/constants/tools";
 import {
   archiveStateCleaned,
   setArchiveUrl,
-} from "redux/reducers/tools/archiveReducer";
+} from "@/redux/reducers/tools/archiveReducer";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
 import assistantApiCalls from "../../Assistant/AssistantApiHandlers/useAssistantApi";
-import {
-  KNOWN_LINKS,
-  KNOWN_LINK_PATTERNS,
-  matchPattern,
-} from "../../Assistant/AssistantRuleBook";
+import { matchPattern } from "../../Assistant/AssistantRuleBook";
+import { KNOWN_LINK_PATTERNS } from "../../Assistant/constants";
 import FifthStep from "./components/FifthStep";
 import FirstStep from "./components/FirstStep";
 import FourthStep from "./components/FourthStep";
@@ -90,7 +88,7 @@ const Archive = () => {
   };
 
   const fetchArchivedUrls = async (waczFileUrl) => {
-    const fetchUrl = process.env.REACT_APP_ARCHIVE_BACKEND;
+    const fetchUrl = import.meta.env.VITE_ARCHIVE_BACKEND;
 
     if (!waczFileUrl) {
       throw new Error("upload_error");
@@ -112,6 +110,22 @@ const Archive = () => {
       return await authenticatedRequest(axiosConfig);
     } catch (error) {
       console.error(error);
+
+      // Check for specific error patterns and throw user-friendly errors
+      const errorMessage =
+        error?.response?.data?.message || error?.message || "";
+
+      // Check for extraction error (no captures could be extracted)
+      if (errorMessage.toLowerCase().includes("extracted")) {
+        throw new Error("upload_extract_error");
+      }
+
+      // Check for LiveCDX playback error
+      if (errorMessage.includes("LiveCDX")) {
+        throw new Error("upload_playback_error");
+      }
+
+      // Fallback to generic error
       throw new Error("upload_error");
     }
   };
@@ -173,8 +187,7 @@ const Archive = () => {
       result = await fetchArchivedUrls(fileToUpload);
     } catch (error) {
       console.error(error);
-      // User friendly Errors
-      throw new Error("upload_error");
+      throw error;
     }
 
     if (!result) throw new Error("upload_error");

@@ -78,31 +78,31 @@ export const setScrapedData = (
   };
 };
 
-export const setInputSourceCredDetails = (
-  positiveSC,
-  cautionSC,
-  mixedSC,
-  extractedSC,
+export const setInputUrlDomainAnalysisDetails = (
+  positiveUDA,
+  cautionUDA,
+  mixedUDA,
+  extractedUDA,
   trafficLights,
   sourceTypes,
   extractedLks,
-  inputSCLoading,
-  inputSCDone,
-  inputSCFail,
+  inputUDALoading,
+  inputUDADone,
+  inputUDAFail,
 ) => {
   return {
-    type: "SET_INPUT_SC_DETAILS",
+    type: "SET_INPUT_URL_DOMAIN_ANALYSIS_DETAILS",
     payload: {
-      positiveSourceCred: positiveSC,
-      cautionSourceCred: cautionSC,
-      mixedSourceCred: mixedSC,
-      extractedSourceCred: extractedSC,
+      positiveUrlDomainAnalysis: positiveUDA,
+      cautionUrlDomainAnalysis: cautionUDA,
+      mixedUrlDomainAnalysis: mixedUDA,
+      extractedUrlDomainAnalysis: extractedUDA,
       trafficLightColors: trafficLights,
       sourceTypes: sourceTypes,
       extractedLinks: extractedLks,
-      inputSCLoading: inputSCLoading,
-      inputSCDone: inputSCDone,
-      inputSCFail: inputSCFail,
+      inputUrlDomainAnalysisLoading: inputUDALoading,
+      inputUrlDomainAnalysisDone: inputUDADone,
+      inputUrlDomainAnalysisFail: inputUDAFail,
     },
   };
 };
@@ -138,40 +138,6 @@ export const setDbkfTextMatchDetails = (
       dbkfTextMatchLoading: textMatchLoading,
       dbkfTextMatchDone: textMatchDone,
       dbkfTextMatchFail: textMatchFail,
-    },
-  };
-};
-
-export const setDbkfImageMatchDetails = (
-  imageMatch,
-  dbkfMediaMatchLoading,
-  dbkfMediaMatchDone,
-  dbkfMediaMatchFail,
-) => {
-  return {
-    type: "SET_DBKF_IMAGE_MATCH_DETAILS",
-    payload: {
-      dbkfImageMatch: imageMatch,
-      dbkfMediaMatchLoading: dbkfMediaMatchLoading,
-      dbkfMediaMatchDone: dbkfMediaMatchDone,
-      dbkfMediaMatchFail: dbkfMediaMatchFail,
-    },
-  };
-};
-
-export const setDbkfVideoMatchDetails = (
-  videoMatch,
-  dbkfMediaMatchLoading,
-  dbkfMediaMatchDone,
-  dbkfMediaMatchFail,
-) => {
-  return {
-    type: "SET_DBKF_VIDEO_MATCH_DETAILS",
-    payload: {
-      dbkfVideoMatch: videoMatch,
-      dbkfMediaMatchLoading: dbkfMediaMatchLoading,
-      dbkfMediaMatchDone: dbkfMediaMatchDone,
-      dbkfMediaMatchFail: dbkfMediaMatchFail,
     },
   };
 };
@@ -268,23 +234,6 @@ export const setMachineGeneratedTextChunksDetails = (
   };
 };
 
-export const setMachineGeneratedTextSentencesDetails = (
-  mgtsResult,
-  mgtsLoading,
-  mgtsDone,
-  mgtsFail,
-) => {
-  return {
-    type: "SET_MACHINE_GENERATED_TEXT_SENTENCES_DETAILS",
-    payload: {
-      machineGeneratedTextSentencesResult: mgtsResult,
-      machineGeneratedTextSentencesLoading: mgtsLoading,
-      machineGeneratedTextSentencesDone: mgtsDone,
-      machineGeneratedTextSentencesFail: mgtsFail,
-    },
-  };
-};
-
 export const setMultilingualStanceDetails = (
   msResult,
   msLoading,
@@ -330,20 +279,20 @@ export const setSingleMediaPresent = (singleMediaPresent) => {
   };
 };
 
-export const setWarningExpanded = (warningExpanded) => {
+export const setFactChecksExpanded = (factChecksExpanded) => {
   return {
-    type: "SET_WARNING_EXPANDED",
+    type: "SET_FACT_CHECKS_EXPANDED",
     payload: {
-      warningExpanded: warningExpanded,
+      factChecksExpanded: factChecksExpanded,
     },
   };
 };
 
-export const setAssuranceExpanded = (assuranceExpanded) => {
+export const setDomainAnalysisExpanded = (domainAnalysisExpanded) => {
   return {
-    type: "SET_ASSURANCE_EXPANDED",
+    type: "SET_DOMAIN_ANALYSIS_EXPANDED",
     payload: {
-      assuranceExpanded: assuranceExpanded,
+      domainAnalysisExpanded: domainAnalysisExpanded,
     },
   };
 };
@@ -366,10 +315,11 @@ export const submitInputUrl = (inputUrl) => {
   };
 };
 
-export const submitUpload = (contentType) => {
+export const submitUpload = (uploadFileUrl, contentType) => {
   return {
     type: "SUBMIT_UPLOAD",
     payload: {
+      uploadFileUrl: uploadFileUrl,
       contentType: contentType,
     },
   };

@@ -22,9 +22,9 @@ import {
   setAnalysisLinkComments,
   setAnalysisVerifiedComments,
 } from "@/redux/actions/tools/analysisActions";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { ReverseSearchButtons } from "@Shared/ReverseSearch/ReverseSearchButtons";
 import { reverseImageSearch } from "@Shared/ReverseSearch/reverseSearchUtils";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
@@ -115,6 +115,7 @@ const YoutubeResults = (props) => {
                   onClick={() => {
                     dispatch(cleanAnalysisState());
                   }}
+                  data-testid="close-result-yt-btn"
                 >
                   <CloseIcon />
                 </IconButton>

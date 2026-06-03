@@ -12,7 +12,7 @@ const DataUpload = ({
   setUploadedData,
   setShowUploadModal,
   setUploadedFileName,
-  setShowZeeschuimerUploadModal,
+  setUploadType,
 }) => {
   const openUploadPrompt = () => dataUploadInputRef.current?.click();
 
@@ -20,9 +20,11 @@ const DataUpload = ({
     const file = event.target.files[0];
     Papa.parse(file, {
       header: true,
+      dynamicTyping: true,
       complete: (res) => {
         setUploadedFileName(file.name);
         setUploadedData(res.data);
+        setUploadType("csv");
         setShowUploadModal(true);
       },
     });
@@ -46,7 +48,8 @@ const DataUpload = ({
           });
         setUploadedFileName(file.name);
         setUploadedData(result);
-        setShowZeeschuimerUploadModal(true);
+        setUploadType("ndjson");
+        setShowUploadModal(true);
       },
       false,
     );
@@ -61,6 +64,7 @@ const DataUpload = ({
           hidden
           accept=".csv,.ndjson"
           ref={dataUploadInputRef}
+          data-testid="sna-file-upload-input"
           onChange={(event) => {
             let filename = event.target.files[0].name;
             let extension = filename.split(".").pop();
@@ -72,7 +76,11 @@ const DataUpload = ({
         <Typography variant="h6" align="left">
           {keyword("dataupload_title")}
         </Typography>
-        <Button variant="outlined" onClick={openUploadPrompt}>
+        <Button
+          variant="outlined"
+          onClick={openUploadPrompt}
+          data-testid="sna-upload-button"
+        >
           {keyword("uploadButton_text")}
         </Button>
       </Stack>

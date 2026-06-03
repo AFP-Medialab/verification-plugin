@@ -123,7 +123,7 @@ export function useMachineGeneratedText() {
     const config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: process.env.REACT_APP_MGT_URL,
+      url: import.meta.env.VITE_MGT_URL,
       headers: {
         "Content-Type": "application/json",
       },
@@ -143,7 +143,7 @@ export function useMachineGeneratedText() {
     const config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: process.env.REACT_APP_MGT_URL,
+      url: import.meta.env.VITE_MGT_URL,
       headers: {
         "Content-Type": "application/json",
       },

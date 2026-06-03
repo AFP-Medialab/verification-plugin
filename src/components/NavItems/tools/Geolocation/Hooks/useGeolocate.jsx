@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
+import { setError } from "@/redux/reducers/errorReducer";
 import {
   setGeolocationLoading,
   setGeolocationResult,
 } from "@/redux/reducers/tools/geolocationReducer";
 import axios from "axios";
-import { setError } from "redux/reducers/errorReducer";
 
-const caa_localtion_base_url = process.env.REACT_APP_CAA_LOCATION_URL;
+const caa_localtion_base_url = import.meta.env.VITE_CAA_LOCATION_URL;
 
 export const handleError = (e, keyword, dispatch) => {
   if (keyword(e) !== "") dispatch(setError(keyword(e)));
@@ -22,7 +22,6 @@ export const useGeolocate = (url, processURL, keyword) => {
   useEffect(() => {
     if (processURL && url !== "") {
       dispatch(setGeolocationLoading(true));
-
       axios
         .get(caa_localtion_base_url + "?image_url=" + url + "&use_gradcam=0")
         .then((response) => {

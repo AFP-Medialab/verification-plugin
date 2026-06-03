@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -10,6 +11,7 @@ import Popover from "@mui/material/Popover";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
+import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import CloseIcon from "@mui/icons-material/Close";
 import DownloadIcon from "@mui/icons-material/Download";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
@@ -19,11 +21,13 @@ import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import { KeyframeInputType as TAB_VALUES } from "@/components/NavItems/tools/Keyframes/api/createKeyframeJob";
 import ImageGrid from "@/components/NavItems/tools/Keyframes/components/ImageGrid";
 import KeyframesLoadingState from "@/components/NavItems/tools/Keyframes/components/KeyframesLoadingState";
+import { audioHiya, canUserSeeTool } from "@/constants/tools";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import {
   SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
 } from "@Shared/ReverseSearch/reverseSearchUtils";
+import { openNewTabWithUrl } from "@Shared/ReverseSearch/utils/openTabUtils";
 import { downloadFile } from "@Shared/Utils/fileUtils";
 
 const KeyframesResults = ({
@@ -36,25 +40,32 @@ const KeyframesResults = ({
 }) => {
   if (tabSelected !== TAB_VALUES.URL) return null;
 
+  const role = useSelector((state) => state.userSession.user.roles);
+  const userAuthenticated = useSelector(
+    (state) => state.userSession && state.userSession.userAuthenticated,
+  );
+
   const keyword = i18nLoadNamespace("components/NavItems/tools/Keyframes");
   const keywordHelp = i18nLoadNamespace("components/Shared/OnClickInfo");
 
   const [isZipDownloading, setIsZipDownloading] = useState(false);
+
+  const [isAudioDownloading, setIsAudioDownloading] = useState(false);
 
   const [detailed, setDetailed] = useState(false);
 
   const ALLOWED_COLS = [1, 2, 3, 4, 6, 12];
   const [cols, setCols] = useState(2);
 
-  const handleDownload = async () => {
-    setIsZipDownloading(true);
+  const handleDownload = async (fileUrl, fileName, setIsDownloading) => {
+    setIsDownloading(true);
 
     try {
-      await downloadFile(data.zipFileUrl, "keyframes.zip");
+      await downloadFile(fileUrl, fileName);
     } catch (e) {
       console.error("Download failed:", e);
     } finally {
-      setIsZipDownloading(false);
+      setIsDownloading(false);
     }
   };
 
@@ -99,8 +110,9 @@ const KeyframesResults = ({
     setAnchorHelp(event.currentTarget);
   }
 
-  const ResultsCard = ({ children, p = 4 }) => (
-    <Card variant="outlined">
+  // We use the spread operator to retrieve the “other” properties, including the `data-testid` used in Playwright
+  const ResultsCard = ({ children, p = 4, ...props }) => (
+    <Card variant="outlined" {...props}>
       <Box sx={{ p }}>
         <Stack direction="column" spacing={2}>
           {children}
@@ -145,6 +157,16 @@ const KeyframesResults = ({
     );
   };
 
+  const openAudioAnalysisInHiya = async (jobId) => {
+    const hiyaUrl = `${import.meta.env.VITE_KEYFRAME_API}/audio/${jobId}`;
+    const encodedUrl = encodeURIComponent(hiyaUrl);
+
+    await openNewTabWithUrl(
+      { url: `/popup.html#/app/tools/hiya/${encodedUrl}` },
+      false,
+    );
+  };
+
   return (
     <>
       {!data && (isPending || isFeatureDataPending) ? (
@@ -156,7 +178,7 @@ const KeyframesResults = ({
         <>
           {data && (
             <Stack direction="column" spacing={4}>
-              <Card variant="outlined">
+              <Card variant="outlined" data-testid="keyframes-results-general">
                 <Box sx={{ pb: 4, pt: 2, px: 4 }}>
                   <Stack direction="column" spacing={2}>
                     <Stack
@@ -173,6 +195,7 @@ const KeyframesResults = ({
                           <HelpOutlineIcon />
                         </IconButton>
                         <IconButton
+                          data-testid="keyframes-close"
                           aria-label="close"
                           onClick={handleClose}
                           sx={{ p: 1 }}
@@ -196,7 +219,10 @@ const KeyframesResults = ({
                         }}
                       >
                         <Grid>
-                          <Button onClick={toggleDetail}>
+                          <Button
+                            onClick={toggleDetail}
+                            data-testid="keyframes-toggle-detailed"
+                          >
                             {!detailed
                               ? keyword("keyframe_title_get_detail")
                               : keyword("keyframe_title_get_simple")}
@@ -205,10 +231,17 @@ const KeyframesResults = ({
 
                         <Grid>
                           <Button
+                            data-testid="keyframes-download"
                             color="primary"
                             loading={isZipDownloading}
                             loadingPosition="start"
-                            onClick={handleDownload}
+                            onClick={() =>
+                              handleDownload(
+                                data.zipFileUrl,
+                                "keyframes.zip",
+                                setIsZipDownloading,
+                              )
+                            }
                             startIcon={<DownloadIcon />}
                           >
                             {keyword("keyframes_download_subshots")}
@@ -217,6 +250,7 @@ const KeyframesResults = ({
 
                         <Grid sx={{ flexGrow: 1, textAlign: "end" }}>
                           <Button
+                            data-testid="keyframes-zoomout"
                             onClick={zoomOut}
                             startIcon={<ZoomOutIcon />}
                             disabled={cols === ALLOWED_COLS[0]}
@@ -226,6 +260,7 @@ const KeyframesResults = ({
                         </Grid>
                         <Grid>
                           <Button
+                            data-testid="keyframes-zoomin"
                             onClick={zoomIn}
                             startIcon={<ZoomInIcon />}
                             disabled={
@@ -245,29 +280,95 @@ const KeyframesResults = ({
                           : data.keyframes
                       }
                       alt="extracted img with text"
-                      getImageUrl={(img) => img.keyframeUrl}
+                      getImageUrl={(img) => {
+                        return img.keyframeUrl;
+                      }}
                       nbOfCols={cols}
                       onClick={(imgUrl) => imageClickReverseSearch(imgUrl)}
                     />
                   </Stack>
                 </Box>
               </Card>
+
+              <Card variant="outlined" data-testid="keyframes-results-audio">
+                <Box sx={{ pb: 4, pt: 2, px: 4 }}>
+                  <Stack direction="column" spacing={2}>
+                    <Stack
+                      direction="row"
+                      sx={{
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography variant="h6">{"Audio"}</Typography>
+                    </Stack>
+
+                    {data.session && (
+                      <Stack direction="column" spacing={2}>
+                        <Box>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            loading={isAudioDownloading}
+                            loadingPosition="start"
+                            startIcon={<DownloadIcon />}
+                            onClick={() =>
+                              handleDownload(
+                                `${import.meta.env.VITE_KEYFRAME_API}/audio/${data.session}`,
+                                "extracted_audio",
+                                setIsAudioDownloading,
+                              )
+                            }
+                          >
+                            {"Download extracted audio file"}
+                          </Button>
+                        </Box>
+                        {canUserSeeTool(audioHiya, role, userAuthenticated) && (
+                          <Box>
+                            <Button
+                              variant="outlined"
+                              startIcon={<ArrowOutwardIcon />}
+                              onClick={() =>
+                                openAudioAnalysisInHiya(data.session)
+                              }
+                            >
+                              {"Open Voice Cloning analysis in Hiya"}
+                            </Button>
+                          </Box>
+                        )}
+                      </Stack>
+                    )}
+                  </Stack>
+                </Box>
+              </Card>
+
               {features && (
                 <>
-                  <ResultsCard>
+                  <ResultsCard data-testid="keyframes-results-face">
                     <Typography variant="h6">Text Detected</Typography>
                     <ImageGrid
                       images={features.texts}
                       alt="extracted img with text"
-                      getImageUrl={(img) => img.representative.imageUrl}
+                      getImageUrl={(img) => {
+                        // Fallback to first item if representative image is missing
+                        return (
+                          img.representative?.imageUrl ||
+                          (img.items && img.items[0]?.imageUrl)
+                        );
+                      }}
                     />
                   </ResultsCard>
-                  <ResultsCard>
+                  <ResultsCard data-testid="keyframes-results-text">
                     <Typography variant="h6">Faces Detected</Typography>
                     <ImageGrid
                       images={features.faces}
                       alt="extracted img with face"
-                      getImageUrl={(img) => img.representative.imageUrl}
+                      getImageUrl={(img) => {
+                        // Fallback to first item if representative image is missing
+                        return (
+                          img.representative?.imageUrl ||
+                          (img.items && img.items[0]?.imageUrl)
+                        );
+                      }}
                     />
                   </ResultsCard>
                 </>

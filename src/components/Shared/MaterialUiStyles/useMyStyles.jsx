@@ -320,6 +320,9 @@ const styles = (theme) => ({
   assistantCardHeader: {
     fontSize: theme.typography.h6.fontSize,
     textAlign: "start",
+    "& .MuiCardHeader-subheader": {
+      color: "var(--mui-palette-text-primary)",
+    },
   },
   assistantHover: {
     borderWidth: 3,
@@ -327,16 +330,9 @@ const styles = (theme) => ({
       borderColor: theme.palette.primary.main,
     },
   },
-  sourceCredibilityBorder: {
+  urlDomainAnalysisBorder: {
     border: "2px solid",
     borderColor: theme.palette.primary.main,
-    borderRadius: "15px",
-    display: "flex",
-    padding: "12px",
-  },
-  assistantWarningBorder: {
-    border: "2px solid",
-    borderColor: "red",
     borderRadius: "15px",
     display: "flex",
     padding: "12px",
@@ -349,6 +345,19 @@ const styles = (theme) => ({
   },
   assistantIconLeft: {
     marginRight: "-15px",
+  },
+  assistantTooltip: {
+    "&&": {
+      textAlign: "left",
+      backgroundColor: "#424242",
+    },
+  },
+  /* for URL Domain Analysis and Fact Check results */
+  assistantTooltipCollapsibleCard: {
+    display: "flex",
+    ml: "auto",
+    textAlign: "right",
+    mt: 1,
   },
 
   /* OCR classes */

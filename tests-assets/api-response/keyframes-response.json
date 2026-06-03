@@ -1,0 +1,46 @@
+{
+    "session": "2f3d48ca01a4da56e416e19c2",
+    "generated_at": "2026-05-04 14:07:57.139157",
+    "expires_at": "2026-05-05 14:07:57.139161",
+    "backend_version": "2.3.0",
+    "filename": "2f3d48ca01a4da56e416e19c2.mp4",
+    "url": "https://www.youtube.com/watch?v=S1MBVXkQbWU",
+    "framerate": 23.976,
+    "duration": "0:01:39.140000",
+    "keyframes_zip": "https://kse.idt.iti.gr/kse/keyframes_zip/2f3d48ca01a4da56e416e19c2",
+    "shots": [
+        {
+            "begintime": 0.0,
+            "endtime": 1.835,
+            "beginframe": 0,
+            "endframe": 44
+        }
+    ],
+    "subshots": [
+        {
+            "begintime": 0.0,
+            "endtime": 1.334,
+            "beginframe": 0,
+            "endframe": 32,
+            "shot": 1
+        }
+    ],
+    "keyframes": [
+        {
+            "shot": 1,
+            "subshot": 1,
+            "frame": 32,
+            "keyframe_time": 1.334,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/2f3d48ca01a4da56e416e19c2/32.jpg"
+        }
+    ],
+    "keyframes_xtra": [
+        {
+            "shot": 1,
+            "subshot": 1,
+            "frame": 64,
+            "keyframe_time": 2.669,
+            "keyframe_url": "https://kse.idt.iti.gr/kse/keyframe/2f3d48ca01a4da56e416e19c2/64.jpg"
+        }
+    ]
+}

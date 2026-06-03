@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -10,12 +10,15 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Select from "@mui/material/Select";
-import TextField from "@mui/material/TextField";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowRight";
 
-import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import { handleAddCollection } from "../utils/snaUtils";
+import { CollectionSelect } from "./CollectionSelect";
+
+// Re-export for backward compatibility with other components
+export { getRecordingInfo } from "../utils/snaUtils";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -28,13 +31,21 @@ const SocialMediaSelectMenuProps = {
   },
 };
 
-const socialMediaPlatforms = ["Twitter", "Tiktok"];
+const socialMediaPlatforms = ["X", "Tiktok"];
 
-function MultipleSelectChip(
+const renderSelectedValue = (selected) => (
+  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+    {selected.map((value) => (
+      <Chip key={value} label={value} />
+    ))}
+  </Box>
+);
+
+const MultipleSelectChip = ({
   selectedSocialMedia,
   setSelectedSocialMedia,
   keyword,
-) {
+}) => {
   const handleChange = (event) => {
     const {
       target: { value },
@@ -63,13 +74,7 @@ function MultipleSelectChip(
               label={keyword("snaRecord_socialMediaSelectlabel")}
             />
           }
-          renderValue={(selected) => (
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-              {selected.map((value) => (
-                <Chip key={value} label={value} />
-              ))}
-            </Box>
-          )}
+          renderValue={renderSelectedValue}
           MenuProps={SocialMediaSelectMenuProps}
         >
           {socialMediaPlatforms.map((name) => (
@@ -81,46 +86,13 @@ function MultipleSelectChip(
       </FormControl>
     </div>
   );
-}
-
-export const getRecordingInfo = async (
-  setCollections,
-  setRecording,
-  setSelectedCollection,
-) => {
-  let recInfo = await chrome.runtime.sendMessage({
-    prompt: "getRecordingInfo",
-  });
-  setCollections(recInfo.collections.map((x) => x.id).flat());
-  setRecording(recInfo.recording[0].state !== false);
-  recInfo.recording[0].state !== false
-    ? setSelectedCollection(recInfo.recording[0].state)
-    : {};
-};
-
-const handleAddCollection = (
-  newCollectionName,
-  collections,
-  setCollections,
-  setSelectedCollection,
-  setNewCollectionName,
-) => {
-  if (newCollectionName.trim() && !collections.includes(newCollectionName)) {
-    chrome.runtime.sendMessage({
-      prompt: "addCollection",
-      newCollectionName: newCollectionName,
-    });
-    setCollections([...collections, newCollectionName]);
-    setSelectedCollection(newCollectionName);
-    setNewCollectionName("");
-  }
 };
 
 const handleMainButtonClick = (recording, setRecording, setExpanded) => {
   if (recording) {
     setRecording(false);
     setExpanded(false);
-    chrome.runtime.sendMessage({ prompt: "stopRecording" });
+    browser.runtime.sendMessage({ prompt: "stopRecording" });
   } else {
     setExpanded((prev) => !prev);
   }
@@ -132,7 +104,7 @@ const handleStartRecording = (
   setExpanded,
   selectedSocialMedia,
 ) => {
-  chrome.runtime.sendMessage({
+  browser.runtime.sendMessage({
     prompt: "startRecording",
     currentCollectionName: selectedCollection,
     platforms: selectedSocialMedia,
@@ -146,79 +118,35 @@ const CollectionSelector = ({
   selectedCollection,
   setSelectedCollection,
   collections,
-  setCollections,
   newCollectionName,
   setNewCollectionName,
-  setRecording,
-  setExpanded,
   selectedSocialMedia,
   setSelectedSocialMedia,
+  onAddCollection,
+  onStartRecording,
 }) => {
   return (
     <>
       <Box mt={1} display="flex" flexDirection="column" gap={2}>
-        {MultipleSelectChip(
-          selectedSocialMedia,
-          setSelectedSocialMedia,
-          keyword,
-        )}
-        <FormControl fullWidth>
-          <InputLabel>
-            {keyword("snaRecording_selectCollectionLabel")}
-          </InputLabel>
-          <Select
-            value={selectedCollection}
-            onChange={(e) => setSelectedCollection(e.target.value)}
-            label={keyword("snaRecording_selectCollectionLabel")}
-          >
-            {collections.map((name) => (
-              <MenuItem key={name} value={name}>
-                {name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <Box display="flex" gap={1}>
-          <TextField
-            label={keyword("snaTools_newCollectionLabel")}
-            value={newCollectionName}
-            onChange={(e) => setNewCollectionName(e.target.value)}
-            fullWidth
-          />
-          <Button
-            variant="outlined"
-            onClick={() =>
-              handleAddCollection(
-                newCollectionName,
-                collections,
-                setCollections,
-                setSelectedCollection,
-                setNewCollectionName,
-              )
-            }
-            color="primary"
-            sx={{
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              justifyContent: "flex-start",
-              textAlign: "left",
-            }}
-          >
-            {keyword("snaTools_addNewCollectionLabel")}
-          </Button>
-        </Box>
+        <MultipleSelectChip
+          selectedSocialMedia={selectedSocialMedia}
+          setSelectedSocialMedia={setSelectedSocialMedia}
+          keyword={keyword}
+        />
+        <CollectionSelect
+          keyword={keyword}
+          selectedCollection={selectedCollection}
+          setSelectedCollection={setSelectedCollection}
+          collections={collections}
+          newCollectionName={newCollectionName}
+          setNewCollectionName={setNewCollectionName}
+          onAddCollection={onAddCollection}
+        />
         <Button
           variant="contained"
           color="primary"
-          onClick={() =>
-            handleStartRecording(
-              selectedCollection,
-              setRecording,
-              setExpanded,
-              selectedSocialMedia,
-            )
-          }
+          onClick={onStartRecording}
+          disabled={selectedSocialMedia.length === 0}
         >
           {keyword("snaRecording_startRecordingButton")}
         </Button>
@@ -240,8 +168,34 @@ export const RecordingWindow = ({
   setNewCollectionName,
   selectedSocialMedia,
   setSelectedSocialMedia,
+  keyword,
 }) => {
-  const keyword = i18nLoadNamespace("components/NavItems/tools/NewSNA");
+  const handleMainClick = useCallback(() => {
+    handleMainButtonClick(recording, setRecording, setExpanded);
+  }, [recording, setRecording, setExpanded]);
+
+  const handleAddCollectionClick = useCallback(() => {
+    handleAddCollection(
+      newCollectionName,
+      setCollections,
+      setSelectedCollection,
+      setNewCollectionName,
+    );
+  }, [
+    newCollectionName,
+    setCollections,
+    setSelectedCollection,
+    setNewCollectionName,
+  ]);
+
+  const handleStartRecordingClick = useCallback(() => {
+    handleStartRecording(
+      selectedCollection,
+      setRecording,
+      setExpanded,
+      selectedSocialMedia,
+    );
+  }, [selectedCollection, setRecording, setExpanded, selectedSocialMedia]);
 
   return (
     <>
@@ -250,9 +204,7 @@ export const RecordingWindow = ({
           <Button
             variant="outlined"
             color="primary"
-            onClick={() =>
-              handleMainButtonClick(recording, setRecording, setExpanded)
-            }
+            onClick={handleMainClick}
             endIcon={
               !recording ? (
                 expanded ? (
@@ -274,13 +226,12 @@ export const RecordingWindow = ({
               selectedCollection={selectedCollection}
               setSelectedCollection={setSelectedCollection}
               collections={collections}
-              setCollections={setCollections}
               newCollectionName={newCollectionName}
               setNewCollectionName={setNewCollectionName}
-              setRecording={setRecording}
-              setExpanded={setExpanded}
               selectedSocialMedia={selectedSocialMedia}
               setSelectedSocialMedia={setSelectedSocialMedia}
+              onAddCollection={handleAddCollectionClick}
+              onStartRecording={handleStartRecordingClick}
             />
           </Collapse>
         </Box>

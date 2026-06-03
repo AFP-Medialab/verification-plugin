@@ -1,27 +1,58 @@
 /**
+ * Cross-browser tab utilities for Chrome and Firefox MV3 compatibility
+ *
+ * Handles browser differences:
+ * - Chrome MV3: supports both 'selected' and 'active' properties
+ * - Firefox MV3: only supports 'active' property
+ *
+ * These utilities automatically normalize 'selected' → 'active' for Firefox compatibility
+ */
+
+/**
  * Wrapper function to open a new tab from the context menus or from the app
  * @param url The url object
  * @param {boolean} isRequestFromContextMenu
  */
 export const openNewTabWithUrl = async (url, isRequestFromContextMenu) => {
-  if (isRequestFromContextMenu) openTabsSearch(url);
-  else await chrome.tabs.create(url);
+  if (isRequestFromContextMenu) {
+    openTabsSearch(url);
+  } else {
+    // Normalize tab properties for cross-browser compatibility
+    const normalizedUrl = { ...url };
+
+    // Handle Firefox/Chrome differences
+    if ("selected" in normalizedUrl) {
+      normalizedUrl.active = normalizedUrl.selected;
+      delete normalizedUrl.selected;
+    }
+
+    await browser.tabs.create(normalizedUrl);
+  }
 };
 
 export const openTabs = (url) => {
-  chrome.tabs.create(url, (createdTab) => {
-    chrome.tabs.onUpdated.addListener(async function _(tabId) {
+  // Normalize tab properties for cross-browser compatibility
+  const normalizedUrl = { ...url };
+
+  // Handle Firefox/Chrome differences
+  if ("selected" in normalizedUrl) {
+    normalizedUrl.active = normalizedUrl.selected;
+    delete normalizedUrl.selected;
+  }
+
+  browser.tabs.create(normalizedUrl, (createdTab) => {
+    browser.tabs.onUpdated.addListener(async function _(tabId) {
       if (tabId === createdTab.id) {
-        chrome.tabs.onUpdated.removeListener(_);
+        browser.tabs.onUpdated.removeListener(_);
       } else {
-        await chrome.tabs.get(tabId, async () => {
-          if (!chrome.runtime.lastError) {
+        await browser.tabs.get(tabId, async () => {
+          if (!browser.runtime.lastError) {
             //console.log("tab exist ", tabId)
-            await chrome.tabs.remove(tabId, () => {
-              if (!chrome.runtime.lastError) {
+            await browser.tabs.remove(tabId, () => {
+              if (!browser.runtime.lastError) {
                 //nothing todo
               }
-              //chrome.tabs.onUpdated.removeListener(_);
+              //browser.tabs.onUpdated.removeListener(_);
             });
           }
         });
@@ -31,22 +62,31 @@ export const openTabs = (url) => {
 };
 
 const openTabsSearch = (url) => {
-  chrome.tabs.create(url, (createdTab) => {
-    chrome.tabs.onUpdated.addListener(async function _(tabId, info, tab) {
+  // Normalize tab properties for cross-browser compatibility
+  const normalizedUrl = { ...url };
+
+  // Handle Firefox/Chrome differences
+  if ("selected" in normalizedUrl) {
+    normalizedUrl.active = normalizedUrl.selected;
+    delete normalizedUrl.selected;
+  }
+
+  browser.tabs.create(normalizedUrl, (createdTab) => {
+    browser.tabs.onUpdated.addListener(async function _(tabId, info, tab) {
       let pending_url = ns(createdTab.pendingUrl);
       let tab_url = ns(tab.url);
       if (tabId === createdTab.id && pending_url === tab_url) {
         //console.log("remove .... listerner", tabId);
-        chrome.tabs.onUpdated.removeListener(_);
+        browser.tabs.onUpdated.removeListener(_);
       } else {
         if (pending_url === tab_url) {
           //console.log("remove id ", tabId);
-          await chrome.tabs.get(tabId, async () => {
-            if (!chrome.runtime.lastError) {
+          await browser.tabs.get(tabId, async () => {
+            if (!browser.runtime.lastError) {
               //console.log("tab exist ", tabId)
-              await chrome.tabs.remove(tabId, async () => {
+              await browser.tabs.remove(tabId, async () => {
                 //nothing todo
-                if (!chrome.runtime.lastError) {
+                if (!browser.runtime.lastError) {
                   //nothing todo
                 }
               });

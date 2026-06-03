@@ -17,27 +17,18 @@ const defaultState = {
   processUrlType: null,
   inputUrlType: null,
 
-  positiveSourceCred: null,
-  cautionSourceCred: null,
-  mixedSourceCred: null,
-  extractedSourceCred: {},
+  positiveUrlDomainAnalysis: null,
+  cautionUrlDomainAnalysis: null,
+  mixedUrlDomainAnalysis: null,
+  extractedUrlDomainAnalysis: {},
   trafficLightColors: [],
   sourceTypes: {},
   extractedLinks: [],
-  inputSCLoading: false,
-  inputSCDone: false,
-  inputSCFail: false,
 
   dbkfTextMatch: null,
   dbkfTextMatchLoading: false,
   dbkfTextMatchDone: false,
   dbkfTextMatchFail: false,
-
-  dbkfImageMatch: null,
-  dbkfVideoMatch: null,
-  dbkfMediaMatchLoading: false,
-  dbkfMediaMatchDone: false,
-  dbkfMediaMatchFail: false,
 
   neResultCategory: null,
   neResultCount: null,
@@ -62,8 +53,8 @@ const defaultState = {
 
   subjectivityResult: null,
   subjectivityLoading: false,
-  subjectivityTextDone: false,
-  subjectivityTextFail: false,
+  subjectivityDone: false,
+  subjectivityFail: false,
 
   prevFactChecksResult: null,
   prevFactChecksLoading: false,
@@ -75,19 +66,14 @@ const defaultState = {
   machineGeneratedTextChunksDone: false,
   machineGeneratedTextChunksFail: false,
 
-  machineGeneratedTextSentencesResult: null,
-  machineGeneratedTextSentencesLoading: false,
-  machineGeneratedTextSentencesDone: false,
-  machineGeneratedTextSentencesFail: false,
-
   multilingualStanceResult: null,
   multilingualStanceLoading: false,
   multilingualStanceDone: false,
   multilingualStanceFail: false,
 
   loading: false,
-  warningExpanded: false,
-  assuranceExpanded: false,
+  factChecksExpanded: false,
+  domainAnalysisExpanded: false,
   stateExpanded: false,
 
   importantSentenceThreshold: 80,
@@ -105,10 +91,8 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_MODE":
     case "SET_IMAGE_VIDEO_SELECTED":
     case "SET_SINGLE_MEDIA_PRESENT":
-    case "SET_INPUT_SC_DETAILS":
+    case "SET_INPUT_URL_DOMAIN_ANALYSIS_DETAILS":
     case "SET_DBKF_TEXT_MATCH_DETAILS":
-    case "SET_DBKF_IMAGE_MATCH_DETAILS":
-    case "SET_DBKF_VIDEO_MATCH_DETAILS":
     case "SET_NE_DETAILS":
     case "SET_NEWS_TOPIC_DETAILS":
     case "SET_NEWS_GENRE_DETAILS":
@@ -116,13 +100,13 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_SUBJECTIVITY_DETAILS":
     case "SET_PREV_FACT_CHECKS_DETAILS":
     case "SET_MACHINE_GENERATED_TEXT_CHUNKS_DETAILS":
-    case "SET_MACHINE_GENERATED_TEXT_SENTENCES_DETAILS":
     case "SET_MULTILINGUAL_STANCE_DETAILS":
     case "SET_LOADING":
     case "SET_MISSING_MEDIA":
-    case "SET_WARNING_EXPANDED":
-    case "SET_ASSURANCE_EXPANDED":
+    case "SET_FACT_CHECKS_EXPANDED":
+    case "SET_DOMAIN_ANALYSIS_EXPANDED":
     case "SET_STATE_EXPANDED":
+    case "SUBMIT_UPLOAD":
       return Object.assign({}, state, action.payload);
 
     case "SET_IMPORTANT_SENTENCE_THRESHOLD":
@@ -158,27 +142,21 @@ const assistantReducer = (state = defaultState, action) => {
         processUrlType: null,
         inputUrlType: null,
 
-        positiveSourceCred: null,
-        cautionSourceCred: null,
-        mixedSourceCred: null,
-        extractedSourceCred: {},
+        positiveUrlDomainAnalysis: null,
+        cautionUrlDomainAnalysis: null,
+        mixedUrlDomainAnalysis: null,
+        extractedUrlDomainAnalysis: {},
         trafficLightColors: [],
         sourceTypes: {},
         extractedLinks: [],
-        inputSCLoading: false,
-        inputSCDone: false,
-        inputSCFail: false,
+        inputUrlDomainAnalysisLoading: false,
+        inputUrlDomainAnalysisDone: false,
+        inputUrlDomainAnalysisFail: false,
 
         dbkfTextMatch: null,
         dbkfTextMatchLoading: false,
         dbkfTextMatchDone: false,
         dbkfTextMatchFail: false,
-
-        dbkfImageMatch: null,
-        dbkfVideoMatch: null,
-        dbkfMediaMatchLoading: false,
-        dbkfMediaMatchDone: false,
-        dbkfMediaMatchFail: false,
 
         neResultCategory: null,
         neResultCount: null,
@@ -203,8 +181,8 @@ const assistantReducer = (state = defaultState, action) => {
 
         subjectivityResult: null,
         subjectivityLoading: false,
-        subjectivityTextDone: false,
-        subjectivityTextFail: false,
+        subjectivityDone: false,
+        subjectivityFail: false,
 
         prevFactChecksResult: null,
         prevFactChecksLoading: false,
@@ -216,19 +194,14 @@ const assistantReducer = (state = defaultState, action) => {
         machineGeneratedTextChunksDone: false,
         machineGeneratedTextChunksFail: false,
 
-        machineGeneratedTextSentencesResult: null,
-        machineGeneratedTextSentencesLoading: false,
-        machineGeneratedTextSentencesDone: false,
-        machineGeneratedTextSentencesFail: false,
-
         multilingualStanceResult: null,
         multilingualStanceLoading: false,
         multilingualStanceDone: false,
         multilingualStanceFail: false,
 
         loading: false,
-        warningExpanded: false,
-        assuranceExpanded: false,
+        factChecksExpanded: false,
+        domainAnalysisExpanded: false,
         stateExpanded: false,
 
         importantSentenceThreshold: 80,

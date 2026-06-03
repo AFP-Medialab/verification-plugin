@@ -1,37 +1,60 @@
-import React, { useEffect, useState } from "react";
+import AssistantIcon from "@/components/NavBar/images/navbar/assistant-icon-primary.svg?react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { useColorScheme } from "@mui/material";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import { useColorScheme } from "@mui/material/styles";
 
 import { Close } from "@mui/icons-material";
+import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { useSetInputFromAssistant } from "@/Hooks/useUrlOrFile";
 import AssistantCheckStatus from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantCheckStatus";
+import AssistantFactCheckResult from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantFactCheckResult";
 import AssistantNEResult from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantNEResult";
+import AssistantUrlDomainAnalysisResult from "@/components/NavItems/Assistant/AssistantCheckResults/AssistantUrlDomainAnalysisResult";
 import AssistantCommentResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantCommentResult";
 import AssistantLinkResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantLinkResult";
 import AssistantMediaResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantMediaResult";
 import AssistantTextResult from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantTextResult";
-import AssistantSCResults from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantUrlDomainAnalysisResults";
-import AssistantWarnings from "@/components/NavItems/Assistant/AssistantScrapeResults/AssistantWarnings";
+import HeaderTool from "@/components/Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
+import StringFileUploadField from "@/components/Shared/StringFileUploadField";
+import { getFileTypeFromFileObject } from "@/components/Shared/Utils/fileUtils";
+import { ROLES } from "@/constants/roles";
+import { KNOWN_LINKS, TOOLS_CATEGORIES } from "@/constants/tools";
 import {
   cleanAssistantState,
+  setImageVideoSelected,
+  setInputUrl,
+  setScrapedData,
+  setSingleMediaPresent,
   setUrlMode,
   submitInputUrl,
+  submitUpload,
 } from "@/redux/actions/tools/assistantActions";
 import { setError } from "@/redux/reducers/errorReducer";
 
-import AssistantFileSelected from "./AssistantFileSelected";
-import AssistantIntroduction from "./AssistantIntroduction";
-import AssistantUrlSelected from "./AssistantUrlSelected";
+import {
+  TransAssistantHelpFourTooltip,
+  TransAssistantHelpThreeTooltip,
+  TransAssistantHelpTwoTooltip,
+  TransHtmlDoubleLineBreak,
+  TransSupportedToolsLink,
+} from "./components";
 
 const Assistant = () => {
   // styles, language, dispatch, params
@@ -41,16 +64,31 @@ const Assistant = () => {
   const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
+  // checking if user logged in
+  const role = useSelector((state) => state.userSession.user.roles);
+
   // for dark mode
   const { mode, systemMode } = useColorScheme();
   const resolvedMode = systemMode || mode;
 
+  // submitted - using ref to avoid triggering useEffect on change
+  const hasSubmitted = useRef(false);
+
   // form states
+  const loading = useSelector((state) => state.assistant.loading);
   const inputUrl = useSelector((state) => state.assistant.inputUrl);
   const urlMode = useSelector((state) => state.assistant.urlMode);
+  const [formInput, setFormInput] = useState("");
+  const inputUrlType = useSelector((state) => state.assistant.inputUrlType);
+
+  // uploading an image/video
   const imageVideoSelected = useSelector(
     (state) => state.assistant.imageVideoSelected,
   );
+  const [fileInput, setFileInput] = useState(null);
+  const [videoUploaded, setVideoUploaded] = useState(false);
+  const [imageUploaded, setImageUploaded] = useState(false);
+  const setAssistantSelection = useSetInputFromAssistant();
 
   // result states
   const imageList = useSelector((state) => state.assistant.imageList);
@@ -66,29 +104,24 @@ const Assistant = () => {
   const neResult = useSelector((state) => state.assistant.neResultCategory);
 
   // source credibility
-  const positiveSourceCred = useSelector(
-    (state) => state.assistant.positiveSourceCred,
+  const positiveUrlDomainAnalysis = useSelector(
+    (state) => state.assistant.positiveUrlDomainAnalysis,
   );
-  const cautionSourceCred = useSelector(
-    (state) => state.assistant.cautionSourceCred,
+  const cautionUrlDomainAnalysis = useSelector(
+    (state) => state.assistant.cautionUrlDomainAnalysis,
   );
-  const mixedSourceCred = useSelector(
-    (state) => state.assistant.mixedSourceCred,
+  const mixedUrlDomainAnalysis = useSelector(
+    (state) => state.assistant.mixedUrlDomainAnalysis,
   );
 
   const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
-  const dbkfImageResult = useSelector(
-    (state) => state.assistant.dbkfImageMatch,
-  );
-  const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
 
   // third party fail states
-  const scFailState = useSelector((state) => state.assistant.inputSCFail);
+  const urlDomainAnalysisFailState = useSelector(
+    (state) => state.assistant.inputUrlDomainAnalysisFail,
+  );
   const dbkfTextFailState = useSelector(
     (state) => state.assistant.dbkfTextMatchFail,
-  );
-  const dbkfMediaFailState = useSelector(
-    (state) => state.assistant.dbkfMediaMatchFail,
   );
   const neFailState = useSelector((state) => state.assistant.neFail);
   const newsFramingFailState = useSelector(
@@ -101,7 +134,7 @@ const Assistant = () => {
     (state) => state.assistant.persuasionFail,
   );
   const prevFactChecksFailState = useSelector(
-    (state) => state.assistant.previousFactChecksFail,
+    (state) => state.assistant.prevFactChecksFail,
   );
   const prevFactChecksResult = useSelector(
     (state) => state.assistant.prevFactChecksResult,
@@ -110,23 +143,135 @@ const Assistant = () => {
     (state) => state.assistant.subjectivityFail,
   );
   const machineGeneratedTextChunksFailState = useSelector(
-    (state) => state.assistant.machineGeneratedChunksTextFail,
-  );
-  const machineGeneratedTextSentencesFailState = useSelector(
-    (state) => state.assistant.machineGeneratedTextSentencesFail,
+    (state) => state.assistant.machineGeneratedTextChunksFail,
   );
   const multilingualStanceFailState = useSelector(
     (state) => state.assistant.multilingualStanceFail,
   );
 
-  //local state
-  const [formInput, setFormInput] = useState(inputUrl);
+  useTrackEvent(
+    "submission",
+    "assistant",
+    "page assistant",
+    formInput,
+    null,
+    url,
+  );
+
+  const handleSubmit = async () => {
+    dispatch(cleanAssistantState());
+    hasSubmitted.current = true;
+
+    // set fileInput and formInput
+    if (formInput) {
+      const fixedUrl = formInput.replace(/ /g, "%20"); // fix space issue
+      // submit url
+      dispatch(submitInputUrl(fixedUrl));
+      navigate("/app/assistant/" + encodeURIComponent(fixedUrl));
+      //trackEvent("submission", "assistant", "page assistant", fixedUrl);
+      setAssistantSelection(fixedUrl);
+    } else {
+      try {
+        if (fileInput) {
+          setAssistantSelection(fileInput);
+
+          // Determine file type
+          const fileType = await getFileTypeFromFileObject(fileInput);
+
+          if (!fileType || fileType instanceof Error) {
+            throw new Error(keyword("unable_to_determine_file_type"));
+          }
+
+          // set ImgaeVideoSelected for user media upload
+          dispatch(setImageVideoSelected(true));
+          // set single media present for display
+          dispatch(setSingleMediaPresent(true));
+          navigate("/app/assistant/");
+
+          if (fileType.mime.includes("video")) {
+            // set the video URL
+            const videoUrl = URL.createObjectURL(fileInput);
+            const ctype = TOOLS_CATEGORIES.VIDEO;
+
+            dispatch(setInputUrl(videoUrl, KNOWN_LINKS.OWN));
+            dispatch(
+              setScrapedData(null, null, null, [], [videoUrl], null, null),
+            );
+            dispatch(submitUpload(videoUrl, ctype));
+            setVideoUploaded(true);
+
+            return;
+          }
+
+          if (fileType.mime.includes("image")) {
+            // Set the image URL
+            const imageUrl = URL.createObjectURL(fileInput);
+            const ctype = TOOLS_CATEGORIES.IMAGE;
+
+            dispatch(setInputUrl(imageUrl, KNOWN_LINKS.OWN)); // kicks off getUrlDomainAnalysisSaga
+            dispatch(
+              setScrapedData(null, null, null, [imageUrl], [], null, null),
+            );
+            dispatch(submitUpload(imageUrl, ctype));
+            setImageUploaded(true);
+
+            return;
+          }
+
+          throw new Error(keyword("unsupported_file_type"));
+        } else {
+          throw new Error(keyword("no_input_provided"));
+        }
+      } catch (error) {
+        console.error("Error in submitUrl:", error.message);
+        dispatch(setError(error.message));
+      }
+    }
+  };
+
+  // for archiving URLs
+  const handleArchive = () => {
+    let archiveUrl = "";
+
+    switch (inputUrlType) {
+      case KNOWN_LINKS.FACEBOOK:
+        archiveUrl =
+          "https://www.facebook.com/plugins/post.php?href=" +
+          encodeURIComponent(inputUrl);
+        break;
+      case KNOWN_LINKS.INSTAGRAM:
+        archiveUrl = inputUrl.endsWith("/")
+          ? inputUrl + "embed/captioned/"
+          : inputUrl + "/embed/captioned/";
+        break;
+      default:
+        archiveUrl = inputUrl;
+    }
+    navigator.clipboard.writeText(archiveUrl).then(() => {
+      window.open("https://web.archive.org/save/" + archiveUrl, "_blank");
+    });
+  };
+
+  // pre process media file
+  const preprocessFileInput = (file) => {
+    setFileInput(file);
+    return file;
+  };
 
   // clean assistant
-  const cleanAssistant = () => {
+  const cleanAssistant = useCallback(() => {
     dispatch(cleanAssistantState());
+    // clean url mode
+    hasSubmitted.current = false;
     setFormInput("");
-  };
+    navigate("/app/assistant/");
+    dispatch(setUrlMode(false));
+    // clean upload mode
+    dispatch(setImageVideoSelected(false));
+    dispatch(setSingleMediaPresent(false));
+    setImageUploaded(false);
+    setVideoUploaded(false);
+  }, []);
 
   // set correct error message
   useEffect(() => {
@@ -134,92 +279,200 @@ const Assistant = () => {
       dispatch(setError(keyword(errorKey)));
       cleanAssistant();
     }
-  }, [errorKey]);
+  }, [errorKey, keyword, cleanAssistant]);
 
-  // if a url is present in the plugin url(as a param), set it to input
+  // if a url is present in the plugin url (as a param), set it to input
   useEffect(() => {
-    if (url !== undefined) {
-      let uri = url !== null ? decodeURIComponent(url) : undefined;
+    if (url !== undefined && !hasSubmitted.current) {
+      // only handle user-entered spaces which shouldn't normally be in URLs
+      const uri = url !== null ? url.replace(/ /g, "%20") : undefined;
       dispatch(setUrlMode(true));
       setFormInput(uri);
       dispatch(submitInputUrl(uri));
-      navigate("/app/assistant/" + encodeURIComponent(url));
+      navigate("/app/assistant/" + encodeURIComponent(uri));
     }
   }, [url]);
 
+  // when navigating to a different tool then back to assistant
+  // make sure url is set in form
+  useEffect(() => {
+    if (inputUrl) {
+      setFormInput(inputUrl);
+    }
+  }, [inputUrl]);
+
   // for having a single results section with a close button
   const handleClose = () => {
-    //setFormInput("");
     cleanAssistant();
-    dispatch(setUrlMode(true));
   };
 
   return (
-    <Grid
-      container
-      spacing={4}
-      direction="column"
-      className={classes.root}
-      sx={{
-        justifyContent: "flex-start",
-        alignItems: "center",
-      }}
-    >
-      {/* introduction */}
-      <Grid
-        size="grow"
-        sx={{
-          width: "100%",
-        }}
-      >
-        <AssistantIntroduction cleanAssistant={cleanAssistant} />
-      </Grid>
-      {/* url entry field */}
-      {urlMode ? (
-        <Grid
-          size="grow"
-          sx={{
-            width: "100%",
-          }}
-        >
-          <AssistantUrlSelected
-            formInput={formInput}
-            setFormInput={setFormInput}
-            cleanAssistant={cleanAssistant}
+    <div>
+      {/* header */}
+      <HeaderTool
+        name={keyword("assistant_title")}
+        description={keyword("assistant_intro")}
+        icon={
+          <AssistantIcon
+            style={{ marginRight: "10px" }}
+            width="40px"
+            height="40px"
           />
-        </Grid>
-      ) : null}
-      {/* local file selection field */}
-      {imageVideoSelected ? (
-        <Grid
-          size="grow"
-          sx={{
-            width: "100%",
-          }}
-        >
-          <AssistantFileSelected />
-        </Grid>
-      ) : null}
+        }
+        action={
+          <Tooltip
+            interactive={"true"}
+            title={
+              <>
+                <TransAssistantHelpTwoTooltip keyword={keyword} />
+                <TransSupportedToolsLink keyword={keyword} />
+              </>
+            }
+            classes={{ tooltip: classes.assistantTooltip }}
+          >
+            <HelpOutlineOutlinedIcon
+              className={classes.toolTipIcon}
+              color={"primary"}
+            />
+          </Tooltip>
+        }
+      />
+
+      <Card variant="outlined" sx={{ mt: 4 }}>
+        <CardHeader
+          className={classes.assistantCardHeader}
+          title={
+            <Typography style={{ fontWeight: "bold", fontSize: 20 }}>
+              {keyword("assistant_choose")}
+            </Typography>
+          }
+          action={
+            <Tooltip
+              interactive={"true"}
+              title={
+                <>
+                  <TransAssistantHelpThreeTooltip keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
+                  <TransAssistantHelpFourTooltip keyword={keyword} />
+                </>
+              }
+              classes={{ tooltip: classes.assistantTooltip }}
+            >
+              <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+            </Tooltip>
+          }
+        />
+
+        <CardContent>
+          {/* upload file or submit url form */}
+          <form>
+            <StringFileUploadField
+              labelKeyword={keyword("assistant_urlbox")}
+              placeholderKeyword={keyword("assistant_urlbox_placeholder")}
+              submitButtonKeyword={keyword("button_submit")}
+              localFileKeyword={keyword("button_localfile")}
+              urlInput={formInput}
+              setUrlInput={setFormInput}
+              fileInput={fileInput}
+              setFileInput={setFileInput}
+              handleSubmit={handleSubmit}
+              fileInputTypesAccepted={"image/*, video/*"}
+              handleCloseSelectedFile={cleanAssistant}
+              preprocessLocalFile={preprocessFileInput}
+              handleClearUrl={cleanAssistant}
+            />
+          </form>
+
+          {/* archive */}
+          {inputUrl !== null && imageVideoSelected === false ? (
+            <Stack
+              direction="row"
+              sx={{
+                justifyContent: "flex-start",
+                alignItems: "left",
+                mt: 1,
+              }}
+            >
+              <Button
+                onClick={() => handleArchive()}
+                startIcon={<ArchiveOutlinedIcon />}
+              >
+                <label>{keyword("archive_url_link")}</label>
+              </Button>
+            </Stack>
+          ) : null}
+        </CardContent>
+      </Card>
+
+      {/* loading results */}
+      {loading && (
+        <Card sx={{ mt: 4 }}>
+          <Stack
+            direction="column"
+            spacing={4}
+            sx={{
+              p: 4,
+            }}
+          >
+            <Skeleton variant="rounded" height={40} />
+            <Skeleton variant="rounded" width="50%" height={40} />
+          </Stack>
+        </Card>
+      )}
+
       {/* assistant status */}
-      {scFailState ||
-      dbkfTextFailState ||
-      dbkfMediaFailState ||
-      neFailState ||
-      newsFramingFailState ||
-      newsGenreFailState ||
-      persuasionFailState ||
-      subjectivityFailState ||
-      prevFactChecksFailState ||
-      machineGeneratedTextChunksFailState ||
-      machineGeneratedTextSentencesFailState ||
-      multilingualStanceFailState ? (
-        <Grid size={{ xs: 12 }}>
+      {(urlMode || imageVideoSelected) &&
+      (urlDomainAnalysisFailState ||
+        dbkfTextFailState ||
+        neFailState ||
+        newsFramingFailState ||
+        newsGenreFailState ||
+        persuasionFailState ||
+        subjectivityFailState ||
+        prevFactChecksFailState ||
+        machineGeneratedTextChunksFailState ||
+        multilingualStanceFailState) ? (
+        <Grid size={{ xs: 12 }} sx={{ mt: 4 }}>
           <AssistantCheckStatus />
         </Grid>
       ) : null}
-      {/* assistant results section */}
+
+      {/* assistant local file results section */}
+      {!urlMode && imageVideoSelected ? (
+        <Card variant="outlined" sx={{ width: "100%", mb: 2, mt: 4 }}>
+          <CardHeader
+            className={classes.assistantCardHeader}
+            title={
+              <Typography style={{ fontWeight: "bold", fontSize: 20 }}>
+                {keyword("assistant_results")}
+              </Typography>
+            }
+            action={
+              <IconButton aria-label="close" onClick={handleClose}>
+                <Close
+                  sx={{ color: resolvedMode === "dark" ? "white" : "grey" }}
+                />
+              </IconButton>
+            }
+          />
+
+          <CardContent>
+            <AssistantMediaResult
+              title={
+                videoUploaded
+                  ? "upload_video"
+                  : imageUploaded
+                    ? "upload_image"
+                    : null
+              }
+            />
+          </CardContent>
+        </Card>
+      ) : null}
+
+      {/* assistant url results section */}
       {urlMode && inputUrl ? (
-        <Card variant="outlined" sx={{ width: "100%", mb: 2 }}>
+        <Card variant="outlined" sx={{ width: "100%", mb: 2, mt: 4 }}>
           <CardHeader
             className={classes.assistantCardHeader}
             title={
@@ -238,31 +491,29 @@ const Assistant = () => {
 
           <CardContent>
             <Grid container spacing={4}>
-              {/* warnings and api status checks */}
+              {/* URL domain analysis results */}
+              {positiveUrlDomainAnalysis ||
+              cautionUrlDomainAnalysis ||
+              mixedUrlDomainAnalysis ? (
+                <Grid size={{ xs: 12 }}>
+                  <AssistantUrlDomainAnalysisResult />
+                </Grid>
+              ) : null}
+
+              {/* fact check results */}
               {dbkfTextMatch ||
-              dbkfImageResult ||
-              dbkfVideoMatch ||
-              prevFactChecksResult ? (
+              (prevFactChecksResult && role.includes(ROLES.BETA_TESTER)) ? (
                 <Grid
                   size={{ xs: 12 }}
                   className={classes.assistantGrid}
                   hidden={urlMode === false}
                 >
-                  <AssistantWarnings />
-                </Grid>
-              ) : null}
-
-              {/* source credibility//URL domain analysis results */}
-              {positiveSourceCred || cautionSourceCred || mixedSourceCred ? (
-                <Grid size={{ xs: 12 }}>
-                  <AssistantSCResults />
+                  <AssistantFactCheckResult />
                 </Grid>
               ) : null}
 
               {/* media results */}
-              {imageList.length > 0 ||
-              videoList.length > 0 ||
-              imageVideoSelected ? (
+              {imageList.length > 0 || videoList.length > 0 ? (
                 <Grid size={{ xs: 12 }}>
                   <AssistantMediaResult />
                 </Grid>
@@ -301,7 +552,7 @@ const Assistant = () => {
           </CardContent>
         </Card>
       ) : null}
-    </Grid>
+    </div>
   );
 };
 export default Assistant;

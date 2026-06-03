@@ -19,15 +19,15 @@ import { hexToRgb } from "@mui/material/styles";
 
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
+import { ThresholdSlider } from "@/components/NavItems/Assistant/components";
 import {
-  ThresholdSlider,
   getPersuasionCategoryTechnique,
   mergeSpanIndices,
   rgbToLuminance,
   rgbToString,
   treeMapToElements,
   wrapPlainTextSpan,
-} from "@/components/NavItems/Assistant/AssistantScrapeResults/assistantUtils";
+} from "@/components/NavItems/Assistant/utils";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import {
@@ -39,16 +39,14 @@ import { v4 as uuidv4 } from "uuid";
 
 // Had to create a custom styled span as the default style attribute does not support
 // :hover metaclass
-const StyledSpan = styled("span")(({ theme }) => ({
-  ...theme,
-}));
+const StyledSpan = styled("span")();
 
 export default function AssistantTextSpanClassification({
   text,
   classification,
-  titleText = "",
   categoriesTooltipContent = "",
   textHtmlMap = null,
+  credibilitySignal = "",
 }) {
   const classes = useMyStyles();
   const dispatch = useDispatch();
@@ -181,7 +179,7 @@ export default function AssistantTextSpanClassification({
             cursor: "pointer",
           }}
         >
-          {keyword(divText)}
+          {divText}
         </div>,
       );
     }
@@ -201,7 +199,7 @@ export default function AssistantTextSpanClassification({
                 ? "black"
                 : "white"
               : "black",
-            ":hover": {
+            "&:hover": {
               background: rgbToString(backgroundRgbHover),
               color: resolvedMode === "dark" ? "black" : "white",
             },
@@ -281,7 +279,7 @@ export default function AssistantTextSpanClassification({
         <Card>
           <CardHeader
             className={classes.assistantCardHeader}
-            title={titleText}
+            title={keyword(credibilitySignal)}
             action={
               <div style={{ display: "flex" }}>
                 <Tooltip
@@ -391,7 +389,7 @@ export function CategoriesListToggle({
               : rgbToString([140, 140, 140]),
           color: rgbToLuminance(primaryRgb) > 0.7 ? "black" : "white",
           boxShadow: "0.15em 0.15em 0.15em gray",
-          ":hover": {
+          "&:hover": {
             background: rgbToString(primaryRgb),
             boxShadow: "0.25em 0.25em 0.25em gray",
           },
@@ -414,7 +412,6 @@ export function CategoriesListToggle({
         {keyword("threshold_slider_confidence")}
       </Typography>
       <ThresholdSlider
-        credibilitySignal={credibilitySignal}
         importantSentenceThreshold={importantSentenceThreshold}
         handleSliderChange={handleSliderChange}
         keyword={keyword}
@@ -455,7 +452,15 @@ export function MultiCategoryClassifiedText({
   let output = categoriesText[category];
 
   return (
-    <Typography component={"div"} sx={{ textAlign: "start" }}>
+    <Typography
+      component={"div"}
+      sx={{
+        textAlign: "start",
+        "& p": {
+          margin: "8px 0",
+        },
+      }}
+    >
       {output}
     </Typography>
   );

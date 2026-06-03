@@ -42,7 +42,7 @@ export default function useAuthenticationAPI() {
   const loginTimeout = 30000;
   const jsonContentType = "application/json";
   const textContentType = "text/plain";
-  const authSrvBaseURL = `${process.env.REACT_APP_BASEURL}/api/v1/auth`;
+  const authSrvBaseURL = `${import.meta.env.VITE_BASEURL}/api/v1/auth`;
 
   // Services URL
   const AUTH_SRV_REGISTER_USER_URL = "/registration";

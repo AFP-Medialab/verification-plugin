@@ -1,3 +1,7 @@
+import DataIcon from "../../../NavBar/images/SVG/DataAnalysis/Data_analysis.svg?react";
+import ImageIcon from "../../../NavBar/images/SVG/Image/Images.svg?react";
+import SearchIcon from "../../../NavBar/images/SVG/Search/Search.svg?react";
+import VideoIcon from "../../../NavBar/images/SVG/Video/Video.svg?react";
 import React, { useState } from "react";
 import Iframe from "react-iframe";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,12 +27,8 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { ROLES } from "@/constants/roles";
 import { TOOLS_CATEGORIES, canUserSeeTool, tools } from "@/constants/tools";
 import { selectToolTab } from "@/redux/reducers/toolTabSelectedReducer";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
-import DataIcon from "../../../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
-import ImageIcon from "../../../NavBar/images/SVG/Image/Images.svg";
-import SearchIcon from "../../../NavBar/images/SVG/Search/Search.svg";
-import VideoIcon from "../../../NavBar/images/SVG/Video/Video.svg";
 import ToolsMenuItem from "./ToolsMenuItem";
 
 function TabPanel(props) {
@@ -92,9 +92,9 @@ const ToolsMenu = () => {
 
   const handlePush = (path) => {
     if (path === "csvSna" || path === "factcheck" || path === "xnetwork") {
-      window.open(process.env.REACT_APP_TSNA_SERVER + path, "_blank");
+      window.open(import.meta.env.VITE_TSNA_SERVER + path, "_blank");
     } else if (path === "disinfoDeck") {
-      window.open(process.env.REACT_APP_DISINFO_DECK_SERVER, "_blank");
+      window.open(import.meta.env.VITE_DISINFO_DECK_SERVER, "_blank");
     } else {
       navigate("/app/tools/" + path);
     }

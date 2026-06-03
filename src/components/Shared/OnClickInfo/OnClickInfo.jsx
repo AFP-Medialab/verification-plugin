@@ -1,9 +1,13 @@
-import useMyStyles from "../MaterialUiStyles/useMyStyles";
 import React, { useEffect, useState } from "react";
-import Typography from "@mui/material/Typography";
-import WbIncandescentIcon from "@mui/icons-material/WbIncandescent";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import Linkify from "react-linkify";
+
+import Typography from "@mui/material/Typography";
+
+import WbIncandescentIcon from "@mui/icons-material/WbIncandescent";
+
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+
+import useMyStyles from "../MaterialUiStyles/useMyStyles";
 
 const OnClickInfo = (props) => {
   const classes = useMyStyles();

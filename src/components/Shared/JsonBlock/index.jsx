@@ -97,7 +97,7 @@ export const JsonBlock = ({ jsonString }) => {
       );
     };
 
-    return [renderObject(json, 2, path)];
+    return renderObject(json, 2, path);
   };
 
   return (

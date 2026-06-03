@@ -14,7 +14,7 @@ import TextField from "@mui/material/TextField";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
 import { useInput } from "@/Hooks/useInput";
-import { searchTwitter } from "@/constants/tools";
+import { canUserSeeTool, newSna, searchTwitter } from "@/constants/tools";
 import DateAndTimePicker from "@Shared/DateTimePicker/DateAndTimePicker";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import HeaderTool from "@Shared/HeaderTool/HeaderTool";
@@ -36,6 +36,7 @@ const TwitterAdvancedSearch = () => {
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
   );
+  const keywordNewSna = i18nLoadNamespace("components/NavItems/tools/NewSNA");
 
   const term = useInput("");
   const account = useInput("");
@@ -79,7 +80,7 @@ const TwitterAdvancedSearch = () => {
 
   const [fromDate, setSelectedFromDate] = useState(null);
   const [fromDateError, setSelectedFromDateError] = useState(false);
-  ``;
+
   const [toDate, setSelectedToDate] = useState(null);
   const [toDateError, setSelectedToDateError] = useState(false);
 
@@ -144,8 +145,16 @@ const TwitterAdvancedSearch = () => {
     useState("Default Collection");
   const [newCollectionName, setNewCollectionName] = useState("");
   const [selectedSocialMedia, setSelectedSocialMedia] = useState([]);
+  const userRoles = useSelector((state) => state.userSession.user.roles);
+  const isUserAuthenticated = useSelector(
+    (state) => state.userSession.userAuthenticated,
+  );
 
   useEffect(() => {
+    if (!canUserSeeTool(newSna, userRoles, isUserAuthenticated)) {
+      return;
+    }
+
     getRecordingInfo(setCollections, setRecording, setSelectedCollection);
   }, []);
 
@@ -173,20 +182,23 @@ const TwitterAdvancedSearch = () => {
         />
 
         <div className={classes.root2}>
-          <RecordingWindow
-            recording={recording}
-            setRecording={setRecording}
-            expanded={expanded}
-            setExpanded={setExpanded}
-            selectedCollection={selectedCollection}
-            setSelectedCollection={setSelectedCollection}
-            collections={collections}
-            setCollections={setCollections}
-            newCollectionName={newCollectionName}
-            setNewCollectionName={setNewCollectionName}
-            selectedSocialMedia={selectedSocialMedia}
-            setSelectedSocialMedia={setSelectedSocialMedia}
-          />
+          {canUserSeeTool(newSna, userRoles, isUserAuthenticated) && (
+            <RecordingWindow
+              recording={recording}
+              setRecording={setRecording}
+              expanded={expanded}
+              setExpanded={setExpanded}
+              selectedCollection={selectedCollection}
+              setSelectedCollection={setSelectedCollection}
+              collections={collections}
+              setCollections={setCollections}
+              newCollectionName={newCollectionName}
+              setNewCollectionName={setNewCollectionName}
+              selectedSocialMedia={selectedSocialMedia}
+              setSelectedSocialMedia={setSelectedSocialMedia}
+              keyword={keywordNewSna}
+            />
+          )}
           {largeInputList.map((value, key) => {
             return (
               <TextField
@@ -197,6 +209,7 @@ const TwitterAdvancedSearch = () => {
                 placeholder={"ex : (need tsv changes)"}
                 fullWidth
                 {...value.props}
+                data-testid={`twitter-search-${key}`}
               />
             );
           })}
@@ -226,12 +239,14 @@ const TwitterAdvancedSearch = () => {
                 control={<Radio color="primary" />}
                 label={keyword("twitter_local_time")}
                 labelPlacement="end"
+                data-testid="twitter-radio-local"
               />
               <FormControlLabel
                 value={"false"}
                 control={<Radio color="primary" />}
                 label={keyword("twitter_gmt")}
                 labelPlacement="end"
+                data-testid="twitter-radio-gmt"
               />
             </RadioGroup>
           </FormControl>
@@ -240,7 +255,12 @@ const TwitterAdvancedSearch = () => {
               m: 2,
             }}
           />
-          <Button variant="contained" color="primary" onClick={onSubmit}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={onSubmit}
+            data-testid="twitter-submit"
+          >
             {keyword("button_submit")}
           </Button>
         </div>

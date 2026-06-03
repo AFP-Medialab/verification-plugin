@@ -17,12 +17,12 @@ import Typography from "@mui/material/Typography";
 import { Download } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import GaugeChartResult from "@/components/Shared/GaugeChartResults/GaugeChartResult";
+import { getclientId } from "@/components/Shared/GoogleAnalytics/MatomoAnalytics";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
 import { LineChart } from "@mui/x-charts/LineChart";
-import { useTrackEvent } from "Hooks/useAnalytics";
-import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult";
-import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const DeepfakeResultsVideo = (props) => {
   const userAuthenticated = useSelector(
@@ -233,13 +233,18 @@ const DeepfakeResultsVideo = (props) => {
       <CardHeader
         title={keyword("deepfake_video_title")}
         action={
-          <IconButton aria-label="close" onClick={handleClose} sx={{ p: 1 }}>
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            sx={{ p: 1 }}
+            data-testid="deepfake-close"
+          >
             <CloseIcon />
           </IconButton>
         }
       />
       <CardContent>
-        <Stack direction="column" spacing={4}>
+        <Stack direction="column" spacing={4} data-testid="deepfake-results">
           <Grid
             container
             direction="row"
@@ -267,6 +272,7 @@ const DeepfakeResultsVideo = (props) => {
                       borderRadius: "10px",
                       maxHeight: "50vh",
                     }}
+                    data-testid="deepfake-video"
                   >
                     <source
                       src={results[faceswapAlgorithm].video_path + "#t=2,4"}
@@ -280,6 +286,7 @@ const DeepfakeResultsVideo = (props) => {
                     sx={{
                       justifyContent: "center",
                     }}
+                    data-testid="deepfake-chart"
                   >
                     <LineChart
                       xAxis={[
@@ -336,7 +343,11 @@ const DeepfakeResultsVideo = (props) => {
               </Grid>
             </Grid>
             <Grid size={{ xs: 6 }}>
-              <Stack direction="column" spacing={4}>
+              <Stack
+                direction="column"
+                spacing={4}
+                data-testid="deepfake-gauge"
+              >
                 {deepfakeScores && deepfakeScores.length === 0 && (
                   <Typography variant="h5" sx={{ color: "red" }}>
                     {keyword("deepfake_no_face_detection")}
@@ -393,6 +404,7 @@ const DeepfakeResultsVideo = (props) => {
                     sx={{
                       width: "100%",
                     }}
+                    data-testid="deepfake-keyframes"
                   >
                     {results[faceswapAlgorithm].results.map(
                       (valueShot, keyShot) => {

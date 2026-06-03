@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
@@ -11,13 +11,14 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import KeyframesHeader from "@/components/NavItems/tools/Keyframes/components/KeyframesHeader";
 import KeyframesResults from "@/components/NavItems/tools/Keyframes/components/KeyframesResults";
 import KeyframesTabs from "@/components/NavItems/tools/Keyframes/components/KeyframesTabs";
 import SimilarityResults from "@/components/NavItems/tools/Keyframes/components/SimilarityResults";
+import { ROLES } from "@/constants/roles";
 import {
   resetKeyframes,
   setKeyframesFeatures,
@@ -31,7 +32,7 @@ import StringFileUploadField from "@Shared/StringFileUploadField";
 import { TabContext, TabPanel } from "@mui/lab";
 
 import { useProcessKeyframes } from "./Hooks/useKeyframeWrapper";
-import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
+//import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
 import LocalFile from "./LocalFile/LocalFile";
 
 // Constants
@@ -41,11 +42,9 @@ const TAB_VALUES = {
 };
 const PROCESS_LEVEL_OPTIONS = [1, 2, 3];
 const AUDIO_OPTIONS = [0, 1];
-const SENSITIVITY_DEFAULT = 0.4;
-const DOWNLOAD_MAX_HEIGHT_DEFAULT = 1080;
 const DOWNLOAD_MAX_HEIGHT_OPTIONS = [480, 720, 1080, 1440, 2160];
-const PROCESS_LEVEL_DEFAULT = 3;
-const AUDIO_DEFAULT = 0;
+const PROCESS_LEVEL_DEFAULT = 2;
+const AUDIO_DEFAULT = 1;
 const PROCESS_LEVEL_DESCRIPTIONS = {
   1: "Temporal segmentation only - faster",
   2: "Segmentation + key element detection",
@@ -72,8 +71,9 @@ const useKeyframesState = () => {
       keyframesFeaturesData: state.keyframes.keyframesFeatures,
       isLoadingSimilarity: state.keyframes.similarityLoading,
       similarityResults: state.keyframes.similarity,
-      processUrl: state.assistant.processUrl,
       role: state.userSession.user.roles,
+      userAuthenticated:
+        state.userSession && state.userSession.userAuthenticated,
     }),
     shallowEqual,
   );
@@ -82,6 +82,7 @@ const useKeyframesState = () => {
 // Main component
 const Keyframes = () => {
   const { url: urlParam } = useParams();
+  const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Keyframes");
   const keywordAllTools = i18nLoadNamespace(
@@ -94,12 +95,12 @@ const Keyframes = () => {
     keyframesFeaturesData,
     isLoadingSimilarity,
     similarityResults,
-    processUrl,
     role,
+    userAuthenticated,
   } = useKeyframesState();
 
-  const [input, setInput] = useState(resultUrl || "");
-  const [videoFile, setVideoFile] = useState(null);
+  const [input = resultUrl || "", setInput, videoFile, setVideoFile] =
+    useUrlOrFile();
   const [submittedUrl, setSubmittedUrl] = useState(undefined);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [tabSelected, setTabSelected] = useState(TAB_VALUES.URL);
@@ -108,13 +109,20 @@ const Keyframes = () => {
   const [showResetAdvancedSettings, setShowResetAdvancedSettings] =
     useState(false);
 
+  // Determine default max height based on authentication status
+  const getDefaultMaxHeight = () => {
+    return userAuthenticated ? 1080 : 720;
+  };
+
+  // Check if user has access to advanced settings
+  const hasAdvancedSettingsAccess = role && role.includes(ROLES.EXTRA_FEATURE);
+
   // Controlled state hooks for advanced settings
   const [downloadMaxHeight, setDownloadMaxHeight] = useState(
-    DOWNLOAD_MAX_HEIGHT_DEFAULT,
+    getDefaultMaxHeight(),
   );
   const [processLevel, setProcessLevel] = useState(PROCESS_LEVEL_DEFAULT);
   const [audioEnabled, setAudioEnabled] = useState(AUDIO_DEFAULT);
-  const [sensitivity, setSensitivity] = useState(SENSITIVITY_DEFAULT);
 
   const resetSearchSettings = () => {
     setShowResetAdvancedSettings(false);
@@ -134,7 +142,7 @@ const Keyframes = () => {
     featureDataError,
   } = useProcessKeyframes(source);
 
-  useVideoSimilarity(submittedUrl, keyword);
+  //useVideoSimilarity(submittedUrl, keyword);
   useTrackEvent(
     "submission",
     "keyframe",
@@ -155,15 +163,21 @@ const Keyframes = () => {
     dispatch(resetKeyframes());
     resetFetchingKeyframes();
 
+    const options = {
+      download_max_height: downloadMaxHeight,
+      process_level: processLevel,
+      audio: audioEnabled,
+    };
+
     try {
       if (file) {
         setHasSubmitted(true);
-        await executeProcess(file, role);
+        await executeProcess(file, options);
       } else if (finalUrl) {
         dispatch(setKeyframesUrl(finalUrl));
         setSubmittedUrl(finalUrl);
         setHasSubmitted(true);
-        const result = await executeProcess(finalUrl, role);
+        const result = await executeProcess(finalUrl, options);
         if (result?.fromCache) {
           dispatch(setKeyframesResult(result.data));
           dispatch(setKeyframesFeatures(result.featureData));
@@ -196,10 +210,11 @@ const Keyframes = () => {
   }, [urlParam]);
 
   useEffect(() => {
-    if (!processUrl) return;
-    setInput(processUrl);
-    submitUrl(processUrl);
-  }, [processUrl]);
+    const fromAssistant = searchParams.has("fromAssistant");
+    if (fromAssistant && (input || videoFile)) {
+      submitUrl(input, videoFile);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (featureData && data && hasSubmitted) {
@@ -208,6 +223,11 @@ const Keyframes = () => {
       setHasSubmitted(false);
     }
   }, [featureData, data, hasSubmitted, dispatch]);
+
+  // Update max height when authentication status changes
+  useEffect(() => {
+    setDownloadMaxHeight(getDefaultMaxHeight());
+  }, [userAuthenticated]);
 
   return (
     <Box>
@@ -240,96 +260,93 @@ const Keyframes = () => {
                     // preprocessLocalFile={}
                     isParentLoading={isBusy}
                     handleClearUrl={resetResults}
+                    urlInputTestId="keyframes-input"
+                    submitButtonTestId="keyframes-submit"
                   />
 
-                  <AdvancedSettingsContainer
-                    showAdvancedSettings={showAdvancedSettings}
-                    setShowAdvancedSettings={setShowAdvancedSettings}
-                    showResetAdvancedSettings={showResetAdvancedSettings}
-                    resetSearchSettings={resetSearchSettings}
-                    keywordFn={keyword}
-                    keywordShow={"keyframes_advanced_settings_show"}
-                    keywordHide={"keyframes_advanced_settings_hide"}
-                    keywordReset={"keyframes_advanced_settings_reset"}
-                  >
-                    <Box display="flex" gap={2} flexWrap="wrap" sx={{ p: 2 }}>
-                      <FormControl sx={{ minWidth: 120 }}>
-                        <InputLabel id="download-max-height-label">
-                          {keyword("download_max_height")}
-                        </InputLabel>
-                        <Select
-                          variant="outlined"
-                          labelId="download-max-height-label"
-                          id="download-max-height-select"
-                          value={downloadMaxHeight}
-                          label={keyword("download_max_height")}
-                          onChange={(e) =>
-                            setDownloadMaxHeight(Number(e.target.value))
-                          }
-                        >
-                          {DOWNLOAD_MAX_HEIGHT_OPTIONS.map((val) => (
-                            <MenuItem key={val} value={val}>
-                              {val}p
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
+                  {hasAdvancedSettingsAccess && (
+                    <AdvancedSettingsContainer
+                      showAdvancedSettings={showAdvancedSettings}
+                      setShowAdvancedSettings={setShowAdvancedSettings}
+                      showResetAdvancedSettings={showResetAdvancedSettings}
+                      resetSearchSettings={resetSearchSettings}
+                      keywordFn={keyword}
+                      keywordShow={"keyframes_advanced_settings_show"}
+                      keywordHide={"keyframes_advanced_settings_hide"}
+                      keywordReset={"keyframes_advanced_settings_reset"}
+                    >
+                      <Box display="flex" gap={2} flexWrap="wrap" sx={{ p: 2 }}>
+                        <FormControl sx={{ minWidth: 120 }}>
+                          <InputLabel id="download-max-height-label">
+                            {keyword("download_max_height")}
+                          </InputLabel>
+                          <Select
+                            variant="outlined"
+                            labelId="download-max-height-label"
+                            id="download-max-height-select"
+                            disabled={isBusy}
+                            value={downloadMaxHeight}
+                            label={keyword("download_max_height")}
+                            onChange={(e) =>
+                              setDownloadMaxHeight(Number(e.target.value))
+                            }
+                          >
+                            {DOWNLOAD_MAX_HEIGHT_OPTIONS.map((val) => (
+                              <MenuItem key={val} value={val}>
+                                {val}p
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
 
-                      <FormControl sx={{ minWidth: 120 }}>
-                        <InputLabel id="process-level-label">
-                          {keyword("process_level")}
-                        </InputLabel>
-                        <Select
-                          variant="outlined"
-                          labelId="process-level-label"
-                          id="process-level-select"
-                          value={processLevel}
-                          label={keyword("process_level")}
-                          onChange={(e) =>
-                            setProcessLevel(Number(e.target.value))
-                          }
-                        >
-                          {PROCESS_LEVEL_OPTIONS.map((val) => (
-                            <MenuItem key={val} value={val}>
-                              {PROCESS_LEVEL_DESCRIPTIONS[val]}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
+                        <FormControl sx={{ minWidth: 120 }}>
+                          <InputLabel id="process-level-label">
+                            {keyword("process_level")}
+                          </InputLabel>
+                          <Select
+                            variant="outlined"
+                            labelId="process-level-label"
+                            id="process-level-select"
+                            disabled={isBusy}
+                            value={processLevel}
+                            label={keyword("process_level")}
+                            onChange={(e) =>
+                              setProcessLevel(Number(e.target.value))
+                            }
+                          >
+                            {PROCESS_LEVEL_OPTIONS.map((val) => (
+                              <MenuItem key={val} value={val}>
+                                {PROCESS_LEVEL_DESCRIPTIONS[val]}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
 
-                      <FormControl sx={{ minWidth: 120 }}>
-                        <InputLabel id="audio-enabled-label">
-                          {keyword("enable_audio_processing")}
-                        </InputLabel>
-                        <Select
-                          variant="outlined"
-                          labelId="audio-enabled-label"
-                          id="audio-enabled-select"
-                          value={audioEnabled}
-                          label={keyword("audio")}
-                          onChange={(e) =>
-                            setAudioEnabled(Number(e.target.value))
-                          }
-                        >
-                          {AUDIO_OPTIONS.map((val) => (
-                            <MenuItem key={val} value={val}>
-                              {val === 0 ? "False" : "True"}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-
-                      <TextField
-                        variant="outlined"
-                        label={keyword("sensitivity")}
-                        type="number"
-                        inputProps={{ min: 0.01, max: 0.6, step: 0.01 }}
-                        value={sensitivity}
-                        onChange={(e) => setSensitivity(Number(e.target.value))}
-                        sx={{ minWidth: 120 }}
-                      />
-                    </Box>
-                  </AdvancedSettingsContainer>
+                        <FormControl sx={{ minWidth: 120 }}>
+                          <InputLabel id="audio-enabled-label">
+                            {keyword("enable_audio_processing")}
+                          </InputLabel>
+                          <Select
+                            variant="outlined"
+                            labelId="audio-enabled-label"
+                            id="audio-enabled-select"
+                            value={audioEnabled}
+                            label={keyword("enable_audio_processing")}
+                            disabled={isBusy}
+                            onChange={(e) =>
+                              setAudioEnabled(Number(e.target.value))
+                            }
+                          >
+                            {AUDIO_OPTIONS.map((val) => (
+                              <MenuItem key={val} value={val}>
+                                {val === 0 ? "False" : "True"}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Box>
+                    </AdvancedSettingsContainer>
+                  )}
                 </Stack>
               </form>
             </TabPanel>

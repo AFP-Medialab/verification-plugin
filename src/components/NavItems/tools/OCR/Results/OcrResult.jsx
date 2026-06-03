@@ -22,14 +22,14 @@ import {
   setReprocessOpen,
   setSelectedScript,
 } from "@/redux/actions/tools/ocrActions";
+import { setError } from "@/redux/reducers/errorReducer";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import {
   SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
 } from "@Shared/ReverseSearch/reverseSearchUtils";
 import { TextCopy } from "@Shared/Utils/TextCopy";
 import { Translate } from "@Shared/Utils/Translate";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { setError } from "redux/reducers/errorReducer";
 
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 
@@ -194,7 +194,7 @@ const OcrResult = () => {
   }, [result]);
 
   return (
-    <Grid container spacing={4}>
+    <Grid container spacing={4} data-testid="ocr-results">
       <Grid size={{ xs: 6 }}>
         <Grid container spacing={2} direction={"column"}>
           <Grid size={{ xs: 12 }}>
@@ -242,6 +242,7 @@ const OcrResult = () => {
                           false,
                         )
                       }
+                      data-testid="ocr-results-yandex"
                     >
                       {keyword("ocr_search_yandex")}
                     </Button>
@@ -259,6 +260,7 @@ const OcrResult = () => {
                             false,
                           );
                         }}
+                        data-testid="ocr-results-bing"
                       >
                         {keyword("ocr_search_bing")}
                       </Button>
@@ -276,6 +278,7 @@ const OcrResult = () => {
                           false,
                         );
                       }}
+                      data-testid="ocr-results-google"
                     >
                       {keyword("ocr_search_google_lens")}
                     </Button>
@@ -304,11 +307,11 @@ const OcrResult = () => {
                       alignItems: "flex-start",
                     }}
                   >
-                    <Grid size={{ xs: 6 }}>
+                    <Grid size={{ xs: 6 }} data-testid="ocr-results-copy">
                       <TextCopy text={fullText} index="-1" type={"BUTTON"} />
                     </Grid>
 
-                    <Grid size={{ xs: 6 }}>
+                    <Grid size={{ xs: 6 }} data-testid="ocr-results-translate">
                       <Translate text={fullText} type={"BUTTON"} />
                     </Grid>
                   </Grid>

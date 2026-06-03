@@ -13,11 +13,9 @@ import CardHeader from "@mui/material/CardHeader";
 import Collapse from "@mui/material/Collapse";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
-import LinearProgress from "@mui/material/LinearProgress";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { WarningAmber } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
@@ -29,18 +27,18 @@ import { TOOLS_CATEGORIES } from "@/constants/tools";
 import {
   setProcessUrl,
   setStateExpanded,
-  setWarningExpanded,
 } from "@/redux/actions/tools/assistantActions";
 
 import {
   TransHtmlDoubleLineBreak,
   TransSupportedToolsLink,
-} from "../TransComponents";
+} from "../components";
+import { scrollToElement } from "../utils/index";
 import AssistantImageResult from "./AssistantImageResult";
 import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
 import AssistantVideoResult from "./AssistantVideoResult";
 
-const AssistantMediaResult = () => {
+const AssistantMediaResult = ({ title = null }) => {
   const classes = useMyStyles();
   const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -60,21 +58,8 @@ const AssistantMediaResult = () => {
 
   // third party topMenuItem states
   //const ocrLoading = useSelector(state=>state.assistant.ocrLoading)
-  const dbkfMediaMatchLoading = useSelector(
-    (state) => state.assistant.dbkfMediaMatchLoading,
-  );
-  const dbkfImageMatch = useSelector((state) => state.assistant.dbkfImageMatch);
-  const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
 
-  const warningExpanded = useSelector(
-    (state) => state.assistant.warningExpanded,
-  );
   const resultIsImage = resultProcessType === TOOLS_CATEGORIES.IMAGE;
-
-  // local control state
-  // const [expandMedia, setExpandMedia] = useState(
-  //   !singleMediaPresent || processUrl == null,
-  // );
 
   // select the correct media to process, then load actions possible
   const submitMediaToProcess = (url) => {
@@ -86,6 +71,7 @@ const AssistantMediaResult = () => {
       cType = TOOLS_CATEGORIES.VIDEO;
     }
     dispatch(setProcessUrl(url, cType));
+    scrollToElement("url-media-results", 100);
   };
 
   const [filteredImageList, setFilteredImageList] = useState([]);
@@ -124,29 +110,16 @@ const AssistantMediaResult = () => {
   return (
     <Card
       variant="outlined"
+      id="url-media-results"
       data-testid="url-media-results"
       hidden={!filteredImageList.length && !videoList.length}
     >
       <CardHeader
         className={classes.assistantCardHeader}
-        title={keyword("media_title")}
+        title={title ? keyword(title) : keyword("media_title")}
         subheader={keyword("media_below")}
         action={
           <div style={{ display: "flex" }}>
-            <div>
-              {(dbkfImageMatch || dbkfVideoMatch) && (
-                <Tooltip title={keyword("image_warning")}>
-                  <WarningAmber
-                    color={"warning"}
-                    className={classes.toolTipWarning}
-                    onClick={() => {
-                      dispatch(setWarningExpanded(!warningExpanded));
-                      window.scroll(0, 0);
-                    }}
-                  />
-                </Tooltip>
-              )}
-            </div>
             <div>
               <Tooltip
                 interactive={"true"}
@@ -170,15 +143,8 @@ const AssistantMediaResult = () => {
             </div>
           </div>
         }
-        slotProps={{
-          subheader: { sx: { color: "white" } },
-        }}
       />
-      {dbkfMediaMatchLoading ? (
-        <div>
-          <LinearProgress />
-        </div>
-      ) : null}
+
       {/* selected image or video with recommended tools */}
       <CardContent sx={{ padding: processUrl == null ? 0 : undefined }}>
         {missingMedia ? (

@@ -49,7 +49,7 @@ const ResultDisplayItem = ({
     >
       <Grid
         container
-        direction="row"
+        direction={{ sm: "column", md: "row" }}
         sx={{
           p: 2,
           justifyContent: "space-between",
@@ -58,7 +58,7 @@ const ResultDisplayItem = ({
         <Grid
           container
           direction="row"
-          size={{ xs: 10 }}
+          size={{ sm: 12, md: 10 }}
           spacing={2}
           sx={{
             justifyContent: "flex-start",
@@ -137,17 +137,19 @@ const ResultDisplayItem = ({
           </Grid>
         </Grid>
         <Grid
-          size={{ xs: 2 }}
+          size={{ sm: 12, md: 2 }}
           sx={{
-            pl: 4,
+            pl: { sm: 0, md: 4 },
+            pt: { sm: 2, md: 0 },
           }}
         >
           <Stack
-            direction="column"
+            direction={{ sm: "row", md: "column" }}
             spacing={2}
             sx={{
-              justifyContent: "center",
-              alignItems: "flex-start",
+              justifyContent: { sm: "flex-start", md: "center" },
+              alignItems: { sm: "center", md: "flex-start" },
+              flexWrap: "wrap",
             }}
           >
             <Link

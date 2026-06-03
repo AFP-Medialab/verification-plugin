@@ -1,0 +1,204 @@
+import React, { useRef, useState } from "react";
+
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Box from "@mui/material/Box";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
+import ListItemText from "@mui/material/ListItemText";
+import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
+
+import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
+
+import {
+  renderDescription,
+  renderDomainTitle,
+  renderEvidence,
+  renderLabels,
+  renderScope,
+  renderSourceTypeChip,
+  renderThisDomainOrAccount,
+} from "../utils";
+
+const ExtractedUrlDomainAnalysisResult = ({
+  domainResults,
+  credibilityScope,
+  urlColor,
+  sourceTypes,
+  trafficLightColors,
+}) => {
+  const classes = useMyStyles();
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
+  const [open, setOpen] = useState(false);
+  const triggerRef = useRef(null);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  // passing through correct colours for details here
+  const urlDomainAnalysisData = [
+    [domainResults.caution, trafficLightColors.caution, sourceTypes.caution],
+    [domainResults.mixed, trafficLightColors.mixed, sourceTypes.mixed],
+    [domainResults.positive, trafficLightColors.positive, sourceTypes.positive],
+  ];
+
+  return (
+    <List component={Stack} direction="row" disablePadding={true}>
+      {urlDomainAnalysisData ? (
+        <ListItem>
+          <ListItemText
+            primary={
+              <div>
+                <Typography
+                  variant={"body1"}
+                  component={"div"}
+                  align={"left"}
+                  color={"textPrimary"}
+                ></Typography>
+                <Box mb={0.5} />
+              </div>
+            }
+            secondary={
+              <Typography
+                variant={"caption"}
+                component={"div"}
+                color={"textSecondary"}
+              >
+                <ListItemSecondaryAction>
+                  <Tooltip title="Details">
+                    <IconButton
+                      ref={triggerRef}
+                      aria-label="View details"
+                      size="small"
+                      onClick={handleClickOpen}
+                    >
+                      <ListAltOutlinedIcon />
+                    </IconButton>
+                  </Tooltip>
+
+                  <Dialog
+                    onClose={handleClose}
+                    maxWidth={"lg"}
+                    open={open}
+                    scroll={"paper"}
+                    sx={{ "& .MuiDialog-paper": { minWidth: "50%" } }}
+                    disableRestoreFocus
+                    TransitionProps={{
+                      onExited: () => triggerRef.current?.focus(),
+                    }}
+                  >
+                    <DialogTitle>
+                      {/* display the url */}
+                      {urlDomainAnalysisData
+                        ? renderDomainTitle(
+                            keyword,
+                            classes,
+                            credibilityScope,
+                            urlColor,
+                            handleClose,
+                          )
+                        : null}
+                    </DialogTitle>
+
+                    <DialogContent dividers>
+                      {/* display the URL Domain Analysis results in an accordion*/}
+                      {urlDomainAnalysisData?.map(
+                        (
+                          [
+                            urlDomainAnalysisResults,
+                            trafficLightColor,
+                            sourceType,
+                          ],
+                          index,
+                        ) => (
+                          <Box key={index} mt={3} ml={2}>
+                            {urlDomainAnalysisResults?.map((value, key) => (
+                              <Accordion
+                                key={key}
+                                style={{ overflow: "hidden" }}
+                              >
+                                <AccordionSummary
+                                  expandIcon={<ExpandMoreIcon />}
+                                >
+                                  {value.credibilityScope ? (
+                                    <Stack
+                                      direction="row"
+                                      spacing={1}
+                                      alignItems="center"
+                                    >
+                                      {renderSourceTypeChip(
+                                        keyword,
+                                        trafficLightColor,
+                                        sourceType,
+                                      )}
+                                      {renderThisDomainOrAccount(
+                                        keyword,
+                                        value.credibilityScope,
+                                        value.source,
+                                      )}
+                                    </Stack>
+                                  ) : null}
+                                </AccordionSummary>
+
+                                <AccordionDetails>
+                                  <List key={key}>
+                                    <ListItem>
+                                      {renderScope(
+                                        keyword,
+                                        value.credibilityScope,
+                                      )}
+                                    </ListItem>
+                                    <ListItem>
+                                      {renderLabels(keyword, value.labels)}
+                                    </ListItem>
+                                    <ListItem>
+                                      {renderDescription(
+                                        keyword,
+                                        value.description,
+                                      )}
+                                    </ListItem>
+                                  </List>
+                                  {value.evidence
+                                    ? renderEvidence(
+                                        keyword,
+                                        value.labels,
+                                        value.evidence,
+                                        value.source,
+                                        value.credibilityScope,
+                                      )
+                                    : null}
+                                </AccordionDetails>
+                              </Accordion>
+                            ))}
+                          </Box>
+                        ),
+                      )}
+                    </DialogContent>
+                  </Dialog>
+                </ListItemSecondaryAction>
+              </Typography>
+            }
+          />
+        </ListItem>
+      ) : null}
+    </List>
+  );
+};
+export default ExtractedUrlDomainAnalysisResult;

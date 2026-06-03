@@ -6,11 +6,11 @@ import {
   setForensicsLoading,
   setForensicsResult,
 } from "@/redux/actions/tools/forensicActions";
+import { setError } from "@/redux/reducers/errorReducer";
 import axios from "axios";
-import { setError } from "redux/reducers/errorReducer";
 
 const useGetImages = (url, type, keyword) => {
-  const forensic_base_url = process.env.REACT_APP_CAA_FORENSICS_URL;
+  const forensic_base_url = import.meta.env.VITE_CAA_FORENSICS_URL;
 
   const link2dataURL = async (imgLink) => {
     let resp = await fetch(imgLink);

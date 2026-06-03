@@ -1,3 +1,4 @@
+import VideoIcon from "@/components/NavBar/images/SVG/Video/Video.svg?react";
 import React from "react";
 import Iframe from "react-iframe";
 import { useSelector } from "react-redux";
@@ -7,16 +8,18 @@ import CardActions from "@mui/material/CardActions";
 import CardMedia from "@mui/material/CardMedia";
 import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
+import SvgIcon from "@mui/material/SvgIcon";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
-import ImageIcon from "@mui/icons-material/Image";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
+import YouTubeEmbed from "@/components/Shared/Utils/YouTubeEmbed";
 import { KNOWN_LINKS } from "@/constants/tools";
+import { browser } from "wxt/browser";
 
 const AssistantVideoResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -24,18 +27,25 @@ const AssistantVideoResult = () => {
 
   const processUrl = useSelector((state) => state.assistant.processUrl);
   const input_url_type = useSelector((state) => state.assistant.inputUrlType);
+  const imageVideoSelected = useSelector(
+    (state) => state.assistant.imageVideoSelected,
+  );
 
-  const useIframe = () => {
+  const getVideoRenderType = () => {
     switch (input_url_type) {
       case KNOWN_LINKS.YOUTUBE:
+        return "youtube";
+      case KNOWN_LINKS.BBC:
       case KNOWN_LINKS.VIMEO:
       case KNOWN_LINKS.DAILYMOTION:
       case KNOWN_LINKS.LIVELEAK:
-        return true;
+        return "iframe";
       default:
-        return false;
+        return "video";
     }
   };
+
+  const videoRenderType = getVideoRenderType();
 
   const downloadVideoFound = () => {
     switch (input_url_type) {
@@ -50,8 +60,9 @@ const AssistantVideoResult = () => {
     let positionOne = 0;
 
     // Don't embed blob links, they are url for cached in-memory video
+    // imageVideoSelected true for a local file
     if (embedURL.startsWith("blob:")) {
-      return null;
+      return imageVideoSelected ? embedURL : null;
     }
 
     let positionTwo;
@@ -61,7 +72,7 @@ const AssistantVideoResult = () => {
         if (!embedURL.includes("/embed/")) {
           let ids = embedURL.match("(?<=v=|youtu.be/)([a-zA-Z0-9_-]+)[&|?]?");
           if (ids) {
-            embedURL = "http://www.youtube.com/embed/" + ids[0];
+            embedURL = "https://www.youtube.com/embed/" + ids[0];
           }
         }
         break;
@@ -101,32 +112,29 @@ const AssistantVideoResult = () => {
     navigator.clipboard.writeText(processUrl);
   };
 
+  const embedUrl = preprocessLinkForEmbed(processUrl);
+
   return (
     <Card variant={"outlined"}>
       <CardMedia data-testid="assistant-media-video-container">
-        {useIframe() && preprocessLinkForEmbed(processUrl) && (
+        {videoRenderType === "youtube" && embedUrl && (
+          <YouTubeEmbed embedLink={embedUrl} height="400" width="100%" />
+        )}
+        {videoRenderType === "iframe" && embedUrl && (
           <div data-testid="assistant-media-video-iframe">
-            <Iframe
-              hidden={downloadVideoFound()}
-              frameBorder="0"
-              url={preprocessLinkForEmbed(processUrl)}
-              //allow="fullscreen"  // correct way to fix error? "useAssistantApi.jsx:28 Allow attribute will take precedence over 'allowfullscreen'."
-              height="400"
-              width="100%"
-            />
+            <Iframe frameBorder="0" url={embedUrl} height="400" width="100%" />
           </div>
         )}
-        {!useIframe() && preprocessLinkForEmbed(processUrl) && (
+        {videoRenderType === "video" && embedUrl && (
           <video
-            hidden={downloadVideoFound()}
-            src={preprocessLinkForEmbed(processUrl)}
-            controls={true}
+            src={embedUrl}
+            controls
             height="400"
             width="100%"
             data-testid="assistant-media-video-tag"
-          ></video>
+          />
         )}
-        {!preprocessLinkForEmbed(processUrl) && (
+        {!embedUrl && (
           <div
             style={{
               width: "100%",
@@ -152,7 +160,7 @@ const AssistantVideoResult = () => {
         </Typography>
       </CardMedia>
       <CardActions>
-        <ImageIcon color={"action"} />
+        <SvgIcon component={VideoIcon} color="action" inheritViewBox />
         <Link
           className={classes.longText}
           href={processUrl}
@@ -178,10 +186,9 @@ const AssistantVideoResult = () => {
         <Tooltip title={keyword("archive_link")}>
           <IconButton
             onClick={() => {
-              window.open(
-                "https://web.archive.org/save/" + processUrl,
-                "_blank",
-              );
+              browser.tabs.create({
+                url: "https://web.archive.org/save/" + processUrl,
+              });
             }}
           >
             <ArchiveOutlinedIcon color={"action"} />

@@ -29,7 +29,7 @@ import {
   getSelectedSourcesNameMaps,
   getTextClusters,
   onlyUnique,
-} from "components/NavItems/tools/SNA/utils/accessSavedCollections";
+} from "@/components/NavItems/tools/SNA/utils/accessSavedCollections";
 import dayjs from "dayjs";
 import { MultiUndirectedGraph } from "graphology";
 import louvain from "graphology-communities-louvain";
@@ -215,8 +215,7 @@ const getCoorContent = async (
     let filteredResp = resp
       .map((o) => {
         let x = o["cluster"];
-        o.objects = x;
-        return o;
+        return { ...o, objects: x };
       })
       .filter(
         (x) =>
@@ -227,8 +226,7 @@ const getCoorContent = async (
   let filteredContent = selectedContent
     .map((o) => {
       let x = o[objectChoice];
-      o.objects = x;
-      return o;
+      return { ...o, objects: x };
     })
     .filter((o) => o.objects?.length > 0);
   return filteredContent;

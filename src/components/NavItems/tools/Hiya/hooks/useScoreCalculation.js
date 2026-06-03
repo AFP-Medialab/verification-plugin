@@ -31,6 +31,9 @@ export const useScoreCalculation = (result) => {
       return null;
     }
 
+    // Note: Error checking is now handled upstream in the hook flow
+    // This function should only receive valid results after error filtering
+
     // Validate result structure and data types
     if (
       !result.scores ||

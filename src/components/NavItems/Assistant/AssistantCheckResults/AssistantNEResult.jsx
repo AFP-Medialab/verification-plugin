@@ -3,6 +3,7 @@ import { Trans } from "react-i18next";
 import { useSelector } from "react-redux";
 import { TagCloud } from "react-tagcloud";
 
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Card from "@mui/material/Card";
@@ -24,7 +25,9 @@ import "tippy.js/dist/tippy.css";
 import {
   TransHtmlDoubleLineBreak,
   TransNamedEntityRecogniserLink,
-} from "../TransComponents";
+  TransUsfdAuthor,
+} from "../components";
+import { NE_TYPE_COLORS } from "../constants";
 
 const AssistantNEResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -49,26 +52,7 @@ const AssistantNEResult = () => {
   };
 
   function getWordColor(tag) {
-    switch (tag.category.toLowerCase()) {
-      case "person":
-        return "#648FFF";
-      // return "blue";
-      case "location":
-        return "#DC267F";
-      // return "red";
-      case "organization":
-        return "#FFB000";
-      // return "green";
-      case "hashtag":
-        return "#FE6100";
-      // return "orange";
-      case "userid":
-        return "#785EF0";
-      // return "purple";
-      default:
-        return "black";
-      // return "black";
-    }
+    return NE_TYPE_COLORS[tag.category.toLowerCase()] ?? "black";
   }
 
   const styles = {
@@ -107,7 +91,7 @@ const AssistantNEResult = () => {
             <Typography variant="h5">
               {tag.count} {keyword("named_entity_mentions")}
             </Typography>
-            <Typography>{tag.abstract}</Typography>
+            {!!tag.abstract && <Typography>{tag.abstract}</Typography>}
           </>
         }
         arrow
@@ -138,6 +122,8 @@ const AssistantNEResult = () => {
                 <>
                   <Trans t={keyword} i18nKey="named_entity_tooltip" />
                   <TransHtmlDoubleLineBreak keyword={keyword} />
+                  <TransUsfdAuthor keyword={keyword} />
+                  <TransHtmlDoubleLineBreak keyword={keyword} />
                   <TransNamedEntityRecogniserLink keyword={keyword} />
                 </>
               }
@@ -149,28 +135,30 @@ const AssistantNEResult = () => {
         />
         {neLoading && <LinearProgress />}
         <CardContent>
-          <ButtonGroup sx={{ paddingBottom: "15px" }}>
-            {neResult.map((tag) => (
-              <Button
-                className={
-                  visibleCategories[tag.category.toLowerCase()]
-                    ? classes.namedEntityButtonHidden
-                    : ""
-                }
-                style={{
-                  color: "white",
-                  border: "none",
-                  backgroundColor: getWordColor(tag),
-                }}
-                key={tag.category}
-                onClick={() => toggleCategory(tag.category.toLowerCase())}
-              >
-                {tag.category}
-              </Button>
-            ))}
-          </ButtonGroup>
+          <Box sx={{ textAlign: "center" }}>
+            <ButtonGroup sx={{ paddingBottom: 2 }}>
+              {neResult.map((tag) => (
+                <Button
+                  className={
+                    visibleCategories[tag.category.toLowerCase()]
+                      ? classes.namedEntityButtonHidden
+                      : ""
+                  }
+                  style={{
+                    color: "white",
+                    border: "none",
+                    backgroundColor: getWordColor(tag),
+                  }}
+                  key={tag.category}
+                  onClick={() => toggleCategory(tag.category.toLowerCase())}
+                >
+                  {tag.category}
+                </Button>
+              ))}
+            </ButtonGroup>
+          </Box>
           <Grid container>
-            <Grid align={"center"}>
+            <Grid sx={{ textAlign: "center" }}>
               <TagCloud
                 tags={neResultCount}
                 shuffle={false}

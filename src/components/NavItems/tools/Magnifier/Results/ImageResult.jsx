@@ -11,10 +11,10 @@ import IconButton from "@mui/material/IconButton";
 
 import CloseIcon from "@mui/icons-material/Close";
 
+import { ReverseSearchButtons } from "@/components/Shared/ReverseSearch/ReverseSearchButtons";
 import { setMagnifierResult } from "@/redux/actions/tools/magnifierActions";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { reverseImageSearch } from "@Shared/ReverseSearch/reverseSearchUtils";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { ReverseSearchButtons } from "components/Shared/ReverseSearch/ReverseSearchButtons";
 
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import ImageCropper from "../Utils/ImageCropper";
@@ -102,7 +102,7 @@ const ImageResult = ({ handleCloseResults }) => {
   const [imageCropperOpen, setImageCropperOpen] = useState(false);
 
   return (
-    <Card variant="outlined">
+    <Card variant="outlined" data-testid="magnifier-results">
       <Box
         sx={{
           m: 2,
@@ -113,6 +113,7 @@ const ImageResult = ({ handleCloseResults }) => {
           className={classes.headerUploadedImage}
           action={
             <IconButton
+              data-testid="magnifier-close"
               aria-label="close"
               onClick={handleCloseResults}
               sx={{ p: 1 }}
@@ -141,6 +142,7 @@ const ImageResult = ({ handleCloseResults }) => {
             setMagnifierResult={setMagnifierResult}
             original={original}
             setIsImageUrl={setIsImageUrl}
+            data-testid="magnifier-close-cropper"
           />
 
           <Box
@@ -158,12 +160,18 @@ const ImageResult = ({ handleCloseResults }) => {
             }}
           >
             <Grid>
-              <Button color="primary" variant="contained" onClick={handleOpen}>
+              <Button
+                data-testid="magnifier-open-editor"
+                color="primary"
+                variant="contained"
+                onClick={handleOpen}
+              >
                 {keyword("edit_image")}
               </Button>
             </Grid>
             <Grid>
               <Button
+                data-testid="magnifier-open-cropper"
                 color="primary"
                 variant="contained"
                 onClick={() => {
@@ -179,7 +187,11 @@ const ImageResult = ({ handleCloseResults }) => {
                 href={resultImage}
                 download={getDownloadLink(resultImage)}
               >
-                <Button color="primary" variant="contained">
+                <Button
+                  data-testid="magnifier-download"
+                  color="primary"
+                  variant="contained"
+                >
                   {keyword("download")}
                 </Button>
               </a>
@@ -199,6 +211,7 @@ const ImageResult = ({ handleCloseResults }) => {
           <ReverseSearchButtons
             isimageUrl={isImageUrl}
             reverseSearch={reverseSearch}
+            data-testid="magnifier-reversesearch"
           >
             <></>
           </ReverseSearchButtons>

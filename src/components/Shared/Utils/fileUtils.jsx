@@ -4,6 +4,7 @@ import {
   MAX_VIDEO_FILE_SIZE,
 } from "@/config";
 import { ROLES } from "@/constants/roles";
+import ResizeWorker from "@workers/resizeImageWorker.js?worker";
 import {
   fileTypeFromBlob,
   fileTypeFromBuffer,
@@ -180,9 +181,7 @@ let workerInstance;
  */
 export const resizeImageWithWorker = (image) => {
   if (!workerInstance) {
-    workerInstance = new Worker(
-      new URL("@workers/resizeImageWorker", import.meta.url),
-    );
+    workerInstance = new ResizeWorker();
   }
 
   return new Promise((resolve, reject) => {

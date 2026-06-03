@@ -9,6 +9,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import { ThemeProvider } from "@mui/material/styles";
 
+import { AssistantSelectionProvider } from "@/Hooks/useUrlOrFile";
 import createCache from "@emotion/cache";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -87,8 +88,10 @@ const AppWrapper = ({ children }) => {
             }}
           />
           <QueryClientProvider client={queryClient}>
-            {children}
-            <ReactQueryDevtools initialIsOpen={false}></ReactQueryDevtools>
+            <AssistantSelectionProvider>
+              {children}
+              <ReactQueryDevtools initialIsOpen={false}></ReactQueryDevtools>
+            </AssistantSelectionProvider>
           </QueryClientProvider>
         </ThemeProvider>
       </CacheProvider>

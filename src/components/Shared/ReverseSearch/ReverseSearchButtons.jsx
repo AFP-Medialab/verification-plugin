@@ -3,7 +3,7 @@ import React from "react";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 
-import { SEARCH_ENGINE_SETTINGS } from "components/Shared/ReverseSearch/reverseSearchUtils";
+import { SEARCH_ENGINE_SETTINGS } from "@/components/Shared/ReverseSearch/reverseSearchUtils";
 
 import { i18nLoadNamespace } from "../Languages/i18nLoadNamespace";
 import useMyStyles from "../MaterialUiStyles/useMyStyles";
@@ -13,6 +13,7 @@ export const ReverseSearchButtons = ({
   reverseSearch,
   isimageUrl = true,
   children,
+  ...props
 }) => {
   const keyword = i18nLoadNamespace("components/Shared/ReverseSearch");
   const classes = useMyStyles();
@@ -40,6 +41,7 @@ export const ReverseSearchButtons = ({
                 variant="contained"
                 color={"primary"}
                 onClick={async () => await reverseSearch(engine.NAME)}
+                {...props}
               >
                 {keyword(engine.CONTEXT_MENU_ID)}
               </Button>

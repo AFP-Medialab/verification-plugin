@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
+import { setError } from "@/redux/reducers/errorReducer";
 import axios from "axios";
 import _ from "lodash";
-import { setError } from "redux/reducers/errorReducer";
 
 export const useAnalysisWrapper = (
   setAnalysisLoading,
@@ -14,7 +14,7 @@ export const useAnalysisWrapper = (
   keyword,
   isLoading,
 ) => {
-  const assistantEndpoint = process.env.REACT_APP_ASSISTANT_URL;
+  const assistantEndpoint = import.meta.env.VITE_ASSISTANT_URL;
   const dispatch = useDispatch();
   const [data, setData] = useState(null);
   const [cpt, setCpt] = useState(0);

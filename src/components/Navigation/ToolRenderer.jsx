@@ -1,0 +1,113 @@
+import React, { Suspense, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Route, Routes, useLocation } from "react-router-dom";
+
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import Container from "@mui/material/Container";
+import Fade from "@mui/material/Fade";
+
+import { useTrackPageView } from "@/Hooks/useAnalytics";
+import { TOOL_GROUPS, toolsHome } from "@/constants/tools";
+import { TOP_MENU_ITEMS } from "@/constants/topMenuItems";
+import { selectTopMenuItem } from "@/redux/reducers/navReducer";
+import { selectTool } from "@/redux/reducers/tools/toolReducer";
+import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
+
+/**
+ *
+ * @param toolsList {Tool[]}
+ * @returns {Element}
+ */
+const ToolRenderer = ({ tools }) => {
+  return (
+    <Routes>
+      {tools.map((tool, index) => {
+        if (tool.path === toolsHome.path) {
+          return (
+            <Route
+              path={"*"}
+              key={index}
+              element={<ToolPageLayout tool={tool} />}
+            />
+          );
+        } else if (tool.path) {
+          return (
+            <Route path={tool.path} key={index}>
+              <Route index element={<ToolPageLayout tool={tool} />} />
+              <Route path={":url"} element={<ToolPageLayout tool={tool} />} />
+              <Route
+                path={":url/:type"}
+                element={<ToolPageLayout tool={tool} />}
+              />
+            </Route>
+          );
+        }
+        return null;
+      })}
+    </Routes>
+  );
+};
+const ToolPageLayout = ({ tool }) => {
+  const dispatch = useDispatch();
+
+  const path = useLocation();
+  const client_id = getclientId();
+
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.id : null;
+
+  const handleToolChange = (tool) => {
+    if (tool.toolGroup === TOOL_GROUPS.VERIFICATION)
+      dispatch(selectTopMenuItem(TOP_MENU_ITEMS[0].title));
+
+    dispatch(selectTool(tool.titleKeyword));
+  };
+
+  useTrackPageView(path, client_id, uid, tool);
+  useEffect(() => {
+    //trackPageView(path, client_id, uid);
+    handleToolChange(tool);
+  }, [tool]);
+
+  return (
+    <Container
+      key={tool.titleKeyword}
+      maxWidth={false}
+      sx={{
+        minHeight: "calc(100vh - 110px)",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <Fade
+        in={true}
+        style={{ flex: 1, display: "flex", flexDirection: "column" }}
+      >
+        <Box>
+          <Box sx={{ flex: 1 }}>
+            <Suspense
+              fallback={
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  minHeight="200px"
+                >
+                  <CircularProgress />
+                </Box>
+              }
+            >
+              {tool.content}
+            </Suspense>
+          </Box>
+          <Box component="footer" sx={{ mt: "auto" }}>
+            {tool.footer}
+          </Box>
+        </Box>
+      </Fade>
+    </Container>
+  );
+};
+
+export default ToolRenderer;

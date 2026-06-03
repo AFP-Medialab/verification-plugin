@@ -1,4 +1,4 @@
-import { onlyUnique } from "components/NavItems/tools/SNA/utils/accessSavedCollections";
+import { onlyUnique } from "@/components/NavItems/tools/SNA/utils/accessSavedCollections";
 
 export const entryAggregatorByListValue = (
   selectedContent,
@@ -7,6 +7,7 @@ export const entryAggregatorByListValue = (
 ) => {
   let aggregator = {};
   selectedContent.forEach((entry) => {
+    console.log(entry.splitText);
     if (!entry[listField]) return;
     if (!entry[listField]?.length > 0) return;
     entry[listField]
@@ -25,7 +26,6 @@ export const entryAggregatorByListValue = (
         }
       });
   });
-
   return Object.values(aggregator).sort((a, b) => b.count - a.count);
 };
 

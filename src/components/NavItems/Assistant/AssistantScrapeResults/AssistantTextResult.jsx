@@ -21,20 +21,28 @@ import TextFooter from "@/components/NavItems/Assistant/AssistantScrapeResults/T
 import {
   scrollToElement,
   treeMapToElements,
-} from "@/components/NavItems/Assistant/AssistantScrapeResults/assistantUtils";
-import {
-  TransCredibilitySignalsLink,
-  TransHtmlDoubleLineBreak,
-  TransMachineGeneratedTextTooltip,
-  TransPersuasionTechniquesTooltip,
-  TransSupportedToolsLink,
-} from "@/components/NavItems/Assistant/TransComponents";
+} from "@/components/NavItems/Assistant/utils";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
+import { ROLES } from "@/constants/roles";
 import {
+  setFactChecksExpanded,
   setImportantSentenceThreshold,
-  setWarningExpanded,
 } from "@/redux/actions/tools/assistantActions";
+
+import {
+  TransCredibilitySignalsLink,
+  TransDeutscheWelleAuthor,
+  TransExtractedTextTooltip,
+  TransHtmlDoubleLineBreak,
+  TransKinitAuthor,
+  TransNewsFramingTooltip,
+  TransNewsGenreTooltip,
+  TransPersuasionTechniquesTooltip,
+  TransSupportedToolsLink,
+  TransUsfdAuthor,
+} from "../components";
+import { CREDIBILITY_SIGNAL_TITLES } from "../constants";
 
 const AssistantTextResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -43,21 +51,31 @@ const AssistantTextResult = () => {
   const classes = useMyStyles();
   const dispatch = useDispatch();
 
+  // checking if user logged in
+  const role = useSelector((state) => state.userSession.user.roles);
+
   // assistant media states
   const text = useSelector((state) => state.assistant.urlText);
   const textLang = useSelector((state) => state.assistant.textLang);
   const textHtmlMap = useSelector((state) => state.assistant.urlTextHtmlMap);
   const [textHtmlOutput, setTextHtmlOutput] = useState(null);
 
-  // third party check states
+  // dbkf check states
   const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
-  const mtLoading = useSelector((state) => state.assistant.mtLoading);
   const dbkfTextMatchLoading = useSelector(
     (state) => state.assistant.dbkfTextMatchLoading,
   );
 
+  // previous fact-checks check states
+  const prevFactChecksResult = useSelector(
+    (state) => state.assistant.prevFactChecksResult,
+  );
+  const prevFactChecksLoading = useSelector(
+    (state) => state.assistant.prevFactChecksLoading,
+  );
+
   // news framing (topic)
-  const newsFramingTitle = keyword("news_framing_title");
+  const newsFramingTitle = CREDIBILITY_SIGNAL_TITLES.NEWS_FRAMING;
   const newsFramingResult = useSelector(
     (state) => state.assistant.newsFramingResult,
   );
@@ -69,7 +87,7 @@ const AssistantTextResult = () => {
   );
 
   // news genre
-  const newsGenreTitle = keyword("news_genre_title");
+  const newsGenreTitle = CREDIBILITY_SIGNAL_TITLES.NEWS_GENRE;
   const newsGenreResult = useSelector(
     (state) => state.assistant.newsGenreResult,
   );
@@ -79,7 +97,7 @@ const AssistantTextResult = () => {
   const newsGenreFail = useSelector((state) => state.assistant.newsGenreFail);
 
   // persuasion techniques
-  const persuasionTitle = keyword("persuasion_techniques_title");
+  const persuasionTitle = CREDIBILITY_SIGNAL_TITLES.PERSUASION;
   const persuasionResult = useSelector(
     (state) => state.assistant.persuasionResult,
   );
@@ -89,7 +107,7 @@ const AssistantTextResult = () => {
   const persuasionFail = useSelector((state) => state.assistant.persuasionFail);
 
   // subjectivity
-  const subjectivityTitle = keyword("subjectivity_title");
+  const subjectivityTitle = CREDIBILITY_SIGNAL_TITLES.SUBJECTIVITY;
   const subjectivityResult = useSelector(
     (state) => state.assistant.subjectivityResult,
   );
@@ -101,7 +119,8 @@ const AssistantTextResult = () => {
   );
 
   // machine generated text
-  const machineGeneratedTextTitle = keyword("machine_generated_text_title");
+  const machineGeneratedTextTitle =
+    CREDIBILITY_SIGNAL_TITLES.MACHINE_GENERATED_TEXT;
   const machineGeneratedTextChunksResult = useSelector(
     (state) => state.assistant.machineGeneratedTextChunksResult,
   );
@@ -110,20 +129,6 @@ const AssistantTextResult = () => {
   );
   const machineGeneratedTextChunksFail = useSelector(
     (state) => state.assistant.machineGeneratedTextChunksFail,
-  );
-  const machineGeneratedTextSentencesResult = useSelector(
-    (state) => state.assistant.machineGeneratedTextSentencesResult,
-  );
-  const machineGeneratedTextSentencesLoading = useSelector(
-    (state) => state.assistant.machineGeneratedTextSentencesLoading,
-  );
-  const machineGeneratedTextSentencesFail = useSelector(
-    (state) => state.assistant.machineGeneratedTextSentencesFail,
-  );
-
-  // previous fact-checks
-  const prevFactChecksResult = useSelector(
-    (state) => state.assistant.prevFactChecksResult,
   );
 
   // display states
@@ -173,28 +178,18 @@ const AssistantTextResult = () => {
   // tooltips
   const newsFramingTooltip = (
     <>
-      <Trans
-        t={keyword}
-        i18nKey="news_framing_tooltip"
-        components={{
-          ul: <ul />,
-          li: <li />,
-        }}
-      />
+      <TransNewsFramingTooltip keyword={keyword} />
+      <TransUsfdAuthor keyword={keyword} />
+      <TransHtmlDoubleLineBreak keyword={keyword} />
       <TransCredibilitySignalsLink keyword={keyword} />
     </>
   );
 
   const newsGenreTooltip = (
     <>
-      <Trans
-        t={keyword}
-        i18nKey="news_genre_tooltip"
-        components={{
-          ul: <ul />,
-          li: <li />,
-        }}
-      />
+      <TransNewsGenreTooltip keyword={keyword} />
+      <TransUsfdAuthor keyword={keyword} />
+      <TransHtmlDoubleLineBreak keyword={keyword} />
       <TransCredibilitySignalsLink keyword={keyword} />
     </>
   );
@@ -202,6 +197,8 @@ const AssistantTextResult = () => {
   const persuasionTooltip = (
     <>
       <TransPersuasionTechniquesTooltip keyword={keyword} />
+      <TransUsfdAuthor keyword={keyword} />
+      <TransHtmlDoubleLineBreak keyword={keyword} />
       <TransCredibilitySignalsLink keyword={keyword} />
     </>
   );
@@ -210,13 +207,17 @@ const AssistantTextResult = () => {
     <>
       <Trans t={keyword} i18nKey="subjectivity_tooltip" />
       <TransHtmlDoubleLineBreak keyword={keyword} />
+      <TransDeutscheWelleAuthor keyword={keyword} />
+      <TransHtmlDoubleLineBreak keyword={keyword} />
       <TransCredibilitySignalsLink keyword={keyword} />
     </>
   );
 
   const machineGeneratedTextTooltip = (
     <>
-      <TransMachineGeneratedTextTooltip keyword={keyword} />
+      <Trans t={keyword} i18nKey="machine_generated_text_tooltip" />
+      <TransHtmlDoubleLineBreak keyword={keyword} />
+      <TransKinitAuthor keyword={keyword} />
       <TransHtmlDoubleLineBreak keyword={keyword} />
       <TransCredibilitySignalsLink keyword={keyword} />
     </>
@@ -238,15 +239,26 @@ const AssistantTextResult = () => {
           // top right warning and tooltip
           <div style={{ display: "flex" }}>
             <div
-              hidden={dbkfTextMatch === null && prevFactChecksResult === null}
+              hidden={
+                !dbkfTextMatch &&
+                !(prevFactChecksResult && role.includes(ROLES.BETA_TESTER))
+              }
             >
-              <Tooltip title={keyword("text_warning")}>
+              <Tooltip
+                title={
+                  <Trans
+                    t={keyword}
+                    i18nKey="text_warning"
+                    components={{ b: <b /> }}
+                  />
+                }
+              >
                 <WarningAmber
                   color={"warning"}
                   className={classes.toolTipWarning}
                   sx={{ cursor: "pointer" }}
                   onClick={() => {
-                    dispatch(setWarningExpanded(true));
+                    dispatch(setFactChecksExpanded(true));
                     scrollToElement("warnings", 100);
                   }}
                 />
@@ -257,15 +269,7 @@ const AssistantTextResult = () => {
                 interactive={"true"}
                 title={
                   <>
-                    <Trans
-                      t={keyword}
-                      i18nKey="text_tooltip"
-                      components={{
-                        b: <b />,
-                        ul: <ul />,
-                        li: <li />,
-                      }}
-                    />
+                    <TransExtractedTextTooltip keyword={keyword} />
                     <TransSupportedToolsLink keyword={keyword} />
                     <TransHtmlDoubleLineBreak keyword={keyword} />
                     <TransCredibilitySignalsLink keyword={keyword} />
@@ -279,9 +283,13 @@ const AssistantTextResult = () => {
           </div>
         }
       />
-      {dbkfTextMatchLoading && mtLoading && (
-        <LinearProgress variant={"indeterminate"} color={"secondary"} />
+
+      {/* show loading bar when DBKF and prev fact-checks are loading */}
+      {(dbkfTextMatchLoading ||
+        (role.includes(ROLES.BETA_TESTER) ? prevFactChecksLoading : false)) && (
+        <LinearProgress variant={"indeterminate"} color={"primary"} />
       )}
+
       <CardContent
         style={{
           wordBreak: "break-word",
@@ -298,7 +306,7 @@ const AssistantTextResult = () => {
           <Tab
             label={
               <div>
-                {newsFramingTitle}
+                {keyword(newsFramingTitle)}
                 {newsFramingLoading && <LinearProgress />}
               </div>
             }
@@ -308,7 +316,7 @@ const AssistantTextResult = () => {
           <Tab
             label={
               <div>
-                {newsGenreTitle}
+                {keyword(newsGenreTitle)}
                 {newsGenreLoading && <LinearProgress />}
               </div>
             }
@@ -318,7 +326,7 @@ const AssistantTextResult = () => {
           <Tab
             label={
               <div>
-                {persuasionTitle}
+                {keyword(persuasionTitle)}
                 {persuasionLoading && <LinearProgress />}
               </div>
             }
@@ -328,7 +336,7 @@ const AssistantTextResult = () => {
           <Tab
             label={
               <div>
-                {subjectivityTitle}
+                {keyword(subjectivityTitle)}
                 {subjectivityLoading && <LinearProgress />}
               </div>
             }
@@ -338,17 +346,14 @@ const AssistantTextResult = () => {
           <Tab
             label={
               <div>
-                {machineGeneratedTextTitle}
-                {(machineGeneratedTextChunksLoading ||
-                  machineGeneratedTextSentencesLoading) && <LinearProgress />}
+                {keyword(machineGeneratedTextTitle)}
+                {machineGeneratedTextChunksLoading && <LinearProgress />}
               </div>
             }
             {...a11yProps(5)}
             disabled={
               machineGeneratedTextChunksFail ||
-              machineGeneratedTextChunksLoading ||
-              machineGeneratedTextSentencesFail ||
-              machineGeneratedTextSentencesLoading
+              machineGeneratedTextChunksLoading
             }
           />
         </Tabs>
@@ -365,7 +370,15 @@ const AssistantTextResult = () => {
         >
           {/* extracted raw text */}
           <CustomTabPanel value={textTabIndex} index={0}>
-            <Typography component={"div"} sx={{ textAlign: "start" }}>
+            <Typography
+              component={"div"}
+              sx={{
+                textAlign: "start",
+                "& p": {
+                  margin: "8px 0",
+                },
+              }}
+            >
               {textHtmlOutput ?? text}
             </Typography>
           </CustomTabPanel>
@@ -376,7 +389,6 @@ const AssistantTextResult = () => {
               text={text}
               classification={newsFramingResult?.entities}
               configs={newsFramingResult?.configs}
-              titleText={newsFramingTitle}
               categoriesTooltipContent={newsFramingTooltip}
               textHtmlMap={textHtmlMap}
               credibilitySignal={newsFramingTitle}
@@ -389,7 +401,6 @@ const AssistantTextResult = () => {
               text={text}
               classification={newsGenreResult?.entities}
               configs={newsGenreResult?.configs}
-              titleText={newsGenreTitle}
               categoriesTooltipContent={newsGenreTooltip}
               textHtmlMap={textHtmlMap}
               credibilitySignal={newsGenreTitle}
@@ -402,9 +413,9 @@ const AssistantTextResult = () => {
               text={text}
               classification={persuasionResult?.entities}
               configs={persuasionResult?.configs}
-              titleText={persuasionTitle}
               categoriesTooltipContent={persuasionTooltip}
               textHtmlMap={textHtmlMap}
+              credibilitySignal={persuasionTitle}
             />
           </CustomTabPanel>
 
@@ -414,7 +425,6 @@ const AssistantTextResult = () => {
               text={text}
               classification={subjectivityResult?.entities}
               configs={subjectivityResult?.configs}
-              titleText={subjectivityTitle}
               categoriesTooltipContent={subjectivityTooltip}
               textHtmlMap={textHtmlMap}
               credibilitySignal={subjectivityTitle}
@@ -425,10 +435,8 @@ const AssistantTextResult = () => {
           <CustomTabPanel value={textTabIndex} index={5}>
             <AssistantTextClassification
               text={text}
-              classification={machineGeneratedTextSentencesResult?.entities}
-              overallClassification={machineGeneratedTextChunksResult?.entities}
-              configs={machineGeneratedTextSentencesResult?.configs}
-              titleText={machineGeneratedTextTitle}
+              classification={machineGeneratedTextChunksResult?.entities}
+              configs={machineGeneratedTextChunksResult?.configs}
               categoriesTooltipContent={machineGeneratedTextTooltip}
               textHtmlMap={textHtmlMap}
               credibilitySignal={machineGeneratedTextTitle}

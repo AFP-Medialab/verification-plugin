@@ -30,12 +30,12 @@ import Typography from "@mui/material/Typography";
 import { Download, ExpandMore } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
+import { useTrackEvent } from "@/Hooks/useAnalytics";
+import { getclientId } from "@/components/Shared/GoogleAnalytics/MatomoAnalytics";
 import { ROLES } from "@/constants/roles";
 import { JsonBlock } from "@Shared/JsonBlock";
+import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { exportReactElementAsJpg } from "@Shared/Utils/htmlUtils";
-import { useTrackEvent } from "Hooks/useAnalytics";
-import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import CustomAlertScore from "../../../Shared/CustomAlertScore";
 import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
@@ -175,6 +175,7 @@ const SyntheticImageDetectionResults = ({
         syntheticImageDetectionAlgorithm.name,
         syntheticImageDetectionAlgorithm.description,
         syntheticImageDetectionAlgorithm.rolesNeeded,
+        syntheticImageDetectionAlgorithm.warning,
       );
       this.predictionScore = predictionScore;
       this.isError = isError;
@@ -194,7 +195,7 @@ const SyntheticImageDetectionResults = ({
 
   const gaugeChartRef = useRef(null);
 
-  const [showCerthLabels, setShowCerthLabels] = useState(true);
+  const [showCerthLabels, setShowCerthLabels] = useState(false);
 
   const handleToggleCerthLabel = (event) => {
     setShowCerthLabels(event.target.checked);
@@ -420,7 +421,11 @@ const SyntheticImageDetectionResults = ({
   const resolvedMode = systemMode || mode;
 
   return (
-    <Card variant="outlined" sx={{ width: "100%" }}>
+    <Card
+      variant="outlined"
+      sx={{ width: "100%" }}
+      data-testid="synthetic-images-results"
+    >
       <CardContent sx={{ flex: "1 0 auto" }}>
         <Stack direction="column" spacing={4}>
           <Stack
@@ -453,7 +458,12 @@ const SyntheticImageDetectionResults = ({
               )}
             </Stack>
 
-            <IconButton aria-label="close" onClick={handleClose} sx={{ p: 1 }}>
+            <IconButton
+              aria-label="close"
+              onClick={handleClose}
+              sx={{ p: 1 }}
+              data-testid="synthetic-images-close"
+            >
               <CloseIcon />
             </IconButton>
           </Stack>
@@ -509,6 +519,7 @@ const SyntheticImageDetectionResults = ({
                         }}
                         crossOrigin={"anonymous"}
                         ref={imgElement}
+                        data-testid="synthetic-images-results-image"
                       />
                       <List dense={true}>
                         <ListItem>
@@ -615,6 +626,7 @@ const SyntheticImageDetectionResults = ({
                           justifyContent: "center",
                           alignItems: "center",
                         }}
+                        data-testid="synthetic-images-gauge"
                       >
                         <GaugeChart
                           id={"gauge-chart"}
@@ -773,7 +785,8 @@ const SyntheticImageDetectionResults = ({
                                 <TableCell>
                                   {c2paData[0]?.assertion?.data?.actions?.[1]
                                     ?.softwareAgent?.name ||
-                                    c2paData[0]?.softwareAgent?.name}
+                                    c2paData[0]?.softwareAgent?.name ||
+                                    c2paData[0]?.softwareAgent}
                                 </TableCell>
                               </TableRow>
                               <TableRow>
@@ -785,7 +798,8 @@ const SyntheticImageDetectionResults = ({
                                 <TableCell>
                                   {c2paData[0]?.assertion?.data?.actions?.[0]
                                     ?.softwareAgent?.name ||
-                                    c2paData[0]?.softwareAgent?.name}
+                                    c2paData[0]?.softwareAgent?.name ||
+                                    c2paData[0]?.softwareAgent}
                                 </TableCell>
                               </TableRow>
                             </TableBody>
@@ -853,11 +867,18 @@ const SyntheticImageDetectionResults = ({
                     defaultExpanded={false}
                     onChange={handleDetailsChange}
                   >
-                    <AccordionSummary expandIcon={<ExpandMore />}>
+                    <AccordionSummary
+                      expandIcon={<ExpandMore />}
+                      data-testid="synthetic-images-accordion"
+                    >
                       <Typography>{keyword(detailsPanelMessage)}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                      <Stack direction={"column"} spacing={4}>
+                      <Stack
+                        direction={"column"}
+                        spacing={4}
+                        data-testid="synthetic-images-accordion-details"
+                      >
                         {syntheticImageScores.map((item, key) => {
                           let predictionScore;
 
@@ -959,9 +980,16 @@ const SyntheticImageDetectionResults = ({
                                       "var(--mui-palette-background-paper)",
                                   }}
                                 >
-                                  <Typography>
-                                    {keyword(item.description)}
-                                  </Typography>
+                                  <Stack direction="column" spacing={2}>
+                                    <Typography>
+                                      {keyword(item.description)}
+                                    </Typography>
+                                    {item.warning && (
+                                      <Alert severity="warning">
+                                        {keyword(item.warning)}
+                                      </Alert>
+                                    )}
+                                  </Stack>
                                 </Box>
                               </Stack>
                               {syntheticImageScores.length > key + 1 && (

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -19,7 +19,9 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
 import { loadImageSize, useLoading } from "@/Hooks/useInput";
+import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import { thumbnails } from "@/constants/tools";
+import { setError } from "@/redux/reducers/errorReducer";
 import {
   cleanThumbnailsState,
   setThumbnailsLoading,
@@ -36,10 +38,10 @@ import {
   reverseImageSearch,
   reverseImageSearchAll,
 } from "@Shared/ReverseSearch/reverseSearchUtils";
-import { setError } from "redux/reducers/errorReducer";
 
 const Thumbnails = () => {
   const { url } = useParams();
+  const [searchParams] = useSearchParams();
 
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Thumbnails");
@@ -55,7 +57,7 @@ const Thumbnails = () => {
 
   const [height, setHeight] = useState(0);
   const [showResult, setShowResult] = useState(false);
-  const [input, setInput] = useState(resultUrl);
+  const [input = resultUrl, setInput] = useUrlOrFile();
   const [urlDetected, setUrlDetected] = useState(false);
   const cols = 3;
 
@@ -226,13 +228,12 @@ const Thumbnails = () => {
     }
   }, [showResult]);
 
-  const processUrl = useSelector((state) => state.assistant.processUrl);
   useEffect(() => {
-    if (processUrl) {
-      setInput(processUrl);
-      setUrlDetected(true);
+    const fromAssistant = searchParams.has("fromAssistant");
+    if (fromAssistant && input) {
+      submitForm();
     }
-  }, [processUrl]);
+  }, [searchParams]);
 
   return (
     <div>
@@ -262,6 +263,7 @@ const Thumbnails = () => {
             >
               <Grid size="grow">
                 <TextField
+                  data-testid="thumbnails-input"
                   id="standard-full-width"
                   label={keyword("youtube_input")}
                   placeholder={keyword("api_input")}
@@ -289,6 +291,7 @@ const Thumbnails = () => {
               </Grid>
               <Grid>
                 <Button
+                  data-testid="thumbnails-submit"
                   type="submit"
                   variant="contained"
                   color="primary"
@@ -355,6 +358,7 @@ const Thumbnails = () => {
             className={classes.headerUploadedImage}
             action={
               <IconButton
+                data-testid="thumbnails-close"
                 aria-label="close"
                 onClick={() => dispatch(cleanThumbnailsState())}
                 sx={{ p: 1 }}

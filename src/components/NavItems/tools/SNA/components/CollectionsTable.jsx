@@ -1,4 +1,6 @@
 import React, { useRef, useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+import { useDispatch } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
@@ -20,6 +22,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
 import UploadIcon from "@mui/icons-material/Upload";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+
+import { setError } from "@/redux/reducers/errorReducer";
+import ErrorBoundaryFallback from "@Shared/ErrorBoundaryFallback/ErrorBoundaryFallback";
+import { set } from "lodash";
+
+import { addingUrl, uploadToCollection } from "../utils/snaUtils";
 
 const EmptyTablePlaceholder = ({ keyword }) => {
   return (
@@ -79,16 +87,16 @@ const CollectionTableHeader = ({
 const CollectionActionsCell = ({
   row,
   dataSources,
-  dlAnchorEl,
-  setDlAnchorEl,
   setSelected,
   selected,
   setDataSources,
   keyword,
-  activeDownloadRow,
-  setActiveDownloadRow,
 }) => {
   const rowFileInputRef = useRef(null);
+
+  const [dlAnchorEl, setDlAnchorEl] = useState(null);
+
+  const dispatch = useDispatch(); // to dispatch error state
 
   const rawUploadIconButton = (row) => {
     const handleRawFileChange = (event, rowID) => {
@@ -102,26 +110,60 @@ const CollectionActionsCell = ({
             const parsed = JSON.parse(e.target.result);
             await handleRawUpload(parsed, rowName);
           } catch (error) {
-            console.error("Invalid JSON file:", error);
+            dispatch(setError(error));
           }
         };
         reader.readAsText(file);
       } else {
-        console.error("Please upload a valid JSON file.");
-        // TODO: Replace with snackbar notification in the future
+        dispatch(setError(keyword("error_upload_file_is_not_json")));
       }
     };
 
     const handleRawUpload = async (parsed, rowName) => {
       try {
-        await chrome.runtime.sendMessage({
-          prompt: "addToCollection",
-          data: parsed,
-          platform: row.source,
-          collectionId: rowName.split("~")[0],
-        });
+        if (!Array.isArray(parsed) || parsed.length === 0) {
+          throw new Error(keyword("error_upload_file_content"));
+        }
+        const targetCollectionId = rowName.split("~")[0]; // it retrieve the name of the collection without the social network
+
+        const dataKeyMap = { twitter: "tweet", tiktok: "tiktok", fb: "post" }; // the potential keys of the nested object
+        const dataKey = dataKeyMap[row.source]; // the key of the collection target
+
+        const firstItem = parsed[0];
+
+        const isRawFormat = dataKey && dataKey in firstItem;
+        const innerObjectIsValid =
+          isRawFormat &&
+          typeof firstItem[dataKey] === "object" &&
+          firstItem[dataKey] !== null &&
+          !(dataKey in firstItem[dataKey]);
+        const isClassicWithId = !isRawFormat && "id" in firstItem;
+
+        if (!innerObjectIsValid && !isClassicWithId) {
+          throw new Error(keyword("error_upload_file_keys"));
+        }
+
+        const items = isRawFormat
+          ? parsed.map((item, index) => {
+              // check every row in case the file contains both raw and classical json -> throw an error if some row are different from the first one
+              // we could analyse row by row, but we assume that a file with multiple types of row is corrupted and we dont want to upload it to
+              // the collection
+              if (!item[dataKey] || dataKey in item[dataKey]) {
+                throw new Error(`${keyword(error_upload_raw)} ${index + 1}`);
+              }
+              return { ...item[dataKey], collectionID: targetCollectionId };
+            })
+          : parsed.map((item, index) => {
+              // same than above here
+              if (!("id" in item) || (dataKey && dataKey in item)) {
+                throw new Error(`${keyword(error_upload_raw)} ${index + 1}`);
+              }
+              return { ...item, collectionID: targetCollectionId };
+            });
+
+        await uploadToCollection(items, row.source, targetCollectionId);
       } catch (error) {
-        console.error("Error uploading raw collection:", error);
+        dispatch(setError(error.message || keyword("error_unknown")));
       }
     };
 
@@ -153,13 +195,13 @@ const CollectionActionsCell = ({
 
     const handleDownload = (event, row) => {
       setDlAnchorEl(event.currentTarget);
-      setActiveDownloadRow(row);
     };
 
     const downloadTweetCSV = () => {
-      const selectedData = activeDownloadRow;
+      const selectedData = row;
       if (!selectedData) return;
       let headers = selectedData.headers.join(",");
+      console.log(headers);
       let csvData = selectedData.content
         .map((obj) =>
           selectedData.headers.map((k) =>
@@ -178,11 +220,10 @@ const CollectionActionsCell = ({
       a.download = `${selectedData.name}_export.csv`;
       a.click();
       setDlAnchorEl(null);
-      setActiveDownloadRow(null);
     };
 
     const downloadTweetsJson = () => {
-      const selectedData = activeDownloadRow;
+      const selectedData = row;
       if (!selectedData) return;
       let dl = JSON.stringify(selectedData.content);
       const blob = new Blob([dl], { type: "application/json;charset=utf-8;" });
@@ -191,15 +232,14 @@ const CollectionActionsCell = ({
       a.download = `${selectedData.name}_export.json`;
       a.click();
       setDlAnchorEl(null);
-      setActiveDownloadRow(null);
     };
 
     const downloadTweetsRaw = async () => {
-      const selectedData = activeDownloadRow;
+      const selectedData = row;
       if (!selectedData) return;
 
       try {
-        let content = await chrome.runtime.sendMessage({
+        let content = await browser.runtime.sendMessage({
           prompt: "getRawCollection",
           platform: selectedData.source,
           collectionId: selectedData.name.split("~")[0],
@@ -218,7 +258,6 @@ const CollectionActionsCell = ({
       }
 
       setDlAnchorEl(null);
-      setActiveDownloadRow(null);
     };
 
     return (
@@ -249,15 +288,29 @@ const CollectionActionsCell = ({
           open={open}
           onClose={() => {
             setDlAnchorEl(null);
-            setActiveDownloadRow(null);
           }}
           MenuListProps={{
             "aria-labelledby": "basic-button",
           }}
         >
-          <MenuItem onClick={() => downloadTweetCSV()}>CSV</MenuItem>
-          <MenuItem onClick={() => downloadTweetsJson()}>JSON</MenuItem>
-          <MenuItem onClick={() => downloadTweetsRaw()}>Raw JSON</MenuItem>
+          <MenuItem
+            onClick={() => downloadTweetCSV()}
+            data-testid={`sna-download-csv-${row.id}`}
+          >
+            CSV
+          </MenuItem>
+          <MenuItem
+            onClick={() => downloadTweetsJson()}
+            data-testid={`sna-download-json-${row.id}`}
+          >
+            JSON
+          </MenuItem>
+          <MenuItem
+            onClick={() => downloadTweetsRaw()}
+            data-testid={`sna-download-raw-json-${row.id}`}
+          >
+            Raw JSON
+          </MenuItem>
         </Menu>
       </>
     );
@@ -275,7 +328,7 @@ const CollectionActionsCell = ({
 
       if (dataSource.source !== "fileUpload") {
         try {
-          await chrome.runtime.sendMessage({
+          await browser.runtime.sendMessage({
             prompt: "deleteCollection",
             source: dataSource.source,
             collectionId: dataSource.name.split("~")[0],
@@ -293,6 +346,7 @@ const CollectionActionsCell = ({
           aria-label="delete"
           color="error"
           sx={{ p: 1 }}
+          data-testid={`sna-delete-button-${row.id}`}
         >
           <DeleteIcon />
         </IconButton>
@@ -323,19 +377,20 @@ const CollectionActionsCell = ({
 };
 
 const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
-  const { selected, setSelected, setDetailContent, setOpenDetailModal } =
-    rowProps;
+  const {
+    selected,
+    setSelected,
+    setDetailContent,
+    setDetailSource,
+    setOpenDetailModal,
+  } = rowProps;
   const {
     fileInputRef,
     dataSources,
-    dlAnchorEl,
-    setDlAnchorEl,
     setSelected: setSelectedActions,
     selected: selectedActions,
     setDataSources,
     keyword: keywordActions,
-    activeDownloadRow,
-    setActiveDownloadRow,
   } = actionsProps;
 
   const handleSelectRow = (id) => {
@@ -347,7 +402,6 @@ const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
     } else {
       newSelected = selected.filter((item) => item !== id);
     }
-
     setSelected(newSelected);
   };
 
@@ -357,14 +411,17 @@ const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
       hover
       role="checkbox"
       selected={selected.indexOf(row.id) !== -1}
+      data-testid={`sna-collection-row-${row.name}`}
     >
       <TableCell>
         <IconButton
           onClick={() => {
             setDetailContent(row.content);
+            setDetailSource(row.source);
             setOpenDetailModal(true);
           }}
           sx={{ p: 1 }}
+          data-testid={`sna-visibility-button-${row.id}`}
         >
           <VisibilityIcon />
         </IconButton>
@@ -374,6 +431,7 @@ const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
           key={row.id + "_collectionTableCheckbox"}
           checked={selected.indexOf(row.id) !== -1}
           onChange={() => handleSelectRow(row.id)}
+          data-testid={`sna-collection-checkbox-${row.id}`}
         />
       </TableCell>
       <TableCell>{row.name}</TableCell>
@@ -400,14 +458,10 @@ const CollectionsTableRow = ({ row, rowProps, actionsProps, keyword }) => {
         row={row}
         fileInputRef={fileInputRef}
         dataSources={dataSources}
-        dlAnchorEl={dlAnchorEl}
-        setDlAnchorEl={setDlAnchorEl}
         setSelected={setSelectedActions}
         selected={selectedActions}
         setDataSources={setDataSources}
         keyword={keywordActions}
-        activeDownloadRow={activeDownloadRow}
-        setActiveDownloadRow={setActiveDownloadRow}
       />
     </TableRow>
   );
@@ -420,21 +474,27 @@ const CollectionsTableBody = ({
   keyword,
 }) => {
   return (
-    <TableBody>
-      {dataSources?.length > 0 ? (
-        dataSources.map((row) => (
-          <CollectionsTableRow
-            key={"row_" + row.id}
-            row={row}
-            rowProps={rowProps}
-            actionsProps={actionsProps}
-            keyword={keyword}
-          />
-        ))
-      ) : (
-        <EmptyTablePlaceholder keyword={keyword} />
-      )}
-    </TableBody>
+    <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
+      <TableBody>
+        {dataSources?.length > 0 ? (
+          dataSources.map((row) => {
+            // we create a new object based on row, because row is freezed, and add to it a video url column
+            const enrichedRow = addingUrl(row);
+            return (
+              <CollectionsTableRow
+                key={"row_" + row.id}
+                row={enrichedRow}
+                rowProps={rowProps}
+                actionsProps={actionsProps}
+                keyword={keyword}
+              />
+            );
+          })
+        ) : (
+          <EmptyTablePlaceholder keyword={keyword} />
+        )}
+      </TableBody>
+    </ErrorBoundary>
   );
 };
 
@@ -443,6 +503,7 @@ const CollectionsTable = ({
   selected,
   setSelected,
   setDetailContent,
+  setDetailSource,
   setOpenDetailModal,
   fileInputRef,
   dataSources,
@@ -450,8 +511,6 @@ const CollectionsTable = ({
   setDlAnchorEl,
   setDataSources,
 }) => {
-  const [activeDownloadRow, setActiveDownloadRow] = useState(null);
-
   let collectionTableHeaderProps = {
     selected,
     setSelected,
@@ -463,20 +522,17 @@ const CollectionsTable = ({
     selected,
     setSelected,
     setDetailContent,
+    setDetailSource,
     setOpenDetailModal,
   };
 
   let collectionActionsCellProps = {
     fileInputRef,
     dataSources,
-    dlAnchorEl,
-    setDlAnchorEl,
     setSelected,
     selected,
     setDataSources,
     keyword,
-    activeDownloadRow,
-    setActiveDownloadRow,
   };
 
   return (
@@ -500,4 +556,37 @@ const CollectionsTable = ({
   );
 };
 
-export default CollectionsTable;
+// Custom comparison function for React.memo
+// Only re-render if actual data content changes, not just reference
+const arePropsEqual = (prevProps, nextProps) => {
+  // IMPORTANT: Check selection state FIRST before checking dataSources
+  // Otherwise checkboxes won't update when selection changes
+  if (
+    prevProps.selected.length !== nextProps.selected.length ||
+    !prevProps.selected.every((id) => nextProps.selected.includes(id)) ||
+    !nextProps.selected.every((id) => prevProps.selected.includes(id))
+  ) {
+    return false; // Selection changed, need to re-render
+  }
+
+  // Quick reference check for dataSources
+  if (prevProps.dataSources === nextProps.dataSources) return true;
+
+  // Check if dataSources content actually changed
+  if (prevProps.dataSources.length !== nextProps.dataSources.length) {
+    return false;
+  }
+
+  // Deep comparison of collection content lengths (lightweight proxy for content change)
+  const prevHash = prevProps.dataSources
+    .map((ds) => `${ds.id}:${ds.length}`)
+    .join("|");
+  const nextHash = nextProps.dataSources
+    .map((ds) => `${ds.id}:${ds.length}`)
+    .join("|");
+
+  // If hash is the same, props are equal (no re-render needed)
+  return prevHash === nextHash;
+};
+
+export default React.memo(CollectionsTable, arePropsEqual);

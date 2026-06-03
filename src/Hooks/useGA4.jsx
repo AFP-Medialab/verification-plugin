@@ -1,5 +1,5 @@
 export const GAUtils = (event_name) => {
-  const GACode = process.env.REACT_APP_GOOGLE_ANALYTICS_KEY;
+  const GACode = import.meta.env.VITE_GOOGLE_ANALYTICS_KEY;
   const url =
     "https://www.google-analytics.com/mp/collect?measurement_id=" +
     GACode +
