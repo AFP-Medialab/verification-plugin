@@ -297,7 +297,7 @@ const ChatbotUI = () => {
         // set temperature (defaults to 0.7)
 
         // set predefined prompt
-        const promptId = "rhetorical-analysis_en";
+        const promptId = "rhetorical_analysis";
         dispatch(setSelectedPrompt(promptId));
         const selectedPromptObj = prompts.find((req) => req.id === promptId);
         dispatch(setActivePrompt({ prompt: selectedPromptObj }));
