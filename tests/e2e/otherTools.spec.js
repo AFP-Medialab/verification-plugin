@@ -19,14 +19,13 @@ test('Test tool archive savepagenow', async ({page, authenticatedArchiveExtensio
 
     await expect(page.getByTestId('archive-url-archive-card')).toBeVisible();
 
-    const newTabPromise = context.waitForEvent('page');
-    
-    await page.getByTestId('archive-url-archive-card').getByRole('button', { name: /internet archive/i }).first().click();
-    
-    const newPage = await newTabPromise;
+    const pagesBefore = context.pages();
 
-    await expect(newPage).toBeDefined();
-    
+    await page.getByTestId('archive-internet-archive-button').first().click();
+
+    await expect.poll(async () => context.pages().length).toBeGreaterThan(pagesBefore.length);
+
+    const newPage = context.pages().find(p => !pagesBefore.includes(p));
     await expect(newPage).toHaveURL(/web\.archive\.org/);
 });
 

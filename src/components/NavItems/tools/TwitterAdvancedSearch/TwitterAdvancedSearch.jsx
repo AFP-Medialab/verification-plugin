@@ -223,6 +223,8 @@ const TwitterAdvancedSearch = () => {
               untilValue={toDate}
               handleSinceChange={handleFromDateChange}
               handleUntilChange={handleToDateChange}
+              sinceTestId="twitter-since-date"
+              untilTestId="twitter-until-date"
             />
           </div>
 
