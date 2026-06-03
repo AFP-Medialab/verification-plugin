@@ -40,7 +40,7 @@ export default function TextFooter({
       <Grid container spacing={2}>
         {/* language detected */}
         <Grid
-          size={10}
+          size={9}
           align={"left"}
           sx={{
             pt: 1,
