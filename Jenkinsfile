@@ -26,7 +26,7 @@ pipeline {
                 }  
             }
             steps {
-                slackSend channel: 'medialab_builds', message: "Start build ${env.JOB_NAME} - ID: ${env.BUILD_ID}", tokenCredentialId: 'medialab_slack_token'
+                slackSend channel: 'C0B34ADJ7C3', message: "Start build ${env.JOB_NAME} - ID: ${env.BUILD_ID}", tokenCredentialId: 'medialab_slack_token'
                 script {
                     if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "pre-master") {
                         env.ENV_FILE = ".env.production"
