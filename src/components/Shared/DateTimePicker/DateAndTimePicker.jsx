@@ -24,6 +24,8 @@ const DateAndTimePicker = ({
   untilValue,
   handleSinceChange,
   handleUntilChange,
+  sinceTestId,
+  untilTestId,
 }) => {
   const pastDate = (currentDate) => {
     const itemDate = dayjs(currentDate);
@@ -51,6 +53,9 @@ const DateAndTimePicker = ({
             value={fromValue}
             ampm={false}
             shouldDisableDate={futureDate}
+            slotProps={{
+              textField: { inputProps: { "data-testid": sinceTestId } },
+            }}
           />
           <DateTimePicker
             onChange={handleUntilChange}
@@ -62,6 +67,9 @@ const DateAndTimePicker = ({
             value={untilValue}
             ampm={false}
             shouldDisableDate={pastDate}
+            slotProps={{
+              textField: { inputProps: { "data-testid": untilTestId } },
+            }}
           />
         </>
       ) : (

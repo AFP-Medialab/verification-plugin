@@ -24,10 +24,10 @@ test('Test twitter search', async ({ page, context, extensionId }) => {
     await page.locator('[data-testid="twitter-search-5"] input').fill('Paris');
     await page.locator('[data-testid="twitter-search-6"] input').fill('15km'); 
 
-    await page.getByLabel(`* Since`).fill('2023-10-25 10:00');
+    await page.getByTestId('twitter-since-date').fill('2023-10-25 10:00');
     await page.keyboard.press('Enter');
 
-    await page.getByLabel(`* Until`).fill('2023-10-26 15:30');
+    await page.getByTestId('twitter-until-date').fill('2023-10-26 15:30');
     await page.keyboard.press('Enter');
     
     await page.getByTestId('twitter-radio-gmt').click();

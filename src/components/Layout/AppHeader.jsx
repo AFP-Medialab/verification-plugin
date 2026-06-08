@@ -468,7 +468,11 @@ const AppHeader = ({ topMenuItems, tools }) => {
               )}
 
               <Tooltip title={keyword("drawer_settings_title")}>
-                <IconButton sx={{ p: 1 }} onClick={handleMenuClick}>
+                <IconButton
+                  data-testid="settings-button"
+                  sx={{ p: 1 }}
+                  onClick={handleMenuClick}
+                >
                   <Settings />
                 </IconButton>
               </Tooltip>
