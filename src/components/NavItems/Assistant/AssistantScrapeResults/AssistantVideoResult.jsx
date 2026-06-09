@@ -118,7 +118,9 @@ const AssistantVideoResult = () => {
     <Card variant={"outlined"}>
       <CardMedia data-testid="assistant-media-video-container">
         {videoRenderType === "youtube" && embedUrl && (
-          <YouTubeEmbed embedLink={embedUrl} height="400" width="100%" />
+          <div data-testid="assistant-media-video-youtube">
+            <YouTubeEmbed embedLink={embedUrl} height="400" width="100%" />
+          </div>
         )}
         {videoRenderType === "iframe" && embedUrl && (
           <div data-testid="assistant-media-video-iframe">

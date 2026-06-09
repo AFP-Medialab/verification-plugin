@@ -376,6 +376,8 @@ const Assistant = () => {
               handleCloseSelectedFile={cleanAssistant}
               preprocessLocalFile={preprocessFileInput}
               handleClearUrl={cleanAssistant}
+              urlInputTestId="assistant-url-selected-input"
+              submitButtonTestId="assistant-url-selected-analyse-btn"
             />
           </form>
 
