@@ -1,5 +1,7 @@
 import { test as base, chromium, type BrowserContext } from '@playwright/test';
 import * as path from 'path';
+import * as os from 'os';
+import * as fs from 'fs';
 
 // Mirrors the shape expected by authenticationReducer and actualSaveToLocalStorage().
 const fakeAuthStateBetaTester = {
@@ -73,8 +75,9 @@ export const test = base.extend<{
     const pathToExtension = path.resolve(__dirname, `../../build/${process.env.EXTENSION_BUILD_DIR ?? 'chrome-mv3'}`);
 
     const isCI = !!process.env.CI;
+    const userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'playwright-ext-'));
 
-    const context = await chromium.launchPersistentContext('', {
+    const context = await chromium.launchPersistentContext(userDataDir, {
       headless: isCI,
       channel: 'chromium',
       args: [
@@ -92,6 +95,7 @@ export const test = base.extend<{
     });
     await use(context);
     await context.close();
+    fs.rmSync(userDataDir, { recursive: true, force: true });
   },
   extensionId: async ({ context }, use) => {
     // for manifest v3:
