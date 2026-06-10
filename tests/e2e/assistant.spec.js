@@ -269,6 +269,59 @@ const MediaServices = {
   },
 );
 
+// ---------------------------------------------------------------------------
+// Role-gated tool tests
+//
+// These use the authenticated fixtures from fixtures.ts which pre-seed
+// { cookies: true } in chrome.storage, so the cookie consent Accept
+// button does not appear and must not be clicked.
+//
+// Note: syntheticImageDetection, geolocation, and c2pa are restricted to
+// MISC/OWN/BBC link types — they cannot be tested via social media URLs.
+// ---------------------------------------------------------------------------
+
+test("youtube video + BETA_TESTER role: deepfake tool is visible", async ({
+  page,
+  authenticatedBetaTesterExtensionId,
+}) => {
+  await page.goto(
+    `chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/assistant/`,
+  );
+
+  await page
+    .locator("[data-testid='assistant-url-selected-input'] input")
+    .fill("https://www.youtube.com/watch?v=UXrkN0iQmZQ");
+  await page.getByTestId("assistant-url-selected-analyse-btn").click();
+
+  await expect(page.getByTestId("url-media-results")).toBeVisible({
+    timeout: 30000,
+  });
+  await expect(page.getByTestId("navbar_deepfake_video")).toBeVisible();
+  await expect(page.getByTestId("navbar_analysis_video")).toBeVisible();
+  await expect(page.getByTestId("navbar_keyframes")).toBeVisible();
+});
+
+test("youtube video + EXTRA_FEATURE role: POI forensics tool is visible", async ({
+  page,
+  authenticatedExtraFeaturesExtensionId,
+}) => {
+  await page.goto(
+    `chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/assistant/`,
+  );
+
+  await page
+    .locator("[data-testid='assistant-url-selected-input'] input")
+    .fill("https://www.youtube.com/watch?v=UXrkN0iQmZQ");
+  await page.getByTestId("assistant-url-selected-analyse-btn").click();
+
+  await expect(page.getByTestId("url-media-results")).toBeVisible({
+    timeout: 30000,
+  });
+  await expect(page.getByTestId("navbar_poiforensics")).toBeVisible();
+  await expect(page.getByTestId("navbar_analysis_video")).toBeVisible();
+  await expect(page.getByTestId("navbar_keyframes")).toBeVisible();
+});
+
 async function checkMediaServices(page, availableServices) {
   // Checks that expected services are shown
   for (const serviceId of availableServices) {
