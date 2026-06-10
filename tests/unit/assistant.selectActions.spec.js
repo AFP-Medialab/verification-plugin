@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { selectCorrectActions } from "../../src/components/NavItems/Assistant/AssistantRuleBook";
+import { matchPattern, selectCorrectActions } from "../../src/components/NavItems/Assistant/AssistantRuleBook";
 import { KNOWN_LINKS, TOOLS_CATEGORIES } from "../../src/constants/toolsData";
 import { ROLES } from "../../src/constants/roles";
 
@@ -254,4 +254,29 @@ test("unauthenticated users cannot see any role-gated tools", () => {
   expect(t).not.toContain("navbar_geolocation");
   expect(t).not.toContain("navbar_c2pa");
   expect(t).not.toContain("navbar_gif");
+});
+
+// ---------------------------------------------------------------------------
+// matchPattern
+// ---------------------------------------------------------------------------
+
+const TEST_PATTERNS = [
+  { key: "foo", patterns: [/foo\.\w+/] },
+  { key: "bar", patterns: [/bar\.\w+/, /baz\.\w+/] },
+];
+
+test("matchPattern: null input returns null", () => {
+  expect(matchPattern(null, TEST_PATTERNS)).toBeNull();
+});
+
+test("matchPattern: matching URL returns correct key", () => {
+  expect(matchPattern("https://foo.com/page", TEST_PATTERNS)).toBe("foo");
+});
+
+test("matchPattern: second pattern in a record also matches", () => {
+  expect(matchPattern("https://baz.org/video", TEST_PATTERNS)).toBe("bar");
+});
+
+test("matchPattern: non-matching URL returns null", () => {
+  expect(matchPattern("https://other.com/page", TEST_PATTERNS)).toBeNull();
 });

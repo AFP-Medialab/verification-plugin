@@ -146,3 +146,28 @@ test("treeMapToElements: spanHighlightIndices splits text into unhighlighted and
   expect(children).toContain("hello ");
   expect(children).toContain("world");
 });
+
+test("treeMapToElements: trailing text after highlight span is appended", () => {
+  const mapping = { tag: "p", span: { start: 0, end: 11 }, children: [] };
+  const result = treeMapToElements(
+    "hello world",
+    mapping,
+    [{ indices: [0, 5] }],
+    null,
+  );
+  const children = result.props.children;
+  expect(children).toContain("hello");
+  expect(children).toContain(" world");
+});
+
+test("treeMapToElements: attributes are passed through and key is set", () => {
+  const mapping = {
+    tag: "p",
+    span: { start: 0, end: 5 },
+    children: [],
+    attributes: { className: "highlight" },
+  };
+  const result = treeMapToElements("hello", mapping);
+  expect(result.props.className).toBe("highlight");
+  expect(result.key).toBeDefined();
+});
