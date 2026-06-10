@@ -204,7 +204,10 @@ const MediaServices = {
       await page.getByTestId("assistant-url-selected-analyse-btn").click();
 
       // Expecting a media post with images or video
-      await expect(page.getByTestId("url-media-results")).toBeVisible();
+      await expect(
+        page.getByTestId("url-media-results"),
+        `Scraping did not complete within 30s for ${url} — check assistant backend is reachable`,
+      ).toBeVisible({ timeout: 30000 });
 
       // If multiple images/videos exist, click on the media grid first
       if (Number.isInteger(videoGridIndex))
