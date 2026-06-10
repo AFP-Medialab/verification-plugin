@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/experimental-ct-react";
+import { expect, test } from "vitest";
 import { selectCorrectActions } from "../../src/components/NavItems/Assistant/AssistantRuleBook";
 import { KNOWN_LINKS, TOOLS_CATEGORIES } from "../../src/constants/toolsData";
 import { ROLES } from "../../src/constants/roles";

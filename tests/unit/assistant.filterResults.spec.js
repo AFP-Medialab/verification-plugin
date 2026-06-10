@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/experimental-ct-react";
+import { expect, test } from "vitest";
 import { filterAssistantResults } from "../../src/components/NavItems/Assistant/utils/assistantResultsUtils";
 import { KNOWN_LINKS, TOOLS_CATEGORIES } from "../../src/constants/toolsData";
 
