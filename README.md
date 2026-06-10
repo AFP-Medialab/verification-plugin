@@ -177,7 +177,7 @@ in the `tests` folder with the following structure:
 
 tests
 !- unit - Pure unit tests (Vitest)
-!- component_unit - Component tests (Playwright CT)
+!- component - Component tests (Playwright CT)
 |- e2e - End to end testing
 -- examples - Examples to serve as a reference only
 
