@@ -170,13 +170,14 @@ browser specified in the build command.
 
 ## Testing
 
-The [playwright](https://playwright.dev/) framework is used for e2e, component and unit testing. All tests are located
+The project uses [Vitest](https://vitest.dev/) for pure unit tests and [Playwright](https://playwright.dev/) for component and e2e testing. All tests are located
 in the `tests` folder with the following structure:
 
 ```
 
 tests
-!- component_unit - Component and unit testing
+!- unit - Pure unit tests (Vitest)
+!- component_unit - Component tests (Playwright CT)
 |- e2e - End to end testing
 -- examples - Examples to serve as a reference only
 
@@ -193,17 +194,29 @@ pnpm run test
 
 ```
 
-### Component and Unit testing
+### Unit testing
 
-Component and unit testing are run together using the following command:
-
-```
-
-pnpm run test-cu
+Pure function unit tests run with Vitest:
 
 ```
 
-Playwright configurations of the component and unit tests can be found in `/playwright-ct.config.js`
+pnpm run test-unit
+
+```
+
+Vitest configuration can be found in `/vitest.config.mjs`. Unit tests live in `tests/unit/`.
+
+### Component testing
+
+Component tests are run using the following command:
+
+```
+
+pnpm run test-ct
+
+```
+
+Playwright configurations for component tests can be found in `/playwright-ct.config.js`
 
 Component and unit testing uses the
 experimental [playwright component testing module](https://playwright.dev/docs/test-components).
@@ -216,7 +229,7 @@ Note: Component testing is best done on components that can be easily isolated. 
 are likely to be more suitable for e2e testing.
 
 Note: Playwright/vite generates cache files at `/playwright/.cache` which sometimes does not get updated properly
-when `.jsx` files changes, so currently the command `pnpm run test-cu` deletes the cache directory before running the
+when `.jsx` files changes, so currently the command `pnpm run test-ct` deletes the cache directory before running the
 tests.
 
 ### End-to-end (e2e) testing
