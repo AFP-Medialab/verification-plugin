@@ -33,6 +33,7 @@ import { usePoiSync } from "../Hooks/usePoiSync";
 import {
   computeAreaUnderCurve,
   computeGlobalScorePerTrack,
+  computePercentagePointsAboveThreshold,
   drawBoundingBox,
 } from "../poiUtils";
 
@@ -60,13 +61,18 @@ const PoiForensicsResults = (props) => {
   const scores = results?.poi_forensics_report?.scores_per_time;
   const times = results?.poi_forensics_report?.time_vector;
 
-  const overallScore = results?.poi_forensics_report?.overall_score.toFixed(3);
+  const overallScore = results?.poi_forensics_report?.overall_score?.toFixed(3);
   const resultsPerTrack = results?.poi_forensics_report?.results_per_track;
 
   const globalScorePerTrack = useMemo(() => {
     if (_.isEmpty(resultsPerTrack)) return [];
     return computeGlobalScorePerTrack(resultsPerTrack);
   }, [resultsPerTrack]);
+
+  const percentageScoresAboveThreshold = useMemo(() => {
+    if (_.isEmpty(scores)) return 0;
+    return computePercentagePointsAboveThreshold(scores);
+  }, [scores]);
 
   const areaUnderCurve = useMemo(() => {
     if (_.isEmpty(scores) || _.isEmpty(times)) return 0;
@@ -344,6 +350,21 @@ const PoiForensicsResults = (props) => {
                               style={{ fontWeight: "bold" }}
                             >
                               {percentageFake}%
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell
+                              component="th"
+                              scope="row"
+                              style={{ fontWeight: "bold" }}
+                            >
+                              Pourcentage de points au dessus du seuil
+                            </TableCell>
+                            <TableCell
+                              align="right"
+                              style={{ fontWeight: "bold" }}
+                            >
+                              {percentageScoresAboveThreshold}%
                             </TableCell>
                           </TableRow>
 

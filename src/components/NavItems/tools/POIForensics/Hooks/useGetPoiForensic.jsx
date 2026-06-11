@@ -17,6 +17,7 @@ async function useGetPoiForensics(
   errorMsg,
   type,
   mediaFile,
+  setStatus,
 ) {
   if (!processURL || (!url && !mediaFile)) {
     return;
@@ -110,6 +111,7 @@ async function useGetPoiForensics(
     } else {
       handleError("error_mode_not_supported_" + response.data.mode);
     }
+    dispatch(setPoiForensicsLoading(false));
   };
 
   const waitUntilFinish = async (id) => {
@@ -120,16 +122,30 @@ async function useGetPoiForensics(
       handleError("poiforensics_error_" + error.status);
     }
 
-    if (response && response.data && response.data.status === "PROCESSING") {
-      await sleep(waitUntilFinish, id);
-    } else if (
+    const poiInfo = response?.data?.info?.poi_forensics;
+    const jobStatus = poiInfo?.status ?? response?.data?.status;
+    const percent = poiInfo?.progress?.percent_completed;
+
+    if (setStatus && jobStatus) {
+      const label =
+        percent !== undefined
+          ? `${jobStatus} — ${Math.round(percent)}%`
+          : jobStatus;
+      setStatus(label);
+    }
+
+    if (
       response &&
       response.data &&
-      response.data.status === "COMPLETED"
+      (jobStatus === "PENDING" ||
+        jobStatus === "QUEUED" ||
+        jobStatus === "STARTED")
     ) {
+      await sleep(waitUntilFinish, id);
+    } else if (response && response.data && jobStatus === "COMPLETED") {
       await getResult(id);
     } else {
-      handleError("deepfake_error_" + response.data.status);
+      handleError("deepfake_error_" + jobStatus);
     }
   };
 

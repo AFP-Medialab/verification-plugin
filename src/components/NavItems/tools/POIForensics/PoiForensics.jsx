@@ -6,6 +6,7 @@ import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Checkbox from "@mui/material/Checkbox";
+import CircularProgress from "@mui/material/CircularProgress";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
@@ -94,6 +95,8 @@ const PoiForensics = () => {
     initializeSelectedMode(),
   );
 
+  const [status, setStatus] = useState(null);
+
   const handleChangeMode = (event) => {
     setSelectedMode(event.target.value);
   };
@@ -110,6 +113,7 @@ const PoiForensics = () => {
       keywordWarning("error_invalid_url"),
       type,
       videoFile,
+      setStatus,
     );
   };
 
@@ -134,6 +138,7 @@ const PoiForensics = () => {
   };
 
   const handleSubmit = async () => {
+    setStatus(null);
     dispatch(resetPoiForensics());
     await submitUrl();
   };
@@ -142,6 +147,7 @@ const PoiForensics = () => {
     setInput("");
     setVideoFile(undefined);
     setType("");
+    setStatus(null);
     dispatch(resetPoiForensics());
   };
 
@@ -237,6 +243,12 @@ const PoiForensics = () => {
             </Box>
           </Box>
         </Card>
+
+        {status && isLoading && (
+          <Alert icon={<CircularProgress size={20} />} severity="info">
+            {status}
+          </Alert>
+        )}
 
         {result && (
           <PoiForensicsResults
