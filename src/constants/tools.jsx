@@ -37,6 +37,7 @@ import {
 } from "@//redux/actions/tools/deepfakeVideoActions";
 import {
   resetPoiForensics,
+  setPoiForensicsFile,
   setPoiForensicsUrl,
 } from "@/redux/actions/tools/poiForensicsActions";
 import { c2paUrlSet, resetC2paState } from "@/redux/reducers/tools/c2paReducer";
@@ -511,6 +512,7 @@ export const poiForensic = new Tool(
     text: "deepfake_video_text",
     resetUrl: resetPoiForensics,
     setUrl: (resultUrl) => setPoiForensicsUrl({ url: resultUrl }),
+    setFile: (resultFile) => setPoiForensicsFile(resultFile),
   },
 );
 

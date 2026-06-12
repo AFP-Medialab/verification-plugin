@@ -1,6 +1,7 @@
 import {
   setPoiForensicsLoading,
   setPoiForensicsResult,
+  setStatus,
 } from "@/redux/actions/tools/poiForensicsActions";
 import { setError } from "@/redux/reducers/errorReducer";
 import { isValidUrl } from "@Shared/Utils/URLUtils";
@@ -17,7 +18,6 @@ async function useGetPoiForensics(
   errorMsg,
   type,
   mediaFile,
-  setStatus,
 ) {
   if (!processURL || (!url && !mediaFile)) {
     return;
@@ -95,7 +95,7 @@ async function useGetPoiForensics(
         break;
     }
   } catch (error) {
-    handleError("poiforensics_error_" + error.response.status);
+    handleError("poiforensics_error_" + error.response?.status);
   }
 
   const getResult = async (id) => {
@@ -126,12 +126,12 @@ async function useGetPoiForensics(
     const jobStatus = poiInfo?.status ?? response?.data?.status;
     const percent = poiInfo?.progress?.percent_completed;
 
-    if (setStatus && jobStatus) {
+    if (jobStatus) {
       const label =
         percent !== undefined
           ? `${jobStatus} — ${Math.round(percent)}%`
           : jobStatus;
-      setStatus(label);
+      dispatch(setStatus(label));
     }
 
     if (
