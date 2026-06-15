@@ -57,3 +57,5 @@ const VideoImageList = (props) => {
     </ImageList>
   );
 };
+
+export default VideoImageList;
