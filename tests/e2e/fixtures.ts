@@ -64,6 +64,28 @@ const fakeAuthStateArchive = {
   },
 };
 
+// page.evaluate callbacks run in the browser context where `chrome` is a global,
+// but TypeScript type-checks them as Node.js code. Access via globalThis to avoid
+// the "Cannot find name 'chrome'" error.
+async function injectAuthState(page: import('@playwright/test').Page, authState: object): Promise<void> {
+  await page.evaluate((state) => {
+    const persistState = { cookies: true, userSession: state };
+    return new Promise<void>((resolve, reject) => {
+      const c = (globalThis as any).chrome;
+      const storage = c?.storage?.sync || c?.storage?.local;
+      if (storage) {
+        storage.set({ 'persist:state': persistState }, () => {
+          if (c?.runtime?.lastError) reject(c.runtime.lastError);
+          else resolve();
+        });
+      } else {
+        localStorage.setItem('persist:state', JSON.stringify(persistState));
+        resolve();
+      }
+    });
+  }, authState);
+}
+
 export const test = base.extend<{
   context: BrowserContext;
   extensionId: string;
@@ -90,7 +112,7 @@ export const test = base.extend<{
         '--disable-dev-shm-usage',
         '--disable-dbus-deprecation-message',
         '--disable-freestyler-dogfood',
-        '--no-zygote', 
+        '--no-zygote',
       ],
     });
     await use(context);
@@ -115,23 +137,7 @@ export const test = base.extend<{
     const page = await context.newPage();
     await page.goto(`chrome-extension://${extensionId}/popup.html`);
     await page.waitForLoadState('domcontentloaded');
-
-    await page.evaluate((authState) => {
-      const persistState = { cookies: true, userSession: authState };
-      return new Promise<void>((resolve, reject) => {
-        const storage = chrome.storage?.sync || chrome.storage?.local;
-        if (storage) {
-          storage.set({ 'persist:state': persistState }, () => {
-            if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
-            else resolve();
-          });
-        } else {
-          localStorage.setItem('persist:state', JSON.stringify(persistState));
-          resolve();
-        }
-      });
-    }, fakeAuthStateBetaTester);
-
+    await injectAuthState(page, fakeAuthStateBetaTester);
     await page.close();
     await use(extensionId);
   },
@@ -141,23 +147,7 @@ export const test = base.extend<{
     const page = await context.newPage();
     await page.goto(`chrome-extension://${extensionId}/popup.html`);
     await page.waitForLoadState('domcontentloaded');
-
-    await page.evaluate((authState) => {
-      const persistState = { cookies: true, userSession: authState };
-      return new Promise<void>((resolve, reject) => {
-        const storage = chrome.storage?.sync || chrome.storage?.local;
-        if (storage) {
-          storage.set({ 'persist:state': persistState }, () => {
-            if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
-            else resolve();
-          });
-        } else {
-          localStorage.setItem('persist:state', JSON.stringify(persistState));
-          resolve();
-        }
-      });
-    }, fakeAuthStateExtraFeatures);
-
+    await injectAuthState(page, fakeAuthStateExtraFeatures);
     await page.close();
     await use(extensionId);
   },
@@ -166,23 +156,7 @@ export const test = base.extend<{
     const page = await context.newPage();
     await page.goto(`chrome-extension://${extensionId}/popup.html`);
     await page.waitForLoadState('domcontentloaded');
-
-    await page.evaluate((authState) => {
-      const persistState = { cookies: true, userSession: authState };
-      return new Promise<void>((resolve, reject) => {
-        const storage = chrome.storage?.sync || chrome.storage?.local;
-        if (storage) {
-          storage.set({ 'persist:state': persistState }, () => {
-            if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
-            else resolve();
-          });
-        } else {
-          localStorage.setItem('persist:state', JSON.stringify(persistState));
-          resolve();
-        }
-      });
-    }, fakeAuthStateArchive);
-
+    await injectAuthState(page, fakeAuthStateArchive);
     await page.close();
     await use(extensionId);
   },
