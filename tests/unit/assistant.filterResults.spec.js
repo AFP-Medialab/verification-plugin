@@ -53,26 +53,32 @@ test("tiktok: scraped videos placed in videoList", () => {
 // Instagram
 // ---------------------------------------------------------------------------
 
-test("instagram with video: first video placed in videoList", () => {
-  const scrape = makeScrape({ videos: ["https://cdn.ig.com/v.mp4"], images: ["https://cdn.ig.com/img.jpg"] });
+test.each([
+  {
+    label: "video and images",
+    videos: ["https://cdn.ig.com/v.mp4"],
+    images: ["https://cdn.ig.com/img.jpg"],
+  },
+  {
+    label: "no video, images only",
+    videos: [],
+    images: ["https://cdn.ig.com/img1.jpg", "https://cdn.ig.com/img2.jpg"],
+  },
+  {
+    label: "video only, no images",
+    videos: ["https://cdn.ig.com/v.mp4"],
+    images: [],
+  },
+  {
+    label: "multiple videos and images",
+    videos: ["https://cdn.ig.com/v1.mp4", "https://cdn.ig.com/v2.mp4"],
+    images: ["https://cdn.ig.com/img.jpg"],
+  },
+])("instagram $label: all scraped media returned", ({ videos, images }) => {
+  const scrape = makeScrape({ videos, images });
   const result = filterAssistantResults(KNOWN_LINKS.INSTAGRAM, null, "https://instagram.com/p/abc", scrape);
-  expect(result.videoList).toEqual(["https://cdn.ig.com/v.mp4"]);
-  expect(result.imageList).toEqual([]);
-});
-
-test("instagram without video: first image placed in imageList", () => {
-  const scrape = makeScrape({ videos: [], images: ["https://cdn.ig.com/img1.jpg", "https://cdn.ig.com/img2.jpg"] });
-  const result = filterAssistantResults(KNOWN_LINKS.INSTAGRAM, null, "https://instagram.com/p/abc", scrape);
-  expect(result.imageList).toEqual(["https://cdn.ig.com/img1.jpg"]);
-  expect(result.videoList).toEqual([]);
-});
-
-test("instagram with multiple videos: only first video used", () => {
-  const scrape = makeScrape({ videos: ["https://cdn.ig.com/v1.mp4", "https://cdn.ig.com/v2.mp4"] });
-  const result = filterAssistantResults(KNOWN_LINKS.INSTAGRAM, null, "https://instagram.com/p/abc", scrape);
-  // videos.length !== 1, so falls to image branch
-  expect(result.videoList).toEqual([]);
-  expect(result.imageList).toEqual([scrape.images[0]]);
+  expect(result.videoList).toEqual(videos);
+  expect(result.imageList).toEqual(images);
 });
 
 // ---------------------------------------------------------------------------
