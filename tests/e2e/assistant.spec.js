@@ -25,6 +25,8 @@ const MediaServices = {
   videoDownload: "assistant_video_download_action",
   videoDownloadGeneric: "assistant_video_download_generic",
   videoDownloadTiktok: "assistant_video_download_tiktok",
+  deepfakeVideo: "navbar_deepfake_video",
+  poiForensics: "navbar_poiforensics",
 };
 
 [
@@ -299,9 +301,13 @@ test("youtube video + BETA_TESTER role: deepfake tool is visible", async ({
   await expect(page.getByTestId("url-media-results")).toBeVisible({
     timeout: 30000,
   });
-  await expect(page.getByTestId("navbar_deepfake_video")).toBeVisible();
-  await expect(page.getByTestId("navbar_analysis_video")).toBeVisible();
-  await expect(page.getByTestId("navbar_keyframes")).toBeVisible();
+  await checkMediaServices(page, [
+    MediaServices.deepfakeVideo,
+    MediaServices.analysisVideo,
+    MediaServices.keyframes,
+    MediaServices.thumbnails,
+    MediaServices.videoDownloadGeneric,
+  ]);
 });
 
 test("youtube video + EXTRA_FEATURE role: POI forensics tool is visible", async ({
@@ -320,9 +326,13 @@ test("youtube video + EXTRA_FEATURE role: POI forensics tool is visible", async 
   await expect(page.getByTestId("url-media-results")).toBeVisible({
     timeout: 30000,
   });
-  await expect(page.getByTestId("navbar_poiforensics")).toBeVisible();
-  await expect(page.getByTestId("navbar_analysis_video")).toBeVisible();
-  await expect(page.getByTestId("navbar_keyframes")).toBeVisible();
+  await checkMediaServices(page, [
+    MediaServices.poiForensics,
+    MediaServices.analysisVideo,
+    MediaServices.keyframes,
+    MediaServices.thumbnails,
+    MediaServices.videoDownloadGeneric,
+  ]);
 });
 
 async function checkMediaServices(page, availableServices) {
