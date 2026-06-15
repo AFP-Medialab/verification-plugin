@@ -16,7 +16,7 @@ i18next
     ns: ["components/PopUp"],
     defaultNS: "components/PopUp",
     fallbackLng: "en",
-    saveMissing: true,
+    saveMissing: false,
     interpolation: {
       escapeValue: false,
     },

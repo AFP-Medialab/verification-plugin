@@ -16,6 +16,7 @@ import { KNOWN_LINKS } from "@/constants/toolsData";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { history } from "@Shared/History/History";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import { browser } from "wxt/browser";
 
 import CopyButton from "../../../../Shared/CopyButton";
 import { prettifyLargeString } from "../utils";
@@ -115,7 +116,7 @@ const UrlArchive = ({ url, mediaUrl }) => {
   }, [platform]);
 
   const saveToInternetArchive = (link) => {
-    window.open("https://web.archive.org/save/" + link, "_blank");
+    browser.tabs.create({ url: "https://web.archive.org/save/" + link });
   };
 
   const ArchiveLink = ({ link, link_type_keyword }) => {
@@ -145,6 +146,7 @@ const UrlArchive = ({ url, mediaUrl }) => {
 
           <Box>
             <Button
+              data-testid="archive-internet-archive-button"
               variant="outlined"
               onClick={() => {
                 setClickedUrl(link);
@@ -199,7 +201,7 @@ const UrlArchive = ({ url, mediaUrl }) => {
             color="primary"
             onClick={() => {
               urls.map((urlElement) => {
-                window.open(urlElement, "_blank");
+                browser.tabs.create({ url: urlElement });
               });
             }}
             sx={{ textTransform: "none" }}

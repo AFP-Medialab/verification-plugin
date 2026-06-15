@@ -195,7 +195,7 @@ const SyntheticImageDetectionResults = ({
 
   const gaugeChartRef = useRef(null);
 
-  const [showCerthLabels, setShowCerthLabels] = useState(true);
+  const [showCerthLabels, setShowCerthLabels] = useState(false);
 
   const handleToggleCerthLabel = (event) => {
     setShowCerthLabels(event.target.checked);

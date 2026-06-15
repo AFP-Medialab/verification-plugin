@@ -20,15 +20,18 @@ const TextImageCanvas = ({
   imgSrc,
   text,
   filterDataURL,
-  paused,
+  editMode,
   annotation,
+  defaultColor = "red",
 }) => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/CheckGIF");
 
   const stageRef = React.useRef(null);
   const [img, setImg] = useState(null);
-  const [textColor, setTextColor] = useState("red");
+  const [textColor, setTextColor] = useState(
+    defaultColor === "green" ? "#00ff00" : defaultColor,
+  );
   const [textSize, setTextSize] = useState(35);
 
   const handleExport = () => {
@@ -48,7 +51,7 @@ const TextImageCanvas = ({
 
   useEffect(() => {
     if (img) handleExport();
-  }, [img]);
+  }, [img, annotation, textColor, textSize]);
 
   if (img) {
     //calculates width and height used for the canvas, to have the same proportions as the image
@@ -85,7 +88,7 @@ const TextImageCanvas = ({
           </Stage>
         </Grid>
         <Grid>
-          {paused && (
+          {editMode && (
             <>
               <Grid container direction="column">
                 <Grid>
@@ -106,6 +109,9 @@ const TextImageCanvas = ({
                       onChange={changeColor}
                     >
                       <MenuItem value={"red"}>{keyword("colour_red")}</MenuItem>
+                      <MenuItem value={"#00ff00"}>
+                        {keyword("colour_green")}
+                      </MenuItem>
                       <MenuItem value={"blue"}>
                         {keyword("colour_blue")}
                       </MenuItem>

@@ -35,8 +35,8 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import MetadataImageResult from "./Results/MetadataImageResult";
 import MetadataVideoResult from "./Results/MetadataVideoResult";
 import {
-  getImageMetadataFromFile,
-  getImageMetadataFromUrl,
+  extractMetadataFromFile,
+  extractMetadataFromUrl,
 } from "./api/imageMetadataApi";
 import { useVideoMetadataMutation } from "./hooks/useVideoMetadataMutation";
 
@@ -162,8 +162,8 @@ const Metadata = () => {
 
         // Extract metadata
         const metadata = input
-          ? await getImageMetadataFromUrl(input)
-          : await getImageMetadataFromFile(fileInput);
+          ? await extractMetadataFromUrl(input)
+          : await extractMetadataFromFile(fileInput);
 
         setImageMetadata(metadata instanceof Error ? null : metadata);
 

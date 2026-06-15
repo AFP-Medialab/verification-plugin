@@ -247,7 +247,7 @@ export const poiForensic = makeTool(
   data.poiForensic,
   PoiForensicSvgIcon,
   <PoiForensics />,
-  <Footer type={FOOTER_TYPES.ITI} />,
+  <Footer type={FOOTER_TYPES.ITI_UNINA} />,
 );
 export const imageMagnifier = makeTool(
   data.imageMagnifier,
