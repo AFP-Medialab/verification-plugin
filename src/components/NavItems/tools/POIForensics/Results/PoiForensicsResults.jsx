@@ -146,22 +146,22 @@ const PoiForensicsResults = (props) => {
         {hasData ? (
           <>
             <CardContent>
-              <Grid
-                container
+              <Stack
                 direction="row"
+                spacing={2}
                 sx={{
-                  justifyContent: "space-evenly",
+                  justifyContent: "flex-start",
                   alignItems: "flex-start",
                 }}
               >
-                <Stack direction="row" spacing={4} sx={{ width: "100%" }}>
+                <Stack direction="column" spacing={4} sx={{ width: "100%" }}>
                   <Grid
                     size={{ xs: 6 }}
-                    sx={{ flex: 1 }}
                     container
                     direction="column"
-                    spacing={2}
-                    alignItems="center"
+                    sx={{
+                      width: "100%",
+                    }}
                   >
                     <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
                       <Box
@@ -210,224 +210,207 @@ const PoiForensicsResults = (props) => {
                         />
                       </Box>
                     </ErrorBoundary>
-                  </Grid>
-
-                  <Grid size={{ xs: 6 }} sx={{ flex: 1 }}>
-                    <Stack
-                      direction="column"
+                    <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
+                      <Box
+                        sx={{
+                          m: 2,
+                        }}
+                      >
+                        <LineChart
+                          xAxis={[
+                            {
+                              data: times,
+                              min: 0,
+                            },
+                          ]}
+                          yAxis={[
+                            {
+                              min: 0,
+                            },
+                          ]}
+                          series={[
+                            {
+                              data: scores,
+                            },
+                          ]}
+                          height={300}
+                          grid={{ vertical: true, horizontal: true }}
+                          onAxisClick={handleChartClick}
+                          data-testid="poiforensic-chart"
+                        >
+                          <ChartsReferenceLine
+                            y={1}
+                            label={keyword("poi_forensics_result_treshold")}
+                            lineStyle={{
+                              stroke: "red",
+                              strokeDasharray: "3 3",
+                            }}
+                          />
+                        </LineChart>
+                        <Typography>
+                          {keyword("poi_forensics_graph_title")}
+                        </Typography>
+                      </Box>
+                    </ErrorBoundary>
+                    <Box
                       sx={{
-                        justifyContent: "center",
+                        m: 2,
                       }}
                     >
-                      <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
-                        <>
-                          <LineChart
-                            xAxis={[
-                              {
-                                data: times,
-                                min: 0,
-                              },
-                            ]}
-                            yAxis={[
-                              {
-                                min: 0,
-                              },
-                            ]}
-                            series={[
-                              {
-                                data: scores,
-                              },
-                            ]}
-                            height={300}
-                            grid={{ vertical: true, horizontal: true }}
-                            onAxisClick={handleChartClick}
-                            data-testid="poiforensic-chart"
-                          >
-                            <ChartsReferenceLine
-                              y={1}
-                              label={keyword("poi_forensics_result_treshold")}
-                              lineStyle={{
-                                stroke: "red",
-                                strokeDasharray: "3 3",
-                              }}
-                            />
-                          </LineChart>
-                          <Typography>
-                            {keyword("poi_forensics_graph_title")}
-                          </Typography>
-                        </>
-                      </ErrorBoundary>
-                    </Stack>
+                      <Table
+                        className={classes.table}
+                        size="small"
+                        sx={{
+                          maxWidth: 800,
+                          width: "100%",
+                        }}
+                        data-testid="poiforensic-table"
+                      >
+                        <TableBody>
+                          <TableRow>
+                            <TableCell
+                              component="th"
+                              scope="row"
+                              style={{ fontWeight: "bold" }}
+                            >
+                              {keyword("poi_forensics_overall_score")}
+                            </TableCell>
+                            <TableCell
+                              align="right"
+                              style={{ fontWeight: "bold" }}
+                            >
+                              {overallScore}
+                            </TableCell>
+                          </TableRow>
+
+                          <TableRow>
+                            <TableCell
+                              component="th"
+                              scope="row"
+                              style={{ fontWeight: "bold" }}
+                            >
+                              {keyword("poi_forensics_auc")}
+                            </TableCell>
+                            <TableCell
+                              align="right"
+                              style={{ fontWeight: "bold" }}
+                            >
+                              {areaUnderCurve}
+                            </TableCell>
+                          </TableRow>
+
+                          <TableRow>
+                            <TableCell
+                              component="th"
+                              scope="row"
+                              style={{ fontWeight: "bold" }}
+                            >
+                              {keyword("poi_forensics_area_above")}
+                            </TableCell>
+                            <TableCell
+                              align="right"
+                              style={{ fontWeight: "bold" }}
+                            >
+                              {areaAboveTreshold}
+                            </TableCell>
+                          </TableRow>
+
+                          <TableRow>
+                            <TableCell
+                              component="th"
+                              scope="row"
+                              style={{ fontWeight: "bold" }}
+                            >
+                              {keyword("poi_forensics_area_below")}
+                            </TableCell>
+                            <TableCell
+                              align="right"
+                              style={{ fontWeight: "bold" }}
+                            >
+                              {areaBelowTreshold}
+                            </TableCell>
+                          </TableRow>
+
+                          <TableRow>
+                            <TableCell
+                              component="th"
+                              scope="row"
+                              style={{ fontWeight: "bold" }}
+                            >
+                              {keyword("poi_forensics_percentage")}
+                            </TableCell>
+                            <TableCell
+                              align="right"
+                              style={{ fontWeight: "bold" }}
+                            >
+                              {percentageFake}%
+                            </TableCell>
+                          </TableRow>
+
+                          <TableRow>
+                            <TableCell colSpan={2} style={{ padding: 0 }} />
+                          </TableRow>
+                          {globalScorePerTrack.map((track) => {
+                            return (
+                              <TableRow key={track.trackID}>
+                                <TableCell component="th" scope="row">
+                                  Track {track.trackID}
+                                </TableCell>
+                                <TableCell align="right">
+                                  {track.globalScore}
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </Box>
                   </Grid>
                 </Stack>
-              </Grid>
-            </CardContent>
-            <CardContent>
-              <Grid
-                container
-                direction="row"
-                sx={{
-                  justifyContent: "space-evenly",
-                  alignItems: "flex-start",
-                }}
-              >
-                <Stack direction="row" spacing={4} sx={{ width: "100%" }}>
+                <Stack direction="column" spacing={4} sx={{ width: "100%" }}>
                   <Grid
                     size={{ xs: 6 }}
-                    sx={{ flex: 1 }}
                     container
                     direction="column"
-                    spacing={2}
+                    sx={{
+                      width: "100%",
+                    }}
+                    data-testid="poiforensic-gauge"
                   >
-                    <Table
-                      className={classes.table}
-                      size="small"
-                      sx={{
-                        maxWidth: 800,
-                        width: "100%",
+                    <GaugeChartResult
+                      keyword={keyword}
+                      scores={[
+                        {
+                          methodName: "poiForensics",
+                          predictionScore: percentageFake,
+                        },
+                      ]}
+                      methodNames={{
+                        poiForensics: {
+                          name: keyword("poi_forensics_videoreport_name"),
+                          description: keyword(
+                            "poi_forensics_videoreport_description",
+                          ),
+                        },
                       }}
-                      data-testid="poiforensic-table"
-                    >
-                      <TableBody>
-                        <TableRow>
-                          <TableCell
-                            component="th"
-                            scope="row"
-                            style={{ fontWeight: "bold" }}
-                          >
-                            {keyword("poi_forensics_overall_score")}
-                          </TableCell>
-                          <TableCell
-                            align="right"
-                            style={{ fontWeight: "bold" }}
-                          >
-                            {overallScore}
-                          </TableCell>
-                        </TableRow>
-
-                        <TableRow>
-                          <TableCell
-                            component="th"
-                            scope="row"
-                            style={{ fontWeight: "bold" }}
-                          >
-                            {keyword("poi_forensics_auc")}
-                          </TableCell>
-                          <TableCell
-                            align="right"
-                            style={{ fontWeight: "bold" }}
-                          >
-                            {areaUnderCurve}
-                          </TableCell>
-                        </TableRow>
-
-                        <TableRow>
-                          <TableCell
-                            component="th"
-                            scope="row"
-                            style={{ fontWeight: "bold" }}
-                          >
-                            {keyword("poi_forensics_area_above")}
-                          </TableCell>
-                          <TableCell
-                            align="right"
-                            style={{ fontWeight: "bold" }}
-                          >
-                            {areaAboveTreshold}
-                          </TableCell>
-                        </TableRow>
-
-                        <TableRow>
-                          <TableCell
-                            component="th"
-                            scope="row"
-                            style={{ fontWeight: "bold" }}
-                          >
-                            {keyword("poi_forensics_area_below")}
-                          </TableCell>
-                          <TableCell
-                            align="right"
-                            style={{ fontWeight: "bold" }}
-                          >
-                            {areaBelowTreshold}
-                          </TableCell>
-                        </TableRow>
-
-                        <TableRow>
-                          <TableCell
-                            component="th"
-                            scope="row"
-                            style={{ fontWeight: "bold" }}
-                          >
-                            {keyword("poi_forensics_percentage")}
-                          </TableCell>
-                          <TableCell
-                            align="right"
-                            style={{ fontWeight: "bold" }}
-                          >
-                            {percentageFake}%
-                          </TableCell>
-                        </TableRow>
-
-                        <TableRow>
-                          <TableCell colSpan={2} style={{ padding: 0 }} />
-                        </TableRow>
-                        {globalScorePerTrack.map((track) => {
-                          return (
-                            <TableRow key={track.trackID}>
-                              <TableCell component="th" scope="row">
-                                Track {track.trackID}
-                              </TableCell>
-                              <TableCell align="right">
-                                {track.globalScore}
-                              </TableCell>
-                            </TableRow>
-                          );
-                        })}
-                      </TableBody>
-                    </Table>
-                  </Grid>
-                  <Grid size={{ xs: 6 }} sx={{ flex: 1 }}>
-                    <Stack
-                      direction="column"
-                      spacing={4}
-                      data-testid="poiforensic-gauge"
-                    >
-                      <GaugeChartResult
-                        keyword={keyword}
-                        scores={[
-                          {
-                            methodName: "poiForensics",
-                            predictionScore: percentageFake,
-                          },
-                        ]}
-                        methodNames={{
-                          poiForensics: {
-                            name: keyword("poi_forensics_videoreport_name"),
-                            description: keyword(
-                              "poi_forensics_videoreport_description",
-                            ),
-                          },
-                        }}
-                        detectionThresholds={DETECTION_THRESHOLDS}
-                        resultsHaveErrors={false}
-                        sanitizeDetectionPercentage={(n) => Math.round(n)}
-                        gaugeExplanation={{
-                          keywords: [
-                            "gauge_scale_modal_explanation_rating_1",
-                            "gauge_scale_modal_explanation_rating_2",
-                            "gauge_scale_modal_explanation_rating_3",
-                            "gauge_scale_modal_explanation_rating_4",
-                          ],
-                          colors: ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"],
-                        }}
-                        toolName={"PoiForensics"}
-                        detectionType={"video"}
-                      />
-                    </Stack>
+                      detectionThresholds={DETECTION_THRESHOLDS}
+                      resultsHaveErrors={false}
+                      sanitizeDetectionPercentage={(n) => Math.round(n)}
+                      gaugeExplanation={{
+                        keywords: [
+                          "gauge_scale_modal_explanation_rating_1",
+                          "gauge_scale_modal_explanation_rating_2",
+                          "gauge_scale_modal_explanation_rating_3",
+                          "gauge_scale_modal_explanation_rating_4",
+                        ],
+                        colors: ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"],
+                      }}
+                      toolName={"PoiForensics"}
+                      detectionType={"video"}
+                    />
                   </Grid>
                 </Stack>
-              </Grid>
+              </Stack>
             </CardContent>
             <CardContent>
               {role.includes(ROLES.EXTRA_FEATURE) && results && (
