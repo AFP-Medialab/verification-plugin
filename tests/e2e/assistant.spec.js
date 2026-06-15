@@ -91,13 +91,14 @@ const MediaServices = {
     mediaStatus: MediaVideoStatus.video,
     services: [MediaServices.metadataVideo, MediaServices.videoDownload],
   },
-  // Telegram post with video - Fails, goes to the group page
-  // {
-  //   url: "https://t.me/disclosetv/13970",
-  //   mediaType: MediaType.video,
-  //   mediaStatus: MediaVideoStatus.video,
-  //   services: [MediaServices.metadata, MediaServices.videoDownload]
-  // },
+  // Telegram group post URLs redirect to the group page rather than the post
+  {
+    url: "https://t.me/disclosetv/13970",
+    mediaType: MediaType.video,
+    mediaStatus: MediaVideoStatus.video,
+    services: [MediaServices.metadataVideo, MediaServices.videoDownload],
+    skip: true,
+  },
   // Instagram post with an image
   {
     url: "https://www.instagram.com/p/CI2b-3usJoH/",
