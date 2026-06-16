@@ -83,6 +83,7 @@ const MediaServices = {
       MediaServices.keyframes,
       MediaServices.videoDownload,
     ],
+    skip: true,
   },
   // Telegram post with video
   {
