@@ -2,15 +2,6 @@
   "extends": ".wxt/tsconfig.json",
   "compilerOptions": {
     "jsx": "preserve",
-    "lib": ["ESNext", "DOM", "WebWorker"],
-    "allowJs": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"],
-      "@Shared": ["src/components/Shared"],
-      "@Shared/*": ["src/components/Shared/*"],
-      "@workers": ["src/workers"],
-      "@workers/*": ["src/workers/*"]
-    }
+    "lib": ["ESNext", "DOM", "WebWorker"]
   }
 }
