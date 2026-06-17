@@ -20,6 +20,10 @@ export const getPersonOfInterest = (keyword) => ({
     DISPLAY_NAME: `${keyword("poi_forensics_meloni")}`,
     NAME_TOSEND: "GiorgiaMeloni",
   },
+  Trump: {
+    DISPLAY_NAME: `${keyword("poi_forensics_trump")}`,
+    NAME_TOSEND: "Trump",
+  },
 });
 
 /**
