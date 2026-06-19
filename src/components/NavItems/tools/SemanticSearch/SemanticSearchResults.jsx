@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -17,6 +18,7 @@ import SelectSmall from "./components/SelectSmall";
 
 const SemanticSearchResults = (searchResults) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/SemanticSearch");
+  const locale = useSelector((state) => state.language);
 
   const sortingModes = [
     {
@@ -132,10 +134,7 @@ const SemanticSearchResults = (searchResults) => {
                     ) ?? null
                   }
                   website={resultItem.website}
-                  language={getLanguageName(
-                    resultItem.language,
-                    resultItem.language,
-                  )}
+                  language={getLanguageName(resultItem.language, locale)}
                   similarityScore={resultItem.similarityScore}
                   articleUrl={resultItem.articleUrl}
                   domainUrl={resultItem.domainUrl}
