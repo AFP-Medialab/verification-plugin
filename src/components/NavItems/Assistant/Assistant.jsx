@@ -193,7 +193,6 @@ const Assistant = () => {
             const videoUrl = URL.createObjectURL(fileInput);
             const ctype = TOOLS_CATEGORIES.VIDEO;
 
-            dispatch(setInputUrl(videoUrl, KNOWN_LINKS.OWN));
             dispatch(
               setScrapedData(null, null, null, [], [videoUrl], null, null),
             );
@@ -208,7 +207,6 @@ const Assistant = () => {
             const imageUrl = URL.createObjectURL(fileInput);
             const ctype = TOOLS_CATEGORIES.IMAGE;
 
-            dispatch(setInputUrl(imageUrl, KNOWN_LINKS.OWN)); // kicks off getUrlDomainAnalysisSaga
             dispatch(
               setScrapedData(null, null, null, [imageUrl], [], null, null),
             );
