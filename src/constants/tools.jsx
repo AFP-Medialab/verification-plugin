@@ -34,7 +34,7 @@ import {
 import {
   resetDeepfake,
   setDeepfakeUrlVideo,
-} from "@//redux/actions/tools/deepfakeVideoActions";
+} from "@/redux/actions/tools/deepfakeVideoActions";
 import {
   resetPoiForensics,
   setPoiForensicsFile,
@@ -52,7 +52,7 @@ import {
 import { FOOTER_TYPES, Footer } from "@Shared/Footer/Footer";
 
 import AfpDigitalCoursesIconComponent from "../components/NavBar/images/SVG/Navbar/AfpDigitalCoursesIcon";
-import { Tool } from "./toolsData";
+import { KNOWN_LINKS, Tool } from "./toolsData";
 import * as data from "./toolsData";
 
 // Re-export everything from the pure-data module so existing imports of
