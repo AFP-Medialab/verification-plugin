@@ -398,6 +398,11 @@ export default defineBackground(() => {
       // Twitter: GraphQL response with nested data structure
       const isTiktokCapture = request.prompt === "tiktokCapture";
 
+      // Check if this is a Community Note message (has _snaRecorderType flag)
+      const isCommunityNote =
+        request._snaRecorderType === "communityNote" ||
+        request._snaRecorderType === "tweetWithCommunityNote";
+
       // Twitter messages have a 'data' field at the root level (GraphQL responses)
       const isTwitterCapture =
         request.data &&
@@ -412,7 +417,7 @@ export default defineBackground(() => {
           // Check for timeline instructions
           request.data.threaded_conversation_with_injections_v2);
 
-      if (isTiktokCapture || isTwitterCapture) {
+      if (isTiktokCapture || isTwitterCapture || isCommunityNote) {
         handleRecordedMessage(request);
         return false;
       }
