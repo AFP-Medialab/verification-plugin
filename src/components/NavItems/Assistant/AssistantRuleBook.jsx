@@ -9,8 +9,8 @@ import {
   Tool,
   canUserSeeTool,
   imageGif,
-  toolConfigs,
-} from "@/constants/toolsData";
+  tools,
+} from "@/constants/tools";
 
 export { TYPE_PATTERNS, KNOWN_LINK_PATTERNS } from "./constants";
 
@@ -103,7 +103,7 @@ export const selectCorrectActions = (
   role,
   isUserAuthenticated,
 ) => {
-  let newPossibleActions = toolConfigs
+  let newPossibleActions = tools
     .concat(downloadActions)
     .filter(
       (tool) =>
@@ -121,7 +121,7 @@ export const selectCorrectActions = (
     .map((tool) => ({
       ...tool.assistantProps,
       title: tool.titleKeyword,
-      icon: tool.icon ? <tool.icon sx={{ fontSize: "24px" }} /> : null,
+      icon: <tool.icon sx={{ fontSize: "24px" }} />,
       path: "tools/" + tool.path,
     }));
 

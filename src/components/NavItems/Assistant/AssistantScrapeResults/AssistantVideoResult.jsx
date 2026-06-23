@@ -18,7 +18,7 @@ import FileCopyIcon from "@mui/icons-material/FileCopy";
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import YouTubeEmbed from "@/components/Shared/Utils/YouTubeEmbed";
-import { KNOWN_LINKS } from "@/constants/toolsData";
+import { KNOWN_LINKS } from "@/constants/tools";
 import { browser } from "wxt/browser";
 
 const AssistantVideoResult = () => {
@@ -118,9 +118,7 @@ const AssistantVideoResult = () => {
     <Card variant={"outlined"}>
       <CardMedia data-testid="assistant-media-video-container">
         {videoRenderType === "youtube" && embedUrl && (
-          <div data-testid="assistant-media-video-youtube">
-            <YouTubeEmbed embedLink={embedUrl} height="400" width="100%" />
-          </div>
+          <YouTubeEmbed embedLink={embedUrl} height="400" width="100%" />
         )}
         {videoRenderType === "iframe" && embedUrl && (
           <div data-testid="assistant-media-video-iframe">

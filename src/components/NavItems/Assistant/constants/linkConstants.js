@@ -1,4 +1,4 @@
-import { KNOWN_LINKS, TOOLS_CATEGORIES } from "@/constants/toolsData";
+import { KNOWN_LINKS, TOOLS_CATEGORIES } from "@/constants/tools";
 
 /**
  * File-extension patterns used to classify a URL as video or image

@@ -35,7 +35,6 @@ yarn-error.log*
 .mcp.json
 
 # Playwright
-.playwright
 /test-results/
 /playwright-report/
 /blob-report/

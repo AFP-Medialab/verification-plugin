@@ -18,9 +18,8 @@ module.exports = defineConfig({
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 1 : 0,
-  /* Chrome extension tests share a persistent context — run sequentially locally
-     to avoid resource exhaustion from parallel browser instances on dev machines. */
-  workers: process.env.CI ? 5 : 1,
+  /* Opt out of parallel tests on CI. */
+  workers: process.env.CI ? 5 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */

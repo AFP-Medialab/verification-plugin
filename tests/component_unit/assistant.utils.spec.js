@@ -5,7 +5,7 @@ import {TestTreeMapToElementHarness, TestTreeMapToElementHighlightWrapHarness} f
 
 test.use({ viewport: { width: 500, height: 500 } });
 
-test('treeMapToElement: no highlighting', async ({ mount }) => {
+test('Test treeMapToElement - No highlighting', async ({ mount }) => {
 
   const component = await mount(<TestTreeMapToElementHarness />);
   await expect(component.locator("h1")).toContainText("word0");
@@ -13,7 +13,7 @@ test('treeMapToElement: no highlighting', async ({ mount }) => {
 
 });
 
-test('treeMapToElement: dynamic text highlighting', async ({ mount }) => {
+test('Test treeMapToElement - Dynamic text highlighting', async ({ mount }) => {
 
   const component = await mount(<TestTreeMapToElementHighlightWrapHarness />);
   await expect(component.locator("h1")).toContainText("word0");

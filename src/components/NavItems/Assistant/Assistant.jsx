@@ -35,7 +35,7 @@ import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "@/components/Shared/StringFileUploadField";
 import { getFileTypeFromFileObject } from "@/components/Shared/Utils/fileUtils";
 import { ROLES } from "@/constants/roles";
-import { KNOWN_LINKS, TOOLS_CATEGORIES } from "@/constants/toolsData";
+import { KNOWN_LINKS, TOOLS_CATEGORIES } from "@/constants/tools";
 import {
   cleanAssistantState,
   setImageVideoSelected,
@@ -380,8 +380,6 @@ const Assistant = () => {
               handleCloseSelectedFile={cleanAssistant}
               preprocessLocalFile={preprocessFileInput}
               handleClearUrl={cleanAssistant}
-              urlInputTestId="assistant-url-selected-input"
-              submitButtonTestId="assistant-url-selected-analyse-btn"
             />
           </form>
 

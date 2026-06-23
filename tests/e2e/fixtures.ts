@@ -1,7 +1,5 @@
 import { test as base, chromium, type BrowserContext } from '@playwright/test';
 import * as path from 'path';
-import * as os from 'os';
-import * as fs from 'fs';
 
 // Mirrors the shape expected by authenticationReducer and actualSaveToLocalStorage().
 const fakeAuthStateBetaTester = {
@@ -64,28 +62,6 @@ const fakeAuthStateArchive = {
   },
 };
 
-// page.evaluate callbacks run in the browser context where `chrome` is a global,
-// but TypeScript type-checks them as Node.js code. Access via globalThis to avoid
-// the "Cannot find name 'chrome'" error.
-async function injectAuthState(page: import('@playwright/test').Page, authState: object): Promise<void> {
-  await page.evaluate((state) => {
-    const persistState = { cookies: true, userSession: state };
-    return new Promise<void>((resolve, reject) => {
-      const c = (globalThis as any).chrome;
-      const storage = c?.storage?.sync || c?.storage?.local;
-      if (storage) {
-        storage.set({ 'persist:state': persistState }, () => {
-          if (c?.runtime?.lastError) reject(c.runtime.lastError);
-          else resolve();
-        });
-      } else {
-        localStorage.setItem('persist:state', JSON.stringify(persistState));
-        resolve();
-      }
-    });
-  }, authState);
-}
-
 export const test = base.extend<{
   context: BrowserContext;
   extensionId: string;
@@ -97,9 +73,8 @@ export const test = base.extend<{
     const pathToExtension = path.resolve(__dirname, `../../build/${process.env.EXTENSION_BUILD_DIR ?? 'chrome-mv3'}`);
 
     const isCI = !!process.env.CI;
-    const userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'playwright-ext-'));
 
-    const context = await chromium.launchPersistentContext(userDataDir, {
+    const context = await chromium.launchPersistentContext('', {
       headless: isCI,
       channel: 'chromium',
       args: [
@@ -112,12 +87,11 @@ export const test = base.extend<{
         '--disable-dev-shm-usage',
         '--disable-dbus-deprecation-message',
         '--disable-freestyler-dogfood',
-        '--no-zygote',
+        '--no-zygote', 
       ],
     });
     await use(context);
     await context.close();
-    fs.rmSync(userDataDir, { recursive: true, force: true });
   },
   extensionId: async ({ context }, use) => {
     // for manifest v3:
@@ -137,7 +111,23 @@ export const test = base.extend<{
     const page = await context.newPage();
     await page.goto(`chrome-extension://${extensionId}/popup.html`);
     await page.waitForLoadState('domcontentloaded');
-    await injectAuthState(page, fakeAuthStateBetaTester);
+
+    await page.evaluate((authState) => {
+      const persistState = { cookies: true, userSession: authState };
+      return new Promise<void>((resolve, reject) => {
+        const storage = chrome.storage?.sync || chrome.storage?.local;
+        if (storage) {
+          storage.set({ 'persist:state': persistState }, () => {
+            if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
+            else resolve();
+          });
+        } else {
+          localStorage.setItem('persist:state', JSON.stringify(persistState));
+          resolve();
+        }
+      });
+    }, fakeAuthStateBetaTester);
+
     await page.close();
     await use(extensionId);
   },
@@ -147,7 +137,23 @@ export const test = base.extend<{
     const page = await context.newPage();
     await page.goto(`chrome-extension://${extensionId}/popup.html`);
     await page.waitForLoadState('domcontentloaded');
-    await injectAuthState(page, fakeAuthStateExtraFeatures);
+
+    await page.evaluate((authState) => {
+      const persistState = { cookies: true, userSession: authState };
+      return new Promise<void>((resolve, reject) => {
+        const storage = chrome.storage?.sync || chrome.storage?.local;
+        if (storage) {
+          storage.set({ 'persist:state': persistState }, () => {
+            if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
+            else resolve();
+          });
+        } else {
+          localStorage.setItem('persist:state', JSON.stringify(persistState));
+          resolve();
+        }
+      });
+    }, fakeAuthStateExtraFeatures);
+
     await page.close();
     await use(extensionId);
   },
@@ -156,7 +162,23 @@ export const test = base.extend<{
     const page = await context.newPage();
     await page.goto(`chrome-extension://${extensionId}/popup.html`);
     await page.waitForLoadState('domcontentloaded');
-    await injectAuthState(page, fakeAuthStateArchive);
+
+    await page.evaluate((authState) => {
+      const persistState = { cookies: true, userSession: authState };
+      return new Promise<void>((resolve, reject) => {
+        const storage = chrome.storage?.sync || chrome.storage?.local;
+        if (storage) {
+          storage.set({ 'persist:state': persistState }, () => {
+            if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
+            else resolve();
+          });
+        } else {
+          localStorage.setItem('persist:state', JSON.stringify(persistState));
+          resolve();
+        }
+      });
+    }, fakeAuthStateArchive);
+
     await page.close();
     await use(extensionId);
   },
