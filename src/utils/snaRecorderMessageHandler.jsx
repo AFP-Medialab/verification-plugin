@@ -1,5 +1,4 @@
 import {
-  transformCommunityNote,
   transformTiktok,
   transformTweet,
 } from "@/components/NavItems/tools/SNA/utils/snaDataTransformers";
@@ -18,7 +17,6 @@ db.version(2).stores({
 const TIKTOKCOLLECTION = "tiktoks";
 const TWITTERCOLLECTION = "tweets";
 const FBCOLLECTION = "fb";
-const COMMUNITYNOTESCOLLECTION = "communityNotes";
 
 const snaDB = new DBStorage("snaData", 1, {
   collections: {
@@ -81,14 +79,10 @@ const postFormat = (rawData) => {
   let post = rawData.post;
   return post;
 };
-const communityNoteFormat = (rawData) => {
-  let note = rawData.note;
-  return note;
-};
 
 /**
  * Get the table name for a given platform
- * @param {string} platform - Platform name (twitter/tiktok/communityNotes)
+ * @param {string} platform - Platform name (twitter/tiktok)
  * @returns {string} Table name
  */
 const getTableForPlatform = (platform) => {
@@ -103,8 +97,6 @@ const getTableForPlatform = (platform) => {
       return "fb";
     case "fb":
       return "fb";
-    case "communityNotes":
-      return COMMUNITYNOTESCOLLECTION;
     default:
       return "custom";
   }
@@ -112,7 +104,7 @@ const getTableForPlatform = (platform) => {
 
 /**
  * Get the data key for a given platform
- * @param {string} platform - Platform name (twitter/tiktok/communityNotes)
+ * @param {string} platform - Platform name (twitter/tiktok)
  * @returns {string} Data key name
  */
 const getDataKeyForPlatform = (platform) => {
@@ -125,8 +117,6 @@ const getDataKeyForPlatform = (platform) => {
       return "tiktok";
     case "crowdTangleFb":
       return "post";
-    case "communityNotes":
-      return "note";
     default:
       return "post";
   }
@@ -228,12 +218,6 @@ export const handleSNARecorderChromeMessage = async (
     } else if (request.prompt === "getFBPosts") {
       const fbPostResp = await getItemsFromDB(FBCOLLECTION, postFormat);
       sendResponse(fbPostResp);
-    } else if (request.prompt === "getCommunityNotes") {
-      const communityNotesResp = await getItemsFromDB(
-        COMMUNITYNOTESCOLLECTION,
-        communityNoteFormat,
-      );
-      sendResponse(communityNotesResp);
     } else if (request.prompt === "deleteAll") {
       //await db.delete().then(() => db.open());
       await snaDB.deleteDatabase().then(() => snaDB.init());
@@ -325,57 +309,6 @@ export const handleRecordedMessage = async (request) => {
 
   const currentSession = session[0].state;
   if (currentSession === false) {
-    return;
-  }
-
-  console.log(JSON.stringify(request, null, 2));
-
-  // Handle Community Notes listing pages (browse/search results with tweets)
-  if (request._snaRecorderType === "communityNote") {
-    // Extract tweets_results array (note: it's tweets_results, not tweet_results)
-    const tweetsResultsArrays = jp({
-      json: request,
-      path: "$..tweets_results",
-    });
-
-    let processedCount = 0;
-    let totalTweets = 0;
-
-    // Iterate through each tweets_results array
-    for (const tweetsResultsArray of tweetsResultsArrays) {
-      if (!Array.isArray(tweetsResultsArray)) {
-        continue;
-      }
-
-      totalTweets += tweetsResultsArray.length;
-
-      // Process each tweet in the array
-      for (const tweetItem of tweetsResultsArray) {
-        try {
-          // Extract the tweet content from the result
-          const tweetContent = tweetItem?.result;
-
-          if (tweetContent && tweetContent.rest_id) {
-            // Transform and store the tweet
-            const tweet = transformTweet(tweetContent, currentSession);
-
-            await snaDB.put(TWITTERCOLLECTION, {
-              id: tweet.id,
-              collectionID: currentSession,
-              tweet: tweet,
-            });
-
-            processedCount++;
-          }
-        } catch (error) {
-          console.error(
-            "[SNA Recorder] Error processing tweet from listing:",
-            error,
-          );
-        }
-      }
-    }
-
     return;
   }
 
@@ -471,13 +404,6 @@ export const handleRecorderOnCommit = async (details) => {
 
   let recordingSession = recordingState.state;
   let currentTab = await getCurrentTab();
-
-  // Add safety check for currentTab
-  if (!currentTab) {
-    console.warn("[SNA Recorder] Could not get current tab");
-    return;
-  }
-
   if (recordingSession === false) {
     return;
   }

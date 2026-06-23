@@ -20,10 +20,6 @@ export const getPersonOfInterest = (keyword) => ({
     DISPLAY_NAME: `${keyword("poi_forensics_meloni")}`,
     NAME_TOSEND: "GiorgiaMeloni",
   },
-  Trump: {
-    DISPLAY_NAME: `${keyword("poi_forensics_trump")}`,
-    NAME_TOSEND: "Trump",
-  },
 });
 
 /**
@@ -244,19 +240,4 @@ export const computeAreaUnderCurve = (results, times, threshold = 1) => {
       100
     ).toFixed(1),
   };
-};
-
-export const computePercentagePointsAboveThreshold = (
-  scores,
-  threshold = 1,
-) => {
-  let countAbove = 0;
-
-  for (let i = 0; i < scores.length; i++) {
-    if (scores[i] > threshold) {
-      countAbove += 1;
-    }
-  }
-
-  return ((countAbove / scores.length) * 100).toFixed(1);
 };

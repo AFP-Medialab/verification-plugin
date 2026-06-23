@@ -31,24 +31,6 @@ import {
   SmartToy,
 } from "@mui/icons-material";
 
-import {
-  resetDeepfake,
-  setDeepfakeUrlVideo,
-} from "@//redux/actions/tools/deepfakeVideoActions";
-import {
-  resetPoiForensics,
-  setPoiForensicsFile,
-  setPoiForensicsUrl,
-} from "@/redux/actions/tools/poiForensicsActions";
-import { c2paUrlSet, resetC2paState } from "@/redux/reducers/tools/c2paReducer";
-import {
-  resetGeolocation as resetGeolocationImage,
-  setGeolocationUrl,
-} from "@/redux/reducers/tools/geolocationReducer";
-import {
-  resetSyntheticImageDetectionImage,
-  setSyntheticImageDetectionUrl,
-} from "@/redux/reducers/tools/syntheticImageDetectionReducer";
 import { FOOTER_TYPES, Footer } from "@Shared/Footer/Footer";
 
 import AfpDigitalCoursesIconComponent from "../components/NavBar/images/SVG/Navbar/AfpDigitalCoursesIcon";
@@ -266,23 +248,6 @@ export const poiForensic = makeTool(
   PoiForensicSvgIcon,
   <PoiForensics />,
   <Footer type={FOOTER_TYPES.ITI_UNINA} />,
-  {
-    processLinksAccepted: [
-      KNOWN_LINKS.YOUTUBE,
-      KNOWN_LINKS.TWITTER,
-      KNOWN_LINKS.TELEGRAM,
-      KNOWN_LINKS.YOUTUBESHORTS,
-      KNOWN_LINKS.DAILYMOTION,
-      KNOWN_LINKS.MISC,
-      KNOWN_LINKS.OWN,
-    ],
-    exceptions: [],
-    useInputUrl: false,
-    text: "deepfake_video_text",
-    resetUrl: resetPoiForensics,
-    setUrl: (resultUrl) => setPoiForensicsUrl({ url: resultUrl }),
-    setFile: (resultFile) => setPoiForensicsFile(resultFile),
-  },
 );
 export const imageMagnifier = makeTool(
   data.imageMagnifier,

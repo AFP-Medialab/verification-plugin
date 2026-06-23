@@ -43,21 +43,17 @@ const MachineGeneratedText = () => {
         </Alert>
       )}
 
-      {(mutationChunks.status === "error" ||
-        mutationSentences.status === "error") && (
-        <Alert severity="error">
-          {"An error happened, try again later"}
-          <Box mt={2} data-testid="mgt-errors">
-            <JsonBlock
-              jsonString={JSON.stringify(
-                mutationChunks.error ?? mutationSentences.error,
-                null,
-                2,
-              )}
-            />
-          </Box>
-        </Alert>
-      )}
+      {mutationChunks.status === "error" ||
+        (mutationSentences.status === "error" && (
+          <Alert severity="error">
+            {"An error happened, try again later"}
+            <Box mt={2}>
+              <JsonBlock
+                jsonString={JSON.stringify(mutationChunks.error, null, 2)}
+              />
+            </Box>
+          </Alert>
+        ))}
 
       {mutationChunks.data && mutationSentences.data && (
         <MachineGeneratedTextResults

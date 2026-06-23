@@ -41,9 +41,6 @@ const MachineGeneratedTextForm = ({
     mutationChunks.status === "pending" ||
     mutationSentences.status === "pending";
 
-  const threshold = 6000; // limit size of the text we can send to the API
-  const isOverThreshold = searchString.length > threshold;
-
   return (
     <Card variant="outlined">
       <Box
@@ -63,6 +60,7 @@ const MachineGeneratedTextForm = ({
             sx={{
               height: "100%",
               justifyContent: "space-between",
+              alignItems: "flex-end",
             }}
           >
             <TextField
@@ -125,24 +123,10 @@ const MachineGeneratedTextForm = ({
                 },
               }}
             />
-          </Stack>
-          <Stack
-            direction="row"
-            sx={{
-              width: "100%",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <div style={{ color: isOverThreshold ? "red" : "black" }}>
-              <p>
-                {searchString.length}/{threshold}
-              </p>
-            </div>
             <Button
               type="submit"
               variant="contained"
-              disabled={isLoading || !searchString || isOverThreshold}
+              disabled={isLoading || !searchString}
               loading={isLoading}
               data-testid="mgt-submit"
             >

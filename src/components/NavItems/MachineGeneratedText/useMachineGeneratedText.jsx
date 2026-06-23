@@ -1,12 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
-import { useDispatch } from "react-redux";
 
-import { setError } from "@/redux/reducers/errorReducer";
 import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequest";
 
 export function useMachineGeneratedText() {
-  const dispatch = useDispatch();
-
   /**
    * Maps a machine-generated score to a predicted classification label and associated RGB color values for light and dark themes.
    *
@@ -166,7 +162,7 @@ export function useMachineGeneratedText() {
       // console.log(data);
     },
     onError: (error) => {
-      dispatch(setError(error.message));
+      console.error(error);
     },
   });
 
@@ -176,9 +172,8 @@ export function useMachineGeneratedText() {
       // console.log(data);
     },
     onError: (error) => {
-      dispatch(setError(error.message));
+      console.error(error);
     },
   });
-
   return { mutationChunks, mutationSentences };
 }

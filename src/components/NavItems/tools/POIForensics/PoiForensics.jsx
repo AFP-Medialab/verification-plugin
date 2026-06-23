@@ -6,7 +6,6 @@ import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Checkbox from "@mui/material/Checkbox";
-import CircularProgress from "@mui/material/CircularProgress";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
@@ -20,14 +19,7 @@ import { FaceRetouchingNatural } from "@mui/icons-material";
 import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import StringFileUploadField from "@/components/Shared/StringFileUploadField";
 import { preprocessFileUpload } from "@/components/Shared/Utils/fileUtils";
-import {
-  resetPoiForensics,
-  setPoiForensicsFile,
-  setPoiForensicsUrl,
-  setSelectedMode,
-  setSelectedPoi,
-  setStatus,
-} from "@/redux/actions/tools/poiForensicsActions";
+import { resetPoiForensics } from "@/redux/actions/tools/poiForensicsActions";
 import { setError } from "@/redux/reducers/errorReducer";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
@@ -54,42 +46,56 @@ const PoiForensics = () => {
   const isLoading = useSelector((state) => state.poiForensics.loading);
   const result = useSelector((state) => state.poiForensics.result);
   const url = useSelector((state) => state.poiForensics.url);
-  const storedFile = useSelector((state) => state.poiForensics.file);
   const role = useSelector((state) => state.userSession.user.roles);
-
-  const selectedMode = useSelector((state) => state.poiForensics.selectedMode);
-  const selectedPoi = useSelector((state) => state.poiForensics.selectedPoi);
-
-  const status = useSelector((state) => state.poiForensics.status);
-
   const [input = url || "", setInput, videoFile, setVideoFile] = useUrlOrFile();
   const fromAssistant = searchParams.has("fromAssistant");
   const [type, setType] = useState(() => {
     if (fromAssistant) {
       return videoFile ? "local" : input ? "url" : "";
     }
-    return storedFile ? "local" : url ? "url" : "";
+    return "";
   });
-
-  useEffect(() => {
-    if (!fromAssistant && storedFile && !videoFile) {
-      setVideoFile(storedFile);
-    }
-  }, []);
 
   const dispatch = useDispatch();
 
-  const handleChangePoi = (event) => {
-    dispatch(
-      setSelectedPoi({
-        ...selectedPoi,
-        [event.target.value]: event.target.checked,
-      }),
-    );
+  /**
+   * Initialize selected POI with Macron
+   * @returns {selectedValue}
+   */
+  const initializeSelectedPoi = () => {
+    let selectedList = {};
+
+    for (const poi of Object.values(personsOfInterest)) {
+      selectedList[poi.NAME_TOSEND] =
+        poi.NAME_TOSEND === personsOfInterest.MACRON.NAME_TOSEND;
+    }
+
+    return selectedList;
   };
 
+  const [selectedPoi, setSelectedPoi] = useState(() => initializeSelectedPoi());
+
+  const handleChangePoi = (event) => {
+    setSelectedPoi({
+      ...selectedPoi,
+      [event.target.value]: event.target.checked,
+    });
+  };
+
+  /**
+   * Initialize selecrted modewith audiovideo
+   * @returns {string}
+   */
+  const initializeSelectedMode = () => {
+    return modes.AUDIO_VIDEO.NAME_TOSEND;
+  };
+
+  const [selectedMode, setSelectedMode] = useState(() =>
+    initializeSelectedMode(),
+  );
+
   const handleChangeMode = (event) => {
-    dispatch(setSelectedMode(event.target.value));
+    setSelectedMode(event.target.value);
   };
 
   const submitUrl = async () => {
@@ -128,13 +134,7 @@ const PoiForensics = () => {
   };
 
   const handleSubmit = async () => {
-    dispatch(setStatus(null));
     dispatch(resetPoiForensics());
-    if (type === "local" && videoFile) {
-      dispatch(setPoiForensicsFile(videoFile));
-    } else if (input) {
-      dispatch(setPoiForensicsUrl({ url: input }));
-    }
     await submitUrl();
   };
 
@@ -142,7 +142,6 @@ const PoiForensics = () => {
     setInput("");
     setVideoFile(undefined);
     setType("");
-    dispatch(setStatus(null));
     dispatch(resetPoiForensics());
   };
 
@@ -238,12 +237,6 @@ const PoiForensics = () => {
             </Box>
           </Box>
         </Card>
-
-        {status && isLoading && (
-          <Alert icon={<CircularProgress size={20} />} severity="info">
-            {status}
-          </Alert>
-        )}
 
         {result && (
           <PoiForensicsResults

@@ -1,7 +1,6 @@
 import {
   setPoiForensicsLoading,
   setPoiForensicsResult,
-  setStatus,
 } from "@/redux/actions/tools/poiForensicsActions";
 import { setError } from "@/redux/reducers/errorReducer";
 import { isValidUrl } from "@Shared/Utils/URLUtils";
@@ -95,7 +94,7 @@ async function useGetPoiForensics(
         break;
     }
   } catch (error) {
-    handleError("poiforensics_error_" + error.response?.status);
+    handleError("poiforensics_error_" + error.response.status);
   }
 
   const getResult = async (id) => {
@@ -111,7 +110,6 @@ async function useGetPoiForensics(
     } else {
       handleError("error_mode_not_supported_" + response.data.mode);
     }
-    dispatch(setPoiForensicsLoading(false));
   };
 
   const waitUntilFinish = async (id) => {
@@ -122,30 +120,16 @@ async function useGetPoiForensics(
       handleError("poiforensics_error_" + error.status);
     }
 
-    const poiInfo = response?.data?.info?.poi_forensics;
-    const jobStatus = poiInfo?.status ?? response?.data?.status;
-    const percent = poiInfo?.progress?.percent_completed;
-
-    if (jobStatus) {
-      const label =
-        percent !== undefined
-          ? `${jobStatus} — ${Math.round(percent)}%`
-          : jobStatus;
-      dispatch(setStatus(label));
-    }
-
-    if (
+    if (response && response.data && response.data.status === "PROCESSING") {
+      await sleep(waitUntilFinish, id);
+    } else if (
       response &&
       response.data &&
-      (jobStatus === "PENDING" ||
-        jobStatus === "QUEUED" ||
-        jobStatus === "STARTED")
+      response.data.status === "COMPLETED"
     ) {
-      await sleep(waitUntilFinish, id);
-    } else if (response && response.data && jobStatus === "COMPLETED") {
       await getResult(id);
     } else {
-      handleError("deepfake_error_" + jobStatus);
+      handleError("deepfake_error_" + response.data.status);
     }
   };
 
