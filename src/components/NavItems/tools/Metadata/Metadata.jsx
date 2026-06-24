@@ -14,7 +14,7 @@ import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import C2paResults from "@/components/NavItems/tools/C2pa/Results/C2paResults";
 import { useC2paMetadataMutation } from "@/components/NavItems/tools/Metadata/hooks/useC2paMetadataMutation";
 import StringFileUploadField from "@/components/Shared/StringFileUploadField";
-import { KNOWN_LINKS } from "@/constants/tools";
+import { KNOWN_LINKS } from "@/constants/toolsData";
 import {
   cleanMetadataState,
   setC2paMetadataResult,
