@@ -22,6 +22,7 @@ const PreviousFactCheckResult = ({ results }) => {
   const prevFactChecksDone = useSelector(
     (state) => state.assistant.prevFactChecksDone,
   );
+  const locale = useSelector((state) => state.language);
 
   // date information
   dayjs.extend(LocaleData);
@@ -57,10 +58,7 @@ const PreviousFactCheckResult = ({ results }) => {
                   null
                 }
                 website={resultItem.website ?? resultItem.source_name}
-                language={getLanguageName(
-                  resultItem.source_language,
-                  resultItem.source_language,
-                )}
+                language={getLanguageName(resultItem.source_language, locale)}
                 similarityScore={resultItem.score}
                 articleUrl={resultItem.url}
                 domainUrl={resultItem.source_name}

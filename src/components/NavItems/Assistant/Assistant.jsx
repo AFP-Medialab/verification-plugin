@@ -35,7 +35,7 @@ import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "@/components/Shared/StringFileUploadField";
 import { getFileTypeFromFileObject } from "@/components/Shared/Utils/fileUtils";
 import { ROLES } from "@/constants/roles";
-import { KNOWN_LINKS, TOOLS_CATEGORIES } from "@/constants/tools";
+import { KNOWN_LINKS, TOOLS_CATEGORIES } from "@/constants/toolsData";
 import {
   cleanAssistantState,
   setImageVideoSelected,
@@ -193,7 +193,6 @@ const Assistant = () => {
             const videoUrl = URL.createObjectURL(fileInput);
             const ctype = TOOLS_CATEGORIES.VIDEO;
 
-            dispatch(setInputUrl(videoUrl, KNOWN_LINKS.OWN));
             dispatch(
               setScrapedData(null, null, null, [], [videoUrl], null, null),
             );
@@ -208,7 +207,6 @@ const Assistant = () => {
             const imageUrl = URL.createObjectURL(fileInput);
             const ctype = TOOLS_CATEGORIES.IMAGE;
 
-            dispatch(setInputUrl(imageUrl, KNOWN_LINKS.OWN)); // kicks off getUrlDomainAnalysisSaga
             dispatch(
               setScrapedData(null, null, null, [imageUrl], [], null, null),
             );
@@ -380,6 +378,8 @@ const Assistant = () => {
               handleCloseSelectedFile={cleanAssistant}
               preprocessLocalFile={preprocessFileInput}
               handleClearUrl={cleanAssistant}
+              urlInputTestId="assistant-url-selected-input"
+              submitButtonTestId="assistant-url-selected-analyse-btn"
             />
           </form>
 
