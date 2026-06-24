@@ -390,7 +390,7 @@ const PoiForensicsResults = (props) => {
                               scope="row"
                               style={{ fontWeight: "bold" }}
                             >
-                              Pourcentage de points au dessus du seuil
+                              {keyword("poi_forensics_percentage_points")}
                             </TableCell>
                             <TableCell
                               align="right"
