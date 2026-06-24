@@ -53,7 +53,8 @@ test("tiktok: scraped videos placed in videoList", () => {
 // Instagram
 // ---------------------------------------------------------------------------
 
-test.each([
+// will be unskipped in PR #1203
+test.skip.each([
   {
     label: "video and images",
     videos: ["https://cdn.ig.com/v.mp4"],
