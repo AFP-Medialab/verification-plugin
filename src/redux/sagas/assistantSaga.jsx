@@ -676,7 +676,7 @@ function* handleMultilingualStanceCall(action) {
     if (
       (urlType === KNOWN_LINKS.YOUTUBE ||
         urlType === KNOWN_LINKS.YOUTUBESHORTS) &&
-      collectedComments.length > 0
+      collectedComments?.length > 0
     ) {
       yield put(setMultilingualStanceDetails(null, true, false, false));
 
