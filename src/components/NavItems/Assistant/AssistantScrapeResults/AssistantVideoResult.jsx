@@ -78,7 +78,9 @@ const AssistantVideoResult = () => {
         break;
       case KNOWN_LINKS.YOUTUBESHORTS:
       case KNOWN_LINKS.VK:
-        embedURL = null; // Null as youtube shorts and vk do not support embedding
+      case KNOWN_LINKS.TIKTOK:
+      case KNOWN_LINKS.LIVELEAK:
+        embedURL = null; // Null as youtube shorts, vk, tiktok, liveleak do not support embedding
         break;
       case KNOWN_LINKS.VIMEO:
         stringToMatch = "vimeo.com/";
@@ -98,9 +100,6 @@ const AssistantVideoResult = () => {
           embedURL.slice(0, positionOne) +
           "embed/" +
           embedURL.slice(positionOne);
-        break;
-      case KNOWN_LINKS.TIKTOK:
-        embedURL = null;
         break;
       default:
         return embedURL;

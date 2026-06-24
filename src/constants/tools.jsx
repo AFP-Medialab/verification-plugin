@@ -242,6 +242,20 @@ export const keyframes = makeTool(
   KeyframesSvgIcon,
   <Keyframes />,
   <Footer type={FOOTER_TYPES.ITI} />,
+  {
+    linksAccepted: [
+      KNOWN_LINKS.TWITTER,
+      KNOWN_LINKS.YOUTUBE,
+      KNOWN_LINKS.FACEBOOK,
+      KNOWN_LINKS.YOUTUBE,
+      KNOWN_LINKS.YOUTUBESHORTS,
+      KNOWN_LINKS.SNAPCHAT,
+      KNOWN_LINKS.OWN,
+    ],
+    exceptions: [],
+    useInputUrl: true,
+    text: "keyframes_text",
+  },
 );
 export const thumbnails = makeTool(
   data.thumbnails,
