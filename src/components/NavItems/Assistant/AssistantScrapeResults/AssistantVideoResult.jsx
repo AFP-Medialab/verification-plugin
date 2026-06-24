@@ -100,6 +100,7 @@ const AssistantVideoResult = () => {
           embedURL.slice(positionOne);
         break;
       case KNOWN_LINKS.TIKTOK:
+      case KNOWN_LINKS.LIVELEAK:
         embedURL = null;
         break;
       default:
