@@ -63,11 +63,13 @@ const MachineGeneratedTextResults = ({
     },
   };
 
-  const chunksScore = mutationChunks?.data?.entities?.mgt_overall_score
+  const chunksScore = mutationChunks?.data?.entities?.mgt_overall_score?.[0]
+    ?.score
     ? Number(mutationChunks.data.entities.mgt_overall_score[0].score) * 100
     : null;
 
-  const sentencesScore = mutationSentences?.data?.entities?.mgt_overall_score
+  const sentencesScore = mutationSentences?.data?.entities
+    ?.mgt_overall_score?.[0]?.score
     ? Number(mutationSentences.data.entities.mgt_overall_score[0].score) * 100
     : null;
 
@@ -90,30 +92,21 @@ const MachineGeneratedTextResults = ({
               spacing={2}
               data-testid="mgt-results-gauge"
             >
-              <Typography>
-                {"Detection score (chunks): " +
-                  Math.round(
-                    Number(
-                      mutationChunks.data.entities.mgt_overall_score[0].score,
-                    ) * 100,
-                  ) +
-                  "%"}
-              </Typography>
+              {chunksScore !== null && (
+                <Typography>
+                  {"Detection score (chunks): " + Math.round(chunksScore) + "%"}
+                </Typography>
+              )}
 
-              {hasExtraFeatureAccess && (
+              {hasExtraFeatureAccess && sentencesScore !== null && (
                 <Typography>
                   {"Detection score (sentences): " +
-                    Math.round(
-                      Number(
-                        mutationSentences.data.entities.mgt_overall_score[0]
-                          .score,
-                      ) * 100,
-                    ) +
+                    Math.round(sentencesScore) +
                     "%"}
                 </Typography>
               )}
 
-              {mutationChunks.data.entities.mgt_overall_score && (
+              {mutationChunks?.data?.entities?.mgt_overall_score && (
                 <GaugeChartResult
                   keyword={keyword}
                   scores={[MachineGeneratedTextMethodNamesResults]}

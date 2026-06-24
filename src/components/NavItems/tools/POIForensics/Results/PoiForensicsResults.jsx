@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { memo, useCallback, useMemo } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useSelector } from "react-redux";
 
@@ -19,7 +19,7 @@ import Typography from "@mui/material/Typography";
 
 import CloseIcon from "@mui/icons-material/Close";
 
-import GaugeChartResult from "@/components/Shared/GaugeChartResults/GaugeChartResult";
+import _GaugeChartResult from "@/components/Shared/GaugeChartResults/GaugeChartResult";
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
 import { ROLES } from "@/constants/roles";
 import ErrorBoundaryFallback from "@Shared/ErrorBoundaryFallback/ErrorBoundaryFallback";
@@ -33,6 +33,7 @@ import { usePoiSync } from "../Hooks/usePoiSync";
 import {
   computeAreaUnderCurve,
   computeGlobalScorePerTrack,
+  computePercentagePointsAboveThreshold,
   drawBoundingBox,
 } from "../poiUtils";
 
@@ -60,13 +61,18 @@ const PoiForensicsResults = (props) => {
   const scores = results?.poi_forensics_report?.scores_per_time;
   const times = results?.poi_forensics_report?.time_vector;
 
-  const overallScore = results?.poi_forensics_report?.overall_score.toFixed(3);
+  const overallScore = results?.poi_forensics_report?.overall_score?.toFixed(3);
   const resultsPerTrack = results?.poi_forensics_report?.results_per_track;
 
   const globalScorePerTrack = useMemo(() => {
     if (_.isEmpty(resultsPerTrack)) return [];
     return computeGlobalScorePerTrack(resultsPerTrack);
   }, [resultsPerTrack]);
+
+  const percentageScoresAboveThreshold = useMemo(() => {
+    if (_.isEmpty(scores)) return 0;
+    return computePercentagePointsAboveThreshold(scores);
+  }, [scores]);
 
   const areaUnderCurve = useMemo(() => {
     if (_.isEmpty(scores) || _.isEmpty(times)) return 0;
@@ -88,11 +94,43 @@ const PoiForensicsResults = (props) => {
     return computeAreaUnderCurve(scores, times).percentageFake;
   }, [scores, times]);
 
-  const DETECTION_THRESHOLDS = {
-    THRESHOLD_1: 50,
-    THRESHOLD_2: 70,
-    THRESHOLD_3: 90,
-  };
+  const DETECTION_THRESHOLDS = useMemo(
+    () => ({ THRESHOLD_1: 50, THRESHOLD_2: 70, THRESHOLD_3: 90 }),
+    [],
+  );
+
+  // we memoize the gauge in order to no recreate it at every re-render
+  const GaugeChartResult = memo(_GaugeChartResult);
+
+  const gaugeScores = useMemo(
+    () => [{ methodName: "poiForensics", predictionScore: percentageFake }],
+    [percentageFake],
+  );
+
+  const gaugeMethodNames = useMemo(
+    () => ({
+      poiForensics: {
+        name: keyword("poi_forensics_videoreport_name"),
+        description: keyword("poi_forensics_videoreport_description"),
+      },
+    }),
+    [keyword],
+  );
+
+  const gaugeExplanation = useMemo(
+    () => ({
+      keywords: [
+        "gauge_scale_modal_explanation_rating_1",
+        "gauge_scale_modal_explanation_rating_2",
+        "gauge_scale_modal_explanation_rating_3",
+        "gauge_scale_modal_explanation_rating_4",
+      ],
+      colors: ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"],
+    }),
+    [],
+  );
+
+  const sanitizeDetectionPercentage = useCallback((n) => Math.round(n), []);
 
   const [selectedIndex, setSelectedIndex] = useState(null);
   const videoRef = useRef(null);
@@ -346,6 +384,21 @@ const PoiForensicsResults = (props) => {
                               {percentageFake}%
                             </TableCell>
                           </TableRow>
+                          <TableRow>
+                            <TableCell
+                              component="th"
+                              scope="row"
+                              style={{ fontWeight: "bold" }}
+                            >
+                              {keyword("poi_forensics_percentage_points")}
+                            </TableCell>
+                            <TableCell
+                              align="right"
+                              style={{ fontWeight: "bold" }}
+                            >
+                              {percentageScoresAboveThreshold}%
+                            </TableCell>
+                          </TableRow>
 
                           <TableRow>
                             <TableCell colSpan={2} style={{ padding: 0 }} />
@@ -379,32 +432,12 @@ const PoiForensicsResults = (props) => {
                   >
                     <GaugeChartResult
                       keyword={keyword}
-                      scores={[
-                        {
-                          methodName: "poiForensics",
-                          predictionScore: percentageFake,
-                        },
-                      ]}
-                      methodNames={{
-                        poiForensics: {
-                          name: keyword("poi_forensics_videoreport_name"),
-                          description: keyword(
-                            "poi_forensics_videoreport_description",
-                          ),
-                        },
-                      }}
+                      scores={gaugeScores}
+                      methodNames={gaugeMethodNames}
                       detectionThresholds={DETECTION_THRESHOLDS}
                       resultsHaveErrors={false}
-                      sanitizeDetectionPercentage={(n) => Math.round(n)}
-                      gaugeExplanation={{
-                        keywords: [
-                          "gauge_scale_modal_explanation_rating_1",
-                          "gauge_scale_modal_explanation_rating_2",
-                          "gauge_scale_modal_explanation_rating_3",
-                          "gauge_scale_modal_explanation_rating_4",
-                        ],
-                        colors: ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"],
-                      }}
+                      sanitizeDetectionPercentage={sanitizeDetectionPercentage}
+                      gaugeExplanation={gaugeExplanation}
                       toolName={"PoiForensics"}
                       detectionType={"video"}
                     />
