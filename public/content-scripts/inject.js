@@ -105,29 +105,24 @@
                                             JSON.stringify(twitterData).includes('birdwatch'));
 
             if (hasCommunityNote) {
-              console.log('[SNA Recorder] Community Note captured');
               const notePayload = {
                 data: twitterData.data,
                 _snaRecorderType: 'communityNote'
               };
               sendToExtension(notePayload);
             } else if (hasCommunityNoteKey) {
-              console.log('[SNA Recorder] Community Note API captured');
               const notePayload = {
                 data: twitterData.data,
                 _snaRecorderType: 'communityNote'
               };
               sendToExtension(notePayload);
             } else if (isCommunityNotesListing) {
-              console.log('[SNA Recorder] Community Notes listing slice captured');
-              console.log('[SNA Recorder] Raw JSON slice:', JSON.stringify(twitterData, null, 2));
               const listingPayload = {
                 data: twitterData.data,
                 _snaRecorderType: 'communityNotesListing'
               };
               sendToExtension(listingPayload);
             } else if (hasTweetWithNote) {
-              console.log('[SNA Recorder] Tweet with Community Note captured');
               const notePayload = {
                 data: twitterData.data,
                 _snaRecorderType: 'tweetWithCommunityNote'
