@@ -435,6 +435,21 @@ export const audioHiya = {
   assistantProps: {},
 };
 
+export const audioExtraction = {
+  titleKeyword: "navbar_audioExtraction",
+  descriptionKeyword: "navbar_audioExtraction",
+  category: TOOLS_CATEGORIES.AUDIO,
+  rolesIcons: [
+    TOOL_STATUS_ICON.NEW,
+    TOOL_STATUS_ICON.EXPERIMENTAL,
+    TOOL_STATUS_ICON.LOCK,
+  ],
+  rolesNeeded: [ROLES.EXTRA_FEATURE],
+  path: "audioExtraction",
+  toolGroup: TOOL_GROUPS.VERIFICATION,
+  assistantProps: {},
+};
+
 export const searchTwitter = {
   titleKeyword: "navbar_twitter",
   descriptionKeyword: "navbar_twitter_description",

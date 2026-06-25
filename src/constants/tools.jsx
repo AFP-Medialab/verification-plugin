@@ -128,6 +128,9 @@ const TwitterAdvancedSearch = React.lazy(
 const TwitterSna = React.lazy(
   () => import("../components/NavItems/tools/TwitterSna/TwitterSna"),
 );
+const AudioExtraction = React.lazy(
+  () => import("../components/NavItems/tools/AudioExtraction/AudioExtraction"),
+);
 
 // ---------------------------------------------------------------------------
 // Icon wrapper components
@@ -411,6 +414,12 @@ export const c2paData = makeTool(
   <C2paData />,
   <Footer type={FOOTER_TYPES.AFP} />,
 );
+export const audioExtraction = makeTool(
+  data.audioExtraction,
+  AudioFileSvgIcon,
+  <AudioExtraction />,
+  <Footer type={FOOTER_TYPES.AFP} />,
+);
 
 export const tools = Object.freeze([
   toolsHome,
@@ -442,4 +451,5 @@ export const tools = Object.freeze([
   afpDigitalCourses,
   about,
   c2paData,
+  audioExtraction,
 ]);
