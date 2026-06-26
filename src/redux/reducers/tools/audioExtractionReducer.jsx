@@ -11,6 +11,7 @@ const audioExtractionReducer = (state = defaultState, action) => {
       return {
         ...state,
         url: "",
+        result: null,
         file: null,
         loading: false,
         type: "",
@@ -28,8 +29,7 @@ const audioExtractionReducer = (state = defaultState, action) => {
     case "SET_AUDIO_EXTRACTION_RESULT":
       return {
         ...state,
-        url: action.payload.url,
-        result: action.payload.result,
+        result: action.payload ? action.payload.url : null,
         loading: false,
       };
     default:

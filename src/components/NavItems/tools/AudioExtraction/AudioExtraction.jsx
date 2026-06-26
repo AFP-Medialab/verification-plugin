@@ -21,25 +21,11 @@ import {
 } from "@/redux/actions/tools/audioExtractionActions";
 import { setError } from "@/redux/reducers/errorReducer";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-import {
-  ALL_FORMATS,
-  BufferTarget,
-  Input,
-  Mp4InputFormat,
-  Mp4OutputFormat,
-  Output,
-  Source,
-} from "mediabunny";
+import audioBufferToWav from "audiobuffer-to-wav";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 
 const AudioExtraction = () => {
-  const keyword = i18nLoadNamespace(
-    "components/NavItems/tools/AudioExtraction",
-  );
-  const keywordAllTools = i18nLoadNamespace(
-    "components/NavItems/tools/Alltools",
-  );
   const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
 
   const isLoading = useSelector((state) => state.audioExtraction.loading);
@@ -52,50 +38,21 @@ const AudioExtraction = () => {
   const dispatch = useDispatch();
 
   const handleSubmit = async () => {
-    if (!input && !videoFile) return;
+    dispatch(setAudioExtractionLoading(true));
+    // in order to free space for the new URL incoming
+    if (result) {
+      URL.revokeObjectURL(result);
+    }
+    let audioUrl = null;
+    if (type === "local" && videoFile) {
+      try {
+        audioUrl = URL.createObjectURL(videoFile);
 
-    setAudioExtractionLoading(true);
-    try {
-      // 1. Déterminer la ressource brute
-      const rawSource = videoFile ? videoFile : input;
-
-      // 2. Laisser Mediabunny créer le bon wrapper de Source automatiquement
-      const wrappedSource = Source.from(rawSource);
-
-      // 3. Initialiser l'entrée
-      const mediaInput = new Input({
-        source: wrappedSource,
-        formats: ALL_FORMATS,
-      });
-
-      // 4. Extraire la piste audio principale
-      const audioTrack = await mediaInput.getPrimaryAudioTrack();
-      if (!audioTrack)
-        throw new Error("Aucune piste audio trouvée dans cette vidéo.");
-
-      // 5. Configurer la sortie en mémoire
-      const output = new Output({
-        format: new Mp4OutputFormat(),
-        target: new BufferTarget(),
-      });
-
-      output.addAudioTrack(audioTrack);
-
-      await output.start();
-      await output.finalize();
-
-      // 6. Récupérer le résultat binaire
-      const { buffer } = output.target;
-      const audioBlob = new Blob([buffer], { type: "audio/mp4" });
-      const audioUrl = URL.createObjectURL(audioBlob);
-
-      // Envoi à Redux
-      dispatch(setAudioExtractionResult(audioUrl));
-    } catch (error) {
-      console.error(error);
-      dispatch(setError("Erreur lors de l'extraction audio locale."));
-    } finally {
-      setAudioExtractionLoading(false);
+        dispatch(setAudioExtractionResult({ url: audioUrl }));
+      } catch (error) {
+        console.error("Erreur lors de l'extraction audio :", error);
+        dispatch(setAudioExtractionLoading(false));
+      }
     }
   };
 
@@ -123,12 +80,20 @@ const AudioExtraction = () => {
     setInput("");
     setVideoFile(null);
     setType("");
-    setAudioExtractionResult(null);
     dispatch(resetAudioExtraction());
   };
 
   const handleDownload = () => {
-    // implement the download of the mp3 file
+    if (!result) return;
+
+    const link = document.createElement("a");
+    link.href = result;
+
+    link.download = `audio_extrait_${Date.now()}.mp3`;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -157,10 +122,10 @@ const AudioExtraction = () => {
               }}
             >
               <StringFileUploadField
-                labelKeyword={keyword("audio_extraction_link")}
-                placeholderKeyword={keyword("audio_extraction_placeholder")}
-                submitButtonKeyword={keyword("submit_button")}
-                localFileKeyword={keyword("button_localfile")}
+                labelKeyword="Please upload a file from your local storage"
+                placeholderKeyword="Insert the file"
+                submitButtonKeyword="Extract"
+                localFileKeyword="Local file"
                 urlInput={input}
                 setUrlInput={setInput}
                 fileInput={videoFile}
@@ -171,6 +136,7 @@ const AudioExtraction = () => {
                 preprocessLocalFile={preprocessVideo}
                 isParentLoading={isLoading}
                 handleClearUrl={resetState}
+                disableUrlInput={true}
                 urlInputTestId="audioextraction-input"
                 submitButtonTestId="audioextraction-submit"
               />
@@ -183,7 +149,28 @@ const AudioExtraction = () => {
             )}
           </Box>
         </Card>
-        {result && <audio controls src={result}></audio>}
+        {result && (
+          <Card>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                p: 3,
+                gap: 3,
+              }}
+            >
+              <audio controls src={result}></audio>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={handleDownload}
+              >
+                Download file
+              </Button>
+            </Box>
+          </Card>
+        )}
       </Stack>
     </Box>
   );
