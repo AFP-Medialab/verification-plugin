@@ -8,7 +8,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import AudioFile from "@mui/icons-material/AudioFile";
+import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
 
 import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import StringFileUploadField from "@/components/Shared/StringFileUploadField";
@@ -21,12 +21,18 @@ import {
 } from "@/redux/actions/tools/audioExtractionActions";
 import { setError } from "@/redux/reducers/errorReducer";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
-import audioBufferToWav from "audiobuffer-to-wav";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import AudioExtractionResult from "./AudioExtractionResult";
 
 const AudioExtraction = () => {
+  const keywordAllTools = i18nLoadNamespace(
+    "components/NavItems/tools/Alltools",
+  );
   const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
+  const keyword = i18nLoadNamespace(
+    "components/NavItems/tools/AudioExtraction",
+  );
 
   const isLoading = useSelector((state) => state.audioExtraction.loading);
   const role = useSelector((state) => state.userSession.user.roles);
@@ -83,27 +89,14 @@ const AudioExtraction = () => {
     dispatch(resetAudioExtraction());
   };
 
-  const handleDownload = () => {
-    if (!result) return;
-
-    const link = document.createElement("a");
-    link.href = result;
-
-    link.download = `audio_extrait_${Date.now()}.mp3`;
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
   return (
     <Box>
       <Stack direction="column" spacing={4}>
         <HeaderTool
-          name="Audio extraction"
-          description="A tool to extract audio from a video"
+          name={keywordAllTools("navbar_audio_extraction")}
+          description={keywordAllTools("navbar_audio_extraction_description")}
           icon={
-            <AudioFile
+            <LibraryMusicIcon
               style={{
                 fill: "var(--mui-palette-primary-main)",
                 height: "40px",
@@ -122,10 +115,10 @@ const AudioExtraction = () => {
               }}
             >
               <StringFileUploadField
-                labelKeyword="Please upload a file from your local storage"
-                placeholderKeyword="Insert the file"
-                submitButtonKeyword="Extract"
-                localFileKeyword="Local file"
+                labelKeyword={keyword("audio_extraction_label")}
+                placeholderKeyword={keyword("audio_extraction_placeholder")}
+                submitButtonKeyword={keyword("audio_extraction_submitbutton")}
+                localFileKeyword={keyword("button_localfile")}
                 urlInput={input}
                 setUrlInput={setInput}
                 fileInput={videoFile}
@@ -149,28 +142,7 @@ const AudioExtraction = () => {
             )}
           </Box>
         </Card>
-        {result && (
-          <Card>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                p: 3,
-                gap: 3,
-              }}
-            >
-              <audio controls src={result}></audio>
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={handleDownload}
-              >
-                Download file
-              </Button>
-            </Box>
-          </Card>
-        )}
+        {result && <AudioExtractionResult />}
       </Stack>
     </Box>
   );

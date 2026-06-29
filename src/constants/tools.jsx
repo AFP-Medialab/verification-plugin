@@ -27,6 +27,7 @@ import {
   FaceRetouchingNatural,
   GeneratingTokensRounded,
   Gradient,
+  LibraryMusic,
   ManageSearch,
   SmartToy,
 } from "@mui/icons-material";
@@ -174,6 +175,11 @@ const GeolocationSvgIcon = (props) => (
   <SvgIcon component={GeolocationIcon} inheritViewBox {...props} />
 );
 const AudioFileSvgIcon = (props) => <AudioFile inheritViewBox {...props} />;
+
+const AudioExtractionIcon = (props) => (
+  <LibraryMusic inheritViewBox {...props} />
+);
+
 const TwitterSearchSvgIcon = (props) => (
   <SvgIcon component={TwitterSearchIcon} inheritViewBox {...props} />
 );
@@ -416,7 +422,7 @@ export const c2paData = makeTool(
 );
 export const audioExtraction = makeTool(
   data.audioExtraction,
-  AudioFileSvgIcon,
+  AudioExtractionIcon,
   <AudioExtraction />,
   <Footer type={FOOTER_TYPES.AFP} />,
 );
