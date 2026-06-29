@@ -1,6 +1,6 @@
 {
   "name": "weverify-plugin",
-  "version": "0.92",
+  "version": "0.93",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -25,8 +25,9 @@
     "zip:firefox:production": "wxt zip -b firefox --mode production",
     "zip:all:development": "wxt zip -b chrome --mode development && wxt zip -b firefox --mode development",
     "zip:all:production": "wxt zip -b chrome --mode production && wxt zip -b firefox --mode production",
-    "test": "pnpm run test-cu && pnpm run test-e2e",
-    "test-cu": "rm -rf playwright/.cache && playwright test -c playwright-ct.config.js",
+    "test": "pnpm run test-unit && pnpm run test-ct && pnpm run test-e2e",
+    "test-unit": "vitest run --config vitest.config.mjs",
+    "test-ct": "rm -rf playwright/.cache && playwright test -c playwright-ct.config.js",
     "test-e2e": "playwright test",
     "test-e2e:dev": "NODE_ENV=development playwright test",
     "test-e2e-ui": "playwright test --ui",
@@ -121,7 +122,7 @@
     "stylis": "^4.3.4",
     "stylis-plugin-rtl": "^2.1.1",
     "tippy.js": "^6.3.7",
-    "uuid": "^10.0.0",
+    "uuid": "^14.0.0",
     "warcio": "^2.4.10",
     "wavesurfer.js": "^7.8.6",
     "yup": "^1.7.1"
@@ -146,10 +147,12 @@
     "eslint-plugin-react": "^7.36.1",
     "globals": "^15.9.0",
     "husky": "^9.1.7",
+    "jsdom": "^29.1.1",
     "lint-staged": "^15.2.10",
     "prettier": "3.3.3",
     "vite": "^8.0.0",
     "vite-plugin-svgr": "^5.0.0",
+    "vitest": "^4.1.8",
     "wxt": "^0.20.18"
   },
   "lint-staged": {
