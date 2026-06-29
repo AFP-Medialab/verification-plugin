@@ -295,6 +295,7 @@ export default function AssistantTextSpanClassification({
           <CardContent>
             <CategoriesListToggle
               categories={uniqueCategories}
+              classification={classification}
               primaryRgb={primaryRgb}
               noCategoriesText={keyword("no_detected_techniques")}
               allCategoriesLabel={allCategoriesLabel}
@@ -324,6 +325,7 @@ function EmptyListMessage({ noCategoriesText }) {
 
 export function CategoriesListToggle({
   categories,
+  classification = {},
   primaryRgb,
   noCategoriesText,
   allCategoriesLabel,
@@ -360,9 +362,16 @@ export function CategoriesListToggle({
     onCategoryChange(currentCategory);
   }
 
-  // order categories by highest number of sentences first
+  // order categories by highest count in original classification first, then by categories count as tiebreaker
   const sortedCategories = Object.fromEntries(
-    Object.entries(categories).sort(([, a], [, b]) => b.length - a.length),
+    Object.entries(categories).sort(([keyA, valA], [keyB, valB]) => {
+      const classificationDiff =
+        (classification[keyB]?.length ?? 0) -
+        (classification[keyA]?.length ?? 0);
+      return classificationDiff !== 0
+        ? classificationDiff
+        : valB.length - valA.length;
+    }),
   );
   for (const category in sortedCategories) {
     // don't display overall category
