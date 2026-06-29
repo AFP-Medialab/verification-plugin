@@ -362,15 +362,16 @@ export function CategoriesListToggle({
     onCategoryChange(currentCategory);
   }
 
-  // order categories by highest count in original classification first, then by categories count as tiebreaker
+  const uniqueScoreCount = (spans) => new Set(spans.map((s) => s.score)).size;
+
+  // order categories by highest chip count first (unique scores), with classification count as tiebreaker
   const sortedCategories = Object.fromEntries(
     Object.entries(categories).sort(([keyA, valA], [keyB, valB]) => {
-      const classificationDiff =
-        (classification[keyB]?.length ?? 0) -
-        (classification[keyA]?.length ?? 0);
-      return classificationDiff !== 0
-        ? classificationDiff
-        : valB.length - valA.length;
+      const chipDiff = uniqueScoreCount(valB) - uniqueScoreCount(valA);
+      return chipDiff !== 0
+        ? chipDiff
+        : (classification[keyB]?.length ?? 0) -
+            (classification[keyA]?.length ?? 0);
     }),
   );
   for (const category in sortedCategories) {
