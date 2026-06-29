@@ -78,7 +78,7 @@ function treeMapToElementsRecursive(
     }
   }
 
-  for (let i = 0; i < treeElem.children.length; i++) {
+  for (let i = 0; i < (treeElem.children?.length ?? 0); i++) {
     childElems.push(
       treeMapToElementsRecursive(
         text,
