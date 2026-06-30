@@ -166,7 +166,7 @@ test('Test tool metadata video', async ({ page, extensionId }) => {
   await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/metadata_image`);
   await page.getByText("Accept").click();
 
-  const filePath = path.resolve(__dirname, '../../tests-assets/test-metadata.mp4');
+  const filePath = path.resolve(__dirname, '../../tests-assets/test-audio-extract.mp4');
 
   await page.locator('input[type="file"]').setInputFiles(filePath);
 

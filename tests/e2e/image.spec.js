@@ -251,7 +251,7 @@ test('Test tool geolocalisation', async ({page, authenticatedBetaTesterExtension
 test('Test tool C2PA', async ({page, authenticatedExtraFeaturesExtensionId}) => {
     await page.goto(`chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/tools/c2pa`);
 
-    const filePath = path.resolve(__dirname, '../../tests-assets/test-c2pa.jpg');
+    const filePath = path.resolve(__dirname, '../../tests-assets/test-metadata.jpg');
     await page.locator('input[type="file"]').setInputFiles(filePath);
 
     await page.getByTestId('c2pa-reversesearch-toggle').click();

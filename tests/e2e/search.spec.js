@@ -52,7 +52,7 @@ test('Test Machine generated text search', async ({ page, authenticatedBetaTeste
 
     await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/mgt`);
 
-    await page.locator('[data-testid="mgt-input"] textarea:not([aria-hidden])').fill(MGT_INPUT_TEXT);
+    await page.locator('[data-testid="mgt-input"] textarea:not([aria-hidden])').fill("test");
 
     await page.getByTestId('mgt-submit').click();
 
@@ -73,7 +73,7 @@ test('Test Machine generated text search error', async ({ page, authenticatedBet
 
     await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/mgt`);
 
-    await page.locator('[data-testid="mgt-input"] textarea:not([aria-hidden])').fill(MGT_INPUT_TEXT);
+    await page.locator('[data-testid="mgt-input"] textarea:not([aria-hidden])').fill("test");
 
     await page.getByTestId('mgt-submit').click();
 

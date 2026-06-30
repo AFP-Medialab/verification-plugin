@@ -46,11 +46,24 @@ const AudioExtractionResult = () => {
           gap: 3,
         }}
       >
-        <audio controls src={result}></audio>
-        <Button color="primary" variant="contained" onClick={handleDownload}>
+        <audio
+          controls
+          src={result}
+          data-testid="audioextraction-audio-container"
+        ></audio>
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={handleDownload}
+          data-testid="audioextraction-download-button"
+        >
           {keyword("audio_extraction_downloadbutton")}
         </Button>
-        <Button variant="contained" onClick={handleGoToHiya}>
+        <Button
+          variant="contained"
+          onClick={handleGoToHiya}
+          data-testid="audioextraction-hiya-button"
+        >
           Hiya
         </Button>
       </Box>
