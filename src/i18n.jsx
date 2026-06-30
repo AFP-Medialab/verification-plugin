@@ -20,9 +20,9 @@ i18next
     interpolation: {
       escapeValue: false,
     },
-    // react: {
-    //   useSuspense: false,
-    // },
+    react: {
+      useSuspense: false,
+    },
     load: "languageOnly",
     backend: {
       backends: [
