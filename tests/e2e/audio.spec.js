@@ -96,7 +96,7 @@ test(`Test tool analysis audio`, async ({ page, authenticatedBetaTesterExtension
 test(`Test tool extract audio from video`, async ({ page, authenticatedExtraFeaturesExtensionId }) => {
     await page.goto(`chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/tools/audioExtraction`);
 
-    const filePath = path.resolve(__dirname, '../../tests-assets/test-audio-extract.mp4');
+    const filePath = path.resolve(__dirname, '../../tests-assets/test-audio-extract.webm');
 
     await page.locator('input[type="file"]').setInputFiles(filePath);
     await page.getByTestId('audioextraction-submit').click();

@@ -60,8 +60,7 @@ const AudioExtraction = () => {
           reader.readAsArrayBuffer(videoFile);
         });
 
-        const audioCtx = new (window.AudioContext ||
-          window.webkitAudioContext)();
+        const audioCtx = new OfflineAudioContext(1, 1, 44100);
         const audioBuffer = await audioCtx.decodeAudioData(arrBuffer);
 
         const wavArrayBuffer = audioBufferToWav(audioBuffer);
