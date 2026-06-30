@@ -19,7 +19,7 @@ const AudioExtractionResult = () => {
     const link = document.createElement("a");
     link.href = result;
 
-    link.download = `audio_extrait_${Date.now()}.mp3`;
+    link.download = `audio_extrait_${Date.now()}.wav`;
 
     document.body.appendChild(link);
     link.click();

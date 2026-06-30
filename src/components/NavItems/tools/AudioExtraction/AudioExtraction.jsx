@@ -21,6 +21,7 @@ import {
 } from "@/redux/actions/tools/audioExtractionActions";
 import { setError } from "@/redux/reducers/errorReducer";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
+import audioBufferToWav from "audiobuffer-to-wav";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import AudioExtractionResult from "./AudioExtractionResult";
@@ -52,13 +53,30 @@ const AudioExtraction = () => {
     let audioUrl = null;
     if (type === "local" && videoFile) {
       try {
-        audioUrl = URL.createObjectURL(videoFile);
+        const arrBuffer = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = (e) => resolve(e.target.result);
+          reader.onerror = (e) => reject(new Error("Failed to read file"));
+          reader.readAsArrayBuffer(videoFile);
+        });
+
+        const audioCtx = new (window.AudioContext ||
+          window.webkitAudioContext)();
+        const audioBuffer = await audioCtx.decodeAudioData(arrBuffer);
+
+        const wavArrayBuffer = audioBufferToWav(audioBuffer);
+
+        const wavBlob = new Blob([wavArrayBuffer], { type: "audio/wav" });
+        audioUrl = URL.createObjectURL(wavBlob);
 
         dispatch(setAudioExtractionResult({ url: audioUrl }));
       } catch (error) {
         console.error("Erreur lors de l'extraction audio :", error);
         dispatch(setAudioExtractionLoading(false));
       }
+    } else if (input) {
+      try {
+      } catch (error) {}
     }
   };
 
