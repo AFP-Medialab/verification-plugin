@@ -295,6 +295,7 @@ export default function AssistantTextSpanClassification({
           <CardContent>
             <CategoriesListToggle
               categories={uniqueCategories}
+              classification={classification}
               primaryRgb={primaryRgb}
               noCategoriesText={keyword("no_detected_techniques")}
               allCategoriesLabel={allCategoriesLabel}
@@ -324,6 +325,7 @@ function EmptyListMessage({ noCategoriesText }) {
 
 export function CategoriesListToggle({
   categories,
+  classification = {},
   primaryRgb,
   noCategoriesText,
   allCategoriesLabel,
@@ -360,9 +362,17 @@ export function CategoriesListToggle({
     onCategoryChange(currentCategory);
   }
 
-  // order categories by highest number of sentences first
+  const uniqueScoreCount = (spans) => new Set(spans.map((s) => s.score)).size;
+
+  // order categories by highest chip count first (unique scores), with classification count as tiebreaker
   const sortedCategories = Object.fromEntries(
-    Object.entries(categories).sort(([, a], [, b]) => b.length - a.length),
+    Object.entries(categories).sort(([keyA, valA], [keyB, valB]) => {
+      const chipDiff = uniqueScoreCount(valB) - uniqueScoreCount(valA);
+      return chipDiff !== 0
+        ? chipDiff
+        : (classification[keyB]?.length ?? 0) -
+            (classification[keyA]?.length ?? 0);
+    }),
   );
   for (const category in sortedCategories) {
     // don't display overall category
