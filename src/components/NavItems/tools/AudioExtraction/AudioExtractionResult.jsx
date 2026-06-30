@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 
+import { setHiyaFile } from "@/redux/reducers/tools/hiyaReducer";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 const AudioExtractionResult = () => {
@@ -12,6 +14,8 @@ const AudioExtractionResult = () => {
     "components/NavItems/tools/AudioExtraction",
   );
   const result = useSelector((state) => state.audioExtraction.result);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleDownload = () => {
     if (!result) return;
@@ -24,6 +28,11 @@ const AudioExtractionResult = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const handleGoToHiya = () => {
+    dispatch(setHiyaFile({ name: "extracted_audio.wav", url: result }));
+    navigate("/app/tools/hiya");
   };
 
   return (
@@ -40,6 +49,9 @@ const AudioExtractionResult = () => {
         <audio controls src={result}></audio>
         <Button color="primary" variant="contained" onClick={handleDownload}>
           {keyword("audio_extraction_downloadbutton")}
+        </Button>
+        <Button variant="contained" onClick={handleGoToHiya}>
+          Hiya
         </Button>
       </Box>
     </Card>
