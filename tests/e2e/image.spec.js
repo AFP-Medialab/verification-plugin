@@ -90,7 +90,7 @@ test('Test tool OCR', async ({ page, context, extensionId }) => {
   await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/ocr`);
   await page.getByText("Accept").click();
 
-  await page.route('**ocr**', async (route) => {
+  await page.route('**/ocr', async (route) => {
         await route.fulfill({
             status: 200,
             contentType: 'application/json',
