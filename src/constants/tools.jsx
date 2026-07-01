@@ -27,6 +27,7 @@ import {
   FaceRetouchingNatural,
   GeneratingTokensRounded,
   Gradient,
+  LibraryMusic,
   ManageSearch,
   SmartToy,
 } from "@mui/icons-material";
@@ -128,6 +129,9 @@ const TwitterAdvancedSearch = React.lazy(
 const TwitterSna = React.lazy(
   () => import("../components/NavItems/tools/TwitterSna/TwitterSna"),
 );
+const AudioExtraction = React.lazy(
+  () => import("../components/NavItems/tools/AudioExtraction/AudioExtraction"),
+);
 
 // ---------------------------------------------------------------------------
 // Icon wrapper components
@@ -171,6 +175,11 @@ const GeolocationSvgIcon = (props) => (
   <SvgIcon component={GeolocationIcon} inheritViewBox {...props} />
 );
 const AudioFileSvgIcon = (props) => <AudioFile inheritViewBox {...props} />;
+
+const AudioExtractionIcon = (props) => (
+  <LibraryMusic inheritViewBox {...props} />
+);
+
 const TwitterSearchSvgIcon = (props) => (
   <SvgIcon component={TwitterSearchIcon} inheritViewBox {...props} />
 );
@@ -242,20 +251,6 @@ export const keyframes = makeTool(
   KeyframesSvgIcon,
   <Keyframes />,
   <Footer type={FOOTER_TYPES.ITI} />,
-  {
-    linksAccepted: [
-      KNOWN_LINKS.TWITTER,
-      KNOWN_LINKS.YOUTUBE,
-      KNOWN_LINKS.FACEBOOK,
-      KNOWN_LINKS.YOUTUBE,
-      KNOWN_LINKS.YOUTUBESHORTS,
-      KNOWN_LINKS.SNAPCHAT,
-      KNOWN_LINKS.OWN,
-    ],
-    exceptions: [],
-    useInputUrl: true,
-    text: "keyframes_text",
-  },
 );
 export const thumbnails = makeTool(
   data.thumbnails,
@@ -280,23 +275,6 @@ export const poiForensic = makeTool(
   PoiForensicSvgIcon,
   <PoiForensics />,
   <Footer type={FOOTER_TYPES.ITI_UNINA} />,
-  {
-    processLinksAccepted: [
-      KNOWN_LINKS.YOUTUBE,
-      KNOWN_LINKS.TWITTER,
-      KNOWN_LINKS.TELEGRAM,
-      KNOWN_LINKS.YOUTUBESHORTS,
-      KNOWN_LINKS.DAILYMOTION,
-      KNOWN_LINKS.MISC,
-      KNOWN_LINKS.OWN,
-    ],
-    exceptions: [],
-    useInputUrl: false,
-    text: "deepfake_video_text",
-    resetUrl: resetPoiForensics,
-    setUrl: (resultUrl) => setPoiForensicsUrl({ url: resultUrl }),
-    setFile: (resultFile) => setPoiForensicsFile(resultFile),
-  },
 );
 export const imageMagnifier = makeTool(
   data.imageMagnifier,
@@ -411,6 +389,12 @@ export const c2paData = makeTool(
   <C2paData />,
   <Footer type={FOOTER_TYPES.AFP} />,
 );
+export const audioExtraction = makeTool(
+  data.audioExtraction,
+  AudioExtractionIcon,
+  <AudioExtraction />,
+  <Footer type={FOOTER_TYPES.AFP} />,
+);
 
 export const tools = Object.freeze([
   toolsHome,
@@ -442,4 +426,5 @@ export const tools = Object.freeze([
   afpDigitalCourses,
   about,
   c2paData,
+  audioExtraction,
 ]);

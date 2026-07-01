@@ -74,6 +74,9 @@ importers:
       attr-accept:
         specifier: ^2.2.5
         version: 2.2.5
+      audiobuffer-to-wav:
+        specifier: ^1.0.0
+        version: 1.0.0
       axios:
         specifier: ^1.13.6
         version: 1.14.0
@@ -2778,6 +2781,9 @@ packages:
   attr-accept@2.2.5:
     resolution: {integrity: sha512-0bDNnY/u6pPwHDMoF0FieU354oBi0a8rD9FcsLwzcGWbc8KS8KPIi7y+s13OlVY+gMWc/9xEMUgNE6Qm8ZllYQ==}
     engines: {node: '>=4'}
+
+  audiobuffer-to-wav@1.0.0:
+    resolution: {integrity: sha512-CAoir4NRrAzAgYo20tEMiKZR84coE8bq/L+H2kwAaULVY4+0xySsEVtNT5raqpzmH6y0pqzY6EmoViLd9W8F/w==}
 
   available-typed-arrays@1.0.7:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
@@ -8851,6 +8857,8 @@ snapshots:
       when-exit: 2.1.5
 
   attr-accept@2.2.5: {}
+
+  audiobuffer-to-wav@1.0.0: {}
 
   available-typed-arrays@1.0.7:
     dependencies:

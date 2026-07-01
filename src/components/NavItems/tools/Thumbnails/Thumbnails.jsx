@@ -380,6 +380,7 @@ const Thumbnails = () => {
               handleClick={imageClickUrl}
               height={height}
               cols={cols}
+              centered
             />
           </div>
         </Card>

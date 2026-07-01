@@ -127,6 +127,22 @@ export const sd21BfreeSiglipGrip = new SyntheticImageDetectionAlgorithm(
   "synthetic_image_detection_sd21_bfree-siglip_grip_warning",
 );
 
+export const onlineRineMever = new SyntheticImageDetectionAlgorithm(
+  "online_rine_mever",
+  "synthetic_image_detection_online_rine_mever_name",
+  "synthetic_image_detection_online_rine_mever_description",
+  [ROLES.EXTRA_FEATURE],
+  "synthetic_image_detection_online_rine_mever_warning",
+);
+
+export const onlineSpaiMever = new SyntheticImageDetectionAlgorithm(
+  "online_spai_mever",
+  "synthetic_image_detection_online_spai_mever_name",
+  "synthetic_image_detection_online_spai_mever_description",
+  [ROLES.EXTRA_FEATURE],
+  "synthetic_image_detection_online_spai_mever_warning",
+);
+
 /**
  * The list of the synthetic image detection algorithms
  * TODO:Use SET
@@ -145,6 +161,8 @@ export const syntheticImageDetectionAlgorithms = [
   sd21BfreeDino2reg4Grip,
   multiBfreeDino2reg4Grip,
   sd21BfreeSiglipGrip,
+  onlineRineMever,
+  onlineSpaiMever,
 ];
 
 /**
