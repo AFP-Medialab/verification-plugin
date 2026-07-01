@@ -113,8 +113,9 @@ const MediaServices = {
   // Instagram post with a video reel
   {
     url: "https://www.instagram.com/p/C8JwcyOiFDD/",
+    videoGridIndex: 0,
     mediaType: MediaType.video,
-    mediaStatus: MediaVideoStatus.noEmbed,
+    mediaStatus: MediaVideoStatus.video,
     services: [MediaServices.videoDownloadGeneric],
   },
   // TikTok video post
