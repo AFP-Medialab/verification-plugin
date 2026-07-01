@@ -117,8 +117,7 @@ test('Test tool chatbot', async ({page, authenticatedExtraFeaturesExtensionId}) 
 
     await page.goto(`chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/tools/chatbot`);
 
-    await page.getByTestId('chatbot-select-model').click();
-    await page.getByTestId('chatbot-mistral-7b').click();
+    //there is no need to select the model, because we mock only one model so it is selected automatically 
 
     await page.getByTestId('chatbot-select-prompt').click();
     await page.getByTestId('chatbot-fact-check-analysis').click();

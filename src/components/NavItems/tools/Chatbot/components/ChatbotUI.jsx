@@ -359,7 +359,7 @@ const ChatbotUI = () => {
                   <MenuItem
                     key={model.id}
                     value={model.id}
-                    data-testid={`chatbot-${model.id}`}
+                    data-testid={`chatbot-mistral-7b`}
                   >
                     {model.id}
                   </MenuItem>
