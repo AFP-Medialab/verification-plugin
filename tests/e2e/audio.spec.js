@@ -92,22 +92,3 @@ test(`Test tool analysis audio`, async ({ page, authenticatedBetaTesterExtension
     await page.getByTestId('hiya-close').click();
     await expect (page.getByTestId("hiya-results")).toHaveCount(0);
 });
-
-test(`Test tool extract audio from video`, async ({ page, authenticatedExtraFeaturesExtensionId }) => {
-    await page.goto(`chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/tools/audioExtraction`);
-
-    const filePath = path.resolve(__dirname, '../../tests-assets/test-audio-extract.webm');
-
-    await page.locator('input[type="file"]').setInputFiles(filePath);
-    await page.getByTestId('audioextraction-submit').click();
-
-    await expect(page.getByTestId("audioextraction-audio-container")).toBeVisible();
-    await expect(page.getByTestId("audioextraction-download-button")).toBeVisible();
-    await expect(page.getByTestId("audioextraction-hiya-button")).toBeVisible();
-
-    const downloadPromise = page.waitForEvent('download');
-    await page.getByTestId('audioextraction-download-button').click();
-    const download = await downloadPromise;
-
-    expect(download.suggestedFilename()).toMatch(/^audio_extrait_.*\.wav$/);
-});

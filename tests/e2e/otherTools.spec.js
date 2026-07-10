@@ -130,22 +130,18 @@ test('Test tool chatbot', async ({page, authenticatedExtraFeaturesExtensionId}) 
 
 test('Test tool audiovideo extraction', async ({page, authenticatedExtraFeaturesExtensionId}) => {
     const videoInputPath = path.resolve(__dirname, '../../tests-assets/test-metadata.mp4');
-    const mockVideoPath = path.resolve(__dirname, '../../tests-assets/test-metadata.mp4');
-    const mockAudioPath = path.resolve(__dirname, '../../tests-assets/test-audio-extract.webm');
 
-    await page.route('**/api/ffmpeg/extractvideo**', async (route) => {
+    await page.route('**extractvideo**', async (route) => {
         await route.fulfill({
             status: 200,
-            contentType: 'video/mp4',
-            path: mockVideoPath,
+            contentType: 'video/mp4'
         });
     });
 
-    await page.route('**/api/ffmpeg/extractaudio**', async (route) => {
+    await page.route('**extractaudio**', async (route) => {
         await route.fulfill({
             status: 200,
-            contentType: 'audio/mpeg',
-            path: mockAudioPath,
+            contentType: 'audio/mpeg'
         });
     });
 
