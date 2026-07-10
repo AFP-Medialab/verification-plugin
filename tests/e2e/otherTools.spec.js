@@ -127,3 +127,47 @@ test('Test tool chatbot', async ({page, authenticatedExtraFeaturesExtensionId}) 
 
     await expect (page.getByTestId("chatbot-result")).toBeVisible();
 })
+
+test('Test tool audiovideo extraction', async ({page, authenticatedExtraFeaturesExtensionId}) => {
+    const videoInputPath = path.resolve(__dirname, '../../tests-assets/test-metadata.mp4');
+    const mockVideoPath = path.resolve(__dirname, '../../tests-assets/test-metadata.mp4');
+    const mockAudioPath = path.resolve(__dirname, '../../tests-assets/test-audio-extract.webm');
+
+    await page.route('**/api/ffmpeg/extractvideo**', async (route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'video/mp4',
+            path: mockVideoPath,
+        });
+    });
+
+    await page.route('**/api/ffmpeg/extractaudio**', async (route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'audio/mpeg',
+            path: mockAudioPath,
+        });
+    });
+
+    await page.goto(`chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/tools/audioVideoExtraction`);
+
+    await page.locator('input[type="file"]').setInputFiles(videoInputPath);
+
+    await expect(page.getByTestId('audioextraction-slider')).toBeVisible();
+
+    await page.getByTestId('audioextraction-submit').click();
+
+    await expect(page.getByTestId('audioextraction-video-container')).toBeVisible();
+
+    // download video
+    const downloadVideoPromise = page.waitForEvent('download');
+    await page.getByTestId('audioextraction-download-button').first().click();
+    const downloadVideo = await downloadVideoPromise;
+    expect(downloadVideo.suggestedFilename()).toBe('extract.mp4');
+
+    // download audio
+    const downloadAudioPromise = page.waitForEvent('download');
+    await page.getByTestId('audioextraction-download-button').nth(1).click();
+    const downloadAudio = await downloadAudioPromise;
+    expect(downloadAudio.suggestedFilename()).toBe('extract.mp3');
+})

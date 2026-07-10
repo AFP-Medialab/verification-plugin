@@ -3,9 +3,11 @@ const defaultState = {
   result: null,
   loading: false,
   type: "",
+  endCutTime: null,
+  beginCutTime: null,
 };
 
-const audioExtractionReducer = (state = defaultState, action) => {
+const audioVideoExtractionReducer = (state = defaultState, action) => {
   switch (action.type) {
     case "AUDIO_EXTRACTION_RESET":
       return {
@@ -32,8 +34,18 @@ const audioExtractionReducer = (state = defaultState, action) => {
         result: action.payload ? action.payload.url : null,
         loading: false,
       };
+    case "SET_BEGIN_CUT_TIME":
+      return {
+        ...state,
+        beginCutTime: action.payload,
+      };
+    case "SET_END_CUT_TIME":
+      return {
+        ...state,
+        endCutTime: action.payload,
+      };
     default:
       return state;
   }
 };
-export default audioExtractionReducer;
+export default audioVideoExtractionReducer;
