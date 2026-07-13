@@ -5,6 +5,8 @@ const defaultState = {
   type: "",
   endCutTime: null,
   beginCutTime: null,
+  keyframes: null,
+  keyframesLoading: null,
 };
 
 const audioVideoExtractionReducer = (state = defaultState, action) => {
@@ -17,6 +19,9 @@ const audioVideoExtractionReducer = (state = defaultState, action) => {
         file: null,
         loading: false,
         type: "",
+        endCutTime: null,
+        beginCutTime: null,
+        keyframes: null,
       };
     case "SET_AUDIO_EXTRACTION_LOADING":
       return {
@@ -43,6 +48,16 @@ const audioVideoExtractionReducer = (state = defaultState, action) => {
       return {
         ...state,
         endCutTime: action.payload,
+      };
+    case "SET_KEYFRAMES":
+      return {
+        ...state,
+        keyframes: action.payload,
+      };
+    case "SET_KEYFRAMES_LOADING":
+      return {
+        ...state,
+        keyframesLoading: action.payload,
       };
     default:
       return state;

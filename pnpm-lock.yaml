@@ -158,6 +158,9 @@ importers:
       jsonpath-plus:
         specifier: ^10.3.0
         version: 10.4.0
+      jszip:
+        specifier: ^3.10.1
+        version: 3.10.1
       jwt-decode:
         specifier: ^4.0.0
         version: 4.0.0

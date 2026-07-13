@@ -1,8 +1,12 @@
-import React from "react";
+import { React, useState } from "react";
+import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
+import LinearProgress from "@mui/material/LinearProgress";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
@@ -11,9 +15,19 @@ const AudioVideoExtractionResult = ({
   onDownloadAudio,
   onDownloadVideo,
   onGoToHiya,
+  onGetKeyframes,
+  onDownloadKeyframes,
 }) => {
   const keyword = i18nLoadNamespace(
     "components/NavItems/tools/AudioVideoExtraction",
+  );
+
+  const keyframes = useSelector(
+    (state) => state.audioVideoExtraction.keyframes,
+  );
+
+  const isLoading = useSelector(
+    (state) => state.audioVideoExtraction.keyframesLoading,
   );
 
   return (
@@ -66,7 +80,51 @@ const AudioVideoExtractionResult = ({
         >
           Hiya
         </Button>
+        <Button
+          variant="contained"
+          onClick={onGetKeyframes}
+          data-testid="audioextraction-keyframes-button"
+        >
+          Keyframes
+        </Button>
       </Box>
+      {keyframes && (
+        <Box sx={{ p: 2 }}>
+          <ImageList
+            sx={{ width: "100%", height: 450 }}
+            cols={3}
+            rowHeight="auto"
+            gap={8}
+          >
+            {keyframes.map((item, index) => {
+              const imageSrc = `data:${item.mimeType};base64,${item.data}`;
+
+              return (
+                <ImageListItem key={item.filename || index}>
+                  <img
+                    src={imageSrc}
+                    alt={item.filename}
+                    loading="lazy"
+                    style={{ padding: 5, margin: 5 }}
+                  />
+                </ImageListItem>
+              );
+            })}
+          </ImageList>
+          <Button
+            variant="contained"
+            onClick={onDownloadKeyframes}
+            data-testid="audioextraction-download-keyframes-button"
+          >
+            {keyword("audiovideo_extraction_downloadkeyframesbutton")}
+          </Button>
+        </Box>
+      )}
+      {isLoading && (
+        <Box sx={{ mt: 3 }}>
+          <LinearProgress />
+        </Box>
+      )}
     </Card>
   );
 };

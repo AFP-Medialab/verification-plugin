@@ -11,6 +11,14 @@ import singlefileResponse from '../../tests-assets/api-response/singlefile-to-wa
 import mockedChatbotResponse from '../../tests-assets/api-response/chatbot-response';
 
 test('Test tool archive savepagenow', async ({page, authenticatedArchiveExtensionId, context}) => {
+    await context.route('**web.archive.org**', async (route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'text/html',
+            body: '<html><body>Mocked</body></html>'
+        });
+    });
+
     await page.goto(`chrome-extension://${authenticatedArchiveExtensionId}/popup.html#/app/tools/archive`);
 
     await page.locator('[data-testid="archive-input"] input').fill('https://www.youtube.com/watch?v=QQFgQ1uBQtk');
@@ -159,11 +167,11 @@ test('Test tool audiovideo extraction', async ({page, authenticatedExtraFeatures
     const downloadVideoPromise = page.waitForEvent('download');
     await page.getByTestId('audioextraction-download-button').first().click();
     const downloadVideo = await downloadVideoPromise;
-    expect(downloadVideo.suggestedFilename()).toBe('extract.mp4');
+    expect(downloadVideo.suggestedFilename()).toBe('test-metadata_extract.mp4');
 
     // download audio
     const downloadAudioPromise = page.waitForEvent('download');
     await page.getByTestId('audioextraction-download-button').nth(1).click();
     const downloadAudio = await downloadAudioPromise;
-    expect(downloadAudio.suggestedFilename()).toBe('extract.mp3');
+    expect(downloadAudio.suggestedFilename()).toBe('test-metadata_extract.mp3');
 })

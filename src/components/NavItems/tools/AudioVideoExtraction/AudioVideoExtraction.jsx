@@ -41,6 +41,8 @@ const AudioVideoExtraction = () => {
     handleDownloadAudio,
     handleDownloadVideo,
     handleGoToHiya,
+    handleGetKeyframes,
+    handleDownloadKeyframes,
   } = useAudioVideoExtraction();
 
   return (
@@ -67,6 +69,7 @@ const AudioVideoExtraction = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
+                resetState();
                 handleSubmit();
               }}
             >
@@ -139,6 +142,8 @@ const AudioVideoExtraction = () => {
             onDownloadAudio={handleDownloadAudio}
             onDownloadVideo={handleDownloadVideo}
             onGoToHiya={handleGoToHiya}
+            onGetKeyframes={handleGetKeyframes}
+            onDownloadKeyframes={handleDownloadKeyframes}
           />
         )}
       </Stack>
