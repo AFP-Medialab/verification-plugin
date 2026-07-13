@@ -23,11 +23,11 @@ import SvgIcon from "@mui/material/SvgIcon";
 import {
   Archive as ArchiveIcon,
   AudioFile,
+  ContentCut,
   Dashboard,
   FaceRetouchingNatural,
   GeneratingTokensRounded,
   Gradient,
-  LibraryMusic,
   ManageSearch,
   SmartToy,
 } from "@mui/icons-material";
@@ -129,8 +129,11 @@ const TwitterAdvancedSearch = React.lazy(
 const TwitterSna = React.lazy(
   () => import("../components/NavItems/tools/TwitterSna/TwitterSna"),
 );
-const AudioExtraction = React.lazy(
-  () => import("../components/NavItems/tools/AudioExtraction/AudioExtraction"),
+const AudioVideoExtraction = React.lazy(
+  () =>
+    import(
+      "../components/NavItems/tools/AudioVideoExtraction/AudioVideoExtraction"
+    ),
 );
 
 // ---------------------------------------------------------------------------
@@ -176,8 +179,8 @@ const GeolocationSvgIcon = (props) => (
 );
 const AudioFileSvgIcon = (props) => <AudioFile inheritViewBox {...props} />;
 
-const AudioExtractionIcon = (props) => (
-  <LibraryMusic inheritViewBox {...props} />
+const AudioVideoExtractionIcon = (props) => (
+  <ContentCut inheritViewBox {...props} />
 );
 
 const TwitterSearchSvgIcon = (props) => (
@@ -389,10 +392,10 @@ export const c2paData = makeTool(
   <C2paData />,
   <Footer type={FOOTER_TYPES.AFP} />,
 );
-export const audioExtraction = makeTool(
-  data.audioExtraction,
-  AudioExtractionIcon,
-  <AudioExtraction />,
+export const audioVideoExtraction = makeTool(
+  data.audioVideoExtraction,
+  AudioVideoExtractionIcon,
+  <AudioVideoExtraction />,
   <Footer type={FOOTER_TYPES.AFP} />,
 );
 
@@ -426,5 +429,5 @@ export const tools = Object.freeze([
   afpDigitalCourses,
   about,
   c2paData,
-  audioExtraction,
+  audioVideoExtraction,
 ]);

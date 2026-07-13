@@ -435,17 +435,17 @@ export const audioHiya = {
   assistantProps: {},
 };
 
-export const audioExtraction = {
+export const audioVideoExtraction = {
   titleKeyword: "navbar_audio_extraction",
   descriptionKeyword: "navbar_audio_extraction_description",
-  category: TOOLS_CATEGORIES.AUDIO,
+  category: TOOLS_CATEGORIES.OTHER,
   rolesIcons: [
     TOOL_STATUS_ICON.NEW,
     TOOL_STATUS_ICON.EXPERIMENTAL,
     TOOL_STATUS_ICON.LOCK,
   ],
   rolesNeeded: [ROLES.EXTRA_FEATURE],
-  path: "audioExtraction",
+  path: "audioVideoExtraction",
   toolGroup: TOOL_GROUPS.VERIFICATION,
   assistantProps: {},
 };

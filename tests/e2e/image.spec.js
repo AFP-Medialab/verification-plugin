@@ -12,6 +12,7 @@ import path from 'path';
 import mockedSyntheticImageResponse from '../../tests-assets/api-response/syntheticimages-response.json'
 import mockedGeolocationResponse from '../../tests-assets/api-response/geolocation-response.json'
 import mockedOcrResponse from '../../tests-assets/api-response/ocr-response.json'
+import mockedForensicResponse from '../../tests-assets/api-response/forensic-response.json'
 
 test('Test tool magnifier', async ({ page, context, extensionId }) => {
     // Navigate to the demo page
@@ -68,6 +69,14 @@ test('Test tool metadata image', async ({ page, extensionId }) => {
 test('Test tool forensic', async ({ page, extensionId }) => {
   await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/forensic`);
   await page.getByText("Accept").click();
+
+  await page.route('**forensic**', async (route) => {
+    await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(mockedForensicResponse)
+    })
+  });
 
   await page.locator('[data-testid="forensic-input"] input').fill('https://www.lebigdata.fr/wp-content/uploads/2023/03/macron-pape-ia-deepfake-1050x525.jpg');
   await page.getByTestId('forensic-submit').click();
