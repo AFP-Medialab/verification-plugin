@@ -157,20 +157,24 @@ const useAudioVideoExtraction = () => {
   };
 
   const fetchAudio = async () => {
-    const apiUrl = import.meta.env.VITE_FFMPEG_YTDLP_API_URL;
-    const res = await fetch(
-      `${apiUrl}/api/ffmpeg/extractaudio?startTime=${beginCutTime}&endTime=${endCutTime}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "video/mp4" },
-        body: videoFile,
-        duplex: "half",
-      },
-    );
-    if (!res.ok) throw new Error(`API error: ${res.status}`);
-    const contentType = res.headers.get("content-type") || "audio/mpeg";
-    const blob = await res.blob();
-    return new Blob([blob], { type: contentType });
+    try {
+      const apiUrl = import.meta.env.VITE_FFMPEG_YTDLP_API_URL;
+      const res = await fetch(
+        `${apiUrl}/api/ffmpeg/extractaudio?startTime=${beginCutTime}&endTime=${endCutTime}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "video/mp4" },
+          body: videoFile,
+          duplex: "half",
+        },
+      );
+      if (!res.ok) throw new Error(`API error: ${res.status}`);
+      const contentType = res.headers.get("content-type") || "audio/mpeg";
+      const blob = await res.blob();
+      return new Blob([blob], { type: contentType });
+    } catch (error) {
+      dispatch(setError(error));
+    }
   };
 
   const getNameFromFileName = (fileName) => {
@@ -179,73 +183,94 @@ const useAudioVideoExtraction = () => {
   };
 
   const handleDownloadAudio = async () => {
-    const blob = await fetchAudio();
-    const audioUrl = URL.createObjectURL(blob);
+    try {
+      const blob = await fetchAudio();
+      const audioUrl = URL.createObjectURL(blob);
 
-    const name = getNameFromFileName(fileName);
+      const name = getNameFromFileName(fileName);
 
-    const a = document.createElement("a");
-    a.href = audioUrl;
-    a.download = `${name}_extract.mp3`;
-    a.click();
-    URL.revokeObjectURL(audioUrl);
+      const a = document.createElement("a");
+      a.href = audioUrl;
+      a.download = `${name}_extract.mp3`;
+      a.click();
+      URL.revokeObjectURL(audioUrl);
+    } catch (error) {
+      dispatch(setError(error));
+    }
   };
 
   const handleDownloadVideo = () => {
-    const name = getNameFromFileName(fileName);
-    const a = document.createElement("a");
-    a.href = result;
-    a.download = `${name}_extract.mp4`;
-    a.click();
+    try {
+      const name = getNameFromFileName(fileName);
+      const a = document.createElement("a");
+      a.href = result;
+      a.download = `${name}_extract.mp4`;
+      a.click();
+    } catch (error) {
+      dispatch(setError(error));
+    }
   };
 
   const handleGoToHiya = async () => {
-    const blob = await fetchAudio();
-    const hiyaUrl = URL.createObjectURL(blob);
-    const name = getNameFromFileName(fileName);
-    dispatch(setHiyaFile({ name: `${name}_extract.mp3`, url: hiyaUrl }));
-    navigate("/app/tools/hiya");
+    try {
+      const blob = await fetchAudio();
+      const hiyaUrl = URL.createObjectURL(blob);
+      const name = getNameFromFileName(fileName);
+      dispatch(setHiyaFile({ name: `${name}_extract.mp3`, url: hiyaUrl }));
+      navigate("/app/tools/hiya");
+    } catch (error) {
+      dispatch(setError(error));
+    }
   };
 
   const handleGetKeyframes = async () => {
     dispatch(setKeyframesLoading(true));
-    const apiUrl = import.meta.env.VITE_FFMPEG_YTDLP_API_URL;
-    const videoBlob = await fetch(result).then((r) => r.blob());
-    const res = await fetch(`${apiUrl}/api/ffmpeg/extractkeyframes`, {
-      method: "POST",
-      headers: { "Content-Type": "video/mp4" },
-      body: videoBlob,
-      duplex: "half",
-    });
-    if (!res.ok) {
+    try {
+      const apiUrl = import.meta.env.VITE_FFMPEG_YTDLP_API_URL;
+      const videoBlob = await fetch(result).then((r) => r.blob());
+      const res = await fetch(`${apiUrl}/api/ffmpeg/extractkeyframes`, {
+        method: "POST",
+        headers: { "Content-Type": "video/mp4" },
+        body: videoBlob,
+        duplex: "half",
+      });
+      if (!res.ok) {
+        dispatch(setKeyframesLoading(false));
+        throw new Error(`API error: ${res.status}`);
+      }
+      const { frames } = await res.json();
+      dispatch(setKeyframes(frames));
       dispatch(setKeyframesLoading(false));
-      throw new Error(`API error: ${res.status}`);
+    } catch (error) {
+      dispatch(setKeyframesLoading(false));
+      dispatch(setError(error));
     }
-    const { frames } = await res.json();
-    dispatch(setKeyframes(frames));
-    dispatch(setKeyframesLoading(false));
   };
 
   const handleDownloadKeyframes = async () => {
-    if (!keyframes || keyframes.length === 0) return;
-    const folderName = fileName
-      ? fileName.replace(/\.[^.]+$/, "")
-      : "keyframes";
-    const zip = new JSZip();
-    const folder = zip.folder(folderName);
-    keyframes.forEach((frame) => {
-      const binaryStr = atob(frame.data);
-      const bytes = new Uint8Array(binaryStr.length);
-      for (let i = 0; i < binaryStr.length; i++)
-        bytes[i] = binaryStr.charCodeAt(i);
-      folder.file(frame.filename, bytes, { binary: true });
-    });
-    const blob = await zip.generateAsync({ type: "blob" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = `${folderName}_keyframes.zip`;
-    a.click();
-    URL.revokeObjectURL(a.href);
+    try {
+      if (!keyframes || keyframes.length === 0) return;
+      const folderName = fileName
+        ? fileName.replace(/\.[^.]+$/, "")
+        : "keyframes";
+      const zip = new JSZip();
+      const folder = zip.folder(folderName);
+      keyframes.forEach((frame) => {
+        const binaryStr = atob(frame.data);
+        const bytes = new Uint8Array(binaryStr.length);
+        for (let i = 0; i < binaryStr.length; i++)
+          bytes[i] = binaryStr.charCodeAt(i);
+        folder.file(frame.filename, bytes, { binary: true });
+      });
+      const blob = await zip.generateAsync({ type: "blob" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `${folderName}_keyframes.zip`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    } catch (error) {
+      dispatch(setError(error));
+    }
   };
 
   return {
