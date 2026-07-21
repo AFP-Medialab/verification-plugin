@@ -80,7 +80,9 @@ async function initializeApp() {
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: false,
-        immutableCheck: { ignoredPaths: ["poiForensics.file"] },
+        immutableCheck: {
+          ignoredPaths: ["poiForensics.file", "audioVideoExtraction.file"],
+        },
       }).prepend(sagaMiddleware),
     preloadedState: persistedState,
   });

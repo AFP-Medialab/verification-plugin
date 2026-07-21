@@ -1,17 +1,27 @@
 import { createAction } from "@reduxjs/toolkit";
 
-export const resetAudioVideoExtraction = createAction("AUDIO_EXTRACTION_RESET");
+export const resetAudioVideoExtraction = createAction(
+  "AUDIO_VIDEO_EXTRACTION_RESET",
+);
 
 export const setAudioVideoExtractionLoading = createAction(
-  "SET_AUDIO_EXTRACTION_LOADING",
+  "SET_AUDIO_VIDEO_EXTRACTION_LOADING",
 );
 
 export const setAudioVideoExtractionUrl = createAction(
-  "SET_AUDIO_EXTRACTION_URL",
+  "SET_AUDIO_VIDEO_EXTRACTION_URL",
+);
+
+export const setAudioVideoExtractionFile = createAction(
+  "SET_AUDIO_VIDEO_EXTRACTION_FILE",
+);
+
+export const setAudioVideoExtractionFileName = createAction(
+  "SET_AUDIO_VIDEO_EXTRACTION_FILE_NAME",
 );
 
 export const setAudioVideoExtractionResult = createAction(
-  "SET_AUDIO_EXTRACTION_RESULT",
+  "SET_AUDIO_VIDEO_EXTRACTION_RESULT",
 );
 
 export const setBeginCutTime = createAction("SET_BEGIN_CUT_TIME");

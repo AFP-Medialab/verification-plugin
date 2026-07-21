@@ -85,7 +85,7 @@ const AudioVideoExtractionResult = ({
           onClick={onGetKeyframes}
           data-testid="audioextraction-keyframes-button"
         >
-          Keyframes
+          I-frames
         </Button>
       </Box>
       {keyframes && (

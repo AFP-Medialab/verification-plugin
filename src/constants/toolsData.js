@@ -436,8 +436,8 @@ export const audioHiya = {
 };
 
 export const audioVideoExtraction = {
-  titleKeyword: "navbar_audio_extraction",
-  descriptionKeyword: "navbar_audio_extraction_description",
+  titleKeyword: "navbar_audiovideo_extraction",
+  descriptionKeyword: "navbar_audiovideo_extraction_description",
   category: TOOLS_CATEGORIES.OTHER,
   rolesIcons: [
     TOOL_STATUS_ICON.NEW,

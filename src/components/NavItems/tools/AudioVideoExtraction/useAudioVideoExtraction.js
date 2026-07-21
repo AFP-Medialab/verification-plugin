@@ -6,6 +6,8 @@ import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import { preprocessFileUpload } from "@/components/Shared/Utils/fileUtils";
 import {
   resetAudioVideoExtraction,
+  setAudioVideoExtractionFile,
+  setAudioVideoExtractionFileName,
   setAudioVideoExtractionLoading,
   setAudioVideoExtractionResult,
   setBeginCutTime,
@@ -36,15 +38,25 @@ const useAudioVideoExtraction = () => {
     (state) => state.audioVideoExtraction.keyframes,
   );
 
+  const storedFile = useSelector((state) => state.audioVideoExtraction.file);
+  const fileName =
+    useSelector((state) => state.audioVideoExtraction.fileName) ?? "";
+
   const [input = url || "", setInput, videoFile, setVideoFile] = useUrlOrFile();
-  const [type, setType] = useState("");
+  const [type, setType] = useState(() =>
+    storedFile ? "local" : url ? "url" : "",
+  );
   const [sliderRange, setSliderRange] = useState([0, 0]);
   const [videoDuration, setVideoDuration] = useState(0);
 
-  const [fileName, setFileName] = useState("");
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (storedFile && !videoFile) {
+      setVideoFile(storedFile);
+    }
+  }, []);
 
   const formatSeconds = (totalSeconds) => {
     const h = Math.floor(totalSeconds / 3600)
@@ -78,7 +90,8 @@ const useAudioVideoExtraction = () => {
   const handleSubmit = async () => {
     if (!videoFile) return;
 
-    setFileName(videoFile.name);
+    dispatch(setAudioVideoExtractionFile(videoFile));
+    dispatch(setAudioVideoExtractionFileName(videoFile.name));
 
     const startTime = formatSeconds(sliderRange[0]);
     const endTime = formatSeconds(sliderRange[1]);
