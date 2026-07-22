@@ -81,7 +81,7 @@ async function initializeApp() {
       getDefaultMiddleware({
         serializableCheck: false,
         immutableCheck: {
-          ignoredPaths: ["poiForensics.file", "audioVideoExtraction.file"],
+          ignoredPaths: ["poiForensics.file", "ffmpegToolkit.file"],
         },
       }).prepend(sagaMiddleware),
     preloadedState: persistedState,

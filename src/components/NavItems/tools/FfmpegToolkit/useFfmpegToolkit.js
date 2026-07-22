@@ -5,42 +5,35 @@ import { useNavigate } from "react-router-dom";
 import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import { preprocessFileUpload } from "@/components/Shared/Utils/fileUtils";
 import {
-  resetAudioVideoExtraction,
-  setAudioVideoExtractionFile,
-  setAudioVideoExtractionFileName,
-  setAudioVideoExtractionLoading,
-  setAudioVideoExtractionResult,
+  resetFfmpegToolkit,
   setBeginCutTime,
   setEndCutTime,
+  setFfmpegToolkitFile,
+  setFfmpegToolkitFileName,
+  setFfmpegToolkitLoading,
+  setFfmpegToolkitResult,
   setKeyframes,
   setKeyframesLoading,
-} from "@/redux/actions/tools/audioVideoExtractionActions";
+} from "@/redux/actions/tools/ffmpegToolkitActions";
 import { setError } from "@/redux/reducers/errorReducer";
 import { setHiyaFile } from "@/redux/reducers/tools/hiyaReducer";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import fr from "dayjs/locale/fr";
 import JSZip from "jszip";
 
-const useAudioVideoExtraction = () => {
+const useFfmpegToolkit = () => {
   const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
 
-  const isLoading = useSelector((state) => state.audioVideoExtraction.loading);
+  const isLoading = useSelector((state) => state.ffmpegToolkit.loading);
   const role = useSelector((state) => state.userSession.user.roles);
-  const result = useSelector((state) => state.audioVideoExtraction.result);
-  const url = useSelector((state) => state.audioVideoExtraction.url);
-  const beginCutTime = useSelector(
-    (state) => state.audioVideoExtraction.beginCutTime,
-  );
-  const endCutTime = useSelector(
-    (state) => state.audioVideoExtraction.endCutTime,
-  );
-  const keyframes = useSelector(
-    (state) => state.audioVideoExtraction.keyframes,
-  );
+  const result = useSelector((state) => state.ffmpegToolkit.result);
+  const url = useSelector((state) => state.ffmpegToolkit.url);
+  const beginCutTime = useSelector((state) => state.ffmpegToolkit.beginCutTime);
+  const endCutTime = useSelector((state) => state.ffmpegToolkit.endCutTime);
+  const keyframes = useSelector((state) => state.ffmpegToolkit.keyframes);
 
-  const storedFile = useSelector((state) => state.audioVideoExtraction.file);
-  const fileName =
-    useSelector((state) => state.audioVideoExtraction.fileName) ?? "";
+  const storedFile = useSelector((state) => state.ffmpegToolkit.file);
+  const fileName = useSelector((state) => state.ffmpegToolkit.fileName) ?? "";
 
   const [input = url || "", setInput, videoFile, setVideoFile] = useUrlOrFile();
   const [type, setType] = useState(() =>
@@ -90,15 +83,15 @@ const useAudioVideoExtraction = () => {
   const handleSubmit = async () => {
     if (!videoFile) return;
 
-    dispatch(setAudioVideoExtractionFile(videoFile));
-    dispatch(setAudioVideoExtractionFileName(videoFile.name));
+    dispatch(setFfmpegToolkitFile(videoFile));
+    dispatch(setFfmpegToolkitFileName(videoFile.name));
 
     const startTime = formatSeconds(sliderRange[0]);
     const endTime = formatSeconds(sliderRange[1]);
 
     dispatch(setBeginCutTime(startTime));
     dispatch(setEndCutTime(endTime));
-    dispatch(setAudioVideoExtractionLoading(true));
+    dispatch(setFfmpegToolkitLoading(true));
 
     try {
       const apiUrl = import.meta.env.VITE_FFMPEG_YTDLP_API_URL;
@@ -119,10 +112,10 @@ const useAudioVideoExtraction = () => {
       const resultUrl = URL.createObjectURL(
         new Blob([blob], { type: contentType }),
       );
-      dispatch(setAudioVideoExtractionResult({ url: resultUrl }));
+      dispatch(setFfmpegToolkitResult({ url: resultUrl }));
     } catch (e) {
       dispatch(setError(e.message));
-      dispatch(setAudioVideoExtractionLoading(false));
+      dispatch(setFfmpegToolkitLoading(false));
     }
   };
 
@@ -153,7 +146,7 @@ const useAudioVideoExtraction = () => {
     setSliderRange([0, 0]);
     setVideoDuration(0);
     setKeyframes(null);
-    dispatch(resetAudioVideoExtraction());
+    dispatch(resetFfmpegToolkit());
   };
 
   const fetchAudio = async () => {
@@ -295,4 +288,4 @@ const useAudioVideoExtraction = () => {
   };
 };
 
-export default useAudioVideoExtraction;
+export default useFfmpegToolkit;

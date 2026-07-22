@@ -13,16 +13,14 @@ import StringFileUploadField from "@/components/Shared/StringFileUploadField";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import AudioVideoExtractionResult from "./AudioVideoExtractionResult";
-import useAudioVideoExtraction from "./useAudioVideoExtraction";
+import FfmpegToolkitResult from "./FfmpegToolkitResult";
+import useFfmpegToolkit from "./useFfmpegToolkit";
 
-const AudioVideoExtraction = () => {
+const FfmpegToolkit = () => {
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
   );
-  const keyword = i18nLoadNamespace(
-    "components/NavItems/tools/AudioVideoExtraction",
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/FfmpegToolkit");
 
   const {
     isLoading,
@@ -43,16 +41,14 @@ const AudioVideoExtraction = () => {
     handleGoToHiya,
     handleGetKeyframes,
     handleDownloadKeyframes,
-  } = useAudioVideoExtraction();
+  } = useFfmpegToolkit();
 
   return (
     <Box>
       <Stack direction="column" spacing={4}>
         <HeaderTool
-          name={keywordAllTools("navbar_audiovideo_extraction")}
-          description={keywordAllTools(
-            "navbar_audiovideo_extraction_description",
-          )}
+          name={keywordAllTools("navbar_ffmpeg_toolkit")}
+          description={keywordAllTools("navbar_ffmpeg_toolkit_description")}
           icon={
             <ContentCutIcon
               style={{
@@ -74,13 +70,9 @@ const AudioVideoExtraction = () => {
               }}
             >
               <StringFileUploadField
-                labelKeyword={keyword("audiovideo_extraction_label")}
-                placeholderKeyword={keyword(
-                  "audiovideo_extraction_placeholder",
-                )}
-                submitButtonKeyword={keyword(
-                  "audiovideo_extraction_extractbutton",
-                )}
+                labelKeyword={keyword("ffmpeg_toolkit_label")}
+                placeholderKeyword={keyword("ffmpeg_toolkit_placeholder")}
+                submitButtonKeyword={keyword("ffmpeg_toolkit_extractbutton")}
                 localFileKeyword={keyword("button_localfile")}
                 urlInput={input}
                 setUrlInput={setInput}
@@ -93,20 +85,20 @@ const AudioVideoExtraction = () => {
                 isParentLoading={isLoading}
                 handleClearUrl={resetState}
                 disableUrlInput={true}
-                urlInputTestId="audioextraction-input"
-                submitButtonTestId="audioextraction-submit"
+                urlInputTestId="ffmpegtoolkit-input"
+                submitButtonTestId="ffmpegtoolkit-submit"
               />
 
               <Typography
                 variant="subtitle1"
                 sx={{ mt: 3, mb: 1, fontWeight: "medium" }}
               >
-                Choisissez la portion de la vidéo :
+                {keyword("ffmpeg_toolkit_cut_description")}
               </Typography>
 
               <Box sx={{ mt: 1, px: 1 }}>
                 <Slider
-                  data-testid="audioextraction-slider"
+                  data-testid="ffmpegtoolkit-slider"
                   value={sliderRange}
                   onChange={(_, newValue) => {
                     if (newValue[1] - newValue[0] < 1) return;
@@ -137,7 +129,7 @@ const AudioVideoExtraction = () => {
         </Card>
 
         {result && (
-          <AudioVideoExtractionResult
+          <FfmpegToolkitResult
             result={result}
             onDownloadAudio={handleDownloadAudio}
             onDownloadVideo={handleDownloadVideo}
@@ -151,4 +143,4 @@ const AudioVideoExtraction = () => {
   );
 };
 
-export default AudioVideoExtraction;
+export default FfmpegToolkit;

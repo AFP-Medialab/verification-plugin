@@ -129,11 +129,8 @@ const TwitterAdvancedSearch = React.lazy(
 const TwitterSna = React.lazy(
   () => import("../components/NavItems/tools/TwitterSna/TwitterSna"),
 );
-const AudioVideoExtraction = React.lazy(
-  () =>
-    import(
-      "../components/NavItems/tools/AudioVideoExtraction/AudioVideoExtraction"
-    ),
+const FfmpegToolkit = React.lazy(
+  () => import("../components/NavItems/tools/FfmpegToolkit/FfmpegToolkit"),
 );
 
 // ---------------------------------------------------------------------------
@@ -179,9 +176,7 @@ const GeolocationSvgIcon = (props) => (
 );
 const AudioFileSvgIcon = (props) => <AudioFile inheritViewBox {...props} />;
 
-const AudioVideoExtractionIcon = (props) => (
-  <ContentCut inheritViewBox {...props} />
-);
+const FfmpegToolkitIcon = (props) => <ContentCut inheritViewBox {...props} />;
 
 const TwitterSearchSvgIcon = (props) => (
   <SvgIcon component={TwitterSearchIcon} inheritViewBox {...props} />
@@ -392,10 +387,10 @@ export const c2paData = makeTool(
   <C2paData />,
   <Footer type={FOOTER_TYPES.AFP} />,
 );
-export const audioVideoExtraction = makeTool(
-  data.audioVideoExtraction,
-  AudioVideoExtractionIcon,
-  <AudioVideoExtraction />,
+export const ffmpegToolkit = makeTool(
+  data.ffmpegToolkit,
+  FfmpegToolkitIcon,
+  <FfmpegToolkit />,
   <Footer type={FOOTER_TYPES.AFP} />,
 );
 
@@ -429,5 +424,5 @@ export const tools = Object.freeze([
   afpDigitalCourses,
   about,
   c2paData,
-  audioVideoExtraction,
+  ffmpegToolkit,
 ]);

@@ -11,9 +11,9 @@ const defaultState = {
   fileName: null,
 };
 
-const audioVideoExtractionReducer = (state = defaultState, action) => {
+const ffmpegToolkitReducer = (state = defaultState, action) => {
   switch (action.type) {
-    case "AUDIO_VIDEO_EXTRACTION_RESET":
+    case "FFMPEG_TOOLKIT_RESET":
       return {
         ...state,
         url: "",
@@ -26,28 +26,28 @@ const audioVideoExtractionReducer = (state = defaultState, action) => {
         beginCutTime: null,
         keyframes: null,
       };
-    case "SET_AUDIO_VIDEO_EXTRACTION_LOADING":
+    case "SET_FFMPEG_TOOLKIT_LOADING":
       return {
         ...state,
         loading: action.payload,
       };
-    case "SET_AUDIO_VIDEO_EXTRACTION_URL":
+    case "SET_FFMPEG_TOOLKIT_URL":
       return {
         ...state,
         url: action.payload.url,
       };
-    case "SET_AUDIO_VIDEO_EXTRACTION_RESULT":
+    case "SET_FFMPEG_TOOLKIT_RESULT":
       return {
         ...state,
         result: action.payload ? action.payload.url : null,
         loading: false,
       };
-    case "SET_AUDIO_VIDEO_EXTRACTION_FILE":
+    case "SET_FFMPEG_TOOLKIT_FILE":
       return {
         ...state,
         file: action.payload,
       };
-    case "SET_AUDIO_VIDEO_EXTRACTION_FILE_NAME":
+    case "SET_FFMPEG_TOOLKIT_FILE_NAME":
       return {
         ...state,
         fileName: action.payload,
@@ -76,4 +76,4 @@ const audioVideoExtractionReducer = (state = defaultState, action) => {
       return state;
   }
 };
-export default audioVideoExtractionReducer;
+export default ffmpegToolkitReducer;

@@ -10,7 +10,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
-const AudioVideoExtractionResult = ({
+const FfmpegToolkitResult = ({
   result,
   onDownloadAudio,
   onDownloadVideo,
@@ -18,16 +18,12 @@ const AudioVideoExtractionResult = ({
   onGetKeyframes,
   onDownloadKeyframes,
 }) => {
-  const keyword = i18nLoadNamespace(
-    "components/NavItems/tools/AudioVideoExtraction",
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/FfmpegToolkit");
 
-  const keyframes = useSelector(
-    (state) => state.audioVideoExtraction.keyframes,
-  );
+  const keyframes = useSelector((state) => state.ffmpegToolkit.keyframes);
 
   const isLoading = useSelector(
-    (state) => state.audioVideoExtraction.keyframesLoading,
+    (state) => state.ffmpegToolkit.keyframesLoading,
   );
 
   return (
@@ -44,7 +40,7 @@ const AudioVideoExtractionResult = ({
             objectFit: "contain",
             display: "block",
           }}
-          data-testid="audioextraction-video-container"
+          data-testid="ffmpegtoolkit-video-container"
         />
       </Box>
       <Box
@@ -61,29 +57,29 @@ const AudioVideoExtractionResult = ({
           color="primary"
           variant="contained"
           onClick={onDownloadVideo}
-          data-testid="audioextraction-download-button"
+          data-testid="ffmpegtoolkit-download-button"
         >
-          {keyword("audiovideo_extraction_downloadvideobutton")}
+          {keyword("ffmpeg_toolkit_downloadvideobutton")}
         </Button>
         <Button
           color="primary"
           variant="contained"
           onClick={onDownloadAudio}
-          data-testid="audioextraction-download-button"
+          data-testid="ffmpegtoolkit-download-button"
         >
-          {keyword("audiovideo_extraction_downloadaudiobutton")}
+          {keyword("ffmpeg_toolkit_downloadaudiobutton")}
         </Button>
         <Button
           variant="contained"
           onClick={onGoToHiya}
-          data-testid="audioextraction-hiya-button"
+          data-testid="ffmpegtoolkit-hiya-button"
         >
           Hiya
         </Button>
         <Button
           variant="contained"
           onClick={onGetKeyframes}
-          data-testid="audioextraction-keyframes-button"
+          data-testid="ffmpegtoolkit-keyframes-button"
         >
           I-frames
         </Button>
@@ -114,9 +110,9 @@ const AudioVideoExtractionResult = ({
           <Button
             variant="contained"
             onClick={onDownloadKeyframes}
-            data-testid="audioextraction-download-keyframes-button"
+            data-testid="ffmpegtoolkit-download-keyframes-button"
           >
-            {keyword("audiovideo_extraction_downloadkeyframesbutton")}
+            {keyword("ffmpeg_toolkit_downloadkeyframesbutton")}
           </Button>
         </Box>
       )}
@@ -129,4 +125,4 @@ const AudioVideoExtractionResult = ({
   );
 };
 
-export default AudioVideoExtractionResult;
+export default FfmpegToolkitResult;

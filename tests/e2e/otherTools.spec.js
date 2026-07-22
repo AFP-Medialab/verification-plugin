@@ -136,7 +136,7 @@ test('Test tool chatbot', async ({page, authenticatedExtraFeaturesExtensionId}) 
     await expect (page.getByTestId("chatbot-result")).toBeVisible();
 })
 
-test('Test tool audiovideo extraction', async ({page, authenticatedExtraFeaturesExtensionId}) => {
+test('Test tool ffmpeg toolkit', async ({page, authenticatedExtraFeaturesExtensionId}) => {
     const videoInputPath = path.resolve(__dirname, '../../tests-assets/test-metadata.mp4');
 
     await page.route('**extractvideo**', async (route) => {
@@ -153,25 +153,25 @@ test('Test tool audiovideo extraction', async ({page, authenticatedExtraFeatures
         });
     });
 
-    await page.goto(`chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/tools/audioVideoExtraction`);
+    await page.goto(`chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/tools/ffmpegtoolkit`);
 
     await page.locator('input[type="file"]').setInputFiles(videoInputPath);
 
-    await expect(page.getByTestId('audioextraction-slider')).toBeVisible();
+    await expect(page.getByTestId('ffmpegtoolkit-slider')).toBeVisible();
 
-    await page.getByTestId('audioextraction-submit').click();
+    await page.getByTestId('ffmpegtoolkit-submit').click();
 
-    await expect(page.getByTestId('audioextraction-video-container')).toBeVisible();
+    await expect(page.getByTestId('ffmpegtoolkit-video-container')).toBeVisible();
 
     // download video
     const downloadVideoPromise = page.waitForEvent('download');
-    await page.getByTestId('audioextraction-download-button').first().click();
+    await page.getByTestId('ffmpegtoolkit-download-button').first().click();
     const downloadVideo = await downloadVideoPromise;
     expect(downloadVideo.suggestedFilename()).toBe('test-metadata_extract.mp4');
 
     // download audio
     const downloadAudioPromise = page.waitForEvent('download');
-    await page.getByTestId('audioextraction-download-button').nth(1).click();
+    await page.getByTestId('ffmpegtoolkit-download-button').nth(1).click();
     const downloadAudio = await downloadAudioPromise;
     expect(downloadAudio.suggestedFilename()).toBe('test-metadata_extract.mp3');
 })

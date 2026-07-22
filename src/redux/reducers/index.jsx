@@ -16,9 +16,9 @@ import languageSupportReducer from "./languageSupportReducer";
 import navReducer from "./navReducer";
 import analysisReducer from "./tools/analysisReducer";
 import archiveReducer from "./tools/archiveReducer";
-import audioVideoExtractionReducer from "./tools/audioVideoExtractionReducer";
 import c2paReducer from "./tools/c2paReducer";
 import deepfakeReducerVideo from "./tools/deepfakeVideoReducer";
+import ffmpegToolkitReducer from "./tools/ffmpegToolkitReducer";
 import forensicReducer from "./tools/forensicReducer";
 import geolocationReducer from "./tools/geolocationReducer";
 import gifReducer from "./tools/gifReducer";
@@ -74,7 +74,7 @@ const allReducers = combineReducers({
   geolocation: geolocationReducer,
   c2pa: c2paReducer,
   archive: archiveReducer,
-  audioVideoExtraction: audioVideoExtractionReducer,
+  ffmpegToolkit: ffmpegToolkitReducer,
 });
 
 export default allReducers;
