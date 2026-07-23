@@ -103,11 +103,14 @@ pipeline {
                 container('aws-cli') {
                     script {
                         echo "Uploading artifacts to S3..."
-                        sh """                                                                                                                                                                                               
-                            ZIP=\$(ls build/weverify-plugin-*.zip 2>/dev/null | head -1)                                                                                                                                       
-                            if [ -z "\$ZIP" ]; then echo "No zip found!"; exit 1; fi                                                                                                                                           
-                            aws s3 cp "\$ZIP" s3://${S3_BUCKET}/jenkins/builds/${env.BRANCH_NAME}/we-verify-plugin-${VERSION_TAG}.zip                                                                                                  
-                        """   
+                        sh """
+                            ZIPS=\$(ls build/weverify-plugin-*.zip 2>/dev/null)
+                            if [ -z "\$ZIPS" ]; then echo "No zip found!"; exit 1; fi
+                            for ZIP in \$ZIPS; do
+                                BROWSER=\$(basename "\$ZIP" | grep -oE 'chrome|firefox')
+                                aws s3 cp "\$ZIP" s3://${S3_BUCKET}/jenkins/builds/${env.BRANCH_NAME}/we-verify-plugin-${VERSION_TAG}-\${BROWSER}.zip
+                            done
+                        """
                     }
                 }
             }
