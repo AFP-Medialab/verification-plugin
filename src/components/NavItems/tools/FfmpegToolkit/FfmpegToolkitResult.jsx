@@ -4,13 +4,13 @@ import { useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
 import LinearProgress from "@mui/material/LinearProgress";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
-const AudioVideoExtractionResult = ({
+import DownloadVideoModal from "./DownloadVideoModal";
+
+const FfmpegToolkitResult = ({
   result,
   onDownloadAudio,
   onDownloadVideo,
@@ -18,17 +18,12 @@ const AudioVideoExtractionResult = ({
   onGetKeyframes,
   onDownloadKeyframes,
 }) => {
-  const keyword = i18nLoadNamespace(
-    "components/NavItems/tools/AudioVideoExtraction",
-  );
+  const [showDownloadModal, setShowDownloadModal] = useState(false);
+  const keyword = i18nLoadNamespace("components/NavItems/tools/FfmpegToolkit");
 
-  const keyframes = useSelector(
-    (state) => state.audioVideoExtraction.keyframes,
-  );
+  const keyframes = useSelector((state) => state.ffmpegToolkit.keyframes);
 
-  const isLoading = useSelector(
-    (state) => state.audioVideoExtraction.keyframesLoading,
-  );
+  const isLoading = useSelector((state) => state.ffmpegToolkit.bottomLoading);
 
   return (
     <Card>
@@ -44,7 +39,7 @@ const AudioVideoExtractionResult = ({
             objectFit: "contain",
             display: "block",
           }}
-          data-testid="audioextraction-video-container"
+          data-testid="ffmpegtoolkit-video-container"
         />
       </Box>
       <Box
@@ -60,63 +55,80 @@ const AudioVideoExtractionResult = ({
         <Button
           color="primary"
           variant="contained"
-          onClick={onDownloadVideo}
-          data-testid="audioextraction-download-button"
+          onClick={() => setShowDownloadModal(true)}
+          data-testid="ffmpegtoolkit-downloadvideo-button"
         >
-          {keyword("audiovideo_extraction_downloadvideobutton")}
+          {keyword("ffmpeg_toolkit_downloadvideobutton")}
         </Button>
+        <DownloadVideoModal
+          showModal={showDownloadModal}
+          setShowModal={setShowDownloadModal}
+          onConfirm={onDownloadVideo}
+        />
         <Button
           color="primary"
           variant="contained"
           onClick={onDownloadAudio}
-          data-testid="audioextraction-download-button"
+          data-testid="ffmpegtoolkit-downloadaudio-button"
         >
-          {keyword("audiovideo_extraction_downloadaudiobutton")}
+          {keyword("ffmpeg_toolkit_downloadaudiobutton")}
         </Button>
         <Button
           variant="contained"
           onClick={onGoToHiya}
-          data-testid="audioextraction-hiya-button"
+          data-testid="ffmpegtoolkit-hiya-button"
         >
           Hiya
         </Button>
         <Button
           variant="contained"
           onClick={onGetKeyframes}
-          data-testid="audioextraction-keyframes-button"
+          data-testid="ffmpegtoolkit-keyframes-button"
         >
-          Keyframes
+          I-frames
         </Button>
       </Box>
       {keyframes && (
         <Box sx={{ p: 2 }}>
-          <ImageList
-            sx={{ width: "100%", height: 450 }}
-            cols={3}
-            rowHeight="auto"
-            gap={8}
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 1,
+              maxHeight: 450,
+              overflowY: "auto",
+              overflowX: "hidden",
+            }}
           >
             {keyframes.map((item, index) => {
               const imageSrc = `data:${item.mimeType};base64,${item.data}`;
 
               return (
-                <ImageListItem key={item.filename || index}>
+                <Box
+                  key={item.filename || index}
+                  sx={{ width: "calc(33.33% - 8px)", flexShrink: 0 }}
+                >
                   <img
                     src={imageSrc}
                     alt={item.filename}
                     loading="lazy"
-                    style={{ padding: 5, margin: 5 }}
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                      display: "block",
+                      padding: 5,
+                    }}
                   />
-                </ImageListItem>
+                </Box>
               );
             })}
-          </ImageList>
+          </Box>
           <Button
             variant="contained"
             onClick={onDownloadKeyframes}
-            data-testid="audioextraction-download-keyframes-button"
+            data-testid="ffmpegtoolkit-download-keyframes-button"
           >
-            {keyword("audiovideo_extraction_downloadkeyframesbutton")}
+            {keyword("ffmpeg_toolkit_downloadkeyframesbutton")}
           </Button>
         </Box>
       )}
@@ -129,4 +141,4 @@ const AudioVideoExtractionResult = ({
   );
 };
 
-export default AudioVideoExtractionResult;
+export default FfmpegToolkitResult;

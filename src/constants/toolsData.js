@@ -435,9 +435,9 @@ export const audioHiya = {
   assistantProps: {},
 };
 
-export const audioVideoExtraction = {
-  titleKeyword: "navbar_audio_extraction",
-  descriptionKeyword: "navbar_audio_extraction_description",
+export const ffmpegToolkit = {
+  titleKeyword: "navbar_ffmpeg_toolkit",
+  descriptionKeyword: "navbar_ffmpeg_toolkit_description",
   category: TOOLS_CATEGORIES.OTHER,
   rolesIcons: [
     TOOL_STATUS_ICON.NEW,
@@ -445,7 +445,7 @@ export const audioVideoExtraction = {
     TOOL_STATUS_ICON.LOCK,
   ],
   rolesNeeded: [ROLES.EXTRA_FEATURE],
-  path: "audioVideoExtraction",
+  path: "ffmpegtoolkit",
   toolGroup: TOOL_GROUPS.VERIFICATION,
   assistantProps: {},
 };

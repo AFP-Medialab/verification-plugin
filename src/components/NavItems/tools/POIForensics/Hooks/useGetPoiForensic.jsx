@@ -144,8 +144,12 @@ async function useGetPoiForensics(
       await sleep(waitUntilFinish, id);
     } else if (response && response.data && jobStatus === "COMPLETED") {
       await getResult(id);
+    } else if (response && response.data && jobStatus === "FAILED") {
+      handleError(
+        "poi_forensic_error : " + response.data.poi_forensics_report?.message,
+      );
     } else {
-      handleError("deepfake_error_" + jobStatus);
+      handleError("poi_forensic_error_" + jobStatus);
     }
   };
 

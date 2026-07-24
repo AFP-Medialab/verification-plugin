@@ -159,6 +159,7 @@ const ImageCropper = ({
     await handleSaveImage(cropFile);
     setCrop();
     setCompletedCrop();
+    handleClose();
   }
 
   return (

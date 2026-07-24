@@ -95,7 +95,7 @@ const PoiForensicsResults = (props) => {
   }, [scores, times]);
 
   const DETECTION_THRESHOLDS = useMemo(
-    () => ({ THRESHOLD_1: 50, THRESHOLD_2: 70, THRESHOLD_3: 90 }),
+    () => ({ THRESHOLD_1: 70, THRESHOLD_2: 80, THRESHOLD_3: 85 }),
     [],
   );
 

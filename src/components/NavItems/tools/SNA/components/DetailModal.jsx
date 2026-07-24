@@ -2,6 +2,7 @@ import React from "react";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Link from "@mui/material/Link";
 import Modal from "@mui/material/Modal";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
@@ -64,6 +65,22 @@ const DetailModal = ({
               field: x,
               headerName: x,
               width: size,
+              renderCell: (params) => {
+                const val = params.value;
+                if (typeof val === "string" && val.startsWith("http")) {
+                  return (
+                    <Link
+                      href={val}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      sx={{ wordBreak: "break-all" }}
+                    >
+                      {val}
+                    </Link>
+                  );
+                }
+                return val;
+              },
             };
           }
         })

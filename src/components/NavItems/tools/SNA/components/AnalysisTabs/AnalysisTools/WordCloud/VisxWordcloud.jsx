@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { useDispatch } from "react-redux";
 
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
@@ -8,6 +9,7 @@ import Select from "@mui/material/Select";
 import { styled } from "@mui/material/styles";
 
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
+import { setSNAWordCloudLanguage } from "@/redux/reducers/tools/snaDataReducer";
 import { scaleLog } from "@visx/scale";
 import { Text } from "@visx/text";
 import Wordcloud from "@visx/wordcloud/lib/Wordcloud";
@@ -30,16 +32,13 @@ const fixedValueGenerator = () => 0.5;
  * @param {string} language ISO 639-1 language code for stop-word filtering
  * @param {function} onLanguageChange called with the new language code when the user changes the selector
  */
-export const VisxWordcloud = ({
-  words,
-  wordClickFunction,
-  language,
-  onLanguageChange,
-}) => {
+export const VisxWordcloud = ({ words, wordClickFunction, language }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/NewSNA");
   const keywordLanguages = i18nLoadNamespace(
     "components/NavItems/tools/stopWords",
   );
+
+  const dispatch = useDispatch();
 
   const languages = getLanguages(keywordLanguages);
 
@@ -66,6 +65,10 @@ export const VisxWordcloud = ({
     },
   });
 
+  const setLanguage = (language) => {
+    dispatch(setSNAWordCloudLanguage(language));
+  };
+
   return (
     <>
       <Box display="flex" justifyContent="left" mb={2}>
@@ -78,7 +81,7 @@ export const VisxWordcloud = ({
             id="wordcloud-language-select"
             value={language}
             label={keyword("wordcloud_language_label")}
-            onChange={(e) => onLanguageChange(e.target.value)}
+            onChange={(e) => setLanguage(e.target.value)}
           >
             <MenuItem value="">
               <em>{keyword("wordcloud_language_none")}</em>

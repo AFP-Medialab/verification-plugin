@@ -6,38 +6,51 @@ const defaultState = {
   endCutTime: null,
   beginCutTime: null,
   keyframes: null,
-  keyframesLoading: null,
+  bottomLoading: null,
+  file: null,
+  fileName: null,
 };
 
-const audioVideoExtractionReducer = (state = defaultState, action) => {
+const ffmpegToolkitReducer = (state = defaultState, action) => {
   switch (action.type) {
-    case "AUDIO_EXTRACTION_RESET":
+    case "FFMPEG_TOOLKIT_RESET":
       return {
         ...state,
         url: "",
         result: null,
         file: null,
+        fileName: null,
         loading: false,
         type: "",
         endCutTime: null,
         beginCutTime: null,
         keyframes: null,
       };
-    case "SET_AUDIO_EXTRACTION_LOADING":
+    case "SET_FFMPEG_TOOLKIT_LOADING":
       return {
         ...state,
         loading: action.payload,
       };
-    case "SET_AUDIO_EXTRACTION_URL":
+    case "SET_FFMPEG_TOOLKIT_URL":
       return {
         ...state,
         url: action.payload.url,
       };
-    case "SET_AUDIO_EXTRACTION_RESULT":
+    case "SET_FFMPEG_TOOLKIT_RESULT":
       return {
         ...state,
         result: action.payload ? action.payload.url : null,
         loading: false,
+      };
+    case "SET_FFMPEG_TOOLKIT_FILE":
+      return {
+        ...state,
+        file: action.payload,
+      };
+    case "SET_FFMPEG_TOOLKIT_FILE_NAME":
+      return {
+        ...state,
+        fileName: action.payload,
       };
     case "SET_BEGIN_CUT_TIME":
       return {
@@ -54,13 +67,13 @@ const audioVideoExtractionReducer = (state = defaultState, action) => {
         ...state,
         keyframes: action.payload,
       };
-    case "SET_KEYFRAMES_LOADING":
+    case "SET_BOTTOM_LOADING":
       return {
         ...state,
-        keyframesLoading: action.payload,
+        bottomLoading: action.payload,
       };
     default:
       return state;
   }
 };
-export default audioVideoExtractionReducer;
+export default ffmpegToolkitReducer;

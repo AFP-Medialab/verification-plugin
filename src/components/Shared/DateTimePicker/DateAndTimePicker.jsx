@@ -29,13 +29,13 @@ const DateAndTimePicker = ({
 }) => {
   const pastDate = (currentDate) => {
     const itemDate = dayjs(currentDate);
-    if (fromValue) return itemDate.isBefore(fromValue);
+    if (fromValue) return itemDate.isBefore(fromValue, "day");
     return false;
   };
 
   const futureDate = (currentDate) => {
     const itemDate = dayjs(currentDate);
-    if (untilValue) return untilValue.isBefore(itemDate);
+    if (untilValue) return untilValue.isBefore(itemDate, "day");
     return false;
   };
 
