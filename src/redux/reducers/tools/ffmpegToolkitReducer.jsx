@@ -6,7 +6,7 @@ const defaultState = {
   endCutTime: null,
   beginCutTime: null,
   keyframes: null,
-  keyframesLoading: null,
+  bottomLoading: null,
   file: null,
   fileName: null,
 };
@@ -67,10 +67,10 @@ const ffmpegToolkitReducer = (state = defaultState, action) => {
         ...state,
         keyframes: action.payload,
       };
-    case "SET_KEYFRAMES_LOADING":
+    case "SET_BOTTOM_LOADING":
       return {
         ...state,
-        keyframesLoading: action.payload,
+        bottomLoading: action.payload,
       };
     default:
       return state;

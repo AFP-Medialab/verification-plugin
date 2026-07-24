@@ -22,4 +22,4 @@ export const setEndCutTime = createAction("SET_END_CUT_TIME");
 
 export const setKeyframes = createAction("SET_KEYFRAMES");
 
-export const setKeyframesLoading = createAction("SET_KEYFRAMES_LOADING");
+export const setBottomLoading = createAction("SET_BOTTOM_LOADING");

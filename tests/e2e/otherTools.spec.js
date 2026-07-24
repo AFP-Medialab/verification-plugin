@@ -163,15 +163,51 @@ test('Test tool ffmpeg toolkit', async ({page, authenticatedExtraFeaturesExtensi
 
     await expect(page.getByTestId('ffmpegtoolkit-video-container')).toBeVisible();
 
-    // download video
+    // download video without options: open modal, confirm without checking anything
+    await page.getByTestId('ffmpegtoolkit-downloadvideo-button').click();
+    await expect(page.getByTestId('ffmpegtoolkit-download-modal')).toBeVisible();
+
     const downloadVideoPromise = page.waitForEvent('download');
-    await page.getByTestId('ffmpegtoolkit-download-button').first().click();
+    await page.getByTestId('ffmpegtoolkit-download-modal-confirm').click();
     const downloadVideo = await downloadVideoPromise;
     expect(downloadVideo.suggestedFilename()).toBe('test-metadata_extract.mp4');
 
+    await expect(page.getByTestId('ffmpegtoolkit-download-modal')).not.toBeVisible();
+
+    // download video with compress option
+    await page.getByTestId('ffmpegtoolkit-downloadvideo-button').click();
+    await expect(page.getByTestId('ffmpegtoolkit-download-modal')).toBeVisible();
+    await page.getByTestId('ffmpegtoolkit-compress-checkbox').click();
+
+    const downloadCompressedPromise = page.waitForEvent('download');
+    await page.getByTestId('ffmpegtoolkit-download-modal-confirm').click();
+    const downloadCompressed = await downloadCompressedPromise;
+    expect(downloadCompressed.suggestedFilename()).toBe('test-metadata_extract_compressed.mp4');
+
+    // download video with scale down option
+    await page.getByTestId('ffmpegtoolkit-downloadvideo-button').click();
+    await expect(page.getByTestId('ffmpegtoolkit-download-modal')).toBeVisible();
+    await page.getByTestId('ffmpegtoolkit-scale-checkbox').click();
+
+    const downloadScaledPromise = page.waitForEvent('download');
+    await page.getByTestId('ffmpegtoolkit-download-modal-confirm').click();
+    const downloadScaled = await downloadScaledPromise;
+    expect(downloadScaled.suggestedFilename()).toBe('test-metadata_extract_scaled.mp4');
+
+    // download video with both options
+    await page.getByTestId('ffmpegtoolkit-downloadvideo-button').click();
+    await expect(page.getByTestId('ffmpegtoolkit-download-modal')).toBeVisible();
+    await page.getByTestId('ffmpegtoolkit-compress-checkbox').click();
+    await page.getByTestId('ffmpegtoolkit-scale-checkbox').click();
+
+    const downloadBothPromise = page.waitForEvent('download');
+    await page.getByTestId('ffmpegtoolkit-download-modal-confirm').click();
+    const downloadBoth = await downloadBothPromise;
+    expect(downloadBoth.suggestedFilename()).toBe('test-metadata_extract_compressed_scaled.mp4');
+
     // download audio
     const downloadAudioPromise = page.waitForEvent('download');
-    await page.getByTestId('ffmpegtoolkit-download-button').nth(1).click();
+    await page.getByTestId('ffmpegtoolkit-downloadaudio-button').click();
     const downloadAudio = await downloadAudioPromise;
     expect(downloadAudio.suggestedFilename()).toBe('test-metadata_extract.mp3');
 })

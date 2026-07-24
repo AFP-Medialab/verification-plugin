@@ -7,13 +7,13 @@ import { preprocessFileUpload } from "@/components/Shared/Utils/fileUtils";
 import {
   resetFfmpegToolkit,
   setBeginCutTime,
+  setBottomLoading,
   setEndCutTime,
   setFfmpegToolkitFile,
   setFfmpegToolkitFileName,
   setFfmpegToolkitLoading,
   setFfmpegToolkitResult,
   setKeyframes,
-  setKeyframesLoading,
 } from "@/redux/actions/tools/ffmpegToolkitActions";
 import { setError } from "@/redux/reducers/errorReducer";
 import { setHiyaFile } from "@/redux/reducers/tools/hiyaReducer";
@@ -91,6 +91,7 @@ const useFfmpegToolkit = () => {
 
     dispatch(setBeginCutTime(startTime));
     dispatch(setEndCutTime(endTime));
+    dispatch(setKeyframes(null));
     dispatch(setFfmpegToolkitLoading(true));
 
     try {
@@ -176,6 +177,7 @@ const useFfmpegToolkit = () => {
   };
 
   const handleDownloadAudio = async () => {
+    dispatch(setBottomLoading(true));
     try {
       const blob = await fetchAudio();
       const audioUrl = URL.createObjectURL(blob);
@@ -187,19 +189,61 @@ const useFfmpegToolkit = () => {
       a.download = `${name}_extract.mp3`;
       a.click();
       URL.revokeObjectURL(audioUrl);
+      dispatch(setBottomLoading(false));
     } catch (error) {
+      dispatch(setBottomLoading(false));
       dispatch(setError(error));
     }
   };
 
-  const handleDownloadVideo = () => {
+  const handleDownloadVideo = async ({ compress, scaleDown } = {}) => {
     try {
       const name = getNameFromFileName(fileName);
+      const suffix = [compress && "compressed", scaleDown && "scaled"]
+        .filter(Boolean)
+        .join("_");
+
+      let downloadUrl = result;
+
+      if (compress || scaleDown) {
+        dispatch(setBottomLoading(true));
+
+        const params = new URLSearchParams({
+          startTime: beginCutTime,
+          endTime: endCutTime,
+        });
+        if (compress) params.set("isCompressed", "");
+        if (scaleDown) params.set("isScaled", "");
+
+        const apiUrl = import.meta.env.VITE_FFMPEG_YTDLP_API_URL;
+        const res = await fetch(
+          `${apiUrl}/api/ffmpeg/extractvideo?${params.toString()}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "video/mp4" },
+            body: videoFile,
+            duplex: "half",
+          },
+        );
+
+        if (!res.ok) throw new Error(`API error: ${res.status}`);
+
+        const contentType = res.headers.get("content-type") || "video/mp4";
+        const blob = await res.blob();
+        downloadUrl = URL.createObjectURL(
+          new Blob([blob], { type: contentType }),
+        );
+        dispatch(setBottomLoading(false));
+      }
+
       const a = document.createElement("a");
-      a.href = result;
-      a.download = `${name}_extract.mp4`;
+      a.href = downloadUrl;
+      a.download = `${name}_extract${suffix ? `_${suffix}` : ""}.mp4`;
       a.click();
+
+      if (compress || scaleDown) URL.revokeObjectURL(downloadUrl);
     } catch (error) {
+      dispatch(setBottomLoading(false));
       dispatch(setError(error));
     }
   };
@@ -217,7 +261,7 @@ const useFfmpegToolkit = () => {
   };
 
   const handleGetKeyframes = async () => {
-    dispatch(setKeyframesLoading(true));
+    dispatch(setBottomLoading(true));
     try {
       const apiUrl = import.meta.env.VITE_FFMPEG_YTDLP_API_URL;
       const videoBlob = await fetch(result).then((r) => r.blob());
@@ -228,14 +272,14 @@ const useFfmpegToolkit = () => {
         duplex: "half",
       });
       if (!res.ok) {
-        dispatch(setKeyframesLoading(false));
+        dispatch(setBottomLoading(false));
         throw new Error(`API error: ${res.status}`);
       }
       const { frames } = await res.json();
       dispatch(setKeyframes(frames));
-      dispatch(setKeyframesLoading(false));
+      dispatch(setBottomLoading(false));
     } catch (error) {
-      dispatch(setKeyframesLoading(false));
+      dispatch(setBottomLoading(false));
       dispatch(setError(error));
     }
   };
