@@ -78,9 +78,12 @@ async function initializeApp() {
   const store = configureStore({
     reducer: allReducers,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({ serializableCheck: false }).prepend(
-        sagaMiddleware,
-      ),
+      getDefaultMiddleware({
+        serializableCheck: false,
+        immutableCheck: {
+          ignoredPaths: ["poiForensics.file", "ffmpegToolkit.file"],
+        },
+      }).prepend(sagaMiddleware),
     preloadedState: persistedState,
   });
   sagaMiddleware.run(rootSaga);

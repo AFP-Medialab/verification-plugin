@@ -18,8 +18,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Testing
 
-- `npm run test` - Run all tests (component/unit + e2e)
-- `npm run test-cu` - Run component and unit tests only
+- `npm run test` - Run all tests (unit + component + e2e)
+- `npm run test-unit` - Run pure unit tests only (Vitest)
+- `npm run test-ct` - Run component tests only (Playwright CT)
 - `npm run test-e2e` - Run end-to-end tests only
 - `npm run test-e2e-ui` - Run e2e tests with interactive UI
 

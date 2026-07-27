@@ -39,11 +39,11 @@ export const createUrl = (
   if (from_date) {
     let epoch =
       localTime === "false" ? convertMomentToGMT(from_date) : from_date;
-    twitter_url += "%20since%3A" + epoch.toDate().getTime() / 1000;
+    twitter_url += "%20since%5Ftime%3A" + epoch.toDate().getTime() / 1000;
   }
   if (to_date) {
     let epoch = localTime === "false" ? convertMomentToGMT(to_date) : to_date;
-    twitter_url += "%20until%3A" + epoch.toDate().getTime() / 1000;
+    twitter_url += "%20until%5Ftime%3A" + epoch.toDate().getTime() / 1000;
   }
   // twitter_url = twitter_url + "&src=typd"
   return twitter_url;

@@ -11,6 +11,8 @@ import { test, expect } from './fixtures';
 import path from 'path';
 import mockedSyntheticImageResponse from '../../tests-assets/api-response/syntheticimages-response.json'
 import mockedGeolocationResponse from '../../tests-assets/api-response/geolocation-response.json'
+import mockedOcrResponse from '../../tests-assets/api-response/ocr-response.json'
+import mockedForensicResponse from '../../tests-assets/api-response/forensic-response.json'
 
 test('Test tool magnifier', async ({ page, context, extensionId }) => {
     // Navigate to the demo page
@@ -68,6 +70,14 @@ test('Test tool forensic', async ({ page, extensionId }) => {
   await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/forensic`);
   await page.getByText("Accept").click();
 
+  await page.route('**forensic**', async (route) => {
+    await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(mockedForensicResponse)
+    })
+  });
+
   await page.locator('[data-testid="forensic-input"] input').fill('https://www.lebigdata.fr/wp-content/uploads/2023/03/macron-pape-ia-deepfake-1050x525.jpg');
   await page.getByTestId('forensic-submit').click();
 
@@ -88,6 +98,14 @@ test('Test tool forensic', async ({ page, extensionId }) => {
 test('Test tool OCR', async ({ page, context, extensionId }) => {
   await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/ocr`);
   await page.getByText("Accept").click();
+
+  await page.route('**/ocr', async (route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(mockedOcrResponse)
+        })
+    });
 
   await page.locator('[data-testid="ocr-input"] input').fill('https://www.rue89strasbourg.com/wp-content/uploads/2024/06/dsc-3582-1920x1280.jpg');
   await page.getByTestId('ocr-submit').click();
@@ -242,7 +260,7 @@ test('Test tool geolocalisation', async ({page, authenticatedBetaTesterExtension
 test('Test tool C2PA', async ({page, authenticatedExtraFeaturesExtensionId}) => {
     await page.goto(`chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/tools/c2pa`);
 
-    const filePath = path.resolve(__dirname, '../../tests-assets/test-c2pa.jpg');
+    const filePath = path.resolve(__dirname, '../../tests-assets/test-metadata.jpg');
     await page.locator('input[type="file"]').setInputFiles(filePath);
 
     await page.getByTestId('c2pa-reversesearch-toggle').click();

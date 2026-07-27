@@ -76,8 +76,6 @@ const Deepfake = () => {
   };
 
   useEffect(() => {
-    console.log(url);
-    console.log(input);
     if (url && input && !result) {
       handleSubmit(input);
     }

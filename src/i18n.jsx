@@ -20,9 +20,9 @@ i18next
     interpolation: {
       escapeValue: false,
     },
-    // react: {
-    //   useSuspense: false,
-    // },
+    react: {
+      useSuspense: false,
+    },
     load: "languageOnly",
     backend: {
       backends: [
@@ -35,6 +35,7 @@ i18next
         {
           loadPath: `${import.meta.env.VITE_TRANSLATION_URL}/dictionaries/{{ns}}.tsv?lang={{lng}}&tag=${import.meta.env.VITE_TRANSLATION_TAG}`,
           crossDomain: true,
+          requestTimeout: 3000,
           requestOptions: {
             // used for fetch, can also be a function (payload) => ({ method: 'GET' })
             mode: "cors",
