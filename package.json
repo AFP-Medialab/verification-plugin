@@ -68,7 +68,7 @@
     "clsx": "^2.1.1",
     "dateformat": "^5.0.3",
     "dayjs": "^1.11.13",
-    "echarts": "^5.6.0",
+    "echarts": "^6.1.0",
     "echarts-for-react": "^3.0.2",
     "exif-js": "^2.3.0",
     "exifr": "^7.1.3",
