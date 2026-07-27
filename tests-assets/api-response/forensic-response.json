@@ -1,0 +1,188 @@
+{
+    "status": "COMPLETED",
+    "hash": "757eeac380044c29b52277ffc29e6220:5daf3ad43b13a1499bf82d73297141c8",
+    "id": "757eeac380044c29b52277ffc29e6220:5daf3ad43b13a1499bf82d73297141c8",
+    "adq1_report": {
+        "array": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/DQOutputGray.png",
+        "completed": true,
+        "map": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/DQOutput.png",
+        "maxValue": 0.5,
+        "message": "Process completed successfully.",
+        "minValue": 0.5
+    },
+    "blk_report": {
+        "array": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/BLKOutputGray.png",
+        "completed": true,
+        "map": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/BLKOutput.png",
+        "maxValue": 1937.0,
+        "message": "Process completed successfully.",
+        "minValue": 0.0
+    },
+    "cagi_report": {
+        "completed": true,
+        "mapG": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/CAGIOutput.png",
+        "mapGI": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/CAGIInversedOutput.png",
+        "arrayG": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/CAGIOutputGray.png",
+        "arrayGI": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/CAGIInversedOutputGray.png",
+        "maxValueG": 0.4189857728975017,
+        "minValueG": 0.2347018690282811,
+        "maxValueGI": 0.2827283047619368,
+        "minValueGI": 0.08323681846693046,
+        "cagiNormalReport": {
+            "completed": true,
+            "map": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/CAGIOutput.png",
+            "array": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/CAGIOutputGray.png",
+            "maxValue": 0.4189857728975017,
+            "minValue": 0.2347018690282811,
+            "message": "Cagi completed successfully"
+        },
+        "cagiInversedReport": {
+            "completed": true,
+            "map": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/CAGIInversedOutput.png",
+            "array": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/CAGIInversedOutputGray.png",
+            "maxValue": 0.2827283047619368,
+            "minValue": 0.08323681846693046,
+            "message": "Cagi inversed completed successfully"
+        }
+    },
+    "cfa_report": {
+        "completed": true,
+        "map": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/CFAOutput.png",
+        "array": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/CFAOutput.png",
+        "message": "CFA forgery localization completed successfully"
+    },
+    "cmfd_report": {
+        "array": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/CMFDOutputGray.png",
+        "completed": true,
+        "map": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/CMFDOutput.png",
+        "maxValue": 1,
+        "message": "Process completed successfully.",
+        "minValue": 0
+    },
+    "dct_report": {
+        "array": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/DCTOutputGray.png",
+        "completed": true,
+        "map": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/DCTOutput.png",
+        "maxValue": 153.0,
+        "message": "Process completed successfully.",
+        "minValue": 18.0
+    },
+    "ela_report": {
+        "array": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/ELAOutput.png",
+        "completed": true,
+        "map": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/ELAOutput.png",
+        "maxValue": 1840,
+        "message": "Process completed successfully.",
+        "minValue": 0
+    },
+    "fusion_report": {
+        "array": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/FusionOutputGray.png",
+        "completed": true,
+        "gpu": true,
+        "map": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/FusionOutput.png",
+        "maxValue": 0.909535825252533,
+        "message": "Process completed successfully.",
+        "minValue": 0.00042060911073349416
+    },
+    "ghost_report": {
+        "arrays": [
+            "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/GhostOutputGray100.png"
+        ],
+        "completed": true,
+        "differences": [
+            15.696708743921986
+        ],
+        "gifMaps": "",
+        "maps": [
+            "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/GhostOutput100.png"
+        ],
+        "maxQuality": 100,
+        "maxValues": [
+            1680.6666666666667
+        ],
+        "message": "Process completed successfully.",
+        "minQuality": 65,
+        "minValues": [
+            0.0
+        ],
+        "qualities": [
+            100
+        ]
+    },
+    "laplacian_report": {
+        "completed": true,
+        "map": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/laplacian.png",
+        "message": "Process completed successfully."
+    },
+    "mantranet_report": {
+        "array": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/MANTRANETOutputGray.png",
+        "completed": true,
+        "map": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/MANTRANETOutput.png",
+        "maxValue": 0.9891490340232848,
+        "message": "Process completed successfully.",
+        "minValue": 0.00012222760415170342
+    },
+    "median_report": {
+        "completed": true,
+        "map": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/MedianNoiseOutput.png",
+        "array": null,
+        "maxvalue": 254.0,
+        "minvalue": 0.0,
+        "message": "Successfully completed"
+    },
+    "rcmfd_report": {
+        "completed": true,
+        "map": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/rcmfd.png",
+        "message": "Process completed successfully."
+    },
+    "splicebuster_report": {
+        "array": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/SBOutputGray.png",
+        "completed": true,
+        "map": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/SBOutput.png",
+        "maxValue": 3950.450068080007,
+        "message": "Process completed successfully.",
+        "minValue": 0.0
+    },
+    "wavelet_report": {
+        "completed": true,
+        "map": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/DWNoiseOutput.png",
+        "array": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/DWNoiseOutputGray.png",
+        "maxvalue": 17.011907074645634,
+        "minvalue": 0.6119792491836922,
+        "message": ""
+    },
+    "zero_report": {
+        "completed": true,
+        "forgery": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/forgery.png",
+        "forgery_array": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/forgery_gray.png",
+        "message": "Process completed successfully.",
+        "votemap": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/colored_votemap.png",
+        "votemap_array": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/votemap_gray.png"
+    },
+    "mmfusion_report": {
+        "completed": true,
+        "map": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/mmfusion_jet.png",
+        "array": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/mmfusion.png",
+        "maxValue": 0.9212353825569152,
+        "minValue": 0.0012308740988373756,
+        "message": "MMFusion forgery analysis completed successfully"
+    },
+    "trufor_report": {
+        "completed": true,
+        "map": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/trufor_jet.png",
+        "array": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/trufor.png",
+        "score": 0.07418020069599152,
+        "maxValue": 0.9957616925239564,
+        "minValue": 0.001644256990402937,
+        "message": "TruFor forgery analysis completed successfully"
+    },
+    "omgfuser_report": {
+        "completed": true,
+        "map": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/omgfuser_jet.png",
+        "array": "https://artifacts.mever.iti.gr/forensics/images/5daf3ad43b13a1499bf82d73297141c8/omgfuser.png",
+        "score": 6.890078657306731e-05,
+        "maxValue": 0.03487787023186684,
+        "minValue": 2.3862705589294826e-08,
+        "message": "OMG-Fuser forgery analysis completed successfully"
+    }
+}

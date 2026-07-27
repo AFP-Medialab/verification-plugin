@@ -11,6 +11,14 @@ import singlefileResponse from '../../tests-assets/api-response/singlefile-to-wa
 import mockedChatbotResponse from '../../tests-assets/api-response/chatbot-response';
 
 test('Test tool archive savepagenow', async ({page, authenticatedArchiveExtensionId, context}) => {
+    await context.route('**web.archive.org**', async (route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'text/html',
+            body: '<html><body>Mocked</body></html>'
+        });
+    });
+
     await page.goto(`chrome-extension://${authenticatedArchiveExtensionId}/popup.html#/app/tools/archive`);
 
     await page.locator('[data-testid="archive-input"] input').fill('https://www.youtube.com/watch?v=QQFgQ1uBQtk');
@@ -117,8 +125,7 @@ test('Test tool chatbot', async ({page, authenticatedExtraFeaturesExtensionId}) 
 
     await page.goto(`chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/tools/chatbot`);
 
-    await page.getByTestId('chatbot-select-model').click();
-    await page.getByTestId('chatbot-mistral-7b').click();
+    //there is no need to select the model, because we mock only one model so it is selected automatically 
 
     await page.getByTestId('chatbot-select-prompt').click();
     await page.getByTestId('chatbot-fact-check-analysis').click();
@@ -127,4 +134,80 @@ test('Test tool chatbot', async ({page, authenticatedExtraFeaturesExtensionId}) 
     await page.getByTestId('chatbot-submit').click();
 
     await expect (page.getByTestId("chatbot-result")).toBeVisible();
+})
+
+test('Test tool ffmpeg toolkit', async ({page, authenticatedExtraFeaturesExtensionId}) => {
+    const videoInputPath = path.resolve(__dirname, '../../tests-assets/test-metadata.mp4');
+
+    await page.route('**extractvideo**', async (route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'video/mp4'
+        });
+    });
+
+    await page.route('**extractaudio**', async (route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'audio/mpeg'
+        });
+    });
+
+    await page.goto(`chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/tools/ffmpegtoolkit`);
+
+    await page.locator('input[type="file"]').setInputFiles(videoInputPath);
+
+    await expect(page.getByTestId('ffmpegtoolkit-slider')).toBeVisible();
+
+    await page.getByTestId('ffmpegtoolkit-submit').click();
+
+    await expect(page.getByTestId('ffmpegtoolkit-video-container')).toBeVisible();
+
+    // download video without options: open modal, confirm without checking anything
+    await page.getByTestId('ffmpegtoolkit-downloadvideo-button').click();
+    await expect(page.getByTestId('ffmpegtoolkit-download-modal')).toBeVisible();
+
+    const downloadVideoPromise = page.waitForEvent('download');
+    await page.getByTestId('ffmpegtoolkit-download-modal-confirm').click();
+    const downloadVideo = await downloadVideoPromise;
+    expect(downloadVideo.suggestedFilename()).toBe('test-metadata_extract.mp4');
+
+    await expect(page.getByTestId('ffmpegtoolkit-download-modal')).not.toBeVisible();
+
+    // download video with compress option
+    await page.getByTestId('ffmpegtoolkit-downloadvideo-button').click();
+    await expect(page.getByTestId('ffmpegtoolkit-download-modal')).toBeVisible();
+    await page.getByTestId('ffmpegtoolkit-compress-checkbox').click();
+
+    const downloadCompressedPromise = page.waitForEvent('download');
+    await page.getByTestId('ffmpegtoolkit-download-modal-confirm').click();
+    const downloadCompressed = await downloadCompressedPromise;
+    expect(downloadCompressed.suggestedFilename()).toBe('test-metadata_extract_compressed.mp4');
+
+    // download video with scale down option
+    await page.getByTestId('ffmpegtoolkit-downloadvideo-button').click();
+    await expect(page.getByTestId('ffmpegtoolkit-download-modal')).toBeVisible();
+    await page.getByTestId('ffmpegtoolkit-scale-checkbox').click();
+
+    const downloadScaledPromise = page.waitForEvent('download');
+    await page.getByTestId('ffmpegtoolkit-download-modal-confirm').click();
+    const downloadScaled = await downloadScaledPromise;
+    expect(downloadScaled.suggestedFilename()).toBe('test-metadata_extract_scaled.mp4');
+
+    // download video with both options
+    await page.getByTestId('ffmpegtoolkit-downloadvideo-button').click();
+    await expect(page.getByTestId('ffmpegtoolkit-download-modal')).toBeVisible();
+    await page.getByTestId('ffmpegtoolkit-compress-checkbox').click();
+    await page.getByTestId('ffmpegtoolkit-scale-checkbox').click();
+
+    const downloadBothPromise = page.waitForEvent('download');
+    await page.getByTestId('ffmpegtoolkit-download-modal-confirm').click();
+    const downloadBoth = await downloadBothPromise;
+    expect(downloadBoth.suggestedFilename()).toBe('test-metadata_extract_compressed_scaled.mp4');
+
+    // download audio
+    const downloadAudioPromise = page.waitForEvent('download');
+    await page.getByTestId('ffmpegtoolkit-downloadaudio-button').click();
+    const downloadAudio = await downloadAudioPromise;
+    expect(downloadAudio.suggestedFilename()).toBe('test-metadata_extract.mp3');
 })

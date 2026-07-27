@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import stopwords from "stopwords-iso";
 
@@ -38,7 +39,7 @@ export const WordCloud = ({
   setOpenDetailModal,
   wordCloudData,
 }) => {
-  const [language, setLanguage] = useState("en");
+  const language = useSelector((state) => state.snaData.language);
 
   const filteredWords = language
     ? wordCloudData?.filter((w) => !stopwords[language]?.includes(w.text))
@@ -54,7 +55,6 @@ export const WordCloud = ({
       words={filteredWords}
       wordClickFunction={setDetailFromWord}
       language={language}
-      onLanguageChange={setLanguage}
     />
   );
 };

@@ -8,6 +8,7 @@ const initialState = {
   dataSources: null, // Cached data sources
   lastLoaded: null, // Timestamp of last load
   isLoading: false,
+  language: "",
 };
 
 const snaDataSlice = createSlice({
@@ -27,10 +28,17 @@ const snaDataSlice = createSlice({
       state.lastLoaded = null;
       state.isLoading = false;
     },
+    setSNAWordCloudLanguage(state, action) {
+      state.language = action.payload;
+    },
   },
 });
 
-export const { setSNADataSources, setSNALoading, clearSNACache } =
-  snaDataSlice.actions;
+export const {
+  setSNADataSources,
+  setSNALoading,
+  clearSNACache,
+  setSNAWordCloudLanguage,
+} = snaDataSlice.actions;
 
 export default snaDataSlice.reducer;
