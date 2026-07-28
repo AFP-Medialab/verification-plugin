@@ -1,6 +1,7 @@
 import { React, useState } from "react";
 import { useSelector } from "react-redux";
 
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -24,6 +25,8 @@ const FfmpegToolkitResult = ({
   const keyframes = useSelector((state) => state.ffmpegToolkit.keyframes);
 
   const isLoading = useSelector((state) => state.ffmpegToolkit.bottomLoading);
+
+  const hasKeyframes = keyframes?.length > 0;
 
   return (
     <Card>
@@ -88,7 +91,7 @@ const FfmpegToolkitResult = ({
           I-frames
         </Button>
       </Box>
-      {keyframes && (
+      {keyframes && hasKeyframes && (
         <Box sx={{ p: 2 }}>
           <Box
             sx={{
@@ -127,9 +130,15 @@ const FfmpegToolkitResult = ({
             variant="contained"
             onClick={onDownloadKeyframes}
             data-testid="ffmpegtoolkit-download-keyframes-button"
+            sx={{ mt: 2 }}
           >
             {keyword("ffmpeg_toolkit_downloadkeyframesbutton")}
           </Button>
+        </Box>
+      )}
+      {keyframes && !hasKeyframes && (
+        <Box sx={{ p: 2 }}>
+          <Alert severity="warning">No keyframes found in this video</Alert>
         </Box>
       )}
       {isLoading && (

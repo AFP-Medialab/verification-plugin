@@ -3,6 +3,7 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import LinearProgress from "@mui/material/LinearProgress";
+import Link from "@mui/material/Link";
 import Slider from "@mui/material/Slider";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -48,7 +49,19 @@ const FfmpegToolkit = () => {
       <Stack direction="column" spacing={4}>
         <HeaderTool
           name={keywordAllTools("navbar_ffmpeg_toolkit")}
-          description={keywordAllTools("navbar_ffmpeg_toolkit_description")}
+          description={
+            <>
+              {keywordAllTools("navbar_ffmpeg_toolkit_description")}
+              <Link
+                href="https://en.wikipedia.org/wiki/Video_compression_picture_types"
+                target="_blank"
+                rel="noopener noreferrer"
+                underline="hover"
+              >
+                {keywordAllTools("navbar_ffmpeg_toolkit_iframelink")}.
+              </Link>
+            </>
+          }
           icon={
             <ContentCutIcon
               style={{
