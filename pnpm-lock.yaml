@@ -107,6 +107,9 @@ importers:
       echarts-for-react:
         specifier: ^3.0.2
         version: 3.0.6(echarts@5.6.0)(react@18.3.1)
+      eld:
+        specifier: ^2.0.3
+        version: 2.0.3
       exif-js:
         specifier: ^2.3.0
         version: 2.3.0
@@ -3488,6 +3491,9 @@ packages:
 
   echarts@5.6.0:
     resolution: {integrity: sha512-oTbVTsXfKuEhxftHqL5xprgLoc0k7uScAwtryCgWF6hPYFLRwOUHiFmHGCBKP5NPFNkDVopOieyUqYGH8Fa3kA==}
+
+  eld@2.0.3:
+    resolution: {integrity: sha512-KiwFrycPPJ2XgKb7MGsJ3m3grUFXq6+55R8ZuS9fj+Qv0WRFgeEBhmorHO/YwHV9VqhdJURKFGJ+CY24sEikOw==}
 
   electron-to-chromium@1.5.328:
     resolution: {integrity: sha512-QNQ5l45DzYytThO21403XN3FvK0hOkWDG8viNf6jqS42msJ8I4tGDSpBCgvDRRPnkffafiwAym2X2eHeGD2V0w==}
@@ -9598,6 +9604,8 @@ snapshots:
     dependencies:
       tslib: 2.3.0
       zrender: 5.6.1
+
+  eld@2.0.3: {}
 
   electron-to-chromium@1.5.328: {}
 
