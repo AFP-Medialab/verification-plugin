@@ -5,6 +5,7 @@ import {
 } from "@/redux/reducers/tools/c2paReducer";
 import { createC2pa } from "@contentauth/c2pa-web";
 import wasmSrc from "@contentauth/c2pa-web/resources/c2pa.wasm?url";
+import { browser } from "wxt/browser";
 
 /**
  * This function reads the image's capture information from the assertions
@@ -270,7 +271,9 @@ export async function getToolkitSettings() {
  */
 async function readC2paFromUrl(url) {
   const settings = await getToolkitSettings();
-  const c2pa = await createC2pa({ wasmSrc });
+  const workerUrl = new URL(browser.runtime.getURL("c2pa_worker.js"));
+  Object.defineProperty(workerUrl, "protocol", { get: () => "https:" });
+  const c2pa = await createC2pa({ wasmSrc, workerSrc: workerUrl });
   const response = await fetch(url);
   const blob = await response.blob();
   const reader = await c2pa.reader.fromBlob(blob.type, blob, settings);

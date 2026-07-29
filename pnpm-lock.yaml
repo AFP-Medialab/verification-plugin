@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@contentauth/c2pa-web':
-        specifier: ^0.7.0
-        version: 0.7.0
+        specifier: ^0.13.1
+        version: 0.13.1
       '@emotion/cache':
         specifier: ^11.14.0
         version: 11.14.0
@@ -999,14 +999,14 @@ packages:
     resolution: {integrity: sha512-ctxtJ/eA+t+6q2++vj5j7FYX3nRu311q1wfYH3xjlLOsczhlhxAg2FWNUXhpGvAw3BWo1xBcvOV6/YLc2r5FJw==}
     hasBin: true
 
-  '@contentauth/c2pa-types@0.4.3':
-    resolution: {integrity: sha512-uJJPpv8kS/wLaokb4lPGycyK9yf663H4Db/QDkdWuxxVM8d0UR4ZaIrJXWBeYO9M8gqH8JYJA/WBRkchboJWSQ==}
+  '@contentauth/c2pa-types@0.7.2':
+    resolution: {integrity: sha512-SH+q4a6ZS2z2YhlqfTB2GzN1S4M9koLhJETGPxL5J4JVhJEFSyEQK52PnwOhee+ObiZdDZK18NI+s+1IrUSdTQ==}
 
-  '@contentauth/c2pa-wasm@0.5.0':
-    resolution: {integrity: sha512-UedHh4Uhj4P9Y5EjRKVG+VZ1Ub/Nr7GiU8MRFxO1rpg6DmUEum12vZHahH/QRDWwQXn/6nq+9lW28Jxig+uQcA==}
+  '@contentauth/c2pa-wasm@0.11.0':
+    resolution: {integrity: sha512-pL7tGZnM/qQz7JFCPB0hWSZM41L4aUEF/SV9B1fL+0L2sUZT1Zj7UGcUjSmiRWeXLagQ8Jds7RF+XQ9gxZiG7g==}
 
-  '@contentauth/c2pa-web@0.7.0':
-    resolution: {integrity: sha512-tcPAKByxlZ7ffO4Jvir5AFwFRmG7DsQkAG+zrppe6bIKMBxLMraci/OZda/tJ4TOywXKgvmwhPzgAMagW3KRXA==}
+  '@contentauth/c2pa-web@0.13.1':
+    resolution: {integrity: sha512-K4GLdhqIdLE3DUdO0Ub2M6rnyopAnCtdOQhFx2ACayVXo6uLuYlMPRlBivqc4RlvuXMpvJcW2BMu6B1FZpbYhw==}
 
   '@csstools/color-helpers@6.0.2':
     resolution: {integrity: sha512-LMGQLS9EuADloEFkcTBR3BwV/CGHV7zyDxVRtVDTwdI2Ca4it0CCVTT9wCkxSgokjE5Ho41hEPgb8OEUwoXr6Q==}
@@ -5941,8 +5941,8 @@ packages:
     peerDependencies:
       typescript: '>=4.8.4'
 
-  ts-deepmerge@7.0.3:
-    resolution: {integrity: sha512-Du/ZW2RfwV/D4cmA5rXafYjBQVuvu4qGiEEla4EmEHVHgRdx68Gftx7i66jn2bzHPwSVZY36Ae6OuDn9el4ZKA==}
+  ts-deepmerge@8.0.0:
+    resolution: {integrity: sha512-133O+10nJmVI8w5xeVZPEv5PIrv7iaUae07wv1aH8XJH95Ur6YIhWAPhPyP1YPlbPS9fCVcNIZTu7m8urRVF0A==}
     engines: {node: '>=14.13.1'}
 
   tslib@2.3.0:
@@ -7261,16 +7261,16 @@ snapshots:
     dependencies:
       css-tree: 3.2.1
 
-  '@contentauth/c2pa-types@0.4.3': {}
+  '@contentauth/c2pa-types@0.7.2': {}
 
-  '@contentauth/c2pa-wasm@0.5.0': {}
+  '@contentauth/c2pa-wasm@0.11.0': {}
 
-  '@contentauth/c2pa-web@0.7.0':
+  '@contentauth/c2pa-web@0.13.1':
     dependencies:
-      '@contentauth/c2pa-types': 0.4.3
-      '@contentauth/c2pa-wasm': 0.5.0
+      '@contentauth/c2pa-types': 0.7.2
+      '@contentauth/c2pa-wasm': 0.11.0
       highgain: 0.1.0
-      ts-deepmerge: 7.0.3
+      ts-deepmerge: 8.0.0
 
   '@csstools/color-helpers@6.0.2': {}
 
@@ -12545,7 +12545,7 @@ snapshots:
     dependencies:
       typescript: 5.9.3
 
-  ts-deepmerge@7.0.3: {}
+  ts-deepmerge@8.0.0: {}
 
   tslib@2.3.0: {}
 
