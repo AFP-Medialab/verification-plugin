@@ -88,5 +88,11 @@
   "error_unknown": "خطأ غير معروف",
   "wordcloud_language_label": "اختر لغة كلمات التوقف",
   "wordcloud_language_none": "لم يتم اختيار لغة",
-  "wordcloud_language_clear": "مسح جميع اللغات"
+  "wordcloud_language_clear": "مسح جميع اللغات",
+  "snaTools_languageDetection": "اكتشاف اللغة",
+  "snaTools_languageDetectionDescription": "التوزيع اللغوي للتغريدات في المجموعة بالكشف عبر ELD",
+  "snaTools_languageDetectionButtonText": "عرض",
+  "snaTools_languageDetectionTotal": "{{total}} تغريدة تم تحليلها",
+  "snaTools_languageDetectionBarLabel": "التغريدات",
+  "snaTools_languageDetectionUnidentified": "غير محدد"
 }

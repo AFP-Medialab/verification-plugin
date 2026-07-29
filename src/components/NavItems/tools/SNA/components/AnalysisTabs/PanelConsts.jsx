@@ -67,6 +67,11 @@ export const analysisTools = {
     propKey: "textClusters",
     component: (props) => <AnalysisDisplayTemplate {...props} />,
   },
+  languageDetection: {
+    keywordLabel: "snaTools_languageDetection",
+    propKey: "languageDetection",
+    component: (props) => <AnalysisDisplayTemplate {...props} />,
+  },
 };
 /**
  *
