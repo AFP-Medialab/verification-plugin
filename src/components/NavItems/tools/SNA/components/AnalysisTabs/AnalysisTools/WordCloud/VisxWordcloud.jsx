@@ -119,12 +119,16 @@ export const VisxWordcloud = ({ words, wordClickFunction, languages }) => {
               )
             }
           >
-            {Object.entries(languageMap).map(([code, { display_name }]) => (
-              <MenuItem key={code} value={code}>
-                <Checkbox checked={languages.includes(code)} />
-                <ListItemText primary={display_name} />
-              </MenuItem>
-            ))}
+            {Object.entries(languageMap)
+              .sort(([, a], [, b]) =>
+                a.display_name.localeCompare(b.display_name),
+              )
+              .map(([code, { display_name }]) => (
+                <MenuItem key={code} value={code}>
+                  <Checkbox checked={languages.includes(code)} />
+                  <ListItemText primary={display_name} />
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
         {languages.length > 0 && (
