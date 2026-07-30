@@ -40,6 +40,10 @@ import {
   hashtagAnalysisDetailModalContent,
 } from "./components/AnalysisTabs/AnalysisTools/HashtagAnalysis/HashtagAnalysisUtils";
 import {
+  LanguageDetectionChart,
+  generateLanguageDetectionData,
+} from "./components/AnalysisTabs/AnalysisTools/LanguageDetection/LanguageDetectionUtils";
+import {
   generateMostMentionedData,
   mostMentionedDetailDisplayHandler,
 } from "./components/AnalysisTabs/AnalysisTools/MostMentioned/MostMentionedUtils";
@@ -55,6 +59,7 @@ import {
   WordCloud,
   generateWordCloudGraphData,
 } from "./components/AnalysisTabs/AnalysisTools/WordCloud/WordCloudUtils";
+import { getLanguages } from "./components/AnalysisTabs/AnalysisTools/WordCloud/languages";
 import SNAPanel from "./components/AnalysisTabs/SNAPanel";
 import CollectionsTable from "./components/CollectionsTable";
 import DataUpload from "./components/DataUpload/DataUpload";
@@ -76,6 +81,10 @@ import {
 
 const SNA = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/NewSNA");
+  const keywordLanguages = i18nLoadNamespace(
+    "components/NavItems/tools/stopWords",
+  );
+  const languageMap = getLanguages(keywordLanguages);
   const dispatch = useDispatch();
 
   // Get cached data from Redux
@@ -320,6 +329,27 @@ const SNA = () => {
         setDetailContent={setDetailContent}
         setOpenDetailModal={setOpenDetailModal}
         wordCloudData={result}
+      />
+    );
+  };
+
+  //Language detection props
+  const [languageDetectionLoading, setLanguageDetectionLoading] =
+    useState(false);
+  const [languageDetectionResult, setLanguageDetectionResult] = useState(null);
+  const [languageDetectionErrorMessage, setLanguageDetectionErrorMessage] =
+    useState("");
+
+  const languageDetectionViz = ({ result }) => {
+    if (!result) return null;
+    return (
+      <LanguageDetectionChart
+        result={result}
+        keyword={keyword}
+        languageMap={languageMap}
+        unidentifiedLabel={keyword("snaTools_languageDetectionUnidentified")}
+        setDetailContent={setDetailContent}
+        setOpenDetailModal={setOpenDetailModal}
       />
     );
   };
@@ -585,6 +615,27 @@ const SNA = () => {
     },
   };
 
+  const languageDetectionProps = {
+    toolDisplayProps: {
+      toolDescription: "snaTools_languageDetectionDescription",
+      toolButtonText: "snaTools_languageDetectionButton",
+      toolLoading: languageDetectionLoading,
+      setToolLoading: setLanguageDetectionLoading,
+      errorMessage: languageDetectionErrorMessage,
+      setErrorMessage: setLanguageDetectionErrorMessage,
+    },
+    toolAnalysisProps: {
+      analysisFunction: generateLanguageDetectionData,
+      analysisArgs: {
+        languageMap,
+        unidentifiedLabel: keyword("snaTools_languageDetectionUnidentified"),
+      },
+      toolResult: languageDetectionResult,
+      setToolResult: setLanguageDetectionResult,
+      ToolVizResult: languageDetectionViz,
+    },
+  };
+
   const analysisToolsProps = {
     essentialProps: {
       keyword,
@@ -598,6 +649,7 @@ const SNA = () => {
     hashtagAnalysis: hashtagAnalysisProps,
     wordCloud: wordCloudProps,
     textClusters: textClustersProps,
+    languageDetection: languageDetectionProps,
   };
 
   const snaPanelProps = {

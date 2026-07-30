@@ -249,11 +249,12 @@ test('Test tool geolocalisation', async ({page, authenticatedBetaTesterExtension
     await expect (page.getByTestId("geolocation-results-image")).toBeVisible();
     await expect (page.getByTestId("geolocation-results-map")).toBeVisible();
 
+    const newPagePromise = context.waitForEvent('page');
     await page.getByTestId('geolocation-results-button-to-gmaps').click();
-    
-    await expect.poll(async () => {
-        return context.pages().length;
-    }).toBe(2);
+    const newPage = await newPagePromise;
+    await newPage.waitForLoadState();
+
+    await expect(newPage).toHaveURL(/google\.com\/maps/);
 })
 
 // TODO : manage to mock the api for afp reverse search (api response for this available in tests assets)

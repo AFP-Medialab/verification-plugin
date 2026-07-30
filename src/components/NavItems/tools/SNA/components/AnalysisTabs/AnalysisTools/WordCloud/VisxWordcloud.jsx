@@ -2,14 +2,22 @@ import React, { useMemo } from "react";
 import { useDispatch } from "react-redux";
 
 import Box from "@mui/material/Box";
+import Checkbox from "@mui/material/Checkbox";
+import Chip from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
+import IconButton from "@mui/material/IconButton";
 import InputLabel from "@mui/material/InputLabel";
+import ListItemText from "@mui/material/ListItemText";
 import MenuItem from "@mui/material/MenuItem";
+import OutlinedInput from "@mui/material/OutlinedInput";
 import Select from "@mui/material/Select";
+import Tooltip from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
 
+import ClearIcon from "@mui/icons-material/Clear";
+
 import { i18nLoadNamespace } from "@/components/Shared/Languages/i18nLoadNamespace";
-import { setSNAWordCloudLanguage } from "@/redux/reducers/tools/snaDataReducer";
+import { setSNAWordCloudLanguages } from "@/redux/reducers/tools/snaDataReducer";
 import { scaleLog } from "@visx/scale";
 import { Text } from "@visx/text";
 import Wordcloud from "@visx/wordcloud/lib/Wordcloud";
@@ -29,10 +37,9 @@ const fixedValueGenerator = () => 0.5;
 /**
  * @param {object[]} words array of words containing the fields 'text', 'value', 'entries'
  * @param {function} wordClickFunction called on word click with the word object
- * @param {string} language ISO 639-1 language code for stop-word filtering
- * @param {function} onLanguageChange called with the new language code when the user changes the selector
+ * @param {string[]} languages ISO 639-1 language codes for stop-word filtering
  */
-export const VisxWordcloud = ({ words, wordClickFunction, language }) => {
+export const VisxWordcloud = ({ words, wordClickFunction, languages }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/NewSNA");
   const keywordLanguages = i18nLoadNamespace(
     "components/NavItems/tools/stopWords",
@@ -40,7 +47,7 @@ export const VisxWordcloud = ({ words, wordClickFunction, language }) => {
 
   const dispatch = useDispatch();
 
-  const languages = getLanguages(keywordLanguages);
+  const languageMap = getLanguages(keywordLanguages);
 
   const spiralType = "archimedean";
   const withRotation = true;
@@ -65,34 +72,75 @@ export const VisxWordcloud = ({ words, wordClickFunction, language }) => {
     },
   });
 
-  const setLanguage = (language) => {
-    dispatch(setSNAWordCloudLanguage(language));
+  const handleLanguageChange = (event) => {
+    const value = event.target.value;
+    dispatch(
+      setSNAWordCloudLanguages(
+        typeof value === "string" ? value.split(",") : value,
+      ),
+    );
   };
 
   return (
     <>
-      <Box display="flex" justifyContent="left" mb={2}>
-        <FormControl size="small" sx={{ minWidth: 200 }}>
+      <Box
+        display="flex"
+        justifyContent="left"
+        alignItems="center"
+        gap={1}
+        mb={2}
+      >
+        <FormControl size="small" sx={{ minWidth: 200, maxWidth: 350 }}>
           <InputLabel id="wordcloud-language-label">
             {keyword("wordcloud_language_label")}
           </InputLabel>
           <Select
             labelId="wordcloud-language-label"
             id="wordcloud-language-select"
-            value={language}
-            label={keyword("wordcloud_language_label")}
-            onChange={(e) => setLanguage(e.target.value)}
+            multiple
+            value={languages}
+            onChange={handleLanguageChange}
+            input={
+              <OutlinedInput label={keyword("wordcloud_language_label")} />
+            }
+            renderValue={(selected) =>
+              selected.length === 0 ? (
+                <em>{keyword("wordcloud_language_none")}</em>
+              ) : (
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                  {selected.map((code) => (
+                    <Chip
+                      key={code}
+                      label={languageMap[code]?.display_name ?? code}
+                      size="small"
+                    />
+                  ))}
+                </Box>
+              )
+            }
           >
-            <MenuItem value="">
-              <em>{keyword("wordcloud_language_none")}</em>
-            </MenuItem>
-            {Object.entries(languages).map(([code, { display_name }]) => (
-              <MenuItem key={code} value={code}>
-                {display_name}
-              </MenuItem>
-            ))}
+            {Object.entries(languageMap)
+              .sort(([, a], [, b]) =>
+                a.display_name.localeCompare(b.display_name),
+              )
+              .map(([code, { display_name }]) => (
+                <MenuItem key={code} value={code}>
+                  <Checkbox checked={languages.includes(code)} />
+                  <ListItemText primary={display_name} />
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
+        {languages.length > 0 && (
+          <Tooltip title={keyword("wordcloud_language_clear")}>
+            <IconButton
+              size="small"
+              onClick={() => dispatch(setSNAWordCloudLanguages([]))}
+            >
+              <ClearIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        )}
       </Box>
       <Box display="flex" justifyContent="center">
         <Wordcloud
