@@ -9,6 +9,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Slider from "@mui/material/Slider";
+import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
 import useMyStyles from "@/components/Shared/MaterialUiStyles/useMyStyles";
@@ -33,6 +34,7 @@ const TextImageCanvas = ({
     defaultColor === "green" ? "#00ff00" : defaultColor,
   );
   const [textSize, setTextSize] = useState(35);
+  const [editableText, setEditableText] = useState(text);
 
   const handleExport = () => {
     if (!stageRef.current) return;
@@ -44,6 +46,10 @@ const TextImageCanvas = ({
     setTextColor(event.target.value);
   };
 
+  useEffect(() => {
+    setEditableText(text);
+  }, [text]);
+
   // loads image
   useEffect(() => {
     preloadImage(imgSrc).then(setImg);
@@ -51,7 +57,7 @@ const TextImageCanvas = ({
 
   useEffect(() => {
     if (img) handleExport();
-  }, [img, annotation, textColor, textSize]);
+  }, [img, annotation, textColor, textSize, editableText]);
 
   if (img) {
     //calculates width and height used for the canvas, to have the same proportions as the image
@@ -77,7 +83,7 @@ const TextImageCanvas = ({
                 <Text
                   x={80}
                   y={80}
-                  text={text}
+                  text={editableText}
                   fontSize={textSize}
                   draggable
                   fill={textColor}
@@ -91,6 +97,15 @@ const TextImageCanvas = ({
           {editMode && (
             <>
               <Grid container direction="column">
+                <Grid sx={{ pt: 2 }}>
+                  <TextField
+                    label={keyword("annotation_text_label")}
+                    value={editableText}
+                    onChange={(e) => setEditableText(e.target.value)}
+                    size="small"
+                    fullWidth
+                  />
+                </Grid>
                 <Grid>
                   <Box
                     sx={{
