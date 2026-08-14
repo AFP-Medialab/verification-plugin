@@ -50,6 +50,7 @@ const PopUp = () => {
 
   const urlOpenAssistant = () => {
     window.open("/popup.html#/app/assistant/" + encodeURIComponent(pageUrl));
+    window.close();
   };
 
   const userRoles = useSelector((state) => state.userSession.user.roles);
@@ -167,7 +168,10 @@ const PopUp = () => {
             variant="outlined"
             color="primary"
             fullWidth={true}
-            onClick={() => window.open("/popup.html#/app/tools")}
+            onClick={() => {
+              window.open("/popup.html#/app/tools");
+              window.close();
+            }}
           >
             {keyword("open_website")}
           </Button>
@@ -182,7 +186,10 @@ const PopUp = () => {
             variant="outlined"
             color="primary"
             fullWidth={true}
-            onClick={() => window.open("/popup.html#/app/assistant/")}
+            onClick={() => {
+              window.open("/popup.html#/app/assistant/");
+              window.close();
+            }}
           >
             {keyword("open_assistant")}
           </Button>
@@ -213,7 +220,10 @@ const PopUp = () => {
             variant="outlined"
             color="primary"
             fullWidth={true}
-            onClick={() => window.open("/popup.html#/app/classroom/")}
+            onClick={() => {
+              window.open("/popup.html#/app/classroom/");
+              window.close();
+            }}
           >
             {keyword("open_classroom")}
           </Button>
@@ -258,6 +268,7 @@ const PopUp = () => {
                   "/popup.html#/app/tools/archive/" +
                     encodeURIComponent(pageUrl),
                 );
+                window.close();
               }}
             >
               {keyword("archive_this")}
