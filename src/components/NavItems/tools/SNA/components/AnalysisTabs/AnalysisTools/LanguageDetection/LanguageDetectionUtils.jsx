@@ -79,6 +79,7 @@ const CustomTooltip = ({ active, payload }) => {
           border: "1px solid #ccc",
           borderRadius: 1,
           p: 1,
+          color: "rgba(0, 0, 0, 0.87)",
         }}
       >
         <Typography variant="body2" fontWeight="bold">
