@@ -145,14 +145,22 @@ export const AccountActivityChart = ({
     );
   };
 
-  const CustomizedToolTip = ({ active, payload, label }, nameMaps) => {
+  const CustomizedToolTip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       let payloadLabel = label;
       let barLabel = nameMaps.has(payloadLabel)
         ? nameMaps.get(payloadLabel)
         : payloadLabel;
       return (
-        <Box>
+        <Box
+          sx={{
+            background: "white",
+            border: "1px solid #ccc",
+            borderRadius: 1,
+            p: 1,
+            color: "rgba(0, 0, 0, 0.87)",
+          }}
+        >
           <Stack direction="column" spacing={1}>
             <Typography>{barLabel}</Typography>
             <Typography>{`Value: ${payload[0].value}`}</Typography>
@@ -210,7 +218,7 @@ export const AccountActivityChart = ({
           tick={{ dx: currentLang !== "ar" ? 0 : -20 }}
         />
         <Tooltip
-          content={CustomizedToolTip(nameMaps)}
+          content={CustomizedToolTip}
           cursor={{
             fill: "rgba(128, 128, 128, 0.2)",
           }}

@@ -265,7 +265,7 @@ const useFfmpegToolkit = () => {
     try {
       const apiUrl = import.meta.env.VITE_FFMPEG_YTDLP_API_URL;
       const videoBlob = await fetch(result).then((r) => r.blob());
-      const res = await fetch(`${apiUrl}/api/ffmpeg/extractkeyframes`, {
+      const res = await fetch(`${apiUrl}/api/ffmpeg/extractIframes`, {
         method: "POST",
         headers: { "Content-Type": "video/mp4" },
         body: videoBlob,

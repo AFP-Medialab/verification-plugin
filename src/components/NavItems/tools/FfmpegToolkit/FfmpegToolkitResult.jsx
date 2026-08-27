@@ -59,6 +59,7 @@ const FfmpegToolkitResult = ({
           color="primary"
           variant="contained"
           onClick={() => setShowDownloadModal(true)}
+          disabled={isLoading}
           data-testid="ffmpegtoolkit-downloadvideo-button"
         >
           {keyword("ffmpeg_toolkit_downloadvideobutton")}
@@ -72,6 +73,7 @@ const FfmpegToolkitResult = ({
           color="primary"
           variant="contained"
           onClick={onDownloadAudio}
+          disabled={isLoading}
           data-testid="ffmpegtoolkit-downloadaudio-button"
         >
           {keyword("ffmpeg_toolkit_downloadaudiobutton")}
@@ -79,6 +81,7 @@ const FfmpegToolkitResult = ({
         <Button
           variant="contained"
           onClick={onGoToHiya}
+          disabled={isLoading}
           data-testid="ffmpegtoolkit-hiya-button"
         >
           Hiya
@@ -86,6 +89,7 @@ const FfmpegToolkitResult = ({
         <Button
           variant="contained"
           onClick={onGetKeyframes}
+          disabled={isLoading}
           data-testid="ffmpegtoolkit-keyframes-button"
         >
           I-frames

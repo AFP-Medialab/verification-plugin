@@ -292,7 +292,7 @@ export const poiForensic = {
     ],
     exceptions: [],
     useInputUrl: false,
-    text: "deepfake_video_text",
+    text: "poiforensics_text",
     resetUrl: resetPoiForensics,
     setUrl: (resultUrl) => setPoiForensicsUrl({ url: resultUrl }),
   },
