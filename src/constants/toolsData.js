@@ -514,7 +514,7 @@ export const dataAnalysisSna = {
   descriptionKeyword: "navbar_twitter_sna_description",
   category: TOOLS_CATEGORIES.DATA_ANALYSIS,
   rolesIcons: [TOOL_STATUS_ICON.LOCK],
-  rolesNeeded: null,
+  rolesNeeded: [ROLES.REGISTERED_USER],
   path: "twitterSna",
   toolGroup: TOOL_GROUPS.VERIFICATION,
   assistantProps: {},
