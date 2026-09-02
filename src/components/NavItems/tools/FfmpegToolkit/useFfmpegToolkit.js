@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -41,6 +41,12 @@ const useFfmpegToolkit = () => {
   );
   const [sliderRange, setSliderRange] = useState([0, 0]);
   const [videoDuration, setVideoDuration] = useState(0);
+  const [videoObjectUrl, setVideoObjectUrl] = useState(null);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const videoRef = useRef(null);
+  const prevSliderRef = useRef(sliderRange);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -66,19 +72,65 @@ const useFfmpegToolkit = () => {
     if (!videoFile) {
       setVideoDuration(0);
       setSliderRange([0, 0]);
+      setVideoObjectUrl(null);
+      setCurrentTime(0);
+      setIsPlaying(false);
       return;
     }
     const objectUrl = URL.createObjectURL(videoFile);
+    setVideoObjectUrl(objectUrl);
     const video = document.createElement("video");
     video.preload = "metadata";
     video.onloadedmetadata = () => {
       const seconds = Math.floor(video.duration);
       setVideoDuration(seconds);
       setSliderRange([0, seconds]);
-      URL.revokeObjectURL(objectUrl);
     };
     video.src = objectUrl;
+    return () => {
+      URL.revokeObjectURL(objectUrl);
+    };
   }, [videoFile]);
+
+  useEffect(() => {
+    if (!videoRef.current || !videoDuration) return;
+    const [prevStart, prevEnd] = prevSliderRef.current;
+    const [start, end] = sliderRange;
+    if (start !== prevStart) videoRef.current.currentTime = start;
+    else if (end !== prevEnd) videoRef.current.currentTime = end;
+    prevSliderRef.current = sliderRange;
+  }, [sliderRange, videoDuration]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !videoObjectUrl) return;
+    const onTimeUpdate = () => setCurrentTime(video.currentTime);
+    const onPlay = () => setIsPlaying(true);
+    const onPause = () => setIsPlaying(false);
+    const onEnded = () => setIsPlaying(false);
+    video.addEventListener("timeupdate", onTimeUpdate);
+    video.addEventListener("play", onPlay);
+    video.addEventListener("pause", onPause);
+    video.addEventListener("ended", onEnded);
+    return () => {
+      video.removeEventListener("timeupdate", onTimeUpdate);
+      video.removeEventListener("play", onPlay);
+      video.removeEventListener("pause", onPause);
+      video.removeEventListener("ended", onEnded);
+    };
+  }, [videoObjectUrl]);
+
+  const togglePlay = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (isPlaying) video.pause();
+    else video.play();
+  };
+
+  const handleSeek = (time) => {
+    if (videoRef.current) videoRef.current.currentTime = time;
+    setCurrentTime(time);
+  };
 
   const handleSubmit = async () => {
     if (!videoFile) return;
@@ -146,6 +198,8 @@ const useFfmpegToolkit = () => {
     setType("");
     setSliderRange([0, 0]);
     setVideoDuration(0);
+    setCurrentTime(0);
+    setIsPlaying(false);
     setKeyframes(null);
     dispatch(resetFfmpegToolkit());
   };
@@ -317,6 +371,12 @@ const useFfmpegToolkit = () => {
     setInput,
     videoFile,
     setVideoFile,
+    videoObjectUrl,
+    videoRef,
+    currentTime,
+    isPlaying,
+    togglePlay,
+    handleSeek,
     sliderRange,
     setSliderRange,
     videoDuration,
