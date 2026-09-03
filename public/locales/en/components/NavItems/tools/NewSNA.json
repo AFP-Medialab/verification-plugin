@@ -91,7 +91,7 @@
   "wordcloud_language_clear": "Clear all languages",
   "snaTools_languageDetection": "Language detection",
   "snaTools_languageDetectionDescription": "Linguistic repartition of the tweets in the corpus detected using ELD",
-  "snaTools_languageDetectionButtonText": "View",
+  "snaTools_languageDetectionButton": "View",
   "snaTools_languageDetectionTotal": "{{total}} tweets analysed",
   "snaTools_languageDetectionBarLabel": "Tweets",
   "snaTools_languageDetectionUnidentified": "Unidentified"

@@ -86,7 +86,7 @@ const CustomTooltip = ({ active, payload }) => {
           {name} ({language})
         </Typography>
         <Typography variant="body2">
-          {`${count} tweets${pct ? ` (${pct}%)` : ""}`}
+          {`${count} ${pct ? ` (${pct}%)` : ""}`}
         </Typography>
         {avgConfidence !== null && (
           <Typography variant="body2" color="text.secondary">
