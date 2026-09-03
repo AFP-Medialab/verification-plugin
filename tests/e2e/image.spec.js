@@ -9,6 +9,7 @@
  */
 import { test, expect } from './fixtures';
 import path from 'path';
+import fs from 'fs';
 import mockedSyntheticImageResponse from '../../tests-assets/api-response/syntheticimages-response.json'
 import mockedGeolocationResponse from '../../tests-assets/api-response/geolocation-response.json'
 import mockedOcrResponse from '../../tests-assets/api-response/ocr-response.json'
@@ -231,7 +232,7 @@ test('Test tool Synthetic Images', async({page, authenticatedBetaTesterExtension
     await expect (page.getByTestId("synthetic-images-results")).toHaveCount(0);
 })
 
-test('Test tool geolocalisation', async ({page, authenticatedBetaTesterExtensionId, context}) => {
+test('Test tool geolocalisation - algorithm results', async ({page, authenticatedBetaTesterExtensionId, context}) => {
     await page.route('**/geolocate?image_url=**', async(route) => {
         await route.fulfill({
             status: 200,
@@ -245,9 +246,12 @@ test('Test tool geolocalisation', async ({page, authenticatedBetaTesterExtension
     await page.locator('[data-testid="geolocation-input"] input').fill('testurl');
     await page.getByTestId('geolocation-submit').click();
 
-    await expect (page.getByTestId("geolocation-results")).toBeVisible();
-    await expect (page.getByTestId("geolocation-results-image")).toBeVisible();
-    await expect (page.getByTestId("geolocation-results-map")).toBeVisible();
+    await expect(page.getByTestId("geolocation-results")).toBeVisible();
+    await expect(page.getByTestId("geolocation-results-image")).toBeVisible();
+    await expect(page.getByTestId("geolocation-results-map")).toBeVisible();
+
+    // metadata tab should be disabled when image has no GPS EXIF
+    await expect(page.getByTestId("geolocation-tab-metadata")).toBeDisabled();
 
     const newPagePromise = context.waitForEvent('page');
     await page.getByTestId('geolocation-results-button-to-gmaps').click();
@@ -255,6 +259,39 @@ test('Test tool geolocalisation', async ({page, authenticatedBetaTesterExtension
     await newPage.waitForLoadState();
 
     await expect(newPage).toHaveURL(/google\.com\/maps/);
+})
+
+test('Test tool geolocalisation - GPS metadata only', async ({page, authenticatedBetaTesterExtensionId}) => {
+    // algorithm returns no predictions
+    await page.route('**/geolocate?image_url=**', async(route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({ predictions: [], soft_confidence_threshold: 0.1 })
+        })
+    })
+    // serve an image with GPS EXIF (Paris: 48.8566, 2.3522) via a real HTTP URL
+    await page.route('https://test.verification.local/gps-image.jpg', async(route) => {
+        const imageBuffer = fs.readFileSync(path.resolve(__dirname, '../../tests-assets/test-metadata-gps.jpg'));
+        await route.fulfill({
+            status: 200,
+            contentType: 'image/jpeg',
+            body: imageBuffer
+        })
+    })
+
+    await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/geolocation`);
+
+    await page.locator('[data-testid="geolocation-input"] input').fill('https://test.verification.local/gps-image.jpg');
+    await page.getByTestId('geolocation-submit').click();
+
+    // metadata tab should be enabled once GPS EXIF is extracted
+    await expect(page.getByTestId("geolocation-tab-metadata")).toBeEnabled();
+    await page.getByTestId("geolocation-tab-metadata").click();
+
+    await expect(page.getByTestId("geolocation-metadata-results")).toBeVisible();
+    await expect(page.getByTestId("geolocation-metadata-results-map")).toBeVisible();
+    await expect(page.getByTestId("geolocation-metadata-results-image")).toBeVisible();
 })
 
 // TODO : manage to mock the api for afp reverse search (api response for this available in tests assets)

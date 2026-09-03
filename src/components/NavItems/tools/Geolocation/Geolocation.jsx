@@ -37,6 +37,7 @@ const Geolocation = () => {
   const dispatch = useDispatch();
 
   const result = useSelector((state) => state.geolocation.result);
+  const metadata = useSelector((state) => state.geolocation.metadata);
   const urlImage = useSelector((state) => state.geolocation.urlImage);
   const isLoading = useSelector((state) => state.geolocation.loading);
   const [processUrl, setProcessUrl] = useState(false);
@@ -54,15 +55,17 @@ const Geolocation = () => {
     // swapped so imageFile has priority which works with fromAssistant
     if (imageFile) {
       try {
-        const prediction = (await geolocateLocalFile(imageFile)).predictions;
-        if (prediction.length === 0) {
+        const { predictions, gpsMetadata } =
+          await geolocateLocalFile(imageFile);
+        if (predictions.length === 0) {
           handleError("geo_error_no_result_found", keyword, dispatch);
           dispatch(setGeolocationLoading(false));
         } else {
           dispatch(
             setGeolocationResult({
               urlImage: URL.createObjectURL(imageFile),
-              result: prediction,
+              result: predictions,
+              metadata: gpsMetadata,
               loading: false,
             }),
           );
@@ -140,8 +143,12 @@ const Geolocation = () => {
           </Box>
           {isLoading && <LinearProgress />}
         </Card>
-        {result && !isLoading && (
-          <GeolocationResults result={result} urlImage={urlImage} />
+        {(result || metadata) && !isLoading && (
+          <GeolocationResults
+            result={result}
+            urlImage={urlImage}
+            metadata={metadata}
+          />
         )}
       </Stack>
     </Box>
