@@ -111,7 +111,7 @@ const FfmpegToolkit = () => {
                 submitButtonTestId="ffmpegtoolkit-submit"
               />
 
-              {videoObjectUrl && (
+              {videoObjectUrl && !result && (
                 <Box sx={{ mt: 2 }}>
                   <video
                     ref={videoRef}
