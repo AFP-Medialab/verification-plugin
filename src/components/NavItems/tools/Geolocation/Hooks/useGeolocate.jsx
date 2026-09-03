@@ -8,6 +8,11 @@ import {
 } from "@/redux/reducers/tools/geolocationReducer";
 import axios from "axios";
 
+import {
+  extractMetadataFromFile,
+  extractMetadataFromUrl,
+} from "../../Metadata/api/imageMetadataApi";
+
 const caa_localtion_base_url = import.meta.env.VITE_CAA_LOCATION_URL;
 
 export const handleError = (e, keyword, dispatch) => {
@@ -22,28 +27,40 @@ export const useGeolocate = (url, processURL, keyword) => {
   useEffect(() => {
     if (processURL && url !== "") {
       dispatch(setGeolocationLoading(true));
-      axios
-        .get(caa_localtion_base_url + "?image_url=" + url + "&use_gradcam=0")
-        .then((response) => {
-          if (response.data != null) {
+      const fetchGeolocationData = async () => {
+        try {
+          const [geoResponse, metadataRaw] = await Promise.all([
+            axios.get(
+              `${caa_localtion_base_url}?image_url=${url}&use_gradcam=0`,
+            ),
+            extractMetadataFromUrl(url),
+          ]);
+
+          const gpsMetadata = metadataRaw
+            ? filterMetadataToGetGeolocationMetadata(metadataRaw)
+            : null;
+
+          if (geoResponse.data != null) {
             dispatch(
               setGeolocationResult({
                 urlImage: url,
-                result: response.data.predictions,
+                result: geoResponse.data.predictions,
+                metadata: gpsMetadata,
                 loading: false,
               }),
             );
           } else {
             handleError(
-              "geo_error_" + response.data?.status,
+              `geo_error_${geoResponse.data?.status}`,
               keyword,
               dispatch,
             );
           }
-        })
-        .catch((error) => {
+        } catch (error) {
           handleError("geo_error_" + error.response.status, keyword, dispatch);
-        });
+        }
+      };
+      fetchGeolocationData();
     }
   }, [processURL, url]);
 };
@@ -57,17 +74,34 @@ export const geolocateLocalFile = async (file) => {
   formData.append("file", file);
 
   try {
-    const response = await fetch(caa_localtion_base_url, {
-      method: "POST",
-      body: formData,
-    });
+    const [metadataRaw, response] = await Promise.all([
+      extractMetadataFromFile(file),
+      fetch(caa_localtion_base_url, { method: "POST", body: formData }),
+    ]);
 
-    if (response.ok && response.data !== null) {
-      return await response.json();
+    const gpsMetadata = metadataRaw
+      ? filterMetadataToGetGeolocationMetadata(metadataRaw)
+      : null;
+
+    if (response.ok) {
+      const data = await response.json();
+      return { predictions: data.predictions, gpsMetadata };
     } else {
       console.error("Error:", response.statusText);
     }
   } catch (error) {
     console.error("Error:", error);
+    throw error;
   }
+};
+
+const filterMetadataToGetGeolocationMetadata = (metadata) => {
+  if (!metadata.GPS?.longitude || !metadata.GPS?.latitude) {
+    return null;
+  }
+
+  const latitude = metadata.GPS.latitude;
+  const longitude = metadata.GPS.longitude;
+
+  return { latitude: latitude, longitude: longitude };
 };
