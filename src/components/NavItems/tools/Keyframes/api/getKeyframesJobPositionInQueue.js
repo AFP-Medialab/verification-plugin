@@ -1,4 +1,4 @@
-import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequest";
+import axios from "axios";
 
 /**
  * Gets the current position/length of the keyframes job queue.
@@ -7,16 +7,13 @@ import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequ
  * @param {string} jobId - The ID of the keyframe job to monitor.
  * @returns {Promise<string>} The queue length as a string.
  */
-export async function getKeyframesJobPositionInQueueApi(
-  authenticatedRequest,
-  jobId,
-) {
+export async function getKeyframesJobPositionInQueueApi(jobId) {
   const config = {
     method: "get",
     url: `${import.meta.env.VITE_KEYFRAME_API}/queue_info/${jobId}`,
   };
 
-  const response = await authenticatedRequest(config);
+  const response = await axios(config);
 
   // Return the length string from the API response
   return typeof response.data.position === "number"
@@ -29,8 +26,6 @@ export async function getKeyframesJobPositionInQueueApi(
  *
  * @returns {() => Promise<string>} A function to fetch the queue length.
  */
-export const useGetKeyframesJobPositionInQueue = () => {
-  const authenticatedRequest = useAuthenticatedRequest();
-
-  return () => getKeyframesJobPositionInQueueApi(authenticatedRequest);
+export const useGetKeyframesJobPositionInQueue = (jobId) => {
+  return () => getKeyframesJobPositionInQueueApi(jobId);
 };

@@ -1,4 +1,4 @@
-import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequest";
+import axios from "axios";
 
 /**
  * Fetches raw keyframe segmentation results for a given jobId.
@@ -7,13 +7,13 @@ import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequ
  * @param {string} jobId - The job ID whose keyframe results to retrieve.
  * @returns {Promise<KeyframesData>} An object containing session metadata, keyframes, shots, subshots, and download URL.
  */
-export async function fetchKeyframesApi(authenticatedRequest, jobId) {
+export async function fetchKeyframesApi(jobId) {
   const config = {
     method: "get",
     url: `${import.meta.env.VITE_KEYFRAME_API}/json/seg/${jobId}`,
   };
 
-  const response = await authenticatedRequest(config);
+  const response = await axios(config);
 
   /** @type {Shot[]} */
   const shots =
@@ -73,7 +73,5 @@ export async function fetchKeyframesApi(authenticatedRequest, jobId) {
  * @returns {(jobId: string) => Promise<KeyframesData>} A function to fetch and parse keyframe data.
  */
 export const useFetchKeyframes = () => {
-  const authenticatedRequest = useAuthenticatedRequest();
-
-  return (jobId) => fetchKeyframesApi(authenticatedRequest, jobId);
+  return (jobId) => fetchKeyframesApi(jobId);
 };
