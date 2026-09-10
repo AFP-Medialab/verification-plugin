@@ -49,8 +49,8 @@ const FfmpegToolkit = () => {
     handleDownloadAudio,
     handleDownloadVideo,
     handleGoToHiya,
-    handleGetKeyframes,
-    handleDownloadKeyframes,
+    handleGetIframes,
+    handleDownloadIframes,
   } = useFfmpegToolkit();
 
   return (
@@ -197,8 +197,8 @@ const FfmpegToolkit = () => {
             onDownloadAudio={handleDownloadAudio}
             onDownloadVideo={handleDownloadVideo}
             onGoToHiya={handleGoToHiya}
-            onGetKeyframes={handleGetKeyframes}
-            onDownloadKeyframes={handleDownloadKeyframes}
+            onGetIframes={handleGetIframes}
+            onDownloadIframes={handleDownloadIframes}
           />
         )}
       </Stack>

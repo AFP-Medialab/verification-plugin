@@ -16,17 +16,17 @@ const FfmpegToolkitResult = ({
   onDownloadAudio,
   onDownloadVideo,
   onGoToHiya,
-  onGetKeyframes,
-  onDownloadKeyframes,
+  onGetIframes,
+  onDownloadIframes,
 }) => {
   const [showDownloadModal, setShowDownloadModal] = useState(false);
   const keyword = i18nLoadNamespace("components/NavItems/tools/FfmpegToolkit");
 
-  const keyframes = useSelector((state) => state.ffmpegToolkit.keyframes);
+  const iframes = useSelector((state) => state.ffmpegToolkit.iframes);
 
   const isLoading = useSelector((state) => state.ffmpegToolkit.bottomLoading);
 
-  const hasKeyframes = keyframes?.length > 0;
+  const hasIframes = iframes?.length > 0;
 
   return (
     <Card>
@@ -88,14 +88,14 @@ const FfmpegToolkitResult = ({
         </Button>
         <Button
           variant="contained"
-          onClick={onGetKeyframes}
+          onClick={onGetIframes}
           disabled={isLoading}
-          data-testid="ffmpegtoolkit-keyframes-button"
+          data-testid="ffmpegtoolkit-iframes-button"
         >
           I-frames
         </Button>
       </Box>
-      {keyframes && hasKeyframes && (
+      {iframes && hasIframes && (
         <Box sx={{ p: 2 }}>
           <Box
             sx={{
@@ -107,7 +107,7 @@ const FfmpegToolkitResult = ({
               overflowX: "hidden",
             }}
           >
-            {keyframes.map((item, index) => {
+            {iframes.map((item, index) => {
               const imageSrc = `data:${item.mimeType};base64,${item.data}`;
 
               return (
@@ -132,17 +132,17 @@ const FfmpegToolkitResult = ({
           </Box>
           <Button
             variant="contained"
-            onClick={onDownloadKeyframes}
-            data-testid="ffmpegtoolkit-download-keyframes-button"
+            onClick={onDownloadIframes}
+            data-testid="ffmpegtoolkit-download-iframes-button"
             sx={{ mt: 2 }}
           >
-            {keyword("ffmpeg_toolkit_downloadkeyframesbutton")}
+            {keyword("ffmpeg_toolkit_downloadiframesbutton")}
           </Button>
         </Box>
       )}
-      {keyframes && !hasKeyframes && (
+      {iframes && !hasIframes && (
         <Box sx={{ p: 2 }}>
-          <Alert severity="warning">No keyframes found in this video</Alert>
+          <Alert severity="warning">No iframes found in this video</Alert>
         </Box>
       )}
       {isLoading && (
