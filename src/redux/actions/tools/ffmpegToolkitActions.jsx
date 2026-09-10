@@ -20,6 +20,6 @@ export const setBeginCutTime = createAction("SET_BEGIN_CUT_TIME");
 
 export const setEndCutTime = createAction("SET_END_CUT_TIME");
 
-export const setKeyframes = createAction("SET_KEYFRAMES");
+export const setIframes = createAction("SET_IFRAMES");
 
 export const setBottomLoading = createAction("SET_BOTTOM_LOADING");

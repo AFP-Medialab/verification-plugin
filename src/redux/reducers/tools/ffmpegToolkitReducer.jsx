@@ -5,7 +5,7 @@ const defaultState = {
   type: "",
   endCutTime: null,
   beginCutTime: null,
-  keyframes: null,
+  iframes: null,
   bottomLoading: null,
   file: null,
   fileName: null,
@@ -24,7 +24,7 @@ const ffmpegToolkitReducer = (state = defaultState, action) => {
         type: "",
         endCutTime: null,
         beginCutTime: null,
-        keyframes: null,
+        iframes: null,
       };
     case "SET_FFMPEG_TOOLKIT_LOADING":
       return {
@@ -62,10 +62,10 @@ const ffmpegToolkitReducer = (state = defaultState, action) => {
         ...state,
         endCutTime: action.payload,
       };
-    case "SET_KEYFRAMES":
+    case "SET_IFRAMES":
       return {
         ...state,
-        keyframes: action.payload,
+        iframes: action.payload,
       };
     case "SET_BOTTOM_LOADING":
       return {
