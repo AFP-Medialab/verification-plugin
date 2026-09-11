@@ -1,4 +1,4 @@
-import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequest";
+import axios from "axios";
 
 /**
  * Fetches keyframe audio extraction for a given jobId.
@@ -7,14 +7,14 @@ import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequ
  * @param {string} jobId - The ID of the completed keyframe job.
  * @returns {Promise<Object>} Parsed audio features.
  */
-export async function fetchKeyframeAudioApi(authenticatedRequest, jobId) {
+export async function fetchKeyframeAudioApi(jobId) {
   const config = {
     method: "get",
     // url: `${import.meta.env.VITE_KEYFRAME_API}/json/audio/${jobId}`,
     url: `${import.meta.env.VITE_KEYFRAME_API}/mp3/${jobId}`,
   };
 
-  const response = await authenticatedRequest(config);
+  const response = await axios(config);
 
   //console.log(response.data);
 
@@ -30,7 +30,5 @@ export async function fetchKeyframeAudioApi(authenticatedRequest, jobId) {
  * @returns {(jobId: string) => Promise<KeyframesFeatures>} A function that retrieves parsed keyframe features.
  */
 export const useFetchKeyframeAudio = () => {
-  const authenticatedRequest = useAuthenticatedRequest();
-
-  return (jobId) => fetchKeyframeAudioApi(authenticatedRequest, jobId);
+  return (jobId) => fetchKeyframeAudioApi(jobId);
 };

@@ -1,4 +1,4 @@
-import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequest";
+import axios from "axios";
 
 /**
  * Fetches enhanced keyframe features (faces and text groups) for a given jobId.
@@ -7,13 +7,13 @@ import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequ
  * @param {string} jobId - The ID of the completed keyframe job.
  * @returns {Promise<KeyframesFeatures>} Parsed features including face and text groups.
  */
-export async function fetchKeyframeFeaturesApi(authenticatedRequest, jobId) {
+export async function fetchKeyframeFeaturesApi(jobId) {
   const config = {
     method: "get",
     url: `${import.meta.env.VITE_KEYFRAME_API}/json/det/${jobId}`,
   };
 
-  const response = await authenticatedRequest(config);
+  const response = await axios(config);
   let faces = /** @type {ImagesFeature[]} */ [];
   let texts = /** @type {ImagesFeature[]} */ [];
 
@@ -73,7 +73,5 @@ export async function fetchKeyframeFeaturesApi(authenticatedRequest, jobId) {
  * @returns {(jobId: string) => Promise<KeyframesFeatures>} A function that retrieves parsed keyframe features.
  */
 export const useFetchKeyframeFeatures = () => {
-  const authenticatedRequest = useAuthenticatedRequest();
-
-  return (jobId) => fetchKeyframeFeaturesApi(authenticatedRequest, jobId);
+  return (jobId) => fetchKeyframeFeaturesApi(jobId);
 };
