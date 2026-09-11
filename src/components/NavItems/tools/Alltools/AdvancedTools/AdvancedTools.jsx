@@ -579,15 +579,35 @@ const AdvancedTools = () => {
             }}
           >
             <DialogTitle id="max-width-dialog-title">
-              <Typography
-                gutterBottom
+              <Grid
+                container
+                direction="row"
+                style={{ width: "100%" }}
                 sx={{
-                  color: "var(--mui-palette-primary-main)",
-                  fontSize: "24px",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
                 }}
               >
-                {messageI18NResolver("REGISTRATIONFORM_TITLE_WINDOW")}
-              </Typography>
+                <Grid>
+                  <IconButton
+                    color="primary"
+                    onClick={handleClickBack}
+                    component="span"
+                  >
+                    <ArrowBackIosIcon />
+                  </IconButton>
+                </Grid>
+                <Grid>
+                  <Typography
+                    style={{
+                      color: "var(--mui-palette-primary-main)",
+                      fontSize: "24px",
+                    }}
+                  >
+                    {messageI18NResolver("REGISTRATIONFORM_TITLE_WINDOW")}
+                  </Typography>
+                </Grid>
+              </Grid>
             </DialogTitle>
             <DialogContent>
               <Typography variant="body2">

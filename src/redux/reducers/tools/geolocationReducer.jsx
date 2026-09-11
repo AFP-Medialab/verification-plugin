@@ -4,6 +4,7 @@ const initialState = {
   urlImage: "",
   result: null,
   loading: false,
+  metadata: null,
 };
 
 const geolocalisationSlice = createSlice({

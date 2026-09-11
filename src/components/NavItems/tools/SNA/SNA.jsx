@@ -82,7 +82,7 @@ import {
 const SNA = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/NewSNA");
   const keywordLanguages = i18nLoadNamespace(
-    "components/NavItems/tools/stopWords",
+    "components/NavItems/tools/Languages",
   );
   const languageMap = getLanguages(keywordLanguages);
   const dispatch = useDispatch();

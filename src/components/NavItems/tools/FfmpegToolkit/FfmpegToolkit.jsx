@@ -2,6 +2,7 @@ import React from "react";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
+import IconButton from "@mui/material/IconButton";
 import LinearProgress from "@mui/material/LinearProgress";
 import Link from "@mui/material/Link";
 import Slider from "@mui/material/Slider";
@@ -9,6 +10,8 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import ContentCutIcon from "@mui/icons-material/ContentCut";
+import PauseIcon from "@mui/icons-material/Pause";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 
 import StringFileUploadField from "@/components/Shared/StringFileUploadField";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
@@ -30,6 +33,12 @@ const FfmpegToolkit = () => {
     setInput,
     videoFile,
     setVideoFile,
+    videoObjectUrl,
+    videoRef,
+    currentTime,
+    isPlaying,
+    togglePlay,
+    handleSeek,
     sliderRange,
     setSliderRange,
     videoDuration,
@@ -102,6 +111,47 @@ const FfmpegToolkit = () => {
                 submitButtonTestId="ffmpegtoolkit-submit"
               />
 
+              {videoObjectUrl && !result && (
+                <Box sx={{ mt: 2 }}>
+                  <video
+                    ref={videoRef}
+                    key={videoObjectUrl}
+                    style={{
+                      width: "100%",
+                      maxHeight: "400px",
+                      display: "block",
+                    }}
+                    src={videoObjectUrl}
+                  />
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    spacing={1}
+                    sx={{ mt: 0.5 }}
+                  >
+                    <IconButton size="small" onClick={togglePlay}>
+                      {isPlaying ? (
+                        <PauseIcon fontSize="small" />
+                      ) : (
+                        <PlayArrowIcon fontSize="small" />
+                      )}
+                    </IconButton>
+                    <Typography variant="caption">
+                      {formatSeconds(Math.floor(currentTime))} /{" "}
+                      {formatSeconds(videoDuration)}
+                    </Typography>
+                  </Stack>
+                  <Slider
+                    size="small"
+                    value={currentTime}
+                    onChange={(_, val) => handleSeek(val)}
+                    min={0}
+                    max={videoDuration || 1}
+                    disabled={!videoDuration}
+                  />
+                </Box>
+              )}
+
               <Typography
                 variant="subtitle1"
                 sx={{ mt: 3, mb: 1, fontWeight: "medium" }}
@@ -109,7 +159,7 @@ const FfmpegToolkit = () => {
                 {keyword("ffmpeg_toolkit_cut_description")}
               </Typography>
 
-              <Box sx={{ mt: 1, px: 1 }}>
+              <Box sx={{ mt: 1 }}>
                 <Slider
                   data-testid="ffmpegtoolkit-slider"
                   value={sliderRange}

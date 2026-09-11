@@ -206,7 +206,6 @@ const TwitterAdvancedSearch = () => {
                 id="standard-full-width"
                 label={keyword(value.label)}
                 style={{ margin: 8 }}
-                placeholder={"ex : (need tsv changes)"}
                 fullWidth
                 {...value.props}
                 data-testid={`twitter-search-${key}`}
