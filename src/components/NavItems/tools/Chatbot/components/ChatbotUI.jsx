@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
@@ -292,31 +292,24 @@ const ChatbotUI = () => {
   }, [fetchModels]);
 
   // Check if directed from assistant
-  let text = useSelector((state) => state.assistant.urlText);
-  const { url } = useParams();
+  const text = useSelector((state) => state.assistant.urlText);
+  const [searchParams] = useSearchParams();
+  const fromAssistant = searchParams.has("fromAssistant");
   useEffect(() => {
-    //takes in text parameter from url
-    if (url) {
-      const uri = decodeURIComponent(url);
-      if (uri === "assistantText" && text) {
-        // set model (defaults to first in list)
+    if (fromAssistant && text) {
+      // set predefined prompt
+      const promptId = "rhetorical_analysis";
+      dispatch(setSelectedPrompt(promptId));
+      const selectedPromptObj = prompts.find((req) => req.id === promptId);
+      dispatch(setActivePrompt({ prompt: selectedPromptObj }));
 
-        // set temperature (defaults to 0.7)
+      // set text to analyse
+      dispatch(setUserInput(text.trim()));
 
-        // set predefined prompt
-        const promptId = "rhetorical_analysis";
-        dispatch(setSelectedPrompt(promptId));
-        const selectedPromptObj = prompts.find((req) => req.id === promptId);
-        dispatch(setActivePrompt({ prompt: selectedPromptObj }));
-
-        // set text to analyse
-        dispatch(setUserInput(text.trim()));
-
-        // send message
-        handleSendMessage();
-      }
+      // send message
+      handleSendMessage();
     }
-  }, [dispatch, url, text, isReady]);
+  }, [dispatch, fromAssistant, text, isReady]);
 
   const handleSendMessage = async () => {
     if (!userInput.trim() || !isReady) {

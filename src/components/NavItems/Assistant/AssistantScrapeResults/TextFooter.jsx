@@ -30,8 +30,7 @@ export default function TextFooter({
   const navigate = useNavigate();
 
   const handleClick = (path) => {
-    // instead need to set parameter then load text in ChatBot/index.jsx ... ?
-    navigate("/app/" + path + "/assistantText");
+    navigate("/app/" + path + "?fromAssistant");
   };
 
   return (
