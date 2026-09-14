@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 
+import { ROLES } from "@/constants/roles";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { TextCopy } from "@Shared/Utils/TextCopy";
 import { Translate } from "@Shared/Utils/Translate";
@@ -26,6 +27,9 @@ export default function TextFooter({
   const keyword = i18nLoadNamespace("components/Shared/utils");
   const locale = useSelector((state) => state.language);
 
+  // checking if user logged in
+  const role = useSelector((state) => state.userSession.user.roles);
+
   // for navigating to ChatBot with text
   const navigate = useNavigate();
 
@@ -39,7 +43,7 @@ export default function TextFooter({
       <Grid container spacing={2}>
         {/* language detected */}
         <Grid
-          size={9}
+          size={role.includes(ROLES.EXTRA_FEATURE) ? 9 : 10}
           align={"left"}
           sx={{
             pt: 1,
@@ -89,23 +93,27 @@ export default function TextFooter({
         </Grid>
 
         {/* send text to local LLM chatbot */}
-        <Grid
-          size={{ xs: 1 }}
-          align={"right"}
-          sx={{
-            display: "flex",
-            pt: 2,
-          }}
-        >
-          <Tooltip title={keyword("extracted_text_chatbot")}>
-            <Link
-              sx={{ cursor: "pointer" }}
-              onClick={() => handleClick("tools/ChatBot")}
-            >
-              <SmartToyIcon sx={{ color: "var(--mui-palette-primary-main)" }} />
-            </Link>
-          </Tooltip>
-        </Grid>
+        {role.includes(ROLES.EXTRA_FEATURE) && (
+          <Grid
+            size={{ xs: 1 }}
+            align={"right"}
+            sx={{
+              display: "flex",
+              pt: 2,
+            }}
+          >
+            <Tooltip title={keyword("extracted_text_chatbot")}>
+              <Link
+                sx={{ cursor: "pointer" }}
+                onClick={() => handleClick("tools/ChatBot")}
+              >
+                <SmartToyIcon
+                  sx={{ color: "var(--mui-palette-primary-main)" }}
+                />
+              </Link>
+            </Tooltip>
+          </Grid>
+        )}
       </Grid>
     </Box>
   );
