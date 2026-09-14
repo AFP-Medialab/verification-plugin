@@ -9,6 +9,7 @@
  */
 import { test, expect } from './fixtures';
 import mockedMGTresponse from '../../tests-assets/api-response/machine-generated-text.json'
+import mockedMGTresponseError from '../../tests-assets/api-response/machine-generated-text-error.json'
 
 const MGT_INPUT_TEXT = `Artificial intelligence (AI) is rapidly transforming the way we live and work. From self-driving cars to medical diagnosis, AI systems are increasingly making decisions that were once exclusively the domain of humans. This technological revolution brings both tremendous opportunities and significant challenges that society must navigate carefully.`;
 
@@ -24,10 +25,10 @@ test('Test twitter search', async ({ page, context, extensionId }) => {
     await page.locator('[data-testid="twitter-search-5"] input').fill('Paris');
     await page.locator('[data-testid="twitter-search-6"] input').fill('15km'); 
 
-    await page.getByLabel(`* Since`).fill('2023-10-25 10:00');
+    await page.getByTestId('twitter-since-date').fill('2023-10-25 10:00');
     await page.keyboard.press('Enter');
 
-    await page.getByLabel(`* Until`).fill('2023-10-26 15:30');
+    await page.getByTestId('twitter-until-date').fill('2023-10-26 15:30');
     await page.keyboard.press('Enter');
     
     await page.getByTestId('twitter-radio-gmt').click();
@@ -51,7 +52,7 @@ test('Test Machine generated text search', async ({ page, authenticatedBetaTeste
 
     await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/mgt`);
 
-    await page.locator('[data-testid="mgt-input"] textarea:not([aria-hidden])').fill(MGT_INPUT_TEXT);
+    await page.locator('[data-testid="mgt-input"] textarea:not([aria-hidden])').fill("test");
 
     await page.getByTestId('mgt-submit').click();
 
@@ -59,4 +60,22 @@ test('Test Machine generated text search', async ({ page, authenticatedBetaTeste
     await expect (page.getByTestId("mgt-results-gauge")).toBeVisible();
 
     await expect (page.getByTestId("mgt-results-highlight-text")).toBeVisible();
+})
+
+test('Test Machine generated text search error', async ({ page, authenticatedBetaTesterExtensionId }) => {
+    await page.route('**/kinit/mgt/detection', async(route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(mockedMGTresponseError)
+        })
+    })
+
+    await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/mgt`);
+
+    await page.locator('[data-testid="mgt-input"] textarea:not([aria-hidden])').fill("test");
+
+    await page.getByTestId('mgt-submit').click();
+
+    await expect (page.getByTestId("mgt-errors")).toBeVisible();
 })

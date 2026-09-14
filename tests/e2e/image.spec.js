@@ -9,8 +9,11 @@
  */
 import { test, expect } from './fixtures';
 import path from 'path';
+import fs from 'fs';
 import mockedSyntheticImageResponse from '../../tests-assets/api-response/syntheticimages-response.json'
 import mockedGeolocationResponse from '../../tests-assets/api-response/geolocation-response.json'
+import mockedOcrResponse from '../../tests-assets/api-response/ocr-response.json'
+import mockedForensicResponse from '../../tests-assets/api-response/forensic-response.json'
 
 test('Test tool magnifier', async ({ page, context, extensionId }) => {
     // Navigate to the demo page
@@ -68,6 +71,14 @@ test('Test tool forensic', async ({ page, extensionId }) => {
   await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/forensic`);
   await page.getByText("Accept").click();
 
+  await page.route('**forensic**', async (route) => {
+    await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(mockedForensicResponse)
+    })
+  });
+
   await page.locator('[data-testid="forensic-input"] input').fill('https://www.lebigdata.fr/wp-content/uploads/2023/03/macron-pape-ia-deepfake-1050x525.jpg');
   await page.getByTestId('forensic-submit').click();
 
@@ -88,6 +99,14 @@ test('Test tool forensic', async ({ page, extensionId }) => {
 test('Test tool OCR', async ({ page, context, extensionId }) => {
   await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/ocr`);
   await page.getByText("Accept").click();
+
+  await page.route('**/ocr', async (route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(mockedOcrResponse)
+        })
+    });
 
   await page.locator('[data-testid="ocr-input"] input').fill('https://www.rue89strasbourg.com/wp-content/uploads/2024/06/dsc-3582-1920x1280.jpg');
   await page.getByTestId('ocr-submit').click();
@@ -213,7 +232,7 @@ test('Test tool Synthetic Images', async({page, authenticatedBetaTesterExtension
     await expect (page.getByTestId("synthetic-images-results")).toHaveCount(0);
 })
 
-test('Test tool geolocalisation', async ({page, authenticatedBetaTesterExtensionId, context}) => {
+test('Test tool geolocalisation - algorithm results', async ({page, authenticatedBetaTesterExtensionId, context}) => {
     await page.route('**/geolocate?image_url=**', async(route) => {
         await route.fulfill({
             status: 200,
@@ -227,22 +246,59 @@ test('Test tool geolocalisation', async ({page, authenticatedBetaTesterExtension
     await page.locator('[data-testid="geolocation-input"] input').fill('testurl');
     await page.getByTestId('geolocation-submit').click();
 
-    await expect (page.getByTestId("geolocation-results")).toBeVisible();
-    await expect (page.getByTestId("geolocation-results-image")).toBeVisible();
-    await expect (page.getByTestId("geolocation-results-map")).toBeVisible();
+    await expect(page.getByTestId("geolocation-results")).toBeVisible();
+    await expect(page.getByTestId("geolocation-results-image")).toBeVisible();
+    await expect(page.getByTestId("geolocation-results-map")).toBeVisible();
 
+    // metadata tab should be disabled when image has no GPS EXIF
+    await expect(page.getByTestId("geolocation-tab-metadata")).toBeDisabled();
+
+    const newPagePromise = context.waitForEvent('page');
     await page.getByTestId('geolocation-results-button-to-gmaps').click();
-    
-    await expect.poll(async () => {
-        return context.pages().length;
-    }).toBe(2);
+    const newPage = await newPagePromise;
+    await newPage.waitForLoadState();
+
+    await expect(newPage).toHaveURL(/google\.com\/maps/);
+})
+
+test('Test tool geolocalisation - GPS metadata only', async ({page, authenticatedBetaTesterExtensionId}) => {
+    // algorithm returns no predictions
+    await page.route('**/geolocate?image_url=**', async(route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({ predictions: [], soft_confidence_threshold: 0.1 })
+        })
+    })
+    // serve an image with GPS EXIF (Paris: 48.8566, 2.3522) via a real HTTP URL
+    await page.route('https://test.verification.local/gps-image.jpg', async(route) => {
+        const imageBuffer = fs.readFileSync(path.resolve(__dirname, '../../tests-assets/test-metadata-gps.jpg'));
+        await route.fulfill({
+            status: 200,
+            contentType: 'image/jpeg',
+            body: imageBuffer
+        })
+    })
+
+    await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/geolocation`);
+
+    await page.locator('[data-testid="geolocation-input"] input').fill('https://test.verification.local/gps-image.jpg');
+    await page.getByTestId('geolocation-submit').click();
+
+    // metadata tab should be enabled once GPS EXIF is extracted
+    await expect(page.getByTestId("geolocation-tab-metadata")).toBeEnabled();
+    await page.getByTestId("geolocation-tab-metadata").click();
+
+    await expect(page.getByTestId("geolocation-metadata-results")).toBeVisible();
+    await expect(page.getByTestId("geolocation-metadata-results-map")).toBeVisible();
+    await expect(page.getByTestId("geolocation-metadata-results-image")).toBeVisible();
 })
 
 // TODO : manage to mock the api for afp reverse search (api response for this available in tests assets)
 test('Test tool C2PA', async ({page, authenticatedExtraFeaturesExtensionId}) => {
     await page.goto(`chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/tools/c2pa`);
 
-    const filePath = path.resolve(__dirname, '../../tests-assets/test-c2pa.jpg');
+    const filePath = path.resolve(__dirname, '../../tests-assets/test-metadata.jpg');
     await page.locator('input[type="file"]').setInputFiles(filePath);
 
     await page.getByTestId('c2pa-reversesearch-toggle').click();

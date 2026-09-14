@@ -18,6 +18,7 @@ import analysisReducer from "./tools/analysisReducer";
 import archiveReducer from "./tools/archiveReducer";
 import c2paReducer from "./tools/c2paReducer";
 import deepfakeReducerVideo from "./tools/deepfakeVideoReducer";
+import ffmpegToolkitReducer from "./tools/ffmpegToolkitReducer";
 import forensicReducer from "./tools/forensicReducer";
 import geolocationReducer from "./tools/geolocationReducer";
 import gifReducer from "./tools/gifReducer";
@@ -73,6 +74,7 @@ const allReducers = combineReducers({
   geolocation: geolocationReducer,
   c2pa: c2paReducer,
   archive: archiveReducer,
+  ffmpegToolkit: ffmpegToolkitReducer,
 });
 
 export default allReducers;

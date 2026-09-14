@@ -78,7 +78,7 @@ function treeMapToElementsRecursive(
     }
   }
 
-  for (let i = 0; i < treeElem.children.length; i++) {
+  for (let i = 0; i < (treeElem.children?.length ?? 0); i++) {
     childElems.push(
       treeMapToElementsRecursive(
         text,
@@ -90,10 +90,9 @@ function treeMapToElementsRecursive(
   }
 
   // Collect attributes
-  let attributes = {};
-  if (treeElem.attributes) {
-    attributes = { ...treeElem.attributes, key: uuidv4() };
-  }
+  const attributes = treeElem.attributes
+    ? { ...treeElem.attributes, key: uuidv4() }
+    : { key: uuidv4() };
 
   return React.createElement(treeElem.tag, attributes, childElems);
 }

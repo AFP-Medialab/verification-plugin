@@ -121,7 +121,11 @@ const Interactive = () => {
                 }}
               >
                 <Grid>
-                  <Fab color={"primary"} onClick={previous}>
+                  <Fab
+                    data-testid="interactive-previous"
+                    color={"primary"}
+                    onClick={previous}
+                  >
                     {isCurrentLanguageLeftToRight ? (
                       <NavigateBeforeIcon
                         fontSize={"large"}
@@ -136,7 +140,11 @@ const Interactive = () => {
                   </Fab>
                 </Grid>
                 <Grid>
-                  <Fab color={"primary"} onClick={next}>
+                  <Fab
+                    data-testid="interactive-next"
+                    color={"primary"}
+                    onClick={next}
+                  >
                     {isCurrentLanguageLeftToRight ? (
                       <NavigateNextIcon
                         fontSize={"large"}
@@ -162,6 +170,7 @@ const Interactive = () => {
                 >
                   <Grid>
                     <Button
+                      data-testid="interactive-similarity"
                       variant="contained"
                       color="primary"
                       onClick={() => {
@@ -193,6 +202,7 @@ const Interactive = () => {
                 </Grid>
               ) : (
                 <Button
+                  data-testid="interactive-keyframes"
                   variant="contained"
                   color="primary"
                   onClick={() => {
@@ -211,8 +221,13 @@ const Interactive = () => {
                 }}
               />
               <Typography variant={"h5"}>{obj.title}</Typography>
-              <Accordion expanded={answerExpanded} onChange={handleExpanded}>
+              <Accordion
+                data-testid="interactive-accordion"
+                expanded={answerExpanded}
+                onChange={handleExpanded}
+              >
                 <AccordionSummary
+                  data-testid="interactive-accordion-summary"
                   expandIcon={answersAvailable ? <ExpandMoreIcon /> : null}
                   aria-controls="panel4bh-content"
                   id="panel4bh-header"

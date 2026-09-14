@@ -87,6 +87,16 @@ const ImageResult = ({ handleCloseResults }) => {
   };
 
   const getDownloadLink = (image) => {
+    if (image.startsWith("data:")) {
+      let baseName = "image";
+      if (!original.startsWith("data:")) {
+        const urlName = original.substring(original.lastIndexOf("/") + 1);
+        baseName = urlName.includes(".")
+          ? urlName.substring(0, urlName.lastIndexOf("."))
+          : urlName || "image";
+      }
+      return `${baseName}-cropped.png`;
+    }
     let image_name = image.substring(image.lastIndexOf("/") + 1);
     return image_name.substring(0, image_name.lastIndexOf("."));
   };

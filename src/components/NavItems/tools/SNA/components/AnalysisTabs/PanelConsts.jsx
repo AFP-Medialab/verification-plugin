@@ -67,6 +67,11 @@ export const analysisTools = {
     propKey: "textClusters",
     component: (props) => <AnalysisDisplayTemplate {...props} />,
   },
+  languageDetection: {
+    keywordLabel: "snaTools_languageDetection",
+    propKey: "languageDetection",
+    component: (props) => <AnalysisDisplayTemplate {...props} />,
+  },
 };
 /**
  *
@@ -106,7 +111,10 @@ export const AnalysisDisplayTemplate = ({
     let selectedContent = getSelectedSourcesContent(dataSources, selected);
     try {
       let result = await analysisFunction(selectedContent, analysisArgs);
-      if (Array.isArray(result) && result.length === 0) {
+      if (
+        (Array.isArray(result) && result.length === 0) ||
+        (result?.words && result.words.length === 0)
+      ) {
         setErrorMessage("snaTools_noResultMessage");
       } else {
         setToolResult(result);

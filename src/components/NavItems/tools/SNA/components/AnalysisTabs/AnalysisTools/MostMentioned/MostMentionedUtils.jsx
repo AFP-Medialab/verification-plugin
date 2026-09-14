@@ -7,7 +7,6 @@ export const entryAggregatorByListValue = (
 ) => {
   let aggregator = {};
   selectedContent.forEach((entry) => {
-    console.log(entry.splitText);
     if (!entry[listField]) return;
     if (!entry[listField]?.length > 0) return;
     entry[listField]

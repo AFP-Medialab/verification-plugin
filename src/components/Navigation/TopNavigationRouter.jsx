@@ -7,7 +7,7 @@ import Container from "@mui/material/Container";
 import Fade from "@mui/material/Fade";
 
 import { useTrackPageView } from "@/Hooks/useAnalytics";
-import { toolsHome } from "@/constants/tools";
+import { toolsHome } from "@/constants/toolsData";
 import { TOP_MENU_ITEMS } from "@/constants/topMenuItems";
 import { selectTopMenuItem } from "@/redux/reducers/navReducer";
 

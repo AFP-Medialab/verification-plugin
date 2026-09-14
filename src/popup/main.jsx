@@ -49,7 +49,10 @@ const sagaMiddleware = createSagaMiddleware();
 const store = configureStore({
   reducer: allReducers,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }).prepend(sagaMiddleware),
+    getDefaultMiddleware({
+      serializableCheck: false,
+      immutableCheck: { ignoredPaths: ["poiForensics.file"] },
+    }).prepend(sagaMiddleware),
   preloadedState: persistedState,
 });
 sagaMiddleware.run(rootSaga);

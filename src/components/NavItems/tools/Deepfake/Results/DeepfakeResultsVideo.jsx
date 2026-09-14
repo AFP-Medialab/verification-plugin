@@ -275,7 +275,7 @@ const DeepfakeResultsVideo = (props) => {
                     data-testid="deepfake-video"
                   >
                     <source
-                      src={results[faceswapAlgorithm].video_path + "#t=2,4"}
+                      src={results[faceswapAlgorithm].video_path}
                       type="video/mp4"
                     />
                     {keyword("deepfake_support")}

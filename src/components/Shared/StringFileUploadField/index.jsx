@@ -54,6 +54,7 @@ const StringFileUploadField = ({
   preprocessLocalFile,
   isParentLoading,
   handleClearUrl,
+  disableUrlInput = false,
   urlInputTestId = "urlInputTestIdByDefault",
   submitButtonTestId = "submitButtonTestIdByDefault",
 }) => {
@@ -157,7 +158,9 @@ const StringFileUploadField = ({
               fullWidth
               value={urlInput}
               variant="outlined"
-              disabled={isParentLoading || fileInput instanceof Blob}
+              disabled={
+                isParentLoading || fileInput instanceof Blob || disableUrlInput
+              }
               onChange={(e) => setUrlInput(e.target.value)}
               slotProps={{
                 input: {

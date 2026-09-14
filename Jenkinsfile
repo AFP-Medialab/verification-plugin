@@ -10,7 +10,7 @@ pipeline {
     }
 
     environment {
-        VERSION_TAG = "${env.BRANCH_NAME}-${env.BUILD_ID}"
+        VERSION_TAG = "${env.BRANCH_NAME}-${env.VITE_TRANSLATION_TAG}-${env.BUILD_ID}"
         S3_BUCKET = "verification-plugin-builds"
         AWS_REGION = "eu-west-1"
         CI="true"
@@ -26,7 +26,7 @@ pipeline {
                 }  
             }
             steps {
-                slackSend channel: 'medialab_builds', message: "Start build ${env.JOB_NAME} - ID: ${env.BUILD_ID}", tokenCredentialId: 'medialab_slack_token'
+                slackSend channel: 'C0B34ADJ7C3', message: "Start build ${env.JOB_NAME} - ID: ${env.BUILD_ID}", tokenCredentialId: 'medialab_slack_token'
                 script {
                     if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "pre-master") {
                         env.ENV_FILE = ".env.production"
@@ -103,11 +103,14 @@ pipeline {
                 container('aws-cli') {
                     script {
                         echo "Uploading artifacts to S3..."
-                        sh """                                                                                                                                                                                               
-                            ZIP=\$(ls build/weverify-plugin-*.zip 2>/dev/null | head -1)                                                                                                                                       
-                            if [ -z "\$ZIP" ]; then echo "No zip found!"; exit 1; fi                                                                                                                                           
-                            aws s3 cp "\$ZIP" s3://${S3_BUCKET}/jenkins/builds/${env.BRANCH_NAME}/we-verify-plugin-${VERSION_TAG}.zip                                                                                                  
-                        """   
+                        sh """
+                            ZIPS=\$(ls build/weverify-plugin-*.zip 2>/dev/null)
+                            if [ -z "\$ZIPS" ]; then echo "No zip found!"; exit 1; fi
+                            for ZIP in \$ZIPS; do
+                                BROWSER=\$(basename "\$ZIP" | grep -oE 'chrome|firefox')
+                                aws s3 cp "\$ZIP" s3://${S3_BUCKET}/jenkins/builds/${env.BRANCH_NAME}/we-verify-plugin-${VERSION_TAG}-\${BROWSER}.zip
+                            done
+                        """
                     }
                 }
             }
@@ -117,7 +120,7 @@ pipeline {
         success {
             slackSend channel: 'C0B34ADJ7C3', 
                     color: 'good',
-                    message: "✅ SUCCESS: ${env.JOB_NAME} #${env.BUILD_ID}\nArtefact: s3://${S3_BUCKET}/builds/${env.BRANCH_NAME}/we-verify-plugin-${VERSION_TAG}.zip", 
+                    message: "✅ SUCCESS: ${env.JOB_NAME} #${env.BUILD_ID}\nArtefact: s3://${S3_BUCKET}/jenkins/builds/${env.BRANCH_NAME}/we-verify-plugin-${VERSION_TAG}.zip", 
                     tokenCredentialId: 'medialab_slack_token'
         }
         failure {

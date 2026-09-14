@@ -243,6 +243,7 @@ const SettingsDrawer = ({ isPanelOpen, handleClosePanel }) => {
                 <FormControlLabel
                   control={
                     <Checkbox
+                      data-testid="settings-unlock-explanations"
                       checked={interactiveExplanation}
                       onChange={() =>
                         dispatch(toggleUnlockExplanationCheckBox())

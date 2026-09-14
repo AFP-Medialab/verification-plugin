@@ -19,16 +19,21 @@ const useLoadSupportedLanguage = () => {
     import.meta.env.VITE_TRANSLATION_TAG;
 
   useEffect(() => {
-    // If already loaded, return
-    if (languageIsLoaded) {
+    if (languageIsLoaded) return;
+
+    if (!navigator.onLine) {
+      dispatch(loadLanguages({ en: "English", ar: "عربي" }));
       return;
     }
 
-    axios.get(languagesUrl).then((result) => {
-      const languages = result.data;
-
-      dispatch(loadLanguages(languages));
-    });
+    axios
+      .get(languagesUrl)
+      .then((result) => {
+        dispatch(loadLanguages(result.data));
+      })
+      .catch(() => {
+        dispatch(loadLanguages({ en: "English", ar: "عربي" }));
+      });
   }, [userAuthenticated]);
 };
 

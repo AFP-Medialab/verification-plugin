@@ -4,6 +4,7 @@
  * auth.setup.js that fill localstorage with auth credentials.
  */
 import { test, expect } from './fixtures';
+import path from 'path';
 
 test(`Test tool analysis audio`, async ({ page, authenticatedBetaTesterExtensionId }) => {
     // mocking upload route 

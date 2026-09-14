@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
@@ -9,12 +10,16 @@ import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 export const Translate = ({ text, type }) => {
   const keyword = i18nLoadNamespace("components/Shared/utils");
-  // forward text on to google translate
+  const language = useSelector((state) => state.language);
+
   const googleTranslate = function (text) {
     let translate_url =
-      "https://translate.google.com/?sl=auto&text=" +
+      "https://translate.google.com/?sl=auto&tl=" +
+      encodeURIComponent(language) +
+      "&text=" +
       encodeURIComponent(text) +
       "&op=translate";
+
     window.open(translate_url, "_blank");
   };
 
