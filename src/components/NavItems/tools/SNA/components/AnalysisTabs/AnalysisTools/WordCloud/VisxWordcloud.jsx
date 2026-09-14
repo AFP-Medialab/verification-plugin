@@ -42,7 +42,7 @@ const fixedValueGenerator = () => 0.5;
 export const VisxWordcloud = ({ words, wordClickFunction, languages }) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/NewSNA");
   const keywordLanguages = i18nLoadNamespace(
-    "components/NavItems/tools/stopWords",
+    "components/NavItems/tools/Languages",
   );
 
   const dispatch = useDispatch();

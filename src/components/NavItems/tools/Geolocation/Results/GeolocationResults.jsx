@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { useSelector } from "react-redux";
@@ -8,6 +8,8 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 
 import { ROLES } from "@/constants/roles";
@@ -16,10 +18,12 @@ import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-const GeolocationResults = ({ result, urlImage }) => {
-  const keyword = i18nLoadNamespace("components/NavItems/tools/Geolocalizer");
+import GeolocationMetadataResults from "./GeolocationMetadataResults";
 
+const GeolocationResults = ({ result, urlImage, metadata }) => {
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Geolocalizer");
   const userRoles = useSelector((state) => state.userSession.user.roles);
+  const [tab, setTab] = useState(0);
 
   const resultIcon = new Icon({
     iconUrl: "img/marker-icon.png",
@@ -32,77 +36,54 @@ const GeolocationResults = ({ result, urlImage }) => {
     result = result.slice(0, 1);
   }
 
+  const hasMetadata = metadata?.latitude && metadata?.longitude;
+
   return (
     <Box>
-      <Stack direction="column" spacing={4}>
-        {result &&
-          result.length > 0 &&
-          result.map((res, key) => (
-            <Card
-              variant="outlined"
-              key={key}
-              data-testid="geolocation-results"
-            >
-              {userRoles.includes(ROLES.EXTRA_FEATURE) &&
-                res.confidence &&
-                typeof res.confidence === "number" && (
-                  <Box
-                    sx={{
-                      width: "100%",
-                      p: 4,
-                    }}
-                  >
-                    <Typography>{`Confidence score: ${
-                      res.confidence >= 0.5
-                        ? Math.round(res.confidence * 100)
-                        : Math.floor(res.confidence * 100)
-                    }%`}</Typography>
-                  </Box>
-                )}
-              <Grid
-                container
-                direction={{ md: "row", xs: "column" }}
-                style={{ flexWrap: "nowrap" }}
-                spacing={4}
-                sx={{
-                  justifyContent: "center",
-                  alignItems: "flex-start",
-                  p: 4,
-                }}
+      <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ mb: 2 }}>
+        <Tab
+          label={keyword("geo_tab_algorithm")}
+          data-testid="geolocation-tab-algorithm"
+        />
+        <Tab
+          label={keyword("geo_tab_metadata")}
+          disabled={!hasMetadata}
+          data-testid="geolocation-tab-metadata"
+        />
+      </Tabs>
+
+      {tab === 0 && (
+        <Stack direction="column" spacing={4}>
+          {result &&
+            result.length > 0 &&
+            result.map((res, key) => (
+              <Card
+                variant="outlined"
+                key={key}
+                data-testid="geolocation-results"
               >
+                {userRoles.includes(ROLES.EXTRA_FEATURE) &&
+                  res.confidence &&
+                  typeof res.confidence === "number" && (
+                    <Box sx={{ width: "100%", p: 4 }}>
+                      <Typography>{`Confidence score: ${
+                        res.confidence >= 0.5
+                          ? Math.round(res.confidence * 100)
+                          : Math.floor(res.confidence * 100)
+                      }%`}</Typography>
+                    </Box>
+                  )}
                 <Grid
                   container
-                  direction="column"
-                  spacing={3}
-                  size={{ md: 6, xs: 12 }}
+                  direction={{ md: "row", xs: "column" }}
+                  style={{ flexWrap: "nowrap" }}
+                  spacing={4}
                   sx={{
-                    justifyContent: "flex-start",
+                    justifyContent: "center",
                     alignItems: "flex-start",
+                    p: 4,
                   }}
                 >
-                  <Grid
-                    size={6}
-                    style={{ width: "100%" }}
-                    sx={{
-                      justifyContent: "center",
-                      display: "flex",
-                    }}
-                    data-testid="geolocation-results-image"
-                  >
-                    <img
-                      src={urlImage}
-                      alt="image submitted"
-                      style={{
-                        maxHeight: "400px",
-                        maxWidth: "-webkit-fill-available",
-                        backgroundSize: "contain",
-                        borderRadius: 10,
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-
-                {res.latitude && res.longitude && (
                   <Grid
                     container
                     direction="column"
@@ -113,130 +94,150 @@ const GeolocationResults = ({ result, urlImage }) => {
                       alignItems: "flex-start",
                     }}
                   >
-                    <Stack
+                    <Grid
+                      size={6}
+                      style={{ width: "100%" }}
+                      sx={{ justifyContent: "center", display: "flex" }}
+                      data-testid="geolocation-results-image"
+                    >
+                      <img
+                        src={urlImage}
+                        alt="image submitted"
+                        style={{
+                          maxHeight: "400px",
+                          maxWidth: "-webkit-fill-available",
+                          backgroundSize: "contain",
+                          borderRadius: 10,
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+
+                  {res.latitude && res.longitude && (
+                    <Grid
+                      container
                       direction="column"
-                      spacing={4}
+                      spacing={3}
+                      size={{ md: 6, xs: 12 }}
                       sx={{
-                        width: "100%",
+                        justifyContent: "flex-start",
+                        alignItems: "flex-start",
                       }}
                     >
-                      <Box
-                        sx={{
-                          width: "100%",
-                        }}
-                        data-testid="geolocation-results-map"
+                      <Stack
+                        direction="column"
+                        spacing={4}
+                        sx={{ width: "100%" }}
                       >
-                        <ErrorBoundary
-                          FallbackComponent={ErrorBoundaryFallback}
-                        >
-                          <MapContainer
-                            center={[res.latitude, res.longitude]}
-                            zoom={13}
-                            scrollWheelZoom={false}
-                            style={{
-                              width: "100%",
-                              height: "400px",
-                              borderRadius: 10,
-                            }}
-                          >
-                            <TileLayer
-                              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-                              url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-                            />
-                            <Marker
-                              position={[res.latitude, res.longitude]}
-                              icon={resultIcon}
-                            >
-                              <Popup>{keyword("geo_prediction")}</Popup>
-                            </Marker>
-                          </MapContainer>
-                        </ErrorBoundary>
-                      </Box>
-                      <Box
-                        sx={{
-                          width: "100%",
-                        }}
-                      >
-                        <Grid
-                          container
-                          direction="row"
-                          style={{ flexWrap: "nowrap" }}
-                          spacing={1}
-                          sx={{
-                            justifyContent: "space-between",
-                            alignItems: "flex-start",
-                          }}
-                        >
-                          <Grid
-                            container
-                            direction="column"
-                            sx={{
-                              justifyContent: "flex-start",
-                              alignItems: "flex-start",
-                            }}
-                          >
-                            <Typography
-                              variant="body1"
-                              style={{ color: "#697684" }}
-                            >
-                              {keyword("geo_lat")}
-                            </Typography>
-
-                            <Typography variant="h5">{res.latitude}</Typography>
-                          </Grid>
-
-                          <Grid
-                            container
-                            direction="column"
-                            sx={{
-                              justifyContent: "flex-start",
-                              alignItems: "flex-start",
-                            }}
-                          >
-                            <Typography
-                              variant="body1"
-                              style={{ color: "#697684" }}
-                            >
-                              {keyword("geo_lon")}
-                            </Typography>
-
-                            <Typography variant="h5">
-                              {res.longitude}
-                            </Typography>
-                          </Grid>
-                        </Grid>
-
                         <Box
-                          sx={{
-                            m: 4,
-                          }}
-                        />
-
-                        <Button
-                          variant="outlined"
-                          color="primary"
-                          fullWidth
-                          onClick={() =>
-                            window.open(
-                              "https://www.google.com/maps/place/" +
-                                res.latitude +
-                                "," +
-                                res.longitude,
-                              "_blank ",
-                            )
-                          }
-                          data-testid="geolocation-results-button-to-gmaps"
+                          sx={{ width: "100%" }}
+                          data-testid="geolocation-results-map"
                         >
-                          {keyword("geo_maps")}
-                        </Button>
-                      </Box>
-                    </Stack>
-                  </Grid>
-                )}
-              </Grid>
-            </Card>
-          ))}
-      </Stack>
+                          <ErrorBoundary
+                            FallbackComponent={ErrorBoundaryFallback}
+                          >
+                            <MapContainer
+                              center={[res.latitude, res.longitude]}
+                              zoom={13}
+                              scrollWheelZoom={false}
+                              style={{
+                                width: "100%",
+                                height: "400px",
+                                borderRadius: 10,
+                              }}
+                            >
+                              <TileLayer
+                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                                url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+                              />
+                              <Marker
+                                position={[res.latitude, res.longitude]}
+                                icon={resultIcon}
+                              >
+                                <Popup>{keyword("geo_prediction")}</Popup>
+                              </Marker>
+                            </MapContainer>
+                          </ErrorBoundary>
+                        </Box>
+                        <Box sx={{ width: "100%" }}>
+                          <Grid
+                            container
+                            direction="row"
+                            style={{ flexWrap: "nowrap" }}
+                            spacing={1}
+                            sx={{
+                              justifyContent: "space-between",
+                              alignItems: "flex-start",
+                            }}
+                          >
+                            <Grid
+                              container
+                              direction="column"
+                              sx={{
+                                justifyContent: "flex-start",
+                                alignItems: "flex-start",
+                              }}
+                            >
+                              <Typography
+                                variant="body1"
+                                style={{ color: "#697684" }}
+                              >
+                                {keyword("geo_lat")}
+                              </Typography>
+                              <Typography variant="h5">
+                                {res.latitude}
+                              </Typography>
+                            </Grid>
+                            <Grid
+                              container
+                              direction="column"
+                              sx={{
+                                justifyContent: "flex-start",
+                                alignItems: "flex-start",
+                              }}
+                            >
+                              <Typography
+                                variant="body1"
+                                style={{ color: "#697684" }}
+                              >
+                                {keyword("geo_lon")}
+                              </Typography>
+                              <Typography variant="h5">
+                                {res.longitude}
+                              </Typography>
+                            </Grid>
+                          </Grid>
+                          <Box sx={{ m: 4 }} />
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            fullWidth
+                            onClick={() =>
+                              window.open(
+                                "https://www.google.com/maps/place/" +
+                                  res.latitude +
+                                  "," +
+                                  res.longitude,
+                                "_blank ",
+                              )
+                            }
+                            data-testid="geolocation-results-button-to-gmaps"
+                          >
+                            {keyword("geo_maps")}
+                          </Button>
+                        </Box>
+                      </Stack>
+                    </Grid>
+                  )}
+                </Grid>
+              </Card>
+            ))}
+        </Stack>
+      )}
+
+      {tab === 1 && (
+        <GeolocationMetadataResults metadata={metadata} urlImage={urlImage} />
+      )}
     </Box>
   );
 };
