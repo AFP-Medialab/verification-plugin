@@ -105,7 +105,12 @@ const ChatbotUI = () => {
   }));
 
   // Reusable message footer component
-  const MessageFooter = ({ timestamp, messageText, showCopy = false }) => (
+  const MessageFooter = ({
+    timestamp,
+    messageText,
+    model,
+    showCopy = false,
+  }) => (
     <Box
       sx={{
         display: "flex",
@@ -115,6 +120,7 @@ const ChatbotUI = () => {
     >
       <Typography variant="caption" sx={{ opacity: 0.7 }}>
         {timestamp}
+        {model && ` · ${model}`}
       </Typography>
       {showCopy && messageText && (
         <CopyButton
@@ -157,6 +163,7 @@ const ChatbotUI = () => {
         <MessageFooter
           timestamp={message.timestamp}
           messageText={message.text}
+          model={!isUser ? message.model : undefined}
           showCopy={!isUser}
         />
       </MessageBubble>
@@ -284,7 +291,7 @@ const ChatbotUI = () => {
     fetchModels();
   }, [fetchModels]);
 
-  // check if directed from assistant
+  // Check if directed from assistant
   let text = useSelector((state) => state.assistant.urlText);
   const { url } = useParams();
   useEffect(() => {
