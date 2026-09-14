@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
+import useAuthenticatedRequest from "@/components/Shared/Authentication/useAuthenticatedRequest";
 import { preprocessFileUpload } from "@/components/Shared/Utils/fileUtils";
 import {
   resetFfmpegToolkit,
@@ -50,6 +51,8 @@ const useFfmpegToolkit = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const authenticatedRequest = useAuthenticatedRequest();
 
   useEffect(() => {
     if (storedFile && !videoFile) {
@@ -148,22 +151,19 @@ const useFfmpegToolkit = () => {
 
     try {
       const apiUrl = import.meta.env.VITE_FFMPEG_YTDLP_API_URL;
-      const res = await fetch(
-        `${apiUrl}/api/ffmpeg/extractvideo?startTime=${startTime}&endTime=${endTime}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "video/mp4" },
-          body: videoFile,
-          duplex: "half",
-        },
-      );
+      const ffmpegExtractVideoRequest = {
+        method: "POST",
+        url: `${apiUrl}api/ffmpeg/extractvideo?startTime=${startTime}&endTime=${endTime}`,
+        headers: { "Content-Type": "video/mp4" },
+        data: videoFile,
+        responseType: "blob",
+      };
 
-      if (!res.ok) throw new Error(`API error: ${res.status}`);
+      const res = await authenticatedRequest(ffmpegExtractVideoRequest);
 
-      const contentType = res.headers.get("content-type") || "video/mp4";
-      const blob = await res.blob();
+      const contentType = res.headers["content-type"] || "video/mp4";
       const resultUrl = URL.createObjectURL(
-        new Blob([blob], { type: contentType }),
+        new Blob([res.data], { type: contentType }),
       );
       dispatch(setFfmpegToolkitResult({ url: resultUrl }));
     } catch (e) {
@@ -207,19 +207,18 @@ const useFfmpegToolkit = () => {
   const fetchAudio = async () => {
     try {
       const apiUrl = import.meta.env.VITE_FFMPEG_YTDLP_API_URL;
-      const res = await fetch(
-        `${apiUrl}/api/ffmpeg/extractaudio?startTime=${beginCutTime}&endTime=${endCutTime}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "video/mp4" },
-          body: videoFile,
-          duplex: "half",
-        },
-      );
-      if (!res.ok) throw new Error(`API error: ${res.status}`);
-      const contentType = res.headers.get("content-type") || "audio/mpeg";
-      const blob = await res.blob();
-      return new Blob([blob], { type: contentType });
+      const audioRequest = {
+        method: "POST",
+        url: `${apiUrl}api/ffmpeg/extractaudio?startTime=${beginCutTime}&endTime=${endCutTime}`,
+        headers: { "Content-Type": "video/mp4" },
+        data: videoFile,
+        responseType: "blob",
+      };
+
+      const res = await authenticatedRequest(audioRequest);
+
+      const contentType = res.headers["content-type"] || "audio/mpeg";
+      return new Blob([res.data], { type: contentType });
     } catch (error) {
       dispatch(setError(error));
     }
@@ -270,22 +269,19 @@ const useFfmpegToolkit = () => {
         if (scaleDown) params.set("isScaled", "");
 
         const apiUrl = import.meta.env.VITE_FFMPEG_YTDLP_API_URL;
-        const res = await fetch(
-          `${apiUrl}/api/ffmpeg/extractvideo?${params.toString()}`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "video/mp4" },
-            body: videoFile,
-            duplex: "half",
-          },
-        );
+        const videoExtractRequest = {
+          method: "POST",
+          url: `${apiUrl}api/ffmpeg/extractvideo?${params.toString()}`,
+          headers: { "Content-Type": "video/mp4" },
+          data: videoFile,
+          responseType: "blob",
+        };
 
-        if (!res.ok) throw new Error(`API error: ${res.status}`);
+        const res = await authenticatedRequest(videoExtractRequest);
 
-        const contentType = res.headers.get("content-type") || "video/mp4";
-        const blob = await res.blob();
+        const contentType = res.headers["content-type"] || "video/mp4";
         downloadUrl = URL.createObjectURL(
-          new Blob([blob], { type: contentType }),
+          new Blob([res.data], { type: contentType }),
         );
         dispatch(setBottomLoading(false));
       }
@@ -319,17 +315,13 @@ const useFfmpegToolkit = () => {
     try {
       const apiUrl = import.meta.env.VITE_FFMPEG_YTDLP_API_URL;
       const videoBlob = await fetch(result).then((r) => r.blob());
-      const res = await fetch(`${apiUrl}/api/ffmpeg/extractIframes`, {
+      const res = await authenticatedRequest({
         method: "POST",
+        url: `${apiUrl}api/ffmpeg/extractIframes`,
         headers: { "Content-Type": "video/mp4" },
-        body: videoBlob,
-        duplex: "half",
+        data: videoBlob,
       });
-      if (!res.ok) {
-        dispatch(setBottomLoading(false));
-        throw new Error(`API error: ${res.status}`);
-      }
-      const { frames } = await res.json();
+      const { frames } = res.data;
       dispatch(setKeyframes(frames));
       dispatch(setBottomLoading(false));
     } catch (error) {
