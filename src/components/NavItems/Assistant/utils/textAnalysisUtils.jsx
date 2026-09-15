@@ -7,6 +7,23 @@ import Typography from "@mui/material/Typography";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
+// HTML void elements must not receive `children` or `dangerouslySetInnerHTML`
+const VOID_ELEMENTS = new Set([
+  "area",
+  "base",
+  "br",
+  "col",
+  "embed",
+  "hr",
+  "img",
+  "input",
+  "link",
+  "meta",
+  "source",
+  "track",
+  "wbr",
+]);
+
 /**
  * Recursively takes tree map and returns highlighted spans
  * @param text
@@ -89,10 +106,25 @@ function treeMapToElementsRecursive(
     );
   }
 
-  // Collect attributes
-  const attributes = treeElem.attributes
-    ? { ...treeElem.attributes, key: uuidv4() }
-    : { key: uuidv4() };
+  // Plain text node (no tag): return the accumulated content directly
+  // instead of calling React.createElement(null, ...), which crashes
+  if (treeElem.tag === null || treeElem.tag === undefined) {
+    return childElems;
+  }
+
+  // Collect attributes, stripping inline event-handler attributes (e.g.
+  // onclick) which are raw HTML strings and invalid as React props
+  const rawAttributes = treeElem.attributes ?? {};
+  const attributes = { key: uuidv4() };
+  for (const [attrName, attrValue] of Object.entries(rawAttributes)) {
+    if (!/^on[a-z]+$/i.test(attrName)) {
+      attributes[attrName] = attrValue;
+    }
+  }
+
+  if (VOID_ELEMENTS.has(treeElem.tag)) {
+    return React.createElement(treeElem.tag, attributes);
+  }
 
   return React.createElement(treeElem.tag, attributes, childElems);
 }
