@@ -23,8 +23,6 @@ import { fetchEventSource } from "@microsoft/fetch-event-source";
 import fr from "dayjs/locale/fr";
 import JSZip from "jszip";
 
-//in order to create an EventSource with classical fetch options
-
 const useFfmpegToolkit = () => {
   const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
 
@@ -170,6 +168,7 @@ const useFfmpegToolkit = () => {
       const resultUrl = URL.createObjectURL(
         new Blob([res.data], { type: contentType }),
       );
+
       dispatch(setFfmpegToolkitResult({ url: resultUrl }));
     } catch (e) {
       dispatch(setError(e.message));
@@ -209,61 +208,79 @@ const useFfmpegToolkit = () => {
   };
 
   const getAudioFile = async (fileId) => {
-    const apiUrl = import.meta.env.VITE_FFMPEG_YTDLP_API_URL;
-    const downloadResponse = await authenticatedRequest({
-      method: "GET",
-      url: `${apiUrl}api/ffmpeg/download?fileId=${fileId}`,
-      responseType: "blob",
-    });
+    try {
+      const apiUrl = import.meta.env.VITE_FFMPEG_YTDLP_API_URL;
+      const downloadResponse = await authenticatedRequest({
+        method: "GET",
+        url: `${apiUrl}api/ffmpeg/download?fileId=${fileId}`,
+        responseType: "blob",
+      });
 
-    const contentType =
-      downloadResponse.headers["content-type"] || "audio/mpeg";
-    return new Blob([downloadResponse.data], { type: contentType });
+      const contentType =
+        downloadResponse.headers["content-type"] || "audio/mpeg";
+      return new Blob([downloadResponse.data], { type: contentType });
+    } catch (error) {
+      dispatch(setBottomLoading(false));
+      dispatch(setError(error.message));
+      throw error;
+    }
   };
 
   const fetchAudioEventSource = async (onProgress) => {
-    const apiUrl = import.meta.env.VITE_FFMPEG_YTDLP_API_URL;
-    const sseHeaders = {
-      "Content-Type": "video/mp4",
-      Accept: "text/event-stream",
-    };
-    if (accessToken) sseHeaders["Authorization"] = `Bearer ${accessToken}`;
+    try {
+      const apiUrl = import.meta.env.VITE_FFMPEG_YTDLP_API_URL;
+      const sseHeaders = {
+        "Content-Type": "video/mp4",
+        Accept: "text/event-stream",
+      };
+      if (accessToken) sseHeaders["Authorization"] = `Bearer ${accessToken}`;
 
-    const res = await fetch(
-      `${apiUrl}api/ffmpeg/extractaudio?startTime=${beginCutTime}&endTime=${endCutTime}&wantsStream=true`,
-      { method: "POST", headers: sseHeaders, body: videoFile, duplex: "half" },
-    );
+      const res = await fetch(
+        `${apiUrl}api/ffmpeg/extractaudio?startTime=${beginCutTime}&endTime=${endCutTime}&wantsStream=true`,
+        {
+          method: "POST",
+          headers: sseHeaders,
+          body: videoFile,
+          duplex: "half",
+        },
+      );
 
-    if (!res.ok) throw new Error(`API error: ${res.status}`);
+      if (!res.ok) throw new Error(`API error: ${res.status}`);
 
-    let fileId = null;
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder("utf-8");
-    let buffer = "";
+      let fileId = null;
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+      let buffer = "";
 
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
 
-      buffer += decoder.decode(value, { stream: true });
-      const events = buffer.split("\n\n");
-      buffer = events.pop() || "";
+        buffer += decoder.decode(value, { stream: true });
+        const events = buffer.split("\n\n");
+        buffer = events.pop() || "";
 
-      for (const rawEvent of events) {
-        const line = rawEvent.trim();
-        if (line.startsWith(":")) continue;
-        if (!line.startsWith("data:")) continue;
+        for (const rawEvent of events) {
+          const line = rawEvent.trim();
+          if (line.startsWith(":")) continue;
+          if (!line.startsWith("data:")) continue;
 
-        const data = JSON.parse(line.replace(/^data:\s*/, ""));
-        if (onProgress) onProgress(data);
-        if (data.status === "error")
-          throw new Error(data.error || "Audio processing failed");
-        if (data.status === "completed" && data.fileId) fileId = data.fileId;
+          const data = JSON.parse(line.replace(/^data:\s*/, ""));
+          if (onProgress) onProgress(data);
+          if (data.status === "error")
+            throw new Error(data.error || "Audio processing failed");
+          if (data.status === "completed" && data.fileId) fileId = data.fileId;
+        }
       }
-    }
 
-    if (!fileId) throw new Error("Flux terminé sans réception du fileId.");
-    return await getAudioFile(fileId);
+      if (!fileId) throw new Error("Flux terminé sans réception du fileId.");
+      return await getAudioFile(fileId);
+    } catch (error) {
+      console.log(error);
+      dispatch(setBottomLoading(false));
+      dispatch(setError(error.message));
+      throw error;
+    }
   };
 
   const getNameFromFileName = (fileName) => {
@@ -294,7 +311,7 @@ const useFfmpegToolkit = () => {
       dispatch(setBottomLoading(false));
     } catch (error) {
       dispatch(setBottomLoading(false));
-      dispatch(setError(error));
+      dispatch(setError(error.message));
     }
   };
 
@@ -341,7 +358,7 @@ const useFfmpegToolkit = () => {
       if (compress || scaleDown) URL.revokeObjectURL(downloadUrl);
     } catch (error) {
       dispatch(setBottomLoading(false));
-      dispatch(setError(error));
+      dispatch(setError(error.message));
     }
   };
 
@@ -353,7 +370,7 @@ const useFfmpegToolkit = () => {
       dispatch(setHiyaFile({ name: `${name}_extract.mp3`, url: hiyaUrl }));
       navigate("/app/tools/hiya");
     } catch (error) {
-      dispatch(setError(error));
+      dispatch(setError(error.message));
     }
   };
 
@@ -373,7 +390,7 @@ const useFfmpegToolkit = () => {
       dispatch(setBottomLoading(false));
     } catch (error) {
       dispatch(setBottomLoading(false));
-      dispatch(setError(error));
+      dispatch(setError(error.message));
     }
   };
 
@@ -399,7 +416,7 @@ const useFfmpegToolkit = () => {
       a.click();
       URL.revokeObjectURL(a.href);
     } catch (error) {
-      dispatch(setError(error));
+      dispatch(setError(error.message));
     }
   };
 
