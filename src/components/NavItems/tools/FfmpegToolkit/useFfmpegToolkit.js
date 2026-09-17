@@ -237,7 +237,7 @@ const useFfmpegToolkit = () => {
 
       const videoBlob = await fetch(result).then((r) => r.blob());
       const res = await fetch(
-        `${apiUrl}api/ffmpeg/extractaudio?startTime=${beginCutTime}&endTime=${endCutTime}&wantsStream=true`,
+        `${apiUrl}api/ffmpeg/extractaudio?&wantsStream=true`,
         {
           method: "POST",
           headers: sseHeaders,
@@ -328,12 +328,9 @@ const useFfmpegToolkit = () => {
       if (compress || scaleDown) {
         dispatch(setBottomLoading(true));
 
-        const params = new URLSearchParams({
-          startTime: beginCutTime,
-          endTime: endCutTime,
-        });
-        if (compress) params.set("isCompressed", "");
-        if (scaleDown) params.set("isScaled", "");
+        const params = new URLSearchParams();
+        if (compress) params.set("isCompressed", "true");
+        if (scaleDown) params.set("isScaled", "true");
 
         const apiUrl = import.meta.env.VITE_FFMPEG_YTDLP_API_URL;
         const videoBlob = await fetch(result).then((r) => r.blob());
