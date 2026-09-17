@@ -235,12 +235,13 @@ const useFfmpegToolkit = () => {
       };
       if (accessToken) sseHeaders["Authorization"] = `Bearer ${accessToken}`;
 
+      const videoBlob = await fetch(result).then((r) => r.blob());
       const res = await fetch(
         `${apiUrl}api/ffmpeg/extractaudio?startTime=${beginCutTime}&endTime=${endCutTime}&wantsStream=true`,
         {
           method: "POST",
           headers: sseHeaders,
-          body: videoFile,
+          body: videoBlob,
           duplex: "half",
         },
       );
@@ -335,11 +336,12 @@ const useFfmpegToolkit = () => {
         if (scaleDown) params.set("isScaled", "");
 
         const apiUrl = import.meta.env.VITE_FFMPEG_YTDLP_API_URL;
+        const videoBlob = await fetch(result).then((r) => r.blob());
         const res = await authenticatedRequest({
           method: "POST",
           url: `${apiUrl}api/ffmpeg/extractvideo?${params.toString()}`,
           headers: { "Content-Type": "video/mp4" },
-          data: videoFile,
+          data: videoBlob,
           responseType: "blob",
         });
 
