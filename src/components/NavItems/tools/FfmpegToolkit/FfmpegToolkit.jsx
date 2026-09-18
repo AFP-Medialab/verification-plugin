@@ -18,7 +18,7 @@ import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import FfmpegToolkitResult from "./FfmpegToolkitResult";
-import useFfmpegToolkit from "./useFfmpegToolkit";
+import useFfmpegToolkit from "./Hooks/useFfmpegToolkit";
 
 const FfmpegToolkit = () => {
   const keywordAllTools = i18nLoadNamespace(
