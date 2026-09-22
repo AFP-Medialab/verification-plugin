@@ -132,7 +132,6 @@ const AssistantTextResult = () => {
   );
 
   // display states
-  const textBox = document.getElementById("element-to-check");
   const [expanded, setExpanded] = useState(false);
   const [displayOrigLang, setDisplayOrigLang] = useState(true);
   const [textTabIndex, setTextTabIndex] = useState(0);
@@ -148,7 +147,7 @@ const AssistantTextResult = () => {
       // extract all contents in the <main> node#
       setTextHtmlOutput(treeMapToElements(text, textHtmlMap));
     }
-  }, [textBox]);
+  }, [text, textHtmlMap]);
 
   // custom tab panel
   function CustomTabPanel(props) {
