@@ -2,7 +2,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import useAuthenticatedRequest from "@/components/Shared/Authentication/useAuthenticatedRequest";
-import { setBottomLoading } from "@/redux/actions/tools/ffmpegToolkitActions";
+import {
+  setBottomLoading,
+  setProgress,
+} from "@/redux/actions/tools/ffmpegToolkitActions";
 import { setError } from "@/redux/reducers/errorReducer";
 import { setHiyaFile } from "@/redux/reducers/tools/hiyaReducer";
 
@@ -13,7 +16,8 @@ const useFfmpegAudio = () => {
 
   const result = useSelector((state) => state.ffmpegToolkit.result);
   const accessToken = useSelector((state) => state.userSession?.accessToken);
-  const fileName = useSelector((state) => state.ffmpegToolkit.fileName) ?? "";
+  const fileName = useSelector((state) => state.ffmpegToolkit.fileName);
+  const progress = useSelector((state) => state.ffmpegToolkit.progress);
 
   const getNameFromFileName = (name) => name.split(".")[0];
 
@@ -99,7 +103,7 @@ const useFfmpegAudio = () => {
       const blob = await fetchAudioEventSource((data) => {
         console.log("Message en temps réel :", data);
         if (data.progress) {
-          console.log(data.progress);
+          dispatch(setProgress(data.progress));
         }
       });
 
@@ -112,6 +116,7 @@ const useFfmpegAudio = () => {
       a.click();
       URL.revokeObjectURL(audioUrl);
       dispatch(setBottomLoading(false));
+      dispatch(setProgress(0));
     } catch (error) {
       dispatch(setBottomLoading(false));
       dispatch(setError(error.message));

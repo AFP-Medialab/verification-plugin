@@ -4,6 +4,7 @@ import useAuthenticatedRequest from "@/components/Shared/Authentication/useAuthe
 import {
   setBottomLoading,
   setIframes,
+  setProgress,
 } from "@/redux/actions/tools/ffmpegToolkitActions";
 import { setError } from "@/redux/reducers/errorReducer";
 import JSZip from "jszip";
@@ -16,6 +17,8 @@ const useFfmpegIframes = () => {
   const iframes = useSelector((state) => state.ffmpegToolkit.iframes);
   const fileName = useSelector((state) => state.ffmpegToolkit.fileName) ?? "";
   const accessToken = useSelector((state) => state.userSession?.accessToken);
+
+  const progress = useSelector((state) => state.ffmpegToolkit.progress);
 
   const getIframesFile = async (fileId) => {
     try {
@@ -97,11 +100,12 @@ const useFfmpegIframes = () => {
       const frames = await fetchIframesEventSource((data) => {
         console.log("Message en temps réel :", data);
         if (data.progress) {
-          console.log(data.progress);
+          dispatch(setProgress(data.progress));
         }
       });
       dispatch(setIframes(frames));
       dispatch(setBottomLoading(false));
+      dispatch(setProgress(0));
     } catch (error) {
       dispatch(setBottomLoading(false));
       dispatch(setError(error.message));

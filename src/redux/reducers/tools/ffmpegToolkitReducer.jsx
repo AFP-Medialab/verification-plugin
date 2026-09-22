@@ -8,7 +8,8 @@ const defaultState = {
   iframes: null,
   bottomLoading: null,
   file: null,
-  fileName: null,
+  fileName: "",
+  progress: 0,
 };
 
 const ffmpegToolkitReducer = (state = defaultState, action) => {
@@ -71,6 +72,11 @@ const ffmpegToolkitReducer = (state = defaultState, action) => {
       return {
         ...state,
         bottomLoading: action.payload,
+      };
+    case "SET_PROGRESS":
+      return {
+        ...state,
+        progress: action.payload,
       };
     default:
       return state;

@@ -14,6 +14,8 @@ const useFfmpegToolkit = () => {
   const url = useSelector((state) => state.ffmpegToolkit.url);
   const storedFile = useSelector((state) => state.ffmpegToolkit.file);
 
+  const progress = useSelector((state) => state.ffmpegToolkit.progress);
+
   const [input = url || "", setInput, videoFile, setVideoFile] = useUrlOrFile();
   const [type, setType] = useState(() =>
     storedFile ? "local" : url ? "url" : "",
@@ -152,6 +154,7 @@ const useFfmpegToolkit = () => {
     handleGoToHiya,
     handleGetIframes,
     handleDownloadIframes,
+    progress,
   };
 };
 

@@ -1,7 +1,9 @@
 import React from "react";
 
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
+import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import LinearProgress from "@mui/material/LinearProgress";
 import Link from "@mui/material/Link";
@@ -51,6 +53,7 @@ const FfmpegToolkit = () => {
     handleGoToHiya,
     handleGetIframes,
     handleDownloadIframes,
+    progress,
   } = useFfmpegToolkit();
 
   return (
@@ -184,9 +187,11 @@ const FfmpegToolkit = () => {
             </form>
 
             {isLoading && (
-              <Box sx={{ mt: 3 }}>
-                <LinearProgress />
-              </Box>
+              <>
+                <Alert icon={<CircularProgress size={20} />} severity="info">
+                  {progress}%
+                </Alert>
+              </>
             )}
           </Box>
         </Card>

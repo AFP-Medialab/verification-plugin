@@ -11,6 +11,7 @@ import {
   setFfmpegToolkitLoading,
   setFfmpegToolkitResult,
   setIframes,
+  setProgress,
 } from "@/redux/actions/tools/ffmpegToolkitActions";
 import { setError } from "@/redux/reducers/errorReducer";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
@@ -30,6 +31,8 @@ const useFfmpegVideo = ({
   const result = useSelector((state) => state.ffmpegToolkit.result);
   const fileName = useSelector((state) => state.ffmpegToolkit.fileName) ?? "";
   const accessToken = useSelector((state) => state.userSession?.accessToken);
+
+  const progress = useSelector((state) => state.ffmpegToolkit.progress);
 
   const getNameFromFileName = (name) => name.split(".")[0];
 
@@ -162,7 +165,7 @@ const useFfmpegVideo = ({
         (data) => {
           console.log("Message en temps réel :", data);
           if (data.progress) {
-            console.log(data.progress);
+            dispatch(setProgress(data.progress));
           }
         },
         videoFile,
@@ -176,6 +179,7 @@ const useFfmpegVideo = ({
       dispatch(setError(e.message));
     }
     dispatch(setFfmpegToolkitLoading(false));
+    dispatch(setProgress(0));
   };
 
   const handleDownloadVideo = async ({ compress, scaleDown } = {}) => {
@@ -196,7 +200,7 @@ const useFfmpegVideo = ({
           (data) => {
             console.log("Message en temps réel :", data);
             if (data.progress) {
-              console.log(data.progress);
+              dispatch(setProgress(data.progress));
             }
           },
           videoBlob,
@@ -205,6 +209,7 @@ const useFfmpegVideo = ({
 
         downloadUrl = URL.createObjectURL(blob);
         dispatch(setBottomLoading(false));
+        dispatch(setProgress(0));
       }
 
       const a = document.createElement("a");
