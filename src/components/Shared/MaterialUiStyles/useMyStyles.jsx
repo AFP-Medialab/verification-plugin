@@ -127,6 +127,8 @@ const styles = (theme) => ({
 
   popUp: {
     width: "300px",
+    maxHeight: "560px",
+    overflowY: "auto",
     padding: theme.spacing(1, 2),
     textAlign: "start",
   },

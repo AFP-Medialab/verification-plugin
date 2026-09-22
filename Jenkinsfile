@@ -10,7 +10,7 @@ pipeline {
     }
 
     environment {
-        VERSION_TAG = "${env.BRANCH_NAME}-${env.BUILD_ID}"
+        VERSION_TAG = "${env.BRANCH_NAME}-${env.VITE_TRANSLATION_TAG}-${env.BUILD_ID}"
         S3_BUCKET = "verification-plugin-builds"
         AWS_REGION = "eu-west-1"
         CI="true"

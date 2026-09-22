@@ -22,7 +22,6 @@ import {
   setMetadataMediaType,
   setMetadataResult,
 } from "@/redux/reducers/tools/metadataReducer";
-import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequest";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import {
@@ -73,8 +72,6 @@ const Metadata = () => {
   const [imageMetadata, setImageMetadata] = useState(
     resultData ? resultData : null,
   );
-
-  const authenticatedRequest = useAuthenticatedRequest();
 
   const client_id = getclientId();
   useTrackEvent(
@@ -156,27 +153,14 @@ const Metadata = () => {
       }
 
       if (fileType.mime.includes("image")) {
-        // Set the image URL
         const imageUrl = input || URL.createObjectURL(fileInput);
         setImageUrl(imageUrl);
 
-        // Extract metadata
         const metadata = input
           ? await extractMetadataFromUrl(input)
           : await extractMetadataFromFile(fileInput);
 
         setImageMetadata(metadata instanceof Error ? null : metadata);
-
-        const hdImageConfig = {
-          method: "get",
-          responseType: "blob",
-          maxBodyLength: Infinity,
-          url: input || URL.createObjectURL(fileInput),
-        };
-
-        const blob = (await authenticatedRequest(hdImageConfig)).data;
-
-        await getC2paMetadata.mutateAsync(URL.createObjectURL(blob));
 
         dispatch(
           setMetadataResult({
@@ -187,6 +171,8 @@ const Metadata = () => {
             isImage: true,
           }),
         );
+
+        getC2paMetadata.mutate(imageUrl);
 
         return;
       }

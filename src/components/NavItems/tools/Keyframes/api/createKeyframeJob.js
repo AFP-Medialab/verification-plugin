@@ -1,4 +1,4 @@
-import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequest";
+import axios from "axios";
 
 /**
  * Enum for keyframe input types.
@@ -52,12 +52,7 @@ const API_URLS = {
  * @returns {Promise<string>} The session ID of the created keyframe job.
  * @throws {Error} Will throw an error if the input type is invalid or if the API response does not contain a valid session ID.
  */
-export const createKeyframeJobApi = async (
-  authenticatedRequest,
-  type,
-  value,
-  options = {},
-) => {
+export const createKeyframeJobApi = async (type, value, options = {}) => {
   if (!validKeyframeTypes.has(type)) {
     throw new Error(`Invalid keyframe type ${type}`);
   }
@@ -111,7 +106,7 @@ export const createKeyframeJobApi = async (
   }
 
   // Send the request and wait for the response.
-  const response = await authenticatedRequest(config);
+  const response = await axios(config);
 
   // Validate the response to ensure it contains a valid session ID.
   if (
@@ -135,8 +130,6 @@ export const createKeyframeJobApi = async (
  * A function that creates a keyframe job given the type, value, and optional parameters.
  */
 export const useCreateKeyframeJob = () => {
-  const authenticatedRequest = useAuthenticatedRequest();
-
   return (type, value, options = {}) =>
-    createKeyframeJobApi(authenticatedRequest, type, value, options);
+    createKeyframeJobApi(type, value, options);
 };

@@ -12,14 +12,23 @@ import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequ
 import { createC2pa } from "@contentauth/c2pa-web";
 import wasmSrc from "@contentauth/c2pa-web/resources/c2pa.wasm?url";
 import axios from "axios";
+import { browser } from "wxt/browser";
 
 import { syntheticImageDetectionAlgorithms } from "./SyntheticImageDetectionAlgorithms";
 
 const fetchGenerativeInfoFromC2pa = async (url) => {
   const settings = await getToolkitSettings();
-  const c2pa = await createC2pa({
-    wasmSrc,
-  });
+  // Firefox MV3 CSP blocks blob URL workers (chrome-extension blob: is not covered by 'self').
+  // Chrome MV3 crashes with RESULT_CODE_KILLED_BAD_MESSAGE when using a module worker
+  // from a chrome-extension:// URL, so Chrome keeps the default blob URL approach.
+  let c2pa;
+  if (import.meta.env.BROWSER === "firefox") {
+    const workerUrl = new URL(browser.runtime.getURL("c2pa_worker.js"));
+    Object.defineProperty(workerUrl, "protocol", { get: () => "https:" });
+    c2pa = await createC2pa({ wasmSrc, workerSrc: workerUrl });
+  } else {
+    c2pa = await createC2pa({ wasmSrc });
+  }
   const response = await fetch(url);
   const blob = await response.blob();
   let genInfo = null;
