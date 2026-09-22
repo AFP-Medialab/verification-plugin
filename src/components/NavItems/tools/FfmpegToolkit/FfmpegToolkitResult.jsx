@@ -1,6 +1,7 @@
 import { React, useState } from "react";
 import { useSelector } from "react-redux";
 
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -24,6 +25,8 @@ const FfmpegToolkitResult = ({
   const keyframes = useSelector((state) => state.ffmpegToolkit.keyframes);
 
   const isLoading = useSelector((state) => state.ffmpegToolkit.bottomLoading);
+
+  const hasKeyframes = keyframes?.length > 0;
 
   return (
     <Card>
@@ -56,6 +59,7 @@ const FfmpegToolkitResult = ({
           color="primary"
           variant="contained"
           onClick={() => setShowDownloadModal(true)}
+          disabled={isLoading}
           data-testid="ffmpegtoolkit-downloadvideo-button"
         >
           {keyword("ffmpeg_toolkit_downloadvideobutton")}
@@ -69,6 +73,7 @@ const FfmpegToolkitResult = ({
           color="primary"
           variant="contained"
           onClick={onDownloadAudio}
+          disabled={isLoading}
           data-testid="ffmpegtoolkit-downloadaudio-button"
         >
           {keyword("ffmpeg_toolkit_downloadaudiobutton")}
@@ -76,6 +81,7 @@ const FfmpegToolkitResult = ({
         <Button
           variant="contained"
           onClick={onGoToHiya}
+          disabled={isLoading}
           data-testid="ffmpegtoolkit-hiya-button"
         >
           Hiya
@@ -83,12 +89,13 @@ const FfmpegToolkitResult = ({
         <Button
           variant="contained"
           onClick={onGetKeyframes}
+          disabled={isLoading}
           data-testid="ffmpegtoolkit-keyframes-button"
         >
           I-frames
         </Button>
       </Box>
-      {keyframes && (
+      {keyframes && hasKeyframes && (
         <Box sx={{ p: 2 }}>
           <Box
             sx={{
@@ -127,9 +134,15 @@ const FfmpegToolkitResult = ({
             variant="contained"
             onClick={onDownloadKeyframes}
             data-testid="ffmpegtoolkit-download-keyframes-button"
+            sx={{ mt: 2 }}
           >
             {keyword("ffmpeg_toolkit_downloadkeyframesbutton")}
           </Button>
+        </Box>
+      )}
+      {keyframes && !hasKeyframes && (
+        <Box sx={{ p: 2 }}>
+          <Alert severity="warning">No keyframes found in this video</Alert>
         </Box>
       )}
       {isLoading && (

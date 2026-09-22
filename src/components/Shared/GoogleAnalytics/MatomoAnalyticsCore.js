@@ -16,6 +16,8 @@ function matomoCall(actions) {
     return;
   }
 
+  if (typeof navigator !== "undefined" && !navigator.onLine) return;
+
   let innerWidth;
   let innerHeight;
 

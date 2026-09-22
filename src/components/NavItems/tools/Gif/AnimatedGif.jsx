@@ -329,60 +329,63 @@ const AnimatedGif = ({
                 defaultColor="green"
               />
             </Box>
-            <Stack spacing={1} sx={{ mt: 3, width: "100%" }}>
-              {paused && (
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  disabled={toolState === 7}
-                  onClick={() => pauseUnpause(false)}
-                  startIcon={<PlayArrow />}
-                >
-                  {keyword("button_play")}
-                </Button>
-              )}
-              {(annotation || annotationOriginal) && !paused && (
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  disabled={toolState === 7}
-                  onClick={modifyAnnotations}
-                  startIcon={<Edit />}
-                >
-                  {keyword("button_modify")}
-                </Button>
-              )}
-              <Stack direction="row" spacing={1}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  color={annotation ? "error" : "primary"}
-                  disabled={toolState === 7}
-                  onClick={() => addRemoveAnnotation(!annotation)}
-                  data-testid="gif-result-toggle-annotation"
-                >
-                  {annotation
-                    ? keyword("button_remove_fake")
-                    : keyword("button_add_fake")}
-                </Button>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  color={annotationOriginal ? "error" : "success"}
-                  disabled={toolState === 7}
-                  onClick={() =>
-                    addRemoveAnnotationOriginal(!annotationOriginal)
-                  }
-                  data-testid="gif-result-toggle-annotation-original"
-                >
-                  {annotationOriginal
-                    ? keyword("button_remove_original")
-                    : keyword("button_add_original")}
-                </Button>
-              </Stack>
-              <Alert severity="info">{keyword("fake_annotation_tip")}</Alert>
-            </Stack>
           </Box>
+          <Stack
+            spacing={1}
+            sx={{ mt: 3, width: "100%", maxWidth: "100%", overflow: "hidden" }}
+          >
+            {paused && (
+              <Button
+                fullWidth
+                variant="outlined"
+                color="primary"
+                disabled={toolState === 7}
+                onClick={() => pauseUnpause(false)}
+                startIcon={<PlayArrow />}
+              >
+                {keyword("button_play")}
+              </Button>
+            )}
+            {(annotation || annotationOriginal) && !paused && (
+              <Button
+                fullWidth
+                variant="outlined"
+                color="primary"
+                disabled={toolState === 7}
+                onClick={modifyAnnotations}
+                startIcon={<Edit />}
+              >
+                {keyword("button_modify")}
+              </Button>
+            )}
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+              <Button
+                sx={{ flex: "1 1 0%", minWidth: 0 }}
+                variant="outlined"
+                color={annotation ? "error" : "primary"}
+                disabled={toolState === 7}
+                onClick={() => addRemoveAnnotation(!annotation)}
+                data-testid="gif-result-toggle-annotation"
+              >
+                {annotation
+                  ? keyword("button_remove_fake")
+                  : keyword("button_add_fake")}
+              </Button>
+              <Button
+                sx={{ flex: "1 1 0%", minWidth: 0 }}
+                variant="outlined"
+                color={annotationOriginal ? "error" : "success"}
+                disabled={toolState === 7}
+                onClick={() => addRemoveAnnotationOriginal(!annotationOriginal)}
+                data-testid="gif-result-toggle-annotation-original"
+              >
+                {annotationOriginal
+                  ? keyword("button_remove_original")
+                  : keyword("button_add_original")}
+              </Button>
+            </Box>
+            <Alert severity="info">{keyword("fake_annotation_tip")}</Alert>
+          </Stack>
           <Grid
             container
             direction="column"

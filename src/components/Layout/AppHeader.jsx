@@ -4,6 +4,7 @@ import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg?re
 import LogoVeraBlack from "../NavBar/images/SVG/Navbar/vera-logo_black.svg?react";
 import LogoVeraWhite from "../NavBar/images/SVG/Navbar/vera-logo_white.svg?react";
 import React, { useState } from "react";
+import { Suspense } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -481,16 +482,18 @@ const AppHeader = ({ topMenuItems, tools }) => {
         </Grid>
       </Toolbar>
       <Divider sx={{ width: "100%" }} />
-      <SettingsDrawer
-        isPanelOpen={isPanelOpen}
-        handleClosePanel={handleClosePanel}
-        recording={recording}
-        setRecording={setRecording}
-        collections={collections}
-        setCollections={setCollections}
-        selectedCollection={selectedCollection}
-        setSelectedCollection={setSelectedCollection}
-      />
+      <Suspense fallback={null}>
+        <SettingsDrawer
+          isPanelOpen={isPanelOpen}
+          handleClosePanel={handleClosePanel}
+          recording={recording}
+          setRecording={setRecording}
+          collections={collections}
+          setCollections={setCollections}
+          selectedCollection={selectedCollection}
+          setSelectedCollection={setSelectedCollection}
+        />
+      </Suspense>
 
       {/* Mobile Navigation Drawer */}
       <Drawer

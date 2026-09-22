@@ -1,5 +1,5 @@
 import { getKeyframesJobPositionInQueueApi } from "@/components/NavItems/tools/Keyframes/api/getKeyframesJobPositionInQueue";
-import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequest";
+import axios from "axios";
 
 /**
  * Polls the status of a keyframe job until it completes.
@@ -10,11 +10,7 @@ import useAuthenticatedRequest from "@Shared/Authentication/useAuthenticatedRequ
  * @returns {Promise<string>} Resolves with the jobId once status is "completed:::100".
  * @throws {Error} Will throw an error if the job fails, is not found, or exceeds empty status retries.
  */
-export async function pollKeyframeJobStatusApi(
-  authenticatedRequest,
-  jobId,
-  setStatus,
-) {
+export async function pollKeyframeJobStatusApi(jobId, setStatus) {
   let currentStatus;
   let emptyStatusTriesNumber = 0;
   const EMPTY_STATUS_MAX_TRIES = 3;
@@ -29,7 +25,7 @@ export async function pollKeyframeJobStatusApi(
       url: `${import.meta.env.VITE_KEYFRAME_API}/status/${jobId}`,
     };
 
-    const response = await authenticatedRequest(config);
+    const response = await axios(config);
 
     if (!response.data.status) {
       throw new Error("KSE Job id not found");
@@ -51,10 +47,7 @@ export async function pollKeyframeJobStatusApi(
       emptyStatusTriesNumber++;
       setStatus?.(`Processing... Trying to retrieve the status`);
     } else if (statusMessage.includes("waiting in queue")) {
-      const queueLength = await getKeyframesJobPositionInQueueApi(
-        authenticatedRequest,
-        jobId,
-      );
+      const queueLength = await getKeyframesJobPositionInQueueApi(jobId);
       setStatus?.(`Processing... ${statusMessage} (position: ${queueLength})`);
     } else {
       setStatus?.(`Processing... ${statusMessage} ${statusPercentage}%`);
@@ -75,8 +68,5 @@ export async function pollKeyframeJobStatusApi(
  * @returns {(jobId: string) => Promise<string>} A function that polls the job status until completion.
  */
 export const usePollKeyframeJobStatus = (setStatus) => {
-  const authenticatedRequest = useAuthenticatedRequest();
-
-  return (jobId) =>
-    pollKeyframeJobStatusApi(authenticatedRequest, jobId, setStatus);
+  return (jobId) => pollKeyframeJobStatusApi(jobId, setStatus);
 };
