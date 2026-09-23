@@ -145,7 +145,9 @@ const FfmpegToolkitResult = ({
       )}
       {iframes && !hasIframes && (
         <Box sx={{ p: 2 }}>
-          <Alert severity="warning">No iframes found in this video</Alert>
+          <Alert severity="warning">
+            {keyword("ffmpeg_toolkit_no_iframes_warning")}
+          </Alert>
         </Box>
       )}
       {isLoading && (
