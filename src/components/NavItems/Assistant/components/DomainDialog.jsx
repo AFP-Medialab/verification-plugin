@@ -75,7 +75,7 @@ export function DomainDialog({
                   color={trafficLightColor}
                   size="small"
                 />
-                {keyword("url_domain_analysis_popup_header_domain")}
+                {keyword("url_domain_analysis_popup_header_domain")}{" "}
                 {value.source}
               </Typography>
             </Grid>
