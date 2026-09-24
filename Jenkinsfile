@@ -10,7 +10,6 @@ pipeline {
     }
 
     environment {
-        VERSION_TAG = "${env.BRANCH_NAME}-${env.VITE_TRANSLATION_TAG}-${env.BUILD_ID}"
         S3_BUCKET = "verification-plugin-builds"
         AWS_REGION = "eu-west-1"
         CI="true"
@@ -26,6 +25,15 @@ pipeline {
                 }  
             }
             steps {
+                container('node') {
+                    script {
+                        env.PACKAGE_VERSION = sh(
+                            script: "node -p \"require('./package.json').version\"",
+                            returnStdout: true
+                        ).trim()
+                        env.VERSION_TAG = "${env.BRANCH_NAME}-v${packageVersion}-${env.BUILD_ID}"
+                    }
+                }
                 slackSend channel: 'C0B34ADJ7C3', message: "Start build ${env.JOB_NAME} - ID: ${env.BUILD_ID}", tokenCredentialId: 'medialab_slack_token'
                 script {
                     if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "pre-master") {
