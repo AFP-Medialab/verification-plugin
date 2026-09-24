@@ -111,6 +111,7 @@ const handleStartRecording = (
   });
   setRecording(true);
   setExpanded(false);
+  window.close();
 };
 
 const CollectionSelector = ({
