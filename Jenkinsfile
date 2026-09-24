@@ -31,7 +31,7 @@ pipeline {
                             script: "node -p \"require('./package.json').version\"",
                             returnStdout: true
                         ).trim()
-                        env.VERSION_TAG = "${env.BRANCH_NAME}-v${packageVersion}-${env.BUILD_ID}"
+                        env.VERSION_TAG = "${env.BRANCH_NAME}-v${env.PACKAGE_VERSION}-${env.BUILD_ID}"
                     }
                 }
                 slackSend channel: 'C0B34ADJ7C3', message: "Start build ${env.JOB_NAME} - ID: ${env.BUILD_ID}", tokenCredentialId: 'medialab_slack_token'
