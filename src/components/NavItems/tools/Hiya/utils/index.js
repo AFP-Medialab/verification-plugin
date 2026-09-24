@@ -11,3 +11,10 @@ export {
   getAudioTimeRange,
   createChartConfig,
 } from "./chartUtils";
+
+export {
+  hashFile,
+  urlCacheKey,
+  getCachedResult,
+  setCachedResult,
+} from "./hiyaCache";
