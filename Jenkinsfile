@@ -116,7 +116,7 @@ pipeline {
                             if [ -z "\$ZIPS" ]; then echo "No zip found!"; exit 1; fi
                             for ZIP in \$ZIPS; do
                                 BROWSER=\$(basename "\$ZIP" | grep -oE 'chrome|firefox')
-                                aws s3 cp "\$ZIP" s3://${S3_BUCKET}/jenkins/builds/${env.BRANCH_NAME}/we-verify-plugin-${VERSION_TAG}-\${BROWSER}.zip
+                                aws s3 cp "\$ZIP" s3://${S3_BUCKET}/jenkins/builds/${env.BRANCH_NAME}/we-verify-plugin-${env.VERSION_TAG}-\${BROWSER}.zip
                             done
                         """
                     }
@@ -128,7 +128,7 @@ pipeline {
         success {
             slackSend channel: 'C0B34ADJ7C3', 
                     color: 'good',
-                    message: "✅ SUCCESS: ${env.JOB_NAME} #${env.BUILD_ID}\nArtefact: s3://${S3_BUCKET}/jenkins/builds/${env.BRANCH_NAME}/we-verify-plugin-${VERSION_TAG}.zip", 
+                    message: "✅ SUCCESS: ${env.JOB_NAME} #${env.BUILD_ID}\nArtefact: s3://${S3_BUCKET}/jenkins/builds/${env.BRANCH_NAME}", 
                     tokenCredentialId: 'medialab_slack_token'
         }
         failure {
