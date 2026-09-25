@@ -65,7 +65,6 @@ const MultipleSelectChip = ({
         <Select
           labelId="socialMediaSelect-multiple-chip-label"
           id="socialMediaSelect-multiple-chip"
-          multiple
           value={selectedSocialMedia}
           onChange={handleChange}
           input={
