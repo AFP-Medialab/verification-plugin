@@ -99,7 +99,7 @@ const FfmpegToolkitResult = ({
         </Button>
       </Box>
       {iframes && hasIframes && (
-        <Box sx={{ p: 2 }}>
+        <Box sx={{ p: 2 }} data-testid="ffmpegtoolkit-iframes-container">
           <Box
             sx={{
               display: "flex",
