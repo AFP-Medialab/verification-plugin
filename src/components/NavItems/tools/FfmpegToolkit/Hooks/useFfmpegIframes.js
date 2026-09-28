@@ -98,7 +98,6 @@ const useFfmpegIframes = () => {
     dispatch(setBottomLoading(true));
     try {
       const frames = await fetchIframesEventSource((data) => {
-        console.log("Message en temps réel :", data);
         if (data.progress) {
           dispatch(setProgress(data.progress));
         }

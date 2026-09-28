@@ -101,7 +101,6 @@ const useFfmpegAudio = () => {
     dispatch(setBottomLoading(true));
     try {
       const blob = await fetchAudioEventSource((data) => {
-        console.log("Message en temps réel :", data);
         if (data.progress) {
           dispatch(setProgress(data.progress));
         }

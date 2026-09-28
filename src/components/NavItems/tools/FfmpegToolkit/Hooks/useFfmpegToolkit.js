@@ -8,6 +8,10 @@ import useFfmpegAudio from "./useFfmpegAudio";
 import useFfmpegIframes from "./useFfmpegIframes";
 import useFfmpegVideo from "./useFfmpegVideo";
 
+/**
+ * Gather all the ffmpeg hooks (audio, video and iframes)
+ * @returns
+ */
 const useFfmpegToolkit = () => {
   const isLoading = useSelector((state) => state.ffmpegToolkit.loading);
   const result = useSelector((state) => state.ffmpegToolkit.result);

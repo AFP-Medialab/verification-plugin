@@ -163,7 +163,6 @@ const useFfmpegVideo = ({
     try {
       const blob = await fetchVideoEventSource(
         (data) => {
-          console.log("Message en temps réel :", data);
           if (data.progress) {
             dispatch(setProgress(data.progress));
           }
