@@ -129,7 +129,14 @@ const useFfmpegToolkit = () => {
 
   const { handleDownloadAudio, handleGoToHiya } = useFfmpegAudio();
   const { preprocessVideo, handleSubmit, handleDownloadVideo } = useFfmpegVideo(
-    { videoFile, sliderRange, formatSeconds, setVideoFile, setType },
+    {
+      videoFile,
+      sliderRange,
+      formatSeconds,
+      setVideoFile,
+      setType,
+      videoDuration,
+    },
   );
   const { handleGetIframes, handleDownloadIframes } = useFfmpegIframes();
 

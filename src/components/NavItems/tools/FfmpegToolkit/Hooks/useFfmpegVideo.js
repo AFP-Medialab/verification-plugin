@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 
+import useAuthenticatedFetch from "@/components/Shared/Authentication/useAuthenticatedFetch";
 import useAuthenticatedRequest from "@/components/Shared/Authentication/useAuthenticatedRequest";
-import { preprocessFileUpload } from "@/components/Shared/Utils/fileUtils";
 import {
   setBeginCutTime,
   setBottomLoading,
@@ -16,23 +16,31 @@ import {
 import { setError } from "@/redux/reducers/errorReducer";
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
+import {
+  preprocessExtract,
+  preprocessFfmpegVideoUpload,
+} from "../Utils/ffmpegPreprocessFile";
+
 const useFfmpegVideo = ({
   videoFile,
   sliderRange,
   formatSeconds,
   setVideoFile,
   setType,
+  videoDuration,
 }) => {
   const dispatch = useDispatch();
   const authenticatedRequest = useAuthenticatedRequest();
+  const authenticatedFetch = useAuthenticatedFetch();
   const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
 
   const role = useSelector((state) => state.userSession.user.roles);
   const result = useSelector((state) => state.ffmpegToolkit.result);
   const fileName = useSelector((state) => state.ffmpegToolkit.fileName) ?? "";
-  const accessToken = useSelector((state) => state.userSession?.accessToken);
 
   const progress = useSelector((state) => state.ffmpegToolkit.progress);
+
+  const keyword = i18nLoadNamespace("components/NavItems/tools/FfmpegToolkit");
 
   const getNameFromFileName = (name) => name.split(".")[0];
 
@@ -47,9 +55,8 @@ const useFfmpegVideo = ({
   };
 
   const preprocessVideo = (file) => {
-    return preprocessFileUpload(
+    return preprocessFfmpegVideoUpload(
       file,
-      role,
       undefined,
       preprocessingSuccess,
       preprocessingError,
@@ -85,12 +92,17 @@ const useFfmpegVideo = ({
     } = {},
   ) => {
     try {
+      const isExtractTooBig = preprocessExtract(
+        videoToSend.size,
+        startTime,
+        endTime,
+        videoDuration,
+      );
+      if (isExtractTooBig) {
+        dispatch(setError(keyword("ffmpeg_toolkit_error_extract_too_large")));
+        throw new Error(keyword("ffmpeg_toolkit_error_extract_too_large"));
+      }
       const apiUrl = import.meta.env.VITE_FFMPEG_YTDLP_API_URL;
-      const sseHeaders = {
-        "Content-Type": "video/mp4",
-        Accept: "text/event-stream",
-      };
-      if (accessToken) sseHeaders["Authorization"] = `Bearer ${accessToken}`;
 
       const params = new URLSearchParams();
       if (startTime !== null) params.append("startTime", startTime);
@@ -101,9 +113,9 @@ const useFfmpegVideo = ({
 
       const url = `${apiUrl}api/ffmpeg/extractvideo?${params.toString()}`;
 
-      const res = await fetch(url, {
+      const res = await authenticatedFetch(url, {
         method: "POST",
-        headers: sseHeaders,
+        headers: { "Content-Type": "video/mp4", Accept: "text/event-stream" },
         body: videoToSend,
         duplex: "half",
       });
@@ -197,7 +209,6 @@ const useFfmpegVideo = ({
         const videoBlob = await fetch(result).then((r) => r.blob());
         const blob = await fetchVideoEventSource(
           (data) => {
-            console.log("Message en temps réel :", data);
             if (data.progress) {
               dispatch(setProgress(data.progress));
             }

@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 
+import useAuthenticatedFetch from "@/components/Shared/Authentication/useAuthenticatedFetch";
 import useAuthenticatedRequest from "@/components/Shared/Authentication/useAuthenticatedRequest";
 import {
   setBottomLoading,
@@ -12,11 +13,11 @@ import JSZip from "jszip";
 const useFfmpegIframes = () => {
   const dispatch = useDispatch();
   const authenticatedRequest = useAuthenticatedRequest();
+  const authenticatedFetch = useAuthenticatedFetch();
 
   const result = useSelector((state) => state.ffmpegToolkit.result);
   const iframes = useSelector((state) => state.ffmpegToolkit.iframes);
   const fileName = useSelector((state) => state.ffmpegToolkit.fileName) ?? "";
-  const accessToken = useSelector((state) => state.userSession?.accessToken);
 
   const progress = useSelector((state) => state.ffmpegToolkit.progress);
 
@@ -39,18 +40,13 @@ const useFfmpegIframes = () => {
   const fetchIframesEventSource = async (onProgress) => {
     try {
       const apiUrl = import.meta.env.VITE_FFMPEG_YTDLP_API_URL;
-      const sseHeaders = {
-        "Content-Type": "video/mp4",
-        Accept: "text/event-stream",
-      };
-      if (accessToken) sseHeaders["Authorization"] = `Bearer ${accessToken}`;
 
       const videoBlob = await fetch(result).then((r) => r.blob());
-      const res = await fetch(
+      const res = await authenticatedFetch(
         `${apiUrl}api/ffmpeg/extractIframes?wantsStream=true`,
         {
           method: "POST",
-          headers: sseHeaders,
+          headers: { "Content-Type": "video/mp4", Accept: "text/event-stream" },
           body: videoBlob,
           duplex: "half",
         },
