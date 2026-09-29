@@ -140,26 +140,48 @@ test('Test tool chatbot', async ({page, authenticatedExtraFeaturesExtensionId}) 
 test('Test tool ffmpeg toolkit', async ({page, authenticatedExtraFeaturesExtensionId}) => {
     const videoInputPath = path.resolve(__dirname, '../../tests-assets/test-metadata.mp4');
 
+    const VIDEO_FILE_ID = 'test-video-file-id';
+    const AUDIO_FILE_ID = 'test-audio-file-id';
+    const IFRAMES_FILE_ID = 'test-iframes-file-id';
+
     await page.route('**extractvideo**', async (route) => {
         await route.fulfill({
             status: 200,
-            contentType: 'video/mp4'
+            contentType: 'text/event-stream',
+            body: `data: ${JSON.stringify({ status: 'completed', fileId: VIDEO_FILE_ID })}\n\n`
         });
     });
 
     await page.route('**extractaudio**', async (route) => {
         await route.fulfill({
             status: 200,
-            contentType: 'audio/mpeg'
+            contentType: 'text/event-stream',
+            body: `data: ${JSON.stringify({ status: 'completed', fileId: AUDIO_FILE_ID })}\n\n`
         });
     });
 
     await page.route('**extractIframes**', async (route) => {
         await route.fulfill({
             status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify(mockedIframesResponse)
+            contentType: 'text/event-stream',
+            body: `data: ${JSON.stringify({ status: 'completed', fileId: IFRAMES_FILE_ID })}\n\n`
         });
+    });
+
+    await page.route('**download**', async (route) => {
+        const url = route.request().url();
+        if (url.includes(IFRAMES_FILE_ID)) {
+            await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify(mockedIframesResponse)
+            });
+        } else {
+            await route.fulfill({
+                status: 200,
+                contentType: 'video/mp4'
+            });
+        }
     });
 
     await page.goto(`chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/tools/ffmpegtoolkit`);
