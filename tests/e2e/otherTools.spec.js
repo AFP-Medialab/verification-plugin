@@ -9,6 +9,7 @@ import { test, expect } from './fixtures';
 import path from 'path';
 import singlefileResponse from '../../tests-assets/api-response/singlefile-to-wacz-response';
 import mockedChatbotResponse from '../../tests-assets/api-response/chatbot-response';
+import mockedIframesResponse from '../../tests-assets/api-response/ffmpeg-iframes-response';
 
 test('Test tool archive savepagenow', async ({page, authenticatedArchiveExtensionId, context}) => {
     await context.route('**web.archive.org**', async (route) => {
@@ -153,6 +154,14 @@ test('Test tool ffmpeg toolkit', async ({page, authenticatedExtraFeaturesExtensi
         });
     });
 
+    await page.route('**extractIframes**', async (route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(mockedIframesResponse)
+        });
+    });
+
     await page.goto(`chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/tools/ffmpegtoolkit`);
 
     await page.locator('input[type="file"]').setInputFiles(videoInputPath);
@@ -210,4 +219,18 @@ test('Test tool ffmpeg toolkit', async ({page, authenticatedExtraFeaturesExtensi
     await page.getByTestId('ffmpegtoolkit-downloadaudio-button').click();
     const downloadAudio = await downloadAudioPromise;
     expect(downloadAudio.suggestedFilename()).toBe('test-metadata_extract.mp3');
+
+    // extract iframes
+    await page.getByTestId('ffmpegtoolkit-iframes-button').click();
+    await expect(page.getByTestId('ffmpegtoolkit-iframes-container')).toBeVisible();
+
+    // iframes container shows the expected number of images
+    const iframesContainer = page.getByTestId('ffmpegtoolkit-iframes-container');
+    await expect(iframesContainer.locator('img')).toHaveCount(mockedIframesResponse.frames.length);
+
+    // download iframes
+    const downloadIframesPromise = page.waitForEvent('download');
+    await page.getByTestId('ffmpegtoolkit-download-iframes-button').click();
+    const downloadIframes = await downloadIframesPromise;
+    expect(downloadIframes.suggestedFilename()).toBe('test-metadata_iframes.zip');
 })

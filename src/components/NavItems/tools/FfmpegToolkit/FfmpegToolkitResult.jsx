@@ -1,32 +1,35 @@
-import { React, useState } from "react";
+import { React, use, useState } from "react";
 import { useSelector } from "react-redux";
 
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
+import CircularProgress from "@mui/material/CircularProgress";
 import LinearProgress from "@mui/material/LinearProgress";
 
 import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
-import DownloadVideoModal from "./DownloadVideoModal";
+import DownloadVideoModal from "./FfmpegDownloadVideoModal";
 
 const FfmpegToolkitResult = ({
   result,
   onDownloadAudio,
   onDownloadVideo,
   onGoToHiya,
-  onGetKeyframes,
-  onDownloadKeyframes,
+  onGetIframes,
+  onDownloadIframes,
 }) => {
   const [showDownloadModal, setShowDownloadModal] = useState(false);
   const keyword = i18nLoadNamespace("components/NavItems/tools/FfmpegToolkit");
 
-  const keyframes = useSelector((state) => state.ffmpegToolkit.keyframes);
+  const iframes = useSelector((state) => state.ffmpegToolkit.iframes);
 
   const isLoading = useSelector((state) => state.ffmpegToolkit.bottomLoading);
 
-  const hasKeyframes = keyframes?.length > 0;
+  const progress = useSelector((state) => state.ffmpegToolkit.progress);
+
+  const hasIframes = iframes?.length > 0;
 
   return (
     <Card>
@@ -88,15 +91,15 @@ const FfmpegToolkitResult = ({
         </Button>
         <Button
           variant="contained"
-          onClick={onGetKeyframes}
+          onClick={onGetIframes}
           disabled={isLoading}
-          data-testid="ffmpegtoolkit-keyframes-button"
+          data-testid="ffmpegtoolkit-iframes-button"
         >
           I-frames
         </Button>
       </Box>
-      {keyframes && hasKeyframes && (
-        <Box sx={{ p: 2 }}>
+      {iframes && hasIframes && (
+        <Box sx={{ p: 2 }} data-testid="ffmpegtoolkit-iframes-container">
           <Box
             sx={{
               display: "flex",
@@ -107,7 +110,7 @@ const FfmpegToolkitResult = ({
               overflowX: "hidden",
             }}
           >
-            {keyframes.map((item, index) => {
+            {iframes.map((item, index) => {
               const imageSrc = `data:${item.mimeType};base64,${item.data}`;
 
               return (
@@ -132,22 +135,26 @@ const FfmpegToolkitResult = ({
           </Box>
           <Button
             variant="contained"
-            onClick={onDownloadKeyframes}
-            data-testid="ffmpegtoolkit-download-keyframes-button"
+            onClick={onDownloadIframes}
+            data-testid="ffmpegtoolkit-download-iframes-button"
             sx={{ mt: 2 }}
           >
-            {keyword("ffmpeg_toolkit_downloadkeyframesbutton")}
+            {keyword("ffmpeg_toolkit_downloadiframesbutton")}
           </Button>
         </Box>
       )}
-      {keyframes && !hasKeyframes && (
+      {iframes && !hasIframes && (
         <Box sx={{ p: 2 }}>
-          <Alert severity="warning">No keyframes found in this video</Alert>
+          <Alert severity="warning">
+            {keyword("ffmpeg_toolkit_no_iframes_warning")}
+          </Alert>
         </Box>
       )}
       {isLoading && (
-        <Box sx={{ mt: 3 }}>
-          <LinearProgress />
+        <Box sx={{ p: 2 }}>
+          <Alert icon={<CircularProgress size={20} />} severity="info">
+            {progress}%
+          </Alert>
         </Box>
       )}
     </Card>
