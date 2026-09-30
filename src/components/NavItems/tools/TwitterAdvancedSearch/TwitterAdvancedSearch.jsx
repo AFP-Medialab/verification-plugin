@@ -306,7 +306,7 @@ const TwitterAdvancedSearch = () => {
             </Button>
 
             <Button variant="outlined" color="primary" onClick={handleReset}>
-              Reset
+              {keyword("button_reset")}
             </Button>
           </Box>
         </div>
