@@ -1,12 +1,6 @@
 import { openNewTabWithUrl } from "../utils/openTabUtils";
 import { IMAGE_FORMATS } from "../utils/searchUtils";
 
-// Timing constants — increase if Google Lens upload fails on slow connections
-const LENS_PAGE_READY_DELAY_MS = 300; // wait after tab "complete" event before injecting
-const LENS_CONSENT_DISMISS_DELAY_MS = 500; // wait after dismissing cookie popup
-const LENS_TRIGGER_CLICK_DELAY_MS = 300; // wait for file input after clicking upload button (waitForElement handles the rest)
-const LENS_UPLOAD_SETTLE_DELAY_MS = 300; // wait after setting file before resolving
-
 export const googleLensReversearch = (
   imageObject,
   isRequestFromContextMenu,
@@ -39,7 +33,13 @@ export const reverseRemoteGoogleLens = (
 };
 
 /**
- * Search with local image by uploading directly to lens.google.com
+ * Search with a local image by injecting a POST into a google.com tab.
+ *
+ * A direct fetch from the extension context gets a 403 because Google rejects
+ * requests with Origin: chrome-extension://... The workaround is to open
+ * google.com in the background (active: false keeps the popup alive), then
+ * inject a script running in MAIN world so the POST is treated as same-origin.
+ *
  * @param {Blob} imgBlob - The image blob to upload
  * @param {boolean} isRequestFromContextMenu - Whether request is from context menu
  */
@@ -50,162 +50,69 @@ export const reverseImageSearchGoogleLensLocal = async (
   try {
     const dataUrl = await blobToDataUrl(imgBlob);
 
-    // Open Google Lens directly — more stable than the Google homepage approach
+    // Open google.com in the background so the popup stays alive while we
+    // wait for the page to load and inject the upload script.
     const tab = await browser.tabs.create({
-      url: "https://lens.google.com/",
-      active: !isRequestFromContextMenu,
+      url: "https://www.google.com/",
+      active: false,
     });
 
+    // onDOMContentLoaded fires as soon as the DOM is parsed — much earlier than
+    // tabs.onUpdated "complete" (which waits for all resources). MAIN world
+    // execution only needs the page context to be established, which is ready
+    // at DOMContentLoaded.
     await new Promise((resolve) => {
-      const listener = (tabId, changeInfo) => {
-        if (tabId === tab.id && changeInfo.status === "complete") {
-          browser.tabs.onUpdated.removeListener(listener);
-          setTimeout(resolve, LENS_PAGE_READY_DELAY_MS);
+      const listener = (details) => {
+        if (details.tabId === tab.id && details.frameId === 0) {
+          browser.webNavigation.onDOMContentLoaded.removeListener(listener);
+          resolve();
         }
       };
-      browser.tabs.onUpdated.addListener(listener);
+      browser.webNavigation.onDOMContentLoaded.addListener(listener);
     });
 
+    // MAIN world: the script runs with the page's origin (google.com), so the
+    // POST to /searchbyimage/upload is same-origin and Google accepts it.
     await browser.scripting.executeScript({
       target: { tabId: tab.id },
-      func: uploadToGoogleLens,
-      args: [
-        dataUrl,
-        "image.jpg",
-        LENS_CONSENT_DISMISS_DELAY_MS,
-        LENS_TRIGGER_CLICK_DELAY_MS,
-        LENS_UPLOAD_SETTLE_DELAY_MS,
-      ],
+      world: "MAIN",
+      func: uploadAndNavigate,
+      args: [dataUrl],
     });
+
+    // Make the tab visible now that the upload and navigation are underway.
+    if (!isRequestFromContextMenu) {
+      await browser.tabs.update(tab.id, { active: true });
+    }
   } catch (error) {
     console.error("Error in reverseImageSearchGoogleLensLocal:", error);
     alert(
-      `Failed to upload image to Google Lens: ${error.message}\nCheck browser console for details.`,
+      `Failed to upload image to Google: ${error.message}\nCheck browser console for details.`,
     );
   }
 };
 
 /**
- * Content script injected into lens.google.com to trigger file upload.
- * Handles consent popup, finds the upload trigger, and sets the image file.
+ * Injected into google.com (MAIN world). Posts the image to the reverse image
+ * search endpoint and navigates the tab to the results page.
  */
-async function uploadToGoogleLens(
-  imageDataUrl,
-  filename,
-  consentDismissDelay = 800,
-  triggerClickDelay = 1000,
-  uploadSettleDelay = 500,
-) {
-  return new Promise((resolve, reject) => {
-    (async () => {
-      try {
-        const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+async function uploadAndNavigate(imageDataUrl) {
+  const imgResponse = await fetch(imageDataUrl);
+  const blob = await imgResponse.blob();
 
-        const waitForElement = (selector, timeout = 10000) =>
-          new Promise((res, rej) => {
-            const start = Date.now();
-            const check = () => {
-              const el = document.querySelector(selector);
-              if (el) return res(el);
-              if (Date.now() - start > timeout)
-                return rej(new Error(`Element not found: ${selector}`));
-              setTimeout(check, 100);
-            };
-            check();
-          });
+  const formData = new FormData();
+  formData.append("encoded_image", blob, "image.jpg");
+  formData.append("sbisrc", "cr_1");
 
-        const waitForElementXPath = (xpath, timeout = 5000) =>
-          new Promise((res) => {
-            const start = Date.now();
-            const check = () => {
-              const result = document.evaluate(
-                xpath,
-                document,
-                null,
-                XPathResult.FIRST_ORDERED_NODE_TYPE,
-                null,
-              );
-              const el = result.singleNodeValue;
-              if (el) return res(el);
-              if (Date.now() - start > timeout) return res(null);
-              setTimeout(check, 100);
-            };
-            check();
-          });
-
-        // Dismiss consent/cookie popup if present
-        const consentPopup = await waitForElementXPath(
-          `//div[@role="dialog"
-            and contains(., "g.co/privacytools")
-            and .//a[starts-with(@href, "https://policies.google.com/technologies/cookies")]
-          ]`,
-        );
-        if (consentPopup) {
-          const buttons = consentPopup.querySelectorAll("button");
-          if (buttons.length >= 3) buttons[2].click();
-          else if (buttons.length > 0) buttons[buttons.length - 1].click();
-          await sleep(consentDismissDelay);
-        }
-
-        // Check if a file input is already present (some Lens page variants expose it directly)
-        let fileInput = document.querySelector('input[type="file"]');
-
-        if (!fileInput) {
-          // Try to find and click the upload trigger button on lens.google.com.
-          // Google updates their DOM frequently, so we try multiple selectors.
-          const uploadTriggerSelectors = [
-            // Current Lens homepage "Upload an image" area
-            '[aria-label*="Upload" i]',
-            '[aria-label*="Importer" i]',
-            '[aria-label*="Caméra" i]',
-            '[aria-label*="Search by image" i]',
-            '[aria-label*="Recherche par image" i]',
-            // Data attributes used in various Google Lens versions
-            "[data-base-lens-url]",
-            "[data-uploadbtn]",
-            // jsaction-based selectors
-            '[jsaction*="upload"]',
-            '[jsaction*="lens"]',
-            // Generic upload area / button fallbacks
-            'div[role="button"][jscontroller]',
-          ];
-
-          for (const selector of uploadTriggerSelectors) {
-            const el = document.querySelector(selector);
-            if (el) {
-              el.click();
-              await sleep(triggerClickDelay);
-              fileInput = document.querySelector('input[type="file"]');
-              if (fileInput) break;
-            }
-          }
-
-          // Last resort: wait for a file input to appear after any click
-          if (!fileInput) {
-            fileInput = await waitForElement('input[type="file"]');
-          }
-        }
-
-        // Convert data URL to File and assign it to the input
-        const response = await fetch(imageDataUrl);
-        const blob = await response.blob();
-        const file = new File([blob], filename, {
-          type: blob.type || "image/jpeg",
-        });
-
-        const dataTransfer = new DataTransfer();
-        dataTransfer.items.add(file);
-        fileInput.files = dataTransfer.files;
-        fileInput.dispatchEvent(new Event("change", { bubbles: true }));
-
-        await sleep(uploadSettleDelay);
-        resolve({ success: true });
-      } catch (error) {
-        console.error("[Google Lens Upload] Error:", error);
-        reject({ success: false, error: error.message });
-      }
-    })();
+  const uploadResponse = await fetch("/searchbyimage/upload", {
+    method: "POST",
+    body: formData,
+    redirect: "follow",
   });
+
+  window.location.href = uploadResponse.url.includes("/search")
+    ? uploadResponse.url
+    : "https://lens.google.com/";
 }
 
 /**

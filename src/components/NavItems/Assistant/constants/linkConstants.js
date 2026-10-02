@@ -84,7 +84,7 @@ export const KNOWN_LINK_PATTERNS = [
   },
   {
     key: KNOWN_LINKS.MASTODON,
-    patterns: ["^(?:https?:/{2})?(www.)?.+..+/@.*/d*"],
+    patterns: ["^(?:https?:/{2})?(www\\.)?.+\\..+/@[^/]+/\\d+$"],
   },
   {
     key: KNOWN_LINKS.VK,

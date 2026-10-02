@@ -13,7 +13,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import TextField from "@mui/material/TextField";
 
 import { useTrackEvent } from "@/Hooks/useAnalytics";
-import { useInput } from "@/Hooks/useInput";
+import { useInputWithPersistence } from "@/Hooks/useInput";
 import { canUserSeeTool, newSna, searchTwitter } from "@/constants/tools";
 import DateAndTimePicker from "@Shared/DateTimePicker/DateAndTimePicker";
 import { getclientId } from "@Shared/GoogleAnalytics/MatomoAnalytics";
@@ -38,14 +38,16 @@ const TwitterAdvancedSearch = () => {
   );
   const keywordNewSna = i18nLoadNamespace("components/NavItems/tools/NewSNA");
 
-  const term = useInput("");
-  const account = useInput("");
-  const filter = useInput("");
-  const tweetLang = useInput("");
-  const geocode = useInput("");
-  const near = useInput("");
-  const within = useInput("");
-  const [localTime, setLocalTime] = useState("true");
+  const term = useInputWithPersistence("", "tw_search_term");
+  const account = useInputWithPersistence("", "tw_search_account");
+  const filter = useInputWithPersistence("", "tw_search_filter");
+  const tweetLang = useInputWithPersistence("", "tw_search_lang");
+  const geocode = useInputWithPersistence("", "tw_search_geocode");
+  const near = useInputWithPersistence("", "tw_search_near");
+  const within = useInputWithPersistence("", "tw_search_within");
+  const [localTime, setLocalTime] = useState(() => {
+    return sessionStorage.getItem("tw_search_localtime") || "true";
+  });
 
   const largeInputList = [
     {
@@ -78,11 +80,33 @@ const TwitterAdvancedSearch = () => {
     },
   ];
 
-  const [fromDate, setSelectedFromDate] = useState(null);
+  const [fromDate, setSelectedFromDate] = useState(() => {
+    const saved = sessionStorage.getItem("tw_search_from_date");
+    return saved ? dayjs(saved) : null;
+  });
   const [fromDateError, setSelectedFromDateError] = useState(false);
 
-  const [toDate, setSelectedToDate] = useState(null);
+  const [toDate, setSelectedToDate] = useState(() => {
+    const saved = sessionStorage.getItem("tw_search_to_date");
+    return saved ? dayjs(saved) : null;
+  });
   const [toDateError, setSelectedToDateError] = useState(false);
+
+  useEffect(() => {
+    if (fromDate)
+      sessionStorage.setItem("tw_search_from_date", fromDate.toISOString());
+    else sessionStorage.removeItem("tw_search_from_date");
+  }, [fromDate]);
+
+  useEffect(() => {
+    if (toDate)
+      sessionStorage.setItem("tw_search_to_date", toDate.toISOString());
+    else sessionStorage.removeItem("tw_search_to_date");
+  }, [toDate]);
+
+  useEffect(() => {
+    sessionStorage.setItem("tw_search_localtime", localTime);
+  }, [localTime]);
 
   const handleFromDateChange = (date) => {
     setSelectedFromDateError(date === null);
@@ -94,6 +118,33 @@ const TwitterAdvancedSearch = () => {
     setSelectedToDateError(date === null);
     if (fromDate && date < fromDate) setSelectedToDateError(true);
     setSelectedToDate(dayjs(date));
+  };
+
+  const handleReset = () => {
+    term.setValue("");
+    account.setValue("");
+    filter.setValue("");
+    tweetLang.setValue("");
+    geocode.setValue("");
+    near.setValue("");
+    within.setValue("");
+    setSelectedFromDate(null);
+    setSelectedToDate(null);
+    setLocalTime("true");
+
+    const keys = [
+      "tw_search_term",
+      "tw_search_account",
+      "tw_search_filter",
+      "tw_search_lang",
+      "tw_search_geocode",
+      "tw_search_near",
+      "tw_search_within",
+      "tw_search_from_date",
+      "tw_search_to_date",
+      "tw_search_localtime",
+    ];
+    keys.forEach((key) => localStorage.removeItem(key));
   };
 
   const session = useSelector((state) => state.userSession);
@@ -126,14 +177,6 @@ const TwitterAdvancedSearch = () => {
     if (toDateError === false && fromDateError === false) {
       setEventUrl(url);
       window.open(url);
-      /*trackEvent(
-                                          "submission",
-                                          "twitter_advance_search",
-                                          "search twitter request",
-                                          url,
-                                          client_id,
-                                          uid
-                                        );*/
     }
   };
 
@@ -200,6 +243,7 @@ const TwitterAdvancedSearch = () => {
             />
           )}
           {largeInputList.map((value, key) => {
+            const { setValue, ...inputProps } = value.props;
             return (
               <TextField
                 key={key}
@@ -207,7 +251,7 @@ const TwitterAdvancedSearch = () => {
                 label={keyword(value.label)}
                 style={{ margin: 8 }}
                 fullWidth
-                {...value.props}
+                {...inputProps}
                 data-testid={`twitter-search-${key}`}
               />
             );
@@ -251,19 +295,20 @@ const TwitterAdvancedSearch = () => {
               />
             </RadioGroup>
           </FormControl>
-          <Box
-            sx={{
-              m: 2,
-            }}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={onSubmit}
-            data-testid="twitter-submit"
-          >
-            {keyword("button_submit")}
-          </Button>
+          <Box sx={{ m: 2, display: "flex", gap: 2, justifyContent: "center" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={onSubmit}
+              data-testid="twitter-submit"
+            >
+              {keyword("button_submit")}
+            </Button>
+
+            <Button variant="outlined" color="primary" onClick={handleReset}>
+              {keyword("button_reset")}
+            </Button>
+          </Box>
         </div>
       </Card>
     </div>

@@ -6,6 +6,7 @@ import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 import { PROMPTS_CONFIG_I18N } from "../config/prompts";
 import {
   createChatbotApi,
+  fetchLoadedModelId,
   fetchModels,
   formatMessagesForAPI,
 } from "../services/chatbotApiService";
@@ -88,12 +89,29 @@ const useChatbot = (
 
   const models = modelsData || [];
 
-  // Auto-select first model if none selected
+  // Look up the model LM Studio currently has loaded, so the dropdown can
+  // default to the one that's actually running instead of just the first
+  // in the list. Not every backend supports this, so it resolves to null
+  // (rather than erroring) when unavailable.
+  const { data: loadedModelId, isLoading: isLoadedModelLoading } = useQuery({
+    queryKey: ["loadedModel", apiBaseUrl],
+    queryFn: () => fetchLoadedModelId(apiBaseUrl),
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 10 * 60 * 1000,
+    retry: false,
+  });
+
+  // Auto-select the loaded model if we could detect one, otherwise fall
+  // back to the first model in the list.
   useEffect(() => {
-    if (models.length > 0 && !selectedModel) {
-      setSelectedModel(models[0].id);
-    }
-  }, [models, selectedModel]);
+    if (selectedModel || models.length === 0 || isLoadedModelLoading) return;
+
+    const preferredModel =
+      loadedModelId && models.some((model) => model.id === loadedModelId)
+        ? loadedModelId
+        : models[0].id;
+    setSelectedModel(preferredModel);
+  }, [models, selectedModel, loadedModelId, isLoadedModelLoading]);
 
   // Create API instance with current dependencies
   const api = useMemo(

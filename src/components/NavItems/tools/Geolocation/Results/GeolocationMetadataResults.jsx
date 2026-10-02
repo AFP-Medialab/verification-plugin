@@ -19,6 +19,8 @@ const GeolocationMetadataResults = ({ metadata, urlImage }) => {
 
   if (!metadata?.latitude || !metadata?.longitude) return null;
 
+  const apiKey = import.meta.env.VITE_CARTO_API_KEY;
+
   const resultIcon = new Icon({
     iconUrl: "img/marker-icon.png",
     iconSize: [25, 41],
@@ -97,7 +99,7 @@ const GeolocationMetadataResults = ({ metadata, urlImage }) => {
                   >
                     <TileLayer
                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-                      url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+                      url={`https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=${apiKey}`}
                     />
                     <Marker
                       position={[metadata.latitude, metadata.longitude]}

@@ -1,5 +1,7 @@
 import React from "react";
 
+import Box from "@mui/material/Box";
+
 import { DatePicker, DateTimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 
@@ -40,7 +42,7 @@ const DateAndTimePicker = ({
   };
 
   return (
-    <>
+    <Box sx={{ m: 2, display: "flex", gap: 2, justifyContent: "center" }}>
       {time ? (
         <>
           <DateTimePicker
@@ -96,7 +98,7 @@ const DateAndTimePicker = ({
           />
         </>
       )}
-    </>
+    </Box>
   );
 };
 

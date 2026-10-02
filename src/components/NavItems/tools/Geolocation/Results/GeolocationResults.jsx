@@ -25,6 +25,8 @@ const GeolocationResults = ({ result, urlImage, metadata }) => {
   const userRoles = useSelector((state) => state.userSession.user.roles);
   const [tab, setTab] = useState(0);
 
+  const apiKey = import.meta.env.VITE_CARTO_API_KEY;
+
   const resultIcon = new Icon({
     iconUrl: "img/marker-icon.png",
     iconSize: [25, 41],
@@ -148,7 +150,7 @@ const GeolocationResults = ({ result, urlImage, metadata }) => {
                             >
                               <TileLayer
                                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-                                url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+                                url={`https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=${apiKey}`}
                               />
                               <Marker
                                 position={[res.latitude, res.longitude]}
