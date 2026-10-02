@@ -64,24 +64,46 @@ const DownloadVideoModal = ({ showModal, setShowModal, onConfirm }) => {
 
           <FormControlLabel
             data-testid="ffmpegtoolkit-compress-checkbox"
+            alignItems="flex-start"
             control={
               <Checkbox
                 checked={compress}
                 onChange={(e) => setCompress(e.target.checked)}
+                sx={{ py: 0 }}
               />
             }
-            label={keyword("ffmpeg_toolkit_download_options_compress")}
+            label={
+              <Stack direction="column">
+                <Typography variant="body1">
+                  {keyword("ffmpeg_toolkit_download_options_compress")}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {keyword("ffmpeg_toolkit_download_options_compress_details")}
+                </Typography>
+              </Stack>
+            }
           />
 
           <FormControlLabel
             data-testid="ffmpegtoolkit-scale-checkbox"
+            alignItems="flex-start"
             control={
               <Checkbox
                 checked={scaleDown}
                 onChange={(e) => setScaleDown(e.target.checked)}
+                sx={{ py: 0 }}
               />
             }
-            label={keyword("ffmpeg_toolkit_download_options_scale")}
+            label={
+              <Stack direction="column">
+                <Typography variant="body1">
+                  {keyword("ffmpeg_toolkit_download_options_scale")}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {keyword("ffmpeg_toolkit_download_options_scale_details")}
+                </Typography>
+              </Stack>
+            }
           />
 
           <Button

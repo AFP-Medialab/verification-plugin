@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useUrlOrFile } from "@/Hooks/useUrlOrFile";
 import { resetFfmpegToolkit } from "@/redux/actions/tools/ffmpegToolkitActions";
 
-import useFfmpegAudio from "./useFfmpegAudio";
-import useFfmpegIframes from "./useFfmpegIframes";
-import useFfmpegVideo from "./useFfmpegVideo";
+import useFfmpegAudio from "./services/useFfmpegAudio";
+import useFfmpegIframes from "./services/useFfmpegIframes";
+import useFfmpegVideo from "./services/useFfmpegVideo";
 
 /**
  * Gather all the ffmpeg hooks (audio, video and iframes)
