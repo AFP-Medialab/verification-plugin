@@ -137,7 +137,7 @@ test('Test tool chatbot', async ({page, authenticatedExtraFeaturesExtensionId}) 
     await expect (page.getByTestId("chatbot-result")).toBeVisible();
 })
 
-test('Test tool ffmpeg toolkit', async ({page, authenticatedExtraFeaturesExtensionId}) => {
+test('Test tool ffmpeg toolkit', async ({page, authenticatedBetaTesterExtensionId}) => {
     const videoInputPath = path.resolve(__dirname, '../../tests-assets/test-metadata.mp4');
 
     const VIDEO_FILE_ID = 'test-video-file-id';
@@ -184,7 +184,7 @@ test('Test tool ffmpeg toolkit', async ({page, authenticatedExtraFeaturesExtensi
         }
     });
 
-    await page.goto(`chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/tools/ffmpegtoolkit`);
+    await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/ffmpegtoolkit`);
 
     await page.locator('input[type="file"]').setInputFiles(videoInputPath);
 

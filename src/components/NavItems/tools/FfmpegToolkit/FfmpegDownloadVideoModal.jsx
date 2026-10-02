@@ -64,7 +64,6 @@ const DownloadVideoModal = ({ showModal, setShowModal, onConfirm }) => {
 
           <FormControlLabel
             data-testid="ffmpegtoolkit-compress-checkbox"
-            alignItems="flex-start"
             control={
               <Checkbox
                 checked={compress}
@@ -86,7 +85,6 @@ const DownloadVideoModal = ({ showModal, setShowModal, onConfirm }) => {
 
           <FormControlLabel
             data-testid="ffmpegtoolkit-scale-checkbox"
-            alignItems="flex-start"
             control={
               <Checkbox
                 checked={scaleDown}

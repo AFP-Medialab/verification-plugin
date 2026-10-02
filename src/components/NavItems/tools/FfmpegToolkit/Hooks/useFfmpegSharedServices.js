@@ -6,6 +6,7 @@ import { setBottomLoading } from "@/redux/actions/tools/ffmpegToolkitActions";
 import { setError } from "@/redux/reducers/errorReducer";
 
 const FFMPEG_API_URL = import.meta.env.VITE_FFMPEG_YTDLP_API_URL;
+const FFMPEG_TIMEOUT_MS = 3 * 60 * 1000;
 
 export const getNameFromFileName = (name) => name.split(".")[0];
 
@@ -63,15 +64,25 @@ const useFfmpegService = () => {
     onProgress,
     defaultError,
   ) => {
-    console.log(`Starting ffmpeg job: ${endpoint}`);
-    const res = await authenticatedFetch(`${FFMPEG_API_URL}${endpoint}`, {
-      method: "POST",
-      headers: { "Content-Type": "video/mp4", Accept: "text/event-stream" },
-      body,
-      duplex: "half",
-    });
-    if (!res.ok) throw new Error(`API error: ${res.status}`);
-    return readEventStream(res, onProgress, defaultError);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), FFMPEG_TIMEOUT_MS);
+    try {
+      const res = await authenticatedFetch(`${FFMPEG_API_URL}${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "video/mp4", Accept: "text/event-stream" },
+        body,
+        duplex: "half",
+        signal: controller.signal,
+      });
+      if (!res.ok) throw new Error(`API error: ${res.status}`);
+      return await readEventStream(res, onProgress, defaultError);
+    } catch (error) {
+      if (error.name === "AbortError")
+        throw new Error("The request timed out. Please try again.");
+      throw error;
+    } finally {
+      clearTimeout(timeoutId);
+    }
   };
 
   const downloadBlobFromApi = async (
@@ -83,14 +94,19 @@ const useFfmpegService = () => {
         method: "GET",
         url: `${FFMPEG_API_URL}api/ffmpeg/download?fileId=${fileId}`,
         responseType: "blob",
+        timeout: FFMPEG_TIMEOUT_MS,
       });
       const contentType =
         response.headers["content-type"] || defaultContentType;
       return new Blob([response.data], { type: contentType });
     } catch (error) {
+      const message =
+        error.code === "ECONNABORTED"
+          ? "The request timed out. Please try again."
+          : error.message;
       dispatch(setBottomLoading(false));
-      dispatch(setError(error.message));
-      throw error;
+      dispatch(setError(message));
+      throw new Error(message);
     }
   };
 
@@ -100,12 +116,17 @@ const useFfmpegService = () => {
         method: "GET",
         url: `${FFMPEG_API_URL}api/ffmpeg/download?fileId=${fileId}`,
         responseType: "text",
+        timeout: FFMPEG_TIMEOUT_MS,
       });
       return response.data;
     } catch (error) {
+      const message =
+        error.code === "ECONNABORTED"
+          ? "The request timed out. Please try again."
+          : error.message;
       dispatch(setBottomLoading(false));
-      dispatch(setError(error.message));
-      throw error;
+      dispatch(setError(message));
+      throw new Error(message);
     }
   };
 
