@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
@@ -104,7 +105,12 @@ const ChatbotUI = () => {
   }));
 
   // Reusable message footer component
-  const MessageFooter = ({ timestamp, messageText, showCopy = false }) => (
+  const MessageFooter = ({
+    timestamp,
+    messageText,
+    model,
+    showCopy = false,
+  }) => (
     <Box
       sx={{
         display: "flex",
@@ -114,6 +120,7 @@ const ChatbotUI = () => {
     >
       <Typography variant="caption" sx={{ opacity: 0.7 }}>
         {timestamp}
+        {model && ` · ${model}`}
       </Typography>
       {showCopy && messageText && (
         <CopyButton
@@ -156,6 +163,7 @@ const ChatbotUI = () => {
         <MessageFooter
           timestamp={message.timestamp}
           messageText={message.text}
+          model={!isUser ? message.model : undefined}
           showCopy={!isUser}
         />
       </MessageBubble>
@@ -283,8 +291,30 @@ const ChatbotUI = () => {
     fetchModels();
   }, [fetchModels]);
 
+  // Check if directed from assistant
+  const text = useSelector((state) => state.assistant.urlText);
+  const [searchParams] = useSearchParams();
+  const fromAssistant = searchParams.has("fromAssistant");
+  useEffect(() => {
+    if (fromAssistant && text) {
+      // set predefined prompt
+      const promptId = "rhetorical_analysis";
+      dispatch(setSelectedPrompt(promptId));
+      const selectedPromptObj = prompts.find((req) => req.id === promptId);
+      dispatch(setActivePrompt({ prompt: selectedPromptObj }));
+
+      // set text to analyse
+      dispatch(setUserInput(text.trim()));
+
+      // send message
+      handleSendMessage();
+    }
+  }, [dispatch, fromAssistant, text, isReady]);
+
   const handleSendMessage = async () => {
-    if (!userInput.trim() || !isReady) return;
+    if (!userInput.trim() || !isReady) {
+      return;
+    }
 
     const previousUserInput = userInput;
 

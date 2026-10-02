@@ -56,6 +56,28 @@ export const fetchModels = async (apiBaseUrl) => {
   return data.data || [];
 };
 
+// LM Studio's proprietary REST API exposes a `state` field ("loaded" vs
+// "not-loaded") that the OpenAI-compatible /v1/models endpoint lacks.
+// Used only to improve the default model selection; failures (e.g. the
+// server isn't LM Studio) are swallowed so callers can fall back gracefully.
+export const fetchLoadedModelId = async (apiBaseUrl) => {
+  try {
+    const response = await fetch(`${apiBaseUrl}/api/v0/models`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (!response.ok) return null;
+
+    const data = await response.json();
+    const loadedModel = (data.data || []).find(
+      (model) => model.state === "loaded",
+    );
+    return loadedModel?.id || null;
+  } catch {
+    return null;
+  }
+};
+
 // Factory function to create API functions with dependencies
 export const createChatbotApi = (apiBaseUrl, selectedModel) => {
   const handleStreamingCompletionsResponse = async (

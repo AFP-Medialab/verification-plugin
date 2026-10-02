@@ -1,7 +1,9 @@
 import React from "react";
 
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
+import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import LinearProgress from "@mui/material/LinearProgress";
 import Link from "@mui/material/Link";
@@ -18,7 +20,7 @@ import { i18nLoadNamespace } from "@Shared/Languages/i18nLoadNamespace";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import FfmpegToolkitResult from "./FfmpegToolkitResult";
-import useFfmpegToolkit from "./useFfmpegToolkit";
+import useFfmpegToolkit from "./Hooks/useFfmpegToolkit";
 
 const FfmpegToolkit = () => {
   const keywordAllTools = i18nLoadNamespace(
@@ -49,8 +51,9 @@ const FfmpegToolkit = () => {
     handleDownloadAudio,
     handleDownloadVideo,
     handleGoToHiya,
-    handleGetKeyframes,
-    handleDownloadKeyframes,
+    handleGetIframes,
+    handleDownloadIframes,
+    progress,
   } = useFfmpegToolkit();
 
   return (
@@ -60,7 +63,7 @@ const FfmpegToolkit = () => {
           name={keywordAllTools("navbar_ffmpeg_toolkit")}
           description={
             <>
-              {keywordAllTools("navbar_ffmpeg_toolkit_description")}
+              {keywordAllTools("navbar_ffmpeg_toolkit_description_1")}
               <Link
                 href="https://en.wikipedia.org/wiki/Video_compression_picture_types"
                 target="_blank"
@@ -69,6 +72,8 @@ const FfmpegToolkit = () => {
               >
                 {keywordAllTools("navbar_ffmpeg_toolkit_iframelink")}.
               </Link>
+              <br />
+              {keywordAllTools("navbar_ffmpeg_toolkit_description_2")}
             </>
           }
           icon={
@@ -111,7 +116,7 @@ const FfmpegToolkit = () => {
                 submitButtonTestId="ffmpegtoolkit-submit"
               />
 
-              {videoObjectUrl && !result && (
+              {videoObjectUrl && (
                 <Box sx={{ mt: 2 }}>
                   <video
                     ref={videoRef}
@@ -184,9 +189,11 @@ const FfmpegToolkit = () => {
             </form>
 
             {isLoading && (
-              <Box sx={{ mt: 3 }}>
-                <LinearProgress />
-              </Box>
+              <>
+                <Alert icon={<CircularProgress size={20} />} severity="info">
+                  {progress}%
+                </Alert>
+              </>
             )}
           </Box>
         </Card>
@@ -197,8 +204,8 @@ const FfmpegToolkit = () => {
             onDownloadAudio={handleDownloadAudio}
             onDownloadVideo={handleDownloadVideo}
             onGoToHiya={handleGoToHiya}
-            onGetKeyframes={handleGetKeyframes}
-            onDownloadKeyframes={handleDownloadKeyframes}
+            onGetIframes={handleGetIframes}
+            onDownloadIframes={handleDownloadIframes}
           />
         )}
       </Stack>

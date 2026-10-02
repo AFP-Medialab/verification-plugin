@@ -22,6 +22,12 @@ import { blobToBase64, preprocessFileUpload } from "@Shared/Utils/fileUtils";
 import axios from "axios";
 
 import { API_RESPONSE_LABELS } from "../constants/detectionConstants";
+import {
+  getCachedResult,
+  hashFile,
+  setCachedResult,
+  urlCacheKey,
+} from "../utils/hiyaCache";
 
 /**
  * Custom hook for Hiya audio analysis functionality
@@ -207,6 +213,25 @@ export const useHiyaAudioAnalysis = () => {
       }
     }
 
+    const cacheKey = audioFile
+      ? await hashFile(audioFile)
+      : urlCacheKey(actualUrl);
+
+    const resultUrl = audioFile ? URL.createObjectURL(audioFile) : actualUrl;
+
+    const cached = await getCachedResult(cacheKey);
+    if (cached) {
+      const { type, data } = cached;
+      if (type === "error") {
+        dispatchAction(setHiyaError({ url: resultUrl, ...data }));
+      } else if (type === "resultWithWarning") {
+        dispatchAction(setHiyaResultWithWarning({ url: resultUrl, ...data }));
+      } else {
+        dispatchAction(setHiyaResult({ url: resultUrl, ...data }));
+      }
+      return;
+    }
+
     const base64EncodedFile = audioBlob
       ? decodeURIComponent(await blobToBase64(audioBlob))
       : await blobToBase64(audioFile);
@@ -237,32 +262,30 @@ export const useHiyaAudioAnalysis = () => {
 
       // Check for error labels in the chunks
       const errorInfo = checkForErrorLabel(chunks.data);
-      const resultUrl = audioFile ? URL.createObjectURL(audioFile) : actualUrl;
 
       if (errorInfo) {
         if (errorInfo.errorType === "all") {
           // Case: All chunks have errors - show error only, no results
-          dispatchAction(
-            setHiyaError({
-              url: resultUrl,
-              errorType: errorInfo.errorType,
-              errorLabels: errorInfo.errorLabels,
-            }),
-          );
-          return; // Don't proceed with result processing
+          const cacheData = {
+            errorType: errorInfo.errorType,
+            errorLabels: errorInfo.errorLabels,
+          };
+          await setCachedResult(cacheKey, "error", cacheData);
+          dispatchAction(setHiyaError({ url: resultUrl, ...cacheData }));
+          return;
         } else if (errorInfo.errorType === "partial") {
           // Case: Some chunks have errors - show results WITH warnings
           const isAnalysisInconclusive = isResultInconclusive(chunks.data);
-
+          const cacheData = {
+            result: detectionResponse.data,
+            chunks: chunks.data,
+            isInconclusive: isAnalysisInconclusive,
+            errorType: errorInfo.errorType,
+            errorLabels: errorInfo.errorLabels,
+          };
+          await setCachedResult(cacheKey, "resultWithWarning", cacheData);
           dispatchAction(
-            setHiyaResultWithWarning({
-              url: resultUrl,
-              result: detectionResponse.data,
-              chunks: chunks.data,
-              isInconclusive: isAnalysisInconclusive,
-              errorType: errorInfo.errorType,
-              errorLabels: errorInfo.errorLabels,
-            }),
+            setHiyaResultWithWarning({ url: resultUrl, ...cacheData }),
           );
           return;
         }
@@ -270,15 +293,13 @@ export const useHiyaAudioAnalysis = () => {
 
       // Case: No errors - show results only
       const isAnalysisInconclusive = isResultInconclusive(chunks.data);
-
-      dispatchAction(
-        setHiyaResult({
-          url: resultUrl,
-          result: detectionResponse.data,
-          chunks: chunks.data,
-          isInconclusive: isAnalysisInconclusive,
-        }),
-      );
+      const cacheData = {
+        result: detectionResponse.data,
+        chunks: chunks.data,
+        isInconclusive: isAnalysisInconclusive,
+      };
+      await setCachedResult(cacheKey, "result", cacheData);
+      dispatchAction(setHiyaResult({ url: resultUrl, ...cacheData }));
     } catch (error) {
       console.log(error);
       if (error.message.includes("canceled")) {

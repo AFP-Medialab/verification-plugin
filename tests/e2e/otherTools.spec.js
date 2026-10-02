@@ -9,6 +9,7 @@ import { test, expect } from './fixtures';
 import path from 'path';
 import singlefileResponse from '../../tests-assets/api-response/singlefile-to-wacz-response';
 import mockedChatbotResponse from '../../tests-assets/api-response/chatbot-response';
+import mockedIframesResponse from '../../tests-assets/api-response/ffmpeg-iframes-response';
 
 test('Test tool archive savepagenow', async ({page, authenticatedArchiveExtensionId, context}) => {
     await context.route('**web.archive.org**', async (route) => {
@@ -136,24 +137,54 @@ test('Test tool chatbot', async ({page, authenticatedExtraFeaturesExtensionId}) 
     await expect (page.getByTestId("chatbot-result")).toBeVisible();
 })
 
-test('Test tool ffmpeg toolkit', async ({page, authenticatedExtraFeaturesExtensionId}) => {
+test('Test tool ffmpeg toolkit', async ({page, authenticatedBetaTesterExtensionId}) => {
     const videoInputPath = path.resolve(__dirname, '../../tests-assets/test-metadata.mp4');
+
+    const VIDEO_FILE_ID = 'test-video-file-id';
+    const AUDIO_FILE_ID = 'test-audio-file-id';
+    const IFRAMES_FILE_ID = 'test-iframes-file-id';
 
     await page.route('**extractvideo**', async (route) => {
         await route.fulfill({
             status: 200,
-            contentType: 'video/mp4'
+            contentType: 'text/event-stream',
+            body: `data: ${JSON.stringify({ status: 'completed', fileId: VIDEO_FILE_ID })}\n\n`
         });
     });
 
     await page.route('**extractaudio**', async (route) => {
         await route.fulfill({
             status: 200,
-            contentType: 'audio/mpeg'
+            contentType: 'text/event-stream',
+            body: `data: ${JSON.stringify({ status: 'completed', fileId: AUDIO_FILE_ID })}\n\n`
         });
     });
 
-    await page.goto(`chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/tools/ffmpegtoolkit`);
+    await page.route('**extractIframes**', async (route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'text/event-stream',
+            body: `data: ${JSON.stringify({ status: 'completed', fileId: IFRAMES_FILE_ID })}\n\n`
+        });
+    });
+
+    await page.route('**download**', async (route) => {
+        const url = route.request().url();
+        if (url.includes(IFRAMES_FILE_ID)) {
+            await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify(mockedIframesResponse)
+            });
+        } else {
+            await route.fulfill({
+                status: 200,
+                contentType: 'video/mp4'
+            });
+        }
+    });
+
+    await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/ffmpegtoolkit`);
 
     await page.locator('input[type="file"]').setInputFiles(videoInputPath);
 
@@ -210,4 +241,18 @@ test('Test tool ffmpeg toolkit', async ({page, authenticatedExtraFeaturesExtensi
     await page.getByTestId('ffmpegtoolkit-downloadaudio-button').click();
     const downloadAudio = await downloadAudioPromise;
     expect(downloadAudio.suggestedFilename()).toBe('test-metadata_extract.mp3');
+
+    // extract iframes
+    await page.getByTestId('ffmpegtoolkit-iframes-button').click();
+    await expect(page.getByTestId('ffmpegtoolkit-iframes-container')).toBeVisible();
+
+    // iframes container shows the expected number of images
+    const iframesContainer = page.getByTestId('ffmpegtoolkit-iframes-container');
+    await expect(iframesContainer.locator('img')).toHaveCount(mockedIframesResponse.frames.length);
+
+    // download iframes
+    const downloadIframesPromise = page.waitForEvent('download');
+    await page.getByTestId('ffmpegtoolkit-download-iframes-button').click();
+    const downloadIframes = await downloadIframesPromise;
+    expect(downloadIframes.suggestedFilename()).toBe('test-metadata_iframes.zip');
 })

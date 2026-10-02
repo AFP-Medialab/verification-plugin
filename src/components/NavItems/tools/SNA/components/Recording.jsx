@@ -65,7 +65,6 @@ const MultipleSelectChip = ({
         <Select
           labelId="socialMediaSelect-multiple-chip-label"
           id="socialMediaSelect-multiple-chip"
-          multiple
           value={selectedSocialMedia}
           onChange={handleChange}
           input={
@@ -77,6 +76,7 @@ const MultipleSelectChip = ({
           renderValue={renderSelectedValue}
           MenuProps={SocialMediaSelectMenuProps}
         >
+          <MenuItem value="" display="none" style={{ display: "none" }} />
           {socialMediaPlatforms.map((name) => (
             <MenuItem key={name} value={name}>
               {name}
@@ -111,6 +111,7 @@ const handleStartRecording = (
   });
   setRecording(true);
   setExpanded(false);
+  window.close();
 };
 
 const CollectionSelector = ({
