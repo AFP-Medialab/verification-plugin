@@ -63,7 +63,7 @@ const FfmpegToolkit = () => {
           name={keywordAllTools("navbar_ffmpeg_toolkit")}
           description={
             <>
-              {keywordAllTools("navbar_ffmpeg_toolkit_description")}
+              {keywordAllTools("navbar_ffmpeg_toolkit_description_1")}
               <Link
                 href="https://en.wikipedia.org/wiki/Video_compression_picture_types"
                 target="_blank"
@@ -72,6 +72,8 @@ const FfmpegToolkit = () => {
               >
                 {keywordAllTools("navbar_ffmpeg_toolkit_iframelink")}.
               </Link>
+              <br />
+              {keywordAllTools("navbar_ffmpeg_toolkit_description_2")}
             </>
           }
           icon={

@@ -76,6 +76,7 @@ const MultipleSelectChip = ({
           renderValue={renderSelectedValue}
           MenuProps={SocialMediaSelectMenuProps}
         >
+          <MenuItem value="" display="none" style={{ display: "none" }} />
           {socialMediaPlatforms.map((name) => (
             <MenuItem key={name} value={name}>
               {name}

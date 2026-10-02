@@ -1,15 +1,34 @@
 import { useState } from "react";
 
-export const useInput = (defaultValue) => {
-  const [value, setValue] = useState(defaultValue);
+export const useInputWithPersistence = (initialValue, key) => {
+  const [value, setValue] = useState(() => {
+    if (!key) return initialValue;
+    try {
+      const persisted = sessionStorage.getItem(key);
+      return persisted !== null ? JSON.parse(persisted) : initialValue;
+    } catch {
+      return initialValue;
+    }
+  });
 
-  const handleChange = (e) => {
+  useEffect(() => {
+    if (key) {
+      try {
+        sessionStorage.setItem(key, JSON.stringify(value));
+      } catch (e) {
+        console.error("Erreur d'écriture dans sessionStorage", e);
+      }
+    }
+  }, [key, value]);
+
+  const onChange = (e) => {
     setValue(e.target.value);
   };
 
   return {
-    value: value,
-    onChange: handleChange,
+    value,
+    onChange,
+    setValue,
   };
 };
 
