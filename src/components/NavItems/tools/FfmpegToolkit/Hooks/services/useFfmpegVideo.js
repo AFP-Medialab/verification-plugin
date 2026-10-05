@@ -21,7 +21,7 @@ import {
 import useFfmpegService, {
   getNameFromFileName,
   triggerBrowserDownload,
-} from "../useFfmpegSharedServices";
+} from "./useFfmpegSharedServices";
 
 const useFfmpegVideo = ({
   videoFile,
