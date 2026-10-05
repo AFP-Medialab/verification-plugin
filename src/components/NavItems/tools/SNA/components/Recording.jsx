@@ -111,6 +111,10 @@ const handleStartRecording = (
   });
   setRecording(true);
   setExpanded(false);
+  const isCalledFromPopup = !window.location.href.includes("app");
+  if (isCalledFromPopup) {
+    window.close();
+  }
 };
 
 const CollectionSelector = ({
