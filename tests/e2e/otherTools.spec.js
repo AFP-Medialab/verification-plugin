@@ -144,7 +144,7 @@ test('Test tool ffmpeg toolkit', async ({page, authenticatedBetaTesterExtensionI
     const AUDIO_FILE_ID = 'test-audio-file-id';
     const IFRAMES_FILE_ID = 'test-iframes-file-id';
 
-    await page.route('**extractvideo**', async (route) => {
+    await page.route('**cutVideo**', async (route) => {
         await route.fulfill({
             status: 200,
             contentType: 'text/event-stream',
@@ -182,6 +182,15 @@ test('Test tool ffmpeg toolkit', async ({page, authenticatedBetaTesterExtensionI
                 contentType: 'video/mp4'
             });
         }
+    });
+
+    // registered after '**download**' so it takes priority (that glob also matches 'downloadVideo')
+    await page.route('**downloadVideo**', async (route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'text/event-stream',
+            body: `data: ${JSON.stringify({ status: 'completed', fileId: VIDEO_FILE_ID })}\n\n`
+        });
     });
 
     await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/ffmpegtoolkit`);

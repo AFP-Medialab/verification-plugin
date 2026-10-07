@@ -8,7 +8,7 @@ import {
 import { setError } from "@/redux/reducers/errorReducer";
 import JSZip from "jszip";
 
-import useFfmpegService from "../useFfmpegSharedServices";
+import useFfmpegService from "./useFfmpegSharedServices";
 
 const useFfmpegIframes = () => {
   const dispatch = useDispatch();
