@@ -12,7 +12,7 @@ import useFfmpegVideo from "./services/useFfmpegVideo";
  * Gather all the ffmpeg hooks (audio, video and iframes)
  * @returns
  */
-const useFfmpegToolkit = () => {
+const useFfmpegToolkitWrapper = () => {
   const isLoading = useSelector((state) => state.ffmpegToolkit.loading);
   const result = useSelector((state) => state.ffmpegToolkit.result);
   const url = useSelector((state) => state.ffmpegToolkit.url);
@@ -169,4 +169,4 @@ const useFfmpegToolkit = () => {
   };
 };
 
-export default useFfmpegToolkit;
+export default useFfmpegToolkitWrapper;
