@@ -11,7 +11,7 @@ import { setHiyaFile } from "@/redux/reducers/tools/hiyaReducer";
 import useFfmpegService, {
   getNameFromFileName,
   triggerBrowserDownload,
-} from "../useFfmpegSharedServices";
+} from "./useFfmpegSharedServices";
 
 const useFfmpegAudio = () => {
   const dispatch = useDispatch();

@@ -140,8 +140,11 @@ const DetailModal = ({
                 columns={columns}
                 getRowHeight={() => "auto"}
                 sx={{
-                  minWidth: `${totalWidth}px`,
-                  "& .MuiDataGrid-virtualScroller": { overflowX: "hidden" },
+                  // explictly tells the datagrid to take the width it needs, the container handle the overflow
+                  width: `${totalWidth}px`,
+                  maxWidth: "none",
+                  // hide the horizontal scrollbar
+                  "& .MuiDataGrid-scrollbar--horizontal": { display: "none" },
                 }}
               />
             </Box>
