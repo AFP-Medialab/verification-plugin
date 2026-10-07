@@ -59,38 +59,12 @@ const useFfmpegVideo = ({
     );
   };
 
-  // Sends a video blob through the extract SSE endpoint with optional cut/compress params.
-  const fetchVideoBlob = async (
-    videoToSend,
-    onProgress,
-    {
-      startTime = null,
-      endTime = null,
-      isCompressed = null,
-      isScaled = null,
-    } = {},
-  ) => {
-    const isExtractTooBig = preprocessExtract(
-      videoToSend.size,
-      startTime,
-      endTime,
-      videoDuration,
-    );
-    if (isExtractTooBig) {
-      const msg = keyword("ffmpeg_toolkit_error_extract_too_large");
-      dispatch(setError(msg));
-      throw new Error(msg);
-    }
-
-    const params = new URLSearchParams({ wantsStream: "true" });
-    if (startTime !== null) params.append("startTime", startTime);
-    if (endTime !== null) params.append("endTime", endTime);
-    if (isCompressed !== null) params.append("isCompressed", isCompressed);
-    if (isScaled !== null) params.append("isScaled", isScaled);
-
+  // Sends a video blob to an SSE endpoint and returns the resulting video blob.
+  const fetchVideoBlob = async (endpoint, videoToSend, onProgress, params) => {
+    const query = new URLSearchParams({ wantsStream: "true", ...params });
     try {
       const fileId = await startEventSourceJob(
-        `api/ffmpeg/extractvideo?${params.toString()}`,
+        `api/ffmpeg/${endpoint}?${query.toString()}`,
         videoToSend,
         onProgress,
         "Video processing failed",
@@ -102,6 +76,27 @@ const useFfmpegVideo = ({
       throw error;
     }
   };
+
+  const cutVideo = async (videoToSend, onProgress, startTime, endTime) => {
+    const isExtractTooBig = preprocessExtract(
+      videoToSend.size,
+      startTime,
+      endTime,
+      videoDuration,
+    );
+    if (isExtractTooBig) {
+      const msg = keyword("ffmpeg_toolkit_error_extract_too_large");
+      dispatch(setError(msg));
+      throw new Error(msg);
+    }
+    return fetchVideoBlob("cutVideo", videoToSend, onProgress, {
+      startTime,
+      endTime,
+    });
+  };
+
+  const downloadVideo = (videoToSend, onProgress, options) =>
+    fetchVideoBlob("downloadVideo", videoToSend, onProgress, options);
 
   const onProgress = (data) => {
     if (data.progress) dispatch(setProgress(data.progress));
@@ -122,10 +117,7 @@ const useFfmpegVideo = ({
     dispatch(setFfmpegToolkitLoading(true));
 
     try {
-      const blob = await fetchVideoBlob(videoFile, onProgress, {
-        startTime,
-        endTime,
-      });
+      const blob = await cutVideo(videoFile, onProgress, startTime, endTime);
       dispatch(setFfmpegToolkitResult({ url: URL.createObjectURL(blob) }));
     } catch (e) {
       dispatch(setError(e.message));
@@ -146,9 +138,9 @@ const useFfmpegVideo = ({
       if (compress || scaleDown) {
         dispatch(setBottomLoading(true));
         const videoBlob = await fetch(result).then((r) => r.blob());
-        const blob = await fetchVideoBlob(videoBlob, onProgress, {
-          isCompressed: compress,
-          isScaled: scaleDown,
+        const blob = await downloadVideo(videoBlob, onProgress, {
+          isCompressed: !!compress,
+          isScaled: !!scaleDown,
         });
         downloadUrl = URL.createObjectURL(blob);
         dispatch(setBottomLoading(false));
