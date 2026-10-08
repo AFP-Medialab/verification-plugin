@@ -6,7 +6,7 @@ import { setBottomLoading } from "@/redux/actions/tools/ffmpegToolkitActions";
 import { setError } from "@/redux/reducers/errorReducer";
 
 const FFMPEG_API_URL = import.meta.env.VITE_FFMPEG_YTDLP_API_URL;
-const FFMPEG_TIMEOUT_MS = 3 * 60 * 1000;
+const FFMPEG_TIMEOUT_MS = import.meta.env.VITE_FFMPEG_TIMEOUT_MS;
 
 export const getNameFromFileName = (name) => name.split(".")[0];
 
