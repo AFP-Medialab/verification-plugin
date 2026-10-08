@@ -444,7 +444,7 @@ export const ffmpegToolkit = {
     TOOL_STATUS_ICON.EXPERIMENTAL,
     TOOL_STATUS_ICON.LOCK,
   ],
-  rolesNeeded: [ROLES.BETA_TESTER],
+  rolesNeeded: [ROLES.FFMPEG],
   path: "ffmpegtoolkit",
   toolGroup: TOOL_GROUPS.VERIFICATION,
   assistantProps: {},
