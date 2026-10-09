@@ -176,7 +176,6 @@ test('Test tool metadata video', async ({ page, extensionId }) => {
 });
 
 test('Test tool deepfake video', async ({page, authenticatedBetaTesterExtensionId}) => {
-  // mocking main route (TODO : put this json in test assets folder, in a dedicated file to mocked api response)
   await page.route('**deepfake**', async (route) => {
     await route.fulfill({
       status: 200,
