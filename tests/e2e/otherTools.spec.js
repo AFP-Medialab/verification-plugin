@@ -101,7 +101,7 @@ test('Test tool archive', async ({page, authenticatedArchiveExtensionId}) => {
     expect(download2.suggestedFilename()).toBe('test-capture-id.wacz');
 });
 
-test('Test tool chatbot', async ({page, authenticatedExtraFeaturesExtensionId}) => {
+test('Test tool chatbot', async ({page, authenticatedExnlpExtensionId}) => {
     // mock of the answer of the model
     await page.route('**completions**', async (route) => {
         await route.fulfill({
@@ -124,7 +124,7 @@ test('Test tool chatbot', async ({page, authenticatedExtraFeaturesExtensionId}) 
         });
     });
 
-    await page.goto(`chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/tools/chatbot`);
+    await page.goto(`chrome-extension://${authenticatedExnlpExtensionId}/popup.html#/app/tools/chatbot`);
 
     //there is no need to select the model, because we mock only one model so it is selected automatically 
 
