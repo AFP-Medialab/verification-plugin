@@ -578,7 +578,7 @@ export const chatbot = {
   descriptionKeyword: "navbar_chatbot_description",
   category: TOOLS_CATEGORIES.OTHER,
   rolesIcons: [TOOL_STATUS_ICON.NEW],
-  rolesNeeded: [ROLES.EXTRA_FEATURE],
+  rolesNeeded: [ROLES.EXNLP],
   path: "chatbot",
   toolGroup: TOOL_GROUPS.VERIFICATION,
   assistantProps: {},

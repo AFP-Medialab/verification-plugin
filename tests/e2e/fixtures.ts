@@ -84,6 +84,26 @@ const fakeAuthStateFfmpeg = {
   },
 };
 
+const fakeAuthStateExnlp = {
+  userAuthenticated: true,
+  userLoginLoading: false,
+  userRegistrationLoading: false,
+  userRegistrationSent: false,
+  accessCodeRequestLoading: false,
+  accessCodeRequestSent: false,
+  accessToken: 'fake-access-token-for-e2e',
+  accessTokenExpiry: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+  refreshToken: 'fake-refresh-token-for-e2e',
+  user: {
+    id: 'test-user-id',
+    firstName: 'Test',
+    lastName: 'User',
+    email: 'test@e2e.local',
+    username: 'test-user',
+    roles: ['EXNLP'],
+  },
+};
+
 // page.evaluate callbacks run in the browser context where `chrome` is a global,
 // but TypeScript type-checks them as Node.js code. Access via globalThis to avoid
 // the "Cannot find name 'chrome'" error.
@@ -113,6 +133,7 @@ export const test = base.extend<{
   authenticatedExtraFeaturesExtensionId: string;
   authenticatedArchiveExtensionId: string;
   authenticatedFfmpegExtensionId: string;
+  authenticatedExnlpExtensionId: string;
 }>({
   context: async ({ }, use) => {
     const pathToExtension = path.resolve(__dirname, `../../build/${process.env.EXTENSION_BUILD_DIR ?? 'chrome-mv3'}`);
@@ -187,6 +208,15 @@ export const test = base.extend<{
     await page.goto(`chrome-extension://${extensionId}/popup.html`);
     await page.waitForLoadState('domcontentloaded');
     await injectAuthState(page, fakeAuthStateFfmpeg);
+    await page.close();
+    await use(extensionId);
+  },
+
+  authenticatedExnlpExtensionId: async ({ context, extensionId }, use) => {
+    const page = await context.newPage();
+    await page.goto(`chrome-extension://${extensionId}/popup.html`);
+    await page.waitForLoadState('domcontentloaded');
+    await injectAuthState(page, fakeAuthStateExnlp);
     await page.close();
     await use(extensionId);
   },
