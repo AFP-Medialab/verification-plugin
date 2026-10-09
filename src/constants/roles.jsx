@@ -12,4 +12,6 @@ export const ROLES = {
   AFP_C2PA_GOLD: "AFP_C2PA_GOLD", // Highest level for AFP Reverse search
   AFP_C2PA_2: "AFP_C2PA_2", // Lower level for AFP Reverse search
   BETA_LANGUAGES: "BETA_LANGUAGES", // Access new localizations still being tested
+  FFMPEG: "FFMPEG",
+  EXNLP: "EXNLP",
 };

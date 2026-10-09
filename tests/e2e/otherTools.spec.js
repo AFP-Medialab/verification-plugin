@@ -101,7 +101,7 @@ test('Test tool archive', async ({page, authenticatedArchiveExtensionId}) => {
     expect(download2.suggestedFilename()).toBe('test-capture-id.wacz');
 });
 
-test('Test tool chatbot', async ({page, authenticatedExtraFeaturesExtensionId}) => {
+test('Test tool chatbot', async ({page, authenticatedExnlpExtensionId}) => {
     // mock of the answer of the model
     await page.route('**completions**', async (route) => {
         await route.fulfill({
@@ -124,7 +124,7 @@ test('Test tool chatbot', async ({page, authenticatedExtraFeaturesExtensionId}) 
         });
     });
 
-    await page.goto(`chrome-extension://${authenticatedExtraFeaturesExtensionId}/popup.html#/app/tools/chatbot`);
+    await page.goto(`chrome-extension://${authenticatedExnlpExtensionId}/popup.html#/app/tools/chatbot`);
 
     //there is no need to select the model, because we mock only one model so it is selected automatically 
 
@@ -137,7 +137,7 @@ test('Test tool chatbot', async ({page, authenticatedExtraFeaturesExtensionId}) 
     await expect (page.getByTestId("chatbot-result")).toBeVisible();
 })
 
-test('Test tool ffmpeg toolkit', async ({page, authenticatedBetaTesterExtensionId}) => {
+test('Test tool ffmpeg toolkit', async ({page, authenticatedFfmpegExtensionId}) => {
     const videoInputPath = path.resolve(__dirname, '../../tests-assets/test-metadata.mp4');
 
     const VIDEO_FILE_ID = 'test-video-file-id';
@@ -193,7 +193,7 @@ test('Test tool ffmpeg toolkit', async ({page, authenticatedBetaTesterExtensionI
         });
     });
 
-    await page.goto(`chrome-extension://${authenticatedBetaTesterExtensionId}/popup.html#/app/tools/ffmpegtoolkit`);
+    await page.goto(`chrome-extension://${authenticatedFfmpegExtensionId}/popup.html#/app/tools/ffmpegtoolkit`);
 
     await page.locator('input[type="file"]').setInputFiles(videoInputPath);
 
