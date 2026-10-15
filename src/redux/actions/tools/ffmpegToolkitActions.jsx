@@ -25,3 +25,7 @@ export const setIframes = createAction("SET_IFRAMES");
 export const setBottomLoading = createAction("SET_BOTTOM_LOADING");
 
 export const setProgress = createAction("SET_PROGRESS");
+
+export const setFfmpegInputId = createAction("SET_FFMPEG_INPUT_ID");
+
+export const setFfmpegCutInputId = createAction("SET_FFMPEG_CUT_INPUT_ID");

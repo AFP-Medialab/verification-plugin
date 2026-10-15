@@ -12,19 +12,17 @@ import useFfmpegService from "./useFfmpegSharedServices";
 
 const useFfmpegIframes = () => {
   const dispatch = useDispatch();
-  const { fetchCurrentVideoBlob, startEventSourceJob, downloadTextFromApi } =
-    useFfmpegService();
+  const { runJob, downloadTextFromApi } = useFfmpegService();
 
+  const cutInputId = useSelector((state) => state.ffmpegToolkit.cutInputId);
   const iframes = useSelector((state) => state.ffmpegToolkit.iframes);
   const fileName = useSelector((state) => state.ffmpegToolkit.fileName) ?? "";
 
   const handleGetIframes = async () => {
     dispatch(setBottomLoading(true));
     try {
-      const videoBlob = await fetchCurrentVideoBlob();
-      const fileId = await startEventSourceJob(
-        "api/ffmpeg/extractIframes?wantsStream=true",
-        videoBlob,
+      const { fileId } = await runJob(
+        { type: "extractIframes", inputId: cutInputId },
         (data) => {
           if (data.progress) dispatch(setProgress(data.progress));
         },
