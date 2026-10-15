@@ -16,10 +16,10 @@ import useFfmpegService, {
 const useFfmpegAudio = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { fetchCurrentVideoBlob, startEventSourceJob, downloadBlobFromApi } =
-    useFfmpegService();
+  const { runJob, downloadBlobFromApi } = useFfmpegService();
 
   const fileName = useSelector((state) => state.ffmpegToolkit.fileName);
+  const cutInputId = useSelector((state) => state.ffmpegToolkit.cutInputId);
 
   const onProgress = (data) => {
     if (data.progress) dispatch(setProgress(data.progress));
@@ -27,10 +27,8 @@ const useFfmpegAudio = () => {
 
   const fetchAudioBlob = async (onProgressCb) => {
     try {
-      const videoBlob = await fetchCurrentVideoBlob();
-      const fileId = await startEventSourceJob(
-        "api/ffmpeg/extractaudio?wantsStream=true",
-        videoBlob,
+      const { fileId } = await runJob(
+        { type: "extractAudio", inputId: cutInputId },
         onProgressCb,
         "Audio processing failed",
       );
