@@ -140,35 +140,48 @@ test('Test tool chatbot', async ({page, authenticatedExnlpExtensionId}) => {
 test('Test tool ffmpeg toolkit', async ({page, authenticatedFfmpegExtensionId}) => {
     const videoInputPath = path.resolve(__dirname, '../../tests-assets/test-metadata.mp4');
 
+    const INPUT_ID = 'test-input-id';
+    const CUT_INPUT_ID = 'test-cut-input-id';
     const VIDEO_FILE_ID = 'test-video-file-id';
     const AUDIO_FILE_ID = 'test-audio-file-id';
     const IFRAMES_FILE_ID = 'test-iframes-file-id';
 
-    await page.route('**cutVideo**', async (route) => {
+    // job result by job type; the jobId is built from the type so jobEvents can resolve it
+    const jobResults = {
+        cutVideo: { inputId: CUT_INPUT_ID },
+        downloadVideo: { fileId: VIDEO_FILE_ID },
+        extractAudio: { fileId: AUDIO_FILE_ID },
+        extractIframes: { fileId: IFRAMES_FILE_ID },
+    };
+
+    await page.route('**/api/ffmpeg/upload', async (route) => {
         await route.fulfill({
             status: 200,
-            contentType: 'text/event-stream',
-            body: `data: ${JSON.stringify({ status: 'completed', fileId: VIDEO_FILE_ID })}\n\n`
+            contentType: 'application/json',
+            body: JSON.stringify({ inputId: INPUT_ID })
         });
     });
 
-    await page.route('**extractaudio**', async (route) => {
+    await page.route('**/api/ffmpeg/jobs', async (route) => {
+        const { type } = route.request().postDataJSON();
         await route.fulfill({
             status: 200,
-            contentType: 'text/event-stream',
-            body: `data: ${JSON.stringify({ status: 'completed', fileId: AUDIO_FILE_ID })}\n\n`
+            contentType: 'application/json',
+            body: JSON.stringify({ jobId: `job-${type}` })
         });
     });
 
-    await page.route('**extractIframes**', async (route) => {
+    await page.route('**/api/ffmpeg/jobEvents**', async (route) => {
+        const jobId = new URL(route.request().url()).searchParams.get('jobId');
+        const type = jobId.replace('job-', '');
         await route.fulfill({
             status: 200,
             contentType: 'text/event-stream',
-            body: `data: ${JSON.stringify({ status: 'completed', fileId: IFRAMES_FILE_ID })}\n\n`
+            body: `data: ${JSON.stringify({ status: 'completed', ...jobResults[type] })}\n\n`
         });
     });
 
-    await page.route('**download**', async (route) => {
+    await page.route('**/api/ffmpeg/download**', async (route) => {
         const url = route.request().url();
         if (url.includes(IFRAMES_FILE_ID)) {
             await route.fulfill({
@@ -182,15 +195,6 @@ test('Test tool ffmpeg toolkit', async ({page, authenticatedFfmpegExtensionId}) 
                 contentType: 'video/mp4'
             });
         }
-    });
-
-    // registered after '**download**' so it takes priority (that glob also matches 'downloadVideo')
-    await page.route('**downloadVideo**', async (route) => {
-        await route.fulfill({
-            status: 200,
-            contentType: 'text/event-stream',
-            body: `data: ${JSON.stringify({ status: 'completed', fileId: VIDEO_FILE_ID })}\n\n`
-        });
     });
 
     await page.goto(`chrome-extension://${authenticatedFfmpegExtensionId}/popup.html#/app/tools/ffmpegtoolkit`);
