@@ -4,6 +4,8 @@ import {
   setBeginCutTime,
   setBottomLoading,
   setEndCutTime,
+  setFfmpegCutInputId,
+  setFfmpegInputId,
   setFfmpegToolkitFile,
   setFfmpegToolkitFileName,
   setFfmpegToolkitLoading,
@@ -32,10 +34,13 @@ const useFfmpegVideo = ({
   videoDuration,
 }) => {
   const dispatch = useDispatch();
-  const { startEventSourceJob, downloadBlobFromApi } = useFfmpegService();
+  const { uploadInput, runJob, downloadBlobFromApi } = useFfmpegService();
   const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
 
   const result = useSelector((state) => state.ffmpegToolkit.result);
+  const storedFile = useSelector((state) => state.ffmpegToolkit.file);
+  const storedInputId = useSelector((state) => state.ffmpegToolkit.inputId);
+  const cutInputId = useSelector((state) => state.ffmpegToolkit.cutInputId);
   const fileName = useSelector((state) => state.ffmpegToolkit.fileName) ?? "";
 
   const keyword = i18nLoadNamespace("components/NavItems/tools/FfmpegToolkit");
@@ -59,13 +64,58 @@ const useFfmpegVideo = ({
     );
   };
 
-  // Sends a video blob to an SSE endpoint and returns the resulting video blob.
-  const fetchVideoBlob = async (endpoint, videoToSend, onProgress, params) => {
-    const query = new URLSearchParams({ wantsStream: "true", ...params });
+  // Uploads the original video once; later cuts reuse the same inputId.
+  const ensureInputId = async (file, force = false) => {
+    if (!force && storedInputId && storedFile === file) return storedInputId;
+    const inputId = await uploadInput(file);
+    dispatch(setFfmpegInputId(inputId));
+    return inputId;
+  };
+
+  // Cuts the original video on the server, returns the cut as a blob (and keeps its cutInputId).
+  const cutVideo = async (file, onProgress, startTime, endTime) => {
+    const isExtractTooBig = preprocessExtract(
+      file.size,
+      startTime,
+      endTime,
+      videoDuration,
+    );
+    if (isExtractTooBig) {
+      const msg = keyword("ffmpeg_toolkit_error_extract_too_large");
+      dispatch(setError(msg));
+      throw new Error(msg);
+    }
+
+    const job = (inputId) =>
+      runJob(
+        { type: "cutVideo", inputId, params: { startTime, endTime } },
+        onProgress,
+        "Video processing failed",
+      );
+
     try {
-      const fileId = await startEventSourceJob(
-        `api/ffmpeg/${endpoint}?${query.toString()}`,
-        videoToSend,
+      let output;
+      try {
+        output = await job(await ensureInputId(file));
+      } catch (error) {
+        // The stored input has expired: upload the file again once.
+        if (error.status !== 404) throw error;
+        output = await job(await ensureInputId(file, true));
+      }
+      dispatch(setFfmpegCutInputId(output.inputId));
+      return await downloadBlobFromApi(output.inputId, "video/mp4", "inputId");
+    } catch (error) {
+      dispatch(setBottomLoading(false));
+      dispatch(setError(error.message));
+      throw error;
+    }
+  };
+
+  // Re-encodes the cut (compression / scale) on the server, returns the blob.
+  const downloadVideo = async (onProgress, options) => {
+    try {
+      const { fileId } = await runJob(
+        { type: "downloadVideo", inputId: cutInputId, params: options },
         onProgress,
         "Video processing failed",
       );
@@ -76,27 +126,6 @@ const useFfmpegVideo = ({
       throw error;
     }
   };
-
-  const cutVideo = async (videoToSend, onProgress, startTime, endTime) => {
-    const isExtractTooBig = preprocessExtract(
-      videoToSend.size,
-      startTime,
-      endTime,
-      videoDuration,
-    );
-    if (isExtractTooBig) {
-      const msg = keyword("ffmpeg_toolkit_error_extract_too_large");
-      dispatch(setError(msg));
-      throw new Error(msg);
-    }
-    return fetchVideoBlob("cutVideo", videoToSend, onProgress, {
-      startTime,
-      endTime,
-    });
-  };
-
-  const downloadVideo = (videoToSend, onProgress, options) =>
-    fetchVideoBlob("downloadVideo", videoToSend, onProgress, options);
 
   const onProgress = (data) => {
     if (data.progress) dispatch(setProgress(data.progress));
@@ -137,8 +166,7 @@ const useFfmpegVideo = ({
 
       if (compress || scaleDown) {
         dispatch(setBottomLoading(true));
-        const videoBlob = await fetch(result).then((r) => r.blob());
-        const blob = await downloadVideo(videoBlob, onProgress, {
+        const blob = await downloadVideo(onProgress, {
           isCompressed: !!compress,
           isScaled: !!scaleDown,
         });

@@ -10,6 +10,8 @@ const defaultState = {
   file: null,
   fileName: "",
   progress: 0,
+  inputId: null,
+  cutInputId: null,
 };
 
 const ffmpegToolkitReducer = (state = defaultState, action) => {
@@ -26,6 +28,8 @@ const ffmpegToolkitReducer = (state = defaultState, action) => {
         endCutTime: null,
         beginCutTime: null,
         iframes: null,
+        inputId: null,
+        cutInputId: null,
       };
     case "SET_FFMPEG_TOOLKIT_LOADING":
       return {
@@ -77,6 +81,16 @@ const ffmpegToolkitReducer = (state = defaultState, action) => {
       return {
         ...state,
         progress: action.payload,
+      };
+    case "SET_FFMPEG_INPUT_ID":
+      return {
+        ...state,
+        inputId: action.payload,
+      };
+    case "SET_FFMPEG_CUT_INPUT_ID":
+      return {
+        ...state,
+        cutInputId: action.payload,
       };
     default:
       return state;
