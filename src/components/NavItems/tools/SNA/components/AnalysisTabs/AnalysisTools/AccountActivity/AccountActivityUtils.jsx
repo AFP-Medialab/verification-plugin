@@ -8,7 +8,10 @@ import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { getSelectedSourcesNameMaps } from "@/components/NavItems/tools/SNA/utils/accessSavedCollections";
+import {
+  getSelectedSourcesContent,
+  getSelectedSourcesNameMaps,
+} from "@/components/NavItems/tools/SNA/utils/accessSavedCollections";
 import {
   Bar,
   BarChart,
@@ -36,8 +39,23 @@ export const accountActivitySettings = ({
   setActivitySelect,
   commonNumberFields,
   selectedSources,
+  dataSources,
+  selected,
+  setAccountActivityResult,
 }) => {
   if (selectedSources.length === 0) return <> </>;
+
+  const handleActivitySettingsChange = (event) => {
+    const newActivity = event.target.value;
+    setActivitySelect(newActivity);
+    if (!setAccountActivityResult) return;
+    const selectedContent = getSelectedSourcesContent(dataSources, selected);
+    setAccountActivityResult(
+      generateAccountActivityData(selectedContent, {
+        activitySelect: newActivity,
+      }),
+    );
+  };
 
   return (
     <Box key="accountActivitySettings">
@@ -48,7 +66,7 @@ export const accountActivitySettings = ({
         <Select
           id="useractivity-select"
           value={activitySelect}
-          onChange={(e) => setActivitySelect(e.target.value)}
+          onChange={handleActivitySettingsChange}
         >
           <MenuItem value={"entries"}>
             {keyword("snaTools_accountActivityEntriesSelect")}
@@ -247,7 +265,7 @@ export const generateAccountActivityData = (
           ? contentGroupedByUser[username].length
           : contentGroupedByUser[username].reduce(
               (initialSum, currentEntry) =>
-                initialSum + currentEntry[activitySelect] || 0,
+                initialSum + (Number(currentEntry[activitySelect]) || 0),
               0,
             ),
     }))
