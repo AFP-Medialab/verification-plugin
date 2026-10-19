@@ -5,6 +5,7 @@ import {
   initializeMessageHandler,
 } from "@/utils/snaRecorderMessageHandler";
 import { trackEvent } from "@Shared/GoogleAnalytics/MatomoAnalyticsCore";
+import { synthIdRequestUrl } from "@Shared/ReverseSearch/engines/synthId";
 import {
   SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
@@ -96,6 +97,19 @@ export default defineBackground(() => {
     }
   };
 
+  const synthIdCheck = async (info) => {
+    let url = getImgUrl(info);
+    if (url !== "") {
+      try {
+        await synthIdRequestUrl(url);
+      } catch (error) {
+        console.error(`❌ ${browserName}: SynthID request failed:`, error);
+      }
+      // Analytics
+      trackEvent("contextMenu", "contextMenuClick", "SynthID", url, "");
+    }
+  };
+
   function contextClick(info) {
     const { menuItemId } = info;
 
@@ -126,6 +140,9 @@ export default defineBackground(() => {
         break;
       case "forensic":
         imageForensic(info);
+        break;
+      case "synthid":
+        synthIdCheck(info);
         break;
       case SEARCH_ENGINE_SETTINGS.ALL.CONTEXT_MENU_ID:
         reverseImageSearchAll(info);
@@ -229,6 +246,13 @@ export default defineBackground(() => {
         parentId: "invid_parent",
       });
 
+      createContextMenu({
+        id: "synthid",
+        title: "SynthID Detector",
+        contexts: ["image", "link"],
+        parentId: "invid_parent",
+      });
+
       // Reverse search parent menu (works on images and links)
       if (SEARCH_ENGINE_SETTINGS && SEARCH_ENGINE_SETTINGS.ALL) {
         createContextMenu({
@@ -323,6 +347,12 @@ export default defineBackground(() => {
       createContextMenu({
         id: "forensic",
         title: "Image Forensic",
+        contexts: ["image"],
+      });
+
+      createContextMenu({
+        id: "synthid",
+        title: "SynthID Detector",
         contexts: ["image"],
       });
 
