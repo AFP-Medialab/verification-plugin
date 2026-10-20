@@ -228,7 +228,11 @@ const getCoorContent = async (
       let x = o[objectChoice];
       return { ...o, objects: x };
     })
-    .filter((o) => o.objects?.length > 0);
+    .filter(
+      (o) =>
+        o.objects?.length > 0 &&
+        !["none", "nan"].includes(String(o.objects).toLowerCase()),
+    );
   return filteredContent;
 };
 
@@ -262,7 +266,14 @@ const getCoorContent = async (
  * @param {object[]} content the dataset, list of objects that has been pre-processed
  * @returns {object[]} list of cosharing user pairs, how often they posted the same object and their entries in the dataset
  */
-const detectCoor = (timeWindow, edgeThresh, minParticipation, content) => {
+const detectCoor = (timeWindow, edgeThresh, minParticipation, rawContent) => {
+  const content = rawContent.filter(
+    (entry) =>
+      entry.username != null &&
+      String(entry.username).trim() !== "" &&
+      dayjs(entry.date).isValid(),
+  );
+
   let contentGroupedByUser = Object.groupBy(
     content,
     ({ username }) => username,
@@ -312,44 +323,59 @@ const detectCoor = (timeWindow, edgeThresh, minParticipation, content) => {
     .flat()
     .filter((groupedContent) => groupedContent.entries.length > 0);
 
-  let cosharingPairs = {};
+  const cosharingPairs = new Map();
+  const objectsByPair = new Map();
+  const entryIdsByPair = new Map();
 
   cosharingInTimeWindow.forEach((sharedObject) => {
     sharedObject.entries.forEach((entry) =>
       entry.cosharers.forEach((cosharer) => {
-        let pairId = [entry.username, cosharer].sort().join("-");
-        if (cosharingPairs[pairId]) {
-          cosharingPairs[pairId].count++;
-
-          cosharingPairs[pairId].entries
-            .map((e) => e.id)
-            .includes(entry.entry.id)
-            ? {}
-            : cosharingPairs[pairId].entries.push(entry.entry);
-        } else {
-          cosharingPairs[pairId] = {
-            count: 1,
-            entries: [entry.entry],
-            cosharers: pairId,
-          };
+        const users = [entry.username, cosharer].sort();
+        const pairKey = JSON.stringify(users);
+        if (!cosharingPairs.has(pairKey)) {
+          cosharingPairs.set(pairKey, {
+            count: 0,
+            entries: [],
+            cosharers: users.join("-"),
+            users: users,
+          });
+          objectsByPair.set(pairKey, new Set());
+          entryIdsByPair.set(pairKey, new Set());
+        }
+        // count = number of distinct objects the pair coshared
+        objectsByPair.get(pairKey).add(sharedObject.objects);
+        if (!entryIdsByPair.get(pairKey).has(entry.entry.id)) {
+          entryIdsByPair.get(pairKey).add(entry.entry.id);
+          cosharingPairs.get(pairKey).entries.push(entry.entry);
         }
       }),
     );
   });
 
+  cosharingPairs.forEach((pair, pairKey) => {
+    pair.count = objectsByPair.get(pairKey).size;
+  });
+
+  const pairs = Array.from(cosharingPairs.values());
   if (edgeThresh > 0) {
-    return Object.values(cosharingPairs)
+    return pairs
       .sort((a, b) => a.count - b.count)
-      .slice(Math.floor(edgeThresh * Object.values(cosharingPairs).length));
+      .slice(Math.floor(edgeThresh * pairs.length));
   } else {
-    return Object.values(cosharingPairs);
+    return pairs;
   }
 };
 
 const getCosharersByObject = (coorResult) => {
-  let cosharedEntries = coorResult
+  const seenIds = new Set();
+  const cosharedEntries = coorResult
     .map((sharingPair) => sharingPair.entries)
-    .flat();
+    .flat()
+    .filter((entry) => {
+      if (seenIds.has(entry.id)) return false;
+      seenIds.add(entry.id);
+      return true;
+    });
   return Object.groupBy(cosharedEntries, ({ objects }) => objects);
 };
 
@@ -365,16 +391,31 @@ export const runCoorAnalysis = async (
     selected,
   },
 ) => {
+  const timeWindow = Number(coorTimeWindow);
+  const edgeThresh = Number(coorEdgeThresh);
+  const minParticipation = Number(coorMinParticipation);
+  if (
+    !Number.isFinite(timeWindow) ||
+    timeWindow < 0 ||
+    !Number.isFinite(edgeThresh) ||
+    edgeThresh < 0 ||
+    edgeThresh > 1 ||
+    !Number.isFinite(minParticipation) ||
+    minParticipation < 0
+  ) {
+    throw new Error("Invalid coordination parameters");
+  }
+
   let readiedContent = await getCoorContent(
     coorObjectChoice,
     selectedContent,
     authenticatedRequest,
   );
   let coorResult = detectCoor(
-    coorTimeWindow,
-    coorEdgeThresh,
-    coorMinParticipation,
-    readiedContent,
+    timeWindow,
+    edgeThresh,
+    minParticipation,
+    readiedContent ?? [],
   );
 
   let coorGraphData = generateCoorGraphData(coorResult, dataSources, selected);
@@ -387,10 +428,11 @@ export const generateCoorGraphData = (coorResult, dataSources, selected) => {
   let edges = [];
   let nameMaps = getSelectedSourcesNameMaps(dataSources, selected);
   coorResult.forEach((cosharingPair) => {
-    let userPair = cosharingPair.cosharers.split("-");
+    let userPair = cosharingPair.users;
     edges.push({
       source: userPair[0],
       target: userPair[1],
+      weight: cosharingPair.count,
     });
     userPair.forEach((user) => {
       if (nodes[user]) {
@@ -402,7 +444,7 @@ export const generateCoorGraphData = (coorResult, dataSources, selected) => {
       } else {
         nodes[user] = {
           id: user,
-          entries: cosharingPair.entries,
+          entries: [...cosharingPair.entries],
           displayName: nameMaps.has(user) ? nameMaps.get(user) : user,
         };
       }
@@ -424,7 +466,9 @@ export const generateCoorGraphData = (coorResult, dataSources, selected) => {
       graph.hasNode(edge.target) &&
       !graph.hasUndirectedEdge(edge.source, edge.target)
     ) {
-      graph.addUndirectedEdge(edge.source, edge.target);
+      graph.addUndirectedEdge(edge.source, edge.target, {
+        weight: edge.weight,
+      });
     }
   });
 
