@@ -399,7 +399,7 @@ export const handleRecordedMessage = async (request) => {
         path: `$..entries[?(@.entryId=="${entryId}")]..tweet_results`,
       });
 
-      if (tweet_results.length > 0) {
+      if (tweet_results.length > 0 && !entryId.startsWith("promoted-tweet-")) {
         let content =
           tweet_results[0].result.tweet ||
           tweet_results[0].result ||
