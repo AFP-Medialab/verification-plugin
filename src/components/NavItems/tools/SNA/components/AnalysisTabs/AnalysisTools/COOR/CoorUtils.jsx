@@ -134,8 +134,6 @@ export const getObjectSelectOptions = (dataSources, selected) => {
       isKeyword: false,
     }));
 
-  console.log(sharedHeadersObjectSelect);
-
   return textSimilarityObjectSelect.concat(sharedHeadersObjectSelect);
 };
 
