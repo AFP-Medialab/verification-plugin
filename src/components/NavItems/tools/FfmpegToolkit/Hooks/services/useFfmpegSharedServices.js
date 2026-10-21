@@ -14,12 +14,26 @@ const RECONNECT_WINDOW_MS = 180000;
 
 const UPLOAD_MAX_RETRIES = 4;
 const UPLOAD_SERVER_ERROR_STATUSES = [500, 502, 504];
-const UPLOAD_SERVER_ERROR_MAX_RETRIES = 3;
+const UPLOAD_SERVER_AFTER_ERROR_MAX_RETRIES = 3;
+
 const UPLOAD_BACKOFF_BASE_MS = 2000;
 const UPLOAD_BACKOFF_MAX_MS = 30000;
 const UPLOAD_RETRY_AFTER_MAX_MS = 60000;
-const SERVICE_BUSY_MESSAGE =
-  "The service is currently overloaded. Please try again in a few minutes.";
+
+const JOB_ERROR_MESSAGES = {
+  processing_failed:
+    "The media could not be processed. The file may be corrupted or unsupported.",
+  timeout:
+    "The processing took too long. Please consider trying on a lighter content.",
+  input_not_found: "The uploaded video has expired. Please try again.",
+  out_of_memory:
+    "The service is currently overloaded. Please try again in a few minutes.",
+  worker_lost:
+    "The service is currently overloaded. Please try again in a few minutes.",
+  storage_error:
+    "A storage error occurred on the server. Please try again in a few minutes.",
+  failure: "An unexpected server error occurred. Please try again.",
+};
 
 // Retry-After is either a number of seconds or an HTTP date.
 const parseRetryAfterMs = (value) => {
@@ -62,7 +76,7 @@ const useFfmpegService = () => {
         });
       } catch (error) {
         if (error.name === "AbortError")
-          throw new Error("The request timed out. Please try again.");
+          throw new Error("The upload timed out. Please try again.");
         throw error;
       } finally {
         clearTimeout(timeoutId);
@@ -72,11 +86,12 @@ const useFfmpegService = () => {
         res.status === 503
           ? UPLOAD_MAX_RETRIES
           : UPLOAD_SERVER_ERROR_STATUSES.includes(res.status)
-            ? UPLOAD_SERVER_ERROR_MAX_RETRIES
+            ? UPLOAD_SERVER_AFTER_ERROR_MAX_RETRIES
             : -1;
       if (maxRetries >= 0) {
         if (attempt >= maxRetries) {
-          if (res.status === 503) throw new Error(SERVICE_BUSY_MESSAGE);
+          if (res.status === 503)
+            throw new Error(JOB_ERROR_MESSAGES.out_of_memory);
           throw new Error(`API error: ${res.status}`);
         }
         const delay = Math.max(
@@ -163,8 +178,12 @@ const useFfmpegService = () => {
           else startTimer();
           if (onProgress) onProgress(data);
           if (data.status === "error") {
-            const error = new Error(data.error || defaultError);
+            const error = new Error(
+              JOB_ERROR_MESSAGES[data.error] || data.error || defaultError,
+            );
             error.final = true;
+            // Lets callers re-upload an expired input (see cutVideo).
+            if (data.error === "input_not_found") error.status = 404;
             throw error;
           }
           if (data.status === "completed")

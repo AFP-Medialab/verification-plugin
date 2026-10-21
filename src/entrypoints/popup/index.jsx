@@ -89,14 +89,33 @@ async function initializeApp() {
   sagaMiddleware.run(rootSaga);
 
   let previousCookiesValue = store.getState().cookies;
+  const selectPersisted = (s) => [
+    s.humanRightsCheckBox,
+    s.interactiveExplanation,
+    s.language,
+    s.defaultLanguage,
+    s.ltr,
+    s.cookies,
+    s.userSession,
+    s.tool?.toolName,
+    s.tool?.pinnedTools,
+  ];
+  let previousPersisted = selectPersisted(store.getState());
 
   store.subscribe(() => {
     const currentState = store.getState();
     const currentCookies = currentState.cookies;
+    const currentPersisted = selectPersisted(currentState);
+    const persistedChanged = currentPersisted.some(
+      (v, i) => v !== previousPersisted[i],
+    );
+    previousPersisted = currentPersisted;
 
     if (currentCookies !== null && currentCookies) {
-      // User accepted cookies - save state
-      saveToLocalStorage(currentState);
+      // Only write when a persisted field changed, to stay under storage write quotas
+      if (persistedChanged) {
+        saveToLocalStorage(currentState);
+      }
     } else if (currentCookies === false && previousCookiesValue !== false) {
       // User explicitly declined cookies (changed from true/null to false) - remove storage
       const storage = browser.storage?.sync || browser.storage?.local;
