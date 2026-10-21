@@ -502,6 +502,7 @@ const SNA = () => {
           setActivitySelect,
           commonNumberFields,
           selectedSources,
+          setAccountActivityResult,
         },
       },
       toolLoading: accountActivityLoading,
