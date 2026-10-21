@@ -36,6 +36,21 @@ import louvain from "graphology-communities-louvain";
 
 const MAX_TABLE_TEXT_LENGTH = 45;
 
+const EXCLUDED_COORD_FIELD = [
+  "date",
+  "username",
+  "id",
+  "display_name",
+  "account_created",
+  "followers",
+  "total_posts",
+  "likes",
+  "quotes",
+  "retweets",
+  "views",
+  "collectionID",
+];
+
 const CoorTextEntry = ({
   keyword,
   fieldDescription,
@@ -111,11 +126,15 @@ export const getObjectSelectOptions = (dataSources, selected) => {
   let sharedHeadersObjectSelect = getSelectedSourceSharedHeaders(
     dataSources,
     selected,
-  ).map((header) => ({
-    label: header,
-    value: header,
-    isKeyword: false,
-  }));
+  )
+    .filter((header) => !EXCLUDED_COORD_FIELD.includes(header))
+    .map((header) => ({
+      label: header,
+      value: header,
+      isKeyword: false,
+    }));
+
+  console.log(sharedHeadersObjectSelect);
 
   return textSimilarityObjectSelect.concat(sharedHeadersObjectSelect);
 };
