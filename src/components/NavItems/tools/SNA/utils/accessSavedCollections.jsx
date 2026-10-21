@@ -68,7 +68,7 @@ const cleanTiktokData = (entries) => {
 const collectionAccessors = {
   twitter: {
     prompt: "getTweets",
-    nameTag: "~TWITTER",
+    nameTag: "~X",
     idTag: "tweets~",
     sourceTag: "twitter",
   },
