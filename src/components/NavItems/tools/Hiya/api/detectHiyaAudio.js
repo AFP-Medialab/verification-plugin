@@ -27,7 +27,7 @@
 export const detectHiyaAudioAuthenticity = async (
   fileHandle,
   authenticatedRequest,
-  model = "digital",
+  model = "phone",
 ) => {
   if (!fileHandle) {
     throw new Error("File handle is required");
