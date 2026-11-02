@@ -1,0 +1,31 @@
+{
+  "platform": "youtube",
+  "video": {
+    "title": "Mocked video title",
+    "description": "Mocked video description",
+    "publishedAt": "2024-01-01T12:00:00Z",
+    "viewCount": "1000",
+    "likeCount": "100",
+    "dislikeCount": "0",
+    "duration": "PT3M20S",
+    "licensedContent": "false"
+  },
+  "source": {
+    "title": "Mocked channel",
+    "description": "Mocked channel description",
+    "publishedAt": "2020-01-01T12:00:00Z",
+    "viewCount": "50000",
+    "subscriberCount": "1200",
+    "url": "https://www.youtube.com/channel/mocked"
+  },
+  "thumbnails": {
+    "preferred": {
+      "url": "https://img.youtube.com/vi/WaaL75G0qu0/maxresdefault.jpg"
+    },
+    "others": [
+      { "url": "https://img.youtube.com/vi/WaaL75G0qu0/1.jpg" },
+      { "url": "https://img.youtube.com/vi/WaaL75G0qu0/2.jpg" },
+      { "url": "https://img.youtube.com/vi/WaaL75G0qu0/3.jpg" }
+    ]
+  }
+}
