@@ -7,6 +7,7 @@
  */
 import { test, expect } from './fixtures';
 import path from 'path';
+import mockedAnalysisYoutubeResponse from '../../tests-assets/api-response/analysis-youtube-response.json'
 import mockedKeyframesResponse from '../../tests-assets/api-response/keyframes-response.json'
 import mockedDeepfakeResponse from '../../tests-assets/api-response/deepfake-response.json'
 import mockedPoiForensicResponse from '../../tests-assets/api-response/poiforensic-response.json'
@@ -16,6 +17,26 @@ const FAKE_JPEG_BUFFER = Buffer.from('/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAgGBgcGBQ
 const FAKE_ZIP_BUFFER = Buffer.from('fake-zip-content');
 
 test(`Test tool analysis video`, async ({ page, extensionId }) => {
+  await page.route('**/videos/**', async (route) => {
+    const { pathname } = new URL(route.request().url());
+    let body;
+    if (pathname.endsWith('/videos/jobs')) {
+      body = { id: 'mocked-job-id' };
+    } else if (pathname.includes('/videos/jobs/')) {
+      body = { id: 'mocked-job-id', status: 'done', media_id: 'mocked-media-id' };
+    } else if (pathname.includes('/videos/reports/')) {
+      body = mockedAnalysisYoutubeResponse;
+    } else {
+      await route.continue();
+      return;
+    }
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(body),
+    });
+  });
+
   await page.goto(`chrome-extension://${extensionId}/popup.html#/app/tools/analysis`);
   // Accept local storage usage
   await page.getByText("Accept").click();
