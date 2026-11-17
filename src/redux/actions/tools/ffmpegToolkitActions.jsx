@@ -29,3 +29,5 @@ export const setProgress = createAction("SET_PROGRESS");
 export const setFfmpegInputId = createAction("SET_FFMPEG_INPUT_ID");
 
 export const setFfmpegCutInputId = createAction("SET_FFMPEG_CUT_INPUT_ID");
+
+export const setFfmpegAudioFileId = createAction("SET_FFMPEG_AUDIO_FILE_ID");

@@ -31,6 +31,35 @@ export const TWEET_PROPERTY_PATHS = {
   retweets: { path: "legacy.retweet_count", default: 0 },
   replies: { path: "legacy.reply_count", default: 0 },
   views: { path: "views.count", default: 0 },
+  isVerified: {
+    path: "core.user_results.result.is_blue_verified",
+    default: false,
+  },
+  profileDescription: {
+    path: "core.user_results.result.profile_bio.description",
+    default: "",
+  },
+  isSensitiveContent: {
+    path: "core.user_results.result.possibly_sensitive",
+    default: false,
+  },
+  location: { path: "core.user_results.result.location.location", default: "" },
+  following: {
+    path: "core.user_results.result.relationship_counts.following",
+    default: 0,
+  },
+  totalTweetsPublished: {
+    path: "core.user_results.result.tweet_counts.tweets",
+    default: 0,
+  },
+  hasOfficialAIContent: {
+    path: "content_disclosure.ai_generated_disclosure.has_ai_generated_media",
+    default: false,
+  },
+  aiContentDetectionSource: {
+    path: "content_disclosure.ai_generated_disclosure.ai_generated_detection_source",
+    default: "",
+  },
 };
 
 export const TIKTOK_PROPERTY_PATHS = {
@@ -108,11 +137,59 @@ export const transformArrayProperty = (array, mapper, minLength = 1) => {
 };
 
 /**
+ * DEBUG: collect leaf paths of an object (arrays are treated as leaves)
+ */
+const collectLeafPaths = (obj, prefix = "", out = {}) => {
+  if (obj !== null && typeof obj === "object" && !Array.isArray(obj)) {
+    Object.keys(obj).forEach((key) =>
+      collectLeafPaths(obj[key], prefix ? `${prefix}.${key}` : key, out),
+    );
+  } else {
+    out[prefix] = obj;
+  }
+  return out;
+};
+
+// DEBUG: paths already logged, so each unscraped field is only printed once
+const loggedUnscrapedPaths = new Set();
+
+/**
+ * DEBUG: log the fields present in the raw tweet that are not scraped
+ * (i.e. not covered by any path of TWEET_PROPERTY_PATHS). Each path is logged once.
+ * @param {Object} tweetInfo - Raw tweet data
+ */
+const logUnscrapedTweetFields = (tweetInfo) => {
+  const scrapedPaths = Object.values(TWEET_PROPERTY_PATHS).map((p) => p.path);
+  const newFields = {};
+  Object.entries(collectLeafPaths(tweetInfo)).forEach(([path, value]) => {
+    const isScraped = scrapedPaths.some(
+      (scraped) => path === scraped || path.startsWith(scraped + "."),
+    );
+    if (!isScraped && !loggedUnscrapedPaths.has(path)) {
+      loggedUnscrapedPaths.add(path);
+      newFields[path] = value;
+    }
+  });
+  if (Object.keys(newFields).length > 0) {
+    const username = _.get(
+      tweetInfo,
+      "core.user_results.result.core.screen_name",
+      "unknown",
+    );
+    console.log(
+      `[SNA] Unscraped tweet fields (@${username}, tweet ${tweetInfo?.rest_id}):`,
+      newFields,
+    );
+  }
+};
+
+/**
  * Extract all properties from tweet data using TWEET_PROPERTY_PATHS
  * @param {Object} tweetInfo - Raw tweet data
  * @returns {Object} Object with all extracted properties
  */
 export const extractTweetProperties = (tweetInfo) => {
+  logUnscrapedTweetFields(tweetInfo);
   const properties = {};
   Object.keys(TWEET_PROPERTY_PATHS).forEach((key) => {
     properties[key] = _.get(
