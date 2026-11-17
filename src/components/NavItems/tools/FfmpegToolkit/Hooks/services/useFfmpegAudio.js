@@ -31,6 +31,7 @@ const useFfmpegAudio = () => {
     try {
       let fileId = audioFileId;
       if (!fileId) {
+        dispatch(setBottomLoading(true));
         ({ fileId } = await runJob(
           { type: "extractAudio", inputId: cutInputId },
           onProgressCb,
@@ -48,7 +49,6 @@ const useFfmpegAudio = () => {
   };
 
   const handleDownloadAudio = async () => {
-    dispatch(setBottomLoading(true));
     try {
       const blob = await fetchAudioBlob(onProgress);
       const audioUrl = URL.createObjectURL(blob);
@@ -65,12 +65,15 @@ const useFfmpegAudio = () => {
 
   const handleGoToHiya = async () => {
     try {
-      const blob = await fetchAudioBlob();
+      const blob = await fetchAudioBlob(onProgress);
       const hiyaUrl = URL.createObjectURL(blob);
       const name = getNameFromFileName(fileName);
       dispatch(setHiyaFile({ name: `${name}_extract.mp3`, url: hiyaUrl }));
+      dispatch(setBottomLoading(false));
+      dispatch(setProgress(0));
       navigate("/app/tools/hiya");
     } catch (error) {
+      dispatch(setBottomLoading(false));
       dispatch(setError(error.message));
     }
   };
