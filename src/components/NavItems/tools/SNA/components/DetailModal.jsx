@@ -1,4 +1,5 @@
 import React from "react";
+import { createPortal } from "react-dom";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -8,7 +9,7 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridPagination } from "@mui/x-data-grid";
 import dayjs from "dayjs";
 
 import { detailsFormat } from "./DataUpload/DataUploadConstants";
@@ -28,6 +29,13 @@ const style = {
   overflow: "hidden",
 };
 
+// The pagination is rendered (via a portal) outside the scrollable area so it
+// stays visible and does not move when the table is scrolled or changes page
+const PaginationPortal = ({ container }) =>
+  container
+    ? createPortal(<GridPagination showFirstButton showLastButton />, container)
+    : null;
+
 const DetailModal = ({
   detailContent,
   detailSource,
@@ -37,6 +45,8 @@ const DetailModal = ({
   setDetailSearchFilter,
   keyword,
 }) => {
+  const [paginationContainer, setPaginationContainer] = React.useState(null);
+
   const handleClose = () => {
     setOpenDetailModal(false);
     setDetailSearchFilter("");
@@ -187,6 +197,8 @@ const DetailModal = ({
                 rows={rows}
                 columns={columns}
                 getRowHeight={() => "auto"}
+                slots={{ footer: PaginationPortal }}
+                slotProps={{ footer: { container: paginationContainer } }}
                 sx={{
                   // explictly tells the datagrid to take the width it needs, the container handle the overflow
                   width: `${totalWidth}px`,
@@ -196,6 +208,14 @@ const DetailModal = ({
                 }}
               />
             </Box>
+            <Box
+              ref={setPaginationContainer}
+              sx={{
+                flexShrink: 0,
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            />
             <Stack
               direction="row"
               spacing={1}
