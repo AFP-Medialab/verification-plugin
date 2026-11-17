@@ -12,6 +12,7 @@ const defaultState = {
   progress: 0,
   inputId: null,
   cutInputId: null,
+  audioFileId: null,
 };
 
 const ffmpegToolkitReducer = (state = defaultState, action) => {
@@ -30,6 +31,7 @@ const ffmpegToolkitReducer = (state = defaultState, action) => {
         iframes: null,
         inputId: null,
         cutInputId: null,
+        audioFileId: null,
       };
     case "SET_FFMPEG_TOOLKIT_LOADING":
       return {
@@ -86,11 +88,18 @@ const ffmpegToolkitReducer = (state = defaultState, action) => {
       return {
         ...state,
         inputId: action.payload,
+        audioFileId: null,
       };
     case "SET_FFMPEG_CUT_INPUT_ID":
       return {
         ...state,
         cutInputId: action.payload,
+        audioFileId: null,
+      };
+    case "SET_FFMPEG_AUDIO_FILE_ID":
+      return {
+        ...state,
+        audioFileId: action.payload,
       };
     default:
       return state;

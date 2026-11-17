@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import {
   setBottomLoading,
+  setFfmpegAudioFileId,
   setProgress,
 } from "@/redux/actions/tools/ffmpegToolkitActions";
 import { setError } from "@/redux/reducers/errorReducer";
@@ -20,6 +21,7 @@ const useFfmpegAudio = () => {
 
   const fileName = useSelector((state) => state.ffmpegToolkit.fileName);
   const cutInputId = useSelector((state) => state.ffmpegToolkit.cutInputId);
+  const audioFileId = useSelector((state) => state.ffmpegToolkit.audioFileId);
 
   const onProgress = (data) => {
     if (data.progress) dispatch(setProgress(data.progress));
@@ -27,12 +29,18 @@ const useFfmpegAudio = () => {
 
   const fetchAudioBlob = async (onProgressCb) => {
     try {
-      const { fileId } = await runJob(
-        { type: "extractAudio", inputId: cutInputId },
-        onProgressCb,
-        "Audio processing failed",
-      );
-      return await downloadBlobFromApi(fileId, "audio/mpeg");
+      let fileId = audioFileId;
+      if (!fileId) {
+        dispatch(setBottomLoading(true));
+        ({ fileId } = await runJob(
+          { type: "extractAudio", inputId: cutInputId },
+          onProgressCb,
+          "Audio processing failed",
+        ));
+      }
+      const blob = await downloadBlobFromApi(fileId, "audio/mpeg");
+      dispatch(setFfmpegAudioFileId(fileId));
+      return blob;
     } catch (error) {
       dispatch(setBottomLoading(false));
       dispatch(setError(error.message));
@@ -41,7 +49,6 @@ const useFfmpegAudio = () => {
   };
 
   const handleDownloadAudio = async () => {
-    dispatch(setBottomLoading(true));
     try {
       const blob = await fetchAudioBlob(onProgress);
       const audioUrl = URL.createObjectURL(blob);
@@ -58,12 +65,15 @@ const useFfmpegAudio = () => {
 
   const handleGoToHiya = async () => {
     try {
-      const blob = await fetchAudioBlob();
+      const blob = await fetchAudioBlob(onProgress);
       const hiyaUrl = URL.createObjectURL(blob);
       const name = getNameFromFileName(fileName);
       dispatch(setHiyaFile({ name: `${name}_extract.mp3`, url: hiyaUrl }));
+      dispatch(setBottomLoading(false));
+      dispatch(setProgress(0));
       navigate("/app/tools/hiya");
     } catch (error) {
+      dispatch(setBottomLoading(false));
       dispatch(setError(error.message));
     }
   };
