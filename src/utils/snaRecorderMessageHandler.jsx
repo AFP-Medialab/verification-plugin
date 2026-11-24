@@ -328,8 +328,6 @@ export const handleRecordedMessage = async (request) => {
     return;
   }
 
-  console.log(JSON.stringify(request, null, 2));
-
   // Handle Community Notes listing pages (browse/search results with tweets)
   if (request._snaRecorderType === "communityNote") {
     // Extract tweets_results array (note: it's tweets_results, not tweet_results)
