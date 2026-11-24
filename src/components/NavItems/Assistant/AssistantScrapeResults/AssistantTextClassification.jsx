@@ -228,8 +228,6 @@ export default function AssistantTextClassification({
                 arcsLength={MGT_ARC_LENGTHS}
                 gaugeLabels={["gauge_no_detection", "gauge_detection"]}
                 orderedCategories={orderedCategories}
-                credibilitySignal={credibilitySignal}
-                machineGeneratedTextTitle={machineGeneratedTextTitle}
               />
             ) : (
               <CategoriesList
@@ -261,8 +259,6 @@ export function GaugeCategoriesList({
   arcsLength,
   gaugeLabels,
   orderedCategories,
-  credibilitySignal,
-  machineGeneratedTextTitle,
 }) {
   // gauge chart
   const gaugeChart = createGaugeChart(
@@ -277,26 +273,24 @@ export function GaugeCategoriesList({
 
   // categories list
   const output = [];
-  if (credibilitySignal === machineGeneratedTextTitle) {
-    for (const category of orderedCategories) {
-      if (category != fullTextScoreLabel && category in categories) {
-        output.push(
-          <ListItem
-            key={category}
-            sx={{
-              background: rgbToString(
-                resolvedMode === "dark"
-                  ? categories[category][0]["rgbDark"]
-                  : categories[category][0]["rgb"],
-              ),
-              color: category == "highly_likely_machine" ? "white" : "black",
-            }}
-          >
-            <ListItemText primary={keyword(category)} />
-          </ListItem>,
-        );
-        output.push(<Divider key={`divider_${category}`} />);
-      }
+  for (const category of orderedCategories) {
+    if (category != fullTextScoreLabel && category in categories) {
+      output.push(
+        <ListItem
+          key={category}
+          sx={{
+            background: rgbToString(
+              resolvedMode === "dark"
+                ? categories[category][0]["rgbDark"]
+                : categories[category][0]["rgb"],
+            ),
+            color: category == "highly_likely_machine" ? "white" : "black",
+          }}
+        >
+          <ListItemText primary={keyword(category)} />
+        </ListItem>,
+      );
+      output.push(<Divider key={`divider_${category}`} />);
     }
   }
 
@@ -312,15 +306,11 @@ export function GaugeCategoriesList({
           colors={colours}
         />
       </Box>
-      {credibilitySignal === machineGeneratedTextTitle && (
-        <>
-          <Divider key={`divider_${fullTextScoreLabel}`} sx={{ my: 2 }} />
-          <Typography fontSize="small" sx={{ textAlign: "start" }}>
-            {keyword("detected_classes")}
-          </Typography>
-          <List>{output}</List>
-        </>
-      )}
+      <Divider key={`divider_${fullTextScoreLabel}`} sx={{ my: 2 }} />
+      <Typography fontSize="small" sx={{ textAlign: "start" }}>
+        {keyword("detected_classes")}
+      </Typography>
+      <List>{output}</List>
     </>
   );
 }
