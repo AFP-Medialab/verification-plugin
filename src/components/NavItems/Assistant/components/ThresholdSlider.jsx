@@ -8,7 +8,7 @@ import Slider from "@mui/material/Slider";
 const scaleValue = (value) => value / 100;
 
 /**
- * Slider component utilised by news framing, news genre, persuasion techniques and subjectivity
+ * Slider component utilised by news framing, news genre and persuasion techniques
  * @param { importantSentenceThreshold, handleSliderChange, keyword }
  * @returns slider component
  */

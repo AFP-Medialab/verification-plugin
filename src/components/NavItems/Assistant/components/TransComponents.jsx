@@ -21,7 +21,6 @@ const URLS = {
   STANCE_CLASSIFIER:
     "https://gatenlp.github.io/we-verify-app-assistant/supported-tools#stance-classifier",
   GATE_SHOPFRONT: "https://cloud.gate.ac.uk/shopfront",
-  DEUTSCHE_WELLE: "https://www.dw.com/",
   KINIT: "https://kinit.sk/",
   ONTOTEXT: "https://www.ontotext.com/",
   MDN_IMAGE_TYPES:
@@ -236,25 +235,6 @@ export function TransUsfdAuthor({ keyword }) {
         usfdLink: (
           <a
             href={URLS.GATE_SHOPFRONT}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={A_STYLE}
-          />
-        ),
-      }}
-    />
-  );
-}
-
-export function TransDeutscheWelleAuthor({ keyword }) {
-  return (
-    <Trans
-      t={keyword}
-      i18nKey="deutsche_welle_author"
-      components={{
-        deutscheWelleLink: (
-          <a
-            href={URLS.DEUTSCHE_WELLE}
             target="_blank"
             rel="noopener noreferrer"
             style={A_STYLE}

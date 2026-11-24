@@ -22,7 +22,6 @@ export const CREDIBILITY_SIGNAL_TITLES = {
   NEWS_FRAMING: "news_framing_title",
   NEWS_GENRE: "news_genre_title",
   PERSUASION: "persuasion_techniques_title",
-  SUBJECTIVITY: "subjectivity_title",
   MACHINE_GENERATED_TEXT: "machine_generated_text_title",
 };
 
@@ -50,20 +49,6 @@ export const DETECTION_EXPLANATION_KEYWORDS_MGT = [
   "gauge_scale_modal_explanation_rating_2_mgt",
   "gauge_scale_modal_explanation_rating_3_mgt",
   "gauge_scale_modal_explanation_rating_4_mgt",
-];
-
-/**
- * Gauge arc lengths for the subjectivity classifier chart
- */
-export const SUBJECTIVITY_ARC_LENGTHS = [0.4, 0.25, 0.35];
-
-/**
- * i18n keys for the gauge scale explanation modal — subjectivity
- */
-export const DETECTION_EXPLANATION_KEYWORDS_SUB = [
-  "gauge_scale_modal_explanation_rating_1_sub",
-  "gauge_scale_modal_explanation_rating_2_sub",
-  "gauge_scale_modal_explanation_rating_3_sub",
 ];
 
 /**

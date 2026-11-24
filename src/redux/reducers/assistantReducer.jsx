@@ -51,11 +51,6 @@ const defaultState = {
   persuasionDone: false,
   persuasionFail: false,
 
-  subjectivityResult: null,
-  subjectivityLoading: false,
-  subjectivityDone: false,
-  subjectivityFail: false,
-
   prevFactChecksResult: null,
   prevFactChecksLoading: false,
   prevFactChecksDone: false,
@@ -97,7 +92,6 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_NEWS_TOPIC_DETAILS":
     case "SET_NEWS_GENRE_DETAILS":
     case "SET_PERSUASION_DETAILS":
-    case "SET_SUBJECTIVITY_DETAILS":
     case "SET_PREV_FACT_CHECKS_DETAILS":
     case "SET_MACHINE_GENERATED_TEXT_CHUNKS_DETAILS":
     case "SET_MULTILINGUAL_STANCE_DETAILS":
@@ -178,11 +172,6 @@ const assistantReducer = (state = defaultState, action) => {
         persuasionLoading: false,
         persuasionDone: false,
         persuasionFail: false,
-
-        subjectivityResult: null,
-        subjectivityLoading: false,
-        subjectivityDone: false,
-        subjectivityFail: false,
 
         prevFactChecksResult: null,
         prevFactChecksLoading: false,

@@ -31,7 +31,6 @@ import {
   setProcessUrlActions,
   setScrapedData,
   setSingleMediaPresent,
-  setSubjectivityDetails,
   setUrlMode,
 } from "@/redux/actions/tools/assistantActions";
 import {
@@ -100,10 +99,6 @@ function* getUrlDomainAnalysisSaga() {
 
 function* getNamedEntitySaga() {
   yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleNamedEntityCall);
-}
-
-function* getSubjectivitySaga() {
-  yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleSubjectivityCall);
 }
 
 function* getPrevFactChecksSaga() {
@@ -368,123 +363,6 @@ function* handlePersuasionCall(action) {
     }
   } catch {
     yield put(setPersuasionDetails(null, false, false, true));
-  }
-}
-
-const SERVER_TIMEOUT_LIMIT = 6000;
-
-const getTextChunks = (text) => {
-  // todo - split around a full stop after SERVER_TIMEOUT_LIMIT
-  let textChunks = [];
-  if (text.length > SERVER_TIMEOUT_LIMIT) {
-    for (let i = 0; i < text.length; i += SERVER_TIMEOUT_LIMIT) {
-      textChunks.push(text.substring(i, i + SERVER_TIMEOUT_LIMIT));
-    }
-  } else {
-    // single chunk as text less than limit
-    textChunks.push(text);
-  }
-  return textChunks;
-};
-
-function* handleSubjectivityCall(action) {
-  if (action.type === "CLEAN_STATE") return;
-
-  try {
-    const text = yield select((state) => state.assistant.urlText);
-
-    if (text) {
-      yield put(setSubjectivityDetails(null, true, false, false));
-
-      // collect chunks of text
-      const textChunks = getTextChunks(text);
-
-      // collect results for each chunk
-      let result = {};
-      let step = 0;
-      for (let i = 0; i < textChunks.length; i += 1) {
-        /*console.log(
-          "Subjectivity service: sending text chunk",
-          i + 1,
-          "/",
-          textChunks.length,
-        );*/
-        const textChunkResult = yield call(
-          assistantApi.callSubjectivityService,
-          textChunks[i],
-        );
-
-        // merge results
-        if (i === 0) {
-          result = textChunkResult;
-          result.entities.Subjective[0].score =
-            result.entities.Subjective[0].score * textChunks[i].length;
-        } else {
-          // add step to sentences indices and Important_Sentence indices
-          step = i * SERVER_TIMEOUT_LIMIT;
-
-          // merge Important_Sentence if any exist
-          let stepImportantSentences = [];
-          for (
-            let j = 0;
-            j < textChunkResult.entities
-              ? textChunkResult.entities.Important_Sentence.length
-              : null;
-            j += 1
-          ) {
-            let importantSentence =
-              textChunkResult.entities.Important_Sentence[j];
-
-            stepImportantSentences.push({
-              indices: [
-                importantSentence.indices[0] + step,
-                importantSentence.indices[1] + step,
-              ],
-              score: importantSentence.score,
-            });
-          }
-
-          // merge sentences
-          let stepSentences = [];
-          for (let k = 0; k < textChunkResult.sentences.length; k += 1) {
-            let sentence = textChunkResult.sentences[k];
-
-            stepSentences.push({
-              indices: [sentence.indices[0] + step, sentence.indices[1] + step],
-              score: sentence.score,
-              label: sentence.label,
-              sentence: sentence.sentence,
-            });
-          }
-          // update results
-          result = {
-            text: result.text + textChunkResult.text,
-            configs: result.configs,
-            entities: {
-              Important_Sentence: result.entities.Important_Sentence.concat(
-                stepImportantSentences,
-              ),
-              Subjective: [
-                {
-                  score:
-                    result.entities.Subjective[0].score +
-                    textChunkResult.entities.Subjective[0].score *
-                      textChunks[i].length,
-                },
-              ],
-            },
-            sentences: result.sentences.concat(stepSentences),
-          };
-        }
-      }
-      // update overall subjectivity score to be weighted
-      result.entities.Subjective[0].score =
-        result.entities.Subjective[0].score / text.length;
-
-      yield put(setSubjectivityDetails(result, false, true, false));
-    }
-  } catch {
-    yield put(setSubjectivityDetails(null, false, false, true));
   }
 }
 
@@ -895,7 +773,6 @@ export default function* assistantSaga() {
     fork(getNewsTopicSaga),
     fork(getNewsGenreSaga),
     fork(getPersuasionSaga),
-    fork(getSubjectivitySaga),
     fork(getPrevFactChecksSaga),
     fork(getMultilingualStanceSaga),
     fork(getMachineGeneratedTextChunksSaga),
