@@ -39,7 +39,6 @@ import { KNOWN_LINKS, TOOLS_CATEGORIES } from "@/constants/toolsData";
 import {
   cleanAssistantState,
   setImageVideoSelected,
-  setInputUrl,
   setScrapedData,
   setSingleMediaPresent,
   setUrlMode,
