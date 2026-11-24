@@ -80,7 +80,9 @@ export default defineConfig({
   publicDir: "public",
 
   zip: {
-    zipSources: false,
+    // sources zip is generated for Firefox only (AMO source code submission)
+    includeSources: [".env.production"],
+    excludeSources: ["build/**", "playwright-report/**", "test-results/**"],
   },
 
   alias: {
