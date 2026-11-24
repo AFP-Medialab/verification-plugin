@@ -115,7 +115,10 @@ pipeline {
                             ZIPS=\$(ls build/weverify-plugin-*.zip 2>/dev/null)
                             if [ -z "\$ZIPS" ]; then echo "No zip found!"; exit 1; fi
                             for ZIP in \$ZIPS; do
-                                BROWSER=\$(basename "\$ZIP" | grep -oE 'chrome|firefox')
+                                case "\$ZIP" in
+                                    *-sources.zip) BROWSER="firefox-sources" ;;
+                                    *) BROWSER=\$(basename "\$ZIP" | grep -oE 'chrome|firefox') ;;
+                                esac
                                 aws s3 cp "\$ZIP" s3://${S3_BUCKET}/jenkins/builds/${env.BRANCH_NAME}/we-verify-plugin-${env.VERSION_TAG}-\${BROWSER}.zip
                             done
                         """
