@@ -20,9 +20,15 @@ const TWITTERCOLLECTION = "tweets";
 const FBCOLLECTION = "fb";
 const COMMUNITYNOTESCOLLECTION = "communityNotes";
 
-const snaDB = new DBStorage("snaData", 1, {
+const snaDB = new DBStorage("snaData", 2, {
   collections: {
     keyPath: "id",
+  },
+  communityNotes: {
+    keyPath: ["collectionID", "id"],
+    indexes: {
+      "by-collectionID": { keyPath: ["collectionID", "id"] },
+    },
   },
   recording: {
     keyPath: "id",
@@ -82,8 +88,8 @@ const postFormat = (rawData) => {
   return post;
 };
 const communityNoteFormat = (rawData) => {
-  let note = rawData.note;
-  return note;
+  // collectionID is stored on the record, not in the note: the UI groups entries by it
+  return { ...rawData.note, collectionID: rawData.collectionID };
 };
 
 /**
@@ -140,16 +146,35 @@ const getDataKeyForPlatform = (platform) => {
 const deleteCollectionByPlatform = async (platform, collectionId) => {
   const table = getTableForPlatform(platform);
   await snaDB.deleteByKeyPath(table, "collectionID", collectionId);
+  if (table === TWITTERCOLLECTION) {
+    await snaDB.deleteByKeyPath(
+      COMMUNITYNOTESCOLLECTION,
+      "collectionID",
+      collectionId,
+    );
+  }
 };
 
 /**
  * Get raw collection data by platform
  * @param {string} platform - Platform name (twitter/tiktok)
- * @returns {Promise<Array>} Raw collection data
+ * @param {string} collectionId - Collection to export
+ * @returns {Promise<Array>} Raw records of this collection only
  */
-const getRawCollectionByPlatform = async (platform) => {
+const getRawCollectionByPlatform = async (platform, collectionId) => {
   const table = getTableForPlatform(platform);
-  return await snaDB.getAllFromIndex(table, "by-collectionID");
+  const inCollection = (record) => record.collectionID === collectionId;
+
+  const records = (
+    await snaDB.getAllFromIndex(table, "by-collectionID")
+  ).filter(inCollection);
+  if (table !== TWITTERCOLLECTION) return records;
+
+  // Community Notes belong to the X collections: records are { id, collectionID, note }
+  const notes = (
+    await snaDB.getAllFromIndex(COMMUNITYNOTESCOLLECTION, "by-collectionID")
+  ).filter(inCollection);
+  return [...records, ...notes];
 };
 
 /**
@@ -287,7 +312,10 @@ export const handleSNARecorderChromeMessage = async (
       });*/
       sendResponse({ success: true });
     } else if (request.prompt === "getRawCollection") {
-      const data = await getRawCollectionByPlatform(request.platform);
+      const data = await getRawCollectionByPlatform(
+        request.platform,
+        request.collectionId,
+      );
       sendResponse({ data });
     } else if (request.prompt === "addToCollection") {
       await addToCollectionByPlatform(
@@ -319,61 +347,157 @@ const storeTiktokItem = async (item, collectionID) => {
   });
 };
 
+/**
+ * Collect every Community Note object of a response, whatever its position
+ * (misleading_birdwatch_notes.notes[*], birdwatch_note_by_rest_id, listings...).
+ * A note is recognised by its rest_id and data_v1 properties.
+ * @param {*} node - Parsed JSON node
+ * @param {Array} found - Accumulator
+ * @returns {Array} Raw notes
+ */
+const findNotes = (node, found = []) => {
+  if (Array.isArray(node)) {
+    node.forEach((child) => findNotes(child, found));
+  } else if (node && typeof node === "object") {
+    if (node.data_v1 && node.rest_id) {
+      found.push(node);
+    } else {
+      Object.values(node).forEach((child) => findNotes(child, found));
+    }
+  }
+  return found;
+};
+
+/**
+ * Store the Community Notes of a response. Notes are kept in their own store,
+ * in the same collection as the tweets and linked to them by tweetId.
+ * A note seen again is overwritten, so its rating_status stays up to date.
+ */
+const storeCommunityNotes = async (request, collectionID) => {
+  for (const rawNote of findNotes(request.data)) {
+    try {
+      const note = transformCommunityNote(rawNote);
+      await snaDB.put(COMMUNITYNOTESCOLLECTION, {
+        id: note.id,
+        collectionID,
+        note,
+      });
+    } catch (error) {
+      console.error("[SNA Recorder] Error processing community note:", error);
+    }
+  }
+};
+
+/**
+ * Tweet object of a tweet_results.result, or null when there is nothing to record
+ * (tombstone, unavailable or truncated tweet).
+ */
+const getTweetContent = (result) => {
+  const tweet = result?.tweet ?? result; // TweetWithVisibilityResults wraps the tweet
+  return tweet?.rest_id && tweet.legacy && tweet.core ? tweet : null;
+};
+
+const tweetPutOperation = (tweetContent, entryId, collectionID) => ({
+  type: "put",
+  storeName: TWITTERCOLLECTION,
+  value: {
+    id: entryId,
+    collectionID,
+    tweet: transformTweet(tweetContent, collectionID, entryId),
+  },
+});
+
+/**
+ * Write the tweets in one transaction. One tweet that cannot be transformed
+ * is logged and skipped, it never prevents the others from being recorded.
+ * @param {Array<{entryId: string, result: Object}>} candidates
+ */
+const storeTweets = async (candidates, collectionID) => {
+  const operations = [];
+  for (const { entryId, result } of candidates) {
+    try {
+      const tweetContent = getTweetContent(result);
+      if (tweetContent) {
+        operations.push(tweetPutOperation(tweetContent, entryId, collectionID));
+      }
+    } catch (error) {
+      console.error(`[SNA Recorder] Error processing ${entryId}:`, error);
+    }
+  }
+  if (operations.length > 0) {
+    await snaDB.batch(operations, "readwrite");
+  }
+};
+
+/**
+ * Timeline items holding a tweet, whatever the feed (home, search, profile, list,
+ * bookmarks, tweet page...) and the instruction that carries them:
+ * entries[*], entry (pinned/replaced), moduleItems[*] and the items of a module.
+ * Ads (promoted tweets) are left out.
+ */
+const findTimelineTweets = (node, found = []) => {
+  if (Array.isArray(node)) {
+    node.forEach((child) => findTimelineTweets(child, found));
+  } else if (node && typeof node === "object") {
+    const itemContent = node.content?.itemContent ?? node.item?.itemContent;
+    if (typeof node.entryId === "string" && itemContent?.tweet_results) {
+      const isAd =
+        node.entryId.startsWith("promoted-tweet-") ||
+        itemContent.promotedMetadata;
+      if (!isAd) {
+        found.push({
+          entryId: node.entryId,
+          result: itemContent.tweet_results.result,
+        });
+      }
+    } else {
+      Object.values(node).forEach((child) => findTimelineTweets(child, found));
+    }
+  }
+  return found;
+};
+
+/**
+ * Store the tweets of Community Notes listing pages (tweets_results arrays).
+ * Same key as the timeline entries ("tweet-<rest_id>") to avoid duplicates.
+ */
+const storeListingTweets = async (request, collectionID) => {
+  const tweetsResultsArrays = jp({
+    json: request,
+    path: "$..tweets_results",
+  });
+
+  const candidates = tweetsResultsArrays
+    .filter(Array.isArray)
+    .flat()
+    .map((item) => ({
+      entryId: `tweet-${item?.result?.rest_id}`,
+      result: item?.result,
+    }));
+  await storeTweets(candidates, collectionID);
+};
+
+/**
+ * Store the tweet of a single-tweet response (tweetResult / tweet_result_by_rest_id).
+ */
+const storeSingleTweetResult = async (request, collectionID) => {
+  const result =
+    request.data?.tweetResult?.result ??
+    request.data?.tweet_result_by_rest_id?.result;
+  const tweetContent = getTweetContent(result);
+  if (!tweetContent) return;
+
+  await storeTweets(
+    [{ entryId: `tweet-${tweetContent.rest_id}`, result: tweetContent }],
+    collectionID,
+  );
+};
+
 export const handleRecordedMessage = async (request) => {
-  const entryIds = jp({ json: request, path: "$..entryId" });
   const session = await snaDB.getAll("recording");
 
-  const currentSession = session[0].state;
-  if (currentSession === false) {
-    return;
-  }
-
-  // Handle Community Notes listing pages (browse/search results with tweets)
-  if (request._snaRecorderType === "communityNote") {
-    // Extract tweets_results array (note: it's tweets_results, not tweet_results)
-    const tweetsResultsArrays = jp({
-      json: request,
-      path: "$..tweets_results",
-    });
-
-    let processedCount = 0;
-    let totalTweets = 0;
-
-    // Iterate through each tweets_results array
-    for (const tweetsResultsArray of tweetsResultsArrays) {
-      if (!Array.isArray(tweetsResultsArray)) {
-        continue;
-      }
-
-      totalTweets += tweetsResultsArray.length;
-
-      // Process each tweet in the array
-      for (const tweetItem of tweetsResultsArray) {
-        try {
-          // Extract the tweet content from the result
-          const tweetContent = tweetItem?.result;
-
-          if (tweetContent && tweetContent.rest_id) {
-            // Transform and store the tweet
-            const tweet = transformTweet(tweetContent, currentSession);
-
-            await snaDB.put(TWITTERCOLLECTION, {
-              id: tweet.id,
-              collectionID: currentSession,
-              tweet: tweet,
-            });
-
-            processedCount++;
-          }
-        } catch (error) {
-          console.error(
-            "[SNA Recorder] Error processing tweet from listing:",
-            error,
-          );
-        }
-      }
-    }
-
+  const currentSession = session[0]?.state;
+  if (!currentSession) {
     return;
   }
 
@@ -391,59 +515,21 @@ export const handleRecordedMessage = async (request) => {
     return;
   }
 
-  // Twitter capture
-  if (jp({ json: request, path: "$..entryId" }).length > 0) {
-    for (let entryId of entryIds) {
-      let tweet_results = jp({
-        json: request,
-        path: `$..entries[?(@.entryId=="${entryId}")]..tweet_results`,
-      });
-
-      if (tweet_results.length > 0 && !entryId.startsWith("promoted-tweet-")) {
-        let content =
-          tweet_results[0].result.tweet ||
-          tweet_results[0].result ||
-          tweet_results[0].tweet;
-
-        let tweet = transformTweet(content, currentSession);
-        await snaDB.put(TWITTERCOLLECTION, {
-          id: entryId,
-          collectionID: currentSession,
-          tweet: tweet,
-        });
-      }
-    }
-  } else {
-    // Try alternative patterns for Twitter data
-    const timelineInstructions = jp({
-      json: request,
-      path: "$..timeline..instructions[*]..entries[*]",
-    });
-
-    if (timelineInstructions.length > 0) {
-      for (let entry of timelineInstructions) {
-        if (entry.entryId && entry.content) {
-          const tweet_results = jp({
-            json: entry,
-            path: "$..tweet_results",
-          });
-
-          if (tweet_results.length > 0) {
-            let content =
-              tweet_results[0].result.tweet ||
-              tweet_results[0].result ||
-              tweet_results[0].tweet;
-
-            let tweet = transformTweet(content, currentSession);
-            await snaDB.put(TWITTERCOLLECTION, {
-              id: entry.entryId,
-              collectionID: currentSession,
-              tweet: tweet,
-            });
-          }
-        }
-      }
-    }
+  switch (request._snaRecorderType) {
+    // Community Notes responses: notes (BirdwatchFetchNotes, single note, listings)
+    // and the tweets of listing pages
+    case "communityNote":
+      await storeCommunityNotes(request, currentSession);
+      await storeListingTweets(request, currentSession);
+      break;
+    // Single tweet response (TweetResultByRestId)
+    case "singleTweet":
+      await storeSingleTweetResult(request, currentSession);
+      break;
+    // Any feed made of timeline instructions
+    case "timeline":
+      await storeTweets(findTimelineTweets(request.data), currentSession);
+      break;
   }
 };
 

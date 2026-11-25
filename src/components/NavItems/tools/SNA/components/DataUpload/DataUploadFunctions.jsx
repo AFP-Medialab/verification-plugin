@@ -1,6 +1,7 @@
 import jp from "jsonpath";
 
 import {
+  extractTweetMedia,
   extractTweetProperties,
   generateTweetLink,
   transformTiktok,
@@ -192,25 +193,9 @@ export const reformatZeeschuimerTweets = (uploadedTweets, uploadedFileName) => {
     // Transform array properties
     reformatedTweet = transformTweetArrayProperties(reformatedTweet);
 
-    // Extract media from the original tweet object
-    const imageLink =
-      jp.query(
-        tweet,
-        "$.result.legacy.extended_entities..media_url_https",
-      )[0] || "None";
-
-    const videoVariants =
-      jp.query(
-        tweet,
-        "$.result.legacy.extended_entities..video_info.variants",
-      )[0] || [];
-
-    const video =
-      videoVariants.filter((x) => x.content_type === "video/mp4")[0]?.url ||
-      "None";
-
-    reformatedTweet.imageLink = imageLink;
-    reformatedTweet.video = video;
+    const media = extractTweetMedia(tweetInfo);
+    reformatedTweet.imageLinks = media.imageLinks;
+    reformatedTweet.videos = media.videos;
 
     // Generate tweet link
     reformatedTweet.tweetLink = generateTweetLink(
