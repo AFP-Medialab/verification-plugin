@@ -32,7 +32,6 @@ import {
 
 import {
   TransCredibilitySignalsLink,
-  TransDeutscheWelleAuthor,
   TransExtractedTextTooltip,
   TransHtmlDoubleLineBreak,
   TransKinitAuthor,
@@ -105,18 +104,6 @@ const AssistantTextResult = () => {
     (state) => state.assistant.persuasionLoading,
   );
   const persuasionFail = useSelector((state) => state.assistant.persuasionFail);
-
-  // subjectivity
-  const subjectivityTitle = CREDIBILITY_SIGNAL_TITLES.SUBJECTIVITY;
-  const subjectivityResult = useSelector(
-    (state) => state.assistant.subjectivityResult,
-  );
-  const subjectivityLoading = useSelector(
-    (state) => state.assistant.subjectivityLoading,
-  );
-  const subjectivityFail = useSelector(
-    (state) => state.assistant.subjectivityFail,
-  );
 
   // machine generated text
   const machineGeneratedTextTitle =
@@ -198,16 +185,6 @@ const AssistantTextResult = () => {
     <>
       <TransPersuasionTechniquesTooltip keyword={keyword} />
       <TransUsfdAuthor keyword={keyword} />
-      <TransHtmlDoubleLineBreak keyword={keyword} />
-      <TransCredibilitySignalsLink keyword={keyword} />
-    </>
-  );
-
-  const subjectivityTooltip = (
-    <>
-      <Trans t={keyword} i18nKey="subjectivity_tooltip" />
-      <TransHtmlDoubleLineBreak keyword={keyword} />
-      <TransDeutscheWelleAuthor keyword={keyword} />
       <TransHtmlDoubleLineBreak keyword={keyword} />
       <TransCredibilitySignalsLink keyword={keyword} />
     </>
@@ -336,21 +313,11 @@ const AssistantTextResult = () => {
           <Tab
             label={
               <div>
-                {keyword(subjectivityTitle)}
-                {subjectivityLoading && <LinearProgress />}
-              </div>
-            }
-            {...a11yProps(4)}
-            disabled={subjectivityFail || subjectivityLoading}
-          />
-          <Tab
-            label={
-              <div>
                 {keyword(machineGeneratedTextTitle)}
                 {machineGeneratedTextChunksLoading && <LinearProgress />}
               </div>
             }
-            {...a11yProps(5)}
+            {...a11yProps(4)}
             disabled={
               machineGeneratedTextChunksFail ||
               machineGeneratedTextChunksLoading
@@ -419,20 +386,8 @@ const AssistantTextResult = () => {
             />
           </CustomTabPanel>
 
-          {/* subjectivity */}
-          <CustomTabPanel value={textTabIndex} index={4}>
-            <AssistantTextClassification
-              text={text}
-              classification={subjectivityResult?.entities}
-              configs={subjectivityResult?.configs}
-              categoriesTooltipContent={subjectivityTooltip}
-              textHtmlMap={textHtmlMap}
-              credibilitySignal={subjectivityTitle}
-            />
-          </CustomTabPanel>
-
           {/* machine generated text */}
-          <CustomTabPanel value={textTabIndex} index={5}>
+          <CustomTabPanel value={textTabIndex} index={4}>
             <AssistantTextClassification
               text={text}
               classification={machineGeneratedTextChunksResult?.entities}

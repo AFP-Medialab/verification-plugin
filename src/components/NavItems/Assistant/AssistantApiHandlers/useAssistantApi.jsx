@@ -290,29 +290,6 @@ export default function assistantApiCalls() {
     );
   };
 
-  const callSubjectivityService = async (text) => {
-    return await callAsyncWithNumRetries(
-      MAX_NUM_RETRIES,
-      async () => {
-        const result = await axios.post(
-          assistantEndpoint + API_ENDPOINTS.SUBJECTIVITY,
-          {
-            content: text,
-          },
-        );
-        return result.data;
-      },
-      (numTries) => {
-        console.log(
-          "Could not connect to subjectivity service, tries " +
-            (numTries + 1) +
-            "/" +
-            MAX_NUM_RETRIES,
-        );
-      },
-    );
-  };
-
   const callPrevFactChecksService = async (text) => {
     return await callAsyncWithNumRetries(
       MAX_NUM_RETRIES,
@@ -390,7 +367,6 @@ export default function assistantApiCalls() {
     callNewsFramingService,
     callNewsGenreService,
     callPersuasionService,
-    callSubjectivityService,
     callPrevFactChecksService,
     callMachineGeneratedTextChunksService,
     callMultilingualStanceService,

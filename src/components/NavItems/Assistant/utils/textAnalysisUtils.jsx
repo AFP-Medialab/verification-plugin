@@ -217,7 +217,7 @@ export function getPersuasionCategoryTechnique(category) {
 }
 
 /**
- * Creates a GaugeChart required by machine generated text and subjectivity
+ * Creates a GaugeChart required by machine generated text
  * @param mgtOverallScoreLabel
  * @param overallClassificationScore
  * @param resolvedMode

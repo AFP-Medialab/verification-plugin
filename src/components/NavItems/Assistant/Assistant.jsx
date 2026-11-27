@@ -39,7 +39,6 @@ import { KNOWN_LINKS, TOOLS_CATEGORIES } from "@/constants/toolsData";
 import {
   cleanAssistantState,
   setImageVideoSelected,
-  setInputUrl,
   setScrapedData,
   setSingleMediaPresent,
   setUrlMode,
@@ -138,9 +137,6 @@ const Assistant = () => {
   );
   const prevFactChecksResult = useSelector(
     (state) => state.assistant.prevFactChecksResult,
-  );
-  const subjectivityFailState = useSelector(
-    (state) => state.assistant.subjectivityFail,
   );
   const machineGeneratedTextChunksFailState = useSelector(
     (state) => state.assistant.machineGeneratedTextChunksFail,
@@ -428,7 +424,6 @@ const Assistant = () => {
         newsFramingFailState ||
         newsGenreFailState ||
         persuasionFailState ||
-        subjectivityFailState ||
         prevFactChecksFailState ||
         machineGeneratedTextChunksFailState ||
         multilingualStanceFailState) ? (

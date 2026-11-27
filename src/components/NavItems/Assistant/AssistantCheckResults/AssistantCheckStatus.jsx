@@ -53,11 +53,6 @@ const AssistantCheckStatus = () => {
     (state) => state.assistant.persuasionFail,
   );
 
-  const subjectivityTitle = keyword("subjectivity_title");
-  const subjectivityFailState = useSelector(
-    (state) => state.assistant.subjectivityFail,
-  );
-
   const prevFactChecksTitle = keyword("previous_fact_checks_title");
   const prevFactChecksFailState = useSelector(
     (state) => state.assistant.prevFactChecksFail,
@@ -83,7 +78,6 @@ const AssistantCheckStatus = () => {
     { title: newsFramingTitle, failed: newsFramingFailState },
     { title: newsGenreTitle, failed: newsGenreFailState },
     { title: persuasionTitle, failed: persuasionFailState },
-    { title: subjectivityTitle, failed: subjectivityFailState },
     { title: prevFactChecksTitle, failed: prevFactChecksFailState },
     {
       title: machineGeneratedTextTitle,
