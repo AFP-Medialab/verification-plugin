@@ -1,3 +1,4 @@
+import { QUOTE_ONLY_ACCOUNTS } from "@/components/NavItems/tools/SNA/utils/snaConstants";
 import {
   transformCommunityNote,
   transformTiktok,
@@ -407,22 +408,57 @@ const tweetPutOperation = (tweetContent, entryId, collectionID) => ({
   },
 });
 
+const quoteOnlyAccounts = new Set(
+  QUOTE_ONLY_ACCOUNTS.map((account) => account.toLowerCase()),
+);
+
+const isQuoteOnlyAccount = (tweetContent) =>
+  quoteOnlyAccounts.has(
+    tweetContent.core?.user_results?.result?.core?.screen_name?.toLowerCase(),
+  );
+
 /**
- * Write the tweets in one transaction. One tweet that cannot be transformed
- * is logged and skipped, it never prevents the others from being recorded.
+ * Tweets quoted by a tweet, then the ones they quote themselves, and so on.
+ * Tombstones and unavailable quoted tweets are left out.
+ */
+const getQuotedTweets = (tweetContent) => {
+  const quotedTweets = [];
+  let current = tweetContent;
+  while (current) {
+    current = getTweetContent(current.quoted_status_result?.result);
+    if (current) quotedTweets.push(current);
+  }
+  return quotedTweets;
+};
+
+/**
+ * Write the tweets in one transaction. A tweet that quotes another one also records
+ * the quoted tweet in its own row ("tweet-<id>", like a timeline entry) and, for the
+ * accounts of QUOTE_ONLY_ACCOUNTS, only the quoted tweet is recorded.
+ * One tweet that cannot be transformed is logged and skipped,
+ * it never prevents the others from being recorded.
  * @param {Array<{entryId: string, result: Object}>} candidates
  */
 const storeTweets = async (candidates, collectionID) => {
   const operations = [];
-  for (const { entryId, result } of candidates) {
+  const addOperation = (tweetContent, entryId) => {
     try {
-      const tweetContent = getTweetContent(result);
-      if (tweetContent) {
-        operations.push(tweetPutOperation(tweetContent, entryId, collectionID));
-      }
+      operations.push(tweetPutOperation(tweetContent, entryId, collectionID));
     } catch (error) {
       console.error(`[SNA Recorder] Error processing ${entryId}:`, error);
     }
+  };
+
+  for (const { entryId, result } of candidates) {
+    const tweetContent = getTweetContent(result);
+    if (!tweetContent) continue;
+
+    if (!isQuoteOnlyAccount(tweetContent)) {
+      addOperation(tweetContent, entryId);
+    }
+    getQuotedTweets(tweetContent).forEach((quotedTweet) =>
+      addOperation(quotedTweet, `tweet-${quotedTweet.rest_id}`),
+    );
   }
   if (operations.length > 0) {
     await snaDB.batch(operations, "readwrite");

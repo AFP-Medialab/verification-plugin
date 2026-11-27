@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import { DataGrid, GridPagination } from "@mui/x-data-grid";
 import dayjs from "dayjs";
 
+import { isUrlList } from "../utils/snaUtils";
 import { detailsFormat } from "./DataUpload/DataUploadConstants";
 
 const style = {
@@ -35,11 +36,6 @@ const PaginationPortal = ({ container }) =>
   container
     ? createPortal(<GridPagination showFirstButton showLastButton />, container)
     : null;
-
-const isUrlList = (val) =>
-  Array.isArray(val) &&
-  val.length > 0 &&
-  val.every((item) => typeof item === "string" && item.startsWith("http"));
 
 const DetailModal = ({
   detailContent,

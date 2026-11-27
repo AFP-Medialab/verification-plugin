@@ -27,7 +27,7 @@ import { setError } from "@/redux/reducers/errorReducer";
 import ErrorBoundaryFallback from "@Shared/ErrorBoundaryFallback/ErrorBoundaryFallback";
 import { set } from "lodash";
 
-import { addingUrl, uploadToCollection } from "../utils/snaUtils";
+import { addingUrl, toCsvCell, uploadToCollection } from "../utils/snaUtils";
 
 const EmptyTablePlaceholder = ({ keyword }) => {
   return (
@@ -224,13 +224,7 @@ const CollectionActionsCell = ({
       let headers = selectedData.headers.join(",");
       console.log(headers);
       let csvData = selectedData.content
-        .map((obj) =>
-          selectedData.headers.map((k) =>
-            obj[k]
-              ? `"${obj[k].toString().replaceAll('"', '""').replaceAll("\n", " ")}"`
-              : "missing",
-          ),
-        )
+        .map((obj) => selectedData.headers.map((k) => toCsvCell(obj[k])))
         .join("\n");
 
       let csvFile = headers + `\n` + csvData;

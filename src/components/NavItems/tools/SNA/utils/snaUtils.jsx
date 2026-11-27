@@ -176,3 +176,28 @@ export const addingUrl = (row) => {
     headers: ["videoUrl", ...row.headers],
   };
 };
+
+/**
+ * True for a non-empty list of URLs (imageLinks, videos, links...)
+ */
+export const isUrlList = (value) =>
+  Array.isArray(value) &&
+  value.length > 0 &&
+  value.every((item) => typeof item === "string" && item.startsWith("http"));
+
+// A URL cannot contain a space, unlike a comma: this separator never merges two URLs
+export const CSV_URL_SEPARATOR = " | ";
+
+/**
+ * Text of a CSV cell. Empty values are exported as "missing"; 0 and false are real values.
+ * @param {*} value - Value of a row property
+ * @returns {string}
+ */
+export const toCsvCell = (value) => {
+  if (value === undefined || value === null || value === "") return "missing";
+
+  const text = isUrlList(value)
+    ? value.join(CSV_URL_SEPARATOR)
+    : value.toString();
+  return `"${text.replaceAll('"', '""').replaceAll("\n", " ")}"`;
+};

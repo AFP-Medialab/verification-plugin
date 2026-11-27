@@ -230,6 +230,12 @@ export const extractTweetProperties = (tweetInfo) => {
     properties.hasCommunityNotes = true;
   }
 
+  // Empty without a note, otherwise whether the text of the note is available
+  properties.isCommunityNotesVisible =
+    properties.hasCommunityNotes === true
+      ? properties.communityNoteText.length > 0
+      : "";
+
   // Posts over 280 characters: legacy.full_text is truncated and the entities
   // (hashtags, mentions, links) of the whole text are in note_tweet
   const longPost = _.get(tweetInfo, "note_tweet.note_tweet_results.result");
