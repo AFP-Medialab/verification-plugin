@@ -183,23 +183,6 @@ export const setPersuasionDetails = (
   };
 };
 
-export const setSubjectivityDetails = (
-  subResult,
-  subLoading,
-  subDone,
-  subFail,
-) => {
-  return {
-    type: "SET_SUBJECTIVITY_DETAILS",
-    payload: {
-      subjectivityResult: subResult,
-      subjectivityLoading: subLoading,
-      subjectivityDone: subDone,
-      subjectivityFail: subFail,
-    },
-  };
-};
-
 export const setPrevFactChecksDetails = (
   pfcResult,
   pfcLoading,

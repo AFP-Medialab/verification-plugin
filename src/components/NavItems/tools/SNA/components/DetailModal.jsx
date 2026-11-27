@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import { DataGrid, GridPagination } from "@mui/x-data-grid";
 import dayjs from "dayjs";
 
+import { isUrlList } from "../utils/snaUtils";
 import { detailsFormat } from "./DataUpload/DataUploadConstants";
 
 const style = {
@@ -47,6 +48,15 @@ const DetailModal = ({
 }) => {
   const [paginationContainer, setPaginationContainer] = React.useState(null);
 
+  // Rows do not all have the same properties (tweets and Community Notes)
+  const columnKeys = React.useMemo(() => {
+    const keys = new Set();
+    (detailContent || []).forEach((row) =>
+      Object.keys(row).forEach((key) => keys.add(key)),
+    );
+    return [...keys];
+  }, [detailContent]);
+
   const handleClose = () => {
     setOpenDetailModal(false);
     setDetailSearchFilter("");
@@ -68,7 +78,7 @@ const DetailModal = ({
 
   const columns =
     detailContent && detailContent.length > 0
-      ? Object.keys(detailContent[0]).map((x) => {
+      ? columnKeys.map((x) => {
           // Detect the column type from the first non-empty value
           const sample = detailContent.find(
             (row) =>
@@ -118,6 +128,25 @@ const DetailModal = ({
             width: size,
             valueGetter: (value) => toDisplayValue(value),
             renderCell: (params) => {
+              // Lists of URLs (imageLinks, videos, links): one clickable link per URL
+              const rawValue = params.row[params.field];
+              if (isUrlList(rawValue)) {
+                return (
+                  <Stack>
+                    {rawValue.map((url, index) => (
+                      <Link
+                        key={`${url}-${index}`}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        sx={{ wordBreak: "break-all" }}
+                      >
+                        {url}
+                      </Link>
+                    ))}
+                  </Stack>
+                );
+              }
               const val = params.value;
               if (typeof val === "string" && val.startsWith("http")) {
                 return (

@@ -90,22 +90,3 @@ export function getMgtColours(configs) {
   ];
   return [colours, coloursDark];
 }
-
-/**
- * Defines the colours required by subjectivity
- * @param configs
- * @returns colours for light and dark mode
- */
-export function getSubjectivityColours(configs) {
-  const colours = [
-    rgbToString(configs.greenRgb),
-    rgbToString(configs.orangeRgb),
-    rgbToString(configs.redRgb),
-  ];
-  const coloursDark = [
-    rgbToString(configs.greenRgbDark),
-    rgbToString(configs.orangeRgbDark),
-    rgbToString(configs.redRgbDark),
-  ];
-  return [colours, coloursDark];
-}

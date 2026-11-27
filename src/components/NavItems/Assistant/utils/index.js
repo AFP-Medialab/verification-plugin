@@ -4,7 +4,6 @@ export {
   rgbToLuminance,
   rgbListToGradient,
   getMgtColours,
-  getSubjectivityColours,
 } from "./colorUtils";
 
 export {

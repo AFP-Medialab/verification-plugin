@@ -95,11 +95,26 @@ export const detailsFormat = {
   twitter: {
     column: [
       {
-        headers: ["text", "tweetlink", "links", "imagelink", "video"],
+        headers: [
+          "text",
+          "tweetlink",
+          "notelink",
+          "links",
+          "imagelinks",
+          "videos",
+        ],
         size: 350,
       },
       {
-        headers: ["username", "display_name", "collectionid", "replying_to"],
+        headers: [
+          "username",
+          "display_name",
+          "collectionid",
+          "replying_to",
+          "noteid",
+          "tweetid",
+          "ratingstatus",
+        ],
         size: 150,
       },
     ],

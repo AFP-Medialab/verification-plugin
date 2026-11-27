@@ -47,6 +47,12 @@
   };
 
   //TWITTER Capture
+  const NOTE_DATA_KEYS = [
+    'birdwatch_note_by_rest_id',
+    'birdwatch_profile_by_alias',
+    'community_boost_pivot_by_rest_id',
+    'authenticated_birdwatch_match',
+  ];
 
   let XHR = XMLHttpRequest.prototype;
   let open = XHR.open;
@@ -83,53 +89,41 @@
           // Check if response contains data (Twitter GraphQL responses always have a 'data' field)
           if (twitterData && twitterData.data) {
             const dataKeys = Object.keys(twitterData.data);
+            const raw = this.responseText;
 
-            // Check if response contains Community Note data
-            const hasCommunityNote = dataKeys.includes('birdwatch_note_by_rest_id');
+            // GraphQL operation name only (the query string may contain "birdwatch" in feature flags)
+            let operationPath = '';
+            try {
+              operationPath = new URL(String(this._url), window.location.href).pathname;
+            } catch {
+              operationPath = '';
+            }
 
-            // Check if response contains other Community Note-related keys
-            const hasCommunityNoteKey = dataKeys.includes('birdwatch_profile_by_alias') ||
-                                       dataKeys.includes('community_boost_pivot_by_rest_id') ||
-                                       dataKeys.includes('authenticated_birdwatch_match');
+            // Responses carrying Community Notes: BirdwatchFetchNotes
+            // (tweet_result_by_rest_id.result.misleading_birdwatch_notes), single note, listings
+            const isCommunityNotePayload =
+              NOTE_DATA_KEYS.some((key) => dataKeys.includes(key)) ||
+              operationPath.includes('Birdwatch') ||
+              raw.includes('"misleading_birdwatch_notes"');
 
-            // Check if tweet response contains embedded Community Notes
-            const hasTweetWithNote = (dataKeys.includes('tweetResult') ||
-                                     dataKeys.includes('tweet_result_by_rest_id')) &&
-                                     (JSON.stringify(twitterData).includes('birdwatch_pivot'));
+            // Single tweet response (TweetResultByRestId)
+            const isSingleTweet =
+              !isCommunityNotePayload &&
+              (dataKeys.includes('tweetResult') || dataKeys.includes('tweet_result_by_rest_id'));
 
-            // Check if this is a Community Notes listing page (browse/search results)
-            const isCommunityNotesListing = dataKeys.includes('authenticated_birdwatch_match') ||
-                                           this._url.includes('BirdwatchSearchTimeline') ||
-                                           this._url.includes('BirdwatchGallery') ||
-                                           (JSON.stringify(twitterData).includes('tweets_results') &&
-                                            JSON.stringify(twitterData).includes('birdwatch'));
+            // Any feed or conversation made of timeline items holding tweets
+            // (home, search, profile, lists, bookmarks, tweet page...)
+            const isTimeline =
+              !isCommunityNotePayload &&
+              !isSingleTweet &&
+              raw.includes('"tweet_results"');
 
-            if (hasCommunityNote) {
-              const notePayload = {
-                data: twitterData.data,
-                _snaRecorderType: 'communityNote'
-              };
-              sendToExtension(notePayload);
-            } else if (hasCommunityNoteKey) {
-              const notePayload = {
-                data: twitterData.data,
-                _snaRecorderType: 'communityNote'
-              };
-              sendToExtension(notePayload);
-            } else if (isCommunityNotesListing) {
-              const listingPayload = {
-                data: twitterData.data,
-                _snaRecorderType: 'communityNotesListing'
-              };
-              sendToExtension(listingPayload);
-            } else if (hasTweetWithNote) {
-              const notePayload = {
-                data: twitterData.data,
-                _snaRecorderType: 'tweetWithCommunityNote'
-              };
-              sendToExtension(notePayload);
-            } else {
-              sendToExtension(twitterData);
+            if (isCommunityNotePayload) {
+              sendToExtension({ data: twitterData.data, _snaRecorderType: 'communityNote' });
+            } else if (isSingleTweet) {
+              sendToExtension({ data: twitterData.data, _snaRecorderType: 'singleTweet' });
+            } else if (isTimeline) {
+              sendToExtension({ data: twitterData.data, _snaRecorderType: 'timeline' });
             }
           }
         } catch (error) {

@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import { JSONPath as jp } from "jsonpath-plus";
 import _ from "lodash";
 
 export const TWEET_PROPERTY_PATHS = {
@@ -11,14 +10,15 @@ export const TWEET_PROPERTY_PATHS = {
     default: "",
   },
   followers: {
-    path: "core.user_results.result.legacy.followers_count",
+    path: "core.user_results.result.relationship_counts.followers",
     default: "",
   },
   total_posts: {
-    path: "core.user_results.result.legacy.statuses_count",
+    path: "core.user_results.result.tweet_counts.tweets",
     default: "",
   },
   text: { path: "legacy.full_text", default: "" },
+  language: { path: "legacy.lang", default: "" },
   replying_to: { path: "legacy.in_reply_to_screen_name", default: false },
   isQuote: { path: "legacy.is_quote_status", default: false },
   retweeted: { path: "legacy.retweeted", default: false },
@@ -34,6 +34,26 @@ export const TWEET_PROPERTY_PATHS = {
   isVerified: {
     path: "core.user_results.result.is_blue_verified",
     default: false,
+  },
+  isOfficiallyVerified: {
+    path: "core.user_results.result.verification.verified",
+    default: false,
+  },
+  verifiedType: {
+    path: "core.user_results.result.verification.verified_type",
+    default: "",
+  },
+  parodyLabel: {
+    path: "core.user_results.result.parody_commentary_fan_label",
+    default: "None",
+  },
+  professionalType: {
+    path: "core.user_results.result.professional.professional_type",
+    default: "",
+  },
+  likesGiven: {
+    path: "core.user_results.result.action_counts.favorites_count",
+    default: 0,
   },
   profileDescription: {
     path: "core.user_results.result.profile_bio.description",
@@ -60,6 +80,11 @@ export const TWEET_PROPERTY_PATHS = {
     path: "content_disclosure.ai_generated_disclosure.ai_generated_detection_source",
     default: "",
   },
+  hasCommunityNotes: {
+    path: "has_birdwatch_notes",
+    default: "absent",
+  },
+  communityNoteText: { path: "birdwatch_pivot.subtitle.text", default: "" },
 };
 
 export const TIKTOK_PROPERTY_PATHS = {
@@ -198,6 +223,28 @@ export const extractTweetProperties = (tweetInfo) => {
       TWEET_PROPERTY_PATHS[key].default,
     );
   });
+
+  // has_birdwatch_notes only comes with TweetDetail: in the other feeds (home, search...)
+  // a tweet showing a Community Note carries a birdwatch_pivot instead
+  if (tweetInfo?.birdwatch_pivot) {
+    properties.hasCommunityNotes = true;
+  }
+
+  // Empty without a note, otherwise whether the text of the note is available
+  properties.isCommunityNotesVisible =
+    properties.hasCommunityNotes === true
+      ? properties.communityNoteText.length > 0
+      : "";
+
+  // Posts over 280 characters: legacy.full_text is truncated and the entities
+  // (hashtags, mentions, links) of the whole text are in note_tweet
+  const longPost = _.get(tweetInfo, "note_tweet.note_tweet_results.result");
+  if (longPost?.text) {
+    properties.text = longPost.text;
+    properties.hashtags = longPost.entity_set?.hashtags ?? [];
+    properties.mentions = longPost.entity_set?.user_mentions ?? [];
+    properties.links = longPost.entity_set?.urls ?? [];
+  }
   return properties;
 };
 
@@ -219,27 +266,32 @@ export const transformTweetArrayProperties = (tweet) => {
 };
 
 /**
- * Extract media links from tweet
+ * Extract all media of a tweet
  * @param {Object} tweetInfo - Raw tweet data
- * @returns {Object} Object with imageLink and video properties
+ * @returns {Object} imageLinks (image or thumbnail URL of each media)
+ * and videos (best mp4 of each video/gif)
  */
 export const extractTweetMedia = (tweetInfo) => {
-  const imageLink =
-    jp({
-      json: tweetInfo,
-      path: "$.legacy.extended_entities..media_url_https",
-    })[0] || "None";
+  const mediaItems =
+    _.get(tweetInfo, "legacy.extended_entities.media") ||
+    _.get(tweetInfo, "legacy.entities.media") ||
+    [];
 
-  const videoVariants =
-    jp({
-      json: tweetInfo,
-      path: "$.legacy.extended_entities..video_info.variants",
-    })[0] || [];
+  const imageLinks = [];
+  const videos = [];
 
-  const video =
-    videoVariants.filter((x) => x.url?.includes(".mp4"))[0]?.url || "None";
+  mediaItems.forEach((media) => {
+    if (media.media_url_https) imageLinks.push(media.media_url_https);
 
-  return { imageLink, video };
+    if (media.type === "video" || media.type === "animated_gif") {
+      const bestMp4 = (media.video_info?.variants || [])
+        .filter((variant) => variant.content_type === "video/mp4")
+        .sort((a, b) => (b.bitrate || 0) - (a.bitrate || 0))[0];
+      if (bestMp4?.url) videos.push(bestMp4.url);
+    }
+  });
+
+  return { imageLinks, videos };
 };
 
 /**
@@ -256,12 +308,14 @@ export const generateTweetLink = (username, id) => {
  * Complete tweet transformation pipeline
  * @param {Object} tweetInfo - Raw tweet data
  * @param {string} collectionID - Collection ID
+ * @param {string} [entryId] - Timeline entryId, e.g. "tweet-123" or "conversationthread-123"
  * @returns {Object} Fully formatted tweet
  */
-export const transformTweet = (tweetInfo, collectionID) => {
+export const transformTweet = (tweetInfo, collectionID, entryId = "") => {
   // Extract all properties
   let tweet = extractTweetProperties(tweetInfo);
   tweet.collectionID = collectionID;
+  tweet.entryType = entryId.replace(/-\d.*$/, "");
 
   // Parse views as integer
   tweet.views = parseInt(tweet.views);
@@ -271,8 +325,8 @@ export const transformTweet = (tweetInfo, collectionID) => {
 
   // Extract media
   const media = extractTweetMedia(tweetInfo);
-  tweet.imageLink = media.imageLink;
-  tweet.video = media.video;
+  tweet.imageLinks = media.imageLinks;
+  tweet.videos = media.videos;
 
   // Generate tweet link
   tweet.tweetLink = generateTweetLink(tweet.username, tweet.id);
@@ -352,18 +406,10 @@ export const COMMUNITY_NOTE_PROPERTY_PATHS = {
   id: { path: "rest_id", default: "" },
   noteId: { path: "rest_id", default: "" },
   text: { path: "data_v1.summary.text", default: "" },
-  classification: { path: "data_v1.classification", default: "" },
-  misleadingTags: { path: "data_v1.misleading_tags", default: [] },
-  trustworthySources: { path: "data_v1.trustworthy_sources", default: false },
   createdAt: { path: "created_at", default: "" },
   tweetId: { path: "tweet_results.result.rest_id", default: "" },
   ratingStatus: { path: "rating_status", default: "" },
-  decidedBy: { path: "decided_by", default: "" },
   language: { path: "language", default: "" },
-  isMediaNote: { path: "is_media_note", default: false },
-  mediaMatches: { path: "media_note_matches_v2.match_count", default: 0 },
-  authorAlias: { path: "birdwatch_profile.alias", default: "" },
-  appealStatus: { path: "appeal_status", default: "" },
 };
 
 /**
@@ -406,32 +452,14 @@ export const generateCommunityNoteLink = (noteId) => {
 /**
  * Complete Community Note transformation pipeline
  * @param {Object} noteInfo - Raw Community Note data
- * @param {string} collectionID - Collection ID
  * @returns {Object} Fully formatted Community Note
  */
-export const transformCommunityNote = (noteInfo, collectionID) => {
-  // Extract all properties
+export const transformCommunityNote = (noteInfo) => {
   let note = extractCommunityNoteProperties(noteInfo);
-  note.collectionID = collectionID;
-
-  // Format date
+  note.entryType = "communityNote";
   note.createdAt = formatCommunityNoteDate(note.createdAt);
-
-  // Parse numeric fields
-  note.mediaMatches = parseInt(note.mediaMatches) || 0;
-
-  // Generate note link
   note.noteLink = generateCommunityNoteLink(note.noteId);
-
-  // Add tweet link if tweetId exists
-  if (note.tweetId) {
-    note.tweetLink = `https://x.com/i/status/${note.tweetId}`;
-  }
-
-  // Ensure misleadingTags is an array
-  if (!Array.isArray(note.misleadingTags)) {
-    note.misleadingTags = [];
-  }
+  note.tweetLink = note.tweetId ? `https://x.com/i/status/${note.tweetId}` : "";
 
   return note;
 };

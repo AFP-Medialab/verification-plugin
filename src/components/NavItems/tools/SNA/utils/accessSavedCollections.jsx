@@ -86,7 +86,12 @@ const collectionAccessors = {
   },
 };
 
-export const getCollectionMetrics = (collectionEntries) => {
+/**
+ * @param {Array} collectionEntries - Tweets/posts of the collection
+ * @param {number} notesCount - Community Notes of the collection: they only count as publications,
+ * every other metric is computed on the tweets/posts
+ */
+export const getCollectionMetrics = (collectionEntries, notesCount = 0) => {
   let uniqueUsers = collectionEntries.map((e) => e.username).filter(onlyUnique);
   let totalLikes = collectionEntries
     .map((e) => safeParseInt(e.likes))
@@ -98,7 +103,7 @@ export const getCollectionMetrics = (collectionEntries) => {
   return [
     {
       label: "collection_nbOfPosts",
-      value: collectionEntries.length,
+      value: collectionEntries.length + notesCount,
     },
     {
       label: "collection_uniqueUsers",
@@ -115,60 +120,96 @@ export const getCollectionMetrics = (collectionEntries) => {
   ];
 };
 
+export const isCommunityNote = (entry) => entry?.entryType === "communityNote";
+
+const dedupeById = (entries) =>
+  Array.from(
+    new Map(
+      entries.filter((entry) => entry.id.length > 0).map((e) => [e.id, e]),
+    ).values(),
+  );
+
+/**
+ * Union of the properties of all the rows (tweets and Community Notes do not share the same ones)
+ */
+const getContentHeaders = (content) => {
+  const headers = new Set();
+  content.forEach((row) => Object.keys(row).forEach((key) => headers.add(key)));
+  return [...headers];
+};
+
+/**
+ * Retrieve the saved entries of a source grouped by collection.
+ * For twitter, the Community Notes are added to the collection they were recorded in
+ * (a collection with only notes is kept).
+ * The order of the collections defines the dataSource ids: every caller must use this function.
+ */
+const getEntriesByCollection = async (source) => {
+  const allEntries = await browser.runtime.sendMessage({
+    prompt: collectionAccessors[source].prompt,
+  });
+  const allNotes =
+    source === "twitter"
+      ? await browser.runtime.sendMessage({ prompt: "getCommunityNotes" })
+      : [];
+
+  const groupByCollection = (entries) =>
+    Object.groupBy(
+      entries.filter((x) => x != undefined),
+      ({ collectionID }) => collectionID,
+    );
+  const entriesByCollection = groupByCollection(allEntries);
+  const notesByCollection = groupByCollection(
+    Array.isArray(allNotes) ? allNotes : [],
+  );
+
+  const collectionIDs = new Set([
+    ...Object.keys(entriesByCollection),
+    ...Object.keys(notesByCollection),
+  ]);
+
+  return [...collectionIDs].map((collectionID) => ({
+    collectionID,
+    entries: dedupeById(entriesByCollection[collectionID] ?? []),
+    notes: dedupeById(notesByCollection[collectionID] ?? []),
+  }));
+};
+
 /**
  * Sends message to background to retrieve all collections
- * and return their entries formatted as dataSources object
+ * and return their entries formatted as dataSources object.
+ * Community Notes are part of the content and of the number of publications,
+ * the other metrics only use the tweets/posts.
  * @param collectionSource {string} The saved collection type
  * @returns Object[] formatted as dataSource (cf. SNA.jsx)
  */
 export const getSavedCollections = async (collectionSource) => {
-  const allCollectionEntries = await browser.runtime.sendMessage({
-    prompt: collectionAccessors[collectionSource].prompt,
+  const collections = await getEntriesByCollection(collectionSource);
+
+  return collections.map(({ collectionID, entries, notes }, idx) => {
+    let cleanedEntries = entries;
+
+    // Apply platform-specific cleaning
+    if (collectionSource === "fb") {
+      cleanedEntries = cleanFacebookData(entries);
+    } else if (collectionSource === "tiktok") {
+      cleanedEntries = cleanTiktokData(entries);
+    }
+
+    const content = [...cleanedEntries, ...notes];
+
+    return {
+      id: collectionAccessors[collectionSource].idTag + idx,
+      name: collectionID + collectionAccessors[collectionSource].nameTag,
+      length: content.length,
+      metrics: getCollectionMetrics(cleanedEntries, notes.length),
+      content,
+      headers: getContentHeaders(content),
+      analysisHeaders: getContentHeaders(cleanedEntries),
+      accountNameMap: getAccountNameMap(cleanedEntries, collectionSource),
+      source: collectionAccessors[collectionSource].sourceTag,
+    };
   });
-  const filteredEntries = allCollectionEntries.filter((x) => x != undefined);
-  const entriesGroupedByCollection = Object.groupBy(
-    filteredEntries,
-    ({ collectionID }) => collectionID,
-  );
-
-  const collectionsAsDataSources = Object.keys(entriesGroupedByCollection).map(
-    (collectionID, idx) => {
-      let collectionEntries = entriesGroupedByCollection[collectionID].filter(
-        (entry) => entry.id.length > 0,
-      );
-      let dedpulicateEntries = Array.from(
-        new Map(collectionEntries.map((item) => [item.id, item])).values(),
-      );
-
-      // Apply platform-specific cleaning
-      if (collectionSource === "fb") {
-        dedpulicateEntries = cleanFacebookData(dedpulicateEntries);
-      } else if (collectionSource === "tiktok") {
-        dedpulicateEntries = cleanTiktokData(dedpulicateEntries);
-      }
-
-      let collectionMetrics = getCollectionMetrics(dedpulicateEntries);
-
-      let accountNameMap = getAccountNameMap(
-        dedpulicateEntries,
-        collectionSource,
-      );
-      return {
-        id: collectionAccessors[collectionSource].idTag + idx,
-        name: collectionID + collectionAccessors[collectionSource].nameTag,
-        length: dedpulicateEntries.length,
-        metrics: collectionMetrics,
-        content: dedpulicateEntries,
-        headers:
-          dedpulicateEntries.length > 0
-            ? Object.keys(dedpulicateEntries[0])
-            : [],
-        accountNameMap: accountNameMap,
-        source: collectionAccessors[collectionSource].sourceTag,
-      };
-    },
-  );
-  return collectionsAsDataSources;
 };
 
 export const initializePage = async () => {
@@ -184,32 +225,13 @@ export const initializePage = async () => {
  * Much faster than getSavedCollections for metric updates
  */
 const getCollectionCounts = async (source) => {
-  const allEntries = await browser.runtime.sendMessage({
-    prompt: collectionAccessors[source].prompt,
-  });
+  const collections = await getEntriesByCollection(source);
 
-  const filteredEntries = allEntries.filter((x) => x != undefined);
-  const entriesGroupedByCollection = Object.groupBy(
-    filteredEntries,
-    ({ collectionID }) => collectionID,
-  );
-
-  return Object.keys(entriesGroupedByCollection).map((collectionID, idx) => {
-    let collectionEntries = entriesGroupedByCollection[collectionID].filter(
-      (entry) => entry.id.length > 0,
-    );
-    let deduplicatedEntries = Array.from(
-      new Map(collectionEntries.map((item) => [item.id, item])).values(),
-    );
-
-    let collectionMetrics = getCollectionMetrics(deduplicatedEntries);
-
-    return {
-      id: collectionAccessors[source].idTag + idx,
-      length: deduplicatedEntries.length,
-      metrics: collectionMetrics,
-    };
-  });
+  return collections.map(({ entries, notes }, idx) => ({
+    id: collectionAccessors[source].idTag + idx,
+    length: entries.length + notes.length,
+    metrics: getCollectionMetrics(entries, notes.length),
+  }));
 };
 
 /**
@@ -554,9 +576,11 @@ export const getSelectedSourcesContent = (dataSources, selected) => {
     selected.includes(source.id),
   );
 
-  let selectedContent = selectedSources.map((source) => source.content).flat();
-
-  return selectedContent;
+  // Community Notes have no author, date or engagement: analyses only use the tweets/posts
+  return selectedSources
+    .map((source) => source.content)
+    .flat()
+    .filter((entry) => !isCommunityNote(entry));
 };
 
 export const keepOnlyNumberFields = (obj) => {
@@ -579,12 +603,16 @@ export const getSelectedSourcesNameMaps = (dataSources, selected) => {
 
 export const getSelectedSourceSharedHeaders = (dataSources, selected) => {
   let selectedSources = dataSources.filter((ds) => selected.includes(ds.id));
+  // analyses only use tweets/posts: Community Notes fields are not proposed
+  const getAnalysisHeaders = (ds) => ds.analysisHeaders ?? ds.headers;
   let sharedHeaders = selectedSources
-    .map((ds) => ds.headers)
+    .map(getAnalysisHeaders)
     .flat()
     .filter(onlyUnique)
     .filter((header) =>
-      selectedSources.every((source) => source.headers.includes(header)),
+      selectedSources.every((source) =>
+        getAnalysisHeaders(source).includes(header),
+      ),
     );
   return sharedHeaders;
 };

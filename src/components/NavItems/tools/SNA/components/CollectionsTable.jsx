@@ -27,7 +27,7 @@ import { setError } from "@/redux/reducers/errorReducer";
 import ErrorBoundaryFallback from "@Shared/ErrorBoundaryFallback/ErrorBoundaryFallback";
 import { set } from "lodash";
 
-import { addingUrl, uploadToCollection } from "../utils/snaUtils";
+import { addingUrl, toCsvCell, uploadToCollection } from "../utils/snaUtils";
 
 const EmptyTablePlaceholder = ({ keyword }) => {
   return (
@@ -129,39 +129,60 @@ const CollectionActionsCell = ({
         const dataKeyMap = { twitter: "tweet", tiktok: "tiktok", fb: "post" }; // the potential keys of the nested object
         const dataKey = dataKeyMap[row.source]; // the key of the collection target
 
-        const firstItem = parsed[0];
+        // Community Notes (raw record or classic row) go to their own store
+        const isNote = (item) =>
+          row.source === "twitter" &&
+          ("note" in item || item.entryType === "communityNote");
+        const noteItems = parsed.filter(isNote).map((item) => {
+          const note = "note" in item ? { ...item.note } : { ...item };
+          delete note.collectionID;
+          return note;
+        });
+        const entries = parsed.filter((item) => !isNote(item));
 
-        const isRawFormat = dataKey && dataKey in firstItem;
-        const innerObjectIsValid =
-          isRawFormat &&
-          typeof firstItem[dataKey] === "object" &&
-          firstItem[dataKey] !== null &&
-          !(dataKey in firstItem[dataKey]);
-        const isClassicWithId = !isRawFormat && "id" in firstItem;
+        if (entries.length > 0) {
+          const firstItem = entries[0];
 
-        if (!innerObjectIsValid && !isClassicWithId) {
-          throw new Error(keyword("error_upload_file_keys"));
+          const isRawFormat = dataKey && dataKey in firstItem;
+          const innerObjectIsValid =
+            isRawFormat &&
+            typeof firstItem[dataKey] === "object" &&
+            firstItem[dataKey] !== null &&
+            !(dataKey in firstItem[dataKey]);
+          const isClassicWithId = !isRawFormat && "id" in firstItem;
+
+          if (!innerObjectIsValid && !isClassicWithId) {
+            throw new Error(keyword("error_upload_file_keys"));
+          }
+
+          const items = isRawFormat
+            ? entries.map((item, index) => {
+                // check every row in case the file contains both raw and classical json -> throw an error if some row are different from the first one
+                // we could analyse row by row, but we assume that a file with multiple types of row is corrupted and we dont want to upload it to
+                // the collection
+                if (!item[dataKey] || dataKey in item[dataKey]) {
+                  throw new Error(`${keyword(error_upload_raw)} ${index + 1}`);
+                }
+                return { ...item[dataKey], collectionID: targetCollectionId };
+              })
+            : entries.map((item, index) => {
+                // same than above here
+                if (!("id" in item) || (dataKey && dataKey in item)) {
+                  throw new Error(`${keyword(error_upload_raw)} ${index + 1}`);
+                }
+                return { ...item, collectionID: targetCollectionId };
+              });
+
+          await uploadToCollection(items, row.source, targetCollectionId);
         }
 
-        const items = isRawFormat
-          ? parsed.map((item, index) => {
-              // check every row in case the file contains both raw and classical json -> throw an error if some row are different from the first one
-              // we could analyse row by row, but we assume that a file with multiple types of row is corrupted and we dont want to upload it to
-              // the collection
-              if (!item[dataKey] || dataKey in item[dataKey]) {
-                throw new Error(`${keyword(error_upload_raw)} ${index + 1}`);
-              }
-              return { ...item[dataKey], collectionID: targetCollectionId };
-            })
-          : parsed.map((item, index) => {
-              // same than above here
-              if (!("id" in item) || (dataKey && dataKey in item)) {
-                throw new Error(`${keyword(error_upload_raw)} ${index + 1}`);
-              }
-              return { ...item, collectionID: targetCollectionId };
-            });
-
-        await uploadToCollection(items, row.source, targetCollectionId);
+        if (noteItems.length > 0) {
+          await uploadToCollection(
+            noteItems,
+            "communityNotes",
+            targetCollectionId,
+          );
+        }
       } catch (error) {
         dispatch(setError(error.message || keyword("error_unknown")));
       }
@@ -203,13 +224,7 @@ const CollectionActionsCell = ({
       let headers = selectedData.headers.join(",");
       console.log(headers);
       let csvData = selectedData.content
-        .map((obj) =>
-          selectedData.headers.map((k) =>
-            obj[k]
-              ? `"${obj[k].toString().replaceAll('"', '""').replaceAll("\n", " ")}"`
-              : "missing",
-          ),
-        )
+        .map((obj) => selectedData.headers.map((k) => toCsvCell(obj[k])))
         .join("\n");
 
       let csvFile = headers + `\n` + csvData;
@@ -242,7 +257,10 @@ const CollectionActionsCell = ({
         let content = await browser.runtime.sendMessage({
           prompt: "getRawCollection",
           platform: selectedData.source,
-          collectionId: selectedData.name.split("~")[0],
+          collectionId: selectedData.name.slice(
+            0,
+            selectedData.name.lastIndexOf("~"),
+          ),
         });
 
         let dl = JSON.stringify(content.data);

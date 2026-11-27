@@ -423,31 +423,17 @@ export default defineBackground(() => {
 
   browser.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
-      // Check if this is a recorded message from content script bridge
+      // Recorded messages from the content script bridge
       // TikTok: { prompt: "tiktokCapture", content: {...} }
-      // Twitter: GraphQL response with nested data structure
+      // Twitter: { data: {...GraphQL response}, _snaRecorderType: "timeline" | "singleTweet" | "communityNote" }
       const isTiktokCapture = request.prompt === "tiktokCapture";
+      const isTwitterCapture = [
+        "timeline",
+        "singleTweet",
+        "communityNote",
+      ].includes(request._snaRecorderType);
 
-      // Check if this is a Community Note message (has _snaRecorderType flag)
-      const isCommunityNote =
-        request._snaRecorderType === "communityNote" ||
-        request._snaRecorderType === "tweetWithCommunityNote";
-
-      // Twitter messages have a 'data' field at the root level (GraphQL responses)
-      const isTwitterCapture =
-        request.data &&
-        typeof request.data === "object" &&
-        // Check for various Twitter GraphQL response patterns
-        (request.data.entryId ||
-          (request.data.entries && Array.isArray(request.data.entries)) ||
-          // Twitter Home Timeline, Search, User tweets, etc.
-          (request.data.home && request.data.home.home_timeline_urt) ||
-          request.data.search_by_raw_query ||
-          (request.data.user && request.data.user.result) ||
-          // Check for timeline instructions
-          request.data.threaded_conversation_with_injections_v2);
-
-      if (isTiktokCapture || isTwitterCapture || isCommunityNote) {
+      if (isTiktokCapture || isTwitterCapture) {
         handleRecordedMessage(request);
         return false;
       }

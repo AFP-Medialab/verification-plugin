@@ -18,7 +18,6 @@ export const API_ENDPOINTS = {
   NEWS_FRAMING: "gcloud/news-framing-clfr",
   NEWS_GENRE: "gcloud/news-genre-clfr",
   PERSUASION: "gcloud/persuasion-span-clfr",
-  SUBJECTIVITY: "dw/subjectivity",
   PREV_FACT_CHECKS: "kinit/prev-fact-checks",
   MGT_CHUNKS: "kinit/machine-generated-text-chunks",
   STANCE: "gcloud/multilingual-stance-classification",
